@@ -2,109 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7957B4D1FD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB98B4D1FD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349435AbiCHSMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S1349446AbiCHSNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbiCHSMt (ORCPT
+        with ESMTP id S1349456AbiCHSNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:12:49 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890A956C01
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:11:52 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id w37so17159327pga.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:11:52 -0800 (PST)
+        Tue, 8 Mar 2022 13:13:34 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7521713DD6;
+        Tue,  8 Mar 2022 10:12:35 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id r20so26189767ljj.1;
+        Tue, 08 Mar 2022 10:12:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3Pry/tblt+LFz/ggmn7l+mL5TXcjGxyxDzyRMHHrD8E=;
-        b=iiRcRwY3T/AIQxyvmUxxl1ZXTM+Xe219CCId+5cHhXYm4c3M6EVpr4PKX7CJaMoIWV
-         ddBgaReZfIareX8mQH3/EDVMLkf3QmnT97AxxrBs0ENRPKtVc3L/BRUGbw6rmXk2k1Cj
-         JXRGOZIPm1vCu0LrXvNOzZuEIG3jp9/w1SSe7PWBjUO+kgr4d7tWBS5cgoKGfPUxkDY/
-         Mv015bQPu8KnmdbY0wbPJHeVVf2uoFriqXCErz23oAOVmDkqBlVe15dqCd3z9yIvE+Sz
-         PAhtWZPpIWxnoJY0mZK5hpFPjO/r27QnbAKo+5yyxWmVPWU9jkzA2f4lCPAm4NrouF+5
-         cDVw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=AyFkmnjwJtbQ1OUH9crr4u8t2jQPuRzriml4H+F7bdA=;
+        b=hcO3uWvue8jZ/iVqW8aY5eERrVsXQR9fgGe0TtHu3uqRLTPh0vWmvUMKQiyDVNj/jR
+         ctnCJfDgxyX0ztygx2CjrUdd5ZIzYG6wjWF9kCxaUDchn3oMlfRDDMKW+omRBHaE4qRy
+         HTPiWt1FIBidhuNdN98BJFDlGggGIl+gtifwoQt1k1wALMsHW7ak9XwOSLZOCXJU6Cpz
+         BQavlzzlpnkvGr74/ezLl1pQYONXVT5tU1s6zDAgGwk82pT7VGnXnfhudI+9+SQQxrAp
+         jKo+VhOjER7liu0zPim+ut8eJfsOXmhh3W8xOCvrp7yblGxb4R4Jydxz8iPim/owCtO2
+         fOmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3Pry/tblt+LFz/ggmn7l+mL5TXcjGxyxDzyRMHHrD8E=;
-        b=uEXJW2kHiMS9pmzP+rVVTd4eXBP4TzD8ivLBgUz+NwDKw+kZtWYm0MJS4GktBJnmyj
-         vrnv0OW6SW/WRlIEuPJpe9eFkceXpI0bqfryP28Fpxgl21Lb4tIsVJsKg0Ajab1U2xWz
-         lvB4a0hzELomYMWY8khCAe3RgQlrEUZg4VRHvVzeqRc/V0avLbbMVy7Su3AEfLE6Fcnv
-         PDb42YosZvZJvy0EE0srnoXhie8ZW5hwn9bCs4Z+/2UfWERppCErKKaIH4+QWZkPEwqh
-         Pacj6FosKVG9S4K1fVj8I2pPosxfnCFHhgVoSA5HpJbrDAgVeiaR+u4HsRJW9kUTYPT8
-         Pzmw==
-X-Gm-Message-State: AOAM533r+JOWKrAxteLZDpboYgQaBY2jhgf2vD7XjbsKIOo10dxHLCcn
-        8RaLOget9FYMwS0RDGLxbzwMNO23X5tBzQ==
-X-Google-Smtp-Source: ABdhPJw23H0nMwGNL6c3/E2MhVBKJ1wt+jn6EjAyDOMFMNYr+UJ2kNf1ahIjaSEq4gg2mdWjlpX8VA==
-X-Received: by 2002:a05:6a00:781:b0:4f4:2a:2d89 with SMTP id g1-20020a056a00078100b004f4002a2d89mr19305230pfu.13.1646763111731;
-        Tue, 08 Mar 2022 10:11:51 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s9-20020a056a00194900b004e1583f88a2sm20437955pfk.0.2022.03.08.10.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 10:11:51 -0800 (PST)
-Date:   Tue, 8 Mar 2022 18:11:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 12/25] KVM: x86/mmu: cleanup computation of MMU roles
- for two-dimensional paging
-Message-ID: <YiecYxd/YreGFWpB@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-13-pbonzini@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=AyFkmnjwJtbQ1OUH9crr4u8t2jQPuRzriml4H+F7bdA=;
+        b=fqvDD5nn12olUzeqzA7NME766rR9v4V1Vp+ZafO3yD8g4Ns38Z1hGItuvgDKTGu1jZ
+         23XNO+YvYq5rhABc02iNOBto/c1jInXNskrYT7yE1VEa3Y/VhZyKJixw/CLcLloyk+it
+         81MdG32l8ar6aLqly8ylwOiXTvi1l3h2ir/ROC/S9OLgnqg2zJwHAVo767REeKhki5PP
+         qOVSyTqrKWI6O+PXQcZO4w3eb6re4yAfMW7N+0MT6vvP6oYYp1twIs0As4bc9gFy1PqR
+         dGIKISK7dZ0oEfeIsPW54Rzl0WkRxPq1/0afjuDnrtSqF1nkMAwj+DjzBkMgunrh+db9
+         BChw==
+X-Gm-Message-State: AOAM530xDIDfG8t237HLWZGuwCgMa70Ftp4JgR3lTep7d2eeynDkXlQZ
+        O0ZkS99N0eKEyQ6gnwUfLAM=
+X-Google-Smtp-Source: ABdhPJzH2ZKwts82VaHKuLfTbUAQhHuDDj/Dw6QoA7HRAP44DtB82EimsJoqw4fsHk2BL3EwzLnQOw==
+X-Received: by 2002:a2e:3911:0:b0:246:3fec:bb3e with SMTP id g17-20020a2e3911000000b002463fecbb3emr11495221lja.337.1646763150820;
+        Tue, 08 Mar 2022 10:12:30 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id bt23-20020a056512261700b00443e7fa1c26sm3609793lfb.261.2022.03.08.10.12.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 10:12:30 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------0kTuiRdFeR90XioQw3UoZwvE"
+Message-ID: <ef9d2a7e-932b-9389-ce4c-82b9d74952c8@gmail.com>
+Date:   Tue, 8 Mar 2022 21:12:28 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-13-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [syzbot] KASAN: use-after-free Read in port100_send_complete
+Content-Language: en-US
+To:     syzbot <syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com>,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000cb6dd805d9b8cbb8@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000cb6dd805d9b8cbb8@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> Inline kvm_calc_mmu_role_common into its sole caller, and simplify it
-> by removing the computation of unnecessary bits.
+This is a multi-part message in MIME format.
+--------------0kTuiRdFeR90XioQw3UoZwvE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 3/8/22 21:03, syzbot wrote:
+> Hello,
 > 
-> Extended bits are unnecessary because page walking uses the CPU mode,
-> and EFER.NX/CR0.WP can be set to one unconditionally---matching the
-> format of shadow pages rather than the format of guest pages.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    38f80f42147f MAINTAINERS: Remove dead patchwork link
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14b0d321700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=542b2708133cc492
+> dashboard link: https://syzkaller.appspot.com/bug?extid=16bcb127fb73baeecb14
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a63d21700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d21be1700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+> 
+> port100 5-1:0.0: NFC: Urb failure (status -71)
+> ==================================================================
+> BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+> Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
 
-But they don't match the format of shadow pages.  EPT has an equivalent to NX in
-that KVM can always clear X, but KVM explicitly supports running with EPT and
-EFER.NX=0 in the host (32-bit non-PAE kernels).
+We need to kill urbs on disconnect, since urbs callbacks they may access 
+freed memory
 
-CR0.WP equally confusing.  Yes, both EPT and NPT enforce write protection at all
-times, but EPT has no concept of user vs. supervisor in the EPT tables themselves,
-at least with respect to writes (thanks mode-based execution for the qualifier...).
-NPT is even worse as the APM explicitly states:
+#syz test
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-  The host hCR0.WP bit is ignored under nested paging.
 
-Unless there's some hidden dependency I'm missing, I'd prefer we arbitrarily leave
-them zero.
 
-> The MMU role for two dimensional paging does still depend on the CPU mode,
 
-Heh, don't think it's necessary to spell out TDP, and I think it would be helpful
-to write it as "non-nested TDP" since the surrounding patches deal with both.
+With regards,
+Pavel Skripkin
+--------------0kTuiRdFeR90XioQw3UoZwvE
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
 
-> even if only barely so, due to SMM and guest mode; for consistency,
-> pass it down to kvm_calc_tdp_mmu_root_page_role instead of querying
-> the vcpu with is_smm or is_guest_mode.
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmZjL3BvcnQxMDAuYyBiL2RyaXZlcnMvbmZjL3BvcnQx
+MDAuYwppbmRleCBkN2RiMWEwZTZiZTEuLjAwZDhlYTZkY2I1ZCAxMDA2NDQKLS0tIGEvZHJp
+dmVycy9uZmMvcG9ydDEwMC5jCisrKyBiL2RyaXZlcnMvbmZjL3BvcnQxMDAuYwpAQCAtMTYx
+Miw3ICsxNjEyLDkgQEAgc3RhdGljIGludCBwb3J0MTAwX3Byb2JlKHN0cnVjdCB1c2JfaW50
+ZXJmYWNlICppbnRlcmZhY2UsCiAJbmZjX2RpZ2l0YWxfZnJlZV9kZXZpY2UoZGV2LT5uZmNf
+ZGlnaXRhbF9kZXYpOwogCiBlcnJvcjoKKwl1c2Jfa2lsbF91cmIoZGV2LT5pbl91cmIpOwog
+CXVzYl9mcmVlX3VyYihkZXYtPmluX3VyYik7CisJdXNiX2tpbGxfdXJiKGRldi0+b3V0X3Vy
+Yik7CiAJdXNiX2ZyZWVfdXJiKGRldi0+b3V0X3VyYik7CiAJdXNiX3B1dF9kZXYoZGV2LT51
+ZGV2KTsKIAo=
 
-The changelog should call out this is a _significant_ change in behavior for KVM,
-as it allows reusing shadow pages with different guest MMU "role bits".  E.g. if
-this lands after the changes to not unload MMUs on cr0/cr4 emulation, it will be
-quite the functional change.
+--------------0kTuiRdFeR90XioQw3UoZwvE--

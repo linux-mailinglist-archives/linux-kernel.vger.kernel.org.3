@@ -2,139 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F674D1CAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65864D1CB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244605AbiCHQEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S1347180AbiCHQFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233290AbiCHQEC (ORCPT
+        with ESMTP id S1344539AbiCHQFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:04:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50925496A2;
-        Tue,  8 Mar 2022 08:03:06 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0CAC139F;
-        Tue,  8 Mar 2022 08:03:05 -0800 (PST)
-Received: from [192.168.1.10] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7BB13FA45;
-        Tue,  8 Mar 2022 08:03:02 -0800 (PST)
-Message-ID: <e91bcc83-37c8-dcca-e088-8b3fcd737b2c@arm.com>
-Date:   Tue, 8 Mar 2022 17:03:07 +0100
+        Tue, 8 Mar 2022 11:05:41 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E6F473BF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:04:44 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id dr20so40211916ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wPdkQphM15Eo5SdM94J/CTEkuLTXrgrE/iujWZfOFDM=;
+        b=aEkBiyYVtzRXNJrAwcqq5Cwk5JilhiTWgJi0SCpBkYO4Fiat+SModSUH3HKB3MwIVt
+         M4do+kkcYvc+Hi/On7MZ173vl9tapETKN5+r8i8Q1TTXLM8AxNSBVbDLs1z4eeGhOmfB
+         wWL4ES7pxhENQhDd4uNDCD8b/YcftTftn6DYs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wPdkQphM15Eo5SdM94J/CTEkuLTXrgrE/iujWZfOFDM=;
+        b=Oekz9Qek50R8vSzHZa8KgvTPzqQtfy9Fl72nv9QCERfDPhz1D1DHwNW9vyCZH7rFaD
+         D1XW8qJHTgGaZxrR6T+1K7WvzAXwIHng7uavxYoQpTy1gcvxeK3YtO7FPVZgkqt1bqnf
+         FSFIAPC1YpWYCRoutHY62Ul/TrN3741ON1qq3ZsM2b6BtAb4BfgLEgI3Z2KBkUEeYwm4
+         9mowafPW/K2MNUjIeAjxwJXuzUkDTb0q0YJRvAc3+uKK3no234Q2KYFs9G2X1e+GlWkK
+         YZDFYAWVwCgsdm7YCCEoyjnuddlnDh38GeQj59Dm8dlFid4RfcNlKPydalldzWNWvvAp
+         RCUw==
+X-Gm-Message-State: AOAM532NlGuxonxdHQtJz7cHeFCj0cp+ZNf5xGM8fdEjBMntndK7/Y03
+        LBk4Aw7/QLcPtcWt/9FXLq4/QSrb5YdUPfag
+X-Google-Smtp-Source: ABdhPJx0d3ZD4+ST9IWy40QXNG2bRrYvEcBSvGvlkHpP2gJwjR12+aSf6auNeQW0JyHhGnJ3hm8a6g==
+X-Received: by 2002:a17:906:b50:b0:6d6:e503:131c with SMTP id v16-20020a1709060b5000b006d6e503131cmr13805069ejg.597.1646755477828;
+        Tue, 08 Mar 2022 08:04:37 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id ka6-20020a170907990600b006ce54c95e3csm6062142ejc.161.2022.03.08.08.04.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 08:04:36 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id t11so29315335wrm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:04:36 -0800 (PST)
+X-Received: by 2002:a5d:490f:0:b0:1f0:6791:a215 with SMTP id
+ x15-20020a5d490f000000b001f06791a215mr13078257wrq.422.1646755475774; Tue, 08
+ Mar 2022 08:04:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v3] topology: make core_mask include at least
- cluster_siblings
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+References: <20220308033241.22099-1-rdunlap@infradead.org>
+In-Reply-To: <20220308033241.22099-1-rdunlap@infradead.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 8 Mar 2022 08:04:23 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=W90Hd-baPzurraEaDUGNOCxb8FLUysHKOQg2frMuZRAQ@mail.gmail.com>
+Message-ID: <CAD=FV=W90Hd-baPzurraEaDUGNOCxb8FLUysHKOQg2frMuZRAQ@mail.gmail.com>
+Subject: Re: [PATCH] kgdboc: fix return value of __setup handler
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Laura Abbott <labbott@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org
-References: <f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com>
- <20220308103012.GA31267@willie-the-truck>
- <CAKfTPtDe+i0fwV10m2sX2xkJGBrO8B+RQogDDij8ioJAT5+wAw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAKfTPtDe+i0fwV10m2sX2xkJGBrO8B+RQogDDij8ioJAT5+wAw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 12:04, Vincent Guittot wrote:
-> On Tue, 8 Mar 2022 at 11:30, Will Deacon <will@kernel.org> wrote:
+Hi,
 
-[...]
+On Mon, Mar 7, 2022 at 7:32 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> __setup() handlers should return 1 to indicate that the boot option
+> has been handled. A return of 0 causes the boot option/value to be
+> listed as an Unknown kernel parameter and added to init's (limited)
+> environment strings. So return 1 from kgdboc_option_setup().
 
->>> ---
->>> v1: Drop MC level if coregroup weight == 1
->>> v2: New sd topo in arch/arm64/kernel/smp.c
->>> v3: No new topo, extend core_mask to cluster_siblings
->>>
->>>  drivers/base/arch_topology.c | 8 ++++++++
->>>  1 file changed, 8 insertions(+)
->>>
->>> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
->>> index 976154140f0b..a96f45db928b 100644
->>> --- a/drivers/base/arch_topology.c
->>> +++ b/drivers/base/arch_topology.c
->>> @@ -628,6 +628,14 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
->>>                       core_mask = &cpu_topology[cpu].llc_sibling;
->>>       }
->>>
->>> +     /*
->>> +      * For systems with no shared cpu-side LLC but with clusters defined,
->>> +      * extend core_mask to cluster_siblings. The sched domain builder will
->>> +      * then remove MC as redundant with CLS if SCHED_CLUSTER is enabled.
+This took me about 20 minutes to trace through the code to confirm,
+but it appears you're correct. It's pretty twisted that early_param()
+and __setup(), both of which add things to the same list, work exactly
+opposite here. :( Any chance I could convince you to:
 
-IMHO, if core_mask weight is 1, MC will be removed/degenerated anyway.
+1. Add a comment before the definition of __setup_param() explaining
+that 0 means error and 1 means no error. There's a comment next to
+early_param() that _implies_ that setup is the opposite(), but it'd be
+nice to see documentation of __setup(). I know __setup() is supposed
+to be "only for core code", but still seems like we could document it.
 
-This is what I get on my Ampere Altra (I guess I don't have the ACPI
-changes which would let to a CLS sched domain):
-
-# cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-DIE
-NUMA
-root@oss-altra01:~# zcat /proc/config.gz | grep SCHED_CLUSTER
-CONFIG_SCHED_CLUSTER=y
-
->>> +      */
->>> +     if (cpumask_subset(core_mask, &cpu_topology[cpu].cluster_sibling))
->>> +             core_mask = &cpu_topology[cpu].cluster_sibling;
->>> +
->>
->> Sudeep, Vincent, are you happy with this now?
-> 
-> I would not say that I'm happy because this solution skews the core
-> cpu mask in order to abuse the scheduler so that it will remove a
-> wrong but useless level when it will build its domains.
-> But this works so as long as the maintainer are happy, I'm fine
-
-I do not have any better idea than this tweak here either in case the
-platform can't provide a cleaner setup.
-
-Maybe the following is easier to read but then we use
-'&cpu_topology[cpu].llc_sibling' in cpu_coregroup_mask() already ...
-
-@@ -617,6 +617,7 @@ EXPORT_SYMBOL_GPL(cpu_topology);
- const struct cpumask *cpu_coregroup_mask(int cpu)
- {
-        const cpumask_t *core_mask = cpumask_of_node(cpu_to_node(cpu));
-+       const cpumask_t *cluster_mask = cpu_clustergroup_mask(cpu);
-
-        /* Find the smaller of NUMA, core or LLC siblings */
-        if (cpumask_subset(&cpu_topology[cpu].core_sibling, core_mask)) {
-@@ -628,6 +629,9 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
-                        core_mask = &cpu_topology[cpu].llc_sibling;
-        }
-
-+       if (cpumask_subset(core_mask, cluster_mask))
-+               core_mask = cluster_mask;
-+
-        return core_mask;
- }
-
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+2. Add something to your commit message helping someone find the place
+where the return value is checked. Basically just mention
+obsolete_checksetup() to give people a hint.
 
 
+> Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
+>   kgdboc=kbd kgdbts=", will be passed to user space.
+>
+>  Run /sbin/init as init process
+>    with arguments:
+>      /sbin/init
+>    with environment:
+>      HOME=/
+>      TERM=linux
+>      BOOT_IMAGE=/boot/bzImage-517rc7
+>      kgdboc=kbd
+>      kgdbts=
+>
+> Fixes: 1cd25cbb2fed ("kgdboc: Fix warning with module build")
+
+Are you certain about this "Fixes" line? That commit was just code
+motion to move the code inside the #ifdef. It sure looks like it was
+broken even before this.
 
 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> Cc: Laura Abbott <labbott@redhat.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: kgdb-bugreport@lists.sourceforge.net
+> Cc: Jason Wessel <jason.wessel@windriver.com>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: linux-serial@vger.kernel.org
+> ---
+>  drivers/tty/serial/kgdboc.c |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> --- lnx-517-rc7.orig/drivers/tty/serial/kgdboc.c
+> +++ lnx-517-rc7/drivers/tty/serial/kgdboc.c
+> @@ -403,16 +403,16 @@ static int kgdboc_option_setup(char *opt
+>  {
+>         if (!opt) {
+>                 pr_err("config string not provided\n");
+> -               return -EINVAL;
+> +               return 1;
+
+Shouldn't it return 0 in the error cases? If __setup() functions are
+supposed to return "1" no matter what then what was the purpose of
+having a return value in the first place?

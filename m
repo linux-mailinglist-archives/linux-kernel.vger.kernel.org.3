@@ -2,112 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC814D1609
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBE44D160E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346433AbiCHLST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S1346045AbiCHLWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346423AbiCHLSS (ORCPT
+        with ESMTP id S239282AbiCHLWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:18:18 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7F141625;
-        Tue,  8 Mar 2022 03:17:21 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id BD1471F43E42
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646738239;
-        bh=iIIlUlWD+Bc1GobtHRXLCDOiF4+ae+ixtyxUlRG6iWo=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=jF01mL+I8S6+Kb4PGBewSEtA53E5ojtFJnMSVC6fUgypqvav+xLQh/0ZoGtV3oDYW
-         FNZEGphVUQokbKnc8So8OU5aOLEtr9d0PkMZlIyjwQJsL4Md+KZZwl12teRsc2tZX6
-         2BxG+kWLRxs9t5cS9H8fcJeDDqPu+AmNIAOI1bjl2/JElIXvIo+KsURuzUbxZ9jItN
-         k+KwNDy+MbK/NaQtQ5KzeSJ5gx46XwXMey4N68Ae3ex7Ziz2468sJl7HpZ+xiNb9gy
-         Zpw+cq4Js9yXxsZ5czbIQKaAz9Rw1FiqONHoJmiAOmBfJcA9VpXhVXHGzlKPIChA2p
-         Xgv0hc1lmTHuw==
-Message-ID: <f12e7608-eaf3-2dc9-46fa-4dc656c3e40b@collabora.com>
-Date:   Tue, 8 Mar 2022 16:17:13 +0500
+        Tue, 8 Mar 2022 06:22:08 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB791D33E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:21:11 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 8C99C3200F81;
+        Tue,  8 Mar 2022 06:21:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 08 Mar 2022 06:21:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=CdZrMhODLMAY5p
+        aagnkeQEyFhM0Ql5esHdKus1Ks+Yc=; b=ER3t45+fI9cauoJdFopJJ7DyXgozQf
+        4Gyqn8yNQ9Zmgv0qe7gQmKw+lnQZeKWRIDj6jTz/iq7VvlaOxTqQrNb9hYhe+eAL
+        gknXBTef1UTxkTrpNhl8G4JChJ7BzRNNFLj6D59+cg1kMF+YhXPubZzh7Fyz2ANL
+        82dLWwl1bKIiZeFyKhMpFL9OA+zn/BttaJiXNFDM6roRe2j9secJsvrdukfJPGfl
+        bjiS4bMpY0Ydt+UBufkvYNl871CQ/JgJqRUOGZTqHynzTU1webaNPUM5Sw25yHR2
+        FNPaQUSYbIPXDCAUHCwrSA2q14lSIAJUtVIoapAvmzo7UnMfFmVb0h/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=CdZrMhODLMAY5paagnkeQEyFhM0Ql5esHdKus1Ks+
+        Yc=; b=Oe7MbOPKJFZBKqafQdmmjSpzzZqn9az4NfY+YyJD/8gtbn4UV3BYRUCq8
+        ojYSkPDbSJiBMmdhur+CduFG1AXNUaKKKAuTI3MmozyWsgssQZMm7n+AdGNE5y/3
+        tVAEPnbnsFGN0OjXLMFiDUPWLQUjliZdBum+HdXeC9THRcQKSOW0syH2JyozRyPa
+        Ez+/ujfn16LdXxd3KXMnt2JQ3yt25R+9BcyPG3Wgrp00K5Or84FONTaLaiNYqBEE
+        IDKgiLzRMOJXhqEMMcUr9u8zpNirlhM6YohNUXX2rUHcZx+SwPcS3X9L2O5YcEOD
+        e5VtjeVTCENxf4ByW4/4aAWg0gZ9w==
+X-ME-Sender: <xms:JTwnYk_7WCZRxHHZ1IHJKp4rCzM9t7XHIlTHiQ74laPyUVwJ2P6bpg>
+    <xme:JTwnYssWdrxKDwbRSJYEqKaYyjhnjZJWXpevLkCPQ3YaMVDspWqncUxVixnpcG2pG
+    uWLnYbVB_GQzV8d7LI>
+X-ME-Received: <xmr:JTwnYqBuRlsV-bxmPCKVyRJCYg2dg0au1yjo8vHkeVL7PHJwIDkUOduPRPoJiZhmqT0LIukEDWlLrNLS5SQDt-T6ujNe-UIFUxVgH6w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudduiedgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejuefggeekfffgueevtddvudffhfejffejjedvvdduudethefhfefhfeeg
+    ieekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:JTwnYkdGxCRhefpe2ifGo0q-DBjnKNfQREJEXAM8B4CdupqKyPJpag>
+    <xmx:JTwnYpN6bZb_Bg_6VP4ni1KHA0qmEig5Uci7PtrJP0E8dx5sz69AWA>
+    <xmx:JTwnYuneJ2OJqr8jJVpaangkkGoNoqCHaLYzozUjiynzJKWq7HL9Jw>
+    <xmx:JjwnYqHXw0fc1snHf2FbTvO8pQ0wyYIUcPx9qz5PSe7MipfWpULc2w>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 8 Mar 2022 06:21:09 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        andrzej.hajda@intel.com
+Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
+        jonas@kwiboo.se, daniel@ffwll.ch, narmstrong@baylibre.com,
+        dri-devel@lists.freedesktop.org, jernej.skrabec@gmail.com,
+        airlied@linux.ie, Laurent.pinchart@ideasonboard.com,
+        robert.foss@linaro.org
+Subject: Re: (subset) [PATCH] drm/bridge: nxp-ptn3460: switch to devm_drm_of_get_bridge
+Date:   Tue,  8 Mar 2022 12:21:01 +0100
+Message-Id: <164673846305.2436174.13416229211421085343.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220228182600.22463-1-jose.exposito89@gmail.com>
+References: <20220228182600.22463-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernelci@groups.io,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
- CFI_FORWARD_PROTO
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <0c22d702-b451-e9b3-8d3f-7c28ca71c1da@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <0c22d702-b451-e9b3-8d3f-7c28ca71c1da@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reminder!
+On Mon, 28 Feb 2022 19:26:00 +0100, José Expósito wrote:
+> The function "drm_of_find_panel_or_bridge" has been deprecated in
+> favor of "devm_drm_of_get_bridge".
+> 
+> Switch to the new function and reduce boilerplate.
+> 
+> 
 
-On 2/28/22 12:06 PM, Muhammad Usama Anjum wrote:
-> Hi,
-> 
-> Any thoughts?
-> 
-> On 2/18/22 1:56 AM, Muhammad Usama Anjum wrote:
->> Add config options which are needed for LKDTM sub-tests.
->> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
->> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
->> INIT_ON_FREE_DEFAULT_ON config.
->>
->> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
->> kind. Turn it off for now by default until proper support.
->>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  tools/testing/selftests/lkdtm/config    | 2 ++
->>  tools/testing/selftests/lkdtm/tests.txt | 2 +-
->>  2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
->> index 46f39ee762086..adc9fa60057c5 100644
->> --- a/tools/testing/selftests/lkdtm/config
->> +++ b/tools/testing/selftests/lkdtm/config
->> @@ -2,8 +2,10 @@ CONFIG_LKDTM=y
->>  CONFIG_DEBUG_LIST=y
->>  CONFIG_SLAB_FREELIST_HARDENED=y
->>  CONFIG_FORTIFY_SOURCE=y
->> +CONFIG_GCC_PLUGIN_STACKLEAK=y
->>  CONFIG_HARDENED_USERCOPY=y
->>  CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
->> +CONFIG_INIT_ON_FREE_DEFAULT_ON=y
->>  CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
->>  CONFIG_UBSAN=y
->>  CONFIG_UBSAN_BOUNDS=y
->> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
->> index 6b36b7f5dcf96..aa947b0ce1eeb 100644
->> --- a/tools/testing/selftests/lkdtm/tests.txt
->> +++ b/tools/testing/selftests/lkdtm/tests.txt
->> @@ -72,7 +72,7 @@ USERCOPY_STACK_FRAME_FROM
->>  USERCOPY_STACK_BEYOND
->>  USERCOPY_KERNEL
->>  STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
->> -CFI_FORWARD_PROTO
->> +#CFI_FORWARD_PROTO
->>  FORTIFIED_STRSCPY
->>  FORTIFIED_OBJECT
->>  FORTIFIED_SUBOBJECT
+Applied to drm/drm-misc (drm-misc-next).
+
+Thanks!
+Maxime

@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E184D1E11
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 763DF4D1E1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345049AbiCHREY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S1348390AbiCHRGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241414AbiCHREX (ORCPT
+        with ESMTP id S1346685AbiCHRGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:04:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF2D3B014;
-        Tue,  8 Mar 2022 09:03:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FD860A53;
-        Tue,  8 Mar 2022 17:03:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5C8C340F6;
-        Tue,  8 Mar 2022 17:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646759005;
-        bh=NKnnFyTivlkfLyeedrHqiD586sUqxiBFzjH+dgeXsZY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=d0LpCWREVCkBGMB7dwP3FyzDA9DmCKfiaoPZQz2qnK8O9mCqNBlvCjW4ovzyRpw0M
-         Jue97MvArvdKZGZKx3KpMqixMnbL0PR4wEFUGyOjvJDibjKxq83G5bw89w9Gm5dvJu
-         3VX6eNrQY1afVmPtQ8moAvTyWB2lePSuX7ol/w03eYoW8ilXSrr4sIBbZ2LkP2ZzEY
-         DGMiierYKC/hjeKkkQoRxSy+sBBoX0lVdj4mpdfQf4HJsybqc55XCA5lXLFV4qhQxx
-         QRWLvb/oUW5RhR/hOzTBb5GpgOvxYEQmdjPWlUCj4H7ynwuiL9uv6BZe3Q6npeoiRs
-         HXfks9Jz/RByQ==
-Received: by mail-ej1-f44.google.com with SMTP id qx21so40640810ejb.13;
-        Tue, 08 Mar 2022 09:03:25 -0800 (PST)
-X-Gm-Message-State: AOAM533RGQJ8RFPqxCHP6qJCt4tAOGtTGYApB7y1GFX20oszr4AxdhAT
-        RKE/lFK209QxY2S2isnz8XD4E9jdvSP0PSKgWQ==
-X-Google-Smtp-Source: ABdhPJzN23lpvKd1L3L5/TUPLoM0VFl/olTwDpOKkWJ4fTJqoM2LJ1xDS1gnhQCuWPgH4Mcpr3xC2yxZC4SCgRznV0U=
-X-Received: by 2002:a17:906:9913:b0:6d6:dc48:5d49 with SMTP id
- zl19-20020a170906991300b006d6dc485d49mr14270448ejb.325.1646758997461; Tue, 08
- Mar 2022 09:03:17 -0800 (PST)
+        Tue, 8 Mar 2022 12:06:35 -0500
+Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFE452B18;
+        Tue,  8 Mar 2022 09:05:36 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id C7773C8008A;
+        Tue,  8 Mar 2022 18:05:34 +0100 (CET)
+Authentication-Results: srv6.fidu.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=tuxedocomputers.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        tuxedocomputers.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from; s=
+        default; t=1646759134; x=1648573535; bh=OA0ZQjt3Q8Ik0rClfyLh5tXC
+        L350HchRnX2lr5OmMB4=; b=h+xg8xPczvpohUE02gmTVbQjJ/dw3GfSG0hN7nA2
+        IVZpSaZ05TN0GLqeCCXTByU0j6SvojDnTo/+mZi2xp+uGYdS7Z/1tdzpLYPwY6cs
+        AV3EAPbObC//DUHY3pf5zdjBXuVGk1uYSgL86jQfbRCRIyFqpb21f7b/mneZHOry
+        FBk=
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id Vx7izqSMtrB0; Tue,  8 Mar 2022 18:05:34 +0100 (CET)
+Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPA id 43C37C80062;
+        Tue,  8 Mar 2022 18:05:34 +0100 (CET)
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     dmitry.torokhov@gmail.com, tiwai@suse.de, mpdesouza@suse.com,
+        arnd@arndb.de, hdegoede@redhat.com, samuel@cavoj.net,
+        wse@tuxedocomputers.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] Input/i8042: Merge quirk tables and add Clevo devices
+Date:   Tue,  8 Mar 2022 18:05:20 +0100
+Message-Id: <20220308170523.783284-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <0dcdea9c559040509dd443ee75de75a1@huawei.com>
-In-Reply-To: <0dcdea9c559040509dd443ee75de75a1@huawei.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 8 Mar 2022 11:03:05 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJNMGobo1iaBjqSQJXNy9arXGU+et20dMueCK44seGnQw@mail.gmail.com>
-Message-ID: <CAL_JsqJNMGobo1iaBjqSQJXNy9arXGU+et20dMueCK44seGnQw@mail.gmail.com>
-Subject: Re: [PATCH2] PCI: dwc: solve returning success but actually failed
-To:     "Zhangjiantao(Kirin,Nanjing)" <water.zhangjiantao@huawei.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
-        "gustavo.pimentel@synopsys.com" <gustavo.pimentel@synopsys.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhangjianrong (E)" <zhangjianrong5@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,87 +57,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 9:45 AM Zhangjiantao(Kirin,Nanjing)
-<water.zhangjiantao@huawei.com> wrote:
->
-> When dma_mapping_error() returns error because of no enough memory available, dw_pcie_host_init() will return success, which will mislead the callers.
+Following a suggestion by Hans de Goede, I reworked the quirk tables in the
+i8042 driver. Now all quirks only use a single table. This makes quirks
+easier to search by device and reduces code line count and memory usage.
 
-Again, wrap long lines. And please reword the subject as I previously suggested.
+The 2nd patch adds new debug output to make it easy to see if a specific
+quirk got applied or not.
 
-It should be 'PATCH v2', not 'PATCH2' in the subject. 'git send-email
--v2' does that for you.
+The third patch adds a list of Clevo devices that need multiple quirks.
+With the reworked table they don't need to be inserted multiple times now,
+which was required in v1 and v2 of this patch.
 
->
-> Fixes: 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume")
->
-
-Drop the blank line here.
+I also included the extra quirk for the Clevo NS7xMU, which was a separate
+patch before.
 
 
-> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-
-As you are sending the patch, your S-o-b goes last. And the author
-name still doesn't match here: 'Jiantao Zhang' vs.
-'Zhangjiantao(Kirin,Nanjing)'
-
-> Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
-> ---
->   drivers/pci/controller/dwc/pcie-designware-host.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c
-> b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index f4755f3a03be..9dcb51728dd1 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -390,7 +390,8 @@ int dw_pcie_host_init(struct pcie_port *pp)
->                                 sizeof(pp->msi_msg),
->                                 DMA_FROM_DEVICE,
->                                 DMA_ATTR_SKIP_CPU_SYNC);
-> -            if (dma_mapping_error(pci->dev, pp->msi_data)) {
-> +            ret = dma_mapping_error(pci->dev, pp->msi_data);
-> +            if (ret) {
->                   dev_err(pci->dev, "Failed to map MSI data\n");
->                   pp->msi_data = 0;
->                   goto err_free_msi;
-> --
-> 2.17.1
->
-> Jiantao Zhang
->
-> On 2022/3/5 5:39, Bjorn Helgaas wrote:
-> > On Fri, Mar 04, 2022 at 12:06:10PM +0000, Zhangjiantao(Kirin,Nanjing) wrote:
-
-All this should not be in new versions of patches.
-
-> >> When dma_mapping_error returns error because of no enough memory available, dw_pcie_host_init will return success, which will mislead the callers.
-> > Wrap to fit in 75 columns, add "()" after function names.
-> >> Signed-off-by: zhangjianrong <zhangjianrong5@huawei.com>
-> >> Signed-off-by: zhangjiantao <water.zhangjiantao@huawei.com>
-> >>
-> >> ---
-> >>    drivers/pci/controller/dwc/pcie-designware-host.c | 1 +
-> >>    1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c
-> >> b/drivers/pci/controller/dwc/pcie-designware-host.c
-> >> index f4755f3a03be..ac691d733848 100644
-> >> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> >> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> >> @@ -393,6 +393,7 @@ int dw_pcie_host_init(struct pcie_port *pp)
-> >>                if (dma_mapping_error(pci->dev, pp->msi_data)) {
-> >>                    dev_err(pci->dev, "Failed to map MSI data\n");
-> >>                    pp->msi_data = 0;
-> >> +                ret = -1;
-> > We should save the return value from dma_mapping_error() and return
-> > *that*, not -1.
-> >
-> > Whitespace error (indent with tabs, same as the surrounding code).
-> >
-> >>                    goto err_free_msi;
-> >>                }
-> >>            }
-> >> --
-> >> 2.17.1
-> >>
-> > .

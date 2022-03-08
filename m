@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EA84D1CDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D994D1CE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348225AbiCHQMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S234823AbiCHQNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiCHQL6 (ORCPT
+        with ESMTP id S234486AbiCHQNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:11:58 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A3550B04
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:11:02 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id 19so11198080wmy.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:11:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oR1I0j29FD7B60ybG21a3xvyI7Hv4VggErPMrErL0E0=;
-        b=EtnJXIsNFwmVdSvAfZyYisQ2B9NsK+NizivkiRQROrcDMSlbkKyKE8R2Cq0mQ0wDfC
-         G8KSNyWxz4AC431rn/c3ItQumYk+gODZDtVGht6izSdzp+Yb4Wy495QFImTB1Bs/XOV/
-         sfm5TnVEn5n0xIGq1c60XskQyW53uLtQecCs8LENwhJpJ/kBz73auyIe7sN/Gf4r8UWC
-         YYo3WtzaJt5A58txAorvFi1TC3EU9RfZOTn9kYsHlAWgA7bmuMC38UjwlWR3zjXUsds4
-         0nPG+gzxGyEe7jTWFAfc7nZSYHnBztEcpcssYVCR/cE/Aqp+OK0OfPPmb+Zs8T7JaAGL
-         D8ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oR1I0j29FD7B60ybG21a3xvyI7Hv4VggErPMrErL0E0=;
-        b=t9WiZlNBEIuNveBw/JlUBaiBOm0tgsG5ebpNqwuMfhDwLw9Mr03TrmgqAGDNRLIAOa
-         sH5r/ABnC0wzKdw5uG1tvlAjvZCq8Uvi+FcXNnl+TiuUirekf+mP8nRG2qaM9z+sWdUE
-         M7L7eEegMJfLhOCdRy9eQiMcSLfU1UUE63T/ic7zqO36eYHTQBq3YRWDfbw6LdQYTZpa
-         06/QPjlLmX7j+UncoFWyvmznmefKcn/Lp8LKM/m9+fhcAtsVJ0P4eA3gq2Xj/DJuiw0u
-         tCpnz2QF6zO9A7i8z+ed8tzLTYgBRs2HCsm+Ww7d7sUu38unJkTAx2QlNy5wt/pAKADh
-         Ztow==
-X-Gm-Message-State: AOAM533AkcBsXiE5fTG0b+rjZqRE2NPEnre7TYdVWivU/QJLRthaMzD8
-        TgXjx/orALHy58/tPsljf3VyOw==
-X-Google-Smtp-Source: ABdhPJzAve1LVkuh6cQToviXcGeCSgvLcohwkWt1xoYUKo0PaVMt1yJXrSASyYYPQWyiU7Nur3M3sg==
-X-Received: by 2002:a1c:f315:0:b0:381:1f6d:6ca6 with SMTP id q21-20020a1cf315000000b003811f6d6ca6mr4211928wmq.25.1646755860806;
-        Tue, 08 Mar 2022 08:11:00 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id x14-20020adfffce000000b001f1dfee4867sm14817258wrs.99.2022.03.08.08.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 08:11:00 -0800 (PST)
-Date:   Tue, 8 Mar 2022 16:10:58 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] configs/debug: Restore DEBUG_INFO=y for overriding
-Message-ID: <20220308161058.zuuze2jvhbiq53xy@maple.lan>
-References: <20220308153524.8618-1-quic_qiancai@quicinc.com>
+        Tue, 8 Mar 2022 11:13:34 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7FB1275F;
+        Tue,  8 Mar 2022 08:12:34 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KCgMj1QdKz9sSX;
+        Tue,  8 Mar 2022 17:12:33 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3AGF3ZVhpE6X; Tue,  8 Mar 2022 17:12:33 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KCgMj0ZHVz9sRy;
+        Tue,  8 Mar 2022 17:12:33 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 02F8D8B77C;
+        Tue,  8 Mar 2022 17:12:33 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id kMIHpHcLx_Hg; Tue,  8 Mar 2022 17:12:32 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.9])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AED908B763;
+        Tue,  8 Mar 2022 17:12:32 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 228GCNRo3539464
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 8 Mar 2022 17:12:23 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 228GCLr63539461;
+        Tue, 8 Mar 2022 17:12:21 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH net-next v2] powerpc/net: Implement powerpc specific csum_shift() to remove branch
+Date:   Tue,  8 Mar 2022 17:12:10 +0100
+Message-Id: <1e1a0f38f3f0ab61283ccfb69626104a897f3551.1646755813.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308153524.8618-1-quic_qiancai@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1646755929; l=2873; s=20211009; h=from:subject:message-id; bh=tWGuMHcVZQut1adKSyNowkDKryK0uGnRw4Glaoa8o/E=; b=dBxnwVCqd96k6w95KD5W6WY/Ic1u/Nc0CHXVlTcbJFqo4TeyNXkonGM7W+R5H34Ch5m8ol1cYEgm EbW3lY/VC9h5MFBxeqmLYr0/GEASkeeAXQ8171FqbEHeXEX1vQF4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:35:24AM -0500, Qian Cai wrote:
-> Previously, I failed to realize that Kees' patch [1] has not been merged
-> into the mainline yet, and dropped DEBUG_INFO=y too eagerly from the
-> mainline. As the results, "make debug.config" won't be able to flip
-> DEBUG_INFO=n from the existing .config. This should close the gaps of a
-> few weeks before Kees' patch is there, and work regardless of their
-> merging status anyway.
-> 
-> [1] https://lore.kernel.org/all/20220125075126.891825-1-keescook@chromium.org/
-> 
-> Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
+Today's implementation of csum_shift() leads to branching based on
+parity of 'offset'
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+	000002f8 <csum_block_add>:
+	     2f8:	70 a5 00 01 	andi.   r5,r5,1
+	     2fc:	41 a2 00 08 	beq     304 <csum_block_add+0xc>
+	     300:	54 84 c0 3e 	rotlwi  r4,r4,24
+	     304:	7c 63 20 14 	addc    r3,r3,r4
+	     308:	7c 63 01 94 	addze   r3,r3
+	     30c:	4e 80 00 20 	blr
 
+Use first bit of 'offset' directly as input of the rotation instead of
+branching.
 
-Daniel.
+	000002f8 <csum_block_add>:
+	     2f8:	54 a5 1f 38 	rlwinm  r5,r5,3,28,28
+	     2fc:	20 a5 00 20 	subfic  r5,r5,32
+	     300:	5c 84 28 3e 	rotlw   r4,r4,r5
+	     304:	7c 63 20 14 	addc    r3,r3,r4
+	     308:	7c 63 01 94 	addze   r3,r3
+	     30c:	4e 80 00 20 	blr
 
+And change to left shift instead of right shift to skip one more
+instruction. This has no impact on the final sum.
 
-> ---
->  kernel/configs/debug.config | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
-> index 07df6d93c4df..e8db8d938661 100644
-> --- a/kernel/configs/debug.config
-> +++ b/kernel/configs/debug.config
-> @@ -16,6 +16,7 @@ CONFIG_SYMBOLIC_ERRNAME=y
->  #
->  # Compile-time checks and compiler options
->  #
-> +CONFIG_DEBUG_INFO=y
->  CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
->  CONFIG_DEBUG_SECTION_MISMATCH=y
->  CONFIG_FRAME_WARN=2048
-> -- 
-> 2.30.2
-> 
+	000002f8 <csum_block_add>:
+	     2f8:	54 a5 1f 38 	rlwinm  r5,r5,3,28,28
+	     2fc:	5c 84 28 3e 	rotlw   r4,r4,r5
+	     300:	7c 63 20 14 	addc    r3,r3,r4
+	     304:	7c 63 01 94 	addze   r3,r3
+	     308:	4e 80 00 20 	blr
+
+Seems like only powerpc benefits from a branchless implementation.
+Other main architectures like ARM or X86 get better code with
+the generic implementation and its branch.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/checksum.h | 7 +++++++
+ include/net/checksum.h              | 2 ++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/arch/powerpc/include/asm/checksum.h b/arch/powerpc/include/asm/checksum.h
+index 19eaa2b6d043..8321f6053a67 100644
+--- a/arch/powerpc/include/asm/checksum.h
++++ b/arch/powerpc/include/asm/checksum.h
+@@ -111,6 +111,13 @@ static __always_inline __wsum csum_add(__wsum csum, __wsum addend)
+ #endif
+ }
+ 
++#define HAVE_ARCH_CSUM_SHIFT
++static __always_inline __wsum csum_shift(__wsum sum, int offset)
++{
++	/* rotate sum to align it with a 16b boundary */
++	return (__force __wsum)rol32((__force u32)sum, (offset & 1) << 3);
++}
++
+ /*
+  * This is a version of ip_compute_csum() optimized for IP headers,
+  * which always checksum on 4 octet boundaries.  ihl is the number
+diff --git a/include/net/checksum.h b/include/net/checksum.h
+index 79c67f14c448..6bc783b7a06c 100644
+--- a/include/net/checksum.h
++++ b/include/net/checksum.h
+@@ -80,6 +80,7 @@ static __always_inline __sum16 csum16_sub(__sum16 csum, __be16 addend)
+ 	return csum16_add(csum, ~addend);
+ }
+ 
++#ifndef HAVE_ARCH_CSUM_SHIFT
+ static __always_inline __wsum csum_shift(__wsum sum, int offset)
+ {
+ 	/* rotate sum to align it with a 16b boundary */
+@@ -87,6 +88,7 @@ static __always_inline __wsum csum_shift(__wsum sum, int offset)
+ 		return (__force __wsum)ror32((__force u32)sum, 8);
+ 	return sum;
+ }
++#endif
+ 
+ static __always_inline __wsum
+ csum_block_add(__wsum csum, __wsum csum2, int offset)
+-- 
+2.34.1
+

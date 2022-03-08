@@ -2,97 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D0F4D0CEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847AC4D0CF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244201AbiCHAl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 19:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
+        id S244110AbiCHAsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 19:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244110AbiCHAlX (ORCPT
+        with ESMTP id S238633AbiCHAsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 19:41:23 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809203DDF2;
-        Mon,  7 Mar 2022 16:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646700027; x=1678236027;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=mLllPTDfXt60Bir+ikPy6cJJ1bK+rUaZ0Sed6I0eCbg=;
-  b=NITCLjlm4+dVU0oOfssmBPLhhUP1pVTQcPg1/9c3k8fw6Q7O+Pvd9bI3
-   JJ7VyDlh+24pMkLkUsZOQ9IbsqIydQlVpN5vT+dyK3psl09V01RqFbBsT
-   u0lkNyOjgKXKh9z7E2O9tp/YWwkPjho+hgwkTUgEhnsnyV9lWSV4o+UKB
-   U7MwwtL1Mdp0RqiKUbBUtjX6swDyTQY/d8kz5zPlXHjlOgezQLDw/MfIf
-   CRI9IkWT6cLFxAG+Am2HfeZ0ooZ3ZTCykOJ94sK8PoWA+aTl/xDnB5i3c
-   CMV9t6sdxOJnc3bX0KnbWUM25ldI8EOLRvURMk2ksMQg6A6ZOEPvk6UW1
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="253376521"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="253376521"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 16:40:25 -0800
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="553397703"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 16:40:23 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     <linux-kernel@vger.kernel.org>,
-        <linux-tip-commits@vger.kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, <x86@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [tip: sched/core] sched/numa: Avoid migrating task to CPU-less
- node
-References: <20220214121553.582248-2-ying.huang@intel.com>
-        <164512421264.16921.689831789198253265.tip-bot2@tip-bot2>
-        <Yh6H8SPSqpjv1dl7@qian>
-        <87v8wx1850.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <87wnh648ec.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <YiYOc0NFlzJocYt0@qian>
-Date:   Tue, 08 Mar 2022 08:40:21 +0800
-In-Reply-To: <YiYOc0NFlzJocYt0@qian> (Qian Cai's message of "Mon, 7 Mar 2022
-        08:53:55 -0500")
-Message-ID: <87ee3dmg3u.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 19:48:19 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61F3FD9C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:47:23 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id s11so15872536pfu.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 16:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wypaPIA6ghdghr/IDrb/MsW89Q13oqpEaAH1HD6rl2Q=;
+        b=5GWNMF7aPQ5cvEpAtHaiMyRSUVh71/WOgLZl7yJJ4pakehav7XEh0jVVHMqPFQmL12
+         AyAht2FPHo8A8lVkzPwGI6OTLH3X03ltJOt0M3fzLULv2J+7KgdCxUtQHMP05dVfqdzN
+         dVXM+ulgnr46yoSBZJX7xNYny1cumI3o6ArXCytoJ7gMq38lO2yi7gswSLzoc6z80bGi
+         oIX2VZRn22zna8kG48HztWrMOy0DMyyZNAcSh7+0KzU8GW90GM3zNnXuYSONkMHLpbId
+         sOwHITm4Q4Y5pVy84DhnRCCZonbkFPa6WrNxn9pCrvArhEIE80yX21BUwEvn97jgJasS
+         I5ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=wypaPIA6ghdghr/IDrb/MsW89Q13oqpEaAH1HD6rl2Q=;
+        b=65p+qXRLZjlgwM2JGs81F2MhE+p9MpU1MRodUINQDEsfegJek/BR6uUQ7udjdmZcrR
+         frwSAApfHtgbg8D7HkO598JrUDKs/CaifinDX0Y66QgBHDOCy/F4Z/Y0p6htS9abZi8g
+         m542312Hd4GdzpOKDiH1yUSVfytsFpYUzm1YMU7XpIEjgcN1XA0r4wZnoEKpaaERBh+T
+         ZEaSKi65aze5SQWxaEVYvLAV9Nx4/wVZMu0SaF1cYYGHSlJZcn/r0Uv8TthLDx7QCKxq
+         pBW+0ZEm4T/tujYz8rEs1eCCG36gtdbFBqgfqaxHLn7+oSZVkPpmKBI0Hub0CJLQdAIK
+         ngzQ==
+X-Gm-Message-State: AOAM531cgAfnJkRAYZZ+foi9QUwWzTZUsBb2rX6+8m5BNgQ2dBoc0z2j
+        FtMvsHMwTBrplbd0enbGnvWKuw==
+X-Google-Smtp-Source: ABdhPJzN0Q+/iTzny+GY7jNEgZYiSy/S/lodFd1M8fC5fiXAiV5Y/3yp0m6imSPSgx/YE1vOCyjQMw==
+X-Received: by 2002:a63:1a54:0:b0:375:82eb:7449 with SMTP id a20-20020a631a54000000b0037582eb7449mr12141643pgm.341.1646700442479;
+        Mon, 07 Mar 2022 16:47:22 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id t9-20020a056a0021c900b004f72e3838aasm178095pfj.183.2022.03.07.16.47.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 16:47:21 -0800 (PST)
+Date:   Mon, 07 Mar 2022 16:47:21 -0800 (PST)
+X-Google-Original-Date: Mon, 07 Mar 2022 12:30:04 PST (-0800)
+Subject:     Re: [PATCH v6 07/14] riscv: prevent compressed instructions in alternatives
+In-Reply-To: <20220209123800.269774-8-heiko@sntech.de>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, wefu@redhat.com,
+        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, drew@beagleboard.org,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        wens@csie.org, maxime@cerno.tech, gfavor@ventanamicro.com,
+        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
+        huffman@cadence.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, heiko@sntech.de
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     heiko@sntech.de
+Message-ID: <mhng-edc0da56-7fc8-4287-8856-9aac0f7465c1@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qian Cai <quic_qiancai@quicinc.com> writes:
-
-> On Mon, Mar 07, 2022 at 01:51:55PM +0800, Huang, Ying wrote:
->> > ---
->> >  kernel/sched/fair.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> > index a3f0ea216ccb..1fe7a4510cca 100644
->> > --- a/kernel/sched/fair.c
->> > +++ b/kernel/sched/fair.c
->> > @@ -2405,7 +2405,7 @@ static void task_numa_placement(struct task_struct *p)
->> >  	}
->> >  
->> >  	/* Cannot migrate task to CPU-less node */
->> > -	if (!node_state(max_nid, N_CPU)) {
->> > +	if (max_nid != NUMA_NO_NODE && !node_state(max_nid, N_CPU)) {
->> >  		int near_nid = max_nid;
->> >  		int distance, near_distance = INT_MAX;
->> 
->> Do you have time to give this patch a try?
+On Wed, 09 Feb 2022 04:37:53 PST (-0800), heiko@sntech.de wrote:
+> Instructions are opportunistically compressed by the RISC-V assembler
+> when possible, but in alternatives-blocks both the old and new content
+> need to be the same size, so having the toolchain do somewhat random
+> optimizations will cause strange side-effects like
+> "attempt to move .org backwards" compile-time errors.
 >
-> Ah, I thought I has already replied it a while ago. Anyway, it works fine.
+> Already a simple "and" used in alternatives assembly will cause these
+> mismatched code sizes.
 
-Thanks!
+There should probably be a ".option norelax" in here as well, as 
+relaxation will trigger exactly the same issues.  That, or we could just 
+remove the constraint that these must be the same size (ie, 
+automatically pad the smaller one with NOP/jump-to-end).
 
-Best Regards,
-Huang, Ying
+> So prevent compressed instructions to be generated in alternatives-
+> code and use option-push and -pop to only limit this to the relevant
+> code blocks
+>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  arch/riscv/include/asm/alternative-macros.h | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
+> index c0fb11fad631..3a52884bf23d 100644
+> --- a/arch/riscv/include/asm/alternative-macros.h
+> +++ b/arch/riscv/include/asm/alternative-macros.h
+> @@ -19,7 +19,10 @@
+>  	.popsection
+>  	.subsection 1
+>  888 :
+> +	.option push
+> +	.option norvc
+>  	\new_c
+> +	.option pop
+>  889 :
+>  	.previous
+>  	.org    . - (889b - 888b) + (887b - 886b)
+> @@ -29,7 +32,10 @@
+>
+>  .macro __ALTERNATIVE_CFG old_c, new_c, vendor_id, errata_id, enable
+>  886 :
+> +	.option push
+> +	.option norvc
+>  	\old_c
+> +	.option pop
+>  887 :
+>  	ALT_NEW_CONTENT \vendor_id, \errata_id, \enable, \new_c
+>  .endm
+> @@ -40,7 +46,10 @@
+>  .macro __ALTERNATIVE_CFG_2 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
+>  				  new_c_2, vendor_id_2, errata_id_2, enable_2
+>  886 :
+> +	.option push
+> +	.option norvc
+>  	\old_c
+> +	.option pop
+>  887 :
+>  	ALT_NEW_CONTENT \vendor_id_1, \errata_id_1, \enable_1, \new_c_1
+>  	ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+> @@ -70,7 +79,10 @@
+>  	".popsection\n"							\
+>  	".subsection 1\n"						\
+>  	"888 :\n"							\
+> +	".option push\n"						\
+> +	".option norvc\n"						\
+>  	new_c "\n"							\
+> +	".option pop\n"							\
+>  	"889 :\n"							\
+>  	".previous\n"							\
+>  	".org	. - (887b - 886b) + (889b - 888b)\n"			\
+> @@ -79,7 +91,10 @@
+>
+>  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
+>  	"886 :\n"							\
+> +	".option push\n"						\
+> +	".option norvc\n"						\
+>  	old_c "\n"							\
+> +	".option pop\n"							\
+>  	"887 :\n"							\
+>  	ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+>
+> @@ -89,7 +104,10 @@
+>  #define __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
+>  				  new_c_2, vendor_id_2, errata_id_2, enable_2) \
+>  	"886 :\n"							\
+> +	".option push\n"						\
+> +	".option norvc\n"						\
+>  	old_c "\n"							\
+> +	".option pop\n"							\
+>  	"887 :\n"							\
+>  	ALT_NEW_CONTENT(vendor_id_1, errata_id_1, enable_1, new_c_1)	\
+>  	ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)

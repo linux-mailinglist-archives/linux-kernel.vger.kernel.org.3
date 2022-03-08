@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2EF4D0C94
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F324D0C9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344069AbiCHALg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 19:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S1344092AbiCHALo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 19:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344087AbiCHAL2 (ORCPT
+        with ESMTP id S1344098AbiCHAL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 19:11:28 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD1F377C9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:10:23 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id e15so14269232pfv.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 16:10:23 -0800 (PST)
+        Mon, 7 Mar 2022 19:11:29 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A672137AB4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:10:25 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso701247pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 16:10:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qamn1KXLKkoAp4pJxR8atvIxLoRPmk7xdgGcjv6i0+c=;
-        b=HtNToSVKei4r/dkWdQX0wFF5BeiprqAGBJsdBdObgeljF01tpvu6X37kYjGzVbNni+
-         WZOVPuhC++u65RvNvI13z38qMqXgqw+SxmFn9G+J1eGwYp92cOQk/pAGGrjwwKQWDFKf
-         /8iwPbKU2kjsHaj0KliCyO3Wyw7yBT0HGo8lI=
+        bh=4+3SrDNrw/tlXyCfJ6sF6gqf9JcGrmJbnTr1rnT8D4k=;
+        b=kes5rEKlUiDwu4xIwi7h/eVnPHdmYkXmiqCB/KbXLeXtt20LcwQZ3cMEeUEPQk4WNl
+         YSUPeUv55tPVK1HWOo460cP56vBx8LlWZBFLM+eRKEu3HPYXxnf4NZMnpuN7gLxgb3L/
+         NNiZoLQHNnecCeOOZOaQQqejRta7Wlhv54aaA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qamn1KXLKkoAp4pJxR8atvIxLoRPmk7xdgGcjv6i0+c=;
-        b=a2p9/LhIZ9YcMqC6JV3ZBRPvaS9PvfEv3fcGEc3MUliRylam9jpKG6iIXFDb7lftQi
-         i1DdS/V2XZfUSkZ6g8FFciE3rhxQPGttEythmdF+oHS4cJyxR/Dsbpn0ZpL5kgg6noxu
-         z9579K2shF/BNFa6OpdPUB9KS/Di6mwApPWG2xLZAhW8JR/ujLK1BDAswW7peRbFFLNA
-         4ZFMpS4xUYaf9Pmmrw9h1zIXGNsqYo0RIKV943SGgspLwQbw/eXtrfzQFPdffJZ+K22U
-         wRHGayUje6YybjEkAKWtN8m/ko4/3h4wb9SlJ4jwnBs+M1Oy3CZO5/UkUCaamOFo3UWr
-         ahQg==
-X-Gm-Message-State: AOAM531UBkrPP2qWZnJessModbVz9euXEFna3P/81fTfein99WCenjLV
-        ctUODCS/cLlgZSGoKnDZ2oVrKg==
-X-Google-Smtp-Source: ABdhPJzGV5UoWWEbvE82QJSgvp/hXpji18fWii897O93/NS3Ey5zWslK5hn5QEXo88Kr410ZN/GnIg==
-X-Received: by 2002:aa7:8432:0:b0:4f6:6dcd:4f19 with SMTP id q18-20020aa78432000000b004f66dcd4f19mr15511216pfn.53.1646698222537;
-        Mon, 07 Mar 2022 16:10:22 -0800 (PST)
+        bh=4+3SrDNrw/tlXyCfJ6sF6gqf9JcGrmJbnTr1rnT8D4k=;
+        b=nVLoqWTdiLYJb0Nwqsc3sxGScAWklUKM6n5utTXR378JMeLr0eTvt/qWo+21f8XPAX
+         EPktmBteRKanJGlyOql/zOx2oZ81lAuqrKoJDBluZMrJYXfNJ0yFAXPQ3jQJxmtSa5+h
+         WBLtTYtyBx0/TsMjt5hrnstgFPHjLaQwVHnL1Vv0RaMzZ4HZ2lJiqcPwzh4RioJ2iwJa
+         j2mJtWMr8qQ/IAc5pq8gRP0Uejv07XMBg4IQYcDL8Y3irxkVMK3kesnpUYcGR9U1O4Oq
+         iN96JJXjRaP45KJk+Rh50pgT1xx9xWLEgC/ZMgK3Ng+pkA3RICz0ZzgLnKfOA9eTa1ep
+         wXZg==
+X-Gm-Message-State: AOAM532Y1yUUwCGEwruooPE82Uo1DeZpq8rVA9W5qDxoPSBTO0b2RPFf
+        AbCz2xlAcWB4d4nqYyaWQJxwSw==
+X-Google-Smtp-Source: ABdhPJxrjIg4zE5+KWt3LU+HcZ0lUvwuOMu/+VLBS5mYdRjIaE2N6sRh1NSOGgpGd5rHYHS3YTVxNA==
+X-Received: by 2002:a17:90b:3807:b0:1bf:6c59:c6ff with SMTP id mq7-20020a17090b380700b001bf6c59c6ffmr1627584pjb.211.1646698224905;
+        Mon, 07 Mar 2022 16:10:24 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:e551:44dc:2842:57f1])
-        by smtp.gmail.com with UTF8SMTPSA id b62-20020a633441000000b0037c794cb68fsm11455025pga.9.2022.03.07.16.10.21
+        by smtp.gmail.com with UTF8SMTPSA id d7-20020a056a00244700b004e1300a2f7csm17255136pfj.212.2022.03.07.16.10.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 16:10:22 -0800 (PST)
+        Mon, 07 Mar 2022 16:10:24 -0800 (PST)
 From:   Brian Norris <briannorris@chromium.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -56,9 +56,9 @@ Cc:     Lin Huang <hl@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v3 08/15] PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
-Date:   Mon,  7 Mar 2022 16:09:38 -0800
-Message-Id: <20220307160918.v3.8.I0f36da588afd01d0dc9ce5866240efa34bd91e21@changeid>
+Subject: [PATCH v3 09/15] PM / devfreq: rk3399_dmc: Support new disable-freq properties
+Date:   Mon,  7 Mar 2022 16:09:39 -0800
+Message-Id: <20220307160918.v3.9.I08d654522b8a1ae92ecb8d2e2a74511f778f61e5@changeid>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 In-Reply-To: <20220308000945.706701-1-briannorris@chromium.org>
 References: <20220308000945.706701-1-briannorris@chromium.org>
@@ -74,108 +74,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're going to add new usages, and it's cleaner to work with macros
-instead of comments and magic numbers.
+Implement the newly-defined properties to allow disabling certain
+power-saving-at-idle features at higher frequencies.
+
+This is a rewritten version of work by Lin Huang <hl@rock-chips.com>.
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
 (no changes since v1)
 
- drivers/devfreq/rk3399_dmc.c | 43 ++++++++++++++++++++----------------
- 1 file changed, 24 insertions(+), 19 deletions(-)
+ drivers/devfreq/rk3399_dmc.c | 51 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 47 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 8f447217303f..c4efbc15cbb1 100644
+index c4efbc15cbb1..fc740c1f6747 100644
 --- a/drivers/devfreq/rk3399_dmc.c
 +++ b/drivers/devfreq/rk3399_dmc.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/arm-smccc.h>
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/devfreq.h>
-@@ -23,6 +24,15 @@
- #include <soc/rockchip/rk3399_grf.h>
- #include <soc/rockchip/rockchip_sip.h>
- 
-+#define RK3399_SET_ODT_PD_0_SR_IDLE			GENMASK(7, 0)
-+#define RK3399_SET_ODT_PD_0_SR_MC_GATE_IDLE		GENMASK(15, 8)
-+#define RK3399_SET_ODT_PD_0_STANDBY_IDLE		GENMASK(31, 16)
+@@ -55,6 +55,12 @@ struct rk3399_dmcfreq {
+ 	unsigned int ddr3_odt_dis_freq;
+ 	unsigned int lpddr3_odt_dis_freq;
+ 	unsigned int lpddr4_odt_dis_freq;
 +
-+#define RK3399_SET_ODT_PD_1_PD_IDLE			GENMASK(11, 0)
-+#define RK3399_SET_ODT_PD_1_SRPD_LITE_IDLE		GENMASK(27, 16)
-+
-+#define RK3399_SET_ODT_PD_2_ODT_ENABLE			BIT(0)
-+
- struct rk3399_dmcfreq {
- 	struct device *dev;
- 	struct devfreq *devfreq;
-@@ -55,7 +65,6 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
- 	unsigned long old_clk_rate = dmcfreq->rate;
- 	unsigned long target_volt, target_rate;
- 	struct arm_smccc_res res;
--	bool odt_enable = false;
- 	int err;
++	unsigned int pd_idle_dis_freq;
++	unsigned int sr_idle_dis_freq;
++	unsigned int sr_mc_gate_idle_dis_freq;
++	unsigned int srpd_lite_idle_dis_freq;
++	unsigned int standby_idle_dis_freq;
+ };
  
- 	opp = devfreq_recommended_opp(dev, freq, flags);
-@@ -72,8 +81,10 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
+ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
+@@ -81,8 +87,25 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
  	mutex_lock(&dmcfreq->lock);
  
  	if (dmcfreq->regmap_pmu) {
-+		unsigned int odt_pd_arg2 = 0;
++		unsigned int odt_pd_arg0 = dmcfreq->odt_pd_arg0;
++		unsigned int odt_pd_arg1 = dmcfreq->odt_pd_arg1;
+ 		unsigned int odt_pd_arg2 = 0;
+ 
++		if (target_rate >= dmcfreq->sr_idle_dis_freq)
++			odt_pd_arg0 &= ~RK3399_SET_ODT_PD_0_SR_IDLE;
++
++		if (target_rate >= dmcfreq->sr_mc_gate_idle_dis_freq)
++			odt_pd_arg0 &= ~RK3399_SET_ODT_PD_0_SR_MC_GATE_IDLE;
++
++		if (target_rate >= dmcfreq->standby_idle_dis_freq)
++			odt_pd_arg0 &= ~RK3399_SET_ODT_PD_0_STANDBY_IDLE;
++
++		if (target_rate >= dmcfreq->pd_idle_dis_freq)
++			odt_pd_arg1 &= ~RK3399_SET_ODT_PD_1_PD_IDLE;
++
++		if (target_rate >= dmcfreq->srpd_lite_idle_dis_freq)
++			odt_pd_arg1 &= ~RK3399_SET_ODT_PD_1_SRPD_LITE_IDLE;
 +
  		if (target_rate >= dmcfreq->odt_dis_freq)
--			odt_enable = true;
-+			odt_pd_arg2 |= RK3399_SET_ODT_PD_2_ODT_ENABLE;
+ 			odt_pd_arg2 |= RK3399_SET_ODT_PD_2_ODT_ENABLE;
  
- 		/*
- 		 * This makes a SMC call to the TF-A to set the DDR PD
-@@ -83,7 +94,7 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
- 		arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, dmcfreq->odt_pd_arg0,
- 			      dmcfreq->odt_pd_arg1,
- 			      ROCKCHIP_SIP_CONFIG_DRAM_SET_ODT_PD,
--			      odt_enable, 0, 0, 0, &res);
-+			      odt_pd_arg2, 0, 0, 0, &res);
+@@ -91,10 +114,9 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
+ 		 * (power-down) timings and to enable or disable the
+ 		 * ODT (on-die termination) resistors.
+ 		 */
+-		arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, dmcfreq->odt_pd_arg0,
+-			      dmcfreq->odt_pd_arg1,
+-			      ROCKCHIP_SIP_CONFIG_DRAM_SET_ODT_PD,
+-			      odt_pd_arg2, 0, 0, 0, &res);
++		arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, odt_pd_arg0, odt_pd_arg1,
++			      ROCKCHIP_SIP_CONFIG_DRAM_SET_ODT_PD, odt_pd_arg2,
++			      0, 0, 0, &res);
  	}
  
  	/*
-@@ -316,23 +327,17 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 	/*
- 	 * In TF-A there is a platform SIP call to set the PD (power-down)
- 	 * timings and to enable or disable the ODT (on-die termination).
--	 * This call needs three arguments as follows:
--	 *
--	 * arg0:
--	 *     bit[0-7]   : sr_idle
--	 *     bit[8-15]  : sr_mc_gate_idle
--	 *     bit[16-31] : standby idle
--	 * arg1:
--	 *     bit[0-11]  : pd_idle
--	 *     bit[16-27] : srpd_lite_idle
--	 * arg2:
--	 *     bit[0]     : odt enable
- 	 */
--	data->odt_pd_arg0 = (data->sr_idle & 0xff) |
--			    ((data->sr_mc_gate_idle & 0xff) << 8) |
--			    ((data->standby_idle & 0xffff) << 16);
--	data->odt_pd_arg1 = (data->pd_idle & 0xfff) |
--			    ((data->srpd_lite_idle & 0xfff) << 16);
-+	data->odt_pd_arg0 =
-+		FIELD_PREP(RK3399_SET_ODT_PD_0_SR_IDLE, data->sr_idle) |
-+		FIELD_PREP(RK3399_SET_ODT_PD_0_SR_MC_GATE_IDLE,
-+			   data->sr_mc_gate_idle) |
-+		FIELD_PREP(RK3399_SET_ODT_PD_0_STANDBY_IDLE,
-+			   data->standby_idle);
-+	data->odt_pd_arg1 =
-+		FIELD_PREP(RK3399_SET_ODT_PD_1_PD_IDLE, data->pd_idle) |
-+		FIELD_PREP(RK3399_SET_ODT_PD_1_SRPD_LITE_IDLE,
-+			   data->srpd_lite_idle);
+@@ -230,6 +252,16 @@ static int rk3399_dmcfreq_of_props(struct rk3399_dmcfreq *data,
+ {
+ 	int ret = 0;
  
- 	/*
- 	 * We add a devfreq driver to our parent since it has a device tree node
++	/*
++	 * These are all optional, and serve as minimum bounds. Give them large
++	 * (i.e., never "disabled") values if the DT doesn't specify one.
++	 */
++	data->pd_idle_dis_freq =
++		data->sr_idle_dis_freq =
++		data->sr_mc_gate_idle_dis_freq =
++		data->srpd_lite_idle_dis_freq =
++		data->standby_idle_dis_freq = UINT_MAX;
++
+ 	ret |= of_property_read_u32(np, "rockchip,pd_idle",
+ 				    &data->pd_idle);
+ 	ret |= of_property_read_u32(np, "rockchip,sr_idle",
+@@ -247,6 +279,17 @@ static int rk3399_dmcfreq_of_props(struct rk3399_dmcfreq *data,
+ 	ret |= of_property_read_u32(np, "rockchip,lpddr4_odt_dis_freq",
+ 				    &data->lpddr4_odt_dis_freq);
+ 
++	ret |= of_property_read_u32(np, "rockchip,pd-idle-dis-freq-hz",
++				    &data->pd_idle_dis_freq);
++	ret |= of_property_read_u32(np, "rockchip,sr-idle-dis-freq-hz",
++				    &data->sr_idle_dis_freq);
++	ret |= of_property_read_u32(np, "rockchip,sr-mc-gate-idle-dis-freq-hz",
++				    &data->sr_mc_gate_idle_dis_freq);
++	ret |= of_property_read_u32(np, "rockchip,srpd-lite-idle-dis-freq-hz",
++				    &data->srpd_lite_idle_dis_freq);
++	ret |= of_property_read_u32(np, "rockchip,standby-idle-dis-freq-hz",
++				    &data->standby_idle_dis_freq);
++
+ 	return ret;
+ }
+ 
 -- 
 2.35.1.616.g0bdcbb4464-goog
 

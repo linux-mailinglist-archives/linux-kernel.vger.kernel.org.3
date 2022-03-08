@@ -2,695 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F04E4D1F95
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8224D1FA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349368AbiCHSBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S1349365AbiCHSGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346328AbiCHSB1 (ORCPT
+        with ESMTP id S231637AbiCHSGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:01:27 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149534ECC3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:00:29 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id w127so19447oig.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:00:29 -0800 (PST)
+        Tue, 8 Mar 2022 13:06:23 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2292149914;
+        Tue,  8 Mar 2022 10:05:26 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228GmsH6004824;
+        Tue, 8 Mar 2022 18:02:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=nPigsk/c+QDDF+t0+LdmZzakg6Xnf3UzZTu7CgA2BdM=;
+ b=FXbf8Pp9hWkY/1dWZMg4aca0u4yGjtIPcRHvzDkWOS+EZQtUGgAWzgEG8+TJHHkL4/J2
+ KAKe554mRH3aYmP9f5BfKHTTKdenWtjQzzJvQXb/b0kpKNeo/uLFeNAGkjjkeaM+6q2m
+ vPzldqdlAtvq955qWcIi+3Vaq5wKwDLpR/0R61zSJrXAU8PNc4XrkvW6jCrv9eOpo4f8
+ jqzG6NUXmRvltBzyw2OOqVyfDEfJFgsQB3ehxC9oou+UeNU4hw5rUIHbpUY3KvA5QImM
+ NDuV4lEGdzddVXnRi9uXK+2mhc/mu85Q1+Nv0b6EpnP40DDviHC3P0dkltDl61uBakPQ WQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyfsfs9d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Mar 2022 18:02:31 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 228Hw3GA103401;
+        Tue, 8 Mar 2022 18:02:30 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2175.outbound.protection.outlook.com [104.47.73.175])
+        by userp3020.oracle.com with ESMTP id 3envvktsak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Mar 2022 18:02:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F3mDaTmAaYYVxC6VLqfv3kQiCWMv3GSvQRabexJXdQaqRcQgpBO6iVaEeDVeAiSEC9Z1/HHcw0L80/oUTgNdxzQ8sjFMDiXFP6eL3vUi2p1sW+IGGIUsmycfM1ifqV/XLbpbYxfaXtIbyS1RlM9bk0+/02K979z/XKdTq++KYfe+DGtkZ20+trK+x6SeZsO579TSc/pbSeoDoh6ieZWHgubLk2FNTl98+tyQG+6isVhtGGNH1dacblJDX08sf+z1YLynfFC+PnS43QMxsJiBR0bwofYrotZTIp1M4VL34GjuTGQMXQj2XvKgk94iIHWuSkplqVeN62YaKWjnE0QWEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nPigsk/c+QDDF+t0+LdmZzakg6Xnf3UzZTu7CgA2BdM=;
+ b=VNAFYcMWl2YlS0BL6EBYfHqRwTTO/jc7jt6pBSq8fljzc33YBAeakfTZnf9qZ4ljJdBqpUGHl+g+pYK2iPmL1BKaWuxR1jZnBcii/nmoGjDRn+aAeCggUPpwajruHidz5vfW3BxZDrbWoKYWiJKf2Jc23XXbMFmCqrRu159iCRsq6ObHvqt13FyzPSH/6d6BiwM9xWEnl7ySDdzXoTntuEKGXFQJkNt0JqfTfD8Otpu3uLi/Zyq7bJciTPoPJ22RLocMnO531wNJjCqnsMealMh5IZT5tt9Q3SRnB1vyL+icACMz6NMwNm4/MXiQWV2Tg4DsO86+vejKvTsr9gw42w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PjgRF7Y8l2pYekuBP6fbGy2G9m7mP7DoyOuHeRY8zWA=;
-        b=ccfxmLtCe7cP/6PDVA50j0nFWDZZSbNlWqMP8VTGvWgCqNGcB7QH5KIZ/l6Y7qC5YD
-         ET5/iTh5viYBv3aPC2P3rrlU64chXFXmm+0LrRsX8LHy9ISHol7zvHVok6IjRNgDxxzo
-         3ND3455Bm341I9EXumT0lg5QSYJRc1ZYa6gzGg1lNKzwzXzsf5UbZCv/pv1bow65k0mJ
-         bj89XFJLZenZfYNob0KlM9IQ8E5WPI7ZRjN5/P9iyDtX8W95nenyYQEAJoPuhTgH8AOe
-         6v6nXRAGY+Tyt8CnEYkUqEnnWj/QoUZT+BcxSvAsgjKote+sX8/Uxg7owmLdMllXK8ty
-         HLcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PjgRF7Y8l2pYekuBP6fbGy2G9m7mP7DoyOuHeRY8zWA=;
-        b=XaVkOPIefhXa0ostCDn7nkU03VWbaTVCQRMFSlTIlQxUfuLgVP+mR2xzEvOYrUj71h
-         DwX/DfS0fhazWtR+b2ehvE/ZFyDLlRBlPlYHBL0AnYoORZNcJaZWIkOdyL4zLZtGxRLY
-         HUl/POZ6q7b+4WKmpdfCxkBF+adJM648sGKJK0oY2lSL5pZmJv2XvY4WN9IZJLLtpHun
-         0RqdD2r0jeH3GqpU6uCGI9Grh60h9d6Wosillf3cK7tGCrA8OWUY7VZJF1cOX0dU3AOk
-         /wleJr+M3HmhGtPYd3ISjHPGLAf1qPtUgyQZnA6+HEqdl9f7xMvopKTW0BHD17g62m/f
-         zXlA==
-X-Gm-Message-State: AOAM530TLJv+yFnO+m6UnIDKO4MnlJGYpwb11SlI19nT9wtsKvogRtj/
-        tAwwmnyRCSLos+0nEDAYyTXTGQ==
-X-Google-Smtp-Source: ABdhPJzokS4xeMGUeoXlRwNt7ByfpewLs4r9cjLntJx9VBO/qR/YADO2waOgwK4aHf/L2cNxqcOlRg==
-X-Received: by 2002:a05:6808:14c8:b0:2d9:be61:def9 with SMTP id f8-20020a05680814c800b002d9be61def9mr3421231oiw.293.1646762428150;
-        Tue, 08 Mar 2022 10:00:28 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id w11-20020a056808140b00b002c0966d9521sm8592197oiv.10.2022.03.08.10.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 10:00:27 -0800 (PST)
-Date:   Tue, 8 Mar 2022 10:02:10 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v10 5/7] pinctrl: qcom: Extract chip specific LPASS LPI
- code
-Message-ID: <YieaIi7UfiahXTHS@ripper>
-References: <1646737394-4740-1-git-send-email-quic_srivasam@quicinc.com>
- <1646737394-4740-6-git-send-email-quic_srivasam@quicinc.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nPigsk/c+QDDF+t0+LdmZzakg6Xnf3UzZTu7CgA2BdM=;
+ b=c5V5T/pHlz8hnR+fSYRhmwj/Q3J+IySPBJuwOfwDnYLS2WhQPfVKSYKZA9k38gT4ZvPkpgr3EiXEcDWsuq3c9sFuGN+CiNm31jQxNIbEdVjJZshgxmdR8LPZO4rJRjwBe+pM/Y+9iI+8w3SoQo3pFCdZbL/qnrtnIQD53Gci0ZU=
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
+ by SN6PR10MB2734.namprd10.prod.outlook.com (2603:10b6:805:41::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Tue, 8 Mar
+ 2022 18:02:26 +0000
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::a8c4:c418:5d49:fe1a]) by CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::a8c4:c418:5d49:fe1a%7]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
+ 18:02:26 +0000
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+CC:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "mic@linux.microsoft.com" <mic@linux.microsoft.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH 3/4] KEYS: CA link restriction
+Thread-Topic: [PATCH 3/4] KEYS: CA link restriction
+Thread-Index: AQHYLZNA834T4wj1IU2tnKIEwT0iJayvXcOAgATjNQCAAFKBgIAACluAgAAwN4CAAKt3gIAAWKsA
+Date:   Tue, 8 Mar 2022 18:02:26 +0000
+Message-ID: <068F32E0-B202-4B20-9DE7-57373EF71BFE@oracle.com>
+References: <20220301173651.3435350-1-eric.snowberg@oracle.com>
+ <20220301173651.3435350-4-eric.snowberg@oracle.com>
+ <47f3654e-892d-a35a-e77c-70ada1ebcf43@linux.ibm.com>
+ <2415444C-AD8F-4F03-8B1C-C0770F83ADAE@oracle.com>
+ <e2dd58cd6074ae692256333b43b5ecde70bcdbdd.camel@linux.ibm.com>
+ <67456A73-8B72-4DB6-8E23-7C603661A0A4@oracle.com>
+ <22860730-d615-5683-6af0-05b6f4f3e71d@linux.ibm.com>
+ <e10f2161aaa69a9d301b3a16a37cbab266318aee.camel@linux.ibm.com>
+In-Reply-To: <e10f2161aaa69a9d301b3a16a37cbab266318aee.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.7)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e59d61d2-4a3f-4a37-74ed-08da012dcdb1
+x-ms-traffictypediagnostic: SN6PR10MB2734:EE_
+x-microsoft-antispam-prvs: <SN6PR10MB2734F1D0B5F68AF93A6DDAE587099@SN6PR10MB2734.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6vuy+9FC/GkLqjDi7Od/r6jtfrDDJ9sQqE4tz7ppGdoYTrD5lNfc4y+vkVRKzqQO+TRWQh3huYWA5ptW711E0+NEOShZEDSVJS5gfSXJJRDqKna9DaTMDhn0Bq2doz1/jRDcG12yMhFCs+4c9nBFmGCGC5w+J0Ru4Mt6ypKgW9B/h5JNhbSxXM5Mc19jAQJ1AEVOWkD22tEnu/OFrSYge9oIGg8IQDxKji2bujIYVlL/ai7M65qaXF9571qYO+VJWN4S8erGWfCA3MN/WR0vxrAcN9kiPUqjitAbpJzbJ3DBJzXElV62Tq2bqTgE7H99cn0FJOQnzBPaPLLAPQJ4mDql8xjQe3+62+PLMMN8fIU4/k706j3wF+LOS8LPWk4GcycQK1/g20YlgzRB2jP5nmJgzcirZmI0ZDv3x47/D6bTn+c/CvOUX2ZEiuROIv7lq9dsIQ1bBXfSrvF7UzwfON7EfOZWxc79YUsJyBBk+btjtq2BuJtuAspwnlpQ4D/RuPhzY4dpEFIUByOUCzCbwrxoLaUq3ZhxQtxHKFl/N7a2yM79E5ufzIyhdUAbj8+oeEYgwkpekzssWTczGTXVPnN63nTq8M5jnZjEBTwzNCWnQaA2VaQzrGe2elzgPd0tiW/ZTvGxz26T6K2FOEwro9uAcYWSnU5KPCjSb2SQQE8jZSQrMG8I72r1KISErtsNmzZCxo2fkQAivznuPd3Vmltj7fOW5dfj+KCtWx+h9VuxJON/48cVc6Dl6DCglesh2P1Iz+ckY3ASDJRmiSN0jopTtOJCNf4uSYx1vmrW7GwE7wos90ziC3ZLXaOckJKI
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66446008)(7416002)(44832011)(6506007)(53546011)(33656002)(86362001)(8936002)(2616005)(508600001)(5660300002)(6486002)(2906002)(6512007)(186003)(26005)(64756008)(4326008)(8676002)(91956017)(66476007)(76116006)(66946007)(66556008)(38100700002)(110136005)(38070700005)(122000001)(316002)(71200400001)(54906003)(36756003)(83380400001)(966005)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SzIrTi8xRFZjQVFlNG1MTldETTJxTUs1YS9ZeTllSnBBcEp4NytBYUp4Skd0?=
+ =?utf-8?B?YlZsYXN6Um13RHF3Z0Ryd1JXazF6SUYyeUwwMWVWN1Q4T3REeGczMzlKQTAv?=
+ =?utf-8?B?c2FkQ25pMWNUWkRIR05NUWtNSVVDOW85aS9rQzFVOUVFenl6TTc1aGE5UjRh?=
+ =?utf-8?B?ZUlzRzdOYkQvbmcxTlpRejVxQzVqMjJNRDZsdWF4SnQrR09RdmYzemt4ZXlp?=
+ =?utf-8?B?cXAwck1DTW1vQjVkUHVFdEJGSDFhYzlMWDZoR2trMkN5c0I4bUtHZkJsck14?=
+ =?utf-8?B?Z1hOUTRXbW1pMlM3OENNWFVQU2wzMjRFKzUrK0kzVGhCWjdDVk95SElDb3FW?=
+ =?utf-8?B?TnF4TkFUMExNU05ISmR1NTZVZXpZaEUrck5Bd1MrMUZlQzlxUUYyZ1lIVE4x?=
+ =?utf-8?B?Y3RHSDVZWGJLSmxSUndFMGE4TUtuT3UxbW56UE10WFZ6Y3E2dTl5bFZBMHEx?=
+ =?utf-8?B?d0xoaVhZeDczTGFSS0ZoMnR0MkJqNUdyMnFmeEhXOXNnWjdiaXRoMzltL1FX?=
+ =?utf-8?B?NzZYd0RFb1RYN2h1aHdBcXlJc2ZLWDl2ZVhHT1hYT2VzUnZCQ1RuSVpHZ3lC?=
+ =?utf-8?B?cVpkQW0yS3JUWitnTmFUOThWQW5sa00zcTB4V1pUc3BoYVNOTGZ0RVpRbDdY?=
+ =?utf-8?B?NHg4RTBnd3dyMUttVmNpMzl0U0JxcTA2MFpqcDBYSVlING9WVTJSMDR2K0VQ?=
+ =?utf-8?B?bDVtdEUxbCsxL0ZmTVl5cTUxZWY1TFJodmYxaGRNRmhzYXN1U0l2YlNhS3pQ?=
+ =?utf-8?B?eEIzaEtYa3A1dG5RRitPWUNzZGhLRVpjbUgvN1NiNjllK1dQTnFiRXYwZ25C?=
+ =?utf-8?B?VUhjK1NoRkZTMzdmTlVSbW9TNmFOZGdDMGwxc3prckhScXpMRnRGS2liV0lT?=
+ =?utf-8?B?OTNYeS9IeVcrYzNnQnZKNWMzQ0wwbkkvSzVpWHlMaWlRZkJ0NGpKeThNb1hC?=
+ =?utf-8?B?UmpUeDJyeUNuLzlZSFd2U1gySURFN1dTV0RyYzVOWjVDRUNRdDNrQnB0cnZ1?=
+ =?utf-8?B?MlRJLy8rSFp3MTJEdU81WjN2aFFiZWxUNjBsSU9uaWhFYlZtU1hya2FRZDdU?=
+ =?utf-8?B?a040MXdXeVBUcmFhVlZMUnpINjJLVEsvUDJmeEUrbTZVVDlyQmo1N01iZkFm?=
+ =?utf-8?B?bTVjWWhkVmR5cTlJMXdjZm5zU2ZiRnZ5N1dMU2JsM1hsSTMvQU1ZaGZxQTR0?=
+ =?utf-8?B?VEIzVTMzcWN4dzdRVjd2TVFYTHBVcWkwc3JGTXFGV2xsY1V5endhaW4vdTdG?=
+ =?utf-8?B?SGhVLy9LWnZDbTBrTEV2WThiMEdpdmdvTTBjUzZZZ0pSaTVPYm5mdWcvaDRs?=
+ =?utf-8?B?NDQrdXNKNGZCaDVUZXYwZS9lcGg5TWIyZEROWTNMZXJ2OVIySlBKNTdCMWRn?=
+ =?utf-8?B?MFU1WnhLd1ZYWmo3Z1o1RFc5OFBqVm5vMEJ1ZGcvQVBzczdRdzBrK0xUeHdn?=
+ =?utf-8?B?Y1pnWWU2TEJ3TzFHdExoelVEcmRwejYzVjZuNmZac29hOGdSajI5cTRvVEhL?=
+ =?utf-8?B?cUtuMVJnZUFtMVdOWjgvZWFmV3pSa1hucS9xdHlyZjg3clgxVGNBRTBoa2FS?=
+ =?utf-8?B?Ym5ma3pCTjVVWWNzNUZ6bnJJaWV3WUdoUElsZXhtYVFWREFpcS9jNGtCNVNR?=
+ =?utf-8?B?ZlFwSU5IeWU0UEc5NGp2ZS9OdDlDYi9rVDliYkpxQVZNcUF0NUF1NUF5MGRO?=
+ =?utf-8?B?bGp0d0tzSjlYKzBldmcwSGoxanF5dUxReHFRV3lSQ0FFcjRsWDMwbWdNL1dy?=
+ =?utf-8?B?WGVUMFhGQmNvVTVXSk5ITnp3bzd3ZmZ0M1FrNVMrZjhpTkY3NGZwYys2dXVN?=
+ =?utf-8?B?UFpiMkpBT2FnalB6VnVwQzFGV1Ztd3NCK2JLRHpHTldEZENOaStDMmhBU25s?=
+ =?utf-8?B?UUlXVXQ1THc2amdJMEczV2tRUXNzWVB4YlBWMTM5elVnODVvVzlZN3dhT0xZ?=
+ =?utf-8?B?VHFlYUpYQjY3OElBWE1lM2NvYVVKTVB2UHA3WkNlZzQ4clo0dzlBT0Y3aFp4?=
+ =?utf-8?B?eWorZHpocWU2VEk0a2xLRm95Wll6SWtqVTIzQ3FoMVVjT0VvMVR6Q21nQ1dh?=
+ =?utf-8?B?VTNEVFFRNERnenFTcVlXaGZuUHJTVWZvbmtVV0hWSVNhVU43bFl2WXdjdEla?=
+ =?utf-8?B?Y2ZsOHJuYys1cVd0ejNPZDBSTytnMmlZcW94akx6NnJ5eXFMV1FtdXJOcklZ?=
+ =?utf-8?B?QmJzYmFVTnFOektUeVB3UnZTemI2SFJXMncwV0ZYZy9CQUtGRlVlYmZaWEZy?=
+ =?utf-8?Q?klMVQ1X0Q6wxmS9WUJjEAPZqZcWXc6VP/ylivr7vvg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <042FCB20DD98D9498C651AEAACA24767@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646737394-4740-6-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e59d61d2-4a3f-4a37-74ed-08da012dcdb1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2022 18:02:26.1836
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G0i5rA+MVfRkSyd5bCIf2Nnr+TywGK5e2OwDNMpL/KzwObiJcQAa8P55WunbgzRetNee8vYfgI/+aSY8mzpUwwEnu/QGVS+MtxS3pqHDzYQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2734
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10280 signatures=690848
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203080093
+X-Proofpoint-GUID: gDYfzMTZdtka5UT2DjEjOp_azWwzQVvX
+X-Proofpoint-ORIG-GUID: gDYfzMTZdtka5UT2DjEjOp_azWwzQVvX
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08 Mar 03:03 PST 2022, Srinivasa Rao Mandadapu wrote:
-
-> Extract the chip specific SM8250 data from the LPASS LPI pinctrl driver
-> to allow reusing the common code in the addition of subsequent
-> platforms.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-
-I don't believe that lkp reported something that resulted in you writing
-this patch.
-
-> ---
->  drivers/pinctrl/qcom/Kconfig                    |   8 +
->  drivers/pinctrl/qcom/Makefile                   |   1 +
->  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c        | 233 +-----------------------
->  drivers/pinctrl/qcom/pinctrl-lpass-lpi.h        |  85 +++++++++
->  drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c | 165 +++++++++++++++++
->  5 files changed, 264 insertions(+), 228 deletions(-)
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> 
-> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-> index 31c4aa6..3c7b163 100644
-> --- a/drivers/pinctrl/qcom/Kconfig
-> +++ b/drivers/pinctrl/qcom/Kconfig
-> @@ -329,6 +329,14 @@ config PINCTRL_SM8250
->  	  Qualcomm Technologies Inc TLMM block found on the Qualcomm
->  	  Technologies Inc SM8250 platform.
->  
-> +config PINCTRL_SM8250_LPASS_LPI
-> +	tristate "Qualcomm Technologies Inc SM8250 LPASS LPI pin controller driver"
-> +	select PINCTRL_LPASS_LPI
-
-You shouldn't select user selectable options, so this should be "depends
-on PINCTRL_LPASS_LPI".
-
-That said, PINCTRL_LPASS_LPI doesn't actually do anything on its own, so
-it would would be nicer to make PINCTRL_LPASS_LPI not be user selectable
-and keep the select PINCTRL_LPASS_LPI here. (You would also need depends
-on GPIOLIB here though).
-
-With that I think this patch looks good.
-
-Regards,
-Bjorn
-
-> +	help
-> +	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
-> +	  Qualcomm Technologies Inc LPASS (Low Power Audio SubSystem) LPI
-> +	  (Low Power Island) found on the Qualcomm Technologies Inc SM8250 platform.
-> +
->  config PINCTRL_SM8350
->  	tristate "Qualcomm Technologies Inc SM8350 pin controller driver"
->  	depends on PINCTRL_MSM
-> diff --git a/drivers/pinctrl/qcom/Makefile b/drivers/pinctrl/qcom/Makefile
-> index 709882f..39650d6 100644
-> --- a/drivers/pinctrl/qcom/Makefile
-> +++ b/drivers/pinctrl/qcom/Makefile
-> @@ -38,6 +38,7 @@ obj-$(CONFIG_PINCTRL_SM6350) += pinctrl-sm6350.o
->  obj-$(CONFIG_PINCTRL_SDX65) += pinctrl-sdx65.o
->  obj-$(CONFIG_PINCTRL_SM8150) += pinctrl-sm8150.o
->  obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
-> +obj-$(CONFIG_PINCTRL_SM8250_LPASS_LPI) += pinctrl-sm8250-lpass-lpi.o
->  obj-$(CONFIG_PINCTRL_SM8350) += pinctrl-sm8350.o
->  obj-$(CONFIG_PINCTRL_SM8450) += pinctrl-sm8450.o
->  obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-lpass-lpi.o
-> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> index 54750ba..1ab572f 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> @@ -4,91 +4,15 @@
->   * Copyright (c) 2020 Linaro Ltd.
->   */
->  
-> -#include <linux/bitops.h>
-> -#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/gpio/driver.h>
-> -#include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> -#include <linux/of.h>
->  #include <linux/pinctrl/pinconf-generic.h>
->  #include <linux/pinctrl/pinconf.h>
->  #include <linux/pinctrl/pinmux.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/slab.h>
-> -#include <linux/types.h>
-> -#include "../core.h"
->  #include "../pinctrl-utils.h"
-> -
-> -#define LPI_SLEW_RATE_CTL_REG		0xa000
-> -#define LPI_TLMM_REG_OFFSET		0x1000
-> -#define LPI_SLEW_RATE_MAX		0x03
-> -#define LPI_SLEW_BITS_SIZE		0x02
-> -#define LPI_SLEW_RATE_MASK		GENMASK(1, 0)
-> -#define LPI_GPIO_CFG_REG		0x00
-> -#define LPI_GPIO_PULL_MASK		GENMASK(1, 0)
-> -#define LPI_GPIO_FUNCTION_MASK		GENMASK(5, 2)
-> -#define LPI_GPIO_OUT_STRENGTH_MASK	GENMASK(8, 6)
-> -#define LPI_GPIO_OE_MASK		BIT(9)
-> -#define LPI_GPIO_VALUE_REG		0x04
-> -#define LPI_GPIO_VALUE_IN_MASK		BIT(0)
-> -#define LPI_GPIO_VALUE_OUT_MASK		BIT(1)
-> -
-> -#define LPI_GPIO_BIAS_DISABLE		0x0
-> -#define LPI_GPIO_PULL_DOWN		0x1
-> -#define LPI_GPIO_KEEPER			0x2
-> -#define LPI_GPIO_PULL_UP		0x3
-> -#define LPI_GPIO_DS_TO_VAL(v)		(v / 2 - 1)
-> -#define LPI_NO_SLEW				-1
-> -
-> -#define LPI_FUNCTION(fname)			                \
-> -	[LPI_MUX_##fname] = {		                \
-> -		.name = #fname,				\
-> -		.groups = fname##_groups,               \
-> -		.ngroups = ARRAY_SIZE(fname##_groups),	\
-> -	}
-> -
-> -#define LPI_PINGROUP(id, soff, f1, f2, f3, f4)		\
-> -	{						\
-> -		.group.name = "gpio" #id,			\
-> -		.group.pins = gpio##id##_pins,		\
-> -		.pin = id,				\
-> -		.slew_offset = soff,			\
-> -		.group.num_pins = ARRAY_SIZE(gpio##id##_pins),	\
-> -		.funcs = (int[]){			\
-> -			LPI_MUX_gpio,			\
-> -			LPI_MUX_##f1,			\
-> -			LPI_MUX_##f2,			\
-> -			LPI_MUX_##f3,			\
-> -			LPI_MUX_##f4,			\
-> -		},					\
-> -		.nfuncs = 5,				\
-> -	}
-> -
-> -struct lpi_pingroup {
-> -	struct group_desc group;
-> -	unsigned int pin;
-> -	/* Bit offset in slew register for SoundWire pins only */
-> -	int slew_offset;
-> -	unsigned int *funcs;
-> -	unsigned int nfuncs;
-> -};
-> -
-> -struct lpi_function {
-> -	const char *name;
-> -	const char * const *groups;
-> -	unsigned int ngroups;
-> -};
-> -
-> -struct lpi_pinctrl_variant_data {
-> -	const struct pinctrl_pin_desc *pins;
-> -	int npins;
-> -	const struct lpi_pingroup *groups;
-> -	int ngroups;
-> -	const struct lpi_function *functions;
-> -	int nfunctions;
-> -};
-> +#include "pinctrl-lpass-lpi.h"
->  
->  #define MAX_LPI_NUM_CLKS	2
->  
-> @@ -104,136 +28,6 @@ struct lpi_pinctrl {
->  	const struct lpi_pinctrl_variant_data *data;
->  };
->  
-> -/* sm8250 variant specific data */
-> -static const struct pinctrl_pin_desc sm8250_lpi_pins[] = {
-> -	PINCTRL_PIN(0, "gpio0"),
-> -	PINCTRL_PIN(1, "gpio1"),
-> -	PINCTRL_PIN(2, "gpio2"),
-> -	PINCTRL_PIN(3, "gpio3"),
-> -	PINCTRL_PIN(4, "gpio4"),
-> -	PINCTRL_PIN(5, "gpio5"),
-> -	PINCTRL_PIN(6, "gpio6"),
-> -	PINCTRL_PIN(7, "gpio7"),
-> -	PINCTRL_PIN(8, "gpio8"),
-> -	PINCTRL_PIN(9, "gpio9"),
-> -	PINCTRL_PIN(10, "gpio10"),
-> -	PINCTRL_PIN(11, "gpio11"),
-> -	PINCTRL_PIN(12, "gpio12"),
-> -	PINCTRL_PIN(13, "gpio13"),
-> -};
-> -
-> -enum sm8250_lpi_functions {
-> -	LPI_MUX_dmic1_clk,
-> -	LPI_MUX_dmic1_data,
-> -	LPI_MUX_dmic2_clk,
-> -	LPI_MUX_dmic2_data,
-> -	LPI_MUX_dmic3_clk,
-> -	LPI_MUX_dmic3_data,
-> -	LPI_MUX_i2s1_clk,
-> -	LPI_MUX_i2s1_data,
-> -	LPI_MUX_i2s1_ws,
-> -	LPI_MUX_i2s2_clk,
-> -	LPI_MUX_i2s2_data,
-> -	LPI_MUX_i2s2_ws,
-> -	LPI_MUX_qua_mi2s_data,
-> -	LPI_MUX_qua_mi2s_sclk,
-> -	LPI_MUX_qua_mi2s_ws,
-> -	LPI_MUX_swr_rx_clk,
-> -	LPI_MUX_swr_rx_data,
-> -	LPI_MUX_swr_tx_clk,
-> -	LPI_MUX_swr_tx_data,
-> -	LPI_MUX_wsa_swr_clk,
-> -	LPI_MUX_wsa_swr_data,
-> -	LPI_MUX_gpio,
-> -	LPI_MUX__,
-> -};
-> -
-> -static int gpio0_pins[] = { 0 };
-> -static int gpio1_pins[] = { 1 };
-> -static int gpio2_pins[] = { 2 };
-> -static int gpio3_pins[] = { 3 };
-> -static int gpio4_pins[] = { 4 };
-> -static int gpio5_pins[] = { 5 };
-> -static int gpio6_pins[] = { 6 };
-> -static int gpio7_pins[] = { 7 };
-> -static int gpio8_pins[] = { 8 };
-> -static int gpio9_pins[] = { 9 };
-> -static int gpio10_pins[] = { 10 };
-> -static int gpio11_pins[] = { 11 };
-> -static int gpio12_pins[] = { 12 };
-> -static int gpio13_pins[] = { 13 };
-> -static const char * const swr_tx_clk_groups[] = { "gpio0" };
-> -static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio5" };
-> -static const char * const swr_rx_clk_groups[] = { "gpio3" };
-> -static const char * const swr_rx_data_groups[] = { "gpio4", "gpio5" };
-> -static const char * const dmic1_clk_groups[] = { "gpio6" };
-> -static const char * const dmic1_data_groups[] = { "gpio7" };
-> -static const char * const dmic2_clk_groups[] = { "gpio8" };
-> -static const char * const dmic2_data_groups[] = { "gpio9" };
-> -static const char * const i2s2_clk_groups[] = { "gpio10" };
-> -static const char * const i2s2_ws_groups[] = { "gpio11" };
-> -static const char * const dmic3_clk_groups[] = { "gpio12" };
-> -static const char * const dmic3_data_groups[] = { "gpio13" };
-> -static const char * const qua_mi2s_sclk_groups[] = { "gpio0" };
-> -static const char * const qua_mi2s_ws_groups[] = { "gpio1" };
-> -static const char * const qua_mi2s_data_groups[] = { "gpio2", "gpio3", "gpio4" };
-> -static const char * const i2s1_clk_groups[] = { "gpio6" };
-> -static const char * const i2s1_ws_groups[] = { "gpio7" };
-> -static const char * const i2s1_data_groups[] = { "gpio8", "gpio9" };
-> -static const char * const wsa_swr_clk_groups[] = { "gpio10" };
-> -static const char * const wsa_swr_data_groups[] = { "gpio11" };
-> -static const char * const i2s2_data_groups[] = { "gpio12", "gpio12" };
-> -
-> -static const struct lpi_pingroup sm8250_groups[] = {
-> -	LPI_PINGROUP(0, 0, swr_tx_clk, qua_mi2s_sclk, _, _),
-> -	LPI_PINGROUP(1, 2, swr_tx_data, qua_mi2s_ws, _, _),
-> -	LPI_PINGROUP(2, 4, swr_tx_data, qua_mi2s_data, _, _),
-> -	LPI_PINGROUP(3, 8, swr_rx_clk, qua_mi2s_data, _, _),
-> -	LPI_PINGROUP(4, 10, swr_rx_data, qua_mi2s_data, _, _),
-> -	LPI_PINGROUP(5, 12, swr_tx_data, swr_rx_data, _, _),
-> -	LPI_PINGROUP(6, LPI_NO_SLEW, dmic1_clk, i2s1_clk, _,  _),
-> -	LPI_PINGROUP(7, LPI_NO_SLEW, dmic1_data, i2s1_ws, _, _),
-> -	LPI_PINGROUP(8, LPI_NO_SLEW, dmic2_clk, i2s1_data, _, _),
-> -	LPI_PINGROUP(9, LPI_NO_SLEW, dmic2_data, i2s1_data, _, _),
-> -	LPI_PINGROUP(10, 16, i2s2_clk, wsa_swr_clk, _, _),
-> -	LPI_PINGROUP(11, 18, i2s2_ws, wsa_swr_data, _, _),
-> -	LPI_PINGROUP(12, LPI_NO_SLEW, dmic3_clk, i2s2_data, _, _),
-> -	LPI_PINGROUP(13, LPI_NO_SLEW, dmic3_data, i2s2_data, _, _),
-> -};
-> -
-> -static const struct lpi_function sm8250_functions[] = {
-> -	LPI_FUNCTION(dmic1_clk),
-> -	LPI_FUNCTION(dmic1_data),
-> -	LPI_FUNCTION(dmic2_clk),
-> -	LPI_FUNCTION(dmic2_data),
-> -	LPI_FUNCTION(dmic3_clk),
-> -	LPI_FUNCTION(dmic3_data),
-> -	LPI_FUNCTION(i2s1_clk),
-> -	LPI_FUNCTION(i2s1_data),
-> -	LPI_FUNCTION(i2s1_ws),
-> -	LPI_FUNCTION(i2s2_clk),
-> -	LPI_FUNCTION(i2s2_data),
-> -	LPI_FUNCTION(i2s2_ws),
-> -	LPI_FUNCTION(qua_mi2s_data),
-> -	LPI_FUNCTION(qua_mi2s_sclk),
-> -	LPI_FUNCTION(qua_mi2s_ws),
-> -	LPI_FUNCTION(swr_rx_clk),
-> -	LPI_FUNCTION(swr_rx_data),
-> -	LPI_FUNCTION(swr_tx_clk),
-> -	LPI_FUNCTION(swr_tx_data),
-> -	LPI_FUNCTION(wsa_swr_clk),
-> -	LPI_FUNCTION(wsa_swr_data),
-> -};
-> -
-> -static struct lpi_pinctrl_variant_data sm8250_lpi_data = {
-> -	.pins = sm8250_lpi_pins,
-> -	.npins = ARRAY_SIZE(sm8250_lpi_pins),
-> -	.groups = sm8250_groups,
-> -	.ngroups = ARRAY_SIZE(sm8250_groups),
-> -	.functions = sm8250_functions,
-> -	.nfunctions = ARRAY_SIZE(sm8250_functions),
-> -};
-> -
->  static int lpi_gpio_read(struct lpi_pinctrl *state, unsigned int pin,
->  			 unsigned int addr)
->  {
-> @@ -580,7 +374,7 @@ static const struct gpio_chip lpi_gpio_template = {
->  	.dbg_show		= lpi_gpio_dbg_show,
->  };
->  
-> -static int lpi_pinctrl_probe(struct platform_device *pdev)
-> +int lpi_pinctrl_probe(struct platform_device *pdev)
->  {
->  	const struct lpi_pinctrl_variant_data *data;
->  	struct device *dev = &pdev->dev;
-> @@ -659,8 +453,9 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL_GPL(lpi_pinctrl_probe);
->  
-> -static int lpi_pinctrl_remove(struct platform_device *pdev)
-> +int lpi_pinctrl_remove(struct platform_device *pdev)
->  {
->  	struct lpi_pinctrl *pctrl = platform_get_drvdata(pdev);
->  
-> @@ -669,25 +464,7 @@ static int lpi_pinctrl_remove(struct platform_device *pdev)
->  
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(lpi_pinctrl_remove);
->  
-> -static const struct of_device_id lpi_pinctrl_of_match[] = {
-> -	{
-> -	       .compatible = "qcom,sm8250-lpass-lpi-pinctrl",
-> -	       .data = &sm8250_lpi_data,
-> -	},
-> -	{ }
-> -};
-> -MODULE_DEVICE_TABLE(of, lpi_pinctrl_of_match);
-> -
-> -static struct platform_driver lpi_pinctrl_driver = {
-> -	.driver = {
-> -		   .name = "qcom-lpass-lpi-pinctrl",
-> -		   .of_match_table = lpi_pinctrl_of_match,
-> -	},
-> -	.probe = lpi_pinctrl_probe,
-> -	.remove = lpi_pinctrl_remove,
-> -};
-> -
-> -module_platform_driver(lpi_pinctrl_driver);
->  MODULE_DESCRIPTION("QTI LPI GPIO pin control driver");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-> new file mode 100644
-> index 0000000..afbac2a
-> --- /dev/null
-> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-> @@ -0,0 +1,85 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020 Linaro Ltd.
-> + */
-> +#ifndef __PINCTRL_LPASS_LPI_H__
-> +#define __PINCTRL_LPASS_LPI_H__
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/bitfield.h>
-> +#include "../core.h"
-> +
-> +#define LPI_SLEW_RATE_CTL_REG	0xa000
-> +#define LPI_TLMM_REG_OFFSET		0x1000
-> +#define LPI_SLEW_RATE_MAX		0x03
-> +#define LPI_SLEW_BITS_SIZE		0x02
-> +#define LPI_SLEW_RATE_MASK		GENMASK(1, 0)
-> +#define LPI_GPIO_CFG_REG		0x00
-> +#define LPI_GPIO_PULL_MASK		GENMASK(1, 0)
-> +#define LPI_GPIO_FUNCTION_MASK		GENMASK(5, 2)
-> +#define LPI_GPIO_OUT_STRENGTH_MASK	GENMASK(8, 6)
-> +#define LPI_GPIO_OE_MASK		BIT(9)
-> +#define LPI_GPIO_VALUE_REG		0x04
-> +#define LPI_GPIO_VALUE_IN_MASK		BIT(0)
-> +#define LPI_GPIO_VALUE_OUT_MASK		BIT(1)
-> +
-> +#define LPI_GPIO_BIAS_DISABLE		0x0
-> +#define LPI_GPIO_PULL_DOWN		0x1
-> +#define LPI_GPIO_KEEPER			0x2
-> +#define LPI_GPIO_PULL_UP		0x3
-> +#define LPI_GPIO_DS_TO_VAL(v)		(v / 2 - 1)
-> +#define LPI_NO_SLEW				-1
-> +
-> +#define LPI_FUNCTION(fname)			                \
-> +	[LPI_MUX_##fname] = {		                \
-> +		.name = #fname,				\
-> +		.groups = fname##_groups,               \
-> +		.ngroups = ARRAY_SIZE(fname##_groups),	\
-> +	}
-> +
-> +#define LPI_PINGROUP(id, soff, f1, f2, f3, f4)		\
-> +	{						\
-> +		.group.name = "gpio" #id,			\
-> +		.group.pins = gpio##id##_pins,		\
-> +		.pin = id,				\
-> +		.slew_offset = soff,			\
-> +		.group.num_pins = ARRAY_SIZE(gpio##id##_pins),	\
-> +		.funcs = (int[]){			\
-> +			LPI_MUX_gpio,			\
-> +			LPI_MUX_##f1,			\
-> +			LPI_MUX_##f2,			\
-> +			LPI_MUX_##f3,			\
-> +			LPI_MUX_##f4,			\
-> +		},					\
-> +		.nfuncs = 5,				\
-> +	}
-> +
-> +struct lpi_pingroup {
-> +	struct group_desc group;
-> +	unsigned int pin;
-> +	/* Bit offset in slew register for SoundWire pins only */
-> +	int slew_offset;
-> +	unsigned int *funcs;
-> +	unsigned int nfuncs;
-> +};
-> +
-> +struct lpi_function {
-> +	const char *name;
-> +	const char * const *groups;
-> +	unsigned int ngroups;
-> +};
-> +
-> +struct lpi_pinctrl_variant_data {
-> +	const struct pinctrl_pin_desc *pins;
-> +	int npins;
-> +	const struct lpi_pingroup *groups;
-> +	int ngroups;
-> +	const struct lpi_function *functions;
-> +	int nfunctions;
-> +};
-> +
-> +int lpi_pinctrl_probe(struct platform_device *pdev);
-> +int lpi_pinctrl_remove(struct platform_device *pdev);
-> +
-> +#endif /*__PINCTRL_LPASS_LPI_H__*/
-> diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> new file mode 100644
-> index 0000000..fb7dbb3
-> --- /dev/null
-> +++ b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> @@ -0,0 +1,165 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020 Linaro Ltd.
-> + */
-> +
-> +#include <linux/gpio/driver.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "pinctrl-lpass-lpi.h"
-> +
-> +enum lpass_lpi_functions {
-> +	LPI_MUX_dmic1_clk,
-> +	LPI_MUX_dmic1_data,
-> +	LPI_MUX_dmic2_clk,
-> +	LPI_MUX_dmic2_data,
-> +	LPI_MUX_dmic3_clk,
-> +	LPI_MUX_dmic3_data,
-> +	LPI_MUX_i2s1_clk,
-> +	LPI_MUX_i2s1_data,
-> +	LPI_MUX_i2s1_ws,
-> +	LPI_MUX_i2s2_clk,
-> +	LPI_MUX_i2s2_data,
-> +	LPI_MUX_i2s2_ws,
-> +	LPI_MUX_qua_mi2s_data,
-> +	LPI_MUX_qua_mi2s_sclk,
-> +	LPI_MUX_qua_mi2s_ws,
-> +	LPI_MUX_swr_rx_clk,
-> +	LPI_MUX_swr_rx_data,
-> +	LPI_MUX_swr_tx_clk,
-> +	LPI_MUX_swr_tx_data,
-> +	LPI_MUX_wsa_swr_clk,
-> +	LPI_MUX_wsa_swr_data,
-> +	LPI_MUX_gpio,
-> +	LPI_MUX__,
-> +};
-> +
-> +static int gpio0_pins[] = { 0 };
-> +static int gpio1_pins[] = { 1 };
-> +static int gpio2_pins[] = { 2 };
-> +static int gpio3_pins[] = { 3 };
-> +static int gpio4_pins[] = { 4 };
-> +static int gpio5_pins[] = { 5 };
-> +static int gpio6_pins[] = { 6 };
-> +static int gpio7_pins[] = { 7 };
-> +static int gpio8_pins[] = { 8 };
-> +static int gpio9_pins[] = { 9 };
-> +static int gpio10_pins[] = { 10 };
-> +static int gpio11_pins[] = { 11 };
-> +static int gpio12_pins[] = { 12 };
-> +static int gpio13_pins[] = { 13 };
-> +
-> +
-> +/* sm8250 variant specific data */
-> +static const struct pinctrl_pin_desc sm8250_lpi_pins[] = {
-> +	PINCTRL_PIN(0, "gpio0"),
-> +	PINCTRL_PIN(1, "gpio1"),
-> +	PINCTRL_PIN(2, "gpio2"),
-> +	PINCTRL_PIN(3, "gpio3"),
-> +	PINCTRL_PIN(4, "gpio4"),
-> +	PINCTRL_PIN(5, "gpio5"),
-> +	PINCTRL_PIN(6, "gpio6"),
-> +	PINCTRL_PIN(7, "gpio7"),
-> +	PINCTRL_PIN(8, "gpio8"),
-> +	PINCTRL_PIN(9, "gpio9"),
-> +	PINCTRL_PIN(10, "gpio10"),
-> +	PINCTRL_PIN(11, "gpio11"),
-> +	PINCTRL_PIN(12, "gpio12"),
-> +	PINCTRL_PIN(13, "gpio13"),
-> +};
-> +
-> +static const char * const swr_tx_clk_groups[] = { "gpio0" };
-> +static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio5" };
-> +static const char * const swr_rx_clk_groups[] = { "gpio3" };
-> +static const char * const swr_rx_data_groups[] = { "gpio4", "gpio5" };
-> +static const char * const dmic1_clk_groups[] = { "gpio6" };
-> +static const char * const dmic1_data_groups[] = { "gpio7" };
-> +static const char * const dmic2_clk_groups[] = { "gpio8" };
-> +static const char * const dmic2_data_groups[] = { "gpio9" };
-> +static const char * const i2s2_clk_groups[] = { "gpio10" };
-> +static const char * const i2s2_ws_groups[] = { "gpio11" };
-> +static const char * const dmic3_clk_groups[] = { "gpio12" };
-> +static const char * const dmic3_data_groups[] = { "gpio13" };
-> +static const char * const qua_mi2s_sclk_groups[] = { "gpio0" };
-> +static const char * const qua_mi2s_ws_groups[] = { "gpio1" };
-> +static const char * const qua_mi2s_data_groups[] = { "gpio2", "gpio3", "gpio4" };
-> +static const char * const i2s1_clk_groups[] = { "gpio6" };
-> +static const char * const i2s1_ws_groups[] = { "gpio7" };
-> +static const char * const i2s1_data_groups[] = { "gpio8", "gpio9" };
-> +static const char * const wsa_swr_clk_groups[] = { "gpio10" };
-> +static const char * const wsa_swr_data_groups[] = { "gpio11" };
-> +static const char * const i2s2_data_groups[] = { "gpio12", "gpio12" };
-> +
-> +static const struct lpi_pingroup sm8250_groups[] = {
-> +	LPI_PINGROUP(0, 0, swr_tx_clk, qua_mi2s_sclk, _, _),
-> +	LPI_PINGROUP(1, 2, swr_tx_data, qua_mi2s_ws, _, _),
-> +	LPI_PINGROUP(2, 4, swr_tx_data, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(3, 8, swr_rx_clk, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(4, 10, swr_rx_data, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(5, 12, swr_tx_data, swr_rx_data, _, _),
-> +	LPI_PINGROUP(6, LPI_NO_SLEW, dmic1_clk, i2s1_clk, _,  _),
-> +	LPI_PINGROUP(7, LPI_NO_SLEW, dmic1_data, i2s1_ws, _, _),
-> +	LPI_PINGROUP(8, LPI_NO_SLEW, dmic2_clk, i2s1_data, _, _),
-> +	LPI_PINGROUP(9, LPI_NO_SLEW, dmic2_data, i2s1_data, _, _),
-> +	LPI_PINGROUP(10, 16, i2s2_clk, wsa_swr_clk, _, _),
-> +	LPI_PINGROUP(11, 18, i2s2_ws, wsa_swr_data, _, _),
-> +	LPI_PINGROUP(12, LPI_NO_SLEW, dmic3_clk, i2s2_data, _, _),
-> +	LPI_PINGROUP(13, LPI_NO_SLEW, dmic3_data, i2s2_data, _, _),
-> +};
-> +
-> +static const struct lpi_function sm8250_functions[] = {
-> +	LPI_FUNCTION(dmic1_clk),
-> +	LPI_FUNCTION(dmic1_data),
-> +	LPI_FUNCTION(dmic2_clk),
-> +	LPI_FUNCTION(dmic2_data),
-> +	LPI_FUNCTION(dmic3_clk),
-> +	LPI_FUNCTION(dmic3_data),
-> +	LPI_FUNCTION(i2s1_clk),
-> +	LPI_FUNCTION(i2s1_data),
-> +	LPI_FUNCTION(i2s1_ws),
-> +	LPI_FUNCTION(i2s2_clk),
-> +	LPI_FUNCTION(i2s2_data),
-> +	LPI_FUNCTION(i2s2_ws),
-> +	LPI_FUNCTION(qua_mi2s_data),
-> +	LPI_FUNCTION(qua_mi2s_sclk),
-> +	LPI_FUNCTION(qua_mi2s_ws),
-> +	LPI_FUNCTION(swr_rx_clk),
-> +	LPI_FUNCTION(swr_rx_data),
-> +	LPI_FUNCTION(swr_tx_clk),
-> +	LPI_FUNCTION(swr_tx_data),
-> +	LPI_FUNCTION(wsa_swr_clk),
-> +	LPI_FUNCTION(wsa_swr_data),
-> +};
-> +
-> +static const struct lpi_pinctrl_variant_data sm8250_lpi_data = {
-> +	.pins = sm8250_lpi_pins,
-> +	.npins = ARRAY_SIZE(sm8250_lpi_pins),
-> +	.groups = sm8250_groups,
-> +	.ngroups = ARRAY_SIZE(sm8250_groups),
-> +	.functions = sm8250_functions,
-> +	.nfunctions = ARRAY_SIZE(sm8250_functions),
-> +};
-> +
-> +static const struct of_device_id lpi_pinctrl_of_match[] = {
-> +	{
-> +	       .compatible = "qcom,sm8250-lpass-lpi-pinctrl",
-> +	       .data = &sm8250_lpi_data,
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, lpi_pinctrl_of_match);
-> +
-> +static struct platform_driver lpi_pinctrl_driver = {
-> +	.driver = {
-> +		   .name = "qcom-sm8250-lpass-lpi-pinctrl",
-> +		   .of_match_table = lpi_pinctrl_of_match,
-> +	},
-> +	.probe = lpi_pinctrl_probe,
-> +	.remove = lpi_pinctrl_remove,
-> +};
-> +
-> +module_platform_driver(lpi_pinctrl_driver);
-> +MODULE_DESCRIPTION("QTI SM8250 LPI GPIO pin control driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.7.4
-> 
+DQoNCj4gT24gTWFyIDgsIDIwMjIsIGF0IDU6NDUgQU0sIE1pbWkgWm9oYXIgPHpvaGFyQGxpbnV4
+LmlibS5jb20+IHdyb3RlOg0KPiANCj4gT24gTW9uLCAyMDIyLTAzLTA3IGF0IDIxOjMxIC0wNTAw
+LCBTdGVmYW4gQmVyZ2VyIHdyb3RlOg0KPj4gDQo+PiBPbiAzLzcvMjIgMTg6MzgsIEVyaWMgU25v
+d2Jlcmcgd3JvdGU6DQo+Pj4gDQo+Pj4gDQo+Pj4+IE9uIE1hciA3LCAyMDIyLCBhdCA0OjAxIFBN
+LCBNaW1pIFpvaGFyIDx6b2hhckBsaW51eC5pYm0uY29tPiB3cm90ZToNCj4+Pj4gDQo+Pj4+IE9u
+IE1vbiwgMjAyMi0wMy0wNyBhdCAxODowNiArMDAwMCwgRXJpYyBTbm93YmVyZyB3cm90ZToNCj4+
+Pj4+IA0KPj4+Pj4+PiBkaWZmIC0tZ2l0IGEvY3J5cHRvL2FzeW1tZXRyaWNfa2V5cy9yZXN0cmlj
+dC5jIGIvY3J5cHRvL2FzeW1tZXRyaWNfa2V5cy9yZXN0cmljdC5jDQo+Pj4+Pj4+IGluZGV4IDZi
+MWFjNWY1ODk2YS4uNDliYjJlYTdmNjA5IDEwMDY0NA0KPj4+Pj4+PiAtLS0gYS9jcnlwdG8vYXN5
+bW1ldHJpY19rZXlzL3Jlc3RyaWN0LmMNCj4+Pj4+Pj4gKysrIGIvY3J5cHRvL2FzeW1tZXRyaWNf
+a2V5cy9yZXN0cmljdC5jDQo+Pj4+Pj4+IEBAIC0xMDgsNiArMTA4LDQ5IEBAIGludCByZXN0cmlj
+dF9saW5rX2J5X3NpZ25hdHVyZShzdHJ1Y3Qga2V5ICpkZXN0X2tleXJpbmcsDQo+Pj4+Pj4+IAly
+ZXR1cm4gcmV0Ow0KPj4+Pj4+PiB9DQo+Pj4+Pj4+ICsvKioNCj4+Pj4+Pj4gKyAqIHJlc3RyaWN0
+X2xpbmtfYnlfY2EgLSBSZXN0cmljdCBhZGRpdGlvbnMgdG8gYSByaW5nIG9mIENBIGtleXMNCj4+
+Pj4+Pj4gKyAqIEBkZXN0X2tleXJpbmc6IEtleXJpbmcgYmVpbmcgbGlua2VkIHRvLg0KPj4+Pj4+
+PiArICogQHR5cGU6IFRoZSB0eXBlIG9mIGtleSBiZWluZyBhZGRlZC4NCj4+Pj4+Pj4gKyAqIEBw
+YXlsb2FkOiBUaGUgcGF5bG9hZCBvZiB0aGUgbmV3IGtleS4NCj4+Pj4+Pj4gKyAqIEB0cnVzdF9r
+ZXlyaW5nOiBVbnVzZWQuDQo+Pj4+Pj4+ICsgKg0KPj4+Pj4+PiArICogQ2hlY2sgaWYgdGhlIG5l
+dyBjZXJ0aWZpY2F0ZSBpcyBhIENBLiBJZiBpdCBpcyBhIENBLCB0aGVuIG1hcmsgdGhlIG5ldw0K
+Pj4+Pj4+PiArICogY2VydGlmaWNhdGUgYXMgYmVpbmcgb2sgdG8gbGluay4NCj4+Pj4+PiANCj4+
+Pj4+PiBDQSA9IHJvb3QgQ0EgaGVyZSwgcmlnaHQ/DQo+Pj4+PiANCj4+Pj4+IFllcywgSeKAmWxs
+IHVwZGF0ZSB0aGUgY29tbWVudA0KPj4+PiANCj4+Pj4gVXBkYXRpbmcgdGhlIGNvbW1lbnQgaXMg
+bm90IGVub3VnaC4gIFRoZXJlJ3MgYW4gZXhpc3RpbmcgZnVuY3Rpb24gbmFtZWQNCj4+Pj4gIng1
+MDlfY2hlY2tfZm9yX3NlbGZfc2lnbmVkKCkiIHdoaWNoIGRldGVybWluZXMgd2hldGhlciB0aGUg
+Y2VydGlmaWNhdGUNCj4+Pj4gaXMgc2VsZi1zaWduZWQuDQo+Pj4gDQo+Pj4gT3JpZ2luYWxseSBJ
+IHRyaWVkIHVzaW5nIHRoYXQgZnVuY3Rpb24uICBIb3dldmVyIHdoZW4gdGhlIHJlc3RyaWN0IGxp
+bmsgY29kZSBpcyBjYWxsZWQsDQo+Pj4gYWxsIHRoZSBuZWNlc3NhcnkgeDUwOSBpbmZvcm1hdGlv
+biBpcyBubyBsb25nZXIgYXZhaWxhYmxlLiAgIFRoZSBjb2RlIGluDQo+Pj4gcmVzdHJpY3RfbGlu
+a19ieV9jYSBpcyBiYXNpY2FsbHkgZG9pbmcgdGhlIGVxdWl2YWxlbnQgdG8geDUwOV9jaGVja19m
+b3Jfc2VsZl9zaWduZWQuDQo+Pj4gQWZ0ZXIgdmVyaWZ5aW5nIHRoZSBjZXJ0IGhhcyB0aGUgQ0Eg
+ZmxhZyBzZXQsIHRoZSBjYWxsIHRvIHB1YmxpY19rZXlfdmVyaWZ5X3NpZ25hdHVyZQ0KPj4+IHZh
+bGlkYXRlcyB0aGUgY2VydCBpcyBzZWxmIHNpZ25lZC4NCj4+PiANCj4+IElzbid0IHg1MDlfY2Vy
+dF9wYXJzZSgpIGJlaW5nIGNhbGxlZCBhcyBwYXJ0IG9mIHBhcnNpbmcgdGhlIGNlcnRpZmljYXRl
+PyANCj4+IElmIHNvLCBpdCBzZWVtcyB0byBjaGVjayBmb3IgYSBzZWxmLXNpZ25lZCBjZXJ0aWZp
+Y2F0ZSBldmVyeSB0aW1lLiBZb3UgDQo+PiBjb3VsZCBhZGQgc29tZXRoaW5nIGxpa2UgdGhlIGZv
+bGxvd2luZyB0byB4NTA5X2NoZWNrX2Zvcl9zZWxmX3NpZ25lZChjZXJ0KToNCj4+IHB1Yi0+eDUw
+OV9zZWxmX3NpZ25lZCA9IGNlcnQtPnNlbGZfc2lnbmVkID0gdHJ1ZTsNCj4+IA0KPj4gVGhpcyBj
+b3VsZCB0aGVuIHJlZHVjZSB0aGUgZnVuY3Rpb24gaW4gMy80IHRvIHNvbWV0aGluZyBsaWtlOg0K
+Pj4gDQo+PiByZXR1cm4gcGF5bG9hZC0+ZGF0YVthc3ltX2NyeXB0b10tPng1MDlfc2VsZl9zaWdu
+ZWQ7DQoNCldoZW4gSSB3YXMgc3R1ZHlpbmcgdGhlIHJlc3RyaWN0aW9uIGNvZGUsIGJlZm9yZSB3
+cml0aW5nIHRoaXMgcGF0Y2gsIGl0IGxvb2tlZCBsaWtlDQppdCB3YXMgd3JpdHRlbiBmcm9tIHRo
+ZSBzdGFuZHBvaW50IHRvIGJlIGFzIGdlbmVyaWMgYXMgcG9zc2libGUuICBBbGwgY29kZSBjb250
+YWluZWQgDQp3aXRoaW4gaXQgd29ya3Mgb24gZWl0aGVyIGEgcHVibGljX2tleV9zaWduYXR1cmUg
+b3IgYSBwdWJsaWNfa2V5LiAgSSBoYWQgYXNzdW1lZCBpdA0Kd2FzIHdyaXR0ZW4gdGhpcyB3YXkg
+dG8gYmUgdXNlZCB3aXRoIGRpZmZlcmVudCBhc3ltbWV0cmljYWwga2V5IHR5cGVzIG5vdyBhbmQg
+aW4NCnRoZSBmdXR1cmUuIEkgY2FsbGVkIHRoZSBwdWJsaWNfa2V5X3ZlcmlmeV9zaWduYXR1cmUg
+ZnVuY3Rpb24gaW5zdGVhZCBvZiBpbnRlcnJvZ2F0aW5nDQp0aGUgeDUwOSBwYXlsb2FkIHRvIGtl
+ZXAgaW4gbGluZSB3aXRoIHdoYXQgSSB0aG91Z2h0IHdhcyB0aGUgb3JpZ2luYWwgZGVzaWduLiBM
+ZXQgbWUNCmtub3cgaWYgSSBzaG91bGQgYmUgY2FycnlpbmcgeDUwOSBjb2RlIGluIGhlcmUgdG8g
+bWFrZSB0aGUgY2hhbmdlIGFib3ZlLg0KDQo+IEFncmVlZCwgYXMgbG9uZyBhcyB0aGUgb3RoZXIg
+dHdvIGNyaXRlcmlhIGFyZSBhbHNvIG1ldDogQ0EgYW5kIGtleVVzYWdlDQo+IHNob3VsZCBiZSBy
+ZXF1aXJlZCBhbmQgbGltaXRlZCB0byBrZXlDZXJ0U2lnbi4NCg0KSSBoYXZlIGFkZGVkIHRoZSBr
+ZXlfaXNfY2EgaW4gdGhlIHB1YmxpY19rZXkgaGVhZGVyLiAgSSBjYW4gbG9vayBhdCBhZGRpbmcg
+dGhlIHVzYWdlDQp0b28uIEJlZm9yZSBkb2luZyB0aGlzIEkgd291bGQgbGlrZSB0byB1bmRlcnN0
+YW5kIHRoZSAibGltaXRlZCB0byIgYWJvdmUuICBNYW55IENBIGtleXMgDQp0aGF0IGhhdmUga2V5
+Q2VydFNpZ24gc2V0LCBhbHNvIGhhdmUgZGlnaXRhbFNpZ25hdHVyZSBzZXQgZm9yIGtleSB1c2Fn
+ZS4gIEZvciANCmV4YW1wbGU6DQoNCmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2Vy
+dEVWQ29kZVNpZ25pbmdDQS1TSEEyLmNydA0KDQpBcmUgeW91IHNheWluZyB3ZSB3b3VsZCB3YW50
+IHRvIGV4Y2x1ZGUgYSBDQSBsaWtlIHRoZSBvbmUgYWJvdmUsIHNpbmNlIGl0IGFzIHRoZSANCmRp
+Z2l0YWxTaWduYXR1cmUgdXNhZ2Ugc2V0IHRvbz8gIA0KDQo=

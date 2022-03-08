@@ -2,141 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC65F4D242C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7884D2431
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343664AbiCHWYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S1350711AbiCHW0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236364AbiCHWYx (ORCPT
+        with ESMTP id S236364AbiCHW0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:24:53 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFE358387
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:23:55 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id k24so269806wrd.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:23:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VLNTenH17gTL++hzFtoUTNEHN+pSYqZsQ93MYsewbsE=;
-        b=B+Y+aj0Kp1KcmHD1TJUXHwyix6ApB1/FqwmXZGhx1wcc4TAOmxh9gxTlBgAGamLqPE
-         vpKcowdhEgZzk2U98r53D5Hy1Scrw6xH8PQcSydekPlZ5HI3qiA9pxOFbKVYi/9OQf1Z
-         2z+/4YhPKMZ9oKQH20k7HP91wcJX8Isk8gqkO9jES0i3L0GPwD3p1LcGOB9U6h/BRgsQ
-         8084feHyzqqtSFPTbppFkm13Ecg1wAy6AkYXNngnc+JaHTQVPUGmgGjdIb5GLtIM4Q/G
-         bFqhl4gpP3fujkTcmelxXGFmAibfXsgFjzDNGvuS4OkzK2lYWp6unZQFj+/yXcyvAvNf
-         Zjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VLNTenH17gTL++hzFtoUTNEHN+pSYqZsQ93MYsewbsE=;
-        b=xQMtrp1FktAexxu3sXQF9sJiSgMt6klYuNQAaKHV1b0FPQRApr7zFywvXedwl1Bh9Y
-         vh+a5s0u9zQywtLN8K6IYpfRSVXk8mdWaRL8saaY95aFSCrQgwLZUoYMukNJf4Cr3gmf
-         K80u5Eqii3vrlu2jmbORtiCntRnWyi0Jmbc1bW65afypB6ezQcR8BsFPOGi4CGpSNYYN
-         YmmWrv5xF2SJaWALOwxw0nLTz1k0RVwyg1s21pZqsQnBO8+EIz0hyjQW9dK7su0A3GWU
-         dm+DUgWZy7bJOTABpZQ5NomHoApwKpKOIrHhHbxJyn3zzbncNHjUyCO8TZ8DPp+k7Mo+
-         M0Bw==
-X-Gm-Message-State: AOAM530NbfLzekrmovBwKHlvUbR8dlAWfOo2PpT4pw6b5gxRX7cAa2Wh
-        2qBqDxWoenw8bZLaHcpZ6PWHtsXAcQm7stXbdOE=
-X-Google-Smtp-Source: ABdhPJyGuPzIrRNVs2k9a2b1qGUaqAliN4KUm5RnUtzkOdj1rRLWp/R6GjNYrs64hWACoBMY67pIWSlhNB+JjFA13n4=
-X-Received: by 2002:a05:6000:15c5:b0:1f1:e64d:e4c3 with SMTP id
- y5-20020a05600015c500b001f1e64de4c3mr11545524wry.328.1646778234465; Tue, 08
- Mar 2022 14:23:54 -0800 (PST)
+        Tue, 8 Mar 2022 17:26:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F650583A3;
+        Tue,  8 Mar 2022 14:25:22 -0800 (PST)
+Date:   Tue, 08 Mar 2022 22:25:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646778320;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDOCC6fJPsTkG+qvHEySw4J70C9xQqVLmfp1R+zQxdM=;
+        b=QyNquRJCeKmWWi6OBjvcRijufrstVJIhWI0PIpqpwRoAChCYOkvRpykiZ8uYK0LfPsxmHC
+        cQAsCZhk8I9zpsJ6IJQYeCG2AZ89PtqnTR9OK1ewvFpzu4yJCpdoQEZuf6vHlFRrrmd1vw
+        0W3WVpalOIhWmm/ezx5Z52TiHa703LcZT6ujGMPpIGLvK5ZKo47XoiZjZshxf6QYjoyzty
+        ntgHljM8niC1Gln6QscXGj4d7AROdNjSI/+CxFaygq8yJFEJsGWK9kgqhfItk5jVFZ6Mvu
+        vQmJNuamEe56HfiPg+ZGOQze7KpltD+Ey0fRO1hat2478gHwZsmQYsnCRk6rzQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646778320;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDOCC6fJPsTkG+qvHEySw4J70C9xQqVLmfp1R+zQxdM=;
+        b=V4TzrgnOZHpQjOT1bND1xkE7DrP1U1thMEtEKk2+YP29vmOBrS60rBb/S1aBiPVIx+B+wY
+        W5+2BDMsg6F9YHBA==
+From:   "tip-bot2 for K Prateek Nayak" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/topology: Remove redundant variable and fix
+ incorrect type in build_sched_domains
+Cc:     kernel test robot <lkp@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220218162743.1134-1-kprateek.nayak@amd.com>
+References: <20220218162743.1134-1-kprateek.nayak@amd.com>
 MIME-Version: 1.0
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com> <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
-In-Reply-To: <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 8 Mar 2022 14:24:22 -0800
-Message-ID: <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164677831883.16921.2209475420454417488.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 11:28 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 3/8/22 19:29, Rob Clark wrote:
-> > On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
-> >> During OOM, the shrinker will release BOs that are marked as "not needed"
-> >> by userspace using the new madvise IOCTL. The userspace in this case is
-> >> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
-> >> allowing kernel driver to release memory of the cached shmem BOs on lowmem
-> >> situations, preventing OOM kills.
-> >
-> > Will host memory pressure already trigger shrinker in guest?
->
-> The host memory pressure won't trigger shrinker in guest here. This
-> series will help only with the memory pressure within the guest using a
-> usual "virgl context".
->
-> Having a host shrinker in a case of "virgl contexts" should be a
-> difficult problem to solve.
+The following commit has been merged into the sched/core branch of tip:
 
-Hmm, I think we just need the balloon driver to trigger the shrinker
-in the guest kernel?  I suppose a driver like drm/virtio might want to
-differentiate between host and guest pressure (ie. consider only
-objects that have host vs guest storage), but even without that,
-freeing up memory in the guest when host is under memory pressure
-seems worthwhile.  Maybe I'm over-simplifying?
+Commit-ID:     7f434dff76215af00c26ba6449eaa4738fe9e2ab
+Gitweb:        https://git.kernel.org/tip/7f434dff76215af00c26ba6449eaa4738fe9e2ab
+Author:        K Prateek Nayak <kprateek.nayak@amd.com>
+AuthorDate:    Fri, 18 Feb 2022 21:57:43 +05:30
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 08 Mar 2022 16:08:40 +01:00
 
-> > This is
-> > something I'm quite interested in for "virtgpu native contexts" (ie.
-> > native guest driver with new context type sitting on top of virtgpu),
->
-> In a case of "native contexts" it should be doable, at least I can't see
-> any obvious problems. The madvise invocations could be passed to the
-> host using a new virtio-gpu command by the guest's madvise IOCTL
-> handler, instead-of/in-addition-to handling madvise in the guest's
-> kernel, and that's it.
+sched/topology: Remove redundant variable and fix incorrect type in build_sched_domains
 
-I think we don't want to do that, because MADV:WILLNEED would be by
-far the most frequent guest<->host synchronous round trip.  So from
-that perspective tracking madvise state in guest kernel seems quite
-attractive.
+While investigating the sparse warning reported by the LKP bot [1],
+observed that we have a redundant variable "top" in the function
+build_sched_domains that was introduced in the recent commit
+e496132ebedd ("sched/fair: Adjust the allowed NUMA imbalance when
+SD_NUMA spans multiple LLCs")
 
-If we really can't track madvise state in the guest for dealing with
-host memory pressure, I think the better option is to introduce
-MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
-buffer is needed but the previous contents are not (as long as the GPU
-VA remains the same).  With this the host could allocate new pages if
-needed, and the guest would not need to wait for a reply from host.
+The existing variable "sd" suffices which allows us to remove the
+redundant variable "top" while annotating the other variable "top_p"
+with the "__rcu" annotation to silence the sparse warning.
 
-> > since that isn't using host storage
->
-> s/host/guest ?
+[1] https://lore.kernel.org/lkml/202202170853.9vofgC3O-lkp@intel.com/
 
-Yes, sorry, I meant that it is not using guest storage.
+Fixes: e496132ebedd ("sched/fair: Adjust the allowed NUMA imbalance when SD_NUMA spans multiple LLCs")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+Link: https://lore.kernel.org/r/20220218162743.1134-1-kprateek.nayak@amd.com
+---
+ kernel/sched/topology.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-BR,
--R
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 32841c6..43f2899 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -2291,7 +2291,7 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
+ 
+ 			if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
+ 			    (child->flags & SD_SHARE_PKG_RESOURCES)) {
+-				struct sched_domain *top, *top_p;
++				struct sched_domain __rcu *top_p;
+ 				unsigned int nr_llcs;
+ 
+ 				/*
+@@ -2316,11 +2316,9 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
+ 				sd->imb_numa_nr = imb;
+ 
+ 				/* Set span based on the first NUMA domain. */
+-				top = sd;
+-				top_p = top->parent;
++				top_p = sd->parent;
+ 				while (top_p && !(top_p->flags & SD_NUMA)) {
+-					top = top->parent;
+-					top_p = top->parent;
++					top_p = top_p->parent;
+ 				}
+ 				imb_span = top_p ? top_p->span_weight : sd->span_weight;
+ 			} else {

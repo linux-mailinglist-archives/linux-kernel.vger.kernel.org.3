@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3804D0F9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55374D0FA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238210AbiCHF5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S244136AbiCHF6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbiCHF5c (ORCPT
+        with ESMTP id S233650AbiCHF6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:57:32 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67A32991;
-        Mon,  7 Mar 2022 21:56:36 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nRSpm-0003fn-Ba; Tue, 08 Mar 2022 06:56:34 +0100
-Message-ID: <4af605b4-d4c9-0060-9a26-f9846d44a328@leemhuis.info>
-Date:   Tue, 8 Mar 2022 06:56:33 +0100
+        Tue, 8 Mar 2022 00:58:40 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E601ADB4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:57:44 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id k24so17227777wrd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 21:57:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xIgw1CeMnBUIL/RC29fGtIeWMwiFcbnmOLdGCa76gaY=;
+        b=dyvq9P0JTvA5h9bwOZCVBY5lenifpgc/O9PVmslobo52K48eIMdPbQL3M6uKNg281M
+         +lkM0gl7OVKvD7qvptTyaWiBj99ozuZByicKHUS5T7G1Iak5aNnOrh6oDpNFvmch18YF
+         UiYbwAV5ql7/skjeygZ03JFBTPS8LbT3TShde2YV9aMc/w526q9nwjdiAbNcOKBVuZFM
+         LTBM/yoLYFCr+So/Gqt2O7XHXe9JoymfvZBYu3asQGaV2917CGOOH4GrlnZ/q52zuiKN
+         u1GG+8BvXTdm3oZWlTi47HUQ9fzztnkbktKIRb4ysX785/wQrwIM6jdxBfjiy2TjJqcc
+         fe3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xIgw1CeMnBUIL/RC29fGtIeWMwiFcbnmOLdGCa76gaY=;
+        b=c80cbPhTe8jiQcPELxdyi6+pwDGQrfyTERuCDDbuF9qLze+6HvV/vsx0PRaW0TTK4y
+         NcpABlwHJBDPzpFoahWdetX1bA2x7XdEflIcuF0uLdE8usMkjWgiHzE0IAF0vq7KMLWh
+         p846XpnKfd+9WsPgdED+rn+9zfJTVvPAIEvLfCwboi+PukcfGaSVF3Or6jKh4RJ2hstp
+         jTZuBmNzd0FLALacIqJesWR5U8XTITUQpF8cMbH+4hut/J1ccwLr6XLqScDb8RM+E4Lp
+         I/00XSUiR1mhlFbj+WaO1GZtOQvU7Eg7jr7gbEReRx1J5aFFna1QvS50q20h/gupYdFU
+         WLDQ==
+X-Gm-Message-State: AOAM530NHVX3QARmfQ0gEQbZuRzwdYCdl1q6L0CVcD4ley4imGxz07p9
+        4QmNJVJIH+C41JpGQEKnTKQxqoli4jIu6OXpD0qUyA==
+X-Google-Smtp-Source: ABdhPJyWy1Uyhyu9cuDZx89dRaND7TYseZQ1e/hZSNiya6vyhdBIBdrrXDP7oYGdjQ+148oOJJ8ZEA6K8aOTFu9rDjg=
+X-Received: by 2002:adf:b60c:0:b0:1f0:227d:bce with SMTP id
+ f12-20020adfb60c000000b001f0227d0bcemr10946306wre.313.1646719062630; Mon, 07
+ Mar 2022 21:57:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Justin Sanders <justin@coraid.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: Bug 215647 - aoe: removing aoe devices with flush (implicit in rmmod
- aoe) leads to page fault
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646718996;ff796f56;
-X-HE-SMSGID: 1nRSpm-0003fn-Ba
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220201082227.361967-1-apatel@ventanamicro.com>
+In-Reply-To: <20220201082227.361967-1-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 8 Mar 2022 11:27:30 +0530
+Message-ID: <CAAhSdy3JwLyOoNOubAS2VusNdj6O-CJJNSs+mM8+NvKErtAdmw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] KVM RISC-V SBI v0.3 support
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi! As part of my regression tracking work I noticed this bug report
-that was filed about a week ago:
+On Tue, Feb 1, 2022 at 1:53 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> This series adds initial support for SBI v0.3 which includes:
+> 1) SBI SRST support for Guest
+> 2) SBI HSM suspend for Guest
+>
+> The SBI PMU support is intentionally left out and will be added as
+> a separate patch series.
+>
+> These patches can also be found in riscv_kvm_sbi_v03_v1 branch at:
+> https://github.com/avpatel/linux.git
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215647
+Queued this series for Linux-5.18
 
-To quote the first para:
+Thanks,
+Anup
 
-> there is a bug in the aoe driver module between v4.20-rc1 and
-> v5.14-rc1 inroduced in 3582dd2 (aoe: convert aoeblk to blk-mq) and
-> fixed in 6560ec9 (aoe: use blk_mq_alloc_disk and blk_cleanup_disk). 
-> Every forcible removal of an aoe device (eg. "rmmod aoe" with aoe
-> devices available or "aoe-flush ex.x") leads to a page fault. This
-> bug was successfully reproduced with kernel 5.10.92 from the debian
-> repository, there were no changes to the affected code between
-> v4.20-rc1 and v5.14-rc1. Version 4.19.208 (from debian buster) and
-> 5.17-rc4 (from debian experimental) are confirmed not to be
-> affected.
-
-I checked the logs to see why mainline might not be affected anymore and
-noticed a recent commit in the same area:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/block/aoe/aoedev.c?id=6560ec961a080944f8d5e1fef17b771bfaf189cb
-
-> From 6560ec961a080944f8d5e1fef17b771bfaf189cb Mon Sep 17 00:00:00 2001
-> From: Christoph Hellwig <hch@lst.de>
-> Date: Wed, 2 Jun 2021 09:53:31 +0300
-> Subject: aoe: use blk_mq_alloc_disk and blk_cleanup_disk
-> 
-> Use blk_mq_alloc_disk and blk_cleanup_disk to simplify the gendisk and
-> request_queue allocation.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-> Link: https://lore.kernel.org/r/20210602065345.355274-17-hch@lst.de
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> ---
->  drivers/block/aoe/aoedev.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> (limited to 'drivers/block/aoe/aoedev.c')
-> 
-> diff --git a/drivers/block/aoe/aoedev.c b/drivers/block/aoe/aoedev.c
-> index e2ea2356da061..c5753c6bfe804 100644
-> --- a/drivers/block/aoe/aoedev.c
-> +++ b/drivers/block/aoe/aoedev.c
-> @@ -277,9 +277,8 @@ freedev(struct aoedev *d)
->  	if (d->gd) {
->  		aoedisk_rm_debugfs(d);
->  		del_gendisk(d->gd);
-> -		put_disk(d->gd);
-> +		blk_cleanup_disk(d->gd);
->  		blk_mq_free_tag_set(&d->tag_set);
-> -		blk_cleanup_queue(d->blkq);
->  	}
->  	t = d->targets;
->  	e = t + d->ntargets;
-
-Does that need backporting? Or is the patch the reporter provided in
-bugzilla the easier and safer way to fix that regression in older releases?
-
-Ciao, Thorsten
+>
+> Anup Patel (6):
+>   RISC-V: KVM: Upgrade SBI spec version to v0.3
+>   RISC-V: KVM: Add common kvm_riscv_vcpu_sbi_system_reset() function
+>   RISC-V: KVM: Implement SBI v0.3 SRST extension
+>   RISC-V: Add SBI HSM suspend related defines
+>   RISC-V: KVM: Add common kvm_riscv_vcpu_wfi() function
+>   RISC-V: KVM: Implement SBI HSM suspend call
+>
+>  arch/riscv/include/asm/kvm_host.h     |  1 +
+>  arch/riscv/include/asm/kvm_vcpu_sbi.h |  5 ++-
+>  arch/riscv/include/asm/sbi.h          | 27 +++++++++++++---
+>  arch/riscv/kernel/cpu_ops_sbi.c       |  2 +-
+>  arch/riscv/kvm/vcpu_exit.c            | 22 ++++++++++----
+>  arch/riscv/kvm/vcpu_sbi.c             | 19 ++++++++++++
+>  arch/riscv/kvm/vcpu_sbi_hsm.c         | 18 +++++++++--
+>  arch/riscv/kvm/vcpu_sbi_replace.c     | 44 +++++++++++++++++++++++++++
+>  arch/riscv/kvm/vcpu_sbi_v01.c         | 18 ++---------
+>  9 files changed, 125 insertions(+), 31 deletions(-)
+>
+> --
+> 2.25.1
+>

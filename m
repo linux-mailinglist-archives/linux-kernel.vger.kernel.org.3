@@ -2,135 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459124D1BE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FE64D1BE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347880AbiCHPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S241001AbiCHPl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiCHPkN (ORCPT
+        with ESMTP id S231753AbiCHPl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:40:13 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7177D3134E;
-        Tue,  8 Mar 2022 07:39:16 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228EbFnV009983;
-        Tue, 8 Mar 2022 15:39:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : reply-to : subject : to : cc : references : from :
- in-reply-to : content-type : content-transfer-encoding; s=pp1;
- bh=CM6kiWJAiPT9mC+Dod5De+bPxG2c0/kN9DmKhg/1EXU=;
- b=G9XKMNjk4/8MgXBDKglny1+HFu3u8hsAos7MTF6i7xHZI5TIGwMswBrpB5U51JKjFQYW
- 7Djdyjljb17hJsmW4enz5tIXPlEnZgYviQUjcKkucIIJY/MR8oxRDXv73wO12cumcKmV
- n23fGS+/sX0UvuX04osf7dRdeY0+LPqTsK+I7u1H8lloqMktZgLE8SNjwKrXddqtd5gQ
- VnjAoqCuQLvIW4WDgY3jT4Un6cNzU/XJAReY8TzeSzMz0KAxqbyrGBplix/01Hl2/T9Q
- hpgADo1HujQccGrYylOPRW9MJqsRby6pyhAv87+m47VNyYFBKNR51WKftiJDvm9EXpaa 2w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eny9k5v7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 15:39:13 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 228FBqFJ007052;
-        Tue, 8 Mar 2022 15:39:13 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eny9k5v7f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 15:39:13 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 228F7nxw001363;
-        Tue, 8 Mar 2022 15:39:12 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01wdc.us.ibm.com with ESMTP id 3ekyg95yt0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 15:39:12 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 228FdBOU51446118
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Mar 2022 15:39:11 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1892AAC062;
-        Tue,  8 Mar 2022 15:39:11 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B31EAC05F;
-        Tue,  8 Mar 2022 15:39:09 +0000 (GMT)
-Received: from [9.160.101.128] (unknown [9.160.101.128])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Mar 2022 15:39:09 +0000 (GMT)
-Message-ID: <439f929f-9d15-c33c-b40d-88dd06cebd85@linux.ibm.com>
-Date:   Tue, 8 Mar 2022 10:39:09 -0500
+        Tue, 8 Mar 2022 10:41:27 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C824ECC6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646754030; x=1678290030;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jnkYFkLex+M6IWhUg0D9eerewUXo7eiqKU63ziTCpyY=;
+  b=TUvjLp87LIG6dK+uwUsg7UoHt6XAfVSdUmJJqOwb3bcLCaw2s3OohB2x
+   ySrHPMpILt45MgibWcwVOgIZFGeJc93WH9q106uTA0E8dUpYax+QdT0GT
+   UMGv1iBG4awJvtPEwvvWlOTMLJp6LFtp3ZUK2Hb0mjt2hw+55PUfNcLjB
+   /Wv8XunTiU6/MjnpL+l0HEl6zOu1TrqM160xGcic2I5BmoJ/USJdc/VMm
+   9E22XEhvknTJG2s5VwE6LXZDpJwfFEy8I/fY8wcau6H0M0UUlxKhEbnqp
+   qaenN69jpUOZA1+0DoRnsiHl6QfGKmJ0bdwBIIlM1+xIV+ohoju/Xhq5v
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254905259"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="254905259"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 07:40:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="578027095"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 08 Mar 2022 07:40:28 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRbwq-0001cY-2T; Tue, 08 Mar 2022 15:40:28 +0000
+Date:   Tue, 8 Mar 2022 23:39:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-d1 12/12]
+ arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+Message-ID: <202203082302.eZ9h0xp5-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Reply-To: jjherne@linux.ibm.com
-Subject: Re: [PATCH v18 08/18] s390/vfio-ap: allow assignment of unavailable
- AP queues to mdev device
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
- <20220215005040.52697-9-akrowiak@linux.ibm.com>
- <97681738-50a1-976d-9f0f-be326eab7202@linux.ibm.com>
- <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rc5-eKYUXwHhura1Um6mUyUgGeqFHTah
-X-Proofpoint-GUID: 1E5L0lbB7A5F2Z6AEhlQ7i62A1kmJPHd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-08_05,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=637
- phishscore=0 suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203080081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 07:31, Tony Krowiak wrote:
->>> +         * If the input apm and aqm belong to the matrix_mdev's matrix,
->>> +         * then move on to the next.
->>> +         */
->>> +        if (mdev_apm == matrix_mdev->matrix.apm &&
->>> +            mdev_aqm == matrix_mdev->matrix.aqm)
->>>               continue;
->>
->> We may have a problem here. This check seems like it exists to stop you from
->> comparing an mdev's apm/aqm with itself. Obviously comparing an mdev's newly
->> updated apm/aqm with itself would cause a false positive sharing check, right?
->> If this is the case, I think the comment should be changed to reflect that.
-> 
-> You are correct, this check is performed to prevent comparing an mdev to
-> itself, I'll improve the comment.
-> 
->>
->> Aside from the comment, what stops this particular series of if statements from
->> allowing us to configure a second mdev with the exact same apm/aqm values as an
->> existing mdev? If we do, then this check's continue will short circuit the rest
->> of the function thereby allowing that 2nd mdev even though it should be a
->> sharing violation.
-> 
-> I don't see how this is possible.
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-d1
+head:   b3cda759adb0111b5b3efd3a0b986864b647a94a
+commit: b3cda759adb0111b5b3efd3a0b986864b647a94a [12/12] riscv: add memory-type errata for T-Head
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220308/202203082302.eZ9h0xp5-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b3cda759adb0111b5b3efd3a0b986864b647a94a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-d1
+        git checkout b3cda759adb0111b5b3efd3a0b986864b647a94a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-You are correct. I missed the fact that you are comparing pointers here, and not
-values. Apologies. Now that I understand the code, I agree that this is fine as is.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+--
+   arch/riscv/mm/init.c:724:13: warning: no previous prototype for 'pt_ops_set_early' [-Wmissing-prototypes]
+     724 | void __init pt_ops_set_early(void)
+         |             ^~~~~~~~~~~~~~~~
+   arch/riscv/mm/init.c:744:13: warning: no previous prototype for 'pt_ops_set_fixmap' [-Wmissing-prototypes]
+     744 | void __init pt_ops_set_fixmap(void)
+         |             ^~~~~~~~~~~~~~~~~
+   arch/riscv/mm/init.c:760:13: warning: no previous prototype for 'pt_ops_set_late' [-Wmissing-prototypes]
+     760 | void __init pt_ops_set_late(void)
+         |             ^~~~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+   arch/riscv/include/asm/pgtable.h:280: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable-64.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+   arch/riscv/include/asm/pgtable.h:280: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+   arch/riscv/include/asm/pgtable.h:436: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable.h: Assembler messages:
+   arch/riscv/include/asm/pgtable.h:436: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable-64.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+--
+   arch/riscv/include/asm/pgtable-64.h: Assembler messages:
+>> arch/riscv/include/asm/pgtable-64.h:214: Error: attempt to move .org backwards
+>> arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+..
 
 
--- 
--- Jason J. Herne (jjherne@linux.ibm.com)
+vim +323 arch/riscv/include/asm/pgtable.h
+
+08f051eda33b51 Andrew Waterman 2017-10-25  319  
+07037db5d479f9 Palmer Dabbelt  2017-07-10  320  static inline int pte_huge(pte_t pte)
+07037db5d479f9 Palmer Dabbelt  2017-07-10  321  {
+f5397c3ee0a3e2 Nanyong Sun     2021-04-30  322  	return pte_present(pte) && (pte_val(pte) & _PAGE_LEAF);
+07037db5d479f9 Palmer Dabbelt  2017-07-10 @323  }
+07037db5d479f9 Palmer Dabbelt  2017-07-10  324  
+
+:::::: The code at line 323 was first introduced by commit
+:::::: 07037db5d479f90377c998259a4f9a469c404edf RISC-V: Paging and MMU
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

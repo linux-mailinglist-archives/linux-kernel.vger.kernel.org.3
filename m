@@ -2,85 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530B04D0FAC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AE84D0FB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343613AbiCHGAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 01:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S1343837AbiCHGEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 01:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbiCHGAT (ORCPT
+        with ESMTP id S230162AbiCHGES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:00:19 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72BB33375;
-        Mon,  7 Mar 2022 21:59:23 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V6cqYPl_1646719159;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V6cqYPl_1646719159)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 08 Mar 2022 13:59:21 +0800
-Date:   Tue, 8 Mar 2022 13:59:19 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Hongnan Li <hongnan.li@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/filesystem/dax: update DAX description on
- erofs
-Message-ID: <Yibwt1yDO+oXF7Pu@B-P7TQMD6M-0146.local>
-References: <20220308034139.93748-1-hongnan.li@linux.alibaba.com>
+        Tue, 8 Mar 2022 01:04:18 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1D9338AE;
+        Mon,  7 Mar 2022 22:03:21 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id q11so5200338iod.6;
+        Mon, 07 Mar 2022 22:03:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jdj7UvN4JlhtbGcBhBgVL5c92dLwKF5liiIiJPmclNk=;
+        b=RzBVKh9xt7w5vqKVgzGOB38zm3dXdN40cAbUcD34ErUe0Bccin0ZnwHgoTV3EM+3s+
+         yAQmgNMwSDsfXGmDVNYGwys7J0oce9DqPI+6uE8nRjmEFgrROMdmOPE9Dd8/5wgt4o7L
+         v/6on9wLsw9sjOiiIgWartFuCvIuSXBEs3VNEFROzlAEqkCRmXngGO1clSnOEiBHnVRg
+         A+VcSjHXCZUX+dpNBiwCveDZd1m5cmGzc64nEmetUbTx37Vim94+FO77k53mdEd54S11
+         f+F57LpCjsB4A9IC95YUOuFysr2ALBtR/QYUmLyikBZyl7pw0UmeyaslZYaiNMjxvstZ
+         K3UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jdj7UvN4JlhtbGcBhBgVL5c92dLwKF5liiIiJPmclNk=;
+        b=c8yY/F1vDpr8saqL4W5UM6UtaeJu7U0YW19KPUFm3WyNyo9Iv5+SKa5vXfKL8fVyoV
+         jvFYYohNOQ6wvCd/WnXcF8t+3ez87G6nf3cKvEuCfowlTHG8acHXp81ZqOPoT1/tYf4j
+         h3s/vPzxvzg4R+hbiCc5y2cD6xf9wcXgDDyYNLZ1eXrWY37oqs7w13kz52EhxiedtlFq
+         18fUmB/vAluez/ZAsODpSzAlVuCRwCERu9KyQnM1nwFE7PUOT1I3d6tkbFdI1+2GTO9K
+         UBYRrfLCiu8yQS5zMqBpmc6tasX8hYaSYb26kiyEWoPjBvlEICBd103NWkkY4p7sBIOL
+         lPrw==
+X-Gm-Message-State: AOAM532q+J5W5qkjHN3v/r2Uv6me4qFEGsSixIk4YDDJB7z82Q4oyrdt
+        Y+W7Gi7rjWqILpSQDLXnqwJUyEjDklD8y0ccYpk=
+X-Google-Smtp-Source: ABdhPJwezQtoIgRReqYdIawmVjRwaVU9F0VeFr5yitfBdNleVnAM2hurtGtco6eYjEEvBKCrhbyperM36DsiXchS+Vo=
+X-Received: by 2002:a05:6602:185a:b0:645:d914:35e9 with SMTP id
+ d26-20020a056602185a00b00645d91435e9mr4437860ioi.154.1646719400724; Mon, 07
+ Mar 2022 22:03:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220308034139.93748-1-hongnan.li@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220301132623.GA19995@vscode.7~>
+In-Reply-To: <20220301132623.GA19995@vscode.7~>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 7 Mar 2022 22:03:09 -0800
+Message-ID: <CAEf4BzYm=3Awdz2H32JC6bB4anCY40=+_LWF6E57CbR8a9TFxg@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: unmap rings when umem deleted
+To:     lic121 <lic121@chinatelecom.cn>
+Cc:     bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:41:39AM +0800, Hongnan Li wrote:
-> From: lihongnan <hongnan.lhn@alibaba-inc.com>
-> 
-> Add missing erofs fsdax description since fsdax has been supported
-> on erofs from Linux 5.15.
-> 
-> Signed-off-by: lihongnan <hongnan.lhn@alibaba-inc.com>
-
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-(If no other concern, I will apply it for -5.18 cycle...)
-
-Thanks,
-Gao Xiang
-
+On Tue, Mar 1, 2022 at 5:26 AM lic121 <lic121@chinatelecom.cn> wrote:
+>
+> xsk_umem__create() does mmap for fill/comp rings, but xsk_umem__delete()
+> doesn't do the unmap. This works fine for regular cases, because
+> xsk_socket__delete() does unmap for the rings. But for the case that
+> xsk_socket__create_shared() fails, umem rings are not unmapped.
+>
+> fill_save/comp_save are checked to determine if rings have already be
+> unmapped by xsk. If fill_save and comp_save are NULL, it means that the
+> rings have already been used by xsk. Then they are supposed to be
+> unmapped by xsk_socket__delete(). Otherwise, xsk_umem__delete() does the
+> unmap.
+>
+> Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
+> Signed-off-by: lic121 <lic121@chinatelecom.cn>
 > ---
->  Documentation/filesystems/dax.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/dax.rst b/Documentation/filesystems/dax.rst
-> index e3b30429d703..c04609d8ee24 100644
-> --- a/Documentation/filesystems/dax.rst
-> +++ b/Documentation/filesystems/dax.rst
-> @@ -23,11 +23,11 @@ on it as usual.  The `DAX` code currently only supports files with a block
->  size equal to your kernel's `PAGE_SIZE`, so you may need to specify a block
->  size when creating the filesystem.
->  
-> -Currently 4 filesystems support `DAX`: ext2, ext4, xfs and virtiofs.
-> +Currently 5 filesystems support `DAX`: ext2, ext4, xfs, virtiofs and erofs.
->  Enabling `DAX` on them is different.
->  
-> -Enabling DAX on ext2
-> ---------------------
-> +Enabling DAX on ext2 and erofs
-> +------------------------------
->  
->  When mounting the filesystem, use the ``-o dax`` option on the command line or
->  add 'dax' to the options in ``/etc/fstab``.  This works to enable `DAX` on all files
-> -- 
-> 2.32.0 (Apple Git-132)
+
+Applied to bpf-next as well. Changed the name to Cheng Li while
+applying. Thanks.
+
+>  tools/lib/bpf/xsk.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> index edafe56..32a2f57 100644
+> --- a/tools/lib/bpf/xsk.c
+> +++ b/tools/lib/bpf/xsk.c
+> @@ -1193,12 +1193,23 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+>
+>  int xsk_umem__delete(struct xsk_umem *umem)
+>  {
+> +       struct xdp_mmap_offsets off;
+> +       int err;
+> +
+>         if (!umem)
+>                 return 0;
+>
+>         if (umem->refcount)
+>                 return -EBUSY;
+>
+> +       err = xsk_get_mmap_offsets(umem->fd, &off);
+> +       if (!err && umem->fill_save && umem->comp_save) {
+> +               munmap(umem->fill_save->ring - off.fr.desc,
+> +                      off.fr.desc + umem->config.fill_size * sizeof(__u64));
+> +               munmap(umem->comp_save->ring - off.cr.desc,
+> +                      off.cr.desc + umem->config.comp_size * sizeof(__u64));
+> +       }
+> +
+>         close(umem->fd);
+>         free(umem);
+>
+> --
+> 1.8.3.1
+>

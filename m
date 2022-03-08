@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9224D1FE0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7DD4D1FDE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349458AbiCHSPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S1349204AbiCHSQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:16:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349455AbiCHSPH (ORCPT
+        with ESMTP id S1344710AbiCHSQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:15:07 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC77943492
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:14:10 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id qt6so41074998ejb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:14:10 -0800 (PST)
+        Tue, 8 Mar 2022 13:16:10 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929BF43EDB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:15:12 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id h16-20020a4a6f10000000b00320507b9ccfso23124252ooc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:15:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:date:message-id:in-reply-to:references:user-agent
-         :subject:mime-version;
-        bh=pyTxeutxuspgMWt81UKj4UBoeF8XDqRhfyE37zB35hs=;
-        b=fQNp35audhzYZT/iPyR5p/0p3yvCgpS7lHGWWSRTmxXcqQ5WWCV5++qHFta7yFxIPU
-         2+vEaKh0hTk4Ycve1AD/JgF14iL/R0Gm7G3bgK+JbabUm6TQYAsLRdC3+sLBjxHkId/V
-         UgpyDFILttd+W9V2PZ4z3iVWnmPJlY7CIVvGg=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K4GIB1a+cgx4ASeA8RiYFt2Phvx3d2n9qYtTtjZSkjo=;
+        b=UuFWGLCWyKSF1937a9Wv2qLhK28Wkbk9bEbbmmrrfvDRJ1Wtzfdj1sks2P69kNILqn
+         EPQd5G/VRqb8jjyzV2yyXcuczhNYHyervElZWFcN0DuJdw2O34wuDg6AGovcTtMiCRjr
+         PxPxce4e0JuQN4adwPVYMGDm5lUSUNp6hxV2hQBpnRWATRqv8QHWJURKk83phuW448Vb
+         NUXR5P8PFZudugMtiyCTu9nfk/2lQ1jwnS06yyX5/MJH9l5qdypLdYhDePlgoTLWudmv
+         dQB7ILfS0cZb1jrTD9P7lfXH6OmQOQWT15Fhdbrby8crHAMSNLJi3aCzTz8B36Fo0hb2
+         7u4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:subject:mime-version;
-        bh=pyTxeutxuspgMWt81UKj4UBoeF8XDqRhfyE37zB35hs=;
-        b=DH5lK/BoF0bh2pqeW4sY7q9sy7A48Sr4iQcsquR7ktLsc/l8hhvxZ0Vg+ww7UCOR6/
-         wQyWaBUO77x9FE+AFsxGgDYfwKY4CZq3QRSY2MHRsSfYBvPHHhUpe0ItABRldrZsOq+M
-         ZQ+DscZdm2URPtj81DUubUock4icbBLrXp8cZBUdl9ST/FgEwWJVtZkmeeDrbGDtVxag
-         CzH49Q2JYnmFCDPLktQB/JoU/1Ybmcji4HB2gDnILIybn2Tk2QUSOHZdzVoTniEJyHO3
-         KAq6yMEai2IjPxHCrUeJhwOGHQ8pds5QOTtvEk57FnTLPJ/9oj0MmG0Qsrk3ZOFyG1ox
-         IKxg==
-X-Gm-Message-State: AOAM532GJhnGjsFpKTHb7fblQDWIQWLPkuv46RsJg8ZQRkCe+BXpeTkn
-        lUPyCfb4Onp323kTdtyyGdck+g==
-X-Google-Smtp-Source: ABdhPJw+Cg4uzrEdM8pE4yYPGBl6D8uiLKmUlPR7NvlGHllkUI2+LSzgHUulXx/H+/Ibzc5P5iK4Lg==
-X-Received: by 2002:a17:906:facf:b0:6cd:ed0e:ed7 with SMTP id lu15-20020a170906facf00b006cded0e0ed7mr14017457ejb.376.1646763249259;
-        Tue, 08 Mar 2022 10:14:09 -0800 (PST)
-Received: from [192.168.178.38] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id m24-20020a170906161800b006d420027b63sm6200454ejd.18.2022.03.08.10.14.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Mar 2022 10:14:08 -0800 (PST)
-From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Abel Vesa <abelvesa@linux.com>, Rabin Vincent <rabin@rab.in>,
-        Colin Cross <ccross@android.com>
-Date:   Tue, 08 Mar 2022 19:14:08 +0100
-Message-ID: <17f6abd0980.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-In-Reply-To: <20220308124527.0ef9ca63@gandalf.local.home>
-References: <9a86b2c9-1009-1683-442e-61c5a7dc8cf3@broadcom.com>
- <20220307082450.641ed866@gandalf.local.home>
- <62c01368-b67f-66af-2e31-d62f4df75b61@broadcom.com>
- <20220308102007.6c6618e7@gandalf.local.home>
- <1dec8992-b924-7ea2-8e45-a6bbc10a6086@nokia.com>
- <20220308124527.0ef9ca63@gandalf.local.home>
-User-Agent: AquaMail/1.34.0 (build: 103400118)
-Subject: Re: ftrace bug
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=K4GIB1a+cgx4ASeA8RiYFt2Phvx3d2n9qYtTtjZSkjo=;
+        b=FOOsxRUiI543lpvU/BtQAIbkViaajkvRvr1qiQJcGtgBO+Ci+eD1hGzYtPcSHNsiK8
+         Xu5tJd28M9oPO9mKjpIz1boNEIhKCr2uFHQ7J/IxPmokvTUZIDDSTD0YcQXV6v2LVCfG
+         XgpVbJVSGcloeUTTYlW2dNIP47+gdbjOpEcAB/qI3uIecUhBavDr3iasNJqA38yoU4Xy
+         z3e43oDoRRgieouAgVAT8ctq/SV0tgKsgsAbHz+MGKJDzpyiSS8S8SzB5msx8NklLqIw
+         a/mbOMQMyK6aSZjYWMdLEuw9MvfDXkG8hqVhuBC7fmUeWMwFnI13uFLFAmbuj8HPCSIM
+         +MIA==
+X-Gm-Message-State: AOAM531z0il1KWOkiDWO3oYsH0mWr50D1zahAoOD+E+E6iBtRbJIfY7K
+        qCJ9uL/Gm+kltGXbOIP4rWp0Bg==
+X-Google-Smtp-Source: ABdhPJxMxiUBjaZfyfik8ZsFdtHh5D/+Th3AexX3SwQukuqx41mBNh7mZv7BtOgxyId3ct0kIoaJlA==
+X-Received: by 2002:a05:6870:3049:b0:da:371b:5864 with SMTP id u9-20020a056870304900b000da371b5864mr3179434oau.105.1646763311852;
+        Tue, 08 Mar 2022 10:15:11 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id 37-20020a9d0328000000b005b2265711fcsm4672999otv.16.2022.03.08.10.15.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 10:15:11 -0800 (PST)
+Date:   Tue, 8 Mar 2022 10:16:54 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Drew Fustini <dfustini@baylibre.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suman Anna <s-anna@ti.com>, Dave Gerlach <d-gerlach@ti.com>
+Subject: Re: [PATCH] remoteproc: move rproc_da_to_va declaration to
+ remoteproc.h
+Message-ID: <YiedlvZWpHd8HP40@ripper>
+References: <20220308172515.29556-1-dfustini@baylibre.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000850c8305d9b8f219"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308172515.29556-1-dfustini@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,110 +72,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000850c8305d9b8f219
-Content-Type: text/plain; format=flowed; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+On Tue 08 Mar 09:25 PST 2022, Drew Fustini wrote:
 
-On March 8, 2022 6:45:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> The rproc_da_to_va() API is an exported function, so move its
+> declaration from the remoteproc local remoteproc_internal.h
+> to the public remoteproc.h file.
+> 
+> This will allow drivers outside of the remoteproc folder to be
+> able to use this API.
+> 
 
-> On Tue, 8 Mar 2022 17:02:53 +0100
-> Alexander Sverdlin <alexander.sverdlin@nokia.com> wrote:
->
->> This problem is addressed by:
->>
->> commit 8113e622926ef6590771ede0f7f64821e1751b67
->> Author: Alex Sverdlin <alexander.sverdlin@nokia.com>
->> Date:   Mon Sep 27 14:02:45 2021 -0700
->
-> Thanks Alex. I knew it was a good idea not to try to figure this out on my
-> own ;-)
+Can you explain why drivers outside of the remoteproc folder should be
+able to poke straight into the memory of the remoteproc?
 
-Ditto :-p
+Your reasoning makes sense, but we've on purpose kept it out of
+remoteproc.h because no one has had a proper reason for it and I sense
+that we might open the door for some new creative solutions...
 
-Arend
+Regards,
+Bjorn
 
-
-
-
---000000000000850c8305d9b8f219
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAXFvTKHMGno5al8g+J
-ORxiVQAtaEnQflNhOGB7U02UbjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAzMDgxODE0MDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEARCn1kY0qi1J8D6y0iD5jk4OVp46QCo/Mi2yf
-GluxH2feAsX9S7WG+bKSe/mJk9jTHa/ERS47M+oe45pwHuiJQXvGDT30yuaiRvc9d7usHDyWDyi0
-3Nekk/kJ92K9a677zri5vXKquwT8xxbxJvU1uclVUsZ7QVaohGKZZ14LlbvP8uHWQUxlaRJbMTD7
-pZV/DgGP6rOBnu4uLam6Q5H8lVAefB5zqxgCfCUcmtCNVoOZH4NCo6oN6qKYvEbMXZ1Z/XelVir2
-O4cthPP0B4N4A9YjaHDwEmnt5IgKzxYEXcDhsnpceZq1F53mI/dXdFeB+9p33WRLkmncpBQE4BIn
-dg==
---000000000000850c8305d9b8f219--
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> [adjusted line numbers to apply]
+> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> ---
+> Note: I previously posted this patch as part of a series:
+> [PATCH 00/11] soc: ti: wkup_m3_ipc: support vtt toggle, io isolation & voltage scaling
+> https://lore.kernel.org/linux-omap/20220219215328.485660-1-dfustini@baylibre.com/
+> 
+> I was advised to break that series up into smaller pieces, so I am
+> submitting this patch individually. I will in the future post a series
+> to support i2c voltage scaling which will utilize rproc_da_to_va() from 
+> drivers/soc/ti/wkup_m3_ipc.c
+> 
+>  drivers/remoteproc/remoteproc_internal.h | 1 -
+>  include/linux/remoteproc.h               | 1 +
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index a328e634b1de..72d4d3d7d94d 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -84,7 +84,6 @@ static inline void  rproc_char_device_remove(struct rproc *rproc)
+>  void rproc_free_vring(struct rproc_vring *rvring);
+>  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+>  
+> -void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iomem);
+>  phys_addr_t rproc_va_to_pa(void *cpu_addr);
+>  int rproc_trigger_recovery(struct rproc *rproc);
+>  
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index e0600e1e5c17..cc9dc9aef0c0 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -673,6 +673,7 @@ void rproc_shutdown(struct rproc *rproc);
+>  int rproc_detach(struct rproc *rproc);
+>  int rproc_set_firmware(struct rproc *rproc, const char *fw_name);
+>  void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
+> +void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iomem);
+>  void rproc_coredump_using_sections(struct rproc *rproc);
+>  int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size);
+>  int rproc_coredump_add_custom_segment(struct rproc *rproc,
+> -- 
+> 2.32.0
+> 

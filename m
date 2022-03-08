@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15D64D0D03
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18B34D0D07
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245481AbiCHAvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 19:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S245642AbiCHAxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 19:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244301AbiCHAvN (ORCPT
+        with ESMTP id S233782AbiCHAxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 19:51:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE11F28E29
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:50:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66DAFB81686
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD099C340EF;
-        Tue,  8 Mar 2022 00:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1646700616;
-        bh=Kv+yY9E+DYOUfGXI4e3etZBeNRkR4t4l0wyhFQINGm4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=icoTRQd5NmdJTiFKjqLxohZMoKg1VLUj244SwSAg3OjjkIg4C0hSdDvv8VB73qd5h
-         tKSNRNKZhlTu24R5AuQLD5Oz4CiNZ4o0SBneRR5sUTHkD7XnaQlvTR+W/ocnxGJL83
-         p5kij24S6LMz1dJ82NPR3HZmFIae5LFUOtmHU5Ys=
-Date:   Mon, 7 Mar 2022 16:50:15 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting
- PMD
-Message-Id: <20220307165015.77fbcbe9e1fa2fe15f3eb239@linux-foundation.org>
-In-Reply-To: <CAHbLzkqY69nFniK+ckQaeu117Q+OqZ2hvFEdVbZaW2C_zAzDbg@mail.gmail.com>
-References: <20220303222014.517033-1-shy828301@gmail.com>
-        <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
-        <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
-        <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com>
-        <20220306180718.6d4e6233130b94fdad98df88@linux-foundation.org>
-        <84a6c9c1-d18f-6955-2666-0a2d7bce6094@redhat.com>
-        <20220307154326.6494f7fca7def491a23e5df1@linux-foundation.org>
-        <CAHbLzkqY69nFniK+ckQaeu117Q+OqZ2hvFEdVbZaW2C_zAzDbg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 7 Mar 2022 19:53:06 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E21C329B4;
+        Mon,  7 Mar 2022 16:52:11 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id s207so445609oie.11;
+        Mon, 07 Mar 2022 16:52:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=td2dQrLboBYxumnDQKShw1XpxIe3rYbrby2068uMMkU=;
+        b=gitu32eHVSpYHZXU9cTbr/U2e5RJiPHWq9J9r9iBiRkDHG/1SKErsc4BUyKsKsoaDf
+         UqRx0b94CDct/FrXIq2oaIv5NoS0jM2Q/hukfwRfgyoRPXQVqt2aH0iwS3eJOuZgEjMl
+         stvTa+9/qW+9vwZJ+ChsKfy8M3Bqsueoa5TghQIHAbFxP0TkZnvkBkYPNsUiIlKtMYoS
+         u4pIIk5rbZ7nmsgG5te5KHWXLZ6hUXjB5BVCbnDXLMYcM3m0/y1Jz1St8z7ZYabRD9kT
+         1d5XJSghJ2ANQVQuIdacrT74/RmTh/A4bUdnHCOXynSHShDqdCSJG2GlKx20IuCwbojF
+         A5Fg==
+X-Gm-Message-State: AOAM532MQ3KKFlqYjTme4YoIH28JZACsPJUbft2lTiz9f6Ekj0cVUYjG
+        Xlx7/BfVaIK6Yocd0X1WAjIBst75Dw==
+X-Google-Smtp-Source: ABdhPJxSn+4z1/FosMK1XhAw6ohhDDkJ4pH6slHP5dt44vFixTof+W76bqSyA9UYoEi4proM/zVDSg==
+X-Received: by 2002:a05:6808:1708:b0:2d9:a868:9883 with SMTP id bc8-20020a056808170800b002d9a8689883mr1156916oib.158.1646700730641;
+        Mon, 07 Mar 2022 16:52:10 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dw7-20020a056870770700b000d9aa7a6d63sm6261234oab.6.2022.03.07.16.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 16:52:09 -0800 (PST)
+Received: (nullmailer pid 3597630 invoked by uid 1000);
+        Tue, 08 Mar 2022 00:52:08 -0000
+Date:   Mon, 7 Mar 2022 18:52:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] spi: Add optional number of additional clock
+ cycles to be generated
+Message-ID: <YiaouHFtlIG8nQxu@robh.at.kernel.org>
+References: <cover.1646060734.git.christophe.leroy@csgroup.eu>
+ <6b6bad3844828c22de3acfb9e7fbac877a48d5a4.1646060734.git.christophe.leroy@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b6bad3844828c22de3acfb9e7fbac877a48d5a4.1646060734.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,62 +65,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 16:03:12 -0800 Yang Shi <shy828301@gmail.com> wrote:
-
-> On Mon, Mar 7, 2022 at 3:43 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > @@ -2133,8 +2133,6 @@ void __split_huge_pmd(struct vm_area_str
-> >  {
-> >         spinlock_t *ptl;
-> >         struct mmu_notifier_range range;
-> > -       bool do_unlock_folio = false;
-> > -       pmd_t _pmd;
-> >
-> >         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
-> >                                 address & HPAGE_PMD_MASK,
-> > @@ -2153,42 +2151,14 @@ void __split_huge_pmd(struct vm_area_str
-> >                         goto out;
-> >         }
-> >
-> > -repeat:
-> >         if (pmd_trans_huge(*pmd)) {
-> > -               if (!folio) {
-> > +               if (!folio)
-> >                         folio = page_folio(pmd_page(*pmd));
+On Mon, 28 Feb 2022 16:15:45 +0100, Christophe Leroy wrote:
+> Some components require a few clock cycles with chipselect off before
+> or/and after the data transfer done with CS on.
 > 
-> We could remove the "if (pmd_trans_huge(*pmd))" section since folio is
-> actually not used afterward at all.
-
->
-> ...
->
+> Typically IDT 801034 QUAD PCM CODEC datasheet states "Note *: CCLK
+> should have one cycle before CS goes low, and two cycles after
+> CS goes high".
 > 
-> With the above if removed, this could be changed to:
+> The cycles "before" are implicitely provided by all previous activity
+> on the SPI bus. But the cycles "after" must be provided in order to
+> achieve the SPI transfer.
 > 
-> if (pmd_trans_huge(*pmd) || pmd_devmap(*pmd) ||
->             is_pmd_migration_entry(*pmd))
->                 __split_huge_pmd_locked(vma, pmd, range.start, freeze);
+> In order to use that kind of component, implement a new option for
+> SPI slaves in order to implement trailing clock of a given number of
+> bits with ChipSelect off at the end of the transfer.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml      | 5 +++++
+>  drivers/spi/spi.c                                          | 7 +++++--
+>  include/linux/spi/spi.h                                    | 1 +
+>  3 files changed, 11 insertions(+), 2 deletions(-)
 > 
 
-OK, looks sane.  Can someone please test all this?
-
---- a/mm/huge_memory.c~mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd-fix
-+++ a/mm/huge_memory.c
-@@ -2151,12 +2151,10 @@ void __split_huge_pmd(struct vm_area_str
- 			goto out;
- 	}
- 
--	if (pmd_trans_huge(*pmd)) {
--		if (!folio)
--			folio = page_folio(pmd_page(*pmd));
--	} else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
--		goto out;
--	__split_huge_pmd_locked(vma, pmd, range.start, freeze);
-+	if (pmd_trans_huge(*pmd) || pmd_devmap(*pmd) ||
-+	    is_pmd_migration_entry(*pmd)))
-+		__split_huge_pmd_locked(vma, pmd, range.start, freeze);
-+
- out:
- 	spin_unlock(ptl);
- 	/*
-_
-
+Acked-by: Rob Herring <robh@kernel.org>

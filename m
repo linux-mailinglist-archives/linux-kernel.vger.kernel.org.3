@@ -2,170 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76EC4D1565
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AE94D1567
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238246AbiCHLDU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Mar 2022 06:03:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
+        id S1346111AbiCHLDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346137AbiCHLDG (ORCPT
+        with ESMTP id S1346192AbiCHLDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:03:06 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D29443AED;
-        Tue,  8 Mar 2022 03:02:08 -0800 (PST)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KCXRw6Gsmz67bj2;
-        Tue,  8 Mar 2022 19:00:44 +0800 (CST)
-Received: from lhreml719-chm.china.huawei.com (10.201.108.70) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Tue, 8 Mar 2022 12:02:06 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml719-chm.china.huawei.com (10.201.108.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 11:02:05 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Tue, 8 Mar 2022 11:02:05 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [PATCH v8 5/9] hisi_acc_vfio_pci: Restrict access to VF dev BAR2
- migration region
-Thread-Topic: [PATCH v8 5/9] hisi_acc_vfio_pci: Restrict access to VF dev BAR2
- migration region
-Thread-Index: AQHYL1LES66RK6Gs/kmsjFJ+eUfqqKy1C2eAgAAh4CCAAB0qAIAADCAA
-Date:   Tue, 8 Mar 2022 11:02:05 +0000
-Message-ID: <1695cf776d7744bdb984e9f8f61d63b1@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-6-shameerali.kolothum.thodi@huawei.com>
- <BN9PR11MB527681F9F6B0906596A77A178C099@BN9PR11MB5276.namprd11.prod.outlook.com>
- <21c1ddd171df45bdb62220cf997e58e6@huawei.com>
- <BN9PR11MB527673BB7DCF28B782927E658C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB527673BB7DCF28B782927E658C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.27.151]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 8 Mar 2022 06:03:18 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0712843AED
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:02:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646737342; x=1678273342;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yGk3VWwzO+DOKWQWFeM4kTZHzMtinuGmDIkTdG8JKZY=;
+  b=TWDB26ga3MO/Gon3SC76ee7QECZ6jwm5QEoIVl4MSdbdrOCH/4z1Va9z
+   05svRcVurvlq1CYOUhdWMIgncdejE+6jjA0Q0vr7JuZ85biWjBgkY4GqF
+   sT3xaxzCQQSV3kE50orFD/55PQBe8zcHo7uZbjiLAeYXGAZPGVduPdiRT
+   3nzaA/I4Dpz+uK6DLJmv+NeH4gL5X2zggUpCCs/ermLrsJJE8lblPOGNY
+   8e0JcYh/JrSRmHS+hEe7xzm6+YjXIMuy0O3yNm6frEHUtr4RHHGfNtwAL
+   VlVcqgSCQm41Pq7TUzfPKs0oLEjg/FYdioPIsuZcpRnu8DHPIBf5P9r/Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254846918"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="254846918"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 03:02:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="495414133"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 03:02:19 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRXbf-0001Ib-25; Tue, 08 Mar 2022 11:02:19 +0000
+Date:   Tue, 8 Mar 2022 19:02:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 50/54] or1k-linux-ld:
+ fs/cifs/file.o:undefined reference to `netfs_invalidatepage'
+Message-ID: <202203081815.sMaYyDI2-lkp@intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
+head:   0a76f6b7563134f15673a1cd5a2ccc2fd6b4c1d0
+commit: a80918300e1cb9538bea4a225c7a45fe75f4678a [50/54] netfs: Provide invalidatepage and releasepage calls
+config: openrisc-randconfig-r023-20220308 (https://download.01.org/0day-ci/archive/20220308/202203081815.sMaYyDI2-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/a80918300e1cb9538bea4a225c7a45fe75f4678a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
+        git checkout a80918300e1cb9538bea4a225c7a45fe75f4678a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> -----Original Message-----
-> From: Tian, Kevin [mailto:kevin.tian@intel.com]
-> Sent: 08 March 2022 10:09
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
-> kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com; jgg@nvidia.com;
-> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: RE: [PATCH v8 5/9] hisi_acc_vfio_pci: Restrict access to VF dev BAR2
-> migration region
-> 
-> > From: Shameerali Kolothum Thodi
-> > <shameerali.kolothum.thodi@huawei.com>
-> > Sent: Tuesday, March 8, 2022 4:33 PM
-> >
-> > Hi Kevin,
-> >
-> > > -----Original Message-----
-> > > From: Tian, Kevin [mailto:kevin.tian@intel.com]
-> > > Sent: 08 March 2022 06:23
-> > > To: Shameerali Kolothum Thodi
-> > <shameerali.kolothum.thodi@huawei.com>;
-> > > kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > linux-crypto@vger.kernel.org
-> > > Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com;
-> > jgg@nvidia.com;
-> > > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
-> > Linuxarm
-> > > <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>;
-> > Zengtao (B)
-> > > <prime.zeng@hisilicon.com>; Jonathan Cameron
-> > > <jonathan.cameron@huawei.com>; Wangzhou (B)
-> > <wangzhou1@hisilicon.com>
-> > > Subject: RE: [PATCH v8 5/9] hisi_acc_vfio_pci: Restrict access to VF dev
-> > BAR2
-> > > migration region
-> > >
-> > > Hi, Shameer,
-> > >
-> > > > From: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> > > > Sent: Friday, March 4, 2022 7:01 AM
-> > > >
-> > > > HiSilicon ACC VF device BAR2 region consists of both functional
-> > > > register space and migration control register space. From a
-> > > > security point of view, it's not advisable to export the migration
-> > > > control region to Guest.
-> > > >
-> > > > Hence, introduce a separate struct vfio_device_ops for migration
-> > > > support which will override the ioctl/read/write/mmap methods to
-> > > > hide the migration region and limit the access only to the
-> > > > functional register space.
-> > > >
-> > > > This will be used in subsequent patches when we add migration
-> > > > support to the driver.
-> > >
-> > > As a security concern the migration control region should be always
-> > > disabled regardless of whether migration support is added to the
-> > > driver for such device... It sounds like we should first fix this security
-> > > hole for acc device assignment and then add the migration support
-> > > atop (at least organize the series in this way).
-> >
-> > By exposing the migration BAR region, there is a possibility that a malicious
-> > Guest can prevent migration from happening by manipulating the migration
-> > BAR region. I don't think there are any other security concerns now
-> especially
-> > since we only support the STOP_COPY state.  And the approach has been
-> > that
-> > we only restrict this if migration support is enabled. I think I can change the
-> > above "security concern" description to "malicious Guest can prevent
-> > migration"
-> > to make it more clear.
-> >
-> 
-> In concept migrated device state may include both the state directly
-> touched by the guest driver and also the one that is configured by
-> the PF driver. Unless there is guarantee that the state managed via
-> the migration control interface only touches the former (which implies
-> the latter managed via the PF driver) this security concern will hold
-> even for normal device assignment.
-> 
-> If the acc device has such guarantee it's worth of a clarification here.
+All errors (new ones prefixed by >>):
 
-I just double-checked with our ACC team and the VF migration region 
-manipulations will not affect the PF configurations. I will add a clarification
-here to make it clear.
+>> or1k-linux-ld: fs/cifs/file.o:(.rodata+0x318c): undefined reference to `netfs_invalidatepage'
+>> or1k-linux-ld: fs/cifs/file.o:(.rodata+0x3190): undefined reference to `netfs_releasepage'
+   or1k-linux-ld: fs/cifs/file.o:(.rodata+0x31e4): undefined reference to `netfs_invalidatepage'
+   or1k-linux-ld: fs/cifs/file.o:(.rodata+0x31e8): undefined reference to `netfs_releasepage'
 
-Thanks,
-Shameer
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

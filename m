@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202E74D1FF4
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDC34D1FF5
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349496AbiCHSTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349485AbiCHSTm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1349483AbiCHSTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 8 Mar 2022 13:19:42 -0500
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C040143EDB;
-        Tue,  8 Mar 2022 10:18:45 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id u10so19647119ybd.9;
-        Tue, 08 Mar 2022 10:18:45 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349464AbiCHSTj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 8 Mar 2022 13:19:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D4FA3D48B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:18:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646763522;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SS6f7dRwxzKIXX1gLdfWCfBLoUQykjMr5LR57Ii/WgE=;
+        b=hGcOw1cfvZ3AHtfUmxyiuCJSMi2V4/7vMt0Ev/2lFK8zrwneOhaV6uiolF2iLJuns7+EuX
+        Lzpz3OIZtmB51gi6Mxz1Shqxp7TcUVIBWDeOtQX/wBHUJ+24LSZj7r3kxVMKF0UOqvNRrk
+        wbMcQ5iIR3LlhgEMBwjwcp/rLILbe6U=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-Gsix1dlLN4eP0kpdVZ_2aw-1; Tue, 08 Mar 2022 13:18:41 -0500
+X-MC-Unique: Gsix1dlLN4eP0kpdVZ_2aw-1
+Received: by mail-ej1-f69.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso9102527ejk.17
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:18:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0mm42zyukh7VksC1paHdf15HMBSOa0ps1GGtSZmcm+Y=;
-        b=dUeqh/2yPGz+muX+vwmG5tihyVuaCZ7b3I27N4BZGhADqL3BVklVQJjU1CXF8dl8Z9
-         /ZOhqCGPmE9Jbm1QuLi0e/rNf21EHbPda5ZhV6fTwAFQbMJOHhg4YJvkiOwqBOR0uFEN
-         /0acz+InaTh53nQeQxODlSv4JgOvi40Dn7uDI5CpYd/5FGnMWYXjEV5uArSN0lL7zPYr
-         L2yFXyCjRHB3vlrsgKIj4hw7svFjFH2bo3RP+s/dvTDLFViL2xdwAtMAaSXaOPYDwSC9
-         niYIM3MkSn1GMQeirP0PPDMbrgd+LDoNHDmXMnna8OIJ53H8AJR1U6++ly5j1RDz+Vqu
-         yV8w==
-X-Gm-Message-State: AOAM532QpzmcAcokpNL1oe4UFldDEiEqh/SDrd0X7imfbPibFaIUSTNu
-        vDfcaJNdHp12Iz7ESCkGSa8ePqbfakXOKKacnik=
-X-Google-Smtp-Source: ABdhPJyYffrpdeu9Suv/AB1ytcqAuTnHM7S6CYgSrDk1Koww7qVyYWFAEzAtKp9ZiVc467Auy0StfRQPiSlAR7DB+9Y=
-X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
- o185-20020a25d7c2000000b006289d06457bmr13331613ybg.137.1646763525016; Tue, 08
- Mar 2022 10:18:45 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SS6f7dRwxzKIXX1gLdfWCfBLoUQykjMr5LR57Ii/WgE=;
+        b=u0u+MUP8x2sMUEq5DYQbPkOv/ZlBUceT+ee2p0EBMUn7AQmep+n8R3unP9uh1/zGJu
+         aeOvzKH/TknwlMCFiQBMo/oSaFfFrlDO3XBYFbxHJBcrMegZdopbk2VKBcLhE92xoUN2
+         0+BZgpE43UdQ8MXm66Txo+BJEhxIlRKnMV861C/ZkCPLVa7tnChhpFAlhr9uaG3DU38m
+         pUXpzrNCAftOfTocsyJ5my1MJpEcJ/oPJ7OCvOyR62yfw7du1XLNpG/xEMM7OpynUuym
+         chJT19v0Ppr7eTo9bg9SeKa9LWJYLGCTvnHqo5rTo092J/Zq4dkQmUhhj+3+RTC7IG8G
+         9FyQ==
+X-Gm-Message-State: AOAM5336FpgatPtXtUpRHeQjvWo5DqziQRHjko1l8zLNXhAnxqJ2cpD3
+        BGXbJQcbHdy9ylW+iFqTtCNAvowSMqhrR3wAluM3ttS7yL0CQdK1sJSz0EhH8wxJn39Ssz9e39Q
+        2bd6paRX/s7fYX6AiAcTaMOQS
+X-Received: by 2002:a17:907:1c0a:b0:6da:7ac4:5349 with SMTP id nc10-20020a1709071c0a00b006da7ac45349mr14620588ejc.596.1646763519559;
+        Tue, 08 Mar 2022 10:18:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy9UKSdlIjJiXmn1spywhUg4vxQcqmWsv7ZWbx3Y7a36yveI+/CikgqEVMnFw0WXKZw0Rc7ZQ==
+X-Received: by 2002:a17:907:1c0a:b0:6da:7ac4:5349 with SMTP id nc10-20020a1709071c0a00b006da7ac45349mr14620563ejc.596.1646763519291;
+        Tue, 08 Mar 2022 10:18:39 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id hb19-20020a170906b89300b006daa95d178esm5501118ejb.60.2022.03.08.10.18.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 10:18:38 -0800 (PST)
+Message-ID: <17bc86ec-b470-e6ce-d467-fdc3b11c9c16@redhat.com>
+Date:   Tue, 8 Mar 2022 19:18:37 +0100
 MIME-Version: 1.0
-References: <20220214101450.356047-1-ray.huang@amd.com> <CAJZ5v0jgqzzog_F+DtgKk544FDQ=iQ_rDfwKeHnEiLLrCyi9Hw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jgqzzog_F+DtgKk544FDQ=iQ_rDfwKeHnEiLLrCyi9Hw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 8 Mar 2022 19:18:33 +0100
-Message-ID: <CAJZ5v0h6DB9d2buHKmdaicszJ0f5h8YxGN6gkLhMV78im61zBw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] x86/acpi/cppc: Minor clean up for x86 CPPC implementation
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Huang Rui <ray.huang@amd.com>, Borislav Petkov <bp@alien8.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jassmine Meng <li.meng@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 11/25] KVM: x86/mmu: remove
+ kvm_calc_shadow_root_page_role_common
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-12-pbonzini@redhat.com> <YieW+PZarPdsSnO7@google.com>
+ <f9e7903a-72b6-5bd7-4795-6c568b98f09d@redhat.com>
+ <Yiedukl6MC8OAAog@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yiedukl6MC8OAAog@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 8:20 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Feb 14, 2022 at 11:51 AM Huang Rui <ray.huang@amd.com> wrote:
-> >
-> > Hi all,
-> >
-> > While we were fixing the legacy issue below, we found the dependencies
-> > between smpboot and CPPC were not very good. But due to urgent fix for
-> > 5.17-rc1, I didn't have much time to provide a complete solution.
-> >
-> > https://lore.kernel.org/lkml/YdeWDDCwBQAYnlKb@amd.com/
-> >
-> > In these series, I expand the scope of acpi/cppc_msr to acpi/cppc to cover
-> > the all the CPPC helper functions for x86 ACPI. And then clean up the
-> > smpboot and move CPPC related functions into the acpi/cppc.c. This design
-> > is more straightforward and more clear to handle the CPPC in x86 and
-> > resolve dependency issues between CPPC and smpboot.c.
-> >
-> > Thanks,
-> > Ray
-> >
-> > Huang Rui (4):
-> >   x86/acpi: Expand the CPPC MSR file to cover the whole CPPC
-> >     implementation
-> >   x86, sched: Move AMD maximum frequency ratio setting function into x86
-> >     CPPC
-> >   x86, sched: Expose init_freq_invariance to topology header
-> >   x86/acpi: Move init_freq_invariance_cppc into x86 CPPC
-> >
-> >  arch/x86/include/asm/topology.h |  13 +++-
-> >  arch/x86/kernel/acpi/Makefile   |   2 +-
-> >  arch/x86/kernel/acpi/cppc.c     | 103 ++++++++++++++++++++++++++++++++
-> >  arch/x86/kernel/acpi/cppc_msr.c |  49 ---------------
-> >  arch/x86/kernel/smpboot.c       |  72 +---------------------
-> >  5 files changed, 118 insertions(+), 121 deletions(-)
-> >  create mode 100644 arch/x86/kernel/acpi/cppc.c
-> >  delete mode 100644 arch/x86/kernel/acpi/cppc_msr.c
-> >
-> > --
->
-> This series makes sense to me and I'm inclined to take it if there are
-> no objections, so if there are any, please let me know.
+On 3/8/22 19:17, Sean Christopherson wrote:
+>>> +	role.base.direct = !____is_cr0_pg(regs);
+> 
+> On a serious note, can we add a WARN_ON_ONCE(role.base.direct)?  Not so much that
+> the WARN will be helpful, but to document the subtle dependency?  If the relevant
+> code goes away in the end, ignore this requrest.
 
-And so applied as 5.18 material now with slightly adjusted subjects.
+Ok, that can be done.  Either that or !is_cr0_pg().
 
-Thanks!
+Paolo
+

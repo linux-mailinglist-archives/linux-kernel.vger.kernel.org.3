@@ -2,121 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25FD4D14E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C66E4D14F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236519AbiCHKe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:34:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S1345935AbiCHKnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbiCHKez (ORCPT
+        with ESMTP id S244921AbiCHKnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:34:55 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E605542483
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:33:54 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id d64so14378114vsd.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=WL70BUnQ9ECkrFgLiclEdyC+LhxGlMoS4GrJX3TGgu8=;
-        b=f5ZzkgQGuQYwGYig1UDUBch4002jrP6nb3fsjZe3aQ+VEopxLsoqP5KftHO0Y+xDkq
-         VkrRf1mlyKveWbUoh9xlqWTRGP6BbRVgi6WbI6WYHpEG46u72r8EARCgey3SY9IAA3Zw
-         hCqSEphK4A/+XYzXD5PnEsqFCCnE81EV8J6JfoLDaHDM0PuVNvauoU42RrRiilgCFSUL
-         Oc3qKA0F1zQmBJ5lHkQKH+Nf1V+X50eQ3OoxO+Vae84n0wf4c76zbuqrV5wvedMQP/Sk
-         TIAy5SjKewUFxHw3ZIU1Z2BexkSiGaCpphg0AfvNo7EtbvjcGb1VuLn3pF8rtwTnKx6w
-         lWog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=WL70BUnQ9ECkrFgLiclEdyC+LhxGlMoS4GrJX3TGgu8=;
-        b=CflZenw5rXmlSG2ut24mj4QIhw0vIvgzB/szFibrg3QHnfMmXbyBpGCb+uaTgD/ck2
-         BVETwKYxWiqJuiiD6/7NWnJi6FY8ulUuHVsam/H5xPpKxVdHk0ZD4B46mqOj4W60QIr7
-         W86dW4UpFkITy/J+MEHxspplDnCz/3Vu0kWQpJm7evWOq342aYOeAlleKXcl8awBBgky
-         qi4hInnvDM3/aOPVSPYyW+GsXVRZFgKjo1iJac11EI4afaMGqdns6Jv48BZbWVOAO7Ve
-         OvAhxNmejtaOFJ2LoEVQNcrFklzbNcIbMCijpqHL0UnO+QZz2DSFeVUbhv6V1Dg605Gx
-         RdhA==
-X-Gm-Message-State: AOAM532we0ID6wzrdeA1cnxjCvygmoly0H0TR0mn5RP/pBxqIMBwSq3n
-        xujb2wWrL5SHoUqP8BzX3OIioNf/7rhfd+MhQzY=
-X-Google-Smtp-Source: ABdhPJwVKUT5FD0NlfGAOIrgoCf0NSBlzUuYuv6IdHEvazmK0t1UocuH1ku4BsYY69mc23bueKGlbKkDe5961TLuA8A=
-X-Received: by 2002:a67:fe50:0:b0:31c:1eab:a9ad with SMTP id
- m16-20020a67fe50000000b0031c1eaba9admr5882269vsr.18.1646735633867; Tue, 08
- Mar 2022 02:33:53 -0800 (PST)
+        Tue, 8 Mar 2022 05:43:20 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6380442EC8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646736142; x=1678272142;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MmVzAE5dgBGw1xFAkO3JLMCJwIai0Y5SLEW2EbcNTpU=;
+  b=KJEdT+tHikpBlLGKoY5xMVejI4Hv0qtnhEN6akAKqknJd3R0wPYQisYa
+   gI1JecuefE/ahkLebtlczh5d4Q9gahq3M2xUCH2Ikd3wTQrkw9hZlpipP
+   tXrWpqIOnb/SSuk8pjVhxGOyg69Fdo98ECxzvvEvg02vSMMTkr+02GlWq
+   Ie1zQdmiP6rBYamtxoH/OlLtcnAwUMro/PU4HwAR/ENIYzP7YA9DOYSMq
+   ++D0p0Dsf6CixR3i7TM12t0EVu5Vnp9MeW59Oi9PSIkrYE2s9pQe0xgTB
+   rRIdp6C4cOVosUqVoYbiUeEzVSmvscQP2mCSYfDWV97e7Lmnz4ka3P9gP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234606876"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="234606876"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:42:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="643613776"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 02:42:19 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRXII-0001H6-LL; Tue, 08 Mar 2022 10:42:18 +0000
+Date:   Tue, 8 Mar 2022 18:41:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/video/fbdev/i740fb.c:743:20: sparse: sparse: incorrect type
+ in argument 1 (different address spaces)
+Message-ID: <202203081831.rJ2WE6TU-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a59:d502:0:b0:29a:8219:59d6 with HTTP; Tue, 8 Mar 2022
- 02:33:53 -0800 (PST)
-Reply-To: nislvraj@gmail.com
-From:   Anitha Selvaraj <marjohn595@gmail.com>
-Date:   Tue, 8 Mar 2022 10:33:53 +0000
-Message-ID: <CAC5Z0DnWZ8P6_kjSTGmN2Gv2Y7tbEAAJU7_wwQsNb+V2fN2XzA@mail.gmail.com>
-Subject: =?UTF-8?Q?Querid=C3=ADsimo_en_Cristo=2C?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e30 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5006]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [marjohn595[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [marjohn595[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Querid=C3=ADsimo en Cristo,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ea4424be16887a37735d6550cfd0611528dbe5d9
+commit: 9294523e3768030ae8afb84110bcecc66425a647 module: add printk formats to add module build ID to stacktraces
+date:   8 months ago
+config: csky-randconfig-s032-20220308 (https://download.01.org/0day-ci/archive/20220308/202203081831.rJ2WE6TU-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9294523e3768030ae8afb84110bcecc66425a647
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9294523e3768030ae8afb84110bcecc66425a647
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash drivers/video/fbdev/
 
-Soy la Sra. Anitha Selvaraj, me cas=C3=A9 con el Sr. Francis Selvaraj, dura=
-nte
-19 a=C3=B1os sin hijos y mi esposo muri=C3=B3 en 2007. Me comunico con uste=
-d para que
-sepa mi deseo de donar la suma de (6.500.000 d=C3=B3lares) que hered=C3=A9.=
- de mi
-difunto esposo a la caridad, actualmente el fondo todav=C3=ADa est=C3=A1 en=
- el banco.
-Recientemente, mi m=C3=A9dico me dijo que tengo una enfermedad grave que es=
- un
-problema de c=C3=A1ncer y que no durar=C3=A9 los pr=C3=B3ximos 2 meses.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Quiero una persona que use este fondo para orfanatos, escuelas, iglesias,
-viudas, propagando la palabra de Dios en su pa=C3=ADs.
-Responda para obtener m=C3=A1s informaci=C3=B3n y tambi=C3=A9n env=C3=ADeme=
- la siguiente
-informaci=C3=B3n, seg=C3=BAn se indica a continuaci=C3=B3n.
 
-Tu nombre completo ..........
-Habla a ...........
-Foto ...............
-Bendito seas
-tu hermana en cristo
-Se=C3=B1ora. Anitha Selvaraj
+sparse warnings: (new ones prefixed by >>)
+>> drivers/video/fbdev/i740fb.c:743:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *dest @@     got char [noderef] __iomem *screen_base @@
+   drivers/video/fbdev/i740fb.c:743:20: sparse:     expected void *dest
+   drivers/video/fbdev/i740fb.c:743:20: sparse:     got char [noderef] __iomem *screen_base
+   drivers/video/fbdev/i740fb.c: note: in included file (through arch/csky/include/asm/io.h, include/linux/io.h, include/linux/irq.h, ...):
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+   include/asm-generic/io.h:291:22: sparse:     expected unsigned short [usertype] value
+   include/asm-generic/io.h:291:22: sparse:     got restricted __le16 [usertype]
+   include/asm-generic/io.h:291:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
+
+vim +743 drivers/video/fbdev/i740fb.c
+
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  732  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  733  static int i740fb_set_par(struct fb_info *info)
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  734  {
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  735  	struct i740fb_par *par = info->par;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  736  	u32 itemp;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  737  	int i;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  738  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  739  	i = i740fb_decode_var(&info->var, par, info);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  740  	if (i)
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  741  		return i;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  742  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10 @743  	memset(info->screen_base, 0, info->screen_size);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  744  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  745  	vga_protect(par);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  746  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  747  	i740outreg(par, XRX, DRAM_EXT_CNTL, DRAM_REFRESH_DISABLE);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  748  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  749  	mdelay(1);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  750  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  751  	i740outreg(par, XRX, VCLK2_VCO_M, par->video_clk2_m);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  752  	i740outreg(par, XRX, VCLK2_VCO_N, par->video_clk2_n);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  753  	i740outreg(par, XRX, VCLK2_VCO_MN_MSBS, par->video_clk2_mn_msbs);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  754  	i740outreg(par, XRX, VCLK2_VCO_DIV_SEL, par->video_clk2_div_sel);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  755  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  756  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_0,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  757  			par->pixelpipe_cfg0 & DAC_8_BIT, 0x80);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  758  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  759  	i740inb(par, 0x3DA);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  760  	i740outb(par, 0x3C0, 0x00);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  761  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  762  	/* update misc output register */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  763  	i740outb(par, VGA_MIS_W, par->misc | 0x01);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  764  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  765  	/* synchronous reset on */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  766  	i740outreg(par, VGA_SEQ_I, VGA_SEQ_RESET, 0x01);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  767  	/* write sequencer registers */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  768  	i740outreg(par, VGA_SEQ_I, VGA_SEQ_CLOCK_MODE,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  769  			par->seq[VGA_SEQ_CLOCK_MODE] | 0x20);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  770  	for (i = 2; i < VGA_SEQ_C; i++)
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  771  		i740outreg(par, VGA_SEQ_I, i, par->seq[i]);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  772  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  773  	/* synchronous reset off */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  774  	i740outreg(par, VGA_SEQ_I, VGA_SEQ_RESET, 0x03);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  775  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  776  	/* deprotect CRT registers 0-7 */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  777  	i740outreg(par, VGA_CRT_IC, VGA_CRTC_V_SYNC_END,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  778  			par->crtc[VGA_CRTC_V_SYNC_END]);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  779  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  780  	/* write CRT registers */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  781  	for (i = 0; i < VGA_CRT_C; i++)
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  782  		i740outreg(par, VGA_CRT_IC, i, par->crtc[i]);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  783  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  784  	/* write graphics controller registers */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  785  	for (i = 0; i < VGA_GFX_C; i++)
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  786  		i740outreg(par, VGA_GFX_I, i, par->gdc[i]);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  787  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  788  	/* write attribute controller registers */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  789  	for (i = 0; i < VGA_ATT_C; i++) {
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  790  		i740inb(par, VGA_IS1_RC);		/* reset flip-flop */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  791  		i740outb(par, VGA_ATT_IW, i);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  792  		i740outb(par, VGA_ATT_IW, par->atc[i]);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  793  	}
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  794  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  795  	i740inb(par, VGA_IS1_RC);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  796  	i740outb(par, VGA_ATT_IW, 0x20);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  797  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  798  	i740outreg(par, VGA_CRT_IC, EXT_VERT_TOTAL, par->ext_vert_total);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  799  	i740outreg(par, VGA_CRT_IC, EXT_VERT_DISPLAY, par->ext_vert_disp_end);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  800  	i740outreg(par, VGA_CRT_IC, EXT_VERT_SYNC_START,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  801  			par->ext_vert_sync_start);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  802  	i740outreg(par, VGA_CRT_IC, EXT_VERT_BLANK_START,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  803  			par->ext_vert_blank_start);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  804  	i740outreg(par, VGA_CRT_IC, EXT_HORIZ_TOTAL, par->ext_horiz_total);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  805  	i740outreg(par, VGA_CRT_IC, EXT_HORIZ_BLANK, par->ext_horiz_blank);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  806  	i740outreg(par, VGA_CRT_IC, EXT_OFFSET, par->ext_offset);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  807  	i740outreg(par, VGA_CRT_IC, EXT_START_ADDR_HI, par->ext_start_addr_hi);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  808  	i740outreg(par, VGA_CRT_IC, EXT_START_ADDR, par->ext_start_addr);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  809  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  810  	i740outreg_mask(par, VGA_CRT_IC, INTERLACE_CNTL,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  811  			par->interlace_cntl, INTERLACE_ENABLE);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  812  	i740outreg_mask(par, XRX, ADDRESS_MAPPING, par->address_mapping, 0x1F);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  813  	i740outreg_mask(par, XRX, BITBLT_CNTL, par->bitblt_cntl, COLEXP_MODE);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  814  	i740outreg_mask(par, XRX, DISPLAY_CNTL,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  815  			par->display_cntl, VGA_WRAP_MODE | GUI_MODE);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  816  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_0, par->pixelpipe_cfg0, 0x9B);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  817  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_2, par->pixelpipe_cfg2, 0x0C);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  818  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  819  	i740outreg(par, XRX, PLL_CNTL, par->pll_cntl);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  820  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  821  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_1,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  822  			par->pixelpipe_cfg1, DISPLAY_COLOR_MODE);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  823  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  824  	itemp = readl(par->regs + FWATER_BLC);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  825  	itemp &= ~(LMI_BURST_LENGTH | LMI_FIFO_WATERMARK);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  826  	itemp |= par->lmi_fifo_watermark;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  827  	writel(itemp, par->regs + FWATER_BLC);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  828  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  829  	i740outreg(par, XRX, DRAM_EXT_CNTL, DRAM_REFRESH_60HZ);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  830  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  831  	i740outreg_mask(par, MRX, COL_KEY_CNTL_1, 0, BLANK_DISP_OVERLAY);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  832  	i740outreg_mask(par, XRX, IO_CTNL,
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  833  			par->io_cntl, EXTENDED_ATTR_CNTL | EXTENDED_CRTC_CNTL);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  834  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  835  	if (par->pixelpipe_cfg1 != DISPLAY_8BPP_MODE) {
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  836  		i740outb(par, VGA_PEL_MSK, 0xFF);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  837  		i740outb(par, VGA_PEL_IW, 0x00);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  838  		for (i = 0; i < 256; i++) {
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  839  			itemp = (par->pixelpipe_cfg0 & DAC_8_BIT) ? i : i >> 2;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  840  			i740outb(par, VGA_PEL_D, itemp);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  841  			i740outb(par, VGA_PEL_D, itemp);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  842  			i740outb(par, VGA_PEL_D, itemp);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  843  		}
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  844  	}
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  845  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  846  	/* Wait for screen to stabilize. */
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  847  	mdelay(50);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  848  	vga_unprotect(par);
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  849  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  850  	info->fix.line_length =
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  851  			info->var.xres_virtual * info->var.bits_per_pixel / 8;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  852  	if (info->var.bits_per_pixel == 8)
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  853  		info->fix.visual = FB_VISUAL_PSEUDOCOLOR;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  854  	else
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  855  		info->fix.visual = FB_VISUAL_TRUECOLOR;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  856  
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  857  	return 0;
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  858  }
+5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  859  
+
+:::::: The code at line 743 was first introduced by commit
+:::::: 5350c65f4f15bbc111ffa629130d3f32cdd4ccf6 Resurrect Intel740 driver: i740fb
+
+:::::: TO: Ondrej Zary <linux@rainbow-software.org>
+:::::: CC: Florian Tobias Schandinat <FlorianSchandinat@gmx.de>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

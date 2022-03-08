@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AE94D1567
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB55C4D156F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346111AbiCHLDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S1346117AbiCHLDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346192AbiCHLDS (ORCPT
+        with ESMTP id S1346138AbiCHLDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:03:18 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0712843AED
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:02:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646737342; x=1678273342;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yGk3VWwzO+DOKWQWFeM4kTZHzMtinuGmDIkTdG8JKZY=;
-  b=TWDB26ga3MO/Gon3SC76ee7QECZ6jwm5QEoIVl4MSdbdrOCH/4z1Va9z
-   05svRcVurvlq1CYOUhdWMIgncdejE+6jjA0Q0vr7JuZ85biWjBgkY4GqF
-   sT3xaxzCQQSV3kE50orFD/55PQBe8zcHo7uZbjiLAeYXGAZPGVduPdiRT
-   3nzaA/I4Dpz+uK6DLJmv+NeH4gL5X2zggUpCCs/ermLrsJJE8lblPOGNY
-   8e0JcYh/JrSRmHS+hEe7xzm6+YjXIMuy0O3yNm6frEHUtr4RHHGfNtwAL
-   VlVcqgSCQm41Pq7TUzfPKs0oLEjg/FYdioPIsuZcpRnu8DHPIBf5P9r/Y
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254846918"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="254846918"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 03:02:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="495414133"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 03:02:19 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRXbf-0001Ib-25; Tue, 08 Mar 2022 11:02:19 +0000
-Date:   Tue, 8 Mar 2022 19:02:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 50/54] or1k-linux-ld:
- fs/cifs/file.o:undefined reference to `netfs_invalidatepage'
-Message-ID: <202203081815.sMaYyDI2-lkp@intel.com>
+        Tue, 8 Mar 2022 06:03:39 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C2CA19E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:02:36 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C70943F7E4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646737352;
+        bh=cmIEv3+2duqaZszEh7bUQ4/zmJnqkg7ujOQpTYxWoCc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=YbyzsTi8IUMfoNvd4XdLE1JGIxR09hgvQbmpguSJ4SQWTHldKKt2CKO8TJ6LI5Kpz
+         0wFdjfXfNXqulHCdWhVkWlQiLnwVDmHWzTOE2k41plCGnM+7Hlun8uu0PfjXo0AA/F
+         tNfDjtRghXsvJLrWLwkIx5aGby6LY8ffl5T8hgyGayPhrjzkmwDjgjFHAVCyJvPjYB
+         ZbmVtMfxHQzG8uwIULYlIsGEiJG38tjNG7PCPk8aWttDcyzBDDT3G/cmh/AiuAFuVz
+         iP9R0o7nuTItNvlzz4mPzr4q+7kVhqsfQvlNZ0nhjBQmBYniwFn/zos1L3lFtEnFz0
+         rJjPNftPNpi5A==
+Received: by mail-ej1-f72.google.com with SMTP id hr26-20020a1709073f9a00b006d6d1ee8cf8so8411298ejc.19
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 03:02:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cmIEv3+2duqaZszEh7bUQ4/zmJnqkg7ujOQpTYxWoCc=;
+        b=dmoRh1FfgUcgezv70GPjp1uXxARU/l778Nu5cx8wViGSDwPUm3e1XewICZNcLYSgf/
+         B5bIraxAgOKLd/LVFWUp5kSHiF6fssv6nmofco96z3szokrM2zAqLokt1l8mpstPj3Xx
+         Qxndjkz5Ziq1abkZskZSpMt35Np1DeI87Scv8Yq5I7QEQ81t0ErM3QR9Kzt0ng8ajRXl
+         8Nl/WfKn82NtSf9wlZhh0HM8P5IHK5RupU3vJCor6lWNtKmkQV1lPzCu3Tu2HZVC0Pk/
+         iE5b2XLYelfU1kWYA1THDuuOmVqOJfdzjN17LXrRQ5PZErDfbVsKJaJBheziDNiN02CK
+         gihw==
+X-Gm-Message-State: AOAM532aTpqKMCuklkBBQoXI7pZIkN5Nr63YFPQQjTXe3pkFVF9CmAIM
+        P4nT02Dcdz0/rjNhu4Z/RpmFmP22jHyO8S3Q7QP4dLmR6eIDpcKOvfTh7b18u9Zphn/O2FV4SVL
+        +3OxJc/I7eVer7h+04jMv7njsJyLOoqVyeuMHmrmsdg==
+X-Received: by 2002:a50:ee83:0:b0:416:63c:3dd2 with SMTP id f3-20020a50ee83000000b00416063c3dd2mr15418696edr.361.1646737351828;
+        Tue, 08 Mar 2022 03:02:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx3p9DGak2cIN3Oy9Pu0jBYckHw9+LyOxxPiom+Z6kSsNDhhsbDrANi6ehjTkjpzIfTQQ7yrA==
+X-Received: by 2002:a50:ee83:0:b0:416:63c:3dd2 with SMTP id f3-20020a50ee83000000b00416063c3dd2mr15418664edr.361.1646737351463;
+        Tue, 08 Mar 2022 03:02:31 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id fx3-20020a170906b74300b006daecedee44sm4069130ejb.220.2022.03.08.03.02.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 03:02:30 -0800 (PST)
+Message-ID: <bbb7e8fa-757a-64c6-640e-c24bf3e56b82@canonical.com>
+Date:   Tue, 8 Mar 2022 12:02:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 5/9] ARM: dts: exynos: fix ethernet node name for
+ different odroid boards
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     kernel@pengutronix.de, bcm-kernel-feedback-list@broadcom.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
+ <20220216074927.3619425-6-o.rempel@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220216074927.3619425-6-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   0a76f6b7563134f15673a1cd5a2ccc2fd6b4c1d0
-commit: a80918300e1cb9538bea4a225c7a45fe75f4678a [50/54] netfs: Provide invalidatepage and releasepage calls
-config: openrisc-randconfig-r023-20220308 (https://download.01.org/0day-ci/archive/20220308/202203081815.sMaYyDI2-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/a80918300e1cb9538bea4a225c7a45fe75f4678a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout a80918300e1cb9538bea4a225c7a45fe75f4678a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash
+On 16/02/2022 08:49, Oleksij Rempel wrote:
+> The node name of Ethernet controller should be "ethernet" instead of
+> "usbether" as required by Ethernet controller devicetree schema:
+>  Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> 
+> This patch can potentially affect boot loaders patching against full
+> node path instead of using device aliases.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  arch/arm/boot/dts/exynos4412-odroidu3.dts       | 2 +-
+>  arch/arm/boot/dts/exynos4412-odroidx.dts        | 2 +-
+>  arch/arm/boot/dts/exynos5410-odroidxu.dts       | 2 +-
+>  arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts | 2 +-
+>  arch/arm/boot/dts/exynos5422-odroidxu3.dts      | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Oleksij,
 
-All errors (new ones prefixed by >>):
+Both Exynos patches look good, unfortunately I forgot about them a week
+ago when I was preparing late pull request and now it is too late for
+this cycle. I will pick them up after the merge window. Sorry, for this.
 
->> or1k-linux-ld: fs/cifs/file.o:(.rodata+0x318c): undefined reference to `netfs_invalidatepage'
->> or1k-linux-ld: fs/cifs/file.o:(.rodata+0x3190): undefined reference to `netfs_releasepage'
-   or1k-linux-ld: fs/cifs/file.o:(.rodata+0x31e4): undefined reference to `netfs_invalidatepage'
-   or1k-linux-ld: fs/cifs/file.o:(.rodata+0x31e8): undefined reference to `netfs_releasepage'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+Krzysztof

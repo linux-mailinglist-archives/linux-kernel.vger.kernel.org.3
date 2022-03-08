@@ -2,233 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AE84D2493
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85364D249C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiCHXFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S229890AbiCHXGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 18:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiCHXFE (ORCPT
+        with ESMTP id S229700AbiCHXGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:05:04 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AB15EBD6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:04:07 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id f8so667669pfj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w1SxKbRJ8WkX9WltRoD14k9Ob0xVI9Pf1gGrPgXvoiI=;
-        b=EVgtw0P+ZA+mu2sZJnZGHuZB7XszskLKawEE3nAiNRP9dEGu7nI2QIrA5TVsfvVAGn
-         v2Nrtcwox3fbKRkSXRPXnMZh7HlBOGXfl7QZWo3Az3DsJ/Wu5DocTWIrOK3tyKTA3tPr
-         eoZCiTsg9CRb53IFehojTmdmxEuCDbWuul32W1Y0WClJB2Hp2gjAL12Qm0838c+GuVR7
-         Bvzv2Sv0dBX9B0aYlYfj7DZXintbNPXxPW801RyfHxHv6fbt+BMdZc9lhNnvSAAXjJ32
-         qEw1iU1r3Z8oirwGbptJgohfxu6CvjfIvLlv8XkS2s5KgDMtbBg4cBrHYpRWkmzeKJhp
-         c0ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w1SxKbRJ8WkX9WltRoD14k9Ob0xVI9Pf1gGrPgXvoiI=;
-        b=ZSFCc6GZWz1/oTt7NVY/YbQpFzPMLm7k8mm7CcKeZKQyzF6UebAa5SbP9MbSk0SPb/
-         diCEMU+ifuzsrY0iokAFYLuMxFnG0P4Rgh8zS5BhLeSTE/j7AHoS9/VxMkn0cpuE5gDD
-         q+soMplBJPx7gWOs1qc9uTfhGE5KXWo2ck/o9a2BR66xnJDAOmc4E8WjSe1aoBoVZ5Nc
-         UR9e8MkrvNqrXaOx2/0BGheo+YIDX+bBn8GcFb1hAkNG/QaNfUagLu4Od4GmImG+AOE2
-         jYw+rHEBpab4QOjQnJ3qQpuUPCriqUFLctz0/vCP4AgkX2E+M9MVxwC+RpwYc2zdWDZQ
-         elxQ==
-X-Gm-Message-State: AOAM533+cU9KiO41LeekfXfYnG2qNmNda9jMkI+7YJ2i6/QJeZZwaeJ9
-        gT7A+8256fOBCSqrpnDviRclIw==
-X-Google-Smtp-Source: ABdhPJytZy0DNaiUVFrbFyiAkMa1BfgnsrX/YkRy+IAt7mzDpdiZQTFzYeLxz3AHzEUWRGM1Ahp1wA==
-X-Received: by 2002:a63:1d4b:0:b0:37f:f10b:726f with SMTP id d11-20020a631d4b000000b0037ff10b726fmr15828871pgm.562.1646780646266;
-        Tue, 08 Mar 2022 15:04:06 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm154336pgn.72.2022.03.08.15.04.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 15:04:05 -0800 (PST)
-Date:   Tue, 8 Mar 2022 23:04:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Gao Chao <chao.gao@intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
- unconditionally
-Message-ID: <Yifg4bea6zYEz1BK@google.com>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
- <20220225082223.18288-7-guang.zeng@intel.com>
+        Tue, 8 Mar 2022 18:06:02 -0500
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62E55D1B5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:05:02 -0800 (PST)
+Received: (wp-smtpd smtp.wp.pl 26950 invoked from network); 9 Mar 2022 00:04:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1646780699; bh=OLgWtwFbtTxDfDBG+/DhEFnjk/bpFHtT+b+PcGpPCqs=;
+          h=From:To:Cc:Subject;
+          b=x7/aEyw3SWhmJPvNg9B2YQa8fgwwBtbvxxOOTEjVFsz9vXuZCT47ZLhDgEfcWl9/2
+           BCgpsEMofyB5uYQSO0wG0pGemzuIfkIaeRo/qYIcWo7yJ0C2a+7Klm99foUa2pOW3Y
+           XGKJrOcdDLgwS1itdZjHQSLl+E1M/8+akCfwGFCA=
+Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <hauke@hauke-m.de>; 9 Mar 2022 00:04:59 +0100
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     hauke@hauke-m.de, andrew@lunn.ch, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>,
+        Thomas Nixon <tom@tomn.co.uk>
+Subject: [PATCH net-next] net: dsa: lantiq_gswip: enable jumbo frames on GSWIP
+Date:   Wed,  9 Mar 2022 00:04:57 +0100
+Message-Id: <20220308230457.1599237-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225082223.18288-7-guang.zeng@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 570e89349c46434796f7ed3f4d7bf1ee
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [8bNE]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022, Zeng Guang wrote:
-> From: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> No normal guest has any reason to change physical APIC IDs,
+This enables non-standard MTUs on a per-port basis, with the overall
+frame size set based on the CPU port.
 
-I don't think we can reasonably assume this, my analysis in the link (that I just
-realized I deleted from context here) shows it's at least plausible that an existing
-guest could rely on the APIC ID being writable.  And that's just one kernel, who
-know what else is out there, especially given that people use KVM to emulate really
-old stuff, often on really old hardware.
+When the MTU is not changed, this should have no effect.
 
-Practically speaking, anyone that wants to deploy IPIv is going to have to make
-the switch at some point, but that doesn't help people running legacy crud that
-don't care about IPIv.
+Long packets crash the switch with MTUs of greater than 2526, so the
+maximum is limited for now. Medium packets are sometimes dropped (e.g.
+TCP over 2477, UDP over 2516-2519, ICMP over 2526), Hence an MTU value
+of 2400 seems safe.
 
-I was thinking a module param would be trivial, and it is (see below) if the
-param is off by default.  A module param will also provide a convenient opportunity
-to resolve the loophole reported by Maxim[1][2], though it's a bit funky.
-
-Anyways, with an off-by-default module param, we can just do:
-
-	if (!enable_apicv || !cpu_has_vmx_ipiv() || !xapic_id_readonly)
-		enable_ipiv = false;
-
-Forcing userspace to take advantage of IPIv is rather annoying, but it's not the
-end of world.
-
-Having the param on by default is a mess.  Either we break userspace (above), or
-we only kinda break userspace by having it on iff IPIv is on, but then we end up
-with cyclical dependency hell.  E.g. userspace makes xAPIC ID writable and forces
-on IPIv, which one "wins"?  And if it's on by default, we can't fix the loophole
-in KVM_SET_LAPIC.
-
-If we really wanted to have it on by default, we could have a Kconfig and make
-_that_ off by default, e.g.
-
-  static bool __read_mostly xapic_id_readonly = IS_ENABLED(CONFING_KVM_XAPIC_ID_RO);
-
-but that seems like overkill.  If a kernel owner knows they want the param on,
-it should be easy enough to force it without a Kconfig.
-
-So I think my vote would be for something like this?  Compile tested only...
-
+Signed-off-by: Thomas Nixon <tom@tomn.co.uk>
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 ---
- arch/x86/kvm/lapic.c    | 14 +++++++++-----
- arch/x86/kvm/svm/avic.c |  5 +++++
- arch/x86/kvm/x86.c      |  4 ++++
- arch/x86/kvm/x86.h      |  1 +
- 4 files changed, 19 insertions(+), 5 deletions(-)
+ drivers/net/dsa/lantiq_gswip.c | 53 +++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index c4c3155d98db..2c01cd45fb18 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2043,7 +2043,7 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
-
- 	switch (reg) {
- 	case APIC_ID:		/* Local APIC ID */
--		if (!apic_x2apic_mode(apic))
-+		if (!apic_x2apic_mode(apic) && !xapic_id_readonly)
- 			kvm_apic_set_xapic_id(apic, val >> 24);
- 		else
- 			ret = 1;
-@@ -2634,10 +2634,7 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
- 		u32 *ldr = (u32 *)(s->regs + APIC_LDR);
- 		u64 icr;
-
--		if (vcpu->kvm->arch.x2apic_format) {
--			if (*id != vcpu->vcpu_id)
--				return -EINVAL;
--		} else {
-+		if (!vcpu->kvm->arch.x2apic_format) {
- 			if (set)
- 				*id >>= 24;
- 			else
-@@ -2650,6 +2647,10 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
- 		 * split to ICR+ICR2 in userspace for backwards compatibility.
- 		 */
- 		if (set) {
-+			if ((vcpu->kvm->arch.x2apic_format || xapic_id_readonly) &&
-+			    (*id != vcpu->vcpu_id))
-+				return -EINVAL;
+diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
+index 8a7a8093a156..f7059ab3b014 100644
+--- a/drivers/net/dsa/lantiq_gswip.c
++++ b/drivers/net/dsa/lantiq_gswip.c
+@@ -213,6 +213,7 @@
+ #define  GSWIP_MAC_CTRL_0_GMII_MII	0x0001
+ #define  GSWIP_MAC_CTRL_0_GMII_RGMII	0x0002
+ #define GSWIP_MAC_CTRL_2p(p)		(0x905 + ((p) * 0xC))
++#define GSWIP_MAC_CTRL_2_LCHKL		BIT(2) /* Frame Length Check Long Enable */
+ #define GSWIP_MAC_CTRL_2_MLEN		BIT(3) /* Maximum Untagged Frame Lnegth */
+ 
+ /* Ethernet Switch Fetch DMA Port Control Register */
+@@ -239,6 +240,15 @@
+ 
+ #define XRX200_GPHY_FW_ALIGN	(16 * 1024)
+ 
++/* Maximum packet size supported by the switch. In theory this should be 10240,
++ * but long packets currently cause lock-ups with an MTU of over 2526. Medium
++ * packets are sometimes dropped (e.g. TCP over 2477, UDP over 2516-2519, ICMP
++ * over 2526), hence an MTU value of 2400 seems safe. This issue only affects
++ * packet reception. This is probably caused by the PPA engine, which is on the
++ * RX part of the device. Packet transmission works properly up to 10240.
++ */
++#define GSWIP_MAX_PACKET_LENGTH	2400
 +
- 			*ldr = kvm_apic_calc_x2apic_ldr(*id);
-
- 			icr = __kvm_lapic_get_reg(s->regs, APIC_ICR) |
-@@ -2659,6 +2660,9 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
- 			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
- 			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
- 		}
-+	} else if (set && xapic_id_readonly &&
-+		   (__kvm_lapic_get_reg(s->regs, APIC_ID) >> 24) != vcpu->vcpu_id) {
-+		return -EINVAL;
+ struct gswip_hw_info {
+ 	int max_ports;
+ 	int cpu_port;
+@@ -863,10 +873,6 @@ static int gswip_setup(struct dsa_switch *ds)
+ 	gswip_switch_mask(priv, 0, GSWIP_PCE_PCTRL_0_INGRESS,
+ 			  GSWIP_PCE_PCTRL_0p(cpu_port));
+ 
+-	gswip_switch_mask(priv, 0, GSWIP_MAC_CTRL_2_MLEN,
+-			  GSWIP_MAC_CTRL_2p(cpu_port));
+-	gswip_switch_w(priv, VLAN_ETH_FRAME_LEN + 8 + ETH_FCS_LEN,
+-		       GSWIP_MAC_FLEN);
+ 	gswip_switch_mask(priv, 0, GSWIP_BM_QUEUE_GCTRL_GL_MOD,
+ 			  GSWIP_BM_QUEUE_GCTRL);
+ 
+@@ -883,6 +889,8 @@ static int gswip_setup(struct dsa_switch *ds)
+ 		return err;
  	}
-
+ 
++	ds->mtu_enforcement_ingress = true;
++
+ 	gswip_port_enable(ds, cpu_port, NULL);
+ 
+ 	ds->configure_vlan_while_not_filtering = false;
+@@ -1446,6 +1454,39 @@ static int gswip_port_fdb_dump(struct dsa_switch *ds, int port,
  	return 0;
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index b37b353ec086..4a031d9686c2 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -442,6 +442,11 @@ static int avic_handle_apic_id_update(struct kvm_vcpu *vcpu)
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 	u32 id = kvm_xapic_id(vcpu->arch.apic);
-
-+	if (xapic_id_readonly && id != vcpu->vcpu_id) {
-+		kvm_prepare_emulation_failure_exit(vcpu);
-+		return 0;
+ }
+ 
++static int gswip_port_max_mtu(struct dsa_switch *ds, int port)
++{
++	/* Includes 8 bytes for special header. */
++	return GSWIP_MAX_PACKET_LENGTH - VLAN_ETH_HLEN - ETH_FCS_LEN;
++}
++
++static int gswip_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
++{
++	struct gswip_priv *priv = ds->priv;
++	int cpu_port = priv->hw_info->cpu_port;
++
++	/* CPU port always has maximum mtu of user ports, so use it to set
++	 * switch frame size, including 8 byte special header.
++	 */
++	if (port == cpu_port) {
++		new_mtu += 8;
++		gswip_switch_w(priv, VLAN_ETH_HLEN + new_mtu + ETH_FCS_LEN,
++			       GSWIP_MAC_FLEN);
 +	}
 +
- 	if (vcpu->vcpu_id == id)
- 		return 0;
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4fa4d8269e5b..67706d468ed3 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -177,6 +177,10 @@ module_param(tsc_tolerance_ppm, uint, S_IRUGO | S_IWUSR);
- static int __read_mostly lapic_timer_advance_ns = -1;
- module_param(lapic_timer_advance_ns, int, S_IRUGO | S_IWUSR);
-
-+bool __read_mostly xapic_id_readonly;
-+module_param(xapic_id_readonly, bool, 0444);
-+EXPORT_SYMBOL_GPL(xapic_id_readonly);
++	/* Enable MLEN for ports with non-standard MTUs, including the special
++	 * header on the CPU port added above.
++	 */
++	if (new_mtu != ETH_DATA_LEN)
++		gswip_switch_mask(priv, 0, GSWIP_MAC_CTRL_2_MLEN,
++				  GSWIP_MAC_CTRL_2p(port));
++	else
++		gswip_switch_mask(priv, GSWIP_MAC_CTRL_2_MLEN, 0,
++				  GSWIP_MAC_CTRL_2p(port));
 +
- static bool __read_mostly vector_hashing = true;
- module_param(vector_hashing, bool, S_IRUGO);
-
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index aa86abad914d..89f40c921c08 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -302,6 +302,7 @@ static inline bool kvm_mpx_supported(void)
- extern unsigned int min_timer_period_us;
-
- extern bool enable_vmware_backdoor;
-+extern bool xapic_id_readonly;
-
- extern int pi_inject_timer;
-
-
-base-commit: 1e147f6f90668f2c2b57406d451f0cfcd2ba19d0
---
++	return 0;
++}
++
+ static void gswip_xrx200_phylink_get_caps(struct dsa_switch *ds, int port,
+ 					  struct phylink_config *config)
+ {
+@@ -1791,6 +1832,8 @@ static const struct dsa_switch_ops gswip_xrx200_switch_ops = {
+ 	.port_fdb_add		= gswip_port_fdb_add,
+ 	.port_fdb_del		= gswip_port_fdb_del,
+ 	.port_fdb_dump		= gswip_port_fdb_dump,
++	.port_change_mtu	= gswip_port_change_mtu,
++	.port_max_mtu		= gswip_port_max_mtu,
+ 	.phylink_get_caps	= gswip_xrx200_phylink_get_caps,
+ 	.phylink_mac_config	= gswip_phylink_mac_config,
+ 	.phylink_mac_link_down	= gswip_phylink_mac_link_down,
+@@ -1815,6 +1858,8 @@ static const struct dsa_switch_ops gswip_xrx300_switch_ops = {
+ 	.port_fdb_add		= gswip_port_fdb_add,
+ 	.port_fdb_del		= gswip_port_fdb_del,
+ 	.port_fdb_dump		= gswip_port_fdb_dump,
++	.port_change_mtu	= gswip_port_change_mtu,
++	.port_max_mtu		= gswip_port_max_mtu,
+ 	.phylink_get_caps	= gswip_xrx300_phylink_get_caps,
+ 	.phylink_mac_config	= gswip_phylink_mac_config,
+ 	.phylink_mac_link_down	= gswip_phylink_mac_link_down,
+-- 
+2.30.2
 

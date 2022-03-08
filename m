@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2F24D1057
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A825F4D105A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237282AbiCHGeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 01:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S241386AbiCHGfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 01:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiCHGeF (ORCPT
+        with ESMTP id S234718AbiCHGfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:34:05 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C7B3A70C;
-        Mon,  7 Mar 2022 22:33:10 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id bc27so15595552pgb.4;
-        Mon, 07 Mar 2022 22:33:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hMjnxV0GnFj2CSor8E3F7ywKx8ZqWT73m+9Cg9mTc0I=;
-        b=SLdxROCW6cr3FHmNOHAdjkeIc8HSPqIauQwbKl06rFdvYwydIfxdCuzSumG9QQcDJc
-         K+VSXhaQaSUh09zI60t2vuH1BgCyUy0iuQ1wPpR/ucWsmcC4LvUZ4nNWOVWZmod8BDeY
-         hgSgKiW9vNbYk6BNWeB9gE+aiz1HBTQD4E/pH/gpnCIYWTntMiBj4uYwGUmugiSZZZa3
-         3t+g+iRBngfe7q85VOKTu4lrDzWeZnb4waJrKtkHV78xCGD/04kLcBgtxhrCYAC966n9
-         9LcRa2Xx5q7buYyo7hhS6xhZTyvjCNAVtUaUzECkVdJ3dMORTaM9kkRQO1PPBYlMHoE5
-         uLQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hMjnxV0GnFj2CSor8E3F7ywKx8ZqWT73m+9Cg9mTc0I=;
-        b=6ktfS//RouT6r7vdlQrDFCbAHkQeXI3i0pHKKdOrHDE3MCrLEO+tPYnFaM4WJyx2Xe
-         YtpiXBuSqrtPGRAor4Jo5wH5ne4MLek6iv52I6EzDh4XU1gB8TX1EkQIimDLnU+CWkiy
-         D8/9VzDuHYna8UaOjzSqok3fk5hE0cq2xnuM47vcXq4ZpmanRlt0E8QRkKD3HtqnBwFm
-         T87aEHJrdgD9kalZUyDQxOo21YjfK9MeC2nRedgfjwHf1FVWBlMhFCjO6p70lLh5AVOs
-         vc1FbxMf2orj2D192rFtKbGM8vi/A3LKJPb7cYcHZIQbVR2MAX2Uii0DEAVnCywVNSda
-         8lUA==
-X-Gm-Message-State: AOAM531wffaM4dGQHOGH5Sa/JHAJEPEzDBarDVKXWqDk593wuMI2wDjs
-        06z+s/iuKRSZLDkrvj+Tqh4=
-X-Google-Smtp-Source: ABdhPJzM074HV5/+qzKqbSEKkUCYmOGcd3K7CQJbyJDhO2N3GuyVvwZHiiPbJmprB2u0EkXiohKqTQ==
-X-Received: by 2002:a65:43c8:0:b0:378:7add:ec4c with SMTP id n8-20020a6543c8000000b003787addec4cmr12509854pgp.570.1646721189783;
-        Mon, 07 Mar 2022 22:33:09 -0800 (PST)
-Received: from 9a2d8922b8f1 ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id z16-20020a056a00241000b004f3a647ae89sm18559292pfh.174.2022.03.07.22.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 22:33:09 -0800 (PST)
-Date:   Tue, 8 Mar 2022 12:03:04 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] arm: dts: realview/versatile/ste: Update spi clock
- name
-Message-ID: <20220308063304.GA67419@9a2d8922b8f1>
-References: <20220307205357.66322-1-singh.kuldeep87k@gmail.com>
- <20220307205357.66322-2-singh.kuldeep87k@gmail.com>
- <CAL_JsqKrq-NtkPF=p8Qn-_63qE80_0FSQkbY5WxCfJUcrNxJuA@mail.gmail.com>
+        Tue, 8 Mar 2022 01:35:17 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F893B552;
+        Mon,  7 Mar 2022 22:34:20 -0800 (PST)
+Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KCQVx2RmJzdb2h;
+        Tue,  8 Mar 2022 14:32:57 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 14:34:18 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 14:34:17 +0800
+Subject: Re: [PATCH 4.19 00/51] 4.19.233-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220307091636.988950823@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <79aed492-a822-738e-050a-4fd7f7c1426d@huawei.com>
+Date:   Tue, 8 Mar 2022 14:34:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKrq-NtkPF=p8Qn-_63qE80_0FSQkbY5WxCfJUcrNxJuA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 07:14:09PM -0600, Rob Herring wrote:
-> On Mon, Mar 7, 2022 at 2:54 PM Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
-> >
-> > SPI clock for pl022 is "sspclk" and meanwhile few platforms such as
-> > realview, versatile etc. specify "SSPCLK" as clock name. Even though
-> > bindings checks don't differentiate between the two names still keep
-> > same convention throughout i.e sspclk to align with other platforms.
+
+
+On 2022/3/7 17:18, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.233 release.
+> There are 51 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I don't see the point in worrying about this. The binding already
-> allows both. Why? Because I wrote the schema and checked it against
-> all the in tree users. The resulting warnings are what should be fixed
-> in the dts files IMO. What's not warning doesn't need to be fixed.
+> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.233-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Hi Rob,
+Tested on arm64 and x86 for 4.19.233-rc1,
 
-I personally share a different opinion though. Kindly bear with me for
-my explanations.
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-4.19.y
+Version: 4.19.233-rc1
+Commit: e227a7bfe445a282a8ba16771c3716b19839820b
+Compiler: gcc version 7.3.0 (GCC)
 
-As there were no checks on DTs before, so DTs have been defining names
-which may not align with bindings. In case of pl022, doc says sspclk is
-connected clock and whereas binding specify SSPCLK and sspclk both. Why
-keep both versions in bindings? just because DTs have it. I don't think
-it's justifiable enough and that's what prompted me to keep single
-entry. Please let me know in case my understanding is incorrect.
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8938
+passed: 8938
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-I kept "sspclk" as it is aligned with "apb_pclk" and I have not seen
-many DT defining names in caps.
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8938
+passed: 8938
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-Moreover, I ran out few checks and came up with some observations:
-	1. Keep SSPCLK in binding, 'make dtbs_check' doesn't complain. An
-	obvious behavior.
-	2. Remove SSPCLK from binding, 'make dtbs_check' again doesn't
-	complain.
-
-For 2), though binding doesn't have SSPCLK, still DTs with clock-name
-SSPCLK do not complain which further leads me to conclusion that casing
-is not considered while comparing. So, why should we keep both and can't
-simply discard other one.
-
-This may not be a concern as per warnings point of view, but let's say
-in future comparison checks get even more stricter, then this will roll
-out as a warning and needs to be looked again. Why shall we leave out a
-chance which may need to be revisited later?
-
-Regards
-Kuldeep
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

@@ -2,83 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B3F4D1A55
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED3B4D1A64
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241843AbiCHOYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S1347446AbiCHOZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiCHOYg (ORCPT
+        with ESMTP id S239921AbiCHOZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:24:36 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E447AEE;
-        Tue,  8 Mar 2022 06:23:38 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id q17so24704019edd.4;
-        Tue, 08 Mar 2022 06:23:38 -0800 (PST)
+        Tue, 8 Mar 2022 09:25:21 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199684B1CE;
+        Tue,  8 Mar 2022 06:24:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EWTDePeT9c6La97u9wbH4GX9FAATzBXHG6ctqZCvpd8=;
-        b=SwqxHt+CEM8U7jF/UK1QRxl5zaWGz+Rpz4kjl8tvUvDaBAc0cOanxW07D6pncov5FM
-         gkd2qQwI0YwO6fv6KGfwWTdIhmXVP5unai0Qp+omUXb+WQ5xFptNlsN3Il9kPfrWZRuD
-         CeAlmjr+WCW5YMTmeG1wxqXSlw5Y8rfh6YOqPMT3r7liiLMwwk7MPSOlCqq5FNhp5spZ
-         +bgyq/QIo2p0dq9S8g0ec/FDVJJD89jCSGDGpl+fJBco42+cQIKend21tWdBKmt4J3wO
-         +vBMgEKph46t0L6FqdMWxfStycIg/UlleEu+fPcXuYPcf15ut2tI1yFpYukWA4Y99cq0
-         wetw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EWTDePeT9c6La97u9wbH4GX9FAATzBXHG6ctqZCvpd8=;
-        b=yVi16mZr87jj1MElEFulv7aLWUIczzorKfy2OsnTasZuzTvlFxSmBgpUmQoCEXMBUN
-         vpfTKa/fvKxkg30hLPapnm7dYaUo46dQGQi4InVNj+6lL8KALTEOx2KEMJdVhaPKq/i1
-         WpTVN71N/HbzHCFn8hzz51IwZTnEkIE1qNVBP50uWJrvJTaUDPm7twkuMjY1HD0sXNiL
-         q/QjjEsFobTT9MiYLTdiOtA6XNrUpnnJchi0yumkO0iDOlmwQekEzhHrtsiEOO+dn0gM
-         tZDSKcLxJLTdkccratK65KWcEcrXCBsmQ6EQcAE72w5ddwfUgxAqkRt1uoEp6uwVKTTH
-         U/1A==
-X-Gm-Message-State: AOAM5309a3rJmNy5plStQKOexG2Xn5T/kX8gmgBmCoR7qqtx8EiPXgri
-        V5iz0/jhGSA32I1+ivJlMgo=
-X-Google-Smtp-Source: ABdhPJzK8eDtdQLsY2k88vsdbhPp3EbvokltEUVWoGn1cx3RxrX/AsjFlMtrSnnw23OOfx1ddoRO/g==
-X-Received: by 2002:a50:fd8e:0:b0:415:fe34:f03 with SMTP id o14-20020a50fd8e000000b00415fe340f03mr16318601edt.310.1646749417260;
-        Tue, 08 Mar 2022 06:23:37 -0800 (PST)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id s14-20020aa7cb0e000000b00410bf015567sm7483195edt.92.2022.03.08.06.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 06:23:36 -0800 (PST)
-Date:   Tue, 8 Mar 2022 15:23:34 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Masami Hiramatsu <mhiramat@redhat.com>,
-        Yucong Sun <fallentree@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 08/10] libbpf: Add bpf_program__attach_kprobe_opts
- support for multi kprobes
-Message-ID: <Yidm5vcehK7k1B2O@krava>
-References: <20220222170600.611515-1-jolsa@kernel.org>
- <20220222170600.611515-9-jolsa@kernel.org>
- <CAEf4Bza0qRAzA7WmtPD4US4Kur3qf3X+LC5uowr_H3Y-_pLfCA@mail.gmail.com>
- <YiTvdMGi6GA7i2Ex@krava>
- <CAEf4BzZZy6XSb2naSam+W=_wY6JviX6Vz30N7mSg=xYZW_TxQA@mail.gmail.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1646749465;
+  x=1678285465;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mFtYJAkI1dCyXIaGgRAGOKTPa8IX45yA6MGULzN9kow=;
+  b=beRRryRjerIuKdMAwepncmRoDy4MXHsp5rnUhha3igzazh2rnRaCBZCn
+   UE/ebnSeHEDnUnY/n+MRU4BJZNOi9CV6CzGkj2gv9WwA9vbOy1KDGHICF
+   G+V8VRz5xOfVA6eK4KsyAM2V7f2AmyzBjOw1UMY4SMKd83elEQlT17Bgk
+   HpQ5a/KY/fVkLo5PNs/1FqCnXygx6K2nTDYOqCyQWChY85jbU7h3VAS6M
+   VkIDpCgmbbWkaE8d2BXO6HrBJIhMEiADxHOUyGT1bo0qtlClDNWvXNRJO
+   u/h9w2TvQ2WUSxStNYWEDFSXjmaXBi/lemcelqbEMU8Zm6Xx2moaDNesf
+   g==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <krzysztof.kozlowski@canonical.com>, <tglx@linutronix.de>,
+        <daniel.lezcano@linaro.org>
+CC:     <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <robh+dt@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH v2 0/4] clocksource: Add MCT support for ARTPEC-8
+Date:   Tue, 8 Mar 2022 15:24:06 +0100
+Message-ID: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZZy6XSb2naSam+W=_wY6JviX6Vz30N7mSg=xYZW_TxQA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,135 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:28:54PM -0800, Andrii Nakryiko wrote:
-> On Sun, Mar 6, 2022 at 9:29 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Fri, Mar 04, 2022 at 03:11:19PM -0800, Andrii Nakryiko wrote:
-> > > On Tue, Feb 22, 2022 at 9:07 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > >
-> > > > Adding support to bpf_program__attach_kprobe_opts to attach kprobes
-> > > > to multiple functions.
-> > > >
-> > > > If the kprobe program has BPF_TRACE_KPROBE_MULTI as expected_attach_type
-> > > > it will use the new kprobe_multi link to attach the program. In this case
-> > > > it will use 'func_name' as pattern for functions to attach.
-> > > >
-> > > > Adding also new section types 'kprobe.multi' and kretprobe.multi'
-> > > > that allows to specify wildcards (*?) for functions, like:
-> > > >
-> > > >   SEC("kprobe.multi/bpf_fentry_test*")
-> > > >   SEC("kretprobe.multi/bpf_fentry_test?")
-> > > >
-> > > > This will set kprobe's expected_attach_type to BPF_TRACE_KPROBE_MULTI,
-> > > > and attach it to functions provided by the function pattern.
-> > > >
-> > > > Using glob_match from selftests/bpf/test_progs.c and adding support to
-> > > > match '?' based on original perf code.
-> > > >
-> > > > Cc: Masami Hiramatsu <mhiramat@redhat.com>
-> > > > Cc: Yucong Sun <fallentree@fb.com>
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > ---
-> > > >  tools/lib/bpf/libbpf.c | 130 +++++++++++++++++++++++++++++++++++++++--
-> > > >  1 file changed, 125 insertions(+), 5 deletions(-)
-> > > >
-> > >
-> > > [...]
-> > >
-> > > > +static struct bpf_link *
-> > > > +attach_kprobe_multi_opts(const struct bpf_program *prog,
-> > > > +                  const char *func_pattern,
-> > > > +                  const struct bpf_kprobe_opts *kopts)
-> > > > +{
-> > > > +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
-> > >
-> > > nit: just LIBBPF_OPTS
-> >
-> > ok
-> >
-> > >
-> > >
-> > > > +       struct kprobe_multi_resolve res = {
-> > > > +               .name = func_pattern,
-> > > > +       };
-> > > > +       struct bpf_link *link = NULL;
-> > > > +       char errmsg[STRERR_BUFSIZE];
-> > > > +       int err, link_fd, prog_fd;
-> > > > +       bool retprobe;
-> > > > +
-> > > > +       err = libbpf_kallsyms_parse(resolve_kprobe_multi_cb, &res);
-> > >
-> > > hm... I think as a generic API we should support three modes of
-> > > specifying attachment target:
-> > >
-> > >
-> > > 1. glob-based (very convenient, I agree)
-> > > 2. array of function names (very convenient when I know specific set
-> > > of functions)
-> > > 3. array of addresses (advanced use case, so probably will be rarely used).
-> > >
-> > >
-> > >
-> > > So I wonder if it's better to have a separate
-> > > bpf_program__attach_kprobe_multi() API for this, instead of doing both
-> > > inside bpf_program__attach_kprobe()...
-> > >
-> > > In such case bpf_program__attach_kprobe() could either fail if
-> > > expected attach type is BPF_TRACE_KPROBE_MULTI or it can redirect to
-> > > attach_kprobe_multi with func_name as a pattern or just single
-> > > function (let's think which one makes more sense)
-> > >
-> > > Let's at least think about this
-> >
-> > I think it would make the code more clear, how about this:
-> >
-> >         struct bpf_kprobe_multi_opts {
-> >                 /* size of this struct, for forward/backward compatiblity */
-> >                 size_t sz;
-> >
-> >                 const char **funcs;
-> 
-> naming nit: func_names (to oppose it to "func_pattern")? Or just
-> "names" to be in line with "addrs" (but then "pattern" instead of
-> "func_pattern"? with kprobe it's always about functions, so this
-> "func_" everywhere is a bit redundant)
+This series add supports for the timer block on ARTPEC-8.  The block itself is
+fully compatible with the existing exynos4210-mct driver.  The ARTPEC-8 SoC
+uses this block from two separate processors running Linux (AMP) so it needs
+some extra code to allow this sharing.
 
-ok
+v2:
+- The series is now rebased on top of Krzysztof's patch "dt-bindings: timer:
+  exynos4210-mct: describe known hardware and its interrupts".
+- Combine the Kconfig change and the local timer change into one series
+- Use devicetree property rather than module parameter for the local timer handling
+- Add specific compatible with the correct number of interrupts.
 
-> 
-> >                 const unsigned long *addrs;
-> >                 const u64 *cookies;
-> >                 int cnt;
-> 
-> nit: let's use size_t
+Vincent Whitchurch (4):
+  dt-bindings: timer: exynos4210-mct: Add ARTPEC-8 MCT
+  dt-bindings: timer: exynos4210-mct: Support using only local timer
+  clocksource/drivers/exynos_mct: Support local-timer-index property
+  clocksource/drivers/exynos_mct: Enable building on ARTPEC
 
-ok
+ .../timer/samsung,exynos4210-mct.yaml         | 11 ++++++++
+ drivers/clocksource/Kconfig                   |  2 +-
+ drivers/clocksource/exynos_mct.c              | 25 +++++++++++++++----
+ 3 files changed, 32 insertions(+), 6 deletions(-)
 
-> 
-> 
-> >                 bool retprobe;
-> >                 size_t :0;
-> >         };
-> >
-> >         bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
-> >                                               const char *pattern,
-> >                                               const struct bpf_kprobe_multi_opts *opts);
-> >
-> >
-> > if pattern is NULL we'd use opts data:
-> >
-> >         bpf_program__attach_kprobe_multi_opts(prog, "ksys_*", NULL);
-> >         bpf_program__attach_kprobe_multi_opts(prog, NULL, &opts);
-> >
-> > to have '2. array of function names' as direct function argument,
-> > we'd need to add 'cnt' as well, so I think it's better to have it
-> > in opts, and have just pattern for quick/convenient call without opts
-> >
-> 
-> yeah, naming pattern as direct argument for common use case makes
-> sense. Let's go with this scheme
+-- 
+2.34.1
 
-great, I'll make the changes
-
-thanks,
-jirka

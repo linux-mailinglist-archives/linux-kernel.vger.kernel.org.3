@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60CA4D1ECF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50A54D1ECB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348962AbiCHRW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S240682AbiCHRWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349016AbiCHRUt (ORCPT
+        with ESMTP id S1348975AbiCHRUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:20:49 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C0F50040;
-        Tue,  8 Mar 2022 09:19:39 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id m12so391173edc.12;
-        Tue, 08 Mar 2022 09:19:39 -0800 (PST)
+        Tue, 8 Mar 2022 12:20:50 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E5F19C07;
+        Tue,  8 Mar 2022 09:19:40 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id qx21so40743456ejb.13;
+        Tue, 08 Mar 2022 09:19:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=V4vXPVmGTGf3aM5gfb7e+nenL3OxJPCKkBovWpiUsBc=;
-        b=W3Rr+kQiOf7U/zNXKiIybgGxag2KDpokpz3hlzoDsrPnAoo7mSwYsX7FVlpHauDt1D
-         U/U+aXwyG6LbcsGI7sS971Xky8MR5TJ9OvXnOCFi2gyPj2i6o/+a5oKfzN8A6KEbSDqX
-         kwNgoQIltfQqgAmeU40FhKHt3vXGsizsHJIVobm3XraAP6z9uwlwPwGzTJMSy6TIBLHm
-         XrzwrVinH1FLSJExs9eP9NqnLfa3TUamaGQN2T9BpN0itABrjntHycBirIqtZpxmYJf7
-         QUNdoNEZ3A+z1UOPu2laXXrqD3fE1bj4lB9pEGTE4/YhHtRsuskK4amFL7kf8cd6yd0C
-         DXOw==
+        bh=9K0gcdyqyJc1QtOxbnGCoxSlcO9DFr3Tv4OE16b7cHs=;
+        b=KsliqEO2BmgRd/JUjeCagekkSlvlnEeYkzi1XuFTJZc312pDytb0eYxrKEMnvYkH1X
+         5nRdaQnkab7c0r9kP8bCinM8AHhLYb4+jR2HSoBumHjNWHbVvPuXA3dQY1GNc0NsDgxz
+         2r1PahOgdidTf4Mldm1VVfZBp0GNjXWkNdvep/m2da0y4mNRBFmcbVXJNAuEWfYuYp9P
+         Xu2xsoYrJrp9Dcbqv14oZvUZTO6nz7cVXz3Fky5Mt3NvcuKOrvEwcMOXl1Poc0ct0AIB
+         laB6aMGnzn/9HFgXkbVf1jJMY0CNHl4+h9NIIx9GVtkjjzf33RDEHgtbaF/4XaJol/nj
+         /peQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=V4vXPVmGTGf3aM5gfb7e+nenL3OxJPCKkBovWpiUsBc=;
-        b=XMi1RC6MEfLfR4FMBzwPfSOkjHggob2WtwqyDfRz9KSAHJTd/lLOjbGLhwmGceuwx6
-         cu5bH/5k7SbmGpxOlyXvbkD+3DV9DAn9bxWvnhJe6Dm1VFJADSpUx+YxlN87+hhQ35wy
-         KBFGfUr6xRATrtz3EDv/E8Q26If2yZnMd5UutUAnTDr97/oXRDqUwDC8lY8AF53vBIer
-         BbofVJP0tP9eSeNsmDJu6P+iTxsosEZ1uW5Atj6auLHkcVLiffjWiKOEiDUzpVUNChiN
-         rCDYOtUNkMAviGsH+/OoDaQhmNLwRcHhET9m5VZtfsb5K4eT98XDNW9Ove742ouPl/Zz
-         cL0A==
-X-Gm-Message-State: AOAM531QhCJKfy8EmvGyDNIFw7TcPOybX6PuChmKR75rnvi7XYNZxywY
-        Fo6QmDNES9Y8Ss5oZnji34g=
-X-Google-Smtp-Source: ABdhPJxMQ0hlgL52WO6E1BZ4eLdJ/9lm/sh5VABLlk+17MAzErX+vHN8ZSGVSD+UI9O2z+wIwkhTjQ==
-X-Received: by 2002:a50:9fa6:0:b0:415:fd95:6afa with SMTP id c35-20020a509fa6000000b00415fd956afamr17187529edf.200.1646759977655;
-        Tue, 08 Mar 2022 09:19:37 -0800 (PST)
+        bh=9K0gcdyqyJc1QtOxbnGCoxSlcO9DFr3Tv4OE16b7cHs=;
+        b=J14wVZY/rDAc1q/qyejGtVXze5bB+V+9npGDlsS7lKzbCPR0Lf78PoHXK7DufoyY5R
+         iDYEcE2lxf1jUrSpMDhz98hIRm9Qo2ilvbd7VH8EyqJJF72qXQRQGHjgnu0/Mux9GkJG
+         oJXGs022w8FFfYD7rnMyvdr9gajl9pjlIen3mjRyCXNpRJw8dLqZH9jAnciONCRJWp4j
+         VGZ2Aip3E0EJxbA4Kyeu/pLMt3ZEgWXa0mR6XMEd/jXUeKB/liqA8EP5u/rIFf44hLs2
+         u+3NaPaIMr7EmlQd1c2D1SgAWbd3UdgDFA/luVG1nbNQN8324l+Y0hv9lCEsLOwwvyCx
+         b57g==
+X-Gm-Message-State: AOAM531JyshlifBdXCTR8R8rxw2Ixk/0S0lCQ7+sbGLGjxWZIzLPQwjk
+        zQd2GgHpDmZAT7xCMqcOrmw=
+X-Google-Smtp-Source: ABdhPJzROPf0on8GO23L49XUIf01Xp7An6s1Bg7AFDWIE/J91fVVH3cYCteWptRh8cz08W/V4nh/LQ==
+X-Received: by 2002:a17:907:168a:b0:6da:9167:47dc with SMTP id hc10-20020a170907168a00b006da916747dcmr14227765ejc.126.1646759979025;
+        Tue, 08 Mar 2022 09:19:39 -0800 (PST)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm6085044ejb.82.2022.03.08.09.19.36
+        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm6085044ejb.82.2022.03.08.09.19.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:19:37 -0800 (PST)
+        Tue, 08 Mar 2022 09:19:38 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Greg Kroah-Hartman <greg@kroah.com>
 Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
@@ -74,9 +74,9 @@ Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH v2 24/26] usb: gadget: udc: core: remove usage of list iterator past the loop body
-Date:   Tue,  8 Mar 2022 18:18:16 +0100
-Message-Id: <20220308171818.384491-25-jakobkoschel@gmail.com>
+Subject: [PATCH v2 25/26] usb: gadget: dummy_hcd: remove usage of list iterator past the loop body
+Date:   Tue,  8 Mar 2022 18:18:17 +0100
+Message-Id: <20220308171818.384491-26-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220308171818.384491-1-jakobkoschel@gmail.com>
 References: <20220308171818.384491-1-jakobkoschel@gmail.com>
@@ -102,54 +102,43 @@ concluded to use a separate iterator variable [1].
 Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/usb/gadget/udc/core.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/usb/gadget/udc/dummy_hcd.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 568534a0d17c..02735b463bb4 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1528,7 +1528,7 @@ static int udc_bind_to_driver(struct usb_udc *udc, struct usb_gadget_driver *dri
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index a2d956af42a2..35aec8e7fc73 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -751,7 +751,7 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	struct dummy		*dum;
+ 	int			retval = -EINVAL;
+ 	unsigned long		flags;
+-	struct dummy_request	*req = NULL;
++	struct dummy_request	*req = NULL, *iter;
  
- int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
- {
--	struct usb_udc		*udc = NULL;
-+	struct usb_udc		*udc = NULL, *iter;
- 	int			ret = -ENODEV;
+ 	if (!_ep || !_req)
+ 		return retval;
+@@ -763,13 +763,14 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
  
- 	if (!driver || !driver->bind || !driver->setup)
-@@ -1536,10 +1536,12 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
- 
- 	mutex_lock(&udc_lock);
- 	if (driver->udc_name) {
--		list_for_each_entry(udc, &udc_list, list) {
--			ret = strcmp(driver->udc_name, dev_name(&udc->dev));
--			if (!ret)
--				break;
-+		list_for_each_entry(iter, &udc_list, list) {
-+			ret = strcmp(driver->udc_name, dev_name(&iter->dev));
-+			if (ret)
-+				continue;
-+			udc = iter;
-+			break;
- 		}
- 		if (ret)
- 			ret = -ENODEV;
-@@ -1548,10 +1550,12 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
- 		else
- 			goto found;
- 	} else {
--		list_for_each_entry(udc, &udc_list, list) {
-+		list_for_each_entry(iter, &udc_list, list) {
- 			/* For now we take the first one */
--			if (!udc->driver)
--				goto found;
-+			if (iter->driver)
-+				continue;
-+			udc = iter;
-+			goto found;
- 		}
+ 	local_irq_save(flags);
+ 	spin_lock(&dum->lock);
+-	list_for_each_entry(req, &ep->queue, queue) {
+-		if (&req->req == _req) {
+-			list_del_init(&req->queue);
+-			_req->status = -ECONNRESET;
+-			retval = 0;
+-			break;
+-		}
++	list_for_each_entry(iter, &ep->queue, queue) {
++		if (&iter->req != _req)
++			continue;
++		list_del_init(&iter->queue);
++		_req->status = -ECONNRESET;
++		req = iter;
++		retval = 0;
++		break;
  	}
+ 	spin_unlock(&dum->lock);
  
 -- 
 2.25.1

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF724D1C8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F414D1C72
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348432AbiCHP6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        id S1348102AbiCHP46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348062AbiCHP4I (ORCPT
+        with ESMTP id S1348044AbiCHP4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:08 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAF34F9E0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:07 -0800 (PST)
+        Tue, 8 Mar 2022 10:56:04 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA454F9CF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=uY+jcOMFirwczJeMx5tMsqeYilw19841F6sj97KYysQ=; b=lyapG0Pa0xWATfvmzg4G9EXwD+
-        4fh5LukSK11kqmUs4dSnLuVURX4iepaaT1FIa+02msh7iS96xayjvn1pVNPHtv+7Jv8uu7oQc6DMy
-        4w1HtQ02VeYDa5jPBP+aH4f4TtvxDmSRBAhNfqAarhffQ3EtJkEG+T0kkRWjI7d7/83e5QMrrxTFn
-        +5EKB6bIaU8QAbL0DuFbxvPjxmFTFSMKAFFSukbWGqZG3KEvDXZA1y5CJ3sR87rUVvpkI+g73PGu7
-        mPzuC+nsHr9XkkeQbRjfhRrbvrH//XEWw4jEvaP/p27RgZ1vNXrWvLDnK7Hy0XbDoKs3Im88jBjj0
-        yi6oM7+A==;
+        bh=drGG7z9wXSjoirqs/jFmcbkXc11ClO+eo/+GaDxmf4w=; b=KNkZEExL2ikee5MU76cCdqIxKQ
+        KOVTbPNBWJl6he0u1ji/192TRJmtyC+ISPeA+kKqlZlXQsphL0veEOTHQX02kJ8wTfU6kqZrNSqbD
+        kUG7O1/xPtLwNE1tsaLN6V7ByinqGhux3K/QYBas6cwL274eqkMgyd41GMHCtV6YYPJ2FdQipGKZe
+        38OyMROthz/h/HBzBrpASA+Ylg+x0wesElcrxDEq5kXyJIA5x/+UFsYsvxsiDHDFqGO3R1XlsX9UW
+        LuGzFVX0lW8BZEQkG+38VvorXbh5pCIQac1ExEvhP6YcsFiiE6X3+JrUyePybN1SZtejbCOSl7U5e
+        aZ+70EjQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAd-00GUik-E2; Tue, 08 Mar 2022 15:54:43 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRcAd-00GIvV-EB; Tue, 08 Mar 2022 15:54:43 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51426302DD9;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5342E302DDC;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id E3BCF2B5649DA; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154319.528181453@infradead.org>
+        id EA0F62B5649DD; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154319.586815435@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:51 +0100
+Date:   Tue, 08 Mar 2022 16:30:52 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -46,9 +46,8 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         ndesaulniers@google.com, keescook@chromium.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v4 40/45] Kbuild: Allow whole module objtool runs
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: [PATCH v4 41/45] objtool: Read the NOENDBR annotation
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,145 +61,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like we have vmlinux.o objtool runs, add the ability to do whole
-module objtool runs.
+Read the new NOENDBR annotation. While there, attempt to not bloat
+struct instruction.
 
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- scripts/Makefile.build    |   44 ++------------------------------------------
- scripts/Makefile.lib      |   45 +++++++++++++++++++++++++++++++++++++++++++++
- scripts/Makefile.modfinal |    1 +
- 3 files changed, 48 insertions(+), 42 deletions(-)
+ tools/objtool/check.c                 |   27 +++++++++++++++++++++++++++
+ tools/objtool/include/objtool/check.h |   13 ++++++++++---
+ 2 files changed, 37 insertions(+), 3 deletions(-)
 
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -223,41 +223,6 @@ cmd_record_mcount = $(if $(findstring $(
- 	$(sub_cmd_record_mcount))
- endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1860,6 +1860,29 @@ static int read_unwind_hints(struct objt
+ 	return 0;
+ }
  
--ifdef CONFIG_STACK_VALIDATION
--
--objtool := $(objtree)/tools/objtool/objtool
--
--objtool_args =								\
--	$(if $(CONFIG_UNWINDER_ORC),orc generate,check)			\
--	$(if $(part-of-module), --module)				\
--	$(if $(CONFIG_FRAME_POINTER),, --no-fp)				\
--	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
--	$(if $(CONFIG_RETPOLINE), --retpoline)				\
--	$(if $(CONFIG_X86_SMAP), --uaccess)				\
--	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
--	$(if $(CONFIG_SLS), --sls)
--
--cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
--cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
--
--endif # CONFIG_STACK_VALIDATION
--
--ifdef CONFIG_LTO_CLANG
--
--# Skip objtool for LLVM bitcode
--$(obj)/%.o: objtool-enabled :=
--
--else
--
--# 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
--# 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
--# 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
--
--$(obj)/%.o: objtool-enabled = $(if $(filter-out y%, \
--	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
--
--endif
--
- ifdef CONFIG_TRIM_UNUSED_KSYMS
- cmd_gen_ksymdeps = \
- 	$(CONFIG_SHELL) $(srctree)/scripts/gen_ksymdeps.sh $@ >> $(dot-target).cmd
-@@ -292,21 +257,16 @@ ifdef CONFIG_LTO_CLANG
- # Module .o files may contain LLVM bitcode, compile them into native code
- # before ELF processing
- quiet_cmd_cc_lto_link_modules = LTO [M] $@
--cmd_cc_lto_link_modules =						\
-+      cmd_cc_lto_link_modules =						\
- 	$(LD) $(ld_flags) -r -o $@					\
- 		$(shell [ -s $(@:.lto.o=.o.symversions) ] &&		\
- 			echo -T $(@:.lto.o=.o.symversions))		\
- 		--whole-archive $(filter-out FORCE,$^)			\
- 		$(cmd_objtool)
--
--# objtool was skipped for LLVM bitcode, run it now that we have compiled
--# modules into native code
--$(obj)/%.lto.o: objtool-enabled = y
--$(obj)/%.lto.o: part-of-module := y
-+endif
++static int read_noendbr_hints(struct objtool_file *file)
++{
++	struct section *sec;
++	struct instruction *insn;
++	struct reloc *reloc;
++
++	sec = find_section_by_name(file->elf, ".rela.discard.noendbr");
++	if (!sec)
++		return 0;
++
++	list_for_each_entry(reloc, &sec->reloc_list, list) {
++		insn = find_insn(file, reloc->sym->sec, reloc->sym->offset + reloc->addend);
++		if (!insn) {
++			WARN("bad .discard.noendbr entry");
++			return -1;
++		}
++
++		insn->noendbr = 1;
++	}
++
++	return 0;
++}
++
+ static int read_retpoline_hints(struct objtool_file *file)
+ {
+ 	struct section *sec;
+@@ -2097,6 +2120,10 @@ static int decode_sections(struct objtoo
+ 	if (ret)
+ 		return ret;
  
- $(obj)/%.lto.o: $(obj)/%.o FORCE
- 	$(call if_changed,cc_lto_link_modules)
--endif
- 
- cmd_mod = { \
- 	echo $(if $($*-objs)$($*-y)$($*-m), $(addprefix $(obj)/, $($*-objs) $($*-y) $($*-m)), $(@:.mod=.o)); \
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -533,3 +533,48 @@ define filechk_offsets
- 	 echo ""; \
- 	 echo "#endif"
- endef
++	ret = read_noendbr_hints(file);
++	if (ret)
++		return ret;
 +
-+# objtool
-+# ---------------------------------------------------------------------------
+ 	/*
+ 	 * Must be before add_{jump_call}_destination.
+ 	 */
+--- a/tools/objtool/include/objtool/check.h
++++ b/tools/objtool/include/objtool/check.h
+@@ -45,11 +45,18 @@ struct instruction {
+ 	unsigned int len;
+ 	enum insn_type type;
+ 	unsigned long immediate;
+-	bool dead_end, ignore, ignore_alts;
+-	bool hint;
+-	bool retpoline_safe;
 +
-+ifdef CONFIG_STACK_VALIDATION
++	u8 dead_end	: 1,
++	   ignore	: 1,
++	   ignore_alts	: 1,
++	   hint		: 1,
++	   retpoline_safe : 1,
++	   noendbr	: 1;
++		/* 2 bit hole */
+ 	s8 instr;
+ 	u8 visited;
++	/* u8 hole */
 +
-+objtool := $(objtree)/tools/objtool/objtool
-+
-+objtool_args =								\
-+	$(if $(CONFIG_UNWINDER_ORC),orc generate,check)			\
-+	$(if $(part-of-module), --module)				\
-+	$(if $(CONFIG_FRAME_POINTER),, --no-fp)				\
-+	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
-+	$(if $(CONFIG_RETPOLINE), --retpoline)				\
-+	$(if $(CONFIG_X86_SMAP), --uaccess)				\
-+	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
-+	$(if $(CONFIG_SLS), --sls)
-+
-+cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
-+cmd_objtool_mod = $(if $(objtool-enabled), $(objtool) $(objtool_args) $(@:.ko=.o) ; )
-+cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
-+
-+endif # CONFIG_STACK_VALIDATION
-+
-+ifdef CONFIG_LTO_CLANG
-+
-+# Skip objtool for LLVM bitcode
-+$(obj)/%.o: objtool-enabled :=
-+
-+# objtool was skipped for LLVM bitcode, run it now that we have compiled
-+# modules into native code
-+$(obj)/%.lto.o: objtool-enabled = y
-+$(obj)/%.lto.o: part-of-module := y
-+
-+else
-+
-+# 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
-+# 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
-+# 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
-+
-+$(obj)/%.o: objtool-enabled = $(if $(filter-out y%, \
-+	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
-+
-+endif
-+
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -32,6 +32,7 @@ ARCH_POSTLINK := $(wildcard $(srctree)/a
- 
- quiet_cmd_ld_ko_o = LD [M]  $@
-       cmd_ld_ko_o +=							\
-+	$(cmd_objtool_mod)						\
- 	$(LD) -r $(KBUILD_LDFLAGS)					\
- 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
- 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\
+ 	struct alt_group *alt_group;
+ 	struct symbol *call_dest;
+ 	struct instruction *jump_dest;
 
 

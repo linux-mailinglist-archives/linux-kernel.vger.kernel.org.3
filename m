@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0064D1E24
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD12C4D1E27
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241937AbiCHRIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S1345698AbiCHRJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiCHRIa (ORCPT
+        with ESMTP id S230093AbiCHRJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:08:30 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25508BC81
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:07:34 -0800 (PST)
+        Tue, 8 Mar 2022 12:09:48 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C2636305;
+        Tue,  8 Mar 2022 09:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646759254; x=1678295254;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rbzyGGxkDdg5MrfDGdFxARpZaSodeNWFg/OZHJmkfrw=;
-  b=AcWJA2gAnz2tlstm7dJTNF3qJbaLdhwFx8g3beXHTsIEGPEkYaauDv+C
-   3ABtYZUGMJURvjEV/SArZvzg5vV/6i/8KHPtnCuSA77lD/Ztsx6RATuJb
-   vBeq/7rqfn3TgWbmX2jA777SoO3LcRAnly7tNlGmKNTiAXlIyc/jwBqRC
-   FHtoIghDgdSxLEgdE8VR7dvM+DZU1sLAxkwwYgIx/sylrKmS7kajGT42c
-   VVuJrfBge1pfbszHfF0WxZ0VxY83OShPEIwqQxDVdxpprPJyudxCV1TRL
-   0jBn/mmZATvFy6DfBQr3rjz2pkEK1pheovUuJAyqhe7JMj/LFp/EL8r8X
+  t=1646759332; x=1678295332;
+  h=from:to:cc:subject:date:message-id;
+  bh=R0CDGnvApoSO1gfn9j+YZMCQMFxsSEmVfmtBoWiu+Qw=;
+  b=S5ceqGltaeFtsuLCkCWcq1CU6lm58G8qp3DcNfKNZe2xngHbgFXK+Vzb
+   YOxt3IJwein2lAKXqMsOe1a/yCqcf87Ud6CWKxlgLSL51XXxNnYXeItDk
+   Im4kbNNa25FkUyu0QgHTblfapkjQY8M6p2MMthC84g7QR1UIX1uFXUGvD
+   Rq8BMLaUfuGh80VcRWyyD6lTr46hhVONpGmiO3yZ8zEZmigZsllJX9+M2
+   egta+QvEcoje0c6k2fjnvkYZhd26zvq6ZAWTWAmSVeoaZ6/YwRR5sqXuJ
+   lY0M2QOrhudGFu7JGGKmMljaWm0qKw+HiWJ5TJm/UuIc7U/ft4EPnGyFU
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242184069"
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235352219"
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="242184069"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 09:07:30 -0800
+   d="scan'208";a="235352219"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 09:08:52 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="632297352"
-Received: from ralphala-mobl.amr.corp.intel.com (HELO [10.209.117.92]) ([10.209.117.92])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 09:07:24 -0800
-Message-ID: <86383ac9-e5f2-1a2e-dd19-02e39714a3fd@intel.com>
-Date:   Tue, 8 Mar 2022 09:07:20 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -V11 2/9] mm/migrate: update node demotion order on
- hotplug events
-Content-Language: en-US
-To:     Oscar Salvador <osalvador@suse.de>,
-        "Huang, Ying" <ying.huang@intel.com>
-Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20210721063926.3024591-1-ying.huang@intel.com>
- <20210721063926.3024591-2-ying.huang@intel.com>
- <eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com>
- <f5edb9dc-8b25-47c2-9905-09e88e41861b@intel.com>
- <4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com>
- <87pmnb3ccr.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YicvnkVODh5qbxTC@localhost.localdomain>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YicvnkVODh5qbxTC@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+   d="scan'208";a="641822768"
+Received: from gio-01395267462.iind.intel.com ([10.49.4.124])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2022 09:08:49 -0800
+From:   shruthi.sanil@intel.com
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     heikki.krogerus@intel.com, srikanth.thokala@intel.com,
+        mallikarjunappa.sangannavar@intel.com, shruthi.sanil@intel.com
+Subject: [PATCH] usb: dwc3: pci: Add support for Intel Alder Lake
+Date:   Tue,  8 Mar 2022 22:38:48 +0530
+Message-Id: <20220308170848.30722-1-shruthi.sanil@intel.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 02:27, Oscar Salvador wrote:
-> @@ -2043,7 +2044,12 @@ static void __init init_cpu_node_state(void)
->  static int vmstat_cpu_online(unsigned int cpu)
->  {
->  	refresh_zone_stat_thresholds();
-> -	node_set_state(cpu_to_node(cpu), N_CPU);
-> +
-> +	if (!node_state(cpu_to_node(cpu), N_CPU)) {
-> +		node_set_state(cpu_to_node(cpu), N_CPU);
-> +		set_migration_target_nodes();
-> +	}
-> +
->  	return 0;
->  }
-> 
-> @@ -2066,6 +2072,8 @@ static int vmstat_cpu_dead(unsigned int cpu)
->  		return 0;
-> 
->  	node_clear_state(node, N_CPU);
-> +	set_migration_target_nodes();
-> +
->  	return 0;
->  }
+From: Shruthi Sanil <shruthi.sanil@intel.com>
 
-Yeah, those callbacks do look like they're reinventing the wheel.  This
-is a much more direct way of doing it.
+Add the PCI device ID and update the dwc3_pci_id_table
+for Intel Alder Lake SoC.
+
+The DWC3 controllor in the CPU block handles the USB3 traffic
+and the device ID is common across the Alder Lake platforms.
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Shruthi Sanil <shruthi.sanil@intel.com>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 06d0e88ec8af..d8b9798fc7d4 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -40,6 +40,7 @@
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
++#define PCI_DEVICE_ID_INTEL_ADL			0x465e
+ #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
+ #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
+ #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
+@@ -412,6 +413,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADL),
++	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
++
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
+
+base-commit: ea4424be16887a37735d6550cfd0611528dbe5d9
+-- 
+2.17.1
+

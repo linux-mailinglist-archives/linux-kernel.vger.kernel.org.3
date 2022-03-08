@@ -2,251 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5584D0F2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6B94D0F2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244214AbiCHF2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S244055AbiCHF2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241389AbiCHF2e (ORCPT
+        with ESMTP id S237923AbiCHF2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:28:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A201E0D9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:27:35 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2281sisC003613;
-        Tue, 8 Mar 2022 05:26:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=2NuPl/gKTfNiuEy8jxBmbGhyS01zHEB1cp3HGCW8c40=;
- b=ofcnTAK2IzY0XY2LtnOw1NEVeJxrpBFU4Mksb42x36v8Vkv2dwRTsIwYKJZwRU1nMZYS
- /4gmKLJZuHlPnycKEFRGgnyku3ExAgLJbQgXB8kEaVu799NNlXaJnJh9bbqC44XW4sc4
- hpytXKOZTikpSX1TrjOdQvx4baNV7GOGSG7yT6fbkpRcY6ezpfSEueOQvKs7FG35aXTY
- AaxhyHCQW4NDRuCjNkh4VZOkx2gXf2KVVEbO/+rVbUx9GgTufghA7MykUbfqxFnPqv+/
- m07alKpWEXW73cxh9SQTqlxIl6skIxPD/SbdOlTPb7DMIol2Ma31VFkJhB3vlZ1W5G2q SA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3enww73p6w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 05:26:57 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2285CWIN016187;
-        Tue, 8 Mar 2022 05:26:54 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3ekyg8dh4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 05:26:54 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2285QpXI50921940
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Mar 2022 05:26:51 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 394F5AE045;
-        Tue,  8 Mar 2022 05:26:51 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6012AE053;
-        Tue,  8 Mar 2022 05:26:46 +0000 (GMT)
-Received: from [9.43.61.97] (unknown [9.43.61.97])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Mar 2022 05:26:46 +0000 (GMT)
-Message-ID: <38ab9d45-e756-80b2-1b56-287c43c84ca2@linux.ibm.com>
-Date:   Tue, 8 Mar 2022 10:56:45 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 0/4] Add perf interface to expose nvdimm
-Content-Language: en-US
-To:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, dan.j.williams@intel.com,
-        ira.weiny@intel.com, vishal.l.verma@intel.com
-Cc:     santosh@fossix.org, maddy@linux.ibm.com, rnsastry@linux.ibm.com,
-        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        vaibhav@linux.ibm.com, tglx@linutronix.de
-References: <20220225143024.47947-1-kjain@linux.ibm.com>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <20220225143024.47947-1-kjain@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6lmNjVgsjJFS08nZkTtsgDi_kKhZ8v8k
-X-Proofpoint-GUID: 6lmNjVgsjJFS08nZkTtsgDi_kKhZ8v8k
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 8 Mar 2022 00:28:01 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD6A3B57A
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:27:05 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id z4so15460653pgh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 21:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oPr7jbEQjZcFbPcnfK3KFYS7eLKVUp4KxioDBpQLsHE=;
+        b=KFudWe1Vy5F9opv/soKhgh7FbpSJlX8UMUatuMgFRoPStXK8BeJYII3IzceeF4CUsE
+         tbZtmjAemFX5zvbE6wUAsuHZbZjxHyMXZWeEZcotbpQPuVRvG0M7k6VpuXKY6pkei48H
+         zXfV9NCW2jKEE17DZ9Ra4LgaKKzI3Af1gO2wcA7ElXQGZWb4NCyLsLzkpbYM8UT9vsEO
+         pUu9p56Gp1SA3gnsGePgMqiQbP60EhVUK9DOvNBmk8vIgN7nMuOBxQ+IB8iUaUiYu2Qb
+         2Pna2NPt9syIKgvHRHKvIJRPlI6Fu620/j9bCtoglu3IB7vYM/lS7I1CEm9Rb4f9/4gY
+         lvcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oPr7jbEQjZcFbPcnfK3KFYS7eLKVUp4KxioDBpQLsHE=;
+        b=G8/ZQFPsHTNpKOtvdyOeUXFn9369UpcRjgDpg7QHJ8ilD3HJ02tW42+pqdom2if0p2
+         fP5BbJ9A6JAEfQEu2BDJKO5J10iTEagO4aGIe8tuajB0sHndzWNQL9rz44iUoTrLsLho
+         BrT74mRBLuUMJd9KApuWLxqn4hsSPJ+r+DkqmhGtvYDoVs3ey0ZoDlGAOuw50+p9x4C8
+         X1K8GGl78itl61ffchrDsLY5vYi8lNqAJ1iFAq0bWcb4wiscb6hsp1SZRzh17C1dgYXj
+         C1XDHSrb4YXCCK55+8XanJga+1EEN871gTm9AFu1MLGMPMW3pGSAgIf9bWu5cepBrsg6
+         6IUw==
+X-Gm-Message-State: AOAM532UCVPH/L3onbMVXBbyf82IzesimKHhXevtUOBfe+O/DFXcfA59
+        M8hfpeFLSWh+AdwHE/ushNcmqQ==
+X-Google-Smtp-Source: ABdhPJyH9JQVBjUGI9YE7QPYpbcBryWFyGEZ7zSUSAdXkhoivPgJwH+prK8BW8Uov0OvBfEDSxptFQ==
+X-Received: by 2002:a63:d018:0:b0:374:a3c1:dfed with SMTP id z24-20020a63d018000000b00374a3c1dfedmr12888737pgf.155.1646717224619;
+        Mon, 07 Mar 2022 21:27:04 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm18580376pfl.135.2022.03.07.21.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 21:27:04 -0800 (PST)
+Date:   Tue, 8 Mar 2022 05:26:59 +0000
+From:   Chun-Tse Shao <ctshao@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        keyrings@vger.kernel.org, DTML <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4] config: Allow kernel installation packaging to
+ override pkg-config
+Message-ID: <YibpI1MkqVUvEl9h@google.com>
+References: <20220306223016.2239094-1-ctshao@google.com>
+ <CAKwvOdnmtRYnSx3VvG=PEnzpzWa8f=0bn1xDymjER5EShS2tmw@mail.gmail.com>
+ <YiaMJCHOOuujHwiK@google.com>
+ <CAK7LNAS-=Fne6fyiqzQ6DwNLOdF-HAY9Libn10uyV9GmQQMUKQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-08_01,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1015
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203080022
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAS-=Fne6fyiqzQ6DwNLOdF-HAY9Libn10uyV9GmQQMUKQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
-    Can you take this patch-set if it looks fine to you.
+On Tue, Mar 08, 2022 at 01:01:45PM +0900, Masahiro Yamada wrote:
+> On Tue, Mar 8, 2022 at 7:50 AM Chun-Tse Shao <ctshao@google.com> wrote:
+> >
+> > On Mon, Mar 07, 2022 at 10:17:17AM -0800, Nick Desaulniers wrote:
+> > > On Sun, Mar 6, 2022 at 2:39 PM Chun-Tse Shao <ctshao@google.com> wrote:
+> > > >
+> > > > Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
+> > > > what pkg-config and parameters are used.
+> > >
+> > > Sorry, kind a late thought here for v4, but we don't seem to prefix
+> > > many other host side tools with HOST_, i.e. LEX, YACC, AWK, PERL,
+> > > PYTHON3, etc.  Maybe just having the variable identifier be simply
+> > > PKGCONFIG rather than HOSTPKG_CONFIG then put it at the end of the
+> > > list in the top level Makefile after ZSTD (i.e. the list of host
+> > > tools)?  There's HOST_ prefixes when there's more than one tool
+> > > involved (i.e. host compiler vs target compiler), but I suspect
+> > > there's no such distinction for the existing uses of pkg-config?
+> > >
+> > Thanks for your suggestion, Nick! Yes I think it makes sense with PKGCONFIG
+> > instead of HOSTPKG_CONFIG since there is only one tool involved. I will
+> > work on it and submit a new patch.
+> >
+>
+> Please hold on.
+>
+> I was also wondering what to do with the "HOST" prefix.
+>
+> Libraries are usually arch-dependent.
+> (in other words, pkg-config should return different library paths
+> for $(CC) and $(HOSTCC) )
+>
+> You already understood this, so you added "HOST" prefix.
+>
+>
+> Please let me take time for further discussion.
+> I will come back to this when I get some time.
+>
+>
+> In the meantime,
+>   a8a5cd8b472ca20e5b8fa649c43b3756867322f8
+> as reference info if you have not seen it.
+>
+>
+> How many distros support something like
+> "aarch64-linux-gnu-pkg-config"  ?
+>
+> Ubuntu 18.04 and 20.04 seem to support it.
+> I do not know for others.
+>
+>
+>
+>
+>
+> --
+> Best Regards
+>
+> Masahiro Yamada
 
-Thanks,
-Kajol Jain
+Thanks Masahiro! Will wait for your suggestion.
 
-On 2/25/22 20:00, Kajol Jain wrote:
-> Patchset adds performance stats reporting support for nvdimm.
-> Added interface includes support for pmu register/unregister
-> functions. A structure is added called nvdimm_pmu to be used for
-> adding arch/platform specific data such as cpumask, nvdimm device
-> pointer and pmu event functions like event_init/add/read/del.
-> User could use the standard perf tool to access perf events
-> exposed via pmu.
-> 
-> Interface also defines supported event list, config fields for the
-> event attributes and their corresponding bit values which are exported
-> via sysfs. Patch 3 exposes IBM pseries platform nmem* device
-> performance stats using this interface.
-> 
-> Result from power9 pseries lpar with 2 nvdimm device:
-> 
-> Ex: List all event by perf list
-> 
-> command:# perf list nmem
-> 
->   nmem0/cache_rh_cnt/                                [Kernel PMU event]
->   nmem0/cache_wh_cnt/                                [Kernel PMU event]
->   nmem0/cri_res_util/                                [Kernel PMU event]
->   nmem0/ctl_res_cnt/                                 [Kernel PMU event]
->   nmem0/ctl_res_tm/                                  [Kernel PMU event]
->   nmem0/fast_w_cnt/                                  [Kernel PMU event]
->   nmem0/host_l_cnt/                                  [Kernel PMU event]
->   nmem0/host_l_dur/                                  [Kernel PMU event]
->   nmem0/host_s_cnt/                                  [Kernel PMU event]
->   nmem0/host_s_dur/                                  [Kernel PMU event]
->   nmem0/med_r_cnt/                                   [Kernel PMU event]
->   nmem0/med_r_dur/                                   [Kernel PMU event]
->   nmem0/med_w_cnt/                                   [Kernel PMU event]
->   nmem0/med_w_dur/                                   [Kernel PMU event]
->   nmem0/mem_life/                                    [Kernel PMU event]
->   nmem0/poweron_secs/                                [Kernel PMU event]
->   ...
->   nmem1/mem_life/                                    [Kernel PMU event]
->   nmem1/poweron_secs/                                [Kernel PMU event]
-> 
-> Patch1:
->         Introduces the nvdimm_pmu structure
-> Patch2:
->         Adds common interface to add arch/platform specific data
->         includes nvdimm device pointer, pmu data along with
->         pmu event functions. It also defines supported event list
->         and adds attribute groups for format, events and cpumask.
->         It also adds code for cpu hotplug support.
-> Patch3:
->         Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
->         nmem* pmu. It fills in the nvdimm_pmu structure with pmu name,
->         capabilities, cpumask and event functions and then registers
->         the pmu by adding callbacks to register_nvdimm_pmu.
-> Patch4:
->         Sysfs documentation patch
-> 
-> Changelog
-> ---
-> v6 -> v7
-> - Add function call to numa_map_to_online_node function inorder to
->   get online numa node. As the node id returned by function dev_to_node
->   can be offline in some scenarios and can create issue in hotplug code
->   as reported by Nageswara R Sastry.
-> 
-> - Add function declaration of perf_pmu_register, perf_pmu_unregister
->   and  perf_pmu_migrate_context functions in nd.h file to resolve
->   the implicit-function-declaration warning as reported by kernel test
->   robot.
->   Link: https://lore.kernel.org/all/202202241242.zqzGkguy-lkp@intel.com/
-> 
-> - Add Tested-by, Acked-by and Reported-by tags from Peter Zijlstra
->   and Nageswara R Sastry.
-> 
-> - Link to the patchset v6: https://lkml.org/lkml/2022/2/17/857
-> 
-> Resend v5 -> v6
-> - No logic change, just a rebase to latest upstream and
->   tested the patchset.
-> 
-> - Link to the patchset Resend v5: https://lkml.org/lkml/2021/11/15/3979
-> 
-> v5 -> Resend v5
-> - Resend the patchset
-> 
-> - Link to the patchset v5: https://lkml.org/lkml/2021/9/28/643
-> 
-> v4 -> v5:
-> - Remove multiple variables defined in nvdimm_pmu structure include
->   name and pmu functions(event_int/add/del/read) as they are just
->   used to copy them again in pmu variable. Now we are directly doing
->   this step in arch specific code as suggested by Dan Williams.
-> 
-> - Remove attribute group field from nvdimm pmu structure and
->   defined these attribute groups in common interface which
->   includes format, event list along with cpumask as suggested by
->   Dan Williams.
->   Since we added static defination for attrbute groups needed in
->   common interface, removes corresponding code from papr.
-> 
-> - Add nvdimm pmu event list with event codes in the common interface.
-> 
-> - Remove Acked-by/Reviewed-by/Tested-by tags as code is refactored
->   to handle review comments from Dan.
-> 
-> - Make nvdimm_pmu_free_hotplug_memory function static as reported
->   by kernel test robot, also add corresponding Reported-by tag.
-> 
-> - Link to the patchset v4: https://lkml.org/lkml/2021/9/3/45
-> 
-> v3 -> v4
-> - Rebase code on top of current papr_scm code without any logical
->   changes.
-> 
-> - Added Acked-by tag from Peter Zijlstra and Reviewed by tag
->   from Madhavan Srinivasan.
-> 
-> - Link to the patchset v3: https://lkml.org/lkml/2021/6/17/605
-> 
-> v2 -> v3
-> - Added Tested-by tag.
-> 
-> - Fix nvdimm mailing list in the ABI Documentation.
-> 
-> - Link to the patchset v2: https://lkml.org/lkml/2021/6/14/25
-> 
-> v1 -> v2
-> - Fix hotplug code by adding pmu migration call
->   incase current designated cpu got offline. As
->   pointed by Peter Zijlstra.
-> 
-> - Removed the retun -1 part from cpu hotplug offline
->   function.
-> 
-> - Link to the patchset v1: https://lkml.org/lkml/2021/6/8/500
-> 
-> Kajol Jain (4):
->   drivers/nvdimm: Add nvdimm pmu structure
->   drivers/nvdimm: Add perf interface to expose nvdimm performance stats
->   powerpc/papr_scm: Add perf interface support
->   docs: ABI: sysfs-bus-nvdimm: Document sysfs event format entries for
->     nvdimm pmu
-> 
->  Documentation/ABI/testing/sysfs-bus-nvdimm |  35 +++
->  arch/powerpc/include/asm/device.h          |   5 +
->  arch/powerpc/platforms/pseries/papr_scm.c  | 225 ++++++++++++++
->  drivers/nvdimm/Makefile                    |   1 +
->  drivers/nvdimm/nd_perf.c                   | 328 +++++++++++++++++++++
->  include/linux/nd.h                         |  44 +++
->  6 files changed, 638 insertions(+)
->  create mode 100644 drivers/nvdimm/nd_perf.c
-> 
+-CT

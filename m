@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD794D13D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599334D13E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345491AbiCHJw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S243401AbiCHJwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345407AbiCHJwZ (ORCPT
+        with ESMTP id S235807AbiCHJwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:52:25 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE38941F9A;
-        Tue,  8 Mar 2022 01:51:29 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 972741F397;
-        Tue,  8 Mar 2022 09:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646733088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rfVbrz8lg45qGvZsPo5VEWHFttjSpHtZNvUX7LzR6Kc=;
-        b=Q/14xt4hxFEC3EFzitSjjIrDHD20ZIPHE9sAhGZv9bDKNlVYDwQxQ0keoh7JHnFGf4p52u
-        kUvVaHNzmJV/h77ISdtMNYNhu2SU04s8RNFKDq8cQyYjYn6xDRXCQzbtG1T37aJ16joRHJ
-        6MIEYsWQmkffQPzrMPkG85hpN6Iic+A=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 78E8DA3B87;
-        Tue,  8 Mar 2022 09:51:28 +0000 (UTC)
-Date:   Tue, 8 Mar 2022 10:51:28 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] livepatch: Don't block removal of patches that are
- safe to unload
-Message-ID: <YicnIIatfgLc2NN2@alley>
-References: <20220303105446.7152-1-zhouchengming@bytedance.com>
+        Tue, 8 Mar 2022 04:52:40 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D67241F8D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:51:44 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KCVr23Nqxz9sXd;
+        Tue,  8 Mar 2022 17:48:02 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 17:51:42 +0800
+Subject: Re: [PATCH -next] powerpc/spufs: Fix build warning when
+ CONFIG_PROC_FS=n
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     "jk@ozlabs.org" <jk@ozlabs.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220305123116.26828-1-yuehaibing@huawei.com>
+ <860002a4-4e52-c399-fda6-054fa64df3ce@csgroup.eu>
+ <CAK8P3a2p+Yryg1y5h=kTLP72WGYc2d4qctFuW+opR6F=1uYJPw@mail.gmail.com>
+ <16b319ec-3d87-7ac1-6bc3-d6679e639426@csgroup.eu>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <7562505a-24ff-eac7-34ea-83cea5988fd0@huawei.com>
+Date:   Tue, 8 Mar 2022 17:51:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303105446.7152-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <16b319ec-3d87-7ac1-6bc3-d6679e639426@csgroup.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,73 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
-> module_put() is currently never called for a patch with forced flag, to block
-> the removal of that patch module that might still be in use after a forced
-> transition.
+On 2022/3/7 21:30, Christophe Leroy wrote:
 > 
-> But klp_force_transition() will set all patches on the list to be forced, since
-> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
-> has removed stack ordering of the livepatches, it will cause all other patches can't
-> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
 > 
-> In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
-> transition. It can still be unloaded safely as long as it has passed through
-> the consistency model in KLP_UNPATCHED transition.
-
-It really looks safe. klp_check_stack_func() makes sure that @new_func
-is not on the stack when klp_target_state == KLP_UNPATCHED. As a
-result, the system should not be using code from the livepatch module
-when KLP_UNPATCHED transition cleanly finished.
-
-
-> But the exception is when force transition of an atomic replace patch, we
-> have to set all previous patches to forced, or they will be removed at
-> the end of klp_try_complete_transition().
+> Le 07/03/2022 à 14:10, Arnd Bergmann a écrit :
+>> On Sun, Mar 6, 2022 at 9:04 PM Christophe Leroy
+>> <christophe.leroy@csgroup.eu> wrote:
+>>> Le 05/03/2022 à 13:31, YueHaibing a écrit :
+>>>> arch/powerpc/platforms/cell/spufs/sched.c:1055:12: warning: ‘show_spu_loadavg’ defined but not used [-Wunused-function]
+>>>>    static int show_spu_loadavg(struct seq_file *s, void *private)
+>>>>               ^~~~~~~~~~~~~~~~
+>>>>
+>>>> Mark this as __maybe_unused to fix this.
+>>>
+>>> Marking it as __maybe_unused doesn't fix it. It just pushes the dust
+>>> under the carpet.
+>>>
+>>> proc_create_single macro should be fix to avoid that warning.
+>>
+>> We discussed that when proc_create_single() was introduced, but ended up
+>> not doing it that way because there were already a lot of files using an #ifdef
+>> around the function definitions. To change it back, one would have to audit
+>> every user of proc_create_single() and remove the #ifdefs.
+>>
 > 
-> This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
-> case, and keep the old behavior when in atomic replace case.
+> Fair enough.
 > 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
-> v2: interact nicely with the atomic replace feature noted by Miroslav.
-> ---
->  kernel/livepatch/transition.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> In that case, I'd prefer to go for a #ifdef as well for 
+> show_spu_loadavg() instead of going for a __maybe_unused flag.
+
+Ok, will do that in v2.
 > 
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index 5683ac0d2566..34ffb8c014ed 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -641,6 +641,10 @@ void klp_force_transition(void)
->  	for_each_possible_cpu(cpu)
->  		klp_update_patch_state(idle_task(cpu));
->  
-> -	klp_for_each_patch(patch)
-> -		patch->forced = true;
-> +	if (klp_target_state == KLP_UNPATCHED)
-> +		klp_transition_patch->forced = true;
-> +	else if (klp_transition_patch->replace) {
-> +		klp_for_each_patch(patch)
-> +			patch->forced = true;
-
-This works only because there is should be only one patch when
-klp_target_state == KLP_UNPATCHED and
-klp_transition_patch->forced == true.
-But it is a bit tricky. I would do it the other way:
-
-	if (klp_transition_patch->replace) {
-		klp_for_each_patch(patch)
-			patch->forced = true;
-	} else if (klp_target_state == KLP_UNPATCHED) {
-		klp_transition_patch->forced = true;
-	}
-
-It looks more sane. And it makes it more clear
-that the special handling of KLP_UNPATCHED transition
-is done only when the atomic replace is not used.
-
-Otherwise, I do not see any real problem with the patch.
-
-Best Regards,
-Petr
+> Christophe
+> 

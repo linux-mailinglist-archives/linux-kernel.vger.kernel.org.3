@@ -2,161 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737B44D1D19
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BAC4D1D1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348335AbiCHQY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S1343960AbiCHQZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240888AbiCHQYy (ORCPT
+        with ESMTP id S1348337AbiCHQZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:24:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7994888D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:23:58 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nRccf-0008Qz-VH; Tue, 08 Mar 2022 17:23:41 +0100
-Message-ID: <48ad0f65-a12e-e3b0-8c56-3197464c0b59@pengutronix.de>
-Date:   Tue, 8 Mar 2022 17:23:32 +0100
+        Tue, 8 Mar 2022 11:25:17 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7F44F9E6;
+        Tue,  8 Mar 2022 08:24:19 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2E0065C0131;
+        Tue,  8 Mar 2022 11:24:19 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 08 Mar 2022 11:24:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=QiZzwEJwAsqLkGpP4XLt1jLF2k2PI6EZcrR+RR
+        Jgmiw=; b=M4CAjyA4pm6JW0W/znqqC+gWsxAnPWz/iYfK1clA/ajl837M4BLw76
+        Z3lyuVUVAueOzrrG/oVx4Rj7ypu24JeH7uWmnFGGkE7xFsf8JLhsN8Ib0vapTjDv
+        5/mPq6PWqzV8p2CUcwiT6vf20Rnu3djGo8M89DqLVJZoTt0pjgG/DpXbzx6Jr1AX
+        GHS2B1y9Yn6Se0+3BG1QveqQ2sTIifMPL5VQ90vTgYdawTyDIMUSp3TD0ITS63gp
+        fYVmq7cLHPPe3XjXYN2X7paq92FkOPopi917qkLab9/4G+47hehX7mkiQqwyrZ6j
+        bi6DIII1klI+BxqYwAg2sg7fWtbXz+4g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=QiZzwEJwAsqLkGpP4
+        XLt1jLF2k2PI6EZcrR+RRJgmiw=; b=e7OtT2/4WpcMSH5Bm0MwUyrcIm6EzSOSz
+        lVlSdOY+9egEcGT/xMbHvMQERP/3/wAWTU1j1298SNhhfS8mNOzZnunx9EJ+XUPd
+        tQISGKIWySDX4rXYux1jOw+s/Xi9ZGgb1gZbJ+isHEqZ4ohrL6m8DGznAX0zJ4Fa
+        Q1wB9GmtfF6+jcuArerDiefWIdz4vnoNKoOyynmrHD0Dzc5oYuFDzY5dbxncmFUu
+        FVOHBuTewl+Gx3C38P3QQDj7N+Zb5GpE2EdetTL+Aul2u0jAoFUI5lBXgUMzG0BE
+        syuREor9Up+XzAEidLo7M58P8F1cAW/Prouanx6p+leSqNjXxkgog==
+X-ME-Sender: <xms:MoMnYjbqBQQ2exdi4X2-uGRhfZJEw1MLiGpdU1qRIHXoQ-C1pnMjDg>
+    <xme:MoMnYiZZrwyRFQraVicdj0MCQtgemkcllu_MqU_pKRqPhDlKQT5dYQhUjFKAbk_ev
+    PhkwkWuNemmrslYmWU>
+X-ME-Received: <xmr:MoMnYl9xKQtD1Z6UreYSS3_a74rggNjjeWAPt0lfcleb8BOgRZ3-MV2Fhj3Gx47ANTEdusFnYZbpA_tDeZ7SbBtHLUIXCupGPgLfKF0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudduiedgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:MoMnYpoL-CYL5Lt70meY0YsoUeH5s7I9KFBm-ktzqthGGPf3iuec1w>
+    <xmx:MoMnYuoQRexcfAlYC1YzqFzuoE-1Kw25PITCYneaLuXdrZ1hD4qMeg>
+    <xmx:MoMnYvQLOat0fZLE6vh5kStxHyD1yZ6rc0y-NMzlngG2pXZxlbhG5Q>
+    <xmx:M4MnYl2RBd8DG0o5RLDp4SwvJeb5RPeykirmE6wEh1B6Uc9Yh0mtcA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 8 Mar 2022 11:24:18 -0500 (EST)
+Date:   Tue, 8 Mar 2022 17:24:16 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Deadlock at reboot?
+Message-ID: <20220308162416.xnrlys6utylzb3uz@houat>
+References: <20220304104942.lypg3wvlgk2ywi2t@houat>
+ <YiIfCDjOIBoM+KlB@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-Content-Language: en-US
-To:     Tokunori Ikegami <ikegami.t@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
- <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
- <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
- <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
- <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
- <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
- <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
- <9621c512-06f2-17b2-5c68-943b1f0981eb@gmail.com>
- <b23e4089-6431-de26-8666-bae4c3c8df88@pengutronix.de>
- <510adc50-79aa-3ed2-ab6f-9f9711d9bb23@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <510adc50-79aa-3ed2-ab6f-9f9711d9bb23@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7ofuk2vyimjb5u44"
+Content-Disposition: inline
+In-Reply-To: <YiIfCDjOIBoM+KlB@kroah.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tokunori-san,
 
-On 08.03.22 17:13, Tokunori Ikegami wrote:
-> Hi Ahmad-san,
-> 
-> On 2022/03/08 18:44, Ahmad Fatoum wrote:
->> Hello Tokunori,
->>
->> On 06.03.22 16:49, Tokunori Ikegami wrote:
->>> Hi,
->>>
->>> On 2022/03/04 20:11, Ahmad Fatoum wrote:
->>>> Hello Tokunori-san,
->>>>
->>>> On 20.02.22 13:22, Tokunori Ikegami wrote:
->>>>> Hi Ahmad-san,
->>>>>
->>>>> Could you please try the version 2 patch attached for the error case?
->>>>> This version is to check the DQ true data 0xFF by chip_good().
->>>> I had a similar patch locally as well at first. I just tested yours
->>>> and I can't reproduce the issue.
->>> Thanks for your support.
->>> Sorry if possible could you please retest the attached the patch again since this fixed the version 1 patch maintainer review comments?
->> Works good.
->>
->> Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> Thank you so much for your test.
->>
->>>>> But I am not sure if this works or not since the error is possible to be caused by Hi-Z 0xff on floating bus or etc.
->>>> That it works for me could be because of Hi-Z 0xff, which is why
->>>> decided against it.
->>> I see.
->>>>>>>>> What seems to work for me is checking if chip_good or chip_ready
->>>>>>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
->>>>>>>>> (Worst case bus is floating at this point of time and Hi-Z is read
->>>>>>>>> as 0xff on CPU data lines...)
->>>>>>>> Sorry I am not sure about this.
->>>>>>>> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
->>>>>>>> But it did not work correctly so changed to use chip_good() instead as it is also correct.
->>>>>>> What exactly in the datasheet makes you believe chip_good is not appropriate?
->>>>>> I just mentioned about the actual issue behaviors as not worked chip_good() on S29GL964N and not worked chip_ready() on MX29GL512FHT2I-11G before etc.
->>>>>> Anyway let me recheck the data sheet details as just checked it again quickly but needed more investigation to understand.
->>>>> As far as I checked still both chip_good() and chip_ready() seem correct but still the root cause is unknown.
->>>>> If as you mentioned the issue was cased by the DQ true data 0xFF I am not sure why the read work without any error after the write operation.
->>>>> Also if the error was caused by the Hi-Z 0xff on floating bus as mentioned I am not sure why the read work without any error after the write operation with chip_ready().
->>>>> Sorry anyway the root cause is also unknown when the write operation was changed to use chip_good() instead of chip_ready().
->>>> I've be ok with v1 then. Restores working behavior for me and shouldn't break others.
->>> Noted but still I am thinking the version 2 patch to check 0xff seems better than to use chip_ready() so let me consider this again later.
->> The original version has less room for surprise as it restores previously
->> working behavior. Assuming 0xFF to be good without backing from documentation
->> is more risky IMO.
-> The change to check 0xFF can be limited for the S29GL064N chip do you have any comment about this?
+--7ofuk2vyimjb5u44
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I see that, but I am not sure it's the correct thing to do on the S29GL064N,
-even if it seems to work. In absence of definitive information from the vendor,
-I'd prefer we just restore behavior as it was before, i.e. using chip_ready
-instead of chip_good for S29GL064N. This is the way of least surprise.
+Hi,
 
-> Just attached the patch changed as so and thinking to send the patch as version 3 to the maintainer if you are okay.
-> 
-> Regards,
-> Ikegami
-> 
->>
->> Thanks for your continued support,
->> Ahmad
->>
->>> Regards,
->>> Ikegami
->>>
->>>> Cheers and thanks again,
->>>> Ahmad
->>>>
->>>>> Regards,
->>>>> Ikegami
->>>>>
->>>>>> Regards,
->>>>>> Ikegami
->>>>>>
->>>>>>> Cheers,
->>>>>>> Ahmad
->>>>>>>
->>>>>>>
->>
+On Fri, Mar 04, 2022 at 03:15:36PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Mar 04, 2022 at 11:49:42AM +0100, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> > I'm not entirely sure who I'm supposed to send this to, so apologies if
+> > I forgot somebody.
+> >=20
+> > I've had an issue when rebooting on and off for a couple of monthes, but
+> > I got a stacktrace from lockdep today:
+> >=20
+> > [71721.872904] reboot: Restarting system
+> > [71721.876743] ------------[ cut here ]------------
+> > [71721.877081]
+> > [71721.877084] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > [71721.877086] WARNING: possible circular locking dependency detected
+> > [71721.877088] 5.17.0-rc6-next-20220303-v8+ #10 Not tainted
+>=20
+> This is linux-next, does this also happen on Linus's tree?
+>=20
+> If not, can you bisect to find the offending commit?
 
+So it turns out the reboot stuck issue was a bootloader issue that
+wouldn't detect the ethernet phy after a patch was introduced in 5.16.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+So nothing to do with the lockdep stacktrace, really. If there's indeed
+a locking issue, it doesn't seem to affect my system.
+
+Maxime
+
+--7ofuk2vyimjb5u44
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYieDMAAKCRDj7w1vZxhR
+xVjfAQC5pD7MyFRlK/jhH1bEioWD6ziYy5KSW+Zj/OG2mDN2sgEA3Ed+trkaED06
+H7lSOp1zQo9aFaSBq6eSyNhep2RV/AE=
+=u/9r
+-----END PGP SIGNATURE-----
+
+--7ofuk2vyimjb5u44--

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694044D1C98
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3324D1C7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348650AbiCHP6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
+        id S1348235AbiCHP50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348063AbiCHP4I (ORCPT
+        with ESMTP id S1348050AbiCHP4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:08 -0500
+        Tue, 8 Mar 2022 10:56:05 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE224F9E5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5494F467
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=vD0W8Bg9OSPLjosR2mk55Ig4ZSTAO551TZzfWzYeejs=; b=lb9DF7Y8PdFkGU1/gIeAyrLmJz
-        AiLQ3SRlqKkmg/46Q5WJ0SbiANzIkZTzYrFe9WGQdyIpai6VpYxu4Cujf/Bjtog0snsYutJxaNzo1
-        CtERwLuiHv/qoNB3NIJDE81T+ZgbKFiC0sE8Ud4MXY/1GepHc90a5Ylr23TXIlohfoLMObK1lrUrf
-        DzesVRmz01vcwZgFMsnnn3wKvqNY/cdborgVNm233i77OuS1LOxNx5AqAxqYpW76ExzDMfuBhJaTj
-        hHYBWh/RFEZWjyf+4LUSKEvcPhI7AqcLI5xeQLPbDgR2G6MbcBGUPeNQnA0o+pgpScutd2ed3d7yq
-        dRgqGTsA==;
+        bh=kaekhGQnbqIAOSbPxlFxjf8WrK3PvHPuLWeA2b7V9bc=; b=mqqPXbWytPaZMsAvo9nd4Km6Po
+        vbjrW/qS9R3kuMn5oVH1SDfNutlq8cR0X0pn37STWpZDDaTgWBUNnpWSl0tV+GmOLZBaPfd26ae/E
+        1p7HTSw0QC1L/lVa220ylqHjG7kj12MbsslHrxzFBFUpY4VTakbkOs+mFb1JB+4JhbE8hiJHo/A2U
+        6wqcDgiJlcEHePKbr4hsT1XwNkChgp3ycuQGKdB1xUlf2zGohH8lGTkECCKrAWZ3448+UWoOnG60c
+        5SRVKlE91jsk6xLqI+ycYLdDyKFJdmSfXOrkQgfFeG7ghUzbl+0Afqncp3w+rM/vsZBwH2HooGYw6
+        Bd9TiwiA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAc-00GUiS-Hi; Tue, 08 Mar 2022 15:54:42 +0000
+        id 1nRcAc-00GUiU-Jq; Tue, 08 Mar 2022 15:54:42 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 349773017B1;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 349C9301A50;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 0CC942B561915; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154317.992708941@infradead.org>
+        id 1516E2B561917; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154318.051635891@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:25 +0100
+Date:   Tue, 08 Mar 2022 16:30:26 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 14/45] x86/linkage: Add ENDBR to SYM_FUNC_START*()
+Subject: [PATCH v4 15/45] x86/ibt,paravirt: Sprinkle ENDBR
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,62 +61,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure the ASM functions have ENDBR on for IBT builds, this follows
-the ARM64 example. Unlike ARM64, we'll likely end up overwriting them
-with poison.
 
-Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/linkage.h |   31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ arch/x86/include/asm/paravirt.h           |    1 +
+ arch/x86/include/asm/qspinlock_paravirt.h |    3 +++
+ arch/x86/kernel/kvm.c                     |    3 ++-
+ arch/x86/kernel/paravirt.c                |    2 ++
+ 4 files changed, 8 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -3,6 +3,7 @@
- #define _ASM_X86_LINKAGE_H
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -666,6 +666,7 @@ bool __raw_callee_save___native_vcpu_is_
+ 	    ".globl " PV_THUNK_NAME(func) ";"				\
+ 	    ".type " PV_THUNK_NAME(func) ", @function;"			\
+ 	    PV_THUNK_NAME(func) ":"					\
++	    ASM_ENDBR							\
+ 	    FRAME_BEGIN							\
+ 	    PV_SAVE_ALL_CALLER_REGS					\
+ 	    "call " #func ";"						\
+--- a/arch/x86/include/asm/qspinlock_paravirt.h
++++ b/arch/x86/include/asm/qspinlock_paravirt.h
+@@ -2,6 +2,8 @@
+ #ifndef __ASM_QSPINLOCK_PARAVIRT_H
+ #define __ASM_QSPINLOCK_PARAVIRT_H
  
- #include <linux/stringify.h>
 +#include <asm/ibt.h>
++
+ /*
+  * For x86-64, PV_CALLEE_SAVE_REGS_THUNK() saves and restores 8 64-bit
+  * registers. For i386, however, only 1 32-bit register needs to be saved
+@@ -39,6 +41,7 @@ asm    (".pushsection .text;"
+ 	".type " PV_UNLOCK ", @function;"
+ 	".align 4,0x90;"
+ 	PV_UNLOCK ": "
++	ASM_ENDBR
+ 	FRAME_BEGIN
+ 	"push  %rdx;"
+ 	"mov   $0x1,%eax;"
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -1024,10 +1024,11 @@ asm(
+ ".global __raw_callee_save___kvm_vcpu_is_preempted;"
+ ".type __raw_callee_save___kvm_vcpu_is_preempted, @function;"
+ "__raw_callee_save___kvm_vcpu_is_preempted:"
++ASM_ENDBR
+ "movq	__per_cpu_offset(,%rdi,8), %rax;"
+ "cmpb	$0, " __stringify(KVM_STEAL_TIME_preempted) "+steal_time(%rax);"
+ "setne	%al;"
+-"ret;"
++ASM_RET
+ ".size __raw_callee_save___kvm_vcpu_is_preempted, .-__raw_callee_save___kvm_vcpu_is_preempted;"
+ ".popsection");
  
- #undef notrace
- #define notrace __attribute__((no_instrument_function))
-@@ -34,5 +35,35 @@
- 
- #endif /* __ASSEMBLY__ */
- 
-+/* SYM_FUNC_START -- use for global functions */
-+#define SYM_FUNC_START(name)				\
-+	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
-+	ENDBR
-+
-+/* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
-+#define SYM_FUNC_START_NOALIGN(name)			\
-+	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)	\
-+	ENDBR
-+
-+/* SYM_FUNC_START_LOCAL -- use for local functions */
-+#define SYM_FUNC_START_LOCAL(name)			\
-+	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)	\
-+	ENDBR
-+
-+/* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
-+#define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
-+	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)	\
-+	ENDBR
-+
-+/* SYM_FUNC_START_WEAK -- use for weak functions */
-+#define SYM_FUNC_START_WEAK(name)			\
-+	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)	\
-+	ENDBR
-+
-+/* SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment */
-+#define SYM_FUNC_START_WEAK_NOALIGN(name)		\
-+	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
-+	ENDBR
-+
- #endif /* _ASM_X86_LINKAGE_H */
- 
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -41,6 +41,7 @@ extern void _paravirt_nop(void);
+ asm (".pushsection .entry.text, \"ax\"\n"
+      ".global _paravirt_nop\n"
+      "_paravirt_nop:\n\t"
++     ASM_ENDBR
+      ASM_RET
+      ".size _paravirt_nop, . - _paravirt_nop\n\t"
+      ".type _paravirt_nop, @function\n\t"
+@@ -50,6 +51,7 @@ asm (".pushsection .entry.text, \"ax\"\n
+ asm (".pushsection .entry.text, \"ax\"\n"
+      ".global paravirt_ret0\n"
+      "paravirt_ret0:\n\t"
++     ASM_ENDBR
+      "xor %" _ASM_AX ", %" _ASM_AX ";\n\t"
+      ASM_RET
+      ".size paravirt_ret0, . - paravirt_ret0\n\t"
 
 

@@ -2,255 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2764D1E56
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7384D1E5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348707AbiCHRST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S1348726AbiCHRSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbiCHRSS (ORCPT
+        with ESMTP id S1348721AbiCHRSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:18:18 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6333852E72;
-        Tue,  8 Mar 2022 09:17:21 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id bi12so27666599ejb.3;
-        Tue, 08 Mar 2022 09:17:21 -0800 (PST)
+        Tue, 8 Mar 2022 12:18:30 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AAA10B2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:17:30 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2d07ae0b1c0so209465327b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:17:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QN4f7aRfMRy6jjFzTVyfXHZqX7kSLQSGCV4hl7xnDdo=;
-        b=TT73bdraUoPqY7Hv+qcsEXvwe+EPtjpOa3Yf+DT5eiC4TWS06FVOn80zFlJHx+XfjO
-         HguK1F3joiuVeYAOw5LFJLlteZCqzS8icf1jQbPWBtJEmz4JOOo48IbWPYWPlpu0RvdM
-         ZBAF6fPOAU8yO37GY9qmsU6je89NUxuMHbXqiL8EY+ZCiGMrdqWoO6UHehNCVGOdtvkJ
-         yllpIFosLxW9z+uLFDPpMA+VVkp5PqdrC1EEETGnHsXoQ0VtaMH6F9t9tuEOtiJJn4m0
-         titviv4dUsAN5hh2TmPeXxxAmKgz9RtbBLEtnbwRo6fchg+nsh0XZOUkPIM96bPNBwI/
-         Dv3Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Hh6AaBiVTRgfkr5a5o3e19bf/1tJeN6ZNyRK5PzJXAQ=;
+        b=hOPx34+OAtf/UYtXpRM5485F6TSKHLfrql5Q/b3CbA231R/2Bm0KxFfyME6IR43zYm
+         A2A4RNddyVN5UsRqkguTcsxAeGQM3Raewmw/HjvyckfPiZqosSSlBqaueXAe9AZivLtQ
+         21oG8haA37BnVQvvUgwNXPQcU4Av4g6d0C6IvTVjNil1dUt9SIZGyH484yefXOmaTxvh
+         xN4RmVZDv+7ZpaSn2kldtORiWjzVp/estmfhLUB6pxbY7eOPHI/mou85VLyXS/+myk8F
+         48rIM7gkhEd7kjS7wf/uTlPurXa9SeJSnH1sZ6GoVueuDagmwmKjEHO7s8vnzLt2CZTW
+         gzNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QN4f7aRfMRy6jjFzTVyfXHZqX7kSLQSGCV4hl7xnDdo=;
-        b=b4RcROCN6lG6Asq1+QngFRcBrFq0yRNCzrMN6LYqDdzW5fnScaCzfmEBunotWhfUZn
-         ad+OkDnoIbVpu8h0o1SwinLJsZjGRyfUe65pdkn0jlww1NkA3T42adtrFQH15KfT9kbo
-         ypvdxgQQU4J/J5yHrNEtrVbp0rYt4SyarHwrTmk3xmc+Ijqcz127sf/4ZLHa91I7okVN
-         ooalAlOC9U4EUnJyGPpS5KkmHKx9EIqfGigZAhxjz5k51WzY3NHyaiiUI/3UPX/kfmDS
-         SBSLuJh1H3NhT7f+EmENQtDqAvAyOG7BReiqr88kshJgapNlehCSBWvMbWd/Owq0dgrV
-         N0CA==
-X-Gm-Message-State: AOAM532PQy3ewSM/zc8HqMvbwdiD06FzvFtHMI5gD5L1GAVfvZGB5HkD
-        mgCUe+EFkA9yTHzueXsJ004=
-X-Google-Smtp-Source: ABdhPJxKq7B8zhwV1jSOt8K6TnNnJ9hfc2/PfFK1D2149KXccg1yauJo46R0dZqYgRXN+Czl48JNLQ==
-X-Received: by 2002:a17:906:d29b:b0:6da:9e4d:bb7c with SMTP id ay27-20020a170906d29b00b006da9e4dbb7cmr14859587ejb.155.1646759839575;
-        Tue, 08 Mar 2022 09:17:19 -0800 (PST)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id z16-20020a05640240d000b004165f6ce23bsm2312585edb.24.2022.03.08.09.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:17:19 -0800 (PST)
-Date:   Tue, 8 Mar 2022 19:17:17 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 04/10] net: bridge: mst: Notify switchdev
- drivers of VLAN MSTI migrations
-Message-ID: <20220308171717.s2hqp6raoe5gcgtl@skbuf>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
- <20220301100321.951175-5-tobias@waldekranz.com>
- <20220303205921.sxb52jzw4jcdj6m7@skbuf>
- <87y21kna9r.fsf@waldekranz.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Hh6AaBiVTRgfkr5a5o3e19bf/1tJeN6ZNyRK5PzJXAQ=;
+        b=fbj1MQgUojPYj/1BH9fof71c36bgYaCV3efZ6aySooGH3khgQYZfcsUBfZ/0RgZfbu
+         PFFWqqPXq2IV0FXxRQCIBVAW3Q6+N8eZhnz4JEmf2D1+Ddb+Xe0D4z3q2m4jRa8s0iB2
+         uoigKOjPZREE2p2cakEhoeZzDIMpiKwkOYFLEe6lGHRAv3AXG/SY42hXluLE2ajOImVb
+         LZ8Y3UvblGhtW+l539Hcse7Ims4CVpdNt7RP2vrZ1qNEsjeTn/2BgFRuU8PoVs3qJfI9
+         5xKhqxvIbuUpw1opfUHdbK7a/TVnS1CxUJH9EKVwIlu+HrIusuHggrY4n0kO6RkMwkPR
+         W9ZA==
+X-Gm-Message-State: AOAM532PDIeYwqoC/JuJ/4asBUw+JS8ojk9m6p6pGhzyG8A/xIq4NcK4
+        1f1KssQpaZ6vtv4r86eWLxM5aVrEynwjcvQx4iF0mg==
+X-Google-Smtp-Source: ABdhPJxiUIoU7Lx/l5zt1tw4jRmbNc5dYO+GULFWeQs2eA0DFeCA3IJlyTY988bm8xJJioCxrCk5qKbCd+joZ/7de6w=
+X-Received: by 2002:a0d:d187:0:b0:2dc:5d83:217d with SMTP id
+ t129-20020a0dd187000000b002dc5d83217dmr13775475ywd.189.1646759849838; Tue, 08
+ Mar 2022 09:17:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y21kna9r.fsf@waldekranz.com>
+References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Mar 2022 22:47:18 +0530
+Message-ID: <CA+G9fYuh6r0+92=0caTC_Ji0wN0MgkVVCPinc0V55hcsJ4kQOw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/42] 4.14.270-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 09:01:04AM +0100, Tobias Waldekranz wrote:
-> On Thu, Mar 03, 2022 at 22:59, Vladimir Oltean <olteanv@gmail.com> wrote:
-> > On Tue, Mar 01, 2022 at 11:03:15AM +0100, Tobias Waldekranz wrote:
-> >> Whenever a VLAN moves to a new MSTI, send a switchdev notification so
-> >> that switchdevs can...
-> >> 
-> >> ...either refuse the migration if the hardware does not support
-> >> offloading of MST...
-> >> 
-> >> ..or track a bridge's VID to MSTI mapping when offloading is
-> >> supported.
-> >> 
-> >> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> >> ---
-> >>  include/net/switchdev.h   | 10 +++++++
-> >>  net/bridge/br_mst.c       | 15 +++++++++++
-> >>  net/bridge/br_switchdev.c | 57 +++++++++++++++++++++++++++++++++++++++
-> >>  3 files changed, 82 insertions(+)
-> >> 
-> >> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
-> >> index 3e424d40fae3..39e57aa5005a 100644
-> >> --- a/include/net/switchdev.h
-> >> +++ b/include/net/switchdev.h
-> >> @@ -28,6 +28,7 @@ enum switchdev_attr_id {
-> >>  	SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED,
-> >>  	SWITCHDEV_ATTR_ID_BRIDGE_MROUTER,
-> >>  	SWITCHDEV_ATTR_ID_MRP_PORT_ROLE,
-> >> +	SWITCHDEV_ATTR_ID_VLAN_MSTI,
-> >>  };
-> >>  
-> >>  struct switchdev_brport_flags {
-> >> @@ -35,6 +36,14 @@ struct switchdev_brport_flags {
-> >>  	unsigned long mask;
-> >>  };
-> >>  
-> >> +struct switchdev_vlan_attr {
-> >> +	u16 vid;
-> >> +
-> >> +	union {
-> >> +		u16 msti;
-> >> +	};
-> >
-> > Do you see other VLAN attributes that would be added in the future, such
-> > as to justify making this a single-element union from the get-go?
-> 
-> I could imagine being able to control things like multicast snooping on
-> a per-VLAN basis. Being able to act as a multicast router in one VLAN
-> but not another.
-> 
-> > Anyway if that is the case, we're lacking an id for the attribute type,
-> > so we'd end up needing to change drivers when a second union element
-> > appears. Otherwise they'd all expect an u16 msti.
-> 
-> My idea was that `enum switchdev_attr_id` would hold all of that
-> information. In this example SWITCHDEV_ATTR_ID_VLAN_MSTI, denotes both
-> that `vlan_attr` is the valid member of `u` and that `msti` is the valid
-> member of `vlan_attr`. If we add SWITCHDEV_ATTR_ID_VLAN_SNOOPING, that
-> would point to both `vlan_attr` and a new `bool snooping` in the union.
-> 
-> Do you think we should just have a SWITCHDEV_ATTR_ID_VLAN_ATTR for all
-> per-VLAN attributes and then have a separate union?
+On Mon, 7 Mar 2022 at 14:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.270 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.270-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-It's the first nested union that I see, and a bit confusing.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-I think it would be better if we had a
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-struct switchdev_vlan_attr_msti {
-	u16 vid;
-	u16 msti;
-};
+## Build
+* kernel: 4.14.270-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: [None, 'linux-4.14.y']
+* git commit: 5ffa96cabf3ed80e6ade1e0670b39b5803501cf3
+* git describe: v4.14.269-44-g5ffa96cabf3e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.269-44-g5ffa96cabf3e
 
-and different structures for other, future VLAN attributes. Basically
-keep a 1:1 mapping between an attribute id and a union.
+## Test Regressions (compared to v4.14.269-38-g748cb9eabcfb)
+No test regressions found.
 
-> >> +};
-> >> +
-> >>  struct switchdev_attr {
-> >>  	struct net_device *orig_dev;
-> >>  	enum switchdev_attr_id id;
-> >> @@ -50,6 +59,7 @@ struct switchdev_attr {
-> >>  		u16 vlan_protocol;			/* BRIDGE_VLAN_PROTOCOL */
-> >>  		bool mc_disabled;			/* MC_DISABLED */
-> >>  		u8 mrp_port_role;			/* MRP_PORT_ROLE */
-> >> +		struct switchdev_vlan_attr vlan_attr;	/* VLAN_* */
-> >>  	} u;
-> >>  };
-> >>  
-> >> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
-> >> index 8dea8e7257fd..aba603675165 100644
-> >> --- a/net/bridge/br_mst.c
-> >> +++ b/net/bridge/br_mst.c
-> >> @@ -7,6 +7,7 @@
-> >>   */
-> >>  
-> >>  #include <linux/kernel.h>
-> >> +#include <net/switchdev.h>
-> >>  
-> >>  #include "br_private.h"
-> >>  
-> >> @@ -65,9 +66,23 @@ static void br_mst_vlan_sync_state(struct net_bridge_vlan *pv, u16 msti)
-> >>  
-> >>  int br_mst_vlan_set_msti(struct net_bridge_vlan *mv, u16 msti)
-> >>  {
-> >> +	struct switchdev_attr attr = {
-> >> +		.id = SWITCHDEV_ATTR_ID_VLAN_MSTI,
-> >> +		.flags = SWITCHDEV_F_DEFER,
-> >
-> > Is the bridge spinlock held (atomic context), or otherwise why is
-> > SWITCHDEV_F_DEFER needed here?
-> 
-> Nope, just copypasta. In fact, it shouldn't be needed when setting the
-> state either, as you can only change the state via a netlink message. I
-> will remove it.
-> 
-> >> +		.orig_dev = mv->br->dev,
-> >> +		.u.vlan_attr = {
-> >> +			.vid = mv->vid,
-> >> +			.msti = msti,
-> >> +		},
-> >> +	};
-> >>  	struct net_bridge_vlan_group *vg;
-> >>  	struct net_bridge_vlan *pv;
-> >>  	struct net_bridge_port *p;
-> >> +	int err;
-> >> +
-> >> +	err = switchdev_port_attr_set(mv->br->dev, &attr, NULL);
-> >
-> > Treating a "VLAN attribute" as a "port attribute of the bridge" is
-> > pushing the taxonomy just a little, but I don't have a better suggestion.
-> 
-> Isn't there prior art here? I thought things like VLAN filtering already
-> worked like this?
+## Metric Regressions (compared to v4.14.269-38-g748cb9eabcfb)
+No metric regressions found.
 
-Hmm, I can think of VLAN filtering as being an attribute of the bridge
-device, but 'which MSTI does VLAN X belong to' is an attribute of the
-VLAN (in itself a switchdev object, i.e. something countable).
+## Test Fixes (compared to v4.14.269-38-g748cb9eabcfb)
+No test fixes found.
 
-If the prior art would apply as straightforward as you say, then we'd be
-replaying the VLAN MSTIs together with the other port attributes - in
-"pull" mode, in dsa_port_switchdev_sync_attrs(), rather than in "push"
-mode with the rest of the objects - in nbp_switchdev_sync_objs().
-But we're not doing that.
+## Metric Fixes (compared to v4.14.269-38-g748cb9eabcfb)
+No metric fixes found.
 
-To prove that there is a difference between VLAN filtering as a port
-property of the bridge device, and VLAN MSTIs (or other per-VLAN global
-bridge options), consider this.
-You create a bridge, add 10 VLANs on br0, enable VLAN filtering, then
-delete the 10 VLANs and re-create them. The bridge is still VLAN
-filtering.
-So VLAN filtering is a property of the bridge.
+## Test result summary
+total: 83353, pass: 66534, fail: 1002, skip: 13185, xfail: 2632
 
-Next you create a bridge, add 10 VLANs on br0, run your new command:
-'bridge vlan global set dev br0 vid <VID> msti <MSTI>'
-then delete the 10 VLANs and create them back.
-Their MSTI is 0, not what was set via the bridge vlan global options...
-Because the MSTI is a property of the VLANs, not of the bridge.
+## Build Summary
+* arm: 280 total, 270 passed, 10 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 60 total, 12 passed, 48 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
 
-A real port attribute wouldn't behave like that.
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
-At least this is what I understand from your patch set, I haven't run it;
-sorry if I'm mistaken about something, but I can't find a clearer way to
-express what I find strange.
-
-Anyway, I'll stop uselessly commenting here - I can understand the
-practical reasons why you wouldn't want to bother expanding the taxonomy
-to describe this for what it really is - an "object attribute" of sorts -
-because a port attribute for the bridge device has the call path you
-need already laid out, including replication towards all bridge ports.
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,230 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8731F4D1B80
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E08B4D1B82
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345376AbiCHPSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S1347607AbiCHPTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241233AbiCHPSg (ORCPT
+        with ESMTP id S231816AbiCHPTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:18:36 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE20CB868
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:17:37 -0800 (PST)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228DhBWu012080;
-        Tue, 8 Mar 2022 15:17:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=LjyKfmfP7Vu839xRleqUuDgBE/97p6EYx1iD9+26bz4=;
- b=WWymZ9cSzZTx8cIV56lEJ2JHuAP/8Fjz88Pj97crTw/dUbjtyMapqtnBKbj8mv39GJbn
- QJe2RfFul5xP6tX1PxN3QsV0R95bNIt0+ePt73HtlnxHx/AxlXRNQpiihOMr0KKMR1+w
- P49McYN3ag1ocsnEIjvVzFFIZiepIwwXtP0cRsHKclRzkmhxLKqWEgGZhWjw3ojBfAUs
- 6slqXKqIJnsqi4LImsAt9pgfIa3OBTd9S/zx8c0JcuaE7R4Rxc5xfDgfWJP7EqTn1rq5
- BRVoHrIWqMAW7ZP+PzLycfjI70SCRQ96ggWl43JYYPS4E8DQ6y3wUVjhm7Mbelf9zCL+ 9g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ep03vmc0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 15:17:22 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 228EMiv6023011;
-        Tue, 8 Mar 2022 15:17:21 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ep03vmby9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 15:17:21 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 228F7aQ1010428;
-        Tue, 8 Mar 2022 15:17:19 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3ekyg96s3t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 15:17:18 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 228FHF6Z49611084
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Mar 2022 15:17:15 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B139842041;
-        Tue,  8 Mar 2022 15:17:15 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 014B04203F;
-        Tue,  8 Mar 2022 15:17:15 +0000 (GMT)
-Received: from localhost (unknown [9.171.12.198])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  8 Mar 2022 15:17:14 +0000 (GMT)
-Date:   Tue, 8 Mar 2022 16:17:13 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: Re: [PATCH v6 31/39] kasan, vmalloc: only tag normal vmalloc
- allocations
-Message-ID: <your-ad-here.call-01646752633-ext-6250@work.hours>
-References: <cover.1643047180.git.andreyknvl@google.com>
- <fbfd9939a4dc375923c9a5c6b9e7ab05c26b8c6b.1643047180.git.andreyknvl@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fbfd9939a4dc375923c9a5c6b9e7ab05c26b8c6b.1643047180.git.andreyknvl@google.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iDBgHtSy0Ow09BuHd6Oj4wKSrRssGLUg
-X-Proofpoint-ORIG-GUID: WqPy8d8WPu5_9RZv83SYr5ei94IiJE9c
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 8 Mar 2022 10:19:38 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A4A4A928
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:18:40 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qx21so39944182ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:18:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NUBCkBiY+0tJ4VuBewl7LfnbzjGwy2PAsOh1R0tzjbw=;
+        b=jPjzz/ciSsrFwizk/TxR9U2AEKTDlrk4VSxsOEvDb12jHdPMjrPc2yEreK1cFsug0G
+         h/rpxh8zFAgVlb2/BQ0/DNKlYREKNYnUu/4dwnHWp5LikZ7qRLdhI1tHBffV+h5uYro7
+         U+ej1V2HN3qetiSftP8bL82DQ2zLyPVFOQ9bEO4rYv/WvQRP8Gd10zJcGYHvqlGTSjhF
+         VGezST/w4Ns+p+djH5ClNEUz0Ovju2lu9latTei59XzXa8qyncmCtlwZb9/jC3rdNtrT
+         iNEWy1N3zQf2Ok27chvioGRnPrgt7/J4Q78bn/osZ3fiszi0H3XYxlWSZOT7p5UitA04
+         G4Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=NUBCkBiY+0tJ4VuBewl7LfnbzjGwy2PAsOh1R0tzjbw=;
+        b=t3U1vjWTt7lIZNsWsQ3P2gS+ArII/9H0GI5LIlG8JKhb0hZezKNxjOqlIXEsDoJtjU
+         mPdFPCmfa12/XNVzO6lY6yH9I8HgeQECvYgSpD5GTQuNKKkTUKftMhsH+4Ze9v/HJyCx
+         8UBo//zx7GjzB9vm3yiK52vNS1Pvm8ycxB7IQ/Liy/OoU37wPLuMh5upvyDkUhplQDLd
+         EOwkKO6cbhrVAUSCBotNTx54SZXr/w+U+wWxS5usI+FBZI1bzPtwyEzaQeZ67xS11EOQ
+         PLSpXhMZc606UV7RzCLTPyx4ZHNp3J2Q4/lljkvQZgjv1afI92k40O+vW7yBYUlo12yO
+         VfNg==
+X-Gm-Message-State: AOAM532qsB+6nJRkEJh1c2kSh085OOg5CvRNoXy25WmizJpWNFBr6y76
+        Tgt42JHvA6UdAksIdGqUUzE=
+X-Google-Smtp-Source: ABdhPJxOmkjVqpIBLzxb/V3vv3cbffYfs0OjFH10BOAhZLuZStat001uH9Q7OPIE5ycX224ToDtg+g==
+X-Received: by 2002:a17:906:dc10:b0:6da:f383:86ed with SMTP id yy16-20020a170906dc1000b006daf38386edmr13576533ejb.391.1646752719131;
+        Tue, 08 Mar 2022 07:18:39 -0800 (PST)
+Received: from m4.home (tor-exit-7.zbau.f3netze.de. [2a0b:f4c0:16c:7::1])
+        by smtp.gmail.com with ESMTPSA id gz20-20020a170907a05400b006d91b214235sm5998485ejc.185.2022.03.08.07.18.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 07:18:38 -0800 (PST)
+Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
+Received: from cavok by m4.home with local (Exim 4.94.2)
+        (envelope-from <cavok@localhost>)
+        id 1nRbbe-00047z-Hc; Tue, 08 Mar 2022 16:18:34 +0100
+Date:   Tue, 8 Mar 2022 16:18:34 +0100
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binfmt_misc: add two-steps registration (opt-in)
+Message-ID: <YidzykfBmAVqVWTC@localhost>
+References: <Yh4fdijvNXE7K88c@localhost>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-08_05,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- spamscore=0 clxscore=1011 malwarescore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 phishscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203080081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh4fdijvNXE7K88c@localhost>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 07:05:05PM +0100, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
+Hi Eric and Kees,
+
+On Tue, Mar 01, 2022 at 02:28:22PM +0100, Domenico Andreoli wrote:
+> From: Domenico Andreoli <domenico.andreoli@linux.com>
 > 
-> The kernel can use to allocate executable memory. The only supported way
-> to do that is via __vmalloc_node_range() with the executable bit set in
-> the prot argument. (vmap() resets the bit via pgprot_nx()).
+> Experimenting with new interpreter configurations can lead to annoying
+> failures, when the system is left unable to load ELF binaries power
+> cycling is the only way to get it back operational.
 > 
-> Once tag-based KASAN modes start tagging vmalloc allocations, executing
-> code from such allocations will lead to the PC register getting a tag,
-> which is not tolerated by the kernel.
+> This patch tries to mitigate such conditions by adding an opt-in
+> two-steps registration.
 > 
-> Only tag the allocations for normal kernel pages.
+> A new optional field is added to the configuration string, it's an
+> expiration interval for the newly added interpreter. If the user is
+> not able to confirm in time, possibly because the system is broken,
+> the new interpreter is automatically disabled.
+
+I was wondering whether, maybe, likely, you missed this patch of mine.
+
+It would be great if you could just ack (or nack) it for later.
+
+Thanks!
+Domenico
+
 > 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> 
+> ---
+>  Documentation/admin-guide/binfmt-misc.rst |   12 +++
+>  fs/binfmt_misc.c                          |  112 ++++++++++++++++++++++++++++--
+>  2 files changed, 113 insertions(+), 11 deletions(-)
+> 
+> Index: b/Documentation/admin-guide/binfmt-misc.rst
+> ===================================================================
+> --- a/Documentation/admin-guide/binfmt-misc.rst
+> +++ b/Documentation/admin-guide/binfmt-misc.rst
+> @@ -16,8 +16,8 @@ First you must mount binfmt_misc::
+>  	mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
+>  
+>  To actually register a new binary type, you have to set up a string looking like
+> -``:name:type:offset:magic:mask:interpreter:flags`` (where you can choose the
+> -``:`` upon your needs) and echo it to ``/proc/sys/fs/binfmt_misc/register``.
+> +``:name:type:offset:magic:mask:interpreter:flags:timeout`` (where you can choose
+> +the ``:`` upon your needs) and echo it to ``/proc/sys/fs/binfmt_misc/register``.
+>  
+>  Here is what the fields mean:
+>  
+> @@ -88,6 +88,14 @@ Here is what the fields mean:
+>  	    emulation is installed and uses the opened image to spawn the
+>  	    emulator, meaning it is always available once installed,
+>  	    regardless of how the environment changes.
+> +- ``timeout``
+> +  is an optional field; the newly added interpreter is automatically
+> +  disabled after the specified number of seconds. To cancel such
+> +  count down, cat or echo something to ``/proc/.../the_name``.  This
+> +  registration in two steps allows recovering a system left unusable
+> +  by some wrong configuration. A timeout of 0 seconds effectively adds
+> +  a disabled interpreter.  Values smaller than 0 or bigger than 120
+> +  are invalid.
+>  
+>  
+>  There are some restrictions:
+> Index: b/fs/binfmt_misc.c
+> ===================================================================
+> --- a/fs/binfmt_misc.c
+> +++ b/fs/binfmt_misc.c
+> @@ -27,6 +27,8 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/fs.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/timer.h>
+>  
+>  #include "internal.h"
+>  
+> @@ -49,6 +51,8 @@ enum {Enabled, Magic};
+>  #define MISC_FMT_CREDENTIALS (1 << 29)
+>  #define MISC_FMT_OPEN_FILE (1 << 28)
+>  
+> +struct node_timer;
+> +
+>  typedef struct {
+>  	struct list_head list;
+>  	unsigned long flags;		/* type, status, etc. */
+> @@ -60,8 +64,15 @@ typedef struct {
+>  	char *name;
+>  	struct dentry *dentry;
+>  	struct file *interp_file;
+> +	struct node_timer *auto_disable;
+> +	spinlock_t auto_disable_lock;
+>  } Node;
+>  
+> +struct node_timer {
+> +	struct timer_list timer;
+> +	Node *node;
+> +};
+> +
+>  static DEFINE_RWLOCK(entries_lock);
+>  static struct file_system_type bm_fs_type;
+>  static struct vfsmount *bm_mnt;
+> @@ -69,19 +80,30 @@ static int entry_count;
+>  
+>  /*
+>   * Max length of the register string.  Determined by:
+> - *  - 7 delimiters
+> - *  - name:   ~50 bytes
+> - *  - type:   1 byte
+> - *  - offset: 3 bytes (has to be smaller than BINPRM_BUF_SIZE)
+> - *  - magic:  128 bytes (512 in escaped form)
+> - *  - mask:   128 bytes (512 in escaped form)
+> - *  - interp: ~50 bytes
+> - *  - flags:  5 bytes
+> + *  - 8 delimiters
+> + *  - name:    ~50 bytes
+> + *  - type:    1 byte
+> + *  - offset:  3 bytes (has to be smaller than BINPRM_BUF_SIZE)
+> + *  - magic:   128 bytes (512 in escaped form)
+> + *  - mask:    128 bytes (512 in escaped form)
+> + *  - interp:  ~50 bytes
+> + *  - flags:   5 bytes
+> + *  - timeout: 3 bytes
+>   * Round that up a bit, and then back off to hold the internal data
+>   * (like struct Node).
+>   */
+>  #define MAX_REGISTER_LENGTH 1920
+>  
+> +#define MAX_AUTO_DISABLE_TIMEOUT 120
+> +
+> +static void auto_disable_timer_fn(struct timer_list *t)
+> +{
+> +	struct node_timer *timer = container_of(t, struct node_timer, timer);
+> +
+> +	clear_bit(Enabled, &timer->node->flags);
+> +	pr_info("%s: auto-disabled\n", timer->node->name);
+> +}
+> +
+>  /*
+>   * Check if we support the binfmt
+>   * if we do, return the node, else NULL
+> @@ -266,6 +288,41 @@ static char *check_special_flags(char *s
+>  	return p;
+>  }
+>  
+> +static char *setup_auto_disable(char *p, char *endp, Node *e)
+> +{
+> +	unsigned int timeout;
+> +	char buf[4] = {0};
+> +
+> +	while (endp[-1] == '\n')
+> +		endp--;
+> +	if (p >= endp || *p != ':' || ++p == endp)
+> +		return p;
+> +
+> +	endp = min(endp, p + sizeof(buf) - 1);
+> +	memcpy(buf, p, (size_t) (endp - p));
+> +
+> +	if (kstrtouint(buf, 10, &timeout) || timeout > MAX_AUTO_DISABLE_TIMEOUT) {
+> +		pr_info("%s: invalid timeout: %s\n", e->name, buf);
+> +		return p;
+> +	}
+> +
+> +	if (timeout == 0) {
+> +		e->flags &= ~(1 << Enabled);
+> +		return endp;
+> +	}
+> +
+> +	e->auto_disable = kmalloc(sizeof(struct node_timer), GFP_KERNEL);
+> +	if (!e->auto_disable)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	pr_info("%s: auto-disable in %u seconds\n", e->name, timeout);
+> +
+> +	timer_setup(&e->auto_disable->timer, auto_disable_timer_fn, 0);
+> +	e->auto_disable->timer.expires = jiffies + timeout * HZ;
+> +	e->auto_disable->node = e;
+> +	return endp;
+> +}
+> +
+>  /*
+>   * This registers a new binary format, it recognises the syntax
+>   * ':name:type:offset:magic:mask:interpreter:flags'
+> @@ -273,7 +330,7 @@ static char *check_special_flags(char *s
+>   */
+>  static Node *create_entry(const char __user *buffer, size_t count)
+>  {
+> -	Node *e;
+> +	Node *e = NULL;
+>  	int memsize, err;
+>  	char *buf, *p;
+>  	char del;
+> @@ -297,6 +354,8 @@ static Node *create_entry(const char __u
+>  	if (copy_from_user(buf, buffer, count))
+>  		goto efault;
+>  
+> +	spin_lock_init(&e->auto_disable_lock);
+> +
+>  	del = *p++;	/* delimeter */
+>  
+>  	pr_debug("register: delim: %#x {%c}\n", del, del);
+> @@ -454,6 +513,14 @@ static Node *create_entry(const char __u
+>  
+>  	/* Parse the 'flags' field. */
+>  	p = check_special_flags(p, e);
+> +
+> +	/* Parse the 'timeout' field and init the auto-disable timer. */
+> +	p = setup_auto_disable(p, buf + count, e);
+> +	if (IS_ERR(p)) {
+> +		err = PTR_ERR(p);
+> +		goto out;
+> +	}
+> +
+>  	if (*p == '\n')
+>  		p++;
+>  	if (p != buf + count)
+> @@ -462,12 +529,15 @@ static Node *create_entry(const char __u
+>  	return e;
+>  
+>  out:
+> +	kfree(e);
+>  	return ERR_PTR(err);
+>  
+>  efault:
+>  	kfree(e);
+>  	return ERR_PTR(-EFAULT);
+>  einval:
+> +	if (e)
+> +		kfree(e->auto_disable);
+>  	kfree(e);
+>  	return ERR_PTR(-EINVAL);
+>  }
+> @@ -499,6 +569,21 @@ static int parse_command(const char __us
+>  
+>  /* generic stuff */
+>  
+> +static void cancel_auto_disable(Node *e)
+> +{
+> +	struct node_timer *auto_disable = NULL;
+> +
+> +	spin_lock(&e->auto_disable_lock);
+> +	swap(e->auto_disable, auto_disable);
+> +	spin_unlock(&e->auto_disable_lock);
+> +
+> +	if (auto_disable) {
+> +		if (del_timer_sync(&auto_disable->timer))
+> +			pr_info("%s: cancelled auto-disable\n", e->name);
+> +		kfree(auto_disable);
+> +	}
+> +}
+> +
+>  static void entry_status(Node *e, char *page)
+>  {
+>  	char *dp = page;
+> @@ -559,6 +644,8 @@ static void bm_evict_inode(struct inode
+>  
+>  	if (e && e->flags & MISC_FMT_OPEN_FILE)
+>  		filp_close(e->interp_file, NULL);
+> +	if (e)
+> +		cancel_auto_disable(e);
+>  
+>  	clear_inode(inode);
+>  	kfree(e);
+> @@ -588,6 +675,8 @@ bm_entry_read(struct file *file, char __
+>  	ssize_t res;
+>  	char *page;
+>  
+> +	cancel_auto_disable(e);
+> +
+>  	page = (char *) __get_free_page(GFP_KERNEL);
+>  	if (!page)
+>  		return -ENOMEM;
+> @@ -607,6 +696,8 @@ static ssize_t bm_entry_write(struct fil
+>  	Node *e = file_inode(file)->i_private;
+>  	int res = parse_command(buffer, count);
+>  
+> +	cancel_auto_disable(e);
+> +
+>  	switch (res) {
+>  	case 1:
+>  		/* Disable this handler. */
+> @@ -699,6 +790,9 @@ static ssize_t bm_register_write(struct
+>  	list_add(&e->list, &entries);
+>  	write_unlock(&entries_lock);
+>  
+> +	if (e->auto_disable)
+> +		add_timer(&e->auto_disable->timer);
+> +
+>  	err = 0;
+>  out2:
+>  	dput(dentry);
 
-This breaks s390 and produce huge amount of false positives.
-I haven't been testing linux-next with KASAN for while, now tried it with
-next-20220308 and bisected false positives to this commit.
-
-Any idea what is going wrong here?
-
-I see 2 patterns:
-
-[    1.123723] BUG: KASAN: vmalloc-out-of-bounds in ftrace_plt_init+0xb8/0xe0
-[    1.123740] Write of size 8 at addr 001bffff80000000 by task swapper/0/1
-[    1.123745]
-[    1.123749] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7-118520-ga20d77ce812a #142
-[    1.123755] Hardware name: IBM 8561 T01 701 (KVM/Linux)
-[    1.123758] Call Trace:
-[    1.123761]  [<000000000218e5fe>] dump_stack_lvl+0xc6/0xf8
-[    1.123782]  [<0000000002176cb4>] print_address_description.constprop.0+0x64/0x2f0
-[    1.123793]  [<000000000086fd3e>] kasan_report+0x15e/0x1c8
-[    1.123802]  [<0000000000870f5c>] kasan_check_range+0x174/0x1c0
-[    1.123808]  [<0000000000871988>] memcpy+0x58/0x88
-[    1.123813]  [<000000000342cea8>] ftrace_plt_init+0xb8/0xe0
-[    1.123819]  [<0000000000101522>] do_one_initcall+0xc2/0x468
-[    1.123825]  [<000000000341ffc6>] do_initcalls+0x1be/0x1e8
-[    1.123830]  [<0000000003420504>] kernel_init_freeable+0x494/0x4e8
-[    1.123834]  [<0000000002196556>] kernel_init+0x2e/0x180
-[    1.123838]  [<000000000010625a>] __ret_from_fork+0x8a/0xe8
-[    1.123843]  [<00000000021b557a>] ret_from_fork+0xa/0x40
-[    1.123852]
-[    1.123854]
-[    1.123856] Memory state around the buggy address:
-[    1.123861]  001bffff7fffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[    1.123865]  001bffff7fffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[    1.123868] >001bffff80000000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-[    1.123872]                    ^
-[    1.123874]  001bffff80000080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-[    1.123878]  001bffff80000100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-
-$ cat /sys/kernel/debug/kernel_page_tables
----[ Modules Area Start ]---
-0x001bffff80000000-0x001bffff80001000         4K PTE RO X
-0x001bffff80001000-0x001bffff80002000         4K PTE I
-0x001bffff80002000-0x001bffff80003000         4K PTE RO X
-0x001bffff80003000-0x001bffff80004000         4K PTE I
-
-[    1.409146] BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_binary_alloc+0x138/0x170
-[    1.409154] Write of size 4 at addr 001bffff80002000 by task systemd/1
-[    1.409158]
-[    1.409160] CPU: 0 PID: 1 Comm: systemd Tainted: G    B   W         5.17.0-rc7-118520-ga20d77ce812a #141
-[    1.409166] Hardware name: IBM 8561 T01 701 (KVM/Linux)
-[    1.409169] Call Trace:
-[    1.409171]  [<000000000218e5fe>] dump_stack_lvl+0xc6/0xf8
-[    1.409176]  [<0000000002176cb4>] print_address_description.constprop.0+0x64/0x2f0
-[    1.409183]  [<000000000086fd3e>] kasan_report+0x15e/0x1c8
-[    1.409188]  [<0000000000588860>] bpf_jit_binary_alloc+0x138/0x170
-[    1.409192]  [<000000000019fa84>] bpf_int_jit_compile+0x814/0xca8
-[    1.409197]  [<000000000058b60e>] bpf_prog_select_runtime+0x286/0x3e8
-[    1.409202]  [<000000000059ac2e>] bpf_prog_load+0xe66/0x1a10
-[    1.409206]  [<000000000059ebd4>] __sys_bpf+0x8bc/0x1088
-[    1.409211]  [<000000000059f9e8>] __s390x_sys_bpf+0x98/0xc8
-[    1.409216]  [<000000000010ce74>] do_syscall+0x22c/0x328
-[    1.409221]  [<000000000219599c>] __do_syscall+0x94/0xf0
-[    1.409226]  [<00000000021b5542>] system_call+0x82/0xb0
-[    1.409232]
-[    1.409234]
-[    1.409235] Memory state around the buggy address:
-[    1.409238]  001bffff80001f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-[    1.409242]  001bffff80001f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-[    1.409246] >001bffff80002000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-[    1.409249]                    ^
-[    1.409251]  001bffff80002080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-[    1.409255]  001bffff80002100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-
-$ git bisect log
-git bisect start
-# good: [ea4424be16887a37735d6550cfd0611528dbe5d9] Merge tag 'mtd/fixes-for-5.17-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux
-git bisect good ea4424be16887a37735d6550cfd0611528dbe5d9
-# bad: [cb153b68ff91cbc434f3de70ac549e110543e1bb] Add linux-next specific files for 20220308
-git bisect bad cb153b68ff91cbc434f3de70ac549e110543e1bb
-# good: [1ce7aac49a7b73abbd691c6e6a1577a449d90bad] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good 1ce7aac49a7b73abbd691c6e6a1577a449d90bad
-# good: [08688e100b1b07ce178c1d3c6b9983e00cd85413] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-git bisect good 08688e100b1b07ce178c1d3c6b9983e00cd85413
-# good: [82a204646439657e5c2f94da5cad7ba96de10414] Merge branch 'togreg' of git://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-git bisect good 82a204646439657e5c2f94da5cad7ba96de10414
-# good: [ac82bf337c937458bf4f75985857bf3a68cd7c16] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-git bisect good ac82bf337c937458bf4f75985857bf3a68cd7c16
-# good: [a36f330518af9bd205451bedb4eb22a5245cf010] ipc/mqueue: use get_tree_nodev() in mqueue_get_tree()
-git bisect good a36f330518af9bd205451bedb4eb22a5245cf010
-# good: [339c1d0fb400ab3acd2da2d9990242f654689f6e] Merge branch 'for-next' of git://git.infradead.org/users/willy/pagecache.git
-git bisect good 339c1d0fb400ab3acd2da2d9990242f654689f6e
-# good: [b8a58fecbd4982211f528d405a9ded00ddc7d646] kasan: only apply __GFP_ZEROTAGS when memory is zeroed
-git bisect good b8a58fecbd4982211f528d405a9ded00ddc7d646
-# bad: [141e05389762bee5fb0eb54af9c4d5266ce11d26] kasan: drop addr check from describe_object_addr
-git bisect bad 141e05389762bee5fb0eb54af9c4d5266ce11d26
-# good: [97fedbc9a6bccd508c392b0e177380313dd9fcd2] kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
-git bisect good 97fedbc9a6bccd508c392b0e177380313dd9fcd2
-# bad: [606c2ee3fabbf66594f39998be9b5a21c2bf5dff] arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
-git bisect bad 606c2ee3fabbf66594f39998be9b5a21c2bf5dff
-# bad: [bd2c296805cff9572080bf56807c16d1dd382260] kasan, scs: support tagged vmalloc mappings
-git bisect bad bd2c296805cff9572080bf56807c16d1dd382260
-# good: [7b80fa947b3a3ee746115395d1c5f7157119b7d2] kasan, vmalloc: add vmalloc tagging for HW_TAGS
-git bisect good 7b80fa947b3a3ee746115395d1c5f7157119b7d2
-# bad: [f51c09448ea124622f8ebcfb41d06c809ee01bca] fix for "kasan, vmalloc: only tag normal vmalloc allocations"
-git bisect bad f51c09448ea124622f8ebcfb41d06c809ee01bca
-# bad: [a20d77ce812a3e11b3cf2cb4f411904bb5c6edaa] kasan, vmalloc: only tag normal vmalloc allocations
-git bisect bad a20d77ce812a3e11b3cf2cb4f411904bb5c6edaa
-# first bad commit: [a20d77ce812a3e11b3cf2cb4f411904bb5c6edaa] kasan, vmalloc: only tag normal vmalloc allocations
+-- 
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05

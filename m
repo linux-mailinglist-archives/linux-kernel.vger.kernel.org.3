@@ -2,192 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FC64D3431
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0CA4D3434
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiCIQXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S235281AbiCIQX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236636AbiCIQTo (ORCPT
+        with ESMTP id S237900AbiCIQVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:19:44 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD9C190B74
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646842505; x=1678378505;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WM6eCdkxZ9CYApmaiSTssyYOiXBFLkK74l7LdadqI1Q=;
-  b=h2TmMF7b93quSonBZpgJzkmVyXfSFyxnc8gzg55j6FO5loQSp0x5yt+R
-   HKTukTKKCSsv1epYTKWRWbnAo4A2Yw8yDXobA4Z2fJBeRT/OaHmAzdo45
-   LcXkR57NkMbP3CRlerCGZ1N0jW/xlFBEPvXv0VODI4e2SfPlw8m3GAugD
-   GgVgvLmx6iJ2eXKOYL3FUxHN7xgplLjGGQTx5R3bl1Cb6DRb4hDe7aO0x
-   4KbH77XIM/OYIFERcNDVcpw5J8aTf6P4GLL1JANPLbbzPK6iybFQseCtc
-   Cm9xlutxrT+Tvdk8vnpfw4X1GoEmFv17/pFVeFKs/UBYwWiGBdxfA+rHO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235617247"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="235617247"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 08:14:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="711991410"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2022 08:14:45 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 640E794; Wed,  9 Mar 2022 18:15:04 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     dave.hansen@intel.com
-Cc:     aarcange@redhat.com, ak@linux.intel.com, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com,
-        kirill.shutemov@linux.intel.com, knsathya@kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [PATCH] x86/tdx: Handle CPUID via #VE
-Date:   Wed,  9 Mar 2022 19:15:02 +0300
-Message-Id: <20220309161502.22884-1-kirill.shutemov@linux.intel.com>
+        Wed, 9 Mar 2022 11:21:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6B81451E9;
+        Wed,  9 Mar 2022 08:17:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 389296194C;
+        Wed,  9 Mar 2022 16:17:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACAEC340E8;
+        Wed,  9 Mar 2022 16:17:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646842641;
+        bh=Uy23ZolzuI1RPojDcKbOT+RVaAD15FgdKsEPlpak3Ic=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eu0cq5nKT9mDIwdLPyvYdQTNAswY1B78OWx2tcL6BIfIwnHkxuSvqApH3+DxXfxJ0
+         TZMrrNRknAoVmgLlpOfD9jnFaa77aQonVMrFsRZno/6vjlyimcwiJKnC2ljQ9fcRr2
+         u0RaBwM4N8JxJKo5RKIlG/lKrcE06LIKurW2lnmVZPhimcl6z8QAAEJFtnrIZMmLrs
+         IEpI9pUDr0YTEgiRksdRgRAroOx4BdBSwcC9u777Cxtk/Ib8YHCs/eENePFztwzbEg
+         GuHclo8r7fzDf8D+4mvKHqJYIlz2GgL80h8hud/Qtjr0IcpDH0Drad27SmhUE5OBkt
+         YHjLzCzzBiGFA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        pgwipeout@gmail.com, cl@rock-chips.com,
+        michael.riesch@wolfvision.net, frattaroli.nicolas@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 01/27] arm64: dts: rockchip: fix dma-controller node names on rk356x
+Date:   Wed,  9 Mar 2022 11:16:38 -0500
+Message-Id: <20220309161711.135679-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <133a741f-02ae-49bd-1bc4-87ec42ab024b@intel.com>
-References: <133a741f-02ae-49bd-1bc4-87ec42ab024b@intel.com>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In TDX guests, most CPUID leaf/sub-leaf combinations are virtualized
-by the TDX module while some trigger #VE.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Implement the #VE handling for EXIT_REASON_CPUID by handing it through
-the hypercall, which in turn lets the TDX module handle it by invoking
-the host VMM.
+[ Upstream commit 2ddd96aadbd0412040ef49eda94549c32de6c92c ]
 
-More details on CPUID Virtualization can be found in the TDX module
-specification, the section titled "CPUID Virtualization".
+DMA-Cotrollers defined in rk356x.dtsi do not match the pattern in bindings.
 
-Note that VMM that handles the hypercall is not trusted. It can return
-data that may steer the guest kernel in wrong direct. Only allow  VMM
-to control range reserved for hypervisor communication.
+arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dt.yaml:
+  dmac@fe530000: $nodename:0: 'dmac@fe530000' does not match '^dma-controller(@.*)?$'
+	From schema: Documentation/devicetree/bindings/dma/arm,pl330.yaml
+arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dt.yaml:
+  dmac@fe550000: $nodename:0: 'dmac@fe550000' does not match '^dma-controller(@.*)?$'
+	From schema: Documentation/devicetree/bindings/dma/arm,pl330.yaml
 
-Return all-zeros for any CPUID outside the hypervisor range. It matches
-CPU behaviour for non-supported leaf.
+This Patch fixes it.
 
-Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Link: https://lore.kernel.org/r/20220123133615.135789-1-linux@fw-web.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/coco/tdx.c | 58 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-index a2f19c78583a..3d468a2b9ec6 100644
---- a/arch/x86/coco/tdx.c
-+++ b/arch/x86/coco/tdx.c
-@@ -163,6 +163,48 @@ static bool write_msr(struct pt_regs *regs)
- 	return !__tdx_hypercall(&args, 0);
- }
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 46d9552f6028..688e3585525a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -647,7 +647,7 @@ &i2s1m0_sdo0   &i2s1m0_sdo1
+ 		status = "disabled";
+ 	};
  
-+static bool handle_cpuid(struct pt_regs *regs)
-+{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = hcall_func(EXIT_REASON_CPUID),
-+		.r12 = regs->ax,
-+		.r13 = regs->cx,
-+	};
-+
-+	/*
-+	 * Only allow VMM to control range reserved for hypervisor
-+	 * communication.
-+	 *
-+	 * Return all-zeros for any CPUID outside the range. It matches CPU
-+	 * behaviour for non-supported leaf.
-+	 */
-+	if (regs->ax < 0x40000000 || regs->ax > 0x4FFFFFFF) {
-+		regs->ax = regs->bx = regs->cx = regs->dx = 0;
-+		return true;
-+	}
-+
-+	/*
-+	 * Emulate the CPUID instruction via a hypercall. More info about
-+	 * ABI can be found in TDX Guest-Host-Communication Interface
-+	 * (GHCI), section titled "VP.VMCALL<Instruction.CPUID>".
-+	 */
-+	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+		return false;
-+
-+	/*
-+	 * As per TDX GHCI CPUID ABI, r12-r15 registers contain contents of
-+	 * EAX, EBX, ECX, EDX registers after the CPUID instruction execution.
-+	 * So copy the register contents back to pt_regs.
-+	 */
-+	regs->ax = args.r12;
-+	regs->bx = args.r13;
-+	regs->cx = args.r14;
-+	regs->dx = args.r15;
-+
-+	return true;
-+}
-+
- void tdx_get_ve_info(struct ve_info *ve)
- {
- 	struct tdx_module_output out;
-@@ -186,6 +228,18 @@ void tdx_get_ve_info(struct ve_info *ve)
- 	ve->instr_info  = upper_32_bits(out.r10);
- }
+-	dmac0: dmac@fe530000 {
++	dmac0: dma-controller@fe530000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x0 0xfe530000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
+@@ -658,7 +658,7 @@ dmac0: dmac@fe530000 {
+ 		#dma-cells = <1>;
+ 	};
  
-+/* Handle the user initiated #VE */
-+static bool virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
-+{
-+	switch (ve->exit_reason) {
-+	case EXIT_REASON_CPUID:
-+		return handle_cpuid(regs);
-+	default:
-+		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-+		return false;
-+	}
-+}
-+
- /* Handle the kernel #VE */
- static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
- {
-@@ -196,6 +250,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
- 		return read_msr(regs);
- 	case EXIT_REASON_MSR_WRITE:
- 		return write_msr(regs);
-+	case EXIT_REASON_CPUID:
-+		return handle_cpuid(regs);
- 	default:
- 		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
- 		return false;
-@@ -207,7 +263,7 @@ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
- 	bool ret;
- 
- 	if (user_mode(regs))
--		ret = false;
-+		ret = virt_exception_user(regs, ve);
- 	else
- 		ret = virt_exception_kernel(regs, ve);
- 
+-	dmac1: dmac@fe550000 {
++	dmac1: dma-controller@fe550000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x0 0xfe550000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 

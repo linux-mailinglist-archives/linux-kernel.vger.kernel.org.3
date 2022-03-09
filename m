@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96F94D39E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB31B4D39F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237594AbiCITUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S235712AbiCITUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237632AbiCITUT (ORCPT
+        with ESMTP id S238392AbiCITSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:20:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3D4114FC4;
-        Wed,  9 Mar 2022 11:19:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7700DB82396;
-        Wed,  9 Mar 2022 19:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FE1C340E8;
-        Wed,  9 Mar 2022 19:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646853551;
-        bh=mZ0YOFOw30QUQWww8HEgcbPZ7ISUs/jOLiEzn+8383E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jYYWjfr7qHblMTfR0x3UegRLIdjcsCfTQN4OejzagH6Yfbo3B3Zo2vNiDSO7dCFbh
-         6eUgwXUcTXPWszRSF9FhQGqPRlOMms/v6yPVCxsOLOu5Mr4xYtNlnAXJC9TwfKjv8f
-         HzDDXmaqMTPCW321oAC2T6cYAVTWoNY7fzDzRZZzgmvLKl9of+ODytuREB9LrYYoYr
-         ADbd7m1FqnZKrRhoI3xudSm3bEkbpJRDQ2uJN9DjDgsrsMO46wxYdAl2Ye6xx+XWQY
-         az03UbI6T6si1J8pHOKey6tnwq8clOy/pJcSU9dEY+grd7ROciynKK9h6gPAIE4IOb
-         XIrTSJSKh9JRA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH] arm64: Do not include __READ_ONCE() block in assembly files
-Date:   Wed,  9 Mar 2022 12:16:34 -0700
-Message-Id: <20220309191633.2307110-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 14:18:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 330E8108BF5;
+        Wed,  9 Mar 2022 11:17:25 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 981B71691;
+        Wed,  9 Mar 2022 11:17:24 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFD953FA27;
+        Wed,  9 Mar 2022 11:17:22 -0800 (PST)
+Date:   Wed, 9 Mar 2022 19:17:20 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>, krzk+dt@kernel.org,
+        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        Hector Yuan <hector.yuan@mediatek.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an
+ example
+Message-ID: <Yij9QBWFe5z9Ze23@bogus>
+References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+ <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,79 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building arm64 defconfig + CONFIG_LTO_CLANG_{FULL,THIN}=y after
-commit 558c303c9734 ("arm64: Mitigate spectre style branch history side
-channels"), the following error occurs:
+On Wed, Mar 09, 2022 at 08:45:40PM +0530, Manivannan Sadhasivam wrote:
+> Qcom CPUFREQ HW don't have the support for generic performance domains yet.
+> So use MediaTek CPUFREQ HW that has the support available in mainline.
+> 
+> This also silences the below dtschema warnings for "cpufreq-qcom-hw.yaml":
+> 
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: reg: [[305397760, 4096]] is too short
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clocks' is a required property
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clock-names' is a required property
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#freq-domain-cells' is a required property
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#performance-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> 
+> Cc: Hector Yuan <hector.yuan@mediatek.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
 
-  <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-   mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-   ^
+Thanks for fixing this. It seem to have slipped through the cracks. I had
+plans to push this once Mediatek driver was merged but totally forgot about
+it.
 
-Marc figured out that moving "#include <linux/init.h>" in
-include/linux/arm-smccc.h into a !__ASSEMBLY__ block resolves it. The
-full include chain with CONFIG_LTO=y from include/linux/arm-smccc.h:
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-include/linux/init.h
-include/linux/compiler.h
-arch/arm64/include/asm/rwonce.h
-arch/arm64/include/asm/alternative-macros.h
-arch/arm64/include/asm/assembler.h
-
-The asm/alternative-macros.h include in asm/rwonce.h only happens when
-CONFIG_LTO is set, which ultimately casues asm/assembler.h to be
-included before the definition of ARM_SMCCC_ARCH_WORKAROUND_3. As a
-result, the preprocessor does not expand ARM_SMCCC_ARCH_WORKAROUND_3 in
-__mitigate_spectre_bhb_fw, which results in the error above.
-
-Avoid this problem by just avoiding the CONFIG_LTO=y __READ_ONCE() block
-in asm/rwonce.h with assembly files, as nothing in that block is useful
-to assembly files, which allows ARM_SMCCC_ARCH_WORKAROUND_3 to be
-properly expanded with CONFIG_LTO=y builds.
-
-Cc: stable@vger.kernel.org
-Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
-Link: https://lore.kernel.org/r/20220309155716.3988480-1-maz@kernel.org/
-Reported-by: Marc Zyngier <maz@kernel.org>
-Acked-by: James Morse <james.morse@arm.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-This is based on current mainline; if it should be based on a specific
-arm64 branch, please let me know.
-
-As 558c303c9734 is going to stable, I marked this for stable as well to
-avoid breaking Android. I used e35123d83ee3 for the fixes tag to make it
-clear to the stable team this should only go where that commit is
-present. If a different fixes tag should be used, please feel free to
-substitute.
-
- arch/arm64/include/asm/rwonce.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 1bce62fa908a..56f7b1d4d54b 100644
---- a/arch/arm64/include/asm/rwonce.h
-+++ b/arch/arm64/include/asm/rwonce.h
-@@ -5,7 +5,7 @@
- #ifndef __ASM_RWONCE_H
- #define __ASM_RWONCE_H
- 
--#ifdef CONFIG_LTO
-+#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
- 
- #include <linux/compiler_types.h>
- #include <asm/alternative-macros.h>
-@@ -66,7 +66,7 @@
- })
- 
- #endif	/* !BUILD_VDSO */
--#endif	/* CONFIG_LTO */
-+#endif	/* CONFIG_LTO && !__ASSEMBLY__ */
- 
- #include <asm-generic/rwonce.h>
- 
-
-base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
 -- 
-2.35.1
-
+Regards,
+Sudeep

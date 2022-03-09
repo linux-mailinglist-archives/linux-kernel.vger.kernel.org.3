@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57ACE4D3C5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135604D3C63
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbiCIVuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S238467AbiCIVvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238450AbiCIVuR (ORCPT
+        with ESMTP id S238463AbiCIVu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:50:17 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E2185BDA;
-        Wed,  9 Mar 2022 13:49:17 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id q4so2912177qki.11;
-        Wed, 09 Mar 2022 13:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=sxvKTikY8johRtBV0JsrDp4qIzaspSzV/aknHXI6mPA=;
-        b=DCXO3372gPkxqP/Leco25R+kBT3KC6i+9oHMlPpmT+JSeAW5L43zE9d6d4Br3DvUil
-         g1mpCeweEtr57ihSZ3v3Lu5Wqt3b+xsbwCZ88y9lNDoRh2ifUxY30DWyxLziXWAu+ElF
-         TUOtflCId8R7+wcSMXzSduYnD2cCh/r7ky7OK715NCydC80W+1HkTND0pEvDKg7mbg7j
-         6rIh+3vH2TFkQv7wVBwOTLv0IH15S3SaMjlPRlIS9iYQB3hgxs8K2Hbx+yKgQEaoNdfD
-         ynn+sEXueD3BluQqIKivZwtxCUDefogfxSxrFQ9Un81CMx0nIYzF5x0epajCXHgP6ag5
-         GSGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=sxvKTikY8johRtBV0JsrDp4qIzaspSzV/aknHXI6mPA=;
-        b=iUkmZG8lis3wWjwOQWuhNB1RwawDdtCwyzwcrHOvNEz4Ljh1JqlDsRLoftYYoIIT7G
-         253ZvCgINsX/aWkomMnAC8Jzv9ik3pLYuRMqRicpDeWCNDguhU2249uHogeYd1AF5vUu
-         Jkx8A3X/KLB4JzgftJKP7GlKCYomr8kUWrc0HjYPETyR1DH9eWIpGp260iKhiXYt29rl
-         FMf07CzkEyBCq3wwNTiaQthq/k07Il80CnemPso8fp/Tcsm8GIXAPlexeQuT0tfvYSke
-         cJyvRdldAtffWDWvPjAlIwIxRSZGc58THsDZKph+0JzM08EUAyH+wgzGP3aQpnrMolHK
-         S23Q==
-X-Gm-Message-State: AOAM531vck8U7nbOkxWpgjGdFoJJwgxBrjAk91DpPftZiOkCjR90K9c8
-        IkXSNGFsTsDA0uTNS7Sq/QPSGurL6FXzVf5Mb1NWLw==
-X-Google-Smtp-Source: ABdhPJz6S3bIPh2tXJa8Muk574LyVrRdVW2MlicGoT88aodYQr+2l7R9qt9NP/h1er0GNuLvdiEjqA==
-X-Received: by 2002:a05:620a:2a05:b0:67d:2fb0:b292 with SMTP id o5-20020a05620a2a0500b0067d2fb0b292mr1189717qkp.343.1646862556410;
-        Wed, 09 Mar 2022 13:49:16 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id t28-20020a05620a005c00b00662fb1899d2sm1460327qkt.0.2022.03.09.13.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 13:49:15 -0800 (PST)
-Message-ID: <622920db.1c69fb81.bcbd2.97ff@mx.google.com>
-Date:   Wed, 09 Mar 2022 13:49:15 -0800 (PST)
-X-Google-Original-Date: Wed, 09 Mar 2022 21:49:13 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
-Subject: RE: [PATCH 5.16 00/37] 5.16.14-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
+        Wed, 9 Mar 2022 16:50:59 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48243B459B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646862599; x=1678398599;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HV/+nnR+t+oLvJeCRHCts1IrxHyVQNRs7afgjp2JRlg=;
+  b=el4f+7j/ZOgGUlTCwkwShk1+Te9x9a09VFnjEeGFgm5Sw3GJ2MEgxigC
+   8KJHZ2mrTYa1ezaRpd1lkcHMTHdGbK2lR1DBJtQedIV/X2iWrWgNxEzpN
+   6eslCrXqcCUjzHTII45sdctdjYR0LjkzWHXNYxc69mq1i8qTEOxPbH2vk
+   sSX1cRH4KIMtSJAFqlZ9ttPlDySGwlx8VCLNUnffyGQtIhJM4ro7KpdjF
+   Da71vdiJccrg6R7rdJs1jLQaXR719+U8tXuLfAhtC54djaqOncvaAzpKG
+   ihPSwKi5cj3VKLeHzj5xwnyHa0dmTqdHW8kDcTOMo98J3e5vWCAmDcQuH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="318324148"
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="318324148"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 13:49:56 -0800
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="642311367"
+Received: from sli6-mobl.amr.corp.intel.com (HELO [10.209.104.236]) ([10.209.104.236])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 13:49:54 -0800
+Message-ID: <ecbce3ff-7340-3dec-4682-197a6828f8ef@intel.com>
+Date:   Wed, 9 Mar 2022 13:49:48 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv5 30/30] Documentation/x86: Document TDX kernel
+ architecture
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-31-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220302142806.51844-31-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,27 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  9 Mar 2022 17:00:01 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.16.14 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 3/2/22 06:28, Kirill A. Shutemov wrote:
+> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 > 
-> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> Anything received after that time might be too late.
+> Document the TDX guest architecture details like #VE support,
+> shared memory, etc.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-5.16.14-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
-
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>

@@ -2,178 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCD94D353C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8D44D3598
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbiCIRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:16:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S236739AbiCIRQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238893AbiCIRPM (ORCPT
+        with ESMTP id S236008AbiCIRPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:15:12 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3193015697C;
-        Wed,  9 Mar 2022 09:11:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0XOxoRhCxn4RuwbyrCrk6t3swVtPgJmu2MdScDyPqbQ=; b=mcg579PjLxcqqpzqmD4TRDh0KO
-        Xt0CJkuEF3rXPN1ImSzHh6Zt+thXoFDboFMnj8ugMCZZKUaIEVUXKcmvirOBNEMELY3Pxu/2zX5YG
-        r+VBiq0o+GX45wMXXny2eh9NxP71vd1ZpJNQPeG63R8Z/+SsqlFBYAWCIQMcENH6J/E51sljsf88X
-        E5oU7FtUDYgMnVs0JQzM4JfuM/paCLg9B7YP48F0cCiITKZ16aD2+nYxfZTuuu10ARHL0Oy04RsPn
-        Rv8nuvFfBpUBzV8AL/5DUKmbw9UWRXkqjXosDRTNuPtwZYpHZivlxTgEXuftAgwAYeeH0TFqL1YcO
-        SF5eQmsg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57748)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nRzqi-0002Gq-67; Wed, 09 Mar 2022 17:11:44 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nRzqe-00088O-RE; Wed, 09 Mar 2022 17:11:40 +0000
-Date:   Wed, 9 Mar 2022 17:11:40 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
- __read_once_word_nocheck
-Message-ID: <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
-References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
- <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
- <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
- <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
- <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
- <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
- <YijCkHHhpleeADAO@shell.armlinux.org.uk>
- <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+        Wed, 9 Mar 2022 12:15:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003B62669;
+        Wed,  9 Mar 2022 09:13:20 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229FZ7pX031743;
+        Wed, 9 Mar 2022 17:12:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=ERfmtCrOveRkJbrZVDECIm+95CvkUGw5l6XDtNMGZR8=;
+ b=ThJK20YhdsNzKWFDPul1yUDK52WlcmG5oJEo57z4jL0jXnfwFSef+NDvviUVJ+nGJPDu
+ Wh+tJ6i3iV8dr+ckCtzlYfw/fIEQ6L7/nQeQhwJAoSfmEy8nX/ytVYQL8RHXj5XJsbPH
+ hLZEL1k/tfEI42Zpkx15jmu+a5D51G5wSKRvZnlVmI5M6cunOqkgVuf1zxIKVmUtyTVS
+ FBbiOVrA/PXnHx3uzeQiTf/UJIpRVWwm8MPvxnlkyisOxHqIH7MDML9esX3lqumy8E58
+ bu5ZwgTiSA6N3ZHTVGMCml2VepXdReQkYXFpsNAzPSq/kdp/03t0ZTREDc7laW4TTA9P cQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ep1077340-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 17:12:49 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 229Gv4Ne001953;
+        Wed, 9 Mar 2022 17:12:48 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ep107733j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 17:12:48 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 229HChND022064;
+        Wed, 9 Mar 2022 17:12:47 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma03dal.us.ibm.com with ESMTP id 3emy8hanpx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 17:12:47 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 229HCjJe22610408
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Mar 2022 17:12:45 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2940BE05F;
+        Wed,  9 Mar 2022 17:12:45 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8C4DBE058;
+        Wed,  9 Mar 2022 17:12:42 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Mar 2022 17:12:42 +0000 (GMT)
+Message-ID: <930d970d-0120-d3f0-939a-b5ef3b596318@linux.ibm.com>
+Date:   Wed, 9 Mar 2022 12:12:41 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/4] KEYS: CA link restriction
+Content-Language: en-US
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "mic@linux.microsoft.com" <mic@linux.microsoft.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+References: <20220301173651.3435350-1-eric.snowberg@oracle.com>
+ <20220301173651.3435350-4-eric.snowberg@oracle.com>
+ <47f3654e-892d-a35a-e77c-70ada1ebcf43@linux.ibm.com>
+ <2415444C-AD8F-4F03-8B1C-C0770F83ADAE@oracle.com>
+ <e2dd58cd6074ae692256333b43b5ecde70bcdbdd.camel@linux.ibm.com>
+ <67456A73-8B72-4DB6-8E23-7C603661A0A4@oracle.com>
+ <22860730-d615-5683-6af0-05b6f4f3e71d@linux.ibm.com>
+ <e10f2161aaa69a9d301b3a16a37cbab266318aee.camel@linux.ibm.com>
+ <068F32E0-B202-4B20-9DE7-57373EF71BFE@oracle.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <068F32E0-B202-4B20-9DE7-57373EF71BFE@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rqnPdFEcO6soykUtSB6sY7xeZNaeIZxc
+X-Proofpoint-GUID: F7UnrJsWqoGVmzw3lmyFlc0pK--_0eBm
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-09_07,2022-03-09_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0
+ clxscore=1015 spamscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203090096
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 10:08:25PM +0530, Naresh Kamboju wrote:
-> Hi Russell,
+
+
+On 3/8/22 13:02, Eric Snowberg wrote:
 > 
-> On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
-> > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > >
-> <trim>
-> > Well, we unwound until:
-> >
-> >  __irq_svc from migrate_disable+0x0/0x70
-> >
-> > and then crashed - and the key thing there is that we're at the start
-> > of migrate_disable() when we took an interrupt.
-> >
-> > For some reason, this triggers an access to address 0x10, which faults.
-> > We then try unwinding again, and successfully unwind all the way back
-> > to the same point (the line above) which then causes the unwinder to
-> > again access address 0x10, and the cycle repeats with the stack
-> > growing bigger and bigger.
-> >
-> > I'd suggest also testing without the revert but with my patch.
 > 
-> I have tested your patch on top of linux next-20220309 and still see kernel
-> crash as below [1]. build link [2].
+>> On Mar 8, 2022, at 5:45 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>
+>> On Mon, 2022-03-07 at 21:31 -0500, Stefan Berger wrote:
+>>>
+>>> On 3/7/22 18:38, Eric Snowberg wrote:
+>>>>
+>>>>
+>>>>> On Mar 7, 2022, at 4:01 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>>>>
+>>>>> On Mon, 2022-03-07 at 18:06 +0000, Eric Snowberg wrote:
+>>>>>>
+>>>>>>>> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
+>>>>>>>> index 6b1ac5f5896a..49bb2ea7f609 100644
+>>>>>>>> --- a/crypto/asymmetric_keys/restrict.c
+>>>>>>>> +++ b/crypto/asymmetric_keys/restrict.c
+>>>>>>>> @@ -108,6 +108,49 @@ int restrict_link_by_signature(struct key *dest_keyring,
+>>>>>>>> 	return ret;
+>>>>>>>> }
+>>>>>>>> +/**
+>>>>>>>> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
+>>>>>>>> + * @dest_keyring: Keyring being linked to.
+>>>>>>>> + * @type: The type of key being added.
+>>>>>>>> + * @payload: The payload of the new key.
+>>>>>>>> + * @trust_keyring: Unused.
+>>>>>>>> + *
+>>>>>>>> + * Check if the new certificate is a CA. If it is a CA, then mark the new
+>>>>>>>> + * certificate as being ok to link.
+>>>>>>>
+>>>>>>> CA = root CA here, right?
+>>>>>>
+>>>>>> Yes, I’ll update the comment
+>>>>>
+>>>>> Updating the comment is not enough.  There's an existing function named
+>>>>> "x509_check_for_self_signed()" which determines whether the certificate
+>>>>> is self-signed.
+>>>>
+>>>> Originally I tried using that function.  However when the restrict link code is called,
+>>>> all the necessary x509 information is no longer available.   The code in
+>>>> restrict_link_by_ca is basically doing the equivalent to x509_check_for_self_signed.
+>>>> After verifying the cert has the CA flag set, the call to public_key_verify_signature
+>>>> validates the cert is self signed.
+>>>>
+>>> Isn't x509_cert_parse() being called as part of parsing the certificate?
+>>> If so, it seems to check for a self-signed certificate every time. You
+>>> could add something like the following to x509_check_for_self_signed(cert):
+>>> pub->x509_self_signed = cert->self_signed = true;
+>>>
+>>> This could then reduce the function in 3/4 to something like:
+>>>
+>>> return payload->data[asym_crypto]->x509_self_signed;
 > 
-> [   26.812060] 8<--- cut here ---
-> [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
-> [   26.816139] [b6a3ab70] *pgd=fb28a835
-> [   26.817770] Internal error: : 1b [#1] SMP ARM
-> [   26.819636] Modules linked in:
-> [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
-> 5.17.0-rc7-next-20220309 #1
-> [   26.824519] Hardware name: Generic DT based system
-> [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
-> [   26.829856] LR is at unwind_frame+0x7dc/0xab4
-> 
-> - Naresh
-> 
-> [1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
-> [2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/
+> When I was studying the restriction code, before writing this patch, it looked like
+> it was written from the standpoint to be as generic as possible.  All code contained
+> within it works on either a public_key_signature or a public_key.  I had assumed it
+> was written this way to be used with different asymmetrical key types now and in
+> the future. I called the public_key_verify_signature function instead of interrogating
+> the x509 payload to keep in line with what I thought was the original design. Let me
+> know if I should be carrying x509 code in here to make the change above.
 
-I think the problem has just moved:
+It does not seem right if there were two functions trying to determine 
+whether an x509 cert is self-signed. The existing is invoked as part of 
+loading a key onto the machine keyring from what I can see. It has 
+access to more data about the cert and therefore can do stronger tests, 
+yours doesn't have access to the data. So I guess I would remember in a 
+boolean in the public key structure that the x509 cert it comes from was 
+self signed following the existing test. Key in your function may be 
+that that payload->data[] array is guaranteed to be from the x509 cert 
+as set in x509_key_preparse().
 
-[   27.113085]  __irq_svc from __copy_to_user_std+0x24/0x378
+https://elixir.bootlin.com/linux/v5.17-rc7/source/crypto/asymmetric_keys/x509_public_key.c#L236
 
-The code at the start of __copy_to_user_std is:
+    StefanIt does not seem right if there were two functions trying to 
+determine whether an x509 cert is self-signed. The existing is invoked 
+as part of loading a key onto the machine keyring from what I can see. 
+It has access to more data about the cert and therefore can do stronger 
+tests, yours doesn't have access to the data. So I guess I would 
+remember in a boolean in the public key structure that the x509 cert it 
+comes from was self signed following the existing test. Key in your 
+function may be that that payload->data[] array is guaranteed to be from 
+the x509 cert as set in x509_key_preparse().
 
-   0:   e3a034bf        mov     r3, #-1090519040        ; 0xbf000000
-   4:   e243c001        sub     ip, r3, #1
-   8:   e05cc000        subs    ip, ip, r0
-   c:   228cc001        addcs   ip, ip, #1
-  10:   205cc002        subscs  ip, ip, r2
-  14:   33a00000        movcc   r0, #0
-  18:   e320f014        csdb
-  1c:   e3a03000        mov     r3, #0
-  20:   e92d481d        push    {r0, r2, r3, r4, fp, lr}
-  24:   e1a0b00d        mov     fp, sp
+https://elixir.bootlin.com/linux/v5.17-rc7/source/crypto/asymmetric_keys/x509_public_key.c#L236
 
-and the unwind information will be:
-
-0xc056f14c <arm_copy_to_user+0x1c>: @0xc0b89b84
-  Compact model index: 1
-  0x9b      vsp = r11
-  0xb1 0x0d pop {r0, r2, r3}
-  0x84 0x81 pop {r4, r11, r14}
-  0xb0      finish
-
-The problem is that the unwind information says "starting at offset
-0x1c, to unwind do the following operations". The first of which is
-to move r11 (fp) to the stack pointer. However, r11 isn't setup
-until function offset 0x24. You've hit that instruction, which hasn't
-executed yet, but the stack has been modified by pushing r0, r2-r4,
-fp and lr onto it.
-
-Given this, there is no way that the unwinder (as it currently stands)
-can do its job properly between 0x1c and 0x24.
-
-I don't think this is specifically caused by Ard's patches, but by
-the addition of KASAN, which has the effect of calling the unwinder
-at random points in the kernel (when an interrupt happens) and it's
-clear from the above that there are windows in the code where, if
-we attempt to unwind using the unwind information, we faill fail
-because the program state is not consistent with the unwind
-information.
-
-Ard's patch that changes:
-
-	ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
-
-to use get_kernel_nofault() should have the effect of protecting
-against the oops, but the side effect is that it is fundamentally not
-possible with the way these things are to unwind at these points -
-which means its not possible to get a stacktrace there.
-
-So, I don't think this is a "new" problem, but a weakness of using
-the unwinder to get a backtrace for KASAN.
-
-Do you have any way to work out exactly when this problem first
-appeared?
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+    Stefan

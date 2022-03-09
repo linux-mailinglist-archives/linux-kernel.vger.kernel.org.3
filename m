@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0224D3771
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516454D3575
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236182AbiCIRBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S236698AbiCIRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbiCIRAu (ORCPT
+        with ESMTP id S235812AbiCIRBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:00:50 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017D910242A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:47:50 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8CE7B3F62D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:47:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646844456;
-        bh=t5qKAKCgLHNfxioPnEDa1ge5OiEhv8KjWelueqMtl/A=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=G7udQNwdlDinVLi4lSkcaXkUxmniovasE/ECkS5s8BfpVoHxOIbT57dx69hRPYPwL
-         eMgXM4coGsl5N5MnQX2Hrfct+epBo4F1GVKlpnw3fZdW/OkbE2j7Ca2q/whBpX9ckp
-         I6FkxHn/2LTjHcg9pkjliN2BCoxjVb3KFLKAdfEFHdn2SAIiLvkxfFR7jUvAC2vEWM
-         34kGfDSUYOzHngURxXmp7F/u7S9hMPa4FNwcG+FdAjz2BJyRDalTN7ee3sCv4CKWk2
-         JTsDhnXvp1GY2AEeRqLWaPTAVZIBh1qANPfAROeWmOSGDXpqL4hNXnso/gA0yxgtu9
-         rddIdiDrb1+sQ==
-Received: by mail-ed1-f69.google.com with SMTP id o20-20020aa7dd54000000b00413bc19ad08so1594399edw.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+        Wed, 9 Mar 2022 12:01:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC4FB1052AF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646844461;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GtHZAmMaUYAx0LRBNry1Z8g5yS/lTA9TMVV6Zdqr9HI=;
+        b=BYfrRTalkZ7ByBaYceTjXgQMZ8rw5k4wRj7NlM4FQOrjeGqY9eTRUhlBjPvn+A89TpShO2
+        OtOC3QX8nXF6dzvFPF7aNxzGr3+fXj3/XSmFumX02tdMHzgJPQGe1EDmGuMDYOP6Nuc+zT
+        q97VgYpSiuPSEqYgdO5pz3pjA9Mfmi0=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274--FDnHRUINxOZlu-W9BcJUQ-1; Wed, 09 Mar 2022 11:47:39 -0500
+X-MC-Unique: -FDnHRUINxOZlu-W9BcJUQ-1
+Received: by mail-ej1-f69.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so1594057ejw.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:47:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=t5qKAKCgLHNfxioPnEDa1ge5OiEhv8KjWelueqMtl/A=;
-        b=r5zGAxSGWvjIP4ksaAZNvXEFmg/ip3igxcpdXM/15leVV8Ra/UxBPrXw9hiBjaJmZE
-         Zn8P4vxeIC4MundlFQ07MAoIn8ThjkyU8SPd0nTbj9MD9gPQlr2reru/G9FDTQgS3n7E
-         Zl9skaUe5wW+gcPLgjeuDYDF7zXGmPwbfkSBRNH9p9ikdm+ZWuUKxeORgLS6v/hPj9Gt
-         f3WqeHJ+ccwPeKEIcu3mC0JjtubeubNEI2MHWtTYA5soiVWrgHe7hPN8aWN7Jf65LnY2
-         i5TUv8ZCzsbQfrrqmXZFNnSiSC3S7UUegc3Leqe21cuhDsDtr7Y7F6GscMG9hrgekkQM
-         oVLg==
-X-Gm-Message-State: AOAM532odCalhtjkypxlbGtHCke111KM6vicbXyB+Sk6bmvcq0ntUMTJ
-        Ex7W3o2R7N+XjR5uPRPbO6uZdJQ0+qq/UiaEy7QRQRwdjZsfdGxBHGhZ3C8lfihDcAF53d3h7Jx
-        dBDDB67zsRWXXh8F16BaQX4YEOY2Fu0fohCcOlPhuNA==
-X-Received: by 2002:a05:6402:486:b0:413:bd00:4f3f with SMTP id k6-20020a056402048600b00413bd004f3fmr326523edv.103.1646844456274;
-        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwsZlug/Jtbf8IyQ3h7CW4SbOa236xZgNhxscDPorwlpm36emowHe5wTeYyk+ubVgN2NAc0dw==
-X-Received: by 2002:a05:6402:486:b0:413:bd00:4f3f with SMTP id k6-20020a056402048600b00413bd004f3fmr326496edv.103.1646844456025;
-        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm1062084edj.8.2022.03.09.08.47.35
+        bh=GtHZAmMaUYAx0LRBNry1Z8g5yS/lTA9TMVV6Zdqr9HI=;
+        b=SakN3tsyfF85tuaBhLLOFrn3E+bFbi8J1Yy6+wC5+K0eC5Q05cVRiVGAa0BoIJr7Zu
+         53M8SIeCbNhYhyiitDqPn54xJOJ7y1rG88CPRsl2rWQ1V91p42tjHY38Twq7p6akQUWW
+         88Ruzcmr3DFEH6xzRm4bZDygtxmuEAPLOlccZkcPETcST82VzYYp+Bji97ohDrxO0Vas
+         //6yPNdjSPT03BAesBG6hG6jkCni9iNPpzFNQMM25DPXdSMTTD9qCK/AHYxCYSTYQw96
+         o5EymtjYqEgzMC+ExAd/quqrgV/Ekb953q2F5P9RMcADfJ1mPxily4jXLxTJvmeZ1KI2
+         d26w==
+X-Gm-Message-State: AOAM533CAPcuFFgKMwSBV3iKwSGeWij9a6jk9jm/6UiLMv0kw5/jg3ut
+        oIbTCIxTVWrRhHwlFWc2h1RvgG6w992Ooi+H9GWvnK50Y+7NvAHc/C2xmk+3ZMG1a6HaErnqz75
+        y4ddoP0g3BxrjOaHIWSwyJgAT
+X-Received: by 2002:a17:907:60ca:b0:6da:8f25:7983 with SMTP id hv10-20020a17090760ca00b006da8f257983mr631820ejc.106.1646844457789;
+        Wed, 09 Mar 2022 08:47:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7W66bmqFbu8gYAU5N0gz7/+fCQJtGeEoAcf1WlMCvUxsd/Rx1EWoj8m+ZeeL+r81lz05NDA==
+X-Received: by 2002:a17:907:60ca:b0:6da:8f25:7983 with SMTP id hv10-20020a17090760ca00b006da8f257983mr631795ejc.106.1646844457559;
+        Wed, 09 Mar 2022 08:47:37 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm908648ejj.74.2022.03.09.08.47.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 08:47:35 -0800 (PST)
-Message-ID: <ba4c44bd-81d7-afd4-3a4a-6a1c6fec6692@canonical.com>
-Date:   Wed, 9 Mar 2022 17:47:34 +0100
+        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+Message-ID: <63493d06-0b6c-9993-2315-64033dd041d6@redhat.com>
+Date:   Wed, 9 Mar 2022 17:47:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to
- YAML bindings
+Subject: Re: [PATCH MANUALSEL 5.15] KVM: x86: Yield to IPI target vCPU only if
+ it is busy
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org,
-        Rob Herring <robh@kernel.org>
-References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
- <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Li RongQing <lirongqing@baidu.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, kvm@vger.kernel.org
+References: <20220309164632.137995-1-sashal@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220309164632.137995-1-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2022 16:15, Manivannan Sadhasivam wrote:
-> Convert Qualcomm cpufreq devicetree binding to YAML.
+On 3/9/22 17:46, Sasha Levin wrote:
+> From: Li RongQing <lirongqing@baidu.com>
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> [ Upstream commit 9ee83635d872812f3920209c606c6ea9e412ffcc ]
+> 
+> When sending a call-function IPI-many to vCPUs, yield to the
+> IPI target vCPU which is marked as preempted.
+> 
+> but when emulating HLT, an idling vCPU will be voluntarily
+> scheduled out and mark as preempted from the guest kernel
+> perspective. yielding to idle vCPU is pointless and increase
+> unnecessary vmexit, maybe miss the true preempted vCPU
+> 
+> so yield to IPI target vCPU only if vCPU is busy and preempted
+> 
+> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> Message-Id: <1644380201-29423-1-git-send-email-lirongqing@baidu.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
->  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 201 ++++++++++++++++++
->  2 files changed, 201 insertions(+), 172 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>   arch/x86/kernel/kvm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+> index b656456c3a94..49f19e572a25 100644
+> --- a/arch/x86/kernel/kvm.c
+> +++ b/arch/x86/kernel/kvm.c
+> @@ -565,7 +565,7 @@ static void kvm_smp_send_call_func_ipi(const struct cpumask *mask)
+>   
+>   	/* Make sure other vCPUs get a chance to run if they need to. */
+>   	for_each_cpu(cpu, mask) {
+> -		if (vcpu_is_preempted(cpu)) {
+> +		if (!idle_cpu(cpu) && vcpu_is_preempted(cpu)) {
+>   			kvm_hypercall1(KVM_HC_SCHED_YIELD, per_cpu(x86_cpu_to_apicid, cpu));
+>   			break;
+>   		}
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+NACK
 
-
-Best regards,
-Krzysztof

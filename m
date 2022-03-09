@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5744D29EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8795F4D29D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiCIH4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S230374AbiCIH4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiCIHzq (ORCPT
+        with ESMTP id S230189AbiCIHzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:55:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EC715F087;
-        Tue,  8 Mar 2022 23:54:48 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:54:45 -0000
+        Wed, 9 Mar 2022 02:55:51 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ACD163072;
+        Tue,  8 Mar 2022 23:54:49 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:54:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812486;
+        s=2020; t=1646812487;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H0H+nWZrEoL9C0Jbz7R9b4TStI1vVa7COc7hRaM/CoA=;
-        b=YmNGKnPc8O8WbVht8ain1JQZtrf6yLilyWdbsvBgERYcHs1YhkHaX/bj74PpsgCDrWUpSy
-        O2A74jTU4kmV1zsmxb33Wph8vYVKqq4GjZsHiSo3yy+/l8JWhTQzloGIXKM+T+Z4EJnf+r
-        PZOqju7vdY3Kuxoob77SX1KX2YwArmqbIGkNiOf94il6SOQKqeInE9aRbh0ciXIkGTan1I
-        xLG2SfZtp//UoamfxxFdE2OFYottURqin1qsfCy7zkm4mhyDVx2/VU+b3SNGkZEYhBNRDO
-        V+foqqkblYfyrlIE9/sHiztLMvpl3q130/IOzP8shB4DGv1NF6sHuVWE4h1D/w==
+        bh=NafiBD3z6QzC6vWSq0SQ+YQ2bdAauU7/CA9UA5/XyHE=;
+        b=DqkDnsuF3o/GNh0vkaMWORSDZSd8KGSBmu3M9ugQjbBnJ7KhH3KmiaPlOqv86WjUvwee/c
+        vWO0ZvEtL6BPcV6VV6x3b2TXLlVB0LNaPLyWKrYjmPGzV8hunzcy70fi/RPMBuemCoDN25
+        dCOFG+83cbl2hLrpUG2m4cb3rOojkQAS4kQbGVxFED0gMBvX61WD9WQN4okgqlzAVMXDgH
+        Q8J9r+j2z2DpXQFJzuEEoHZua6PavmoTykUJOXN4fVypx2poDQxW38UWzPBHhV+jG1VkOX
+        6vvodiMPl5o0C2qfFnEgcMDxU8zLu5zlaVXWKyai6J0iurpjbwIzDuuJQkh/Wg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812486;
+        s=2020e; t=1646812487;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H0H+nWZrEoL9C0Jbz7R9b4TStI1vVa7COc7hRaM/CoA=;
-        b=EpglWonjfPTsTh5flrB/PacpDyVSzuDSoTjki5Qg2pP7bFkiKXCDDrA7Vk5/49AaRqarlE
-        FLJ8Zbe2ltk6PCAg==
+        bh=NafiBD3z6QzC6vWSq0SQ+YQ2bdAauU7/CA9UA5/XyHE=;
+        b=ybkFIzWUzgdmKXRu6GjupCnFEzBKPBCmq4IU43nAjsoa/CSdlPj6ovauROSVubSN9vepMm
+        /w98zErNBvdu76AQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Rework ASM_REACHABLE
+Subject: [tip: x86/core] exit: Mark do_group_exit() __noreturn
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154319.410010807@infradead.org>
-References: <20220308154319.410010807@infradead.org>
+In-Reply-To: <20220308154319.351270711@infradead.org>
+References: <20220308154319.351270711@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681248582.16921.6244900075385887859.tip-bot2@tip-bot2>
+Message-ID: <164681248681.16921.8811229951116541293.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,114 +67,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     0d5b64134b49881d62029a1a9923c604507e973b
-Gitweb:        https://git.kernel.org/tip/0d5b64134b49881d62029a1a9923c604507e973b
+Commit-ID:     fb604370c4b1c1c17fa9c3f0d60bbe8c9494edd9
+Gitweb:        https://git.kernel.org/tip/fb604370c4b1c1c17fa9c3f0d60bbe8c9494edd9
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:49 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:48 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:37 +01:00
 
-objtool: Rework ASM_REACHABLE
+exit: Mark do_group_exit() __noreturn
 
-Currently ASM_REACHABLE only works for UD2 instructions; reorder
-things to also allow over-riding dead_end_function().
+vmlinux.o: warning: objtool: get_signal()+0x108: unreachable instruction
 
-To that end:
-
- - Mark INSN_BUG instructions in decode_instructions(), this saves
-   having to iterate all instructions yet again.
-
- - Have add_call_destinations() set insn->dead_end for
-   dead_end_function() calls.
-
- - Move add_dead_ends() *after* add_call_destinations() such that
-   ASM_REACHABLE can clear the ->dead_end mark.
-
- - have validate_branch() only check ->dead_end.
+0000 000000000007f930 <get_signal>:
+...
+0103    7fa33:  e8 00 00 00 00          call   7fa38 <get_signal+0x108> 7fa34: R_X86_64_PLT32   do_group_exit-0x4
+0108    7fa38:  41 8b 45 74             mov    0x74(%r13),%eax
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154319.410010807@infradead.org
+Link: https://lore.kernel.org/r/20220308154319.351270711@infradead.org
 ---
- tools/objtool/check.c | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+ include/linux/sched/task.h | 2 +-
+ kernel/exit.c              | 2 +-
+ tools/objtool/check.c      | 1 +
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index e84e54d..719c9a6 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -79,7 +79,7 @@ static inline void exit_thread(struct task_struct *tsk)
+ {
+ }
+ #endif
+-extern void do_group_exit(int);
++extern __noreturn void do_group_exit(int);
+ 
+ extern void exit_files(struct task_struct *);
+ extern void exit_itimers(struct signal_struct *);
+diff --git a/kernel/exit.c b/kernel/exit.c
+index b00a25b..b71f9df 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -906,7 +906,7 @@ SYSCALL_DEFINE1(exit, int, error_code)
+  * Take down every thread in the group.  This is called by fatal signals
+  * as well as by sys_exit_group (below).
+  */
+-void
++void __noreturn
+ do_group_exit(int exit_code)
+ {
+ 	struct signal_struct *sig = current->signal;
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 9896562..aee6246 100644
+index c3ddcec..9896562 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -394,6 +394,14 @@ static int decode_instructions(struct objtool_file *file)
- 			if (ret)
- 				goto err;
+@@ -181,6 +181,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"kunit_try_catch_throw",
+ 		"xen_start_kernel",
+ 		"cpu_bringup_and_idle",
++		"do_group_exit",
+ 		"stop_this_cpu",
+ 	};
  
-+			/*
-+			 * By default, "ud2" is a dead end unless otherwise
-+			 * annotated, because GCC 7 inserts it for certain
-+			 * divide-by-zero cases.
-+			 */
-+			if (insn->type == INSN_BUG)
-+				insn->dead_end = true;
-+
- 			hash_add(file->insn_hash, &insn->hash, sec_offset_hash(sec, insn->offset));
- 			list_add_tail(&insn->list, &file->insn_list);
- 			nr_insns++;
-@@ -523,14 +531,6 @@ static int add_dead_ends(struct objtool_file *file)
- 	struct instruction *insn;
- 
- 	/*
--	 * By default, "ud2" is a dead end unless otherwise annotated, because
--	 * GCC 7 inserts it for certain divide-by-zero cases.
--	 */
--	for_each_insn(file, insn)
--		if (insn->type == INSN_BUG)
--			insn->dead_end = true;
--
--	/*
- 	 * Check for manually annotated dead ends.
- 	 */
- 	sec = find_section_by_name(file->elf, ".rela.discard.unreachable");
-@@ -1113,6 +1113,9 @@ static void annotate_call_site(struct objtool_file *file,
- 		list_add_tail(&insn->call_node, &file->mcount_loc_list);
- 		return;
- 	}
-+
-+	if (!sibling && dead_end_function(file, sym))
-+		insn->dead_end = true;
- }
- 
- static void add_call_dest(struct objtool_file *file, struct instruction *insn,
-@@ -2088,10 +2091,6 @@ static int decode_sections(struct objtool_file *file)
- 	if (ret)
- 		return ret;
- 
--	ret = add_dead_ends(file);
--	if (ret)
--		return ret;
--
- 	add_ignores(file);
- 	add_uaccess_safe(file);
- 
-@@ -2130,6 +2129,14 @@ static int decode_sections(struct objtool_file *file)
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Must be after add_call_destinations() such that it can override
-+	 * dead_end_function() marks.
-+	 */
-+	ret = add_dead_ends(file);
-+	if (ret)
-+		return ret;
-+
- 	ret = add_jump_table_alts(file);
- 	if (ret)
- 		return ret;
-@@ -3137,7 +3144,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 				return 1;
- 			}
- 
--			if (dead_end_function(file, insn->call_dest))
-+			if (insn->dead_end)
- 				return 0;
- 
- 			break;

@@ -2,127 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56C64D3B3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1774D3B43
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbiCIUms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S237254AbiCIUnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbiCIUmq (ORCPT
+        with ESMTP id S236983AbiCIUnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:42:46 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2093.outbound.protection.outlook.com [40.107.237.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C3CFE4;
-        Wed,  9 Mar 2022 12:41:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ytvp7fDhlSfkKm2ldhlVX5WIPm0glqNPphzHPjTnXk5O/MjwPzetXrKd+TrdhhzSJ+9Y/FtAzsQh3+537eohi0u/4fkI8OTMVi4PrrS4Qy/4G4MoSSmtCbLreUu4CKOOzqwwLnDpnAqZA7uM9ldrIzLo3XzCR3I3kaT6CAl4Ogvpra9N0RY9cIlxrYOy4tdi7hqxHc7aJsxNArLVyo3KhVmJOA2FTAW0xgxhOV1w9N28nAsUpGobgp/46KuMDxNkW4MFf3URvyKIoprIEQBrsJ1Ypt7aOIIWQx5ZinA9I7CCtD+dqIb0QvLLAKHihhl9rho92u12pOHVOVAtvm6W1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tLxDW9snDK6GHihb3M29M0CTvggfn7vKV2FwmTYpt6A=;
- b=Lsy0IU1ijc479CzAEsi44OtDkB7n1a61arVyBWbjkHOctnqws4P9lQDFErxHTH6GTzam8FT+kRagW03DFjvdqWcBMBJbt36jbRt9SfJ/YpQQOvLxKIJTPpK34RpU3FT3Bu49OG65lIpr8uNx+Hqf6A+7KZ7Vu6/telotZ+knaJxbbuNPmPk4bbfiUNsu6/56OdOyos39PeEHxcjgfRGVjv9KvTYfhx2QnraKiEbSeLepxNjKEVQNCZoEZWPrTdi+lUFhi9U0EKp+9a0P4+CMPckbi8LjEpe//koveHz49Jtjs19SgKZz5+vHl/Tx3pdEvG8C62ZXtObzqAJTWHm67Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tLxDW9snDK6GHihb3M29M0CTvggfn7vKV2FwmTYpt6A=;
- b=AMi3FAThaYJnDtLp7XF2+1Dsu5WZF8tvvq+1ncDDBlrZUYAF69kn9l9m7hQlGsT11G8Pgvz9aLI2Od5BKPKTHm8DtRgOYtWMFhN4hn8qpabQS/oJWlqsTcnn/6FIhvsWUIJ3HdPk7zkb75XPlalz+uPKkNcGsf4iqwYzLgeACfQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- BN8PR01MB5364.prod.exchangelabs.com (2603:10b6:408:b6::31) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.20; Wed, 9 Mar 2022 20:41:43 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::181b:1522:26bc:c243]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::181b:1522:26bc:c243%4]) with mapi id 15.20.5038.017; Wed, 9 Mar 2022
- 20:41:42 +0000
-Date:   Wed, 9 Mar 2022 12:41:27 -0800 (PST)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-X-X-Sender: ikoskine@ubuntu200401
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        James Morse <james.morse@arm.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        patches@amperecomputing.com, scott@os.amperecomputing.com,
-        Darren Hart <darren@os.amperecomputing.com>
-Subject: Re: [PATCH v6 1/2] ACPI: tables: Add AGDI to the list of known table
- signatures
-In-Reply-To: <CAJZ5v0iY-pV-N7JhuAM4JM99tHVBVnCHj+JyJYpShS4cKA+q_w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2203091234060.4508@ubuntu200401>
-References: <20220309020750.65399-1-ilkka@os.amperecomputing.com> <20220309020750.65399-2-ilkka@os.amperecomputing.com> <CAJZ5v0iY-pV-N7JhuAM4JM99tHVBVnCHj+JyJYpShS4cKA+q_w@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-ClientProxiedBy: MWHPR22CA0014.namprd22.prod.outlook.com
- (2603:10b6:300:ef::24) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+        Wed, 9 Mar 2022 15:43:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB914972B3;
+        Wed,  9 Mar 2022 12:42:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A00F61A3E;
+        Wed,  9 Mar 2022 20:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8383EC36AE3;
+        Wed,  9 Mar 2022 20:42:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646858562;
+        bh=Sntq42ahBVZXgzPBFrt+wDsjyJ+Ih0DKF1/UyiP16JM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c7Bxwod8XcBD4QnecCFu2c8Tmk02WPX3ORtAC3zG831AHJPaXcMphjOqYysTdaYx2
+         ByCEMIAO4u9e20DGDMWej0NArecZARpthE8qmCCjPvDjkOf4mQ4FS6BIzXKMt61//9
+         +Ey8d//kzo34L0LXJtOwy9cS4xSpKQ76n9NI7lrwhccw9DcANguV6RQXpyA6JFwbN5
+         t3Vs1Hd0a/1IEyREyjgJryrAbbOjm91lSnJhlK/Hi7fPlJTEvDh218P/CVYyJMkavA
+         29QDLmGugESzpd3x5h+qUl7Cfl51GP2xRKX4+t6L0+wtYrh0xjV+9p9sR2/0QlSkHA
+         FQREs7Cp8zd+Q==
+Received: by mail-yb1-f179.google.com with SMTP id u61so6827916ybi.11;
+        Wed, 09 Mar 2022 12:42:42 -0800 (PST)
+X-Gm-Message-State: AOAM533DLPUqBfyn99SymlPCEZg+Kd5en4S3fCYpTBPKOkTaX0Y/gLnX
+        Tj9KWgkESSv+p+qk+l81ekwMkDL+pmHHPZgEFEw=
+X-Google-Smtp-Source: ABdhPJysdF5vuZAmfsHsL9o8l/IBRAJzjjd+dlQ7flGgWd5ZFFyeZdXTNCb87FNKHhKswJIyKRr1L81eibe+8NYOO9Q=
+X-Received: by 2002:a25:53c4:0:b0:628:a0de:b4d6 with SMTP id
+ h187-20020a2553c4000000b00628a0deb4d6mr1308534ybb.299.1646858561392; Wed, 09
+ Mar 2022 12:42:41 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5177960e-c80d-40fc-29d7-08da020d3822
-X-MS-TrafficTypeDiagnostic: BN8PR01MB5364:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR01MB53648982F4682D653143B8019D0A9@BN8PR01MB5364.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LXqLLZiFtBH1Zv509n65AkiyJVOKwImnjsX08S8bfunTYe5iUW7E1dUAWaE98qWiRGquwEyf01ZZXv8UsqMZ3WF0C/UW1jolY+0VFxpGR/l8bKb1KkixuFDngXh6q5A2klIBUS3GgM5rh9f6sh8z6K7CRbAELobACsUGrobSp07oJaEutfg7O4uuiQ9TA2YB4U79Njn6rY9COqjk+povB57S7nAtKZXvcefyxpkldHbXWCUVzoUcq5GYyiZG8LwWvn7BFwd89Ly5NZMBUUIHeTg6HzEm9h6tLuIKbuTeWu4XOSbaT/VpOugZx32w2o5b5jYLFHgtY15W6xZSlamKqsbXke0UhQQNjl3xjHMCSOnZ3ZHiPN3yQ3lhBR13wmbz+bwyyEU8ke/tW8GdFbNAZXMVIynP8vb5xZlnBK4J7IQb2k8VvD4HBSPqh6b4RTt7eR2x7ywGHcKlilnlUVxo62rzmt+qDbjk/DaJWi3yb9l3w8SMB+SrrFHP9d/B8lKOxzKpa2kVI5Ad/2xA1Rbml4p9Zpz9lEdYbRSzFJsowh5q6V9afSgW2qHlA386Q62wLWyDYxH6HeJpbUW4WKZrAKrZxBMl2nzMlYCUXsk5qEImpxnjsxzxFfYKPzA8hLwd0vHJqkgM2+prNkBicpmCGjldWAFlDMpB3d16owUikbbmxQuxh0/TuGFAamXO3Clwh1cVGFwGxd+BkYTMNEXcQQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(26005)(186003)(6512007)(8936002)(6916009)(86362001)(66556008)(66946007)(4326008)(316002)(66476007)(8676002)(107886003)(38100700002)(38350700002)(2906002)(33716001)(83380400001)(5660300002)(7416002)(6666004)(53546011)(52116002)(508600001)(6486002)(6506007)(9686003)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sugialWtELGTXDcDkZSCajUeF6NgA6LPYYQKsTtFqxnJp0IAfViz+MosZouP?=
- =?us-ascii?Q?gaf9yQwRpUt6TmOAWypPzVNfUzWxgCUNxgcAws7G73ZziH3fdgIpmVbtO4Sn?=
- =?us-ascii?Q?qT23fuzSixcxHc9nyzHK76lYgxAGjMzBhpErmSE2OusbGH0vAqlXMi3MwCyb?=
- =?us-ascii?Q?pnzBzgQRx8d218NKusLTwbENNHcOnzNvTCSUtbNf6MnzjLxwtD0D8fBLi4Ox?=
- =?us-ascii?Q?3oFYSEGWNIvKl5cTohjSB/5pZGn/a7fhgDwqz8lwxjwLDmJIBbw+KH6XPnPK?=
- =?us-ascii?Q?qnWp0+FIxJYB9TyNje6iIGMo/xXqt3MnejuvHQMK+gmJikln5acfHEhBKH7p?=
- =?us-ascii?Q?2g58g8LjPm0dAF6AUbGFByzzxVndxbMFoa71SE0pbc/VbZjrM6tXWEJtbE+W?=
- =?us-ascii?Q?0iursclG58+9KJD0gl3xLRNTtSTXNnoIK0Tte4gzLoUQA93+tjkJN8aoHO9q?=
- =?us-ascii?Q?kJuRJNpLUCVTdoNRN+TD/v4HaMzJRzAOWYRLdYuISBi3SqiHEoO6jbh2AgmR?=
- =?us-ascii?Q?xeKc5/B3kekmghH3DM/jJBh3+Nd7p+qQ3cWvlc+YFwAdCm/R1KhBt2C25sqg?=
- =?us-ascii?Q?/IxoU3/sDC3kdGP86dsaEriPl46L8pdfAr5yuDplcRSys8o0FIGvRjsyBknh?=
- =?us-ascii?Q?dJMiKp7qF81pcTRFEWeAyO4L0jzgjrgIbJYjub21eE67QPOiba+DggPp1/jY?=
- =?us-ascii?Q?SWGbqbwVjPAAPwRZCIsdRqIDyfo7V3imsRe2z27tOfHqaz5+R3SaSsivkpiR?=
- =?us-ascii?Q?CZycP8AwyEHC0OcRl8A88T9xpjWuX/mlaNNqnwsFG9hC5HzPP1tndh4W+iNC?=
- =?us-ascii?Q?0ic8mRHFNJ/7IMlI/NC+L9GuRalcx5IezM6Cq1dDc+cdbDMRXWkduMrDRfJM?=
- =?us-ascii?Q?NQ2xMxYhcvevG1W1A2gm98cpdKSfJHgLSyLSqzeS/MddX3XAc2+I1P8tgqul?=
- =?us-ascii?Q?L+25+AsfNFyQhBDwocOHelhKGL2NE4uKmKuq+krxfKDb4x3N/NM9Y/FpNa2y?=
- =?us-ascii?Q?1veFk/HblQ5HOkXAyB/cwYv+jGCqTDIFuEasAI8l6z+csyYyuQ9Sw4xi9Im0?=
- =?us-ascii?Q?HPHu5I8ERKTLs80vDXlJhwlQzi/C/a7UIv+1CE+xvtPyO2kiL2ydQmQciAY9?=
- =?us-ascii?Q?botP/2YwWW1EiAOh43q69a9EKwh6kC0VL/Ymo8VBn01iAZT/xGzUpiQDOOW/?=
- =?us-ascii?Q?c4OI3tkFb/3heOCFf5O4di1lCI4xJn1XTlLc9JMXx846xpENUpSjtqtITyEu?=
- =?us-ascii?Q?P2r2dGktNwShuP49lU9VKkjnps8XGLzt/JBAdswi3rKIabT8aMfvHbeAljMv?=
- =?us-ascii?Q?uKwusP7x41yKG6wp0Y/qM5o4k2B8XNWLayjxt22ucHPdJ+V4dJFC69t91OlH?=
- =?us-ascii?Q?B4GFPKQ8WCt1igmhdWSt8r85ngl+Pdg8suNUqnzKJJipGPGUt+v8xIazn2TA?=
- =?us-ascii?Q?Pe79fwDdQIYzRD8dO5ESBZZElgUrpvWyVxn4K9LEQE37vKEG5vLGiQIol7vm?=
- =?us-ascii?Q?fQdgiS2tiTZapNOY62mCUE40DJW36Q4pIvOHJuz09wkumoAir5fqCjJ62k5y?=
- =?us-ascii?Q?0VGGrQFicoQrvF0fZZzTsNOuZM89tu4z8ejirBDQYCb9WqNqVGioeBR2b7LJ?=
- =?us-ascii?Q?8PTJEzrwb9m5t45TQwujOGwYRDjYEpnJuHHrRsRl9l76O8GgnettDhqW/VKP?=
- =?us-ascii?Q?fkMNr8EUHqLfqhNjbzqLVBiraXyhjGK7DjM2oDqdFFvuj0q1AnQB/DfFbSdp?=
- =?us-ascii?Q?Ih+U7B0Hnw=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5177960e-c80d-40fc-29d7-08da020d3822
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 20:41:42.8752
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 12kGR14icNxWg51KS39POHTo/nS/MGQR2u+FDIUWAyXRsBbCBfPCmuUQjDWdMRz9x7i+LUt6Ah3jy24upP2iu1CvShC/zC9tESJbg6bwaJMeTqBeMH7JGtnbUDFxJh0m
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR01MB5364
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk> <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+ <YijfzAhWAgfGGqCO@shell.armlinux.org.uk> <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+ <Yij2cZVKwPexGsTf@shell.armlinux.org.uk> <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
+ <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
+In-Reply-To: <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 9 Mar 2022 21:42:29 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+Message-ID: <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,41 +75,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Rafael,
-
-On Wed, 9 Mar 2022, Rafael J. Wysocki wrote:
-> On Wed, Mar 9, 2022 at 3:08 AM Ilkka Koskinen
-> <ilkka@os.amperecomputing.com> wrote:
->>
->> Add AGDI to the list of known ACPI table signatures to allow the
->> kernel to recognize it when upgrading tables via initrd.
->>
->> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
->> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->> ---
->>  drivers/acpi/tables.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
->> index 369eb998c3d1..ceee808f7f2a 100644
->> --- a/drivers/acpi/tables.c
->> +++ b/drivers/acpi/tables.c
->> @@ -545,7 +545,7 @@ static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
->>         ACPI_SIG_WDDT, ACPI_SIG_WDRT, ACPI_SIG_DSDT, ACPI_SIG_FADT,
->>         ACPI_SIG_PSDT, ACPI_SIG_RSDT, ACPI_SIG_XSDT, ACPI_SIG_SSDT,
->>         ACPI_SIG_IORT, ACPI_SIG_NFIT, ACPI_SIG_HMAT, ACPI_SIG_PPTT,
->> -       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT };
->> +       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI };
->>
->>  #define ACPI_HEADER_SIZE sizeof(struct acpi_table_header)
+On Wed, 9 Mar 2022 at 20:39, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 >
-> I'm noticing that this depends on the linux-next-only commit
-> 783dedf41b79ac7a3a68b51cf6f88cbfd6dc3292, so it is probably better if
-> I apply it and the other patch in the series can be routed via ARM64.
+> On Wed, Mar 09, 2022 at 08:14:30PM +0100, Ard Biesheuvel wrote:
+> > On Wed, 9 Mar 2022 at 19:48, Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > >
+> > > On Wed, Mar 09, 2022 at 06:43:42PM +0100, Ard Biesheuvel wrote:
+> > > > On Wed, 9 Mar 2022 at 18:11, Russell King (Oracle)
+> > > > <linux@armlinux.org.uk> wrote:
+> > > > >
+> > > > > On Wed, Mar 09, 2022 at 10:08:25PM +0530, Naresh Kamboju wrote:
+> > > > > > Hi Russell,
+> > > > > >
+> > > > > > On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
+> > > > > > <linux@armlinux.org.uk> wrote:
+> > > > > > >
+> > > > > > > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> > > > > > > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > > > > > > >
+> > > > > > <trim>
+> > > > > > > Well, we unwound until:
+> > > > > > >
+> > > > > > >  __irq_svc from migrate_disable+0x0/0x70
+> > > > > > >
+> > > > > > > and then crashed - and the key thing there is that we're at the start
+> > > > > > > of migrate_disable() when we took an interrupt.
+> > > > > > >
+> > > > > > > For some reason, this triggers an access to address 0x10, which faults.
+> > > > > > > We then try unwinding again, and successfully unwind all the way back
+> > > > > > > to the same point (the line above) which then causes the unwinder to
+> > > > > > > again access address 0x10, and the cycle repeats with the stack
+> > > > > > > growing bigger and bigger.
+> > > > > > >
+> > > > > > > I'd suggest also testing without the revert but with my patch.
+> > > > > >
+> > > > > > I have tested your patch on top of linux next-20220309 and still see kernel
+> > > > > > crash as below [1]. build link [2].
+> > > > > >
+> > > > > > [   26.812060] 8<--- cut here ---
+> > > > > > [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+> > > > > > [   26.816139] [b6a3ab70] *pgd=fb28a835
+> > > > > > [   26.817770] Internal error: : 1b [#1] SMP ARM
+> > > > > > [   26.819636] Modules linked in:
+> > > > > > [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+> > > > > > 5.17.0-rc7-next-20220309 #1
+> > > > > > [   26.824519] Hardware name: Generic DT based system
+> > > > > > [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+> > > > > > [   26.829856] LR is at unwind_frame+0x7dc/0xab4
+> > > > > >
+> > > > > > - Naresh
+> > > > > >
+> > > > > > [1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
+> > > > > > [2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/
+> > > > >
+> > > > > I think the problem has just moved:
+> > > > >
+> > > > > [   27.113085]  __irq_svc from __copy_to_user_std+0x24/0x378
+> > > > >
+> > > > > The code at the start of __copy_to_user_std is:
+> > > > >
+> > > > >    0:   e3a034bf        mov     r3, #-1090519040        ; 0xbf000000
+> > > > >    4:   e243c001        sub     ip, r3, #1
+> > > > >    8:   e05cc000        subs    ip, ip, r0
+> > > > >    c:   228cc001        addcs   ip, ip, #1
+> > > > >   10:   205cc002        subscs  ip, ip, r2
+> > > > >   14:   33a00000        movcc   r0, #0
+> > > > >   18:   e320f014        csdb
+> > > > >   1c:   e3a03000        mov     r3, #0
+> > > > >   20:   e92d481d        push    {r0, r2, r3, r4, fp, lr}
+> > > > >   24:   e1a0b00d        mov     fp, sp
+> > > > >
+> > > > > and the unwind information will be:
+> > > > >
+> > > > > 0xc056f14c <arm_copy_to_user+0x1c>: @0xc0b89b84
+> > > > >   Compact model index: 1
+> > > > >   0x9b      vsp = r11
+> > > > >   0xb1 0x0d pop {r0, r2, r3}
+> > > > >   0x84 0x81 pop {r4, r11, r14}
+> > > > >   0xb0      finish
+> > > > >
+> > > > > The problem is that the unwind information says "starting at offset
+> > > > > 0x1c, to unwind do the following operations". The first of which is
+> > > > > to move r11 (fp) to the stack pointer. However, r11 isn't setup
+> > > > > until function offset 0x24. You've hit that instruction, which hasn't
+> > > > > executed yet, but the stack has been modified by pushing r0, r2-r4,
+> > > > > fp and lr onto it.
+> > > > >
+> > > > > Given this, there is no way that the unwinder (as it currently stands)
+> > > > > can do its job properly between 0x1c and 0x24.
+> > > > >
+> > > > > I don't think this is specifically caused by Ard's patches, but by
+> > > > > the addition of KASAN, which has the effect of calling the unwinder
+> > > > > at random points in the kernel (when an interrupt happens) and it's
+> > > > > clear from the above that there are windows in the code where, if
+> > > > > we attempt to unwind using the unwind information, we faill fail
+> > > > > because the program state is not consistent with the unwind
+> > > > > information.
+> > > > >
+> > > > > Ard's patch that changes:
+> > > > >
+> > > > >         ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
+> > > > >
+> > > > > to use get_kernel_nofault() should have the effect of protecting
+> > > > > against the oops, but the side effect is that it is fundamentally not
+> > > > > possible with the way these things are to unwind at these points -
+> > > > > which means its not possible to get a stacktrace there.
+> > > > >
+> > > > > So, I don't think this is a "new" problem, but a weakness of using
+> > > > > the unwinder to get a backtrace for KASAN.
+> > > > >
+> > > >
+> > > > It essentially means that we cannot unwind through asynchronous
+> > > > exceptions, and so we should probably make the svc_entry macro
+> > > > .nounwind, instead of pretending that we can reliably unwind through
+> > > > it.
+> > >
+> > > Doesn't that impact the ability to debug the kernel over things like
+> > > oopses and the like?
+> > >
+> >
+> > The backtrace dumped by __die() uses the pt_regs from the exception
+> > context as the starting point, so the exception entry code that deals
+> > with the condition that triggered the oops is omitted, and does not
+> > have to be unwound.
+>
+> That is true, but that's not really the case I was thinking about.
+> I was thinking more about cases such as RCU stalls, soft lockups,
+> etc.
+>
+> For example:
+>
+> https://www.linuxquestions.org/questions/linux-kernel-70/kenel-v4-4-60-panic-in-igmp6_send-and-and-__neigh_create-4175704721/
+>
+> In that stack trace, the interesting bits are not the beginning of
+> the stack trace down to __irq_svc, but everything beyond __irq_svc,
+> since the lockup is probably caused by being stuck in
+> _raw_write_lock_bh().
+>
+> It's these situations that we will totally destroy debuggability for,
+> and the only way around that would be to force frame pointers and
+> ARM builds (not Thumb-2 as that requires the unwinder... which means
+> a Thumb-2 kernel soft lockup would be undebuggable.
+>
 
-Sounds good to me, thanks. The other patch needs commit dc4e8c07e9e2 
-("ACPI: APEI: explicit init of HEST and GHES in apci_init()") in your 
-bleeding edge branch to work but it hasn't been acked yet anyway.
+Indeed.
 
-Cheers, Ilkka
+But that means that the only other choice we have is to retain the
+imprecise nature of the current solution (which usually works fine
+btw), and simply deal with the faulting double dereference of vsp in
+the unwinder code. We simply don't know whether the exception was
+taken at a point where the stack frame is consistent with the unwind
+data.

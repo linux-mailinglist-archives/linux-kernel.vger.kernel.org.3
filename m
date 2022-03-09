@@ -2,86 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D4B4D3CE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6222E4D3CEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238476AbiCIW12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S238618AbiCIW3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbiCIW1X (ORCPT
+        with ESMTP id S234651AbiCIW3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:27:23 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614D8120F71
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:26:24 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id m22so3618395pja.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DnX4yE0wKRLAa2OnqOmK7GeRT23OmcuMA/YZwxy1i9o=;
-        b=Smajq1CdD1HPTSBKN3ajcNxuxHraSrmHZWGlTUKbIR7BFC8ecygKqsMt4vpoIkRd3q
-         v0MiTh50GCZdBElwHeEJM1fvdzusGIkH8xwXUv1hNoRUSWwnqIm9f/QYxHNWaqGfCrFh
-         6IrjUU2PowLSge+VWLOu9vhmFMMOK0ly1zpw4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DnX4yE0wKRLAa2OnqOmK7GeRT23OmcuMA/YZwxy1i9o=;
-        b=sVhIHPCdoFWM+WCJTKuv+vNt7hbb/xilgqVF1w4yJeAM76/PSm9ktcW4uy5BS3NRk7
-         +22X7CVuOg58k+6cFVNF26oCYpLvVfGYbZK9lJd7+MAf/wfisvM3+inhruyxm791DeYt
-         Ye6cfcm8i6zFscdGs6+Iod8Zfs4PWvfepuF+fvY5EKL6otB7fSXlFJaP2EVLIyBqaU+B
-         mmeVXWgbGGxckmFHh53Vuu2jZyQuigpQTrlTJrk3e1ShS4JTrULJrVQnWvnwt/zlVNrR
-         dSUwMZbF+fURHyPl0Ox+u0wd3nfY7Q3XTH8cCzg1HPOEUrGZHg4vt1vUaTwaUvKUJDi3
-         HQ8Q==
-X-Gm-Message-State: AOAM530c1Dcy+PiZEkq7UqsE8JgPA9AiplvuiuNhMI+lZ64tujadIwDY
-        nuc9TzooQ2JuaoWrYIYs4yxDCA==
-X-Google-Smtp-Source: ABdhPJzCcyacsQwJ64Jx4lBOECbPAiTDPJg1GvRkCsR6ZSF3r6rOSjrFo1b0pt2cBK/RzUWmSMRrEA==
-X-Received: by 2002:a17:902:c14d:b0:151:dfb1:a1b4 with SMTP id 13-20020a170902c14d00b00151dfb1a1b4mr1875894plj.132.1646864783889;
-        Wed, 09 Mar 2022 14:26:23 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o66-20020a17090a0a4800b001bf388fc96esm3601627pjo.21.2022.03.09.14.26.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 14:26:23 -0800 (PST)
-Date:   Wed, 9 Mar 2022 14:26:22 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org,
+        Wed, 9 Mar 2022 17:29:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498AD8EB5A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:28:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646864884;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YVaegIYPMNuliKEZs1hQ0iCOAz5kKxaMcLvAsoa4pRE=;
+        b=JG/j/SvptyO+bq6Na9b4tpgok9hrCjqPoQrhPpEa/vshn++pI/x/djWKO8AGYxCNLDGeiz
+        GIAO4ENEjT3vGjXz3+ohf/b6JllMmayMWrek1ampeAVXNuwHIaRGS5sRCF2g/9OiDlCq24
+        fBePSxfvMbGOyyV8J2iv+v/WZ41Uy+g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-dFWyF8bnPDmAjCcY4C1Buw-1; Wed, 09 Mar 2022 17:28:01 -0500
+X-MC-Unique: dFWyF8bnPDmAjCcY4C1Buw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74E6D1854E21;
+        Wed,  9 Mar 2022 22:27:59 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CB20E4E2AE;
+        Wed,  9 Mar 2022 22:27:52 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2ebfd2f772ceef605896e58bbd0e733e1413ff71.camel@kernel.org>
+References: <2ebfd2f772ceef605896e58bbd0e733e1413ff71.camel@kernel.org> <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk> <164678219305.1200972.6459431995188365134.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 03/13] ptrace: Create ptrace_report_syscall_{entry,exit}
- in ptrace.h
-Message-ID: <202203091426.04DF0C97@keescook>
-References: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
- <20220309162454.123006-3-ebiederm@xmission.com>
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 18/19] netfs: Keep track of the actual remote file size
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309162454.123006-3-ebiederm@xmission.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1841544.1646864871.1@warthog.procyon.org.uk>
+Date:   Wed, 09 Mar 2022 22:27:51 +0000
+Message-ID: <1841545.1646864871@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 10:24:44AM -0600, Eric W. Biederman wrote:
-> Rename tracehook_report_syscall_{entry,exit} to
-> ptrace_report_syscall_{entry,exit} and place them in ptrace.h
-> 
-> There is no longer any generic tracehook infractructure so make
-> these ptrace specific functions ptrace specific.
-> 
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Jeff Layton <jlayton@kernel.org> wrote:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> This seems like something useful, but I wonder if it'll need some sort
+> of serialization vs. concurrent updates.
 
--- 
-Kees Cook
+Quite possibly, though that may be something that we have to delegate to the
+network filesystem.  kafs, for instance, performs local serialisation of
+StoreData RPCs to any given inode because the server will exclusively lock the
+remote vnode around the write-to-disk and callback break (ie. change
+notification) phases.  This does not preclude, however, another client making
+a change whilst the local lock is held.  Of course, in such a case, we're into
+conflict resolution and may end up invalidating the local copy.
+
+> Can we assume that netfs itself will never call netfs_resize_file?
+
+Probably.  Depends on how truncation gets handled.
+
+> Ceph already has some pretty complicated size tracking, since it can get
+> async notifications of size changes from the MDS. We'll have to consider
+> how to integrate this with what it does. Probably this will replace one
+> (or more?) of its fields.
+
+ceph's i_reported_size maybe?  cifs has server_eof.
+
+> We may need to offer up some guidance wrt locking.
+
+i_lock may be a good fit.  I wonder if it's worth at some point moving i_lock
+to being a seqlock so that various values ordinarily protected by it are
+accessible using read_seqbegin().
+
+David
+

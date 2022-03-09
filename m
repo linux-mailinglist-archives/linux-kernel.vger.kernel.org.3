@@ -2,580 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386044D2A40
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E624D2A3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiCIICM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S230461AbiCIIB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiCIICA (ORCPT
+        with ESMTP id S230399AbiCIIBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:02:00 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C1414CC90;
-        Wed,  9 Mar 2022 00:00:49 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22980RLL010730;
-        Wed, 9 Mar 2022 02:00:27 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1646812827;
-        bh=nfHDdSN/CiPwFxUEu5dVbm9FyXahN4H18CrgEGxtWYk=;
-        h=From:To:CC:Subject:Date;
-        b=xbx14C2xvkzNNVznAOuOKdKpbUxJifMVGMioPRiKNo8r9W9l3cwfRkcS8W9VBqKsb
-         yHq8H4ZxcA4Yhc+zZIGM22V31eh6tx7TwO7ydv52hT3HsAs+UBQoiHdjAhdJXGjGqP
-         FYamldQJqVu8psmfvjjD0Bmdo5AG61O6O6ws9IjE=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22980RPS101827
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Mar 2022 02:00:27 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
- Mar 2022 02:00:26 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 9 Mar 2022 02:00:26 -0600
-Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22980LAQ048040;
-        Wed, 9 Mar 2022 02:00:23 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <linux@armlinux.org.uk>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-Subject: [PATCH v2] net: ethernet: ti: am65-cpsw: Convert to PHYLINK
-Date:   Wed, 9 Mar 2022 13:29:44 +0530
-Message-ID: <20220309075944.32166-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 9 Mar 2022 03:01:50 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833BF163D6F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:00:34 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2297tM2R028049;
+        Wed, 9 Mar 2022 08:00:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=P0ktE61VoGxgpYD5X3c5d4qETd9drb9/Yh4xrShg6l8=;
+ b=WaBE8W38TR72odUoermo8z02DB8QifPiHHIYxKWSPQocBhylyvwLr2oZzPGGmzQvsR+f
+ ZRGjSOA9OXEgoWULRyRP4aOQGoJUQpbHdS4YROl8KKXfPIniOWfBaAzjRpMbU2dzetfM
+ Jf8GOWpufe7mUxteoMt6oOLoYsnd8vl8+phqSUa1YRA93B7jonVzxfWYj5rpHDE0xzHP
+ H/hqWlanJhBhQj0cOqvF0MxAFfV7P6Ubq+lpVFWacgpgsTbxLJrV3mUslEDEWSeM14iP
+ /O400xjfilF0FpiTZBwkn4fiWfRw+0ORD306MZezlOive53G2tzzdNA+M9vD7k5dDZYc zA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxn2hcmp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 08:00:13 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2297pvWZ010163;
+        Wed, 9 Mar 2022 08:00:12 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2043.outbound.protection.outlook.com [104.47.57.43])
+        by userp3020.oracle.com with ESMTP id 3envvm9spd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 08:00:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bYMCDfnzv7igoM+dS82etyOB7w6xiYzx+oDs0WxYnPc0rMIOZYyvBkNJ4Lysi4cfpRmbpC2miqSpAQV4YpDK+X0oeecpqi6V9+dYHOOyuGOsGCR5oCNKxCqTeQT+wu3lO7weKQaAsN4AGG8Io9YFoXh5+CtuJm/FnyCpQtkJhYj+orAQ4BIqKL/AQRo0lQA3vIxgrs2MYL4g2cg3bZKjTdNGGW/+DbDBNJBXgsBP+FBoRI2zlhHy4mVNa83SnkBrI0B4LLkrTGjXByGSOXgQshm89/qSK3tW6pE51wSN/T+sWEpztpKoKX4RJzziOyBercbI3zArtPa2iLmitcTAAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P0ktE61VoGxgpYD5X3c5d4qETd9drb9/Yh4xrShg6l8=;
+ b=YxceyJadEw69CSImNu86mP1WyS8g5sJXYWCXkFf88Emh31Dqdd/olZ4DOGCzl7hyO238UHUsFq8NxEs1+n3L8PcM7qzlhg/Ce34qHmidTu2N4Tllv8zbgviktPgQOWLP7ptPnl5xxkqxJmJA6LtTHfBEPTh206X+qqypexuDVSoSW4yMzvvvwhV4jTI1fXAxd1YUTj6N2Q6cgm8SWFs9SFW4nnfbqk7XU6ARGHgvk0+hbqwp4xNp66Ex0MBa6IHs3WzbK+WLNyFX/s5SW05se07DLpASKzVKE4LxvR+9Cgl1bKb3hIwsjhJF/DsVWi5xm2RPf0dNytYCUk0+530ZfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P0ktE61VoGxgpYD5X3c5d4qETd9drb9/Yh4xrShg6l8=;
+ b=LbZg6oyWnBCz0b65lokVauaBnuR4ZDA3jgdKjpFKCF3MC5pSrGUdgFZL9Wcmge+YkSszVuoslfRlcZxReU26KaKXOqlt5SbEE6qNKEnL/tn0ibO/3U92Txy2zOXmEhoUTU7KK/NmwzqenbwxoxwZTqwteX4kxWsrv9sgP2B6SYQ=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BN6PR10MB1588.namprd10.prod.outlook.com
+ (2603:10b6:404:3d::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
+ 2022 08:00:09 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.5038.026; Wed, 9 Mar 2022
+ 08:00:09 +0000
+Date:   Wed, 9 Mar 2022 10:59:51 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Vihas Makwana <makvihas@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] staging: r8188eu: call _cancel_timer_ex from
+ _rtw_free_recv_priv
+Message-ID: <20220309075951.GQ3315@kadam>
+References: <20220308205510.48431-1-makvihas@gmail.com>
+ <20220308205510.48431-2-makvihas@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308205510.48431-2-makvihas@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0024.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::36)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 22ea3610-3101-44b0-0d47-08da01a2d4b4
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1588:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR10MB15882A5ECE1BDCA8DAC0A2D18E0A9@BN6PR10MB1588.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V8io/c+KkNJ8y8XTqDdGJ4xrr93vsGNX9NYW7p4cCeQmvnE95edi3xPiDNTmnp2YepGGNlThqCMnjX61qwfZK+gJUR5dIQARKNmth2gcZBQDKCbXWC3wJQfxEBdSVP83zl95e4BtvcX0w//lFhmKtim6MQKCHjnOte/ovIgZF57nSsH1GvmSLy4O/8CyAroienuzi7onieauYLVQIsvp92ukNfj+tfpXHu68uE4bQmCgyErwIecET/vVKT3Vv7GVSvpz8GIfD1PVhYyY+xUjMnNgJcRWSBQ1IyJveUScLUUoZgCoeVtQ4IBNy0fV6YIolYwCk7KoYCCoeFXCSkKGLp6apFOuUs66DRMAi2k2yAOruZPJLFYEo8ggj7zz5S3eXW//iWK0a4WjK3eY+SauBCiqMy+PbUgmTUm0au9ozM3bhXSwLP4dMz60WpyIGsRK1p6FKFyE2ZVoXSsbDmEyxc5e0NXNJ/gtDlNJlvzLMp8iWU5euXAmHzLkxYYDLtajgcN5LwYAs/PG29hkAh4AoJtOmJukts2qZqtcDX9UaXZOVYKbThOElIyuhP36iu69nSqGXxOFnf9itpCwp7uIbi/Y15tN1fLiYnY3MvlxJjOAZUBxhVvLcbc/vlsQ6439bpqW1FegWhIoYvwjEYQprecvIe8gC/ksixAdMvsIpuIvMPMGr0G789B1f59HXtYmuo175sT1qedaXpm1sTfnmg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(52116002)(508600001)(186003)(26005)(316002)(6512007)(9686003)(6486002)(1076003)(6506007)(6666004)(2906002)(66476007)(66556008)(5660300002)(8676002)(4326008)(38100700002)(66946007)(38350700002)(33656002)(44832011)(33716001)(6916009)(8936002)(86362001)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7ouUCuDc8wdTV4rGQ6JwN8NTQpvjOCg86KcgZWw0YaKNujQcTM6hle3qeFVs?=
+ =?us-ascii?Q?DgCum3eo7DtI00pJPN9qIdNHiDjipqM4z2pm+uYlqpH8c9nquk7x45Ee1x0S?=
+ =?us-ascii?Q?PlHRaItTGDxHFJzl+b766cyc0ruJZKYhwTDZ4tXgRAEqY0GZS4x+Ec4HSkjt?=
+ =?us-ascii?Q?m36MYLBvjL5atiCHc3Aslp8wfDopq3FktPWgXnuwh2SbjH17WYW3jogkP02D?=
+ =?us-ascii?Q?RMD4G8mku4zT9h3+U6V9FuBC4beiiBCivB9uNIAqESU8ZITcN5PkdMyyECq8?=
+ =?us-ascii?Q?EkOb6cGSSQ8UbIKHW9so9bl2woCE+rvWvWY/dg9zLHRHYom15V1gAkAge68h?=
+ =?us-ascii?Q?jxVvV82yFPWM3YbdmVOGbTWsQ675s2mhzG/a2Ga8qrra+LMJMHMTe616H4E3?=
+ =?us-ascii?Q?fuCNkiaXJoNrwHVBcLqO+JyhEk2nvlh0SIb2FYAq0YI7CveO1bPrX2lhgMva?=
+ =?us-ascii?Q?8QOu5o4zDAGXdGD5/BK3x1vRFlxbNeucCZCzmpLhp0PmRMYXrKaaACyYUAWT?=
+ =?us-ascii?Q?Fq/z0HEgeDjZ7zPoIs/S+fKxamfkrMDOS3XalAoKNhZSAzWW8Db0HJJPtAU6?=
+ =?us-ascii?Q?Hg7lKvu/ViICXZYauRm+DwWlMzryA2phJW8Uk0jktTD1VmuolVzjmamXL/he?=
+ =?us-ascii?Q?Hjig4lI0Fatw1eHJeLd447/w9Sl16ENY8hYnbtKl0oV97lu2VEoLGct97Xbt?=
+ =?us-ascii?Q?OmJgA9wNsVYexrm+5rs7+tk6DWF7rwk4ULce9CFBMvxOZm/Sgq7kRgUTg3XF?=
+ =?us-ascii?Q?oLck2G92PSYJr/rWT7SZM8Tlzm7A+3KBe5EngG938uFmq2qkmB8whXrurH4A?=
+ =?us-ascii?Q?0yOrVPZG0w8lRZbqv9adN0A03L6moVDNMFzB7crD0ZTFvt4BnL7w/KENI2dJ?=
+ =?us-ascii?Q?qjs1CDmuY+o2C3J0WxI6/ymBAproD/xxG016e5/ABm8PdbZJit4SY92fTP64?=
+ =?us-ascii?Q?lQrdq9k3+GhQ/Gbx2dHjsuQyjvvISGjoeRZ/PQVME8rqpYtIX81IS6n4iSpW?=
+ =?us-ascii?Q?H0+31QymZ55Vlu18HjHuxQ/hCFUO20EcyiWeGcox8ccJAT+M5rDmfORlGJS2?=
+ =?us-ascii?Q?Vx6w4YjLlNxwJIcxLTBF7u5Z9IfVGbP4mgO9XlXFUV7zC4o/1ovde6avxTJq?=
+ =?us-ascii?Q?GwQbFfoW5Z0oJODBdnNYomIbe2HDuzKV8ZvU0mRwP4WGM8zvIBvxlsV9At/u?=
+ =?us-ascii?Q?Igpfg5eCludPBGpwlYKbKB5dVUY4civxMTm7THPw69BggluQXX5nJohHXQGw?=
+ =?us-ascii?Q?vJLLVkucDLYsB7EbCA0u5UzaCsNXKsWn92hVhd3vdQ2eHKyjpiSN7Yi4IXBR?=
+ =?us-ascii?Q?BrRBMsbRUyEfIRghj587yfWqa5TiCMjA5p8BeuvPagRFt3Jn7qjVNwomzz7D?=
+ =?us-ascii?Q?83Svoo5UyQ9xD/g5qd350bgTqjmYe5GHCJ1GiwGJGHydhPFeXo/X9ixo38hg?=
+ =?us-ascii?Q?0GohXM1W/NWFTfnZTw8UYJrcR28KhQEHhjzMKjXEtmwrxYjE2IXib5OrkNkL?=
+ =?us-ascii?Q?/kClab1kzNSjjlO1MaBg3CDLz4U9vPxt1D06+gfmYDnT90mLIP+cRTc0fKmd?=
+ =?us-ascii?Q?0d9+c5ZzvUIzUPphYs0o9w52k4E45quQWqdUJn7DtzCcpns/WQ6EyOG4yfIq?=
+ =?us-ascii?Q?XT6M4/9FbREoMbCoGtWch4uvTkLRxbD5rbSWtOMd0+BA47006qd57O+myZcu?=
+ =?us-ascii?Q?ZtFkbA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22ea3610-3101-44b0-0d47-08da01a2d4b4
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 08:00:09.6401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9lXGgjXqmqu33lEuoipjyl5LGcYXrcTDL3aK6TUTv/S8K2DNZtRGfNfyNlHmPa4c8YgB/uZ3bxdRoXVJTQUW+kUhGnvlxdzFxDPOmL99XRU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1588
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10280 signatures=690848
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203090041
+X-Proofpoint-ORIG-GUID: jiR0mScFVgWvj5KC--dYhC8-ztZXt0EO
+X-Proofpoint-GUID: jiR0mScFVgWvj5KC--dYhC8-ztZXt0EO
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert am65-cpsw driver and am65-cpsw ethtool to use Phylink APIs
-as described at Documentation/networking/sfp-phylink.rst. All calls
-to Phy APIs are replaced with their equivalent Phylink APIs.
+On Wed, Mar 09, 2022 at 02:25:09AM +0530, Vihas Makwana wrote:
+> The _rtw_init_recv_priv() initializes precvpriv->signal_stat_timer and
+> sets it's timeout interval to 1000 ms. But _rtw_free_recv_priv()
+> doesn't cancel the timer and we need to explicitly call
+> _cancel_timer_ex() after we call _rtw_free_recv_priv() to cancel the
+> timer.
+> Call _cancel_timer_ex() from inside _rtw_free_recv_priv() as every init
+> function needs a matching free function.
+> 
+> 
+> Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+> ---
+>  drivers/staging/r8188eu/core/rtw_recv.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index d77d98351..61308eb39 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -103,6 +103,7 @@ void _rtw_free_recv_priv(struct recv_priv *precvpriv)
+>  	vfree(precvpriv->pallocated_frame_buf);
+>  
+>  	rtl8188eu_free_recv_priv(padapter);
+> +	_cancel_timer_ex(&precvpriv->signal_stat_timer);
+>  }
 
-No functional change intended. Use Phylink instead of conventional
-Phylib, in preparation to add support for SGMII/QSGMII modes.
+*If* then timer_setup() belongs in _rtw_init_recv_priv() then this is
+where the _cancel_timer_ex() belongs, yes.  But what about if the devs
+hid it in a different wrong place?
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
-Change log:
-v1 -> v2:
-1. Update commit message to include reason for converting to Phylink.
-2. Initialize .validate member of struct phylink_mac_ops directly.
-3. Use netif_tx_stop_all_queues() instead of netif_tx_disable() in am65_cpsw_nuss_mac_link_down().
-4. Remove call to deprecated .pcs_poll member of struct phylink_config.
-5. Remove SGMII and 1000BASE-X modes as driver doesn't support them currently.
-6. Remove MAC_2500FD from mac_capabilities as it is currently not supported.
-7. Add am65_cpsw_nuss_phylink_cleanup() function to invoke phylink_destroy() and clean up the
-   created phylink instances.
+Right the del_timer is in rtw_cancel_all_timer(), which is called
+from rtw_usb_if1_deinit() when we remove the USB device.  So something
+more complicated is wrong.  I would prefer to just note this as a bug
+until we can investigate more completely.
 
-v1: https://lore.kernel.org/r/20220304075812.1723-1-s-vadapalli@ti.com/
+I believe we can del_timer() twice without creating a bug, but I'm not
+positive.
 
-Tested on Texas Instruments AM64, AM65, J7200 and J721e devices.
-
- drivers/net/ethernet/ti/am65-cpsw-ethtool.c |  56 +----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c    | 228 ++++++++++----------
- drivers/net/ethernet/ti/am65-cpsw-nuss.h    |   5 +-
- 3 files changed, 129 insertions(+), 160 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-index d45b6bb86f0b..72acdf802258 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-@@ -6,7 +6,7 @@
-  */
- 
- #include <linux/net_tstamp.h>
--#include <linux/phy.h>
-+#include <linux/phylink.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- 
-@@ -471,9 +471,7 @@ static void am65_cpsw_get_pauseparam(struct net_device *ndev,
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	pause->autoneg = AUTONEG_DISABLE;
--	pause->rx_pause = salve->rx_pause ? true : false;
--	pause->tx_pause = salve->tx_pause ? true : false;
-+	phylink_ethtool_get_pauseparam(salve->phylink, pause);
- }
- 
- static int am65_cpsw_set_pauseparam(struct net_device *ndev,
-@@ -481,18 +479,7 @@ static int am65_cpsw_set_pauseparam(struct net_device *ndev,
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy)
--		return -EINVAL;
--
--	if (!phy_validate_pause(salve->phy, pause))
--		return -EINVAL;
--
--	salve->rx_pause = pause->rx_pause ? true : false;
--	salve->tx_pause = pause->tx_pause ? true : false;
--
--	phy_set_asym_pause(salve->phy, salve->rx_pause, salve->tx_pause);
--
--	return 0;
-+	return phylink_ethtool_set_pauseparam(salve->phylink, pause);
- }
- 
- static void am65_cpsw_get_wol(struct net_device *ndev,
-@@ -500,11 +487,7 @@ static void am65_cpsw_get_wol(struct net_device *ndev,
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	wol->supported = 0;
--	wol->wolopts = 0;
--
--	if (salve->phy)
--		phy_ethtool_get_wol(salve->phy, wol);
-+	phylink_ethtool_get_wol(salve->phylink, wol);
- }
- 
- static int am65_cpsw_set_wol(struct net_device *ndev,
-@@ -512,10 +495,7 @@ static int am65_cpsw_set_wol(struct net_device *ndev,
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy)
--		return -EOPNOTSUPP;
--
--	return phy_ethtool_set_wol(salve->phy, wol);
-+	return phylink_ethtool_set_wol(salve->phylink, wol);
- }
- 
- static int am65_cpsw_get_link_ksettings(struct net_device *ndev,
-@@ -523,11 +503,7 @@ static int am65_cpsw_get_link_ksettings(struct net_device *ndev,
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy)
--		return -EOPNOTSUPP;
--
--	phy_ethtool_ksettings_get(salve->phy, ecmd);
--	return 0;
-+	return phylink_ethtool_ksettings_get(salve->phylink, ecmd);
- }
- 
- static int
-@@ -536,40 +512,28 @@ am65_cpsw_set_link_ksettings(struct net_device *ndev,
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy || phy_is_pseudo_fixed_link(salve->phy))
--		return -EOPNOTSUPP;
--
--	return phy_ethtool_ksettings_set(salve->phy, ecmd);
-+	return phylink_ethtool_ksettings_set(salve->phylink, ecmd);
- }
- 
- static int am65_cpsw_get_eee(struct net_device *ndev, struct ethtool_eee *edata)
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy || phy_is_pseudo_fixed_link(salve->phy))
--		return -EOPNOTSUPP;
--
--	return phy_ethtool_get_eee(salve->phy, edata);
-+	return phylink_ethtool_get_eee(salve->phylink, edata);
- }
- 
- static int am65_cpsw_set_eee(struct net_device *ndev, struct ethtool_eee *edata)
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy || phy_is_pseudo_fixed_link(salve->phy))
--		return -EOPNOTSUPP;
--
--	return phy_ethtool_set_eee(salve->phy, edata);
-+	return phylink_ethtool_set_eee(salve->phylink, edata);
- }
- 
- static int am65_cpsw_nway_reset(struct net_device *ndev)
- {
- 	struct am65_cpsw_slave_data *salve = am65_ndev_to_slave(ndev);
- 
--	if (!salve->phy || phy_is_pseudo_fixed_link(salve->phy))
--		return -EOPNOTSUPP;
--
--	return phy_restart_aneg(salve->phy);
-+	return phylink_ethtool_nway_reset(salve->phylink);
- }
- 
- static int am65_cpsw_get_regs_len(struct net_device *ndev)
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 8251d7eb001b..d2747e9db286 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -18,7 +18,7 @@
- #include <linux/of_mdio.h>
- #include <linux/of_net.h>
- #include <linux/of_device.h>
--#include <linux/phy.h>
-+#include <linux/phylink.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-@@ -159,69 +159,6 @@ static void am65_cpsw_nuss_get_ver(struct am65_cpsw_common *common)
- 		common->pdata.quirks);
- }
- 
--void am65_cpsw_nuss_adjust_link(struct net_device *ndev)
--{
--	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
--	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
--	struct phy_device *phy = port->slave.phy;
--	u32 mac_control = 0;
--
--	if (!phy)
--		return;
--
--	if (phy->link) {
--		mac_control = CPSW_SL_CTL_GMII_EN;
--
--		if (phy->speed == 1000)
--			mac_control |= CPSW_SL_CTL_GIG;
--		if (phy->speed == 10 && phy_interface_is_rgmii(phy))
--			/* Can be used with in band mode only */
--			mac_control |= CPSW_SL_CTL_EXT_EN;
--		if (phy->speed == 100 && phy->interface == PHY_INTERFACE_MODE_RMII)
--			mac_control |= CPSW_SL_CTL_IFCTL_A;
--		if (phy->duplex)
--			mac_control |= CPSW_SL_CTL_FULLDUPLEX;
--
--		/* RGMII speed is 100M if !CPSW_SL_CTL_GIG*/
--
--		/* rx_pause/tx_pause */
--		if (port->slave.rx_pause)
--			mac_control |= CPSW_SL_CTL_RX_FLOW_EN;
--
--		if (port->slave.tx_pause)
--			mac_control |= CPSW_SL_CTL_TX_FLOW_EN;
--
--		cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
--
--		/* enable forwarding */
--		cpsw_ale_control_set(common->ale, port->port_id,
--				     ALE_PORT_STATE, ALE_PORT_STATE_FORWARD);
--
--		am65_cpsw_qos_link_up(ndev, phy->speed);
--		netif_tx_wake_all_queues(ndev);
--	} else {
--		int tmo;
--
--		/* disable forwarding */
--		cpsw_ale_control_set(common->ale, port->port_id,
--				     ALE_PORT_STATE, ALE_PORT_STATE_DISABLE);
--
--		cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
--
--		tmo = cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
--		dev_dbg(common->dev, "donw msc_sl %08x tmo %d\n",
--			cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_MACSTATUS),
--			tmo);
--
--		cpsw_sl_ctl_reset(port->slave.mac_sl);
--
--		am65_cpsw_qos_link_down(ndev);
--		netif_tx_stop_all_queues(ndev);
--	}
--
--	phy_print_status(phy);
--}
--
- static int am65_cpsw_nuss_ndo_slave_add_vid(struct net_device *ndev,
- 					    __be16 proto, u16 vid)
- {
-@@ -589,15 +526,11 @@ static int am65_cpsw_nuss_ndo_slave_stop(struct net_device *ndev)
- 	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
- 	int ret;
- 
--	if (port->slave.phy)
--		phy_stop(port->slave.phy);
-+	phylink_stop(port->slave.phylink);
- 
- 	netif_tx_stop_all_queues(ndev);
- 
--	if (port->slave.phy) {
--		phy_disconnect(port->slave.phy);
--		port->slave.phy = NULL;
--	}
-+	phylink_disconnect_phy(port->slave.phylink);
- 
- 	ret = am65_cpsw_nuss_common_stop(common);
- 	if (ret)
-@@ -667,25 +600,14 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
- 	if (ret)
- 		goto error_cleanup;
- 
--	if (port->slave.phy_node) {
--		port->slave.phy = of_phy_connect(ndev,
--						 port->slave.phy_node,
--						 &am65_cpsw_nuss_adjust_link,
--						 0, port->slave.phy_if);
--		if (!port->slave.phy) {
--			dev_err(common->dev, "phy %pOF not found on slave %d\n",
--				port->slave.phy_node,
--				port->port_id);
--			ret = -ENODEV;
--			goto error_cleanup;
--		}
--	}
-+	ret = phylink_of_phy_connect(port->slave.phylink, port->slave.phy_node, 0);
-+	if (ret)
-+		goto error_cleanup;
- 
- 	/* restore vlan configurations */
- 	vlan_for_each(ndev, cpsw_restore_vlans, port);
- 
--	phy_attached_info(port->slave.phy);
--	phy_start(port->slave.phy);
-+	phylink_start(port->slave.phylink);
- 
- 	return 0;
- 
-@@ -1431,10 +1353,7 @@ static int am65_cpsw_nuss_ndo_slave_ioctl(struct net_device *ndev,
- 		return am65_cpsw_nuss_hwtstamp_get(ndev, req);
- 	}
- 
--	if (!port->slave.phy)
--		return -EOPNOTSUPP;
--
--	return phy_mii_ioctl(port->slave.phy, req, cmd);
-+	return phylink_mii_ioctl(port->slave.phylink, req, cmd);
- }
- 
- static void am65_cpsw_nuss_ndo_get_stats(struct net_device *dev,
-@@ -1494,6 +1413,81 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
- 	.ndo_get_devlink_port   = am65_cpsw_ndo_get_devlink_port,
- };
- 
-+static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
-+				      const struct phylink_link_state *state)
-+{
-+	/* Currently not used */
-+}
-+
-+static void am65_cpsw_nuss_mac_link_down(struct phylink_config *config, unsigned int mode,
-+					 phy_interface_t interface)
-+{
-+	struct am65_cpsw_slave_data *slave = container_of(config, struct am65_cpsw_slave_data,
-+							  phylink_config);
-+	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-+	struct am65_cpsw_common *common = port->common;
-+	struct net_device *ndev = port->ndev;
-+	int tmo;
-+
-+	/* disable forwarding */
-+	cpsw_ale_control_set(common->ale, port->port_id, ALE_PORT_STATE, ALE_PORT_STATE_DISABLE);
-+
-+	cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
-+
-+	tmo = cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
-+	dev_dbg(common->dev, "down msc_sl %08x tmo %d\n",
-+		cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_MACSTATUS), tmo);
-+
-+	cpsw_sl_ctl_reset(port->slave.mac_sl);
-+
-+	am65_cpsw_qos_link_down(ndev);
-+	netif_tx_stop_all_queues(ndev);
-+}
-+
-+static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy_device *phy,
-+				       unsigned int mode, phy_interface_t interface, int speed,
-+				       int duplex, bool tx_pause, bool rx_pause)
-+{
-+	struct am65_cpsw_slave_data *slave = container_of(config, struct am65_cpsw_slave_data,
-+							  phylink_config);
-+	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-+	struct am65_cpsw_common *common = port->common;
-+	u32 mac_control = CPSW_SL_CTL_GMII_EN;
-+	struct net_device *ndev = port->ndev;
-+
-+	if (speed == SPEED_1000)
-+		mac_control |= CPSW_SL_CTL_GIG;
-+	if (speed == SPEED_10 && interface == PHY_INTERFACE_MODE_RGMII)
-+		/* Can be used with in band mode only */
-+		mac_control |= CPSW_SL_CTL_EXT_EN;
-+	if (speed == SPEED_100 && interface == PHY_INTERFACE_MODE_RMII)
-+		mac_control |= CPSW_SL_CTL_IFCTL_A;
-+	if (duplex)
-+		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
-+
-+	/* rx_pause/tx_pause */
-+	if (rx_pause)
-+		mac_control |= CPSW_SL_CTL_RX_FLOW_EN;
-+
-+	if (tx_pause)
-+		mac_control |= CPSW_SL_CTL_TX_FLOW_EN;
-+
-+	cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
-+
-+	/* enable forwarding */
-+	cpsw_ale_control_set(common->ale, port->port_id, ALE_PORT_STATE, ALE_PORT_STATE_FORWARD);
-+
-+	am65_cpsw_qos_link_up(ndev, speed);
-+	netif_tx_wake_all_queues(ndev);
-+}
-+
-+static const struct phylink_mac_ops am65_cpsw_phylink_mac_ops = {
-+	.validate = phylink_generic_validate,
-+	.mac_config = am65_cpsw_nuss_mac_config,
-+	.mac_link_down = am65_cpsw_nuss_mac_link_down,
-+	.mac_link_up = am65_cpsw_nuss_mac_link_up,
-+};
-+
- static void am65_cpsw_nuss_slave_disable_unused(struct am65_cpsw_port *port)
- {
- 	struct am65_cpsw_common *common = port->common;
-@@ -1890,27 +1884,7 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
- 				of_property_read_bool(port_np, "ti,mac-only");
- 
- 		/* get phy/link info */
--		if (of_phy_is_fixed_link(port_np)) {
--			ret = of_phy_register_fixed_link(port_np);
--			if (ret) {
--				ret = dev_err_probe(dev, ret,
--						     "failed to register fixed-link phy %pOF\n",
--						     port_np);
--				goto of_node_put;
--			}
--			port->slave.phy_node = of_node_get(port_np);
--		} else {
--			port->slave.phy_node =
--				of_parse_phandle(port_np, "phy-handle", 0);
--		}
--
--		if (!port->slave.phy_node) {
--			dev_err(dev,
--				"slave[%d] no phy found\n", port_id);
--			ret = -ENODEV;
--			goto of_node_put;
--		}
--
-+		port->slave.phy_node = port_np;
- 		ret = of_get_phy_mode(port_np, &port->slave.phy_if);
- 		if (ret) {
- 			dev_err(dev, "%pOF read phy-mode err %d\n",
-@@ -1952,12 +1926,25 @@ static void am65_cpsw_pcpu_stats_free(void *data)
- 	free_percpu(stats);
- }
- 
-+static void am65_cpsw_nuss_phylink_cleanup(struct am65_cpsw_common *common)
-+{
-+	struct am65_cpsw_port *port;
-+	int i;
-+
-+	for (i = 0; i < common->port_num; i++) {
-+		port = &common->ports[i];
-+		if (port->slave.phylink)
-+			phylink_destroy(port->slave.phylink);
-+	}
-+}
-+
- static int
- am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
- {
- 	struct am65_cpsw_ndev_priv *ndev_priv;
- 	struct device *dev = common->dev;
- 	struct am65_cpsw_port *port;
-+	struct phylink *phylink;
- 	int ret;
- 
- 	port = &common->ports[port_idx];
-@@ -1995,6 +1982,20 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
- 	port->ndev->netdev_ops = &am65_cpsw_nuss_netdev_ops;
- 	port->ndev->ethtool_ops = &am65_cpsw_ethtool_ops_slave;
- 
-+	/* Configuring Phylink */
-+	port->slave.phylink_config.dev = &port->ndev->dev;
-+	port->slave.phylink_config.type = PHYLINK_NETDEV;
-+	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100 | MAC_1000FD;
-+
-+	phy_interface_set_rgmii(port->slave.phylink_config.supported_interfaces);
-+
-+	phylink = phylink_create(&port->slave.phylink_config, dev->fwnode, port->slave.phy_if,
-+				 &am65_cpsw_phylink_mac_ops);
-+	if (IS_ERR(phylink))
-+		return PTR_ERR(phylink);
-+
-+	port->slave.phylink = phylink;
-+
- 	/* Disable TX checksum offload by default due to HW bug */
- 	if (common->pdata.quirks & AM65_CPSW_QUIRK_I2027_NO_TX_CSUM)
- 		port->ndev->features &= ~NETIF_F_HW_CSUM;
-@@ -2761,15 +2762,17 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
- 
- 	ret = am65_cpsw_nuss_init_ndevs(common);
- 	if (ret)
--		goto err_of_clear;
-+		goto err_free_phylink;
- 
- 	ret = am65_cpsw_nuss_register_ndevs(common);
- 	if (ret)
--		goto err_of_clear;
-+		goto err_free_phylink;
- 
- 	pm_runtime_put(dev);
- 	return 0;
- 
-+err_free_phylink:
-+	am65_cpsw_nuss_phylink_cleanup(common);
- err_of_clear:
- 	of_platform_device_destroy(common->mdio_dev, NULL);
- err_pm_clear:
-@@ -2792,6 +2795,7 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	am65_cpsw_nuss_phylink_cleanup(common);
- 	am65_cpsw_unregister_devlink(common);
- 	am65_cpsw_unregister_notifiers(common);
- 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.h b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-index 048ed10143c1..ac945631bf2f 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-@@ -10,7 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/netdevice.h>
--#include <linux/phy.h>
-+#include <linux/phylink.h>
- #include <linux/platform_device.h>
- #include <linux/soc/ti/k3-ringacc.h>
- #include <net/devlink.h>
-@@ -30,13 +30,14 @@ struct am65_cpsw_slave_data {
- 	bool				mac_only;
- 	struct cpsw_sl			*mac_sl;
- 	struct device_node		*phy_node;
--	struct phy_device		*phy;
- 	phy_interface_t			phy_if;
- 	struct phy			*ifphy;
- 	bool				rx_pause;
- 	bool				tx_pause;
- 	u8				mac_addr[ETH_ALEN];
- 	int				port_vlan;
-+	struct phylink			*phylink;
-+	struct phylink_config		phylink_config;
- };
- 
- struct am65_cpsw_port {
--- 
-2.17.1
+regards,
+dan carpenter
 

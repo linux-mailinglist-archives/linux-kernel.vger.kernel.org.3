@@ -2,234 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3834D2F80
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A33A64D2F84
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiCIMzU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Mar 2022 07:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S232910AbiCIM5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiCIMzS (ORCPT
+        with ESMTP id S231512AbiCIM5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:55:18 -0500
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C13A16040E;
-        Wed,  9 Mar 2022 04:54:18 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id C1AD9FFAFC;
-        Wed,  9 Mar 2022 12:54:16 +0000 (UTC)
-Date:   Wed, 9 Mar 2022 13:54:14 +0100
-From:   Max Staudt <max@enpas.org>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220309135414.34f77251.max@enpas.org>
-In-Reply-To: <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
-References: <20220307214303.1822590-1-max@enpas.org>
-        <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
+        Wed, 9 Mar 2022 07:57:15 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA8F160410
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:56:16 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id eq14so1863782qvb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 04:56:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jFrfJh+TZgGP0j9p3hA56GCX/bbYQBH+vvzpdAJjq0g=;
+        b=w7VWQuKooiUHnffdYK6QYyTjBAnSYz6GAkfdvas2LQtuzEXbExSblgzkNg2qiy0/YG
+         7uHmHiMU6ZdspMudKtkBYQv3VxWfZdsQGYwGwCT9B790u14eS982qpK+2u2xOB1Xo6RC
+         iHRIQzhvUUV0GQfI/WD9TR6tq1ziBA8/gNnG0qC3fqMuIG5PtJ45ZSjxdOT94XMg86vu
+         +2uThA2y0jLw/V6yQJtH37GriDqZkQz0Llz9eI3QQ+y8ULsQv6H+axp3MVrVFx/hy0ZV
+         yk5UCJsbeXNAftxwSMH3aNIuclshYWOzqU59ybqzYRDfSikyYDgkZs8ASnxNwXpuewUq
+         oQ0w==
+X-Gm-Message-State: AOAM5319/Hyr/kK024ZoRVrJ8YB9TMJ/65+zeEvN/SDwOMPxn3Z3Qwom
+        4K8m+hzSWYOTJt6LfB2Zj6AfU/k05i0xnQ==
+X-Google-Smtp-Source: ABdhPJz+qx7giHxK9Bjzp1VzbYrNBrnSRVcW0ArdY2YoEpFtHThTOzKAyJvSxQKu//tqXv9cTMtpsg==
+X-Received: by 2002:ad4:5fc5:0:b0:435:4420:d056 with SMTP id jq5-20020ad45fc5000000b004354420d056mr15595328qvb.130.1646830575358;
+        Wed, 09 Mar 2022 04:56:15 -0800 (PST)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id x5-20020ae9e645000000b0067b122fae88sm893007qkl.2.2022.03.09.04.56.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 04:56:14 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id z30so4168230ybi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 04:56:14 -0800 (PST)
+X-Received: by 2002:a25:dc4:0:b0:629:2337:f9ea with SMTP id
+ 187-20020a250dc4000000b006292337f9eamr14501488ybn.6.1646830574485; Wed, 09
+ Mar 2022 04:56:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220308160758.26060-1-wens@kernel.org>
+In-Reply-To: <20220308160758.26060-1-wens@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Mar 2022 13:56:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWuWFhs5-ezh_UriPzWsZt02A2AJOTJMiszGpu_3hoqfw@mail.gmail.com>
+Message-ID: <CAMuHMdWuWFhs5-ezh_UriPzWsZt02A2AJOTJMiszGpu_3hoqfw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm: ssd130x: Fix COM scan direction register mask
+To:     Chen-Yu Tsai <wens@kernel.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks a lot Vincent for your review!
+On Wed, Mar 9, 2022 at 2:57 AM Chen-Yu Tsai <wens@kernel.org> wrote:
+> From: Chen-Yu Tsai <wens@csie.org>
+>
+> The SSD130x's command to toggle COM scan direction uses bit 3 and only
+> bit 3 to set the direction of the scanout. The driver has an incorrect
+> GENMASK(3, 2), causing the setting to be set on bit 2, rendering it
+> ineffective.
+>
+> Fix the mask to only bit 3, so that the requested setting is applied
+> correctly.
+>
+> Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 
-Most points are self explanatory, for the others I've added replies
-below.
+Thanks, this fixes the vertically-mirrored display on my Adafruit
+FeatherWing 128x32 OLED.
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
+Gr{oetje,eeting}s,
 
+                        Geert
 
-On Tue, 8 Mar 2022 16:01:12 +0900
-Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Hi Max, this is a partial review.
-> 
-> > +/* Bits in elm->cmds_todo */
-> > +enum ELM_TODO {
-> > +       TODO_CAN_DATA = 0,
-> > +       TODO_CANID_11BIT,
-> > +       TODO_CANID_29BIT_LOW,
-> > +       TODO_CANID_29BIT_HIGH,
-> > +       TODO_CAN_CONFIG_PART2,
-> > +       TODO_CAN_CONFIG,
-> > +       TODO_RESPONSES,
-> > +       TODO_SILENT_MONITOR,
-> > +       TODO_INIT  
-> 
-> Nitpick but the TODO name is bugging me. What does this acronym mean?
-> Is it possible to change this so it doesn't look like a FIXME tag?
-
-Good point, I'll change it.
-
-It's an ordered list of things to send next to the adapter. For
-example, whenever the sending CAN ID needs to be changed, the relevant
-TODO_* bits are set, and the new CAN ID is sent down the UART before a
-payload (*_DATA) is ever sent.
-
-
-
-
-> > +       frame.can_id = CAN_ERR_FLAG;
-> > +       frame.can_dlc = CAN_ERR_DLC;
-> > +       frame.data[5] = 'R';
-> > +       frame.data[6] = 'I';
-> > +       frame.data[7] = 'P';
-> > +       elm327_feed_frame_to_netdev(elm, &frame);  
-> 
-> There is a framework to notify a bus off. Refer to:
-> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/etas_es58x/es58x_core.c#L815
-
-Thanks, will do.
-
-
-> > +/* Compare a buffer to a fixed string */
-> > +static inline int _memstrcmp(const u8 *mem, const char *str)
-> > +{
-> > +       return memcmp(mem, str, strlen(str));  
-> 
-> strcpy()?
-> Did you check for buffer overflow?
-
-There is no buffer overflow, as this only ever takes string constants
-as *str. The compiler figures out the strlen() and can generate an
-optimised memcmp() for this given string length.
-
-It's the caller's job to ensure that *mem is large enough.
-
-
-> > +
-> > +       /* Use spaces in CAN ID to distinguish 29 or 11 bit address
-> > length.
-> > +        * No out-of-bounds access:
-> > +        * We use the fact that we can always read from elm->rxbuf.
-> > +        */
-> > +       if (elm->rxbuf[2] == ' ' && elm->rxbuf[5] == ' ' &&
-> > +           elm->rxbuf[8] == ' ' && elm->rxbuf[11] == ' ' &&
-> > +           elm->rxbuf[13] == ' ') {  
-> 
-> Define an inline function elm327_is_eff().
-
-It would only be used this one time, so I don't see the utility? It'd
-just make it harder to read, IMHO.
-
-It's ASCII lexer/parser code, so it's bound to be ugly... :(
-
-
-> > +       /* Read CAN ID */
-> > +       if (frame.can_id & CAN_EFF_FLAG) {
-> > +               frame.can_id |= (hex_to_bin(elm->rxbuf[0]) << 28)
-> > +                             | (hex_to_bin(elm->rxbuf[1]) << 24)
-> > +                             | (hex_to_bin(elm->rxbuf[3]) << 20)
-> > +                             | (hex_to_bin(elm->rxbuf[4]) << 16)
-> > +                             | (hex_to_bin(elm->rxbuf[6]) << 12)
-> > +                             | (hex_to_bin(elm->rxbuf[7]) << 8)
-> > +                             | (hex_to_bin(elm->rxbuf[9]) << 4)
-> > +                             | (hex_to_bin(elm->rxbuf[10]) << 0);
-> > +       } else {
-> > +               frame.can_id |= (hex_to_bin(elm->rxbuf[0]) << 8)
-> > +                             | (hex_to_bin(elm->rxbuf[1]) << 4)
-> > +                             | (hex_to_bin(elm->rxbuf[2]) << 0);  
-> 
-> hex2bin()?
-
-Good idea!
-
-
-> > +       /* Parse the data nibbles. */
-> > +       for (i = 0; i < frame.can_dlc; i++) {  
-> 
-> frame.can_dlc is deprecated. Use frame.len instead.
-
-Thanks!
-
-
-[ ... snip self explanatory stuff ... ]
-
-
-> > +       case ELM_RECEIVING:
-> > +               /* Find <CR> delimiting feedback lines. */
-> > +               for (len = 0;
-> > +                    (len < elm->rxfill) && (elm->rxbuf[len] !=
-> > '\r');  
-> 
-> Did you use ./script/checkpath?
-
-checkpatch? Yes I did (and kudos to whoever wrote it).
-
-Why?
-
-
-> > +/* Dummy needed to use can_rx_offload */
-> > +static struct sk_buff *elmcan_mailbox_read(struct can_rx_offload
-> > *offload,
-> > +                                          unsigned int n, u32
-> > *timestamp,
-> > +                                          bool drop)
-> > +{
-> > +       WARN_ON_ONCE(1); /* This function is a dummy, so don't call
-> > it! */ +
-> > +       return ERR_PTR(-ENOBUFS);
-> > +}  
-> 
-> Could you elaborate on why you need can_rx_offload if the mailbox
-> feature is not needed?
-
-The code previously used netif_rx_ni(), and Marc noted that it may
-reorder packets. To avoid that, he suggested rx_offload:
-
-  Message-ID: 88c08b2c-aa4a-8858-6267-deeeac2796df@pengutronix.de
-
-  https://www.spinics.net/lists/linux-can/msg01859.html
-
-
-But rx_offload needs the mailbox_read function, even if it's a dummy,
-because can_rx_offload_add_fifo() checks:
-
-	if (!offload->mailbox_read)
-		return -EINVAL;
-
-
-> > +/* Send a can_frame to a TTY. */
-> > +static netdev_tx_t elmcan_netdev_start_xmit(struct sk_buff *skb,
-> > +                                           struct net_device *dev)
-> > +{
-> > +       struct elmcan *elm = netdev_priv(dev);
-> > +       struct can_frame *frame = (struct can_frame *)skb->data;
-> > +
-> > +       if (skb->len != sizeof(struct can_frame))
-> > +               goto out;  
-> 
-> Isn’t this aleardy guaranteed by the upper layers?
-
-Copy-pasta from slcan.c - will look into it.
-
-
-> > +       if (!netif_running(dev))  {
-> > +               netdev_warn(elm->dev, "xmit: iface is down.\n");
-> > +               goto out;
-> > +       }  
-> 
-> Even if this check succeeds, interface might still go down at the
-> next cycle. What is the purpose of checking if interface is up here?
-
-No purpose. It's copy-pasta from slip.c via slcan.c.
-
-
-
-
-Thanks again!
-
-Max
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

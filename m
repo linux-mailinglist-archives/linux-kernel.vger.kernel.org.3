@@ -2,140 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1527B4D2DC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEA64D2DC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiCILQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
+        id S232091AbiCILRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiCILQk (ORCPT
+        with ESMTP id S232051AbiCILRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:16:40 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD7113CED0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:15:41 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V6jihDJ_1646824537;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V6jihDJ_1646824537)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Mar 2022 19:15:38 +0800
-Date:   Wed, 9 Mar 2022 19:15:36 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, lkp@intel.com, linux-erofs@lists.ozlabs.org,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: fs/erofs/zmap.c:394 z_erofs_get_extent_compressedlen() warn:
- should '1 << lclusterbits' be a 64 bit type?
-Message-ID: <YiiMWCZS7bzeAFme@B-P7TQMD6M-0146.local>
-References: <202203091002.lJVzsX6e-lkp@intel.com>
+        Wed, 9 Mar 2022 06:17:18 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E38C13CEF8;
+        Wed,  9 Mar 2022 03:16:17 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id A5184180;
+        Wed,  9 Mar 2022 03:16:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1646824576;
+        bh=2rBQwW6XLcpw4ODkOdsflYm4tk7ggmr+Vf8x3pA/P28=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fLXlT0JXfyWFQWXjSjTrNjnb29G/Q0bzDRzgGUzkFG8fwIOUlus/wLRqWAI+uJdOn
+         2AvhQ/s+b2Y9gNX0k+8to702LN4j+F7fk3iNjElxL7zRaKoEh7PKKZGXzYT06rrSvb
+         yrUsGapPgahYv00aTjW6hAVlTb+GfvukwVztwMd8=
+Date:   Wed, 9 Mar 2022 03:16:12 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Rob Herring <robh+dt@kernel.org>,
+        Renze Nicolai <renze@rnplus.nl>
+Subject: Re: [PATCH v2 0/6] hwmon: (nct6775) Convert to regmap, add i2c
+ support
+Message-ID: <YiiMfJV3bjUmoUcV@hatter.bewilderbeest.net>
+References: <20220309005047.5107-1-zev@bewilderbeest.net>
+ <05667284-42f7-0df2-8fa0-463ad6ad9601@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <202203091002.lJVzsX6e-lkp@intel.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <05667284-42f7-0df2-8fa0-463ad6ad9601@molgen.mpg.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Wed, Mar 09, 2022 at 12:12:32AM PST, Paul Menzel wrote:
+>Dear Zev,
+>
+>
+>Am 09.03.22 um 01:50 schrieb Zev Weiss:
+>
+>>This is v2 of my patches to add i2c support to the nct6775 driver.
+>>
+>>Changes since v1 [0]:
+>>  - Added preparatory patch converting driver to regmap API [Guenter]
+>>  - Replaced ENOSPC with ENOBUFS and removed WARN_ON() in
+>>    nct6775_add_attr_group() [Guenter]
+>>  - Added dedicated symbol namespace [Guenter]
+>>  - Removed nct6775_write_temp() and nct6775_update_device() symbol
+>>    exports [Guenter]
+>>  - Reordered patches to put dt-bindings patch first [Krzysztof]
+>>
+>>The nct6775-platform and nct6775-i2c drivers have both been tested on
+>>the NCT6779D in an ASRock ROMED8HM3 system and the NCT6798 [1] in an
+>>ASRock X570-D4U (the latter thanks to Renze, CCed); both seem to work
+>>as expected on both systems.  I don't have access to any asuswmi
+>>hardware, so testing of the nct6775-platform driver on that to ensure
+>>it doesn't break there would be appreciated (Oleksandr, perhaps?).
+>
+>I have an ASUS F2A85-M PRO with that Super I/O. (It’s running coreboot 
+>right now, but I can test with the proprietary vendor firmware, if you 
+>tell me what and how I can test this.
+>
 
-On Wed, Mar 09, 2022 at 01:27:08PM +0300, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   92f90cc9fe0e7a984ea3d4bf3d120e30ba8a2118
-> commit: cec6e93beadfd145758af2c0854fcc2abb8170cb erofs: support parsing big pcluster compress indexes
-> config: i386-randconfig-m021-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091002.lJVzsX6e-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> fs/erofs/zmap.c:394 z_erofs_get_extent_compressedlen() warn: should '1 << lclusterbits' be a 64 bit type?
-> fs/erofs/zmap.c:423 z_erofs_get_extent_compressedlen() warn: should 'm->compressedlcs << lclusterbits' be a 64 bit type?
-> 
-> vim +394 fs/erofs/zmap.c
-> 
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  381  static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  382  					    unsigned int initial_lcn)
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  383  {
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  384  	struct erofs_inode *const vi = EROFS_I(m->inode);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  385  	struct erofs_map_blocks *const map = m->map;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  386  	const unsigned int lclusterbits = vi->z_logical_clusterbits;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  387  	unsigned long lcn;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  388  	int err;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  389  
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  390  	DBG_BUGON(m->type != Z_EROFS_VLE_CLUSTER_TYPE_PLAIN &&
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  391  		  m->type != Z_EROFS_VLE_CLUSTER_TYPE_HEAD);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  392  	if (!(map->m_flags & EROFS_MAP_ZIPPED) ||
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  393  	    !(vi->z_advise & Z_EROFS_ADVISE_BIG_PCLUSTER_1)) {
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07 @394  		map->m_plen = 1 << lclusterbits;
-> 
-> 1ULL << lclusterbits?
+Hi Paul,
 
-Thanks for the report!
+Thanks for offering to test!  I don't see the F2A85-M PRO listed in the 
+asus_wmi_boards array, so (unless there's some alternate model name it 
+also goes by that's in that list) I don't think it will provide coverage 
+for the asuswmi code, but additional testing of the platform driver 
+would still be good anyway.
 
-In practice, m_plen won't be larger than 1MiB due to on-disk constraint
-for compression mode, so we're always safe here. m_plen only can be
-larger than 4GiB for non-compression mode.
+To try it out, first apply the patch series on top of Guenter's current 
+hwmon-next tree (it's based on commit 5d4a2ea96b79).  You'll need to 
+enable both the existing CONFIG_SENSORS_NCT6775 Kconfig option as well 
+as the new CONFIG_SENSORS_NCT6775_PLATFORM.  Then compile, install, and 
+boot into the resulting kernel.  If you set 
+CONFIG_SENSORS_NCT6775_PLATFORM=m (compiling it as a module) you'll need 
+to run 'modprobe nct6775-platform' to load the module, after which 
+running 'sensors' from the lm-sensors package should show sensor 
+readings from it -- if things are working right, it should behave pretty 
+much exactly as the driver did prior to these patches.
 
-Yet we could update this on the static analysis side, I will submit a
-patch later.
+However, since posting the v2 patch series I realized I bungled 
+something in the regmap conversion (patch 2 of the series), so before 
+compiling you should also apply this small fixup (which will be included 
+in subsequent versions of the patchset):
 
-> 
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  395  		return 0;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  396  	}
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  397  
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  398  	lcn = m->lcn + 1;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  399  	if (m->compressedlcs)
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  400  		goto out;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  401  	if (lcn == initial_lcn)
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  402  		goto err_bonus_cblkcnt;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  403  
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  404  	err = z_erofs_load_cluster_from_disk(m, lcn);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  405  	if (err)
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  406  		return err;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  407  
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  408  	switch (m->type) {
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  409  	case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  410  		if (m->delta[0] != 1)
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  411  			goto err_bonus_cblkcnt;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  412  		if (m->compressedlcs)
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  413  			break;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  414  		fallthrough;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  415  	default:
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  416  		erofs_err(m->inode->i_sb,
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  417  			  "cannot found CBLKCNT @ lcn %lu of nid %llu",
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  418  			  lcn, vi->nid);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  419  		DBG_BUGON(1);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  420  		return -EFSCORRUPTED;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  421  	}
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  422  out:
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07 @423  	map->m_plen = m->compressedlcs << lclusterbits;
-> 
-> Same thing here.
+diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+index cb3958c977fa..5801aa9d60ee 100644
+--- a/drivers/hwmon/nct6775-core.c
++++ b/drivers/hwmon/nct6775-core.c
+@@ -1150,7 +1150,7 @@ static int nct6775_write_fan_div(struct nct6775_data *data, int nr)
+  	if (err)
+  		return err;
+  	reg &= 0x70 >> oddshift;
+-	reg |= data->fan_div[nr] & (0x7 << oddshift);
++	reg |= (data->fan_div[nr] & 0x7) << oddshift;
+  	return nct6775_write_value(data, fandiv_reg, reg);
+  }
+  
 
-Ditto.
 
 Thanks,
-Gao Xiang
+Zev
 
-> 
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  424  	return 0;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  425  err_bonus_cblkcnt:
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  426  	erofs_err(m->inode->i_sb,
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  427  		  "bogus CBLKCNT @ lcn %lu of nid %llu",
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  428  		  lcn, vi->nid);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  429  	DBG_BUGON(1);
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  430  	return -EFSCORRUPTED;
-> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  431  }
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 

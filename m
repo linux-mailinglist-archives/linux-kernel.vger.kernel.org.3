@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8004D3BFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA404D3C0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237064AbiCIVXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S236148AbiCIV0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiCIVXL (ORCPT
+        with ESMTP id S234999AbiCIV0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:23:11 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479C89D07F;
-        Wed,  9 Mar 2022 13:22:12 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id q5so5031181ljb.11;
-        Wed, 09 Mar 2022 13:22:12 -0800 (PST)
+        Wed, 9 Mar 2022 16:26:36 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDDC1D;
+        Wed,  9 Mar 2022 13:25:36 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l10so2144696wmb.0;
+        Wed, 09 Mar 2022 13:25:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=VLgjqBH7y19p60K4Q2Ak7wtKmRZ855mtbsvRlPCnkqo=;
-        b=JV7uq62mN7i7UY+NhyIwrofK7K7yFAIp5nBtQTM4ofMVYrsQ5p3JtLKfsksnYMy5i0
-         +G2KQlWUZ408FTElUX6qI3mVTxva7PfFjrY87KL6FXrDUyjFoT4bW2eiR0zlWTMQgwbB
-         us0F+bMEG3/iDEkQu+CMMm+oaXH8g+hwMy8zrrb96nDIEPNwYHvyhrfZV5KTRxGNFNrz
-         MquuR+V7GmpvpR4peeqIUozmbtVEvmQZyHqPQMlp2NTNDf9vz/9687bzI327w9J9TG2J
-         MxqI3JLktNaXMaKSa+LZpABInarWyXgEGEGC8B8UQ/co5gqWFwUDgxyCT+C73btA6Ek0
-         aA0A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g6KjkEqs6nfY8SyVTKb71+0492kgEVv08yBN4Vf8F9c=;
+        b=npZMITQ0h7Cxml4W5J3Vxp64os2biBMdDuRrN4qXAOIXOiY54XPUQHmGwyz0FqCOdA
+         2jY9T8EeLufJPBAPygp2D2ilLnvhJB0pFrQ9fmvfoZ/3n9Mm/XcgYkR9KfODeciYuKnE
+         MPGExWPW++ncM0/LxuXV92GO8XcsU3dgp/6d6A9i66hCsD+icGZVdOlOFjFgcsNE1dSY
+         aDCG2ax6bc6si6cVHBNDkmHwrvulBS747WNclrPDV5fEhbabYXWMGiUVVJxdCUmXIxXT
+         ZKqjDokElzyq6UfJGvlNUuTy7zwF9f1BtDePN0pcyupqm2P4jcBEF5KGeLic0WV7pTfi
+         LBIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VLgjqBH7y19p60K4Q2Ak7wtKmRZ855mtbsvRlPCnkqo=;
-        b=O+7pNEfCyCtUKxpmW55a+e2iyWrDLzka5sK44gsFpTe6VhST51IUgZzsZt6sfo1tdS
-         NfcqVLjXAlY+L1Oc8mMfCPBL5y0Cl1wWX4QowcRbCEVRv2N4HTmmOW0TCo7jCtumt9gA
-         cQeB++MkrujnuDwSNufO/RK2D3yWY7oVkv5GeAprUoIqdTfUPqztjblgluEfqWK9HPi2
-         /SzWif+ZZYR5ar/FceYdBPxV5JX3aaw1AwEHw5UPnPAL75/Pe0KV0jBFCLhrHqxIcWNT
-         NbxIJjpQovW6V1crMjtuIecgKUDTP44HFY4DwFL0g1Az8Bnq/CUqyfHDIw82/64ADMd/
-         BAUQ==
-X-Gm-Message-State: AOAM531xqg3/RCbDG7DwUowMAhLQ9azK6qAASjX32XbhgvDGWPHqNmTi
-        CZWUJbzP788bhcVID91wru9vJ8I2siQ=
-X-Google-Smtp-Source: ABdhPJwZG6GbW1AJfUAfYnSZnqYhCOE/OvJ7F6ZhFw538NDlqCRw//Jr6J9eBxJKOfQD0RBttEf0LQ==
-X-Received: by 2002:a2e:3e15:0:b0:247:d94b:c004 with SMTP id l21-20020a2e3e15000000b00247d94bc004mr954489lja.428.1646860930274;
-        Wed, 09 Mar 2022 13:22:10 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.107])
-        by smtp.gmail.com with ESMTPSA id bq30-20020a056512151e00b0044313dc8e74sm587455lfb.197.2022.03.09.13.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 13:22:09 -0800 (PST)
-Message-ID: <4078dca8-b5d7-7f84-5605-2f5a98563137@gmail.com>
-Date:   Thu, 10 Mar 2022 00:22:08 +0300
+        bh=g6KjkEqs6nfY8SyVTKb71+0492kgEVv08yBN4Vf8F9c=;
+        b=KvScrzIG5ElFwPthzdnHzwzFLl1k2IyDWTFw2Rqmt/ETWVNq736sy0YoWjrQlRZZsd
+         YjDHbTqBleS5HviHWiddEOMY5xNKe5fDOXusICTyK1cRVIq/pCuY9XA4yNjYVn+wcm6q
+         KPCVmJGWu56RJ6T3l+ZyD1B1ikzIbOiyg8i9v2+RWAho5227GQEol2pscyU6mw2RAH3p
+         uWflGUVc0sl7jzFDrSamlyzog0ZYX78kCn10IslMAvIi81uhhdAoj0Rhl1XNxlWl1M5u
+         RNuiehuJEYElTHbYccUvTV3sUzSC2mLV4FKIQn6Ja7pIMZLYnHGtvUHJEqj6w3YF765T
+         WTHA==
+X-Gm-Message-State: AOAM532TUBrRvonQ5tUREO8OsAULEsgApa+5GERbdVSf1RsUEzv7YprT
+        FZrrEqWafx0RKNIgIVcbuKptkX53aGs=
+X-Google-Smtp-Source: ABdhPJyZ3VyOCIprRGLbGIUjwQ5IMWFzSeUQ2UMVdVm3W3thKPHa24j3249olGoaZJJki4zRANcCpA==
+X-Received: by 2002:a05:600c:214a:b0:385:9c42:848 with SMTP id v10-20020a05600c214a00b003859c420848mr1072824wml.176.1646861135093;
+        Wed, 09 Mar 2022 13:25:35 -0800 (PST)
+Received: from monster.fritz.box (dyndsl-085-016-033-210.ewe-ip-backbone.de. [85.16.33.210])
+        by smtp.gmail.com with ESMTPSA id k13-20020a7bc40d000000b00381890032dfsm5891053wmi.1.2022.03.09.13.25.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 13:25:34 -0800 (PST)
+From:   Alexey Galakhov <agalakhov@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, linux-kernel@vger.kernel.org,
+        Alexey Galakhov <agalakhov@gmail.com>
+Subject: [PATCH] scsi: mvsas: Add PCI ID of RocketRaid 2640
+Date:   Wed,  9 Mar 2022 22:25:35 +0100
+Message-Id: <20220309212535.402987-1-agalakhov@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] NFC: port100: fix use-after-free in port100_send_complete
-Content-Language: en-US
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
-References: <20220308185007.6987-1-paskripkin@gmail.com>
- <cbdd5e41-7538-6d8f-344a-54a816c6d511@canonical.com>
- <b46bfa75-2c87-61d9-c0fc-33efb2678f27@gmail.com>
-In-Reply-To: <b46bfa75-2c87-61d9-c0fc-33efb2678f27@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,35 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 21:27, Pavel Skripkin wrote:
-> Hi Krzysztof,
-> 
-> On 3/9/22 12:52, Krzysztof Kozlowski wrote:
->> 
->> 
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> 
->> Thanks, this looks good. I think I saw similar patterns also in other
->> drivers, e.g. pn533. I will check it later, but if you have spare time,
->> feel free to investigate.
->> 
->> Similar cases (unresolved):
->> https://syzkaller.appspot.com/bug?extid=1dc8b460d6d48d7ef9ca
+The HighPoint RocketRaid 2640 is a low-cost SAS controller
+based on Marvell chip. The chip in question was already
+supported by the kernel, just the PCI ID of this particular board
+was missing.
 
-This one is crazy :) No logs from driver at all. Even can't find where 
-probe failure comes from (or even is there any failures...)
+Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+---
+ drivers/scsi/mvsas/mv_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->> https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index f18dd9703595..5c25354662ce 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -646,6 +646,7 @@ static struct pci_device_id mvs_pci_table[] = {
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1300), chip_1300 },
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1320), chip_1320 },
+ 	{ PCI_VDEVICE(ADAPTEC2, 0x0450), chip_6440 },
++	{ PCI_VDEVICE(TTI, 0x2640), chip_6440 },
+ 	{ PCI_VDEVICE(TTI, 0x2710), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2720), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2721), chip_9480 },
+-- 
+2.35.1
 
-Looks like this patch fixes it.
-
->> https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
->> 
-
-This one is already fixed. Fix bisection is bogus, but this bug is not 
-reproducible anymore.
-
-
-
-With regards,
-Pavel Skripkin

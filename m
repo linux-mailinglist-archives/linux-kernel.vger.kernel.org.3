@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49BB4D3BE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9EB4D3BEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbiCIVPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        id S231465AbiCIVSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiCIVPh (ORCPT
+        with ESMTP id S232699AbiCIVSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:15:37 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B92A6514A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:14:35 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id l24-20020a4a8558000000b00320d5a1f938so4435271ooh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 13:14:35 -0800 (PST)
+        Wed, 9 Mar 2022 16:18:47 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2DA35273
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:17:47 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id b188so3932573oia.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 13:17:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pcqaQAO7y8DPuNPy2E+0H6cxOEoatJ+9cjlTLRUbXrc=;
-        b=ULcmmgT+LRECZjix4gCr/VFOb4pyxBSxE5yq5ZZiZO3DNLe1JjzH8mKxfv3S8VyqbU
-         pfgt/TYblMijefdGuOzf1tR8J1UKKQcpW1NCxx6BFjdP321v0sZQAcK6gngRXHhCb/+q
-         UPo/Fb0q1cE6F02tJD8mLaifkLixK5h3hSVP+jeWozL2A2f6mNEqBUpGNGRNpDD1kT5S
-         lmNp857TimpSVcgrnuYzzZHKlEWehSSsHJYVa7DGREhtsvuPXhhUnptCrIoFxYN2cVBy
-         sqoODUAmN3z18S1WTRMNFEw0zKaQZNYYZCyy2RRgIvAOGxZWga1/5GI2nOyAaroCaQuo
-         JEOw==
+        bh=rbmc8BdN8wPgc1BDfOsuXIXyrg5uoDqiCn8RTpOLzZA=;
+        b=ifXyeO9m93yAbEVOSzbE3IuF0Gj20q67LR5hZNuqI7ePath53DUn38nJbEaOLuokuD
+         nsYhNoEamV1iOQ2D57lBypvIcRd/qXIAfN3qA2r6qw1kV67Z+Bk6SshwXuKYp7LALTJQ
+         eSxgkMYIgSXstgyeNrK3fde4WC8EUWx2+afPE7+Bd3KEeVgQuk80i0EaztNYu5p55p00
+         P31QfB5V8NBdUD+cTY3dq9ZHiy6iLXnYr82kPFs5xYkF/iRYKDKs15c9eKSnpbyY2J3x
+         FcoAZilTDpGLdM4ujWB1ETZSLGXKGYK0g5a10c5n//OSXGVGTKYvsOh/IZxXWmqCd03Z
+         P4vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=pcqaQAO7y8DPuNPy2E+0H6cxOEoatJ+9cjlTLRUbXrc=;
-        b=gTPwlOL+Kd1fFq2WCRTdpONbNb5vdC48PQ9DnFwnb56UhXuhpUczkyOxb0V1Cbu08d
-         +ZZPERppwn1P4NE8m21ougPRmtalBC860vFNUpIkaCOt8oNIE1ABPU9MBNoWgbmnE3+D
-         9QZk8sVJWmuDbEVDFtZYfl3A9Dlp0WVMVH336S7h82IRlzcJGWj4AP441YUYtyMo6GAY
-         qiLeQC6GPvH1Rkn8Qk3+TU+gSn5vw/brhwRKb3B1pbsRnoruZkTQKsEBq590vY+MyurO
-         ipRTkfY89vxzwjiPhcyXMPhpzUEw7I8Tb+ofk4BwmsBiJW8pKE23Kk8SHy8KEFNXQ/60
-         Faxg==
-X-Gm-Message-State: AOAM533NPSbsUqm+LrJU0nZ1pE95gjqZG3SRJoUfLkqDG6N8D2Uvnzwn
-        7V33/CJcfcnubxIHQfgM1JPEhw==
-X-Google-Smtp-Source: ABdhPJyJYXwaPfFnHR9mn5b995EC/hSW8oyq6e/5ihUPc364qjqIZ3rt1e4O43pWlBcDpiQ0jTrRvg==
-X-Received: by 2002:a05:6870:c101:b0:da:b3f:2b89 with SMTP id f1-20020a056870c10100b000da0b3f2b89mr6925339oad.296.1646860474300;
-        Wed, 09 Mar 2022 13:14:34 -0800 (PST)
+        bh=rbmc8BdN8wPgc1BDfOsuXIXyrg5uoDqiCn8RTpOLzZA=;
+        b=2WxQjGg0LN6+GFo1RzfZ8Q955ElT9WctMU4VMB0SZhqRWKWigr88TmotKETpCNwJZQ
+         aaQqq6/PiK940k/R+yhyqCkbkjq6M3JJuq8XThob6y34n32sj90SsjTBncKznkryl5/6
+         WbRjyEVgtPeUr1Ua9XEfZkvHYlINN/dyVjUSNgu+3B1WeCa7D2oWeBpSLdIwLoJIK4NV
+         SvxxEX4UGEWYcwi4Cy//zkaBWb6J7ZnH+jNZcoN7cxcTwQ1mIvLgFBRogdlhg8nmLN2h
+         aIQA3jSkaXj63EAzjGRnBxsLqE1bEqwoxRuAhpu+wEK01g4W18L7R0Ev/B55PCpl5bHh
+         43QA==
+X-Gm-Message-State: AOAM532aQ0xLDcxhigl5c78YXSCfYMoz/CPklyx+21ftfjFX/NO0IkSp
+        eVeQAxTtMljMSzKHxcui4dx9fg==
+X-Google-Smtp-Source: ABdhPJwakXmD66mhiHCZJ+QE1uklRFM4cRMElE0uFYnmncuueQnfsrzkmIvYnbM0koL4LQV2SbORiw==
+X-Received: by 2002:a05:6808:14cc:b0:2d9:a01a:48ac with SMTP id f12-20020a05680814cc00b002d9a01a48acmr7322833oiw.247.1646860666456;
+        Wed, 09 Mar 2022 13:17:46 -0800 (PST)
 Received: from [192.168.17.16] ([189.219.74.147])
-        by smtp.gmail.com with ESMTPSA id t11-20020a4ae40b000000b0031cc933b418sm1544369oov.40.2022.03.09.13.14.33
+        by smtp.gmail.com with ESMTPSA id l7-20020acabb07000000b002da34f9ffc3sm1566617oif.37.2022.03.09.13.17.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 13:14:33 -0800 (PST)
-Message-ID: <b17d6dad-b5b3-6c59-b156-831913f7cd3e@linaro.org>
-Date:   Wed, 9 Mar 2022 15:14:32 -0600
+        Wed, 09 Mar 2022 13:17:46 -0800 (PST)
+Message-ID: <3e00dc5b-e147-e231-4d56-6b5b32968833@linaro.org>
+Date:   Wed, 9 Mar 2022 15:17:45 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 00/43] 5.15.28-rc1 review
+Subject: Re: [PATCH 5.16 00/37] 5.16.14-rc1 review
 Content-Language: en-US
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
@@ -63,11 +63,11 @@ Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
         patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
         jonathanh@nvidia.com, f.fainelli@gmail.com,
         sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.086952723@linuxfoundation.org>
 From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,9 +80,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello!
 
-On 09/03/22 09:59, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.28 release.
-> There are 43 patches in this series, all will be posted as a response
+On 09/03/22 10:00, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.14 release.
+> There are 37 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 > 
@@ -90,9 +90,9 @@ On 09/03/22 09:59, Greg Kroah-Hartman wrote:
 > Anything received after that time might be too late.
 > 
 > The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.28-rc1.gz
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc1.gz
 > or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
 > and the diffstat can be found below.
 > 
 > thanks,
@@ -270,68 +270,43 @@ The following Arm combinations failed to build:
 - arm-clang-nightly-u8500_defconfig
 - arm-clang-nightly-vexpress_defconfig
 
-
-Here's one error for GCC (imx_v6_v7_defconfig with gcc-9):
+This is a GCC failure (bcm2835_defconfig with gcc-8):
 
    /builds/linux/arch/arm/kernel/entry-common.S: Assembler messages:
    /builds/linux/arch/arm/kernel/entry-common.S:166: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/kernel/entry-common.S:175: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/kernel/entry-common.o] Error 1
+   make[3]: *** [/builds/linux/scripts/Makefile.build:388: arch/arm/kernel/entry-common.o] Error 1
+   /builds/linux/arch/arm/kernel/entry-armv.S: Assembler messages:
+   /builds/linux/arch/arm/kernel/entry-armv.S:1090: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1113: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1136: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1159: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1198: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[3]: *** [/builds/linux/scripts/Makefile.build:388: arch/arm/kernel/entry-armv.o] Error 1
    /builds/linux/arch/arm/common/secure_cntvoff.S: Assembler messages:
    /builds/linux/arch/arm/common/secure_cntvoff.S:24: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/common/secure_cntvoff.S:27: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/common/secure_cntvoff.S:29: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/common/secure_cntvoff.o] Error 1
+   make[3]: *** [/builds/linux/scripts/Makefile.build:388: arch/arm/common/secure_cntvoff.o] Error 1
    make[3]: Target '__build' not remade because of errors.
-   make[2]: *** [/builds/linux/scripts/Makefile.build:540: arch/arm/common] Error 2
-   /builds/linux/arch/arm/kernel/entry-armv.S: Assembler messages:
-   /builds/linux/arch/arm/kernel/entry-armv.S:1088: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   /builds/linux/arch/arm/kernel/entry-armv.S:1111: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   /builds/linux/arch/arm/kernel/entry-armv.S:1134: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   /builds/linux/arch/arm/kernel/entry-armv.S:1157: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   /builds/linux/arch/arm/kernel/entry-armv.S:1196: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/kernel/entry-armv.o] Error 1
-   /builds/linux/arch/arm/mach-imx/suspend-imx6.S: Assembler messages:
-   /builds/linux/arch/arm/mach-imx/suspend-imx6.S:315: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[2]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/mach-imx/suspend-imx6.o] Error 1
+   make[2]: *** [/builds/linux/scripts/Makefile.build:549: arch/arm/common] Error 2
    /builds/linux/arch/arm/mm/cache-v7.S: Assembler messages:
    /builds/linux/arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/mm/cache-v7.o] Error 1
+   make[3]: *** [/builds/linux/scripts/Makefile.build:388: arch/arm/mm/cache-v7.o] Error 1
    /builds/linux/arch/arm/mm/tlb-v7.S: Assembler messages:
    /builds/linux/arch/arm/mm/tlb-v7.S:85: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/mm/tlb-v7.o] Error 1
+   make[3]: *** [/builds/linux/scripts/Makefile.build:388: arch/arm/mm/tlb-v7.o] Error 1
    /builds/linux/arch/arm/mm/proc-v7-2level.S: Assembler messages:
    /builds/linux/arch/arm/mm/proc-v7-2level.S:55: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/mm/proc-v7-2level.S:57: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
    /builds/linux/arch/arm/mm/proc-v7.S:59: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   /builds/linux/arch/arm/mm/proc-v7.S:183: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/mm/proc-v7.o] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [/builds/linux/Makefile:1868: arch/arm/mach-imx] Error 2
+   make[3]: *** [/builds/linux/scripts/Makefile.build:388: arch/arm/mm/proc-v7.o] Error 1
    make[3]: Target '__build' not remade because of errors.
-   make[2]: *** [/builds/linux/scripts/Makefile.build:540: arch/arm/mm] Error 2
-   /builds/linux/arch/arm/kernel/hyp-stub.S: Assembler messages:
-   /builds/linux/arch/arm/kernel/hyp-stub.S:173: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
-   make[3]: *** [/builds/linux/scripts/Makefile.build:379: arch/arm/kernel/hyp-stub.o] Error 1
-   make[3]: Target '__build' not remade because of errors.
-   make[2]: *** [/builds/linux/scripts/Makefile.build:540: arch/arm/kernel] Error 2
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [/builds/linux/Makefile:1868: arch/arm] Error 2
+   make[2]: *** [/builds/linux/scripts/Makefile.build:549: arch/arm/mm] Error 2
 
 
-And here's one for Clang (same imx_v4_v5_defconfig config, but with clang-11):
-
-   ld.lld: error: ./arch/arm/kernel/vmlinux.lds:117: AT expected, but got NOCROSSREFS
-   >>>  __vectors_lma = .; OVERLAY 0xffff0000 : NOCROSSREFS AT(__vectors_lma) { .vectors { *(.vectors) } .vectors.bhb.loop8 { *(.vectors.bhb.loop8) } .vectors.bhb.bpiall { *(.vectors.bhb.bpiall) } } __vectors_start = LOADADDR(.vectors); __vectors_end = LOADADDR(.vectors) + SIZEOF(.vectors); __vectors_bhb_loop8_start = LOADADDR(.vectors.bhb.loop8); __vectors_bhb_loop8_end = LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __vectors_bhb_bpiall_start = LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bpiall_end = LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); . = __vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.bpiall); __stubs_lma = .; .stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) { *(.stubs) } __stubs_start = LOADADDR(.stubs); __stubs_end = LOADADDR(.stubs) + SIZEOF(.stubs); . = __stubs_lma + SIZEOF(.stubs); PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
-   >>>                                          ^
-   make[1]: *** [/builds/linux/Makefile:1183: vmlinux] Error 1
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
+And this is a Clang failure (

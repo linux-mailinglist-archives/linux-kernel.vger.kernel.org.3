@@ -2,168 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6FE4D2965
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6DA4D2969
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiCIHWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
+        id S230310AbiCIHXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiCIHWa (ORCPT
+        with ESMTP id S229460AbiCIHXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:22:30 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120051.outbound.protection.outlook.com [40.107.12.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D16410A7E5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 23:21:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bn/pj3jBNEXUc87tD44BH7qdlcE9/M9hRn9uPKpMqpHmB5OZSCdK6F5XiLzS7EYfb3jGCeAOIBGom+aoxSoFMpxWsAoCXq7Z3CUuO27nSN7bMRXtzQxxSFbzg9UrCW1lPIin9y/Sd2uIYF6y3pHsuBwRBjXgN7Rol7DHrVq1FjZjTAHZ0/+m8Hag2KnEAlJNZ3OEfDZgc1WXDCksr0mxrEmv9twMa7yGzr/a9Q1CeNcCYSpP9y7oukaYwfahd2YE6ZyOxjl/sgADqb4zKyUgSMtcdVwUA0TvD3smA6WRscFvXg+Q3AvWE9bggOJCOBfuM6hGWSJEb2Y9upoAOtClZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ooG1LwWeKRg7/xvzhTHEA2DBPl9HYWUpsIlBVLpBe60=;
- b=X6mOMcjP7Haz6yQtogX98EGP6WfEmd0hVWXl5VeIU4b49WydixI50eKUZnVzFsgY0N73WbjgPKYSC0bIgXGj1pZz+bmLyz7wWJAhgLsIBeOXfjm5bpiP83HLSEJFDxudiFGvOdLiaI3JU+EBHRUDFrt/Xe89JVxkUVV7BGeKjOnu/XSnCEX0L8HwuolTLU5qwVE+2gEJQSKNeyUSM5hxeI4B235OrkgGmlle8e+Me+DitP5/nPmTyv/o3IbuKC646uYmHkSJY9w8Q3VzFvRPMC/w6Cu/DxsS1hq2wVQwnxFeiRkDKCVoaR18zB2fxv+iGdxCySfPl7mFkYG1mtQlvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB1820.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:16c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16; Wed, 9 Mar
- 2022 07:21:28 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.029; Wed, 9 Mar 2022
- 07:21:28 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "peng.hao2@zte.com.cn" <peng.hao2@zte.com.cn>,
-        "wen.yang99@zte.com.cn" <wen.yang99@zte.com.cn>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
-Thread-Topic: [PATCH] powerpc: 8xx: fix a return value error in
- mpc8xx_pic_init
-Thread-Index: AQHYKINXBJ1zcwXxM0+BDeqd/qE4Oay2eWSAgABCK4A=
-Date:   Wed, 9 Mar 2022 07:21:28 +0000
-Message-ID: <87b40493-7630-f714-27f4-90ad2a5a7c12@csgroup.eu>
-References: <20220223070223.26845-1-hbh25y@gmail.com>
- <87o82fn6yw.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87o82fn6yw.fsf@mpe.ellerman.id.au>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8d52e3ef-124a-47c1-3e2a-08da019d6d80
-x-ms-traffictypediagnostic: PR0P264MB1820:EE_
-x-microsoft-antispam-prvs: <PR0P264MB1820A66C02CE975A165AC44AED0A9@PR0P264MB1820.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rS5KzQdvQu3VJrBWputvTYufLbu5mwr/gYb8PRGr+nA6F2PG2DK4ae0WiMWnRwR3GtC198IQtLvJYrqf+J37tvNtXxIotMKO+pEGlU0mndoMBrPrUX+Dqdo1WE9Do5crzYiTV/J3stTBNtwIJZzcnSAMAFDUjcENxHIPuuDwhEEHpfNuk6Mukjs5LbzqPFU/3ZNWQZBUitWlv0r8+/hsxMxz/ILDkQpzI8PVvXry1cIVbPCUTSJGTiJeEDIab0i/oGHPqh+NxIYVM/P5z3XfsqeC+hOkmQxC2B0+fuaNhhmLLSnP8ZKV4lJUwn0IeIelkAKF5GdawPJNH7Ft8F0QvDZoOdvl/I4dq5/Y7xA3u3q0YflqCWhG9HIkmczb0d1w6ijbGWI8uhPHCeo09z4dtF5JGNN+kSon6zYieAw4TEhrdJhJPMm6N6OAFuiGbjYlv8yh8mreZDGHDNIGyFGxnt7nGArhanGYjglYfI3VgMWH6pP+mL3H0NdOzmIWz8V5VyLSJrGQL+KQmab26R0vX/5PZjWx2klO9EjchqpnoaIDhUNH9clxv9jmhTv0Hi3E5wk3efhHNv52WbTZwhEqNXWuOa5h6967OoYEVel2VdWAFxaDwnCLQTK8rTwxU/gOeeZ1IG/LFlF+IO6nPME/iqdalOGD8GH7UqiWqdi1DEqwivbSJLFkNF7z6jkf5gVXkS5JQQ7AH7MwTos+bBpvuiaiynBSq//4/f3evmT/ZH1CEMMMmzgnkt1OBXNHldM3M2FSp/ygjsArsABw2ENVzw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(6506007)(2906002)(6512007)(86362001)(38100700002)(54906003)(316002)(2616005)(110136005)(36756003)(6486002)(508600001)(66946007)(8676002)(4326008)(76116006)(91956017)(64756008)(66446008)(66476007)(66556008)(8936002)(71200400001)(5660300002)(44832011)(31686004)(122000001)(31696002)(186003)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?STlGbjFDaUJGY1cvek0wbjlFSWtxRjFkeXVNREgvWGpWQnVnM2ZnWkNjMHBs?=
- =?utf-8?B?MzdDUUFPWGgrMG9nV1FpUTdhUjlmRFRONlMvS1o1ekVKRmFraWhCR1ZQMWZL?=
- =?utf-8?B?NjlKTWpnVUFWRnRxbHlvRkEzcUNlSmtFTWplNzBaTTEzamJtenVJYXdlbXdU?=
- =?utf-8?B?MjBXeDQzcmNLNW9FS1NvaXFUaHpxd05LMHlmLytSbkxwUTBjRk51VHAwSC9N?=
- =?utf-8?B?eDVnZXA0bUlaVHg0UzhwNTRYSDVsNzVYQ1NrTkhlTStVWEtVT0JzQVB3aitN?=
- =?utf-8?B?S0lPLzZQb1RsWnN5bnpreXpsc2VPR0VVbVdTZlhmMXJKL3BhZGhXYnJzYzFR?=
- =?utf-8?B?RzhJalJYbUp3VFYwYmxYNnhHVG9MVDVld0piM1VsZFdWR051VlhWeHhWVjZF?=
- =?utf-8?B?ZWNJTzhreFQzdGFmbmRnamZLTW9DZWpWVWYyUFpWUC8vVTY2cUtybDg2dFph?=
- =?utf-8?B?bEVrUlhjMitTNDRWMjJSSjBpendFV1RVQkF4M21oZmQ2UkpGK0RCUU5VVnZZ?=
- =?utf-8?B?TjhhMjFycEdJclJsU1BKaVJETGJualZXV3FVS1AvcmtuQjdORm5JNm1mdTFm?=
- =?utf-8?B?SUZNL2tGb25HSElUUWlqM3NDSTVUbDZoVnVWWmdKUEhzVzg5SnZvZE9nVU5q?=
- =?utf-8?B?M0xLTHpDc3NaU3VseE1rMk10RWNRdStKMDZ5UkRTOHhGSlBTWnMydGhiQXgy?=
- =?utf-8?B?QmtVWnJEdE5SWUlFTWtUdndoRE9FOVJiRmZNNlFWTmRBQnhPUVBKbjlVQ0Z3?=
- =?utf-8?B?ZHJkeVliQzhRRFZBQ1U3U2d4MTVJZWxvYXdKRktSQ3RpV1VHVVptTVVQRDhY?=
- =?utf-8?B?MEdrelRLQkZMQXpIOVk4ZzBjdENUWE9ya3liSmY5d0ZnR0VaUmNFS2JubXY3?=
- =?utf-8?B?UTVrZWdTM04vaExDcm1LNmUvM2pBbjVXZFJHbUpDaWRsSGIxODd6VlBoYTUv?=
- =?utf-8?B?UGRZMGV4TkhWU1hMWDlIUHVDdDRKQ0FhaGtvODZQYkwyM2F0dmNGODl4RW9L?=
- =?utf-8?B?NWJZcktFMzRDQ1Z1LzF4N2hUZkpHL2VxUGRmMUV4Um5ZMFp1eXFUN0lWQlY4?=
- =?utf-8?B?MER3ZDRBQ0laZ3JRMHRBdGs5dGZmTXRiM2VsSTQxYXQ5L1ZhVHM5eVJBbkcz?=
- =?utf-8?B?STdqKzFXTjdzREIxNmRKWjhpSlVLTnhMaHVOMFhrK3JSbW9UWVVSYlh6U1VW?=
- =?utf-8?B?RHNBWWhUVlo2WFh1UlJFNC9ndXZBRHlvUWxJYVlHTXZ0cnRQQnRYd0pBOWVU?=
- =?utf-8?B?eHplN2xnVGw0STVwbDRCQWZEVExzb2J6dVI5UVYwcTNBNHhXeTl0ZTBoVmh1?=
- =?utf-8?B?NitteHF0Ni85bk40dytOR2JubllNQTF1SllBZUtJaVdySjRhVkRlSWhiYnI3?=
- =?utf-8?B?V0FLbGdEaUJpZVdwcEpmUzlaKzlmeVh1Q2Z1SndtZWhxQ3VCMHlRWG9ydk8r?=
- =?utf-8?B?Ty9vQmdqRjhoSFlNNk4rcFp5eW5saXFuREtJd2FCZDczVDBsMWp5UkRxSmtr?=
- =?utf-8?B?WGVSaGh2Wnc3MmUxTlB4bjNTdTFSQWt3SEU4Y1RtdHA1S0VQNFdMMTNvbHhJ?=
- =?utf-8?B?Y1FGNzkwdUVORjBBcjYxSTFFeHFXeGxyS0NmSmhuTFFmSXFlZlRrWDdVUnhZ?=
- =?utf-8?B?UExKaXBSOGNnTGNXMzU3Ti9zTlNDSFVvWWQxME1jK1Vua256YjBQbUU5ZkJ0?=
- =?utf-8?B?K0FoZzlYbFQ1SmdJVjc3UjNxNm9HRWVGQmZxTWVDY2FONnFzVEcvUDZGaU5z?=
- =?utf-8?B?OWF2WjZvNllhcktZaEVxRElzTVI1SzNtSllYM1FwcGdnMzRCVDZhWVNKSDRP?=
- =?utf-8?B?VmdQdUZJeHh1Q3ZaWThiMUFoUDRlaEkwMUZQUWk4NFVlbzZ2ZngwRjlkU2lu?=
- =?utf-8?B?L3gzMEg5NVFCaXdUOXR6dFpYNG1La1Y0VmJHOTFKdzFieThlVStFUmJWTUds?=
- =?utf-8?B?eDh0VTJ4STdLZFNXMm5tenAzTmRwcTFqTnk0ckVuVDFjbUQxYzVEbmwxa05E?=
- =?utf-8?B?UkFURUJjVUdxcXhCcjN5WmMrSXRnZVozem1jdDdua1QwdUlrK3pXREpYRGRG?=
- =?utf-8?B?SUM0bjJaWmpuRjJwMHBydlZlUFlBZEFsa0w2YzhzcHNUYWNNTGZPc0EvTEdr?=
- =?utf-8?B?cnpUN2lHWnBBa0lGUWJUTjRYaHJCek1Idk40SVdZMVk0d1orTVhDUXp5eDlH?=
- =?utf-8?B?QXMrUlFGYlFGS29JclROY0JJdStGWDliRDkwOUN3bDBBSW0xWE1SNlc5ZWNh?=
- =?utf-8?Q?k6VPp4Z8X4CIbqWBCyUzhHUw4Z2Iot76n+VBtLw9cI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <321D2DE8D4FBD948BD81873221ADF8E3@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 9 Mar 2022 02:23:02 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B0910A7E5;
+        Tue,  8 Mar 2022 23:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646810524; x=1678346524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8P15gyfMQXBcZtwt5sBe3cAJYWyxAa9xsRjkNdIfHfs=;
+  b=c4rfCkKtxWbo2cNwGtazxDrff4PLQO3Bd8dSZnzZ15U0A7hK6JaOdK3T
+   lM/OMA3SewgeGxHgAnLKnvFUWIs8F64MgNzs7OG/4mUx/+cPfibUDYGrz
+   oc4oQuPihxkWXArRQIP710+6KzgFyOjaxYftaLTIXpxH82iiNA9YnWKpm
+   6awFm3cP03W8tsLb6VfxR67yip3BSl0uUXk9CJrGfewQPMqAzOEWQZJYG
+   sjleyWoz9tViXjnwGsUysmYd9xpoiC4dngT2oxOEEnzH4GGxpKfXogBIf
+   AOdNJOuLqcTz4OUPLtj5HxlS7991m738MjwNYN2gXRfv8KY4F60roK1SL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234860537"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="234860537"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 23:22:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="814643883"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Mar 2022 23:21:57 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRqdw-0002pB-R8; Wed, 09 Mar 2022 07:21:56 +0000
+Date:   Wed, 9 Mar 2022 15:21:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Byungchul Park <byungchul.park@lge.com>,
+        torvalds@linux-foundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, will@kernel.org,
+        tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org
+Subject: Re: [PATCH v4 02/24] dept: Implement Dept(Dependency Tracker)
+Message-ID: <202203091550.PnufQ7gO-lkp@intel.com>
+References: <1646377603-19730-3-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d52e3ef-124a-47c1-3e2a-08da019d6d80
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2022 07:21:28.4492
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: auPQoCjyTvqZHwexwN+nYMoiNknzWNy2XJve7C49kaP3xt1ZOssIIZMJ17Mo9J/FJTxG0JlYBKKsM7kHCBcEAoxmDEK+Wm9FWBcVzFY7Qrg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1820
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646377603-19730-3-git-send-email-byungchul.park@lge.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzAzLzIwMjIgw6AgMDQ6MjQsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
-Cj4gSGFuZ3l1IEh1YSA8aGJoMjV5QGdtYWlsLmNvbT4gd3JpdGVzOg0KPj4gbXBjOHh4X3BpY19p
-bml0KCkgc2hvdWxkIHJldHVybiAtRU5PTUVNIGluc3RlYWQgb2YgMCB3aGVuDQo+PiBpcnFfZG9t
-YWluX2FkZF9saW5lYXIoKSByZXR1cm4gTlVMTC4gVGhpcyBjYXVzZSBtcGM4eHhfcGljc19pbml0
-IHRvIGNvbnRpbnVlDQo+PiBleGVjdXRpbmcgZXZlbiBpZiBtcGM4eHhfcGljX2hvc3QgaXMgTlVM
-TC4NCj4+DQo+PiBGaXhlczogY2M3NjQwNGZlYWVkICgicG93ZXJwYy84eHg6IEZpeCBwb3NzaWJs
-ZSBkZXZpY2Ugbm9kZSByZWZlcmVuY2UgbGVhayIpDQo+PiBTaWduZWQtb2ZmLWJ5OiBIYW5neXUg
-SHVhIDxoYmgyNXlAZ21haWwuY29tPg0KPj4gLS0tDQo+PiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9y
-bXMvOHh4L3BpYy5jIHwgMSArDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0K
-Pj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzh4eC9waWMuYyBiL2Fy
-Y2gvcG93ZXJwYy9wbGF0Zm9ybXMvOHh4L3BpYy5jDQo+PiBpbmRleCBmMmJhODM3MjQ5ZDYuLjA0
-YTZhYmYxNGMyOSAxMDA2NDQNCj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvOHh4L3Bp
-Yy5jDQo+PiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzh4eC9waWMuYw0KPj4gQEAgLTE1
-Myw2ICsxNTMsNyBAQCBpbnQgX19pbml0IG1wYzh4eF9waWNfaW5pdCh2b2lkKQ0KPiANCj4gRXhw
-YW5kaW5nIHRoZSBjb250ZXh0Og0KPiANCj4gCXNpdV9yZWcgPSBpb3JlbWFwKHJlcy5zdGFydCwg
-cmVzb3VyY2Vfc2l6ZSgmcmVzKSk7DQo+IAlpZiAoc2l1X3JlZyA9PSBOVUxMKSB7DQo+IAkJcmV0
-ID0gLUVJTlZBTDsNCj4gCQlnb3RvIG91dDsNCj4gCX0NCj4gDQo+IAltcGM4eHhfcGljX2hvc3Qg
-PSBpcnFfZG9tYWluX2FkZF9saW5lYXIobnAsIDY0LCAmbXBjOHh4X3BpY19ob3N0X29wcywgTlVM
-TCk7DQo+PiAgIAlpZiAobXBjOHh4X3BpY19ob3N0ID09IE5VTEwpIHsNCj4+ICAgCQlwcmludGso
-S0VSTl9FUlIgIk1QQzh4eCBQSUM6IGZhaWxlZCB0byBhbGxvY2F0ZSBpcnEgaG9zdCFcbiIpOw0K
-Pj4gICAJCXJldCA9IC1FTk9NRU07DQo+PiArCQlnb3RvIG91dDsNCj4+ICAgCX0NCj4+ICAgDQo+
-PiAgIAlyZXQgPSAwOw0KPj4gICAJDQo+IG91dDoNCj4gCW9mX25vZGVfcHV0KG5wKTsNCj4gCXJl
-dHVybiByZXQ7DQo+IH0NCj4gDQo+IFByb3BlciBlcnJvciBjbGVhbnVwIHNob3VsZCBhbHNvIHVu
-ZG8gdGhlIGlvcmVtYXAoKSBpZg0KPiBpcnFfZG9tYWluX2FkZF9saW5lYXIoKSBmYWlscy4NCg0K
-VWggLi4uDQoNCklmIHNpdV9yZWcgaXMgTlVMTCwgeW91IGdldCBhIHNlcmlvdXMgcHJvYmxlbSB3
-aGVuIF9fZG9faXJxKCkgY2FsbHMgDQptcGM4eHhfZ2V0X2lycSgpDQoNCnVuc2lnbmVkIGludCBt
-cGM4eHhfZ2V0X2lycSh2b2lkKQ0Kew0KCWludCBpcnE7DQoNCgkvKiBGb3IgTVBDOHh4LCByZWFk
-IHRoZSBTSVZFQyByZWdpc3RlciBhbmQgc2hpZnQgdGhlIGJpdHMgZG93bg0KCSAqIHRvIGdldCB0
-aGUgaXJxIG51bWJlci4NCgkgKi8NCglpcnEgPSBpbl9iZTMyKCZzaXVfcmVnLT5zY19zaXZlYykg
-Pj4gMjY7DQoNCglpZiAoaXJxID09IFBJQ19WRUNfU1BVUlJJT1VTKQ0KCQlyZXR1cm4gMDsNCg0K
-ICAgICAgICAgcmV0dXJuIGlycV9saW5lYXJfcmV2bWFwKG1wYzh4eF9waWNfaG9zdCwgaXJxKTsN
-Cg0KfQ0KDQoNClNvIEknbGwgbGVhdmUgc2l1X3JlZyBhcyBpcyBldmVuIGlmIGlycV9kb21haW5f
-YWRkX2xpbmVhcigpIGZhaWxzLg0KDQpXaGF0ZXZlciwgaWYgd2UgZG8gc29tZXRoaW5nIGFib3V0
-IHRoYXQgaXQgc2hvdWxkIGJlIGRvbmUgaW4gYW5vdGhlciANCnBhdGNoIEkgdGhpbmsuDQoNCkNo
-cmlzdG9waGU=
+Hi Byungchul,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on linux/master linus/master v5.17-rc7]
+[cannot apply to tip/locking/core hnaz-mm/master next-20220308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Byungchul-Park/DEPT-Dependency-Tracker/20220304-150943
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 25795ef6299f07ce3838f3253a9cb34f64efcfae
+config: hexagon-randconfig-r022-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091550.PnufQ7gO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/387c58f459c6eb2a17a99b6c42ad57512a917d5d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Byungchul-Park/DEPT-Dependency-Tracker/20220304-150943
+        git checkout 387c58f459c6eb2a17a99b6c42ad57512a917d5d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/target/ kernel/dependency/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/dependency/dept.c:2093:6: warning: no previous prototype for function '__dept_wait' [-Wmissing-prototypes]
+   void __dept_wait(struct dept_map *m, unsigned long w_f, unsigned long ip,
+        ^
+   kernel/dependency/dept.c:2093:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __dept_wait(struct dept_map *m, unsigned long w_f, unsigned long ip,
+   ^
+   static 
+   In file included from kernel/dependency/dept.c:2532:
+>> kernel/dependency/dept_hash.h:9:1: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+   HASH(dep, 12)
+   ^~~~~~~~~~~~~
+   kernel/dependency/dept.c:2531:14: note: expanded from macro 'HASH'
+                  #id, B2KB(sizeof(struct hlist_head) * (1UL << bits)));
+                  ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:519:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   kernel/dependency/dept.c:2497:17: note: expanded from macro 'B2KB'
+   #define B2KB(B) ((B) / 1024)
+                   ^~~~~~~~~~~~
+   In file included from kernel/dependency/dept.c:2532:
+   kernel/dependency/dept_hash.h:10:1: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+   HASH(class, 12)
+   ^~~~~~~~~~~~~~~
+   kernel/dependency/dept.c:2531:14: note: expanded from macro 'HASH'
+                  #id, B2KB(sizeof(struct hlist_head) * (1UL << bits)));
+                  ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:519:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   kernel/dependency/dept.c:2497:17: note: expanded from macro 'B2KB'
+   #define B2KB(B) ((B) / 1024)
+                   ^~~~~~~~~~~~
+   3 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FRAME_POINTER
+   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
+   Selected by
+   - DEPT && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
+
+
+vim +/__dept_wait +2093 kernel/dependency/dept.c
+
+  2092	
+> 2093	void __dept_wait(struct dept_map *m, unsigned long w_f, unsigned long ip,
+  2094			 const char *w_fn, int ne)
+  2095	{
+  2096		int e;
+  2097	
+  2098		/*
+  2099		 * Be as conservative as possible. In case of mulitple waits for
+  2100		 * a single dept_map, we are going to keep only the last wait's
+  2101		 * wgen for simplicity - keeping all wgens seems overengineering.
+  2102		 *
+  2103		 * Of course, it might cause missing some dependencies that
+  2104		 * would rarely, probabily never, happen but it helps avoid
+  2105		 * false positive report.
+  2106		 */
+  2107		for_each_set_bit(e, &w_f, DEPT_MAX_SUBCLASSES_EVT) {
+  2108			struct dept_class *c;
+  2109			struct dept_key *k;
+  2110	
+  2111			k = m->keys ?: &m->keys_local;
+  2112			c = check_new_class(&m->keys_local, k,
+  2113					    map_sub(m, e), m->name);
+  2114			if (!c)
+  2115				continue;
+  2116	
+  2117			add_wait(c, ip, w_fn, ne);
+  2118		}
+  2119	}
+  2120	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

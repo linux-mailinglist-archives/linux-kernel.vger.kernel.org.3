@@ -2,289 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC944D312E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFEC4D312B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbiCIOno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 09:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
+        id S233607AbiCIOnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiCIOne (ORCPT
+        with ESMTP id S233362AbiCIOnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:43:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD03BC7
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:42:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA8960EA5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4170C340F6;
-        Wed,  9 Mar 2022 14:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646836948;
-        bh=/IOE9q8yo2NZlvwDe/DVbTQPPU3AcAWQOmaN09MF3ds=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JAYul9PoPEfDWMBeCdNiNUwJTibarEbYXVrQU9Qb2clrADYsp4BMJfuZtdDtnfI5y
-         M0M9CgT3+IbHvKCpqrXsb80DY9AbY2h5r2w+ZPszArbcyoSwMetTgzigfNsDOeFB49
-         eHruOFUCPnOVRGPzMy7ELfJ89Hk2at0zrmGvkG2K9JHHnqxveT58ooxLO/WDMehuTb
-         EhlRWpzNAOWO9AHpmygrRqrXdWppRR8ATvAt/ZWNifbP53Sqbh0BdoqUjKHc0l8tIP
-         HMwY2MQNapTLtQ70ITgnlLUACUZjmfiUZ+28lGaAyu6e/EM5xThDIIh+/25Y0wOLum
-         BPb5u4KzVt3eA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH 2/2] ARM: remove support for NOMMU ARMv4/v5
-Date:   Wed,  9 Mar 2022 15:40:48 +0100
-Message-Id: <20220309144138.360482-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220309144138.360482-1-arnd@kernel.org>
-References: <20220309144138.360482-1-arnd@kernel.org>
+        Wed, 9 Mar 2022 09:43:19 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C8117DBBF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:42:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646836941; x=1678372941;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VXzSaYAq968hpLq9pjQu4f3W0hi/lLLCGhCMIFyMafw=;
+  b=C3BkaDaNMpF6mjSQYrTebGcK6t2IL67vsOdrGU9HoRhxsaeDFrI0h5oA
+   jgGEElDq73VIAy66bcQ59OpjxQUX0NfngrOh7849/jN+qKFU24PGfU9uQ
+   4n5GUrZdFIrFASiRJOyza85IlbBhBfENhfF3N2jex50dxnR2v40kLWtgA
+   OW2/9jbMfxT+bKAJlhz/DP/S9Gvd9KBhxMtze5/sqQWUavRE3tm2iNOj4
+   j2l7+4BAP0U9wow1FVSo6jvfpJx9BSGuuXwgLqFYa7i8Gq617un2kH4Yu
+   nEtqcUllRB7OYrKgIkOanG53S+kbv+8s9mlyhZtOxtluxgd4LVqnSSK4A
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643698800"; 
+   d="scan'208";a="148622984"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 07:42:20 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 9 Mar 2022 07:42:19 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 9 Mar 2022 07:42:17 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <p.yadav@ti.com>, <michael@walle.cc>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <nicolas.ferre@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH v2 0/4] mtd: spi-nor: Parse BFPT to determine the 4-Byte Address Mode
+Date:   Wed, 9 Mar 2022 16:42:11 +0200
+Message-ID: <20220309144215.179449-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Get the 4-Byte Address mode method from BFPT and favor it in the detriment
+of the "default" set_4byte_addr_mode method or the methods set by vendors.
+This may introduce some regressions if flashes have wrong BFPT data. The
+fix is to introduce post_bfpt() hooks and fix where needed. We should let
+the core/sfdp do the params initialization, and do vendor specific updates
+just where needed.
 
-It is possible to build MMU-less kernels for Cortex-M base
-microcrontrollers as well as a couple of older platforms that
-have not been converted to CONFIG_ARCH_MULTIPLATFORM,
-specifically ep93xx, footbridge, dove, sa1100 and s3c24xx.
+This patch set depends on:
+https://lore.kernel.org/lkml/20220304093011.198173-1-tudor.ambarus@microchip.com/
+which depends on:
+https://lore.kernel.org/lkml/20220228111712.111737-1-tudor.ambarus@microchip.com/
 
-It seems unlikely that anybody has tested those configurations
-in recent years, as even building them is frequently broken.
-A patch I submitted caused another build time regression
-in this configuration. I sent a patch for that, but it seems
-better to also remove the option entirely, leaving ARMv7-M
-as the only supported Arm NOMMU target for simplicity.
+You can find a branch containing the entire chain at:
+git@github.com:ambarus/linux-0day.git spi-nor/next-bfpt-4byte-addr
 
-This addresses several build failures in randconfig builds that
-have accumulated over the years.
+v2: drop quad enable patch
 
-Cc: Vladimir Murzin <vladimir.murzin@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-If there are no objections, I'd apply this patch to the soc
-tree for 5.18 as a cleanup.
----
- arch/arm/Kconfig                              | 34 +++++++------------
- .../mach-footbridge/include/mach/hardware.h   | 20 ++++-------
- arch/arm/mach-footbridge/include/mach/io.h    | 20 -----------
- arch/arm/mach-integrator/hardware.h           |  5 ---
- 4 files changed, 20 insertions(+), 59 deletions(-)
- delete mode 100644 arch/arm/mach-footbridge/include/mach/io.h
+Tudor Ambarus (4):
+  mtd: spi-nor: Parse BFPT to determine the 4-Byte Address Mode methods
+  mtd: spi-nor: Update name and description of the set_4byte_addr_mode
+    BFPT methods
+  mtd: spi-nor: Favor the BFPT-parsed set_4byte_addr_mode method
+  mtd: spi-nor: sfdp: Keep SFDP definitions private
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 5f0b40bab4fb..d184377ce2ae 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -304,6 +304,17 @@ config MMU
- 	  Select if you want MMU-based virtualised addressing space
- 	  support by paged memory management. If unsure, say 'Y'.
- 
-+config ARM_SINGLE_ARMV7M
-+	def_bool !MMU
-+	select ARM_NVIC
-+	select AUTO_ZRELADDR
-+	select TIMER_OF
-+	select COMMON_CLK
-+	select CPU_V7M
-+	select NO_IOPORT_MAP
-+	select SPARSE_IRQ
-+	select USE_OF
-+
- config ARCH_MMAP_RND_BITS_MIN
- 	default 8
- 
-@@ -318,12 +329,11 @@ config ARCH_MMAP_RND_BITS_MAX
- #
- choice
- 	prompt "ARM system type"
--	default ARM_SINGLE_ARMV7M if !MMU
--	default ARCH_MULTIPLATFORM if MMU
-+	depends on MMU
-+	default ARCH_MULTIPLATFORM
- 
- config ARCH_MULTIPLATFORM
- 	bool "Allow multiple platforms to be selected"
--	depends on MMU
- 	select ARCH_FLATMEM_ENABLE
- 	select ARCH_SPARSEMEM_ENABLE
- 	select ARCH_SELECT_MEMORY_MODEL
-@@ -337,18 +347,6 @@ config ARCH_MULTIPLATFORM
- 	select SPARSE_IRQ
- 	select USE_OF
- 
--config ARM_SINGLE_ARMV7M
--	bool "ARMv7-M based platforms (Cortex-M0/M3/M4)"
--	depends on !MMU
--	select ARM_NVIC
--	select AUTO_ZRELADDR
--	select TIMER_OF
--	select COMMON_CLK
--	select CPU_V7M
--	select NO_IOPORT_MAP
--	select SPARSE_IRQ
--	select USE_OF
--
- config ARCH_EP93XX
- 	bool "EP93xx-based"
- 	select ARCH_SPARSEMEM_ENABLE
-@@ -367,7 +365,6 @@ config ARCH_FOOTBRIDGE
- 	bool "FootBridge"
- 	select CPU_SA110
- 	select FOOTBRIDGE
--	select NEED_MACH_IO_H if !MMU
- 	select NEED_MACH_MEMORY_H
- 	help
- 	  Support for systems based on the DC21285 companion chip
-@@ -375,7 +372,6 @@ config ARCH_FOOTBRIDGE
- 
- config ARCH_IOP32X
- 	bool "IOP32x-based"
--	depends on MMU
- 	select CPU_XSCALE
- 	select GPIO_IOP
- 	select GPIOLIB
-@@ -387,7 +383,6 @@ config ARCH_IOP32X
- 
- config ARCH_IXP4XX
- 	bool "IXP4xx-based"
--	depends on MMU
- 	select ARCH_SUPPORTS_BIG_ENDIAN
- 	select ARM_PATCH_PHYS_VIRT
- 	select CPU_XSCALE
-@@ -418,7 +413,6 @@ config ARCH_DOVE
- 
- config ARCH_PXA
- 	bool "PXA2xx/PXA3xx-based"
--	depends on MMU
- 	select ARCH_MTD_XIP
- 	select ARM_CPU_SUSPEND if PM
- 	select AUTO_ZRELADDR
-@@ -437,7 +431,6 @@ config ARCH_PXA
- 
- config ARCH_RPC
- 	bool "RiscPC"
--	depends on MMU
- 	depends on !CC_IS_CLANG && GCC_VERSION < 90100 && GCC_VERSION >= 60000
- 	select ARCH_ACORN
- 	select ARCH_MAY_HAVE_PC_FDC
-@@ -493,7 +486,6 @@ config ARCH_S3C24XX
- 
- config ARCH_OMAP1
- 	bool "TI OMAP1"
--	depends on MMU
- 	select ARCH_OMAP
- 	select CLKSRC_MMIO
- 	select GENERIC_IRQ_CHIP
-diff --git a/arch/arm/mach-footbridge/include/mach/hardware.h b/arch/arm/mach-footbridge/include/mach/hardware.h
-index ecaf6e7388d9..985ad3a95671 100644
---- a/arch/arm/mach-footbridge/include/mach/hardware.h
-+++ b/arch/arm/mach-footbridge/include/mach/hardware.h
-@@ -21,32 +21,26 @@
-  * 0xf0000000	0x80000000	16MB	ISA memory
-  */
- 
--#ifdef CONFIG_MMU
--#define MMU_IO(a, b)	(a)
--#else
--#define MMU_IO(a, b)	(b)
--#endif
--
- #define XBUS_SIZE		0x00100000
--#define XBUS_BASE		MMU_IO(0xff800000, 0x40000000)
-+#define XBUS_BASE		0xff800000
- 
- #define ARMCSR_SIZE		0x00100000
--#define ARMCSR_BASE		MMU_IO(0xfe000000, 0x42000000)
-+#define ARMCSR_BASE		0xfe000000
- 
- #define WFLUSH_SIZE		0x00100000
--#define WFLUSH_BASE		MMU_IO(0xfd000000, 0x78000000)
-+#define WFLUSH_BASE		0xfd000000
- 
- #define PCIIACK_SIZE		0x00100000
--#define PCIIACK_BASE		MMU_IO(0xfc000000, 0x79000000)
-+#define PCIIACK_BASE		0xfc000000
- 
- #define PCICFG1_SIZE		0x01000000
--#define PCICFG1_BASE		MMU_IO(0xfb000000, 0x7a000000)
-+#define PCICFG1_BASE		0xfb000000
- 
- #define PCICFG0_SIZE		0x01000000
--#define PCICFG0_BASE		MMU_IO(0xfa000000, 0x7b000000)
-+#define PCICFG0_BASE		0xfa000000
- 
- #define PCIMEM_SIZE		0x01000000
--#define PCIMEM_BASE		MMU_IO(0xf0000000, 0x80000000)
-+#define PCIMEM_BASE		0xf0000000
- 
- #define XBUS_CS2		0x40012000
- 
-diff --git a/arch/arm/mach-footbridge/include/mach/io.h b/arch/arm/mach-footbridge/include/mach/io.h
-deleted file mode 100644
-index 4e18b921373f..000000000000
---- a/arch/arm/mach-footbridge/include/mach/io.h
-+++ /dev/null
-@@ -1,20 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- *  arch/arm/mach-footbridge/include/mach/io.h
-- *
-- *  Copyright (C) 1997-1999 Russell King
-- *
-- *  Modifications:
-- *   06-12-1997	RMK	Created.
-- *   07-04-1999	RMK	Major cleanup
-- */
--#ifndef __ASM_ARM_ARCH_IO_H
--#define __ASM_ARM_ARCH_IO_H
--
--/*
-- * Translation of various i/o addresses to host addresses for !CONFIG_MMU
-- */
--#define PCIO_BASE       0x7c000000
--#define __io(a)			((void __iomem *)(PCIO_BASE + (a)))
--
--#endif
-diff --git a/arch/arm/mach-integrator/hardware.h b/arch/arm/mach-integrator/hardware.h
-index 4d6ade3dd4ee..81ce09e3ad45 100644
---- a/arch/arm/mach-integrator/hardware.h
-+++ b/arch/arm/mach-integrator/hardware.h
-@@ -16,12 +16,7 @@
- #define IO_START		INTEGRATOR_HDR_BASE        // PA of IO
- 
- /* macro to get at IO space when running virtually */
--#ifdef CONFIG_MMU
- #define IO_ADDRESS(x)	(((x) & 0x000fffff) | (((x) >> 4) & 0x0ff00000) | IO_BASE)
--#else
--#define IO_ADDRESS(x)	(x)
--#endif
--
- #define __io_address(n)		((void __iomem *)IO_ADDRESS(n))
- 
- /*
+ drivers/mtd/spi-nor/core.c      |  70 +----------
+ drivers/mtd/spi-nor/core.h      |   1 -
+ drivers/mtd/spi-nor/macronix.c  |   9 +-
+ drivers/mtd/spi-nor/micron-st.c |  32 +----
+ drivers/mtd/spi-nor/sfdp.c      | 199 ++++++++++++++++++++++++++++++++
+ drivers/mtd/spi-nor/sfdp.h      |  57 +--------
+ drivers/mtd/spi-nor/winbond.c   |  18 +--
+ 7 files changed, 234 insertions(+), 152 deletions(-)
+
 -- 
-2.29.2
+2.25.1
 

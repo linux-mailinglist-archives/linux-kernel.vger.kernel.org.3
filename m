@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B32F4D2FD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF384D2FDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbiCINXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S232702AbiCINZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiCINXm (ORCPT
+        with ESMTP id S229738AbiCINZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:23:42 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87643377F4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:22:43 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id z3so1918485plg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:22:43 -0800 (PST)
+        Wed, 9 Mar 2022 08:25:02 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FFF9BBB9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:24:03 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so5235810pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:24:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nFpUu9dr27noPEr7QirbOcRxKdELB7gGpnSLhYA/8gk=;
-        b=u91UGLmWfLry7Qd6UFWNi+UaDteJUJDXdAl658I7tK+Z9YPKkYp1+M814Yrj8LoQkD
-         fYknxzvizgkRxib8MSrjAxFehpP/x5dgDGjjbFsC39p+PHvkvtA1DolgdBAzPJU6SmyG
-         RaNiTUBSrIFpYc1ynXq1YpI377jkv9iEDe9vE3LFtAUV29xTLMZcnaDY/25dFhcIUC+Y
-         d2+TXjv2ruxUWa7In6j5dHHpL91wtEOPc64pDbVhFVS6XyZha9Kjk6E2rUiN5L0PFPmm
-         cxfuvyhePMtYCF6HnQnwHwZQ6ApfixdNaTxIUggcWjdqRRzZy48cG8Nrv70E0rEbe76+
-         yNng==
+        bh=5oRZXC1BJWU5wHBAMKvr18W/wUSl+kSjeSXIhLz/2sU=;
+        b=DPR3zH9WhDgp67OFBrXbywIYtj2eZKwfu4g+rxaQCZ1w925pDwdZomMek8ZYOf4IHT
+         hyJSoj5YpW2KK/n4/cnYUOh3xKOE64v2u65le43o/E7vtXZS+phCqAKsJyAmAOF9f00z
+         9VSopSF0UdM1BKdhSy+pzPQDR2WQ13NzsnHYfjuF6PV2ibawnnrOOaWmmPAb7Sf2R++Q
+         VUZeVGnwEsjwmk7z8SqP3fUnnbQPrqbPFdOu97dI0b0LgBZlP/H81jvy47EZmh+q4KP8
+         mSiCeyQHggeLkG1bDpisnGtm0uvUwsXI8XdcB9wzVJ5cRxwgWHHT9VjMd3chIpetf7Mo
+         C5Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nFpUu9dr27noPEr7QirbOcRxKdELB7gGpnSLhYA/8gk=;
-        b=5pKO1tELWS1HK8RaH6uDl+R+JPduS1spOTAfV3raCjheMe7jAh+2JYWi9a9j/157r6
-         kKNoMbjdxjLdAhtfDPnbn5irLdNpL02cM73iEGlXP0Pytm7Me9ZrRmDsIJHBqsEFRbc0
-         bfMNEzZ+IciNx2Qx2NcSJBp3/COBXcaZrWLMildpAJEj7S6cS6IP3J5Bsrxjse1ZTLtq
-         3sZTMH+LKnEQovMpoglA5PRFvxyfq/j8OxsO6/DdVAuOjRHBRHx8XBuwVEb0QP6fxISZ
-         rHgGQJ5SlQe5RlWXylwd9D9ok5CaDhkvhg4r7m8GF9fhFu0x76YM9sbYIs1qOireswOw
-         6tkg==
-X-Gm-Message-State: AOAM533KCcjt3lzNB/FHURaErB2OPs8miiJOKeoNXZnDv+Ls4a48W26D
-        ek+fXmkE59UctzyHeJVIKQI0BAtkJPpMzSh3MDOXpw==
-X-Google-Smtp-Source: ABdhPJxairSjptuZC/cMBulWljGFXF9/fDim8+cVb5GOFlehI0cit3Yq/MqRNr4EydbX1nuYFckLml5X2cTV8HjYvPc=
+        bh=5oRZXC1BJWU5wHBAMKvr18W/wUSl+kSjeSXIhLz/2sU=;
+        b=K42CoVB0WzhbpjFWZeL6HxlzBe3ObmA+PE8PXxUd3ouiSh4fWLa+f7QeGwxEFc2Gzp
+         Ov+V61xEi+YkXiuQp+K/sBWPv5HAu+1eqC9f3KCqOx8K4gaw1qFmS+TkvXnSjvsmNDWv
+         T3YgfmA8QFCexMQ9MIiGUv7gAGlXC3KT7xOQBYMqn6VtkQcJBixHpXlhlyJprFiBWylI
+         XpwYMcJmlaWYJosE6UgZ51jtptX4QjDqOrPNc64A0vXPpHm2Ey1TXVBxYTGFWmJWyZ7T
+         xUBde9hR0lljTSlZXvaugT4Eln41RZ1hgaea62cjxoaEkS9m7jacLX4Gx5oSfYicmb0F
+         0Kgg==
+X-Gm-Message-State: AOAM532sjK+9xvIhXplXBLWfzA9dMjhDau7eMKzqb43kxeAlYcK3DrYQ
+        3szCzl9XGN38ztK42Sa5qxNIjKPibV56+RJ2lfacbg==
+X-Google-Smtp-Source: ABdhPJw5MkFq8UxSrUjKLChZQOA3kh2aek7Niglg0YrY5Z592yyqMyuGw5kuIMEZSJNh1lQBO4g/snUreHdp++oeCCQ=
 X-Received: by 2002:a17:902:7044:b0:14e:e1b1:bb0e with SMTP id
- h4-20020a170902704400b0014ee1b1bb0emr22498860plt.65.1646832162896; Wed, 09
- Mar 2022 05:22:42 -0800 (PST)
+ h4-20020a170902704400b0014ee1b1bb0emr22504279plt.65.1646832243062; Wed, 09
+ Mar 2022 05:24:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20220309073637.3591-1-rex-bc.chen@mediatek.com>
-In-Reply-To: <20220309073637.3591-1-rex-bc.chen@mediatek.com>
+References: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
+ <20220308110615.2.I4485769d5b25a8096508e839b8fea12ce7b836d3@changeid>
+In-Reply-To: <20220308110615.2.I4485769d5b25a8096508e839b8fea12ce7b836d3@changeid>
 From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 9 Mar 2022 14:22:31 +0100
-Message-ID: <CAG3jFysXP3vs0uWAykQHckE1KBZr6PfE990mOny-6n=AHP2zHA@mail.gmail.com>
-Subject: Re: [RESEND V11 0/3] force hsa hbp hfp packets multiple of lanenum to
- avoid screen shift
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     daniel@ffwll.ch, airlied@linux.ie,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, matthias.bgg@gmail.com,
-        andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        xji@analogixsemi.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+Date:   Wed, 9 Mar 2022 14:23:52 +0100
+Message-ID: <CAG3jFytkSsmN0H3N-ARqLJ16+ughHZqdas09Her_ZOkSTvCydw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] drm/bridge: Add myself as a reviewer for the TI
+ SN65DSI86 bridge chip
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -77,55 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 08:36, Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+On Tue, 8 Mar 2022 at 20:07, Douglas Anderson <dianders@chromium.org> wrote:
 >
-> Resend v11:
->  - Resend this series for reviewing.
->  - Rebase to 5.17-rc7.
+> I've spent quite a bit of time poking at this driver and it's used on
+> several Chromebooks I'm involved with. I'd like to get notified about
+> patches. Add myself as a reviewer. It's expected that changes will
+> still be landed through drm-misc as they always have been.
 >
-> Changes since v10:
->  - Rebase to 5.17-rc3.
->  - Add more maintainers.
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 >
-> Changes since v9:
->  - Change description of "MIPI_DSI_HS_PKT_END_ALIGNED".
->  - Use mode_flags directly instead of another variable on patch [2/3].
->  - Add explanation of implementation in mtk_dsi.c on commit message of [2/3].
+>  MAINTAINERS | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> Changes since v8:
->  - Use mode_flags to control this limitation instead of "hs_packet_end_aligned".
->  - Add new bit definition "MIPI_DSI_HS_PKT_END_ALIGNED" for mode_flags.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a73179d55d00..7d25d0b4dccc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6284,6 +6284,11 @@ DRM DRIVER FOR TDFX VIDEO CARDS
+>  S:     Orphan / Obsolete
+>  F:     drivers/gpu/drm/tdfx/
 >
-> Changes since v7:
->  - Rebase to kernel 5.16
->  - Add tags of reviewed-by and acked-by.
->  - Add detailed commit message for flag "hs_packet_end_aligned" in DSI common driver.
->
-> Changes since v6:
->  - Add "bool hs_packet_end_aligned" in "struct mipi_dsi_device" to control the dsi aligned.
->  - Config the "hs_packet_end_aligned" in ANX7725 .attach().
->
-> Changes since v5:
->  - Search the anx7625 compatible as flag to control dsi output aligned.
->
-> Changes since v4:
->  - Move "dt-bindings: drm/bridge: anx7625: add force_dsi_end_without_null" before
->    "drm/mediatek: force hsa hbp hfp packets multiple of lanenum to avoid".
->  - Retitle "dt-bindings: drm/bridge: anx7625: add force_dsi_end_without_null".
->
-> Rex-BC Chen (3):
->   drm/dsi: transfer DSI HS packets ending at the same time
->   drm/mediatek: implement the DSI HS packets aligned
->   drm/bridge: anx7625: config hs packets end aligned to avoid screen
->     shift
->
->  drivers/gpu/drm/bridge/analogix/anx7625.c |  3 ++-
->  drivers/gpu/drm/mediatek/mtk_dsi.c        | 12 ++++++++++++
->  include/drm/drm_mipi_dsi.h                |  2 ++
->  3 files changed, 16 insertions(+), 1 deletion(-)
->
+> +DRM DRIVER FOR TI SN65DSI86 BRIDGE CHIP
+> +R:     Douglas Anderson <dianders@chromium.org>
+> +F:     Documentation/devicetree/bindings/display/bridge/ti,sn65dsi86.yaml
+> +F:     drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> +
+>  DRM DRIVER FOR TPO TPG110 PANELS
+>  M:     Linus Walleij <linus.walleij@linaro.org>
+>  S:     Maintained
 > --
-> 2.18.0
+> 2.35.1.616.g0bdcbb4464-goog
 >
 
-Applied to drm-misc-next
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

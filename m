@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246C44D2CA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368FB4D2CA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiCIJ7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S232364AbiCIJ77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbiCIJ7B (ORCPT
+        with ESMTP id S231266AbiCIJ74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:59:01 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C85DF9A4F1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:58:02 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-197-9BvwLLeYNEeOm-asGhaVog-1; Wed, 09 Mar 2022 09:57:59 +0000
-X-MC-Unique: 9BvwLLeYNEeOm-asGhaVog-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 9 Mar 2022 09:57:58 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 9 Mar 2022 09:57:57 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Horatiu Vultur' <horatiu.vultur@microchip.com>
-CC:     Andrew Lunn <andrew@lunn.ch>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>
-Subject: RE: [PATCH net-next] net: lan966x: Improve the CPU TX bitrate.
-Thread-Topic: [PATCH net-next] net: lan966x: Improve the CPU TX bitrate.
-Thread-Index: AQHYMzupXSXwX/KYxk6M6s+NBOrfjay2FJiQgACwQ4CAAAv90A==
-Date:   Wed, 9 Mar 2022 09:57:57 +0000
-Message-ID: <45a9f88b140d44af8522e7d8a6abcbbf@AcuMS.aculab.com>
-References: <20220308165727.4088656-1-horatiu.vultur@microchip.com>
- <YifMSUA/uZoPnpf1@lunn.ch>
- <20220308223000.vwdc6tk6wa53x64c@soft-dev3-1.localhost>
- <c85c188f9074456e92e9c4f8d8290ec2@AcuMS.aculab.com>
- <20220309091129.b5q3gtiuqlk5skka@soft-dev3-1.localhost>
-In-Reply-To: <20220309091129.b5q3gtiuqlk5skka@soft-dev3-1.localhost>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 9 Mar 2022 04:59:56 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A19129BB7;
+        Wed,  9 Mar 2022 01:58:58 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id t1so1907682edc.3;
+        Wed, 09 Mar 2022 01:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WvBJ1bCYmOpUz9sA2X7ttEKRPJ5e2lRH183jSE/0mtI=;
+        b=D49GbhhMWElAvxVZqt+JI2yYnMree6VqtRkg2bg8NFou0W4gSTHSN1CPz+VECruU/M
+         ZdojhZRGosAacK3OO0KLYjg4QM3U6dDHy9xk+odQsb/rDpDO0PFO7qz6EL6WfVs5uU0X
+         d1FiVaCBGu84e6cPqImY37dxrixcVJnLVX8HgFdYYwHamMbeQLEI/13j4hJSjDIh4mLc
+         npkKBZSdjXZs8dxVz7Uf0gW0Wchx7gO+e70LZnLM1gSRQR5W521GWuNwRW8JLUsAndtb
+         wuHQJUNbHdDe5Qjv+n81SyZReygB5eMJZdMU4+1nNrvMBrEB3N2VnOP0iwnG0IqdgPSz
+         Tbnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WvBJ1bCYmOpUz9sA2X7ttEKRPJ5e2lRH183jSE/0mtI=;
+        b=aLV+C/OZTzTJlcvOxcDgkZ49mpmSEvJA8hw1o2dpV2wepVaK0S1Lzv8VD6bzFYxaMu
+         N+A0nAF/Ceix6+mmw4bqm3jW49ZM/n6VRXKhEYN9I1hKawSb7UQ1H3fBuK9JNhapoiic
+         kwwg5o+mamncoKJ/dHBPk9/TYvpF6NKyIP2i7prk4vCn+pdFn2B0tgmuEt5VfLA4ZuKF
+         avyfq+M8+jSsIJrLxSGusgOoJ7fDm4V9X25RLqcq6177UFHMMksIV9oB6IWhmfMqVZ77
+         /gIGrZO1cJ0p3V9tD0AFzu8LVJlsR8JR0R7zE12+InUihQG0AicLIMs8lwp4JThOAq4t
+         g+SA==
+X-Gm-Message-State: AOAM5328X69Y/d/gK9mtOC5TPuxpyRCgqPfPho8os5pjvWFUSPUXGi/F
+        cqj2evXl/1LgRd0pWPC+3pw=
+X-Google-Smtp-Source: ABdhPJw+njvmNggCfx5Yl4DtOUfmT/TZk9Zj9sdzyD2ye1Lh3M2PohyXgqqXuiVm1pN3S/h80TZSQw==
+X-Received: by 2002:a05:6402:3582:b0:416:6413:d2ae with SMTP id y2-20020a056402358200b004166413d2aemr9704298edc.192.1646819936447;
+        Wed, 09 Mar 2022 01:58:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id k19-20020a1709067ad300b006da92735c32sm544940ejo.16.2022.03.09.01.58.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 01:58:55 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <175b89f0-14a6-2309-041f-69314d9f191a@redhat.com>
+Date:   Wed, 9 Mar 2022 10:58:54 +0100
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 08/25] KVM: x86/mmu: split cpu_mode from mmu_role
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-9-pbonzini@redhat.com> <YiemuYKEFjqFvDlL@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YiemuYKEFjqFvDlL@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogJ0hvcmF0aXUgVnVsdHVyJw0KPiBTZW50OiAwOSBNYXJjaCAyMDIyIDA5OjExDQo+IA0K
-PiBUaGUgMDMvMDgvMjAyMiAyMjo0NiwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+DQo+ID4gRnJv
-bTogSG9yYXRpdSBWdWx0dXINCj4gPiA+IFNlbnQ6IDA4IE1hcmNoIDIwMjIgMjI6MzANCj4gPiA+
-DQo+ID4gPiBUaGUgMDMvMDgvMjAyMiAyMjozNiwgQW5kcmV3IEx1bm4gd3JvdGU6DQo+ID4gPiA+
-DQo+ID4gPiA+ID4gIHN0YXRpYyBpbnQgbGFuOTY2eF9wb3J0X2lual9yZWFkeShzdHJ1Y3QgbGFu
-OTY2eCAqbGFuOTY2eCwgdTggZ3JwKQ0KPiA+ID4gPiA+ICB7DQo+ID4gPiA+ID4gLSAgICAgdTMy
-IHZhbDsNCj4gPiA+ID4gPiArICAgICB1bnNpZ25lZCBsb25nIHRpbWUgPSBqaWZmaWVzICsgdXNl
-Y3NfdG9famlmZmllcyhSRUFETF9USU1FT1VUX1VTKTsNCj4gPiA+ID4gPiArICAgICBpbnQgcmV0
-ID0gMDsNCj4gPiA+ID4gPg0KPiA+ID4gPiA+IC0gICAgIHJldHVybiByZWFkeF9wb2xsX3RpbWVv
-dXRfYXRvbWljKGxhbjk2NnhfcG9ydF9pbmpfc3RhdHVzLCBsYW45NjZ4LCB2YWwsDQo+ID4gPiA+
-ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUVNfSU5KX1NUQVRVU19G
-SUZPX1JEWV9HRVQodmFsKSAmIEJJVChncnApLA0KPiA+ID4gPiA+IC0gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIFJFQURMX1NMRUVQX1VTLCBSRUFETF9USU1FT1VUX1VTKTsN
-Cj4gPiA+ID4gPiArICAgICB3aGlsZSAoIShsYW5fcmQobGFuOTY2eCwgUVNfSU5KX1NUQVRVUykg
-Jg0KPiA+ID4gPiA+ICsgICAgICAgICAgICAgIFFTX0lOSl9TVEFUVVNfRklGT19SRFlfU0VUKEJJ
-VChncnApKSkpIHsNCj4gPiA+ID4gPiArICAgICAgICAgICAgIGlmICh0aW1lX2FmdGVyKGppZmZp
-ZXMsIHRpbWUpKSB7DQo+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgIHJldCA9IC1FVElN
-RURPVVQ7DQo+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+ID4gPiA+
-ICsgICAgICAgICAgICAgfQ0KPiA+ID4gPg0KPiA+ID4gPiBEaWQgeW91IHRyeSBzZXR0aW5nIFJF
-QURMX1NMRUVQX1VTIHRvIDA/IHJlYWR4X3BvbGxfdGltZW91dF9hdG9taWMoKQ0KPiA+ID4gPiBl
-eHBsaWNpdGx5IHN1cHBvcnRzIHRoYXQuDQo+ID4gPg0KPiA+ID4gSSBoYXZlIHRyaWVkIGJ1dCBp
-dCBkaWRuJ3QgaW1wcm92ZS4gSXQgd2FzIHRoZSBzYW1lIGFzIGJlZm9yZS4NCj4gPg0KPiA+IEhv
-dyBtYW55IHRpbWVzIHJvdW5kIHRoZSBsb29wIGlzIGl0IGdvaW5nID8NCj4gDQo+IEluIHRoZSB0
-ZXN0cyB0aGF0IEkgaGF2ZSBkb25lLCBJIGhhdmUgbmV2ZXIgc2VlbiBlbnRlcmluZyBpbiB0aGUg
-bG9vcC4NCg0KSW4gd2hpY2ggY2FzZSBJJ2QgZG8gYW4gaW5pdGlhbCBzdGF0dXMgY2hlY2sgYmVm
-b3JlIGV2ZW4NCmZhZmZpbmcgd2l0aCAnamlmZmllcycuDQoNCkl0IG1pZ2h0IGV2ZW4gYmUgdGhh
-dCB0aGUgc3RhdHVzIHJlYWQgaXMgc28gc2xvdyB0aGF0IHNwYWNlDQppcyBhbHdheXMgYXZhaWxh
-YmxlIGJ5IHRoZSB0aW1lIGl0IGlzIHByb2Nlc3NlZC4NClBDSWUgcmVhZHMgY2FuIGJlIGhvcnJp
-Ymx5IHNsb3cuDQpJbnRvIG91ciBmZ3BhIHRoZXkgZW5kIHVwIGJlaW5nIHNsb3dlciB0aGFuIG9s
-ZCBJU0EgYnVzIGN5Y2xlcy4NClByb2JhYmx5IHNldmVyYWwgdGhvdXNhbmQgY3B1IGNsb2Nrcy4N
-Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
-LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
-OiAxMzk3Mzg2IChXYWxlcykNCg==
+On 3/8/22 19:55, Sean Christopherson wrote:
+>>   static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *context,
+>> -				    const struct kvm_mmu_role_regs *regs,
+>> -				    union kvm_mmu_role new_role)
+>> +				    union kvm_mmu_role cpu_mode,
+> Can you give all helpers this treatment (rename "role" => "cpu_mode")?  I got
+> tripped up a few times reading patches because the ones where it wasn't necessary,
+> i.e. where there's only a single kvm_mmu_role paramenter, were left as-is.
+> 
+> I think kvm_calc_shadow_npt_root_page_role() and kvm_calc_shadow_mmu_root_page_role()
+> are the only offenders.
 
+These take struct kvm_mmu_role_regs; they *return* union kvm_mmu_role 
+but that is changed later in the series to the base part only.
+
+Paolo

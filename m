@@ -2,67 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0834D3790
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBD84D35BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiCIRUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S236943AbiCIRV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbiCIRUE (ORCPT
+        with ESMTP id S235502AbiCIRVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:20:04 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688E4D1989;
-        Wed,  9 Mar 2022 09:18:54 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z16so2901499pfh.3;
-        Wed, 09 Mar 2022 09:18:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/EHiQ5RK0tydATcXcFAZtxqI0UCJ2812+lItUeQolzs=;
-        b=pVXNn5vPtFs79c5r/sZZmwnZEmqaMNVksMoDyN4FpUXlD4u3j9DQvLRatq2vl1Aou5
-         60pAgGMG/pczWIXlJ8pxt5jrK8ZcF3nCrq+7fIYQ7cv7FGY4lANStJL2oQz2ebVboWIB
-         ufB7dgig/4Tle6jYUtOOyRUSPlwMY2c3ySt6TbkrXk6IbCNUqOsUJ7u5KeijKa92eIbJ
-         RZkfMqv8iZMxiD3V4K8GsY/xC3wiLBV1B/d5kUCtxWoy5ZLKtSAVYuAeKzRp6DevWWZ9
-         u3K9s/PhoiiqXQfaJmPqpPAcYzDX1thPlAKLf9q7A/v5Jb2JZpSRcxlljPTqCpe2Ofa7
-         QEHw==
+        Wed, 9 Mar 2022 12:21:22 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A6CECB3A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:20:22 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CB0DC3F60F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646846418;
+        bh=WpQvggAM0yElbhRsM3tZFtF/ELRn9cc4tgbsCUzDav4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LR+EAHrNz34LGMS/5TTzKK43Qm8svRCa94grLzqEGtT1PpwiFhX1K53NvEtie0pqM
+         WKjBU9Pm3aGkFCp/vnJDR0lEfE1jMEUaYFDb6WTn98S+w2Fg9gIjk+SkVSTlSWblVz
+         LqRzoBgLI7hsgQXNP6H/c6Y//tQ5PaUdOjcUkFA6Hr/zVFQBL2OYXBNNUG6CsoEPoq
+         YdgvpWzP1fwMGywNioZkihJ4AZ8JaVfOT0nxA+YSKJqLdRpDuFcm/oKdm75g63bm2K
+         J7zTqRK9taImBuIh+ecDU2g3ZUK2Vq+vRkq5SLSCqqRHYEXmPIzXDWMqXaA5qsUGhO
+         29C7i5PFTpkXA==
+Received: by mail-ed1-f72.google.com with SMTP id da28-20020a056402177c00b00415ce4b20baso1628676edb.17
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 09:20:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/EHiQ5RK0tydATcXcFAZtxqI0UCJ2812+lItUeQolzs=;
-        b=3QAC7hhtXN96xXTxw7htrQbv2RDHtTgxNNrVxkR54t0J2aomwPs5YX/xKu+sVGq1ds
-         MZOc+eq3tfIbW6jRWtcg0tsO6vIGQv++zLD9WGtVLpckjjpZrynO/1Z89lPdK/0un5BR
-         kcFpvRtUlQy16fDI99WB4O1Zk68vqGZYXXrYomf3QUoJsQUvSxtgce48PetwBIkjJhyY
-         W1vym7dRRyM1t52iRPeUAnzGDs8GYmxc0YXeautPEGVY5d7vDI91Rq4QO18CQbHBgtFI
-         2N5VghPDV3xNDLN4nijAUZoKM8KvMpeR3u6pE5X1aXenbFAlfB2B6YoW6ojih9kzU4nq
-         IGQA==
-X-Gm-Message-State: AOAM533VQQBac258AUH2lQYfAHVc2kmK8MAtka0/Skdy3yUtRW3SxjWB
-        u9jtWt5sQ+34lnKWAolzUf8=
-X-Google-Smtp-Source: ABdhPJwfs6H5I4GdOStkd+gj3PUGN8nkvoPHoPXpJzByV9t6/ZMtKBDDfi4l+sV2kEf/I5ScvaffnA==
-X-Received: by 2002:a05:6a00:1806:b0:4f6:f3e8:b3a0 with SMTP id y6-20020a056a00180600b004f6f3e8b3a0mr732392pfa.43.1646846333867;
-        Wed, 09 Mar 2022 09:18:53 -0800 (PST)
-Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm2879429pgr.37.2022.03.09.09.18.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 09:18:53 -0800 (PST)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v3] spi: Update clock-names property for arm pl022
-Date:   Wed,  9 Mar 2022 22:48:47 +0530
-Message-Id: <20220309171847.5345-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=WpQvggAM0yElbhRsM3tZFtF/ELRn9cc4tgbsCUzDav4=;
+        b=5N0doPJnBhTs+wvSIzNzpUPVpXHFZ9VdutdKVhTNbKHkyeD/SqSayd1AH/JEUt2zZ4
+         wINcEzhUiW41F7yOY5it1HQqlHyacywo7ZNpbd+7srY/EhtTdFt/ikBLoq26Xl2+AQXk
+         AcONjl/yRIVi2+ggnZpexKKNA5KjjEQHbrJ232UkiCZBKZf6W7cBLK9ozonot9oECe9r
+         RpE+9j4fCZYBXY/il0WWpdLZPU8sD6Zt/VsDdO6M/bKVc9Kt+5SxOWpv69dr2hjil7FR
+         EfAnj0RrAotwx+t7q3v7ho1NnXuH7XLRXwjgXOxd2Yc4mtrgMca1VSbp7Wl3meNDZ2tG
+         UoTQ==
+X-Gm-Message-State: AOAM531WT5THCSwK4e2mbcjo/AfOv1uu4zFnCdhGqtQafiir/dXbtNlF
+        Y9nxsLJ3x45a5BQreQZi1bD42iYEogwAPzlh+7iI9UfoGsMLK7w96QKl0uEcUYfkI6yJZ2DJhKU
+        1vKnQ2YzhYSBWdQhtaJZHkn9Iz/7q8k0Iabmd1BwHBg==
+X-Received: by 2002:a17:906:3a4f:b0:6cf:86e0:586c with SMTP id a15-20020a1709063a4f00b006cf86e0586cmr741923ejf.626.1646846417773;
+        Wed, 09 Mar 2022 09:20:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwp8qV5iSHK0r0pv+Ud4p0lkvk1vU2K4nXYAjwrQ7dcKZD7+H0nUl5OJBkP+xuDINxqEXHVsQ==
+X-Received: by 2002:a17:906:3a4f:b0:6cf:86e0:586c with SMTP id a15-20020a1709063a4f00b006cf86e0586cmr741909ejf.626.1646846417574;
+        Wed, 09 Mar 2022 09:20:17 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm952362ejm.103.2022.03.09.09.20.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 09:20:17 -0800 (PST)
+Message-ID: <5136e20f-4a09-35f0-72d8-11e06d52a063@canonical.com>
+Date:   Wed, 9 Mar 2022 18:20:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 26/26] usb: gadget: udc: s3c2410: remove usage of list
+ iterator past the loop body
+Content-Language: en-US
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Greg Kroah-Hartman <greg@kroah.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
+        <linux-usb@vger.kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220308171818.384491-1-jakobkoschel@gmail.com>
+ <20220308171818.384491-27-jakobkoschel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220308171818.384491-27-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,38 +106,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PL022 has two input clocks named sspclk and apb_pclk. Current schema
-refers to two notations of sspclk which are indeed same and thus one can
-be dropped. Update clock-names property to reflect the same.
+On 08/03/2022 18:18, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable [1].
+> 
+> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/s3c2410_udc.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
-v3:
-- Drop SSPCLK
-- New patch, and drop last 2 patches
 
-v2:
-- Keep actual warning and remove path to file
-- Reword commit message a bit
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
- Documentation/devicetree/bindings/spi/spi-pl022.yaml | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-index 6d633728fc2b..bda45ff3d294 100644
---- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-@@ -38,9 +38,7 @@ properties:
- 
-   clock-names:
-     items:
--      - enum:
--          - SSPCLK
--          - sspclk
-+      - const: sspclk
-       - const: apb_pclk
- 
-   pl022,autosuspend-delay:
--- 
-2.25.1
-
+Best regards,
+Krzysztof

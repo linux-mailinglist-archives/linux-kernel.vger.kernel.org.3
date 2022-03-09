@@ -2,103 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C23F4D370A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 096C54D354A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235224AbiCIQoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S235622AbiCIQoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiCIQbM (ORCPT
+        with ESMTP id S237990AbiCIQbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:31:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785D1190C06;
-        Wed,  9 Mar 2022 08:25:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9905A6187D;
-        Wed,  9 Mar 2022 16:25:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0B8C340F6;
-        Wed,  9 Mar 2022 16:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646843107;
-        bh=UR70ayxhFp+l6h9jOgA2GAaST2YfS64RXHquF81m+LE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bJWIeYJjuPYKIfBJjtv/V/IU5yfu7SOHlFTZGZtmHnY8QnY27iik3ick4812Gx4K5
-         EbrTCnIRDkXTjiF+rWm1E3aQaHPF0GcQk9jcuiPMGh4P+h3rorT9COBjGSS7vW0wjw
-         wNivFCxMd6a5BCkv4vdRW+jEjuRZVlXVaTynn8ahtwDU1Dn2a60yt6f+v485KLO9XJ
-         bve1W5IwCz6DrLFnK2u3qZ5AEecINIpmZtNASN8+e9nWTAj7GO/bXkq2pK0LPKYxP9
-         JHoTHvyxS1DPCKyQ+/l2PfMTDGLu14OIzldrJzAXaBx3uRC2HTTtCBdiVpa9eE9Tes
-         u+fYMy3kUbFGA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 19/19] kselftest/vm: fix tests build with old libc
-Date:   Wed,  9 Mar 2022 11:23:36 -0500
-Message-Id: <20220309162337.136773-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220309162337.136773-1-sashal@kernel.org>
-References: <20220309162337.136773-1-sashal@kernel.org>
+        Wed, 9 Mar 2022 11:31:17 -0500
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B49B19143B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:25:28 -0800 (PST)
+Received: from in02.mta.xmission.com ([166.70.13.52]:33250)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nRz7r-00327k-UR; Wed, 09 Mar 2022 09:25:23 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34572 helo=localhost.localdomain)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nRz7q-005hAS-Qu; Wed, 09 Mar 2022 09:25:23 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Date:   Wed,  9 Mar 2022 10:24:42 -0600
+Message-Id: <20220309162454.123006-1-ebiederm@xmission.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+References: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-XM-SPF: eid=1nRz7q-005hAS-Qu;;;mid=<20220309162454.123006-1-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19zLug7qOq1vqtHb4J0vYNTM2ZFZM4qWrQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;linux-kernel@vger.kernel.org
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 459 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 9 (2.0%), b_tie_ro: 8 (1.8%), parse: 0.88 (0.2%),
+        extract_message_metadata: 11 (2.5%), get_uri_detail_list: 1.46 (0.3%),
+        tests_pri_-1000: 14 (3.0%), tests_pri_-950: 1.22 (0.3%),
+        tests_pri_-900: 1.00 (0.2%), tests_pri_-90: 98 (21.3%), check_bayes:
+        96 (21.0%), b_tokenize: 7 (1.5%), b_tok_get_all: 5 (1.2%),
+        b_comp_prob: 1.91 (0.4%), b_tok_touch_all: 79 (17.2%), b_finish: 0.85
+        (0.2%), tests_pri_0: 310 (67.5%), check_dkim_signature: 0.53 (0.1%),
+        check_dkim_adsp: 3.1 (0.7%), poll_dns_idle: 1.28 (0.3%), tests_pri_10:
+        2.2 (0.5%), tests_pri_500: 9 (1.9%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 01/13] ptrace: Move ptrace_report_syscall into ptrace.h
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+Move ptrace_report_syscall from tracehook.h into ptrace.h where it
+belongs.
 
-[ Upstream commit b773827e361952b3f53ac6fa4c4e39ccd632102e ]
-
-The error message when I build vm tests on debian10 (GLIBC 2.28):
-
-    userfaultfd.c: In function `userfaultfd_pagemap_test':
-    userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
-    in this function); did you mean `MADV_RANDOM'?
-      if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
-                                         ^~~~~~~~~~~~
-                                         MADV_RANDOM
-
-This patch includes these newer definitions from UAPI linux/mman.h, is
-useful to fix tests build on systems without these definitions in glibc
-sys/mman.h.
-
-Link: https://lkml.kernel.org/r/20220227055330.43087-2-zhouchengming@bytedance.com
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/ptrace.h    | 27 +++++++++++++++++++++++++++
+ include/linux/tracehook.h | 26 --------------------------
+ 2 files changed, 27 insertions(+), 26 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 9ba7feffe344..9814a0a15ba7 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -46,6 +46,7 @@
- #include <signal.h>
- #include <poll.h>
- #include <string.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
+diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+index 8aee2945ff08..91b1074edb4c 100644
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -413,4 +413,31 @@ static inline void user_single_step_report(struct pt_regs *regs)
+ extern int task_current_syscall(struct task_struct *target, struct syscall_info *info);
+ 
+ extern void sigaction_compat_abi(struct k_sigaction *act, struct k_sigaction *oact);
++
++/*
++ * ptrace report for syscall entry and exit looks identical.
++ */
++static inline int ptrace_report_syscall(unsigned long message)
++{
++	int ptrace = current->ptrace;
++
++	if (!(ptrace & PT_PTRACED))
++		return 0;
++
++	current->ptrace_message = message;
++	ptrace_notify(SIGTRAP | ((ptrace & PT_TRACESYSGOOD) ? 0x80 : 0));
++
++	/*
++	 * this isn't the same as continuing with a signal, but it will do
++	 * for normal use.  strace only continues with a signal if the
++	 * stopping signal is not SIGTRAP.  -brl
++	 */
++	if (current->exit_code) {
++		send_sig(current->exit_code, current, 1);
++		current->exit_code = 0;
++	}
++
++	current->ptrace_message = 0;
++	return fatal_signal_pending(current);
++}
+ #endif
+diff --git a/include/linux/tracehook.h b/include/linux/tracehook.h
+index 88c007ab5ebc..998bc3863559 100644
+--- a/include/linux/tracehook.h
++++ b/include/linux/tracehook.h
+@@ -51,32 +51,6 @@
+ #include <linux/blk-cgroup.h>
+ struct linux_binprm;
+ 
+-/*
+- * ptrace report for syscall entry and exit looks identical.
+- */
+-static inline int ptrace_report_syscall(unsigned long message)
+-{
+-	int ptrace = current->ptrace;
+-
+-	if (!(ptrace & PT_PTRACED))
+-		return 0;
+-
+-	current->ptrace_message = message;
+-	ptrace_notify(SIGTRAP | ((ptrace & PT_TRACESYSGOOD) ? 0x80 : 0));
+-
+-	/*
+-	 * this isn't the same as continuing with a signal, but it will do
+-	 * for normal use.  strace only continues with a signal if the
+-	 * stopping signal is not SIGTRAP.  -brl
+-	 */
+-	if (current->exit_code) {
+-		send_sig(current->exit_code, current, 1);
+-		current->exit_code = 0;
+-	}
+-
+-	current->ptrace_message = 0;
+-	return fatal_signal_pending(current);
+-}
+ 
+ /**
+  * tracehook_report_syscall_entry - task is about to attempt a system call
 -- 
-2.34.1
+2.29.2
 

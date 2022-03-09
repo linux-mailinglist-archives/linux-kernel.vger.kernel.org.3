@@ -2,138 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F7E4D26A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D63114D2764
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiCIDbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 22:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S231732AbiCIDbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 22:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiCIDbK (ORCPT
+        with ESMTP id S231625AbiCIDbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 22:31:10 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0EB6579C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 19:30:11 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V6h7SCV_1646796608;
-Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0V6h7SCV_1646796608)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Mar 2022 11:30:08 +0800
-Date:   Wed, 9 Mar 2022 11:30:08 +0800
-From:   "dust.li" <dust.li@linux.alibaba.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [saeed:net-next 154/185] net/smc/smc_sysctl.h:23:16: warning: no
- previous prototype for 'smc_sysctl_net_init'
-Message-ID: <20220309033008.GH35207@linux.alibaba.com>
-Reply-To: dust.li@linux.alibaba.com
-References: <202203081012.KgONXWsS-lkp@intel.com>
- <20220308051655.GF35207@linux.alibaba.com>
- <20220307212520.176fce24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Tue, 8 Mar 2022 22:31:19 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222A715B3F5;
+        Tue,  8 Mar 2022 19:30:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Aasby+93F3H3sQOG047CDVl/4vvrh2eNkazM7N8aBm0=; b=ovJTpCHMUN9Ts6OvX59nTZgbXv
+        wCbU6VlQTzM4coC5DrXJr5CHAVt0kl0Wjl1p4Iq+oAFnUGQ0yuoIFVjB1pziG2594VlA25Hx3dvNW
+        qwNPnk45l6IhAZCoRy7RkzDLZElI3tChTSF6ZvNYUyP0A+kebn/3D6GHZEOGhbopMu/L/LHhAx6gR
+        xyRg8ljtMMCjn1AxT/KSGpmfX7JXdJ/aVY3L/3qJZJUuQvK+YEeuemccx8jP9NvSo1tg2hgzM4vjf
+        pkDUvgc337rzPGgzDTqHsIPSXw9hKOIqUdlva5/MUzUy0rJuDLj31wvqTXvpKEP9TknRK6GY7lVLR
+        JZU8NPaw==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRn1n-0076Gm-Hk; Wed, 09 Mar 2022 03:30:19 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        He Zhe <zhe.he@windriver.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v2] kgdboc: fix return value of __setup handler
+Date:   Tue,  8 Mar 2022 19:30:18 -0800
+Message-Id: <20220309033018.17936-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220307212520.176fce24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 09:25:20PM -0800, Jakub Kicinski wrote:
->On Tue, 8 Mar 2022 13:16:55 +0800 dust.li wrote:
->> >vim +/smc_sysctl_net_init +23 net/smc/smc_sysctl.h
->> >
->> >    22	  
->> >  > 23	int __net_init smc_sysctl_net_init(struct net *net)  
->> >    24	{
->> >    25		net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
->> >    26		return 0;
->> >    27	}
->> >    28	  
->> >  > 29	void __net_exit smc_sysctl_net_exit(struct net *net) { }  
->> >    30	  
->> 
->> Hi Jakub:
->> 
->> Sorry to bother again on this !
->> Looks like we still need to add 'static inline' or add an extra
->> declaration for these 2 functions if we want to get rid of these warnings.
->> What do you think ?
->
->Sorry my comment was pretty unclear an unnecessary.
->
->I meant that you don't need the __net_init annotation, it still 
->needs to be a static inline. So this is what I meant:
->
->diff --git a/net/smc/smc_sysctl.h b/net/smc/smc_sysctl.h
->index 1d554300604d..0becc11bd2f4 100644
->--- a/net/smc/smc_sysctl.h
->+++ b/net/smc/smc_sysctl.h
->@@ -20,13 +20,13 @@ void __net_exit smc_sysctl_net_exit(struct net *net);
-> 
-> #else
-> 
->-int __net_init smc_sysctl_net_init(struct net *net)
->+static inline int smc_sysctl_net_init(struct net *net)
-> {
->        net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
->        return 0;
-> }
-> 
->-void __net_exit smc_sysctl_net_exit(struct net *net) { }
->+static inline void smc_sysctl_net_exit(struct net *net) { }
-> 
-> #endif /* CONFIG_SYSCTL */
->
->
->
->But really it does not matter if the __net_init / exit is there, 
->so this works too:
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) environment strings.
+So return 1 from kgdboc_option_setup().
 
-Another small comment:
+Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
+  kgdboc=kbd kgdbts=", will be passed to user space.
 
-When re-compile with the W=1, I found '__net_exit' has noinline
-annotation when CONFIG_NET_NS not set:
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc7
+     kgdboc=kbd
+     kgdbts=
 
- #define __net_exit      __ref
- #define __ref           __section(".ref.text") noinline
+Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
+Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: He Zhe <zhe.he@windriver.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: kgdb-bugreport@lists.sourceforge.net
+Cc: Jason Wessel <jason.wessel@windriver.com>
+Cc: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: linux-serial@vger.kernel.org
+---
+v2- correct Fixes: tag(s) (thanks Doug)
+  - drop Cc: Laura Abbott <labbott@redhat.com> (bouncing)
+  - add a reference to init/main.c::obsolete_checksetup()
 
-If '__net_exit' is used together with 'static inline', the compiler
-would give another warning:
- net/smc/smc_sysctl.h:29:58: warning: ignoring attribute ‘gnu_inline’
- because it conflicts with attribute ‘noinline’ [-Wattributes]
-    29 | static inline void __net_exit smc_sysctl_net_exit(struct net
-    *net) { }
+ drivers/tty/serial/kgdboc.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-So I think your first version would be good.
-
-Thanks.
-
->
->diff --git a/net/smc/smc_sysctl.h b/net/smc/smc_sysctl.h
->index 1d554300604d..6979e7173669 100644
->--- a/net/smc/smc_sysctl.h
->+++ b/net/smc/smc_sysctl.h
->@@ -20,13 +20,13 @@ void __net_exit smc_sysctl_net_exit(struct net *net);
-> 
-> #else
-> 
->-int __net_init smc_sysctl_net_init(struct net *net)
->+static inline int __net_init smc_sysctl_net_init(struct net *net)
-> {
->        net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
->        return 0;
-> }
-> 
->-void __net_exit smc_sysctl_net_exit(struct net *net) { }
->+static inline void __net_exit smc_sysctl_net_exit(struct net *net) { }
-> 
-> #endif /* CONFIG_SYSCTL */
-> 
+--- lnx-517-rc7.orig/drivers/tty/serial/kgdboc.c
++++ lnx-517-rc7/drivers/tty/serial/kgdboc.c
+@@ -403,16 +403,16 @@ static int kgdboc_option_setup(char *opt
+ {
+ 	if (!opt) {
+ 		pr_err("config string not provided\n");
+-		return -EINVAL;
++		return 1;
+ 	}
+ 
+ 	if (strlen(opt) >= MAX_CONFIG_LEN) {
+ 		pr_err("config string too long\n");
+-		return -ENOSPC;
++		return 1;
+ 	}
+ 	strcpy(config, opt);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ __setup("kgdboc=", kgdboc_option_setup);

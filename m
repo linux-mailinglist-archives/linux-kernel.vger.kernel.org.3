@@ -2,143 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8134D357A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D574D354B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236048AbiCIQv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S236277AbiCIQvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236714AbiCIQgp (ORCPT
+        with ESMTP id S235297AbiCIQnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:36:45 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F64B69CE4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:32:16 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id u17so596388pfk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gY50ygEuixJOL5+CoXoow1CeKmNwyNyKxbVe9LukYfQ=;
-        b=PWj3A38TItrhsUjIRjWiaSik+i8qjhK1vVSzvImJ/IP/sBZ1SK16gd+4vLXNQJIbfz
-         fq1MW9biuBNne5pe3fHiUnjTtyl3ymQBVPVACAAd0YvUvvBY80zbJXDXhDENAQEcfLCy
-         w3cs3JW4i8Wm/1fIlJ8U/oZ/PDcWTWgkItkFw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gY50ygEuixJOL5+CoXoow1CeKmNwyNyKxbVe9LukYfQ=;
-        b=4OJHOb6VUNQZKx5I/A+koLpv9BjcIhtedRj9SbT3n2ALywVkuAuN9m9vxSglLoCVw6
-         ZkMZIK8OlvsSsN+WotVMXfXQWMQ+PsrnTY699O4pX/yUiOKlt6D+l1H5sHkn7k8m/c1J
-         IKihu848VjZjOPjKQH0akEfROgemHyOz3NwN6hrpVI3jRHFdhBji/IwyZwxrH0k7232y
-         +/H51h1XQUQTAyEMJV54iOuHhFTjOhQ49pmMVWIs1w5IgmvQVHr1MBa1NRb67f0d603O
-         FXdVSMpxu+dkWM8n9m3BqEw7AB0sUck2LnNI51gPJXVHTGU8ysJ9U5V4OQ4Hp2UY7y07
-         aK7A==
-X-Gm-Message-State: AOAM532vBJjxBQ2uLAHNEd39e+F/Qoo87jibY6AO/iUy2fhJruHC1Oa4
-        61jHhRQkDIxEjOPZycC4dSXFHA==
-X-Google-Smtp-Source: ABdhPJwXXZ86osX5c0II41H74ZTE2EneiajZEn1zrtqB/xvvBuaNxf78dej0GeYsUMxEOmzs8vYjZA==
-X-Received: by 2002:a05:6a00:ad0:b0:4e1:2d96:2ab0 with SMTP id c16-20020a056a000ad000b004e12d962ab0mr549019pfl.3.1646843535989;
-        Wed, 09 Mar 2022 08:32:15 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q24-20020aa79618000000b004e0e89985eesm3588763pfg.156.2022.03.09.08.32.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 08:32:15 -0800 (PST)
-Date:   Wed, 9 Mar 2022 08:32:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Denys Vlasenko <vda.linux@googlemail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <liam.howlett@oracle.com>,
-        Jann Horn <jannh@google.com>, linux-mm@kvack.org
-Subject: Re: [GIT PULL] Fix fill_files_note
-Message-ID: <202203090830.7E971BD6C@keescook>
-References: <20220131153740.2396974-1-willy@infradead.org>
- <871r0nriy4.fsf@email.froward.int.ebiederm.org>
- <YfgKw5z2uswzMVRQ@casper.infradead.org>
- <877dafq3bw.fsf@email.froward.int.ebiederm.org>
- <YfgPwPvopO1aqcVC@casper.infradead.org>
- <CAG48ez3MCs8d8hjBfRSQxwUTW3o64iaSwxF=UEVtk+SEme0chQ@mail.gmail.com>
- <87bkzroica.fsf_-_@email.froward.int.ebiederm.org>
- <87h788fdaw.fsf_-_@email.froward.int.ebiederm.org>
- <202203081342.1924AD9@keescook>
- <877d93dr8p.fsf@email.froward.int.ebiederm.org>
+        Wed, 9 Mar 2022 11:43:49 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE0626C8;
+        Wed,  9 Mar 2022 08:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646843892; x=1678379892;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HQ/1ekkK2Glo5J9Tadu/4CMzDFw9pCNql8ud3BmoP9Y=;
+  b=IOOPX+ILQ0aiBP1DchYlU8v3mhVGWlnfY5rn//rLI0CZy2wNJu0sD45D
+   9wCFy+NujVkQbvfElaG8jw7m5g9p4KhrnLLcomQIj78HoNqw+wRYnsufh
+   1XxhKWsHXk/CKINAz21CLHu2GFeQ18X+E2PHmgQSUJi4R2S1cqBHLLvCd
+   sh9gsNuTgP6+yg+NP+iYJWDEHfe9NR3fPzR1p9MXj/6uUGAtMGzlMhxq4
+   tBd9lloK7L6SI1oJGQdsZ5FVh9G03NXi9bG4luDG/MExxtdtyZvy+HNaz
+   zr+y6god+2P5h11tbJ7DfRcM5u8Q/DpS0uYCZT9awCSJzaezLLCUG1yQN
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643698800"; 
+   d="scan'208";a="151431904"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 09:38:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 9 Mar 2022 09:38:11 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 9 Mar 2022 09:38:05 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v8 00/13] media: atmel: atmel-isc: implement media controller
+Date:   Wed, 9 Mar 2022 18:37:45 +0200
+Message-ID: <20220309163758.2672727-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877d93dr8p.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 10:29:10AM -0600, Eric W. Biederman wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> 
-> > On Tue, Mar 08, 2022 at 01:35:03PM -0600, Eric W. Biederman wrote:
-> >> 
-> >> Kees,
-> >> 
-> >> Please pull the coredump-vma-snapshot-fix branch from the git tree:
-> >> 
-> >>   git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git coredump-vma-snapshot-fix
-> >> 
-> >>   HEAD: 390031c942116d4733310f0684beb8db19885fe6 coredump: Use the vma snapshot in fill_files_note
-> >> 
-> >> Matthew Wilcox has reported that a missing mmap_lock in file_files_note,
-> >> which could cause trouble.
-> >> 
-> >> Refactor the code and clean it up so that the vma snapshot makes
-> >> it to fill_files_note, and then use the vma snapshot in fill_files_note.
-> >> 
-> >> Eric W. Biederman (5):
-> >>       coredump: Move definition of struct coredump_params into coredump.h
-> >>       coredump: Snapshot the vmas in do_coredump
-> >>       coredump: Remove the WARN_ON in dump_vma_snapshot
-> >>       coredump/elf: Pass coredump_params into fill_note_info
-> >>       coredump: Use the vma snapshot in fill_files_note
-> >> 
-> >>  fs/binfmt_elf.c          | 66 ++++++++++++++++++++++--------------------------
-> >>  fs/binfmt_elf_fdpic.c    | 18 +++++--------
-> >>  fs/binfmt_flat.c         |  1 +
-> >>  fs/coredump.c            | 59 ++++++++++++++++++++++++++++---------------
-> >>  include/linux/binfmts.h  | 13 +---------
-> >>  include/linux/coredump.h | 20 ++++++++++++---
-> >>  6 files changed, 93 insertions(+), 84 deletions(-)
-> >> 
-> >> ---
-> >> 
-> >> Kees I realized I needed to rebase this on Jann Horn's commit
-> >> 84158b7f6a06 ("coredump: Also dump first pages of non-executable ELF
-> >> libraries").  Unfortunately before I got that done I got distracted and
-> >> these changes have been sitting in limbo for most of the development
-> >> cycle.  Since you are running a tree that is including changes like this
-> >> including Jann's can you please pull these changes into your tree.
-> >
-> > Sure! Can you make a signed tag for this pull?
-> 
-> Not yet.
-> 
-> Hopefully I will get the time to set that up soon, but I am not at all
-> setup to do signed tags at this point.
 
-Okay, cool. Since I'd already review these before, I've pulled and it
-should be in -next now.
+This series is the v8 series that attempts to support media controller in the
+atmel ISC and XISC drivers.
+The CSI2DC driver was accepted thus removed from the patch series, together with
+other patches.
 
-> [...]
-> Thanks.  That looks like a good place to start.
+Important note: this series applies on top of current media_staging tree, as it
+relies on previous patches in the series which were accepted.
 
-I will try to clean up that work-flow and stuff it into my kernel-tools
-repo.
+Thanks to everyone who reviewed my work !
+
+Eugen
+
+Changes in v8:
+-> scaler: modified crop bounds to have the exact source size
+
+Changes in v7:
+-> scaler: modified crop bounds to have maximum isc size
+-> format propagation: did small changes as per Jacopo review
+
+
+Changes in v6:
+-> worked a bit on scaler, added try crop and other changes as per Jacopo review
+-> worked on isc-base enum_fmt , reworked as per Jacopo review
+
+Changes in v5:
+-> removed patch that removed the 'stop' variable as it was still required
+-> added two new trivial patches
+-> reworked some parts of the scaler and format propagation after discussions with Jacopo
+
+
+Changes in v4:
+-> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+one patch that was using it
+-> as reviewed by Jacopo, reworked some parts of the media controller implementation
+
+
+Changes in v3:
+- change in bindings, small fixes in csi2dc driver and conversion to mc
+for the isc-base.
+- removed some MAINTAINERS patches and used patterns in MAINTAINERS
+
+Changes in v2:
+- integrated many changes suggested by Jacopo in the review of the v1 series.
+- add a few new patches
+
+
+Eugen Hristev (13):
+  media: atmel: atmel-isc-base: use streaming status when queueing
+    buffers
+  media: atmel: atmel-isc-base: replace is_streaming call in
+    s_fmt_vid_cap
+  media: atmel: atmel-isc: remove redundant comments
+  media: atmel: atmel-isc: implement media controller
+  media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
+  media: atmel: atmel-isc-base: use mutex to lock awb workqueue from
+    streaming
+  media: atmel: atmel-isc: compact the controller formats list
+  media: atmel: atmel-isc: change format propagation to subdev into only
+    verification
+  media: atmel: atmel-sama7g5-isc: remove stray line
+  dt-bindings: media: microchip,xisc: add bus-width of 14
+  ARM: dts: at91: sama7g5: add nodes for video capture
+  ARM: configs: at91: sama7: add xisc and csi2dc
+  ARM: multi_v7_defconfig: add atmel video pipeline modules
+
+ .../bindings/media/microchip,xisc.yaml        |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |  49 ++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/configs/sama7_defconfig              |   2 +
+ drivers/media/platform/atmel/Makefile         |   2 +-
+ drivers/media/platform/atmel/atmel-isc-base.c | 518 ++++++++++--------
+ .../media/platform/atmel/atmel-isc-scaler.c   | 267 +++++++++
+ drivers/media/platform/atmel/atmel-isc.h      |  58 +-
+ .../media/platform/atmel/atmel-sama5d2-isc.c  |  87 +--
+ .../media/platform/atmel/atmel-sama7g5-isc.c  |  93 ++--
+ 10 files changed, 754 insertions(+), 327 deletions(-)
+ create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
 
 -- 
-Kees Cook
+2.25.1
+

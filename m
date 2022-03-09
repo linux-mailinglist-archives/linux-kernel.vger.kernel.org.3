@@ -2,220 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622ED4D3DBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DAF4D3DC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238289AbiCIXwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 18:52:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S238345AbiCIXz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 18:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiCIXwL (ORCPT
+        with ESMTP id S229586AbiCIXz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 18:52:11 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D311C7D0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646869872; x=1678405872;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yhMxhhr8eo4NC66e5MHzveg2UpYFRTnU3Hn0Y4C6sR0=;
-  b=ZwSZvTkE6i1blUjYcaes/Wuj5G/iyr1DNBStWD4fU6Z7OlTUMpb+aLnx
-   JceFkYGJomTZ+bpS8vUkrr84/oTh8Z+7WUXd07WTJAjqVZJT2oZINyWxy
-   IQsNstb6103nfSyileUoPjg2vTOiTL90iKoj9rX5IRA/q2vfcf//PiYS3
-   9Uo4zcDc/K37AARMOxXlh9Zws//WKHfJm6AJuBMSpN37ulYGOMt63oaFa
-   FGBiGZpLYj/j5fh4dd/xd7k2z/71GZZYj8EUMs4mMUCX5q/h7EWuHGLaE
-   0FdF3lt7B792mXYX22SMTEFjAff+bw/UzgyLLO7E1IBgAirqi+1C0PRUM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="318341339"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="318341339"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 15:51:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="510685408"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 09 Mar 2022 15:51:04 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 670C6211; Thu, 10 Mar 2022 01:51:23 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     dave.hansen@intel.com
-Cc:     aarcange@redhat.com, ak@linux.intel.com, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com,
-        kirill.shutemov@linux.intel.com, knsathya@kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: [PATCHv5.2 04/30] x86/tdx: Extend the confidential computing API to support TDX guests
-Date:   Thu, 10 Mar 2022 02:51:21 +0300
-Message-Id: <20220309235121.33236-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <79432a51-4d26-1fcb-81f2-6a9e7a44706f@intel.com>
-References: <79432a51-4d26-1fcb-81f2-6a9e7a44706f@intel.com>
+        Wed, 9 Mar 2022 18:55:26 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B1412223D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:54:25 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so2768810ioa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 15:54:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=FZKkfb+B9Ye8SW4sgOk+aViFCG1Zd9t6idiFkhiqLKA=;
+        b=g0ov9lk9GvFqoOOXXZPlzI6gKo96E0p6grsJHTU6oldXRvaJFP5/6l86YdAxAXXVtm
+         UwCILfSHxQr20LjYX+Bf4XUt15aMXYrJLWBkhoTf26fEIGVnw2fRBvB4CUK0GLtsotvZ
+         fP0vjrTIRy3+lmr5+YZtVwtMY237hP4XW4S7Q4PCsbbMX874UtUNSM5OVFdog+c+qIWy
+         nnVva6PJA0qjPNwsMIaeNf3X24FPiJbcL6NGPLqWwzJZRff29/b/HmVnrTW7q31vkONA
+         aj+hor2ouL8xFH9ss/TdKIRisVoMbxRK/p8kVEDFrsxCl9jKVEMGFmdRb+jdrTlzv+hP
+         d8mg==
+X-Gm-Message-State: AOAM531JGIhVORK4rAeH465TJQS7FwmVjx5QSgQiT2E+KACypXGC4+rY
+        2Mr4RFwF7FYpn/i9oTIbbgEVmkvYC7n4F2VaJc70IAiQtvlw
+X-Google-Smtp-Source: ABdhPJyVHy/khyyLSyf05JTis72no6NvtkZogjvY6QKKugmN/bv16pOOktXDBrhtnfxHZvR7dvaajtm3yJlsPwJXk3Ttq0pln574
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:7513:0:b0:2b9:5b61:e376 with SMTP id
+ q19-20020a927513000000b002b95b61e376mr1558659ilc.193.1646870064861; Wed, 09
+ Mar 2022 15:54:24 -0800 (PST)
+Date:   Wed, 09 Mar 2022 15:54:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000351b8605d9d1d1bf@google.com>
+Subject: [syzbot] memory leak in usb_get_configuration
+From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
+        rob@robgreener.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Confidential Computing (CC) features (like string I/O unroll support,
-memory encryption/decryption support, etc) are conditionally enabled
-in the kernel using cc_platform_has() API. Since TDX guests also need
-to use these CC features, extend cc_platform_has() API and add TDX
-guest-specific CC attributes support.
+Hello,
 
-CC API also provides an interface to deal with encryption mask. Extend
-it to cover TDX.
+syzbot found the following issue on:
 
-Details about which bit in the page table entry to be used to indicate
-shared/private state is determined by using the TDINFO TDCALL.
+HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810c0289e0 (size 32):
+  comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
+  hex dump (first 32 bytes):
+    09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
+    3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
+  backtrace:
+    [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
+    [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
+    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
+    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
+    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+BUG: memory leak
+unreferenced object 0xffff88810a600f40 (size 64):
+  comm "kworker/1:2", pid 139, jiffies 4294947866 (age 15.870s)
+  hex dump (first 32 bytes):
+    01 00 00 00 01 00 00 00 09 04 00 00 00 d0 bb 3a  ...............:
+    00 00 00 00 00 00 00 00 f2 89 02 0c 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff82c9871d>] kmalloc include/linux/slab.h:586 [inline]
+    [<ffffffff82c9871d>] kzalloc include/linux/slab.h:714 [inline]
+    [<ffffffff82c9871d>] usb_parse_configuration drivers/usb/core/config.c:772 [inline]
+    [<ffffffff82c9871d>] usb_get_configuration+0x7bd/0x1cd0 drivers/usb/core/config.c:944
+    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
+    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
+    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+
+
 ---
- v5.2:
-  - Update comment for tdx_module_call() definition and for the
-    TDX_GET_INFO call site.
----
- arch/x86/Kconfig     |  1 +
- arch/x86/coco/core.c | 12 ++++++++++++
- arch/x86/coco/tdx.c  | 46 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 59 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index c346d66b51fc..93e67842e369 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -884,6 +884,7 @@ config INTEL_TDX_GUEST
- 	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
- 	depends on X86_64 && CPU_SUP_INTEL
- 	depends on X86_X2APIC
-+	select ARCH_HAS_CC_PLATFORM
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
- 	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index fc1365dd927e..6529db059938 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -87,9 +87,18 @@ EXPORT_SYMBOL_GPL(cc_platform_has);
- 
- u64 cc_mkenc(u64 val)
- {
-+	/*
-+	 * Both AMD and Intel use a bit in page table to indicate encryption
-+	 * status of the page.
-+	 *
-+	 * - for AMD, bit *set* means the page is encrypted
-+	 * - for Intel *clear* means encrypted.
-+	 */
- 	switch (vendor) {
- 	case CC_VENDOR_AMD:
- 		return val | cc_mask;
-+	case CC_VENDOR_INTEL:
-+		return val & ~cc_mask;
- 	default:
- 		return val;
- 	}
-@@ -97,9 +106,12 @@ u64 cc_mkenc(u64 val)
- 
- u64 cc_mkdec(u64 val)
- {
-+	/* See comment in cc_mkenc() */
- 	switch (vendor) {
- 	case CC_VENDOR_AMD:
- 		return val & ~cc_mask;
-+	case CC_VENDOR_INTEL:
-+		return val | cc_mask;
- 	default:
- 		return val;
- 	}
-diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-index d1ce35c1ac18..b74b3f70f584 100644
---- a/arch/x86/coco/tdx.c
-+++ b/arch/x86/coco/tdx.c
-@@ -5,8 +5,12 @@
- #define pr_fmt(fmt)     "tdx: " fmt
- 
- #include <linux/cpufeature.h>
-+#include <asm/coco.h>
- #include <asm/tdx.h>
- 
-+/* TDX module Call Leaf IDs */
-+#define TDX_GET_INFO			1
-+
- /*
-  * Wrapper for standard use of __tdx_hypercall with no output aside from
-  * return code.
-@@ -25,8 +29,40 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
- 	return __tdx_hypercall(&args, 0);
- }
- 
-+/*
-+ * Used for TDX guests to make calls directly to the TD module.  This
-+ * should only be used for calls that have no legitimate reason to fail
-+ * or where the kernel can not survive the call failing.
-+ */
-+static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
-+				   struct tdx_module_output *out)
-+{
-+	if (__tdx_module_call(fn, rcx, rdx, r8, r9, out))
-+		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
-+}
-+
-+static void get_info(unsigned int *gpa_width)
-+{
-+	struct tdx_module_output out;
-+
-+	/*
-+	 * TDINFO TDX module call is used to get the TD execution environment
-+	 * information like GPA width, number of available vcpus, debug mode
-+	 * information, etc. More details about the ABI can be found in TDX
-+	 * Guest-Host-Communication Interface (GHCI), section 2.4.2 TDCALL
-+	 * [TDG.VP.INFO].
-+	 *
-+	 * The GPA width that comes out of this call is critical. TDX guests
-+	 * can not meaningfully run without it.
-+	 */
-+	tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out);
-+
-+	*gpa_width = out.rcx & GENMASK(5, 0);
-+}
-+
- void __init tdx_early_init(void)
- {
-+	unsigned int gpa_width;
- 	u32 eax, sig[3];
- 
- 	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
-@@ -36,5 +72,15 @@ void __init tdx_early_init(void)
- 
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
-+	get_info(&gpa_width);
-+
-+	cc_set_vendor(CC_VENDOR_INTEL);
-+
-+	/*
-+	 * The highest bit of a guest physical address is the "sharing" bit.
-+	 * Set it for shared pages and clear it for private pages.
-+	 */
-+	cc_set_mask(BIT_ULL(gpa_width - 1));
-+
- 	pr_info("Guest detected\n");
- }
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

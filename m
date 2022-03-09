@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970704D31C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092EA4D31C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbiCIP3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
+        id S232844AbiCIPaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiCIP24 (ORCPT
+        with ESMTP id S232197AbiCIPaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:28:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A015643F;
-        Wed,  9 Mar 2022 07:27:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB577614EF;
-        Wed,  9 Mar 2022 15:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD08C340F4;
-        Wed,  9 Mar 2022 15:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646839674;
-        bh=AWGrA2gdjK2l3jA6PIbNml5wRlr2I5vXKUiOzXqwJQs=;
-        h=From:To:Subject:Date:In-Reply-To:References:In-Reply-To:
-         References:From;
-        b=ZMF7No5gmILphH9Dpsedeg+jnPC5EbU62iEuRJBm5dAFyQ/KtmjUcExSJ71JFxSbc
-         MGauN4i5PK+Phg1VOy+UB5eUpTIpOjfWcqI413HBfvzmDpjgsWUF/i2KWPmjsQ3szX
-         rUqXPO3IcnG4UwaXRQjjCbxruMTgJivJtCE+9xTm9Z8qXgkKeW9rODPl4gMqbLy0PI
-         dmJEWFt4EDDEwYIhELRhKGspBbcYcne3N01GOtwDZX7suOzwjUCwpGtlS6HxfALhyY
-         gAkK19s9LeDqxzWIDZUFk79tpKhfEZb3TwLGfJHn1FM10DaZ/0lOzC3ZedQUcQH0Wq
-         ckgy0ctcrpDSg==
-From:   zanussi@kernel.org
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <wagi@monom.org>,
-        Clark Williams <williams@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH RT 3/3] Linux 5.4.182-rt71-rc1
-Date:   Wed,  9 Mar 2022 09:27:48 -0600
-Message-Id: <bd340fc79de226f43181694eb693ac5d42712170.1646839649.git.zanussi@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1646839649.git.zanussi@kernel.org>
-References: <cover.1646839649.git.zanussi@kernel.org>
-In-Reply-To: <cover.1646839649.git.zanussi@kernel.org>
-References: <cover.1646839649.git.zanussi@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 10:30:13 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F93D4C8D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5RgX5tZLSsAtO9xXtxg7N8PS6/VOcsvGlxTOVBEJBiM=; b=IIm9rfkLwI0uUdNY/9J8RWA0Mj
+        MHDmjb4uDI+o59odgPocvlaFEGFxkzkdE0jg6Whr093gioLjaDo8EhFWiXjp9m29xSmxWV9gjHRBZ
+        Ltj3327XbxYtmXa+lpV9PsOd8Bc4BSpZuGdyNYGOBEBGet6DvgQ3hwiaFgusrkBS4lNregjBX6B+p
+        JWyMVASql6a7M6QxATsuSChFlxygafIlSkhO2Aqg8eJo4FS4kiujDeFkjq9CL1qJNW5Gm0BWEINrd
+        ddQVsh5E2GdGyqTG59E3pNkuTg854nMNSpiWcJ3fFz/mItx4PishD+b+D1QYj8OJJ9OD0yKo6x+Ts
+        VNhjlusA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRyF5-00HEaa-UG; Wed, 09 Mar 2022 15:28:48 +0000
+Date:   Wed, 9 Mar 2022 15:28:47 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     sxwjean@me.com
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        longman@redhat.com, guro@fb.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>
+Subject: Re: [PATCH 2/2] mm: slub: Delete useless parameter of
+ alloc_slab_page()
+Message-ID: <YijHr+kkp2bPE1dA@casper.infradead.org>
+References: <20220309145052.219138-1-sxwjean@me.com>
+ <20220309145052.219138-3-sxwjean@me.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309145052.219138-3-sxwjean@me.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Zanussi <zanussi@kernel.org>
+On Wed, Mar 09, 2022 at 10:50:52PM +0800, sxwjean@me.com wrote:
+> From: Xiongwei Song <sxwjean@gmail.com>
+> 
+> The parameter @s is useless for alloc_slab_page(), let's delete it.
 
-v5.4.182-rt71-rc1 stable review patch.
-If anyone has any objections, please let me know.
+Perhaps we could add a little more information here.
 
------------
+It was added in 2014 by 5dfb41750992 ("sl[au]b: charge slabs to kmemcg
+explicitly").  The need for it was removed in 2020 by 1f3147b49d75
+("mm: slub: call account_slab_page() after slab page initialization").
 
-
-Signed-off-by: Tom Zanussi <zanussi@kernel.org>
----
- localversion-rt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/localversion-rt b/localversion-rt
-index f36b5d418dd8..00736430c969 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt70
-+-rt71-rc1
--- 
-2.17.1
-
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>

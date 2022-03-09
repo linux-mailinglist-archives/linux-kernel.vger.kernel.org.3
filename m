@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57654D3BB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4574D3BB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238344AbiCIVHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S238351AbiCIVHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiCIVHH (ORCPT
+        with ESMTP id S235735AbiCIVHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:07:07 -0500
+        Wed, 9 Mar 2022 16:07:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF89A10C50F;
-        Wed,  9 Mar 2022 13:06:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340F510CF3D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:06:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78CDF61AB8;
-        Wed,  9 Mar 2022 21:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D548EC36AE7;
-        Wed,  9 Mar 2022 21:06:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0CFE61AB8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2BE46C340E8;
+        Wed,  9 Mar 2022 21:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646859966;
-        bh=FeLtBU7QMp6iEJHccU5vuRdG5htlOJfIhhIpS6r7AhM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z9Ot8vd0SD9n+maWBFR9fCvdLyFrzkzJZ0clgv0hHJ1OYP0+Ol+cZju3OiiDm/yiL
-         Ma5epBS1vFTVXJvScrqEz3sqDgwZZRa9WZQ/N50WIqeqLnS5haqiPMeYb5BejHUGL9
-         gkkFjOLgV8TSt50cYWcDK+LaTTuSxuz8GymRKPkPuDG5hmOZ8p0Ht1ZGHkyCkNTPL/
-         DDCV4RKt0kOAYVylpiJXblzinr/DN5/tGcfvawWu0Ai9ypNTelwyoytBHwt5kDezU1
-         NN0DAiyCI1mY5mAYJwmq6IsD3tUrRYgfz9cKL6IvIqRry19yENUBPAomSN5yUxxWGJ
-         ZzyIfvzhlIOvQ==
-Received: by mail-ej1-f48.google.com with SMTP id qa43so7725407ejc.12;
-        Wed, 09 Mar 2022 13:06:06 -0800 (PST)
-X-Gm-Message-State: AOAM531dwVIA9D83R8yyQox/mSMMg5ZP+c0MrBiTv6zw9XmG325M6DGK
-        pIMvmI6f9QMs22fSrv/UcGC0aNjhdUf6TJT+JA==
-X-Google-Smtp-Source: ABdhPJxP4r5jkW2XGKLwSeYb+P3R9mLVmIuw9bFE1hEmABTru6Z5W8ocg6Km8rnC2ammFaLr1fc9kholLHA72ed6cTo=
-X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
- k14-20020a170906a38e00b006daa1f9f9eemr1449135ejz.27.1646859965060; Wed, 09
- Mar 2022 13:06:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
-In-Reply-To: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 9 Mar 2022 15:05:53 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
-Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1646859981;
+        bh=QHyQ3nVeup6A7S/YyJ8/Xc9gH+3cPfk455tCjG34kZk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=iSFBKE/qb8rq5xiNY0mPzukDOlkzwRh/uRR697UyFohHhia+xxJjXTmIkj28Eab6w
+         i+/C5fK0FrWXKOigss+J7zSWV19gIJ7eznou1H6xDFHa/2AYjUSFg+Ou7DTY1y1CpQ
+         cNEJMGa0J6ykHuuWoqjmMHm7F+nv4mzWMUEV3PzFJ/iPMPaGk+WQFudBcK630bT32T
+         xZwgw+SERNgk+1YBFg6d5Sfl6I6ih6+FltdscHGr3eQFth8sTkRthMhPrUJyStlUCs
+         VpOa3gEIuZzRV5zwIV71aY+japjaTfZtryiVvsk37lB0gxVnHut9WCOnUN/D1EEdRX
+         GvPp2WqMtoEBQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 148D7E7BB08;
+        Wed,  9 Mar 2022 21:06:21 +0000 (UTC)
+Subject: Re: [GIT PULL] arm64 fixes for 5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yij6MY63Lhg0icIg@arm.com>
+References: <Yij6MY63Lhg0icIg@arm.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <Yij6MY63Lhg0icIg@arm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
+X-PR-Tracked-Commit-Id: b859ebedd1e730bbda69142fca87af4e712649a1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e7e19defa57580d679bf0d03f8a34933008a7930
+Message-Id: <164685998107.18291.1953249183991023055.pr-tracker-bot@kernel.org>
+Date:   Wed, 09 Mar 2022 21:06:21 +0000
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,26 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> atmel,at91sam9-rtc is a confuing name for this file as it is documenting
-> the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
-> and atmel,at91sam9x5-rtc)
->
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
->
-> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> similarity index 100%
-> rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+The pull request you sent on Wed, 9 Mar 2022 19:04:17 +0000:
 
-Now failing in -next:
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
 
-./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
-$id: relative path/filename doesn't match actual path or filename
-  expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e7e19defa57580d679bf0d03f8a34933008a7930
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

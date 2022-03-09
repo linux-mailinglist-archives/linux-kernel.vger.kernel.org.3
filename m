@@ -2,163 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ABC4D2948
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A63D4D294D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiCIHLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S230249AbiCIHNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiCIHLa (ORCPT
+        with ESMTP id S229920AbiCIHM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:11:30 -0500
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F5CECC45
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 23:10:31 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220309071028euoutp01d35939bc973a4158ebc116ef39b03f71~apNBUJaw03048130481euoutp01w
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:10:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220309071028euoutp01d35939bc973a4158ebc116ef39b03f71~apNBUJaw03048130481euoutp01w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646809828;
-        bh=TjJEXRfVW4361xBOm+SseNKtnQiXRSWqUUa3WAQ1Cj8=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=hV4/QhmnUfl4CmIIXt2Ah4Oh1n2aOFiC9nETBVRPgE7NjZcH5ZBSYGE5EA8cv1K/V
-         Qb1FUKRdi05wvtvPGH7Cpemxuo9VuxFdc6lgAN6rZ/jAhCcTlpjEzPHZUMeDKnh4El
-         ncxX/CCzIkdzCTnx0niXPI0tDCKCAaSGARapk4lo=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220309071028eucas1p2c0d00f802cf9672455b62a6a63c12999~apNBFPJ-h0838808388eucas1p2L;
-        Wed,  9 Mar 2022 07:10:28 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 10.68.10260.4E258226; Wed,  9
-        Mar 2022 07:10:28 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220309071027eucas1p1f066b42f49e524404d898929b60b344f~apNAyxLdp3267032670eucas1p1I;
-        Wed,  9 Mar 2022 07:10:27 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220309071027eusmtrp12de1cc04d97ba6942d59916713b4cbb8~apNAx7Y0C2066120661eusmtrp1R;
-        Wed,  9 Mar 2022 07:10:27 +0000 (GMT)
-X-AuditID: cbfec7f5-bf3ff70000002814-d7-622852e4163b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id E6.A7.09522.3E258226; Wed,  9
-        Mar 2022 07:10:27 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220309071027eusmtip19d569007785921b281798bea93336883~apM--sSZp2204122041eusmtip1k;
-        Wed,  9 Mar 2022 07:10:26 +0000 (GMT)
-Message-ID: <1be951c7-442f-eb45-a4fc-41fdb771eef7@samsung.com>
-Date:   Wed, 9 Mar 2022 08:10:26 +0100
+        Wed, 9 Mar 2022 02:12:57 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614BF1081B3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 23:11:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646809919; x=1678345919;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M48WQ1VdLf6ReFI/U9jDn3CFilIzAHEjcRYKH8tp1K0=;
+  b=dYXlhNbwUOFRMsPbacXQo6gwuOxM3qMN4GQ60pelUO7Rcq8vUZ/4nwDk
+   /V1UqbQcd8/1piRtnh8kLGqPTaWCkhgibmcTu9n+VdRkLAliTPllfPprW
+   hATVvFin7RwPBMFKgI6ttWNiPAjhskVWIq0Dnv6Jz2rUvNgxg7amM9LOG
+   Kns/GAOItoE+LXAI2rQWU+xNdfZEJHilLr/MpegEAUz6ulwevf1k0867I
+   MkOZjxxukVMoXrmAOSFn2mklCo/YYclvKNJvQDSZ1MB+Y0ghbRAm4OTay
+   k0nz8ReDNFjBDXc+zd2AZsxhC+QoYYHV9aJRzsg1u5yNlNtKNnmn2Gq4A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242351043"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="242351043"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 23:11:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="711842655"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 23:11:57 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRqUG-0002ok-LT; Wed, 09 Mar 2022 07:11:56 +0000
+Date:   Wed, 9 Mar 2022 15:11:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Lawrence <paullawrence@google.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 9998/9999] fs/fuse/backing.c:955:27: warning: cast to pointer from integer
+ of different size
+Message-ID: <202203091504.1hJGsrgr-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH linux-next] cgroup: fix suspicious
- rcu_dereference_check() usage warning
-Content-Language: en-US
-To:     Chengming Zhou <zhouchengming@bytedance.com>, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, peterz@infradead.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220305034103.57123-1-zhouchengming@bytedance.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPKsWRmVeSWpSXmKPExsWy7djP87pPgjSSDJb2sFrcWD6DxWL1Jl+L
-        y7vmsFmceH2EzeLrAS6L470HmCwO3j/HbHH/Yiejxa/lRxktbjZ+YbSYdKOf1YHb49+JNWwe
-        h9+8Z/bYOesuu8fmFVoem1Z1snncubaHzWPmWzWPz5vkAjiiuGxSUnMyy1KL9O0SuDKunXrB
-        UvCAp2LR78nMDYzXuLoYOTkkBEwkOlrmM3UxcnEICaxglFjRN4EZwvnCKLH4ejs7hPOZUeLl
-        kftMMC37bi1jhEgsZ5TYsHwKlPORUeLz4VUsXYwcHLwCdhILLiWCNLAIqEhMn7SNFcTmFRCU
-        ODnzCQuILSqQJPHgQB87iC0sECdx8e1TMJtZQFzi1hOIm0QEWhglLlxdwwriMAs8Z5T43tEN
-        1s0mYCjR9baLDcTmFHCUWND9iBGiW15i+9s5YE9ICEznlPgxZTnU3S4Sa59dZIOwhSVeHd/C
-        DmHLSJye3MMC0dDMKPHw3Fp2CKeHUeJy0wxGiCpriTvnfrGB/MYsoCmxfpc+RNhR4tWa6awg
-        YQkBPokbbwUhjuCTmLRtOjNEmFeio00IolpNYtbxdXBrD164xDyBUWkWUsDMQgqAWUjemYWw
-        dwEjyypG8dTS4tz01GLjvNRyveLE3OLSvHS95PzcTYzANHb63/GvOxhXvPqod4iRiYPxEKME
-        B7OSCO/98ypJQrwpiZVVqUX58UWlOanFhxilOViUxHmTMzckCgmkJ5akZqemFqQWwWSZODil
-        Gpj0rpatuJ0dYHPAo1pF7rJwaGZ88e9VWxasPb6oIXiB5T9zf8HVwUuObvDK9vR2fcIToCWh
-        bu13Psa1S0Rlw56/TCe2/OmbyOb0+43Y63N7Vr1zFZ+86q6Jjee1ua1vPk6a8Ota04Fwx8N1
-        0W/StbS6oucc+Z+XuTsj/cXle5vtr5Ypm7Z3xO2f4dZ32lyxf9OehnLBno9xGl5LOu8Jrj31
-        12VLu+D/dW+shecyfiu95r7hMCvHoYIN6gFnch6tfPz90bS6TR+FtI90355W+zXesu22wmnr
-        gvKeS5/rilicd/Ieu8Jz9ljqa+fSi6pfz5jtX2sn2/Mjz1Gs6fv2bbru6Tv3L39obV73Yi57
-        mdFjJZbijERDLeai4kQAq8udptIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPIsWRmVeSWpSXmKPExsVy+t/xu7qPgzSSDNb361ncWD6DxWL1Jl+L
-        y7vmsFmceH2EzeLrAS6L470HmCwO3j/HbHH/Yiejxa/lRxktbjZ+YbSYdKOf1YHb49+JNWwe
-        h9+8Z/bYOesuu8fmFVoem1Z1snncubaHzWPmWzWPz5vkAjii9GyK8ktLUhUy8otLbJWiDS2M
-        9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DKunXrBUvCAp2LR78nMDYzXuLoYOTkk
-        BEwk9t1axtjFyMUhJLCUUeLv309MEAkZiZPTGlghbGGJP9e62CCK3jNKHHi7m6WLkYODV8BO
-        YsGlRJAaFgEViemTtoHV8woISpyc+YQFxBYVSJJ4uW0jK0i5sECcxIXpPCBhZgFxiVtP5jOB
-        jBQRaGGUmLHoCzOIwyzwnFHi55yZjCBVQgIOEpNunQKz2QQMJbreghzBycEp4CixoPsRI8Qk
-        M4murV1QtrzE9rdzmCcwCs1CcscsJAtnIWmZhaRlASPLKkaR1NLi3PTcYkO94sTc4tK8dL3k
-        /NxNjMCY3Xbs5+YdjPNefdQ7xMjEwXiIUYKDWUmE9/55lSQh3pTEyqrUovz4otKc1OJDjKbA
-        wJjILCWanA9MGnkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUx1
-        p9Z9ULzKMo9v1vPdLCl8V694BP1ZEVmoxbQlPrpx8uTphn7BDFemzTqg2nc+L1z22T4jueXt
-        8/5uF251cfBhyvn45vfZuJDtfxinC/ScSW83Toh7H/C74LnSofo9MQlqn+vcw6dxrN1v+9Oa
-        u9Irvfx80DOONx6F++71HTlknC1kqDXlZdCOA2q/nuk7rS7USC0+rFxw2v/6J22/7DDl3C+l
-        4cFmTkK3d7N+bpslunelS1Gg5kaWa/wfn77zOME/504979yEnZdUbmlxhSWs/BKz6nPcn9rk
-        ZYvOV/3ZdnN1rlpk+uU7OoFqf9qmT7kV4eN1XV3gsuuPC9+Lss/tWPNt/lyFSu2qcP7fiXFK
-        LMUZiYZazEXFiQAdyppPYgMAAA==
-X-CMS-MailID: 20220309071027eucas1p1f066b42f49e524404d898929b60b344f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220309071027eucas1p1f066b42f49e524404d898929b60b344f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220309071027eucas1p1f066b42f49e524404d898929b60b344f
-References: <20220305034103.57123-1-zhouchengming@bytedance.com>
-        <CGME20220309071027eucas1p1f066b42f49e524404d898929b60b344f@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.03.2022 04:41, Chengming Zhou wrote:
-> task_css_set_check() will use rcu_dereference_check() to check for
-> rcu_read_lock_held() on the read-side, which is not true after commit
-> dc6e0818bc9a ("sched/cpuacct: Optimize away RCU read lock"). This
-> commit drop explicit rcu_read_lock(), change to RCU-sched read-side
-> critical section. So fix the RCU warning by adding check for
-> rcu_read_lock_sched_held().
->
-> Fixes: dc6e0818bc9a ("sched/cpuacct: Optimize away RCU read lock")
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Reported-by: syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com
-> Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   5da5b1871950c71755fa5a0b88c78e2f2623da24
+commit: 8efdff35e3052e44d519ccfb9d50594f5df0240b [9998/9999] ANDROID: fuse-bpf: Move fd operations to be synchronous
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203091504.1hJGsrgr-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/8efdff35e3052e44d519ccfb9d50594f5df0240b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout 8efdff35e3052e44d519ccfb9d50594f5df0240b
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/fuse/
 
-Right, this fixes the issue I've reported here:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://lore.kernel.org/all/f4bc652b-115f-35b5-91db-bad3b30fed9b@samsung.com/
+All warnings (new ones prefixed by >>):
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+   fs/fuse/backing.c: In function 'fuse_lookup_finalize':
+>> fs/fuse/backing.c:955:27: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     955 |   struct file *bpf_file = (struct file*) febo->bpf_fd;
+         |                           ^
+   fs/fuse/backing.c:988:18: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     988 |   backing_file = (struct file *) febo->backing_fd;
+         |                  ^
+   fs/fuse/backing.c:984:21: warning: variable 'fc' set but not used [-Wunused-but-set-variable]
+     984 |   struct fuse_conn *fc;
+         |                     ^~
+   fs/fuse/backing.c: In function 'fuse_statfs_initialize':
+   fs/fuse/backing.c:1771:18: warning: initialized field overwritten [-Woverride-init]
+    1771 |   .out_numargs = 1,
+         |                  ^
+   fs/fuse/backing.c:1771:18: note: (near initialization for '(anonymous).out_numargs')
 
-> ---
->   include/linux/cgroup.h | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index 1e356c222756..0d1ada8968d7 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -450,6 +450,7 @@ extern struct mutex cgroup_mutex;
->   extern spinlock_t css_set_lock;
->   #define task_css_set_check(task, __c)					\
->   	rcu_dereference_check((task)->cgroups,				\
-> +		rcu_read_lock_sched_held() ||				\
->   		lockdep_is_held(&cgroup_mutex) ||			\
->   		lockdep_is_held(&css_set_lock) ||			\
->   		((task)->flags & PF_EXITING) || (__c))
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+vim +955 fs/fuse/backing.c
 
+   911	
+   912	struct dentry *fuse_lookup_finalize(struct fuse_args *fa, struct inode *dir,
+   913				   struct dentry *entry, unsigned int flags)
+   914	{
+   915		struct fuse_dentry *fd;
+   916		struct dentry *bd;
+   917		struct inode *inode, *backing_inode;
+   918		struct fuse_entry_out *feo = fa->out_args[0].value;
+   919		struct fuse_entry_bpf_out *febo = fa->out_args[1].value;
+   920	
+   921		fd = get_fuse_dentry(entry);
+   922		if (!fd)
+   923			return ERR_PTR(-EIO);
+   924		bd = fd->backing_path.dentry;
+   925		if (!bd)
+   926			return ERR_PTR(-ENOENT);
+   927		backing_inode = bd->d_inode;
+   928		if (!backing_inode)
+   929			return 0;
+   930	
+   931		inode = fuse_iget_backing(dir->i_sb, backing_inode);
+   932	
+   933		if (IS_ERR(inode))
+   934			return ERR_PTR(PTR_ERR(inode));
+   935	
+   936		/* TODO Make sure this handles invalid handles */
+   937		/* TODO Do we need the same code in revalidate */
+   938		if (get_fuse_inode(inode)->bpf) {
+   939			bpf_prog_put(get_fuse_inode(inode)->bpf);
+   940			get_fuse_inode(inode)->bpf = NULL;
+   941		}
+   942	
+   943		switch (febo->bpf_action) {
+   944		case FUSE_ACTION_KEEP:
+   945			get_fuse_inode(inode)->bpf = get_fuse_inode(dir)->bpf;
+   946			if (get_fuse_inode(inode)->bpf)
+   947				bpf_prog_inc(get_fuse_inode(inode)->bpf);
+   948			break;
+   949	
+   950		case FUSE_ACTION_REMOVE:
+   951			get_fuse_inode(inode)->bpf = NULL;
+   952			break;
+   953	
+   954		case FUSE_ACTION_REPLACE: {
+ > 955			struct file *bpf_file = (struct file*) febo->bpf_fd;
+   956			struct bpf_prog *bpf_prog = ERR_PTR(-EINVAL);
+   957	
+   958			if (bpf_file && !IS_ERR(bpf_file))
+   959				bpf_prog = fuse_get_bpf_prog(bpf_file);
+   960	
+   961			if (IS_ERR(bpf_prog))
+   962				return ERR_PTR(PTR_ERR(bpf_prog));
+   963	
+   964			get_fuse_inode(inode)->bpf = bpf_prog;
+   965			break;
+   966		}
+   967	
+   968		default:
+   969			return ERR_PTR(-EIO);
+   970		}
+   971	
+   972		switch (febo->backing_action) {
+   973		case FUSE_ACTION_KEEP:
+   974			/* backing inode/path are added in fuse_lookup_backing */
+   975			break;
+   976	
+   977		case FUSE_ACTION_REMOVE:
+   978			iput(get_fuse_inode(inode)->backing_inode);
+   979			get_fuse_inode(inode)->backing_inode = NULL;
+   980			path_put_init(&get_fuse_dentry(entry)->backing_path);
+   981			break;
+   982	
+   983		case FUSE_ACTION_REPLACE: {
+   984			struct fuse_conn *fc;
+   985			struct file *backing_file;
+   986	
+   987			fc = get_fuse_mount(dir)->fc;
+   988			backing_file = (struct file *) febo->backing_fd;
+   989			if (!backing_file || IS_ERR(backing_file))
+   990				return ERR_PTR(-EIO);
+   991	
+   992			iput(get_fuse_inode(inode)->backing_inode);
+   993			get_fuse_inode(inode)->backing_inode =
+   994				backing_file->f_inode;
+   995			ihold(get_fuse_inode(inode)->backing_inode);
+   996	
+   997			path_put(&get_fuse_dentry(entry)->backing_path);
+   998			get_fuse_dentry(entry)->backing_path = backing_file->f_path;
+   999			path_get(&get_fuse_dentry(entry)->backing_path);
+  1000	
+  1001			fput(backing_file);
+  1002			break;
+  1003		}
+  1004	
+  1005		default:
+  1006			return ERR_PTR(-EIO);
+  1007		}
+  1008	
+  1009		get_fuse_inode(inode)->nodeid = feo->nodeid;
+  1010	
+  1011		return d_splice_alias(inode, entry);
+  1012	}
+  1013	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

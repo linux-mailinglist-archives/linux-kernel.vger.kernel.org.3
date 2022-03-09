@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2994D3CAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293A34D3CB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238543AbiCIWLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S238565AbiCIWMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiCIWLo (ORCPT
+        with ESMTP id S238557AbiCIWMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:11:44 -0500
+        Wed, 9 Mar 2022 17:12:49 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AD7120E9E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:10:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1873120F4E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:11:48 -0800 (PST)
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229KcmF2022216;
-        Wed, 9 Mar 2022 22:10:05 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229Kclxm022212;
+        Wed, 9 Mar 2022 22:10:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=rnCiA9rRkTMfW6osRF4fhz5Mw4VzlRtn338PAVBlhS4=;
- b=WM0gS0vxm3oipf7dpcmUQjjt7GNwVyAwwyaiLzjAarrRVh3wAZ8gcG7XGONdLGg17l3w
- NvSaYMEXguYUBeczLrLgZiFozme+wDhb15qA5bXaHNOJjIu8hjwSXAuqIodrBlXnj6Pk
- D72D+6+V4CJ0ZiJKGDMWIVG+J0wwQKgY/OFXiSnUFCpC+uMbS2kWDVehR3ZUds0Id3z1
- 5NRAITGg/D0lbsMm1SsaCBKP/SVxiUAHw4ciIB76dmAJNxWtcQfRP222Me3RaBNx1+0K
- VyXNcX413XUbbaIi9vpdSiDMh7dN2zYMS/jbSXUv7z6PZlje6/HvNjsFiaqLTX9NhZcK Kg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxf0ugk6-1
+ s=corp-2021-07-09; bh=oRAKl0H0TZNhMdCI+8vB61CbQYLRZvaq+CovkWIIVCA=;
+ b=LyX21OyfS9I/wE7d6uwQKPQFBUikE/Ve3NyM4EfJ0ylvLfuGJnlqHed5xxfbmL26VELW
+ sJuj2KAkRJbDVOygtkisl25wALhwEIP1iv5VxgBwgAOer6SlaK9BQQezPhRWr1oTMklZ
+ y8j7qR3ZnXdg3nZfU5eWPjw6HciMO+yW9hrxC5ESNWl8A+E2Es9nr77iy8js+sslrFjb
+ nDcb4dlqXu7S2k4Unn8m4Ml2ysBdmzW7S7aJyWZIU64qIvCS+96M8WvardVsd5Z441qy
+ 6s8FUj0c1zKyBEId9r6bhrLBvihTKM2U9IzyeXp8Lcz3zJqNeBL+icdAgAuuY5arK+B6 2Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxf0ugkg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 22:10:05 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 229M6Pb9076248;
-        Wed, 9 Mar 2022 22:10:04 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by userp3030.oracle.com with ESMTP id 3ekvyw6x88-1
+        Wed, 09 Mar 2022 22:10:08 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 229M5geo132868;
+        Wed, 9 Mar 2022 22:10:07 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by aserp3030.oracle.com with ESMTP id 3ekwwd28by-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 22:10:03 +0000
+        Wed, 09 Mar 2022 22:10:06 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SI5Hoh8aDSb0Z8aGf7T1U1kDMoMJoV4HCWtHEFpVMQP82LNiD7awJiPQjEF/TMAkIrarMjLM9X5qbvbs6Q/iJ5E5mk+NlRVDhBw2ygL19t30PByZe8cdTo52Xuy3R8O+2se7TKmw5ZwDr7QNhqpE5S0gPrSVRatECYxmQTgnuASn7KbIv3F/aZpz3LYlLkrX0Qmwct9KE8huKNPitcCl4gruVLdw4aYEgjM8B6U5PTZoydw17AV0uM0f9DyAOt8crYVEorpd8vnz61/RarBcU+ZO3Hx5w1Tu1LW8mFvckx/kcUxvh9Z/rs+vZW5X5GKIrG21Ns2o7A8lhQL2b5PWPQ==
+ b=GLjFsX/ZNrvg8+lynU18llOCurU+fVfBbNMqiP39W+vGeVZhTJBNWe67u7Hd8enUCjHfk2Lt8w94p3dgpxWlPmMFmwAXJ2Qf+r0T0rGJuOl6okQP2H9dzBt2957AOufM8lkfzTxTxnEOR0/9cII9+aMwVZ3d45TcGAhvmDxllk3fMUR4BaD6klf9IzyAGtPvTptNCPS3/JVerWiIv0PtfZu3hWNxMrTYeXUNcj4fQ2asHvoYR1pVRxNNZ4krwS5dnA95/kqvz6hKvgmRE/fyKKEl9lnv29gFSk7l14UjkmBSckurUSrkVsGsNMIsX6vo+TTEOx1bIuo/6i6KEOrTcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rnCiA9rRkTMfW6osRF4fhz5Mw4VzlRtn338PAVBlhS4=;
- b=AL2XxlAeN0Mfj9fAgmczyRrdtjwD3vHKQjGQvp5TqYwzTdoYhOowrqimos/pp67JRkvjgCos004uldiYZSF1Cpw7zqa1ISqNjHK1yxcAl9HbIE92703wbeJgtIadjkjig+Sokxlw/y50dLuOMwYaN5FJ7TtG+ceRn4YrF0hlJf730AaNZXdfkoGE/IUxqBnDq5rtLehfflZtEhtcQio/dLZc3RRBIsXmrET3VOmhj2uh7OQ+9HAkEqoBGxe9hCjJsNIdFnmJrhCudRJuJ20RzBFay+sOsjtKPGZERmGYq2tJOi5EiDhd14oytdJSFK1aPy38KhHreav2mGkBsp6+LQ==
+ bh=oRAKl0H0TZNhMdCI+8vB61CbQYLRZvaq+CovkWIIVCA=;
+ b=nL/ox7baI50FwInNh093Xb0M6dHptCWF26OCn/2o6SqVBhqKdXEFNB2wOTStKkiixyOAg1FG+2xI0e7oMjwEDK4cHu7sk4cIdlxqVanYdazXtA+wKhQxsuCD4wWD6LOmAy9P28HJMYWAtjY0iYQJytUMHL2Isrw+jipdx2jTJr4BmJv1kKWa6yqrA+yzcvx+eWCrxzZWr1lICLHxBLKAQsL2GSbFHmT9+RJ2uKC+sk6De6x3JHqbCm8jqsApJsnM1NMGyG7JqTa1L2yCTPEGGoHK5zyc3giaEt5YB9/Y3h0IkoV9U4h7LXI/2TxIr6ol6WtnpwW0OIkDFxdBdIOw9A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rnCiA9rRkTMfW6osRF4fhz5Mw4VzlRtn338PAVBlhS4=;
- b=qyLsBrUvbsbc76PoHQulR6Wp3tDrYbgbX17GHymVUT6lqef9XixO+bYr5eD7myJ8X28QlJCrU8wGM0bH0U1lzp40BW0XMpAZ2JXvb25zXf396atz3mHdIEaIUWLe7lwhKigEgBMXXe6L3GCIZ7XHwADstvSQJiS91aPuiu+kDdk=
+ bh=oRAKl0H0TZNhMdCI+8vB61CbQYLRZvaq+CovkWIIVCA=;
+ b=JP6CObGUb3r2f2Ofa+J2EIK586NlxgLZtQ0WlOjfFksWn5hfY1UgkAfTf6gUkP43Jh6bVfGj0wr+M7qK/V9EPj9nYpSscPjTbJviH6QBEmeTVdLHbHHzbPSejeXxjl2DNFBWv1CigYlTVHYv6q6yXjt97xezm1HX3aHOxYePrdY=
 Received: from SA1PR10MB5866.namprd10.prod.outlook.com (2603:10b6:806:22b::19)
  by SN4PR10MB5560.namprd10.prod.outlook.com (2603:10b6:806:203::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Wed, 9 Mar
- 2022 22:10:01 +0000
+ 2022 22:10:04 +0000
 Received: from SA1PR10MB5866.namprd10.prod.outlook.com
  ([fe80::e82a:9be1:793c:1702]) by SA1PR10MB5866.namprd10.prod.outlook.com
  ([fe80::e82a:9be1:793c:1702%4]) with mapi id 15.20.5061.021; Wed, 9 Mar 2022
- 22:10:01 +0000
+ 22:10:04 +0000
 From:   Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
@@ -72,9 +72,9 @@ Cc:     thomas.lendacky@amd.com, brijesh.singh@amd.com,
         ashish.kalra@amd.com, darren.kenny@oracle.com,
         venu.busireddy@oracle.com, boris.ostrovsky@oracle.com,
         alejandro.j.jimenez@oracle.com
-Subject: [RFC 1/3] x86: Expose Secure Memory Encryption capabilities in sysfs
-Date:   Wed,  9 Mar 2022 17:06:06 -0500
-Message-Id: <20220309220608.16844-2-alejandro.j.jimenez@oracle.com>
+Subject: [RFC 2/3] x86: Expose SEV capabilities in sysfs
+Date:   Wed,  9 Mar 2022 17:06:07 -0500
+Message-Id: <20220309220608.16844-3-alejandro.j.jimenez@oracle.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309220608.16844-1-alejandro.j.jimenez@oracle.com>
 References: <20220309220608.16844-1-alejandro.j.jimenez@oracle.com>
@@ -85,62 +85,62 @@ X-ClientProxiedBy: BY5PR04CA0015.namprd04.prod.outlook.com
  (2603:10b6:806:22b::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d1023780-1975-4c64-d336-08da02198e43
+X-MS-Office365-Filtering-Correlation-Id: 7c620303-b0d7-4c56-fbe2-08da02199001
 X-MS-TrafficTypeDiagnostic: SN4PR10MB5560:EE_
-X-Microsoft-Antispam-PRVS: <SN4PR10MB55607FAC2D32A9E9A9A16B7AC70A9@SN4PR10MB5560.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <SN4PR10MB5560035A7DD9E9B093CA08F7C70A9@SN4PR10MB5560.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eIBebYgwrevlZc7yBNaIbhz5aU7k+0Rz7XRvCNhf9K+LdlGeqboKQqKaUdH8ZcmyKMLvwdG9z8qSiym0N1Fqqsp7/F9CYpYczRb4XefQqCZRy4mJN0CT0l+C/H6prcoyEcI5ZyBzwIqq6teNf56+U7tP8sDPK9DNJwETaMuCJmnQmP1SIZSxPZQvOLB/wNW9zZIDLOC3y3/p51ZbAaOMdlTqeQIfQ631hGTenMaSAbM/1SCm4Wgv82LHHoH2B4dirO443yzb8yKhWfgLdHe73sZPe//uk7JS+N7LWR/1lO2Rxj/dYpQAdQxyhUEIcHA2kSHn1QqX3JPNtkiCe3kMolbTzMlx9rkU606w5LlE058Q6uhEBLLbBVg+28YoUHxj0Nft2Ypm8b25M2XZHJF/MsGQ5A3xzsOYUm9ha1qbQnbdawMuHJAxPPxPvh9Mn7AFyg7v7hRIcNChIu89JbzvituCRLcU1wNxzwQdkDocOeGiw5leHB9cFgeQs02a+8LkNfiBwP0YeuQ6zERWKbgiXINKhq02X7/0p7Yxiw82HiUY8GtSGnFsmNtiALJsuuvksICh5OlDLl8mSGeglSsmtu1B20JGTTn2UMyT4BbqZp19HIVNo5rWscOgTr5+CTHX17tcML25sPV/xBeQjTaE2JfT6qOY+tOHnH6PbyxnlVVrWbLAHP491TM5XSGUgB/fYQl1/bHoYVDmNnFqrI5b9wPv/wMsDaS1b2XWb6zjHJtrsk7DT/tKWQFflVx9Dt2DYLwB/tp8s3IY207KcEd4VR3Q3br3mRFkMsXMjCE29ari8O1FqorzXBsoRlPGff2/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5866.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(8676002)(4326008)(36756003)(86362001)(103116003)(107886003)(186003)(2616005)(1076003)(5660300002)(52116002)(966005)(6506007)(38350700002)(7416002)(66946007)(83380400001)(6486002)(26005)(38100700002)(6512007)(508600001)(30864003)(8936002)(66476007)(66556008)(2906002)(309714004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LZGVvk1AiTEUlkO5ztgW0mFAeAlqWPeAnt3ixR9qyebj91PyNl0GSVzq0/L0PnFSwb/Ex5EOOCSxPmI+anQMaUQYDYuy5q0XMgnIqVBkEVIyHwbikL5l7OapG1XwOi7husU+BueQcoSSmEHPPB/KQ+z4XmNDVidTOXvyZ5nalA9vX+DtmF2/uhQHJrKRouYGbWhHKZdKuVxl5NlqCT+5Yx0C/SWoZF0mekxtK4U/nGkkpfnsyZiedMeMpYbhXXFh2Dm6i6fPExLjb5TOn2Rk8+59gEEuDhzBTc+vC3cGEfEZrSxdHNattkA4MiKTAdqlj/SPFjiO6G7TDyELUnSy5Mt4U0npvj1kknzkto/iDiA9KjlE2gmRRNtyb7nzWmAJOGgZBURHDZ7L6DQ3dc41nx50/n6u9X8/QzxGeJm/EztKunAcc1yHZMCkoXmL9SKID8lCSK+AgRq8NPD0GXCTqVIxg1vgg3Q41NGqV+iiDtEWZfNo//eec0y5hlsshgdKW9WXvVY6pQeMAqkmfKmcp7gaxUjgzn2udHlotdUcD/aXPFzf0qAizt1Y2WwVVIhzqN5GFK8dzyzkYXNT2pCnCeaCOSVtSWJw7bjkAl43Y1toj1c5ZGtvDRrUexFW4dnhImcmx8I3VHyJU29ktlI/Jaqsm7xPxX8VxoWQznPEvEfhasgqqtv7DUGAZZzlGLkmpqQ37W4Y4I+9AgUHHT5op2m9BiJhxuwsWcKPfML+tH8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5866.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(8676002)(4326008)(36756003)(86362001)(103116003)(107886003)(186003)(2616005)(1076003)(5660300002)(52116002)(6506007)(38350700002)(7416002)(66946007)(83380400001)(6486002)(26005)(38100700002)(6512007)(508600001)(8936002)(66476007)(66556008)(2906002)(309714004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dJfzMkfutQuFEhopymb10KYxUimqX0jlI5oY6yTXoQLxTrI6zzBUUgeCINvK?=
- =?us-ascii?Q?L964jFFXJ+r+7Knfig9u81v9fvggOSXJaEwt/M1ufqQ6SSNj+6EuHXV/Ufbn?=
- =?us-ascii?Q?k0CKqRhfGb5HefMc2FHYywokcdJ5hW9RMJYObRmO2dLnLi8PQBZwFDhp9AAt?=
- =?us-ascii?Q?8uUhTAjyuwrDh5fE67tZzQx+LeWuCwwu+gD/iopXfN7b+Gc430pYlWA9aEkw?=
- =?us-ascii?Q?4Z4epCeR9AP0XqCryV2FFXJCcdwDFYzvycAKaNOSZYAnu11i30jdkiGk/TN0?=
- =?us-ascii?Q?FvaNA3fzDkl+gbqrxfJZ1YNCiHomrsTbKlp30WxeMvldUJXAFUr/71T2kj++?=
- =?us-ascii?Q?sqvFhGX1H7/yS0b7Rdb2BaEGfqMpJa0Bzg0exsD7pNGMmiqyOvze0GK4Kbtz?=
- =?us-ascii?Q?lXUPHY6SmkQS2q79wWVNIyBOhmYrkEkH4odlpptTFcjKofHLyGccaPiLOvKx?=
- =?us-ascii?Q?XdE4v35PDxZ8YlL3VMJ+33aC5PlWZOvPHjmrtvHm2/uMSt5tAC553W94OVGv?=
- =?us-ascii?Q?18thDQ3aU6nrVRPo21yTMbapEIE0ImPUSA6DCKGm50dCy4orLzjidihMo6/e?=
- =?us-ascii?Q?p6NtodpvLvD6wQtT6j/QT2rGv1CbKcURg6MXhiGEJ2wLOAlayC/+NYc2aBGU?=
- =?us-ascii?Q?t2CiM/hyLzFMHtBK/2hY4pageyF+MSFHkev1EJjVVofdKQLB3KkaXRfjUtN2?=
- =?us-ascii?Q?kfKYz7hCwOVldsj+H7bMeA+pwIHB/3A4oT4VAfSiAN90iDwnFy4pwCStLHqS?=
- =?us-ascii?Q?Q3zvddPaWU0b6AyakE8dDtKov32rmFu+i9iH0mSUv+JG8YDvZWftXQhsiVus?=
- =?us-ascii?Q?F5/wJjANYMzdwg4J5aN9yGiNQ2M8akr1E0KpzN7Fgqp7O/l3ok5rkubY/Tub?=
- =?us-ascii?Q?Dn3YJZbGSxv4WPEI/YfTXDcYQ0L46CG+qeR80J06uoMXG5BRTdLje9zK65RN?=
- =?us-ascii?Q?PBdXBsROcIqrsPyQIQfoEhu9Rd12AlDl2jyhLw/gJXJjW1mKxE/ElnlIvWxd?=
- =?us-ascii?Q?5YIB4t5tlNZT3xkFaqcCLileNUHsQNilkCuizd7DpZwj/jsb5OBtvbhO1u4X?=
- =?us-ascii?Q?CA6D/qFH72Az1gZCurj9Jh5b9jas1wUZHcNSWI3PaODjV3QvjBFvxs7MDyc8?=
- =?us-ascii?Q?E/UDOKYmZAC4eC4QUsLJxVBnHilAeOkWKpaBLsJTtzqIfjOQGBNpyGTqOKqG?=
- =?us-ascii?Q?ompEs2DfeqReRcJo3QjnrWTKeucLqLxLESOlUQMQzylwEc2Z6B+51qAjEhut?=
- =?us-ascii?Q?Zgl4iVWV6TEL7Hkn08CTqTUEZp7R4eaqBTFNWjTDOu5qY9PbAOOjRLEjZZjK?=
- =?us-ascii?Q?d3CawjQOeRoDiEy4V4iG5JpIvFrnLHYW3JTg7VTujuTUSMLOKVhWXeuoc1Ii?=
- =?us-ascii?Q?xFp3kp6fUOPAjHKMEvHppmLJeTsx6bMjPtXwL4ZvuO//xS8C8Ey472QRKcNb?=
- =?us-ascii?Q?c/0zaJBcRPHKyw+/C/KkAoqB6e0clDL1j0iozGa2tkvXKSf9LLGHpnU0ZHyT?=
- =?us-ascii?Q?AggwMV9VEWvZ3/aHx5U1ESFkoTvHWG7KqtBG452UawAubiT6sRSOb28PaPlw?=
- =?us-ascii?Q?nVcGNubOTgC8udhhcHSPYC/tCE/bSf/EnzC4YE6ZR73edoUAE4bOLjdWfbJS?=
- =?us-ascii?Q?SlHlhTjtETflexrxJyKDy6yFG07mBOfV85DyEx6z6JRnKoURYR4eFz5vG04+?=
- =?us-ascii?Q?HgPI2g=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JdkDTm3ylhlxZNqrmre5mNmq6i4MPLwUlN71rGWj5ux5KoAO3AtxQwza6ctq?=
+ =?us-ascii?Q?jZmpU7ammb91CtiKiFR0xNdkmnNubySgrYmYo5d+QVMmANsShDxUOwYEYGpO?=
+ =?us-ascii?Q?/gZ3jUlH681J0BUo5bwfkzD3TO47hBNLmFT9AU8CEXOBZTbGoJwo6WRK+aVW?=
+ =?us-ascii?Q?I2DA0a+pXVcuf3vqatf1qvyhSLhwxgF/G5zUIzuoQFisnMKYc4K//gA6QGVR?=
+ =?us-ascii?Q?6C4XAorEohhfacbXOA3eRiOEJo/XFzRzbhY/TUGr/C0WLNPSS/RrXMwG+u82?=
+ =?us-ascii?Q?jrkZNafcppV3Y2H5iq0dWLhIGnHuU8+gu6kHKDjAK3lrMD0ER/FcqW7rmUrF?=
+ =?us-ascii?Q?pvEnQJGOqdS8VzrIb9V3ZMg8OVAYfPRcIq7FGGwRlQa/GIvhc0e8DidjcxpE?=
+ =?us-ascii?Q?KDu3XA2KaOvquduBLsYXyqOwTvpxRs8s/AvxAZIzOrUwsDWveCEgIQN0taIi?=
+ =?us-ascii?Q?UBg3ajfN4LyT1lgU/C1elS171ScA+2RKz1KCxTUt2Ad+1Y7/hX0P+upEhXk6?=
+ =?us-ascii?Q?SxyeJAVoq2Re/DGysUDnMtwpuaw7mmCxvXbHj6e8CrYg93l76azdNKgu8xj8?=
+ =?us-ascii?Q?9o9vCSZDYsmdoZNyfUzMgUXZrfvOZAUeds9gTFYK8raAIAIqLzO2sfeb9T7d?=
+ =?us-ascii?Q?G0mdUNV53U2jsC8OF/6uUP6F4haGKdnrGuAJp/q+IAdXvXtaN/qwveqei5vj?=
+ =?us-ascii?Q?P0czxRLsc5lTFpVOXMC50X9M8v1hi7YIAZZPSItPtKXGsvpi+RJzfwdLUgpi?=
+ =?us-ascii?Q?Xp/zb4L+dSUSjK7+z3o1ykXCWStBMYNTQL+ePUuBVZv5Ax9Cp75opOHrGkGx?=
+ =?us-ascii?Q?dGgs0WT0Od28GjIGlUBRRI38h/X2qslhMdFUAcWyq60+G8eEtCp898uTe2Ca?=
+ =?us-ascii?Q?Uo/HAK4vJoF87RAk3i99PDyfJftJ+El89wBFbcWezB3aVZP9PSMj2+wYR8qm?=
+ =?us-ascii?Q?l6Dhd/B1ew2Wn8YnBga1sv79Ey9GHKrQBohymEIJM5PDXbxgV5mg9OM5Bjrz?=
+ =?us-ascii?Q?Hy+11f9ecScrFJHx54lZG+GLy54wRx2qqf5jj5vr5sCuv694lnukOHS4xsZJ?=
+ =?us-ascii?Q?bn8ZnYysM02IvJ4ziRXjN/ZoGZ7jkAct1L6W46oOC4jgMlb5Oy86AKQBE1gz?=
+ =?us-ascii?Q?SREKj+s1igc54TYqknHoMmTJTP3jVycA9iRHZWJs3AXgo25EIE2SbwGbRzjA?=
+ =?us-ascii?Q?FkVsM6/T+JyjISqa6CwOmvM527VC1U3egjH2fioBU5bWO7oO/OVxltwPAkYR?=
+ =?us-ascii?Q?Bbi3xQ33Cd5/QITkGiDzqYazZsXVzaCF+vfGAU0E2lgZWOA4BvenNKmdxjG7?=
+ =?us-ascii?Q?lVOQt7lYK+fpkbEoCGKx9PNKcQ+WYY5WJ8rod7z/t870gMlg4pvZww0+oSLi?=
+ =?us-ascii?Q?xqSlIjsYKFj0jLOunf48o8IlnMevozCaUp4htH38dD+wt+gHiC6c8G63f8cE?=
+ =?us-ascii?Q?uUohqU36gF6UsKKPdLLaXiB1Q+ba5A4RMUiAtHy3cDqYx8ubg762fC+3iILZ?=
+ =?us-ascii?Q?d7zesZSRTx9VedfBvRVCRjoeV4IGxLM06nRd9Z5FzQw1wioRl+Hy5N7pcpwn?=
+ =?us-ascii?Q?4bqbuY80i/53DwrmEXrWV8EuQuw3z3uL5XANwk4bthk3uagOWCuCiYRLmcKb?=
+ =?us-ascii?Q?XT7MbRhcyYeuBraEjUGHefplFl/76C+2TicDhu0+IHhO2NrC2qDw/Vf6wTJL?=
+ =?us-ascii?Q?ChalkA=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1023780-1975-4c64-d336-08da02198e43
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c620303-b0d7-4c56-fbe2-08da02199001
 X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5866.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 22:10:01.2312
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 22:10:04.1239
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y0glKdRzjRSmZ7FUTp7Cd48Efa0qerEN61z6rBTykvOM5K6V0vPpFOBW8G2mKXxLSRXGpz3McNX+BsQTspu8pXcxcdDX/9Rk2Mdw3/2uiHg=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 35Fg6NEo/NVbSTTFDosXbBd8lOPow+9YgkwxYIT51zTc0vZBkwUu++Bie+csss0IPLQJnfP9RFD12+rFeAjrNv8DUku8nAcC02LaDX3iHmE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5560
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10281 signatures=692062
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2203090111
-X-Proofpoint-ORIG-GUID: Lgz4s9sBR8F8vqqHjXb-sjpZN9sF0A1N
-X-Proofpoint-GUID: Lgz4s9sBR8F8vqqHjXb-sjpZN9sF0A1N
+X-Proofpoint-ORIG-GUID: iZuVj_WW4QMJZMTycOHM7-sfLEIMx1gk
+X-Proofpoint-GUID: iZuVj_WW4QMJZMTycOHM7-sfLEIMx1gk
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -151,210 +151,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When testing SME behavior, it is useful to determine whether or not SME is
-actively being used, or just merely enabled. The distinction between
-supported, enabled, and active is provided by the documentation at:
-
-https://www.kernel.org/doc/Documentation/x86/amd-memory-encryption.txt
-
-There are currently no user-space interfaces to determine if SME is active
-or not, other than searching dmesg:
-
-$ sudo dmesg | grep -i sme
-[    4.275215] AMD Secure Memory Encryption (SME) active
-
-Provide a sysfs interface for a convenient way to display this information.
-This patch also provides the framework to easily add entries for other
-Confidential Computing features that are currently available e.g. SEV.
-
-Also add documentation describing the new ABI.
+Expose the state of the SEV feature via the new sysfs interface. Document
+the new ABI.
 
 Signed-off-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 Reviewed-by: Darren Kenny <darren.kenny@oracle.com>
 ---
- .../ABI/testing/sysfs-kernel-mm-mem-encrypt   |  31 +++
- arch/x86/include/asm/mem_encrypt.h            |   6 +
- arch/x86/mm/mem_encrypt.c                     |  27 +++
- arch/x86/mm/mem_encrypt_amd.c                 | 192 ++++++++++++++++++
- 4 files changed, 256 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-mm-mem-encrypt
+ .../ABI/testing/sysfs-kernel-mm-mem-encrypt   |  31 +++++
+ arch/x86/mm/mem_encrypt_amd.c                 | 106 ++++++++++++++++--
+ 2 files changed, 129 insertions(+), 8 deletions(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-mem-encrypt b/Documentation/ABI/testing/sysfs-kernel-mm-mem-encrypt
-new file mode 100644
-index 000000000000..a53f87f28704
---- /dev/null
+index a53f87f28704..68a932d4540b 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-mm-mem-encrypt
 +++ b/Documentation/ABI/testing/sysfs-kernel-mm-mem-encrypt
-@@ -0,0 +1,31 @@
-+What:		/sys/kernel/mm/mem_encrypt/
+@@ -29,3 +29,34 @@ Description:	(Host only) Expose status of SME feature. Valid values are:
+ 		inactive: Secure Memory Encryption is supported, enabled, but
+ 		the kernel is not applying encryption bit to page table entries
+ 		(SME mask in kernel is zero).
++
++What:		/sys/kernel/mm/mem_encrypt/sev/status
 +Date:		March 2022
 +KernelVersion:	5.17
-+Contact:	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-+Description:	Interface for Secure Memory Encryption capabilities
++Description:	Expose status of sev feature. Valid values are:
 +
-+What:		/sys/kernel/mm/mem_encrypt/c_bit_position
-+Date:		March 2022
-+KernelVersion:	5.17
-+Description:	Bit position of C-bit in a Page Table entries. Setting this bit
-+		in a PTE indicates that the page is encrypted, causing
-+		accesses to that memory to be automatically encrypted and
-+		decrypted by the memory controller.
-+
-+What:		/sys/kernel/mm/mem_encrypt/sme/status
-+Date:		March 2022
-+KernelVersion:	5.17
-+Description:	(Host only) Expose status of SME feature. Valid values are:
-+
-+		unsupported: Secure Memory Encryption capability is not
++		unsupported: Secure Encrypted Virtualization capability is not
 +		supported by the processor.
 +
-+		disabled: Memory encryption has been disabled by
++		enabled (Host only): Hypervisor host capable of running SEV
++		guests.
++
++		disabled (Host only): Memory encryption has been disabled by
 +		System-Configuration Register (SYSCFG) MemEncryptionModeEn bit.
 +
-+		active: Secure Memory Encryption is supported, enabled, and the
-+		kernel is applying encryption bit to page table entries.
++		active (Guest only): Running in virtual machine with encrypted
++		code and data.
 +
-+		inactive: Secure Memory Encryption is supported, enabled, but
-+		the kernel is not applying encryption bit to page table entries
-+		(SME mask in kernel is zero).
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index e2c6f433ed10..48d41cf764ab 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -17,6 +17,8 @@
- 
- #include <asm/bootparam.h>
- 
-+struct kobject;
++		inactive (Guest only): Running in unencrypted virtual machine.
 +
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 
- extern u64 sme_me_mask;
-@@ -49,6 +51,8 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
- 
- void __init mem_encrypt_free_decrypted_mem(void);
- 
-+int amd_cc_sysfs_init(struct kobject *parent);
++What:		/sys/kernel/mm/mem_encrypt/sev/nr_asid_available
++Date:		March 2022
++KernelVersion:	5.17
++Description:	(Host only) Total number of ASIDs available for encrypted
++		guests. Number of encrypted guests supported simultaneously.
 +
- /* Architecture __weak replacement functions */
- void __init mem_encrypt_init(void);
- 
-@@ -85,6 +89,8 @@ early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages, bool enc) {}
- 
- static inline void mem_encrypt_free_decrypted_mem(void) { }
- 
-+static inline int amd_cc_sysfs_init(struct kobject *parent) { return 0; }
-+
- #define __bss_decrypted
- 
- #endif	/* CONFIG_AMD_MEM_ENCRYPT */
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index 50d209939c66..f1731faa96de 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -14,6 +14,33 @@
- #include <linux/mem_encrypt.h>
- #include <linux/virtio_config.h>
- 
-+/*
-+ * Expose the available Confidential Computing features via sysfs interface.
-+ */
-+static struct kobject *coco_kobj;
-+
-+static int __init coco_sysfs_init(void)
-+{
-+	int err;
-+
-+	coco_kobj = kobject_create_and_add("mem_encrypt", mm_kobj);
-+	if (!coco_kobj) {
-+		pr_err("Failed to create sysfs directory for CoCo features.\n");
-+		return -ENOMEM;
-+	}
-+
-+	/*
-+	 * Initialize sysfs entries for CoCo features. Each CPU vendor providing
-+	 * features of this type must add a call to initialize relevant entries.
-+	 */
-+	err = amd_cc_sysfs_init(coco_kobj);
-+	if (err)
-+		kobject_put(coco_kobj);
-+
-+	return err;
-+}
-+subsys_initcall(coco_sysfs_init);
-+
- /* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
- bool force_dma_unencrypted(struct device *dev)
- {
++What:		/sys/kernel/mm/mem_encrypt/sev/nr_sev_asid
++Date:		March 2022
++KernelVersion:	5.17
++Description:	(Host only) Number of ASIDs available for SEV guests with
++		SEV-ES disabled.
 diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index 2b2d018ea345..ccd6448042fe 100644
+index ccd6448042fe..86979e0e26c7 100644
 --- a/arch/x86/mm/mem_encrypt_amd.c
 +++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -34,6 +34,35 @@
+@@ -38,6 +38,7 @@
+ #define AMD_CPUID_ENCRYPTED_MEM		0x8000001f
  
- #include "mm_internal.h"
+ #define AMD_SME_BIT			BIT(0)
++#define AMD_SEV_BIT			BIT(1)
  
-+#define CPUID_MAX_EXTENDED_CAP		0x80000000
-+#define AMD_CPUID_ENCRYPTED_MEM		0x8000001f
+ #define CC_ATTR_RO(_name) \
+ 	static struct kobj_attribute _name##_attr = __ATTR_RO(_name)
+@@ -78,6 +79,8 @@ static char sme_early_buffer[PAGE_SIZE] __initdata __aligned(PAGE_SIZE);
+ 
+ static u8 cbit_pos;
+ static u32 sec_encrypt_support_mask;
++static u32 max_sev_asid;
++static u32 min_sev_asid;
+ 
+ static inline bool is_vm(void)
+ {
+@@ -95,7 +98,10 @@ static void encrypted_mem_caps_init(void)
+ 	cpuid(AMD_CPUID_ENCRYPTED_MEM, &eax, &ebx, &ecx, &edx);
+ 
+ 	cbit_pos = ebx & 0x3f;
+-	sec_encrypt_support_mask = eax & AMD_SME_BIT;
++	sec_encrypt_support_mask = eax & (AMD_SME_BIT | AMD_SEV_BIT);
 +
-+#define AMD_SME_BIT			BIT(0)
-+
-+#define CC_ATTR_RO(_name) \
-+	static struct kobj_attribute _name##_attr = __ATTR_RO(_name)
-+
-+#define foreach_cc_feature(ccf, feat_list)				\
-+	for ((ccf) = (feat_list);					\
-+		(ccf)->cc_attr_grp;					\
-+		(ccf)++)
-+
-+#define AMD_CC_FEATURE(cc_name, attr_grp, kobj)		\
-+{							\
-+	.name           = cc_name,                      \
-+	.cc_attr_grp    = &attr_grp,                    \
-+	.cc_kobj        = kobj,                         \
++	max_sev_asid = ecx;
++	min_sev_asid = edx;
+ }
+ 
+ /* Verify that memory encryption capabilities are supported */
+@@ -104,13 +110,7 @@ static inline bool mem_encrypt_feat_supported(u32 feat_bit)
+ 	return !!(sec_encrypt_support_mask & feat_bit);
+ }
+ 
+-/*
+- * sysfs interface for SME/SEV.
+- * Expose whether the various memory encryption capabilities are
+- * supported/enabled/active.
+- */
+-static ssize_t status_show(struct kobject *kobj,
+-				struct kobj_attribute *attr, char *buf)
++static inline ssize_t sme_status_show(char *buf)
+ {
+ 	if (!mem_encrypt_feat_supported(AMD_SME_BIT))
+ 		return sysfs_emit(buf, "%s\n", "unsupported");
+@@ -129,7 +129,58 @@ static ssize_t status_show(struct kobject *kobj,
+ 	return sysfs_emit(buf, "%s\n",
+ 			!!cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT) ?
+ 			"active" : "inactive");
 +}
 +
-+#define CC_FEATURE_NAME_LEN	32
-+
-+struct amd_cc_feature {
-+	char name[CC_FEATURE_NAME_LEN];
-+	/* Specifies the attributes exposed by this cc feature */
-+	const struct attribute_group *cc_attr_grp;
-+	struct kobject *cc_kobj;
-+};
-+
- /*
-  * Since SME related variables are set early in the boot process they must
-  * reside in the .data section so as not to be zeroed out when the .bss
-@@ -47,6 +76,169 @@ EXPORT_SYMBOL(sme_me_mask);
- /* Buffer used for early in-place encryption by BSP, no locking needed */
- static char sme_early_buffer[PAGE_SIZE] __initdata __aligned(PAGE_SIZE);
- 
-+static u8 cbit_pos;
-+static u32 sec_encrypt_support_mask;
-+
-+static inline bool is_vm(void)
++static inline ssize_t sev_status_show(u32 feat_bit, u32 feat_cap,
++					enum cc_attr encrypt_attr, char *buf)
 +{
-+	return boot_cpu_has(X86_FEATURE_HYPERVISOR);
-+}
++	if (!mem_encrypt_feat_supported(feat_bit))
++		return sysfs_emit(buf, "%s\n", "unsupported");
 +
-+/*
-+ * Initialize and cache values from Memory Encryption Caps CPUID Function.
-+ */
-+static void encrypted_mem_caps_init(void)
-+{
-+	u32 eax, ebx, ecx, edx;
-+
-+	/* Already verified that AMD_CPUID_ENCRYPTED_MEM CPUID exists */
-+	cpuid(AMD_CPUID_ENCRYPTED_MEM, &eax, &ebx, &ecx, &edx);
-+
-+	cbit_pos = ebx & 0x3f;
-+	sec_encrypt_support_mask = eax & AMD_SME_BIT;
-+}
-+
-+/* Verify that memory encryption capabilities are supported */
-+static inline bool mem_encrypt_feat_supported(u32 feat_bit)
-+{
-+	return !!(sec_encrypt_support_mask & feat_bit);
++	if (!is_vm()) {
++		/*
++		 * When in a host, we can avoid reading MSR_AMD64_SYSCFG MSR to
++		 * check for MemEncryptionModeEn (bit 23) since an earlier call
++		 * to early_detect_mem_encrypt() clears the feature from the
++		 * CPU caps if the bit is not set. So it is sufficient to check
++		 * the CPU caps here.
++		 */
++		return sysfs_emit(buf, "%s\n", !!boot_cpu_has(feat_cap) ?
++				"enabled" : "disabled");
++	} else {
++		/*
++		 * When in a guest, we cannot check MemEncryptionModeEn(bit 23)
++		 * since KVM currently masks off MSR_AMD64_SYSCFG. Use the
++		 * cc_platform_has() API which uses the SEV_STATUS MSR to
++		 * determine if the feature is active.
++		 */
++		return sysfs_emit(buf, "%s\n",
++				!!cc_platform_has(encrypt_attr) ?
++				"active" : "inactive");
++	}
 +}
 +
 +/*
@@ -365,136 +291,83 @@ index 2b2d018ea345..ccd6448042fe 100644
 +static ssize_t status_show(struct kobject *kobj,
 +				struct kobj_attribute *attr, char *buf)
 +{
-+	if (!mem_encrypt_feat_supported(AMD_SME_BIT))
-+		return sysfs_emit(buf, "%s\n", "unsupported");
++	if (!strcmp(kobj->name, "sme")) {
++		return sme_status_show(buf);
 +
++	} else if (!strcmp(kobj->name, "sev")) {
++		return sev_status_show(AMD_SEV_BIT, X86_FEATURE_SEV,
++					CC_ATTR_GUEST_MEM_ENCRYPT, buf);
++	}
+ 
 +	/*
-+	 * Memory encryption must be enabled in BIOS.
-+	 * We can avoid reading MSR_AMD64_SYSCFG MSR to check for
-+	 * MemEncryptionModeEn (bit 23) since an earlier call to
-+	 * early_detect_mem_encrypt() clears the feature from the CPU
-+	 * caps if the bit is not set. It is sufficient to check the
-+	 * CPU caps here.
++	 * The checks above must cover all of the possible CoCo features that
++	 * have the status attribute.
 +	 */
-+	if (!boot_cpu_has(X86_FEATURE_SME))
-+		return sysfs_emit(buf, "%s\n", "disabled");
-+
-+	return sysfs_emit(buf, "%s\n",
-+			!!cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT) ?
-+			"active" : "inactive");
-+
-+}
-+CC_ATTR_RO(status);
-+
-+static ssize_t c_bit_position_show(struct kobject *kobj,
++	return -1;
+ }
+ CC_ATTR_RO(status);
+ 
+@@ -140,6 +191,25 @@ static ssize_t c_bit_position_show(struct kobject *kobj,
+ }
+ CC_ATTR_RO(c_bit_position);
+ 
++static ssize_t nr_asid_available_show(struct kobject *kobj,
 +					struct kobj_attribute *attr, char *buf)
 +{
-+	return sysfs_emit(buf, "%u\n", cbit_pos);
++	return sysfs_emit(buf, "%u\n", max_sev_asid);
 +}
-+CC_ATTR_RO(c_bit_position);
++CC_ATTR_RO(nr_asid_available);
 +
-+static struct attribute *sme_attrs[] = {
++static ssize_t nr_sev_asid_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
++{
++	u32 nr_sev_asid = 0;
++
++	if (max_sev_asid)
++		nr_sev_asid = max_sev_asid - min_sev_asid + 1;
++
++	return sysfs_emit(buf, "%u\n", nr_sev_asid);
++}
++CC_ATTR_RO(nr_sev_asid);
++
+ static struct attribute *sme_attrs[] = {
+ 	&status_attr.attr,
+ 	NULL,
+@@ -148,14 +218,34 @@ static const struct attribute_group sme_attr_group = {
+ 	.attrs = sme_attrs,
+ };
+ 
++static struct attribute *sev_host_attrs[] = {
++	&status_attr.attr,
++	&nr_asid_available_attr.attr,
++	&nr_sev_asid_attr.attr,
++	NULL,
++};
++static const struct attribute_group sev_host_attr_group = {
++	.attrs = sev_host_attrs,
++};
++
++static struct attribute *sev_guest_attrs[] = {
 +	&status_attr.attr,
 +	NULL,
 +};
-+static const struct attribute_group sme_attr_group = {
-+	.attrs = sme_attrs,
++static const struct attribute_group sev_guest_attr_group = {
++	.attrs = sev_guest_attrs,
 +};
 +
-+/* List of features to be exposed when running as hypervisor host */
-+static struct amd_cc_feature host_cc_feat_list[] = {
-+	AMD_CC_FEATURE("sme", sme_attr_group, NULL),
-+	{},
-+};
-+
-+/* List of features to be exposed when running as guest */
-+static struct amd_cc_feature guest_cc_feat_list[] = {
-+	{},
-+};
-+
-+static int cc_sysfs_add_feature(struct amd_cc_feature *ccf,
-+				struct kobject *parent)
-+{
-+	int err;
-+
-+	ccf->cc_kobj = kobject_create_and_add(ccf->name, parent);
-+	if (!ccf->cc_kobj) {
-+		pr_err("Failed to create %s kobject.\n", ccf->name);
-+		return -ENOMEM;
-+	}
-+
-+	err = sysfs_create_group(ccf->cc_kobj, ccf->cc_attr_grp);
-+	if (err) {
-+		pr_err("Failed to register %s group.\n", ccf->name);
-+		kobject_put(ccf->cc_kobj);
-+		ccf->cc_kobj = NULL;
-+	}
-+	return err;
-+}
-+
-+static void cc_sysfs_remove_features(struct amd_cc_feature *feature_list,
-+					struct kobject *parent)
-+{
-+	struct amd_cc_feature *ccf;
-+
-+	/* Remove standalone files created for common features */
-+	sysfs_remove_file(parent, &c_bit_position_attr.attr);
-+
-+	foreach_cc_feature(ccf, feature_list) {
-+		if (ccf->cc_kobj) {
-+			sysfs_remove_group(ccf->cc_kobj,
-+						ccf->cc_attr_grp);
-+			kobject_put(ccf->cc_kobj);
-+		}
-+	}
-+}
-+
-+int amd_cc_sysfs_init(struct kobject *parent)
-+{
-+	int err;
-+	struct amd_cc_feature *ccf, *feature_list;
-+
-+	/*
-+	 * Check Encrypted Mem Capabilities CPUID function is available.
-+	 * Nothing to do otherwise.
-+	 */
-+	if (cpuid_eax(CPUID_MAX_EXTENDED_CAP) < AMD_CPUID_ENCRYPTED_MEM)
-+		return -EOPNOTSUPP;
-+
-+	encrypted_mem_caps_init();
-+
-+	/* C-bit position is common to all AMD CoCo features */
-+	err = sysfs_create_file(parent, &c_bit_position_attr.attr);
-+	if (err) {
-+		pr_err("Failed to add entry for %s attribute.\n",
-+			c_bit_position_attr.attr.name);
-+		return err;
-+	}
-+	/*
-+	 * Not all features or attributes in a feature are relevant to both
-+	 * hypervisor hosts and guests (e.g. SME is never available on guests).
-+	 * Determine which mode we are running in and register the appropriate
-+	 * list of features.
-+	 */
-+	feature_list = is_vm() ? guest_cc_feat_list : host_cc_feat_list;
-+
-+	foreach_cc_feature(ccf, feature_list) {
-+		err = cc_sysfs_add_feature(ccf, parent);
-+		if (err) {
-+			pr_err("Failed to add entry for CoCo feature: %s.\n",
-+				ccf->name);
-+
-+			cc_sysfs_remove_features(feature_list, parent);
-+			return err;
-+		}
-+	}
-+
-+	return err;
-+}
-+
- /*
-  * This routine does not change the underlying encryption setting of the
-  * page(s) that map this memory. It assumes that eventually the memory is
+ /* List of features to be exposed when running as hypervisor host */
+ static struct amd_cc_feature host_cc_feat_list[] = {
+ 	AMD_CC_FEATURE("sme", sme_attr_group, NULL),
++	AMD_CC_FEATURE("sev", sev_host_attr_group, NULL),
+ 	{},
+ };
+ 
+ /* List of features to be exposed when running as guest */
+ static struct amd_cc_feature guest_cc_feat_list[] = {
++	AMD_CC_FEATURE("sev", sev_guest_attr_group, NULL),
+ 	{},
+ };
+ 
 -- 
 2.34.1
 

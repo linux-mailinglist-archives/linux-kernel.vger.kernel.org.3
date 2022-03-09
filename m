@@ -2,185 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2691B4D3C5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ACE4D3C5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbiCIVtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S238458AbiCIVuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234129AbiCIVtl (ORCPT
+        with ESMTP id S238450AbiCIVuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:49:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96C950452
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:48:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C5B5B823CD
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3681C340F5;
-        Wed,  9 Mar 2022 21:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646862517;
-        bh=39ENY5sRJs9hngyluGrE4/EDGdC8Q6QsuX+odGM1stk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TbyBXa3WQbGVp+rexODr/c5q9PW9r75PRNudR17GBb/DxNr9ShT4UGtxysOSHSaEG
-         PsPYLasgDliigi+GKTjcPlr+6hS9l8On4Af+k1SHp6rtW4EX7y/+iV4smh1nZvUVpj
-         SNSw70NxH9YMF4z9Vp86lFP4he3v7v8o/vl9WdAF7xq6W7VX930CV9IBCGdr+MCLGJ
-         HEypl0w8G+r+VE563O8No4/arnch65+F/DLSh9UjeoS5GvV3sAB8EP7v/mqd+PySQ6
-         6bh9vWAtHnizTUfIifUVYBZGA4M5yA6nScvEtDqw2zEa/HXK6Fxkhm/w0xiBeB/BJJ
-         Rcx9O/o2Q1Fcw==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 2/2] f2fs: use spin_lock to avoid hang
-Date:   Wed,  9 Mar 2022 13:48:34 -0800
-Message-Id: <20220309214834.3408741-2-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-In-Reply-To: <20220309214834.3408741-1-jaegeuk@kernel.org>
-References: <20220309214834.3408741-1-jaegeuk@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 16:50:17 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E2185BDA;
+        Wed,  9 Mar 2022 13:49:17 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id q4so2912177qki.11;
+        Wed, 09 Mar 2022 13:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=sxvKTikY8johRtBV0JsrDp4qIzaspSzV/aknHXI6mPA=;
+        b=DCXO3372gPkxqP/Leco25R+kBT3KC6i+9oHMlPpmT+JSeAW5L43zE9d6d4Br3DvUil
+         g1mpCeweEtr57ihSZ3v3Lu5Wqt3b+xsbwCZ88y9lNDoRh2ifUxY30DWyxLziXWAu+ElF
+         TUOtflCId8R7+wcSMXzSduYnD2cCh/r7ky7OK715NCydC80W+1HkTND0pEvDKg7mbg7j
+         6rIh+3vH2TFkQv7wVBwOTLv0IH15S3SaMjlPRlIS9iYQB3hgxs8K2Hbx+yKgQEaoNdfD
+         ynn+sEXueD3BluQqIKivZwtxCUDefogfxSxrFQ9Un81CMx0nIYzF5x0epajCXHgP6ag5
+         GSGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=sxvKTikY8johRtBV0JsrDp4qIzaspSzV/aknHXI6mPA=;
+        b=iUkmZG8lis3wWjwOQWuhNB1RwawDdtCwyzwcrHOvNEz4Ljh1JqlDsRLoftYYoIIT7G
+         253ZvCgINsX/aWkomMnAC8Jzv9ik3pLYuRMqRicpDeWCNDguhU2249uHogeYd1AF5vUu
+         Jkx8A3X/KLB4JzgftJKP7GlKCYomr8kUWrc0HjYPETyR1DH9eWIpGp260iKhiXYt29rl
+         FMf07CzkEyBCq3wwNTiaQthq/k07Il80CnemPso8fp/Tcsm8GIXAPlexeQuT0tfvYSke
+         cJyvRdldAtffWDWvPjAlIwIxRSZGc58THsDZKph+0JzM08EUAyH+wgzGP3aQpnrMolHK
+         S23Q==
+X-Gm-Message-State: AOAM531vck8U7nbOkxWpgjGdFoJJwgxBrjAk91DpPftZiOkCjR90K9c8
+        IkXSNGFsTsDA0uTNS7Sq/QPSGurL6FXzVf5Mb1NWLw==
+X-Google-Smtp-Source: ABdhPJz6S3bIPh2tXJa8Muk574LyVrRdVW2MlicGoT88aodYQr+2l7R9qt9NP/h1er0GNuLvdiEjqA==
+X-Received: by 2002:a05:620a:2a05:b0:67d:2fb0:b292 with SMTP id o5-20020a05620a2a0500b0067d2fb0b292mr1189717qkp.343.1646862556410;
+        Wed, 09 Mar 2022 13:49:16 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id t28-20020a05620a005c00b00662fb1899d2sm1460327qkt.0.2022.03.09.13.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 13:49:15 -0800 (PST)
+Message-ID: <622920db.1c69fb81.bcbd2.97ff@mx.google.com>
+Date:   Wed, 09 Mar 2022 13:49:15 -0800 (PST)
+X-Google-Original-Date: Wed, 09 Mar 2022 21:49:13 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
+Subject: RE: [PATCH 5.16 00/37] 5.16.14-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[14696.634553] task:cat             state:D stack:    0 pid:1613738 ppid:1613735 flags:0x00000004
-[14696.638285] Call Trace:
-[14696.639038]  <TASK>
-[14696.640032]  __schedule+0x302/0x930
-[14696.640969]  schedule+0x58/0xd0
-[14696.641799]  schedule_preempt_disabled+0x18/0x30
-[14696.642890]  __mutex_lock.constprop.0+0x2fb/0x4f0
-[14696.644035]  ? mod_objcg_state+0x10c/0x310
-[14696.645040]  ? obj_cgroup_charge+0xe1/0x170
-[14696.646067]  __mutex_lock_slowpath+0x13/0x20
-[14696.647126]  mutex_lock+0x34/0x40
-[14696.648070]  stat_show+0x25/0x17c0 [f2fs]
-[14696.649218]  seq_read_iter+0x120/0x4b0
-[14696.650289]  ? aa_file_perm+0x12a/0x500
-[14696.651357]  ? lru_cache_add+0x1c/0x20
-[14696.652470]  seq_read+0xfd/0x140
-[14696.653445]  full_proxy_read+0x5c/0x80
-[14696.654535]  vfs_read+0xa0/0x1a0
-[14696.655497]  ksys_read+0x67/0xe0
-[14696.656502]  __x64_sys_read+0x1a/0x20
-[14696.657580]  do_syscall_64+0x3b/0xc0
-[14696.658671]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[14696.660068] RIP: 0033:0x7efe39df1cb2
-[14696.661133] RSP: 002b:00007ffc8badd948 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[14696.662958] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007efe39df1cb2
-[14696.664757] RDX: 0000000000020000 RSI: 00007efe399df000 RDI: 0000000000000003
-[14696.666542] RBP: 00007efe399df000 R08: 00007efe399de010 R09: 00007efe399de010
-[14696.668363] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000000000
-[14696.670155] R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
-[14696.671965]  </TASK>
-[14696.672826] task:umount          state:D stack:    0 pid:1614985 ppid:1614984 flags:0x00004000
-[14696.674930] Call Trace:
-[14696.675903]  <TASK>
-[14696.676780]  __schedule+0x302/0x930
-[14696.677927]  schedule+0x58/0xd0
-[14696.679019]  schedule_preempt_disabled+0x18/0x30
-[14696.680412]  __mutex_lock.constprop.0+0x2fb/0x4f0
-[14696.681783]  ? destroy_inode+0x65/0x80
-[14696.683006]  __mutex_lock_slowpath+0x13/0x20
-[14696.684305]  mutex_lock+0x34/0x40
-[14696.685442]  f2fs_destroy_stats+0x1e/0x60 [f2fs]
-[14696.686803]  f2fs_put_super+0x158/0x390 [f2fs]
-[14696.688238]  generic_shutdown_super+0x7a/0x120
-[14696.689621]  kill_block_super+0x27/0x50
-[14696.690894]  kill_f2fs_super+0x7f/0x100 [f2fs]
-[14696.692311]  deactivate_locked_super+0x35/0xa0
-[14696.693698]  deactivate_super+0x40/0x50
-[14696.694985]  cleanup_mnt+0x139/0x190
-[14696.696209]  __cleanup_mnt+0x12/0x20
-[14696.697390]  task_work_run+0x64/0xa0
-[14696.698587]  exit_to_user_mode_prepare+0x1b7/0x1c0
-[14696.700053]  syscall_exit_to_user_mode+0x27/0x50
-[14696.701418]  do_syscall_64+0x48/0xc0
-[14696.702630]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+On Wed,  9 Mar 2022 17:00:01 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.16.14 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/debug.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
-index cba5eab24595..6d26872c7364 100644
---- a/fs/f2fs/debug.c
-+++ b/fs/f2fs/debug.c
-@@ -21,7 +21,7 @@
- #include "gc.h"
- 
- static LIST_HEAD(f2fs_stat_list);
--static DEFINE_MUTEX(f2fs_stat_mutex);
-+static DEFINE_RAW_SPINLOCK(f2fs_stat_lock);
- #ifdef CONFIG_DEBUG_FS
- static struct dentry *f2fs_debugfs_root;
- #endif
-@@ -345,8 +345,9 @@ static int stat_show(struct seq_file *s, void *v)
- {
- 	struct f2fs_stat_info *si;
- 	int i = 0, j = 0;
-+	unsigned long flags;
- 
--	mutex_lock(&f2fs_stat_mutex);
-+	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
- 	list_for_each_entry(si, &f2fs_stat_list, stat_list) {
- 		update_general_status(si->sbi);
- 
-@@ -577,7 +578,7 @@ static int stat_show(struct seq_file *s, void *v)
- 		seq_printf(s, "  - paged : %llu KB\n",
- 				si->page_mem >> 10);
- 	}
--	mutex_unlock(&f2fs_stat_mutex);
-+	raw_spin_unlock_irqrestore(&f2fs_stat_lock, flags);
- 	return 0;
- }
- 
-@@ -588,6 +589,7 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
- {
- 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
- 	struct f2fs_stat_info *si;
-+	unsigned long flags;
- 	int i;
- 
- 	si = f2fs_kzalloc(sbi, sizeof(struct f2fs_stat_info), GFP_KERNEL);
-@@ -623,9 +625,9 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
- 	atomic_set(&sbi->max_aw_cnt, 0);
- 	atomic_set(&sbi->max_vw_cnt, 0);
- 
--	mutex_lock(&f2fs_stat_mutex);
-+	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
- 	list_add_tail(&si->stat_list, &f2fs_stat_list);
--	mutex_unlock(&f2fs_stat_mutex);
-+	raw_spin_unlock_irqrestore(&f2fs_stat_lock, flags);
- 
- 	return 0;
- }
-@@ -633,10 +635,11 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
- void f2fs_destroy_stats(struct f2fs_sb_info *sbi)
- {
- 	struct f2fs_stat_info *si = F2FS_STAT(sbi);
-+	unsigned long flags;
- 
--	mutex_lock(&f2fs_stat_mutex);
-+	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
- 	list_del(&si->stat_list);
--	mutex_unlock(&f2fs_stat_mutex);
-+	raw_spin_unlock_irqrestore(&f2fs_stat_lock, flags);
- 
- 	kfree(si);
- }
--- 
-2.35.1.616.g0bdcbb4464-goog
+5.16.14-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 

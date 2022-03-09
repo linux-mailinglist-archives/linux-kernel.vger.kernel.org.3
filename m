@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FE14D2F6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5482A4D2F75
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiCIMvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S232735AbiCIMwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiCIMvK (ORCPT
+        with ESMTP id S230297AbiCIMwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:51:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3771A997C;
-        Wed,  9 Mar 2022 04:50:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 9 Mar 2022 07:52:34 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D6617777E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:51:35 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CB26F1F382;
+        Wed,  9 Mar 2022 12:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646830293; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QkquTILc7aEHvGG2BhXXypdsFY/K4IZMrpqZS6leWTc=;
+        b=oVG3ZhWViFKiI1T3xF4qLO4s1THrZ/YK8ZHTa9oZGqyV+r1BpDMEH9gVzhFv/gjqoDF9IK
+        BszTnNrwrsFAfqYNEd0J+l3XppRAsQNTsW52MN4spcM3HJJPibRfU+vFmCRkJDgd4YdSFD
+        uEgfWgyP774lgMeRR7OZ24zCZg4P48w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646830293;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QkquTILc7aEHvGG2BhXXypdsFY/K4IZMrpqZS6leWTc=;
+        b=o+dfUm+iSID+6POQ+JDMUVw1Z5Do1EXfhsfo5qLBfWhM69bdVrE0QN5W9s+VUtGz8ILK6Q
+        /XiuSAsrtRaBNnDQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81210619E1;
-        Wed,  9 Mar 2022 12:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5638C340F4;
-        Wed,  9 Mar 2022 12:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646830210;
-        bh=I6ozOdglKxYbxHYFDFEkcL7osJhYjFDadHAfNPgMPFI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cGlkfYnpR/eAABCt2nS59oAeCyM60fcONQKj7SwKoaBj4ZNcyfKL8KcNY/qQceRpM
-         C5RuSyJIxuC0NUVTCwJCsYrBJKFaBNRznFtoxt35vKJXC9FlFInaxj4yZCDgbvwyM/
-         cTBO0hMp7SljK1ODE6OiYBSj6AcJ+HSczZD7QOxF2+M3vgFWxVOsA9nqqTdSfpjed1
-         mJCfUUmiFC6m8Wfsj5OoLGBiXkB/DYwcOsBcojfWS7ZzEQ2e4Be1Cjg8ay0J6brBG6
-         SoUJoBpgofDL/HZgfdhg2SmV2KxUacWKQluWVkkQYB3sh+ynNh4ZN9btkZ8GRQlLE3
-         pIBuSbIIegs9w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6B74E7BB08;
-        Wed,  9 Mar 2022 12:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by relay2.suse.de (Postfix) with ESMTPS id 27C92A3B85;
+        Wed,  9 Mar 2022 12:51:28 +0000 (UTC)
+Date:   Wed, 9 Mar 2022 13:51:33 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+In-Reply-To: <20220308153011.021123062@infradead.org>
+Message-ID: <alpine.LSU.2.21.2203090959150.672@pobox.suse.cz>
+References: <20220308153011.021123062@infradead.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ax25: Fix NULL pointer dereference in ax25_kill_by_device
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164683021074.2371.639793018206811147.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Mar 2022 12:50:10 +0000
-References: <20220308081223.15919-1-duoming@zju.edu.cn>
-In-Reply-To: <20220308081223.15919-1-duoming@zju.edu.cn>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        ralf@linux-mips.org, jreuter@yaina.de
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 8 Mar 2022, Peter Zijlstra wrote:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue,  8 Mar 2022 16:12:23 +0800 you wrote:
-> When two ax25 devices attempted to establish connection, the requester use ax25_create(),
-> ax25_bind() and ax25_connect() to initiate connection. The receiver use ax25_rcv() to
-> accept connection and use ax25_create_cb() in ax25_rcv() to create ax25_cb, but the
-> ax25_cb->sk is NULL. When the receiver is detaching, a NULL pointer dereference bug
-> caused by sock_hold(sk) in ax25_kill_by_device() will happen. The corresponding
-> fail log is shown below:
+> Hopefully last posting...
 > 
-> [...]
+> Since last time:
+> 
+>  - updated the ftrace_location() patch (naveen, rostedt)
+>  - added a few comments and clarifications (bpetkov)
+>  - disable jump-tables (joao)
+>  - verified clang-14-rc2 works
+>  - fixed a whole bunch of objtool unreachable insn issue
+>  - picked up a few more tags
+> 
+> Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
 
-Here is the summary with links:
-  - ax25: Fix NULL pointer dereference in ax25_kill_by_device
-    https://git.kernel.org/netdev/net/c/71171ac8eb34
+FWIW objtool changes look good to me. 
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I only came across 
 
+arch/x86/kernel/head_64.o: warning: objtool: .noinstr.text: unexpected end of section
 
+with CC_HAS_IBT=n, which you already know about.
+
+CC_HAS_IBT=y compilation gives
+
+vmlinux.o: warning: objtool: xen_vcpu_setup()+0xa3: unreachable instruction
+
+Miroslav

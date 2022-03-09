@@ -2,149 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC514D2AF3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1C04D2AF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiCIIxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S231555AbiCIIyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiCIIxU (ORCPT
+        with ESMTP id S231527AbiCIIyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:53:20 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C986D165C31
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:52:21 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id r13so3365269ejd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 00:52:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NQyR0zO7n2luNlcmsiExWGwlTndourCo+FKtAyqqPd0=;
-        b=hyG7opaHxxU1yhVyszjVCofi1Pfzm4tV6Vy9kROTuJwYDUm3zqTs5wltvPCDplmdTa
-         SP0qAI/j2lNy6vM388ieaS4aZLWeCC3e5CQL1ldzcycj3dfdlszR/VF2JfSmCQwADTeH
-         v6ahJ8UI9XJohtKYz0yRgZvyRauDjKiBUk0KkvjOVWUcd5jkUPBaf5q7ByaHq3Fc6Aus
-         za9HZdXkb55rSHs0VQV1DX9841vchNa22xyrxsVLAaatEDMm9awbTSMhEhzghDV5T0Fe
-         OGAbk0/jtXb0ivWLOHZW2A4aGez3yxsS+E50QCC/zXcE79VmARqnC2fDLJtmFLa9gcA1
-         ckLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NQyR0zO7n2luNlcmsiExWGwlTndourCo+FKtAyqqPd0=;
-        b=cc0DhmuynwTl8Gz5fLWHCU+y/RGJwYqWjvBnSHfJvTA5KKMlPg6R2HG30xaUtAAB7P
-         AYZ0jwjfdi94L+6b8oxOzlDpesoIRTvNon8CZF4dF2bGMa7b0gg84l1rh9brjRLCVuSO
-         iFaFCZNKNistnshOueexcqLcSeFyoUu8hs0AnQUsUyco4byt6CFnEyCdco2HFuUzTnyV
-         mGK0u/g+dTVaG+XiHw9+khm33QF8Z+PLEhYG/SOT4T1zbAeg74C81ntbSGuRwRuqd5XS
-         aIU3JgHUsppvEUIRUi/1iWassV+F3HgrixZXGtKf1DUBSiIf5vW1ER9SQMHwU0lcjApR
-         phtA==
-X-Gm-Message-State: AOAM530vLpcBqBIVpcIW7ilsZsC+HcQGDU5utQ3KpdqZikIEtuzl65xd
-        ee1mdhWhvXa8k8qTu9at8eJJVUzILjyfCKoK
-X-Google-Smtp-Source: ABdhPJz8SK8K0sX37U3BiTmR1RgC+OqM/zJvE3fjlnCz4BXY77i6JErjBW+EbSAhD0BdDtyflj4PRQ==
-X-Received: by 2002:a17:906:c0c8:b0:6d0:562c:2894 with SMTP id bn8-20020a170906c0c800b006d0562c2894mr16905477ejb.625.1646815940117;
-        Wed, 09 Mar 2022 00:52:20 -0800 (PST)
-Received: from localhost.localdomain ([102.126.147.138])
-        by smtp.gmail.com with ESMTPSA id jl2-20020a17090775c200b006dabe8887b8sm458706ejc.21.2022.03.09.00.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 00:52:19 -0800 (PST)
-From:   hatimmohammed369@gmail.com
-To:     linux-kernel@vger.kernel.org
-Cc:     greg@kroah.com, abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        Hatim Muhammed <hatimmohammed369@gmail.com>
-Subject: [PATCH 6/6] [Staging]: Removed an unnecessary #if
-Date:   Wed,  9 Mar 2022 10:52:15 +0200
-Message-Id: <20220309085215.7881-1-hatimmohammed369@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 03:54:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F98624BC3;
+        Wed,  9 Mar 2022 00:53:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59E61B81EAB;
+        Wed,  9 Mar 2022 08:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A855C340E8;
+        Wed,  9 Mar 2022 08:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646815982;
+        bh=wpEIW3SwPpEISRwjNCu5yxdFfn1cnwyk3HFiMUGaj9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=elGmIHCl6AlCPZYydvwXmo45L0wIvPpHHIWHBojLETnoaZ9uFe5Wxh3pT8miC8a+r
+         yswjkGA+w51Dr+kUhpwu6VTRwJZacWx8V3BQGbsaNqA26SBhYe9lDp1ls32Kfd/Lp5
+         jGTWFEAu/FvuSu9hfBYGVWoNOJwRCoDnxifFeu7S73qwh1QryU8ufIaZK8OnITOa76
+         oT9pp2g4XiHlsoBisPlVI1KVm/Wnnx22aQfNfg1J7OM/6XTI8kOCOADhgdwPk0Pc7U
+         /f9TNyBjO1PvSmBgG+BQrAHQAuAPdW5RmS0bHME9yxL4t8Ms6qQS4VMAi/kehdvW00
+         nlvpVY2zdakzQ==
+Date:   Wed, 9 Mar 2022 10:52:18 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2.1 14/30] x86/sgx: Support restricting of enclave
+ page permissions
+Message-ID: <YihqwiU3Dr5mvMQx@iki.fi>
+References: <20220304093524.397485-1-jarkko@kernel.org>
+ <20220304093524.397485-14-jarkko@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304093524.397485-14-jarkko@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hatim Muhammed <hatimmohammed369@gmail.com>
+On Fri, Mar 04, 2022 at 11:35:08AM +0200, Jarkko Sakkinen wrote:
+> +#define SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS \
+> +	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_perm)
 
-This removed #if had 1 as its condition, hence it's body will always
-execute and its #else block will never
+What if this was replaced with just SGX_IOC_ENCLAVE_RESET_PAGES, which
+would simply do EMODPR with PROT_NONE? The main ingredient of EMODPR is to
+flush out the TLB's, and move a page to pending state, which cannot be done
+from inside the enclave.
 
-Signed-off-by: Hatim Muhammed <hatimmohammed369@gmail.com>
----
- drivers/comedi/drivers/s526.c | 49 -----------------------------------
- 1 file changed, 49 deletions(-)
+It's there because of microarchitecture constraints, and less so to work as
+a reasonable permission control mechanism (actually it does terrible job on
+that side and only confuses).
 
-diff --git a/drivers/comedi/drivers/s526.c b/drivers/comedi/drivers/s526.c
-index 9245c679a3c4..df9d240518ef 100644
---- a/drivers/comedi/drivers/s526.c
-+++ b/drivers/comedi/drivers/s526.c
-@@ -229,7 +229,6 @@ static int s526_gpct_insn_config(struct comedi_device *dev,
- 		 */
- 		devpriv->gpct_config[chan] = data[0];
- 
--#if 1
- 		/*  Set Counter Mode Register */
- 		val = data[1] & 0xffff;
- 		outw(val, dev->iobase + S526_GPCT_MODE_REG(chan));
-@@ -246,54 +245,6 @@ static int s526_gpct_insn_config(struct comedi_device *dev,
- 			 *      dev->iobase + S526_GPCT_CTRL_REG(chan));
- 			 */
- 		}
--#else
--		val = S526_GPCT_MODE_CTDIR_CTRL_QUAD;
--
--		/*  data[1] contains GPCT_X1, GPCT_X2 or GPCT_X4 */
--		if (data[1] == GPCT_X2)
--			val |= S526_GPCT_MODE_CLK_SRC_QUADX2;
--		else if (data[1] == GPCT_X4)
--			val |= S526_GPCT_MODE_CLK_SRC_QUADX4;
--		else
--			val |= S526_GPCT_MODE_CLK_SRC_QUADX1;
--
--		/*  When to take into account the indexpulse: */
--		/*
--		 * if (data[2] == GPCT_IndexPhaseLowLow) {
--		 * } else if (data[2] == GPCT_IndexPhaseLowHigh) {
--		 * } else if (data[2] == GPCT_IndexPhaseHighLow) {
--		 * } else if (data[2] == GPCT_IndexPhaseHighHigh) {
--		 * }
--		 */
--		/*  Take into account the index pulse? */
--		if (data[3] == GPCT_RESET_COUNTER_ON_INDEX) {
--			/*  Auto load with INDEX^ */
--			val |= S526_GPCT_MODE_AUTOLOAD_IXRISE;
--		}
--
--		/*  Set Counter Mode Register */
--		val = data[1] & 0xffff;
--		outw(val, dev->iobase + S526_GPCT_MODE_REG(chan));
--
--		/*  Load the pre-load register */
--		s526_gpct_write(dev, chan, data[2]);
--
--		/*  Write the Counter Control Register */
--		if (data[3])
--			outw(data[3] & 0xffff,
--			     dev->iobase + S526_GPCT_CTRL_REG(chan));
--
--		/*  Reset the counter if it is software preload */
--		if ((val & S526_GPCT_MODE_AUTOLOAD_MASK) ==
--		    S526_GPCT_MODE_AUTOLOAD_NONE) {
--			/*  Reset the counter */
--			outw(S526_GPCT_CTRL_CT_RESET,
--			     dev->iobase + S526_GPCT_CTRL_REG(chan));
--			/*  Load the counter from PR0 */
--			outw(S526_GPCT_CTRL_CT_LOAD,
--			     dev->iobase + S526_GPCT_CTRL_REG(chan));
--		}
--#endif
- 		break;
- 
- 	case INSN_CONFIG_GPCT_SINGLE_PULSE_GENERATOR:
--- 
-2.35.1
+Once you have this magic TLB reset button in place you can just do one
+EACCEPT and EMODPE inside the enclave and you're done.
 
+This is also kind of atomic in the sense that EACCEPT free's a page with no
+rights so no misuse can happend before EMODPE has tuned EPCM.
+
+BR, Jarkko

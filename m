@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC494D39B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4834D39C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237403AbiCITQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        id S237571AbiCITQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237393AbiCITQW (ORCPT
+        with ESMTP id S237412AbiCITQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:16:22 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5519E811B9;
-        Wed,  9 Mar 2022 11:15:23 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id p9so4556303wra.12;
-        Wed, 09 Mar 2022 11:15:23 -0800 (PST)
+        Wed, 9 Mar 2022 14:16:24 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79D910F20A;
+        Wed,  9 Mar 2022 11:15:24 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id p9so4556432wra.12;
+        Wed, 09 Mar 2022 11:15:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=giCcBvx2lbo0mKnfguv6SI99GvdvBJesRoU/g/VVqrU=;
-        b=gefApEAROwKIXh7Vq4cHqfGjEZSrhtaQj5MoA4W8BVVxFnwe1xiPNqxRW50Kzy9jC1
-         rg9+nkfTSQI3bAo/U4fRgPrpcF+KIqxWG9YXOSCds/OrRivRg+UZ1bwfX7BkKMNbpXY/
-         WkIdQ90N2SzgcdeJuR84oIj7oDPMQxb2T2KSrrTCsDwbkW3tygIQ5ZkVq2Bs8tj/BQwg
-         2VawBXXsRJ65vHBVOkWx5uiFLgukp/O/zyTfHFEsJjkKC4hQaPLeR8CufJlx2cNJFQPd
-         +MPA97przQVEyMnbWZO+Yrl0P1dmkRUI9j7nXstfnaid0G4PH9vip97WW+IjQTDU6IMV
-         dTow==
+        bh=JJE5QCHLqU96tMNAxHj8/NZAD9gp4mQlRTiwyoSvaQg=;
+        b=Ylcrvms6wx7UcUhQ+Q6qYePvBt9ZKFU0zff0VCHjUgx9BikiWb+14fUoo7EBNVCWoh
+         iqvvdroOwTLHl2a2adzBAnvCppxJViVlGk4GCP0R0MkBLt4hiCCnfEt35iV7oGbT/90y
+         sYg4jie7Uj0ZUERl9RljPlJvCDsFEO6V9I5+2bHFUFgU7mo4jymZPJBtp/jJzLYfM0aT
+         vrqCBw/+Gp8WwayHN7eWzDefdMtS5R1E2zSGrt3sNKrb6cItWTpO3z3krd92RTACfQsE
+         fPsUY4lfGzN6mGNYGZ33L6z1BZBz6mJ1ZjSIpY6QUsguCWAfBSoMXUbx8eXZef6Qsp1y
+         0zww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=giCcBvx2lbo0mKnfguv6SI99GvdvBJesRoU/g/VVqrU=;
-        b=F9O1axCrvNQnOZ9h0A8lbKo+m+qCsl/1CBmQ/ObVDOvaYrJ48yikPMpjWpC79Bf1B0
-         VFLsgkMszKiTNZjIcetoWhH51ofrDijqKAVsKFT6crCMDMNpQcKgFpC73n10if1+eemx
-         ldq3vWeoCxe/e51qvsXVNihbeJIBsm9DpQqifrr1CPG2wGL3hnF6th3jjErFH44CbRjY
-         O4PudhyTu2wVQ7unQ03FWQ+USiWP8ZbTPcxuC1fh7ANntNZ5rl5tVkzBUPQsfIlSsIN2
-         Sx4VrFstXZQ/X+hdbf/kWEKdj43WDSHRgfeQNv74nvA+pxmJZ1bVnS3sRGfL0VqDuJqm
-         RO0A==
-X-Gm-Message-State: AOAM530Vfv8vS8l2yuwPI7qSBewbhmrPcSUHuGX5mMzYM5hWr2L3l0Wg
-        vo+NaxVWdqC1gFNC6X1+7CTLCrvYT9k=
-X-Google-Smtp-Source: ABdhPJxeSe+cfj5KlBD+hoLRLVnxYGkeHUTTkh6zMEtwL0RdE/AAE+GuNhZFVxsLreqY4RvFR3/qMg==
-X-Received: by 2002:a5d:47c8:0:b0:1ef:8e97:2b8c with SMTP id o8-20020a5d47c8000000b001ef8e972b8cmr849521wrc.545.1646853321798;
-        Wed, 09 Mar 2022 11:15:21 -0800 (PST)
+        bh=JJE5QCHLqU96tMNAxHj8/NZAD9gp4mQlRTiwyoSvaQg=;
+        b=Pxro6OuzPwJmsDqBK9hky0KsH6ZUIfEnAr0eYqUzmqb5gXZUI7iwCk/qieki441MY6
+         mRHFTVr0BTIuImoTGqeXjuKlG8w/LLr/7fEf5j0IzefVJG4QHjh4MAJD0GECeflrWrAB
+         Jl9f4604HNFYMTsGZN4RSklFnaMXAYg6xVo8XsjvB6/DJupjYlMHsTNjkgwg58tC/BbQ
+         5agxJa0HqIEMm55quBsuGKqCMKDmnBuqgU2k3JqhTY64VB1KS8wee89h7e5XYT22OSVT
+         17KQCAA51lL+FtsF473Z10ztV5xM++erly/pwxGzPCgWttvu4DqlgF5DJ4aYsWXNpGsZ
+         f8Ow==
+X-Gm-Message-State: AOAM5334PNh7B0rYTvakCghnm0VZAq/keLG1//6a1SiTqfpZot4GziFE
+        Vr1r/f4HVRko3/ax5yUnQUA=
+X-Google-Smtp-Source: ABdhPJzFZCwv71cwlzesUU356ElelYbru0irDvuFTPjMFzqWJY2rIUXYKQUX4HXfvgrOPeBCnGa/3Q==
+X-Received: by 2002:a5d:59a3:0:b0:1f5:1eee:fc90 with SMTP id p3-20020a5d59a3000000b001f51eeefc90mr825051wrr.625.1646853323293;
+        Wed, 09 Mar 2022 11:15:23 -0800 (PST)
 Received: from Ansuel-xps.localdomain (host-79-47-249-147.retail.telecomitalia.it. [79.47.249.147])
-        by smtp.googlemail.com with ESMTPSA id w6-20020a5d6806000000b002036515dda7sm2396699wru.33.2022.03.09.11.15.20
+        by smtp.googlemail.com with ESMTPSA id w6-20020a5d6806000000b002036515dda7sm2396699wru.33.2022.03.09.11.15.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 11:15:21 -0800 (PST)
+        Wed, 09 Mar 2022 11:15:22 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Jonathan McDowell <noodles@earth.li>
-Subject: [PATCH v3 05/18] ARM: dts: qcom: add missing snps,dwmac compatible for gmac ipq8064
-Date:   Wed,  9 Mar 2022 20:01:39 +0100
-Message-Id: <20220309190152.7998-6-ansuelsmth@gmail.com>
+Subject: [PATCH v3 06/18] ARM: dts: qcom: enable usb phy by default for ipq8064
+Date:   Wed,  9 Mar 2022 20:01:40 +0100
+Message-Id: <20220309190152.7998-7-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309190152.7998-1-ansuelsmth@gmail.com>
 References: <20220309190152.7998-1-ansuelsmth@gmail.com>
@@ -74,54 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing snps,dwmac compatible for gmac ipq8064 dtsi.
+Enable usb phy by default. When the usb phy were pushed, half of them
+were flagged as disabled by mistake. Fix this to correctly init dwc3
+node on any ipq8064 based SoC.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 Tested-by: Jonathan McDowell <noodles@earth.li>
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 0938838a4af8..9d658fcc1f12 100644
+index 9d658fcc1f12..e247bf51df01 100644
 --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
 +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -1075,7 +1075,7 @@ stmmac_axi_setup: stmmac-axi-config {
+@@ -1175,8 +1175,6 @@ hs_phy_0: phy@100f8800 {
+ 			clocks = <&gcc USB30_0_UTMI_CLK>;
+ 			clock-names = "ref";
+ 			#phy-cells = <0>;
+-
+-			status = "disabled";
+ 		};
  
- 		gmac0: ethernet@37000000 {
- 			device_type = "network";
--			compatible = "qcom,ipq806x-gmac";
-+			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
- 			reg = <0x37000000 0x200000>;
- 			interrupts = <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "macirq";
-@@ -1099,7 +1099,7 @@ gmac0: ethernet@37000000 {
+ 		ss_phy_0: phy@100f8830 {
+@@ -1185,8 +1183,6 @@ ss_phy_0: phy@100f8830 {
+ 			clocks = <&gcc USB30_0_MASTER_CLK>;
+ 			clock-names = "ref";
+ 			#phy-cells = <0>;
+-
+-			status = "disabled";
+ 		};
  
- 		gmac1: ethernet@37200000 {
- 			device_type = "network";
--			compatible = "qcom,ipq806x-gmac";
-+			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
- 			reg = <0x37200000 0x200000>;
- 			interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "macirq";
-@@ -1123,7 +1123,7 @@ gmac1: ethernet@37200000 {
- 
- 		gmac2: ethernet@37400000 {
- 			device_type = "network";
--			compatible = "qcom,ipq806x-gmac";
-+			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
- 			reg = <0x37400000 0x200000>;
- 			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "macirq";
-@@ -1147,7 +1147,7 @@ gmac2: ethernet@37400000 {
- 
- 		gmac3: ethernet@37600000 {
- 			device_type = "network";
--			compatible = "qcom,ipq806x-gmac";
-+			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
- 			reg = <0x37600000 0x200000>;
- 			interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "macirq";
+ 		usb3_0: usb3@100f8800 {
 -- 
 2.34.1
 

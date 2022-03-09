@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4574D3BB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D1D4D3BB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238351AbiCIVHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S238355AbiCIVIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235735AbiCIVHV (ORCPT
+        with ESMTP id S233585AbiCIVID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:07:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340F510CF3D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:06:22 -0800 (PST)
+        Wed, 9 Mar 2022 16:08:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A386910A7C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:07:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0CFE61AB8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2BE46C340E8;
-        Wed,  9 Mar 2022 21:06:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59F2CB823D2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4C7C340E8;
+        Wed,  9 Mar 2022 21:07:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646859981;
-        bh=QHyQ3nVeup6A7S/YyJ8/Xc9gH+3cPfk455tCjG34kZk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=iSFBKE/qb8rq5xiNY0mPzukDOlkzwRh/uRR697UyFohHhia+xxJjXTmIkj28Eab6w
-         i+/C5fK0FrWXKOigss+J7zSWV19gIJ7eznou1H6xDFHa/2AYjUSFg+Ou7DTY1y1CpQ
-         cNEJMGa0J6ykHuuWoqjmMHm7F+nv4mzWMUEV3PzFJ/iPMPaGk+WQFudBcK630bT32T
-         xZwgw+SERNgk+1YBFg6d5Sfl6I6ih6+FltdscHGr3eQFth8sTkRthMhPrUJyStlUCs
-         VpOa3gEIuZzRV5zwIV71aY+japjaTfZtryiVvsk37lB0gxVnHut9WCOnUN/D1EEdRX
-         GvPp2WqMtoEBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 148D7E7BB08;
-        Wed,  9 Mar 2022 21:06:21 +0000 (UTC)
-Subject: Re: [GIT PULL] arm64 fixes for 5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yij6MY63Lhg0icIg@arm.com>
-References: <Yij6MY63Lhg0icIg@arm.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <Yij6MY63Lhg0icIg@arm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-X-PR-Tracked-Commit-Id: b859ebedd1e730bbda69142fca87af4e712649a1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e7e19defa57580d679bf0d03f8a34933008a7930
-Message-Id: <164685998107.18291.1953249183991023055.pr-tracker-bot@kernel.org>
-Date:   Wed, 09 Mar 2022 21:06:21 +0000
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        s=k20201202; t=1646860021;
+        bh=gJmctXUQiX1gCcm73GlTrzc5LAq6lquAv++b2dFj0Vw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kEnlFUHqSXr3jKm7gQ5sb8P08GDFIoF81vvvLpBhB3KNAmI0x9MNiHewuAOIk47Ec
+         yocus+nL8obUkN5YG/AsoUzfV+Cdy2RzlfP3izGPzvpLnlKoujzHRruX7HaEu+fVhx
+         Go2AyTFQvRdQ2c5qcNuvTk7EA/4qYqR7gv0NmB6OgARAsYh8sSXQC8PnBAaKiVNO1X
+         WTzLA9Ujw4liYAWEBlKZ9b9bhQXusHntQ7bcjm+bL4MKfgUgkMLjhWxUWePd8FrAG8
+         zax4UN4gSqYlpKzIGCYQRj9uG0TX4gsKKKXXF+J/SFUPjOefToVJlK3wfPl1oDmCjG
+         vMSKRvbNMVdJw==
+Date:   Wed, 9 Mar 2022 22:06:57 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH] rcu/nocb: Clear rdp offloaded flags when rcuop/rcuog
+ kthreads spawn failed
+Message-ID: <20220309210657.GA68899@lothringen>
+References: <20220228093629.3746473-1-qiang1.zhang@intel.com>
+ <20220303164914.GA87151@lothringen>
+ <PH0PR11MB5880F450C2DDD04D4C76F814DA099@PH0PR11MB5880.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880F450C2DDD04D4C76F814DA099@PH0PR11MB5880.namprd11.prod.outlook.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,15 +60,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 9 Mar 2022 19:04:17 +0000:
+On Tue, Mar 08, 2022 at 07:37:24AM +0000, Zhang, Qiang1 wrote:
+> 
+> On Mon, Feb 28, 2022 at 05:36:29PM +0800, Zqiang wrote:
+> > When CONFIG_RCU_NOCB_CPU is enabled and 'rcu_nocbs' is set, the rcuop 
+> > and rcuog kthreads is created. however the rcuop or rcuog kthreads 
+> > creation may fail, if failed, clear rdp offloaded flags.
+> > 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > ---
+> >  kernel/rcu/tree_nocb.h | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h index 
+> > 46694e13398a..94b279147954 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -1246,7 +1246,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+> >  				"rcuog/%d", rdp_gp->cpu);
+> >  		if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo GP kthread, OOM is now expected behavior\n", __func__)) {
+> >  			mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+> > -			return;
+> > +			goto end;
+> >  		}
+> >  		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+> >  		if (kthread_prio)
+> > @@ -1258,12 +1258,22 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+> >  	t = kthread_run(rcu_nocb_cb_kthread, rdp,
+> >  			"rcuo%c/%d", rcu_state.abbr, cpu);
+> >  	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
+> > -		return;
+> > +		goto end;
+> >  
+> >  	if (kthread_prio)
+> >  		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+> >  	WRITE_ONCE(rdp->nocb_cb_kthread, t);
+> >  	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
+> > +	return;
+> > +end:
+> > +	if (cpumask_test_cpu(cpu, rcu_nocb_mask)) {
+> > +		rcu_segcblist_offload(&rdp->cblist, false);
+> > +		rcu_segcblist_clear_flags(&rdp->cblist,
+> > +				SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
+> > +		rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_LOCKING);
+> > +		rcu_segcblist_set_flags(&rdp->cblist, SEGCBLIST_RCU_CORE);
+> > +	}
+> >>
+> >>Thanks you, consequences are indeed bad otherwise because the target is considered offloaded but nothing actually handles the callbacks.
+> >>
+> >>A few issues though:
+> >>
+> >>* The rdp_gp kthread may be running concurrently. If it's iterating this rdp and
+> >>  the SEGCBLIST_LOCKING flag is cleared in the middle, rcu_nocb_unlock() won't
+> >>  release (among many other possible issues).
+> >>
+> >>* we should clear the cpu from rcu_nocb_mask or we won't be able to later
+> >>  re-offload it.
+> >>
+> >>* we should then delete the rdp from the group list:
+> >>
+> >>     list_del_rcu(&rdp->nocb_entry_rdp);
+> >>
+> >>So ideally we should call rcu_nocb_rdp_deoffload(). But then bear in mind:
+> >>
+> >>1) We must lock rcu_state.barrier_mutex and hotplug read lock. But since we
+> >>   are calling rcutree_prepare_cpu(), we maybe holding hotplug write lock
+> >>   already.
+> >>
+> >>   Therefore we first need to invert the locking dependency order between
+> >>   rcu_state.barrier_mutex and hotplug lock and then just lock the barrier_mutex
+> >>   before calling rcu_nocb_rdp_deoffload() from our failure path.
+> >>   
+> >>
+> >>2) On rcu_nocb_rdp_deoffload(), handle non-existing nocb_gp and/or nocb_cb
+> >>   kthreads. Make sure we are holding nocb_gp_kthread_mutex.
+> 
+> Sorry for my late reply,  Is the nocb_gp_kthread_mutex really necessary?
+> Because the cpu online/offline is serial operation,  It is protected by  cpus_write_lock()
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e7e19defa57580d679bf0d03f8a34933008a7930
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+And you're right! But some people are working on making cpu_up() able to work
+in parallel for faster bring-up on boot.

@@ -2,88 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621E94D25C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F9C4D25BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiCIBFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S230080AbiCIBIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiCIBEr (ORCPT
+        with ESMTP id S230356AbiCIBIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:04:47 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AF513686C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:42:30 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id z11so582834pla.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=Ugb8LAMnhzApo9dcZqIaAqW3+Wj+xC7EdGKtorbqFQ4=;
-        b=cPmZeweir2dZqsfWqdem3ao0HzrSQFQ2BnlJByXXgVp4Pym/TAuYHLP+mdEtMviivT
-         hKOYQ8QjFXzk+Xpag5DquB6EjXeqNSwmG4cDivsl4kfRAXUwY8rQS+SrID0G2T6mnuW/
-         A+o0UDs0ppF03AAIlzCu/Uqs3I69LSKdUsGKHS/aWGdYosRfmvNdhcDdhJCMbfv/bHOh
-         8E/0kcg2ptQfU8Eb4fTlO4G6GmRyuXL6P055ZB2WwSWyHOUhODSQNelofFjd2ipAdJ0p
-         x0GHoqvSzkw53/ulDmftS/7voGyWPl3iVjWAkwDD99YD32sCmUWLAV4nDWkUuTRxgFAl
-         HPiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=Ugb8LAMnhzApo9dcZqIaAqW3+Wj+xC7EdGKtorbqFQ4=;
-        b=DAMtY03nEstgJfT/YJaoKGMzX3+zzwr0YYoBcGwX+YQkPmyOWzQFt3bqnLwGRksUJf
-         MyBGjUXueX8N31syA72zwrExE6YGv5gxekOcTb5bLrf7kkK/Lx/u9jzm73TmyJFvVaee
-         Mfi1HLjcX6V6mCPejmBKdwjLBP9HxCFAV47bpPoTSyD8BjOE81cYqUHwVlB1uMfsnOIa
-         fSUMTm0AVLsBTkQqmJ4CYRGXE+1kgxxh7dhnbwseq17KJ+vPBlUxpAY7Sk1BiuFTNvjK
-         XNp4FOaMbumzq6t/kA4CZMtx4GOsUYzKPc469CDCRB3vgq7wnnpTXWxCwbdECl5fas1q
-         OpQA==
-X-Gm-Message-State: AOAM533MgcdgY7TWaIInerunmt0qA65vbO7GkeUY2z+3fsaz8N4wt6pC
-        QPTk9uvh7pcL/GO7IAYuBHBm5g==
-X-Google-Smtp-Source: ABdhPJycE2IQ/Orf1ePMAF7JGIcjI5Z9JI5pO05mzHNTK5TJbtjhf8yQQaBeQ9Xco/sfTyw2Gudigw==
-X-Received: by 2002:a17:90a:4286:b0:1b8:8ba1:730c with SMTP id p6-20020a17090a428600b001b88ba1730cmr7532393pjg.181.1646786550239;
-        Tue, 08 Mar 2022 16:42:30 -0800 (PST)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id il13-20020a17090b164d00b001bf87e5018bsm4213475pjb.37.2022.03.08.16.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 16:42:29 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        asml.silence@gmail.com, Abaci Robot <abaci@linux.alibaba.com>
-In-Reply-To: <20220308075717.37734-1-jiapeng.chong@linux.alibaba.com>
-References: <20220308075717.37734-1-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH] io_uring: Fix an unsigned subtraction which can never be negative.
-Message-Id: <164678654933.397558.14576742053949962623.b4-ty@kernel.dk>
-Date:   Tue, 08 Mar 2022 17:42:29 -0700
+        Tue, 8 Mar 2022 20:08:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33AF3141FE8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646786956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t1eWWygYqRs8r9/W14PM2EEm1/2DPyShF2lrMpAUnZw=;
+        b=DNhVT/fqUiiWh0SnvhpAwr0pcO9QAqElKxgELByJKKrYSOABfhCT7o71jNtKJ+Ko6A1Xiw
+        fsjjPI6vgRzT5wHFQTVy3wt8IBSB/1iq0UCLl3vOT/3bcHFo14qSjs2fXaMmaYChPh09nG
+        OpVxwW6UXE/BN5c26bBv7Hc8d4nxisc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-137-E5kCM6r3OzGotQCLRK3XaQ-1; Tue, 08 Mar 2022 19:49:11 -0500
+X-MC-Unique: E5kCM6r3OzGotQCLRK3XaQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12103180FD72;
+        Wed,  9 Mar 2022 00:49:09 +0000 (UTC)
+Received: from [10.22.11.135] (unknown [10.22.11.135])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 220CD131FF;
+        Wed,  9 Mar 2022 00:48:12 +0000 (UTC)
+Message-ID: <8dc145f2-7195-05a1-40c5-533301ffca8b@redhat.com>
+Date:   Tue, 8 Mar 2022 19:48:11 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4] mm/oom_kill.c: futex: Don't OOM reap a process with a
+ futex robust list
+Content-Language: en-US
+To:     Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rafael Aquini <aquini@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, tglx@linutronix.de,
+        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
+        andrealmeid@collabora.com, peterz@infradead.org,
+        Joel Savitz <jsavitz@redhat.com>
+References: <20220309002550.103786-1-npache@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220309002550.103786-1-npache@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 15:57:17 +0800, Jiapeng Chong wrote:
-> Eliminate the follow smatch warnings:
-> 
-> fs/io_uring.c:10358 __do_sys_io_uring_enter() warn: unsigned 'fd' is
-> never less than zero.
-> 
-> 
+On 3/8/22 19:25, Nico Pache wrote:
+> The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
+> be targeted by the oom reaper. This mapping is also used to store the futex
+> robust list; the kernel does not keep a copy of the robust list and instead
+> references a userspace address to maintain the robustness during a process
+> death. A race can occur between exit_mm and the oom reaper that allows
+> the oom reaper to clear the memory of the futex robust list before the
+> exit path has handled the futex death.
+>
+> Prevent the OOM reaper from concurrently reaping the mappings if the dying
+> process contains a robust_list. If the dying task_struct does not contain
+> a pointer in tsk->robust_list, we can assume there was either never one
+> setup for this task struct, or futex_cleanup has properly handled the
+> futex death and we can safely reap this memory.
+>
+> Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
+>
+> [1] https://elixir.bootlin.com/glibc/latest/source/nptl/allocatestack.c#L370
+>
+> Fixes: 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
+> Cc: Rafael Aquini <aquini@redhat.com>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Baoquan He <bhe@redhat.com>
+> Cc: Christoph von Recklinghausen <crecklin@redhat.com>
+> Cc: Don Dutile <ddutile@redhat.com>
+> Cc: Herton R. Krzesinski <herton@redhat.com>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: <tglx@linutronix.de>
+> Cc: <mingo@redhat.com>
+> Cc: <dvhart@infradead.org>
+> Cc: <dave@stgolabs.net>
+> Cc: <andrealmeid@collabora.com>
+> Cc: <peterz@infradead.org>
+> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Nico Pache <npache@redhat.com>
+> ---
+>   mm/oom_kill.c | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
+>
+> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> index 989f35a2bbb1..37af902494d8 100644
+> --- a/mm/oom_kill.c
+> +++ b/mm/oom_kill.c
+> @@ -587,6 +587,25 @@ static bool oom_reap_task_mm(struct task_struct *tsk, struct mm_struct *mm)
+>   		goto out_unlock;
+>   	}
+>   
+> +	/* Don't reap a process holding a robust_list as the pthread
+> +	 * struct is allocated in userspace using PRIVATE | ANONYMOUS
+> +	 * memory which when reaped before futex_cleanup() can leave
+> +	 * the waiting process stuck.
+> +	 */
+> +#ifdef CONFIG_FUTEX
+> +	bool robust = false;
+> +
+> +	robust = tsk->robust_list != NULL;
+> +#ifdef CONFIG_COMPAT
+> +	robust |= tsk->compat_robust_list != NULL;
+> +#endif
+> +	if (robust) {
+> +		trace_skip_task_reaping(tsk->pid);
+> +		pr_info("oom_reaper: skipping task as it contains a robust list");
+> +		goto out_finish;
+> +	}
+> +#endif
+> +
+>   	trace_start_task_reaping(tsk->pid);
+>   
+>   	/* failed to reap part of the address space. Try again later */
 
-Applied, thanks!
+I believe it will be easier to read if you define a helper function like
 
-[1/1] io_uring: Fix an unsigned subtraction which can never be negative.
-      commit: 90e80add901b03fe6f3bc5ca6481414ee9f039ab
+#ifdef CONFIG_FUTEX
+static inline bool has_robust_list(struct task_struct *tsk)
+{
+         bool robust = !!tsk->robust_list;
 
-Best regards,
--- 
-Jens Axboe
+#ifdef CONFIG_COMPAT
+         robust |= !!tsk->compat_robust_list
+#endif
+         return robust;
+}
+#else
+static inline bool has_robust_list(struct task_struct *tsk)
+{
+         return false;
+}
+#endif
 
+Then you don't need any #if/endif in oom_reap_task_mm().
+
+Cheers,
+Longman
 

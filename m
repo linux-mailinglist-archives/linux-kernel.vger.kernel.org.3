@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0E14D341D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284274D33E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236242AbiCIQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S233514AbiCIQRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236155AbiCIQJk (ORCPT
+        with ESMTP id S235037AbiCIQIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:09:40 -0500
+        Wed, 9 Mar 2022 11:08:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB499657A9;
-        Wed,  9 Mar 2022 08:07:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF474187B80;
+        Wed,  9 Mar 2022 08:05:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80F5161797;
-        Wed,  9 Mar 2022 16:07:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8968FC340E8;
-        Wed,  9 Mar 2022 16:07:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 863076169D;
+        Wed,  9 Mar 2022 16:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE86C340E8;
+        Wed,  9 Mar 2022 16:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646842066;
-        bh=8CsPEDtSRq+WyZJMx9PdQo5CL8eWcNCJjLJLpJcZxCQ=;
+        s=korg; t=1646841903;
+        bh=VIeR+4wJVyYLfoUSGwRC4ht7eH6VTH3h63d5twbkx7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ieKyaqzE/g7cHRFlUiZfHLH8chaaO9ljYASNV4hck5vIFFbU4Yf2lu8FHbnTrtISF
-         0nq3aER6oa9cfV9u3aFM4vp4diIJqKquskgyNQPcgX68em5jUnt+Sp4Nn+dEjA/RLu
-         LY3tDz9dBFmcWmU3wFu8qs3aPnmQF/1d1d0rC01A=
+        b=BZ/ZpFbnclA1QpGMJl9dEfQglBsOrWbthyjcXBqxQx2Ogg2ezg5/7EVzd2lpKM40b
+         H2B80lkFCyAd4y/sxvvQA3gbeBDOSy4lVve/EIdKOsO22kmC/Xh9D4T7iQUdthHUw2
+         h+QwA2u5MvvIZGJbtCrlSHrX0NrqodesgMDpeW7Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frank van der Linden <fllinden@amazon.com>
-Subject: [PATCH 5.15 04/43] Documentation/hw-vuln: Update spectre doc
-Date:   Wed,  9 Mar 2022 16:59:48 +0100
-Message-Id: <20220309155859.865664358@linuxfoundation.org>
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: [PATCH 5.10 16/43] arm64: Add Neoverse-N2, Cortex-A710 CPU part definition
+Date:   Wed,  9 Mar 2022 16:59:49 +0100
+Message-Id: <20220309155859.713540868@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
-References: <20220309155859.734715884@linuxfoundation.org>
+In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
+References: <20220309155859.239810747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,106 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-commit 5ad3eb1132453b9795ce5fd4572b1c18b292cca9 upstream.
+commit 2d0d656700d67239a57afaf617439143d8dac9be upstream.
 
-Update the doc with the new fun.
+Add the CPU Partnumbers for the new Arm designs.
 
-  [ bp: Massage commit message. ]
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-[fllinden@amazon.com: backported to 5.15]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Link: https://lore.kernel.org/r/20211019163153.3692640-2-suzuki.poulose@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/hw-vuln/spectre.rst   |   42 ++++++++++++++++--------
- Documentation/admin-guide/kernel-parameters.txt |    8 +++-
- 2 files changed, 35 insertions(+), 15 deletions(-)
+ arch/arm64/include/asm/cputype.h |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/Documentation/admin-guide/hw-vuln/spectre.rst
-+++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-@@ -131,6 +131,19 @@ steer its indirect branch speculations t
- speculative execution's side effects left in level 1 cache to infer the
- victim's data.
+--- a/arch/arm64/include/asm/cputype.h
++++ b/arch/arm64/include/asm/cputype.h
+@@ -73,6 +73,8 @@
+ #define ARM_CPU_PART_CORTEX_A76		0xD0B
+ #define ARM_CPU_PART_NEOVERSE_N1	0xD0C
+ #define ARM_CPU_PART_CORTEX_A77		0xD0D
++#define ARM_CPU_PART_CORTEX_A710	0xD47
++#define ARM_CPU_PART_NEOVERSE_N2	0xD49
  
-+Yet another variant 2 attack vector is for the attacker to poison the
-+Branch History Buffer (BHB) to speculatively steer an indirect branch
-+to a specific Branch Target Buffer (BTB) entry, even if the entry isn't
-+associated with the source address of the indirect branch. Specifically,
-+the BHB might be shared across privilege levels even in the presence of
-+Enhanced IBRS.
-+
-+Currently the only known real-world BHB attack vector is via
-+unprivileged eBPF. Therefore, it's highly recommended to not enable
-+unprivileged eBPF, especially when eIBRS is used (without retpolines).
-+For a full mitigation against BHB attacks, it's recommended to use
-+retpolines (or eIBRS combined with retpolines).
-+
- Attack scenarios
- ----------------
+ #define APM_CPU_PART_POTENZA		0x000
  
-@@ -364,13 +377,15 @@ The possible values in this file are:
- 
-   - Kernel status:
- 
--  ====================================  =================================
--  'Not affected'                        The processor is not vulnerable
--  'Vulnerable'                          Vulnerable, no mitigation
--  'Mitigation: Full generic retpoline'  Software-focused mitigation
--  'Mitigation: Full AMD retpoline'      AMD-specific software mitigation
--  'Mitigation: Enhanced IBRS'           Hardware-focused mitigation
--  ====================================  =================================
-+  ========================================  =================================
-+  'Not affected'                            The processor is not vulnerable
-+  'Mitigation: None'                        Vulnerable, no mitigation
-+  'Mitigation: Retpolines'                  Use Retpoline thunks
-+  'Mitigation: LFENCE'                      Use LFENCE instructions
-+  'Mitigation: Enhanced IBRS'               Hardware-focused mitigation
-+  'Mitigation: Enhanced IBRS + Retpolines'  Hardware-focused + Retpolines
-+  'Mitigation: Enhanced IBRS + LFENCE'      Hardware-focused + LFENCE
-+  ========================================  =================================
- 
-   - Firmware status: Show if Indirect Branch Restricted Speculation (IBRS) is
-     used to protect against Spectre variant 2 attacks when calling firmware (x86 only).
-@@ -584,12 +599,13 @@ kernel command line.
- 
- 		Specific mitigations can also be selected manually:
- 
--		retpoline
--					replace indirect branches
--		retpoline,generic
--					google's original retpoline
--		retpoline,amd
--					AMD-specific minimal thunk
-+                retpoline               auto pick between generic,lfence
-+                retpoline,generic       Retpolines
-+                retpoline,lfence        LFENCE; indirect branch
-+                retpoline,amd           alias for retpoline,lfence
-+                eibrs                   enhanced IBRS
-+                eibrs,retpoline         enhanced IBRS + Retpolines
-+                eibrs,lfence            enhanced IBRS + LFENCE
- 
- 		Not specifying this option is equivalent to
- 		spectre_v2=auto.
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5267,8 +5267,12 @@
- 			Specific mitigations can also be selected manually:
- 
- 			retpoline	  - replace indirect branches
--			retpoline,generic - google's original retpoline
--			retpoline,amd     - AMD-specific minimal thunk
-+			retpoline,generic - Retpolines
-+			retpoline,lfence  - LFENCE; indirect branch
-+			retpoline,amd     - alias for retpoline,lfence
-+			eibrs		  - enhanced IBRS
-+			eibrs,retpoline   - enhanced IBRS + Retpolines
-+			eibrs,lfence      - enhanced IBRS + LFENCE
- 
- 			Not specifying this option is equivalent to
- 			spectre_v2=auto.
+@@ -113,6 +115,8 @@
+ #define MIDR_CORTEX_A76	MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A76)
+ #define MIDR_NEOVERSE_N1 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_NEOVERSE_N1)
+ #define MIDR_CORTEX_A77	MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A77)
++#define MIDR_CORTEX_A710 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A710)
++#define MIDR_NEOVERSE_N2 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_NEOVERSE_N2)
+ #define MIDR_THUNDERX	MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX)
+ #define MIDR_THUNDERX_81XX MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX_81XX)
+ #define MIDR_THUNDERX_83XX MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX_83XX)
 
 

@@ -2,179 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097D54D2D06
+	by mail.lfdr.de (Postfix) with ESMTP id D90564D2D08
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiCIKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S230014AbiCIKWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiCIKWc (ORCPT
+        with ESMTP id S230031AbiCIKWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:22:32 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD7216BF91;
-        Wed,  9 Mar 2022 02:21:33 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KD7Vc5DydzfYlR;
-        Wed,  9 Mar 2022 18:20:08 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 18:21:31 +0800
-CC:     <yangyicong@hisilicon.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 2/3] arch_topology: obtain cpu capacity using
- information from CPPC
-To:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Sean Kelley <skelley@nvidia.com>
-References: <20220302180913.13229-1-ionela.voinescu@arm.com>
- <20220302180913.13229-3-ionela.voinescu@arm.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <4283eacf-6eab-b2f5-07f2-d19fad134277@huawei.com>
-Date:   Wed, 9 Mar 2022 18:21:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 9 Mar 2022 05:22:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4F116FDE8;
+        Wed,  9 Mar 2022 02:21:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F43FB81FF7;
+        Wed,  9 Mar 2022 10:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C42C340E8;
+        Wed,  9 Mar 2022 10:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646821306;
+        bh=Wm6tZYodnJhLaX2LYxO6sDtIEcS/tDhVWe8DN5ggHFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nlz1py1GRsjS+umP2V+rm1oqiosy9OL4/vbrcwaaIQoq/8G9FeyK54V8yKPjafEaM
+         2S2+p0gTTETq4b61VteUcVjgkb/VZQWeRG/jRn7AFdv4wdLEsu8zX/mAQeDt7caAN1
+         iUaaHxqIl6xjtMMBhP91Yp3lMEctbv+0aYP0vk5k=
+Date:   Wed, 9 Mar 2022 11:21:41 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH] usb: dwc3: gadget: Wait for ep0 xfers to complete during
+ dequeue
+Message-ID: <Yih/tapu/JMRgBqT@kroah.com>
+References: <20220309004148.12061-1-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <20220302180913.13229-3-ionela.voinescu@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309004148.12061-1-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ionela,
-
-On 2022/3/3 2:09, Ionela Voinescu wrote:
-> Define topology_init_cpu_capacity_cppc() to use highest performance
-> values from _CPC objects to obtain and set maximum capacity information
-> for each CPU. acpi_cppc_processor_probe() is a good point at which to
-> trigger the initialization of CPU (u-arch) capacity values, as at this
-> point the highest performance values can be obtained from each CPU's
-> _CPC objects. Architectures can therefore use this functionality
-> through arch_init_invariance_cppc().
+On Tue, Mar 08, 2022 at 04:41:48PM -0800, Wesley Cheng wrote:
+> From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 > 
-> The performance scale used by CPPC is a unified scale for all CPUs in
-> the system. Therefore, by obtaining the raw highest performance values
-> from the _CPC objects, and normalizing them on the [0, 1024] capacity
-> scale, used by the task scheduler, we obtain the CPU capacity of each
-> CPU.
+> If the request being dequeued is currently active, then the current
+> logic is to issue a stop transfer command, and allow the command
+> completion to cleanup the cancelled list.  The DWC3 controller will
+> run into an end transfer command timeout if there is an ongoing EP0
+> transaction.  If this is the case, wait for the EP0 completion event
+> before proceeding to retry the endxfer command again.
 > 
+> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-So we're going to use highest performance rather than nominal performance,
-and I checked the discussion in v2 [1]. Maybe we should also document this
-in sched-capacity.rst that where scheduler get the capacity from on ACPI
-based system? Currently we only have DT part but after this patch it's
-also supported on ACPI based system.
 
-Out of curiosity, since we have raw capacity now on ACPI system, seems we
-are able to scale the capacity with freq_factor now? looked into
-register_cpufreq_notifier().
+You sent this twice?  What is the differences between the patches?
 
-[1] https://lore.kernel.org/lkml/Yh5OAsYVBWWko+CH@arm.com/
+And as you sent it, your signed-off-by needs to be at the end, as per
+the kernel documentation.
 
-Thanks,
-Yicong
-
-> While an ACPI Notify(0x85) could alert about a change in the highest
-> performance value, which should in turn retrigger the CPU capacity
-> computations, this notification is not currently handled by the ACPI
-> processor driver. When supported, a call to arch_init_invariance_cppc()
-> would perform the update.
-> 
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Tested-by: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
 > ---
->  drivers/base/arch_topology.c  | 40 +++++++++++++++++++++++++++++++++++
->  include/linux/arch_topology.h |  4 ++++
->  2 files changed, 44 insertions(+)
+>  Patch discussion below:
+>    https://lore.kernel.org/linux-usb/1644836933-141376-1-git-send-email-dh10.jung@samsung.com/T/#t
+
+So this is a v2?
+
+
 > 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 976154140f0b..ad2d95920ad1 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -339,6 +339,46 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
->  	return !ret;
+>  drivers/usb/dwc3/core.h   |  2 +-
+>  drivers/usb/dwc3/ep0.c    | 14 ++++++++++++++
+>  drivers/usb/dwc3/gadget.c | 13 ++++++++-----
+>  drivers/usb/dwc3/gadget.h |  1 +
+>  4 files changed, 24 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index eb9c1efced05..f557f5f36a7f 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -736,7 +736,7 @@ struct dwc3_ep {
+>  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+>  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+>  #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
+> -
+> +#define DWC3_EP_DELAY_STOP             BIT(13)
+
+Why did you loose the blank line?
+
+>  	/* This last one is specific to EP0 */
+>  #define DWC3_EP0_DIR_IN			BIT(31)
+>  
+> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+> index 658739410992..1064be5518f6 100644
+> --- a/drivers/usb/dwc3/ep0.c
+> +++ b/drivers/usb/dwc3/ep0.c
+> @@ -271,6 +271,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>  {
+>  	struct dwc3_ep			*dep;
+>  	int				ret;
+> +	int                             i;
+>  
+>  	complete(&dwc->ep0_in_setup);
+>  
+> @@ -279,6 +280,19 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>  			DWC3_TRBCTL_CONTROL_SETUP, false);
+>  	ret = dwc3_ep0_start_trans(dep);
+>  	WARN_ON(ret < 0);
+> +	for (i = 2; i < DWC3_ENDPOINTS_NUM; i++) {
+> +		struct dwc3_ep *dwc3_ep;
+> +
+> +		dwc3_ep = dwc->eps[i];
+> +		if (!dwc3_ep)
+> +			continue;
+> +
+> +		if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+> +			continue;
+> +
+> +		dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+> +		dwc3_stop_active_transfer(dwc3_ep, true, true);
+> +	}
 >  }
 >  
-> +#ifdef CONFIG_ACPI_CPPC_LIB
-> +#include <acpi/cppc_acpi.h>
-> +
-> +void topology_init_cpu_capacity_cppc(void)
-> +{
-> +	struct cppc_perf_caps perf_caps;
-> +	int cpu;
-> +
-> +	if (likely(acpi_disabled || !acpi_cpc_valid()))
-> +		return;
-> +
-> +	raw_capacity = kcalloc(num_possible_cpus(), sizeof(*raw_capacity),
-> +			       GFP_KERNEL);
-> +	if (!raw_capacity)
-> +		return;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (!cppc_get_perf_caps(cpu, &perf_caps) &&
-> +		    (perf_caps.highest_perf >= perf_caps.nominal_perf) &&
-> +		    (perf_caps.highest_perf >= perf_caps.lowest_perf)) {
-> +			raw_capacity[cpu] = perf_caps.highest_perf;
-> +			pr_debug("cpu_capacity: CPU%d cpu_capacity=%u (raw).\n",
-> +				 cpu, raw_capacity[cpu]);
-> +			continue;
-> +		}
-> +
-> +		pr_err("cpu_capacity: CPU%d missing/invalid highest performance.\n", cpu);
-> +		pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
-> +		goto exit;
-> +	}
-> +
-> +	topology_normalize_cpu_scale();
-> +	schedule_work(&update_topology_flags_work);
-> +	pr_debug("cpu_capacity: cpu_capacity initialization done\n");
-> +
-> +exit:
-> +	free_raw_capacity();
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_CPU_FREQ
->  static cpumask_var_t cpus_to_visit;
->  static void parsing_done_workfn(struct work_struct *work);
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index cce6136b300a..58cbe18d825c 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -11,6 +11,10 @@
->  void topology_normalize_cpu_scale(void);
->  int topology_update_cpu_topology(void);
+>  static struct dwc3_ep *dwc3_wIndex_to_dep(struct dwc3 *dwc, __le16 wIndex_le)
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index a0c883f19a41..ccef508b1296 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -654,9 +654,6 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+>  	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
+>  }
 >  
-> +#ifdef CONFIG_ACPI_CPPC_LIB
-> +void topology_init_cpu_capacity_cppc(void);
-> +#endif
-> +
->  struct device_node;
->  bool topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu);
+> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+> -		bool interrupt);
+> -
+>  /**
+>   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
+>   * @dwc: pointer to the DWC3 context
+> @@ -1899,6 +1896,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+>  	 */
+>  	if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
+>  	    (dep->flags & DWC3_EP_WEDGE) ||
+> +	    (dep->flags & DWC3_EP_DELAY_STOP) ||
+>  	    (dep->flags & DWC3_EP_STALL)) {
+>  		dep->flags |= DWC3_EP_DELAY_START;
+>  		return 0;
+> @@ -2033,6 +2031,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>  		if (r == req) {
+>  			struct dwc3_request *t;
 >  
-> 
+> +			if (dwc->ep0state != EP0_SETUP_PHASE && !dwc->delayed_status)
+> +				dep->flags |= DWC3_EP_DELAY_STOP;
+> +
+>  			/* wait until it is processed */
+>  			dwc3_stop_active_transfer(dep, true, true);
+>  
+> @@ -2116,7 +2117,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+>  		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
+>  			dwc3_gadget_move_cancelled_request(req, DWC3_REQUEST_STATUS_STALLED);
+>  
+> -		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING) {
+> +		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
+> +		    (dep->flags & DWC3_EP_DELAY_STOP)) {
+>  			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
+>  			return 0;
+>  		}
+> @@ -3596,7 +3598,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
+>  	}
+>  }
+>  
+> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+> +void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>  	bool interrupt)
+
+This is a horrid api (2 booleans?)  But you aren't adding it so I guess
+we can live with it :(
+
+thanks,
+
+greg k-h

@@ -2,138 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23AF4D2FC2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64634D2FC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiCINOS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Mar 2022 08:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
+        id S233030AbiCINPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:15:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiCINOR (ORCPT
+        with ESMTP id S230048AbiCINPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:14:17 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ACA310A7D1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:13:18 -0800 (PST)
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-ySWuyVfmPTaf810awxiH3A-1; Wed, 09 Mar 2022 08:13:14 -0500
-X-MC-Unique: ySWuyVfmPTaf810awxiH3A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DB66151DC;
-        Wed,  9 Mar 2022 13:13:12 +0000 (UTC)
-Received: from x1.com (unknown [10.22.8.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E77D22E11;
-        Wed,  9 Mar 2022 13:13:05 +0000 (UTC)
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: [PATCH] tracing/osnoise: Do not unregister events twice
-Date:   Wed,  9 Mar 2022 14:13:02 +0100
-Message-Id: <938765e17d5a781c2df429a98f0b2e7cc317b022.1646823913.git.bristot@kernel.org>
+        Wed, 9 Mar 2022 08:15:45 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D3616BF94;
+        Wed,  9 Mar 2022 05:14:47 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id o22so1768128qta.8;
+        Wed, 09 Mar 2022 05:14:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XUvHkX5812DRzHn1EeBQVzC3fP1RFckTmLb18DWoP3k=;
+        b=6wHKbUNbojhRwIiQDr9dO5S9/0jaMiZ0uNM3YctyP79ldtZbFXWga5qoZNADrFhf1o
+         O6mThS2UHOzRI35EMqx1lKUDrqNH1qv94UHMoLFq9KMLCWX6LE4dfWi3oT+jTlIJXtLy
+         527IHtqr7BYxrQNj6exADxXkOvSp/ThTpRYJJYgZrMoBKyQacJVolaogqeLXGMy7q+fU
+         5LLkxj8y0PN4WLqGKl9hhUPKqfLGdJDv+wGooTbgKnG8/OTkOmDvD6kqVbbD1XXOf7un
+         TAqwkYeyBWvRAz1/sd1QtliXW/BkM5YoS0mZIZkL4KaACFYxyM75HVHx7DHPEu1Ng3jr
+         CCaQ==
+X-Gm-Message-State: AOAM5329fz7ldQYda+Y3PCAurzwXaK8CmhC+tZZyWELLDPE/D83uoXc4
+        8PW1LuJPu3Qui6Lmh4+RnjVcYoXGxnYXXw==
+X-Google-Smtp-Source: ABdhPJzEzDR50mDZSfeGC6D0g8OQll9ZINOWap6xYu3WWtZ7RMt7TRCGdJoVuUJqnqR+Qrd4aULJYg==
+X-Received: by 2002:a05:622a:14d0:b0:2e0:64e7:3920 with SMTP id u16-20020a05622a14d000b002e064e73920mr12808558qtx.61.1646831685321;
+        Wed, 09 Mar 2022 05:14:45 -0800 (PST)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id a10-20020a05622a02ca00b002e06585f36csm1234115qtx.23.2022.03.09.05.14.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 05:14:44 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id h126so4288870ybc.1;
+        Wed, 09 Mar 2022 05:14:44 -0800 (PST)
+X-Received: by 2002:a5b:5d0:0:b0:623:c68d:d473 with SMTP id
+ w16-20020a5b05d0000000b00623c68dd473mr16176129ybp.506.1646831684073; Wed, 09
+ Mar 2022 05:14:44 -0800 (PST)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1646683502.git.geert@linux-m68k.org> <c665d6ba072f3debb3fa0a139454fefef6a55011.1646683502.git.geert@linux-m68k.org>
+ <355f94c7-fc8a-7d92-5979-5b1b49c1d738@redhat.com>
+In-Reply-To: <355f94c7-fc8a-7d92-5979-5b1b49c1d738@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Mar 2022 14:14:32 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV8X1k1BeHoNOGkTQq4bQM5bpr7nMzVfzD6VYB7vvuWNw@mail.gmail.com>
+Message-ID: <CAMuHMdV8X1k1BeHoNOGkTQq4bQM5bpr7nMzVfzD6VYB7vvuWNw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/10] drm/fb-helper: Add support for DRM_FORMAT_C[124]
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nicolas reported that using:
+Hi Javier,
 
- # trace-cmd record -e all -M 10 -p osnoise --poll
+On Wed, Mar 9, 2022 at 2:10 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> On 3/7/22 21:52, Geert Uytterhoeven wrote:
+> > Add support for color-indexed frame buffer formats with two, four, and
+> > sixteen colors to the DRM framebuffer helper functions:
+> >   1. Add support for 1, 2, and 4 bits per pixel to the damage helper,
+> >   2. For color-indexed modes, the length of the color bitfields must be
+> >      set to the color depth, else the logo code may pick a logo with too
+> >      many colors.  Drop the incorrect DAC width comment, which
+> >      originates from the i915 driver.
+> >   3. Accept C[124] modes when validating or filling in struct
+> >      fb_var_screeninfo, and use the correct number of bits per pixel.
+> >   4. Set the visual to FB_VISUAL_PSEUDOCOLOR for all color-indexed
+> >      modes.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>
+> [snip]
+>
+> >  static void drm_fb_helper_fill_fix(struct fb_info *info, uint32_t pitch,
+> > -                                uint32_t depth)
+> > +                                bool is_color_indexed)
+> >  {
+> >       info->fix.type = FB_TYPE_PACKED_PIXELS;
+> > -     info->fix.visual = depth == 8 ? FB_VISUAL_PSEUDOCOLOR :
+> > -             FB_VISUAL_TRUECOLOR;
+> > +     info->fix.visual = is_color_indexed ? FB_VISUAL_PSEUDOCOLOR
+> > +                                         : info->fix.visual;
+>
+> Shouldn't this be the following instead ?
+>
+>   +     info->fix.visual = is_color_indexed ? FB_VISUAL_PSEUDOCOLOR
+>   +                                         : FB_VISUAL_TRUECOLOR;
 
-Resulted in the following kernel warning:
+Indeed. Will fix in v3.
+Thanks!
 
- ------------[ cut here ]------------
- WARNING: CPU: 0 PID: 1217 at kernel/tracepoint.c:404 tracepoint_probe_unregister+0x280/0x370
- [...]
- CPU: 0 PID: 1217 Comm: trace-cmd Not tainted 5.17.0-rc6-next-20220307-nico+ #19
- RIP: 0010:tracepoint_probe_unregister+0x280/0x370
- [...]
- CR2: 00007ff919b29497 CR3: 0000000109da4005 CR4: 0000000000170ef0
- Call Trace:
-  <TASK>
-  osnoise_workload_stop+0x36/0x90
-  tracing_set_tracer+0x108/0x260
-  tracing_set_trace_write+0x94/0xd0
-  ? __check_object_size.part.0+0x10a/0x150
-  ? selinux_file_permission+0x104/0x150
-  vfs_write+0xb5/0x290
-  ksys_write+0x5f/0xe0
-  do_syscall_64+0x3b/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
- RIP: 0033:0x7ff919a18127
- [...]
- ---[ end trace 0000000000000000 ]---
+Gr{oetje,eeting}s,
 
-The warning complains about an attempt to unregister an
-unregistered tracepoint.
+                        Geert
 
-This happens on trace-cmd because it first stops tracing, and
-then switches the tracer to nop. Which is equivalent to:
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-  # cd /sys/kernel/tracing/
-  # echo osnoise > current_tracer
-  # echo 0 > tracing_on
-  # echo nop > current_tracer
-
-The osnoise tracer stops the workload when no trace instance
-is actually collecting data. This can be caused both by
-disabling tracing or disabling the tracer itself.
-
-To avoid unregistering events twice, use the existing
-trace_osnoise_callback_enabled variable to check if the events
-(and the workload) are actually active before trying to
-deactivate them.
-
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Fixes: 2fac8d6486d5 ("tracing/osnoise: Allow multiple instances of the same tracer")
-Reported-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- kernel/trace/trace_osnoise.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index cfddb30e65ab..c9eb5001e5cb 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -2200,6 +2200,17 @@ static void osnoise_workload_stop(void)
- 	if (osnoise_has_registered_instances())
- 		return;
- 
-+	/*
-+	 * If callbacks were already disabled in a previous stop
-+	 * call, there is no need to disable then again.
-+	 *
-+	 * For instance, this happens when tracing is stopped via:
-+	 * echo 0 > tracing_on
-+	 * echo nop > current_tracer.
-+	 */
-+	if (!trace_osnoise_callback_enabled)
-+		return;
-+
- 	trace_osnoise_callback_enabled = false;
- 	/*
- 	 * Make sure that ftrace_nmi_enter/exit() see
--- 
-2.34.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

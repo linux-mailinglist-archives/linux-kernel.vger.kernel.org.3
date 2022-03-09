@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D514D35FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817DF4D3754
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbiCIRXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S237050AbiCIRYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233635AbiCIRXr (ORCPT
+        with ESMTP id S237044AbiCIRYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:23:47 -0500
-X-Greylist: delayed 148721 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Mar 2022 09:22:47 PST
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93970818BE;
-        Wed,  9 Mar 2022 09:22:47 -0800 (PST)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id AF7D7C0003;
-        Wed,  9 Mar 2022 17:22:43 +0000 (UTC)
-Message-ID: <5d89f306-d3fa-3e96-c4f3-587c9e3c605b@ovn.org>
-Date:   Wed, 9 Mar 2022 18:22:42 +0100
+        Wed, 9 Mar 2022 12:24:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C29782D01;
+        Wed,  9 Mar 2022 09:23:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 794F361073;
+        Wed,  9 Mar 2022 17:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A497C340E8;
+        Wed,  9 Mar 2022 17:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646846586;
+        bh=mSXOxDm0YQ/4bRgksAVQhm0M51442VyGvpFWc/rjdAg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hwmGntSJzO+BOdWggrE8RO+wwrUWI5gbLemWvf6pRnlLQT3jdEGQn6/I2fNO0Kahh
+         4PwGFv0QZsr/4eNoxgttSNHt0mCaU1IaxO8rRyXD0E7UeZ+WgRTErF193RDDP4c10h
+         Efh3Akk9SCJYaK020CxPZrQlmQCGLsI2kGwi6ThM0rJoGgrJjPOKT9Ym/SMeediYrx
+         AmCoB6t3UphglNfOrXN96U+9h1bIakCmmGCuaDafwuHFGtZTYtagakME47Gm9HHerH
+         dN+CBm5CnUaD1LpKhSNb8v5MaiJVTd6BMFjyBbP9o6lcqs3EaaBxq+i7Id9IGVbzxg
+         vry6HNW6enpRg==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Mike Rapport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] docs/kernel-parameters: update description of mem=
+Date:   Wed,  9 Mar 2022 19:22:58 +0200
+Message-Id: <20220309172258.1183796-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     i.maximets@ovn.org, "David S. Miller" <davem@davemloft.net>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Aaron Conole <aconole@redhat.com>
-Subject: Re: [PATCH net-next] net: openvswitch: fix uAPI incompatibility with
- existing user space
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, Roi Dayan <roid@nvidia.com>
-References: <20220309155623.2996968-1-i.maximets@ovn.org>
-From:   Ilya Maximets <i.maximets@ovn.org>
-In-Reply-To: <20220309155623.2996968-1-i.maximets@ovn.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 16:56, Ilya Maximets wrote:
-> Few years ago OVS user space made a strange choice in the commit [1]
-> to define types only valid for the user space inside the copy of a
-> kernel uAPI header.  '#ifndef __KERNEL__' and another attribute was
-> added later.
-> 
-> This leads to the inevitable clash between user space and kernel types
-> when the kernel uAPI is extended.  The issue was unveiled with the
-> addition of a new type for IPv6 extension header in kernel uAPI.
-> 
-> When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to the
-> older user space application, application tries to parse it as
-> OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message as
-> malformed.  Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied along with
-> every IPv6 packet that goes to the user space, IPv6 support is fully
-> broken.
-> 
-> Fixing that by bringing these user space attributes to the kernel
-> uAPI to avoid the clash.  Strictly speaking this is not the problem
-> of the kernel uAPI, but changing it is the only way to avoid breakage
-> of the older user space applications at this point.
-> 
-> These 2 types are explicitly rejected now since they should not be
-> passed to the kernel.  Additionally, OVS_KEY_ATTR_TUNNEL_INFO moved
-> out from the '#ifdef __KERNEL__' as there is no good reason to hide
-> it from the userspace.  And it's also explicitly rejected now, because
-> it's for in-kernel use only.
-> 
-> Comments with warnings were added to avoid the problem coming back.
-> 
->  [1] beb75a40fdc2 ("userspace: Switching of L3 packets in L2 pipeline")
-> 
-> Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extension header support")
-> Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com
-> Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295bfd6521b0068b4cd12f6de507c
-> Reported-by: Roi Dayan <roid@nvidia.com>
-> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-> ---
-> 
-> Roi, could you please test this change on your setup?
-> 
-> I didn't run system tests myself yet, setting up environment at the moment.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-OK.  I set up my own environment and the patch doesn't seem to work.
-Investigating.
+The existing description of mem= does not cover all the cases and
+differences between how architectures treat it.
+
+Extend the description to match the code.
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+v1: https://lore.kernel.org/all/20220309122446.1118738-1-rppt@kernel.org
+* drop clumsy and redundant paragraph about Hexagon
+
+ .../admin-guide/kernel-parameters.txt          | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index f5a27f067db9..40cd4136331b 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2834,6 +2834,13 @@
+ 			2 when the kernel is not able to see the whole system memory;
+ 			3 memory that lies after 'mem=' boundary is excluded from
+ 			 the hypervisor, then assigned to KVM guests.
++			4 to limit the memory available for kdump kernel.
++
++			[ARC,MICROBLAZE] - the limit applies only to low memory,
++			high memory is not affected.
++
++			[ARM64] - only limits memory covered by the linear
++			mapping. The NOMAP regions are not affected.
+ 
+ 			[X86] Work as limiting max address. Use together
+ 			with memmap= to avoid physical address space collisions.
+@@ -2844,6 +2851,17 @@
+ 			in above case 3, memory may need be hot added after boot
+ 			if system memory of hypervisor is not sufficient.
+ 
++	mem=nn[KMG]@ss[KMG]
++			[ARM,MIPS] - override the memory layout reported by
++			firmware.
++			Define a memory region of size nn[KMG] starting at
++			ss[KMG].
++			Multiple different regions can be specified with
++			multiple mem= parameters on the command line.
++
++	mem=nn[KMG]	[HEXAGON] Set the memory size.
++			Must be specified, otherwise memory size will be 0.
++
+ 	mem=nopentium	[BUGS=X86-32] Disable usage of 4MB pages for kernel
+ 			memory.
+ 
+-- 
+2.34.1
+

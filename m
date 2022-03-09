@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CC94D3ABB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B45E4D3A9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238060AbiCIUCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S238009AbiCITuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235423AbiCIUCG (ORCPT
+        with ESMTP id S234660AbiCITuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:02:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1814D2D8;
-        Wed,  9 Mar 2022 12:01:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A78AA61982;
-        Wed,  9 Mar 2022 19:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB0EC340F6;
-        Wed,  9 Mar 2022 19:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646855349;
-        bh=vLWP7Mz1loKXAb3DtQpG0OTSE1xeUnN23OMpCL3CeWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KDQyLvFoiqpenp9TLxg7LLUJNyjnj7ylkJMcOzp6owy80ytt6FI07RIh5EW9UJFpE
-         EVa7KR0f17MBf4Qjb1ckQ1kkCvl/CYsRfdBzc2nsz63RxM2FA0ymXd9QTneB+GAhK/
-         DgzqOfcsLb22La8VJMRGG1wWWAC2yb/gOqdRnuGdNJ2ILYFSz8dkXzGeaXlIOUnh6O
-         fpHTqJeralBNOQaLkuXvqIB3//XGERraP26JGoYJYPnIDNFLcd9KvPvhrFohk5OwQX
-         m4h+woBg34bDT6DK8932+pOn7HsLwq9OPr7eHDnUOU1ZAit+dgWxASMpS3UjuQqbK/
-         e3il182jgGS9Q==
-Date:   Wed, 9 Mar 2022 19:49:07 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
-Message-ID: <YikEs7RNgPXTQolv@gmail.com>
-References: <20220303201312.3255347-1-kbusch@kernel.org>
- <20220303201312.3255347-7-kbusch@kernel.org>
- <your-ad-here.call-01646770901-ext-3299@work.hours>
- <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
- <YigzoKRJ1EHFRZY9@sol.localdomain>
- <20220309193126.GA3950874@dhcp-10-100-145-180.wdc.com>
+        Wed, 9 Mar 2022 14:50:21 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4139E266D;
+        Wed,  9 Mar 2022 11:49:20 -0800 (PST)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id DF720C0005;
+        Wed,  9 Mar 2022 19:49:16 +0000 (UTC)
+Message-ID: <01c03553-a5de-b040-6296-29282d2f95e9@ovn.org>
+Date:   Wed, 9 Mar 2022 20:49:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309193126.GA3950874@dhcp-10-100-145-180.wdc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     i.maximets@ovn.org, "David S. Miller" <davem@davemloft.net>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Aaron Conole <aconole@redhat.com>
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, Roi Dayan <roid@nvidia.com>
+References: <20220309155623.2996968-1-i.maximets@ovn.org>
+ <5d89f306-d3fa-3e96-c4f3-587c9e3c605b@ovn.org>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [PATCH net-next] net: openvswitch: fix uAPI incompatibility with
+ existing user space
+In-Reply-To: <5d89f306-d3fa-3e96-c4f3-587c9e3c605b@ovn.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 11:31:26AM -0800, Keith Busch wrote:
-> On Tue, Mar 08, 2022 at 08:57:04PM -0800, Eric Biggers wrote:
-> > On Tue, Mar 08, 2022 at 12:27:47PM -0800, Keith Busch wrote:
-> > > On Tue, Mar 08, 2022 at 09:21:41PM +0100, Vasily Gorbik wrote:
-> > > > On Thu, Mar 03, 2022 at 12:13:10PM -0800, Keith Busch wrote:
-> > > > > Hardware specific features may be able to calculate a crc64, so provide
-> > > > > a framework for drivers to register their implementation. If nothing is
-> > > > > registered, fallback to the generic table lookup implementation. The
-> > > > > implementation is modeled after the crct10dif equivalent.
-> > > > 
-> > > > Hi Keith,
-> > > > 
-> > > > this is failing on big-endian systems. I get the following on s390:
-> > > 
-> > > Oh, I see the put_unaligned_le64() in chksum_final() was not the correct
-> > > action. I'll send an update, thank you for the report.
-> > 
-> > Or you could make the digests in your test vectors have have a consistent byte
-> > order, probably little endian.  That's how "shash" algorithms in the crypto API
-> > normally work, including crc32 and crc32c; they produce bytes as output.  I see
-> > that crct10dif violates that convention, and I assume you copied it from there.
-> > I'm not sure you should do that; crct10dif might be more of a one-off quirk.
+On 3/9/22 18:22, Ilya Maximets wrote:
+> On 3/9/22 16:56, Ilya Maximets wrote:
+>> Few years ago OVS user space made a strange choice in the commit [1]
+>> to define types only valid for the user space inside the copy of a
+>> kernel uAPI header.  '#ifndef __KERNEL__' and another attribute was
+>> added later.
+>>
+>> This leads to the inevitable clash between user space and kernel types
+>> when the kernel uAPI is extended.  The issue was unveiled with the
+>> addition of a new type for IPv6 extension header in kernel uAPI.
+>>
+>> When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to the
+>> older user space application, application tries to parse it as
+>> OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message as
+>> malformed.  Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied along with
+>> every IPv6 packet that goes to the user space, IPv6 support is fully
+>> broken.
+>>
+>> Fixing that by bringing these user space attributes to the kernel
+>> uAPI to avoid the clash.  Strictly speaking this is not the problem
+>> of the kernel uAPI, but changing it is the only way to avoid breakage
+>> of the older user space applications at this point.
+>>
+>> These 2 types are explicitly rejected now since they should not be
+>> passed to the kernel.  Additionally, OVS_KEY_ATTR_TUNNEL_INFO moved
+>> out from the '#ifdef __KERNEL__' as there is no good reason to hide
+>> it from the userspace.  And it's also explicitly rejected now, because
+>> it's for in-kernel use only.
+>>
+>> Comments with warnings were added to avoid the problem coming back.
+>>
+>>  [1] beb75a40fdc2 ("userspace: Switching of L3 packets in L2 pipeline")
+>>
+>> Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extension header support")
+>> Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com
+>> Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295bfd6521b0068b4cd12f6de507c
+>> Reported-by: Roi Dayan <roid@nvidia.com>
+>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>> ---
+>>
+>> Roi, could you please test this change on your setup?
+>>
+>> I didn't run system tests myself yet, setting up environment at the moment.
 > 
-> Right, I started with the t10dif implementation. I changed it to the
-> unaligned accessor since you indicated the output buffer doesn't have an
-> alignment guarantee.
-> 
-> Perhaps I'm missing something, but it looks easier to just use the CPU
-> native endianess here. The only users for t10 and rocksoft transform to
-> big-endian for the wire protocol at the end, but there's no need to
-> maintain a specific byte order before setting the payload.
+> OK.  I set up my own environment and the patch doesn't seem to work.
+> Investigating.
 
-The issue is that every other "shash" algorithm besides crct10dif, including
-crc32 and crc32c, follow the convention of treating the digest as bytes.  Doing
-otherwise is unusual for the crypto API.  So I have a slight preference for
-treating it as bytes.  Perhaps see what Herbert Xu (maintainer of the crypto
-API, Cc'ed) recommends?
+I figured that out.  The problem is that OVS_KEY_ATTR_IPV6_EXTHDRS == 32.
+That causes (1 << type) to overflow during the parsing and enable incorrect
+bit in the mask of seen attributes.  The following additional change fixes
+the problem:
 
-- Eric
+diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
+index c9c49e5cd67f..5176f6ccac8e 100644
+--- a/net/openvswitch/flow_netlink.c
++++ b/net/openvswitch/flow_netlink.c
+@@ -489,7 +489,7 @@ static int __parse_flow_nlattrs(const struct nlattr *attr,
+                        return -EINVAL;
+                }
+ 
+-               if (attrs & (1 << type)) {
++               if (attrs & (1ULL << type)) {
+                        OVS_NLERR(log, "Duplicate key (type %d).", type);
+                        return -EINVAL;
+                }
+@@ -502,7 +502,7 @@ static int __parse_flow_nlattrs(const struct nlattr *attr,
+                }
+ 
+                if (!nz || !is_all_zero(nla_data(nla), nla_len(nla))) {
+-                       attrs |= 1 << type;
++                       attrs |= 1ULL << type;
+                        a[type] = nla;
+                }
+        }
+---
+
+I'll run few more checks to be sure and send v2 with above change applied.
+
+We may also want to have a cosmetic change that converts all (1 << OVS_*)
+to (1ULL << OVS_*) even for attributes < 32 as a follow up.  Current code
+looks a bit inconsistent.
+
+Best regards, Ilya Maximets.

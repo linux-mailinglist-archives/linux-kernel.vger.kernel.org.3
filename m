@@ -2,132 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449B64D38A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 656A54D38AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbiCISTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S235466AbiCISWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbiCISTv (ORCPT
+        with ESMTP id S230211AbiCISWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:19:51 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5541E15A18;
-        Wed,  9 Mar 2022 10:18:51 -0800 (PST)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KDL5K3dbKz67LM6;
-        Thu, 10 Mar 2022 02:17:25 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Wed, 9 Mar 2022 19:18:48 +0100
-Received: from localhost (10.47.72.217) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Mar
- 2022 18:18:47 +0000
-Date:   Wed, 9 Mar 2022 18:18:43 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     <gregkh@linuxfoundation.org>, <rafael.j.wysocki@intel.com>,
-        "Alison Schofield" <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>
-Subject: Re: [PATCH 02/11] cxl/core: Refactor a cxl_lock_class() out of
- cxl_nested_lock()
-Message-ID: <20220309181843.000003fe@Huawei.com>
-In-Reply-To: <164610294030.2682974.642590821548098371.stgit@dwillia2-desk3.amr.corp.intel.com>
-References: <164610292916.2682974.12924748003366352335.stgit@dwillia2-desk3.amr.corp.intel.com>
-        <164610294030.2682974.642590821548098371.stgit@dwillia2-desk3.amr.corp.intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 9 Mar 2022 13:22:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB268639A;
+        Wed,  9 Mar 2022 10:21:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48715B8228E;
+        Wed,  9 Mar 2022 18:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF3EC340E8;
+        Wed,  9 Mar 2022 18:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646850082;
+        bh=KYH8xq8zPZxVt7/qLQbqEEEsZnbOUj8+PXHBXLZSS1U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=eZjtaBoTG1WeK4raynVQRIJBpEUu4kr2FHT9iox+5o4IZ6qR3oCPmXeI96LZiBQYm
+         10ZADPQAK2qfGqslNzV35aiIi5abzpJlCtJvB3KXlC4AyTKxGD7xh15Be0GgSyjq0q
+         hay8lXTUZ1ZfbRSI2Z7yI4o+HYb5IEvRQtkd4frL7DaUnyNf0NYaBXmQjxir+1Trrx
+         QuGaOLjF7q+h6BKKgljaiZ+kTueqTnE5h2llrVvvkrQbmUIE+ablQT7ll8Pnxxn6E/
+         C2bTvnoZAhG+I2w+ISu5VLEP1atFCzkMKIUCIfaFD7hJwImH7jmhCKbH/oIpdei/0F
+         GH21H7HBz8bXA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.72.217]
-X-ClientProxiedBy: lhreml733-chm.china.huawei.com (10.201.108.84) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220304151743.2731552-1-abel.vesa@nxp.com>
+References: <20220304151743.2731552-1-abel.vesa@nxp.com>
+Subject: Re: [GIT PULL] clk: imx: Updates for v5.18
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>,
+        Mike Turquette <mturquette@baylibre.com>
+Date:   Wed, 09 Mar 2022 10:21:20 -0800
+User-Agent: alot/0.10
+Message-Id: <20220309182121.EFF3EC340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 18:49:00 -0800
-Dan Williams <dan.j.williams@intel.com> wrote:
+Quoting Abel Vesa (2022-03-04 07:17:43)
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac=
+07:
+>=20
+>   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
+clk-imx-5.18
+>=20
+> for you to fetch changes up to b09c68dc57c9d44071d83bb935b733f53ea2b2b4:
+>=20
+>   clk: imx: pll14xx: Support dynamic rates (2022-03-04 17:06:30 +0200)
+>=20
+> ----------------------------------------------------------------
 
-> In preparation for upleveling device_lock() lockdep annotation support into
-> the core, provide a helper to retrieve the lock class. This lock_class
-> will be used with device_set_lock_class() to idenify the CXL nested
-
-idenify?
-
-> locking rules.
-> 
-> Cc: Alison Schofield <alison.schofield@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Ben Widawsky <ben.widawsky@intel.com>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-
-Otherwise looks fine to me.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  drivers/cxl/cxl.h |   19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 5486fb6aebd4..ca8a61a623b7 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -509,13 +509,12 @@ enum cxl_lock_class {
->  	 */
->  };
->  
-> -static inline void cxl_nested_lock(struct device *dev)
-> +static inline int cxl_lock_class(struct device *dev)
->  {
->  	if (is_cxl_port(dev)) {
->  		struct cxl_port *port = to_cxl_port(dev);
->  
-> -		mutex_lock_nested(&dev->lockdep_mutex,
-> -				  CXL_PORT_LOCK + port->depth);
-> +		return CXL_PORT_LOCK + port->depth;
->  	} else if (is_cxl_decoder(dev)) {
->  		struct cxl_port *port = to_cxl_port(dev->parent);
->  
-> @@ -523,14 +522,18 @@ static inline void cxl_nested_lock(struct device *dev)
->  		 * A decoder is the immediate child of a port, so set
->  		 * its lock class equal to other child device siblings.
->  		 */
-> -		mutex_lock_nested(&dev->lockdep_mutex,
-> -				  CXL_PORT_LOCK + port->depth + 1);
-> +		return CXL_PORT_LOCK + port->depth + 1;
->  	} else if (is_cxl_nvdimm_bridge(dev))
-> -		mutex_lock_nested(&dev->lockdep_mutex, CXL_NVDIMM_BRIDGE_LOCK);
-> +		return CXL_NVDIMM_BRIDGE_LOCK;
->  	else if (is_cxl_nvdimm(dev))
-> -		mutex_lock_nested(&dev->lockdep_mutex, CXL_NVDIMM_LOCK);
-> +		return CXL_NVDIMM_LOCK;
->  	else
-> -		mutex_lock_nested(&dev->lockdep_mutex, CXL_ANON_LOCK);
-> +		return CXL_ANON_LOCK;
-> +}
-> +
-> +static inline void cxl_nested_lock(struct device *dev)
-> +{
-> +	mutex_lock_nested(&dev->lockdep_mutex, cxl_lock_class(dev));
->  }
->  
->  static inline void cxl_nested_unlock(struct device *dev)
-> 
-
+Thanks. Pulled into clk-next

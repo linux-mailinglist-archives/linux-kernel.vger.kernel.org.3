@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3A24D2D47
+	by mail.lfdr.de (Postfix) with ESMTP id 55FA34D2D48
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbiCIKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S230255AbiCIKnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiCIKm3 (ORCPT
+        with ESMTP id S230147AbiCIKnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:42:29 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA6B4F45A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:41:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=z4mmaxHNrXBGVaJHxv43kF3l/Y+f4qiTwxrkpu78Hyo=; b=BN
-        Gp83IgqHQfM8bfylB5NIE2XSsbWdoAc2n18JGuvGO6ihMcyoLssgBoHx/cpHPocq8NgpNGkOQm9hZ
-        7ZpJtcRAzNewRg5d8fLVFtp8o81hkdrnXc4CDui0dBeO7S7hufgkSCDYkryRCM3rSDom/IsjLwRBY
-        cyhRL/B8Xbkrv6h6e1HjQcZ3C6fgN+NpC0lrpvfJLhQ+X/CVo5FSZM+H8tQq6Re87GPZmkqcZPKBI
-        8yP7GnFqOmK2PvdfWQsVt1gVIWBIDyA3f9OhcHx6/l4ASgHEJe3ZjPKD3UmEtXkOjoXcUyOxJwqBx
-        lsTqxIzh5l7d6n/rHZiceo2a+vf4mRFw==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nRtkj-0008Ez-Sx; Wed, 09 Mar 2022 10:41:09 +0000
-From:   John Keeping <john@metanate.com>
-To:     alsa-devel@alsa-project.org
-Cc:     John Keeping <john@metanate.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Daniel Beer <daniel.beer@igorinstitute.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: tas5805m: fix pdn polarity
-Date:   Wed,  9 Mar 2022 10:41:04 +0000
-Message-Id: <20220309104104.3605112-1-john@metanate.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 05:43:16 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61FB7C7BE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:42:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D873DCE1DE0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019C9C340E8;
+        Wed,  9 Mar 2022 10:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646822533;
+        bh=i1WAlMbFpCB4zFf44FTclwrRDmJsihZ4p4yLAZbvN18=;
+        h=Date:From:To:cc:Subject:From;
+        b=ijyge3i9GHK+mFdpsdESFjuhIs3QM9gcgReZDclb4mxgERdKt5D5rtENvG6e2Il2a
+         ezsyJQPe33ESZKJKy/MSS2Ul95d9MG+vzeLsakp3P4dvwQcDI8QZwV3DkhyTWIi5Be
+         v++xQdSgcqDwCXq3S//9bO/KLWMKku1WY/7n1zDxbPmRFSB2REKKqTmMS0OrT1vV4j
+         oMmGexeMmFbeE/lqAch6zVzXN5ryBkZ7QzQJMxIvP+yNQhBo1KhgUSlxKi7BqfivdA
+         s6v5p4v1GfkPBi08mFiYYRCgX8FnQFtkcJ/7lPn5/N3H0bP0CKxrsfCtZ7+70HmBFb
+         cHu4fRJmtTfTQ==
+Date:   Wed, 9 Mar 2022 11:42:10 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [GIT PULL] HID fixes
+Message-ID: <nycvar.YFH.7.76.2203091139210.24795@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The binding defines the GPIO as "pdn-gpios" so when the GPIO is active
-the expectation is that the power down signal is asserted, but the
-driver swaps this to represent the inverted logic of the electrical
-signal.
+Linus,
 
-The GPIO_ACTIVE_HIGH/LOW flags should be used to identify the inverted
-logic here with the driver treating power down as active when the mapped
-GPIO value is 1.
+please pull from
 
-Fixes: ec45268467f4 ("ASoC: add support for TAS5805M digital amplifier")
-Signed-off-by: John Keeping <john@metanate.com>
----
- sound/soc/codecs/tas5805m.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-linus
 
-diff --git a/sound/soc/codecs/tas5805m.c b/sound/soc/codecs/tas5805m.c
-index fa0e81ec875a..12146a860ef8 100644
---- a/sound/soc/codecs/tas5805m.c
-+++ b/sound/soc/codecs/tas5805m.c
-@@ -155,7 +155,7 @@ static const uint32_t tas5805m_volume[] = {
- 
- struct tas5805m_priv {
- 	struct regulator		*pvdd;
--	struct gpio_desc		*gpio_pdn_n;
-+	struct gpio_desc		*gpio_pdn;
- 
- 	uint8_t				*dsp_cfg_data;
- 	int				dsp_cfg_len;
-@@ -444,11 +444,11 @@ static int tas5805m_i2c_probe(struct i2c_client *i2c)
- 
- 	dev_set_drvdata(dev, tas5805m);
- 	tas5805m->regmap = regmap;
--	tas5805m->gpio_pdn_n = devm_gpiod_get(dev, "pdn", GPIOD_OUT_LOW);
--	if (IS_ERR(tas5805m->gpio_pdn_n)) {
-+	tas5805m->gpio_pdn = devm_gpiod_get(dev, "pdn", GPIOD_OUT_HIGH);
-+	if (IS_ERR(tas5805m->gpio_pdn)) {
- 		dev_err(dev, "error requesting PDN gpio: %ld\n",
--			PTR_ERR(tas5805m->gpio_pdn_n));
--		return PTR_ERR(tas5805m->gpio_pdn_n);
-+			PTR_ERR(tas5805m->gpio_pdn));
-+		return PTR_ERR(tas5805m->gpio_pdn);
- 	}
- 
- 	/* This configuration must be generated by PPC3. The file loaded
-@@ -505,7 +505,7 @@ static int tas5805m_i2c_probe(struct i2c_client *i2c)
- 	}
- 
- 	usleep_range(100000, 150000);
--	gpiod_set_value(tas5805m->gpio_pdn_n, 1);
-+	gpiod_set_value(tas5805m->gpio_pdn, 0);
- 	usleep_range(10000, 15000);
- 
- 	/* Don't register through devm. We need to be able to unregister
-@@ -515,7 +515,7 @@ static int tas5805m_i2c_probe(struct i2c_client *i2c)
- 					 &tas5805m_dai, 1);
- 	if (ret < 0) {
- 		dev_err(dev, "unable to register codec: %d\n", ret);
--		gpiod_set_value(tas5805m->gpio_pdn_n, 0);
-+		gpiod_set_value(tas5805m->gpio_pdn, 1);
- 		regulator_disable(tas5805m->pvdd);
- 		return ret;
- 	}
-@@ -529,7 +529,7 @@ static int tas5805m_i2c_remove(struct i2c_client *i2c)
- 	struct tas5805m_priv *tas5805m = dev_get_drvdata(dev);
- 
- 	snd_soc_unregister_component(dev);
--	gpiod_set_value(tas5805m->gpio_pdn_n, 0);
-+	gpiod_set_value(tas5805m->gpio_pdn, 1);
- 	usleep_range(10000, 15000);
- 	regulator_disable(tas5805m->pvdd);
- 	return 0;
+to receive fixes for HID subsystem.
+
+=====
+- sysfs attributes leak fix for Google Vivaldi driver (Dmitry Torokhov)
+- fix for potential out-of-bounds read in Thrustmaster driver (Pavel 
+  Skripkin)
+- error handling reference leak in Elo driver (Jiri Kosina)
+- a few new device IDs
+=====
+
+Thanks.
+
+----------------------------------------------------------------
+Dmitry Torokhov (1):
+      HID: vivaldi: fix sysfs attributes leak
+
+Jia-Ju Bai (1):
+      HID: nintendo: check the return value of alloc_workqueue()
+
+Jiri Kosina (1):
+      HID: elo: Revert USB reference counting
+
+Lucas Zampieri (1):
+      HID: logitech-dj: add new lightspeed receiver id
+
+Michael Hübner (1):
+      HID: Add support for open wheel and no attachment to T300
+
+Pavel Skripkin (1):
+      HID: hid-thrustmaster: fix OOB read in thrustmaster_interrupts
+
+ drivers/hid/hid-elo.c          | 7 +------
+ drivers/hid/hid-logitech-dj.c  | 1 +
+ drivers/hid/hid-nintendo.c     | 4 ++++
+ drivers/hid/hid-thrustmaster.c | 8 ++++++++
+ drivers/hid/hid-vivaldi.c      | 2 +-
+ 5 files changed, 15 insertions(+), 7 deletions(-)
+
 -- 
-2.35.1
+Jiri Kosina
+SUSE Labs
 

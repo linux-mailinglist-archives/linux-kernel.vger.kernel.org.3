@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CDC4D2862
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D179E4D2861
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiCIF3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 00:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S229498AbiCIF35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 00:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCIF3m (ORCPT
+        with ESMTP id S229650AbiCIF3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 00:29:42 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB1F3D1E0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:28:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646803725; x=1678339725;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=97CBgfKzG/hf6ld2R9U1iapWBregjuYMrjFowuf2y98=;
-  b=bBIoHKI8wQExxUnJoW2lFgxsDn2BjXC9lqQXcLv1SEW5Yj7YwbsHnxd2
-   baeu1dCmhuHTkTT0RmO4c3DLOXhzCviQSCU4gQY13oNv9ZU1Vc9ljqN4A
-   QaSn0WDnfHRgVrmhtVd3pzkQt/GCSqYlHzuIEJ8CKWLPNmL6AignQAPXn
-   4=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 08 Mar 2022 21:28:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:28:44 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 21:28:42 -0800
-Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 21:28:38 -0800
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-To:     <akpm@linux-foundation.org>, <yuehaibing@huawei.com>,
-        <minchan@kernel.org>, <sfr@canb.auug.org.au>,
-        <rientjes@google.com>, <edgararriaga@google.com>, <mhocko@suse.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: [PATCH] mm: madvise: return correct bytes advised with process_madvise
-Date:   Wed, 9 Mar 2022 10:57:59 +0530
-Message-ID: <1646803679-11433-1-git-send-email-quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 9 Mar 2022 00:29:54 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6BD3FBD2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:28:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646803736; x=1678339736;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/NxnOKiOS7ncX+ehMkS3Xdu2QCm32Nku4ZRKzFQqlbI=;
+  b=nrz0bxpOzNfJI+9rQSmPPesW6TFM9BBmOpFSv/ATkgt8LMsC++JTFvsg
+   vVeXU1FTiPHmZhCoqpUV0GRFCv6HSvr8XfkrMIvdXWBXTYOAXHyFw2Rxh
+   3QQ2z3KAV2FQViFofl52DMKGNm92Oozz3349k1pspqLGoeebZvIVFtf+9
+   Pa5WezMDMDmCB+iAXyLNI6KHcTTynPXwmpDqm5Y6ejZkztA7CGXEf0cmS
+   eIfbXQoVA5z3Jicx4GeFonExnZyChK8LjL9wQdiiwzpdXbq+bhXElJ4tc
+   EClsNDl+/Wep0eQ3IxrM6646+x3WVH2tbEKBe9J9Y9aGMuFLWJ/eK/Gby
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242336305"
+X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
+   d="scan'208";a="242336305"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:28:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
+   d="scan'208";a="642026895"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2022 21:28:52 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRosW-0002eT-3L; Wed, 09 Mar 2022 05:28:52 +0000
+Date:   Wed, 9 Mar 2022 13:28:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: dtbs_check: ERROR: dtschema minimum version is v2021.2.1
+Message-ID: <202203091300.8HScLbcF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The process_madvise() system call returns error even after processing
-some VMA's passed in the 'struct iovec' vector list which leaves the
-user confused to know where to restart the advise next. It is also
-against this syscall man page[1] documentation where it mentions that
-"return value may be less than the total number of requested bytes, if
-an error occurred after some iovec elements were already processed.".
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+commit: e2b0d9987920f3dc727e08a1bf42296be9b5d6da dt-bindings: Bump dtschema version required to v2021.2.1
+date:   12 months ago
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220309/202203091300.8HScLbcF-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce: make ARCH=arm dtbs_check
 
-Consider a user passed 10 VMA's in the 'struct iovec' vector list of
-which 9 are processed but one. Then it just returns the error caused on
-that failed VMA despite the first 9 VMA's processed, leaving the user
-confused about on which VMA it is failed. Returning the number of bytes
-processed here can help the user to know which VMA it is failed on and
-thus can retry/skip the advise on that VMA.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1]https://man7.org/linux/man-pages/man2/process_madvise.2.html.
+All errors (new ones prefixed by >>):
 
-Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API"
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+   sort: -:2: disorder: 0
+>> ERROR: dtschema minimum version is v2021.2.1
+
 ---
- mm/madvise.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 38d0f51..d3b49b3 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1426,15 +1426,21 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
- 
- 	while (iov_iter_count(&iter)) {
- 		iovec = iov_iter_iovec(&iter);
-+		/*
-+		 * Even when [start, end) passed to do_madvise covers
-+		 * some unmapped addresses, it continues processing with
-+		 * returning ENOMEM at the end. Thus consider the range
-+		 * as processed when do_madvise() returns ENOMEM.
-+		 * This makes process_madvise() never returns ENOMEM.
-+		 */
- 		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
- 					iovec.iov_len, behavior);
--		if (ret < 0)
-+		if (ret < 0 && ret != -ENOMEM)
- 			break;
- 		iov_iter_advance(&iter, iovec.iov_len);
- 	}
- 
--	if (ret == 0)
--		ret = total_len - iov_iter_count(&iter);
-+	ret = (total_len - iov_iter_count(&iter)) ? : ret;
- 
- release_mm:
- 	mmput(mm);
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

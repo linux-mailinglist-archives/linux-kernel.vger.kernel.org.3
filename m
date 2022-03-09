@@ -2,74 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480FC4D292C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312B64D2934
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiCIG4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S230167AbiCIG6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiCIG4d (ORCPT
+        with ESMTP id S229501AbiCIG6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:56:33 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7704B161112
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:55:32 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 09 Mar 2022 15:55:30 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id B1C8D2006F55;
-        Wed,  9 Mar 2022 15:55:30 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 9 Mar 2022 15:55:30 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id E5EA2C1E22;
-        Wed,  9 Mar 2022 15:55:29 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] clk: uniphier: Fix fixed-rate initialization
-Date:   Wed,  9 Mar 2022 15:55:18 +0900
-Message-Id: <1646808918-30899-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 9 Mar 2022 01:58:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF9B5161129
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:57:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646809043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uQZVhMRBRFZnnKX2zkJLC/T4eTixzo4LpDh1ov3v/B8=;
+        b=WLWkIvBAmgGcYfmTSW0ZN/wwRriFlkVfcNsEZ4lluzWdZL+bYTgwIwGOkFER1NLVveVYvl
+        s06BhZ6r5V2033THJIQUVvfZZkZeyzkJC7eBwI7I9x2rEfYpCz7X2R6aU4ilYXnQav/dSS
+        s6GoEAb2w8afkorzVaMF2kXrcfi6dsE=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-i36aYWzJO2O6ufpasZajLw-1; Wed, 09 Mar 2022 01:57:23 -0500
+X-MC-Unique: i36aYWzJO2O6ufpasZajLw-1
+Received: by mail-io1-f69.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so1196294ioa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 22:57:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uQZVhMRBRFZnnKX2zkJLC/T4eTixzo4LpDh1ov3v/B8=;
+        b=UBj9JxFae6nQpgEAm2PUzPvOe/g515CA/BgdOf2HzPz0Wtld05W8rf/LFrfHsaWB4C
+         I41XMHuLMKvRMwpjhoYYxBPTawQZ6T9WIBFTfHaExtfLwXY6BgqY2Npb4q9qiObY43mW
+         UQvDvK9PYyUjWLfoGQr/sKnEI+B1Jg1e80aeilHM6zvnqVA007icticXXVqrJVRMau/8
+         dMBP83kRVVQE3jWPJMjuMVSaTEGmEMzq+aucrwOLMh8ta0nLuzPbfxjbMCNpe6UXANw4
+         R3+iPw+0eHubgiP9hLv75nqG+debuygON/FpHEE1e/dcXlw2JUmzKXWr27BnRuK1dZeE
+         yA7w==
+X-Gm-Message-State: AOAM532zfjXCxpntWhofdU8mCClwlvwijrWw0/+hKa4+4TSCidBGrFuh
+        zX545/zDPFP6kfDvASyY1g95pV2vO+yoyaTT8VvQqnYfFvqkvU7bLkJluSO1uquqGd7cmFXNNd2
+        zEx0DcTGT2PVzmuohYUw1ZFCE
+X-Received: by 2002:a02:782b:0:b0:317:ddef:fa78 with SMTP id p43-20020a02782b000000b00317ddeffa78mr4607889jac.226.1646809042187;
+        Tue, 08 Mar 2022 22:57:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJydiT/IcXzAEqQoDSaZupQDRdDRXGP1/vSHgDFZUSQ1ZWy+U3Vctkw+exsRQ+dmuJJRMFgHcA==
+X-Received: by 2002:a02:782b:0:b0:317:ddef:fa78 with SMTP id p43-20020a02782b000000b00317ddeffa78mr4607877jac.226.1646809041893;
+        Tue, 08 Mar 2022 22:57:21 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056e02158700b002c61541edd7sm671684ilu.3.2022.03.08.22.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 22:57:21 -0800 (PST)
+Date:   Tue, 8 Mar 2022 22:57:18 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <20220309065718.e4k2el2mlqn23yh2@treble>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200614.gyhp657bdq3rxapl@treble>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220308200614.gyhp657bdq3rxapl@treble>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed-rate clocks in UniPhier don't have any parent clocks, however,
-initial data "init.flags" isn't initialized, so it might be determined
-that there is a parent clock for fixed-rate clock.
+On Tue, Mar 08, 2022 at 12:06:18PM -0800, Josh Poimboeuf wrote:
+> As talked about on IRC there are still a few outstanding issues, that
+> I'm fine with fixing after the merge window during the upcoming -next
+> cycle:
+> 
+> - xen hypercall page functions need 'ret' - (I think you already fixed)
+> 
+> - why don't unreachables need to fill up the entire sym hole?
+> 
+> - get rid of the 'c_file' hack
+> 
+> - improve cmdline option intuitive-ness
+> 
+> - properly integrate the retpoline "demotion" with the new Spectre BHI
+>   related patches - probably still needs more discussion - for example
+>   we might instead want to disable IBT and warn
 
-This sets init.flags to zero as initialization.
+One more:
 
-Cc: <stable@vger.kernel.org>
-Fixes: 734d82f4a678 ("clk: uniphier: add core support code for UniPhier clock driver")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- drivers/clk/uniphier/clk-uniphier-fixed-rate.c | 1 +
- 1 file changed, 1 insertion(+)
+- Changing objtool should force a vmlinux re-link.
 
-diff --git a/drivers/clk/uniphier/clk-uniphier-fixed-rate.c b/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-index 5319cd380480..3bc55ab75314 100644
---- a/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-+++ b/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-@@ -24,6 +24,7 @@ struct clk_hw *uniphier_clk_register_fixed_rate(struct device *dev,
- 
- 	init.name = name;
- 	init.ops = &clk_fixed_rate_ops;
-+	init.flags = 0;
- 	init.parent_names = NULL;
- 	init.num_parents = 0;
- 
 -- 
-2.7.4
+Josh
 

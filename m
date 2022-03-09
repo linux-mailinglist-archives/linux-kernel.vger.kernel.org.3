@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85F24D2A1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4670A4D2A32
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiCIH6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S231160AbiCIH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiCIH4q (ORCPT
+        with ESMTP id S230522AbiCIH4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:56:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D5216307A;
-        Tue,  8 Mar 2022 23:55:17 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:55:15 -0000
+        Wed, 9 Mar 2022 02:56:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDE4166A72;
+        Tue,  8 Mar 2022 23:55:18 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:55:16 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812516;
+        s=2020; t=1646812517;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TfzTGlcUujJvCl42SOtzUGnx4onyvN51b7YdmOYIQDw=;
-        b=kCQtTlZx4u+FpYFBc17efhiQBEddqUBY5tKmoCJJ8rY4VsKR+d25zE+FOX+eksmDrpCJ/o
-        QPsRPAZdcddd3YVKY4kfhw5aheUuenTfy8btatOTRJEsPQU73rN8GWUiXv6BXmQJduOQVh
-        rvPYMdr/0I7z5el16wFzg/HIX4jPQP7fRywZAmpRJKqGQP6qXVHP0nShmVRsJMBGyL4irP
-        03yMXZHcaqVTFVEcyUKYCgr+DfyhnX1Atc7mlypr5A3ujn4Y4Kt2oVy/qJ5MMgcbbixhFK
-        ialgBl3L8kZxwglGUNYm2texBl3jdteHuH9lFSmDumr9ZyNTHYRx/NLkeiptRQ==
+        bh=U8/4N8JaSBdR6mS3YbiVfpQNfFZWqC/Iyz06bwsJhz8=;
+        b=maLNT6nRb6sNzu/X8HcOzOSBzdhMqKFXM3fWcXHgHH+gKBkjF8kq0Q2LgY3V0GfIfquWpp
+        +Y60JQwPsLC/t+xESUBfGsUfW8yfaJEZAQMHNODU5RAaqV4w/ViMVF1ll47h/S3HJlIAxP
+        KtisVofBmJ/sb4z9a1PNG+qlJTzv2OYMsKTdEvdMcisDxAP0Pj2OWddDHEvo37AVG0XbMF
+        7Ab1+jGzmf6Tl+4+18N2SeZT5h5x5x5p1myLbL6kA0SW/SZnXPUtzw6H7kEbOyrXquz/79
+        SzaPVIdQSn0ykI2XjDs+fE4OhmUAn5C+E1lBcLZZw8E/DXkDZR3idYFDuV1UoA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812516;
+        s=2020e; t=1646812517;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TfzTGlcUujJvCl42SOtzUGnx4onyvN51b7YdmOYIQDw=;
-        b=WffJGLd1smQzuyNsQszPsRL1116+a98xJpCUBMbeZUoqEzaqBQiS1J3cJ39r1fkJ2TbxNP
-        mq4BSAO/4u71qMCA==
+        bh=U8/4N8JaSBdR6mS3YbiVfpQNfFZWqC/Iyz06bwsJhz8=;
+        b=nESRsv0GVTs30AH3o8OxF6LSTulhNc8rwkhB04hx4qjSwaHjKiYd57Wb9fdsZjvH0UmI7R
+        J+2MwteOvektWEDw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Default ignore INT3 for unreachable
+Subject: [tip: x86/core] objtool: Add --dry-run
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miroslav Benes <mbenes@suse.cz>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154317.343312938@infradead.org>
-References: <20220308154317.343312938@infradead.org>
+In-Reply-To: <20220308154317.282720146@infradead.org>
+References: <20220308154317.282720146@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681251517.16921.3649961493777847480.tip-bot2@tip-bot2>
+Message-ID: <164681251606.16921.7759685904767601146.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,59 +69,74 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     def466688a10fe8a2e1da7d3a72b4a29ff6b1a9e
-Gitweb:        https://git.kernel.org/tip/def466688a10fe8a2e1da7d3a72b4a29ff6b1a9e
+Commit-ID:     951c6aeb3bda02073895ace47630f4796a8b6a9d
+Gitweb:        https://git.kernel.org/tip/951c6aeb3bda02073895ace47630f4796a8b6a9d
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:14 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:13 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:27 +01:00
 
-objtool: Default ignore INT3 for unreachable
+objtool: Add --dry-run
 
-Ignore all INT3 instructions for unreachable code warnings, similar to NOP.
-This allows using INT3 for various paddings instead of NOPs.
+Add a --dry-run argument to skip writing the modifications. This is
+convenient for debugging.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154317.343312938@infradead.org
+Link: https://lore.kernel.org/r/20220308154317.282720146@infradead.org
 ---
- tools/objtool/check.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ tools/objtool/builtin-check.c           | 3 ++-
+ tools/objtool/elf.c                     | 3 +++
+ tools/objtool/include/objtool/builtin.h | 2 +-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7c33ec6..311bfc6 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3115,9 +3115,8 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 		switch (insn->type) {
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index 38070f2..853af93 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -20,7 +20,7 @@
+ #include <objtool/objtool.h>
  
- 		case INSN_RETURN:
--			if (next_insn && next_insn->type == INSN_TRAP) {
--				next_insn->ignore = true;
--			} else if (sls && !insn->retpoline_safe) {
-+			if (sls && !insn->retpoline_safe &&
-+			    next_insn && next_insn->type != INSN_TRAP) {
- 				WARN_FUNC("missing int3 after ret",
- 					  insn->sec, insn->offset);
- 			}
-@@ -3164,9 +3163,8 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 			break;
+ bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-     validate_dup, vmlinux, mcount, noinstr, backup, sls;
++     validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
  
- 		case INSN_JUMP_DYNAMIC:
--			if (next_insn && next_insn->type == INSN_TRAP) {
--				next_insn->ignore = true;
--			} else if (sls && !insn->retpoline_safe) {
-+			if (sls && !insn->retpoline_safe &&
-+			    next_insn && next_insn->type != INSN_TRAP) {
- 				WARN_FUNC("missing int3 after indirect jump",
- 					  insn->sec, insn->offset);
- 			}
-@@ -3337,7 +3335,7 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
- 	int i;
- 	struct instruction *prev_insn;
+ static const char * const check_usage[] = {
+ 	"objtool check [<options>] file.o",
+@@ -46,6 +46,7 @@ const struct option check_options[] = {
+ 	OPT_BOOLEAN('M', "mcount", &mcount, "generate __mcount_loc"),
+ 	OPT_BOOLEAN('B', "backup", &backup, "create .orig files before modification"),
+ 	OPT_BOOLEAN('S', "sls", &sls, "validate straight-line-speculation"),
++	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
+ 	OPT_END(),
+ };
  
--	if (insn->ignore || insn->type == INSN_NOP)
-+	if (insn->ignore || insn->type == INSN_NOP || insn->type == INSN_TRAP)
- 		return true;
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 4b384c9..456ac22 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -1019,6 +1019,9 @@ int elf_write(struct elf *elf)
+ 	struct section *sec;
+ 	Elf_Scn *s;
  
- 	/*
++	if (dryrun)
++		return 0;
++
+ 	/* Update changed relocation sections and section headers: */
+ 	list_for_each_entry(sec, &elf->sections, list) {
+ 		if (sec->changed) {
+diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
+index 89ba869..7b4b124 100644
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -9,7 +9,7 @@
+ 
+ extern const struct option check_options[];
+ extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-            validate_dup, vmlinux, mcount, noinstr, backup, sls;
++            validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
+ 
+ extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
+ 

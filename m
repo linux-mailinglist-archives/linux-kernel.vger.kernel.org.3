@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF314D3126
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8F24D3128
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiCIOlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 09:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S233603AbiCIOm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiCIOlp (ORCPT
+        with ESMTP id S231469AbiCIOmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:41:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9418E17DBA4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:40:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646836845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iKrxniM/I2fRAZ4xvjCSNRsrqJfTXUyCI1qAfWRyj+Q=;
-        b=BjL7tEVO6Bn9DbQybj9+kX6BmyAqeODi+Ub2osloNZ52DySnD2xibyF3PtrtVgQU0z3Fww
-        jdsyKBO/SP5893qIoDIrxz/fi2JBpEXF5S0TmCaK1ZWV4v3++XOx7FZFnC3e5fts7QEZuL
-        hnZmBZkAIMA05WeF/OBRopmT8zpe6f0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-107-oYK2rERPO8ydtrlNHqDzJA-1; Wed, 09 Mar 2022 09:40:42 -0500
-X-MC-Unique: oYK2rERPO8ydtrlNHqDzJA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 9 Mar 2022 09:42:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF517DBB7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:41:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 188B91006AB1;
-        Wed,  9 Mar 2022 14:40:41 +0000 (UTC)
-Received: from llong.com (unknown [10.22.18.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9247923762;
-        Wed,  9 Mar 2022 14:40:26 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH-mm v3] mm/list_lru: Optimize memcg_reparent_list_lru_node()
-Date:   Wed,  9 Mar 2022 09:40:00 -0500
-Message-Id: <20220309144000.1470138-1-longman@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id C5994CE1F08
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B581C340E8;
+        Wed,  9 Mar 2022 14:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646836913;
+        bh=GFoS6bPRq7lzudSutkAFe2brQro/Mh9slsno9R8y1vM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S1k0sVmKPBTacVmbx8BTwfhZZcpPblrE6SH1a/uxzCxYq14PNXGrpZQEyM2z+ymhi
+         +nbO79UQkBDUch83CsQfxb2ami/ek/9xKZnn/TnXFSYZB5wVtum/cij0qGU7FKQpjl
+         SrkMDT3vi6Tj916Ae2C0l6h/qk9isYlEu/u34CjyY41QCvTOIOAfdlwtkwzevpnjWC
+         ILfnx0IhHs4mNWFrOGiaATGwlNaggIHKFh+nLIkAWdePKFb0aqOksidIivwgzD5Bfl
+         VWRqpI59/MvApv85jdudgz5r2lXpoNhSMvRP+NEUX7fca6UW229qHJSEjaq/9mcvlO
+         E8DfKyRzRz/9Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] ARM: fix building NOMMU ARMv4/v5 kernels
+Date:   Wed,  9 Mar 2022 15:40:47 +0100
+Message-Id: <20220309144138.360482-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
-to be race free"), we are tracking the total number of lru
-entries in a list_lru_node in its nr_items field.  In the case of
-memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
-is 0.  We don't even need to take the nlru->lock as no new lru entry
-could be added by a racing list_lru_add() to the draining src_idx memcg
-at this point.
+From: Arnd Bergmann <arnd@arndb.de>
 
-On systems that serve a lot of containers, it is possible that there can
-be thousands of list_lru's present due to the fact that each container
-may mount its own container specific filesystems. As a typical container
-uses only a few cpus, it is likely that only the list_lru_node that
-contains those cpus will be utilized while the rests may be empty. In
-other words, there can be a lot of list_lru_node with 0 nr_items. By
-skipping a lock/unlock operation and loading a cacheline from memcg_lrus,
-a sizeable number of cpu cycles can be saved. That can be substantial
-if we are talking about thousands of list_lru_node's with 0 nr_items.
+The removal of the old-style irq entry broke obscure NOMMU
+configurations on machines that have an MMU:
 
-Signed-off-by: Waiman Long <longman@redhat.com>
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+ld.lld: error: undefined symbol: generic_handle_arch_irq
+ referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
+
+A follow-up patch to convert nvic to the generic_handle_arch_irq()
+could have fixed this by removing the Kconfig conditional, but did
+it differently.
+
+Change the Kconfig logic so ARM machines now unconditionally
+enable the feature.
+
+I have also submitted a patch to remove support for the configurations
+that broke, but fixing the regression first is a trivial and correct
+change.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 54f481a2308e ("ARM: remove old-style irq entry")
+Fixes: 52d240871760 ("irqchip: nvic: Use GENERIC_IRQ_MULTI_HANDLER")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- mm/list_lru.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+This patch should go into the arm/devel-stable branch that has
+the arm-irq-and-vmap-stacks-for-rmk patches from Ard
+---
+ arch/arm/Kconfig        | 2 +-
+ drivers/irqchip/Kconfig | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/mm/list_lru.c b/mm/list_lru.c
-index ba76428ceece..c669d87001a6 100644
---- a/mm/list_lru.c
-+++ b/mm/list_lru.c
-@@ -394,6 +394,12 @@ static void memcg_reparent_list_lru_node(struct list_lru *lru, int nid,
- 	int dst_idx = dst_memcg->kmemcg_id;
- 	struct list_lru_one *src, *dst;
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index e9975ddd5034..5f0b40bab4fb 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -60,7 +60,7 @@ config ARM
+ 	select GENERIC_CPU_AUTOPROBE
+ 	select GENERIC_EARLY_IOREMAP
+ 	select GENERIC_IDLE_POLL_SETUP
+-	select GENERIC_IRQ_MULTI_HANDLER if MMU
++	select GENERIC_IRQ_MULTI_HANDLER
+ 	select GENERIC_IRQ_PROBE
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_IRQ_SHOW_LEVEL
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 488eaa14d3a7..7038957f4a77 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -58,7 +58,6 @@ config ARM_NVIC
+ 	bool
+ 	select IRQ_DOMAIN_HIERARCHY
+ 	select GENERIC_IRQ_CHIP
+-	select GENERIC_IRQ_MULTI_HANDLER
  
-+	/*
-+	 * If there is no lru entry in this nlru, we can skip it immediately.
-+	 */
-+	if (!READ_ONCE(nlru->nr_items))
-+		return;
-+
- 	/*
- 	 * Since list_lru_{add,del} may be called under an IRQ-safe lock,
- 	 * we have to use IRQ-safe primitives here to avoid deadlock.
+ config ARM_VIC
+ 	bool
 -- 
-2.27.0
+2.29.2
 

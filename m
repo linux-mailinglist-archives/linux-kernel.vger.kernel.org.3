@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD874D385F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E24714D3877
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbiCISEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S233086AbiCISJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236572AbiCISEe (ORCPT
+        with ESMTP id S229596AbiCISJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:04:34 -0500
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE54B63F0;
-        Wed,  9 Mar 2022 10:03:33 -0800 (PST)
-Received: from 1nS0ep-00041V-UI by out3b.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nS0eq-000439-VD; Wed, 09 Mar 2022 10:03:32 -0800
-Received: by emcmailer; Wed, 09 Mar 2022 10:03:32 -0800
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nS0ep-00041V-UI; Wed, 09 Mar 2022 10:03:31 -0800
-Received: from tsdebian (unknown [75.164.75.221])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id B4966E3C;
-        Wed,  9 Mar 2022 11:03:30 -0700 (MST)
-Message-ID: <1646848995.2231.2.camel@embeddedTS.com>
-Subject: Re: [PATCH v2] gpio: ts4900: Do not set DAT and OE together
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Featherston <mark@embeddedts.com>
-Date:   Wed, 09 Mar 2022 10:03:15 -0800
-In-Reply-To: <CAMRc=McuAB96JSKVeAPQLOgjGZkD5hOtYt=904Aw4t4aYVVKqg@mail.gmail.com>
-References: <20220308181847.3276-1-kris@embeddedTS.com>
-         <CAMRc=McuAB96JSKVeAPQLOgjGZkD5hOtYt=904Aw4t4aYVVKqg@mail.gmail.com>
-Organization: embeddedTS
+        Wed, 9 Mar 2022 13:09:55 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F00286D6;
+        Wed,  9 Mar 2022 10:08:56 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2dbfe58670cso32545707b3.3;
+        Wed, 09 Mar 2022 10:08:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ifl8zjXJKRKZGSm5jJ/M8kCTgxdJ2vnFQmZ9XC5e+1E=;
+        b=nGEAqFEOQ02rbg9Z0sUxiyqsbjFNXBNhT0O57fibX5o1/8VMMEwS/9xVqGObua0btC
+         jF1K4BmvEuUPGfjnm7q7/umADV/bFv6cJFCAUiJ6oU9mvI3+9/OzLSkcajxA0UVr5DtA
+         +9UxNMmaTPvOuqvojIII3kmzSduGyfuCP5WTf9UODwvQNvaNgSsBbTuuylnaE80CWvMB
+         4jAGMURdNFl7/yYJ0KMHgM+P5LFbXBQK9kIKkZe+7Avqdtls/GduQZFHGVdv9yHr01NS
+         +jB99T+5sn8qYEIsqH3olUWOhjHKQdM6r1YUnfvX7eDelCeg4ILFnQjRZnCk12cGezmd
+         Yq/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ifl8zjXJKRKZGSm5jJ/M8kCTgxdJ2vnFQmZ9XC5e+1E=;
+        b=EK1dOGqVtoRyK5iodjB8+3czqoJl6UlA6v+4FBKvgQSwKN0Bdt9NphHxM6lWsbei53
+         WKob6QMInPT9BIS/QPko0tJQ0QZkJKxeY1Euo0gIYAXvVDDE8Y9etCqcWdzy6khc6c45
+         rJh7Xr2WvCQniEyTVgWLkv3/b0CNgpqOxKNHC/Uqi37938Rx1dcuJJ6IJmeZIHJByGBq
+         NPnLdwzs8rB7BmToBMRJ8/t62edNeMl3JtabbGMq5lQKMCNiRAIWCMGXE+PysXxFRL5p
+         199ezdIBBgT5BnaT4LZsbUY+X3MMYs8Sa9HmCsxGAZgqAagIIrXWsSBvIVNCNl7KKGQt
+         5l6w==
+X-Gm-Message-State: AOAM5310C5zwtIJfrd/WRzWePt6OnAm0ntul3KRsQNPZIP2t/wWK54hY
+        ol6yD3BAF3Yh53lJ9uyjI7Xc3Gv82OMDwPo3ML4=
+X-Google-Smtp-Source: ABdhPJwHHDubL3hFO19tcAoXUSIUQXp0LSo/WnHjBgqxogG9oYYGf/VDvba++pud6bfgaCxPccT3OhYK2VFlnKS3BSI=
+X-Received: by 2002:a81:1493:0:b0:2dc:1a9d:8150 with SMTP id
+ 141-20020a811493000000b002dc1a9d8150mr878076ywu.361.1646849335285; Wed, 09
+ Mar 2022 10:08:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20220309155856.155540075@linuxfoundation.org>
+In-Reply-To: <20220309155856.155540075@linuxfoundation.org>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Wed, 9 Mar 2022 18:08:19 +0000
+Message-ID: <CADVatmMODnr1vQ3VGLOACT16wLEFA6hFrTzY44VdPO2M7gX+iw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/18] 4.19.234-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=0LUNo57BRIswNUx1tYkZhqzyj6GufMslGG3HBmMGVGA=;b=heTgNilBp3VtXq6bnR91XF6e6cDE1pb+bbo9AavVuxBuDWYu5tX7XbBBUOD3e+OlXKhsWnaDYXRjdXmosXPYOFtKE31r1vJu0hWBIWcEV1bCNKSuuh5+hvwiZ9oJBDVE4Vcg7VDsLxOZqCQxysRXD0/xj/TmEq03pHr2zte1QMFSGJVYvYW8bZ8ftFTqB9uiAejtFL0CcYSb7J7yzF47RVLpSsH+TGIP0Ve5ek2QHbWguYfa+zRZFh080Ko9rNG2ByApd08WRA2q3z8r52teXGC6dDBRJ8eyjNmxDbhrP83sQ2L6RNHWllHrlk8f0wf03xHAsUVrA5CUuKPTlUs6IA==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-09 at 09:32 +0100, Bartosz Golaszewski wrote:
-> On Tue, Mar 8, 2022 at 7:19 PM Kris Bahnsen <kris@embeddedts.com> wrote:
-> > 
-> > diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
-> > index d885032cf814..fbabfca030c0 100644
-> > --- a/drivers/gpio/gpio-ts4900.c
-> > +++ b/drivers/gpio/gpio-ts4900.c
-> > @@ -1,7 +1,8 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> 
-> This is not part of the fix, please send a separate patch that comes
-> after the fix adding the SPDX identifier.
-> 
-> >  /*
-> >   * Digital I/O driver for Technologic Systems I2C FPGA Core
-> >   *
-> > - * Copyright (C) 2015 Technologic Systems
-> > + * Copyright (C) 2015-2018 Technologic Systems
-> >   * Copyright (C) 2016 Savoir-Faire Linux
-> >   *
-> >   * This program is free software; you can redistribute it and/or
-> 
-> If you're adding the SPDX identifier, you can drop the license boilerplate here.
-> 
-> Bart
-> 
+Hi Greg,
 
-Thanks for the feedback. I'll get a v3 series out soon to address these.
+On Wed, Mar 9, 2022 at 4:03 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.234 release.
+> There are 18 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
 
-Kris
+My tests are still running, but just an initial result for you,
+
+x86_64 defconfig fails with:
+arch/x86/kernel/cpu/bugs.c: In function 'spectre_v2_select_mitigation':
+arch/x86/kernel/cpu/bugs.c:973:41: error: implicit declaration of
+function 'unprivileged_ebpf_enabled'
+[-Werror=implicit-function-declaration]
+  973 |         if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+
+
+-- 
+Regards
+Sudip

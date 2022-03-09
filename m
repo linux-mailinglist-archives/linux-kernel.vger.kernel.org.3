@@ -2,95 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1FA4D25BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC054D25B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiCIBMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S230033AbiCIBMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiCIBL5 (ORCPT
+        with ESMTP id S230145AbiCIBMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:11:57 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C613A1E8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:54:26 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso886146pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:54:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X+hIDIVjHO6LGkXM0+QFRkB6SfIRAAsbD4jjzcc0akc=;
-        b=DDNhbec9n4vDtcJL0BuO5eDb4cSkBGYrG5wwTwBFdKoL3n7ATvS1gb9+pcW0/dgDyl
-         1d5Eh5tWzWbqZ+YjeVPpTKuxf/5qjL4oWq4uEv36HaxfohGIp8IFme7cWfH1NZ5j0xZo
-         mBY0DHOFIWvlWl0EyDqb1kwWI22bie6Z1TFkKYZPebyMplA2NUZ7he/CcgSSIiqU57H0
-         MIx0rfYifHtmC3aeq5BB9Mf/u076cPuQ5ZnEKtAWTIIVA4/1LHQd6or6ubiglOCD7tsv
-         PHUQfXr+CCSNx/A5qtcbpIfko/s8hNGnj5HpzhBdr7edSqjMrpIyE93p9JARTXREs34x
-         /i4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X+hIDIVjHO6LGkXM0+QFRkB6SfIRAAsbD4jjzcc0akc=;
-        b=J/sLzRZWBHLe0e5JwHzUYHHvsnuH4OdFabMAv8nP7upUM+sk7YzVscxOb/7WMOHTqX
-         id+wOMhcjrAvZf59JYuQnqnGG8eLsIqVJj0FfvTe+KccsvjRXA4tuLz2HqArrHaQTyV1
-         1MGhDUa5EJRaDoJ6zYXNAkmNzyWd5gmb/u8bYtjDQHzUqONGx9yh/t8lkdkbMYHcCg2q
-         VlMEKS0CS7ucksYrA4nz8C++3+G+0Ca9sb74HqV2cXJ/LNR+Hi8dPN2af73XM3ZuzuoB
-         i2fO1zJknq7TC/NIdP0DOZY0mct+j39QX09WYj9EnLSIYe8BX0VjyWIQUFAFp3A+CoNN
-         paTA==
-X-Gm-Message-State: AOAM532NW9PC/JFuCuiDAhw54MQC/1tylP/IetIBTT/WkSFeU2aqtWyv
-        JSjKsNYHohvxeB86GC7RoI6/hzkAsjJxY3jO
-X-Google-Smtp-Source: ABdhPJwetVnpbxsnEbhw3gNfTZ6thnsFgnw08XA0JyAYgma9/do5dC/G+QLHFJ7fHLOHafD2zOFZsg==
-X-Received: by 2002:a17:90a:19d5:b0:1bc:a5db:b655 with SMTP id 21-20020a17090a19d500b001bca5dbb655mr7774866pjj.46.1646787265178;
-        Tue, 08 Mar 2022 16:54:25 -0800 (PST)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e16-20020a17090a119000b001bfa3a0d21asm281656pja.40.2022.03.08.16.54.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 16:54:24 -0800 (PST)
-Message-ID: <612546a3-5630-f1d4-f455-ef2bf564c83e@kernel.dk>
-Date:   Tue, 8 Mar 2022 17:54:23 -0700
+        Tue, 8 Mar 2022 20:12:00 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB261C8FA1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:54:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646787273; x=1678323273;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=NPF0pt6z5LWkrWSRrj9elClGQie5MKGKO466HTh0Wvs=;
+  b=dYCMACUQdiqAFv4fjMRHde5YQtQbx0SpS0FCIKI2A7gghBSCq5H9TO+l
+   kmW4VR5z4KcT1h1xVlaJsd9YCFlgA7Wk3fcFYtlb9hsC4NTYVJPBRHa1R
+   b7xuQssxnj8gK9ougYtdc6NKAbgSiYRVcP3CZLMvIhcfDiguQZOVA8eIm
+   12A414FoehlxWdDvyC82EzJ8jdfomOmNGXcZuc0nPxrpiVq4qqi4D+RUf
+   3qkF7d1naFfifnkC6wKFDHKH+AEzGJGjF7QuoI9Evz4bTIyS2p1cRIPNH
+   cxa2trCYNu9AyQszrRVBYtYXCXtwPutQyvWDZjoMPD6OnvQsEOQfQquYj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254794809"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="254794809"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:54:33 -0800
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="643852690"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:54:31 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>
+Subject: Re: include/linux/pgtable.h:257:16: sparse: sparse: cast to non-scalar
+References: <202203090359.xgOwYxvo-lkp@intel.com>
+Date:   Wed, 09 Mar 2022 08:54:29 +0800
+In-Reply-To: <202203090359.xgOwYxvo-lkp@intel.com> (kernel test robot's
+        message of "Wed, 9 Mar 2022 03:14:32 +0800")
+Message-ID: <87bkyggd2y.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 0/2] io_uring: Add support for napi_busy_poll
-Content-Language: en-US
-To:     Olivier Langlois <olivier@trillion01.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Hao Xu <haoxu@linux.alibaba.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <cover.1646777484.git.olivier@trillion01.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cover.1646777484.git.olivier@trillion01.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 3:17 PM, Olivier Langlois wrote:
-> The sqpoll thread can be used for performing the napi busy poll in a
-> similar way that it does io polling for file systems supporting direct
-> access bypassing the page cache.
-> 
-> The other way that io_uring can be used for napi busy poll is by
-> calling io_uring_enter() to get events.
-> 
-> If the user specify a timeout value, it is distributed between polling
-> and sleeping by using the systemwide setting
-> /proc/sys/net/core/busy_poll.
+kernel test robot <lkp@intel.com> writes:
 
-I think we should get this queued up, but it doesn't apply to
-for-5.18/io_uring at all. I can fix it up, but just curious what you
-tested against?
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   ea4424be16887a37735d6550cfd0611528dbe5d9
+> commit: b99a342d4f11a5455d999b12f5fee42ab6acaf8c NUMA balancing: reduce TLB flush via delaying mapping on hint page fault
+> date:   10 months ago
+> config: alpha-randconfig-s031-20220308 (https://download.01.org/0day-ci/archive/20220309/202203090359.xgOwYxvo-lkp@intel.com/config)
+> compiler: alpha-linux-gcc (GCC) 11.2.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-dirty
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b99a342d4f11a5455d999b12f5fee42ab6acaf8c
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout b99a342d4f11a5455d999b12f5fee42ab6acaf8c
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> sparse warnings: (new ones prefixed by >>)
+>    mm/memory.c:949:17: sparse: sparse: context imbalance in 'copy_pte_range' - different lock contexts for basic block
+>    mm/memory.c:1629:16: sparse: sparse: context imbalance in '__get_locked_pte' - different lock contexts for basic block
+>    mm/memory.c:1678:9: sparse: sparse: context imbalance in 'insert_page' - different lock contexts for basic block
+>    mm/memory.c:2180:17: sparse: sparse: context imbalance in 'remap_pte_range' - different lock contexts for basic block
+>    mm/memory.c:2436:17: sparse: sparse: context imbalance in 'apply_to_pte_range' - unexpected unlock
+>    mm/memory.c:2692:17: sparse: sparse: context imbalance in 'wp_page_copy' - unexpected unlock
+>    mm/memory.c:3038:17: sparse: sparse: context imbalance in 'wp_pfn_shared' - unexpected unlock
+>    mm/memory.c:3101:19: sparse: sparse: context imbalance in 'do_wp_page' - different lock contexts for basic block
+>    mm/memory.c: note: in included file (through include/linux/mm.h, arch/alpha/include/asm/io.h, include/linux/io.h, include/linux/irq.h, ...):
+>>> include/linux/pgtable.h:257:16: sparse: sparse: cast to non-scalar
+>>> include/linux/pgtable.h:257:16: sparse: sparse: cast from non-scalar
+>    mm/memory.c:4660:5: sparse: sparse: context imbalance in 'follow_invalidate_pte' - different lock contexts for basic block
+>    mm/memory.c:4781:9: sparse: sparse: context imbalance in 'follow_pfn' - unexpected unlock
+>
+> vim +257 include/linux/pgtable.h
+>
+> e2cda322648122 include/asm-generic/pgtable.h Andrea Arcangeli 2011-01-13  253  
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15  254  #ifndef __HAVE_ARCH_PTEP_GET
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15  255  static inline pte_t ptep_get(pte_t *ptep)
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15  256  {
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15 @257  	return READ_ONCE(*ptep);
 
--- 
-Jens Axboe
+The change isn't introduced by the reported commit apparently.  So
+there may be some mistake in the 0-Day bisection.
 
+I am not familiar with alpha architecture.  If the pte_t is always
+defined as follows for alpha, the atomicity of the operation should be
+OK?
+
+  typedef struct { unsigned long pte; } pte_t;
+
+Best Regards,
+Huang, Ying
+
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15  258  }
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15  259  #endif
+> 481e980a7c199c include/linux/pgtable.h       Christophe Leroy 2020-06-15  260  
+>
+> :::::: The code at line 257 was first introduced by commit
+> :::::: 481e980a7c199c5a4634fd7ea308067dd4ba75fa mm: Allow arches to provide ptep_get()
+>
+> :::::: TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+> :::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,133 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1B34D3021
+	by mail.lfdr.de (Postfix) with ESMTP id E1B144D3023
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiCINnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S233276AbiCINnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiCINnE (ORCPT
+        with ESMTP id S233262AbiCINnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:43:04 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0A817B0F5;
-        Wed,  9 Mar 2022 05:42:05 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id w4so2888772edc.7;
-        Wed, 09 Mar 2022 05:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Zt0JZXd3BcUZQg6JhqB3BFQru0cX6brxk1RPv5xOa4I=;
-        b=juMUTyXdz5Y8mNC7gU87ZBtfM22WHmaFsNZdEl7vgwy6xH6uKh2pcpRXnkEu0Zh3Xg
-         0dToXIjny5YentlxxLc43ytz32FY3QnYUZam83CtoYL2YYYS+6/KQgRXwaF0I4ni/QDC
-         +9i5DQWJCU/5ottdA/p8u0a7UYkaxOCdOKHV0dexABPuA9nwManlCHnTzODjJGjYiyeU
-         RIyAsnfpGk7ejTZFcczUNh35pR19DbCBZ/HGIDEn61BE0CqTipOGmv5Kqt5iq7oZioTQ
-         lM9mLJ3OfGtoIQRs2rgF0RKnt+8wQa8AJaYgVSB+RvrzUIrWrpBIyRlq5NCLbG+ZkiXQ
-         KxCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Zt0JZXd3BcUZQg6JhqB3BFQru0cX6brxk1RPv5xOa4I=;
-        b=5vS+CVCKpFk2zWOI+5DKbIdnrNpgIS5Y1hqvTZHD1uzB8HSMz1wTF2LwlYc6Fucuso
-         NcOJoYafMxZvMlbbM+Epch4kVmh4tiIEiDKHtnONVkzVBZlPVGugugL8OfKKNfUKxmhi
-         oh6dXk+MO7pygp4eUFYyAMGd2zx2rfX8WI7fBSuspoHy4kP+tahcZLTWl8ATU9Zs9yuz
-         SYornrf0NzKK2eZ4hs99ZZ3MMLR2bPVLpAZOOqTyVw4tOu/quZ3+eKgm8C3h2smARfAO
-         9r52PYqMKeGL0H4SJamUWm0fCHt73Ssk9FKSCAM0huCdOs9xiQ5ofWfYotM2EUNsA9FC
-         drwg==
-X-Gm-Message-State: AOAM532viTqm/8e7zHxemPdmVOb1IDlnHqIxJ0kS6bDRBLR3/CBPnM62
-        Nn6Cxuk7QR/qCowMTF1fmMc=
-X-Google-Smtp-Source: ABdhPJxe7XnM8UWkKCp9IqePxJ945fWMdQbUJYAX1y6i3UJT1vVuZXwrphdBDdvO2iek8Tvj0/nNSQ==
-X-Received: by 2002:a50:9505:0:b0:416:4496:5ec4 with SMTP id u5-20020a509505000000b0041644965ec4mr15590109eda.309.1646833323973;
-        Wed, 09 Mar 2022 05:42:03 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id e5-20020a170906374500b006d5825520a7sm752037ejc.71.2022.03.09.05.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 05:42:03 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <68233503-3ac5-9161-c83d-6b8189dedc8f@redhat.com>
-Date:   Wed, 9 Mar 2022 14:41:59 +0100
+        Wed, 9 Mar 2022 08:43:06 -0500
+Received: from smtp.tom.com (smtprz01.163.net [106.3.154.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB1D17B0F9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:42:07 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by vip-app02.163.net (Postfix) with ESMTP id D3E594400D7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:42:05 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646833325; bh=vRJReDG4bqq0lBu9NwhCT/7EchP5ZD/U7FLT0SyLwVA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KpwJH7dGlAycxRWWHXOuQ9wRqFA1OVxwvx7f6etOnKEIhc7PKy2yKuDHqcluIvNYn
+         sfbQRoL4DlRXuzsqLxCWEjzmcaDl1jPSo8gP1BgWV1pI/lcknMtDEZGiS1GG4J8oR8
+         rH2pf/gkVXUQFPuztiONWiErD+na0+wmNXOkGGc0=
+Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
+          by localhost (TOM SMTP Server) with SMTP ID 1651088751
+          for <linux-kernel@vger.kernel.org>;
+          Wed, 09 Mar 2022 21:42:05 +0800 (CST)
+Received: from antispamvip.163.net (unknown [172.25.16.71])
+        by vip-app02.163.net (Postfix) with ESMTP id CF55844010B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:42:05 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646833325; bh=vRJReDG4bqq0lBu9NwhCT/7EchP5ZD/U7FLT0SyLwVA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KpwJH7dGlAycxRWWHXOuQ9wRqFA1OVxwvx7f6etOnKEIhc7PKy2yKuDHqcluIvNYn
+         sfbQRoL4DlRXuzsqLxCWEjzmcaDl1jPSo8gP1BgWV1pI/lcknMtDEZGiS1GG4J8oR8
+         rH2pf/gkVXUQFPuztiONWiErD+na0+wmNXOkGGc0=
+Received: from antispamvip.163.net (antispamvip.163.net [127.0.0.1])
+        by antispamvip.163.net (Postfix) with ESMTP id 9AA33154155E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:42:05 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
+Received: from antispamvip.163.net ([127.0.0.1])
+        by antispamvip.163.net (antispamvip.163.net [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9X7XD4yHqCpD for <linux-kernel@vger.kernel.org>;
+        Wed,  9 Mar 2022 21:42:03 +0800 (CST)
+Received: from localhost (unknown [223.104.211.98])
+        by antispamvip.163.net (Postfix) with ESMTPA id E129815414D2;
+        Wed,  9 Mar 2022 21:42:00 +0800 (CST)
+Date:   Wed, 9 Mar 2022 21:41:59 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 2/2] nvme-tcp: support specifying the
+ congestion-control
+Message-ID: <20220309212852.00007828@tom.com>
+In-Reply-To: <20220309153136.000048e1@tom.com>
+References: <20220308151606.2563-1-sunmingbao@tom.com>
+        <20220309061442.GA31316@lst.de>
+        <20220309153136.000048e1@tom.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 6/7] KVM: x86: SVM: allow to force AVIC to be enabled
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>
-References: <20220301143650.143749-1-mlevitsk@redhat.com>
- <20220301143650.143749-7-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220301143650.143749-7-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 15:36, Maxim Levitsky wrote:
-> Apparently on some systems AVIC is disabled in CPUID but still usable.
-> 
-> Allow the user to override the CPUID if the user is willing to
-> take the risk.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->   arch/x86/kvm/svm/svm.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 776585dd77769..a26b4c899899e 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -202,6 +202,9 @@ module_param(tsc_scaling, int, 0444);
->   static bool avic;
->   module_param(avic, bool, 0444);
->   
-> +static bool force_avic;
-> +module_param_unsafe(force_avic, bool, 0444);
-> +
->   bool __read_mostly dump_invalid_vmcb;
->   module_param(dump_invalid_vmcb, bool, 0644);
->   
-> @@ -4896,10 +4899,14 @@ static __init int svm_hardware_setup(void)
->   			nrips = false;
->   	}
->   
-> -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
-> +	enable_apicv = avic = avic && npt_enabled && (boot_cpu_has(X86_FEATURE_AVIC) || force_avic);
->   
->   	if (enable_apicv) {
-> -		pr_info("AVIC enabled\n");
-> +		if (!boot_cpu_has(X86_FEATURE_AVIC)) {
-> +			pr_warn("AVIC is not supported in CPUID but force enabled");
-> +			pr_warn("Your system might crash and burn");
-> +		} else
-> +			pr_info("AVIC enabled\n");
->   
->   		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
->   	} else {
+On Wed, 9 Mar 2022 15:32:33 +0800
+Mingbao Sun <sunmingbao@tom.com> wrote:
 
-Queued, thanks.
+> > > @@ -1447,6 +1449,21 @@ static int nvme_tcp_alloc_queue(struct nvme_ct=
+rl *nctrl,
+> > >  	if (nctrl->opts->tos >=3D 0)
+> > >  		ip_sock_set_tos(queue->sock->sk, nctrl->opts->tos);
+> > > =20
+> > > +	if (nctrl->opts->mask & NVMF_OPT_TCP_CONGESTION) {
+> > > +		strncpy(ca_name, nctrl->opts->tcp_congestion,
+> > > +			TCP_CA_NAME_MAX-1);
+> > > +		optval =3D KERNEL_SOCKPTR(ca_name);
+> > > +		ret =3D sock_common_setsockopt(queue->sock, IPPROTO_TCP,
+> > > +					     TCP_CONGESTION, optval,
+> > > +					     strlen(ca_name));   =20
+> >=20
+> > This needs to use kernel_setsockopt.  I also can see absolutely no
+> > need for the optval local variable, and I also don't really see why
+> > we need ca_name either - if we need to limit the length and terminate
+> > it (but why?) that can be done during option parsing. =20
 
-Paolo
+Regards to the replacement of 'sock_common_setsockopt'.
+
+Per the story of the deletion of 'kernel_setsockopt',=20
+users of this API should switch to small functions that
+implement setting a sockopt directly.
+
+So I tried with 'tcp_set_congestion_control'.
+But then I found this symbol is not exported yet.
+Then I applied =E2=80=98EXPORT_SYMBOL_GPL(tcp_set_congestion_control);=E2=
+=80=99
+in my local source, and it works well in the testing.
+
+Then what should I do with this?
+

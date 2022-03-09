@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5254D32C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F424D342A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbiCIQRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S234374AbiCIQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbiCIQHv (ORCPT
+        with ESMTP id S235350AbiCIQNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:07:51 -0500
+        Wed, 9 Mar 2022 11:13:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1A7145AD5;
-        Wed,  9 Mar 2022 08:03:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2BBB65C6;
+        Wed,  9 Mar 2022 08:10:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D9B461666;
-        Wed,  9 Mar 2022 16:03:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B07C340E8;
-        Wed,  9 Mar 2022 16:03:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C50E617B2;
+        Wed,  9 Mar 2022 16:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A11C340E8;
+        Wed,  9 Mar 2022 16:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841835;
-        bh=0pT0F4nlPGnHUHDLi+M/CClvusdGck96cayN7JdG+0Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qop546wVX3FhmhPPKza0Q89aDAoomRSqirxXyzqEn9Ja2vaF8FQbh5ETDpGcqRFSM
-         Nkxk2J8Tz9w9k4qHTjUVXN7aVYImWzRbJklU0kn9y1VjwE+QPqXSen80YLxiOY9eol
-         ilUit7eJ4bSAuEDt92YkdpoVlXcd2MMDbsZu1JEM=
+        s=korg; t=1646842238;
+        bh=BJ4mK36dJa3m7BHv0N7l1otb+o11ZWh6TABV80ZECH4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hNfsmjSlMv/QdPXiNoeKL+xUHFv1FwMJOQBlaPfTFm0qz5y/O33ufaVJoKTAH+Vv4
+         KkK0TQVNTpi7J0+t2t+X1JbKRFzIkshD5xgtLnLu5sX0ID94GMmCJ2/B59/t+LRE8x
+         pZOl04oFV3OTNw1+MMd/r7AGkv5ZF09iFS6yS8/s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.4 11/18] arm/arm64: Provide a wrapper for SMCCC 1.1 calls
-Date:   Wed,  9 Mar 2022 17:00:00 +0100
-Message-Id: <20220309155856.886465553@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.16 00/37] 5.16.14-rc1 review
+Date:   Wed,  9 Mar 2022 17:00:01 +0100
+Message-Id: <20220309155859.086952723@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
-References: <20220309155856.552503355@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.16.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.16.14-rc1
+X-KernelTest-Deadline: 2022-03-11T15:59+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -54,92 +62,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Price <steven.price@arm.com>
+This is the start of the stable review cycle for the 5.16.14 release.
+There are 37 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 541625ac47ce9d0835efaee0fcbaa251b0000a37 upstream.
+Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+Anything received after that time might be too late.
 
-SMCCC 1.1 calls may use either HVC or SMC depending on the PSCI
-conduit. Rather than coding this in every call site, provide a macro
-which uses the correct instruction. The macro also handles the case
-where no conduit is configured/available returning a not supported error
-in res, along with returning the conduit used for the call.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+and the diffstat can be found below.
 
-This allow us to remove some duplicated code and will be useful later
-when adding paravirtualized time hypervisor calls.
+thanks,
 
-Signed-off-by: Steven Price <steven.price@arm.com>
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- include/linux/arm-smccc.h |   58 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+greg k-h
 
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -304,5 +304,63 @@ asmlinkage void __arm_smccc_hvc(unsigned
- #define SMCCC_RET_NOT_SUPPORTED			-1
- #define SMCCC_RET_NOT_REQUIRED			-2
- 
-+/*
-+ * Like arm_smccc_1_1* but always returns SMCCC_RET_NOT_SUPPORTED.
-+ * Used when the SMCCC conduit is not defined. The empty asm statement
-+ * avoids compiler warnings about unused variables.
-+ */
-+#define __fail_smccc_1_1(...)						\
-+	do {								\
-+		__declare_args(__count_args(__VA_ARGS__), __VA_ARGS__);	\
-+		asm ("" __constraints(__count_args(__VA_ARGS__)));	\
-+		if (___res)						\
-+			___res->a0 = SMCCC_RET_NOT_SUPPORTED;		\
-+	} while (0)
-+
-+/*
-+ * arm_smccc_1_1_invoke() - make an SMCCC v1.1 compliant call
-+ *
-+ * This is a variadic macro taking one to eight source arguments, and
-+ * an optional return structure.
-+ *
-+ * @a0-a7: arguments passed in registers 0 to 7
-+ * @res: result values from registers 0 to 3
-+ *
-+ * This macro will make either an HVC call or an SMC call depending on the
-+ * current SMCCC conduit. If no valid conduit is available then -1
-+ * (SMCCC_RET_NOT_SUPPORTED) is returned in @res.a0 (if supplied).
-+ *
-+ * The return value also provides the conduit that was used.
-+ */
-+#define arm_smccc_1_1_invoke(...) ({					\
-+		int method = arm_smccc_1_1_get_conduit();		\
-+		switch (method) {					\
-+		case SMCCC_CONDUIT_HVC:					\
-+			arm_smccc_1_1_hvc(__VA_ARGS__);			\
-+			break;						\
-+		case SMCCC_CONDUIT_SMC:					\
-+			arm_smccc_1_1_smc(__VA_ARGS__);			\
-+			break;						\
-+		default:						\
-+			__fail_smccc_1_1(__VA_ARGS__);			\
-+			method = SMCCC_CONDUIT_NONE;			\
-+			break;						\
-+		}							\
-+		method;							\
-+	})
-+
-+/* Paravirtualised time calls (defined by ARM DEN0057A) */
-+#define ARM_SMCCC_HV_PV_TIME_FEATURES				\
-+	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
-+			   ARM_SMCCC_SMC_64,			\
-+			   ARM_SMCCC_OWNER_STANDARD_HYP,	\
-+			   0x20)
-+
-+#define ARM_SMCCC_HV_PV_TIME_ST					\
-+	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
-+			   ARM_SMCCC_SMC_64,			\
-+			   ARM_SMCCC_OWNER_STANDARD_HYP,	\
-+			   0x21)
-+
- #endif /*__ASSEMBLY__*/
- #endif /*__LINUX_ARM_SMCCC_H*/
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.16.14-rc1
+
+Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+    ARM: fix build error when BPF_SYSCALL is disabled
+
+James Morse <james.morse@arm.com>
+    arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+
+James Morse <james.morse@arm.com>
+    arm64: Use the clearbhb instruction in mitigations
+
+James Morse <james.morse@arm.com>
+    KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
+
+James Morse <james.morse@arm.com>
+    arm64: Mitigate spectre style branch history side channels
+
+James Morse <james.morse@arm.com>
+    arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
+
+James Morse <james.morse@arm.com>
+    arm64: Add percpu vectors for EL1
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Add macro for reading symbol addresses from the trampoline
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Add vectors that have the bhb mitigation sequences
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Allow the trampoline text to occupy multiple pages
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Make the kpti trampoline's kpti sequence optional
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Move trampoline macros out of ifdef'd section
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Don't assume tramp_vectors is the start of the vectors
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Move the trampoline data page before the text page
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Free up another register on kpti's tramp_exit path
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Make the trampoline cleanup optional
+
+James Morse <james.morse@arm.com>
+    KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
+
+James Morse <james.morse@arm.com>
+    arm64: spectre: Rename spectre_v4_patch_fw_mitigation_conduit
+
+James Morse <james.morse@arm.com>
+    arm64: entry.S: Add ventry overflow sanity checks
+
+Joey Gouly <joey.gouly@arm.com>
+    arm64: cpufeature: add HWCAP for FEAT_RPRES
+
+Joey Gouly <joey.gouly@arm.com>
+    arm64: cpufeature: add HWCAP for FEAT_AFP
+
+Joey Gouly <joey.gouly@arm.com>
+    arm64: add ID_AA64ISAR2_EL1 sys register
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: include unprivileged BPF status in Spectre V2 reporting
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: Spectre-BHB workaround
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: use LOADADDR() to get load address of sections
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: early traps initialisation
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: report Spectre v2 status through sysfs
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Warn about Spectre v2 LFENCE mitigation
+
+Kim Phillips <kim.phillips@amd.com>
+    x86/speculation: Update link to AMD speculation whitepaper
+
+Kim Phillips <kim.phillips@amd.com>
+    x86/speculation: Use generic retpoline by default on AMD
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+
+Peter Zijlstra <peterz@infradead.org>
+    Documentation/hw-vuln: Update spectre doc
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/speculation: Add eIBRS + Retpoline options
+
+Peter Zijlstra (Intel) <peterz@infradead.org>
+    x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/hw-vuln/spectre.rst   |  50 +--
+ Documentation/admin-guide/kernel-parameters.txt |   8 +-
+ Documentation/arm64/cpu-feature-registers.rst   |  17 ++
+ Documentation/arm64/elf_hwcaps.rst              |   8 +
+ Makefile                                        |   4 +-
+ arch/arm/include/asm/assembler.h                |  10 +
+ arch/arm/include/asm/spectre.h                  |  32 ++
+ arch/arm/include/asm/vmlinux.lds.h              |  35 ++-
+ arch/arm/kernel/Makefile                        |   2 +
+ arch/arm/kernel/entry-armv.S                    |  79 ++++-
+ arch/arm/kernel/entry-common.S                  |  24 ++
+ arch/arm/kernel/spectre.c                       |  71 +++++
+ arch/arm/kernel/traps.c                         |  65 +++-
+ arch/arm/mm/Kconfig                             |  11 +
+ arch/arm/mm/proc-v7-bugs.c                      | 207 ++++++++++---
+ arch/arm64/Kconfig                              |   9 +
+ arch/arm64/include/asm/assembler.h              |  53 ++++
+ arch/arm64/include/asm/cpu.h                    |   1 +
+ arch/arm64/include/asm/cpufeature.h             |  29 ++
+ arch/arm64/include/asm/cputype.h                |   8 +
+ arch/arm64/include/asm/fixmap.h                 |   6 +-
+ arch/arm64/include/asm/hwcap.h                  |   2 +
+ arch/arm64/include/asm/insn.h                   |   1 +
+ arch/arm64/include/asm/kvm_host.h               |   5 +
+ arch/arm64/include/asm/sections.h               |   5 +
+ arch/arm64/include/asm/spectre.h                |   4 +
+ arch/arm64/include/asm/sysreg.h                 |  18 ++
+ arch/arm64/include/asm/vectors.h                |  73 +++++
+ arch/arm64/include/uapi/asm/hwcap.h             |   2 +
+ arch/arm64/include/uapi/asm/kvm.h               |   5 +
+ arch/arm64/kernel/cpu_errata.c                  |   7 +
+ arch/arm64/kernel/cpufeature.c                  |  25 ++
+ arch/arm64/kernel/cpuinfo.c                     |   3 +
+ arch/arm64/kernel/entry.S                       | 214 +++++++++----
+ arch/arm64/kernel/image-vars.h                  |   4 +
+ arch/arm64/kernel/proton-pack.c                 | 391 +++++++++++++++++++++++-
+ arch/arm64/kernel/vmlinux.lds.S                 |   2 +-
+ arch/arm64/kvm/arm.c                            |   5 +-
+ arch/arm64/kvm/hyp/hyp-entry.S                  |   9 +
+ arch/arm64/kvm/hyp/nvhe/mm.c                    |   4 +-
+ arch/arm64/kvm/hyp/vhe/switch.c                 |   9 +-
+ arch/arm64/kvm/hypercalls.c                     |  12 +
+ arch/arm64/kvm/psci.c                           |  18 +-
+ arch/arm64/kvm/sys_regs.c                       |   2 +-
+ arch/arm64/mm/mmu.c                             |  12 +-
+ arch/arm64/tools/cpucaps                        |   1 +
+ arch/x86/include/asm/cpufeatures.h              |   2 +-
+ arch/x86/include/asm/nospec-branch.h            |  16 +-
+ arch/x86/kernel/alternative.c                   |   8 +-
+ arch/x86/kernel/cpu/bugs.c                      | 204 ++++++++++---
+ arch/x86/lib/retpoline.S                        |   2 +-
+ arch/x86/net/bpf_jit_comp.c                     |   2 +-
+ include/linux/arm-smccc.h                       |   5 +
+ include/linux/bpf.h                             |  12 +
+ kernel/sysctl.c                                 |   7 +
+ tools/arch/x86/include/asm/cpufeatures.h        |   2 +-
+ 56 files changed, 1606 insertions(+), 216 deletions(-)
 
 

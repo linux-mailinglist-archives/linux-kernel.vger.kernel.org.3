@@ -2,182 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71D24D2918
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3884D2924
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiCIGpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S230127AbiCIGuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiCIGpp (ORCPT
+        with ESMTP id S229475AbiCIGuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:45:45 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CB6148659
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:44:48 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id s35-20020a0568302aa300b005b2463a41faso1042312otu.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 22:44:47 -0800 (PST)
+        Wed, 9 Mar 2022 01:50:23 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A490151361
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:49:24 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id w16so2320643ybi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 22:49:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
+        d=benyossef-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ddlDhqG9ZcZuCQ46xAkRaFjEfrrXTPWKVGDb3bNeBt4=;
-        b=L9LS6ryecQAl5Y3LC3sS4tiOKbpcpeYZqMqapy0t7tkSAvirka63wxCQ7NIah37sVc
-         bBXa5fZP0HXztgBPGiT6DMgZFKgrLoL/gmSOVn+ZhZGFI2Am0q5mwj7pjOWGBs5PB07u
-         4msQ1M4YETWuq/zF5XGdF2MSojuFwBkc6CwFM=
+         :cc:content-transfer-encoding;
+        bh=PXkPZl29RVgeXTQ2GIWWfOUEwwiObpL0God+ixV6+aM=;
+        b=tkCH0ND35xmrB09F73tjRYkuklX/ZeXoYEhCbOwMIYNcDv8vY/KNglob2XG74mOL8Y
+         dwP9rArB64+kvy4bdQtFMWzigewp+88Nl5KNCe0vcXv5R5JMGU0LqMafaFbrPd6zvsWU
+         hRuB+rLShGJoTijX6Etu2EJDjYHxpPskHicKMYFRueZITGLY/DwlzemknuLgVObie3up
+         YuXa6DlRloP2e2vQvhs+fU8USJIGBnAvL2KpGF+xoBmSmS/qWT7FW82lPLuEJR87nPJy
+         7Uv8oy3Our6gg6RlU/BD/Q0EQ+an2DdUvzxtcPjESXePk2GHdA+OF5AQBixs/sCub3XW
+         8JPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ddlDhqG9ZcZuCQ46xAkRaFjEfrrXTPWKVGDb3bNeBt4=;
-        b=IL8iOkAMchy1R68VoMFyQxM0sJr8MzOrXZ1U0T0eLhqwgs+r5UkVaIDE3trM1SyLCi
-         mA/iPACvc129CE4jdgwN5jRaoOW0cyvqryS4HviOw58A7RIoWzlqhKDhiwjYwSOIm+kN
-         129ckq00kR1JbhUTg5BzM/U6XeOZ7YTpJtnP7G4siOoi7VbsJTn2DWF2NxyZODu7pBO1
-         fco3Ofqo3UiNb+wl9E3GWPmYFIF+hxaxZx9cd/RiALEsqhCzAjsK2j06cpXj91NI+cEf
-         Cf04CtAiOK7wig+oqrq//YLyKSg8yR+rVrwq6z0b6V9X2qFRRrwjfl9niMIKYF7melmy
-         WwPQ==
-X-Gm-Message-State: AOAM530jSprOUQ+2jjD1Wqy4DmcLvkuQMfM2CT22r7K6UbD3nOZG7vWR
-        u4N0CxUpzO33fEOo0qp904ubLiUkno18mnpGm951MQ==
-X-Google-Smtp-Source: ABdhPJwgeempI9YkdJWOmlVVxhl8MwmoBOdAA7Us6mz2Gm7XPGL0yiUsvDgdWa84lwk3GbH8bhjnKcqPUNxgTgf2thI=
-X-Received: by 2002:a05:6830:25d6:b0:5b2:5015:f015 with SMTP id
- d22-20020a05683025d600b005b25015f015mr2741840otu.127.1646808287162; Tue, 08
- Mar 2022 22:44:47 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PXkPZl29RVgeXTQ2GIWWfOUEwwiObpL0God+ixV6+aM=;
+        b=vskAHpxgwMcmySGVCBoDCXoWTx1C5s0JByjlpAyw8+NnoKKiQXJPWxQWcuGRzQZa5A
+         /7Nynn3/JYuJ4HCRRJ1Epl1D+gUBsHk9X0mzjldteFtf7+cyAbV3kW6wjAACIbFlkwCs
+         CeI8YqoGVUA5SWImlNHEvRStg+C5PgRjG/OZnC7CYRfJXgfLl5IFZIQAZzdCy8IhngHL
+         /rk0knwMemtW20XptoMY4dGCwrP7JhfaOeySy1YZb7VmLP6ahF66V7pOYDZ+3ttKW0rK
+         BCXKwSxTe/PFTNFtU8Gd1q3KNP2H3AmoIWoHWtD50BsffIOgleoSTjWF507qTQ2/vyov
+         bM5w==
+X-Gm-Message-State: AOAM531iImACbhUaIcK0VbFkMt26yJSvUfurzmtJqeMRFnG7EQ4hjzSX
+        E3H7yrB8+ZlHuZDtKReVbtRy+nxEhFojmuVSTa7D6A==
+X-Google-Smtp-Source: ABdhPJw9vHNP1naZoEWeK3eDps51giU+Odp5Dv+clF8fdBjvHY2EdxENK0udT9CzxVds8EAA3EYHiBQJke2oVbVksdI=
+X-Received: by 2002:a25:e0c7:0:b0:629:182a:4b75 with SMTP id
+ x190-20020a25e0c7000000b00629182a4b75mr14698389ybg.539.1646808563321; Tue, 08
+ Mar 2022 22:49:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201223948.1455637-1-keescook@chromium.org>
- <164462189850.7606.6908949862618145181.b4-ty@oracle.com> <CAK=zhgpQcJkRKVNFHy6mDqV9hOyzFsV_uqOWur8UsNLRZy-VdA@mail.gmail.com>
- <yq1ee3blsqp.fsf@ca-mkp.ca.oracle.com>
-In-Reply-To: <yq1ee3blsqp.fsf@ca-mkp.ca.oracle.com>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Wed, 9 Mar 2022 12:14:35 +0530
-Message-ID: <CAK=zhgoiQ_ZeSO875DmLUrE2gGDRCUcPUdY9b9Yw+oftZ0=f1Q@mail.gmail.com>
-Subject: Re: [PATCH] scsi: mpt3sas: Convert to flexible arrays
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-hardening@vger.kernel.org,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fe1a1405d9c36ef0"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
+ <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
+ <YiIUXtxd44ut5uzV@Red> <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
+ <CAOtvUMcudG3ySU+VeE7hfneDVWGLKFTnws-xjhq4hgFYSj0qOg@mail.gmail.com>
+ <YiXjCcXXk0f18FDL@Red> <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
+ <YiYMeFf+Lsa9y4ss@Red> <CAOtvUMccCai9gFrTv6CZB-U56UtCPtmnZUyW5WmUr=+6YiUHZg@mail.gmail.com>
+ <YiYPBdRIi4+HYsmW@Red> <Yickf3IFiPiFFfTH@Red>
+In-Reply-To: <Yickf3IFiPiFFfTH@Red>
+From:   Gilad Ben-Yossef <gilad@benyossef.com>
+Date:   Wed, 9 Mar 2022 08:49:12 +0200
+Message-ID: <CAOtvUMe1mAr2F65ntdYg=747=z2EHaiYx2UizzPuiy=SQnaKsg@mail.gmail.com>
+Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen =
+ authsize =0
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000fe1a1405d9c36ef0
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Mar 9, 2022 at 8:50 AM Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
+On Tue, Mar 8, 2022 at 11:40 AM Corentin Labbe
+<clabbe.montjoie@gmail.com> wrote:
+>
+> Le Mon, Mar 07, 2022 at 02:56:21PM +0100, Corentin Labbe a =C3=A9crit :
+> > Le Mon, Mar 07, 2022 at 03:53:02PM +0200, Gilad Ben-Yossef a =C3=A9crit=
+ :
+> > > On Mon, Mar 7, 2022 at 3:45 PM Corentin Labbe <clabbe.montjoie@gmail.=
+com> wrote:
+> > > >
+> > > > Le Mon, Mar 07, 2022 at 11:14:16AM +0000, Robin Murphy a =C3=A9crit=
+ :
+> > > > > On 2022-03-07 10:48, Corentin Labbe wrote:
+> > > > > > Le Mon, Mar 07, 2022 at 09:59:29AM +0200, Gilad Ben-Yossef a =
+=C4=8F=C5=BC=CB=9Dcrit :
+> > > > > >> On Sun, Mar 6, 2022 at 11:49 PM Herbert Xu <herbert@gondor.apa=
+na.org.au> wrote:
+> > > > > >>>
+> > > > > >>> On Fri, Mar 04, 2022 at 02:30:06PM +0100, Corentin Labbe wrot=
+e:
+> > > > > >>>>
+> > > > > >>>> Hello
+> > > > > >>>>
+> > > > > >>>> I got:
+> > > > > >>>> [   17.563793] ------------[ cut here ]------------
+> > > > > >>>> [   17.568492] DMA-API: ccree e6601000.crypto: device driver=
+ frees DMA memory with different direction [device address=3D0x0000000078fe=
+5800] [size=3D8 bytes] [mapped with DMA_TO_DEVICE] [unmapped with DMA_BIDIR=
+ECTIONAL]
+> > > > > >>>
+> > > > > >>> The direction argument during unmap must match whatever direc=
+tion
+> > > > > >>> you used during the original map call.
+> > > > > >>
+> > > > > >>
+> > > > > >> Yes, of course. I changed one but forgot the other.
+> > > > > >>
+> > > > > >> Corentin, could you be kind and check that this solves the ori=
+ginal
+> > > > > >> problem and does not produce new warnings?
+> > > > > >>
+> > > > > >> diff --git a/drivers/crypto/ccree/cc_buffer_mgr.c
+> > > > > >> b/drivers/crypto/ccree/cc_buffer_mgr.c
+> > > > > >> index 11e0278c8631..31cfe014922e 100644
+> > > > > >> --- a/drivers/crypto/ccree/cc_buffer_mgr.c
+> > > > > >> +++ b/drivers/crypto/ccree/cc_buffer_mgr.c
+> > > > > >> @@ -356,12 +356,14 @@ void cc_unmap_cipher_request(struct devi=
+ce *dev,
+> > > > > >> void *ctx,
+> > > > > >>                                req_ctx->mlli_params.mlli_dma_a=
+ddr);
+> > > > > >>          }
+> > > > > >>
+> > > > > >> -       dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_BIDIRECT=
+IONAL);
+> > > > > >> -       dev_dbg(dev, "Unmapped req->src=3D%pK\n", sg_virt(src)=
+);
+> > > > > >> -
+> > > > > >>          if (src !=3D dst) {
+> > > > > >> -               dma_unmap_sg(dev, dst, req_ctx->out_nents, DMA=
+_BIDIRECTIONAL);
+> > > > > >> +               dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_=
+TO_DEVICE);
+> > > > > >> +               dma_unmap_sg(dev, dst, req_ctx->out_nents, DMA=
+_FROM_DEVICE);
+> > > > > >>                  dev_dbg(dev, "Unmapped req->dst=3D%pK\n", sg_=
+virt(dst));
+> > > > > >> +               dev_dbg(dev, "Unmapped req->src=3D%pK\n", sg_v=
+irt(src));
+> > > > > >> +       } else {
+> > > > > >> +               dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_=
+BIDIRECTIONAL);
+> > > > > >> +               dev_dbg(dev, "Unmapped req->src=3D%pK\n", sg_v=
+irt(src));
+> > > > > >>          }
+> > > > > >>   }
+> > > > > >>
+> > > > > >> @@ -377,6 +379,7 @@ int cc_map_cipher_request(struct cc_drvdat=
+a
+> > > > > >> *drvdata, void *ctx,
+> > > > > >>          u32 dummy =3D 0;
+> > > > > >>          int rc =3D 0;
+> > > > > >>          u32 mapped_nents =3D 0;
+> > > > > >> +       int src_direction =3D (src !=3D dst ? DMA_TO_DEVICE : =
+DMA_BIDIRECTIONAL);
+> > > > > >>
+> > > > > >>          req_ctx->dma_buf_type =3D CC_DMA_BUF_DLLI;
+> > > > > >>          mlli_params->curr_pool =3D NULL;
+> > > > > >> @@ -399,7 +402,7 @@ int cc_map_cipher_request(struct cc_drvdat=
+a
+> > > > > >> *drvdata, void *ctx,
+> > > > > >>          }
+> > > > > >>
+> > > > > >>          /* Map the src SGL */
+> > > > > >> -       rc =3D cc_map_sg(dev, src, nbytes, DMA_BIDIRECTIONAL, =
+&req_ctx->in_nents,
+> > > > > >> +       rc =3D cc_map_sg(dev, src, nbytes, src_direction, &req=
+_ctx->in_nents,
+> > > > > >>                         LLI_MAX_NUM_OF_DATA_ENTRIES, &dummy, &=
+mapped_nents);
+> > > > > >>          if (rc)
+> > > > > >>                  goto cipher_exit;
+> > > > > >> @@ -416,7 +419,7 @@ int cc_map_cipher_request(struct cc_drvdat=
+a
+> > > > > >> *drvdata, void *ctx,
+> > > > > >>                  }
+> > > > > >>          } else {
+> > > > > >>                  /* Map the dst sg */
+> > > > > >> -               rc =3D cc_map_sg(dev, dst, nbytes, DMA_BIDIREC=
+TIONAL,
+> > > > > >> +               rc =3D cc_map_sg(dev, dst, nbytes, DMA_FROM_DE=
+VICE,
+> > > > > >>                                 &req_ctx->out_nents, LLI_MAX_N=
+UM_OF_DATA_ENTRIES,
+> > > > > >>                                 &dummy, &mapped_nents);
+> > > > > >>                  if (rc)
+> > > > > >>
+> > > > > >>
+> > > > > >
+> > > > > > Hello
+> > > > > >
+> > > > > > I still get the warning:
+> > > > > > [  433.406230] ------------[ cut here ]------------
+> > > > > > [  433.406326] DMA-API: ccree e6601000.crypto: cacheline tracki=
+ng EEXIST, overlapping mappings aren't supported
+> > > > > > [  433.406386] WARNING: CPU: 7 PID: 31074 at /home/clabbe/linux=
+-next/kernel/dma/debug.c:571 add_dma_entry+0x1d0/0x288
+> > > > > > [  433.406434] Modules linked in:
+> > > > > > [  433.406458] CPU: 7 PID: 31074 Comm: kcapi Not tainted 5.17.0=
+-rc6-next-20220303-00130-g30042e47ee47-dirty #54
+> > > > > > [  433.406473] Hardware name: Renesas Salvator-X board based on=
+ r8a77950 (DT)
+> > > > > > [  433.406484] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT =
+-SSBS BTYPE=3D--)
+> > > > > > [  433.406498] pc : add_dma_entry+0x1d0/0x288
+> > > > > > [  433.406510] lr : add_dma_entry+0x1d0/0x288
+> > > > > > [  433.406522] sp : ffff800015da3690
+> > > > > > [  433.406531] x29: ffff800015da3690 x28: 0000000000000000 x27:=
+ 0000000000000000
+> > > > > > [  433.406562] x26: 0000000000000000 x25: ffff80000b4c7bc0 x24:=
+ ffff80000b4c7000
+> > > > > > [  433.406593] x23: 0000000000000000 x22: 00000000ffffffef x21:=
+ ffff80000a9b6000
+> > > > > > [  433.406623] x20: ffff0004c0af5c00 x19: ffff80000b420000 x18:=
+ ffffffffffffffff
+> > > > > > [  433.406653] x17: 6c7265766f202c54 x16: 534958454520676e x15:=
+ 000000000000022e
+> > > > > > [  433.406683] x14: ffff800015da3380 x13: 00000000ffffffea x12:=
+ ffff80000b4be010
+> > > > > > [  433.406713] x11: 0000000000000001 x10: 0000000000000001 x9 :=
+ ffff80000b4a6028
+> > > > > > [  433.406743] x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 :=
+ ffff80000b4a5fd0
+> > > > > > [  433.406773] x5 : ffff0006ff795c48 x4 : 0000000000000000 x3 :=
+ 0000000000000027
+> > > > > > [  433.406802] x2 : 0000000000000023 x1 : 8ca4e4fbf4b87900 x0 :=
+ 0000000000000000
+> > > > > > [  433.406833] Call trace:
+> > > > > > [  433.406841]  add_dma_entry+0x1d0/0x288
+> > > > > > [  433.406854]  debug_dma_map_sg+0x150/0x398
+> > > > > > [  433.406869]  __dma_map_sg_attrs+0x9c/0x108
+> > > > > > [  433.406889]  dma_map_sg_attrs+0x10/0x28
+> > > > > > [  433.406904]  cc_map_sg+0x80/0x100
+> > > > > > [  433.406924]  cc_map_cipher_request+0x178/0x3c8
+> > > > > > [  433.406939]  cc_cipher_process+0x210/0xb58
+> > > > > > [  433.406953]  cc_cipher_encrypt+0x2c/0x38
+> > > > > > [  433.406967]  crypto_skcipher_encrypt+0x44/0x78
+> > > > > > [  433.406986]  skcipher_recvmsg+0x36c/0x420
+> > > > > > [  433.407003]  ____sys_recvmsg+0x90/0x280
+> > > > > > [  433.407024]  ___sys_recvmsg+0x88/0xd0
+> > > > > > [  433.407038]  __sys_recvmsg+0x6c/0xd0
+> > > > > > [  433.407049]  __arm64_sys_recvmsg+0x24/0x30
+> > > > > > [  433.407061]  invoke_syscall+0x44/0x100
+> > > > > > [  433.407082]  el0_svc_common.constprop.3+0x90/0x120
+> > > > > > [  433.407096]  do_el0_svc+0x24/0x88
+> > > > > > [  433.407110]  el0_svc+0x4c/0x100
+> > > > > > [  433.407131]  el0t_64_sync_handler+0x90/0xb8
+> > > > > > [  433.407145]  el0t_64_sync+0x170/0x174
+> > > > > > [  433.407160] irq event stamp: 5624
+> > > > > > [  433.407168] hardirqs last  enabled at (5623): [<ffff80000812=
+f6a8>] __up_console_sem+0x60/0x98
+> > > > > > [  433.407191] hardirqs last disabled at (5624): [<ffff800009c9=
+a060>] el1_dbg+0x28/0x90
+> > > > > > [  433.407208] softirqs last  enabled at (5570): [<ffff8000097e=
+62f8>] lock_sock_nested+0x80/0xa0
+> > > > > > [  433.407226] softirqs last disabled at (5568): [<ffff8000097e=
+62d8>] lock_sock_nested+0x60/0xa0
+> > > > > > [  433.407241] ---[ end trace 0000000000000000 ]---
+> > > > > > [  433.407381] DMA-API: Mapped at:
+> > > > > > [  433.407396]  debug_dma_map_sg+0x16c/0x398
+> > > > > > [  433.407416]  __dma_map_sg_attrs+0x9c/0x108
+> > > > > > [  433.407436]  dma_map_sg_attrs+0x10/0x28
+> > > > > > [  433.407455]  cc_map_sg+0x80/0x100
+> > > > > > [  433.407475]  cc_map_cipher_request+0x178/0x3c8
+> > > > > >
+> > > > > >
+> > > > > > BUT I start to thing this is a bug in DMA-API debug.
+> > > > > >
+> > > > > >
+> > > > > > My sun8i-ss driver hit the same warning:
+> > > > > > [  142.458351] WARNING: CPU: 1 PID: 90 at kernel/dma/debug.c:59=
+7 add_dma_entry+0x2ec/0x4cc
+> > > > > > [  142.458429] DMA-API: sun8i-ss 1c15000.crypto: cacheline trac=
+king EEXIST, overlapping mappings aren't supported
+> > > > > > [  142.458455] Modules linked in: ccm algif_aead xts cmac
+> > > > > > [  142.458563] CPU: 1 PID: 90 Comm: 1c15000.crypto- Not tainted=
+ 5.17.0-rc6-next-20220307-00132-g39dad568d20a-dirty #223
+> > > > > > [  142.458581] Hardware name: Allwinner A83t board
+> > > > > > [  142.458596]  unwind_backtrace from show_stack+0x10/0x14
+> > > > > > [  142.458627]  show_stack from 0xf0abdd1c
+> > > > > > [  142.458646] irq event stamp: 31747
+> > > > > > [  142.458660] hardirqs last  enabled at (31753): [<c019316c>] =
+__up_console_sem+0x50/0x60
+> > > > > > [  142.458688] hardirqs last disabled at (31758): [<c0193158>] =
+__up_console_sem+0x3c/0x60
+> > > > > > [  142.458710] softirqs last  enabled at (31600): [<c06990c8>] =
+sun8i_ss_handle_cipher_request+0x300/0x8b8
+> > > > > > [  142.458738] softirqs last disabled at (31580): [<c06990c8>] =
+sun8i_ss_handle_cipher_request+0x300/0x8b8
+> > > > > > [  142.458758] ---[ end trace 0000000000000000 ]---
+> > > > > > [  142.458771] DMA-API: Mapped at:
+> > > > > >
+> > > > > > Yes the mapped at is empty just after.
+> > > > > >
+> > > > > > And the sequence of DMA operations in my driver is simple, so I=
+ cannot see how any overlap could occur.
+> > > > >
+> > > > > The "overlap" is in the sense of having more than one mapping wit=
+hin the
+> > > > > same cacheline:
+> > > > >
+> > > > > [  142.458120] DMA-API: add_dma_entry start P=3Dba79f200 N=3Dba79=
+f
+> > > > > D=3Dba79f200 L=3D10 DMA_FROM_DEVICE attrs=3D0
+> > > > > [  142.458156] DMA-API: add_dma_entry start P=3D445dc010 N=3D445d=
+c
+> > > > > D=3D445dc010 L=3D10 DMA_TO_DEVICE attrs=3D0
+> > > > > [  142.458178] sun8i-ss 1c15000.crypto: SRC 0/1/1 445dc000 len=3D=
+16 bi=3D0
+> > > > > [  142.458215] sun8i-ss 1c15000.crypto: DST 0/1/1 ba79f200 len=3D=
+16 bi=3D0
+> > > > > [  142.458234] DMA-API: add_dma_entry start P=3Dba79f210 N=3Dba79=
+f
+> > > > > D=3Dba79f210 L=3D10 DMA_FROM_DEVICE attrs=3D0
+> > > > >
+> > > > > This actually illustrates exactly the reason why this is unsuppor=
+table.
+> > > > > ba79f200 is mapped for DMA_FROM_DEVICE, therefore subsequently ma=
+pping
+> > > > > ba79f210 for DMA_TO_DEVICE may cause the cacheline covering the r=
+ange
+> > > > > ba79f200-ba79f23f to be written back over the top of data that th=
+e
+> > > > > device has already started to write to memory. Hello data corrupt=
+ion.
+> > > > >
+> > > > > Separate DMA mappings should be from separate memory allocations,
+> > > > > respecting ARCH_DMA_MINALIGN.
+> > > > >
+> > > >
+> > > > I just saw something strange, only one SG is involved, and I dont s=
+ee any DMA_TO_DEVICE for ba79f210.
+> > > > I see 2 DMA_FROM_DEVICE (ba79f200 and ba79f210), but only one shoul=
+d be done.
+> > > > Why 2 FROM mappings are added with only one sg ?
+> > > >
+> > >
+> > > The thing that does the memory allocation of user calls from libkcapi
+> > > tests is the crypto/af_alg.c code ...
+> > >
+> > > I assume the sglist has two buffers? could it be that somehow they ar=
+e
+> > > not DMA aligned? that would be weird indeed...
+> > >
+> >
+> > The SGlist has only one SG, so only one buffer, it is why I dont unders=
+tand the double call to add_dma_entry().
 >
 >
-> Sreekanth,
+> Answering myself, the driver can handle 2 requests in parallel, this is t=
+he reason of 2 dma call.
+> And both are using the same key, and so first DMA call (for the key) give=
+ same address.
 >
-> > I am observing below kernel panic when I load the driver with this
-> > patch changes. After reverting this patch changes then the driver is
-> > getting loaded successfully.
->
-> I am puzzled. The driver loads fine for me. I have verified that the
-> generated object file is identical before and after Kees' patch.
+> This is something hard to prevent at driver level.
 
-Looks like we will observe this issue only if DIF Type 2 drive is
-connected to the HBA. When this panic occurred I had connected one DIF
-Type2 drive to the HBA.
 
-Thanks,
-Sreekanth
+I don't think you can safely DMA map the key though anyway? what if
+you were passed a stack variable?
 
->
-> --
-> Martin K. Petersen      Oracle Linux Engineering
+Better to have an internally allocated context buffer, copy the key
+there and map that buffer.
 
---000000000000fe1a1405d9c36ef0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Gilad
 
-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
-5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
-VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
-DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
-Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
-BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
-Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
-aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
-JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
-s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
-IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
-pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
-X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
-eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
-Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBKosO6V87LGSqju5myS
-eGEwTogxQm+KPIpjwgg5UDfeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDMwOTA2NDQ0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCkYmwsncYY/ySmptIiEiH0hrIs5l1VstZz7GfL
-KuzI6iepMDewrfnO/9lpno2gOzpUdHmSfW7IVchG81qd8JAhAExEtQ0Oa17MSp5vsTtMoaRH5aa3
-VZZrUDtLh3rbALzsWmt06DBQAdGJSys4NfYghlP4QQ1EGmb+staB7gU9SjWrPf7L+Nymb/UIfRDV
-P8B/7LkROGNLMxw8HUglPvBVjtEWshelV6e8orq909JJ7pzkGCFqme2kl1dzHhMWJPTi2MJpXTTP
-vJUbG5K+RuoRguIhmd4C3OHEPNfu5zuKyjqDpHKjZwu6NUNU7I6GwjduORiupB+rLzt9jWRTBLMb
---000000000000fe1a1405d9c36ef0--
+
+--=20
+Gilad Ben-Yossef
+Chief Coffee Drinker
+
+values of =CE=B2 will give rise to dom!

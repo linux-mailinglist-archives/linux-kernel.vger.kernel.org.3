@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6D34D2672
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D186E4D26F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiCIBYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S231256AbiCIBV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiCIBY0 (ORCPT
+        with ESMTP id S230451AbiCIBVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:24:26 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B3F3A1A8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:23:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646788981; x=1678324981;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xtRs6oi+J5auIPKJEANNMf/Y0ox4XmKqILRhR300NLg=;
-  b=TR5VvBvol+FCRVEehNeXGpNpbRiYwhcNMrqIFwsRHaQ0KMVklPsys7jB
-   va39S5qZ/nnqiv+H/aL9eqSy08L0T4EoHJrMwXZ3QaX2ivWIGZ+aWF/Rz
-   yTRWSDErgXB4LT62hlXdC31E8AMI/OeuhAGEVtYZxerv2HeGOFf8y6BUw
-   3M+rVbYerCICE+XOeFHDY6Rirky1lNt4HfYOAcxxhr9HL5TRuMVMi2fvw
-   KS79qZTCBvDTfSodgGC8Y8y3h6EXkK/VuDvTUZU/M5SHp8C+k7r2vEBnR
-   Ul6I7OrNmQlbp1Ep1XynVECcXSFoqYUWBj/By3xQZOTIFmsgxyctCb4gF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253686606"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="253686606"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:12:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495664617"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 17:12:45 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRksf-0002Ic-1d; Wed, 09 Mar 2022 01:12:45 +0000
-Date:   Wed, 9 Mar 2022 09:12:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Tue, 8 Mar 2022 20:21:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D1E517E7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:17:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E667612CF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33317C340EB;
+        Wed,  9 Mar 2022 01:14:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646788472;
+        bh=KMmFpphAkJw5H4xtgMoUXBjVB0II6e0xEoEd+Ma14SA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MQ2VHAKm0dkruIO7sm8cDWuBpBCF8q3ht9jRbIb/eteVP4X+X4R+6OtFhPCXGi7Bs
+         mmbhG2qCUR4C6QWdT/BLnFb/vK7he71VqEj2BpOS9aZBVPVfCpJ2K2mWq6OKJf0WJ8
+         P/aYodaUm9eMOD35Aan2VNFIwBhQ/+CVkO19nHUuPreLgwXEGzdilyMAYSUPAO0wLp
+         4SWSXetvELZ6Jbp0kOUSI1ponykJQZnuqw26VTDXkWY+QnuwrYhYHgTtZKdtq7BXLR
+         VLNuc6DGjEzf8eGnKrzpkEdgm6Z3hh3LvXXOfZDdfFENJqqy06NSLzX3Vs1HXd8XrM
+         SIHnOOKvs35OA==
+Date:   Tue, 8 Mar 2022 17:14:29 -0800
+From:   Keith Busch <kbusch@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Maurizio Lombardi <mlombard@redhat.com>,
+        linux-nvme@lists.infradead.org, axboe@fb.com,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>, Ming Lei <minlei@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [ebiederm-user-namespace:coredump-vma-snapshot-fix 1/5]
- fs/binfmt_flat.c:121:36: error: incomplete definition of type 'struct
- coredump_params'
-Message-ID: <202203090943.0a2uUHMd-lkp@intel.com>
+Subject: Re: nvme-host: disk corruptions when issuing IDENTIFY commands via
+ ioctl()
+Message-ID: <20220309011429.GA3948855@dhcp-10-100-145-180.wdc.com>
+References: <CAFL455n1WaRxZuqCeQGWt1MVDnK8uUytUsAUVEUV9-LLQYv9gQ@mail.gmail.com>
+ <20220308195238.GC3501708@dhcp-10-100-145-180.wdc.com>
+ <YifyZ9MoUws/7esK@T590>
+ <20220309003904.GA3948780@dhcp-10-100-145-180.wdc.com>
+ <Yif8svaBscrL9WZk@T590>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yif8svaBscrL9WZk@T590>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,70 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git coredump-vma-snapshot-fix
-head:   390031c942116d4733310f0684beb8db19885fe6
-commit: a99a3e2efaf1f4454eb5c9176f47e66de075b134 [1/5] coredump: Move definition of struct coredump_params into coredump.h
-config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20220309/202203090943.0a2uUHMd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a2e9c68fcd4425fbce7380746e916966f00a39a0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=a99a3e2efaf1f4454eb5c9176f47e66de075b134
-        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
-        git fetch --no-tags ebiederm-user-namespace coredump-vma-snapshot-fix
-        git checkout a99a3e2efaf1f4454eb5c9176f47e66de075b134
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Wed, Mar 09, 2022 at 09:02:42AM +0800, Ming Lei wrote:
+> On Tue, Mar 08, 2022 at 04:39:04PM -0800, Keith Busch wrote:
+> > On Wed, Mar 09, 2022 at 08:18:47AM +0800, Ming Lei wrote:
+> > > Given NVMe spec states that data length of IDENTIFY command should be
+> > > 4096bytes, and PRP list can't be used. 
+> > > 
+> > > So looks nvme driver need to validate the command before submitting to
+> > > hardware, otherwise any buggy application can break FS or memory easily.
+> > 
+> > No way. The driver does not police the user passthrough interface for
+> > these kinds of things.
+> 
+> So you trust application to provide correct data always?
+>
+> From user viewpoint, this defect provides one easy hole to break FS or
+> memory, it is one serious issue, IMO. The FS/memory corruption can
+> be reproduced easily even in VM.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It doesn't seem so serious considering it's been this way for 10 years,
+and we already knew about this. It's even been reported before:
 
-All errors (new ones prefixed by >>):
+  http://lists.infradead.org/pipermail/linux-nvme/2013-August/000365.html
 
->> fs/binfmt_flat.c:121:36: error: incomplete definition of type 'struct coredump_params'
-                   current->comm, current->pid, cprm->siginfo->si_signo);
-                                                ~~~~^
-   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                              ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   include/linux/binfmts.h:11:8: note: forward declaration of 'struct coredump_params'
-   struct coredump_params;
-          ^
-   1 error generated.
+> > It couldn't ever be complete or future proof if
+> > it did.
+> 
+> But the spec states clearly the data length of IDENTIFY command is 4096
+> and PRP list can't be used, so why do you think it isn't complete or
+> future proof to validate data length of IDENTIFY in nvme driver?
 
-
-vim +121 fs/binfmt_flat.c
-
-^1da177e4c3f415 Linus Torvalds   2005-04-16  111  
-^1da177e4c3f415 Linus Torvalds   2005-04-16  112  /****************************************************************************/
-^1da177e4c3f415 Linus Torvalds   2005-04-16  113  /*
-^1da177e4c3f415 Linus Torvalds   2005-04-16  114   * Routine writes a core dump image in the current directory.
-^1da177e4c3f415 Linus Torvalds   2005-04-16  115   * Currently only a stub-function.
-^1da177e4c3f415 Linus Torvalds   2005-04-16  116   */
-^1da177e4c3f415 Linus Torvalds   2005-04-16  117  
-f6151dfea21496d Masami Hiramatsu 2009-12-17  118  static int flat_core_dump(struct coredump_params *cprm)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  119  {
-4adbb6ac4b807e2 Nicolas Pitre    2016-07-24  120  	pr_warn("Process %s:%d received signr %d and should have core dumped\n",
-13c3f50c914e6a5 Nicolas Pitre    2016-07-24 @121  		current->comm, current->pid, cprm->siginfo->si_signo);
-13c3f50c914e6a5 Nicolas Pitre    2016-07-24  122  	return 1;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  123  }
-^1da177e4c3f415 Linus Torvalds   2005-04-16  124  
-
-:::::: The code at line 121 was first introduced by commit
-:::::: 13c3f50c914e6a51d11e1aba4a85c2223e197e13 binfmt_flat: assorted cleanups
-
-:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
-:::::: CC: Greg Ungerer <gerg@linux-m68k.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The current spec says that opcode uses 4k today. What about some time in
+the future? And why are you focusing on Identify anyway? The same
+potential for abuse exists with any of the other numerous opcodes that
+don't have a fixed transfer size, most of which the driver couldn't
+possibly ever know what the transfer length is supposed to be. This is a
+priviledged operation; the applications get to own the fallout if they
+misuse it.

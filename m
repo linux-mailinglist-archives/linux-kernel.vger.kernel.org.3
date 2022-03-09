@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF9D4D2C7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528B24D2C86
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiCIJt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S232281AbiCIJv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiCIJt4 (ORCPT
+        with ESMTP id S232277AbiCIJvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:49:56 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246FF1070A6;
-        Wed,  9 Mar 2022 01:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646819338; x=1678355338;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=skqK4ekP+jaJdGJ2Qw2JrG7jPV40g1I3Zcdcj+wxnO4=;
-  b=WNLJXFduBlBzfN66tKCkxZmT+AS+F9jXc8G9RvdOn8Foeed7Zp1+wdKk
-   qLWUxT6zeld6flFNmNtdr1Z6nw6pv3I1DVmf3UniYjWYo4zc/ov9Jbz+M
-   ZRQw6ydvHcLf6gChn30rsPBlZv/5Rda9rB1EggJg3k/5smN4XWEhdOC6+
-   HStcrIJDvQCTwrvLFkm5N8iJaWRrLuHqALAjfRjUZT3QA1YywiIin8Mcj
-   zUJE098pCrx3+q5k2lsc03snW/OCkoIJeJ1AEIwhJpNYuVmikbZD9y4y1
-   6uyPR4zciQTLTqJM8X753rAWjS8NfZSXLyl/AnzkNzWhVmCo9/t4lmn0P
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="315652068"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="315652068"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 01:48:57 -0800
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="537942978"
-Received: from byrnec1x-mobl.ger.corp.intel.com (HELO localhost) ([10.252.29.235])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 01:48:54 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/dpll: make read-only array div1_vals static const
-In-Reply-To: <20220307220007.162830-1-colin.i.king@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220307220007.162830-1-colin.i.king@gmail.com>
-Date:   Wed, 09 Mar 2022 11:48:52 +0200
-Message-ID: <87sfrrzcaj.fsf@intel.com>
+        Wed, 9 Mar 2022 04:51:54 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5936A16EA91;
+        Wed,  9 Mar 2022 01:50:55 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id F045F1F44798
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646819453;
+        bh=Wxi2sPEPW5Mnk1KFkrXeTYYuHUNi8Vd22+lhClnt9yg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XoouHc4xb1hLBRzEuSR0otwFxeo0/dtS24PFfocvqliUbmifiwlWmilMW1F5xbZtL
+         Ke+zsplmmO7P62nx1fHPa7z5Relc93XNgn62Sq1fifTuPrjAoR2wP/nSeAobGf44Oq
+         nUrL8OkMaBu92poQZWpL8f6rtrvCjn3n/bHJLOQMaWf7/jRttizKxTN4Ev3Jg8Ce5X
+         knRCIpHV5uNaG+KUEwFYVNPNwaps29PFFUGfQxXMAkxQ3pG3p4USUh7zoJb1GzNyJf
+         qpQwD31fb8+SidbyH+Lcp++Np0F3t889m+tmm+ZlefCtH5xKBXAJ7zt/in1QzaueOV
+         FuSPkIixwVLbg==
+Message-ID: <affb2499-d0c8-9f8f-bfc0-3bf8b2fa431c@collabora.com>
+Date:   Wed, 9 Mar 2022 10:50:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] mmc: mtk-msdc: change a log level
+Content-Language: en-US
+To:     Alexandre Bailon <abailon@baylibre.com>,
+        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
+        matthias.bgg@gmail.com
+Cc:     linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220308094924.2868042-1-abailon@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220308094924.2868042-1-abailon@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Mar 2022, Colin Ian King <colin.i.king@gmail.com> wrote:
-> Don't populate the read-only array div1_vals on the stack but
-> instead make it static const. Also makes the object code a little
-> smaller.
+Il 08/03/22 10:49, Alexandre Bailon ha scritto:
+> We write data to RPMB, we get many time the following log:
+> mtk-msdc 11230000.mmc: phase: [map:ffffffff] [maxlen:32] [final:10]
+> 
+> dev_info is used to print that log but it seems that log is only
+> useful for debbuging. Use dev_dbg instead of dev_info.
+> 
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 
-Thanks, but this was just fixed in commit fe70b262e781 ("drm/i915: Move
-a bunch of stuff into rodata from the stack").
+Hello Alexandre,
 
-BR,
-Jani.
+I definitely agree with this change, but the commit title is not clear enough;
+can you please change it to something like
 
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+mmc: mtk-sd: Silence delay phase calculation debug log
+
+
+After the change,
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 > ---
->  drivers/gpu/drm/i915/display/intel_dpll_mgr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/display/intel_dpll_mgr.c b/drivers/gpu/drm/i915/display/intel_dpll_mgr.c
-> index 569903d47aea..17668b58b30c 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dpll_mgr.c
-> +++ b/drivers/gpu/drm/i915/display/intel_dpll_mgr.c
-> @@ -2759,7 +2759,7 @@ static bool icl_mg_pll_find_divisors(int clock_khz, bool is_dp, bool use_ssc,
->  				     bool is_dkl)
->  {
->  	u32 dco_min_freq, dco_max_freq;
-> -	int div1_vals[] = {7, 5, 3, 2};
-> +	static const int div1_vals[] = {7, 5, 3, 2};
->  	unsigned int i;
->  	int div2;
+>   drivers/mmc/host/mtk-sd.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index d5a9c269d492..05c8b4de46f3 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -1914,8 +1914,8 @@ static struct msdc_delay_phase get_best_delay(struct msdc_host *host, u32 delay)
+>   		final_phase = (start_final + len_final / 3) % PAD_DELAY_MAX;
+>   	else
+>   		final_phase = (start_final + len_final / 2) % PAD_DELAY_MAX;
+> -	dev_info(host->dev, "phase: [map:%x] [maxlen:%d] [final:%d]\n",
+> -		 delay, len_final, final_phase);
+> +	dev_dbg(host->dev, "phase: [map:%x] [maxlen:%d] [final:%d]\n",
+> +		delay, len_final, final_phase);
+>   
+>   	delay_phase.maxlen = len_final;
+>   	delay_phase.start = start_final;
+> 
 
--- 
-Jani Nikula, Intel Open Source Graphics Center

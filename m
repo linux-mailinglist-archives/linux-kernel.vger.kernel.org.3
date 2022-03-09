@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E454D329A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F3E4D3296
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234307AbiCIQEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S234245AbiCIQDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbiCIQC6 (ORCPT
+        with ESMTP id S234130AbiCIQCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:02:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F874175865;
-        Wed,  9 Mar 2022 08:01:58 -0800 (PST)
+        Wed, 9 Mar 2022 11:02:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F7C17F68A;
+        Wed,  9 Mar 2022 08:01:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EAC461486;
-        Wed,  9 Mar 2022 16:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3BAC340E8;
-        Wed,  9 Mar 2022 16:01:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D08661674;
+        Wed,  9 Mar 2022 16:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57784C340E8;
+        Wed,  9 Mar 2022 16:01:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841717;
-        bh=MXzJc6tTNRtXvc8e7ywF9mKWYhF9eLEQl9GE1I8MWLk=;
+        s=korg; t=1646841686;
+        bh=a/dB2UmD78+I6BqAfk2Y/X4e14BkMc2n+CsySWaMTLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d9LQhLPBLQJZI/0skyU71JOecA/Zz9XRs/N/nA4HqqweNH7zXfdarkvU0/kQOznwd
-         8ht9rnqWUhoo865oPA6wVLvI8HSH5xB22kNAH+ayvi+ROSjJtJNfG/s3F3CpvlStdl
-         wNq0CcK+9KnrwXohZYi04ZCg0IfbD+8v1KlG0AgM=
+        b=Fto8OmoYXWSPy1UzZoTtzJD2Zagsmy/2KjK2eXQQ3vb4iDjo1vFqz+ntDvdikW/20
+         GEOzvbmlRC3kgzHgF3or9SyFB7CbjpDSh2IO3SJXmzrJtX/JI/NSBgJ5emPJxI4tnC
+         1Bfv0CrHAROmw+GA643Yne29+IXXc2SSBLN/iHKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4.9 20/24] ARM: early traps initialisation
-Date:   Wed,  9 Mar 2022 16:59:33 +0100
-Message-Id: <20220309155856.894814595@linuxfoundation.org>
+Subject: [PATCH 4.9 21/24] ARM: use LOADADDR() to get load address of sections
+Date:   Wed,  9 Mar 2022 16:59:34 +0100
+Message-Id: <20220309155856.924148773@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220309155856.295480966@linuxfoundation.org>
 References: <20220309155856.295480966@linuxfoundation.org>
@@ -56,69 +56,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-commit 04e91b7324760a377a725e218b5ee783826d30f5 upstream.
+commit 8d9d651ff2270a632e9dc497b142db31e8911315 upstream.
 
-Provide a couple of helpers to copy the vectors and stubs, and also
-to flush the copied vectors and stubs.
+Use the linker's LOADADDR() macro to get the load address of the
+sections, and provide a macro to set the start and end symbols.
 
 Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/traps.c |   27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ arch/arm/kernel/vmlinux-xip.lds.S |   19 ++++++++++++-------
+ arch/arm/kernel/vmlinux.lds.S     |   19 ++++++++++++-------
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
---- a/arch/arm/kernel/traps.c
-+++ b/arch/arm/kernel/traps.c
-@@ -819,10 +819,22 @@ static inline void __init kuser_init(voi
- }
- #endif
+--- a/arch/arm/kernel/vmlinux-xip.lds.S
++++ b/arch/arm/kernel/vmlinux-xip.lds.S
+@@ -12,6 +12,11 @@
+ #include <asm/memory.h>
+ #include <asm/page.h>
  
-+#ifndef CONFIG_CPU_V7M
-+static void copy_from_lma(void *vma, void *lma_start, void *lma_end)
-+{
-+	memcpy(vma, lma_start, lma_end - lma_start);
-+}
++/* Set start/end symbol names to the LMA for the section */
++#define ARM_LMA(sym, section)						\
++	sym##_start = LOADADDR(section);				\
++	sym##_end = LOADADDR(section) + SIZEOF(section)
 +
-+static void flush_vectors(void *vma, size_t offset, size_t size)
-+{
-+	unsigned long start = (unsigned long)vma + offset;
-+	unsigned long end = start + size;
-+
-+	flush_icache_range(start, end);
-+}
-+
- void __init early_trap_init(void *vectors_base)
- {
--#ifndef CONFIG_CPU_V7M
--	unsigned long vectors = (unsigned long)vectors_base;
- 	extern char __stubs_start[], __stubs_end[];
- 	extern char __vectors_start[], __vectors_end[];
- 	unsigned i;
-@@ -843,17 +855,20 @@ void __init early_trap_init(void *vector
- 	 * into the vector page, mapped at 0xffff0000, and ensure these
- 	 * are visible to the instruction stream.
+ #define PROC_INFO							\
+ 	. = ALIGN(4);							\
+ 	VMLINUX_SYMBOL(__proc_info_begin) = .;				\
+@@ -148,19 +153,19 @@ SECTIONS
+ 	 * The vectors and stubs are relocatable code, and the
+ 	 * only thing that matters is their relative offsets
  	 */
--	memcpy((void *)vectors, __vectors_start, __vectors_end - __vectors_start);
--	memcpy((void *)vectors + 0x1000, __stubs_start, __stubs_end - __stubs_start);
-+	copy_from_lma(vectors_base, __vectors_start, __vectors_end);
-+	copy_from_lma(vectors_base + 0x1000, __stubs_start, __stubs_end);
+-	__vectors_start = .;
++	__vectors_lma = .;
+ 	.vectors 0xffff0000 : AT(__vectors_start) {
+ 		*(.vectors)
+ 	}
+-	. = __vectors_start + SIZEOF(.vectors);
+-	__vectors_end = .;
++	ARM_LMA(__vectors, .vectors);
++	. = __vectors_lma + SIZEOF(.vectors);
  
- 	kuser_init(vectors_base);
+-	__stubs_start = .;
+-	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_start) {
++	__stubs_lma = .;
++	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) {
+ 		*(.stubs)
+ 	}
+-	. = __stubs_start + SIZEOF(.stubs);
+-	__stubs_end = .;
++	ARM_LMA(__stubs, .stubs);
++	. = __stubs_lma + SIZEOF(.stubs);
  
--	flush_icache_range(vectors, vectors + PAGE_SIZE * 2);
-+	flush_vectors(vectors_base, 0, PAGE_SIZE * 2);
-+}
- #else /* ifndef CONFIG_CPU_V7M */
-+void __init early_trap_init(void *vectors_base)
-+{
- 	/*
- 	 * on V7-M there is no need to copy the vector table to a dedicated
- 	 * memory area. The address is configurable and so a table in the kernel
- 	 * image can be used.
+ 	PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
+ 
+--- a/arch/arm/kernel/vmlinux.lds.S
++++ b/arch/arm/kernel/vmlinux.lds.S
+@@ -14,6 +14,11 @@
+ #include <asm/page.h>
+ #include <asm/pgtable.h>
+ 
++/* Set start/end symbol names to the LMA for the section */
++#define ARM_LMA(sym, section)						\
++	sym##_start = LOADADDR(section);				\
++	sym##_end = LOADADDR(section) + SIZEOF(section)
++
+ #define PROC_INFO							\
+ 	. = ALIGN(4);							\
+ 	VMLINUX_SYMBOL(__proc_info_begin) = .;				\
+@@ -169,19 +174,19 @@ SECTIONS
+ 	 * The vectors and stubs are relocatable code, and the
+ 	 * only thing that matters is their relative offsets
  	 */
--#endif
- }
-+#endif
+-	__vectors_start = .;
++	__vectors_lma = .;
+ 	.vectors 0xffff0000 : AT(__vectors_start) {
+ 		*(.vectors)
+ 	}
+-	. = __vectors_start + SIZEOF(.vectors);
+-	__vectors_end = .;
++	ARM_LMA(__vectors, .vectors);
++	. = __vectors_lma + SIZEOF(.vectors);
+ 
+-	__stubs_start = .;
+-	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_start) {
++	__stubs_lma = .;
++	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) {
+ 		*(.stubs)
+ 	}
+-	. = __stubs_start + SIZEOF(.stubs);
+-	__stubs_end = .;
++	ARM_LMA(__stubs, .stubs);
++	. = __stubs_lma + SIZEOF(.stubs);
+ 
+ 	PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
+ 
 
 

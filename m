@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D2E4D376D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8054D361B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiCIRJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S237679AbiCIRJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbiCIRHO (ORCPT
+        with ESMTP id S237715AbiCIRIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:07:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 440DC38BC4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:57:57 -0800 (PST)
+        Wed, 9 Mar 2022 12:08:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 890E3120F54
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646845076;
+        s=mimecast20190719; t=1646845140;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jrei6r5qb5eeU3vEpF+OMacc1dbR/CuSODNaTWujW4w=;
-        b=V9K74cxD4OqkLvurhmZTudERs710rsAIR07dzRphjLiuZtyt0AUs89LOS6dGIVbzjgj4zZ
-        u83Q/e453fuBZ3IqI/SNbNHXPNoL+ZTNdd4wDhB1exGD3PW2N8AckITns8RdefVvySfar3
-        TUTkpkyZqZkoyMMhA0ubCEYk822SoT8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=qb1iDD9O8GakHXVHRPxQppvhosdQztyNQTb+YOxevjU=;
+        b=ErpzaAGFnxmNePdq84ylUhPWB6Mx5fOps10/C8LVYtuFnzT/EjpimLWhcnmqGDcMUItkN6
+        KHXo/lE+YGktafMGC0QcprzCtL8GqnJRzPGRXjWUXlJB6I9gqkvvXsmaNsMRSFLH+P2zTu
+        X+fKY7KjokT5WYocTu1r9P5U3qDo40U=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-f5kw1ds_MY6zAHPN7qY00g-1; Wed, 09 Mar 2022 11:57:55 -0500
-X-MC-Unique: f5kw1ds_MY6zAHPN7qY00g-1
-Received: by mail-wm1-f70.google.com with SMTP id f189-20020a1c38c6000000b0037d1bee4847so2819373wma.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:57:54 -0800 (PST)
+ us-mta-31-_Z0ZIdLNPxOZxWFew0sN_g-1; Wed, 09 Mar 2022 11:58:59 -0500
+X-MC-Unique: _Z0ZIdLNPxOZxWFew0sN_g-1
+Received: by mail-ej1-f72.google.com with SMTP id y5-20020a1709060a8500b006da9258a34cso1603653ejf.21
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:58:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=jrei6r5qb5eeU3vEpF+OMacc1dbR/CuSODNaTWujW4w=;
-        b=fiJoJaoLAdCU2dLW8yf9QBEdsTyuO9tCIkTFWGtDAmx2x6mosqpTOFDr7+SbnzVuZc
-         ommjiX0zJPxe/79lxgfXMbCOuhjzILNIovEJ/jgLsl6xCjQyNseyKRftBgmuCP6m0EHc
-         U8P9GuyxR9/u/O77PbMGuoVxfPfU0nXf+3g5MG97DusV7wnuCBIEkI566cduAvChKg7N
-         nJ+2f8mdbXbdbHtmUBMPCxgdZ23T/nLzbZzhUUEh4ukDgbDtRE0lrcoyfXFPzBTGu2ah
-         nJgF3XTxMb7kYkPzVbYoBD06cLaY1C0+RtJlFfTfQ2B7EF4wLp7OB8qGHcdelYpcXYNH
-         976g==
-X-Gm-Message-State: AOAM530u4xvUmHvfzJEoIVRq8xRRQtHPVUoQ8HzYbO6rMYLSK0SbcOBP
-        qaGUKhxRXHy9qwCwiIX9htE7V4flUJSvWp1PINxIgOajiN3HsV7Bnt6Kuu8R+3U9E/X9wNT7lTT
-        NE/UiawfB10+mabz58A0VUAY+
-X-Received: by 2002:a5d:66c3:0:b0:203:7b33:30c7 with SMTP id k3-20020a5d66c3000000b002037b3330c7mr439616wrw.74.1646845073836;
-        Wed, 09 Mar 2022 08:57:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJytKkiKYZw0e+6gF/vyhHHzutjAY6E9zelqV3NxtNje4tiGshyMdrhc2Knbp1y6rhHNrKkO1g==
-X-Received: by 2002:a5d:66c3:0:b0:203:7b33:30c7 with SMTP id k3-20020a5d66c3000000b002037b3330c7mr439579wrw.74.1646845073508;
-        Wed, 09 Mar 2022 08:57:53 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:6300:8418:c653:d01f:3bd2? (p200300cbc70763008418c653d01f3bd2.dip0.t-ipconnect.de. [2003:cb:c707:6300:8418:c653:d01f:3bd2])
-        by smtp.gmail.com with ESMTPSA id u4-20020adfed44000000b0020373d356f8sm2124523wro.84.2022.03.09.08.57.52
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qb1iDD9O8GakHXVHRPxQppvhosdQztyNQTb+YOxevjU=;
+        b=XXfk1z6mNGykWLiSPYC3VH+5IWGnAO/xBMG6dDASy7ep0e8/evzZnPAw22G4kAzCCI
+         d/D+29u7+R/r++7zrGXJvY5f6YXsNhL3wLnKiSRgEKSfmdt9VsG8VfPwAB+KgzHrZGS0
+         hQEn7frYE40RGoN/82d5vHGnei0/O2eOV69is1QkQqkLwdzVCMPdkg4MS+P3wpFVWPzx
+         gcn0fds53TQbyMoFDv44r+2N3YPob5HoKx3cz8gmRAHBV5O0zB4WSYOuC8wzMOSXYe1l
+         m/MSnxuDd02Gl+pfqjyZa4QsZ7jETg1Ylr94hgr0F8XTle7Lsnamiha3DMJGCzgPxAAR
+         T94A==
+X-Gm-Message-State: AOAM533gou7l7CIhkSRrYwNyWgba5c3IyBN1LTBpoLIBENRmu+3+6yYh
+        jYn+q+OF0y8/J+P2knBjh1hrN2kV7pPj3D+x92BfQVZ1Tj7gZrvPAEiGv9ktqiyNuGZh9kGVLzZ
+        BrDoHNIIXwBT3QGHGsE6wTnGo
+X-Received: by 2002:a17:906:3ad1:b0:6ce:a880:7745 with SMTP id z17-20020a1709063ad100b006cea8807745mr677336ejd.46.1646845137826;
+        Wed, 09 Mar 2022 08:58:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxYMTYVMUjRo+NSdRia5ez2xyId2oubQ9K+g2W7NICPyo05bYmdoMaHKAZcsV1AE6fuWkD3BA==
+X-Received: by 2002:a17:906:3ad1:b0:6ce:a880:7745 with SMTP id z17-20020a1709063ad100b006cea8807745mr677322ejd.46.1646845137600;
+        Wed, 09 Mar 2022 08:58:57 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
+        by smtp.gmail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm945780ejt.108.2022.03.09.08.58.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 08:57:53 -0800 (PST)
-Message-ID: <d5b7cd5c-73eb-a1cf-5519-5d13fa6e6b00@redhat.com>
-Date:   Wed, 9 Mar 2022 17:57:51 +0100
+        Wed, 09 Mar 2022 08:58:57 -0800 (PST)
+Message-ID: <0d4cdbbb-993b-55f3-355a-e0826ab45f46@redhat.com>
+Date:   Wed, 9 Mar 2022 17:58:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ Thunderbird/91.4.0
+Subject: Re: linux-next: build failure after merge of the kspp tree
 Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
-        Alexander Potapenko <glider@google.com>
-References: <20220308141437.144919-1-david@redhat.com>
- <20220308141437.144919-11-david@redhat.com>
- <YijL+qwc/Y1kmlnj@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 10/15] mm/page-flags: reuse PG_slab as
- PG_anon_exclusive for PageAnon() pages
-In-Reply-To: <YijL+qwc/Y1kmlnj@casper.infradead.org>
+To:     Kees Cook <keescook@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220309211029.0c766cac@canb.auug.org.au>
+ <202203090847.81E8862@keescook>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202203090847.81E8862@keescook>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -111,138 +88,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 09.03.22 16:47, Matthew Wilcox wrote:
-> On Tue, Mar 08, 2022 at 03:14:32PM +0100, David Hildenbrand wrote:
->> The basic question we would like to have a reliable and efficient answer
->> to is: is this anonymous page exclusive to a single process or might it
->> be shared?
+On 3/9/22 17:52, Kees Cook wrote:
+> On Wed, Mar 09, 2022 at 09:10:29PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the kspp tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> In file included from include/linux/bitops.h:33,
+>>                  from include/linux/kernel.h:22,
+>>                  from drivers/platform/x86/thinkpad_acpi.c:37:
+>> drivers/platform/x86/thinkpad_acpi.c: In function 'tpacpi_dytc_profile_init':
+>> arch/x86/include/asm/bitops.h:207:22: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
+>>   207 |                 (addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+>>       |                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/x86/thinkpad_acpi.c:10385:18: note: while referencing 'output'
+>> 10385 |         int err, output;
+>>       |                  ^~~~~~
+>>
+>> Actually the test_bit() in line 10409.
+>>
+>> Caused by commit
+>>
+>>   e1c21608e3cf ("platform/x86: thinkpad_acpi: Add PSC mode support")
+>>
+>> from the drivers-x86 tree interacting with the enablement of
+>> -Werror=array-bounds.
+>>
+>> I have reverted that commit for today.
+
+Thank you.
+
+> Looking at https://lore.kernel.org/all/20220225182505.7234-1-markpearson@lenovo.com/
 > 
-> Is this supposed to be for PAGE_SIZE pages as well, or is it only used
-> on pages > PAGE_SIZE?
-
-As documented, simple/ordinary PAGE_SIZE pages as well (unfortunately ,
-otherwise we'd have more space :) ).
-
+> The problem is with the cast of "int output" to "unsigned long". Past
+> fixes have either made the variable unsigned long, or adding a new
+> variable and removal of casts. e.g. this pseudo-patch:
 > 
->> In an ideal world, we'd have a spare pageflag. Unfortunately, pageflags
->> don't grow on trees, so we have to get a little creative for the time
->> being.
+> +	unsigned long bits;
 > 
-> This feels a little _too_ creative to me.  There's now an implicit
-
-It's making the semantics of PG_slab depend on another bit in the head
-page. I agree, it's not perfect, but it's not *too* crazy. As raised in
-the cover letter, not proud of this, but I didn't really find an
-alternative for the time being.
-
-> requirement that SL[AOU]B doesn't use the bottom two bits of
-
-I think only the last bit (0x1)
-
-> ->slab_cache, which is probably OK but would need to be documented.
-
-We'd already have false positive PageAnon() if that wasn't the case. At
-least in stable_page_flags() would already indicate something wrong I
-think (KPF_ANON). We'd need !PageSlab() checks at a couple of places
-already if I'm not wrong.
-
-I had a comment in there, but after the PageSlab cleanups came in, I
-dropped it because my assumption was that actually nobody is really
-allowed to use the lowest mapping bit for something else. We can
-document that, of course.
-
-So at least in that regard, I think this is fine.
-
+> 	...
+> +	bits = output;
+> -	if (test_bit(DYTC_FC_MMC, (void *)&output)) { /* MMC MODE */
+> +	if (test_bit(DYTC_FC_MMC, &bits)) { /* MMC MODE */
 > 
-> I have plans to get rid of PageError and PagePrivate, but those are going
-> to be too late for you.  I don't think mappedtodisk has meaning for anon
-> pages, even if they're in the swapcache.  It would need PG_has_hwpoisoned
-
-Are you sure it's not used if the page is in the swapcache? I have no
-detailed knowledge how file-back swap targets are handled in that
-regard. So fs experience would be highly appreciated :)
-
-> to shift to another bit ... but almost any bit will do for has_hwpoisoned.
-> Or have I overlooked something?
-
-Good question, I assume we could use another bit that's not already
-defined/check on subpages of a compound page.
-
-
-Overloading PG_reserved would be an alternative, however, that flag can
-also indicate that the remainder of the memmap might be mostly garbage,
-so it's not that good of a fit IMHO.
-
+> ...
 > 
->> @@ -920,6 +976,70 @@ extern bool is_free_buddy_page(struct page *page);
->>  
->>  __PAGEFLAG(Isolated, isolated, PF_ANY);
->>  
->> +static __always_inline bool folio_test_slab(struct folio *folio)
->> +{
->> +	return !folio_test_anon(folio) &&
->> +	       test_bit(PG_slab, folio_flags(folio, FOLIO_PF_NO_TAIL));
->> +}
->> +
->> +static __always_inline int PageSlab(struct page *page)
->> +{
->> +	return !PageAnon(page) &&
->> +		test_bit(PG_slab, &PF_NO_TAIL(page, 0)->flags);
->> +}
-> 
-> In case we do end up using this, this would be better implemented as
-> 
-> static __always_inline int PageSlab(struct page *page)
-> {
-> 	return folio_test_slab(page_folio(page));
-> }
-> 
-> since PageAnon already has a page_folio() call embedded in it.
+> -	} else if (test_bit(DYTC_FC_PSC, (void *)&output)) { /*PSC MODE */
+> +	} else if (test_bit(DYTC_FC_PSC, &bits)) { /*PSC MODE */
 
-Agreed, I mainly copied the stubs and extended them.
+Right I was just preparing a patch for this, I've gone with:
 
-> 
->> +static __always_inline void __SetPageSlab(struct page *page)
->> +{
->> +	VM_BUG_ON_PGFLAGS(PageAnon(page), page);
->> +	__set_bit(PG_slab, &PF_NO_TAIL(page, 1)->flags);
->> +}
-> 
-> There's only one caller of __SetPageSlab() left, in kfence.  And that
-> code looks ... weird.
-> 
->         for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
->                 if (!i || (i % 2))
->                         continue;
-> 
->                 /* Verify we do not have a compound head page. */
->                 if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
->                         goto err;
-> 
->                 __SetPageSlab(&pages[i]);
-> 
-> I think the author probably intended WARN_ON(PageCompound(page)) because
-> they're actually verifying that it's not a tail page, rather than head
-> page.
+diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+index 7016c7fc3440..c476a78599d6 100644
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -10399,7 +10399,7 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
+ 	if (err)
+ 		return err;
+ 
+-	if (test_bit(DYTC_FC_MMC, (void *)&output)) { /* MMC MODE */
++	if (output & BIT(DYTC_FC_MMC)) { /* MMC MODE */
+ 		dytc_profile_available = DYTC_FUNCMODE_MMC;
+ 
+ 		/*
+@@ -10412,7 +10412,7 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
+ 			if (!err && ((output & DYTC_ERR_MASK) == DYTC_ERR_SUCCESS))
+ 				dytc_mmc_get_available = true;
+ 		}
+-	} else if (test_bit(DYTC_FC_PSC, (void *)&output)) { /*PSC MODE */
++	} else if (output & BIT(DYTC_FC_PSC)) { /* PSC MODE */
+ 		dytc_profile_available = DYTC_FUNCMODE_PSC;
+ 	} else {
+ 		dbg_printk(TPACPI_DBG_INIT, "No DYTC support available\n");
 
-It's certainly a head-scratcher.
+I'll push this to the drivers-x86 tree for-next branch.
 
-> 
->> +static __always_inline void __ClearPageSlab(struct page *page)
->> +{
->> +	VM_BUG_ON_PGFLAGS(PageAnon(page), page);
->> +	__clear_bit(PG_slab, &PF_NO_TAIL(page, 1)->flags);
->> +}
-> 
-> There are no remaining callers of __ClearPageSlab().  yay.
-> 
+Regards,
 
-Indeed, nice.
+Hans
 
-Thanks!
-
--- 
-Thanks,
-
-David / dhildenb
 

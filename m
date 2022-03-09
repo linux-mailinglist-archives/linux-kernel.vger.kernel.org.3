@@ -2,151 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37EE4D2715
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399934D276B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiCIDIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 22:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S231644AbiCIDJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 22:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiCIDIN (ORCPT
+        with ESMTP id S231633AbiCIDJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 22:08:13 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0180214CC84;
-        Tue,  8 Mar 2022 19:07:14 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228M8wUv028053;
-        Wed, 9 Mar 2022 03:06:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=JIRzif8ElQ11YkMCVQYex0i5TpPFXhokbAn+PgJE8CQ=;
- b=chnFz2xDbGArfA2ox7fXcYIdbBtS/zW5gAYanJrKSeRllPCxWQb0h/wZnfEeUZ31MEMF
- RuritKg1MAYxykUeN+GyE+yA8ePtRWf5dXkk+fxWS2WBSKvW1ALiWD9Q0+uopdkgkMdh
- 1/gxnZW/2leqZ7BujWmg/x13uCH6bKpJ2Sf5CS58qW+zpSGaqrJpd3glqIHbnQ0Sj3VT
- /I3f1n3kMjrWMmXn6z6RkgKRgSPFFUvckeruZ2KJXi36Fw7S2ueuoqKfNGhnN1GjXAhe
- 1Um5z2VDJccLcuqSiL2WDkwZvP98RffAtRrmRxaR2vte6sl2gJMKLRUcQ9VpZx82Ogan NQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxn2gtfy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 03:06:58 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22935K3k167216;
-        Wed, 9 Mar 2022 03:06:57 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2046.outbound.protection.outlook.com [104.47.56.46])
-        by userp3020.oracle.com with ESMTP id 3envvm467u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 03:06:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T3oYL3S8HtIACTiwk34rkz5hFOrDXpFI7dXfQXFwNyocfuFvXstpKBEHUoxnJ8qc+t4BhG3Qw80F7EX3PyDul7S3w3hgK7rk1EAq0a+gX2Sais0/ZS7ZhJfrYr/a/ZkR/Yo3FOK60jZB6mil/VAzFWcf7KAE8eLVVFnSJHujohlw2RG9PzJJ2ZJJV0xfX5v1RnGNpr7zq9VrtmgkwZdJ+9WIH7lDApBnoAXIyNaEMbmhu/ALVOecE0mWKFvn7YEbrwzx8kn+C0rr7hFqORO1/LKryHXoLOT/FsJurPypTaMTleLbmhoP8nVMEVo0muBBA+N56iNoSMqVpTQlkq3K9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JIRzif8ElQ11YkMCVQYex0i5TpPFXhokbAn+PgJE8CQ=;
- b=I7kTael1+w8I82BxrhqQwmPmNalnO3Q/RgL/9sX4iXlwiI3dOGrKZoEJKz8wXRfkTnLz5brakqLVGfI6NylQh99m8BjjYqTkxIrvVpWcRmmpMg3PglSUjNF5wETUDUHucCHZE6f/VRCUFVO6TRzM0r41jFHNgJoBrYc16UJVbvBMBR4aP0yjNsPUCMfrp41/5FTcs8AzfHEZv+zOFSTR43OSiG60GV9NaJ5EEtDOvmPnw6C2vdlJIdVmuH5HQ51x3IVj0tQ8UdTe02KWPLbxU/mwsz9aLPAiIDOzSxys9hwQkuBo0vzGxlSX/kWe8LslSUDvNzWfkU2wSVOvOL2/gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 8 Mar 2022 22:09:48 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C9DAE4C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 19:08:50 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so1087080pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 19:08:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JIRzif8ElQ11YkMCVQYex0i5TpPFXhokbAn+PgJE8CQ=;
- b=yOuB2qDB4rmbBPgmMnQYwUtQLbeoUsTHKuYsGGGTrIFvOKh17XeSeKQYN6ivGuwSlIWR+EVQQ0dwHh/MeAXVulmo50XQhK/NhBBqEx2b/7DOqKTS4Q+Qx39PR2YI1WqfjYVvvCvohc2h+P1iPuZ6QT49p/aLmyNbyUBN2Il83Xk=
-Received: from SA2PR10MB4763.namprd10.prod.outlook.com (2603:10b6:806:117::19)
- by MWHPR10MB1854.namprd10.prod.outlook.com (2603:10b6:300:10b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Wed, 9 Mar
- 2022 03:06:55 +0000
-Received: from SA2PR10MB4763.namprd10.prod.outlook.com
- ([fe80::a045:e293:518:7604]) by SA2PR10MB4763.namprd10.prod.outlook.com
- ([fe80::a045:e293:518:7604%3]) with mapi id 15.20.5038.026; Wed, 9 Mar 2022
- 03:06:54 +0000
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
-        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH 4/5] block: turn bio_kmalloc into a simple kmalloc wrapper
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1pmmvltea.fsf@ca-mkp.ca.oracle.com>
-References: <20220308061551.737853-1-hch@lst.de>
-        <20220308061551.737853-5-hch@lst.de>
-Date:   Tue, 08 Mar 2022 22:06:52 -0500
-In-Reply-To: <20220308061551.737853-5-hch@lst.de> (Christoph Hellwig's message
-        of "Tue, 8 Mar 2022 07:15:50 +0100")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0026.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::31) To SA2PR10MB4763.namprd10.prod.outlook.com
- (2603:10b6:806:117::19)
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fafGdH7RVKoIoF9ehJ0GG1R/Gdj0oNIYkbLYA8cJcns=;
+        b=n0mUsJHOEua/lwijnfiK7NlcIJnJoR8Ol+DPJOgawyy2eqC46XuQUUdlVTMkTcJnhC
+         N5BJfrSvLYClKMVOIiuZq+01ndVm990uWRrqVMfE1ZShwitlC5sX2kNR/RFQe1Q6hiNX
+         7WHDQnUw7Zdt1kBoQNw8bluu0cV0meDQOnNDmt1cRfim+pYy3qhc+wbylDbWQp9VEjHp
+         U/SFS7O/yU2dHUL5kSdbfeIkY5t+5rber4qQ0c04Erq9AbZI3HoyV6jfEYSQTGR2lkOF
+         3ktAkEjRMjQFKh6IZeXQUUOQoxiQcTgf4oCibhktb5GUZmEjYI40kXUoYje5IixoPMdo
+         qNFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fafGdH7RVKoIoF9ehJ0GG1R/Gdj0oNIYkbLYA8cJcns=;
+        b=Gf0F/oJ9k0oZoG5aQg6/01DLWMD6GW0ZfPCfRF7GQ8l0IiCgL2IwZC3EJ0wVGCi+nW
+         fGDLfuf8HfjfefhhqafIAnMOYUnZ8mdkWgHUHId1tVpL4jRQPVZgNVBDMMtmt9wTfycE
+         lT1Ao5a1VrAVy5dQ5WCHZscFZ+irH1ntKU1shAHAXiPN0u6ExsT8FaaG+E4l/ehZ3ND/
+         VYf1dd7aLNQ3/824OkyWJBIlL9LVWwO7LMX9wA4h/ldOfsalCtKYuLJdJgJFIOirpmyR
+         XslewW19dxuvKquj//UQsOqXQwUFquTHCoVPTXSnJKWVNKt7EtndYXfyz0yH0zNMUHdd
+         pXUQ==
+X-Gm-Message-State: AOAM533lriSmQmF7Mf9BnjpEiVIxQgiyDVLtdjASFs9iAqMNSQkB7LPR
+        PR0aGMzMp6WimCwXFnD73Fu6VA==
+X-Google-Smtp-Source: ABdhPJzoEgiPlXNtVVWNCvumVkEyRdIdGFc167/d10qWzgVMzRdTj4d2BQQB4cljs/KMP3/ZXh5Wmw==
+X-Received: by 2002:a17:90b:314d:b0:1bf:1dc5:8e8d with SMTP id ip13-20020a17090b314d00b001bf1dc58e8dmr8170467pjb.204.1646795330331;
+        Tue, 08 Mar 2022 19:08:50 -0800 (PST)
+Received: from [10.255.244.211] ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id b2-20020a639302000000b003808dc4e133sm443130pge.81.2022.03.08.19.08.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 19:08:50 -0800 (PST)
+Message-ID: <7054def3-4f69-cf9f-546c-02a7435924d8@bytedance.com>
+Date:   Wed, 9 Mar 2022 11:08:39 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cd6429d1-51cd-4084-7e42-08da0179dda2
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1854:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1854A9FFE5272217F0EF61FC8E0A9@MWHPR10MB1854.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YyzsduugOE9lwovdee4nORz3NBkQN9+Fl/TnfzdZ8YooaoiYR2ashxDuzief7mTABmsMarRWi+EQC5YJYZ8Ia/KlI+V+aqRc3F6V01QSRI/3TXTUndpcCGkSOiQAsrtfcvcfPWz4Oqyr1EJFF+oSsOzmYhYI6o8BdEpiJlJkHLDp1gstb/3roC5lraFDGrWu7MRwZE/QacG0dhdq3+/YalBgjtj0ZCj3dkS57P9zmwlAnS/CzaYgpr1ExDWQwcmedOKHP25S5eXMLUod+QqGkKhoWvLm9GndQfJw5BcS5wDxPHR/utoefBXhVGc2McUpXaOI4ZTwQKMCciSFjDK/3swTJQ+gNeSzp29lr9S/gkstCjPs+/uk6Rx0la44ffxbAqMsga0Edo3jiDXKUoTufnaXdWxPwnEpJs3YXhI13wqLzQn3GCRoapyRhVWn4qtfBoEYOpBVUx7zo3A3PvMDaSeTmIDO6aWFqAxq52q2vTLwxD5jAzlgN5tz7yB8KJ/iih4VueJzRF7Y7zumbyD9VIRHr6WFiZta8Ted90uwXkL6AdJWCh5egQi4QQaBdhfVVBdib6nzq2N4kqoiyjODFom/sdToorz1NLD56jq1EBrIfN6LLdXiZfENi2L0jO/MoyUnGtRPqdDdQdTckG6QcvAFQCarbT6rVs2RHrXi5YjEm4d/BDkiiYahiYO2M6XkTXsETj5cgrH6rr1MJqSFTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4763.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(52116002)(6486002)(508600001)(6506007)(26005)(36916002)(186003)(38350700002)(86362001)(66476007)(8936002)(7416002)(5660300002)(4326008)(8676002)(66946007)(66556008)(2906002)(4744005)(6916009)(54906003)(316002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cMh16E3nrKy496uc53H5fPmMCMq/eMFf/IFriDyvW90rKJ+3TJaVkrUkfKXl?=
- =?us-ascii?Q?kMA1WynXvSYyQMGB22UibieaKx/uzBzbmwQQ5qTSJknUXrySl12NgU+EHpJh?=
- =?us-ascii?Q?KGD7b6xd6L/tdSyVdZxMys5hLgeQI3JjmvZwi5ZvBQLjzzurNE0tQXKkGflK?=
- =?us-ascii?Q?VqpU2wNJ3wMWucMqvV6UIwjQ9R6Hn2pFi7jbWnLVWPH761cMbHk5eSsQ5Oqt?=
- =?us-ascii?Q?QsjZOKtvNd8MY42/i0WFbXDhjrjw+X8o0gC80nHfiB2oco7fnaO28psjkQf/?=
- =?us-ascii?Q?qMu9WVckRfdo5WYjG47askq6BuOTQIES9pyQPyv9e+7/qSqhHoJWinV6ukD3?=
- =?us-ascii?Q?AtAX2QiGgtb5iUFkbH1L5NBSI9+8H0vOfekiNzb+wrW7cGCyiehXc1RWK8WB?=
- =?us-ascii?Q?4vG0R/03TwJyQpqpuMoZHwjrL3Vvk2KQ7ZBLH1r7IPK7KN/Mrp3lO8ljrnOi?=
- =?us-ascii?Q?S54HPaL9ZTNzdzqq44CMy49ioxzy0ymDPqYCs+sHBq1KWEmaRwSNK2nqtrRh?=
- =?us-ascii?Q?sbgGR0e5Dp9THdeKkFjv68UEp6PE6yJ9Nwjl1q8xaSh8NanO9+5+y7/F7yeI?=
- =?us-ascii?Q?V0cScPCVLTmjrtHgTslBrF3V7c69nWDXTh8aYA84TBTBzVIOJlJ0u61500FH?=
- =?us-ascii?Q?a3+GJkpBkOx13ZR4RRya68+x81HlGjFWVdHGhN9Qy3csbP2w3iw7ikt0EucG?=
- =?us-ascii?Q?4QibLfriygrUj1QDT1zAc3S6tNJ/WrNxUefFPk57tRAdF7MjhaOecJU63ke/?=
- =?us-ascii?Q?vCCQwUfbDNzdRZA2vFbw7Cak6HlHdEWPLItS+ATcUJG/seT+8Ps4ifkLirIj?=
- =?us-ascii?Q?a10yR4H+MUi1qrdcJjHhzMTu2dMZ9FJNDLqdywihW8RNQEn/KxAA8URytJDf?=
- =?us-ascii?Q?Lfg/nJcg56R/zSidN4C/pjO5kKcu5nL65bCjC9kN1a/+E1YtXYGMmxnJSXTi?=
- =?us-ascii?Q?EZlyf7OmjpSdQFsRBxeii4fTPFyk1PgYlpCDZsJ5pThriquQe2MZ3W8Z1lf7?=
- =?us-ascii?Q?UWJaYiiZ8E9m7pCG8UUMLcI4ObXa2yNsa/IJ/nhTTbNz7dgLBjRSsBwaS4Li?=
- =?us-ascii?Q?X1TcfLkvFs9NMWWfGJmugW8r/DjmBmG3P44RJgwlxLsfaLLynxMySFld4/vL?=
- =?us-ascii?Q?qAklbt61DJSU4l2y+2F6xv6FOzQ/kMZGodboHrptaKzIsZ15S6oA/PH3aoo6?=
- =?us-ascii?Q?JdRGfIzLwulciSVi9bJW77ognB5aobpE9heaQuJRYczrNtMb+EL5hFA4YN/a?=
- =?us-ascii?Q?u1wCBlXyRLSKebU79y+avJgr/Dr6UzBKHx0pVto5KNYuw1XIXOLpyxwhypng?=
- =?us-ascii?Q?AwHOZ8cQxAeLiLy7q1wUGHC+D5ybJjr/eMiW0/w1EbEYDlT7xisYQQFLuXXS?=
- =?us-ascii?Q?Yv/CQxCRToOt9LH7c0MA1B3p53QkLvlXESJxnBPaZkT3vN4/EKvAJAvolgBe?=
- =?us-ascii?Q?ci4yKbBYUkIl4V2BgrblmT7/iwOiagg0Y/JXR+tM82WyDr7ui0SI/josxmKz?=
- =?us-ascii?Q?alhQqjD3UtPn/sVEjNNX9jYEt6xw+jGoSbPvsRLfsGwqWJSGR0wu4FA//Enj?=
- =?us-ascii?Q?Ko6Xm7vIwEcjrRWoWE3WbUaqRV8PpqQS26JXrNYI8mGKolwcbN4xKgvk0Pvu?=
- =?us-ascii?Q?d12devFrlma1L4r6SUETsJAWSS+sYe4zXyE8Emg1GNhcsds+3sDbUb5+QnzW?=
- =?us-ascii?Q?zORkSHPwqy2LsiSWOQANdEmJ4Fk=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd6429d1-51cd-4084-7e42-08da0179dda2
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4763.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 03:06:54.9149
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oJlGskmXSJKLaAty6IjqkKDMSXkCeyTjOpF7feTVmked8r+Fq6LIDHOcSUAzr1UWW0FbEFW55Y3rvsXdLtNqRrPvFF+6+vNuOTyydoqorrU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1854
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10280 signatures=690848
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
- phishscore=0 malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203090015
-X-Proofpoint-ORIG-GUID: VgWSyWj7774d-F8-GaJuGkifFUXVdhlv
-X-Proofpoint-GUID: VgWSyWj7774d-F8-GaJuGkifFUXVdhlv
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [External] Re: [PATCH v3 2/3] sched/cpuacct: optimize away RCU
+ read lock
+Content-Language: en-US
+To:     Marek Szyprowski <m.szyprowski@samsung.com>, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        bristot@redhat.com, zhaolei@cn.fujitsu.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220220051426.5274-1-zhouchengming@bytedance.com>
+ <20220220051426.5274-2-zhouchengming@bytedance.com>
+ <CGME20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f@eucas1p2.samsung.com>
+ <f4bc652b-115f-35b5-91db-bad3b30fed9b@samsung.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <f4bc652b-115f-35b5-91db-bad3b30fed9b@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,22 +79,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/3/9 7:20 上午, Marek Szyprowski wrote:
+> On 20.02.2022 06:14, Chengming Zhou wrote:
+>> Since cpuacct_charge() is called from the scheduler update_curr(),
+>> we must already have rq lock held, then the RCU read lock can
+>> be optimized away.
+>>
+>> And do the same thing in it's wrapper cgroup_account_cputime(),
+>> but we can't use lockdep_assert_rq_held() there, which defined
+>> in kernel/sched/sched.h.
+>>
+>> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> 
+> This patch landed recently in linux-next as commit dc6e0818bc9a 
+> ("sched/cpuacct: Optimize away RCU read lock"). On my test systems I 
+> found that it triggers a following warning in the early boot stage:
 
-Christoph,
+Hi, thanks for the report. I've send a fix patch[1] for review.
 
-> Remove the magic autofree semantics and require the callers to explicitly
-> call bio_init to initialize the bio.
->
-> This allows bio_free to catch accidental bio_put calls on bio_init()ed
-> bios as well.
+[1] https://lore.kernel.org/lkml/20220305034103.57123-1-zhouchengming@bytedance.com/
 
-> -struct bio *bio_kmalloc(gfp_t gfp_mask, unsigned short nr_iovecs);
-> +struct bio *bio_kmalloc(unsigned short nr_vecs, gfp_t gfp_mask);
-
-I understand why you did it but this parameter reversal is a bit
-scary. Hopefully gfp_t will cause any mistakes to be flagged.
-
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> 
+> Calibrating delay loop (skipped), value calculated using timer 
+> frequency.. 48.00 BogoMIPS (lpj=240000)
+> pid_max: default: 32768 minimum: 301
+> Mount-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
+> Mountpoint-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
+> CPU: Testing write buffer coherency: ok
+> CPU0: Spectre v2: using BPIALL workaround
+> 
+> =============================
+> WARNING: suspicious RCU usage
+> 5.17.0-rc5-00050-gdc6e0818bc9a #11458 Not tainted
+> -----------------------------
+> ./include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
+> 
+> other info that might help us debug this:
+> 
+> 
+> rcu_scheduler_active = 1, debug_locks = 1
+> 2 locks held by kthreadd/2:
+>   #0: c1d7972c (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x30/0x118
+>   #1: ef7b52d0 (&rq->__lock){-...}-{2:2}, at: 
+> raw_spin_rq_lock_nested+0x24/0x34
+> 
+> stack backtrace:
+> CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc5-00050-gdc6e0818bc9a 
+> #11458
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+>   unwind_backtrace from show_stack+0x10/0x14
+>   show_stack from dump_stack_lvl+0x58/0x70
+>   dump_stack_lvl from update_curr+0x1bc/0x35c
+>   update_curr from dequeue_task_fair+0xb0/0x8e8
+>   dequeue_task_fair from __do_set_cpus_allowed+0x19c/0x258
+>   __do_set_cpus_allowed from __set_cpus_allowed_ptr_locked+0x130/0x1d8
+>   __set_cpus_allowed_ptr_locked from __set_cpus_allowed_ptr+0x48/0x64
+>   __set_cpus_allowed_ptr from kthreadd+0x44/0x16c
+>   kthreadd from ret_from_fork+0x14/0x2c
+> Exception stack(0xc1cb9fb0 to 0xc1cb9ff8)
+> 9fa0:                                     00000000 00000000 00000000 
+> 00000000
+> 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
+> 00000000
+> 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> CPU0: thread -1, cpu 0, socket 9, mpidr 80000900
+> cblist_init_generic: Setting adjustable number of callback queues.
+> cblist_init_generic: Setting shift to 1 and lim to 1.
+> Running RCU-tasks wait API self tests
+> Setting up static identity map for 0x40100000 - 0x40100060
+> rcu: Hierarchical SRCU implementation.
+> 
+> =============================
+> WARNING: suspicious RCU usage
+> 5.17.0-rc5-00050-gdc6e0818bc9a #11458 Not tainted
+> -----------------------------
+> ./include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
+> 
+> other info that might help us debug this:
+> 
+> 
+> rcu_scheduler_active = 1, debug_locks = 1
+> 1 lock held by migration/0/13:
+>   #0: ef7b52d0 (&rq->__lock){-...}-{2:2}, at: 
+> raw_spin_rq_lock_nested+0x24/0x34
+> 
+> stack backtrace:
+> CPU: 0 PID: 13 Comm: migration/0 Not tainted 
+> 5.17.0-rc5-00050-gdc6e0818bc9a #11458
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> Stopper: 0x0 <- 0x0
+>   unwind_backtrace from show_stack+0x10/0x14
+>   show_stack from dump_stack_lvl+0x58/0x70
+>   dump_stack_lvl from put_prev_task_stop+0x16c/0x25c
+>   put_prev_task_stop from __schedule+0x698/0x964
+>   __schedule from schedule+0x54/0xe0
+>   schedule from smpboot_thread_fn+0x218/0x288
+>   smpboot_thread_fn from kthread+0xf0/0x134
+>   kthread from ret_from_fork+0x14/0x2c
+> Exception stack(0xc1ccffb0 to 0xc1ccfff8)
+> ffa0:                                     00000000 00000000 00000000 
+> 00000000
+> ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
+> 00000000
+> ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> smp: Bringing up secondary CPUs ...
+> CPU1: thread -1, cpu 1, socket 9, mpidr 80000901
+> CPU1: Spectre v2: using BPIALL workaround
+> smp: Brought up 1 node, 2 CPUs
+> SMP: Total of 2 processors activated (96.00 BogoMIPS).
+> 
+> The above log comes from ARM 32bit Samsung Exnyos4210 based Trats board.
+> 
+>> ---
+>>   include/linux/cgroup.h | 2 --
+>>   kernel/sched/cpuacct.c | 4 +---
+>>   2 files changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+>> index 75c151413fda..9a109c6ac0e0 100644
+>> --- a/include/linux/cgroup.h
+>> +++ b/include/linux/cgroup.h
+>> @@ -791,11 +791,9 @@ static inline void cgroup_account_cputime(struct task_struct *task,
+>>   
+>>   	cpuacct_charge(task, delta_exec);
+>>   
+>> -	rcu_read_lock();
+>>   	cgrp = task_dfl_cgroup(task);
+>>   	if (cgroup_parent(cgrp))
+>>   		__cgroup_account_cputime(cgrp, delta_exec);
+>> -	rcu_read_unlock();
+>>   }
+>>   
+>>   static inline void cgroup_account_cputime_field(struct task_struct *task,
+>> diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
+>> index 307800586ac8..f79f88456d72 100644
+>> --- a/kernel/sched/cpuacct.c
+>> +++ b/kernel/sched/cpuacct.c
+>> @@ -337,12 +337,10 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+>>   	unsigned int cpu = task_cpu(tsk);
+>>   	struct cpuacct *ca;
+>>   
+>> -	rcu_read_lock();
+>> +	lockdep_assert_rq_held(cpu_rq(cpu));
+>>   
+>>   	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+>>   		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
+>> -
+>> -	rcu_read_unlock();
+>>   }
+>>   
+>>   /*
+> 
+> Best regards

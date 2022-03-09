@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142E54D2E7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEACB4D2E82
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbiCIL4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S232480AbiCIL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiCIL4k (ORCPT
+        with ESMTP id S231416AbiCIL6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:56:40 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E379A996D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:55:41 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 5D8B61F44A74
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646826940;
-        bh=dJmw4zOrIHkURAmLQiTZMGndrEkge+z8fLKmyH944ng=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lzcJwR+xt1Hi8zjGE4UgpY3rbII3w72kn/wdkoJY0oZKJ9pzvD/YNCuQY2JgOUcgu
-         IIMJ4teyyYm+lIooNRL4ucJE4cCnUAK2tGNpc2vZqkp7yjbHxivzwLqJHF+wWk7bd7
-         AbfK1dYuMW9v4Pj1MHR8nDciE0aJij8ookDYocuwVasuo8i42d6G+I6ORcCYE/rXBc
-         HHpJ3VRi5ynK0kzALfafF87gYjdAAD1w4DzDqYd5MdOdL0Lv0Qg/lZXqz5TIh4xNRd
-         F7qa8nuXGqfb6EFSdLlQt7VUaiqXMzPL7vK78nwEiPw/xoPmUxGl/7kaktl/W6ke/F
-         P53OZjZwjW4zA==
-Message-ID: <26ab770d-4b59-a25a-79ef-e43858e7b67b@collabora.com>
-Date:   Wed, 9 Mar 2022 14:55:36 +0300
+        Wed, 9 Mar 2022 06:58:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E0226C7;
+        Wed,  9 Mar 2022 03:57:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 206AD618E6;
+        Wed,  9 Mar 2022 11:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33E5C340EE;
+        Wed,  9 Mar 2022 11:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646827069;
+        bh=f4O5J6jHrGpyWRckAD+pP6EOMS6/H2OF0+nhLhBMFXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U9NXIkiLLVdRGICP2UhJGpSCTbv0Yw2+qOsgCAyPoG4fNJdW/3KFgv+qRD3WEQb3S
+         N3tOejg8v79qBtt2OfJw33nR7nlXHwkz4QqkavV802EO8getLBumgwtnzvsiJnBLMO
+         vagxfyIABj/lFJnzenDP0T7XdWhaDQIdKArnNWiA=
+Date:   Wed, 9 Mar 2022 12:57:46 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+Message-ID: <YiiWOovHhWzbxOJV@kroah.com>
+References: <20220307162207.188028559@linuxfoundation.org>
+ <Yid4BNbLm3mStBi2@debian>
+ <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
+ <CA+G9fYv74gGWQLkEZ4idGYri+F9BFV1+9=bz5L0+aophSzDdVA@mail.gmail.com>
+ <YifFMPFMp9gPnjPc@kroah.com>
+ <ab0b668c-e321-e1d9-3cc3-a609111b828d@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 5/5] drm/virtio: Add memory shrinker
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <20220308131725.60607-6-dmitry.osipenko@collabora.com>
- <CAF6AEGvVmV4fesd0MsSo-4WxSVqOFN-U+p5HOE2job6CeYbqTA@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGvVmV4fesd0MsSo-4WxSVqOFN-U+p5HOE2job6CeYbqTA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab0b668c-e321-e1d9-3cc3-a609111b828d@roeck-us.net>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 08, 2022 at 02:45:50PM -0800, Guenter Roeck wrote:
+> On 3/8/22 13:05, Greg Kroah-Hartman wrote:
+> > On Tue, Mar 08, 2022 at 11:08:10PM +0530, Naresh Kamboju wrote:
+> 
+> 
+> [ ... ]
+> 
+> > > > 
+> > > > Reverting 4778338032b3 ("MIPS: fix local_{add,sub}_return on MIPS64")
+> > > > has fixed all the 3 build failures.
+> > > 
+> > > MIPS: fix local_{add,sub}_return on MIPS64
+> > > [ Upstream commit 277c8cb3e8ac199f075bf9576ad286687ed17173 ]
+> > > 
+> > > Use "daddu/dsubu" for long int on MIPS64 instead of "addu/subu"
+> > > 
+> > > Fixes: 7232311ef14c ("local_t: mips extension")
+> > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > 
+> > Ah, I'll queue up the revert for that in the morning, thanks for finding
+> > it.  Odd it doesn't trigger the same issue in 5.16.y.
+> > 
+> 
+> If you don't want to revert: the fix needs the following two patches:
+> 
+> e5b40668e93 ("slip: fix macro redefine warning")
+> b81e0c2372e ("block: drop unused includes in <linux/genhd.h>")
+> 
+> Both are in v5.16, so you won't see the problem there.
 
-On 3/9/22 04:12, Rob Clark wrote:
->> +static unsigned long
->> +virtio_gpu_gem_shrinker_count_objects(struct shrinker *shrinker,
->> +                                     struct shrink_control *sc)
->> +{
->> +       struct drm_gem_shmem_object *shmem;
->> +       struct virtio_gpu_device *vgdev;
->> +       unsigned long count = 0;
->> +       bool empty = true;
->> +
->> +       vgdev = container_of(shrinker, struct virtio_gpu_device,
->> +                            vgshrinker.shrinker);
->> +
->> +       if (!mutex_trylock(&vgdev->mm_lock))
->> +               return 0;
-> One bit of advice from previously dealing with shrinker and heavy
-> memory pressure situations (turns out 4GB chromebooks can be pretty
-> much under *constant* memory pressure):
-> 
-> You *really* want to make shrinker->count_objects lockless.. and
-> minimize the lock contention on shrinker->scan_objects (ie.  The
-> problem is you can end up with shrinking going on on all CPU cores in
-> parallel, you want to not funnel that thru one lock as much as
-> possible.
-> 
-> See in particular:
-> 
-> 25ed38b3ed26 ("drm/msm: Drop mm_lock in scan loop")
-> cc8a4d5a1bd8 ("drm/msm: Avoid mutex in shrinker_count()")
+Thanks, both now added to the queue.
 
-Thank you, I'll take that into account for v2.
+greg k-h

@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A1F4D272C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28274D2748
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiCICY3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Mar 2022 21:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S231465AbiCICay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 21:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiCICYZ (ORCPT
+        with ESMTP id S231279AbiCICax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 21:24:25 -0500
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F0E1B65;
-        Tue,  8 Mar 2022 18:23:27 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2dbfe58670cso8316707b3.3;
-        Tue, 08 Mar 2022 18:23:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vRqEX4jehGb8mpHAHZanSBhzpnb3IlnL81jQ2qWnd2E=;
-        b=AgTQOJMBWm65wrlgk9F3vl0WIIVs6Ww7J4tQcKQpbJ4oO11NlpztuAdwAzxOrVOCET
-         DRSCQ7MkASEWAgWWUxEmsxnSOdKwoXkNcs3wg0chqlcXUziMTW1hkvde8vrHuMTraSvm
-         x7RNQU5CXUO0EP5OS1yvN6IvSyrH1MXD4thumq9Fb7Jh1IjTwGggquhPkwQ+f/3j2sJP
-         aLBVrqah46iUjU36xtRKUgqv83KvoYi9Zcw0DkJMmIHIcwKVPQBMa2RWJRk2nyGZinIq
-         Lr9rOA8+sScj6dNZQTkWQFUA1GxsLZPvbNhZNzPN9OwmXp9qbgFiFxBu9+jUtdDInA1l
-         /0hA==
-X-Gm-Message-State: AOAM531lhpn0enYcXzo5JHBZbw3mXE5X42ceVg2uxpEZibYAB/ORTjwz
-        aCHkSP66oPaVBJnR0mJWXoz2lBoL84B0msWFm7c=
-X-Google-Smtp-Source: ABdhPJzj7DyFzASBA892hVXyxQooQWrYYu3TtRehPlG6eBRsdpkOFy6LiFy+Mi6aV/QfgWrM4LUXLXbItwdvbKc6+AU=
-X-Received: by 2002:a0d:db09:0:b0:2dc:344f:7944 with SMTP id
- d9-20020a0ddb09000000b002dc344f7944mr15041695ywe.45.1646792606156; Tue, 08
- Mar 2022 18:23:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
- <20220308141201.2343757-1-mailhol.vincent@wanadoo.fr> <CAHk-=whvGWbpsTa538CvQ9e=VF+m8WPQmES2y6-=0=-64uGkgg@mail.gmail.com>
-In-Reply-To: <CAHk-=whvGWbpsTa538CvQ9e=VF+m8WPQmES2y6-=0=-64uGkgg@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 9 Mar 2022 11:23:15 +0900
-Message-ID: <CAMZ6RqJ5Pyup4RgjMA5fG5Lt4tpA_tvv61snpKbF4DJAkPzdAg@mail.gmail.com>
-Subject: Re: [PATCH v2] linux/bits.h: GENMASK_INPUT_CHECK: reduce W=2 noise by
- 31% treewide
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tue, 8 Mar 2022 21:30:53 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49BE643E;
+        Tue,  8 Mar 2022 18:29:55 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCx415sG6z4xgv;
+        Wed,  9 Mar 2022 13:29:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646792994;
+        bh=ypfxRf7dJRjx8lo3S2FVKwL6a2rcsCwMKaeXPyNybic=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fI2Zx2wzfah+nMMJ9mVEL+5cTke7QXqbqFuaz3C1GW72Mu9ewg7F3gd0eCkmLWNZo
+         n7Xa5dO0RgKeBZUJEnj5I6RB9up/QJx0ygBeu5o1P6NI49YHln3GCqhHm7a3bdHEHV
+         3iloo477UUrb8IsoySzehAIkfzz2BaNfyI4PxHN3sejP5GOoan4xpKCGDylrCxRg+u
+         gpzNP/vIfd8izHg2pwWXOl8GUfRxOf9rANk+wzQCVMv9SPJ4BspHIyronZCLTiCJYk
+         gt3s/Nf8qxxqUyLrBUPmsGo5ew8QdYhacgwh+DNxiSuPcYOogjrl8IT+FJmce/ETNw
+         +nGUpc+9WiIhg==
+Date:   Wed, 9 Mar 2022 13:29:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Lee Jones <lee.jones@linaro.org>, Olof Johansson <olof@lixom.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the mfd tree with the arm-soc tree
+Message-ID: <20220309132952.525b3aa4@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/nS+BbVYJ.+TjXE_Z.JuxTLp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--Sig_/nS+BbVYJ.+TjXE_Z.JuxTLp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed. 9 Mar 2022 at 03:13, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Tue, Mar 8, 2022 at 6:12 AM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > This patch silences a -Wtypes-limits warning in GENMASK_INPUT_CHECK()
-> > which is accountable for 31% of all warnings when compiling with W=2.
->
-> Please, just make the patch be "remote -Wtypes-limits".
+Hi all,
 
-After this patch, the number of remaining -Wtype-limits drops by
-99.7% from 164714 to only 431 for an allyesconfig (some of which
-could be true positives). So I am inclined to keep
--Wtype-limits at W=2 because it still catches some relevant
-issues. Aside from the issue pointed out here, it is not a hindrance.
+Today's linux-next merge of the mfd tree got a conflict in:
 
-> Instead of making an already complicated check more complicated, and
-> making it more fragile.
+  Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
 
-ACK, this patch makes it more complicated. About making it more
-fragile, lib/test_bits.c is here to catch issues and this patch
-passes those tests including the TEST_GENMASK_FAILURES.
+between commit:
 
-> I don't see why that int cast on h would be valid, for example. Why
-> just h?
+  e465ea5cc05d ("dt-bindings: soc: samsung: usi: refer to dtschema for chil=
+dren")
 
-The compiler only complains on ((unsigned int)foo > 0) patterns,
-i.e. when h is unsigned and l is zero. The signness of l is not relevant
-here.
+from the arm-soc tree and commit:
 
-> And should you not then check that the cast doesn't actually
-> change the value?
+  0ff4827ed66f ("spi: dt-bindings: samsung: Convert to dtschema")
 
-The loss of precision only occurs on big values
-e.g. GENMASK(UINT_MAX + 1, 0).
+from the mfd tree.
 
-GENMASK (and GENMASK_ULL) already requires h and l to be between
-0 and 31 (or 63). Out of band positive values are caught by
--Wshift-count-overflow (and negative values by
--Wshift-count-negative).
+I fixed it up (I just used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-So the use cases in which the int cast would change h value are
-already caught elsewhere.
+--=20
+Cheers,
+Stephen Rothwell
 
-> But the basic issue is that the compiler warns about bad things, and
-> the problem isn't the code, but the compiler.
+--Sig_/nS+BbVYJ.+TjXE_Z.JuxTLp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-ACK, the code is not broken, the compiler is guilty. I tend to
-agree to the rule "if not broken, don’t fix", but I consider this
-patch to be *the exception* because of the outstanding level of
-noise generated here.
+-----BEGIN PGP SIGNATURE-----
 
-If my message did not convince you, then I am fine to move
--Wtypes-limits from W=2 to W=3 as a compromise. But this is not
-my preferred solution because some -Wtypes-limits warnings are
-useful.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIoESEACgkQAVBC80lX
+0GzAUQf+ODsnBkQtuQiVylNTNUtG0njOVLH2/3IAFhQ56rD/6ZJwTYwiGFwi6htR
+jZrpOycKoPE2HbKMngdUyRKfpGoPj0sHuz/fb3QcxXWN2WQGUkEQxcIa8kGU9LDq
+WQtG9blCjgaZwAbYhf3V/a7ZDDi4cBd/PPxMRmO1jF9PWWyGPCSIkD6F0yA2yKhG
+YrPSPgazJPaYNA6ThojqTNOPA4UHJs1zvXM6Z7VgpPOncUEuj16TX1vp5mmX98de
+rFYt44eKvvviGXPz4GThbXtRBb7+EI1P60IBMJ833hNYesivm9up3/hPMTZ2kxCE
+e3TGWOPNM678tFldblIzLpMCJOjjcQ==
+=iRsA
+-----END PGP SIGNATURE-----
 
-
-Yours sincerely,
-Vincent Mailhol
+--Sig_/nS+BbVYJ.+TjXE_Z.JuxTLp--

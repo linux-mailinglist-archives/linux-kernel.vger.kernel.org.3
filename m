@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AF94D3A69
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270494D3A5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235942AbiCITbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S237933AbiCIT3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235870AbiCITbN (ORCPT
+        with ESMTP id S238453AbiCIT3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:31:13 -0500
-X-Greylist: delayed 1237 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Mar 2022 11:30:14 PST
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.47.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852029FC7
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:30:14 -0800 (PST)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 980D91809A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:27:48 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id S1yOn9a1YRnrrS1yOnpf9j; Wed, 09 Mar 2022 13:27:48 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3YPETikwgZf/61jCoqWj0cVi6BGtD6q2kACd4EOhH0A=; b=u6PyuyK3WByUv1ne6OQc+fEH58
-        U5sSA80HLmCvK/uMHiF0GCK0vFUOkLVMnvJhrQMmh53zXDAfR1HAPp2PGpu4Eum7PXMoDGvEk/h0H
-        D7VvnjWsymzb8CV9kho0woFyr4476sOVq5F5Pmg3OtxEcx7XnYrk1IWTxnWwiJzkCjx7IgX5vo/b/
-        Ju0dzrOihPktuqVOEyeEqGwgOBjQo1WE/t/D1jxtNyIMr/pXC9Ys0SRjO6bIEe/dzlpCrmIMaM/tc
-        Kp3HPp21Kha/tz0EHzZ0y7//E2reIcVboAJ+IdVy002kz+TpbqOYWSbQvO/W6zWpBPXnGP5YzrhQJ
-        XJu8zUrw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54204)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nS1yN-002JpO-Qk; Wed, 09 Mar 2022 19:27:47 +0000
-Message-ID: <244cf721-8e68-c540-384a-a8cf24f450e4@roeck-us.net>
-Date:   Wed, 9 Mar 2022 11:27:45 -0800
+        Wed, 9 Mar 2022 14:29:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D1373053
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:28:04 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D4C8321117;
+        Wed,  9 Mar 2022 19:28:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646854082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EBgd/kQM55+aKZyAxeZX48FkKVfo/mz5CTR5lRw9eKc=;
+        b=b3Z3M399AMh+GTSPcGUbXFhjUT60ZcnZGXo3ZwidAB2Na7GV2lWe7y6CQnjqN9QCUraFtC
+        kmMIH2GqDsK/+M4d77UvYJMdMic1Ds/bAscRHv+OmappmAs096Qlr09Exv3pt+gfeVfNL8
+        upzReRQE7qX0ExI5JafnRK6j3g2Qwbc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646854082;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EBgd/kQM55+aKZyAxeZX48FkKVfo/mz5CTR5lRw9eKc=;
+        b=nOFXmqBfiMmnupNjUk7t+uMDGgMsx/dslFxiJeSG1xw9ddpJVnlNHSzDrlfBRb0b6wL5Sh
+        Xia5h41juXNdSRCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8AD0913D7C;
+        Wed,  9 Mar 2022 19:28:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bdAuIML/KGINRQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 09 Mar 2022 19:28:02 +0000
+Message-ID: <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
+Date:   Wed, 9 Mar 2022 20:28:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.4 00/18] 5.4.184-rc1 review
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220309155856.552503355@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nS1yN-002JpO-Qk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54204
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 38
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>
+Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
+ <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0fZuqDyqCnXB5WEZyY7uvbDk"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,19 +84,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 07:59, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.184 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> Anything received after that time might be too late.
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0fZuqDyqCnXB5WEZyY7uvbDk
+Content-Type: multipart/mixed; boundary="------------oCd2skkQJSv6EnHzuN8xFK1Z";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Gert Wollny <gert.wollny@collabora.com>
+Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>, linux-kernel@vger.kernel.org,
+ virtualization@lists.linux-foundation.org,
+ Gustavo Padovan <gustavo.padovan@collabora.com>,
+ dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
+ <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
+In-Reply-To: <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
 
-Building i386:defconfig ... failed
---------------
-Error log:
-arch/x86/kernel/cpu/bugs.c: In function 'spectre_v2_select_mitigation':
-arch/x86/kernel/cpu/bugs.c:973:41: error: implicit declaration of function 'unprivileged_ebpf_enabled' [-Werror=implicit-function-declaration]
-   973 |         if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+--------------oCd2skkQJSv6EnHzuN8xFK1Z
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkNCg0KQW0gMDkuMDMuMjIgdW0gMTI6NTUgc2NocmllYiBEbWl0cnkgT3NpcGVua286DQo+
+IEhlbGxvLA0KPiANCj4gT24gMy85LzIyIDExOjU5LCBUaG9tYXMgWmltbWVybWFubiB3cm90
+ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMDguMDMuMjIgdW0gMTQ6MTcgc2NocmllYiBEbWl0cnkg
+T3NpcGVua286DQo+Pj4gSGVsbG8sDQo+Pj4NCj4+PiBUaGlzIHBhdGNoc2V0IGludHJvZHVj
+ZXMgbWVtb3J5IHNocmlua2VyIGZvciB0aGUgVmlydElPLUdQVSBEUk0gZHJpdmVyLg0KPj4+
+IER1cmluZyBPT00sIHRoZSBzaHJpbmtlciB3aWxsIHJlbGVhc2UgQk9zIHRoYXQgYXJlIG1h
+cmtlZCBhcyAibm90IG5lZWRlZCINCj4+PiBieSB1c2Vyc3BhY2UgdXNpbmcgdGhlIG5ldyBt
+YWR2aXNlIElPQ1RMLiBUaGUgdXNlcnNwYWNlIGluIHRoaXMgY2FzZSBpcw0KPj4+IHRoZSBN
+ZXNhIFZpckdMIGRyaXZlciwgaXQgd2lsbCBtYXJrIHRoZSBjYWNoZWQgQk9zIGFzICJub3Qg
+bmVlZGVkIiwNCj4+PiBhbGxvd2luZyBrZXJuZWwgZHJpdmVyIHRvIHJlbGVhc2UgbWVtb3J5
+IG9mIHRoZSBjYWNoZWQgc2htZW0gQk9zIG9uDQo+Pj4gbG93bWVtDQo+Pj4gc2l0dWF0aW9u
+cywgcHJldmVudGluZyBPT00ga2lsbHMuDQo+Pg0KPj4gVmlydGlvLWdwdSBpcyBidWlsZCBv
+biB0b3Agb2YgR0VNIHNobWVtIGhlbHBlcnMuIEkgaGF2ZSBhIHByb3RvdHlwZQ0KPj4gcGF0
+Y2hzZXQgdGhhdCBhZGRzIGEgc2hyaW5rZXIgdG8gdGhlc2UgaGVscGVycy4gSWYgeW91IHdh
+bnQgdG8gZ28NCj4+IGZ1cnRoZXIsIHlvdSBjb3VsZCBpbXBsZW1lbnQgc29tZXRoaW5nIGxp
+a2UgdGhhdCBpbnN0ZWFkLiBQYW5mcm9zdCBhbmQNCj4+IGxpbWEgYWxzbyBoYXZlIHRoZWly
+IG93biBzaHJpbmtlciBhbmQgY291bGQgY2VydGFpbmx5IGJlIGNvbnZlcnRlZCB0bw0KPj4g
+dGhlIGdlbS1zaG1lbSBzaHJpbmtlci4NCj4gDQo+IEkgaGFkIGEgdGhvdWdodCB0aGF0IGl0
+IGNvdWxkIGJlIHBvc3NpYmxlIHRvIHVuaWZ5IHNocmlua2VycyBpbnRvIGENCj4gY29tbW9u
+IERSTSBmcmFtZXdvcmsuIENvdWxkIHlvdSBwbGVhc2UgZ2l2ZSBtZSBhIGxpbmsgdG8geW91
+cnMgcHJvdG90eXBlDQo+IHBhdGNoc2V0Pw0KDQpJIHVwbG9hZGVkIHRoZSBwYXRjaGVzIHRv
+DQoNCiANCmh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy90emltbWVybWFubi9saW51
+eC8tL2NvbW1pdHMvZ2VtLXNobWVtLWNhY2hlZC1tYXBwaW5ncw0KDQppdCdzIGluY29tcGxl
+dGUgYW5kIHVuLWRlYnVnZ2VkLCBidXQgaXQgc2hvd3Mgd2hhdCBuZWVkcyB0byBiZSBkb25l
+LiBJdCANCmhhcyB0aGUgaW5mcmFzdHJ1Y3R1cmUsIGJ1dCBsYWNrcyB0aGUgY2hhbmdlcyB0
+byB0aGUgR0VNIHNobWVtIGNvZGUuDQoNClRoZSByZWFzb24gZm9yIHRoaXMgd29yayBpcyB0
+byBrZWVwIEdFTSBzaG1lbSBwYWdlcyBtYXBwZWQgYW5kIGFsbG9jYXRlZCANCmV2ZW4gd2hp
+bGUgdGhlIEJPIGlzIG5laXRoZXIgbWFwcGVkIG5vciBwaW5uZWQuICBBcyBpdCBpcyBub3cs
+IEdFTSBTSE1FTSANCmNyZWF0ZXMgYW5kIHJlbGVhc2VzIHBhZ2VzIG9uIGVhY2ggcGluIGFu
+ZCB1bnBpbiwgYW5kIG1hcHMgYW5kIHVubWFwcyANCm1lbW9yeSByYW5nZXMgb24gZWFjaCB2
+bWFwIGFuZCB2dW5tYXAuICBJdCdzIGFsbCB3YXN0ZWZ1bC4gT25seSB0aGUgDQpmaXJzdCBw
+aW4gYW5kIHZtYXAgY2FsbHMgc2hvdWxkIGVzdGFibGlzaCBwYWdlcyBhbmQgbWFwcGluZ3Mg
+YW5kIG9ubHkgDQp0aGUgcHVyZ2UgYW5kIGZyZWUgZnVuY3Rpb25zIHNob3VsZCByZWxlYXNl
+IHRoZW0uDQoNClRoZSBwYXRjaHNldCBhZGRzIG5ldyBoZWxwZXJzIGZvciBCTyBwdXJnaW5n
+IHRvIHN0cnVjdCANCmRybV9nZW1fb2JqZWN0X2Z1bmNzLiBXaXRoIHRoaXMsIEkgdGhpbmsg
+aXQgbWlnaHQgYmUgcG9zc2libGUgdG8gaGF2ZSANCm9uZSBnbG9iYWwgRFJNIHNocmlua2Vy
+IGFuZCBsZXQgaXQgaGFuZGxlIGFsbCBCT3M7IGluZGVwZW5kZW50IG9mIGVhY2ggDQpCTydz
+IG1lbW9yeSBtYW5hZ2VyLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQoNCi0tIA0KVGhv
+bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
+cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
+ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
+aHJlcjogSXZvIFRvdGV2DQo=
+
+--------------oCd2skkQJSv6EnHzuN8xFK1Z--
+
+--------------0fZuqDyqCnXB5WEZyY7uvbDk
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIo/8EFAwAAAAAACgkQlh/E3EQov+B5
+Cg/8D7p/w31jtMqJdXvTfREicil4d2w52/vvgXkFNV6+5IoG0WCNVZ4aiTiws28X/ATH31KjS388
+3stbqkYxb1+Zui9tiXi2ciKBNc9ofNxeht/fpuP0vz0Xqigh0bYXPZmzLiDmwns7sXauMNML4cM1
+CqDnnwL+gjV/ZaowppqMgJqcB47k+SPURriV7ryLVb5Wc34MP3Qa3rbbOPm954y6bv1/W6zwIOAJ
+4Kpu5q6n0m4XWYV8rMVloIODbjm5yUcY0v/RolNfNEZICqDa82stzim8Co9JleplaUixuT7S3xX0
+enWNLyjzuzNz1m1AI64qTNXOwj8oa+Uu5H+rTXxA0+sT9kvZNad8NevS+buLiUEeF2pQullvY2Hh
+TVGmElsblRlDHKA6EpZKnCvjfxtXul1WuQHXAa3E+SX5MQAmWD08MaswNqMqSbzL/vE5lt7nR5yY
+ijCJoAylYpJ9esEkYc22++vvdDm5DMJP6Sto4/uCNIotmZmCOUWdDXb501ypJct8pJsgrMma0pKJ
+wAv8W3sCMHpUgpnB/of52Of7U7CPSe2CJrQ/7QUNRrCNSTp9lH8Ef1j9WxafqNlYJS+K850jOK4Y
+OVZWpm8L8iNpkv9mHd5O1qx6Hk2cjWop7BeSgs0o1u8qCi0KBZKfemMiacLpI8yiBaP60JyVFAsa
+rE8=
+=Wf5r
+-----END PGP SIGNATURE-----
+
+--------------0fZuqDyqCnXB5WEZyY7uvbDk--

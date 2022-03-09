@@ -2,274 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7B64D2AC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EA04D2AC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiCIIoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S231434AbiCIIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiCIIoC (ORCPT
+        with ESMTP id S231419AbiCIIoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:44:02 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C0A98F70;
-        Wed,  9 Mar 2022 00:42:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646815367;
-        bh=k++kNOC2p1Cen2Bd+AWd1weeoH/sDqAVAD9mLuMJjgE=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=HSKTAAcgngGBvxOO4Q5P632aMxaLBzz5a6G5PDOAvEoIPB6xmzMrRsQohr5pCkhJt
-         WhvXUCKR/DaCsCANemg+AilBJ3Rtg5L/79QkhKOXoAf+dJiIvYeS5ONBGq1GGLI7zF
-         wB05VopghE5SI22zOlsrxGljcKSlAdfs5VVUJ/U8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MQvD5-1npkRt2xtf-00O1Jl; Wed, 09
- Mar 2022 09:42:47 +0100
-Message-ID: <c28efa5a-e2ae-486b-6a51-5e063086937c@gmx.com>
-Date:   Wed, 9 Mar 2022 16:42:41 +0800
+        Wed, 9 Mar 2022 03:44:10 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41D5A41BA;
+        Wed,  9 Mar 2022 00:43:10 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id bx5so1705680pjb.3;
+        Wed, 09 Mar 2022 00:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UUlw5iop1hg2LcntCzOm7pJNZ6lZKUbeGMjMuteL4pc=;
+        b=LbW67smhAalQyd7nOFqRjXDlUebOp1rQCcw5RxCkbXxCi++bWhev53p48zrLBYaBMV
+         LV5wRz4huARv02anX7mB2v2G+mIWSn8/tLjtI0RE9tidrZiQb2B1QkT/9H9lgE0nmux7
+         GBJLRdMK1oC6RdM3M3x8AanKvdKpUmvdAhLLLMgSYfK7plXk68DyfY463EbG2Y20OVrN
+         ZXUuLDQ1l8EM4g/CCXADC7CSSzRDT9TKRbflNqUzT5hV8Rg36aV7VzFsXPOgZxaCMV5N
+         qttSLnfzMnkk6GIbarOixaYddJIR891i1mXoy8JmNogliaW8yPNOKcFOj0KGplXWtd7O
+         UeLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UUlw5iop1hg2LcntCzOm7pJNZ6lZKUbeGMjMuteL4pc=;
+        b=WHIoqXQg/8NRchs2bTLddrmqMl8e2vnmSht+9lOAMhcnGKSD3uTpDnfrR4keqyLtNQ
+         UktHc2K9DYcX4MKsTepoJSuyskepXXvZjuuoU3oq/9MxyJP53IP+brzB+6AJ1S0hiv2o
+         mFu9YvZYdfgM+1f2gzt+0L6PvdPwbWqH5gLXePWdiQSdIP0tNTik9MTpar5VH/n5Ho8g
+         I91dsdnMZLZQQBZqj3nGzVu9x2Ba7MrQeK5I+8qa8DtsohoYYszGtDV/wu72zUve3BC+
+         Bluinm6ZgbYXafy/W53yqDXyY0aURagL42cu07rcVOfYQp9z/J+zvk0ovf3CqrAHBsIS
+         faKQ==
+X-Gm-Message-State: AOAM533ekiiRQe8jQQtqWL9S2Q4T6wkCjmESYvumOTYDraN4oVvE+hrU
+        a1sUgmW45EazRq3aNVq7YDE=
+X-Google-Smtp-Source: ABdhPJzKxCI6STq01WzJZgDiHz8+77NWfM0lbC4I8yysxBae/noSe/Q5poixGyGpFl70Ch3T/N57Tg==
+X-Received: by 2002:a17:902:e88d:b0:151:ba78:3bc1 with SMTP id w13-20020a170902e88d00b00151ba783bc1mr21890601plg.13.1646815390346;
+        Wed, 09 Mar 2022 00:43:10 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id m8-20020a17090a158800b001bf2cec0377sm7094436pja.3.2022.03.09.00.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 00:43:09 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: x86/pmu: Fix and isolate TSX-specific performance event logic
+Date:   Wed,  9 Mar 2022 16:42:57 +0800
+Message-Id: <20220309084257.88931-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     Oliver Sang <oliver.sang@intel.com>
-Cc:     Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        lkp@lists.01.org, lkp@intel.com, linux-btrfs@vger.kernel.org
-References: <20220301063026.GB13547@xsang-OptiPlex-9020>
- <e55fb58e-bb3a-ce51-b485-6302415b34e4@gmx.com>
- <20220302084435.GA28137@xsang-OptiPlex-9020>
- <dbc84dd2-7e6d-95b0-d7bc-373f897a7063@gmx.com>
- <20220309074954.GB22223@xsang-OptiPlex-9020>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [btrfs] 3626a285f8: divide_error:#[##]
-In-Reply-To: <20220309074954.GB22223@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:t36bkf+wkjtCr9Lrc2hb5TIOui5AusuXuXA4D1VDl/3GBs5Jh6m
- xHxzNZ5BmyEY4CXqxZoL7+KR65w00PDyBXIoRph9TedRCLKXpKtdqbGd89ZMpkdfPcOm53X
- qDsHbTFdM0YsrzWbyXlkoohBe3p3UQKwChB7N88LhFHZc8PR9mb3Kk/30av5fAXngAyfbC1
- RtHXQvoapzml+zvqDk8GQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4rdgA6dCX44=:WyexwiPI+otK5gsPu9v+2W
- eGVuzEryCUeWQ9jo5iteHmcfUtWvBIlrEOkTLYz3AuL7PUc3NqAeZHNK5kscRvFtsV6FMw9+O
- uox4Q7xDkyAO4BHc2pfzcaHQ/94lBpydCc45NL8+yZNlM+JUaeUvI7zHS1+xzQM6gxGXsvGrT
- uc7bBFjWEdeU0+IHqjpfCOi9A3PB81IqnfRFM50RCZ+CVWWKJ7QE9T/thCrLYuhfz+P8/Zlkt
- K2UhUlIgf/Rv1+w2vvsHF4bAE9qw3WvKvK1ThqKK/dtSTnCu4dV1SMg+5TQ5l/5Zo8aAS5G6x
- fpV153vzvS7ri9Xnax9MTWiN6E2cnNtUisCpoEo9d1txZADHEfA2TGiiA3ab/0iGaheqmed2M
- 8RKQaXnY69VpWRorKqr0RV5SadBNjXosPyfvCD00CVYLLLrZWWwNjTOUCU/tFbvmoXmCeZWm0
- KrqythpSp/6V6/CuT05vh4zK8XG5oOEz6g1HklNMOy5Di1M7IO+krkxF3cz3H26Wy6A5ORFgw
- sNR+UcmSwG0IO5GT9/uacTLc1b6KwTrTSqUKz6XzrFVI8g0DwNIxV2PqN0Irm/q8OO6Q6FFGI
- SN/f5OTXcCFf2XqoDUPZA08WxAV+jpWVQahgiJ/Fe1ZDKWSITO59WQrA11SO8hIWUX3rnUv7r
- 477Vzip4VRvWFyVcDJUqO4g1/BOtZTpaTglJPMIJ4RerKTwWL1v5rEDRfXh9ftvwIQEbicccd
- KCl9wbt7tOiA48comMcjQFEM/C9hP4U2etsSY+lIX01861nSVstmkINkuzzRB+lNaITUGqWn4
- Gzq69+K6D088JUYll69tZWTKm8RfXHZX1AyjFqoQxgyT7RZjtAspGO2sgpAEE2+OW21Drk2xO
- 4M+211h7hbwByT135/Bn49lWNW8UnUk0HVYzAdoqT0i4YgfGkk34hKBTTNBla8ZI2Pj1W/Zzu
- VRGy8gbA5xiVbbJt3VgTL61/jrVBljpNgV6DcWpLCSZBg67XPhEgFl0ozKHn1WLMpPcrMl7fu
- JYEJRxukmeNJom8c+/FGVFZEvS4KBgVjG2+fzQu71g4Fli/RL8jkOr2fnxFYsbYB0ktpNzkCy
- 6mlZQ9LbeAOtJs=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Like Xu <likexu@tencent.com>
 
+HSW_IN_TX* bits are used in generic code which are not supported on
+AMD. Worse, these bits overlap with AMD EventSelect[11:8] and hence
+using HSW_IN_TX* bits unconditionally in generic code is resulting in
+unintentional pmu behavior on AMD. For example, if EventSelect[11:8]
+is 0x2, pmc_reprogram_counter() wrongly assumes that
+HSW_IN_TX_CHECKPOINTED is set and thus forces sampling period to be 0.
 
-On 2022/3/9 15:49, Oliver Sang wrote:
-> Hi Qu,
->
-> On Fri, Mar 04, 2022 at 03:26:19PM +0800, Qu Wenruo wrote:
->>
->>
->> On 2022/3/2 16:44, Oliver Sang wrote:
->>> Hi Qu,
->>>
->>> On Tue, Mar 01, 2022 at 03:47:38PM +0800, Qu Wenruo wrote:
->>>>
->>>>
->>>> This is weird, the code is from simple_stripe_full_stripe_len(), whic=
-h
->>>> means the chunk map must be RAID0 or RAID10.
->>>>
->>>> In that case, their sub_stripes should be either 1 or 2, why we got 0=
- there?
->>>>
->>>> In fact, from volumes.c, all sub_stripes is from btrfs_raid_array[],
->>>> which all have either 1 or 2 sub_stripes.
->>>>
->>>>
->>>> Although the code is old, not the latest version, it should still not
->>>> cause such problem.
->>>>
->>>> Mind to retest with my branch to see if it can be reproduced?
->>>> https://github.com/adam900710/linux/tree/refactor_scrub
->>>
->>> we tested head of this branch:
->>>     d6e3a8c42f2fad btrfs: scrub: rename scrub_bio::pagev and related m=
-embers
->>> and:
->>>     fdad4a9615f180 btrfs: introduce dedicated helper to scrub simple-s=
-tripe based range
->>> on this branch.
->>>
->>> by attached config.
->>>
->>> still reproduce the same issue.
->>>
->>> attached dmesgs FYI.
->>
->> Still failed to reproduce here.
->>
->> Those btrfs/07[0123] tests are already in scrub/replace group, thus I
->> ran them almost hourly during the development.
->>
->>
->> Although there are some ASSERT()s doing extra sanity checks, they shoul=
-d
->> not affect the result anyway.
->>
->> Thus I pushed a branch with more explicit BUG_ON()s to catch the
->> possible divide by zero bugs.
->> (https://github.com/adam900710/linux/tree/refactor_scrub_testing)
->>
->> Mind to give it a try?
->
->
-> in our tests, it seems one BUG_ON you added is triggered
-> (full dmesg attached):
+Also per the SDM, both bits 32 and 33 "may only be set if the processor
+supports HLE or RTM" and for "IN_TXCP (bit 33): this bit may only be set
+for IA32_PERFEVTSEL2."
 
-What the heck...
+Opportunistically eliminate code redundancy, because if the HSW_IN_TX*
+bit is set in pmc->eventsel, it is already set in attr.config.
 
-It's indeed some weird extent mapping has its sub-stripes as 0...
+Reported-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Reported-by: Jim Mattson <jmattson@google.com>
+Fixes: 103af0a98788 ("perf, kvm: Support the in_tx/in_tx_cp modifiers in KVM arch perfmon emulation v5")
+Co-developed-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+v1 -> v2 Changelog:
+- Benefit from the insights provided by commit fdefb96c608e; (Jim)
+- IN_TXCP bit may only be set for IA32_PERFEVTSEL2; (Jim)
+- Remove the redundant code about attr.config; (Jim)
 
-I must be insane or there is something fundamental wrong.
+Previous:
+https://lore.kernel.org/kvm/20220307063805.65030-1-likexu@tencent.com/
 
-Mind to try that branch again? I have updated the branch, now it will
-trigger BUG_ON() as soon as it finds a chunk mapping with sub_stripes =3D=
-=3D 0.
+ arch/x86/kvm/pmu.c           | 15 +++++----------
+ arch/x86/kvm/vmx/pmu_intel.c | 13 ++++++++++---
+ 2 files changed, 15 insertions(+), 13 deletions(-)
 
-I'm wondering if it's old btrfs-progs involved (which may not properly
-initialize btrfs_chunk::sub_stripes) now.
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 902b6d700215..eca39f56c231 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -96,8 +96,7 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
+ 
+ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+ 				  u64 config, bool exclude_user,
+-				  bool exclude_kernel, bool intr,
+-				  bool in_tx, bool in_tx_cp)
++				  bool exclude_kernel, bool intr)
+ {
+ 	struct perf_event *event;
+ 	struct perf_event_attr attr = {
+@@ -116,16 +115,14 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+ 
+ 	attr.sample_period = get_sample_period(pmc, pmc->counter);
+ 
+-	if (in_tx)
+-		attr.config |= HSW_IN_TX;
+-	if (in_tx_cp) {
++	if ((attr.config & HSW_IN_TX_CHECKPOINTED) &&
++	    guest_cpuid_is_intel(pmc->vcpu)) {
+ 		/*
+ 		 * HSW_IN_TX_CHECKPOINTED is not supported with nonzero
+ 		 * period. Just clear the sample period so at least
+ 		 * allocating the counter doesn't fail.
+ 		 */
+ 		attr.sample_period = 0;
+-		attr.config |= HSW_IN_TX_CHECKPOINTED;
+ 	}
+ 
+ 	event = perf_event_create_kernel_counter(&attr, -1, current,
+@@ -233,9 +230,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	pmc_reprogram_counter(pmc, type, config,
+ 			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+ 			      !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
+-			      eventsel & ARCH_PERFMON_EVENTSEL_INT,
+-			      (eventsel & HSW_IN_TX),
+-			      (eventsel & HSW_IN_TX_CHECKPOINTED));
++			      eventsel & ARCH_PERFMON_EVENTSEL_INT);
+ }
+ EXPORT_SYMBOL_GPL(reprogram_gp_counter);
+ 
+@@ -271,7 +266,7 @@ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int idx)
+ 			      kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc),
+ 			      !(en_field & 0x2), /* exclude user */
+ 			      !(en_field & 0x1), /* exclude kernel */
+-			      pmi, false, false);
++			      pmi);
+ }
+ EXPORT_SYMBOL_GPL(reprogram_fixed_counter);
+ 
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index da71160a50d6..efa172a7278e 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -389,6 +389,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	struct kvm_pmc *pmc;
+ 	u32 msr = msr_info->index;
+ 	u64 data = msr_info->data;
++	u64 reserved_bits;
+ 
+ 	switch (msr) {
+ 	case MSR_CORE_PERF_FIXED_CTR_CTRL:
+@@ -443,7 +444,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
+ 			if (data == pmc->eventsel)
+ 				return 0;
+-			if (!(data & pmu->reserved_bits)) {
++			reserved_bits = pmu->reserved_bits;
++			if ((pmc->idx == 2) &&
++			    (pmu->raw_event_mask & HSW_IN_TX_CHECKPOINTED))
++				reserved_bits ^= HSW_IN_TX_CHECKPOINTED;
++			if (!(data & reserved_bits)) {
+ 				reprogram_gp_counter(pmc, data);
+ 				return 0;
+ 			}
+@@ -534,8 +539,10 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	entry = kvm_find_cpuid_entry(vcpu, 7, 0);
+ 	if (entry &&
+ 	    (boot_cpu_has(X86_FEATURE_HLE) || boot_cpu_has(X86_FEATURE_RTM)) &&
+-	    (entry->ebx & (X86_FEATURE_HLE|X86_FEATURE_RTM)))
+-		pmu->reserved_bits ^= HSW_IN_TX|HSW_IN_TX_CHECKPOINTED;
++	    (entry->ebx & (X86_FEATURE_HLE|X86_FEATURE_RTM))) {
++		pmu->reserved_bits ^= HSW_IN_TX;
++		pmu->raw_event_mask |= (HSW_IN_TX|HSW_IN_TX_CHECKPOINTED);
++	}
+ 
+ 	bitmap_set(pmu->all_valid_pmc_idx,
+ 		0, pmu->nr_arch_gp_counters);
+-- 
+2.35.1
 
-Thanks,
-Qu
-
->
->
-> [   75.279958][ T3602] ------------[ cut here ]------------
-> [   75.285221][ T3602] kernel BUG at fs/btrfs/scrub.c:3387!
-> [   75.290490][ T3602] invalid opcode: 0000 [#1] SMP KASAN PTI
-> [   75.296010][ T3602] CPU: 2 PID: 3602 Comm: btrfs Not tainted 5.17.0-r=
-c4-00095-g6b837d4c40d5 #1
-> [   75.304521][ T3602] Hardware name: Dell Inc. OptiPlex 9020/0DNKMN, BI=
-OS A05 12/05/2013
-> [   75.312344][ T3602] RIP: 0010:scrub_stripe+0xed3/0x1340 [btrfs]
-> [   75.318250][ T3602] Code: 90 00 00 00 e8 0e f9 96 c0 e9 98 f3 ff ff e=
-8 c4 f9 96 c0 e9 26 f3 ff ff 48 8b bc 24 80 00 00 00 e8 f2 f8 96 c0 e9 3b =
-f4 ff ff <0f> 0b 0f
-> 0b 4c 8d a4 24 b8 01 00 00 31 f6 4c 8d bd 20 02 00 00 4c
-> [   75.337480][ T3602] RSP: 0018:ffffc9000b47f550 EFLAGS: 00010246
-> [   75.343340][ T3602] RAX: 0000000000000007 RBX: ffff88810231d600 RCX: =
-ffff88810231d61c
-> [   75.351074][ T3602] RDX: 0000000000000000 RSI: 0000000000000004 RDI: =
-ffff8881023a2458
-> [   75.358807][ T3602] RBP: ffff8881097ad800 R08: 0000000000000001 R09: =
-ffffed102828100d
-> [   75.366550][ T3602] R10: ffff888141408063 R11: ffffed102828100c R12: =
-0000000000000000
-> [   75.374282][ T3602] R13: 0000000000100000 R14: ffff888141408000 R15: =
-ffff888129c9c000
-> [   75.382016][ T3602] FS:  00007f94c24ec8c0(0000) GS:ffff8881a6d00000(0=
-000) knlGS:0000000000000000
-> [   75.390691][ T3602] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   75.397054][ T3602] CR2: 00007ffe454aa8e8 CR3: 000000020a796004 CR4: =
-00000000001706e0
-> [   75.404785][ T3602] Call Trace:
-> [   75.407886][ T3602]  <TASK>
-> [   75.410645][ T3602]  ? btrfs_wait_ordered_extents+0x9a1/0xe40 [btrfs]
-> [   75.417049][ T3602]  ? scrub_raid56_parity+0x5c0/0x5c0 [btrfs]
-> [   75.422853][ T3602]  ? btrfs_remove_ordered_extent+0xbc0/0xbc0 [btrfs=
-]
-> [   75.429341][ T3602]  ? mutex_unlock+0x80/0x100
-> [   75.433733][ T3602]  ? __wake_up_common_lock+0xe3/0x140
-> [   75.438897][ T3602]  ? __lookup_extent_mapping+0x215/0x300 [btrfs]
-> [   75.445037][ T3602]  scrub_chunk+0x294/0x480 [btrfs]
-> [   75.449984][ T3602]  scrub_enumerate_chunks+0x643/0x1340 [btrfs]
-> [   75.455962][ T3602]  ? scrub_chunk+0x480/0x480 [btrfs]
-> [   75.461083][ T3602]  ? __scrub_blocked_if_needed+0xb9/0x200 [btrfs]
-> [   75.467317][ T3602]  ? scrub_checksum_data+0x4c0/0x4c0 [btrfs]
-> [   75.473121][ T3602]  ? down_read+0x137/0x240
-> [   75.477339][ T3602]  ? mutex_unlock+0x80/0x100
-> [   75.481726][ T3602]  ? __mutex_unlock_slowpath+0x300/0x300
-> [   75.487743][ T3602]  ? btrfs_find_device+0xac/0x240 [btrfs]
-> [   75.493285][ T3602]  btrfs_scrub_dev+0x535/0xc00 [btrfs]
-> [   75.498578][ T3602]  ? scrub_enumerate_chunks+0x1340/0x1340 [btrfs]
-> [   75.504812][ T3602]  ? btrfs_apply_pending_changes+0x80/0x80 [btrfs]
-> [   75.511120][ T3602]  ? btrfs_record_root_in_trans+0x4d/0x180 [btrfs]
-> [   75.517428][ T3602]  ? finish_wait+0x280/0x280
-> [   75.521819][ T3602]  btrfs_dev_replace_by_ioctl.cold+0x62c/0x720 [btr=
-fs]
-> [   75.528483][ T3602]  ? btrfs_finish_block_group_to_copy+0x3c0/0x3c0 [=
-btrfs]
-> [   75.535440][ T3602]  ? __raw_callee_save___native_queued_spin_unlock+=
-0x11/0x1e
-> [   75.542575][ T3602]  btrfs_ioctl+0x37ee/0x51c0 [btrfs]
-> [   75.547691][ T3602]  ? fput_many+0xaa/0x140
-> [   75.551823][ T3602]  ? filp_close+0xef/0x140
-> [   75.556041][ T3602]  ? __x64_sys_close+0x2d/0x80
-> [   75.560600][ T3602]  ? do_syscall_64+0x3b/0xc0
-> [   75.564991][ T3602]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [   75.570838][ T3602]  ? btrfs_ioctl_get_supported_features+0x40/0x40 [=
-btrfs]
-> [   75.577756][ T3602]  ? _raw_spin_lock_irq+0x82/0xd2
-> [   75.582572][ T3602]  ? _raw_spin_lock+0x100/0x100
-> [   75.587218][ T3602]  ? fiemap_prep+0x200/0x200
-> [   75.591607][ T3602]  ? lockref_put_or_lock+0xc4/0x1c0
-> [   75.596600][ T3602]  ? do_sigaction+0x4b3/0x840
-> [   75.601075][ T3602]  ? __x64_sys_pidfd_send_signal+0x600/0x600
-> [   75.606837][ T3602]  ? __might_fault+0x4d/0x80
-> [   75.611226][ T3602]  ? __x64_sys_rt_sigaction+0x1d0/0x240
-> [   75.616558][ T3602]  ? __ia32_sys_signal+0x140/0x140
-> [   75.621461][ T3602]  ? __fget_light+0x57/0x540
-> [   75.625854][ T3602]  __x64_sys_ioctl+0x127/0x1c0
-> [   75.630414][ T3602]  do_syscall_64+0x3b/0xc0
-> [   75.634633][ T3602]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [   75.640307][ T3602] RIP: 0033:0x7f94c25df427
-> [   75.644533][ T3602] Code: 00 00 90 48 8b 05 69 aa 0c 00 64 c7 00 26 0=
-0 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 =
-00 0f 05 <48> 3d 01
-> f0 ff ff 73 01 c3 48 8b 0d 39 aa 0c 00 f7 d8 64 89 01 48
-> [   75.663771][ T3602] RSP: 002b:00007ffd06a4acc8 EFLAGS: 00000246 ORIG_=
-RAX: 0000000000000010
-> [   75.671937][ T3602] RAX: ffffffffffffffda RBX: 000055d51e9f72a0 RCX: =
-00007f94c25df427
-> [   75.679671][ T3602] RDX: 00007ffd06a4b108 RSI: 00000000ca289435 RDI: =
-0000000000000004
-> [   75.687404][ T3602] RBP: 00000000ffffffff R08: 0000000000000000 R09: =
-000055d51e9fa580
-> [   75.695137][ T3602] R10: 0000000000000008 R11: 0000000000000246 R12: =
-00007ffd06a4e97a
-> [   75.702868][ T3602] R13: 0000000000000004 R14: 0000000000000000 R15: =
-0000000000000005
-> [   75.710600][ T3602]  </TASK>
-> [   75.713445][ T3602] Modules linked in: dm_mod btrfs blake2b_generic x=
-or raid6_pq zstd_compress libcrc32c sd_mod t10_pi sg ata_generic ipmi_devi=
-ntf ipmi_msghandler
-> intel_rapl_msr intel_rapl_common x86_pkg_temp_thermal intel_powerclamp c=
-oretemp i915 kvm_intel kvm intel_gtt ttm irqbypass crct10dif_pclmul crc32_=
-pclmul crc32c_intel
-> ghash_clmulni_intel drm_kms_helper syscopyarea sysfillrect sysimgblt fb_=
-sys_fops rapl ata_piix mei_wdt intel_cstate drm libata mei_me intel_uncore=
- mei video ip_tables
-> [   75.756460][ T3602] ---[ end trace 0000000000000000 ]---
->
->
->>
->> Thanks,
->> Qu
->>

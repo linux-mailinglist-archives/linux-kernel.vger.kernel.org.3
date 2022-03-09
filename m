@@ -2,185 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C304D390B
+	by mail.lfdr.de (Postfix) with ESMTP id 6254B4D390C
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiCISnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        id S236778AbiCISnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiCISnT (ORCPT
+        with ESMTP id S231269AbiCISni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:43:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DFA18CC52;
-        Wed,  9 Mar 2022 10:42:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 347AF61756;
-        Wed,  9 Mar 2022 18:42:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3A7C340E8;
-        Wed,  9 Mar 2022 18:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646851338;
-        bh=C29ILB5Vt8JKrXHmnu0CdK+HMaq+USY1zHtOTjLuda4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cM4HUFPg9nCTg8olRCEbSZ+hTmLN8U4wTaHF/RiJqgG5aabN+0+GMLQ6FKCA2S5Mn
-         bfMBUSk5HUszrY4UMVDlhViszeUB+yHr0ivZMFl3LV0KjyP9mZTWaWvtr7U9jMJTwV
-         xuRBLUbs1nS2h5rXU+7JPmBntb9lg2AHYlOogTjQVjjQABF9i6FzqYns4jNIAofg3C
-         407t2gDczA8JseSxoGQcWdTfjyc0JTTgaaec5w5iCdcEzgU1IUa/oEOEfXK+NR/RYw
-         AE3QJoFmN7EGoMhSq/1TpDCFkbZ7iwKYys4OKPKDM2XRPlx+6aRY1fLKnzUF8eFVZ9
-         gDWdNe/lzI40Q==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH rdma-next] Revert "RDMA/core: Fix ib_qp_usecnt_dec() called when error"
-Date:   Wed,  9 Mar 2022 20:42:13 +0200
-Message-Id: <74c11029adaf449b3b9228a77cc82f39e9e892c8.1646851220.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 13:43:38 -0500
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7EB1403D;
+        Wed,  9 Mar 2022 10:42:37 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dbd97f9bfcso33212037b3.9;
+        Wed, 09 Mar 2022 10:42:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y61mRCKE3zM9b3wOa8ze9bCmXMfmsVduldNuViZnA4k=;
+        b=GE95ESInc2IO8KVquGpLPySZ/+w308ZgkRCbYhr/mdez6s10atGaEEOcXQNqF3yOzs
+         7or9LjOeJNNZhBLWPPqqHkRY96Siescs1oPn5ngD0J51AS0agRTYkTYwPapikrj3jumj
+         QAw/GTvMHddtmjsXUPcL3Zw1EKf/3ZSv5Zgbyw4wsoaDs/PiJe/ewE30VZl+iyXwImhw
+         Lf3ZzrJIpEVszDT8UAzgX28bYH5lgyZygdgfnwUfaEXisJYYHq4+ItkgxDeCs0iamHGn
+         EuAHLMWkwiFLka24HjPmofayoBwRbYTgWn6XtkCmgAacUOHy0ymn/zKKoxoIQMda3YQZ
+         hrpA==
+X-Gm-Message-State: AOAM532aKd7EdlPF04nB4xyuJKmDe5EnFI5tkuJmiXJpZ0QzZaHHSRRV
+        ljRivgTtoSkwmCpjnUIGuOikuMdw0K96HUDL090=
+X-Google-Smtp-Source: ABdhPJwnEUJOD5z2fMROtMR0asiHyfh52H3fwaFsMnbIiBicsEFlOHLbZIOrDuUxLrBPkwWxCOLEpAfGKZlTIDoDxT0=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr971245ywb.326.1646851356977; Wed, 09
+ Mar 2022 10:42:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <43dfaba0646d498fe94c1a8479b812346133f438.1646765290.git.darren@os.amperecomputing.com>
+In-Reply-To: <43dfaba0646d498fe94c1a8479b812346133f438.1646765290.git.darren@os.amperecomputing.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Mar 2022 19:42:26 +0100
+Message-ID: <CAJZ5v0gMh2ed+ZWOnd-t_uTrZtm=AUfxOAkAKWT7WQK3=gf+7w@mail.gmail.com>
+Subject: Re: [PATCH] ACPI/APEI: Limit printable size of BERT table data
+To:     Darren Hart <darren@os.amperecomputing.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Doug Rady <dcrady@os.amperecomputing.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+On Tue, Mar 8, 2022 at 7:51 PM Darren Hart
+<darren@os.amperecomputing.com> wrote:
+>
+> Platforms with large BERT table data can trigger soft lockup errors
+> while attempting to print the entire BERT table data to the console at
+> boot:
+>
+>   watchdog: BUG: soft lockup - CPU#160 stuck for 23s! [swapper/0:1]
+>
+> Observed on Ampere Altra systems with a single BERT record of ~250KB.
+>
+> The original bert driver appears to have assumed relatively small table
+> data. Since it is impractical to reassemble large table data from
+> interwoven console messages, and the table data is available in
+>
+>   /sys/firmware/acpi/tables/data/BERT
+>
+> limit the size for tables printed to the console to 1024 (for no reason
+> other than it seemed like a good place to kick off the discussion, would
+> appreciate feedback from existing users in terms of what size would
+> maintain their current usage model).
+>
+> Alternatively, we could make printing a CONFIG option, use the
+> bert_disable boot arg (or something similar), or use a debug log level.
+> However, all those solutions require extra steps or change the existing
+> behavior for small table data. Limiting the size preserves existing
+> behavior on existing platforms with small table data, and eliminates the
+> soft lockups for platforms with large table data, while still making it
+> available.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Doug Rady <dcrady@os.amperecomputing.com>
+> Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
 
-This reverts commit 7c4a539ec38f4ce400a0f3fcb5ff6c940fcd67bb. which
-causes to the following error in mlx4.
+Not that I have a particularly strong opinion here, but this looks
+reasonable to me, so I've queued it up for 5.18.
 
- [  679.401416] ------------[ cut here ]------------
- [  679.403542] Destroy of kernel CQ shouldn't fail
- [  679.403580] WARNING: CPU: 4 PID: 18064 at include/rdma/ib_verbs.h:3936 mlx4_ib_dealloc_xrcd+0x12e/0x1b0 [mlx4_ib]
- [  679.406534] Modules linked in: bonding ib_ipoib ip_gre ipip tunnel4 geneve rdma_ucm nf_tables ib_umad mlx4_en mlx4_ib ib_uverbs mlx4_core ip6_gre gre ip6_tunnel tunnel6 iptable_raw openvswitch nsh rpcrdma ib_iser libiscsi scsi_transport_iscsi rdma_cm iw_cm ib_cm ib_core xt_conntrack xt_MASQUERADE nf_conntrack_netlink nfnetlink xt_addrtype iptable_nat nf_nat br_netfilter overlay fuse [last unloaded: mlx4_core]
- [  679.413323] CPU: 4 PID: 18064 Comm: ibv_xsrq_pingpo Not tainted 5.17.0-rc7_master_62c6ecb #1
- [  679.415043] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
- [  679.417285] RIP: 0010:mlx4_ib_dealloc_xrcd+0x12e/0x1b0 [mlx4_ib]
- [  679.418455] Code: 1e 93 08 00 40 80 fd 01 0f 87 fa f1 04 00 83 e5 01 0f 85 2b ff ff ff 48 c7 c7 20 4f b6 a0 c6 05 fd 92 08 00 01 e8 47 c9 82 e2 <0f> 0b e9 11 ff ff ff 0f b6 2d eb 92 08 00 40 80 fd 01 0f 87 b1 f1
- [  679.421993] RSP: 0018:ffff8881a4957750 EFLAGS: 00010286
- [  679.423047] RAX: 0000000000000000 RBX: ffff8881ac4b6800 RCX: 0000000000000000
- [  679.424420] RDX: 0000000000000027 RSI: 0000000000000004 RDI: ffffed103492aedc
- [  679.425818] RBP: 0000000000000000 R08: 0000000000000001 R09: ffff8884d2e378eb
- [  679.427186] R10: ffffed109a5c6f1d R11: 0000000000000001 R12: ffff888132620000
- [  679.428553] R13: ffff8881a4957a90 R14: ffff8881aa2d4000 R15: ffff8881a4957ad0
- [  679.429939] FS:  00007f0401747740(0000) GS:ffff8884d2e00000(0000) knlGS:0000000000000000
- [  679.431548] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- [  679.432695] CR2: 000055f8ae036118 CR3: 000000012fe94005 CR4: 0000000000370ea0
- [  679.434099] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- [  679.435498] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- [  679.436914] Call Trace:
- [  679.437510]  <TASK>
- [  679.438042]  ib_dealloc_xrcd_user+0xce/0x120 [ib_core]
- [  679.439245]  ib_uverbs_dealloc_xrcd+0xad/0x210 [ib_uverbs]
- [  679.440385]  uverbs_free_xrcd+0xe8/0x190 [ib_uverbs]
- [  679.441453]  destroy_hw_idr_uobject+0x7a/0x130 [ib_uverbs]
- [  679.442568]  uverbs_destroy_uobject+0x164/0x730 [ib_uverbs]
- [  679.443699]  uobj_destroy+0x72/0xf0 [ib_uverbs]
- [  679.444653]  ib_uverbs_cmd_verbs+0x19fb/0x3110 [ib_uverbs]
- [  679.445805]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
- [  679.446893]  ? uverbs_finalize_object+0x50/0x50 [ib_uverbs]
- [  679.448037]  ? check_chain_key+0x24a/0x580
- [  679.448919]  ? uverbs_fill_udata+0x540/0x540 [ib_uverbs]
- [  679.450040]  ? check_chain_key+0x24a/0x580
- [  679.450934]  ? remove_vma+0xca/0x100
- [  679.451736]  ? lock_acquire+0x1b1/0x4c0
- [  679.452553]  ? lock_acquire+0x1b1/0x4c0
- [  679.453393]  ? ib_uverbs_ioctl+0x11e/0x260 [ib_uverbs]
- [  679.454438]  ? __might_fault+0xb8/0x160
- [  679.455267]  ? lockdep_hardirqs_on_prepare+0x400/0x400
- [  679.456329]  ib_uverbs_ioctl+0x169/0x260 [ib_uverbs]
- [  679.457384]  ? ib_uverbs_ioctl+0x11e/0x260 [ib_uverbs]
- [  679.458443]  ? ib_uverbs_cmd_verbs+0x3110/0x3110 [ib_uverbs]
- [  679.459598]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
- [  679.460689]  ? mark_held_locks+0x9f/0xe0
- [  679.461577]  __x64_sys_ioctl+0x856/0x1550
- [  679.462439]  ? vfs_fileattr_set+0x9f0/0x9f0
- [  679.463328]  ? __up_read+0x1a3/0x750
- [  679.464102]  ? up_write+0x4a0/0x4a0
- [  679.464865]  ? __vm_munmap+0x22e/0x2e0
- [  679.465690]  ? __x64_sys_brk+0x840/0x840
- [  679.466519]  ? __cond_resched+0x17/0x80
- [  679.467340]  ? lockdep_hardirqs_on_prepare+0x286/0x400
- [  679.468373]  ? syscall_enter_from_user_mode+0x1d/0x50
- [  679.469411]  do_syscall_64+0x3d/0x90
- [  679.470174]  entry_SYSCALL_64_after_hwframe+0x44/0xae
- [  679.471191] RIP: 0033:0x7f040191917b
- [  679.471961] Code: 0f 1e fa 48 8b 05 1d ad 0c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ed ac 0c 00 f7 d8 64 89 01 48
- [  679.475467] RSP: 002b:00007ffce7c4a038 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
- [  679.477014] RAX: ffffffffffffffda RBX: 00007ffce7c4a158 RCX: 00007f040191917b
- [  679.478434] RDX: 00007ffce7c4a140 RSI: 00000000c0181b01 RDI: 0000000000000003
- [  679.479840] RBP: 00007ffce7c4a120 R08: 000055f8ae02d080 R09: 0000000000000000
- [  679.481231] R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffce7c4a120
- [  679.482630] R13: 00007ffce7c4a110 R14: 000055f8ae02f440 R15: 0000000000000000
- [  679.484003]  </TASK>
- [  679.484535] irq event stamp: 62713
- [  679.485313] hardirqs last  enabled at (62723): [<ffffffff81480f17>] __up_console_sem+0x67/0x70
- [  679.487019] hardirqs last disabled at (62730): [<ffffffff81480efc>] __up_console_sem+0x4c/0x70
- [  679.488734] softirqs last  enabled at (62220): [<ffffffff8135679f>] __irq_exit_rcu+0x11f/0x170
- [  679.490569] softirqs last disabled at (62215): [<ffffffff8135679f>] __irq_exit_rcu+0x11f/0x170
- [  679.503168] ---[ end trace 0000000000000000 ]---
+APEI reviewers, please chime in if you disagree with the above.
 
-Fixes: 7c4a539ec38f ("RDMA/core: Fix ib_qp_usecnt_dec() called when error")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/infiniband/core/uverbs_cmd.c          | 1 +
- drivers/infiniband/core/uverbs_std_types_qp.c | 1 +
- drivers/infiniband/core/verbs.c               | 3 ++-
- 3 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
-index 4437f834c0a7..6b6393176b3c 100644
---- a/drivers/infiniband/core/uverbs_cmd.c
-+++ b/drivers/infiniband/core/uverbs_cmd.c
-@@ -1437,6 +1437,7 @@ static int create_qp(struct uverbs_attr_bundle *attrs,
- 		ret = PTR_ERR(qp);
- 		goto err_put;
- 	}
-+	ib_qp_usecnt_inc(qp);
- 
- 	obj->uevent.uobject.object = qp;
- 	obj->uevent.event_file = READ_ONCE(attrs->ufile->default_async_file);
-diff --git a/drivers/infiniband/core/uverbs_std_types_qp.c b/drivers/infiniband/core/uverbs_std_types_qp.c
-index 75353e09c6fe..dd1075466f61 100644
---- a/drivers/infiniband/core/uverbs_std_types_qp.c
-+++ b/drivers/infiniband/core/uverbs_std_types_qp.c
-@@ -254,6 +254,7 @@ static int UVERBS_HANDLER(UVERBS_METHOD_QP_CREATE)(
- 		ret = PTR_ERR(qp);
- 		goto err_put;
- 	}
-+	ib_qp_usecnt_inc(qp);
- 
- 	if (attr.qp_type == IB_QPT_XRC_TGT) {
- 		obj->uxrcd = container_of(xrcd_uobj, struct ib_uxrcd_object,
-diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
-index bc9a83f1ca2d..a9819c40a140 100644
---- a/drivers/infiniband/core/verbs.c
-+++ b/drivers/infiniband/core/verbs.c
-@@ -1245,7 +1245,6 @@ static struct ib_qp *create_qp(struct ib_device *dev, struct ib_pd *pd,
- 	if (ret)
- 		goto err_security;
- 
--	ib_qp_usecnt_inc(qp);
- 	rdma_restrack_add(&qp->res);
- 	return qp;
- 
-@@ -1346,6 +1345,8 @@ struct ib_qp *ib_create_qp_kernel(struct ib_pd *pd,
- 	if (IS_ERR(qp))
- 		return qp;
- 
-+	ib_qp_usecnt_inc(qp);
-+
- 	if (qp_init_attr->cap.max_rdma_ctxs) {
- 		ret = rdma_rw_init_mrs(qp, qp_init_attr);
- 		if (ret)
--- 
-2.35.1
-
+> ---
+>  drivers/acpi/apei/bert.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
+> index 19e50fcbf4d6..ad8ab3f12cf3 100644
+> --- a/drivers/acpi/apei/bert.c
+> +++ b/drivers/acpi/apei/bert.c
+> @@ -29,6 +29,7 @@
+>
+>  #undef pr_fmt
+>  #define pr_fmt(fmt) "BERT: " fmt
+> +#define ACPI_BERT_PRINT_MAX_LEN 1024
+>
+>  static int bert_disable;
+>
+> @@ -58,8 +59,11 @@ static void __init bert_print_all(struct acpi_bert_region *region,
+>                 }
+>
+>                 pr_info_once("Error records from previous boot:\n");
+> -
+> -               cper_estatus_print(KERN_INFO HW_ERR, estatus);
+> +               if (region_len < ACPI_BERT_PRINT_MAX_LEN)
+> +                       cper_estatus_print(KERN_INFO HW_ERR, estatus);
+> +               else
+> +                       pr_info_once("Max print length exceeded, table data is available at:\n"
+> +                                    "/sys/firmware/acpi/tables/data/BERT");
+>
+>                 /*
+>                  * Because the boot error source is "one-time polled" type,
+> --
+> 2.31.1
+>

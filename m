@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF16C4D3AC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CC94D3ABB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238066AbiCIUCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        id S238060AbiCIUCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiCIUCG (ORCPT
+        with ESMTP id S235423AbiCIUCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Mar 2022 15:02:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF54B39B;
-        Wed,  9 Mar 2022 12:01:06 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1814D2D8;
+        Wed,  9 Mar 2022 12:01:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8989961978;
-        Wed,  9 Mar 2022 19:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47679C340EC;
-        Wed,  9 Mar 2022 19:46:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A78AA61982;
+        Wed,  9 Mar 2022 19:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB0EC340F6;
+        Wed,  9 Mar 2022 19:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646855215;
-        bh=dtsgPPBOF4aKczoSHHusq0zXiGSQrjZKnGswyuM+XJE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=MFEq8OQOCv7mjY36/BZPDOg/6xDn+q4ZCsq+GEWtvmnAi594FNAO6of8LjsCMztt9
-         57A7cOSy3CmT85vAUV/B+bmymMDuOdmg9cb22Y/sFXJVT89FykAjJCcA5EA3lFp9sc
-         AGbCiBTUQs/6tIlx2bRi7dmWAFoiNUxHAziXlP3VwiitMTrD7yabK+82+UQdwp4lYK
-         Co18p/9jk8YY2IJsInOgeVJ6I4QnnwQuAWGMbTis2ffwKDj1RLdrebL9T3xU9fkGy3
-         XJGkLC48xuoVGZoyAjbn7ZXG+lyDVzoBwpdrd5+nGQSEEhx3HN4QjeQ/tVTcEOl9pG
-         8SGi3EsPtc6Bw==
-Message-ID: <beaf4f6a6c2575ed489adb14b257253c868f9a5c.camel@kernel.org>
-Subject: Re: [PATCH v2 12/19] netfs: Add a netfs inode context
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 09 Mar 2022 14:46:52 -0500
-In-Reply-To: <1790300.1646853782@warthog.procyon.org.uk>
-References: <8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org>
-         <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk>
-         <164678213320.1200972.16807551936267647470.stgit@warthog.procyon.org.uk>
-         <1790300.1646853782@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        s=k20201202; t=1646855349;
+        bh=vLWP7Mz1loKXAb3DtQpG0OTSE1xeUnN23OMpCL3CeWA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KDQyLvFoiqpenp9TLxg7LLUJNyjnj7ylkJMcOzp6owy80ytt6FI07RIh5EW9UJFpE
+         EVa7KR0f17MBf4Qjb1ckQ1kkCvl/CYsRfdBzc2nsz63RxM2FA0ymXd9QTneB+GAhK/
+         DgzqOfcsLb22La8VJMRGG1wWWAC2yb/gOqdRnuGdNJ2ILYFSz8dkXzGeaXlIOUnh6O
+         fpHTqJeralBNOQaLkuXvqIB3//XGERraP26JGoYJYPnIDNFLcd9KvPvhrFohk5OwQX
+         m4h+woBg34bDT6DK8932+pOn7HsLwq9OPr7eHDnUOU1ZAit+dgWxASMpS3UjuQqbK/
+         e3il182jgGS9Q==
+Date:   Wed, 9 Mar 2022 19:49:07 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
+        martin.petersen@oracle.com,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
+Message-ID: <YikEs7RNgPXTQolv@gmail.com>
+References: <20220303201312.3255347-1-kbusch@kernel.org>
+ <20220303201312.3255347-7-kbusch@kernel.org>
+ <your-ad-here.call-01646770901-ext-3299@work.hours>
+ <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
+ <YigzoKRJ1EHFRZY9@sol.localdomain>
+ <20220309193126.GA3950874@dhcp-10-100-145-180.wdc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309193126.GA3950874@dhcp-10-100-145-180.wdc.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,80 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-09 at 19:23 +0000, David Howells wrote:
-> Jeff Layton <jlayton@kernel.org> wrote:
-> 
-> > > Add a netfs_i_context struct that should be included in the network
-> > > filesystem's own inode struct wrapper, directly after the VFS's inode
-> > > struct, e.g.:
+On Wed, Mar 09, 2022 at 11:31:26AM -0800, Keith Busch wrote:
+> On Tue, Mar 08, 2022 at 08:57:04PM -0800, Eric Biggers wrote:
+> > On Tue, Mar 08, 2022 at 12:27:47PM -0800, Keith Busch wrote:
+> > > On Tue, Mar 08, 2022 at 09:21:41PM +0100, Vasily Gorbik wrote:
+> > > > On Thu, Mar 03, 2022 at 12:13:10PM -0800, Keith Busch wrote:
+> > > > > Hardware specific features may be able to calculate a crc64, so provide
+> > > > > a framework for drivers to register their implementation. If nothing is
+> > > > > registered, fallback to the generic table lookup implementation. The
+> > > > > implementation is modeled after the crct10dif equivalent.
+> > > > 
+> > > > Hi Keith,
+> > > > 
+> > > > this is failing on big-endian systems. I get the following on s390:
 > > > 
-> > > 	struct my_inode {
-> > > 		struct {
-> > > 			struct inode		vfs_inode;
-> > > 			struct netfs_i_context	netfs_ctx;
-> > > 		};
+> > > Oh, I see the put_unaligned_le64() in chksum_final() was not the correct
+> > > action. I'll send an update, thank you for the report.
 > > 
-> > This seems a bit klunky.
-> > 
-> > I think it'd be better encapsulation to give this struct a name (e.g.
-> > netfs_inode) and then have the filesystems replace the embedded
-> > vfs_inode with a netfs_inode.
+> > Or you could make the digests in your test vectors have have a consistent byte
+> > order, probably little endian.  That's how "shash" algorithms in the crypto API
+> > normally work, including crc32 and crc32c; they produce bytes as output.  I see
+> > that crct10dif violates that convention, and I assume you copied it from there.
+> > I'm not sure you should do that; crct10dif might be more of a one-off quirk.
 > 
-> I think what you really want is:
+> Right, I started with the t10dif implementation. I changed it to the
+> unaligned accessor since you indicated the output buffer doesn't have an
+> alignment guarantee.
 > 
-> 	struct my_inode : netfs_inode {
-> 	};
-> 
-> right? ;-)
-> 
+> Perhaps I'm missing something, but it looks easier to just use the CPU
+> native endianess here. The only users for t10 and rocksoft transform to
+> big-endian for the wire protocol at the end, but there's no need to
+> maintain a specific byte order before setting the payload.
 
-Sort of, I guess.  The natural way to enforce the requirement that the
-inode and context be ordered and adjacent like that is to make a struct
-that embeds them both.
+The issue is that every other "shash" algorithm besides crct10dif, including
+crc32 and crc32c, follow the convention of treating the digest as bytes.  Doing
+otherwise is unusual for the crypto API.  So I have a slight preference for
+treating it as bytes.  Perhaps see what Herbert Xu (maintainer of the crypto
+API, Cc'ed) recommends?
 
-My thinking was that someone at some point will try to move things
-around if they're just adjacent like this rather than an encapsulated
-"object".
-
-If we go this route, then please leave some comments in each filesystem
-warning people off from breaking them up.
-
-> > That way it's still just pointer math to get to the context from the
-> > inode and vice versa, but the replacement seems a bit cleaner.
-> > 
-> > It might mean a bit more churn in the filesystems themselves as you
-> > convert them, but most of them use macros or inline functions as
-> > accessors so it shouldn't be _too_ bad.
-> 
-> That's a lot of churn - and will definitely cause conflicts with other
-> patches aimed at those filesystems.  I'd prefer to avoid that if I can.
-> 
-
-Good point. Looks like around 200 or so places that would need to change
-in the affected filesystems.
-
-> > > +static int ceph_init_request(struct netfs_io_request *rreq, struct file *file)
-> > > +{
-> > > ...
-> > > +}
-> > > +
-> > 
-> > ^^^
-> > The above change seems like it should be in its own patch. Wasn't it at
-> > one point? Converting this to use init_request doesn't seem to rely on
-> > the new embedded context.
-> 
-> Well, I wrote it as a separate patch on the end for convenience, but I
-> intended to merge it here otherwise ceph wouldn't be able to do readahead for
-> a few patches.
-> 
-> I was thinking that it would require the context change to work and certainly
-> it requires the error-return-from-init_request patch to work, but actually it
-> probably doesn't require the former so I could probably separate that bit out
-> and put it between 11 and 12.
-> 
-
-Ok.
-
--- 
-Jeff Layton <jlayton@kernel.org>
+- Eric

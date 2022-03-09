@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB884D2A1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2CC4D2A24
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiCIH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S231697AbiCIH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiCIH4c (ORCPT
+        with ESMTP id S231146AbiCIH4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:56:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB8A1662E6;
-        Tue,  8 Mar 2022 23:55:12 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:55:10 -0000
+        Wed, 9 Mar 2022 02:56:36 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537261662FA;
+        Tue,  8 Mar 2022 23:55:14 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:55:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812511;
+        s=2020; t=1646812512;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rJmdgn7ZCyHdWWUt8+5UsVcHFrG8zOBiO6QQ/FKHhfM=;
-        b=Yut/p7ypJlBaPRNwHRLuxLzHL/c8nypTlzFPqrqTScNSQ2ZoFZdp2siTH+EtQXOlswyqXe
-        ygRqqHRI8Yqdqwbj6X57q9MQrkZBVal1ZAsFw0TRDJc7Y28LKOojF6SjJ8xbGTfGUH2NPV
-        WfhwWqDpylHXnrpjnw9fx8xg6POGv/5NlUNJ6JXYgpuUar9tTKzrJWs0SK5PIztMQ/0RNP
-        LY1Nu4UANVb5zEtWKBYMck625gJKx2Sbge+Q8GN7vigdaYB4pIL3eHxoUAuGh87r1HvttK
-        KulxWglslg0oy1kFITYn9mxwNZ+SQDSzaRX7wL763Bd7TBgBYPyNRHccxqAPgA==
+        bh=67vwANpJTkFM+VKLfcSYbwEQmBFZeQvy69Ixfm0A92U=;
+        b=h2u+zWXHw3LBNesOmzb4awSqp1HUNyP7MQFidaRMraC1cO2sBbPbeEh4ll+0OgqM3rzO0U
+        j8BE/mZjPhSDgqxv+laGURAb8i8HKzfVPtvpFZHFTeW0wUn7G3Iw+tuMfNYhAnXVvBVvCj
+        R9Jakn2x6ICufTL1XtT3Te6SM+3VtvukIPk/PicIwxqVIsA/R/XL4cjm1UKTFg+98Fh0Vx
+        kxZ1y6Z7LS4fMD+uBEuh9bNt1wS3p3ZsIYAK25HMQYaELWGqkYlQlD4/kf9/Dgj0l0epkj
+        balQJ1yOm6Zwknw0b3gF8jE2aUh6rcVymm7Yp3iBdRJFVOHxJ5BalzSS+tiGFA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812511;
+        s=2020e; t=1646812512;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rJmdgn7ZCyHdWWUt8+5UsVcHFrG8zOBiO6QQ/FKHhfM=;
-        b=pzUza8KTzIRC5VMlAOJgcAOiBvBhi29YCEEfN8WOO1QafADjFYqJEWYNJLryoI8Z4GDbJE
-        t+szM7O8N/w/jrCg==
+        bh=67vwANpJTkFM+VKLfcSYbwEQmBFZeQvy69Ixfm0A92U=;
+        b=Yfl/4WunnGbkmnTr+NYwOs+CcFFaFk/1u9PmD1gg6H7395WqXOLJz3FJfVb3hI0+662cW1
+        yVCmkSs9RuOhTWBA==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,paravirt: Use text_gen_insn() for paravirt_patch()
+Subject: [tip: x86/core] x86/ibt: Add ANNOTATE_NOENDBR
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154317.697253958@infradead.org>
-References: <20220308154317.697253958@infradead.org>
+In-Reply-To: <20220308154317.578968224@infradead.org>
+References: <20220308154317.578968224@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681251019.16921.10564758807764415556.tip-bot2@tip-bot2>
+Message-ID: <164681251179.16921.1282256563704890213.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,110 +68,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     7fb70b6975509102d848f1abdba394e0bdc122c1
-Gitweb:        https://git.kernel.org/tip/7fb70b6975509102d848f1abdba394e0bdc122c1
+Commit-ID:     34963d5e9be5911d93d4a543aa1d07e719599371
+Gitweb:        https://git.kernel.org/tip/34963d5e9be5911d93d4a543aa1d07e719599371
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:20 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:18 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:28 +01:00
 
-x86/ibt,paravirt: Use text_gen_insn() for paravirt_patch()
+x86/ibt: Add ANNOTATE_NOENDBR
 
-Less duplication is more better.
+In order to have objtool warn about code references to !ENDBR
+instruction, we need an annotation to allow this for non-control-flow
+instances -- consider text range checks, text patching, or return
+trampolines etc.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154317.697253958@infradead.org
+Link: https://lore.kernel.org/r/20220308154317.578968224@infradead.org
 ---
- arch/x86/include/asm/text-patching.h | 20 ++++++++++++++------
- arch/x86/kernel/paravirt.c           | 23 +++--------------------
- 2 files changed, 17 insertions(+), 26 deletions(-)
+ include/linux/objtool.h       | 16 ++++++++++++++++
+ tools/include/linux/objtool.h | 16 ++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index 1c4cfb1..c6015b4 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -96,32 +96,40 @@ union text_poke_insn {
- };
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index aca52db..f797368 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -77,6 +77,12 @@ struct unwind_hint {
+ #define STACK_FRAME_NON_STANDARD_FP(func)
+ #endif
  
- static __always_inline
--void *text_gen_insn(u8 opcode, const void *addr, const void *dest)
-+void __text_gen_insn(void *buf, u8 opcode, const void *addr, const void *dest, int size)
- {
--	static union text_poke_insn insn; /* per instance */
--	int size = text_opcode_size(opcode);
-+	union text_poke_insn *insn = buf;
++#define ANNOTATE_NOENDBR					\
++	"986: \n\t"						\
++	".pushsection .discard.noendbr\n\t"			\
++	_ASM_PTR " 986b\n\t"					\
++	".popsection\n\t"
 +
-+	BUG_ON(size < text_opcode_size(opcode));
+ #else /* __ASSEMBLY__ */
  
- 	/*
- 	 * Hide the addresses to avoid the compiler folding in constants when
- 	 * referencing code, these can mess up annotations like
- 	 * ANNOTATE_NOENDBR.
- 	 */
-+	OPTIMIZER_HIDE_VAR(insn);
- 	OPTIMIZER_HIDE_VAR(addr);
- 	OPTIMIZER_HIDE_VAR(dest);
+ /*
+@@ -129,6 +135,13 @@ struct unwind_hint {
+ 	.popsection
+ .endm
  
--	insn.opcode = opcode;
-+	insn->opcode = opcode;
++.macro ANNOTATE_NOENDBR
++.Lhere_\@:
++	.pushsection .discard.noendbr
++	.quad	.Lhere_\@
++	.popsection
++.endm
++
+ #endif /* __ASSEMBLY__ */
  
- 	if (size > 1) {
--		insn.disp = (long)dest - (long)(addr + size);
-+		insn->disp = (long)dest - (long)(addr + size);
- 		if (size == 2) {
- 			/*
- 			 * Ensure that for JMP8 the displacement
- 			 * actually fits the signed byte.
- 			 */
--			BUG_ON((insn.disp >> 31) != (insn.disp >> 7));
-+			BUG_ON((insn->disp >> 31) != (insn->disp >> 7));
- 		}
- 	}
-+}
+ #else /* !CONFIG_STACK_VALIDATION */
+@@ -139,12 +152,15 @@ struct unwind_hint {
+ 	"\n\t"
+ #define STACK_FRAME_NON_STANDARD(func)
+ #define STACK_FRAME_NON_STANDARD_FP(func)
++#define ANNOTATE_NOENDBR
+ #else
+ #define ANNOTATE_INTRA_FUNCTION_CALL
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
+ .endm
+ .macro STACK_FRAME_NON_STANDARD func:req
+ .endm
++.macro ANNOTATE_NOENDBR
++.endm
+ #endif
  
-+static __always_inline
-+void *text_gen_insn(u8 opcode, const void *addr, const void *dest)
-+{
-+	static union text_poke_insn insn; /* per instance */
-+	__text_gen_insn(&insn, opcode, addr, dest, text_opcode_size(opcode));
- 	return &insn.text;
- }
+ #endif /* CONFIG_STACK_VALIDATION */
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index aca52db..f797368 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -77,6 +77,12 @@ struct unwind_hint {
+ #define STACK_FRAME_NON_STANDARD_FP(func)
+ #endif
  
-diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
-index 4420499..06af2cf 100644
---- a/arch/x86/kernel/paravirt.c
-+++ b/arch/x86/kernel/paravirt.c
-@@ -69,29 +69,12 @@ noinstr void paravirt_BUG(void)
- 	BUG();
- }
++#define ANNOTATE_NOENDBR					\
++	"986: \n\t"						\
++	".pushsection .discard.noendbr\n\t"			\
++	_ASM_PTR " 986b\n\t"					\
++	".popsection\n\t"
++
+ #else /* __ASSEMBLY__ */
  
--struct branch {
--	unsigned char opcode;
--	u32 delta;
--} __attribute__((packed));
--
- static unsigned paravirt_patch_call(void *insn_buff, const void *target,
- 				    unsigned long addr, unsigned len)
- {
--	const int call_len = 5;
--	struct branch *b = insn_buff;
--	unsigned long delta = (unsigned long)target - (addr+call_len);
--
--	if (len < call_len) {
--		pr_warn("paravirt: Failed to patch indirect CALL at %ps\n", (void *)addr);
--		/* Kernel might not be viable if patching fails, bail out: */
--		BUG_ON(1);
--	}
--
--	b->opcode = 0xe8; /* call */
--	b->delta = delta;
--	BUILD_BUG_ON(sizeof(*b) != call_len);
--
--	return call_len;
-+	__text_gen_insn(insn_buff, CALL_INSN_OPCODE,
-+			(void *)addr, target, CALL_INSN_SIZE);
-+	return CALL_INSN_SIZE;
- }
+ /*
+@@ -129,6 +135,13 @@ struct unwind_hint {
+ 	.popsection
+ .endm
  
- #ifdef CONFIG_PARAVIRT_XXL
++.macro ANNOTATE_NOENDBR
++.Lhere_\@:
++	.pushsection .discard.noendbr
++	.quad	.Lhere_\@
++	.popsection
++.endm
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #else /* !CONFIG_STACK_VALIDATION */
+@@ -139,12 +152,15 @@ struct unwind_hint {
+ 	"\n\t"
+ #define STACK_FRAME_NON_STANDARD(func)
+ #define STACK_FRAME_NON_STANDARD_FP(func)
++#define ANNOTATE_NOENDBR
+ #else
+ #define ANNOTATE_INTRA_FUNCTION_CALL
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
+ .endm
+ .macro STACK_FRAME_NON_STANDARD func:req
+ .endm
++.macro ANNOTATE_NOENDBR
++.endm
+ #endif
+ 
+ #endif /* CONFIG_STACK_VALIDATION */

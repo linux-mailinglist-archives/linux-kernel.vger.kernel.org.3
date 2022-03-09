@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CA64D29E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94F94D29D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiCIH43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S230479AbiCIH4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbiCIHz4 (ORCPT
+        with ESMTP id S230378AbiCIHz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Mar 2022 02:55:56 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FE9163D5D;
-        Tue,  8 Mar 2022 23:54:56 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:54:53 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CD41637C8;
+        Tue,  8 Mar 2022 23:54:57 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:54:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812494;
+        s=2020; t=1646812495;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mUJX5q3HFcUdt68MyiEILxqVdYqpPyom8Z0+XhS7AZs=;
-        b=qwXPf3UWQMX8dQQhejJLB469nR9UfMO5IJK1aEO1O5fA+5M/6D7hPeP/ZMpTHQpLu5k3HK
-        2TwMCZyQ4pJIa2Y+K4Jf5UFdG5UcBoCouJknSUI0EU0LjRmw5ZxZHZ2g0jskBjvuKpkKiN
-        owTbHKhT0LCKP/ca/PZO/87bbJBXY9FhC2PFhz8n3/ksQrg0mAnFc/q6TK+1xFfGO2QwsP
-        XDySaueGPGStZRGJzlak61Wn2QsxTuUUPFIQby+ueTdsQxX+3p6IJxpvhUhcA2c71V/P5Q
-        8KCA9dhtzy8J9jeFTQ87zTNNA14l9NSGPxhBfLOoFGGQQOF2omP/2A1tKztVAQ==
+        bh=dTDVwieUR0Uy85aC0FApZv01tUvWmzpivXF66auvIPw=;
+        b=LnCcPB7OJt12XT/ZQzTHSoaiBKZGdb/o/fL5iQ/1fFKZyCvn/dnLVHjelEDEsFHCZZwqiX
+        HM0VQ/RQfboMkT14Ub18B4F22hNXaKQdqcJjnuC9JEIS7WsZHZCUVS/eV6ZWVEguZGzlGT
+        BKRc4LvEroHdm0mb+Bs5joHlot5KZuVZzAtJ5BiH3ZFO2dZ7X17c/KPbfGFSlACcbqBjoY
+        Ij+5J+wXotvwx4y5NuAhoe7UjBUBPFORo1RQu7zZYMNQqbc4DtGc9ez4y3ZGEekSlrqyBe
+        YHTzbJqKIgzMh4J47IiS9CJEAymOYDKJkQB2Por/FXaVIQH0oh9rH4F3QS85bw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812494;
+        s=2020e; t=1646812495;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mUJX5q3HFcUdt68MyiEILxqVdYqpPyom8Z0+XhS7AZs=;
-        b=iSlvQFn+Pg5NxwqOWFbilSKXI8Mb+93GlJz2Wr9iKsKU818dXa4Jtb/69wSzy46H8Z6dpM
-        UcoIh04K8mwyxWDw==
+        bh=dTDVwieUR0Uy85aC0FApZv01tUvWmzpivXF66auvIPw=;
+        b=FK2uo04hxJ1Y/hF2hczckBKuaya2XmU+N/98D7qzqVhuO/VS7dbaAxwUPLmVucPwpKKnCH
+        /uoxw+tX8FocB3Dw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,ftrace: Annotate ftrace code patching
+Subject: [tip: x86/core] x86/ibt: Annotate text references
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154318.936599479@infradead.org>
-References: <20220308154318.936599479@infradead.org>
+In-Reply-To: <20220308154318.877758523@infradead.org>
+References: <20220308154318.877758523@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681249375.16921.9693241448931476304.tip-bot2@tip-bot2>
+Message-ID: <164681249486.16921.2722065159172667150.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,81 +67,238 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     84683d8f7ebaf8409e4400842116bd378a017057
-Gitweb:        https://git.kernel.org/tip/84683d8f7ebaf8409e4400842116bd378a017057
+Commit-ID:     eabab5ecc8993fd6f71ce6bba0da6b22381b946e
+Gitweb:        https://git.kernel.org/tip/eabab5ecc8993fd6f71ce6bba0da6b22381b946e
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:41 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:40 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 08 Mar 2022 23:53:35 +01:00
+CommitterDate: Tue, 08 Mar 2022 23:53:34 +01:00
 
-x86/ibt,ftrace: Annotate ftrace code patching
+x86/ibt: Annotate text references
 
-These are code patching sites, not indirect targets.
+Annotate away some of the generic code references. This is things
+where we take the address of a symbol for exception handling or return
+addresses (eg. context switch).
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154318.936599479@infradead.org
+Link: https://lore.kernel.org/r/20220308154318.877758523@infradead.org
 ---
- arch/x86/kernel/ftrace_64.S | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/x86/entry/entry_64.S            |  6 ++++++
+ arch/x86/entry/entry_64_compat.S     |  1 +
+ arch/x86/kernel/alternative.c        | 10 ++++++++--
+ arch/x86/kernel/head_64.S            |  4 ++++
+ arch/x86/kernel/kprobes/core.c       |  1 +
+ arch/x86/kernel/relocate_kernel_64.S |  2 ++
+ arch/x86/lib/error-inject.c          |  2 ++
+ arch/x86/lib/retpoline.S             |  1 +
+ 8 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index e32b5cd..4ec1360 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -145,6 +145,7 @@ SYM_FUNC_START(ftrace_caller)
- 	movq %rcx, RSP(%rsp)
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index b17ee0d..899bc86 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -277,6 +277,7 @@ SYM_FUNC_END(__switch_to_asm)
+ .pushsection .text, "ax"
+ SYM_CODE_START(ret_from_fork)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR // copy_thread
+ 	movq	%rax, %rdi
+ 	call	schedule_tail			/* rdi: 'prev' task parameter */
  
- SYM_INNER_LABEL(ftrace_caller_op_ptr, SYM_L_GLOBAL)
+@@ -569,6 +570,7 @@ __irqentry_text_start:
+ 	.align 16
+ 	.globl __irqentry_text_end
+ __irqentry_text_end:
 +	ANNOTATE_NOENDBR
- 	/* Load the ftrace_ops into the 3rd parameter */
- 	movq function_trace_op(%rip), %rdx
  
-@@ -155,6 +156,7 @@ SYM_INNER_LABEL(ftrace_caller_op_ptr, SYM_L_GLOBAL)
- 	movq $0, CS(%rsp)
+ SYM_CODE_START_LOCAL(common_interrupt_return)
+ SYM_INNER_LABEL(swapgs_restore_regs_and_return_to_usermode, SYM_L_GLOBAL)
+@@ -650,6 +652,7 @@ SYM_INNER_LABEL(early_xen_iret_patch, SYM_L_GLOBAL)
+ #endif
  
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(native_irq_return_iret, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR // exc_double_fault
+ 	/*
+ 	 * This may fault.  Non-paranoid faults on return to userspace are
+ 	 * handled by fixup_bad_iret.  These include #SS, #GP, and #NP.
+@@ -744,6 +747,7 @@ SYM_FUNC_START(asm_load_gs_index)
+ 	FRAME_BEGIN
+ 	swapgs
+ .Lgs_change:
++	ANNOTATE_NOENDBR // error_entry
+ 	movl	%edi, %gs
+ 2:	ALTERNATIVE "", "mfence", X86_BUG_SWAPGS_FENCE
+ 	swapgs
+@@ -1322,6 +1326,7 @@ first_nmi:
+ #endif
+ 
+ repeat_nmi:
++	ANNOTATE_NOENDBR // this code
+ 	/*
+ 	 * If there was a nested NMI, the first NMI's iret will return
+ 	 * here. But NMIs are still enabled and we can take another
+@@ -1350,6 +1355,7 @@ repeat_nmi:
+ 	.endr
+ 	subq	$(5*8), %rsp
+ end_repeat_nmi:
++	ANNOTATE_NOENDBR // this code
+ 
+ 	/*
+ 	 * Everything below this point can be preempted by a nested NMI.
+diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
+index 35a0e69..74208a1 100644
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -148,6 +148,7 @@ SYM_INNER_LABEL(entry_SYSENTER_compat_after_hwframe, SYM_L_GLOBAL)
+ 	popfq
+ 	jmp	.Lsysenter_flags_fixed
+ SYM_INNER_LABEL(__end_entry_SYSENTER_compat, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR // is_sysenter_singlestep
+ SYM_CODE_END(entry_SYSENTER_compat)
+ 
+ /*
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index de56b5c..9823087 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -713,6 +713,7 @@ asm (
+ "	.pushsection	.init.text, \"ax\", @progbits\n"
+ "	.type		int3_magic, @function\n"
+ "int3_magic:\n"
 +	ANNOTATE_NOENDBR
- 	call ftrace_stub
+ "	movl	$1, (%" _ASM_ARG1 ")\n"
+ 	ASM_RET
+ "	.size		int3_magic, .-int3_magic\n"
+@@ -724,16 +725,19 @@ extern void int3_selftest_ip(void); /* defined in asm below */
+ static int __init
+ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
+ {
++	unsigned long selftest = (unsigned long)&int3_selftest_ip;
+ 	struct die_args *args = data;
+ 	struct pt_regs *regs = args->regs;
  
- 	/* Handlers can change the RIP */
-@@ -169,6 +171,7 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	 * layout here.
++	OPTIMIZER_HIDE_VAR(selftest);
++
+ 	if (!regs || user_mode(regs))
+ 		return NOTIFY_DONE;
+ 
+ 	if (val != DIE_INT3)
+ 		return NOTIFY_DONE;
+ 
+-	if (regs->ip - INT3_INSN_SIZE != (unsigned long)&int3_selftest_ip)
++	if (regs->ip - INT3_INSN_SIZE != selftest)
+ 		return NOTIFY_DONE;
+ 
+ 	int3_emulate_call(regs, (unsigned long)&int3_magic);
+@@ -757,7 +761,9 @@ static void __init int3_selftest(void)
+ 	 * then trigger the INT3, padded with NOPs to match a CALL instruction
+ 	 * length.
  	 */
- SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+-	asm volatile ("int3_selftest_ip: int3; nop; nop; nop; nop\n\t"
++	asm volatile ("int3_selftest_ip:\n\t"
++		      ANNOTATE_NOENDBR
++		      "    int3; nop; nop; nop; nop\n\t"
+ 		      : ASM_CALL_CONSTRAINT
+ 		      : __ASM_SEL_RAW(a, D) (&val)
+ 		      : "memory");
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 9b6fa76..462cc1e 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -99,6 +99,7 @@ SYM_CODE_END(startup_64)
+ 
+ SYM_CODE_START(secondary_startup_64)
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 
- 	jmp ftrace_epilogue
- SYM_FUNC_END(ftrace_caller);
-@@ -192,6 +195,7 @@ SYM_FUNC_START(ftrace_regs_caller)
- 	/* save_mcount_regs fills in first two parameters */
- 
- SYM_INNER_LABEL(ftrace_regs_caller_op_ptr, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 	/* Load the ftrace_ops into the 3rd parameter */
- 	movq function_trace_op(%rip), %rdx
- 
-@@ -221,6 +225,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_op_ptr, SYM_L_GLOBAL)
- 	leaq (%rsp), %rcx
- 
- SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 	call ftrace_stub
- 
- 	/* Copy flags back to SS, to restore them */
-@@ -248,6 +253,7 @@ SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
+ 	/*
+ 	 * At this point the CPU runs in 64bit mode CS.L = 1 CS.D = 0,
+ 	 * and someone has loaded a mapped page table.
+@@ -127,6 +128,7 @@ SYM_CODE_START(secondary_startup_64)
  	 */
- 	testq	%rax, %rax
- SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 	jnz	1f
  
- 	restore_mcount_regs
-@@ -261,6 +267,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
- 	 * to the return.
- 	 */
- SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	/*
+ 	 * Retrieve the modifier (SME encryption mask if SME is active) to be
+@@ -192,6 +194,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	jmp	*%rax
+ 1:
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR // above
+ 
+ 	/*
+ 	 * We must switch to a new descriptor in kernel space for the GDT
+@@ -299,6 +302,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	pushq	%rax		# target address in negative space
+ 	lretq
+ .Lafter_lret:
 +	ANNOTATE_NOENDBR
- 	jmp ftrace_epilogue
+ SYM_CODE_END(secondary_startup_64)
  
- 	/* Swap the flags with orig_rax */
+ #include "verify_cpu.S"
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index 9ea0e3e..8ef933c 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -1033,6 +1033,7 @@ asm(
+ 	".type __kretprobe_trampoline, @function\n"
+ 	"__kretprobe_trampoline:\n"
+ #ifdef CONFIG_X86_64
++	ANNOTATE_NOENDBR
+ 	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+ 	"	pushq $__kretprobe_trampoline\n"
+ 	UNWIND_HINT_FUNC
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index 5b65f6e..c1d8626 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -42,6 +42,7 @@
+ 	.code64
+ SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 	/*
+ 	 * %rdi indirection_page
+ 	 * %rsi page_list
+@@ -223,6 +224,7 @@ SYM_CODE_END(identity_mapped)
+ 
+ SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR // RET target, above
+ 	movq	RSP(%r8), %rsp
+ 	movq	CR4(%r8), %rax
+ 	movq	%rax, %cr4
+diff --git a/arch/x86/lib/error-inject.c b/arch/x86/lib/error-inject.c
+index 5208970..1e3de07 100644
+--- a/arch/x86/lib/error-inject.c
++++ b/arch/x86/lib/error-inject.c
+@@ -3,6 +3,7 @@
+ #include <linux/linkage.h>
+ #include <linux/error-injection.h>
+ #include <linux/kprobes.h>
++#include <linux/objtool.h>
+ 
+ asmlinkage void just_return_func(void);
+ 
+@@ -11,6 +12,7 @@ asm(
+ 	".type just_return_func, @function\n"
+ 	".globl just_return_func\n"
+ 	"just_return_func:\n"
++		ANNOTATE_NOENDBR
+ 		ASM_RET
+ 	".size just_return_func, .-just_return_func\n"
+ );
+diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+index 89b3fb2..c6fe8ca 100644
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -55,6 +55,7 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+ 
+ 	.align RETPOLINE_THUNK_SIZE
+ SYM_CODE_START(__x86_indirect_thunk_array)
++	ANNOTATE_NOENDBR // apply_retpolines
+ 
+ #define GEN(reg) THUNK reg
+ #include <asm/GEN-for-each-reg.h>

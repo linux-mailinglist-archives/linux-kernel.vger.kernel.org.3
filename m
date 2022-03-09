@@ -2,138 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DA24D2AA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDE04D2AAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiCIIcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:32:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S231411AbiCIIdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCIIb6 (ORCPT
+        with ESMTP id S230243AbiCIIdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:31:58 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02842107AAA;
-        Wed,  9 Mar 2022 00:30:59 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0V6iwN-y_1646814652;
-Received: from 30.97.48.240(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0V6iwN-y_1646814652)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Mar 2022 16:30:54 +0800
-Message-ID: <defa02c1-9660-f335-a764-d89dbe2f502e@linux.alibaba.com>
-Date:   Wed, 9 Mar 2022 16:30:51 +0800
+        Wed, 9 Mar 2022 03:33:18 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98EE10A7DE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:32:19 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id u10so2766187ybd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 00:32:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fXNP/dUkerz8xKSj4rusJS07a77a18F1+lKC1sYQrwk=;
+        b=BYKNESOGJPcopvgpGHl5UVuspsI04F8GafhdZGlcVkZ6HbM6TAVK4+ugwrI/Y21rhh
+         5gdnaqrwCYQXJ54Y/lJsWXsEhigJsim58ymxtiYJHHPVS/nfBBQPDMsBwkq1+35w3yLv
+         Hf9W49DIaDoA4/TzB1iEZqkiFXSGTGGIISHq38fw9PccBpGB1WdW1fJHmH6TTpmA04nj
+         jmr7VG1nhbaoF2ASRMovFZKXx9lHGkvtgF8jBDcXFQvqjYE/83jTHEBhP30O9ho1vZru
+         I8gmPQwWJ3deMOvuWsgMM5+QXurinWs1n+0hsOPuauvAPuKZtlWnLWgQdn6aTqsBWkZ1
+         i+Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fXNP/dUkerz8xKSj4rusJS07a77a18F1+lKC1sYQrwk=;
+        b=YLwBWKyNU2IQTPjqGp2tAFouPEcUN1uOj8cc8uGBrDh2syo82QG3+zVT9vI/drmPQC
+         u+QPIzL+vRQ3mFcejpNjpLkblqGrSvt3OgZdvTMaeI011wuZRMJHnG6psuh9jLNprYt1
+         rbP9dzFn9C02pz4v9pZP99d0K1vf3qMPFS8rOsz7J5ZDQtwLX4zvsyPR9YpRdIPg4T2j
+         7rAKIVld5n+viEsMXvZxlvZhCGzMlPl/IUdOsHUTxV2QgzMPorAv7jN5KRMxNQcnLC6R
+         P39BShl9yMF8hlOFXBgwDb70cwYEs3x+dwX1RwWE7UFbDg9nA88AfIJYo2bxZigIn9fK
+         o7mA==
+X-Gm-Message-State: AOAM531n0iBwRjW2kZtr0PvxBB5uZJv4xkG9ZeEqCBzmKxUoDcLArG1K
+        cPZ7FEP6UmbHpZbtX71/V0jt6KgKJZPayEVCT5Zq4Q==
+X-Google-Smtp-Source: ABdhPJzxWtL7dOcNyXG6U+l8RXi0WRUpo5Pn/KAfrEpDnvbNZLdBNKsWeAt1dhv+sEkaeo3erEwCndhlBb1RRx1dGv8=
+X-Received: by 2002:a05:6902:184:b0:628:233e:31fe with SMTP id
+ t4-20020a056902018400b00628233e31femr14839424ybh.609.1646814738911; Wed, 09
+ Mar 2022 00:32:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [RFC PATCH v2 0/4] Introduce group balancer
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michael Wang <yun.wang@linux.alibaba.com>,
-        Cruz Zhao <cruzzhao@linux.alibaba.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Chris Down <chris@chrisdown.name>,
-        Vipin Sharma <vipinsh@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-References: <20220308092629.40431-1-dtcccc@linux.alibaba.com>
- <YieOvaqJeEW2lta/@slm.duckdns.org>
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-In-Reply-To: <YieOvaqJeEW2lta/@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220309083753.1561921-1-liupeng256@huawei.com> <20220309083753.1561921-4-liupeng256@huawei.com>
+In-Reply-To: <20220309083753.1561921-4-liupeng256@huawei.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 9 Mar 2022 09:31:42 +0100
+Message-ID: <CANpmjNN6iRS1xfXq6_dKQaHJ83zrU7heZCWL2odauc=_zkmQog@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] kfence: test: try to avoid test_gfpzero trigger rcu_stall
+To:     Peng Liu <liupeng256@huawei.com>
+Cc:     brendanhiggins@google.com, glider@google.com, dvyukov@google.com,
+        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        wangkefeng.wang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/9 01:13, Tejun Heo wrote:
-> Hello,
-> 
-> On Tue, Mar 08, 2022 at 05:26:25PM +0800, Tianchen Ding wrote:
->> Modern platform are growing fast on CPU numbers. To achieve better
->> utility of CPU resource, multiple apps are starting to sharing the CPUs.
->>
->> What we need is a way to ease confliction in share mode,
->> make groups as exclusive as possible, to gain both performance
->> and resource efficiency.
->>
->> The main idea of group balancer is to fulfill this requirement
->> by balancing groups of tasks among groups of CPUs, consider this
->> as a dynamic demi-exclusive mode. Task trigger work to settle it's
->> group into a proper partition (minimum predicted load), then try
->> migrate itself into it. To gradually settle groups into the most
->> exclusively partition.
->>
->> GB can be seen as an optimize policy based on load balance,
->> it obeys the main idea of load balance and makes adjustment
->> based on that.
->>
->> Our test on ARM64 platform with 128 CPUs shows that,
->> throughput of sysbench memory is improved about 25%,
->> and redis-benchmark is improved up to about 10%.
-> 
-> The motivation makes sense to me but I'm not sure this is the right way to
-> architecture it. We already have the framework to do all these - the sched
-> domains and the load balancer. Architecturally, what the suggested patchset
-> is doing is building a separate load balancer on top of cpuset after using
-> cpuset to disable the existing load balancer, which is rather obviously
-> convoluted.
-> 
+On Wed, 9 Mar 2022 at 09:19, 'Peng Liu' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> When CONFIG_KFENCE_NUM_OBJECTS is set to a big number, kfence
+> kunit-test-case test_gfpzero will eat up nearly all the CPU's
+> resources and rcu_stall is reported as the following log which
+> is cut from a physical server.
+>
+>   rcu: INFO: rcu_sched self-detected stall on CPU
+>   rcu:  68-....: (14422 ticks this GP) idle=6ce/1/0x4000000000000002
+>   softirq=592/592 fqs=7500 (t=15004 jiffies g=10677 q=20019)
+>   Task dump for CPU 68:
+>   task:kunit_try_catch state:R  running task
+>   stack:    0 pid: 9728 ppid:     2 flags:0x0000020a
+>   Call trace:
+>    dump_backtrace+0x0/0x1e4
+>    show_stack+0x20/0x2c
+>    sched_show_task+0x148/0x170
+>    ...
+>    rcu_sched_clock_irq+0x70/0x180
+>    update_process_times+0x68/0xb0
+>    tick_sched_handle+0x38/0x74
+>    ...
+>    gic_handle_irq+0x78/0x2c0
+>    el1_irq+0xb8/0x140
+>    kfree+0xd8/0x53c
+>    test_alloc+0x264/0x310 [kfence_test]
+>    test_gfpzero+0xf4/0x840 [kfence_test]
+>    kunit_try_run_case+0x48/0x20c
+>    kunit_generic_run_threadfn_adapter+0x28/0x34
+>    kthread+0x108/0x13c
+>    ret_from_fork+0x10/0x18
+>
+> To avoid rcu_stall and unacceptable latency, a schedule point is
+> added to test_gfpzero.
+>
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
 
-"the sched domains and the load balancer" you mentioned are the ways to 
-"balance" tasks on each domains. However, this patchset aims to "group" 
-them together to win hot cache and less competition, which is different 
-from load balancer. See commit log of the patch 3/4 and this link:
-https://lore.kernel.org/all/11d4c86a-40ef-6ce5-6d08-e9d0bc9b512a@linux.alibaba.com/
+Reviewed-by: Marco Elver <elver@google.com>
 
-> * AFAICS, none of what the suggested code does is all that complicated or
->    needs a lot of input from userspace. it should be possible to parametrize
->    the existing load balancer to behave better.
-> 
 
-Group balancer mainly needs 2 inputs from userspace: cpu partition info 
-and cgroup info.
-Cpu partition info does need user input (and maybe a bit complicated). 
-As a result, the division methods are __free__ to users(can refer to 
-NUMA nodes, clusters, cache, etc.)
-Cgroup info doesn't need extra input. It's naturally configured.
-
-It do parametrize the existing load balancer to behave better.
-Group balancer is a kind of optimize policy, and should obey the basic
-policy (load balance) and improve it.
-The relationship between load balancer and group balancer is explained 
-in detail at the above link.
-
-> * If, for some reason, you need more customizable behavior in terms of cpu
->    allocation, which is what cpuset is for, maybe it'd be better to build the
->    load balancer in userspace. That'd fit way better with how cgroup is used
->    in general and with threaded cgroups, it should fit nicely with everything
->    else.
-> 
-
-We put group balancer in kernel space because this new policy does not 
-depend on userspace apps. It's a "general" feature.
-Doing "dynamic cpuset" in userspace may also introduce performance 
-issue, since it may need to bind and unbind different cpusets for 
-several times, and is too strict(compared with our "soft bind").
-
+> ---
+>  mm/kfence/kfence_test.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+> index caed6b4eba94..1b50f70a4c0f 100644
+> --- a/mm/kfence/kfence_test.c
+> +++ b/mm/kfence/kfence_test.c
+> @@ -627,6 +627,7 @@ static void test_gfpzero(struct kunit *test)
+>                         kunit_warn(test, "giving up ... cannot get same object back\n");
+>                         return;
+>                 }
+> +               cond_resched();
+>         }
+>
+>         for (i = 0; i < size; i++)
+> --
+> 2.18.0.huawei.25
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309083753.1561921-4-liupeng256%40huawei.com.

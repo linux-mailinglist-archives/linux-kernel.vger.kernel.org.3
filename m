@@ -2,174 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E114D2DB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625E54D2DB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbiCILO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S231968AbiCILPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiCILOz (ORCPT
+        with ESMTP id S230392AbiCILPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:14:55 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120081.outbound.protection.outlook.com [40.107.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAD213CA0A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:13:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b9MYlQ6REbb/cr7XG+ry6MVPj5zqZVC/c6Bu7k+P1KACyE5l1GPzMBJFx5rCkW1AIEkSOsMq3pvA2YyyIT+ASDajy5vzJyO799RSceVDDPAgeLTb4v50n4KRuS62uET7nBnpprPJA+DGDXwyMHaTveyWtKJmjYuAsjEO9ZTUpty3b+SwDsSNG11MN3B86CdDAxXks4sqvrnfI0l6/75WgREeRnWnylpTwZwcnoY/JwuFL7diOzryV7hN/Um+XSc/OeyDVSi/Aeb1mXXo3wXe1BrNiWKk2MhJHscFV5NOHnORGV8u0PJtCRyeRI5wybT6yGxwCfR89fWi0CO+4rOjag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jj8qNfekvPK6dmYDLq2FfEGZuWn7E6IvFx3lS+dlDJ0=;
- b=P7GLEB8q4e2onNlAwinTnaDonG43ILzOVzKhgwRACPEkA22wNx9a0f6J9SaoVSFnbaTogG7JB+/daGbv06swKxOUsVzjn/5XF4pmS2cXKNVgPXk7BZMxcgpYJ3HTbjyhkMrp3yQIwvzkjjEv65Vhr1bzIgPxsmu/1dpx8Xj3i70rGGps1pwfnCB3klX4/ggQWjTSdrGXjlMXnwdb7eYKYwvMS1+8jgsajDnVmz/Rrn+6IztKbGOcOFE4SOXX9DQtLatU0KJH+zJf30ifH9apiNee3CkmmGDLmSHIs4tRG7SCp9nW4k3UyWnQ/BXwtkOYkWqYSgxQ8cid2Wahophdrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB3166.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 11:13:53 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.029; Wed, 9 Mar 2022
- 11:13:53 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "peng.hao2@zte.com.cn" <peng.hao2@zte.com.cn>,
-        "wen.yang99@zte.com.cn" <wen.yang99@zte.com.cn>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
-Thread-Topic: [PATCH] powerpc: 8xx: fix a return value error in
- mpc8xx_pic_init
-Thread-Index: AQHYKINXBJ1zcwXxM0+BDeqd/qE4Oay2eWSAgABCK4CAADlYgIAAB5CA
-Date:   Wed, 9 Mar 2022 11:13:53 +0000
-Message-ID: <867e5b54-5990-578e-bfae-b638efce2a8a@csgroup.eu>
-References: <20220223070223.26845-1-hbh25y@gmail.com>
- <87o82fn6yw.fsf@mpe.ellerman.id.au>
- <87b40493-7630-f714-27f4-90ad2a5a7c12@csgroup.eu>
- <87ilsnmmi4.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87ilsnmmi4.fsf@mpe.ellerman.id.au>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0c892d5c-7022-4d3e-3662-08da01bde544
-x-ms-traffictypediagnostic: PAZP264MB3166:EE_
-x-microsoft-antispam-prvs: <PAZP264MB3166346E627B510674E3EC64ED0A9@PAZP264MB3166.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xS6Gks+uR59TvJyC1HrqKRYUfTrjb1egVVCLAkEkQHKpHQt4PKz4lDdoITFAaQPIa2q+oPqkkGt50hhJSr9k6v/hbkkHYOoQwjvtZgXXRtPWvT9TAGD4Yl6uEb5yzp0Nh3aqCQuJe217njDJ6uKzvMKZSTh1mNX3ggvdhfu7c/+LneuM+r7fMq68j97++pOpYG5tuX41V9TXWGccmofMfSCrIghwP7bj3IU0tA/WnYiMcwanN59aIQH8hYEnUssRwtkBRg4c6Ua1nITGszO9tc2vXVXTrDJ2+fGxnojPplodFpD2vy2TXai3oEFsPJCohHXdLqfIEIkHQU1bOJmA5ipscv4YrMPvpPI1B8qHtca16czVwwqsZpeZN6niI78s8/pTWKsZHfn8/dOx3yimKTBeJkqG2/Uj4L3qoU1p8w8j2PFJdOvulG4Skbs5H/ufaMiEJZqPDyo/M4+E1krA+5rxEj//kqgR84+4u/8PLmq4sjS28b317eV/by0lb7s4Q/F+yA56LgeRTu0zUkdl1rTU96v/Q6CQh7vWkiLtfUndp1KILjgZPvi/nLoG8UDO1ODddM1MY4QBuCytkHylg3sH4KWtk7dQsJCrAE2RvYN9UvV4aB6TZzBqUIq7yZGqt5PSdrvdlwjf8SUtORaS/AD5em/1tnpo3vrZCNFLMu0RhPD4sN5sOPBrFNo0PMg/p9x9CIEKlnWMsl21SuDgqagWwU6K2rRMd8e7Ste0AAKsnb0ohIqeD8mV9jm96N/Nf+6/T3yq7IBpKQlMxO9/Ew==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66446008)(6512007)(316002)(6486002)(31686004)(66476007)(66556008)(71200400001)(44832011)(36756003)(6506007)(54906003)(8936002)(5660300002)(110136005)(508600001)(64756008)(26005)(122000001)(86362001)(2906002)(31696002)(186003)(91956017)(38100700002)(76116006)(4326008)(8676002)(2616005)(66946007)(38070700005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dmd5NHZrbTJScExaZnRsQkI0NnB0ZkpLcFhxbnYxOFZNM0xjNk9RekRpMXQz?=
- =?utf-8?B?K2ZTaktxdy9lekxYUjJXWVRnSzdnYzlVUW9yQUhCSEpjR1FJVms2OUEwdnZI?=
- =?utf-8?B?N2puaS9Xbkdlam9OZUZBbXlNNEg5dFBMTFFnZFFUQmsvUklvWkZPdm13UUM2?=
- =?utf-8?B?bndBNk5JYjhLc2RKWXpHMzFac1RSbnVldDVBSlJRaXpVTnBMVlFKZVZWOVFp?=
- =?utf-8?B?Yy9BUzRJZ1Y4am1qLzNES3lrdWE4eFlqNFdkbEhHMnNLWGwrU2cybDJWS2h5?=
- =?utf-8?B?Zjdxb2s0bFRNbnJXK0MxbXBTRGJVT0VzZUJxZXJwMEVQanNLZVRXdUhBM2FY?=
- =?utf-8?B?aklQL3l0MVdJZENlVCtCbzdLdys5R0dBc1FPc3QvcDdUNjNwTllnM0E4MzRx?=
- =?utf-8?B?NWNLejAxNWpTZWpvc3F3OFo1ck5Sa1Bxd2Z4K3ZwTEZKNk14ZkJCUUpydXY4?=
- =?utf-8?B?ZEkwOUMrUTlBeHFoVmdvV2hlaE92aG1SQVlUWVFVT3krc3I0ajlNZjQwcStO?=
- =?utf-8?B?d25WSUFlWUo5ZFZXR1JzZlRkZXdldFJzdUtoSlJrZ3dONlNFODFvWndzbGph?=
- =?utf-8?B?bmZhTENWSUFEV1cxWlVzMGpUcnFua3EvTERTOFRXSnNhVkJiYlV4NGNTNnlJ?=
- =?utf-8?B?VkliWG5yYzNqdjREYnNwOFcxM1QrSjdZVWl5QU93RDhDVEdsbXJrU1I5Vzg5?=
- =?utf-8?B?K3FIU3ZzbXRqSXkyNW9wUllhakFRSVFzNzRwRGp5d1hxOHo2aDYyZVpkeWFG?=
- =?utf-8?B?SjJTUHprbzFDMS9hSGhML1FwWSthaktKbE1JQ3RJaTdYRFJCUTJlbExkeDJD?=
- =?utf-8?B?cXNYRkNtQ2hGMVJKbjR6Z0EyUXV2VFB6dlRTTTF1OHNKb1RXcVEvZUdoL0p2?=
- =?utf-8?B?WEJqWVBoWTNnY2VsY2wzLy9rSi84VzdQNUlVMmRDYS9sS3ZKeU5lVzM0NjBF?=
- =?utf-8?B?N1psZlpMRUp6WjZlVEtPSDRHMjN0OThud05qc0ZkSVM5Vi82NC9ETm9IUEN3?=
- =?utf-8?B?SGNvVmluTXZFYVBWREZVVnlLbXdwU1NzMnBLRlNDelNjK01jR2IrYXE3Q1Jv?=
- =?utf-8?B?ZWJ1NmhxR2tUYTFSSkU4ajk2QXA3UXlWd2xJUDZkWjZZZEZoNjhOUUFvcmE2?=
- =?utf-8?B?ZERmQitiN25ZZDJTZ3g2RitCOW9MM2RrY1B2aXJGOXdhTUNpZGp0Vi9qTVBR?=
- =?utf-8?B?Qm9GcXNoSXNJNnFiYzRxUE02Ny9US1JsbXFCeGloOVBpUlpONCtsM0NCNjIv?=
- =?utf-8?B?UlF3eVBwSExOcE82OE5VTGN6NTVtQlFpZ0t3UXBlVG5LYnJRendEcTNBMXZh?=
- =?utf-8?B?ZndiSjhMN0V5dzVSYUdyWmgzQmdONDJOSWxMdk1nZWtacDQxbytnTytvREx0?=
- =?utf-8?B?VGt0MHY1UzlIU0ptV2M5K2M0S1MvRXl4WDRDUXJ3S0p4NDdaci84NFVvOE8v?=
- =?utf-8?B?MUU0YWh0WVVFbEx4L3JTRUZJUlcybElCL3pqdmlSR3VLYk1GNy9yMkxhNjZZ?=
- =?utf-8?B?c3V5d1NzVXRjS3VuQzQrMVpKbUNEK21XakE4V1hjSDZMYWJrV1dWVkdrUFQ0?=
- =?utf-8?B?ejhENFZVaU9XTFlSd2Zxd1QvWEFMcUJuVUFsdlM3QTNJWS94S1F4Q3NneHlW?=
- =?utf-8?B?czBMSnZPN1g1bno1RlliSUxxdlFzSXBrWlR0MVBGdmFxZVNhZ25Rakx5MzJt?=
- =?utf-8?B?KzFOTm8zRTN6VkU5QVduQXRPN3FpYkFUUklIRGxaN2hqWUhZcHA0Y0k1V1lj?=
- =?utf-8?B?WTZrbGQ3YVVjRGFWc2ZPclBMQ3p4clAwUDJldU96cEx6MjhXK2V5TzgvZVpz?=
- =?utf-8?B?SnFDdGp2bEhpQ2MvcUFNSU1xQTJFTng4Vm5mVXdMalBsOUw1L1ovaTBSbEhM?=
- =?utf-8?B?UUlvc3lKZ1ZkWVlhdUowb1FJSXFQcEM2aDRKaUw0ZWViN3FUZ01YSzdraE5Y?=
- =?utf-8?B?TkJ2eURpRS9aTHNub2xuWWk5QTZhMENuV1dmT2drNjhjdXVLeGxWUzR2bXFv?=
- =?utf-8?B?SU1UK0NIb2dxT3JrNWpmY1NJeCtFUTllUHJNcTFHWjc5c2dvVVI2ZmdqakVP?=
- =?utf-8?B?dFdoSnAxYUZ4THVudDJYa1FBWElOQmpRcWVENVV4SzczMjJ3TFVLVUN1WXJh?=
- =?utf-8?B?RStkOCtTZWoxblloVGlSU0ZEMmNjakR0Zm5mSEVDbkpEV0FUM3pMZFNmYTRV?=
- =?utf-8?B?VW0wSlo0YnBSU0Ztd1pMMTFGU05NWHRqd24vNzRlcmdiTXUvOTNQN3lockg0?=
- =?utf-8?Q?7mNKh/6yktiW7SkgzpJC4i5cLLTBWEEWelwl1e3s4s=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <20786A02C030F041BD4715D19DFB7CCF@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 9 Mar 2022 06:15:33 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A51B13CA1E;
+        Wed,  9 Mar 2022 03:14:35 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2db569555d6so18335637b3.12;
+        Wed, 09 Mar 2022 03:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KXHpYkfJW7jBmBNFMclcDkzdMin2P6Ml1MYW+332E1w=;
+        b=hCifVydiTw930qv1RnwhpicXVtyNfJX3L0JcvqeHGT4zAbaeDHC05bPp14Ucipa/9Z
+         7TWxC/4jFKXSMlayYn72i6rl642q8jdQXDMb+UhaJFs0n91q3kvZ5xtTj5pP5SU/3KHE
+         6S/XSouo4M6Q3+HIhCtc7D+QVrZ9iPhHeP3p/JklUoAKcA1C69DU7B0sAfOp975IMP30
+         VcDTQpPD7EPmWZQOehMhZJpfMug+rsZrvsvSUJ9ZrJ7WJAAIIsLTfaRKbNtzQZRCTMdk
+         +itPmRqtgqselTM1A+orPlMmZ/OjMyNlWfhTyIXvj9XN9dkM5uCwgM2u25VRuYotyPyk
+         fFEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KXHpYkfJW7jBmBNFMclcDkzdMin2P6Ml1MYW+332E1w=;
+        b=2+1yjzvZ2r9i1LVChPWowfrl7s/CcRW0nt0YvN6EZJS/WceU1bKDQXrlBoHN98sqpP
+         SYNAtAYwV5SaLlSEMspxILQNs81nekY0b7WG8LeCWdKxR6jdtO8jAe/FjMf38qneD3eR
+         gmV1w4g4KsZKgBykNnMCT/zMipOQLPeufOnUW/JNFHys+wgiTvzJRNW5Eh0rMLOu4441
+         Z9WlAJpJH0bWYYuzSLpKs9aXTbXyvDjvTlF2jNeI8forMwiVXghlrynNSKeXNCrdRgDJ
+         NsTJEtptxuq78FhceYnSr94/IWq08TItSOgLNL0G1s+GJs818WqGrF8QQLOYU2fkOZ9U
+         aDZg==
+X-Gm-Message-State: AOAM5321PalMrgBE0R33yoG/CWbb/e6wXhkQTBJ081TNATlNZAbOffyH
+        ncQazkMLNVPFpU3ra5qQd9nay7doCOOywly2o+kQk+lupYaK8w==
+X-Google-Smtp-Source: ABdhPJzJgbD/NnoXwaG2bLoYsUbVfrLNI4gaym16qCRCsmDbE8UKEgc4grL76evfdhzUk62srwcPvygXdM/ogqvYwcU=
+X-Received: by 2002:a81:2f12:0:b0:2d7:d366:164a with SMTP id
+ v18-20020a812f12000000b002d7d366164amr17064120ywv.265.1646824473797; Wed, 09
+ Mar 2022 03:14:33 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c892d5c-7022-4d3e-3662-08da01bde544
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2022 11:13:53.2152
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MVWNYMxSewiDiyL9IGP2S4W2Br3vfsYLCj6vXL3Qk/3QTqODc/XaAAaQwRitK8XFNHYgACcqGcil8nPo89QprIO85J4gfahb/P0xVghlncw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3166
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309035648.2080945-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220309035648.2080945-1-chi.minghao@zte.com.cn>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 9 Mar 2022 11:14:07 +0000
+Message-ID: <CA+V-a8tZaOYxr32Hn43N6GNBR0kx856j_fcRYOhwCRPjkituTA@mail.gmail.com>
+Subject: Re: [PATCH] media:davinci:vpbe_display: Use platform_get_irq() to get
+ the interrupt
+To:     cgel.zte@gmail.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzAzLzIwMjIgw6AgMTE6NDYsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
-Cj4gQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cml0ZXM6
-DQo+PiBMZSAwOS8wMy8yMDIyIMOgIDA0OjI0LCBNaWNoYWVsIEVsbGVybWFuIGEgw6ljcml0wqA6
-DQo+Pj4gSGFuZ3l1IEh1YSA8aGJoMjV5QGdtYWlsLmNvbT4gd3JpdGVzOg0KPj4+PiBtcGM4eHhf
-cGljX2luaXQoKSBzaG91bGQgcmV0dXJuIC1FTk9NRU0gaW5zdGVhZCBvZiAwIHdoZW4NCj4+Pj4g
-aXJxX2RvbWFpbl9hZGRfbGluZWFyKCkgcmV0dXJuIE5VTEwuIFRoaXMgY2F1c2UgbXBjOHh4X3Bp
-Y3NfaW5pdCB0byBjb250aW51ZQ0KPj4+PiBleGVjdXRpbmcgZXZlbiBpZiBtcGM4eHhfcGljX2hv
-c3QgaXMgTlVMTC4NCj4+Pj4NCj4+Pj4gRml4ZXM6IGNjNzY0MDRmZWFlZCAoInBvd2VycGMvOHh4
-OiBGaXggcG9zc2libGUgZGV2aWNlIG5vZGUgcmVmZXJlbmNlIGxlYWsiKQ0KPj4+PiBTaWduZWQt
-b2ZmLWJ5OiBIYW5neXUgSHVhIDxoYmgyNXlAZ21haWwuY29tPg0KPj4+PiAtLS0NCj4+Pj4gICAg
-YXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgvcGljLmMgfCAxICsNCj4+Pj4gICAgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2Vy
-cGMvcGxhdGZvcm1zLzh4eC9waWMuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvOHh4L3BpYy5j
-DQo+Pj4+IGluZGV4IGYyYmE4MzcyNDlkNi4uMDRhNmFiZjE0YzI5IDEwMDY0NA0KPj4+PiAtLS0g
-YS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzh4eC9waWMuYw0KPj4+PiArKysgYi9hcmNoL3Bvd2Vy
-cGMvcGxhdGZvcm1zLzh4eC9waWMuYw0KPj4+PiBAQCAtMTUzLDYgKzE1Myw3IEBAIGludCBfX2lu
-aXQgbXBjOHh4X3BpY19pbml0KHZvaWQpDQo+Pj4NCj4+PiBFeHBhbmRpbmcgdGhlIGNvbnRleHQ6
-DQo+Pj4NCj4+PiAJc2l1X3JlZyA9IGlvcmVtYXAocmVzLnN0YXJ0LCByZXNvdXJjZV9zaXplKCZy
-ZXMpKTsNCj4+PiAJaWYgKHNpdV9yZWcgPT0gTlVMTCkgew0KPj4+IAkJcmV0ID0gLUVJTlZBTDsN
-Cj4+PiAJCWdvdG8gb3V0Ow0KPj4+IAl9DQo+Pj4NCj4+PiAJbXBjOHh4X3BpY19ob3N0ID0gaXJx
-X2RvbWFpbl9hZGRfbGluZWFyKG5wLCA2NCwgJm1wYzh4eF9waWNfaG9zdF9vcHMsIE5VTEwpOw0K
-Pj4+PiAgICAJaWYgKG1wYzh4eF9waWNfaG9zdCA9PSBOVUxMKSB7DQo+Pj4+ICAgIAkJcHJpbnRr
-KEtFUk5fRVJSICJNUEM4eHggUElDOiBmYWlsZWQgdG8gYWxsb2NhdGUgaXJxIGhvc3QhXG4iKTsN
-Cj4+Pj4gICAgCQlyZXQgPSAtRU5PTUVNOw0KPj4+PiArCQlnb3RvIG91dDsNCj4+Pj4gICAgCX0N
-Cj4+Pj4gICAgDQo+Pj4+ICAgIAlyZXQgPSAwOw0KPj4+PiAgICAJDQo+Pj4gb3V0Og0KPj4+IAlv
-Zl9ub2RlX3B1dChucCk7DQo+Pj4gCXJldHVybiByZXQ7DQo+Pj4gfQ0KPj4+DQo+Pj4gUHJvcGVy
-IGVycm9yIGNsZWFudXAgc2hvdWxkIGFsc28gdW5kbyB0aGUgaW9yZW1hcCgpIGlmDQo+Pj4gaXJx
-X2RvbWFpbl9hZGRfbGluZWFyKCkgZmFpbHMuDQo+Pg0KPj4gVWggLi4uDQo+Pg0KPj4gSWYgc2l1
-X3JlZyBpcyBOVUxMLCB5b3UgZ2V0IGEgc2VyaW91cyBwcm9ibGVtIHdoZW4gX19kb19pcnEoKSBj
-YWxscw0KPj4gbXBjOHh4X2dldF9pcnEoKQ0KPiANCj4gQXJndWFibHkgaXQgc2hvdWxkbid0IGJl
-IGFzc2lnbmVkIHRvIHBwY19tZC5nZXRfaXJxIHVubGVzcw0KPiBtcGM4eHhfcGljX2luaXQoKSBz
-dWNjZWVkcy4gU2VlIGVnLiB4aWNzX2luaXQoKS4NCg0KDQpJIGFncmVlIHdpdGggdGhhdCwgYnV0
-IGl0J3MgYSBodWdlIHdvcmsgSSBndWVzcy4gTW9zdCBwbGF0Zm9ybXMgc2V0IA0KLmdldF9pcnEg
-aW4gcHBjX21kKCkgYXQgYnVpbGR0aW1lLiBTZWUgdGhlIGdlbmVyaWMgbXBpY19nZXRfaXJxKCkg
-d2hpY2ggDQpoYXMgYSBCVUdfT04oKSBpbiBjYWxsIG1waWNfcHJpbWFyeSBpcyBOVUxMLiBUaGVy
-ZSBhcmUgNTAgcGxhdGZvcm1zIHdpdGggDQpidWlsZHRpbWUgYXNzaWdubWVudC4NCg0KVGhhdCB3
-b3VsZCBob3dldmVyIGJlIGEgZ29vZCBvcHBvcnR1bml0eSB0byBzd2l0Y2ggZ2V0X2lycSgpIHRv
-IGEgc3RhdGljIA0KY2FsbC4gSSdsbCBvcGVuIGEgZ2l0aHViIGlzc3VlIHRvIGZvbGxvdyBpdC4N
-Cg0KQ2hyaXN0b3BoZQ==
+Hi Minghao,
+
+Thank you for the patch.
+
+On Wed, Mar 9, 2022 at 3:56 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+>
+> It is not recommened to use platform_get_resource(pdev, IORESOURCE_IRQ)
+> for requesting IRQ's resources any more, as they can be not ready yet in
+> case of DT-booting.
+>
+> platform_get_irq() instead is a recommended way for getting IRQ even if
+> it was not retrieved earlier.
+>
+> It also makes code simpler because we're getting "int" value right away
+> and no conversion from resource to int is required.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> ---
+>  drivers/media/platform/davinci/vpbe_display.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+NAK, vpbe_display driver doesn't use DT.
+
+Cheers,
+Prabhakar
+
+> diff --git a/drivers/media/platform/davinci/vpbe_display.c b/drivers/media/platform/davinci/vpbe_display.c
+> index bf3c3e76b921..e0aabcb333ac 100644
+> --- a/drivers/media/platform/davinci/vpbe_display.c
+> +++ b/drivers/media/platform/davinci/vpbe_display.c
+> @@ -1363,7 +1363,6 @@ static int vpbe_display_probe(struct platform_device *pdev)
+>  {
+>         struct vpbe_display *disp_dev;
+>         struct v4l2_device *v4l2_dev;
+> -       struct resource *res = NULL;
+>         struct vb2_queue *q;
+>         int k;
+>         int i;
+> @@ -1405,14 +1404,13 @@ static int vpbe_display_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> -       res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -       if (!res) {
+> +       irq = platform_get_irq(pdev, 0);
+> +       if (irq < 0) {
+>                 v4l2_err(v4l2_dev, "Unable to get VENC interrupt resource\n");
+>                 err = -ENODEV;
+>                 goto probe_out;
+>         }
+>
+> -       irq = res->start;
+>         err = devm_request_irq(&pdev->dev, irq, venc_isr, 0,
+>                                VPBE_DISPLAY_DRIVER, disp_dev);
+>         if (err) {
+> --
+> 2.25.1
+>

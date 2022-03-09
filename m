@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B574D2DD8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A7C4D2DE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiCILVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S231890AbiCILZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiCILVP (ORCPT
+        with ESMTP id S229616AbiCILZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:21:15 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ABA13DFE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:20:16 -0800 (PST)
-Received: from zn.tnic (p200300ea9719385972594b3b791fe3f2.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3859:7259:4b3b:791f:e3f2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0A00C1EC03AD;
-        Wed,  9 Mar 2022 12:20:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646824811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KXgHs6lRPpmJUOieXfnSboHcoHSA9UjDKL1SUOGT8lQ=;
-        b=OGERzaXTFFkzLz8jjn3SjJj1N4exWCyNMnmr33pu8IL5rOhOdNn/Ba9mbvCTxukIL15pjW
-        QCkE8vAeAqdbnOiYcXwu4ANS8sQn7Sk6wmGr+17kr3xtDA2GjuuSvtjXHtRD4UHXix+L0M
-        hu0m7AIsRKk63uR9d2v5Zi0UPTErzL8=
-Date:   Wed, 9 Mar 2022 12:20:16 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Cathy Zhang <cathy.zhang@intel.com>
-Cc:     linux-sgx@vger.kernel.org, x86@kernel.org, dave.hansen@intel.com,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 09/11] x86/microcode: Expose EUPDATESVN procedure via
- sysfs
-Message-ID: <YiiNPWdsYtWiULZm@zn.tnic>
-References: <20220309104050.18207-1-cathy.zhang@intel.com>
- <20220309104050.18207-10-cathy.zhang@intel.com>
+        Wed, 9 Mar 2022 06:25:09 -0500
+Received: from outbound-smtp42.blacknight.com (outbound-smtp42.blacknight.com [46.22.139.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E236C13D92D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:24:07 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp42.blacknight.com (Postfix) with ESMTPS id 1225717B4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:24:06 +0000 (GMT)
+Received: (qmail 23128 invoked from network); 9 Mar 2022 11:24:05 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 9 Mar 2022 11:24:05 -0000
+Date:   Wed, 9 Mar 2022 11:24:04 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        lkp@lists.01.org, lkp@intel.com, fengwei.yin@intel.com,
+        aubrey.li@linux.intel.com, yu.c.chen@intel.com
+Subject: Re: [LKP] Re: [sched/numa]  0fb3978b0a: stress-ng.fstat.ops_per_sec
+ -18.9% regression
+Message-ID: <20220309112404.GH15701@techsingularity.net>
+References: <20220302140220.GA32817@xsang-OptiPlex-9020>
+ <87mti7s9xz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <87tuc7fp9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20220309104050.18207-10-cathy.zhang@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87tuc7fp9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On all your patches for the future: don't forget to Cc LKML.
-
-On Wed, Mar 09, 2022 at 06:40:48PM +0800, Cathy Zhang wrote:
-> EUPDATESVN is the SGX instruction which allows enclave attestation
-> to include information about updated microcode without a reboot.
+On Wed, Mar 09, 2022 at 05:28:55PM +0800, Huang, Ying wrote:
+> Hi, All,
 > 
-> Microcode updates which affect SGX require two phases:
+> "Huang, Ying" <ying.huang@intel.com> writes:
 > 
-> 1. Do the main microcode update
-> 2. Make the new CPUSVN available for enclave attestation via
->    EUPDATESVN.
+> > Hi, Oliver,
+> >
+> > Thanks for report.
+> >
+> > I still cannot connect the regression with the patch yet.  To double
+> > check, I have run test again with "sched_verbose" kernel command line,
+> > and verified that the sched_domain isn't changed at all with the patch.
+> >
+> > kernel test robot <oliver.sang@intel.com> writes:
+> >>       0.11   6%      +0.1        0.16   4%  perf-profile.self.cycles-pp.update_rq_clock
+> >>       0.00            +0.1        0.06   6%  perf-profile.self.cycles-pp.memset_erms
+> >>       0.00            +0.1        0.07   5%  perf-profile.self.cycles-pp.get_pid_task
+> >>       0.06   7%      +0.1        0.17   6%  perf-profile.self.cycles-pp.select_task_rq_fair
+> >>       0.54   5%      +0.1        0.68        perf-profile.self.cycles-pp.lockref_put_return
+> >>       4.26            +1.1        5.33        perf-profile.self.cycles-pp.common_perm_cond
+> >>      15.45            +4.9       20.37        perf-profile.self.cycles-pp.lockref_put_or_lock
+> >>      20.12            +6.7       26.82        perf-profile.self.cycles-pp.lockref_get_not_dead
+> >
+> > From the perf-profile above, the most visible change is more cycles in
+> > lockref_get_not_dead(), which will loop with cmpxchg on
+> > dentry->d_lockref.  So this appears to be related to the memory layout.
+> > I will try to debug that.
+> >
+> > Because stress-ng is a weird "benchmark" although it's a very good
+> > functionality test, and I cannot connect the patch with the test case
+> > and performance metrics collected.  I think this regression should be a
+> > low priority one which shouldn't prevent the merging etc.  But I will
+> > continue to investigate the regression to try to root cause it.
 > 
-> Before a EUPDATESVN can succeed, all enclave pages (EPC) must be
-> marked as unused in the SGX metadata (EPCM). This operation destroys
-> all preexisting SGX enclave data and metadata. This is by design and
-> mitigates the impact of vulnerabilities that may have compromised
-> enclaves or the SGX hardware itself prior to the update.
+> Done more investigation for this.  It turns out the sched_domain has
+> been changed after commit 0fb3978b0a, although it's not shown in default
+> sched_verbose output.  sd->imb_numa_nr of level "NUMA" has been changed
+> from 24 to 12 after the commit.  So the following debug patch restore
+> the performance.
 > 
-> Signed-off-by: Cathy Zhang <cathy.zhang@intel.com>
-> ---
->  arch/x86/include/asm/microcode.h     |  5 ++++
->  arch/x86/include/asm/sgx.h           |  5 ++++
->  arch/x86/kernel/cpu/microcode/core.c | 44 ++++++++++++++++++++++++++++
 
-Why is all this code here at all?
-
-What does that have *actually* to do with microcode loading?
-
-AFAICT, you want to hook into microcode_check() which runs after the
-microcode update and do your EUPDATESVN there...
+If Ice Lake has multiple last level caches per socket (I didn't check)
+then the sd->imb_numa_nr would have changed. I didn't dig into what
+stress-ng fstat is doing as it's a stress test more than a performance
+test but given that the number of threads is 10% of the total, it's
+possible that the workload is being split across nodes differently.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Mel Gorman
+SUSE Labs

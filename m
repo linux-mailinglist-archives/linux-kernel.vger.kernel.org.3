@@ -2,95 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563D64D2963
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791194D2964
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiCIHVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S230296AbiCIHVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiCIHVH (ORCPT
+        with ESMTP id S229590AbiCIHVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:21:07 -0500
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5377E105A9C;
-        Tue,  8 Mar 2022 23:20:09 -0800 (PST)
-Message-ID: <34dbb6e0-e278-a78c-cddd-b9484b1bf5e3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646810407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=okH9BX0M/dnwpm23ye/VaVE4Ql3FIN8z7dfUJvXGpow=;
-        b=A/Au1hLfKvxQP1g+/q7dwU6JX4jJmRsCxgYpHUW2JtFGaaGZcYmjbcR53kANDPwadV6oWT
-        YrDdJ4BE9V+Aljtl3WHU7YB4PJ6NcWP28fPm3lwuG7qXxVa68vbSWjEyV++uIJMHyrzrxl
-        yIeNCB/9Ae4XqBaM1JoQ23bB8xTnbmY=
-Date:   Wed, 9 Mar 2022 09:20:03 +0200
+        Wed, 9 Mar 2022 02:21:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A667109A4E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 23:20:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6AC2B81E9D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84027C340F5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646810434;
+        bh=0QXZP8eVgo10f8L1mPMKCddY3p41GJooJb+4El4/TiY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B1Q8u3x/zEgVwf8U1Masn8ZgF8D3nOWrfU2zR9pF90baIpd3AvRlN2tx/Yv+UWcGO
+         1Sk53X0X/5TSpQKn9F7xXKgbmTYJk5h1Y8RZi1AUt36pk5JXc0BLymBWMjLzpSegKe
+         owhK8FCrZLU1rFBGuO36WP81Q7vuEAm/dVK9lxndA7Y3ikDjJJ2TtMYPPqbKE5SWAn
+         7iyXXZ5j7x+pMl5ibicoJwj045iSc0Kf8TRmSk4bFyEOkM//VvlRKgzTHF8TsebZbw
+         EytDBMXw5j30Q4MpTcW2OCoVvZJ0JTxfAU/JWErRCPwD75PzJ+qfZK4c43Swvu10H3
+         /iFHF5YRfA3/A==
+Received: by mail-yb1-f169.google.com with SMTP id g26so2457842ybj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 23:20:34 -0800 (PST)
+X-Gm-Message-State: AOAM531h4KeuHjJILm+xS7p9zN4tOtgGEvs3/RwfSkfj+/n0G2niKNZW
+        88aeZR7hgTHyRDEZ0YnoGrd+WuzngwxDvDmit4g=
+X-Google-Smtp-Source: ABdhPJw6Ebe3DJZC6cSv+jIP0cnkiQl7B1mqVD4KKRI1Lbgg6k8EgTrADWtFm0f6M7E8i3HT1hzzcrVGCJCwhogovQY=
+X-Received: by 2002:a25:af8e:0:b0:622:c778:c0a2 with SMTP id
+ g14-20020a25af8e000000b00622c778c0a2mr15451914ybh.50.1646810433470; Tue, 08
+ Mar 2022 23:20:33 -0800 (PST)
 MIME-Version: 1.0
-Subject: Re: [PATCH for-next 3/9] RDMA/efa: get rid of create_user_ah
-Content-Language: en-US
-To:     Yajun Deng <yajun.deng@linux.dev>, jgg@nvidia.com,
-        selvin.xavier@broadcom.com, galpress@amazon.com, sleybo@amazon.com,
-        liangwenpeng@huawei.com, liweihang@huawei.com,
-        mustafa.ismail@intel.com, shiraz.saleem@intel.com,
-        leonro@nvidia.com, dennis.dalessandro@cornelisnetworks.com,
-        mike.marciniszyn@cornelisnetworks.com, zyjzyj2000@gmail.com
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220308143705.3403496-1-yajun.deng@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Gal Pressman <gal.pressman@linux.dev>
-In-Reply-To: <20220308143705.3403496-1-yajun.deng@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
+ <Yh8tWdiWPgZLyQtx@Red> <CAMj1kXGRtdftpoqmd7HBonBBS67jO=YWzoESPAagGfQBZUDQWg@mail.gmail.com>
+ <Yh8w7ldudhmbYv4N@Red> <CAMj1kXHri2_tnYhu2gE9xTUOxLY9v1=zODCo1BGfjFTKukiedA@mail.gmail.com>
+ <Yh9CbcrfDvN2Z9Y9@Red> <Yh9RI64fThQfnJgS@shell.armlinux.org.uk>
+ <CAMj1kXGVwXzAAyDeJqAi+eK1hOB3uShiBb_LORL-_YNvikbsAw@mail.gmail.com>
+ <Yh9TdbWwHX/5Bhmt@shell.armlinux.org.uk> <YifuVmkcb1ie7bzk@shell.armlinux.org.uk>
+ <Yif+AY3DShT9Z6Q+@shell.armlinux.org.uk>
+In-Reply-To: <Yif+AY3DShT9Z6Q+@shell.armlinux.org.uk>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 9 Mar 2022 08:20:22 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFB9sUdxJ8UZQqE6mgSYZH2aB_Y7Ps70C-CS2Pr4U8yOg@mail.gmail.com>
+Message-ID: <CAMj1kXFB9sUdxJ8UZQqE6mgSYZH2aB_Y7Ps70C-CS2Pr4U8yOg@mail.gmail.com>
+Subject: Re: boot flooded with unwind: Index not found
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 16:37, Yajun Deng wrote:
-> There is no create_user_ah in ib_device_ops, remove it.
+On Wed, 9 Mar 2022 at 02:08, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 >
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> ---
->  drivers/infiniband/hw/efa/efa_main.c  | 2 +-
->  drivers/infiniband/hw/efa/efa_verbs.c | 5 +++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
+> On Wed, Mar 09, 2022 at 12:01:26AM +0000, Russell King (Oracle) wrote:
+> > To reinterate what I've just put on IRC - we have not got to the bottom
+> > of this problem yet - it still very much exists.
+> >
+> > There seems to be something of a fundamental issue with the unwinder,
+> > it now appears to be going wrong and failing to unwind beyond a
+> > couple of functions, and the address it's coming out with appears to
+> > be incorrect. I've only just discovered this because I created my very
+> > own bug, and yet again, the timing sucks with the proximity of the
+> > merge window.
+> >
+> > I'm getting:
+> >
+> > [   13.198803] [<c0017728>] (unwind_backtrace) from [<c0012828>] (show_stack+0x10/0x14)
+> > [   13.198820] [<c0012828>] (show_stack) from [<c2be78d4>] (0xc2be78d4)
+> >
+> > for the WARN_ON() stacktrace, and that address that apparently called
+> > show_stack() is most definitely rubbish and incorrect. This makes any
+> > WARN_ON() condition undebuggable.
+> >
+> > This is with both 9183/1 and 9184/1 applied on top of pulling your
+> > "arm-ftrace-for-rmk" tag and also with just the "arm-vmap-stacks-v6"
+> > tag. This seems to point at one of these patches breaking the
+> > unwinder:
+> >
+> > a1c510d0adc6 ARM: implement support for vmap'ed stacks
+> > 532319b9c418 ARM: unwind: disregard unwind info before stack frame is set up
 >
-> diff --git a/drivers/infiniband/hw/efa/efa_main.c b/drivers/infiniband/hw/efa/efa_main.c
-> index 94b94cca4870..b2f3832cd305 100644
-> --- a/drivers/infiniband/hw/efa/efa_main.c
-> +++ b/drivers/infiniband/hw/efa/efa_main.c
-> @@ -361,7 +361,7 @@ static const struct ib_device_ops efa_dev_ops = {
->  	.alloc_ucontext = efa_alloc_ucontext,
->  	.create_cq = efa_create_cq,
->  	.create_qp = efa_create_qp,
-> -	.create_user_ah = efa_create_ah,
-> +	.create_ah = efa_create_ah,
->  	.dealloc_pd = efa_dealloc_pd,
->  	.dealloc_ucontext = efa_dealloc_ucontext,
->  	.dereg_mr = efa_dereg_mr,
-> diff --git a/drivers/infiniband/hw/efa/efa_verbs.c b/drivers/infiniband/hw/efa/efa_verbs.c
-> index ecfe70eb5efb..44269eb18780 100644
-> --- a/drivers/infiniband/hw/efa/efa_verbs.c
-> +++ b/drivers/infiniband/hw/efa/efa_verbs.c
-> @@ -1959,6 +1959,11 @@ int efa_create_ah(struct ib_ah *ibah,
->  	struct efa_ah *ah = to_eah(ibah);
->  	int err;
->  
-> +	if (!udata) {
-> +		err = -EOPNOTSUPP;
-> +		goto err_out;
-> +	}
-> +
+> The above commit appears to be what's breaking the unwinder. Without
+> this I get sane stacktraces. With it, the unwinder spits out stupid
+> function addresses.
+>
 
-This part is not needed, kverbs flows are blocked for EFA.
+OK, then let's revert that patch. It reduces the likelihood that we
+can show a sane stacktrace when the stack overflows, but that is not
+the end of the world: the important bit is that it gets caught and
+that the offending task is terminated.
 
-Thanks
+We can revisit this in the next cycle.
+
+I do think 9183/1 and 9184/1 should be kept, though. There are
+definitely cases such as Corentin's that are different from yours
+where we might see spurious warnings otherwise.

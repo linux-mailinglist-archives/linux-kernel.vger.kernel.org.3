@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011BE4D29FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1164D29DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbiCIH4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S231191AbiCIH4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiCIH4O (ORCPT
+        with ESMTP id S230476AbiCIH4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:56:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37559163D6C;
-        Tue,  8 Mar 2022 23:54:59 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:54:57 -0000
+        Wed, 9 Mar 2022 02:56:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567AB164D02;
+        Tue,  8 Mar 2022 23:55:01 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:54:58 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812498;
+        s=2020; t=1646812499;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ccy4XzjRvU3p/tZbIiRcB/c7TDX5BH03yivR98VrUfM=;
-        b=xiPcvJ6vFoIGI3+hVVaP3yslkyTHO9cFYCzBLHx69hh8xaEEVWXtDWr5OgnrlPUWv6un+/
-        4NSJw2WyNjSFAHgZGVXD/0bW14aPpGtXtplzGKdU0v6yRSAoJel6+Ma4MEOvDFQqJ9dSZX
-        ctR93/QehbpMEnZbTtRJRHvdvlk9cZT558O00WrewViVP9p7j09Wrn2BcGAT5o4tHtvikn
-        HTsmbqZuNaLDcmzQmKzOQw0EhSPk3p8LtINsmy14rEgFzM90cxu5tjENhJrJK4AW/+ne6T
-        W8T3yGS18UqK5u2/qKJFJa9go2g8PY0hcF1gcJ4ABoizxwv2I2QFOKGm7IL8KQ==
+        bh=FrRfzXMiNTO1Ivbj0UalHDmUZRrd8YsS4YwXuudGaGI=;
+        b=avFCjmhAsM3ZbvrmscZj4gSk8zsurnUyboHrpPJYaqdnxfkHP3maogSqMNcEWZc8ajIQxJ
+        yXpuZJldOrUUo9PyJ3qpyFg5CNgCpSIVLFgGKm0nt07JBx4JAntfo3boDiABUytWIc9ZdC
+        PfrIGhsaQr4cEKc1kpN5+L7bF4OiByeSf+KFpXwUMjURyi/aXrsb4wa+qGoS/Kp9xv6oWu
+        zPxYP9rhu5/4jmUe6hEemS7tE7awtRtb6xTNeQVu39oKChGukwQagMR02E87pMTTU2FK3y
+        NSSHSAFN0Mbt3NXerS7AR9cpwQ1KliER73kxd9UWFej29yHQxWr2H/T2Xjcyxw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812498;
+        s=2020e; t=1646812499;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ccy4XzjRvU3p/tZbIiRcB/c7TDX5BH03yivR98VrUfM=;
-        b=MQ+XtpjxK5I+MYqEZpQ6sRipbyHf4CbuyFhOqPTwgngdmXyN7jYTvaptlvsrVUSgOHDGDL
-        xB3dI4JVAXYSOQDg==
+        bh=FrRfzXMiNTO1Ivbj0UalHDmUZRrd8YsS4YwXuudGaGI=;
+        b=s/AJkfU7feG+yDYqd1ODx9U2Ki3uQfIjmNXSRQgamG9FRFlBgXcHXRSQ2O7NE7U0gAHCFG
+        WFRxCJeqNV/tJhDw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,kexec: Disable CET on kexec
+Subject: [tip: x86/core] x86/ibt,ftrace: Add ENDBR to samples/ftrace
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154318.641454603@infradead.org>
-References: <20220308154318.641454603@infradead.org>
+In-Reply-To: <20220308154318.523421433@infradead.org>
+References: <20220308154318.523421433@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681249728.16921.12285536796767172459.tip-bot2@tip-bot2>
+Message-ID: <164681249889.16921.49890055498398607.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,99 +67,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     f9a08abb06d0abe51295479118f1f8e4a4325798
-Gitweb:        https://git.kernel.org/tip/f9a08abb06d0abe51295479118f1f8e4a4325798
+Commit-ID:     cba7a74a1b138c2b7379c88fbbe7c6b94d5bd180
+Gitweb:        https://git.kernel.org/tip/cba7a74a1b138c2b7379c88fbbe7c6b94d5bd180
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:36 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:34 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:33 +01:00
 
-x86/ibt,kexec: Disable CET on kexec
+x86/ibt,ftrace: Add ENDBR to samples/ftrace
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154318.641454603@infradead.org
+Link: https://lore.kernel.org/r/20220308154318.523421433@infradead.org
 ---
- arch/x86/include/asm/cpu.h           | 3 +++
- arch/x86/kernel/cpu/common.c         | 6 ++++++
- arch/x86/kernel/machine_kexec_64.c   | 4 +++-
- arch/x86/kernel/relocate_kernel_64.S | 8 ++++++++
- 4 files changed, 20 insertions(+), 1 deletion(-)
+ samples/ftrace/ftrace-direct-modify.c       |  5 +++++
+ samples/ftrace/ftrace-direct-multi-modify.c | 10 +++++++---
+ samples/ftrace/ftrace-direct-multi.c        |  5 ++++-
+ samples/ftrace/ftrace-direct-too.c          |  3 +++
+ samples/ftrace/ftrace-direct.c              |  3 +++
+ 5 files changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index a60025f..86e5e4e 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -73,4 +73,7 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
- #else
- static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
- #endif
+diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+index 2c7c318..39146fa 100644
+--- a/samples/ftrace/ftrace-direct-modify.c
++++ b/samples/ftrace/ftrace-direct-modify.c
+@@ -24,20 +24,25 @@ static unsigned long my_ip = (unsigned long)schedule;
+ 
+ #ifdef CONFIG_X86_64
+ 
++#include <asm/ibt.h>
 +
-+extern __noendbr void cet_disable(void);
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+ "	.type		my_tramp1, @function\n"
+ "	.globl		my_tramp1\n"
+ "   my_tramp1:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	call my_direct_func1\n"
+ "	leave\n"
+ "	.size		my_tramp1, .-my_tramp1\n"
+ 	ASM_RET
 +
- #endif /* _ASM_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index db1f149..709acab 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -535,6 +535,12 @@ static __always_inline void setup_cet(struct cpuinfo_x86 *c)
- 	}
- }
+ "	.type		my_tramp2, @function\n"
+ "	.globl		my_tramp2\n"
+ "   my_tramp2:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	call my_direct_func2\n"
+diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+index 6f43a39..65aa94d 100644
+--- a/samples/ftrace/ftrace-direct-multi-modify.c
++++ b/samples/ftrace/ftrace-direct-multi-modify.c
+@@ -22,11 +22,14 @@ extern void my_tramp2(void *);
  
-+__noendbr void cet_disable(void)
-+{
-+	if (cpu_feature_enabled(X86_FEATURE_IBT))
-+		wrmsrl(MSR_IA32_S_CET, 0);
-+}
+ #ifdef CONFIG_X86_64
+ 
++#include <asm/ibt.h>
 +
- /*
-  * Some CPU features depend on higher CPUID levels, which may not always
-  * be available due to CPUID level capping or broken virtualization
-diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-index f5da4a1..566bb8e 100644
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -27,6 +27,7 @@
- #include <asm/kexec-bzimage64.h>
- #include <asm/setup.h>
- #include <asm/set_memory.h>
-+#include <asm/cpu.h>
- 
- #ifdef CONFIG_ACPI
- /*
-@@ -310,6 +311,7 @@ void machine_kexec(struct kimage *image)
- 	/* Interrupts aren't acceptable while we reboot */
- 	local_irq_disable();
- 	hw_breakpoint_disable();
-+	cet_disable();
- 
- 	if (image->preserve_context) {
- #ifdef CONFIG_X86_IO_APIC
-@@ -325,7 +327,7 @@ void machine_kexec(struct kimage *image)
- 	}
- 
- 	control_page = page_address(image->control_code_page) + PAGE_SIZE;
--	memcpy(control_page, relocate_kernel, KEXEC_CONTROL_CODE_MAX_SIZE);
-+	__memcpy(control_page, relocate_kernel, KEXEC_CONTROL_CODE_MAX_SIZE);
- 
- 	page_list[PA_CONTROL_PAGE] = virt_to_phys(control_page);
- 	page_list[VA_CONTROL_PAGE] = (unsigned long)control_page;
-diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
-index 399f075..5b65f6e 100644
---- a/arch/x86/kernel/relocate_kernel_64.S
-+++ b/arch/x86/kernel/relocate_kernel_64.S
-@@ -115,6 +115,14 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
- 	pushq   %rdx
- 
- 	/*
-+	 * Clear X86_CR4_CET (if it was set) such that we can clear CR0_WP
-+	 * below.
-+	 */
-+	movq	%cr4, %rax
-+	andq	$~(X86_CR4_CET), %rax
-+	movq	%rax, %cr4
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+ "	.type		my_tramp1, @function\n"
+ "	.globl		my_tramp1\n"
+ "   my_tramp1:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	pushq %rdi\n"
+@@ -34,12 +37,13 @@ asm (
+ "	call my_direct_func1\n"
+ "	popq %rdi\n"
+ "	leave\n"
+-"	ret\n"
++	ASM_RET
+ "	.size		my_tramp1, .-my_tramp1\n"
 +
-+	/*
- 	 * Set cr0 to a known state:
- 	 *  - Paging enabled
- 	 *  - Alignment check disabled
+ "	.type		my_tramp2, @function\n"
+-"\n"
+ "	.globl		my_tramp2\n"
+ "   my_tramp2:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	pushq %rdi\n"
+@@ -47,7 +51,7 @@ asm (
+ "	call my_direct_func2\n"
+ "	popq %rdi\n"
+ "	leave\n"
+-"	ret\n"
++	ASM_RET
+ "	.size		my_tramp2, .-my_tramp2\n"
+ "	.popsection\n"
+ );
+diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+index 2fafc9a..41ded7c 100644
+--- a/samples/ftrace/ftrace-direct-multi.c
++++ b/samples/ftrace/ftrace-direct-multi.c
+@@ -17,11 +17,14 @@ extern void my_tramp(void *);
+ 
+ #ifdef CONFIG_X86_64
+ 
++#include <asm/ibt.h>
++
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+ "	.type		my_tramp, @function\n"
+ "	.globl		my_tramp\n"
+ "   my_tramp:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	pushq %rdi\n"
+@@ -29,7 +32,7 @@ asm (
+ "	call my_direct_func\n"
+ "	popq %rdi\n"
+ "	leave\n"
+-"	ret\n"
++	ASM_RET
+ "	.size		my_tramp, .-my_tramp\n"
+ "	.popsection\n"
+ );
+diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+index c93fb0e..6690468 100644
+--- a/samples/ftrace/ftrace-direct-too.c
++++ b/samples/ftrace/ftrace-direct-too.c
+@@ -19,11 +19,14 @@ extern void my_tramp(void *);
+ 
+ #ifdef CONFIG_X86_64
+ 
++#include <asm/ibt.h>
++
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+ "	.type		my_tramp, @function\n"
+ "	.globl		my_tramp\n"
+ "   my_tramp:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	pushq %rdi\n"
+diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+index 8b551e5..e8f1e44 100644
+--- a/samples/ftrace/ftrace-direct.c
++++ b/samples/ftrace/ftrace-direct.c
+@@ -16,11 +16,14 @@ extern void my_tramp(void *);
+ 
+ #ifdef CONFIG_X86_64
+ 
++#include <asm/ibt.h>
++
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+ "	.type		my_tramp, @function\n"
+ "	.globl		my_tramp\n"
+ "   my_tramp:"
++	ASM_ENDBR
+ "	pushq %rbp\n"
+ "	movq %rsp, %rbp\n"
+ "	pushq %rdi\n"

@@ -2,192 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90564D2D08
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80734D2D15
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiCIKWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S229962AbiCIKZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiCIKWr (ORCPT
+        with ESMTP id S229796AbiCIKZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:22:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4F116FDE8;
-        Wed,  9 Mar 2022 02:21:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F43FB81FF7;
-        Wed,  9 Mar 2022 10:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C42C340E8;
-        Wed,  9 Mar 2022 10:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646821306;
-        bh=Wm6tZYodnJhLaX2LYxO6sDtIEcS/tDhVWe8DN5ggHFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nlz1py1GRsjS+umP2V+rm1oqiosy9OL4/vbrcwaaIQoq/8G9FeyK54V8yKPjafEaM
-         2S2+p0gTTETq4b61VteUcVjgkb/VZQWeRG/jRn7AFdv4wdLEsu8zX/mAQeDt7caAN1
-         iUaaHxqIl6xjtMMBhP91Yp3lMEctbv+0aYP0vk5k=
-Date:   Wed, 9 Mar 2022 11:21:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
-        Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH] usb: dwc3: gadget: Wait for ep0 xfers to complete during
- dequeue
-Message-ID: <Yih/tapu/JMRgBqT@kroah.com>
-References: <20220309004148.12061-1-quic_wcheng@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309004148.12061-1-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 05:25:46 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98CC156C66
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:24:47 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id t5so1850967pfg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 02:24:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Ce2OWqbOvhVGvkh9CKalayGwAHAmYG9YoQa70H7zwHk=;
+        b=nhsB643oL1z7gSz9OhPKaYTp92GH9sg+/1DuFdJZk1fKbP62NAfuUgyhqycQ1FqFo+
+         5rmoZlZtyivfZVAfYIzmCykCkAF7VU1tcpTtbcye+FzMNUMSpsDn1HqQQBeUEfkEWQYp
+         phjIaBxXla2Fnmq5PQsLvQJ35lNRalRiFJpTO3Ize16CEx26rLuoCAWTk4XyO7syLutA
+         J3tc9yg10WtAbYAUMBfgpJ+sR6FFaDtRA436mFodx2KdMVDsvM4z+cFoBv+/3JIWLk8M
+         LpVMxj0oNuGCkXxkgBd9K3GEPtyHQUZeXY/NhLKujU7sDdSUUiB/QiXt1QbA8U9hCvIC
+         UjkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Ce2OWqbOvhVGvkh9CKalayGwAHAmYG9YoQa70H7zwHk=;
+        b=tQRlnfYVc9h28Iw3G0zJ1KmgtaSKJbb/YwHNLTq8u/X20YIsxyfzTVaKbLoQhjdATJ
+         YoK6zBJfKRZv30PAg5bgRggAWnsTeB3ecFD35j5kOVAxX3yEIDd8x+TizjbvQJg/kqUF
+         O+DQM5DzWmLC4W91ugE1qEPC0Si23/4r9PKI6vSeREdWSo0vRyxFZB483s288z60WbNw
+         DDrJVDLxunqN3pTNji2DveUWBSLroiCdNwnMk5BlQ9P3mWWQuvZs4i6v0A86wvdo9gEn
+         o0pNLHK30P59MadIykT0u4p6LiEB52b+kEI7VmLkqPCBx3mmlGxak1BlmJvaMlr3ed8p
+         C3gQ==
+X-Gm-Message-State: AOAM532BdLSsRvp5kKb/ATvGmCcjErKga0whYa2ZjKvPplzx8c7rtkPa
+        BO3a/yIfPHSX5vLusLZ7Dwo=
+X-Google-Smtp-Source: ABdhPJwWk0jNGLAAdDoKZXq4XIQ1YkfcmM4HG7VGwMH/fxjxX2ftGdpC0zjfa6zFKyVMKy6b1+9O+g==
+X-Received: by 2002:a63:3d48:0:b0:374:4b15:76e4 with SMTP id k69-20020a633d48000000b003744b1576e4mr17404308pga.593.1646821487378;
+        Wed, 09 Mar 2022 02:24:47 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm2369076pfx.34.2022.03.09.02.24.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 02:24:47 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shannon Zhao <shannon.zhao@linaro.org>,
+        Julien Grall <julien.grall@arm.com>,
+        xen-devel@lists.xenproject.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] arm/xen: Fix refcount leak in xen_dt_guest_init
+Date:   Wed,  9 Mar 2022 10:24:41 +0000
+Message-Id: <20220309102442.14726-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 04:41:48PM -0800, Wesley Cheng wrote:
-> From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> 
-> If the request being dequeued is currently active, then the current
-> logic is to issue a stop transfer command, and allow the command
-> completion to cleanup the cancelled list.  The DWC3 controller will
-> run into an end transfer command timeout if there is an ongoing EP0
-> transaction.  If this is the case, wait for the EP0 completion event
-> before proceeding to retry the endxfer command again.
-> 
-> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
+Fixes: 9b08aaa3199a ("ARM: XEN: Move xen_early_init() before efi_init()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ arch/arm/xen/enlighten.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-You sent this twice?  What is the differences between the patches?
+diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
+index ec5b082f3de6..262f45f686b6 100644
+--- a/arch/arm/xen/enlighten.c
++++ b/arch/arm/xen/enlighten.c
+@@ -424,6 +424,7 @@ static void __init xen_dt_guest_init(void)
+ 
+ 	if (of_address_to_resource(xen_node, GRANT_TABLE_INDEX, &res)) {
+ 		pr_err("Xen grant table region is not found\n");
++		of_node_put(xen_node);
+ 		return;
+ 	}
+ 	xen_grant_frames = res.start;
+-- 
+2.17.1
 
-And as you sent it, your signed-off-by needs to be at the end, as per
-the kernel documentation.
-
-> ---
->  Patch discussion below:
->    https://lore.kernel.org/linux-usb/1644836933-141376-1-git-send-email-dh10.jung@samsung.com/T/#t
-
-So this is a v2?
-
-
-> 
->  drivers/usb/dwc3/core.h   |  2 +-
->  drivers/usb/dwc3/ep0.c    | 14 ++++++++++++++
->  drivers/usb/dwc3/gadget.c | 13 ++++++++-----
->  drivers/usb/dwc3/gadget.h |  1 +
->  4 files changed, 24 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index eb9c1efced05..f557f5f36a7f 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -736,7 +736,7 @@ struct dwc3_ep {
->  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
->  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
->  #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
-> -
-> +#define DWC3_EP_DELAY_STOP             BIT(13)
-
-Why did you loose the blank line?
-
->  	/* This last one is specific to EP0 */
->  #define DWC3_EP0_DIR_IN			BIT(31)
->  
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 658739410992..1064be5518f6 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -271,6 +271,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
->  {
->  	struct dwc3_ep			*dep;
->  	int				ret;
-> +	int                             i;
->  
->  	complete(&dwc->ep0_in_setup);
->  
-> @@ -279,6 +280,19 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
->  			DWC3_TRBCTL_CONTROL_SETUP, false);
->  	ret = dwc3_ep0_start_trans(dep);
->  	WARN_ON(ret < 0);
-> +	for (i = 2; i < DWC3_ENDPOINTS_NUM; i++) {
-> +		struct dwc3_ep *dwc3_ep;
-> +
-> +		dwc3_ep = dwc->eps[i];
-> +		if (!dwc3_ep)
-> +			continue;
-> +
-> +		if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
-> +			continue;
-> +
-> +		dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
-> +		dwc3_stop_active_transfer(dwc3_ep, true, true);
-> +	}
->  }
->  
->  static struct dwc3_ep *dwc3_wIndex_to_dep(struct dwc3 *dwc, __le16 wIndex_le)
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index a0c883f19a41..ccef508b1296 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -654,9 +654,6 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
->  	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
->  }
->  
-> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-> -		bool interrupt);
-> -
->  /**
->   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
->   * @dwc: pointer to the DWC3 context
-> @@ -1899,6 +1896,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
->  	 */
->  	if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
->  	    (dep->flags & DWC3_EP_WEDGE) ||
-> +	    (dep->flags & DWC3_EP_DELAY_STOP) ||
->  	    (dep->flags & DWC3_EP_STALL)) {
->  		dep->flags |= DWC3_EP_DELAY_START;
->  		return 0;
-> @@ -2033,6 +2031,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
->  		if (r == req) {
->  			struct dwc3_request *t;
->  
-> +			if (dwc->ep0state != EP0_SETUP_PHASE && !dwc->delayed_status)
-> +				dep->flags |= DWC3_EP_DELAY_STOP;
-> +
->  			/* wait until it is processed */
->  			dwc3_stop_active_transfer(dep, true, true);
->  
-> @@ -2116,7 +2117,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
->  		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
->  			dwc3_gadget_move_cancelled_request(req, DWC3_REQUEST_STATUS_STALLED);
->  
-> -		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING) {
-> +		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
-> +		    (dep->flags & DWC3_EP_DELAY_STOP)) {
->  			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
->  			return 0;
->  		}
-> @@ -3596,7 +3598,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
->  	}
->  }
->  
-> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-> +void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
->  	bool interrupt)
-
-This is a horrid api (2 booleans?)  But you aren't adding it so I guess
-we can live with it :(
-
-thanks,
-
-greg k-h

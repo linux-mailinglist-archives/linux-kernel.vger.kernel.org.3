@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B835E4D3404
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442974D335F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbiCIQUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S235153AbiCIQQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234592AbiCIQKh (ORCPT
+        with ESMTP id S236234AbiCIQJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:10:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62ECB0C4A;
-        Wed,  9 Mar 2022 08:09:09 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF630141E14;
+        Wed,  9 Mar 2022 08:08:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37D8D61797;
-        Wed,  9 Mar 2022 16:09:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402EBC340E8;
-        Wed,  9 Mar 2022 16:09:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B36161644;
+        Wed,  9 Mar 2022 16:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767E7C340E8;
+        Wed,  9 Mar 2022 16:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646842148;
-        bh=MiFC8q9O411o7BpK+5Y1vmS3uAtITiFo3JE5jvXYZFY=;
+        s=korg; t=1646842111;
+        bh=Nvdc0gNUxRVbba+YUAyiUFdp6t8kfz07OiJe+ke0X5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TwPxYNvRf0pmOWVaU66Jw8Wuep0j7k2RnZhPqoxhsKoelxFEhKVMjxgZBatFdygCB
-         UWmupGw5DQZtDuq/Ysf6OH0vcxAdwmYX5cKWpH7hFTLt84PD0oPjhczdouX5Zchhva
-         uEeuLWfDHj/bF2INpEyOHOWp/rUEbgiBndyH7mFY=
+        b=tzbhmmQHoFhKsxZU4Slt/wrfN0zeNRspkQ8h4gMoK6PQsqcRy4etwI4KZUyEtKKv+
+         VPS51N95/J+TW7/u6AqeByB7ogsTBuGmlYsfSKi8w5X8APy+heFoQ2IWBBfzzco2uI
+         jElYWTyX+uCth057oPp29f3Css8HSKOjUsVnY260=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.16 15/37] arm64: cpufeature: add HWCAP for FEAT_AFP
+        stable@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.15 32/43] arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
 Date:   Wed,  9 Mar 2022 17:00:16 +0100
-Message-Id: <20220309155859.531938469@linuxfoundation.org>
+Message-Id: <20220309155900.665473650@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
-References: <20220309155859.086952723@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,118 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joey Gouly <joey.gouly@arm.com>
+From: James Morse <james.morse@arm.com>
 
-commit 5c13f042e73200b50573ace63e1a6b94e2917616 upstream.
+commit aff65393fa1401e034656e349abd655cfe272de0 upstream.
 
-Add a new HWCAP to detect the Alternate Floating-point Behaviour
-feature (FEAT_AFP), introduced in Armv8.7.
+kpti is an optional feature, for systems not using kpti a set of
+vectors for the spectre-bhb mitigations is needed.
 
-Also expose this to userspace in the ID_AA64MMFR1_EL1 feature register.
+Add another set of vectors, __bp_harden_el1_vectors, that will be
+used if a mitigation is needed and kpti is not in use.
 
-Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211210165432.8106-2-joey.gouly@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+The EL1 ventries are repeated verbatim as there is no additional
+work needed for entry from EL1.
+
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/arm64/cpu-feature-registers.rst |    9 +++++++++
- Documentation/arm64/elf_hwcaps.rst            |    4 ++++
- arch/arm64/include/asm/hwcap.h                |    1 +
- arch/arm64/include/asm/sysreg.h               |    1 +
- arch/arm64/include/uapi/asm/hwcap.h           |    1 +
- arch/arm64/kernel/cpufeature.c                |    2 ++
- arch/arm64/kernel/cpuinfo.c                   |    1 +
- 7 files changed, 19 insertions(+)
+ arch/arm64/kernel/entry.S |   35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
---- a/Documentation/arm64/cpu-feature-registers.rst
-+++ b/Documentation/arm64/cpu-feature-registers.rst
-@@ -275,6 +275,15 @@ infrastructure:
-      | SVEVer                       | [3-0]   |    y    |
-      +------------------------------+---------+---------+
- 
-+  8) ID_AA64MMFR1_EL1 - Memory model feature register 1
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -649,10 +649,11 @@ alternative_else_nop_endif
+ 	.macro tramp_ventry, vector_start, regsize, kpti
+ 	.align	7
+ 1:
+-	.if	\kpti == 1
+ 	.if	\regsize == 64
+ 	msr	tpidrro_el0, x30	// Restored in kernel_ventry
+ 	.endif
 +
-+     +------------------------------+---------+---------+
-+     | Name                         |  bits   | visible |
-+     +------------------------------+---------+---------+
-+     | AFP                          | [47-44] |    y    |
-+     +------------------------------+---------+---------+
-+
-+
- Appendix I: Example
- -------------------
- 
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -251,6 +251,10 @@ HWCAP2_ECV
- 
-     Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
- 
-+HWCAP2_AFP
-+
-+    Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -106,6 +106,7 @@
- #define KERNEL_HWCAP_BTI		__khwcap2_feature(BTI)
- #define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
- #define KERNEL_HWCAP_ECV		__khwcap2_feature(ECV)
-+#define KERNEL_HWCAP_AFP		__khwcap2_feature(AFP)
++	.if	\kpti == 1
+ 	/*
+ 	 * Defend against branch aliasing attacks by pushing a dummy
+ 	 * entry onto the return stack and using a RET instruction to
+@@ -740,6 +741,38 @@ SYM_DATA_END(__entry_tramp_data_start)
+ #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
  
  /*
-  * This yields a mask that user programs can use to figure out what
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -904,6 +904,7 @@
- #endif
- 
- /* id_aa64mmfr1 */
-+#define ID_AA64MMFR1_AFP_SHIFT		44
- #define ID_AA64MMFR1_ETS_SHIFT		36
- #define ID_AA64MMFR1_TWED_SHIFT		32
- #define ID_AA64MMFR1_XNX_SHIFT		28
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -76,5 +76,6 @@
- #define HWCAP2_BTI		(1 << 17)
- #define HWCAP2_MTE		(1 << 18)
- #define HWCAP2_ECV		(1 << 19)
-+#define HWCAP2_AFP		(1 << 20)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -329,6 +329,7 @@ static const struct arm64_ftr_bits ftr_i
- };
- 
- static const struct arm64_ftr_bits ftr_id_aa64mmfr1[] = {
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_AFP_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_ETS_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_TWED_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_XNX_SHIFT, 4, 0),
-@@ -2488,6 +2489,7 @@ static const struct arm64_cpu_capabiliti
- 	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
- #endif /* CONFIG_ARM64_MTE */
- 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
-+	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
- 	{},
- };
- 
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -95,6 +95,7 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_BTI]		= "bti",
- 	[KERNEL_HWCAP_MTE]		= "mte",
- 	[KERNEL_HWCAP_ECV]		= "ecv",
-+	[KERNEL_HWCAP_AFP]		= "afp",
- };
- 
- #ifdef CONFIG_COMPAT
++ * Exception vectors for spectre mitigations on entry from EL1 when
++ * kpti is not in use.
++ */
++	.macro generate_el1_vector
++.Lvector_start\@:
++	kernel_ventry	1, t, 64, sync		// Synchronous EL1t
++	kernel_ventry	1, t, 64, irq		// IRQ EL1t
++	kernel_ventry	1, t, 64, fiq		// FIQ EL1h
++	kernel_ventry	1, t, 64, error		// Error EL1t
++
++	kernel_ventry	1, h, 64, sync		// Synchronous EL1h
++	kernel_ventry	1, h, 64, irq		// IRQ EL1h
++	kernel_ventry	1, h, 64, fiq		// FIQ EL1h
++	kernel_ventry	1, h, 64, error		// Error EL1h
++
++	.rept	4
++	tramp_ventry	.Lvector_start\@, 64, kpti=0
++	.endr
++	.rept 4
++	tramp_ventry	.Lvector_start\@, 32, kpti=0
++	.endr
++	.endm
++
++	.pushsection ".entry.text", "ax"
++	.align	11
++SYM_CODE_START(__bp_harden_el1_vectors)
++	generate_el1_vector
++SYM_CODE_END(__bp_harden_el1_vectors)
++	.popsection
++
++
++/*
+  * Register switch for AArch64. The callee-saved registers need to be saved
+  * and restored. On entry:
+  *   x0 = previous task_struct (must be preserved across the switch)
 
 

@@ -2,137 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6254B4D390C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219614D392B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbiCISnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        id S236872AbiCISti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiCISni (ORCPT
+        with ESMTP id S236844AbiCIStf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:43:38 -0500
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7EB1403D;
-        Wed,  9 Mar 2022 10:42:37 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dbd97f9bfcso33212037b3.9;
-        Wed, 09 Mar 2022 10:42:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y61mRCKE3zM9b3wOa8ze9bCmXMfmsVduldNuViZnA4k=;
-        b=GE95ESInc2IO8KVquGpLPySZ/+w308ZgkRCbYhr/mdez6s10atGaEEOcXQNqF3yOzs
-         7or9LjOeJNNZhBLWPPqqHkRY96Siescs1oPn5ngD0J51AS0agRTYkTYwPapikrj3jumj
-         QAw/GTvMHddtmjsXUPcL3Zw1EKf/3ZSv5Zgbyw4wsoaDs/PiJe/ewE30VZl+iyXwImhw
-         Lf3ZzrJIpEVszDT8UAzgX28bYH5lgyZygdgfnwUfaEXisJYYHq4+ItkgxDeCs0iamHGn
-         EuAHLMWkwiFLka24HjPmofayoBwRbYTgWn6XtkCmgAacUOHy0ymn/zKKoxoIQMda3YQZ
-         hrpA==
-X-Gm-Message-State: AOAM532aKd7EdlPF04nB4xyuJKmDe5EnFI5tkuJmiXJpZ0QzZaHHSRRV
-        ljRivgTtoSkwmCpjnUIGuOikuMdw0K96HUDL090=
-X-Google-Smtp-Source: ABdhPJwnEUJOD5z2fMROtMR0asiHyfh52H3fwaFsMnbIiBicsEFlOHLbZIOrDuUxLrBPkwWxCOLEpAfGKZlTIDoDxT0=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr971245ywb.326.1646851356977; Wed, 09
- Mar 2022 10:42:36 -0800 (PST)
+        Wed, 9 Mar 2022 13:49:35 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC51A39EF;
+        Wed,  9 Mar 2022 10:48:35 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229HcPMF011109;
+        Wed, 9 Mar 2022 18:43:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=ROvsIGGvRAK1ngLCXr//BxHvESKX42UqHkHp1VpPzEs=;
+ b=V8eBVEVSOXpyBZ7oq/k6lE9+DV0H46qHo5twb9uvG0VbQ3InFYSYd9d3I2YKQ/8zdM7y
+ xt3XyzvqHM9zGIW/CHPviBHeOyuhbL8SgrWVyMxEB21/NoVF7N1fz2HHMACfoCHA388D
+ y6i/AigrOLIiiRHaBYhGTal4hxIbaAPDeGaS9V8Myh+ZySD0BW8N3AdfjbaM+XGMS07G
+ 5QRWtTs08IWf4mg4oUcZ7PeXvyXHCx1rqw8zeeJcijjDWV690tTyKVJ46zjyd6lvPAT7
+ oXWhqfeImoyle4SW+Jio3OzpFbqNZqkCRQhbieudIOSrmGIr2i36ZdxBbzE2wlcuDF4h Ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3enyw9jjem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 18:43:15 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 229HR6Sb011473;
+        Wed, 9 Mar 2022 18:43:14 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3enyw9jjd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 18:43:14 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 229IY9hC030218;
+        Wed, 9 Mar 2022 18:43:12 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3enqgnndwc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 18:43:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 229Ih82U30015788
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Mar 2022 18:43:08 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 95A1011C04C;
+        Wed,  9 Mar 2022 18:43:08 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB61011C052;
+        Wed,  9 Mar 2022 18:43:06 +0000 (GMT)
+Received: from sig-9-65-73-171.ibm.com (unknown [9.65.73.171])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Mar 2022 18:43:06 +0000 (GMT)
+Message-ID: <f8390bfecbcbae7b9151e2ce65f0c8e5e4a34ce8.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/4] Add CA enforcement in the machine keyring
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
+        dhowells@redhat.com, dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        jmorris@namei.org, serge@hallyn.com, stefanb@linux.ibm.com,
+        nayna@linux.ibm.com, mic@linux.microsoft.com,
+        konrad.wilk@oracle.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Wed, 09 Mar 2022 13:43:06 -0500
+In-Reply-To: <20220301173651.3435350-1-eric.snowberg@oracle.com>
+References: <20220301173651.3435350-1-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DY9S9WFZUMag5c4wekPoVsmPBBCGet-M
+X-Proofpoint-ORIG-GUID: vo3l3WDrmSu29pD6Wr-nZ2C8WxFmXhf9
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <43dfaba0646d498fe94c1a8479b812346133f438.1646765290.git.darren@os.amperecomputing.com>
-In-Reply-To: <43dfaba0646d498fe94c1a8479b812346133f438.1646765290.git.darren@os.amperecomputing.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Mar 2022 19:42:26 +0100
-Message-ID: <CAJZ5v0gMh2ed+ZWOnd-t_uTrZtm=AUfxOAkAKWT7WQK3=gf+7w@mail.gmail.com>
-Subject: Re: [PATCH] ACPI/APEI: Limit printable size of BERT table data
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Doug Rady <dcrady@os.amperecomputing.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-09_07,2022-03-09_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 malwarescore=0 bulkscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2203090101
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 7:51 PM Darren Hart
-<darren@os.amperecomputing.com> wrote:
->
-> Platforms with large BERT table data can trigger soft lockup errors
-> while attempting to print the entire BERT table data to the console at
-> boot:
->
->   watchdog: BUG: soft lockup - CPU#160 stuck for 23s! [swapper/0:1]
->
-> Observed on Ampere Altra systems with a single BERT record of ~250KB.
->
-> The original bert driver appears to have assumed relatively small table
-> data. Since it is impractical to reassemble large table data from
-> interwoven console messages, and the table data is available in
->
->   /sys/firmware/acpi/tables/data/BERT
->
-> limit the size for tables printed to the console to 1024 (for no reason
-> other than it seemed like a good place to kick off the discussion, would
-> appreciate feedback from existing users in terms of what size would
-> maintain their current usage model).
->
-> Alternatively, we could make printing a CONFIG option, use the
-> bert_disable boot arg (or something similar), or use a debug log level.
-> However, all those solutions require extra steps or change the existing
-> behavior for small table data. Limiting the size preserves existing
-> behavior on existing platforms with small table data, and eliminates the
-> soft lockups for platforms with large table data, while still making it
-> available.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Doug Rady <dcrady@os.amperecomputing.com>
-> Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+On Tue, 2022-03-01 at 12:36 -0500, Eric Snowberg wrote:
 
-Not that I have a particularly strong opinion here, but this looks
-reasonable to me, so I've queued it up for 5.18.
+I would begin by saying,
 
-APEI reviewers, please chime in if you disagree with the above.
+The "Enroll kernel keys thru MOK" patch set introduced a new root of
+trust by defining a "machine" keyring, which is linked to the
+secondary_trusted_keyring.  All Machine Owner Keys (MOK) are loaded
+into the machine keyring.
 
-> ---
->  drivers/acpi/apei/bert.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
-> index 19e50fcbf4d6..ad8ab3f12cf3 100644
-> --- a/drivers/acpi/apei/bert.c
-> +++ b/drivers/acpi/apei/bert.c
-> @@ -29,6 +29,7 @@
->
->  #undef pr_fmt
->  #define pr_fmt(fmt) "BERT: " fmt
-> +#define ACPI_BERT_PRINT_MAX_LEN 1024
->
->  static int bert_disable;
->
-> @@ -58,8 +59,11 @@ static void __init bert_print_all(struct acpi_bert_region *region,
->                 }
->
->                 pr_info_once("Error records from previous boot:\n");
-> -
-> -               cper_estatus_print(KERN_INFO HW_ERR, estatus);
-> +               if (region_len < ACPI_BERT_PRINT_MAX_LEN)
-> +                       cper_estatus_print(KERN_INFO HW_ERR, estatus);
-> +               else
-> +                       pr_info_once("Max print length exceeded, table data is available at:\n"
-> +                                    "/sys/firmware/acpi/tables/data/BERT");
->
->                 /*
->                  * Because the boot error source is "one-time polled" type,
-> --
-> 2.31.1
->
+Then proceed with the IMA new root of trust requirements - root CA
+(self-signed CA) with keyUsage limited to keyCertSign.
+
+> A key added to the IMA keyring must be signed by a key contained in either the
+
+^A certificate ... must be signed
+
+> built-in trusted or secondary trusted keyring. IMA also requires these keys 
+> to be a CA. The only option for an end-user to add their own CA is to compile
+> it into the kernel themselves or to use the insert-sys-cert.  Many end-users 
+> do not want to compile their own kernels.  With the insert-sys-cert option, 
+> there are missing upstream changes. 
+> 
+> Currently, all Machine Owner Keys (MOK) load into the machine keyring.
+
+Moved to the beginning.
+
+
+> Add
+
+^Define
+>  
+> a new Kconfig option to only allow CA keys into the machine keyring.  When 
+
+Add the other criteria here as well.
+
+> compiled with the new INTEGRITY_MACHINE_KEYRING_CA_ENFORCED Kconfig, non CA 
+> keys will load into the platform keyring instead. This will allow the end-
+> user to enroll their own CA key into the machine keyring for use with IMA.
+> 
+> These patches are based on Jarkko's linux-tpmdd tree.
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+
+thanks,
+
+Mimi
+

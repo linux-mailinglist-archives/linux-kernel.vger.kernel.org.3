@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F00F4D2A23
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9439A4D2A1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiCIH65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S231256AbiCIH7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiCIH45 (ORCPT
+        with ESMTP id S231203AbiCIH5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:56:57 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99372166E2B;
-        Tue,  8 Mar 2022 23:55:23 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:55:20 -0000
+        Wed, 9 Mar 2022 02:57:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFF1164D1F;
+        Tue,  8 Mar 2022 23:55:36 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:55:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812521;
+        s=2020; t=1646812522;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Mqg0/1Bl9F+kBT44zyBynLr+BcAS3vlx4kvS63JrMnw=;
-        b=QztsIpKR2mISSaIiXJIVxqwPwZ7jCqIkr560OhFxCSppS0lyqyLVcOruje4aUl+Z6WVfHu
-        EQ0azyy/UbFobpcLBQX5SCD63aIbhmeRXv2+d1m9o+Cjy6L3QBCLEokMhUIccFqaRoDG8L
-        IKj0TyDgAaPFv5xO0GwZbWBdTt+OmDGh/ZHGdoeC+PIddlftmZq+OWolD3IFChiCQghYjJ
-        ggvQhY5IyRG3fJQbfH7d15foPqj03E/sWyvX5sBZGp8qI5sVXBnMPzcvZ3MmTqR+t3O3Hb
-        DPQydz43/WE1Hpv8PlZxwu3LiBczgyqb3wfrMTWRztFm3xOvWVGTIGJ3aR658w==
+        bh=DTGTcKLa1dfT2ir9edrxLd7ws8sC+tZUstnN4ryX0OI=;
+        b=vXRtmzJ7qNyQXRzn6suoUJOEIbZBvH9ZHGQLRL/wBHW2OZghzhXSiSqMyDUMXnPR6d6KYL
+        M/ML07qYvaLSG9rIdeOmFCNJ1vHjQExjsitQtDpqH3qZPLy53oKJ57TspFsxYrMIYdP6QW
+        PU5p9MEhqDVr62r91wV4b+eJBVQqDVL7mXLob6ELfb0lNnF29WuHzQ9XPtQt+WAcAsuRWc
+        iAMAsJtIsXfSAqI27cpUPrMUdJLvVGMRfadSdn2kAPODGfeyBRmGf8h/vc+oRLjDI1xCYx
+        hdMpyr0Wz+VBOOznf8LBXZcuXRaiiNxoWLkH6ul6yhjjhva6mNfe7F/q4xhKrQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812521;
+        s=2020e; t=1646812522;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Mqg0/1Bl9F+kBT44zyBynLr+BcAS3vlx4kvS63JrMnw=;
-        b=EO/ED3NDwvQ6hTxsjicIGmC83vI0F9SULecBN/78OXuDRNUFzJgZy8yFZyVpbnPXJtqkIM
-        rIEYdH7rrlNYZbCg==
+        bh=DTGTcKLa1dfT2ir9edrxLd7ws8sC+tZUstnN4ryX0OI=;
+        b=YgVsc1XkiodxaEsVtgBnNmf81fcv0CL9NFwTtfi14hbfYZtsuIrkPXEl+J8iUFeQ4MYBJB
+        qpV/bjyoMtgm4CBw==
 From:   "tip-bot2 for Mark Rutland" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86: clean up symbol aliasing
+Subject: [tip: x86/core] arm64: clean up symbol aliasing
 Cc:     Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Mark Brown <broonie@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Slaby <jslaby@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
+        Joey Gouly <joey.gouly@arm.com>, Will Deacon <will@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220216162229.1076788-4-mark.rutland@arm.com>
-References: <20220216162229.1076788-4-mark.rutland@arm.com>
+In-Reply-To: <20220216162229.1076788-3-mark.rutland@arm.com>
+References: <20220216162229.1076788-3-mark.rutland@arm.com>
 MIME-Version: 1.0
-Message-ID: <164681252041.16921.13637320927245353003.tip-bot2@tip-bot2>
+Message-ID: <164681252135.16921.15418766086891291581.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -76,17 +72,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     7be2e319640c8926bbba4e004a1bee9cf6ed67b0
-Gitweb:        https://git.kernel.org/tip/7be2e319640c8926bbba4e004a1bee9cf6ed67b0
+Commit-ID:     0f61f6be1f7f44edfab0cb731c0a2340a838956f
+Gitweb:        https://git.kernel.org/tip/0f61f6be1f7f44edfab0cb731c0a2340a838956f
 Author:        Mark Rutland <mark.rutland@arm.com>
-AuthorDate:    Wed, 16 Feb 2022 16:22:28 
+AuthorDate:    Wed, 16 Feb 2022 16:22:27 
 Committer:     Will Deacon <will@kernel.org>
 CommitterDate: Tue, 22 Feb 2022 16:21:34 
 
-x86: clean up symbol aliasing
+arm64: clean up symbol aliasing
 
 Now that we have SYM_FUNC_ALIAS() and SYM_FUNC_ALIAS_WEAK(), use those
-to simplify the definition of function aliases across arch/x86.
+to simplify and more consistently define function aliases across
+arch/arm64.
+
+Aliases are now defined in terms of a canonical function name. For
+position-independent functions I've made the __pi_<func> name the
+canonical name, and defined other alises in terms of this.
+
+The SYM_FUNC_{START,END}_PI(func) macros obscure the __pi_<func> name,
+and make this hard to seatch for. The SYM_FUNC_START_WEAK_PI() macro
+also obscures the fact that the __pi_<func> fymbol is global and the
+<func> symbol is weak. For clarity, I have removed these macros and used
+SYM_FUNC_{START,END}() directly with the __pi_<func> name.
+
+For example:
+
+	SYM_FUNC_START_WEAK_PI(func)
+	... asm insns ...
+	SYM_FUNC_END_PI(func)
+	EXPORT_SYMBOL(func)
+
+... becomes:
+
+	SYM_FUNC_START(__pi_func)
+	... asm insns ...
+	SYM_FUNC_END(__pi_func)
+
+	SYM_FUNC_ALIAS_WEAK(func, __pi_func)
+	EXPORT_SYMBOL(func)
 
 For clarity, where there are multiple annotations such as
 EXPORT_SYMBOL(), I've tried to keep annotations grouped by symbol. For
@@ -94,249 +117,490 @@ example, where a function has a name and an alias which are both
 exported, this is organised as:
 
 	SYM_FUNC_START(func)
-	    ... asm insns ...
+	... asm insns ...
 	SYM_FUNC_END(func)
 	EXPORT_SYMBOL(func)
 
 	SYM_FUNC_ALIAS(alias, func)
 	EXPORT_SYMBOL(alias)
 
-Where there are only aliases and no exports or other annotations, I have
-not bothered with line spacing, e.g.
+For consistency with the other string functions, I've defined strrchr as
+a position-independent function, as it can safely be used as such even
+though we have no users today.
 
-	SYM_FUNC_START(func)
-	    ... asm insns ...
-	SYM_FUNC_END(func)
-	SYM_FUNC_ALIAS(alias, func)
-
-The tools/perf/ copies of memset_64.S and memset_64.S are updated
-likewise to avoid the build system complaining these are mismatched:
-
-| Warning: Kernel ABI header at 'tools/arch/x86/lib/memcpy_64.S' differs from latest version at 'arch/x86/lib/memcpy_64.S'
-| diff -u tools/arch/x86/lib/memcpy_64.S arch/x86/lib/memcpy_64.S
-| Warning: Kernel ABI header at 'tools/arch/x86/lib/memset_64.S' differs from latest version at 'arch/x86/lib/memset_64.S'
-| diff -u tools/arch/x86/lib/memset_64.S arch/x86/lib/memset_64.S
+As we no longer use SYM_FUNC_{START,END}_ALIAS(), our local copies are
+removed. The common versions will be removed by a subsequent patch.
 
 There should be no functional change as a result of this patch.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Acked-by: Mark Brown <broonie@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Slaby <jslaby@suse.cz>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Joey Gouly <joey.gouly@arm.com>
+Cc: Will Deacon <will@kernel.org>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220216162229.1076788-4-mark.rutland@arm.com
+Link: https://lore.kernel.org/r/20220216162229.1076788-3-mark.rutland@arm.com
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- arch/x86/boot/compressed/head_32.S |  3 +--
- arch/x86/boot/compressed/head_64.S |  3 +--
- arch/x86/crypto/aesni-intel_asm.S  |  4 +---
- arch/x86/lib/memcpy_64.S           | 10 +++++-----
- arch/x86/lib/memmove_64.S          |  4 ++--
- arch/x86/lib/memset_64.S           |  6 +++---
- tools/arch/x86/lib/memcpy_64.S     | 10 +++++-----
- tools/arch/x86/lib/memset_64.S     |  6 +++---
- 8 files changed, 21 insertions(+), 25 deletions(-)
+ arch/arm64/include/asm/linkage.h | 24 +---------------------
+ arch/arm64/kvm/hyp/nvhe/cache.S  |  5 ++--
+ arch/arm64/lib/clear_page.S      |  5 ++--
+ arch/arm64/lib/copy_page.S       |  5 ++--
+ arch/arm64/lib/memchr.S          |  5 ++--
+ arch/arm64/lib/memcmp.S          |  6 ++---
+ arch/arm64/lib/memcpy.S          | 21 +++++++++----------
+ arch/arm64/lib/memset.S          | 12 ++++++-----
+ arch/arm64/lib/strchr.S          |  6 +++--
+ arch/arm64/lib/strcmp.S          |  6 ++---
+ arch/arm64/lib/strlen.S          |  6 ++---
+ arch/arm64/lib/strncmp.S         |  6 ++---
+ arch/arm64/lib/strnlen.S         |  6 +++--
+ arch/arm64/lib/strrchr.S         |  5 ++--
+ arch/arm64/mm/cache.S            | 35 ++++++++++++++++++-------------
+ 15 files changed, 74 insertions(+), 79 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
-index 659fad5..3b354eb 100644
---- a/arch/x86/boot/compressed/head_32.S
-+++ b/arch/x86/boot/compressed/head_32.S
-@@ -152,14 +152,13 @@ SYM_FUNC_END(startup_32)
+diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
+index b77e9b3..43f8c25 100644
+--- a/arch/arm64/include/asm/linkage.h
++++ b/arch/arm64/include/asm/linkage.h
+@@ -39,28 +39,4 @@
+ 	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
+ 	bti c ;
  
- #ifdef CONFIG_EFI_STUB
- SYM_FUNC_START(efi32_stub_entry)
--SYM_FUNC_START_ALIAS(efi_stub_entry)
- 	add	$0x4, %esp
- 	movl	8(%esp), %esi	/* save boot_params pointer */
- 	call	efi_main
- 	/* efi_main returns the possibly relocated address of startup_32 */
- 	jmp	*%eax
- SYM_FUNC_END(efi32_stub_entry)
--SYM_FUNC_END_ALIAS(efi_stub_entry)
-+SYM_FUNC_ALIAS(efi_stub_entry, efi32_stub_entry)
- #endif
- 
- 	.text
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index fd9441f..dea9530 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -535,7 +535,6 @@ SYM_CODE_END(startup_64)
- #ifdef CONFIG_EFI_STUB
- 	.org 0x390
- SYM_FUNC_START(efi64_stub_entry)
--SYM_FUNC_START_ALIAS(efi_stub_entry)
- 	and	$~0xf, %rsp			/* realign the stack */
- 	movq	%rdx, %rbx			/* save boot_params pointer */
- 	call	efi_main
-@@ -543,7 +542,7 @@ SYM_FUNC_START_ALIAS(efi_stub_entry)
- 	leaq	rva(startup_64)(%rax), %rax
- 	jmp	*%rax
- SYM_FUNC_END(efi64_stub_entry)
--SYM_FUNC_END_ALIAS(efi_stub_entry)
-+SYM_FUNC_ALIAS(efi_stub_entry, efi64_stub_entry)
- #endif
- 
- 	.text
-diff --git a/arch/x86/crypto/aesni-intel_asm.S b/arch/x86/crypto/aesni-intel_asm.S
-index 363699d..837c1e0 100644
---- a/arch/x86/crypto/aesni-intel_asm.S
-+++ b/arch/x86/crypto/aesni-intel_asm.S
-@@ -1751,8 +1751,6 @@ SYM_FUNC_END(aesni_gcm_finalize)
- 
- #endif
- 
+-/*
+- * Annotate a function as position independent, i.e., safe to be called before
+- * the kernel virtual mapping is activated.
+- */
+-#define SYM_FUNC_START_PI(x)			\
+-		SYM_FUNC_START_ALIAS(__pi_##x);	\
+-		SYM_FUNC_START(x)
 -
--SYM_FUNC_START_LOCAL_ALIAS(_key_expansion_128)
- SYM_FUNC_START_LOCAL(_key_expansion_256a)
- 	pshufd $0b11111111, %xmm1, %xmm1
- 	shufps $0b00010000, %xmm0, %xmm4
-@@ -1764,7 +1762,7 @@ SYM_FUNC_START_LOCAL(_key_expansion_256a)
- 	add $0x10, TKEYP
- 	RET
- SYM_FUNC_END(_key_expansion_256a)
--SYM_FUNC_END_ALIAS(_key_expansion_128)
-+SYM_FUNC_ALIAS_LOCAL(_key_expansion_128, _key_expansion_256a)
+-#define SYM_FUNC_START_WEAK_PI(x)		\
+-		SYM_FUNC_START_ALIAS(__pi_##x);	\
+-		SYM_FUNC_START_WEAK(x)
+-
+-#define SYM_FUNC_START_WEAK_ALIAS_PI(x)		\
+-		SYM_FUNC_START_ALIAS(__pi_##x);	\
+-		SYM_START(x, SYM_L_WEAK, SYM_A_ALIGN)
+-
+-#define SYM_FUNC_END_PI(x)			\
+-		SYM_FUNC_END(x);		\
+-		SYM_FUNC_END_ALIAS(__pi_##x)
+-
+-#define SYM_FUNC_END_ALIAS_PI(x)		\
+-		SYM_FUNC_END_ALIAS(x);		\
+-		SYM_FUNC_END_ALIAS(__pi_##x)
+-
+ #endif
+diff --git a/arch/arm64/kvm/hyp/nvhe/cache.S b/arch/arm64/kvm/hyp/nvhe/cache.S
+index 958734f..0c367eb 100644
+--- a/arch/arm64/kvm/hyp/nvhe/cache.S
++++ b/arch/arm64/kvm/hyp/nvhe/cache.S
+@@ -7,7 +7,8 @@
+ #include <asm/assembler.h>
+ #include <asm/alternative.h>
  
- SYM_FUNC_START_LOCAL(_key_expansion_192a)
- 	pshufd $0b01010101, %xmm1, %xmm1
-diff --git a/arch/x86/lib/memcpy_64.S b/arch/x86/lib/memcpy_64.S
-index 59cf234..d0d7b9b 100644
---- a/arch/x86/lib/memcpy_64.S
-+++ b/arch/x86/lib/memcpy_64.S
-@@ -27,8 +27,7 @@
-  * Output:
-  * rax original destination
+-SYM_FUNC_START_PI(dcache_clean_inval_poc)
++SYM_FUNC_START(__pi_dcache_clean_inval_poc)
+ 	dcache_by_line_op civac, sy, x0, x1, x2, x3
+ 	ret
+-SYM_FUNC_END_PI(dcache_clean_inval_poc)
++SYM_FUNC_END(__pi_dcache_clean_inval_poc)
++SYM_FUNC_ALIAS(dcache_clean_inval_poc, __pi_dcache_clean_inval_poc)
+diff --git a/arch/arm64/lib/clear_page.S b/arch/arm64/lib/clear_page.S
+index 1fd5d79..ebde40e 100644
+--- a/arch/arm64/lib/clear_page.S
++++ b/arch/arm64/lib/clear_page.S
+@@ -14,7 +14,7 @@
+  * Parameters:
+  *	x0 - dest
   */
+-SYM_FUNC_START_PI(clear_page)
++SYM_FUNC_START(__pi_clear_page)
+ 	mrs	x1, dczid_el0
+ 	tbnz	x1, #4, 2f	/* Branch if DC ZVA is prohibited */
+ 	and	w1, w1, #0xf
+@@ -35,5 +35,6 @@ SYM_FUNC_START_PI(clear_page)
+ 	tst	x0, #(PAGE_SIZE - 1)
+ 	b.ne	2b
+ 	ret
+-SYM_FUNC_END_PI(clear_page)
++SYM_FUNC_END(__pi_clear_page)
++SYM_FUNC_ALIAS(clear_page, __pi_clear_page)
+ EXPORT_SYMBOL(clear_page)
+diff --git a/arch/arm64/lib/copy_page.S b/arch/arm64/lib/copy_page.S
+index 29144f4..c336d2f 100644
+--- a/arch/arm64/lib/copy_page.S
++++ b/arch/arm64/lib/copy_page.S
+@@ -17,7 +17,7 @@
+  *	x0 - dest
+  *	x1 - src
+  */
+-SYM_FUNC_START_PI(copy_page)
++SYM_FUNC_START(__pi_copy_page)
+ alternative_if ARM64_HAS_NO_HW_PREFETCH
+ 	// Prefetch three cache lines ahead.
+ 	prfm	pldl1strm, [x1, #128]
+@@ -75,5 +75,6 @@ alternative_else_nop_endif
+ 	stnp	x16, x17, [x0, #112 - 256]
+ 
+ 	ret
+-SYM_FUNC_END_PI(copy_page)
++SYM_FUNC_END(__pi_copy_page)
++SYM_FUNC_ALIAS(copy_page, __pi_copy_page)
+ EXPORT_SYMBOL(copy_page)
+diff --git a/arch/arm64/lib/memchr.S b/arch/arm64/lib/memchr.S
+index 7c2276f..37a9f2a 100644
+--- a/arch/arm64/lib/memchr.S
++++ b/arch/arm64/lib/memchr.S
+@@ -38,7 +38,7 @@
+ 
+ 	.p2align 4
+ 	nop
+-SYM_FUNC_START_WEAK_PI(memchr)
++SYM_FUNC_START(__pi_memchr)
+ 	and	chrin, chrin, #0xff
+ 	lsr	wordcnt, cntin, #3
+ 	cbz	wordcnt, L(byte_loop)
+@@ -71,5 +71,6 @@ CPU_LE(	rev	tmp, tmp)
+ L(not_found):
+ 	mov	result, #0
+ 	ret
+-SYM_FUNC_END_PI(memchr)
++SYM_FUNC_END(__pi_memchr)
++SYM_FUNC_ALIAS_WEAK(memchr, __pi_memchr)
+ EXPORT_SYMBOL_NOKASAN(memchr)
+diff --git a/arch/arm64/lib/memcmp.S b/arch/arm64/lib/memcmp.S
+index 7d95638..a5ccf2c 100644
+--- a/arch/arm64/lib/memcmp.S
++++ b/arch/arm64/lib/memcmp.S
+@@ -32,7 +32,7 @@
+ #define tmp1		x7
+ #define tmp2		x8
+ 
+-SYM_FUNC_START_WEAK_PI(memcmp)
++SYM_FUNC_START(__pi_memcmp)
+ 	subs	limit, limit, 8
+ 	b.lo	L(less8)
+ 
+@@ -134,6 +134,6 @@ L(byte_loop):
+ 	b.eq	L(byte_loop)
+ 	sub	result, data1w, data2w
+ 	ret
+-
+-SYM_FUNC_END_PI(memcmp)
++SYM_FUNC_END(__pi_memcmp)
++SYM_FUNC_ALIAS_WEAK(memcmp, __pi_memcmp)
+ EXPORT_SYMBOL_NOKASAN(memcmp)
+diff --git a/arch/arm64/lib/memcpy.S b/arch/arm64/lib/memcpy.S
+index b82fd64..4ab48d4 100644
+--- a/arch/arm64/lib/memcpy.S
++++ b/arch/arm64/lib/memcpy.S
+@@ -57,10 +57,7 @@
+    The loop tail is handled by always copying 64 bytes from the end.
+ */
+ 
+-SYM_FUNC_START_ALIAS(__memmove)
+-SYM_FUNC_START_WEAK_ALIAS_PI(memmove)
 -SYM_FUNC_START_ALIAS(__memcpy)
--SYM_FUNC_START_WEAK(memcpy)
-+SYM_FUNC_START(__memcpy)
- 	ALTERNATIVE_2 "jmp memcpy_orig", "", X86_FEATURE_REP_GOOD, \
- 		      "jmp memcpy_erms", X86_FEATURE_ERMS
+-SYM_FUNC_START_WEAK_PI(memcpy)
++SYM_FUNC_START(__pi_memcpy)
+ 	add	srcend, src, count
+ 	add	dstend, dstin, count
+ 	cmp	count, 128
+@@ -241,12 +238,16 @@ L(copy64_from_start):
+ 	stp	B_l, B_h, [dstin, 16]
+ 	stp	C_l, C_h, [dstin]
+ 	ret
++SYM_FUNC_END(__pi_memcpy)
  
-@@ -40,11 +39,12 @@ SYM_FUNC_START_WEAK(memcpy)
- 	movl %edx, %ecx
- 	rep movsb
- 	RET
--SYM_FUNC_END(memcpy)
--SYM_FUNC_END_ALIAS(__memcpy)
+-SYM_FUNC_END_PI(memcpy)
 -EXPORT_SYMBOL(memcpy)
-+SYM_FUNC_END(__memcpy)
+-SYM_FUNC_END_ALIAS(__memcpy)
++SYM_FUNC_ALIAS(__memcpy, __pi_memcpy)
  EXPORT_SYMBOL(__memcpy)
- 
+-SYM_FUNC_END_ALIAS_PI(memmove)
+-EXPORT_SYMBOL(memmove)
+-SYM_FUNC_END_ALIAS(__memmove)
 +SYM_FUNC_ALIAS_WEAK(memcpy, __memcpy)
 +EXPORT_SYMBOL(memcpy)
 +
- /*
-  * memcpy_erms() - enhanced fast string memcpy. This is faster and
-  * simpler than memcpy. Use memcpy_erms when possible.
-diff --git a/arch/x86/lib/memmove_64.S b/arch/x86/lib/memmove_64.S
-index 50ea390..d83cba3 100644
---- a/arch/x86/lib/memmove_64.S
-+++ b/arch/x86/lib/memmove_64.S
-@@ -24,7 +24,6 @@
-  * Output:
-  * rax: dest
-  */
--SYM_FUNC_START_WEAK(memmove)
- SYM_FUNC_START(__memmove)
- 
- 	mov %rdi, %rax
-@@ -207,6 +206,7 @@ SYM_FUNC_START(__memmove)
- 13:
- 	RET
- SYM_FUNC_END(__memmove)
--SYM_FUNC_END_ALIAS(memmove)
++SYM_FUNC_ALIAS(__pi_memmove, __pi_memcpy)
++
++SYM_FUNC_ALIAS(__memmove, __pi_memmove)
  EXPORT_SYMBOL(__memmove)
-+
 +SYM_FUNC_ALIAS_WEAK(memmove, __memmove)
- EXPORT_SYMBOL(memmove)
-diff --git a/arch/x86/lib/memset_64.S b/arch/x86/lib/memset_64.S
-index d624f2b..fc9ffd3 100644
---- a/arch/x86/lib/memset_64.S
-+++ b/arch/x86/lib/memset_64.S
-@@ -17,7 +17,6 @@
-  *
-  * rax   original destination
-  */
--SYM_FUNC_START_WEAK(memset)
- SYM_FUNC_START(__memset)
- 	/*
- 	 * Some CPUs support enhanced REP MOVSB/STOSB feature. It is recommended
-@@ -42,10 +41,11 @@ SYM_FUNC_START(__memset)
- 	movq %r9,%rax
- 	RET
- SYM_FUNC_END(__memset)
--SYM_FUNC_END_ALIAS(memset)
++EXPORT_SYMBOL(memmove)
+diff --git a/arch/arm64/lib/memset.S b/arch/arm64/lib/memset.S
+index a9c1c9a..a5aebe8 100644
+--- a/arch/arm64/lib/memset.S
++++ b/arch/arm64/lib/memset.S
+@@ -42,8 +42,7 @@ dst		.req	x8
+ tmp3w		.req	w9
+ tmp3		.req	x9
+ 
+-SYM_FUNC_START_ALIAS(__memset)
+-SYM_FUNC_START_WEAK_PI(memset)
++SYM_FUNC_START(__pi_memset)
+ 	mov	dst, dstin	/* Preserve return value.  */
+ 	and	A_lw, val, #255
+ 	orr	A_lw, A_lw, A_lw, lsl #8
+@@ -202,7 +201,10 @@ SYM_FUNC_START_WEAK_PI(memset)
+ 	ands	count, count, zva_bits_x
+ 	b.ne	.Ltail_maybe_long
+ 	ret
+-SYM_FUNC_END_PI(memset)
 -EXPORT_SYMBOL(memset)
+-SYM_FUNC_END_ALIAS(__memset)
++SYM_FUNC_END(__pi_memset)
++
++SYM_FUNC_ALIAS(__memset, __pi_memset)
  EXPORT_SYMBOL(__memset)
- 
-+SYM_FUNC_ALIAS_WEAK(memset, __memset)
++
++SYM_FUNC_ALIAS_WEAK(memset, __pi_memset)
 +EXPORT_SYMBOL(memset)
-+
- /*
-  * ISO C memset - set a memory block to a byte value. This function uses
-  * enhanced rep stosb to override the fast string function.
-diff --git a/tools/arch/x86/lib/memcpy_64.S b/tools/arch/x86/lib/memcpy_64.S
-index 59cf234..d0d7b9b 100644
---- a/tools/arch/x86/lib/memcpy_64.S
-+++ b/tools/arch/x86/lib/memcpy_64.S
-@@ -27,8 +27,7 @@
-  * Output:
-  * rax original destination
+diff --git a/arch/arm64/lib/strchr.S b/arch/arm64/lib/strchr.S
+index 1f47eae..94ee67a 100644
+--- a/arch/arm64/lib/strchr.S
++++ b/arch/arm64/lib/strchr.S
+@@ -18,7 +18,7 @@
+  * Returns:
+  *	x0 - address of first occurrence of 'c' or 0
   */
--SYM_FUNC_START_ALIAS(__memcpy)
--SYM_FUNC_START_WEAK(memcpy)
-+SYM_FUNC_START(__memcpy)
- 	ALTERNATIVE_2 "jmp memcpy_orig", "", X86_FEATURE_REP_GOOD, \
- 		      "jmp memcpy_erms", X86_FEATURE_ERMS
- 
-@@ -40,11 +39,12 @@ SYM_FUNC_START_WEAK(memcpy)
- 	movl %edx, %ecx
- 	rep movsb
- 	RET
--SYM_FUNC_END(memcpy)
--SYM_FUNC_END_ALIAS(__memcpy)
--EXPORT_SYMBOL(memcpy)
-+SYM_FUNC_END(__memcpy)
- EXPORT_SYMBOL(__memcpy)
- 
-+SYM_FUNC_ALIAS_WEAK(memcpy, __memcpy)
-+EXPORT_SYMBOL(memcpy)
+-SYM_FUNC_START_WEAK(strchr)
++SYM_FUNC_START(__pi_strchr)
+ 	and	w1, w1, #0xff
+ 1:	ldrb	w2, [x0], #1
+ 	cmp	w2, w1
+@@ -28,5 +28,7 @@ SYM_FUNC_START_WEAK(strchr)
+ 	cmp	w2, w1
+ 	csel	x0, x0, xzr, eq
+ 	ret
+-SYM_FUNC_END(strchr)
++SYM_FUNC_END(__pi_strchr)
 +
- /*
-  * memcpy_erms() - enhanced fast string memcpy. This is faster and
-  * simpler than memcpy. Use memcpy_erms when possible.
-diff --git a/tools/arch/x86/lib/memset_64.S b/tools/arch/x86/lib/memset_64.S
-index d624f2b..fc9ffd3 100644
---- a/tools/arch/x86/lib/memset_64.S
-+++ b/tools/arch/x86/lib/memset_64.S
-@@ -17,7 +17,6 @@
-  *
-  * rax   original destination
++SYM_FUNC_ALIAS_WEAK(strchr, __pi_strchr)
+ EXPORT_SYMBOL_NOKASAN(strchr)
+diff --git a/arch/arm64/lib/strcmp.S b/arch/arm64/lib/strcmp.S
+index 83bcad7..cda7de7 100644
+--- a/arch/arm64/lib/strcmp.S
++++ b/arch/arm64/lib/strcmp.S
+@@ -41,7 +41,7 @@
+ 
+ 	/* Start of performance-critical section  -- one 64B cache line.  */
+ 	.align 6
+-SYM_FUNC_START_WEAK_PI(strcmp)
++SYM_FUNC_START(__pi_strcmp)
+ 	eor	tmp1, src1, src2
+ 	mov	zeroones, #REP8_01
+ 	tst	tmp1, #7
+@@ -171,6 +171,6 @@ L(loop_misaligned):
+ L(done):
+ 	sub	result, data1, data2
+ 	ret
+-
+-SYM_FUNC_END_PI(strcmp)
++SYM_FUNC_END(__pi_strcmp)
++SYM_FUNC_ALIAS_WEAK(strcmp, __pi_strcmp)
+ EXPORT_SYMBOL_NOHWKASAN(strcmp)
+diff --git a/arch/arm64/lib/strlen.S b/arch/arm64/lib/strlen.S
+index 1648790..4919fe8 100644
+--- a/arch/arm64/lib/strlen.S
++++ b/arch/arm64/lib/strlen.S
+@@ -79,7 +79,7 @@
+ 	   whether the first fetch, which may be misaligned, crosses a page
+ 	   boundary.  */
+ 
+-SYM_FUNC_START_WEAK_PI(strlen)
++SYM_FUNC_START(__pi_strlen)
+ 	and	tmp1, srcin, MIN_PAGE_SIZE - 1
+ 	mov	zeroones, REP8_01
+ 	cmp	tmp1, MIN_PAGE_SIZE - 16
+@@ -208,6 +208,6 @@ L(page_cross):
+ 	csel	data1, data1, tmp4, eq
+ 	csel	data2, data2, tmp2, eq
+ 	b	L(page_cross_entry)
+-
+-SYM_FUNC_END_PI(strlen)
++SYM_FUNC_END(__pi_strlen)
++SYM_FUNC_ALIAS_WEAK(strlen, __pi_strlen)
+ EXPORT_SYMBOL_NOKASAN(strlen)
+diff --git a/arch/arm64/lib/strncmp.S b/arch/arm64/lib/strncmp.S
+index e42bcfc..a848abc 100644
+--- a/arch/arm64/lib/strncmp.S
++++ b/arch/arm64/lib/strncmp.S
+@@ -44,7 +44,7 @@
+ #define endloop		x15
+ #define count		mask
+ 
+-SYM_FUNC_START_WEAK_PI(strncmp)
++SYM_FUNC_START(__pi_strncmp)
+ 	cbz	limit, L(ret0)
+ 	eor	tmp1, src1, src2
+ 	mov	zeroones, #REP8_01
+@@ -256,6 +256,6 @@ L(done_loop):
+ L(ret0):
+ 	mov	result, #0
+ 	ret
+-
+-SYM_FUNC_END_PI(strncmp)
++SYM_FUNC_END(__pi_strncmp)
++SYM_FUNC_ALIAS_WEAK(strncmp, __pi_strncmp)
+ EXPORT_SYMBOL_NOHWKASAN(strncmp)
+diff --git a/arch/arm64/lib/strnlen.S b/arch/arm64/lib/strnlen.S
+index b72913a..d5ac0e1 100644
+--- a/arch/arm64/lib/strnlen.S
++++ b/arch/arm64/lib/strnlen.S
+@@ -47,7 +47,7 @@ limit_wd	.req	x14
+ #define REP8_7f 0x7f7f7f7f7f7f7f7f
+ #define REP8_80 0x8080808080808080
+ 
+-SYM_FUNC_START_WEAK_PI(strnlen)
++SYM_FUNC_START(__pi_strnlen)
+ 	cbz	limit, .Lhit_limit
+ 	mov	zeroones, #REP8_01
+ 	bic	src, srcin, #15
+@@ -156,5 +156,7 @@ CPU_LE( lsr	tmp2, tmp2, tmp4 )	/* Shift (tmp1 & 63).  */
+ .Lhit_limit:
+ 	mov	len, limit
+ 	ret
+-SYM_FUNC_END_PI(strnlen)
++SYM_FUNC_END(__pi_strnlen)
++
++SYM_FUNC_ALIAS_WEAK(strnlen, __pi_strnlen)
+ EXPORT_SYMBOL_NOKASAN(strnlen)
+diff --git a/arch/arm64/lib/strrchr.S b/arch/arm64/lib/strrchr.S
+index 13132d1..a5123cf 100644
+--- a/arch/arm64/lib/strrchr.S
++++ b/arch/arm64/lib/strrchr.S
+@@ -18,7 +18,7 @@
+  * Returns:
+  *	x0 - address of last occurrence of 'c' or 0
   */
--SYM_FUNC_START_WEAK(memset)
- SYM_FUNC_START(__memset)
- 	/*
- 	 * Some CPUs support enhanced REP MOVSB/STOSB feature. It is recommended
-@@ -42,10 +41,11 @@ SYM_FUNC_START(__memset)
- 	movq %r9,%rax
- 	RET
- SYM_FUNC_END(__memset)
--SYM_FUNC_END_ALIAS(memset)
--EXPORT_SYMBOL(memset)
- EXPORT_SYMBOL(__memset)
+-SYM_FUNC_START_WEAK_PI(strrchr)
++SYM_FUNC_START(__pi_strrchr)
+ 	mov	x3, #0
+ 	and	w1, w1, #0xff
+ 1:	ldrb	w2, [x0], #1
+@@ -29,5 +29,6 @@ SYM_FUNC_START_WEAK_PI(strrchr)
+ 	b	1b
+ 2:	mov	x0, x3
+ 	ret
+-SYM_FUNC_END_PI(strrchr)
++SYM_FUNC_END(__pi_strrchr)
++SYM_FUNC_ALIAS_WEAK(strrchr, __pi_strrchr)
+ EXPORT_SYMBOL_NOKASAN(strrchr)
+diff --git a/arch/arm64/mm/cache.S b/arch/arm64/mm/cache.S
+index 7d0563d..0ea6cc2 100644
+--- a/arch/arm64/mm/cache.S
++++ b/arch/arm64/mm/cache.S
+@@ -107,10 +107,11 @@ SYM_FUNC_END(icache_inval_pou)
+  *	- start   - virtual start address of region
+  *	- end     - virtual end address of region
+  */
+-SYM_FUNC_START_PI(dcache_clean_inval_poc)
++SYM_FUNC_START(__pi_dcache_clean_inval_poc)
+ 	dcache_by_line_op civac, sy, x0, x1, x2, x3
+ 	ret
+-SYM_FUNC_END_PI(dcache_clean_inval_poc)
++SYM_FUNC_END(__pi_dcache_clean_inval_poc)
++SYM_FUNC_ALIAS(dcache_clean_inval_poc, __pi_dcache_clean_inval_poc)
  
-+SYM_FUNC_ALIAS_WEAK(memset, __memset)
-+EXPORT_SYMBOL(memset)
-+
  /*
-  * ISO C memset - set a memory block to a byte value. This function uses
-  * enhanced rep stosb to override the fast string function.
+  *	dcache_clean_pou(start, end)
+@@ -140,7 +141,7 @@ SYM_FUNC_END(dcache_clean_pou)
+  *	- start   - kernel start address of region
+  *	- end     - kernel end address of region
+  */
+-SYM_FUNC_START_PI(dcache_inval_poc)
++SYM_FUNC_START(__pi_dcache_inval_poc)
+ 	dcache_line_size x2, x3
+ 	sub	x3, x2, #1
+ 	tst	x1, x3				// end cache line aligned?
+@@ -158,7 +159,8 @@ SYM_FUNC_START_PI(dcache_inval_poc)
+ 	b.lo	2b
+ 	dsb	sy
+ 	ret
+-SYM_FUNC_END_PI(dcache_inval_poc)
++SYM_FUNC_END(__pi_dcache_inval_poc)
++SYM_FUNC_ALIAS(dcache_inval_poc, __pi_dcache_inval_poc)
+ 
+ /*
+  *	dcache_clean_poc(start, end)
+@@ -169,10 +171,11 @@ SYM_FUNC_END_PI(dcache_inval_poc)
+  *	- start   - virtual start address of region
+  *	- end     - virtual end address of region
+  */
+-SYM_FUNC_START_PI(dcache_clean_poc)
++SYM_FUNC_START(__pi_dcache_clean_poc)
+ 	dcache_by_line_op cvac, sy, x0, x1, x2, x3
+ 	ret
+-SYM_FUNC_END_PI(dcache_clean_poc)
++SYM_FUNC_END(__pi_dcache_clean_poc)
++SYM_FUNC_ALIAS(dcache_clean_poc, __pi_dcache_clean_poc)
+ 
+ /*
+  *	dcache_clean_pop(start, end)
+@@ -183,13 +186,14 @@ SYM_FUNC_END_PI(dcache_clean_poc)
+  *	- start   - virtual start address of region
+  *	- end     - virtual end address of region
+  */
+-SYM_FUNC_START_PI(dcache_clean_pop)
++SYM_FUNC_START(__pi_dcache_clean_pop)
+ 	alternative_if_not ARM64_HAS_DCPOP
+ 	b	dcache_clean_poc
+ 	alternative_else_nop_endif
+ 	dcache_by_line_op cvap, sy, x0, x1, x2, x3
+ 	ret
+-SYM_FUNC_END_PI(dcache_clean_pop)
++SYM_FUNC_END(__pi_dcache_clean_pop)
++SYM_FUNC_ALIAS(dcache_clean_pop, __pi_dcache_clean_pop)
+ 
+ /*
+  *	__dma_flush_area(start, size)
+@@ -199,11 +203,12 @@ SYM_FUNC_END_PI(dcache_clean_pop)
+  *	- start   - virtual start address of region
+  *	- size    - size in question
+  */
+-SYM_FUNC_START_PI(__dma_flush_area)
++SYM_FUNC_START(__pi___dma_flush_area)
+ 	add	x1, x0, x1
+ 	dcache_by_line_op civac, sy, x0, x1, x2, x3
+ 	ret
+-SYM_FUNC_END_PI(__dma_flush_area)
++SYM_FUNC_END(__pi___dma_flush_area)
++SYM_FUNC_ALIAS(__dma_flush_area, __pi___dma_flush_area)
+ 
+ /*
+  *	__dma_map_area(start, size, dir)
+@@ -211,12 +216,13 @@ SYM_FUNC_END_PI(__dma_flush_area)
+  *	- size	- size of region
+  *	- dir	- DMA direction
+  */
+-SYM_FUNC_START_PI(__dma_map_area)
++SYM_FUNC_START(__pi___dma_map_area)
+ 	add	x1, x0, x1
+ 	cmp	w2, #DMA_FROM_DEVICE
+ 	b.eq	__pi_dcache_inval_poc
+ 	b	__pi_dcache_clean_poc
+-SYM_FUNC_END_PI(__dma_map_area)
++SYM_FUNC_END(__pi___dma_map_area)
++SYM_FUNC_ALIAS(__dma_map_area, __pi___dma_map_area)
+ 
+ /*
+  *	__dma_unmap_area(start, size, dir)
+@@ -224,9 +230,10 @@ SYM_FUNC_END_PI(__dma_map_area)
+  *	- size	- size of region
+  *	- dir	- DMA direction
+  */
+-SYM_FUNC_START_PI(__dma_unmap_area)
++SYM_FUNC_START(__pi___dma_unmap_area)
+ 	add	x1, x0, x1
+ 	cmp	w2, #DMA_TO_DEVICE
+ 	b.ne	__pi_dcache_inval_poc
+ 	ret
+-SYM_FUNC_END_PI(__dma_unmap_area)
++SYM_FUNC_END(__pi___dma_unmap_area)
++SYM_FUNC_ALIAS(__dma_unmap_area, __pi___dma_unmap_area)

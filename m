@@ -2,85 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DC74D386C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56F94D3864
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236340AbiCISDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S236435AbiCISEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237216AbiCISDD (ORCPT
+        with ESMTP id S233212AbiCISED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:03:03 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB0CFFF8B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:02:03 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id y22so3941818eds.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 10:02:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.unc.edu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9BTio2Awg7juKQM1Om6kj5q4l9NNXHlLZxVh/F8S+tg=;
-        b=be0xgrwE9PVElgzZ6mKpD92wnU3cowCGfBc1OV5jhqQ9ZNrW13BtSXpniXtvJqkFSV
-         XNo8iD0nRYRqU4CsTnJBA5Uiz5DAcru0dFKX+fcB2tZTKJq9Ps0WaeHnJEf2MaDdeyQi
-         okt1bqYGhlDBNU6a49vgHDTGdP3ZrbqgOnXQZ1bIvNvehQ3M59WwjK3n1lPGWdIG4R6A
-         SVwEGH25yGjv1UW2ndhuZygOTEUSpEqQZsIWpC9Ro65+Nm7SQubWCK1CtIe40Bf7ORzm
-         EakUrFXmOiDqDrsz5GdMpGaZqt6aRt/17Pi7Pr6I277q1j8iLg25Tfh7WGVqepNY81ew
-         1TlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9BTio2Awg7juKQM1Om6kj5q4l9NNXHlLZxVh/F8S+tg=;
-        b=XZPPYPQ2WyJB8cL8wlinOHkI6Voq6dKAy15S8vRnFaW+TJ4jq2AEogvNzip8+nLCRR
-         jLLRp7o312srD76SU7Q20QTJMu5JO4spbBthopkH1nWHaiBvqZZ42RzuNOUGyfZMJxO4
-         GoCVjznC7uQB/U9kZIYw5KlbvcjCfFJPEtnaadCnWrlfNxCp78psRf/9NvdX2lOqgBXX
-         CqCNK1U84tl/AjVrmsWUgcxAYM62Io/F09ztMbMlyKJ957IvUognaLo0sgjOom/xnCYM
-         eR37M+wjIRJiHPqpUTf3QD4qVdBt/sN3XPKFmplQCOmFG+drTaSVcxXh82jYX7OGEnqx
-         e3tQ==
-X-Gm-Message-State: AOAM531tnOuGrhT9QwRnn5bGkrALLIvPbUcOB/g4l4X2oosgoJBe7bX6
-        Dlj9hJuXbdsgrJx0W1GUPGVTuNYHFOV7FMbj0FA9+Z5SKpx3qw==
-X-Google-Smtp-Source: ABdhPJwoZmSwRaYZ1GZDi9d2zJ8o5t8281Jc2nc5ttT0AwcMmqFD7BA8pvgIUIee3p5wSoosHXA6m59U6mLbl48Mt8I=
-X-Received: by 2002:a05:6402:1941:b0:413:2b80:b245 with SMTP id
- f1-20020a056402194100b004132b80b245mr682857edz.252.1646848922413; Wed, 09 Mar
- 2022 10:02:02 -0800 (PST)
+        Wed, 9 Mar 2022 13:04:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC1B63F3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:03:04 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C2FA621118;
+        Wed,  9 Mar 2022 18:03:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646848982; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LiWoSBzAEkCGU0Hf+4zaaFdMVIEVCG4nJJMVf7RzVoI=;
+        b=CLLWUWSN9ubDbTFaYanIiR0lUrprKcnmy5k7Y81YBtZWKNgVMrYsWVqmZZVtHBhw45MIAg
+        78av96XmoTF3brhaxpSiGINy76V+yPR0uia/5I2xMZ7mA/EQohnmtLCU5VHL0hutHEFPeJ
+        XAKwnxGZ29FZjSmq9+4fkUbJXqQxVHQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646848982;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LiWoSBzAEkCGU0Hf+4zaaFdMVIEVCG4nJJMVf7RzVoI=;
+        b=Q3Obw1A7h7KfmsNKdz9yheW4tCJ3BjzF/XZHK6j4Wxtnm6t04z9OAuHCBvxAdEQ/5ksnOz
+        M5yo065GDFt3twDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6897B13D7D;
+        Wed,  9 Mar 2022 18:03:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ENrmGNbrKGIQJwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 09 Mar 2022 18:03:02 +0000
+Message-ID: <62cd72d5-c072-d159-8de4-95cd0804c7db@suse.cz>
+Date:   Wed, 9 Mar 2022 19:03:02 +0100
 MIME-Version: 1.0
-References: <20220308025547.20412-1-sagarmp@cs.unc.edu> <de1b0152-7521-db6f-355a-b906ecbe84dd@linux.intel.com>
-In-Reply-To: <de1b0152-7521-db6f-355a-b906ecbe84dd@linux.intel.com>
-From:   Sagar Patel <sagarmp@cs.unc.edu>
-Date:   Wed, 9 Mar 2022 13:01:50 -0500
-Message-ID: <CAMGmevBHM-mrZsNGHK44yhHY8kipiErBf=tgqQZ5E3LgHO49TQ@mail.gmail.com>
-Subject: Re: [PATCH] checkpatch: use python3 to find codespell dictionary
-To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 3/9] mm: slightly clarify KSM logic in do_swap_page()
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org
+References: <20220131162940.210846-1-david@redhat.com>
+ <20220131162940.210846-4-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220131162940.210846-4-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 2:58 AM P=C3=A9ter Ujfalusi wrote:
-> > In addition, when searching for the dictionary, do not check if the
-> > codespell binary exists since codespell can be installed via a Python
-> > package manager. In this case, a codespell binary is not exported in
-> > $PATH, but a dictionary does exist.
->
-> Installing codespell via pip will place the 'codespell' executable under
-> the user's $HOME/.local/bin/ and it expects that it is in PATH:
+On 1/31/22 17:29, David Hildenbrand wrote:
+> Let's make it clearer that KSM might only have to copy a page
+> in case we have a page in the swapcache, not if we allocated a fresh
+> page and bypassed the swapcache. While at it, add a comment why this is
+> usually necessary and merge the two swapcache conditions.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Good point, I'll reword the commit message in v2.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> Having said that, the executable itself is not used by checkpatch.pl, so
->
-> Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-Thank you!
+> ---
+>  mm/memory.c | 38 +++++++++++++++++++++++---------------
+>  1 file changed, 23 insertions(+), 15 deletions(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 923165b4c27e..3c91294cca98 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3615,21 +3615,29 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>  		goto out_release;
+>  	}
+>  
+> -	/*
+> -	 * Make sure try_to_free_swap or reuse_swap_page or swapoff did not
+> -	 * release the swapcache from under us.  The page pin, and pte_same
+> -	 * test below, are not enough to exclude that.  Even if it is still
+> -	 * swapcache, we need to check that the page's swap has not changed.
+> -	 */
+> -	if (unlikely((!PageSwapCache(page) ||
+> -			page_private(page) != entry.val)) && swapcache)
+> -		goto out_page;
+> -
+> -	page = ksm_might_need_to_copy(page, vma, vmf->address);
+> -	if (unlikely(!page)) {
+> -		ret = VM_FAULT_OOM;
+> -		page = swapcache;
+> -		goto out_page;
+> +	if (swapcache) {
+> +		/*
+> +		 * Make sure try_to_free_swap or reuse_swap_page or swapoff did
+> +		 * not release the swapcache from under us.  The page pin, and
+> +		 * pte_same test below, are not enough to exclude that.  Even if
+> +		 * it is still swapcache, we need to check that the page's swap
+> +		 * has not changed.
+> +		 */
+> +		if (unlikely(!PageSwapCache(page) ||
+> +			     page_private(page) != entry.val))
+> +			goto out_page;
+> +
+> +		/*
+> +		 * KSM sometimes has to copy on read faults, for example, if
+> +		 * page->index of !PageKSM() pages would be nonlinear inside the
+> +		 * anon VMA -- PageKSM() is lost on actual swapout.
+> +		 */
+> +		page = ksm_might_need_to_copy(page, vma, vmf->address);
+> +		if (unlikely(!page)) {
+> +			ret = VM_FAULT_OOM;
+> +			page = swapcache;
+> +			goto out_page;
+> +		}
+>  	}
+>  
+>  	cgroup_throttle_swaprate(page, GFP_KERNEL);
 
----Sagar Patel

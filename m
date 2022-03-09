@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14AF4D2D9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463CF4D2DA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiCILDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S231839AbiCILIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiCILDw (ORCPT
+        with ESMTP id S231828AbiCILIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:03:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DFE3289AE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:02:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646823772;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l3XbrCovqtdO2alSM1NhHDwkb673n4bp3acsIFhcLTE=;
-        b=amPnXfr0W2fB/DUoSMxLJV6NiCBnaetAGbysbYx+u5sZiygqlPVdG7SScpLEsAtKminzrM
-        sBxbxaleEHF/CS8kNkDWn9FSomSNKXd1dDsb/v8p+0JOriw1nPpH5spuB63BnaFKUe/RYj
-        M7oQy9GKrCIB8kR3ied/3ig6fbtANuw=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-600-tS4mtK5rPD6nGEfxjA7Q7g-1; Wed, 09 Mar 2022 06:02:51 -0500
-X-MC-Unique: tS4mtK5rPD6nGEfxjA7Q7g-1
-Received: by mail-ej1-f72.google.com with SMTP id go11-20020a1709070d8b00b006cf0d933739so1110010ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 03:02:50 -0800 (PST)
+        Wed, 9 Mar 2022 06:08:22 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4055616F940
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:07:24 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id z3so1630760plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 03:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GKebUur/S+XRejLBhOyjy8XggC3dL/V1yGt1wm2dInU=;
+        b=Qro99lBc7nlHUz1t/2SoAKOWBZUDy7llKexrls150vhS9ztw/EGj3v1Ty/GVOObgXx
+         uX4fKKb6WTOsfvVw6tqE0f8uTx/cyIi97wunNiiZBQGRoREJR8reG278BVlLrtOz+tW0
+         MxMsQf7xiOYlpyj9PuhuH1CEuv19U8D/Z1Lqpuy7tVc0C+wlqGR5wD+FZnAKMvfSvpDl
+         TJ5OHOR3miwa4vJQKnNf7eZro2Nar/fHmwhoBRFbRIOUstNCh1f0u4iIB7F9iXMCiQKm
+         ZAPoYxkQotY0rlMhbH+pAeqfcU7ijOXkqkOfuvoJdcJc2AWluXMAuE5Giu0KRYOrbR9A
+         h22Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=l3XbrCovqtdO2alSM1NhHDwkb673n4bp3acsIFhcLTE=;
-        b=8J8OyPsOVNfVQhv5KjWDjYqgkx61uYxdy7SfBe3uBShq5uVNIKpg1TFv1fwe34yAT7
-         2us8bWi9BYLxTJ4ii+lW5IaCsakQpIQav5oRQXSHNZ6dJahYRlAs2/dUy1ctA0gzmLXG
-         Ow9TUXGtZbBImTTeSLIN/6YxtdmRYxvxLC2IoVGqK7DeA4WuCfgw02wkMiSTFr6SAlDl
-         IEnFfW9P4lUUiZc4L3xA1Lu/VqvC/Gsez3M6g3iklcp3BHgQdixWaeMkuohG5uWIV3A/
-         77P/dUUQNXnDSHuG7KqJJFVjBstblibtMFd42gmIfyrN6tC68mfKA48gUaG5YpyqGRHQ
-         dUow==
-X-Gm-Message-State: AOAM531Rhy4bmwwcZLXrHJSvV7+LF9XprW2a3BrWP9ZVgTZKzLTXKXZB
-        fBQIujerWadBQDxoqsxE5sq19NhaleYMlrVLA+mcuONAJDDJR1lxoomJwidAFmd33UsoXcxq5Hd
-        WafoJMcFOjHGDQeT2ycXIw6cx
-X-Received: by 2002:a17:907:e9e:b0:6da:68cd:fe43 with SMTP id ho30-20020a1709070e9e00b006da68cdfe43mr17296610ejc.161.1646823769859;
-        Wed, 09 Mar 2022 03:02:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwLFK+hu10hbW+53duxLixYqGk1vI3LHURrtIszmQjP1c+mERaelOMU8OSY5UwM9Bkh+CExAg==
-X-Received: by 2002:a17:907:e9e:b0:6da:68cd:fe43 with SMTP id ho30-20020a1709070e9e00b006da68cdfe43mr17296592ejc.161.1646823769645;
-        Wed, 09 Mar 2022 03:02:49 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id y18-20020a170906471200b006da8a883b5fsm587812ejq.54.2022.03.09.03.02.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 03:02:49 -0800 (PST)
-Message-ID: <3b1de531-a2b8-2638-0c8f-fc23fdf5473c@redhat.com>
-Date:   Wed, 9 Mar 2022 12:02:47 +0100
+        bh=GKebUur/S+XRejLBhOyjy8XggC3dL/V1yGt1wm2dInU=;
+        b=d6HAtwY2fsWiXZzL1gfYTWV0jCDMEODuKbZbK6vqlkXxhuqrGZ0C2IOoW9EpDzrM+9
+         vKNhxv6z2FTTY635Y+EwsM/1MZ219I6AI5mpmIB+Xw+5oeQYQC3TwLzOSMPJvGE3NDLz
+         J7xSxQ8r0WO7XJtrkSwNaYRjGA7KecNNnWW/dwXu1Eqf46/RQFc8/cIFtpAAkOX4Xza7
+         jc9xYXZUzR9ML8vqH2duKkJWhU+3JJd+ePvFSzH0R2x9cvIYdLdFUwU8lKfWFpIvvFYm
+         FUhCCHzTlnVdXCZyVmxUCNCUoVhZ1RmmEViz3f0gacNnryD9/yXAxudti/8xLn/Z+3Gf
+         mbNA==
+X-Gm-Message-State: AOAM531Hz0R9WoEAxS1cX5kBwJR+fSgbGTJDLf54Sh6Brr8bIcTXocVa
+        ppghvdnPqA6w0P4nzKle1GhNcrw1kFQCU+5s
+X-Google-Smtp-Source: ABdhPJz9ZXrpmQbPKnEB7U/O9hUNwBgO8ACxtCv3tvpu+540PFnMHpFQxXdudNZWAs5ibUwy9iWImw==
+X-Received: by 2002:a17:902:b087:b0:151:842a:d212 with SMTP id p7-20020a170902b08700b00151842ad212mr22171488plr.92.1646824043769;
+        Wed, 09 Mar 2022 03:07:23 -0800 (PST)
+Received: from n144-252-048.byted.org. ([111.225.144.244])
+        by smtp.gmail.com with ESMTPSA id mw7-20020a17090b4d0700b001b8baf6b6f5sm2440632pjb.50.2022.03.09.03.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 03:07:23 -0800 (PST)
+From:   huteng.ht@bytedance.com
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, huteng.ht@bytedance.com
+Subject: [PATCH] kernel/locking: Return proper value in __down_common()
+Date:   Wed,  9 Mar 2022 19:07:05 +0800
+Message-Id: <20220309110705.1616783-1-huteng.ht@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: SVM: fix panic on out-of-bounds guest IRQ
-Content-Language: en-US
-To:     wang.yi59@zte.com.cn
-Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
-        up2wing@gmail.com, wang.liang82@zte.com.cn, liu.yi24@zte.com.cn
-References: <202203091827565144689@zte.com.cn>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <202203091827565144689@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 11:27, wang.yi59@zte.com.cn wrote:
->> Hi, the Signed-off-by chain is wrong.  Did Yi Liu write the patch (and
->> you are just sending it)?
-> The Signed-off-by chain is not wrong, I (Yi Wang) wrote this patch and Yi Liu
-> co-developed it.
-> 
+From: Teng Hu <huteng.ht@bytedance.com>
 
-Ok, so it should be
+Return -ETIME when a process waiting on a semaphore woken up
+due to timedout, while return -EINTR when woken up by a signal.
 
-Co-developed-by: Yi Liu <liu.yi24@zte.com.cn>
-Signed-off-by: Yi Liu <liu.yi24@zte.com.cn>
-Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Signed-off-by: Teng Hu <huteng.ht@bytedance.com>
+---
+ kernel/locking/semaphore.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I'll fix it myself - thanks for the quick reply!
-
-Paolo
+diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+index 9ee381e4d2a4..97ad6a747d2f 100644
+--- a/kernel/locking/semaphore.c
++++ b/kernel/locking/semaphore.c
+@@ -225,6 +225,8 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
+ 		raw_spin_lock_irq(&sem->lock);
+ 		if (waiter.up)
+ 			return 0;
++		if (timeout)
++			goto interrupted;
+ 	}
+ 
+  timed_out:
+-- 
+2.20.1
 

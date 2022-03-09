@@ -2,196 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE1B4D2521
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BBC4D2525
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiCIBFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S229785AbiCIBF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiCIBEm (ORCPT
+        with ESMTP id S229893AbiCIBFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:04:42 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF57D131F74;
-        Tue,  8 Mar 2022 16:42:16 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:34420)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nRjy1-00AoKs-FO; Tue, 08 Mar 2022 17:14:13 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34136 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nRjy0-00EJ6q-01; Tue, 08 Mar 2022 17:14:13 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     <linux-kernel@vger.kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>, <linux-api@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
-        <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Tue, 08 Mar 2022 18:13:34 -0600
-In-Reply-To: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Mon, 03 Jan 2022 15:30:02 -0600")
-Message-ID: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 8 Mar 2022 20:05:09 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8643D136858
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:42:54 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z15so835257pfe.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:42:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C9mwhzMPXsuBhWeNQaY1yLcs8fwNMTqk4ERNtUz41w0=;
+        b=BDABS9uVQcFS/djzmKr84X48kvQ7FDJAHE5GyVdrdiXPfTAYC3kgAFEzfvB6h5+7Ne
+         DKI04IYSdFHK205mfzwOunyx4PHkbqy5VyoQ+nymhIwFfW7fLx6kcpzrepYQtmDNfncI
+         YRhh6zrCf45T/6Th5xWqyvHHaC1k7FaJUXexXtRN4AiXd2xH+N4D4P3m+p/ADG+Xg6ve
+         AFjeP6Jm272NK/5u/t9B1O8Qh2xSavwE4p9U+Dr8Oiwr+ilU5lrCUw3f+pMoIIM882Va
+         O0xSq8iwXs3eCyKaIJHJymhVdMnlCnaqFoNkx7QlKg6nFd850+5Z0Y1pVrPq8DGUnblw
+         V87g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C9mwhzMPXsuBhWeNQaY1yLcs8fwNMTqk4ERNtUz41w0=;
+        b=xXG4fbamR0X0V++pZvMLr9ud9LNeoACyb2KMoydq6l834wa9g1j1SKXPGxzOQTMfNE
+         H9jHjdMid4xC6wARxfp0uIBEhmSc0w2ie6UHyDOhzCfLyS73LK2xwpbNHBQuk5myQFoo
+         TuYOxQazOTMtf05nMAXGftdxpIIewAwvYeudar08L2toie7YQ3aCzCG0KIDWTSLgXHRV
+         TU5XHWczJdWR1/5F9tKWI81AKb2a2Tyu51yTwZ74g/Tw3f8faI8KlM30D7rhCnNafoFb
+         i4CIWPebu/2CMVRhjjzmU9ZffBWszBJYma1oEKDHVxGNTmWw8rPoBLXU6/CQ3vAxLeL9
+         U0bA==
+X-Gm-Message-State: AOAM533ESYdLXc8wGGQ/pGXsg1Wu8OPLAm7VXB/wcVmbobbggSx7MOp5
+        NJlEK2w2kPqw9Fa9IQN23w17cJ4pdw2IbtbrGDgItJx+0BkN+JNv
+X-Google-Smtp-Source: ABdhPJyBAfeSZLyjOQmRLVwYDPtCASEbExuTxYgwggPQnIDguzuOxXWN2t0qp9chTtu67kkdtr9sUGRdA8hf3NSsJIk=
+X-Received: by 2002:a1f:314b:0:b0:331:fff6:a89e with SMTP id
+ x72-20020a1f314b000000b00331fff6a89emr8182208vkx.26.1646784902851; Tue, 08
+ Mar 2022 16:15:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nRjy0-00EJ6q-01;;;mid=<87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19JrCxd+AEL/F62BtJfkuZkeiMsizbIS8Q=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220308234723.3834941-1-yuzhao@google.com> <CAHk-=wi5wg=72exwHODJdVtAfqa1e85dGfjGftuhHQ5Z4v-DNA@mail.gmail.com>
+In-Reply-To: <CAHk-=wi5wg=72exwHODJdVtAfqa1e85dGfjGftuhHQ5Z4v-DNA@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 8 Mar 2022 17:14:51 -0700
+Message-ID: <CAOUHufYFDawK6vmkQ16EQm7FSHresViifnxW2yj_RDuMSjJPjg@mail.gmail.com>
+Subject: Re: [PATCH v8 00/14] Multi-Gen LRU Framework
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;<linux-kernel@vger.kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 518 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 13 (2.5%), b_tie_ro: 11 (2.2%), parse: 1.73
-        (0.3%), extract_message_metadata: 7 (1.4%), get_uri_detail_list: 4.2
-        (0.8%), tests_pri_-1000: 6 (1.2%), tests_pri_-950: 1.82 (0.4%),
-        tests_pri_-900: 1.44 (0.3%), tests_pri_-90: 72 (13.9%), check_bayes:
-        70 (13.5%), b_tokenize: 17 (3.3%), b_tok_get_all: 11 (2.1%),
-        b_comp_prob: 3.3 (0.6%), b_tok_touch_all: 35 (6.8%), b_finish: 0.95
-        (0.2%), tests_pri_0: 385 (74.4%), check_dkim_signature: 0.88 (0.2%),
-        check_dkim_adsp: 3.4 (0.7%), poll_dns_idle: 1.31 (0.3%), tests_pri_10:
-        4.0 (0.8%), tests_pri_500: 12 (2.4%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 00/13] Removing tracehook.h
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 8, 2022 at 5:07 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Mar 8, 2022 at 3:48 PM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > The current page reclaim is too expensive in terms of CPU usage and it
+> > often makes poor choices about what to evict. This patchset offers an
+> > alternative solution that is performant, versatile and
+> > straightforward.
+>
+> So apart from my complaints about asking users config questions that
+> simply should not be asked, I really think this just needs to start
+> getting merged.
+>
+> We've seen several numbers on the upsides, and I don't think we'll see
+> any of the downsides until we try it. And I don't think there is any
+> question that we _shouldn't_ try it, given the numbers posted.
+>
+> But yeah, I certainly _hope_ that all the benchmarking has been done
+> with a unified set of config values, and it's not some kind of bogus
+> "cherry-picked config values for this particular machine" kind of
+> benchmarking that has been done.
+>
+> Because that isn't valid benchmarking - comparing some "tuned for this
+> paeticular machine or load" setup to a default one is just not worth
+> even setting numbers to, and debases the whole value of posting
+> results.
 
-While working on cleaning up do_exit I have been having to deal with the
-code in tracehook.h.  Unfortunately the code in tracehook.h does not
-make sense as organized.
+All benchmarks were done with the default config values. I'm removing
+those config options now.
 
-This set of changes reorganizes things so that tracehook.h no longer
-exists, and so that it's current contents are organized in a fashion
-that is a little easier to understand.
-
-The biggest change is that I lean into the fact that get_signal
-always calls task_work_run and removes the logic that tried to
-be smart and decouple task_work_run and get_signal as it has proven
-to not be effective.
-
-This is a conservative change and I am not changing the how things
-like signal_pending operate (although it is probably justified).
-
-A new header resume_user_mode.h is added to hold resume_user_mode_work
-which was previously known as tracehook_notify_resume.
-
-Eric W. Biederman (13):
-      ptrace: Move ptrace_report_syscall into ptrace.h
-      ptrace/arm: Rename tracehook_report_syscall report_syscall
-      ptrace: Create ptrace_report_syscall_{entry,exit} in ptrace.h
-      ptrace: Remove arch_syscall_{enter,exit}_tracehook
-      ptrace: Remove tracehook_signal_handler
-      task_work: Remove unnecessary include from posix_timers.h
-      task_work: Introduce task_work_pending
-      task_work: Call tracehook_notify_signal from get_signal on all architectures
-      task_work: Decouple TIF_NOTIFY_SIGNAL and task_work
-      signal: Move set_notify_signal and clear_notify_signal into sched/signal.h
-      resume_user_mode: Remove #ifdef TIF_NOTIFY_RESUME in set_notify_resume
-      resume_user_mode: Move to resume_user_mode.h
-      tracehook: Remove tracehook.h
-
- MAINTAINERS                          |   1 -
- arch/Kconfig                         |   5 +-
- arch/alpha/kernel/ptrace.c           |   5 +-
- arch/alpha/kernel/signal.c           |   4 +-
- arch/arc/kernel/ptrace.c             |   5 +-
- arch/arc/kernel/signal.c             |   4 +-
- arch/arm/kernel/ptrace.c             |  12 +-
- arch/arm/kernel/signal.c             |   4 +-
- arch/arm64/kernel/ptrace.c           |  14 +--
- arch/arm64/kernel/signal.c           |   4 +-
- arch/csky/kernel/ptrace.c            |   5 +-
- arch/csky/kernel/signal.c            |   4 +-
- arch/h8300/kernel/ptrace.c           |   5 +-
- arch/h8300/kernel/signal.c           |   4 +-
- arch/hexagon/kernel/process.c        |   4 +-
- arch/hexagon/kernel/signal.c         |   1 -
- arch/hexagon/kernel/traps.c          |   6 +-
- arch/ia64/kernel/process.c           |   4 +-
- arch/ia64/kernel/ptrace.c            |   6 +-
- arch/ia64/kernel/signal.c            |   1 -
- arch/m68k/kernel/ptrace.c            |   6 +-
- arch/m68k/kernel/signal.c            |   4 +-
- arch/microblaze/kernel/ptrace.c      |   5 +-
- arch/microblaze/kernel/signal.c      |   4 +-
- arch/mips/kernel/ptrace.c            |   5 +-
- arch/mips/kernel/signal.c            |   4 +-
- arch/nds32/include/asm/syscall.h     |   2 +-
- arch/nds32/kernel/ptrace.c           |   5 +-
- arch/nds32/kernel/signal.c           |   4 +-
- arch/nios2/kernel/ptrace.c           |   5 +-
- arch/nios2/kernel/signal.c           |   4 +-
- arch/openrisc/kernel/ptrace.c        |   5 +-
- arch/openrisc/kernel/signal.c        |   4 +-
- arch/parisc/kernel/ptrace.c          |   7 +-
- arch/parisc/kernel/signal.c          |   4 +-
- arch/powerpc/kernel/ptrace/ptrace.c  |   8 +-
- arch/powerpc/kernel/signal.c         |   4 +-
- arch/riscv/kernel/ptrace.c           |   5 +-
- arch/riscv/kernel/signal.c           |   4 +-
- arch/s390/include/asm/entry-common.h |   1 -
- arch/s390/kernel/ptrace.c            |   1 -
- arch/s390/kernel/signal.c            |   5 +-
- arch/sh/kernel/ptrace_32.c           |   5 +-
- arch/sh/kernel/signal_32.c           |   4 +-
- arch/sparc/kernel/ptrace_32.c        |   5 +-
- arch/sparc/kernel/ptrace_64.c        |   5 +-
- arch/sparc/kernel/signal32.c         |   1 -
- arch/sparc/kernel/signal_32.c        |   4 +-
- arch/sparc/kernel/signal_64.c        |   4 +-
- arch/um/kernel/process.c             |   4 +-
- arch/um/kernel/ptrace.c              |   5 +-
- arch/x86/kernel/ptrace.c             |   1 -
- arch/x86/kernel/signal.c             |   5 +-
- arch/x86/mm/tlb.c                    |   1 +
- arch/xtensa/kernel/ptrace.c          |   5 +-
- arch/xtensa/kernel/signal.c          |   4 +-
- block/blk-cgroup.c                   |   2 +-
- fs/coredump.c                        |   1 -
- fs/exec.c                            |   1 -
- fs/io-wq.c                           |   6 +-
- fs/io_uring.c                        |  11 +-
- fs/proc/array.c                      |   1 -
- fs/proc/base.c                       |   1 -
- include/asm-generic/syscall.h        |   2 +-
- include/linux/entry-common.h         |  47 +-------
- include/linux/entry-kvm.h            |   2 +-
- include/linux/posix-timers.h         |   1 -
- include/linux/ptrace.h               |  78 ++++++++++++
- include/linux/resume_user_mode.h     |  64 ++++++++++
- include/linux/sched/signal.h         |  17 +++
- include/linux/task_work.h            |   5 +
- include/linux/tracehook.h            | 226 -----------------------------------
- include/uapi/linux/ptrace.h          |   2 +-
- kernel/entry/common.c                |  19 +--
- kernel/entry/kvm.c                   |   9 +-
- kernel/exit.c                        |   3 +-
- kernel/livepatch/transition.c        |   1 -
- kernel/seccomp.c                     |   1 -
- kernel/signal.c                      |  23 ++--
- kernel/task_work.c                   |   4 +-
- kernel/time/posix-cpu-timers.c       |   1 +
- mm/memcontrol.c                      |   2 +-
- security/apparmor/domain.c           |   1 -
- security/selinux/hooks.c             |   1 -
- 84 files changed, 317 insertions(+), 462 deletions(-)
-
-Eric
+This sounds self-serving: our data centers want them, so I had to try.

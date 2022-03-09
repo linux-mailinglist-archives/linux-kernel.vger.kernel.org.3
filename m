@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577F74D29F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011BE4D29FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiCIH45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S230392AbiCIH4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiCIH4A (ORCPT
+        with ESMTP id S230469AbiCIH4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:56:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1BA163D46;
-        Tue,  8 Mar 2022 23:54:58 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:54:56 -0000
+        Wed, 9 Mar 2022 02:56:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37559163D6C;
+        Tue,  8 Mar 2022 23:54:59 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:54:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812497;
+        s=2020; t=1646812498;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PTP5lTxohWCmXELMqIblhLjNgPpl892lJBS/KOMP3YE=;
-        b=qsELHZ61d6g2ymVoJ44x865c1BVRLDdgo/aUxrmHWFFR9ogVTPHFLcLNoPg5ljG3L+hmNe
-        DYwNCprq0goJHdc2pZVW9ecFbEI/BM698nEHPkCcQ7HMDILDvv8XkSLkb06YNmZYmBARZS
-        LEbwvM7KE87FSqMDq+nBXAxM0GVso/HUP+WcGcAF9JFlve69xqDxzH/2obDzmJEZJis+eJ
-        jnMyZ9QJYVEEZ0JHuQ2v6KSq4SK5MI+uhzoW4wZ8/u/MPhoKy3ZQbN5N6cWdt/Q9FlybSi
-        CkQW+9Q0wGJKUuRjvNrO8Prcc4fcrO4hBeLUTQFctRkauZLEy3WWpkrV4S+c1w==
+        bh=Ccy4XzjRvU3p/tZbIiRcB/c7TDX5BH03yivR98VrUfM=;
+        b=xiPcvJ6vFoIGI3+hVVaP3yslkyTHO9cFYCzBLHx69hh8xaEEVWXtDWr5OgnrlPUWv6un+/
+        4NSJw2WyNjSFAHgZGVXD/0bW14aPpGtXtplzGKdU0v6yRSAoJel6+Ma4MEOvDFQqJ9dSZX
+        ctR93/QehbpMEnZbTtRJRHvdvlk9cZT558O00WrewViVP9p7j09Wrn2BcGAT5o4tHtvikn
+        HTsmbqZuNaLDcmzQmKzOQw0EhSPk3p8LtINsmy14rEgFzM90cxu5tjENhJrJK4AW/+ne6T
+        W8T3yGS18UqK5u2/qKJFJa9go2g8PY0hcF1gcJ4ABoizxwv2I2QFOKGm7IL8KQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812497;
+        s=2020e; t=1646812498;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PTP5lTxohWCmXELMqIblhLjNgPpl892lJBS/KOMP3YE=;
-        b=wO0C9eksDg5Zv6m4h1/ewrZe5JeC9nvGx8bPSuFsxfju0UkcKkU3ALPGNN3F/0Mua+45T8
-        sTg4iueNqTZERJAw==
+        bh=Ccy4XzjRvU3p/tZbIiRcB/c7TDX5BH03yivR98VrUfM=;
+        b=MQ+XtpjxK5I+MYqEZpQ6sRipbyHf4CbuyFhOqPTwgngdmXyN7jYTvaptlvsrVUSgOHDGDL
+        xB3dI4JVAXYSOQDg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/alternative: Simplify int3_selftest_ip
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: x86/core] x86/ibt,kexec: Disable CET on kexec
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154318.700456643@infradead.org>
-References: <20220308154318.700456643@infradead.org>
+In-Reply-To: <20220308154318.641454603@infradead.org>
+References: <20220308154318.641454603@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681249645.16921.5745445367445064904.tip-bot2@tip-bot2>
+Message-ID: <164681249728.16921.12285536796767172459.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,60 +67,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     8cdcaee61f7fe2d35ad8c3b3295ac7bd30244c7f
-Gitweb:        https://git.kernel.org/tip/8cdcaee61f7fe2d35ad8c3b3295ac7bd30244c7f
+Commit-ID:     f9a08abb06d0abe51295479118f1f8e4a4325798
+Gitweb:        https://git.kernel.org/tip/f9a08abb06d0abe51295479118f1f8e4a4325798
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:37 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:36 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 08 Mar 2022 23:53:34 +01:00
+CommitterDate: Tue, 08 Mar 2022 23:53:33 +01:00
 
-x86/alternative: Simplify int3_selftest_ip
+x86/ibt,kexec: Disable CET on kexec
 
-Similar to ibt_selftest_ip, apply the same pattern.
-
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154318.700456643@infradead.org
+Link: https://lore.kernel.org/r/20220308154318.641454603@infradead.org
 ---
- arch/x86/kernel/alternative.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/cpu.h           | 3 +++
+ arch/x86/kernel/cpu/common.c         | 6 ++++++
+ arch/x86/kernel/machine_kexec_64.c   | 4 +++-
+ arch/x86/kernel/relocate_kernel_64.S | 8 ++++++++
+ 4 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 5007c3f..de56b5c 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -719,7 +719,7 @@ asm (
- "	.popsection\n"
- );
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index a60025f..86e5e4e 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -73,4 +73,7 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+ #else
+ static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
+ #endif
++
++extern __noendbr void cet_disable(void);
++
+ #endif /* _ASM_X86_CPU_H */
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index db1f149..709acab 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -535,6 +535,12 @@ static __always_inline void setup_cet(struct cpuinfo_x86 *c)
+ 	}
+ }
  
--extern __initdata unsigned long int3_selftest_ip; /* defined in asm below */
-+extern void int3_selftest_ip(void); /* defined in asm below */
++__noendbr void cet_disable(void)
++{
++	if (cpu_feature_enabled(X86_FEATURE_IBT))
++		wrmsrl(MSR_IA32_S_CET, 0);
++}
++
+ /*
+  * Some CPU features depend on higher CPUID levels, which may not always
+  * be available due to CPUID level capping or broken virtualization
+diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
+index f5da4a1..566bb8e 100644
+--- a/arch/x86/kernel/machine_kexec_64.c
++++ b/arch/x86/kernel/machine_kexec_64.c
+@@ -27,6 +27,7 @@
+ #include <asm/kexec-bzimage64.h>
+ #include <asm/setup.h>
+ #include <asm/set_memory.h>
++#include <asm/cpu.h>
  
- static int __init
- int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
-@@ -733,7 +733,7 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
- 	if (val != DIE_INT3)
- 		return NOTIFY_DONE;
+ #ifdef CONFIG_ACPI
+ /*
+@@ -310,6 +311,7 @@ void machine_kexec(struct kimage *image)
+ 	/* Interrupts aren't acceptable while we reboot */
+ 	local_irq_disable();
+ 	hw_breakpoint_disable();
++	cet_disable();
  
--	if (regs->ip - INT3_INSN_SIZE != int3_selftest_ip)
-+	if (regs->ip - INT3_INSN_SIZE != (unsigned long)&int3_selftest_ip)
- 		return NOTIFY_DONE;
+ 	if (image->preserve_context) {
+ #ifdef CONFIG_X86_IO_APIC
+@@ -325,7 +327,7 @@ void machine_kexec(struct kimage *image)
+ 	}
  
- 	int3_emulate_call(regs, (unsigned long)&int3_magic);
-@@ -757,14 +757,7 @@ static void __init int3_selftest(void)
- 	 * then trigger the INT3, padded with NOPs to match a CALL instruction
- 	 * length.
- 	 */
--	asm volatile ("1: int3; nop; nop; nop; nop\n\t"
--		      ".pushsection .init.data,\"aw\"\n\t"
--		      ".align " __ASM_SEL(4, 8) "\n\t"
--		      ".type int3_selftest_ip, @object\n\t"
--		      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
--		      "int3_selftest_ip:\n\t"
--		      __ASM_SEL(.long, .quad) " 1b\n\t"
--		      ".popsection\n\t"
-+	asm volatile ("int3_selftest_ip: int3; nop; nop; nop; nop\n\t"
- 		      : ASM_CALL_CONSTRAINT
- 		      : __ASM_SEL_RAW(a, D) (&val)
- 		      : "memory");
+ 	control_page = page_address(image->control_code_page) + PAGE_SIZE;
+-	memcpy(control_page, relocate_kernel, KEXEC_CONTROL_CODE_MAX_SIZE);
++	__memcpy(control_page, relocate_kernel, KEXEC_CONTROL_CODE_MAX_SIZE);
+ 
+ 	page_list[PA_CONTROL_PAGE] = virt_to_phys(control_page);
+ 	page_list[VA_CONTROL_PAGE] = (unsigned long)control_page;
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index 399f075..5b65f6e 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -115,6 +115,14 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	pushq   %rdx
+ 
+ 	/*
++	 * Clear X86_CR4_CET (if it was set) such that we can clear CR0_WP
++	 * below.
++	 */
++	movq	%cr4, %rax
++	andq	$~(X86_CR4_CET), %rax
++	movq	%rax, %cr4
++
++	/*
+ 	 * Set cr0 to a known state:
+ 	 *  - Paging enabled
+ 	 *  - Alignment check disabled

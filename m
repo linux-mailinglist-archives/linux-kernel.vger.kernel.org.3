@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97654D340A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C303F4D32DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237914AbiCIQVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S235122AbiCIQQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiCIQMD (ORCPT
+        with ESMTP id S236227AbiCIQJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:12:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2969A145AF9;
-        Wed,  9 Mar 2022 08:09:32 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62B9139826;
+        Wed,  9 Mar 2022 08:08:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BDE661797;
-        Wed,  9 Mar 2022 16:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA3DC340E8;
-        Wed,  9 Mar 2022 16:09:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D069B82220;
+        Wed,  9 Mar 2022 16:08:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B536DC340E8;
+        Wed,  9 Mar 2022 16:08:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646842171;
-        bh=XWfPsTF81CkXJlNPj4xrj7j+Msen4QvmkKqcXNCg8eM=;
+        s=korg; t=1646842095;
+        bh=l37UARKIQ5Jo8vDSJTC9HNb2cDupJ6KmhPyrEn/bpO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YZCCS2WtLzpAx+OHDDzzlsYVJzaeqvUbf8KIpn4x1scjho0A0d1MFoHOW2WcIlweD
-         jV3IyAGD4+UhkfXYRsSaFTj0BZUC7GNbTRJYdykqg3iZaFJygikSVX2ExK++HOq21N
-         nj5a+8htCkFkh5VJBJjCpkxlw8aW+giMUFTq4KU4=
+        b=awCdttT8MOjXH0AHR1TIE/sbi8RYrMrMfa7ky+xYKSQD50yDv72Wnfy212Mtz3bY2
+         w5zali9Co31/iuw+qBBu1Xa2aJNEcuvEQ/jKEKpvdZoDLPD8UPOII36UdG0zE7/u2Z
+         2RPO68cuMdzd7ZqEmHIXOh0pkYBlj3/L3V6wNeT0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
         James Morse <james.morse@arm.com>
-Subject: [PATCH 5.16 22/37] arm64: entry: Move the trampoline data page before the text page
-Date:   Wed,  9 Mar 2022 17:00:23 +0100
-Message-Id: <20220309155859.732615481@linuxfoundation.org>
+Subject: [PATCH 5.15 40/43] arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+Date:   Wed,  9 Mar 2022 17:00:24 +0100
+Message-Id: <20220309155900.890647842@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
-References: <20220309155859.086952723@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,75 +56,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: James Morse <james.morse@arm.com>
 
-commit c091fb6ae059cda563b2a4d93fdbc548ef34e1d6 upstream.
+commit 58c9a5060cb7cd529d49c93954cdafe81c1d642a upstream.
 
-The trampoline code has a data page that holds the address of the vectors,
-which is unmapped when running in user-space. This ensures that with
-CONFIG_RANDOMIZE_BASE, the randomised address of the kernel can't be
-discovered until after the kernel has been mapped.
+The mitigations for Spectre-BHB are only applied when an exception is
+taken from user-space. The mitigation status is reported via the spectre_v2
+sysfs vulnerabilities file.
 
-If the trampoline text page is extended to include multiple sets of
-vectors, it will be larger than a single page, making it tricky to
-find the data page without knowing the size of the trampoline text
-pages, which will vary with PAGE_SIZE.
+When unprivileged eBPF is enabled the mitigation in the exception vectors
+can be avoided by an eBPF program.
 
-Move the data page to appear before the text page. This allows the
-data page to be found without knowing the size of the trampoline text
-pages. 'tramp_vectors' is used to refer to the beginning of the
-.entry.tramp.text section, do that explicitly.
+When unprivileged eBPF is enabled, print a warning and report vulnerable
+via the sysfs vulnerabilities file.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/fixmap.h |    2 +-
- arch/arm64/kernel/entry.S       |    9 +++++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ arch/arm64/kernel/proton-pack.c |   26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
---- a/arch/arm64/include/asm/fixmap.h
-+++ b/arch/arm64/include/asm/fixmap.h
-@@ -62,8 +62,8 @@ enum fixed_addresses {
- #endif /* CONFIG_ACPI_APEI_GHES */
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -18,6 +18,7 @@
+  */
  
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
--	FIX_ENTRY_TRAMP_DATA,
- 	FIX_ENTRY_TRAMP_TEXT,
-+	FIX_ENTRY_TRAMP_DATA,
- #define TRAMP_VALIAS		(__fix_to_virt(FIX_ENTRY_TRAMP_TEXT))
- #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
- 	__end_of_permanent_fixed_addresses,
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -644,6 +644,11 @@ alternative_else_nop_endif
- 	 */
- 	.endm
+ #include <linux/arm-smccc.h>
++#include <linux/bpf.h>
+ #include <linux/cpu.h>
+ #include <linux/device.h>
+ #include <linux/nospec.h>
+@@ -111,6 +112,15 @@ static const char *get_bhb_affected_stri
+ 	}
+ }
  
-+	.macro tramp_data_page	dst
-+	adr	\dst, .entry.tramp.text
-+	sub	\dst, \dst, PAGE_SIZE
-+	.endm
++static bool _unprivileged_ebpf_enabled(void)
++{
++#ifdef CONFIG_BPF_SYSCALL
++	return !sysctl_unprivileged_bpf_disabled;
++#else
++	return false;
++#endif
++}
 +
- 	.macro tramp_ventry, regsize = 64
- 	.align	7
- 1:
-@@ -660,7 +665,7 @@ alternative_else_nop_endif
- 2:
- 	tramp_map_kernel	x30
- #ifdef CONFIG_RANDOMIZE_BASE
--	adr	x30, tramp_vectors + PAGE_SIZE
-+	tramp_data_page		x30
- alternative_insn isb, nop, ARM64_WORKAROUND_QCOM_FALKOR_E1003
- 	ldr	x30, [x30]
- #else
-@@ -851,7 +856,7 @@ SYM_CODE_START(__sdei_asm_entry_trampoli
- 1:	str	x4, [x1, #(SDEI_EVENT_INTREGS + S_SDEI_TTBR1)]
- 
- #ifdef CONFIG_RANDOMIZE_BASE
--	adr	x4, tramp_vectors + PAGE_SIZE
-+	tramp_data_page		x4
- 	add	x4, x4, #:lo12:__sdei_asm_trampoline_next_handler
- 	ldr	x4, [x4]
- #else
+ ssize_t cpu_show_spectre_v2(struct device *dev, struct device_attribute *attr,
+ 			    char *buf)
+ {
+@@ -130,6 +140,9 @@ ssize_t cpu_show_spectre_v2(struct devic
+ 		v2_str = "CSV2";
+ 		fallthrough;
+ 	case SPECTRE_MITIGATED:
++		if (bhb_state == SPECTRE_MITIGATED && _unprivileged_ebpf_enabled())
++			return sprintf(buf, "Vulnerable: Unprivileged eBPF enabled\n");
++
+ 		return sprintf(buf, "Mitigation: %s%s\n", v2_str, bhb_str);
+ 	case SPECTRE_VULNERABLE:
+ 		fallthrough;
+@@ -1125,3 +1138,16 @@ void __init spectre_bhb_patch_clearbhb(s
+ 	*updptr++ = cpu_to_le32(aarch64_insn_gen_nop());
+ 	*updptr++ = cpu_to_le32(aarch64_insn_gen_nop());
+ }
++
++#ifdef CONFIG_BPF_SYSCALL
++#define EBPF_WARN "Unprivileged eBPF is enabled, data leaks possible via Spectre v2 BHB attacks!\n"
++void unpriv_ebpf_notify(int new_state)
++{
++	if (spectre_v2_state == SPECTRE_VULNERABLE ||
++	    spectre_bhb_state != SPECTRE_MITIGATED)
++		return;
++
++	if (!new_state)
++		pr_err("WARNING: %s", EBPF_WARN);
++}
++#endif
 
 

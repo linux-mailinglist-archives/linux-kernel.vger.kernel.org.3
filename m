@@ -2,196 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198AE4D2A67
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376D94D2A73
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiCIIPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S231250AbiCIISU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiCIIPj (ORCPT
+        with ESMTP id S231230AbiCIISS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:15:39 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB59EB166;
-        Wed,  9 Mar 2022 00:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646813681; x=1678349681;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=INwh7wf9yUTzAqL1clBsB0C8mwgobM+LmmSdQXzNAQk=;
-  b=cKSbjPegtfZiZtdoQDNVuNOw5Ds73iuff/em0uGmevUK5SSb7SlmNMeM
-   eRop/zRduBKIJpJkTsQwDWesxUYeqkwyvr8eeuAhLxcfJ5CPSGkeJvkS2
-   2s27gxQoJJ/yymUXISeJiu8cJvegIu4MB3KWg4RY11lgStgjemnRIlHse
-   myCRtKB7yTRl+KpN6e1NtVR+i4IGAP3f6BNIO+QvA2m+oiVk/wyBMmxF9
-   w09VOsY29sUP92NWZE0JwNKKQjWnRuUshsQN+OaOkBcu9ZwJr6RH6iUeD
-   OO0GhLLuoF/XOwaaJIywW4eT5QvzUk6qYaDL9VQSG5FXP0mrLJ3ms+26Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="279642452"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="279642452"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 00:14:41 -0800
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="688220746"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 00:14:38 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, urezki@gmail.com
-Cc:     bigeasy@linutronix.de, juri.lelli@redhat.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] rcu: Only boost rcu reader tasks with lower priority than boost kthreads
-Date:   Wed,  9 Mar 2022 16:15:23 +0800
-Message-Id: <20220309081523.348450-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Mar 2022 03:18:18 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31AC166E0E;
+        Wed,  9 Mar 2022 00:17:18 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id a14so1238069qtx.12;
+        Wed, 09 Mar 2022 00:17:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=35/fzUJmyZh70VM9SdFaR6MnuP0bGFW2YUKkfdLZvtY=;
+        b=zzG6gwLgkifK3NHs5l5W1mPnbMjdYn46UtmzYYMPZwdQYD5couPR/uUPBm6t1YFirv
+         7XK2BGCegVzuGKhXW5HrfdY0T17+rUlK1Xu6cVM+Z35CSrr/ClJmPo9p5t7jchZota2w
+         bujy7xf/E2lKqnLbLY9PCFvFmluLy/SSCnTe3uz7QQ6RqCbBhs4RtOJ3nzs3Zexo9APq
+         QS52b3LfRs4mwTbgHcZMOZSjNaOPVM6IZOSRMqmIcwOrVIEbJpCyUp4ZYqX/Wh4RLRjT
+         IA9XVtYa0nVHUJx+0rtIzbsCqamR5CeaifdjPDT05tlW3/7rlTsuyuvJ7G3ybzYouxZH
+         x5zg==
+X-Gm-Message-State: AOAM532VRFC/uIT2I+wBdNGokQlY7aKh4ZhPexkVjuyXniLeTt5H50py
+        XOQ74GeWyUR+7T0kjD1v0v/POdzCrv3/6Q==
+X-Google-Smtp-Source: ABdhPJy5NUZ1e22kMEvbrC3NoR38LNeI0GEHpPtEAwp6L8m2FR1dzz9+fYtJomuTQ1sat7Z0f5zxRw==
+X-Received: by 2002:ac8:59d5:0:b0:2e0:775e:ed9e with SMTP id f21-20020ac859d5000000b002e0775eed9emr4385680qtf.419.1646813837622;
+        Wed, 09 Mar 2022 00:17:17 -0800 (PST)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id q8-20020a05622a04c800b002e06d7c1eabsm925904qtx.16.2022.03.09.00.17.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 00:17:16 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2dbfe58670cso14305817b3.3;
+        Wed, 09 Mar 2022 00:17:16 -0800 (PST)
+X-Received: by 2002:a81:6dd1:0:b0:2dc:56d1:1dae with SMTP id
+ i200-20020a816dd1000000b002dc56d11daemr15691271ywc.479.1646813836049; Wed, 09
+ Mar 2022 00:17:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220308212315.4551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220308212315.4551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Mar 2022 09:17:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXpZrfuXBh1-mfv2z9aaUpUEjotCgr-i70sv72WN55_dw@mail.gmail.com>
+Message-ID: <CAMuHMdXpZrfuXBh1-mfv2z9aaUpUEjotCgr-i70sv72WN55_dw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/V2L bindings
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When RCU_BOOST is enabled, the boost kthreads will boosting readers
-who are blocking a given grace period, if the current reader tasks
-have a higher priority than boost kthreads(the boost kthreads priority
-not always 1, if the kthread_prio is set), boosting is useless, skip
-current task and select next task to boosting, reduce the time for a
-given grace period.
+On Tue, Mar 8, 2022 at 10:23 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/V2L TSU bindings. The TSU block on RZ/V2L is identical to one
+> found on RZ/G2L SoC. No driver changes are required as generic compatible
+> string "renesas,rzg2l-tsu" will be used as a fallback.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- v1->v2:
- rename label 'end' to 'skip_boost'.
- add 'boost_exp_tasks' pointer to point 'rnp->exp_tasks'
- do the similar thing as normal grace period.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
- kernel/rcu/tree.h        |  2 ++
- kernel/rcu/tree_plugin.h | 31 +++++++++++++++++++++++--------
- 2 files changed, 25 insertions(+), 8 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index b8d07bf92d29..862ca09b56c7 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -103,6 +103,8 @@ struct rcu_node {
- 				/*  queued on this rcu_node structure that */
- 				/*  are blocking the current grace period, */
- 				/*  there can be no such task. */
-+	struct list_head *boost_exp_tasks;
-+
- 	struct rt_mutex boost_mtx;
- 				/* Used only for the priority-boosting */
- 				/*  side effect, not as a lock. */
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index c3d212bc5338..22bf5a8040f5 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -12,6 +12,7 @@
-  */
- 
- #include "../locking/rtmutex_common.h"
-+#include <linux/sched/deadline.h>
- 
- static bool rcu_rdp_is_offloaded(struct rcu_data *rdp)
- {
-@@ -535,6 +536,8 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
- 			drop_boost_mutex = rt_mutex_owner(&rnp->boost_mtx.rtmutex) == t;
- 			if (&t->rcu_node_entry == rnp->boost_tasks)
- 				WRITE_ONCE(rnp->boost_tasks, np);
-+			if (&t->rcu_node_entry == rnp->boost_exp_tasks)
-+				WRITE_ONCE(rnp->boost_exp_tasks, np);
- 		}
- 
- 		/*
-@@ -1022,7 +1025,7 @@ static int rcu_boost(struct rcu_node *rnp)
- 	struct task_struct *t;
- 	struct list_head *tb;
- 
--	if (READ_ONCE(rnp->exp_tasks) == NULL &&
-+	if (READ_ONCE(rnp->boost_exp_tasks) == NULL &&
- 	    READ_ONCE(rnp->boost_tasks) == NULL)
- 		return 0;  /* Nothing left to boost. */
- 
-@@ -1032,7 +1035,7 @@ static int rcu_boost(struct rcu_node *rnp)
- 	 * Recheck under the lock: all tasks in need of boosting
- 	 * might exit their RCU read-side critical sections on their own.
- 	 */
--	if (rnp->exp_tasks == NULL && rnp->boost_tasks == NULL) {
-+	if (rnp->boost_exp_tasks == NULL && rnp->boost_tasks == NULL) {
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 		return 0;
- 	}
-@@ -1043,8 +1046,8 @@ static int rcu_boost(struct rcu_node *rnp)
- 	 * expedited grace period must boost all blocked tasks, including
- 	 * those blocking the pre-existing normal grace period.
- 	 */
--	if (rnp->exp_tasks != NULL)
--		tb = rnp->exp_tasks;
-+	if (rnp->boost_exp_tasks != NULL)
-+		tb = rnp->boost_exp_tasks;
- 	else
- 		tb = rnp->boost_tasks;
- 
-@@ -1065,14 +1068,24 @@ static int rcu_boost(struct rcu_node *rnp)
- 	 * section.
- 	 */
- 	t = container_of(tb, struct task_struct, rcu_node_entry);
-+	if (dl_task(t) || t->prio <= current->prio) {
-+		tb = rcu_next_node_entry(t, rnp);
-+		if (rnp->boost_exp_tasks)
-+			WRITE_ONCE(rnp->boost_exp_tasks, tb);
-+		else
-+			WRITE_ONCE(rnp->boost_tasks, tb);
-+		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+		goto skip_boost;
-+	}
-+
- 	rt_mutex_init_proxy_locked(&rnp->boost_mtx.rtmutex, t);
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	/* Lock only for side effect: boosts task t's priority. */
- 	rt_mutex_lock(&rnp->boost_mtx);
- 	rt_mutex_unlock(&rnp->boost_mtx);  /* Then keep lockdep happy. */
- 	rnp->n_boosts++;
--
--	return READ_ONCE(rnp->exp_tasks) != NULL ||
-+skip_boost:
-+	return READ_ONCE(rnp->boost_exp_tasks) != NULL ||
- 	       READ_ONCE(rnp->boost_tasks) != NULL;
- }
- 
-@@ -1090,7 +1103,7 @@ static int rcu_boost_kthread(void *arg)
- 		WRITE_ONCE(rnp->boost_kthread_status, RCU_KTHREAD_WAITING);
- 		trace_rcu_utilization(TPS("End boost kthread@rcu_wait"));
- 		rcu_wait(READ_ONCE(rnp->boost_tasks) ||
--			 READ_ONCE(rnp->exp_tasks));
-+			 READ_ONCE(rnp->boost_exp_tasks));
- 		trace_rcu_utilization(TPS("Start boost kthread@rcu_wait"));
- 		WRITE_ONCE(rnp->boost_kthread_status, RCU_KTHREAD_RUNNING);
- 		more2boost = rcu_boost(rnp);
-@@ -1129,13 +1142,15 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 		return;
- 	}
--	if (rnp->exp_tasks != NULL ||
-+	if ((rnp->exp_tasks != NULL && rnp->boost_exp_tasks == NULL) ||
- 	    (rnp->gp_tasks != NULL &&
- 	     rnp->boost_tasks == NULL &&
- 	     rnp->qsmask == 0 &&
- 	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld))) {
- 		if (rnp->exp_tasks == NULL)
- 			WRITE_ONCE(rnp->boost_tasks, rnp->gp_tasks);
-+		else
-+			WRITE_ONCE(rnp->boost_exp_tasks, rnp->exp_tasks);
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 		rcu_wake_cond(rnp->boost_kthread_task,
- 			      READ_ONCE(rnp->boost_kthread_status));
--- 
-2.25.1
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

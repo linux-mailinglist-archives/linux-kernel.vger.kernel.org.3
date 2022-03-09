@@ -2,126 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12F24D3BB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3426A4D3BB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbiCIVGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S238325AbiCIVGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiCIVGg (ORCPT
+        with ESMTP id S238287AbiCIVGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:06:36 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702A0104595;
-        Wed,  9 Mar 2022 13:05:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IRpt43NhWtFoqGtJqfhzk6TTmkqzVV5I6VeNfB9/AaXXa2MzHRYT5/grEjctzUDnZsjbm50vSpGJW3kPj8iMt9YPh2tv1FL/v93BkvskORkGYjyt99hCUs2I/hVfWmcVc6PXR6+kxlPgeHT1KdW0eYCY0Dg1eOV8A+u7xJ2SN/+EFoXOoEzCnQEYuRJc0/JvCeJdK6w6QognhurKZ6vXZc5nBgY64vTAQmidJd3lZZU7uH7uzqjV5XdT47GPe85lLQ30xD+prx180kTeWkbLbVt4fgqm+j13RBOTyeMkpxXb+Bmv3Mq0kzU4kCKB4GZ3U+TysKAN0Mk5WMkW9Tb5ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=obF0+DMQxesUte1LU2GML3+R3XealUGeK7ZSAExOSQw=;
- b=aWkUSuuFU5QkjG/dQq7bzD599JsxVv5dXgW8sleOxBsrJL2nnhA/LkufkvFyHgqk45cC6CMtKKi5cO3OKlbXPMKlpWOVnu+kqoW3JwLPk3EEuTxF1nFseVzLYNSX4Stk9AglpgTYtuX/kpnj8jP670XRlrE9E78w+JKUFVoJC/iJw23CyhebUQypSg1hc4Y0D7Bt5DS9KdMCfGRhZeGPvgcV1hsp5FVGYZbwzEpj8sjqF8yNhLQlatkORVomD5Jedf8Quzfvlocpb4LD+hjwyf4aOjj99jFIO6QyJitNsJyeAqVrVn0bqTQzvUx9YPWDeUYCxK7+8wDxMsVyLg8emQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=obF0+DMQxesUte1LU2GML3+R3XealUGeK7ZSAExOSQw=;
- b=Y8GlaEMRpMgwtQfix3zHMEHp1g7+X8s0vQa4E2eSVg6Q2ZrMphCugjA5UrdCGAc6arhAUz95ERNR95vC2rBRzClShYdA/vTaIMwPHfj5TNTsgGq3cZUk53m0KGGUKjQom1insF0ORUGPhxIjQtxa8GRpPIgKsOXTGY2WhobyBb0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM4PR12MB5247.namprd12.prod.outlook.com (2603:10b6:5:39b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 21:05:34 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ad74:927:9e6:d2cd]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ad74:927:9e6:d2cd%2]) with mapi id 15.20.5038.029; Wed, 9 Mar 2022
- 21:05:34 +0000
-Date:   Wed, 9 Mar 2022 21:05:30 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-        william.roche@oracle.com
-Subject: Re: [PATCH v4 0/2] AMD Family 19h Models 10h-1Fh Updates
-Message-ID: <YikWmqJ6y4V9yXHv@yaz-ubuntu>
-References: <20220202144307.2678405-1-yazen.ghannam@amd.com>
- <YiTezZBrQ8PVu80E@nazgul.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiTezZBrQ8PVu80E@nazgul.tnic>
-X-ClientProxiedBy: CH0PR03CA0055.namprd03.prod.outlook.com
- (2603:10b6:610:b3::30) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Wed, 9 Mar 2022 16:06:52 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC2D108558
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:05:53 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id b14so2397037ilf.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 13:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hH3C1LhyPaDv8wejLOvzBm1bdTcO+3Rix77JV0niJRQ=;
+        b=hrOos9iyqn4LWGeeERyxvhB9pbIfNlnkwRtaGZGSJdSUr1jnK1LRFN+fn3EaBq0g6l
+         /MHI18Xq9Dskl9lrgaR1BHZWHBHwYEjdaSyly9LODKjcG3XhqfIoLOHV6W58uzUaR+AB
+         uoASIXG0rXUG8UNMqZiSPrRfsL+5R09idXvIb680Mghq+vD+h68+LYQepaufunkpnEVR
+         yKrAVsCLOyAs+72ZGWlc2KDBM/Wy7QmVrUfkfgXctInw03vB1vu/L6sPIhS3uQ8J5b7j
+         5bZZIxJd3lY7gv2NImVbrhFoCb/8aJ5D/6ZAe55u3/k9wia/8AEFJDLbDDuqwOx50TC2
+         qFww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hH3C1LhyPaDv8wejLOvzBm1bdTcO+3Rix77JV0niJRQ=;
+        b=F5ApEZOgY63WuUrCpMWRqBim2358PEg4CFILsWjSiX98R90+C0vHvIDtDrlprPePq3
+         5fV3AZJ3zs11qxDQwaKw3zhp4PDpTa72+0R1xAp+/lUAuUugQHGwv5D6ndxcxMC2nlqg
+         rsEFZ5jAsSfB75DbrnbXwmyI5tZJzFxsgYOdsSuW97XSfUSbJgSbNal3zQI3PsjouKlR
+         m0pjIJgEMtq50F6RxG2VDlFnWtWAsIBYUHcaGGNOyXbNUkA2XG3nSGP4BzWZrdGzz6Yj
+         kyG30a5qBFJwLKONjzb+mjKEGmfXIa7aGOqoVg/ck7OfHzcGoBDGk06sgMNvfJfnGVzI
+         s7WQ==
+X-Gm-Message-State: AOAM5330z7b1fDfB2uHlPa6g+jr24PPRb3alPG2Nc32vkseg3Kz6OTHb
+        ayyypxbple/jgfqRWxAiKDFzow==
+X-Google-Smtp-Source: ABdhPJwBI32AGLKEvw7cjjVqa0Yyd5Obb2Z1aOnpo9pbWYogwdmD3ytasmnnHPA/YfrmfL3MxaSyKw==
+X-Received: by 2002:a92:c810:0:b0:2c6:ba9:6a42 with SMTP id v16-20020a92c810000000b002c60ba96a42mr975528iln.275.1646859952437;
+        Wed, 09 Mar 2022 13:05:52 -0800 (PST)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id d16-20020a05660225d000b00645c8db7767sm1568074iop.35.2022.03.09.13.05.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 13:05:51 -0800 (PST)
+Message-ID: <01459886-2393-665a-43b1-70082ceace0c@kernel.dk>
+Date:   Wed, 9 Mar 2022 14:05:50 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f7d52417-2813-468e-5ef8-08da02108daf
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5247:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB52473A99B156FA00462AC853F80A9@DM4PR12MB5247.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A/W3znMsOP864C7UZScdpCg3taYB7aC4s6/1MzvQO65ETmyzLKJFeJcg8UNXQjQvqSYMXAdz/2t/SqJaMXD7vISr/1LhEg6YIZPt3Lq84Cku1a/KIxZxJJ5fe8kOMeVSxN1a7Vo5p4vXhv2lQE113RfZ08lr2rcNXRnHYAC9h5CNN2HnxVVvk0bOdTZMxjByZboWFme8uvDJCs6g1/SyNCOzUH4Zzj1yJbjXWXvn3Vd9+EkXrbJZMh1ouTGb3hnGYayx7mX11eeFNlrZsVo2Y/9p1ym/puPyEqPN8eeEjtRtf8cpKCpMuU0NsDzBoMrzpwTHW1+p6RA2jLCXnC68Zqg1/0C6mlyJyy0Ab81KqGdDQ4jYLj9PHc0/iz68esn93zzXSYw+SgjHVIu74rw2Lp5MEF7NDjKRtYqbX+yke6FZmyV0j/yebcG5aGt8eX9tiAqDuUWtGE8PKtTUY/ATvgFJOQV7UE2kO0u1B1/8sLRSua6oMoiv2vBEu9cKGNJ8zFhOE41eKqcmJkO+Zoir6WR6vz/C0kwdQDg+JxnYS4rPttv/3rFcBejaQWZlGRReyX66iWXrr45AENzYiT/UykGn1Ho7aNpZSeWhA5heYSV7XDAC1H68wLcSCWPWD/46MhWVSra1WAmvP+f0X7rmiw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(8676002)(2906002)(38100700002)(508600001)(6666004)(186003)(26005)(44832011)(5660300002)(8936002)(86362001)(558084003)(6916009)(66556008)(66476007)(66946007)(33716001)(316002)(6506007)(6512007)(9686003)(4326008)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fea0chbmdhpiC5FgjQumjKTIvjP0GyVuP8KRjZeufNjfBzETGA7ElBmvkubT?=
- =?us-ascii?Q?qFv/guP1RFFgns+zE2FDel/lmii9WhHFnJYb2S00A+VdovcLQHpgbZ3Dyb5e?=
- =?us-ascii?Q?BnrFGYx0f66rjg/q8Oalf5VhhhsEK+uc8C1DmXeLo7uqhJg26QPNCb1/I4Yr?=
- =?us-ascii?Q?v9YsnkxnC9+917KxNYyNv3vNaMxpK1yA5peGDXQ4hOOPvxT4c5eYhlp6ZHAl?=
- =?us-ascii?Q?Ku4DTJmwk6MzvC+rEIKgNamBlrvaAnvywZUjRCsjnty92vMTZRbSQ+2oFu5G?=
- =?us-ascii?Q?fsOR0l+XVGsRP9pBBQhTZgH8YbIFnvrR0PF4enz0xjQh3UNly2rCkZ+FKl1A?=
- =?us-ascii?Q?9pwHfoMnpI7UHJSBg4FmMUTlOmSx4WrPXLQFpbii+X8h74ZNojgjae1lPIeX?=
- =?us-ascii?Q?GCG6LTO4UMfnawaolQWiXMbgB7xcYcg49YG7gZpw+WIAKOd56ERY/BFd9dm3?=
- =?us-ascii?Q?Lzb0Ww9phX2CobFHSjF8g+HgqZmIc8/BynIzcpE3tuRoxX11priBYJTE+60z?=
- =?us-ascii?Q?6GiXaHT5/V68BQLQePG04imhnQgp3dIzWQ12RIQiurAKgLG0zbiY98L3DKj/?=
- =?us-ascii?Q?D1Pmp8/zau8w/bZ/KYGytldngwihY7ojlb+WTqQP/bvyl2GNuGcnQPGSCYMI?=
- =?us-ascii?Q?jZuNYUN7RzfVY/uIgNh3qDtrbs6kesHF5wl3G/Wmb6q/L72Jj90/VV/2CrCW?=
- =?us-ascii?Q?pJKWZQCIRffLOxLHrQeU1np9B2F0PNqe1JwEiMP6n6fdAwvjF8PDQkKg7aik?=
- =?us-ascii?Q?0Y8rUEhZ4d/9hpRCOvuQtBu9ucX8cVt88/Pnlbw2D0BKtY51PAv1p/A82cUW?=
- =?us-ascii?Q?WqAjxmg4ZTBFviUG65XvvL+Vk58GfvxxSqmSeZiuZQZXo2hbwEDuHlv5tnXj?=
- =?us-ascii?Q?FPjuD7aKneYNVvJxfyH+ZpYUa9W6tKZrrZaK9kqTJ+hpekqDkY/DGTXwIvoC?=
- =?us-ascii?Q?zNGA5ChY/6GPBpsw2qSH+bIPaoOSPAPmB32OUJEIz7dJ/Til/FPpRVat1Dc7?=
- =?us-ascii?Q?AqBe+wTB8C20HvtFBmN4C6Tt70/mQIfSJyIu7NoaaVfmULIqLQeOxuuIy/pt?=
- =?us-ascii?Q?M7JlV5SP5BqQxvjxfE4pZ7wBKOZXXS2aftRD9H0BtqEh/wGh951HUSbl9KwJ?=
- =?us-ascii?Q?hDotiRkSvM0nRGlparWbp99BOn66+YJCT5ZKGDT1hNfEZe81sXA2xWtVQWTI?=
- =?us-ascii?Q?HiHzA5Zh+pjutn1YNx6Z4yL4PImqY5bB+6oW5+q4PIzrgfhfawJEnzHSjO/c?=
- =?us-ascii?Q?TpJCzDERi14dO7wytQrZjlsWe7OlqJQc9+65GkGUkVs29+eLeWU4wt6OhNv0?=
- =?us-ascii?Q?saE/vpKtD4HIPgpNqRbhk7Oz8RUfM/+AuOFMOHbCfYS2clUe3Q/+AezMZdlK?=
- =?us-ascii?Q?If5Yf4T46FhX09ksQ820cg7JyEFqnBgSfMBwjxRmzSozH/DMe5UeX1cJYTc7?=
- =?us-ascii?Q?U8/3Ycck//o+TvD7GwJwz+VcN/c3e0MR0/vm1fnAgge6JdxWAuZFykM4IGPv?=
- =?us-ascii?Q?J2fLkclNFR1BWtS00UMbiZe1HbcxkcENIx/mbTEtc3hc8OfTKrmMg8idUxNu?=
- =?us-ascii?Q?W+vSn+b7YJTZDPLjSvq1hEaO3PhFToJdRMZfCUYxVMs5nHXX6L46GyECexQU?=
- =?us-ascii?Q?0xJq82eu/Podt0nEj2C7Uek=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7d52417-2813-468e-5ef8-08da02108daf
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 21:05:34.7565
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qfVKxIbjdjPM9dQiOeNOJEPF/nnZR3glCN30V+mtIqB9dXBRjva1uskLIp+jUxTbaq+4HdFagzymFj808hCpHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5247
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 07/13] task_work: Introduce task_work_pending
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>
+References: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+ <20220309162454.123006-7-ebiederm@xmission.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220309162454.123006-7-ebiederm@xmission.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 05:18:31PM +0100, Borislav Petkov wrote:
-> 
-> Queued, thanks.
->
+On 3/9/22 9:24 AM, Eric W. Biederman wrote:
+> diff --git a/include/linux/task_work.h b/include/linux/task_work.h
+> index 5b8a93f288bb..897494b597ba 100644
+> --- a/include/linux/task_work.h
+> +++ b/include/linux/task_work.h
+> @@ -19,6 +19,11 @@ enum task_work_notify_mode {
+>  	TWA_SIGNAL,
+>  };
+>  
+> +static inline bool task_work_pending(struct task_struct *task)
+> +{
+> +	return READ_ONCE(task->task_works);
+> +}
+> +
 
-Thank you!
+Most of the checks for this is current, do we need READ_ONCE here?
 
--Yazen 
+-- 
+Jens Axboe
+

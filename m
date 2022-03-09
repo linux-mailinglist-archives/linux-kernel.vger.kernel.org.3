@@ -2,240 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69C54D3AD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E80C4D3ACC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbiCIUKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S237565AbiCIUHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiCIUKr (ORCPT
+        with ESMTP id S229972AbiCIUHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:10:47 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF4EA1473;
-        Wed,  9 Mar 2022 12:09:48 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so2565033otl.6;
-        Wed, 09 Mar 2022 12:09:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l/Y0orG9IQYI6xXeORs6dX5FqeH3cCXmO8RJhBrMe4c=;
-        b=KzUcXG+M1geM2fDorFpsleyafRdyPW9hPdY/aRSipPM2CgE6Bjqz8bj8ZOPSCsfFBH
-         1MkMLhs6QHFtHLuVQFSnNV6O9iNflRUF8W/0NbC4wMsjh+zd2lnMNhKjGmDzwnTlnB9B
-         TORq9vvIUdbCFpExeZ2onIxiHI0hviqutChGmEURminZUS1UmClgPwPlx8+mnm/Mk60A
-         /lIusYWZX1WwbVqxf8YCP5djfaJLpSfcDpBOik8+sp2qyg8Qk1DOC45iC5yfeSCAdOtl
-         CpslrTI0Mm9jlnorG7ps9+ST1hw9E3V2SE8qF3UvABj5klytmo0gG+trwbLBB6Y9bYml
-         lBHg==
-X-Gm-Message-State: AOAM533ZRSVz/qGNAtgHrHxBLvEvQXJhNyfBLIka3tpTKm9TbsZrNIYJ
-        1mOgVDV4PFQi6aGczPHhhBJhFEVbzTUUtQ==
-X-Google-Smtp-Source: ABdhPJyJEsLNSasJ9qqPtlIyypXG3n1yKrUAcLPuryL9NkiSTkSEhaobT5U8PGjK8szlTjMGsq8TkA==
-X-Received: by 2002:a05:6830:1ac4:b0:5b2:319a:8c3 with SMTP id r4-20020a0568301ac400b005b2319a08c3mr799214otc.203.1646856587411;
-        Wed, 09 Mar 2022 12:09:47 -0800 (PST)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
-        by smtp.gmail.com with ESMTPSA id l3-20020a056830268300b005b21c30a3c5sm1526742otu.29.2022.03.09.12.09.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 12:09:47 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id k9-20020a056830242900b005ad25f8ebfdso2563225ots.7;
-        Wed, 09 Mar 2022 12:09:47 -0800 (PST)
-X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
- v133-20020a81618b000000b002dbd9528a39mr1323277ywb.132.1646856254887; Wed, 09
- Mar 2022 12:04:14 -0800 (PST)
+        Wed, 9 Mar 2022 15:07:37 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF9327CC5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:06:38 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 514EB1F41CDC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646856397;
+        bh=upzAnz+AemcOXDgluXZyqh6OsAIdv9e6PtW9m0nL/eY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gAc0WsraZucHzFdCM5DkNgzQK3fhxUgZGbi3q9C2S0WkfH62pOsS7vE5qTN6asQ8p
+         eFNBCuz7uqtDfjh0K79h7YNLUAY6T6Ga0700BpxFPZiMcFKxpGQOPZKOPl3xF9uy3h
+         MwoWvvnGfTUZg9E+wzjsDD3AOKgqjp20vd+OozepoSgbhSt3MgwBEscof+o+96DjTH
+         8dNA+xA9OK4KaeNqwvc5TQijt0/npkRPawqTws+CgwlsiffeFl7pBBV5HhoO6Dsflq
+         3e7HPo5NSfmqYFOu9ubN/OIdAwyka4neXLHb86PqF/xfcQdjLPqPXxM6eF0D0r5ftl
+         gnBZuijXaUiIQ==
+Message-ID: <05e1fe61-1c29-152f-414b-cd6a44525af0@collabora.com>
+Date:   Wed, 9 Mar 2022 23:06:33 +0300
 MIME-Version: 1.0
-References: <20220214133710.3278506-1-javierm@redhat.com> <20220214133710.3278506-4-javierm@redhat.com>
-In-Reply-To: <20220214133710.3278506-4-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Mar 2022 21:04:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUuTAsqpx4=WnosfyjLo-t9ryQPQMaE1OeMBk4Ws9DTpQ@mail.gmail.com>
-Message-ID: <CAMuHMdUuTAsqpx4=WnosfyjLo-t9ryQPQMaE1OeMBk4Ws9DTpQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux PWM List <linux-pwm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+ <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
+ <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
+ <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
+ <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+On 3/9/22 03:56, Rob Clark wrote:
+>> If we really can't track madvise state in the guest for dealing with
+>> host memory pressure, I think the better option is to introduce
+>> MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
+>> buffer is needed but the previous contents are not (as long as the GPU
+>> VA remains the same).  With this the host could allocate new pages if
+>> needed, and the guest would not need to wait for a reply from host.
+> If variant with the memory ballooning will work, then it will be
+> possible to track the state within guest-only. Let's consider the
+> simplest variant for now.
+> 
+> I'll try to implement the balloon driver support in the v2 and will get
+> back to you.
+> 
 
-On Mon, Feb 14, 2022 at 2:37 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> This adds a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
-> OLED display controllers.
->
-> It's only the core part of the driver and a bus specific driver is needed
-> for each transport interface supported by the display controllers.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+I looked at the generic balloon driver and looks like this not what we
+want because:
 
-> --- /dev/null
-> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+1. Memory ballooning is primarily about handling memory overcommit
+situations. I.e. when there are multiple VMs consuming more memory than
+available in the system. Ballooning allows host to ask guest to give
+unused pages back to host and host could give pages to other VMs.
 
-> +static int ssd130x_update_rect(struct ssd130x_device *ssd130x, u8 *buf,
-> +                              struct drm_rect *rect)
-> +{
-> +       unsigned int x = rect->x1;
-> +       unsigned int y = rect->y1;
-> +       unsigned int width = drm_rect_width(rect);
-> +       unsigned int height = drm_rect_height(rect);
-> +       unsigned int line_length = DIV_ROUND_UP(width, 8);
-> +       unsigned int pages = DIV_ROUND_UP(y % 8 + height, 8);
-> +       u32 array_idx = 0;
-> +       int ret, i, j, k;
-> +       u8 *data_array = NULL;
-> +
-> +       data_array = kcalloc(width, pages, GFP_KERNEL);
-> +       if (!data_array)
-> +               return -ENOMEM;
-> +
-> +       /*
-> +        * The screen is divided in pages, each having a height of 8
-> +        * pixels, and the width of the screen. When sending a byte of
-> +        * data to the controller, it gives the 8 bits for the current
-> +        * column. I.e, the first byte are the 8 bits of the first
-> +        * column, then the 8 bits for the second column, etc.
-> +        *
-> +        *
-> +        * Representation of the screen, assuming it is 5 bits
-> +        * wide. Each letter-number combination is a bit that controls
-> +        * one pixel.
-> +        *
-> +        * A0 A1 A2 A3 A4
-> +        * B0 B1 B2 B3 B4
-> +        * C0 C1 C2 C3 C4
-> +        * D0 D1 D2 D3 D4
-> +        * E0 E1 E2 E3 E4
-> +        * F0 F1 F2 F3 F4
-> +        * G0 G1 G2 G3 G4
-> +        * H0 H1 H2 H3 H4
-> +        *
-> +        * If you want to update this screen, you need to send 5 bytes:
-> +        *  (1) A0 B0 C0 D0 E0 F0 G0 H0
-> +        *  (2) A1 B1 C1 D1 E1 F1 G1 H1
-> +        *  (3) A2 B2 C2 D2 E2 F2 G2 H2
-> +        *  (4) A3 B3 C3 D3 E3 F3 G3 H3
-> +        *  (5) A4 B4 C4 D4 E4 F4 G4 H4
-> +        */
-> +
-> +       ret = ssd130x_set_col_range(ssd130x, ssd130x->col_offset + x, width);
-> +       if (ret < 0)
-> +               goto out_free;
-> +
-> +       ret = ssd130x_set_page_range(ssd130x, ssd130x->page_offset + y / 8, pages);
-> +       if (ret < 0)
-> +               goto out_free;
-> +
-> +       for (i = y / 8; i < y / 8 + pages; i++) {
-> +               int m = 8;
-> +
-> +               /* Last page may be partial */
-> +               if (8 * (i + 1) > ssd130x->height)
-> +                       m = ssd130x->height % 8;
-> +               for (j = x; j < x + width; j++) {
-> +                       u8 data = 0;
-> +
-> +                       for (k = 0; k < m; k++) {
-> +                               u8 byte = buf[(8 * i + k) * line_length + j / 8];
+2. Memory ballooning operates with guest memory pages only. I.e. each
+ballooned page is reported to/from host in a form of page's DMA address.
 
-As buf does not point to (0, 0), the above is not correct if rect.x1 !=
-0 or rect.y1 != 0.  After fixing that, writing more than one text line
-to the console works, but I still see an issue with updates where the
-rectangle size and/or position are not aligned to 8 pixels horizontally.
-Will do more investigation, and send fixes...
+3. There is no direct connection between host's OOM events and the
+balloon manager. I guess host could watch system's memory pressure and
+inflate VMs' balloons on low memory, releasing the guest's memory to the
+system, but apparently this use-case not supported by anyone today, at
+least I don't see Qemu supporting it.
 
-> +                               u8 bit = (byte >> (j % 8)) & 1;
-> +
-> +                               data |= bit << k;
-> +                       }
-> +                       data_array[array_idx++] = data;
-> +               }
-> +       }
-> +
-> +       ret = ssd130x_write_data(ssd130x, data_array, width * pages);
-> +
-> +out_free:
-> +       kfree(data_array);
-> +       return ret;
-> +}
-> +
-> +static void ssd130x_clear_screen(struct ssd130x_device *ssd130x)
-> +{
-> +       u8 *buf = NULL;
-> +       struct drm_rect fullscreen = {
-> +               .x1 = 0,
-> +               .x2 = ssd130x->width,
-> +               .y1 = 0,
-> +               .y2 = ssd130x->height,
-> +       };
-> +
-> +       buf = kcalloc(ssd130x->width, ssd130x->height, GFP_KERNEL);
 
-This buffer is larger than needed. Will send a fix.
+So the virtio-balloon driver isn't very useful for us as-is.
 
-> +       if (!buf)
-> +               return;
-> +
-> +       ssd130x_update_rect(ssd130x, buf, &fullscreen);
-> +
-> +       kfree(buf);
-> +}
-> +
-> +static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
-> +                               struct drm_rect *rect)
-> +{
-> +       struct ssd130x_device *ssd130x = drm_to_ssd130x(fb->dev);
-> +       void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
-> +       int ret = 0;
-> +       u8 *buf = NULL;
-> +
-> +       buf = kcalloc(fb->width, fb->height, GFP_KERNEL);
+One possible solution could be to create something like a new
+virtio-shrinker device or add shrinker functionality to the virtio-gpu
+device, allowing host to ask guests to drop shared caches. Host then
+should become a PSI handler. I think this should be doable in a case of
+crosvm. In a case of GNU world, it could take a lot of effort to get
+everything to upstreamable state, at first there is a need to
+demonstrate real problem being solved by this solution.
 
-This buffer is much larger than needed. Will send a fix.
+The other minor issue is that only integrated GPUs may use system's
+memory and even then they could use a dedicated memory carveout, i.e.
+releasing VRAM BOs may not help with host's OOM. In case of virgl
+context we have no clue about where buffers are physically located. On
+the other hand, in the worst case dropping host caches just won't help
+with OOM.
 
-> +       if (!buf)
-> +               return -ENOMEM;
-> +
-> +       drm_fb_xrgb8888_to_mono_reversed(buf, 0, vmap, fb, rect);
-> +
-> +       ssd130x_update_rect(ssd130x, buf, rect);
-> +
-> +       kfree(buf);
-> +
-> +       return ret;
-> +}
+It's now unclear how we should proceed with the host-side shrinker
+support. Thoughts?
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+We may start easy and instead of thinking about host-side shrinker, we
+could make VirtIO-GPU driver to expire cached BOs after a certain
+timeout. Mesa already uses timeout-based BO caching, but it doesn't have
+an alarm timer and simply checks expiration when BO is allocated. Should
+be too much trouble to handle timers within Mesa since it's executed in
+application context, easier to do it in kernel, like VC4 driver does it
+for example. This is not good as a proper memory shrinker, but could be
+good enough in practice.

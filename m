@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489394D332B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873294D3373
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiCIQNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:13:02 -0500
+        id S233444AbiCIQPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:15:41 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235441AbiCIQIv (ORCPT
+        with ESMTP id S236106AbiCIQJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:08:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9B118E43E;
-        Wed,  9 Mar 2022 08:05:56 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A8A2A260;
+        Wed,  9 Mar 2022 08:07:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB1F2B82221;
-        Wed,  9 Mar 2022 16:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CBEC340E8;
-        Wed,  9 Mar 2022 16:05:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7EDCB8222A;
+        Wed,  9 Mar 2022 16:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04827C340E8;
+        Wed,  9 Mar 2022 16:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841953;
-        bh=rxrVtqzt8KzhHd7aJFQSaUe6TCVXuDiXrwAXtG1xse4=;
+        s=korg; t=1646842047;
+        bh=EPZxsixiCZjs6ziUXvhGG6X9Ka3rBtJn1D845WN6Y/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JNXUw9TuPgS4KrQe3y3/3p22W7rAsXbEBB4AkvY6Wo+LsM0fna2Vfwx17zxdo0PGW
-         x60h3EEMkwMlBrAegdLk3eJ8jpqbz6bUc02zYauNivxXrVluvaF756SjsFHjr9ievo
-         dveFvyHLUhORMu03dzD8D7ybb1J5jzh1ZISlxMjI=
+        b=0baUpJI6/5giHPLAyOD0Me9qnbEY+kVrqiDvPLL/fpDsCJJRrWM90lVlzDt3yEbhM
+         n7dTP1cVHu9rH9e6k5iyK41H6bHlMk3MjlNdLvOfWND+r67LUFf5v6xQnuwksZQfjv
+         1VuRUoITmHFthcvi1WVLyyEdbhU9gFVBa2HZLkDs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         James Morse <james.morse@arm.com>
-Subject: [PATCH 5.10 33/43] arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
+Subject: [PATCH 5.15 22/43] arm64: spectre: Rename spectre_v4_patch_fw_mitigation_conduit
 Date:   Wed,  9 Mar 2022 17:00:06 +0100
-Message-Id: <20220309155900.198457305@linuxfoundation.org>
+Message-Id: <20220309155900.379109212@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
-References: <20220309155859.239810747@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,78 +58,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: James Morse <james.morse@arm.com>
 
-commit aff65393fa1401e034656e349abd655cfe272de0 upstream.
+commit 1b33d4860deaecf1d8eec3061b7e7ed7ab0bae8d upstream.
 
-kpti is an optional feature, for systems not using kpti a set of
-vectors for the spectre-bhb mitigations is needed.
+The spectre-v4 sequence includes an SMC from the assembly entry code.
+spectre_v4_patch_fw_mitigation_conduit is the patching callback that
+generates an HVC or SMC depending on the SMCCC conduit type.
 
-Add another set of vectors, __bp_harden_el1_vectors, that will be
-used if a mitigation is needed and kpti is not in use.
-
-The EL1 ventries are repeated verbatim as there is no additional
-work needed for entry from EL1.
+As this isn't specific to spectre-v4, rename it
+smccc_patch_fw_mitigation_conduit so it can be re-used.
 
 Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/entry.S |   35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/entry.S       |    2 +-
+ arch/arm64/kernel/proton-pack.c |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 --- a/arch/arm64/kernel/entry.S
 +++ b/arch/arm64/kernel/entry.S
-@@ -819,10 +819,11 @@ alternative_else_nop_endif
- 	.macro tramp_ventry, vector_start, regsize, kpti
- 	.align	7
- 1:
--	.if	\kpti == 1
- 	.if	\regsize == 64
- 	msr	tpidrro_el0, x30	// Restored in kernel_ventry
- 	.endif
-+
-+	.if	\kpti == 1
- 	/*
- 	 * Defend against branch aliasing attacks by pushing a dummy
- 	 * entry onto the return stack and using a RET instruction to
-@@ -910,6 +911,38 @@ SYM_DATA_END(__entry_tramp_data_start)
- #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
+@@ -118,7 +118,7 @@ alternative_cb_end
+ 	tbnz	\tmp2, #TIF_SSBD, .L__asm_ssbd_skip\@
+ 	mov	w0, #ARM_SMCCC_ARCH_WORKAROUND_2
+ 	mov	w1, #\state
+-alternative_cb	spectre_v4_patch_fw_mitigation_conduit
++alternative_cb	smccc_patch_fw_mitigation_conduit
+ 	nop					// Patched to SMC/HVC #0
+ alternative_cb_end
+ .L__asm_ssbd_skip\@:
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -554,9 +554,9 @@ void __init spectre_v4_patch_fw_mitigati
+  * Patch a NOP in the Spectre-v4 mitigation code with an SMC/HVC instruction
+  * to call into firmware to adjust the mitigation state.
+  */
+-void __init spectre_v4_patch_fw_mitigation_conduit(struct alt_instr *alt,
+-						   __le32 *origptr,
+-						   __le32 *updptr, int nr_inst)
++void __init smccc_patch_fw_mitigation_conduit(struct alt_instr *alt,
++					       __le32 *origptr,
++					       __le32 *updptr, int nr_inst)
+ {
+ 	u32 insn;
  
- /*
-+ * Exception vectors for spectre mitigations on entry from EL1 when
-+ * kpti is not in use.
-+ */
-+	.macro generate_el1_vector
-+.Lvector_start\@:
-+	kernel_ventry	1, sync_invalid			// Synchronous EL1t
-+	kernel_ventry	1, irq_invalid			// IRQ EL1t
-+	kernel_ventry	1, fiq_invalid			// FIQ EL1t
-+	kernel_ventry	1, error_invalid		// Error EL1t
-+
-+	kernel_ventry	1, sync				// Synchronous EL1h
-+	kernel_ventry	1, irq				// IRQ EL1h
-+	kernel_ventry	1, fiq_invalid			// FIQ EL1h
-+	kernel_ventry	1, error			// Error EL1h
-+
-+	.rept	4
-+	tramp_ventry	.Lvector_start\@, 64, kpti=0
-+	.endr
-+	.rept 4
-+	tramp_ventry	.Lvector_start\@, 32, kpti=0
-+	.endr
-+	.endm
-+
-+	.pushsection ".entry.text", "ax"
-+	.align	11
-+SYM_CODE_START(__bp_harden_el1_vectors)
-+	generate_el1_vector
-+SYM_CODE_END(__bp_harden_el1_vectors)
-+	.popsection
-+
-+
-+/*
-  * Register switch for AArch64. The callee-saved registers need to be saved
-  * and restored. On entry:
-  *   x0 = previous task_struct (must be preserved across the switch)
 
 

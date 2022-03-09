@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3426A4D3BB5
+	by mail.lfdr.de (Postfix) with ESMTP id A57654D3BB6
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238325AbiCIVGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S238344AbiCIVHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiCIVGw (ORCPT
+        with ESMTP id S231917AbiCIVHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:06:52 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC2D108558
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:05:53 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id b14so2397037ilf.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 13:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hH3C1LhyPaDv8wejLOvzBm1bdTcO+3Rix77JV0niJRQ=;
-        b=hrOos9iyqn4LWGeeERyxvhB9pbIfNlnkwRtaGZGSJdSUr1jnK1LRFN+fn3EaBq0g6l
-         /MHI18Xq9Dskl9lrgaR1BHZWHBHwYEjdaSyly9LODKjcG3XhqfIoLOHV6W58uzUaR+AB
-         uoASIXG0rXUG8UNMqZiSPrRfsL+5R09idXvIb680Mghq+vD+h68+LYQepaufunkpnEVR
-         yKrAVsCLOyAs+72ZGWlc2KDBM/Wy7QmVrUfkfgXctInw03vB1vu/L6sPIhS3uQ8J5b7j
-         5bZZIxJd3lY7gv2NImVbrhFoCb/8aJ5D/6ZAe55u3/k9wia/8AEFJDLbDDuqwOx50TC2
-         qFww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hH3C1LhyPaDv8wejLOvzBm1bdTcO+3Rix77JV0niJRQ=;
-        b=F5ApEZOgY63WuUrCpMWRqBim2358PEg4CFILsWjSiX98R90+C0vHvIDtDrlprPePq3
-         5fV3AZJ3zs11qxDQwaKw3zhp4PDpTa72+0R1xAp+/lUAuUugQHGwv5D6ndxcxMC2nlqg
-         rsEFZ5jAsSfB75DbrnbXwmyI5tZJzFxsgYOdsSuW97XSfUSbJgSbNal3zQI3PsjouKlR
-         m0pjIJgEMtq50F6RxG2VDlFnWtWAsIBYUHcaGGNOyXbNUkA2XG3nSGP4BzWZrdGzz6Yj
-         kyG30a5qBFJwLKONjzb+mjKEGmfXIa7aGOqoVg/ck7OfHzcGoBDGk06sgMNvfJfnGVzI
-         s7WQ==
-X-Gm-Message-State: AOAM5330z7b1fDfB2uHlPa6g+jr24PPRb3alPG2Nc32vkseg3Kz6OTHb
-        ayyypxbple/jgfqRWxAiKDFzow==
-X-Google-Smtp-Source: ABdhPJwBI32AGLKEvw7cjjVqa0Yyd5Obb2Z1aOnpo9pbWYogwdmD3ytasmnnHPA/YfrmfL3MxaSyKw==
-X-Received: by 2002:a92:c810:0:b0:2c6:ba9:6a42 with SMTP id v16-20020a92c810000000b002c60ba96a42mr975528iln.275.1646859952437;
-        Wed, 09 Mar 2022 13:05:52 -0800 (PST)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id d16-20020a05660225d000b00645c8db7767sm1568074iop.35.2022.03.09.13.05.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 13:05:51 -0800 (PST)
-Message-ID: <01459886-2393-665a-43b1-70082ceace0c@kernel.dk>
-Date:   Wed, 9 Mar 2022 14:05:50 -0700
+        Wed, 9 Mar 2022 16:07:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF89A10C50F;
+        Wed,  9 Mar 2022 13:06:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78CDF61AB8;
+        Wed,  9 Mar 2022 21:06:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D548EC36AE7;
+        Wed,  9 Mar 2022 21:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646859966;
+        bh=FeLtBU7QMp6iEJHccU5vuRdG5htlOJfIhhIpS6r7AhM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z9Ot8vd0SD9n+maWBFR9fCvdLyFrzkzJZ0clgv0hHJ1OYP0+Ol+cZju3OiiDm/yiL
+         Ma5epBS1vFTVXJvScrqEz3sqDgwZZRa9WZQ/N50WIqeqLnS5haqiPMeYb5BejHUGL9
+         gkkFjOLgV8TSt50cYWcDK+LaTTuSxuz8GymRKPkPuDG5hmOZ8p0Ht1ZGHkyCkNTPL/
+         DDCV4RKt0kOAYVylpiJXblzinr/DN5/tGcfvawWu0Ai9ypNTelwyoytBHwt5kDezU1
+         NN0DAiyCI1mY5mAYJwmq6IsD3tUrRYgfz9cKL6IvIqRry19yENUBPAomSN5yUxxWGJ
+         ZzyIfvzhlIOvQ==
+Received: by mail-ej1-f48.google.com with SMTP id qa43so7725407ejc.12;
+        Wed, 09 Mar 2022 13:06:06 -0800 (PST)
+X-Gm-Message-State: AOAM531dwVIA9D83R8yyQox/mSMMg5ZP+c0MrBiTv6zw9XmG325M6DGK
+        pIMvmI6f9QMs22fSrv/UcGC0aNjhdUf6TJT+JA==
+X-Google-Smtp-Source: ABdhPJxP4r5jkW2XGKLwSeYb+P3R9mLVmIuw9bFE1hEmABTru6Z5W8ocg6Km8rnC2ammFaLr1fc9kholLHA72ed6cTo=
+X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
+ k14-20020a170906a38e00b006daa1f9f9eemr1449135ejz.27.1646859965060; Wed, 09
+ Mar 2022 13:06:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 07/13] task_work: Introduce task_work_pending
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
- <20220309162454.123006-7-ebiederm@xmission.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220309162454.123006-7-ebiederm@xmission.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 9 Mar 2022 15:05:53 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
+Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 9:24 AM, Eric W. Biederman wrote:
-> diff --git a/include/linux/task_work.h b/include/linux/task_work.h
-> index 5b8a93f288bb..897494b597ba 100644
-> --- a/include/linux/task_work.h
-> +++ b/include/linux/task_work.h
-> @@ -19,6 +19,11 @@ enum task_work_notify_mode {
->  	TWA_SIGNAL,
->  };
->  
-> +static inline bool task_work_pending(struct task_struct *task)
-> +{
-> +	return READ_ONCE(task->task_works);
-> +}
-> +
+On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> atmel,at91sam9-rtc is a confuing name for this file as it is documenting
+> the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
+> and atmel,at91sam9x5-rtc)
+>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
+>
+> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> similarity index 100%
+> rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
+> rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
 
-Most of the checks for this is current, do we need READ_ONCE here?
+Now failing in -next:
 
--- 
-Jens Axboe
-
+./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
+$id: relative path/filename doesn't match actual path or filename
+  expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#

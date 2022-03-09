@@ -2,315 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DC64D2E2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70954D2E33
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiCILgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S232334AbiCILhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiCILf5 (ORCPT
+        with ESMTP id S232324AbiCILhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:35:57 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EDB153389;
-        Wed,  9 Mar 2022 03:34:58 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2298gZkt010816;
-        Wed, 9 Mar 2022 11:34:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=OxttgzxbyymZURhFfoowvFFQzRIbuMZ7b9uS8WbmDZA=;
- b=ondySYqaeZpyW8WbmbrasktfTaaySx21MHt/bWvYHipgUkD5VOqWWSm99nIYt7i8FFUp
- VQd6OVmd8ezB9U5OGBkrz0osjFDsJLy+hGmVCYnFMCVK8Pjap1IKvCDqTT3DlKpLo6Nv
- Rt+9MC7BUzzL772CmmKu0c3V2VJHt05g3GERhKx2zeTXh39tN8cxa3DctYnz6L0UAs2P
- RvrEXu6Qd2Qan4mLe4L7cqnBZtdiRcOLwCyOnOirYteTHBqr1iBcleStTbSO4/GuRpuY
- NqvgHop/khxvB9s77HRikzE6jkpX/I+LlOvn4JpzchluU6DdcLO6zgICoacU7KiNRoqc mQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyrasetq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 11:34:40 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 229BFg1f132175;
-        Wed, 9 Mar 2022 11:34:39 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
-        by aserp3030.oracle.com with ESMTP id 3ekwwcrsw4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 11:34:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AzzyEysbpjst5rZGRD2Q7RXIZyUWJZ9SXzvCV8jY2YY7Td+qV6J6sHyUPH1uTTRBJYwSPRbgn8YiHjv39nCedBsGVgoMkwM+eROy6TGc2OLsE24JQSFN9N7MHXsGaRZE5/v+BKKZdRgX24nys2lx37eOY/cS9tXrxc1/fBT1773A0TxyUnprKhGPlo91/MQ4PmljHZ/eMgFPorTOC1QeAiZmZqn7X4XNDoqrNgYu24MjzNM6rT0RwP0k0JUqX3+KPqvqW3l63QczBMblv0nGj0GCmJbhF2tCUDanRVicKfppUz3wmQ555evIfNfyY87VG1K7z4gn+Yu8QISXXfF6sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OxttgzxbyymZURhFfoowvFFQzRIbuMZ7b9uS8WbmDZA=;
- b=jQ2KqhASilOvnLWdLzqjVbccxDh/+xVXjVLQn2vMLsK48OjBf5KWuLsWbWYrOOc/NqLmxgnTkV++AdxP3OFIhyZsoMWh95+KYD8Uk+rf4Nkz7R1D0amZjsuyUnulVrQF4f+uW4Vjn8IxALAjT/hCD8ZXicl4I8nAWyK+glsZYKPJ0rTizJrHqez15oT0BYyzCUMI2B2gQrnx/zcRaJPAZ+ctUhw3pYxf3Ko87nj+zp03NF+5B6sg5sft8oGleoIJwWhf4nWqurMtycnpsl7UU8a+dLxCQHgA0LFcEYxq6zERPv7FNaP5KX0b+ZYz1t0vCdwtMpdtTe7D+OA4UsEvjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OxttgzxbyymZURhFfoowvFFQzRIbuMZ7b9uS8WbmDZA=;
- b=gjEwoEi8Ks1kD0n8MNbtgrry3XEt86UODeMuaSoboyoTLze5bzTImtjKOel0FA3axTJKTiEAQiHen6jjrord0/NxD1kq3IQEVjNeU/d3bENhxzFB2j+lEdT4fybZq5ci9ZPpNx536iFF0Rir3v1AYtxdhfGwjmOx+MpnHDY7Y64=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SA2PR10MB4732.namprd10.prod.outlook.com
- (2603:10b6:806:fa::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Wed, 9 Mar
- 2022 11:34:36 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.5038.026; Wed, 9 Mar 2022
- 11:34:36 +0000
-Date:   Wed, 9 Mar 2022 14:34:20 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Ming Qian <ming.qian@nxp.com>
-Cc:     mchehab@kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, hverkuil-cisco@xs4all.nl,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v18 06/15] media: amphion: add vpu v4l2 m2m support
-Message-ID: <20220309113420.GA2592@kili>
-References: <cover.1645670589.git.ming.qian@nxp.com>
- <8af3c8cb6ab6b02461ad67ce21b8058f5c5caf4d.1645670589.git.ming.qian@nxp.com>
+        Wed, 9 Mar 2022 06:37:09 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21C1156C48;
+        Wed,  9 Mar 2022 03:36:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646825770; x=1678361770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yZfd0yrdxn/084b8ilGpKvAPRKSOPL9X9NLFEQ6Zec4=;
+  b=TqbndIKRQfXGqdZohH6BxI3WszQWEuIfPIFOkmkghYnaydDprrljKbus
+   ya8mTJtCIXSZT0ljxJf1shO33hAxgEacW8V+N0W7by3u02pXnX+Q7oEB0
+   0KuiIYH3L/sKlVEOsHxqaUJcJiKPUcnHNtgOxkIfKHfUEXL6HCWM1xXX1
+   OuYH6oxg3j2LwItjgTW5AfFyZArpasVGeDyw01JS/rrkLkrBeY6Per1hI
+   LhMXvEH20eLOuOd8+TUueBw16J/xeAFw1gX4hri/pN7ABV2+up22L0RBZ
+   DFolcJdEb/YpWHHKylTuQx4vRJ8O+F8xAmFX2RxXIOHXzGOfYXV3P5Tcx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318181507"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="318181507"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 03:36:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="688269779"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2022 03:36:06 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRubt-0003Ap-F2; Wed, 09 Mar 2022 11:36:05 +0000
+Date:   Wed, 9 Mar 2022 19:35:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Wang Qing <wangqing@vivo.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Sean Paul <sean@poorly.run>, Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH v1 06/10] drm/msm/a6xx: Propagate OOB set error
+Message-ID: <202203091923.2RD2Ech3-lkp@intel.com>
+References: <20220302225551.v1.6.I7f93862e5dfa6eb1cc3e6d3d4e5e83022a491a94@changeid>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8af3c8cb6ab6b02461ad67ce21b8058f5c5caf4d.1645670589.git.ming.qian@nxp.com>
+In-Reply-To: <20220302225551.v1.6.I7f93862e5dfa6eb1cc3e6d3d4e5e83022a491a94@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0102.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:23::17) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a10fe7f7-e568-43eb-81b5-08da01c0c9e7
-X-MS-TrafficTypeDiagnostic: SA2PR10MB4732:EE_
-X-Microsoft-Antispam-PRVS: <SA2PR10MB47323177FBD54D74BC769B148E0A9@SA2PR10MB4732.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I3UG/7+qKoP/L99KAH3v0Dkr64OnLhjgAW/ZQUYpAUaJh/CResDw3hYjtvM9FDBzRe8NopST6zTWeSMmva7JpZgax3Ne/u0TW9x8UejbHC7+W47cyU5K6dnbghjMHfMTIblSKIZ+5Yv6YMNEn7GFwfjAxuZJwhdMzfLCi9O3kRQ3Mp+DY/0rEHIXdM4YJDpBZL59lRwR+nehFG9a3NaF72LO4twEM8lGXS/Y0xTAJHU3puG44mHCASqUlL7RX086OCr6KdH/zZUBJnaCgLLKpf6L0gzOrxHceHNtkjc9P1Nq/GDXlqIO46we06zm2F7T4Ofih14kZv63balP7UnoqkOqR0rGHLTR/40ULNyA14zQd3/g3TqwRxUmx8pf3p0ia9oFLoKdL3q1xSMp37tf1RmRaWBbHbAA5XHk9l28zG+tpXDbsMGbE/HmpwwTgdnP6PDhzRym1s6CMZMuXYMDKgOkuUho+ErdQzERIq6Zm5hBVzRMZvoM3Me04H56PXXQ1OxzbmSMyoPDcRsYiksQVDwjdHfM35luUiV+E79QG6mSNdVDpunUDlMNoGm/6ragTaR2tc5mZsJhBy7T3rKejJsvZ8xYhtFqFDnpaNlonI+TQQrbxRk+WkHcuQUhj56C7bD2JCrMMIj5ov3JXstUE/vT7xsBlRoCXEQAxaayv98yT7f3+TtsCRGsl+bv3Xc6dDdLDI49fC5bNmKNJKJ+mA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(5660300002)(6486002)(6512007)(9686003)(7416002)(38100700002)(6916009)(316002)(4326008)(8676002)(66556008)(6506007)(86362001)(52116002)(66946007)(66476007)(6666004)(38350700002)(508600001)(8936002)(26005)(83380400001)(186003)(33716001)(33656002)(1076003)(44832011)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jDi464ZzyAxdgJ666VOAWs355toeMh4V2Td7RZStFOd1Rn7GWw9ueCECrfiW?=
- =?us-ascii?Q?t+hBCqyiodyWEBUrXm6BUjs1+XFJGNCRPyM4YmgiH99re35+33ne/kAiu05Z?=
- =?us-ascii?Q?oy7ex4oXkllgTSuHIeXia1mrPdvaS5yP8yRuoVZikEeoTAsKKTpIhVL/U5vi?=
- =?us-ascii?Q?8HYDWeleT0xQpBFENUN3IS22jsSF7LzNiQaynHjII5/scq1cTWAGEvnQwKod?=
- =?us-ascii?Q?gSmzuyQdVBk5Bg0EOV1QUxeMV2XKXOtmff5CaddipYBem3WXq0kIWJJQ3DYC?=
- =?us-ascii?Q?MLEBzu0EgqjXdQbO3WmEE1lx8aL4yK/R/IgBdb2fMauDA4RE4XTByjRAbqoo?=
- =?us-ascii?Q?DumspFW2xbbXr043GpL5k6e1mVlMmNs50rHCoo6AEWCYAMSnMOW1AGpEYvqB?=
- =?us-ascii?Q?LllIoLA+JDClNctf8PI56nNiz8NN1c+72fcsy5rCoJys+F+OwKhyEqBdw5St?=
- =?us-ascii?Q?GpW5UaKnpKh7rUDiVgEk0bYo8BrViMQREOteMG/yMeLqo6/lEmWFQ6nDL8cW?=
- =?us-ascii?Q?bUB+P8EIfLA3i2EPUpUyQu7ICgz1mZ4HVKYadg9Ib647nom0V67v2qugKW8X?=
- =?us-ascii?Q?uNX9utEL+dK2MW4mLA4FEMdM4ESXaCpM3cGcH+iSzeGur1w/CYbM0t2wsUCg?=
- =?us-ascii?Q?3O5QocATdzxgSN8QLcuGfjdmyjnP2UCVhbe2BB0sngnaqvYH9U9YuXyvTpwS?=
- =?us-ascii?Q?41zWQlbo/PWUFmpNQgq8kMukR15wWR9Rk/mI/GPRfs4SbbwzBBdTh71tUZIM?=
- =?us-ascii?Q?Y7H0yOIamnnHAdgwTsd0Gt4cQz0rsbRCxvb/ZS27RH46ZcKzborjumEXMkhj?=
- =?us-ascii?Q?dIcrNZ5zUFXT3ktHYEUk3e2HP9wPxar15m6GDFKhKwGgXy8w7AvOYKMGPT6U?=
- =?us-ascii?Q?FtClIYPv8XDZvhMxZ7aiQ1md3nAMbnvJVMDLybSbwwVWQodGw+x3s4qxiRVi?=
- =?us-ascii?Q?HJI3kp2sV7QLtLi44ppa69HX7dCriW7WOLK4Rhp9teS+nTwi8a77TKvZbSm8?=
- =?us-ascii?Q?MPPIx9U+2tPC+v3oFva2AUWf4wR218XbvqsZ7gBe1iNscSQCCmKkpmtFfYIm?=
- =?us-ascii?Q?WlbA+GbpAjvnRJHYROqrAV1bGK0ORzz6v6ofh6Gx1Q2bwSkUb0vFSECmddcF?=
- =?us-ascii?Q?lYEkQJfQ+T0GTg3oeuMR4PAU6zH2cWSWV34twYjoovtKwF3Roo8TI8qwFS3Z?=
- =?us-ascii?Q?IbrxcSBFFSkLxK0yivpe1RiBU0ncKPVv4VKGJE5zWMA+TjGR9FR+HsNdzn2f?=
- =?us-ascii?Q?/mAKUJD01N/mgqqtlnD+5a5NLHP5q80voLZj0gk/ZqPkRwWP7Do39FLmjLLU?=
- =?us-ascii?Q?T7kGuEntuSNe7r/VfydYFwHgSUN/gFUcsxyouAbzHk30flTHdL/O4t7vUekB?=
- =?us-ascii?Q?tvqu0xr7MG+smZW+xJ5jZZCgyEBs12Xo+XkixQ4X8ve4ITDb+YzRt7OsSkY2?=
- =?us-ascii?Q?9sFqyjWhuucQgETaOYaCqWAIIyNXj6gTxVbFWy1mmS/7gV8aMFMk2NjmtYVE?=
- =?us-ascii?Q?GeutvZiK4qDrq4IIc4sZ0aMHQOUrBdta/QwCqjnbWtlFgsS6/a8TdBBxFac5?=
- =?us-ascii?Q?KP0wjRc84n/TpIpBjNitT+OSwxa/GFvGiYiGLKZI3jIMJzwQ3N8JM8U3V7T2?=
- =?us-ascii?Q?P6PRtv02zYIiwF0TdRs+lXwiQSMRPAtGiv8apLHVHi8ldkr+6PYGScgd2jQ6?=
- =?us-ascii?Q?WqJF0Q=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a10fe7f7-e568-43eb-81b5-08da01c0c9e7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 11:34:36.5493
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Gg7x0oZz0yufsu3vinkaJQeIZhb/pQBPgzfavvay0HhOSql7H7M/npcwpejxNZMuuYoIe+zAM0pp8C0c3KgMZl2JzC2lA2O7+xDs3Ua9gJ4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4732
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10280 signatures=690848
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203090062
-X-Proofpoint-GUID: oxcdqGbFuvrWZOecJ8Es4yvfZWfgBGJw
-X-Proofpoint-ORIG-GUID: oxcdqGbFuvrWZOecJ8Es4yvfZWfgBGJw
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Akhil,
 
-This code has a serious case of the u32 pox.  There are times where u32
-is specified in the hardware or network spec.  That's when a u32 is
-appropriate.  Also for bit masks.  Otherwise "int" is normally the
-correct type.  If it's a size value then unsigned long, long, or
-unsigned long long is probably correct.
+Thank you for the patch! Perhaps something to improve:
 
-INT_MAX is just over 2 billion.  If you make a number line then most
-numbers are going to be near the zero.  You have 10 fingers.  You have
-2 phones.  2 cars.  3 monitors connected to your computer.  200 error
-codes.  You're never going to even get close to the 2 billion limit.
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next v5.17-rc7 next-20220308]
+[cannot apply to tegra-drm/drm/tegra/for-next airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-For situations where the numbers get very large, then the band on the
-number line between 2 and 4 billion is very narrow.  I can name people
-who have over a billion dollars but I cannot name even one who falls
-exactly between 2 and 4 billion.
+url:    https://github.com/0day-ci/linux/commits/Akhil-P-Oommen/Support-for-GMU-coredump-and-some-related-improvements/20220303-013028
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: s390-randconfig-m031-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091923.2RD2Ech3-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
 
-In other words u32 is almost useless for describing anything.  If
-something cannot fit in a int then it's not going to fit into a u32
-either and you should use a u64 instead.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Some people think that unsigned values are more safe than signed values.
-It is true, in certain limited cases that the invisible side effects of
-unsigned math can protect you.  But mostly the invisible side effects
-create surprises and bugs.  And again if you have to pick an unsigned
-type pick an u64 because it is harder to have an integer overflow on a
-64 bit type vs a 32 bit type.
+smatch warnings:
+drivers/gpu/drm/msm/adreno/a6xx_gpu.c:894 hw_init() warn: inconsistent indenting
 
-Avoid u32 types where ever you can, they only cause bugs.
+vim +894 drivers/gpu/drm/msm/adreno/a6xx_gpu.c
 
-> +u32 vpu_helper_copy_from_stream_buffer(struct vpu_buffer *stream_buffer,
-> +				       u32 *rptr, u32 size, void *dst)
-> +{
-> +	u32 offset;
-> +	u32 start;
-> +	u32 end;
-> +	void *virt;
-> +
-> +	if (!stream_buffer || !rptr || !dst)
-> +		return -EINVAL;
+   874	
+   875	#define A6XX_INT_MASK (A6XX_RBBM_INT_0_MASK_CP_AHB_ERROR | \
+   876		  A6XX_RBBM_INT_0_MASK_RBBM_ATB_ASYNCFIFO_OVERFLOW | \
+   877		  A6XX_RBBM_INT_0_MASK_CP_HW_ERROR | \
+   878		  A6XX_RBBM_INT_0_MASK_CP_IB2 | \
+   879		  A6XX_RBBM_INT_0_MASK_CP_IB1 | \
+   880		  A6XX_RBBM_INT_0_MASK_CP_RB | \
+   881		  A6XX_RBBM_INT_0_MASK_CP_CACHE_FLUSH_TS | \
+   882		  A6XX_RBBM_INT_0_MASK_RBBM_ATB_BUS_OVERFLOW | \
+   883		  A6XX_RBBM_INT_0_MASK_RBBM_HANG_DETECT | \
+   884		  A6XX_RBBM_INT_0_MASK_UCHE_OOB_ACCESS | \
+   885		  A6XX_RBBM_INT_0_MASK_UCHE_TRAP_INTR)
+   886	
+   887	static int hw_init(struct msm_gpu *gpu)
+   888	{
+   889		struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+   890		struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+   891		int ret;
+   892	
+   893		/* Make sure the GMU keeps the GPU on while we set it up */
+ > 894		 ret = a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
+   895	
+   896		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_CNTL, 0);
+   897	
+   898		/*
+   899		 * Disable the trusted memory range - we don't actually supported secure
+   900		 * memory rendering at this point in time and we don't want to block off
+   901		 * part of the virtual memory space.
+   902		 */
+   903		gpu_write64(gpu, REG_A6XX_RBBM_SECVID_TSB_TRUSTED_BASE_LO,
+   904			REG_A6XX_RBBM_SECVID_TSB_TRUSTED_BASE_HI, 0x00000000);
+   905		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_TRUSTED_SIZE, 0x00000000);
+   906	
+   907		/* Turn on 64 bit addressing for all blocks */
+   908		gpu_write(gpu, REG_A6XX_CP_ADDR_MODE_CNTL, 0x1);
+   909		gpu_write(gpu, REG_A6XX_VSC_ADDR_MODE_CNTL, 0x1);
+   910		gpu_write(gpu, REG_A6XX_GRAS_ADDR_MODE_CNTL, 0x1);
+   911		gpu_write(gpu, REG_A6XX_RB_ADDR_MODE_CNTL, 0x1);
+   912		gpu_write(gpu, REG_A6XX_PC_ADDR_MODE_CNTL, 0x1);
+   913		gpu_write(gpu, REG_A6XX_HLSQ_ADDR_MODE_CNTL, 0x1);
+   914		gpu_write(gpu, REG_A6XX_VFD_ADDR_MODE_CNTL, 0x1);
+   915		gpu_write(gpu, REG_A6XX_VPC_ADDR_MODE_CNTL, 0x1);
+   916		gpu_write(gpu, REG_A6XX_UCHE_ADDR_MODE_CNTL, 0x1);
+   917		gpu_write(gpu, REG_A6XX_SP_ADDR_MODE_CNTL, 0x1);
+   918		gpu_write(gpu, REG_A6XX_TPL1_ADDR_MODE_CNTL, 0x1);
+   919		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_ADDR_MODE_CNTL, 0x1);
+   920	
+   921		/* enable hardware clockgating */
+   922		a6xx_set_hwcg(gpu, true);
+   923	
+   924		/* VBIF/GBIF start*/
+   925		if (adreno_is_a640_family(adreno_gpu) ||
+   926		    adreno_is_a650_family(adreno_gpu)) {
+   927			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE0, 0x00071620);
+   928			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE1, 0x00071620);
+   929			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE2, 0x00071620);
+   930			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
+   931			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
+   932			gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x3);
+   933		} else {
+   934			gpu_write(gpu, REG_A6XX_RBBM_VBIF_CLIENT_QOS_CNTL, 0x3);
+   935		}
+   936	
+   937		if (adreno_is_a630(adreno_gpu))
+   938			gpu_write(gpu, REG_A6XX_VBIF_GATE_OFF_WRREQ_EN, 0x00000009);
+   939	
+   940		/* Make all blocks contribute to the GPU BUSY perf counter */
+   941		gpu_write(gpu, REG_A6XX_RBBM_PERFCTR_GPU_BUSY_MASKED, 0xffffffff);
+   942	
+   943		/* Disable L2 bypass in the UCHE */
+   944		gpu_write(gpu, REG_A6XX_UCHE_WRITE_RANGE_MAX_LO, 0xffffffc0);
+   945		gpu_write(gpu, REG_A6XX_UCHE_WRITE_RANGE_MAX_HI, 0x0001ffff);
+   946		gpu_write(gpu, REG_A6XX_UCHE_TRAP_BASE_LO, 0xfffff000);
+   947		gpu_write(gpu, REG_A6XX_UCHE_TRAP_BASE_HI, 0x0001ffff);
+   948		gpu_write(gpu, REG_A6XX_UCHE_WRITE_THRU_BASE_LO, 0xfffff000);
+   949		gpu_write(gpu, REG_A6XX_UCHE_WRITE_THRU_BASE_HI, 0x0001ffff);
+   950	
+   951		if (!adreno_is_a650_family(adreno_gpu)) {
+   952			/* Set the GMEM VA range [0x100000:0x100000 + gpu->gmem - 1] */
+   953			gpu_write64(gpu, REG_A6XX_UCHE_GMEM_RANGE_MIN_LO,
+   954				REG_A6XX_UCHE_GMEM_RANGE_MIN_HI, 0x00100000);
+   955	
+   956			gpu_write64(gpu, REG_A6XX_UCHE_GMEM_RANGE_MAX_LO,
+   957				REG_A6XX_UCHE_GMEM_RANGE_MAX_HI,
+   958				0x00100000 + adreno_gpu->gmem - 1);
+   959		}
+   960	
+   961		gpu_write(gpu, REG_A6XX_UCHE_FILTER_CNTL, 0x804);
+   962		gpu_write(gpu, REG_A6XX_UCHE_CACHE_WAYS, 0x4);
+   963	
+   964		if (adreno_is_a640_family(adreno_gpu) ||
+   965		    adreno_is_a650_family(adreno_gpu))
+   966			gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x02000140);
+   967		else
+   968			gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x010000c0);
+   969		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x8040362c);
+   970	
+   971		if (adreno_is_a660_family(adreno_gpu))
+   972			gpu_write(gpu, REG_A6XX_CP_LPAC_PROG_FIFO_SIZE, 0x00000020);
+   973	
+   974		/* Setting the mem pool size */
+   975		gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 128);
+   976	
+   977		/* Setting the primFifo thresholds default values,
+   978		 * and vccCacheSkipDis=1 bit (0x200) for A640 and newer
+   979		*/
+   980		if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
+   981			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
+   982		else if (adreno_is_a640_family(adreno_gpu) || adreno_is_7c3(adreno_gpu))
+   983			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
+   984		else if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
+   985			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
+   986		else
+   987			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00180000);
+   988	
+   989		/* Set the AHB default slave response to "ERROR" */
+   990		gpu_write(gpu, REG_A6XX_CP_AHB_CNTL, 0x1);
+   991	
+   992		/* Turn on performance counters */
+   993		gpu_write(gpu, REG_A6XX_RBBM_PERFCTR_CNTL, 0x1);
+   994	
+   995		/* Select CP0 to always count cycles */
+   996		gpu_write(gpu, REG_A6XX_CP_PERFCTR_CP_SEL(0), PERF_CP_ALWAYS_COUNT);
+   997	
+   998		a6xx_set_ubwc_config(gpu);
+   999	
+  1000		/* Enable fault detection */
+  1001		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL,
+  1002			(1 << 30) | 0x1fffff);
+  1003	
+  1004		gpu_write(gpu, REG_A6XX_UCHE_CLIENT_PF, 1);
+  1005	
+  1006		/* Set weights for bicubic filtering */
+  1007		if (adreno_is_a650_family(adreno_gpu)) {
+  1008			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_0, 0);
+  1009			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_1,
+  1010				0x3fe05ff4);
+  1011			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_2,
+  1012				0x3fa0ebee);
+  1013			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_3,
+  1014				0x3f5193ed);
+  1015			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_4,
+  1016				0x3f0243f0);
+  1017		}
+  1018	
+  1019		/* Protect registers from the CP */
+  1020		a6xx_set_cp_protect(gpu);
+  1021	
+  1022		if (adreno_is_a660_family(adreno_gpu)) {
+  1023			gpu_write(gpu, REG_A6XX_CP_CHICKEN_DBG, 0x1);
+  1024			gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x0);
+  1025		}
+  1026	
+  1027		/* Set dualQ + disable afull for A660 GPU */
+  1028		if (adreno_is_a660(adreno_gpu))
+  1029			gpu_write(gpu, REG_A6XX_UCHE_CMDQ_CONFIG, 0x66906);
+  1030	
+  1031		/* Enable expanded apriv for targets that support it */
+  1032		if (gpu->hw_apriv) {
+  1033			gpu_write(gpu, REG_A6XX_CP_APRIV_CNTL,
+  1034				(1 << 6) | (1 << 5) | (1 << 3) | (1 << 2) | (1 << 1));
+  1035		}
+  1036	
+  1037		/* Enable interrupts */
+  1038		gpu_write(gpu, REG_A6XX_RBBM_INT_0_MASK, A6XX_INT_MASK);
+  1039	
+  1040		ret = adreno_hw_init(gpu);
+  1041		if (ret)
+  1042			goto out;
+  1043	
+  1044		ret = a6xx_ucode_init(gpu);
+  1045		if (ret)
+  1046			goto out;
+  1047	
+  1048		/* Set the ringbuffer address */
+  1049		gpu_write64(gpu, REG_A6XX_CP_RB_BASE, REG_A6XX_CP_RB_BASE_HI,
+  1050			gpu->rb[0]->iova);
+  1051	
+  1052		/* Targets that support extended APRIV can use the RPTR shadow from
+  1053		 * hardware but all the other ones need to disable the feature. Targets
+  1054		 * that support the WHERE_AM_I opcode can use that instead
+  1055		 */
+  1056		if (adreno_gpu->base.hw_apriv)
+  1057			gpu_write(gpu, REG_A6XX_CP_RB_CNTL, MSM_GPU_RB_CNTL_DEFAULT);
+  1058		else
+  1059			gpu_write(gpu, REG_A6XX_CP_RB_CNTL,
+  1060				MSM_GPU_RB_CNTL_DEFAULT | AXXX_CP_RB_CNTL_NO_UPDATE);
+  1061	
+  1062		/*
+  1063		 * Expanded APRIV and targets that support WHERE_AM_I both need a
+  1064		 * privileged buffer to store the RPTR shadow
+  1065		 */
+  1066	
+  1067		if (adreno_gpu->base.hw_apriv || a6xx_gpu->has_whereami) {
+  1068			if (!a6xx_gpu->shadow_bo) {
+  1069				a6xx_gpu->shadow = msm_gem_kernel_new(gpu->dev,
+  1070					sizeof(u32) * gpu->nr_rings,
+  1071					MSM_BO_WC | MSM_BO_MAP_PRIV,
+  1072					gpu->aspace, &a6xx_gpu->shadow_bo,
+  1073					&a6xx_gpu->shadow_iova);
+  1074	
+  1075				if (IS_ERR(a6xx_gpu->shadow))
+  1076					return PTR_ERR(a6xx_gpu->shadow);
+  1077	
+  1078				msm_gem_object_set_name(a6xx_gpu->shadow_bo, "shadow");
+  1079			}
+  1080	
+  1081			gpu_write64(gpu, REG_A6XX_CP_RB_RPTR_ADDR_LO,
+  1082				REG_A6XX_CP_RB_RPTR_ADDR_HI,
+  1083				shadowptr(a6xx_gpu, gpu->rb[0]));
+  1084		}
+  1085	
+  1086		/* Always come up on rb 0 */
+  1087		a6xx_gpu->cur_ring = gpu->rb[0];
+  1088	
+  1089		gpu->cur_ctx_seqno = 0;
+  1090	
+  1091		/* Enable the SQE_to start the CP engine */
+  1092		gpu_write(gpu, REG_A6XX_CP_SQE_CNTL, 1);
+  1093	
+  1094		ret = a6xx_cp_init(gpu);
+  1095		if (ret)
+  1096			goto out;
+  1097	
+  1098		/*
+  1099		 * Try to load a zap shader into the secure world. If successful
+  1100		 * we can use the CP to switch out of secure mode. If not then we
+  1101		 * have no resource but to try to switch ourselves out manually. If we
+  1102		 * guessed wrong then access to the RBBM_SECVID_TRUST_CNTL register will
+  1103		 * be blocked and a permissions violation will soon follow.
+  1104		 */
+  1105		ret = a6xx_zap_shader_init(gpu);
+  1106		if (!ret) {
+  1107			OUT_PKT7(gpu->rb[0], CP_SET_SECURE_MODE, 1);
+  1108			OUT_RING(gpu->rb[0], 0x00000000);
+  1109	
+  1110			a6xx_flush(gpu, gpu->rb[0]);
+  1111			if (!a6xx_idle(gpu, gpu->rb[0]))
+  1112				return -EINVAL;
+  1113		} else if (ret == -ENODEV) {
+  1114			/*
+  1115			 * This device does not use zap shader (but print a warning
+  1116			 * just in case someone got their dt wrong.. hopefully they
+  1117			 * have a debug UART to realize the error of their ways...
+  1118			 * if you mess this up you are about to crash horribly)
+  1119			 */
+  1120			dev_warn_once(gpu->dev->dev,
+  1121				"Zap shader not enabled - using SECVID_TRUST_CNTL instead\n");
+  1122			gpu_write(gpu, REG_A6XX_RBBM_SECVID_TRUST_CNTL, 0x0);
+  1123			ret = 0;
+  1124		} else {
+  1125			return ret;
+  1126		}
+  1127	
+  1128	out:
+  1129		/*
+  1130		 * Tell the GMU that we are done touching the GPU and it can start power
+  1131		 * management
+  1132		 */
+  1133		a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
+  1134	
+  1135		if (a6xx_gpu->gmu.legacy) {
+  1136			/* Take the GMU out of its special boot mode */
+  1137			a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_BOOT_SLUMBER);
+  1138		}
+  1139	
+  1140		return ret;
+  1141	}
+  1142	
 
-This function returns negatives.
-
-> +
-> +	if (!size)
-> +		return 0;
-> +
-> +	offset = *rptr;
-> +	start = stream_buffer->phys;
-> +	end = start + stream_buffer->length;
-> +	virt = stream_buffer->virt;
-> +
-> +	if (offset < start || offset > end)
-> +		return -EINVAL;
-> +
-> +	if (offset + size <= end) {
-
-Check for integer overflows?
-
-
-> +		memcpy(dst, virt + (offset - start), size);
-> +	} else {
-> +		memcpy(dst, virt + (offset - start), end - offset);
-> +		memcpy(dst + end - offset, virt, size + offset - end);
-> +	}
-> +
-> +	*rptr = vpu_helper_step_walk(stream_buffer, offset, size);
-> +	return size;
-
-This function always returns size on success.  Just return 0 on success.
-
-> +}
-> +
-> +u32 vpu_helper_copy_to_stream_buffer(struct vpu_buffer *stream_buffer,
-> +				     u32 *wptr, u32 size, void *src)
-> +{
-> +	u32 offset;
-> +	u32 start;
-> +	u32 end;
-> +	void *virt;
-> +
-> +	if (!stream_buffer || !wptr || !src)
-> +		return -EINVAL;
-
-Signedness bug.
-
-> +
-> +	if (!size)
-> +		return 0;
-> +
-> +	offset = *wptr;
-> +	start = stream_buffer->phys;
-> +	end = start + stream_buffer->length;
-> +	virt = stream_buffer->virt;
-> +	if (offset < start || offset > end)
-> +		return -EINVAL;
-
-Signedness.
-
-> +
-> +	if (offset + size <= end) {
-
-Check for integer overflow?
-
-> +		memcpy(virt + (offset - start), src, size);
-> +	} else {
-> +		memcpy(virt + (offset - start), src, end - offset);
-> +		memcpy(virt, src + end - offset, size + offset - end);
-> +	}
-> +
-> +	*wptr = vpu_helper_step_walk(stream_buffer, offset, size);
-> +
-> +	return size;
-
-Just return zero on success.  No need to return a known parameter.
-
-> +}
-> +
-> +u32 vpu_helper_memset_stream_buffer(struct vpu_buffer *stream_buffer,
-> +				    u32 *wptr, u8 val, u32 size)
-> +{
-> +	u32 offset;
-> +	u32 start;
-> +	u32 end;
-> +	void *virt;
-> +
-> +	if (!stream_buffer || !wptr)
-> +		return -EINVAL;
-
-Signedness.
-
-> +
-> +	if (!size)
-> +		return 0;
-> +
-> +	offset = *wptr;
-> +	start = stream_buffer->phys;
-> +	end = start + stream_buffer->length;
-> +	virt = stream_buffer->virt;
-> +	if (offset < start || offset > end)
-> +		return -EINVAL;
-> +
-> +	if (offset + size <= end) {
-
-Check for overflow?
-
-> +		memset(virt + (offset - start), val, size);
-> +	} else {
-> +		memset(virt + (offset - start), val, end - offset);
-> +		memset(virt, val, size + offset - end);
-> +	}
-> +
-> +	offset += size;
-> +	if (offset >= end)
-> +		offset -= stream_buffer->length;
-> +
-> +	*wptr = offset;
-> +
-> +	return size;
-> +}
-
-regards,
-dan carpenter
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,197 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4AE4D27DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F08C4D27E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiCIEXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S229480AbiCIEjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 23:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiCIEW6 (ORCPT
+        with ESMTP id S229445AbiCIEjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:22:58 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EC6314A075;
-        Tue,  8 Mar 2022 20:21:58 -0800 (PST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxfxNfKyhio3kFAA--.207S3;
-        Wed, 09 Mar 2022 12:21:52 +0800 (CST)
-Subject: Re: [PATCH bpf-next v3 2/2] bpf: Make BPF_JIT_DEFAULT_ON selectable
- in Kconfig
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-References: <1645523826-18149-1-git-send-email-yangtiezhu@loongson.cn>
- <1645523826-18149-3-git-send-email-yangtiezhu@loongson.cn>
- <b2aa5233-282e-004c-1ba3-63417cbccd58@iogearbox.net>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <c709954e-9232-d719-eeb2-6a05546231b6@loongson.cn>
-Date:   Wed, 9 Mar 2022 12:21:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 8 Mar 2022 23:39:00 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B35AA41;
+        Tue,  8 Mar 2022 20:38:01 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2294bqpv118071;
+        Tue, 8 Mar 2022 22:37:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646800672;
+        bh=WGbku9FUkxZtK/LL7SBY1MK//mVyianmQOGT9iKKMuI=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=rHJpyuhC3g2VBKvgRHkBuQZ/z7ElJq0HHBpvbMs39cMZGwaozC0w5fLbwIyrEbUmP
+         +MZWb4vx6ly5jJQojtOQwJp8uITCdXO4sA6kycPt2YM1DTJtXoj/dXR6ch/6DPveI+
+         Ouz4lAJpCdxjf7iMFRS/BUgHwjuIG6BFkhDk3mH0=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2294bqXF041740
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Mar 2022 22:37:52 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 8
+ Mar 2022 22:37:52 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 8 Mar 2022 22:37:52 -0600
+Received: from [10.250.233.186] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2294bmIh017591;
+        Tue, 8 Mar 2022 22:37:49 -0600
+Subject: Re: [PATCH v2] PCI: endpoint: Use blocking notifier instead of atomic
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     <lorenzo.pieralisi@arm.com>, Vidya Sagar <vidyas@nvidia.com>,
+        <kw@linux.com>, <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <dmitry.baryshkov@linaro.org>
+References: <20220228055240.24774-1-manivannan.sadhasivam@linaro.org>
+ <e151083b-c15a-7baa-3423-84bd1881105a@ti.com>
+ <20220228062830.GA37219@thinkpad>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <a66ccea3-b854-75d7-dc3d-6c9bb2057a0d@ti.com>
+Date:   Wed, 9 Mar 2022 10:07:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <b2aa5233-282e-004c-1ba3-63417cbccd58@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20220228062830.GA37219@thinkpad>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxfxNfKyhio3kFAA--.207S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4fGw4kXFW7Zw1fKF18Grg_yoWrZFW8pw
-        1jqw1xKr97Xr1fKFW7Ca47GF4UGw4jgryDJFs8u3yUZF97ua4kCr40gw1jgF9rZr97Xa1j
-        yrZ5u3WkZa1DWa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9E14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8XwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
-        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
-        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjGYLDUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mani,
 
-
-On 03/01/2022 07:53 AM, Daniel Borkmann wrote:
-> Hi Tiezhu,
->
-> (patch 1/2 applied so far, thanks!)
->
-> On 2/22/22 10:57 AM, Tiezhu Yang wrote:
->> Currently, only x86, arm64 and s390 select ARCH_WANT_DEFAULT_BPF_JIT,
->> the other archs do not select ARCH_WANT_DEFAULT_BPF_JIT. On the archs
->> without ARCH_WANT_DEFAULT_BPF_JIT, if we want to set bpf_jit_enable to
->> 1 by default, the only way is to enable CONFIG_BPF_JIT_ALWAYS_ON, then
->> the users can not change it to 0 or 2, it seems bad for some users. We
->
-> Can you elaborate on the "it seems bad for some users" part? What's the
-> concrete
-
-Hi Daniel,
-
-Sorry for the late reply.
-
-I saw the following two similar patches, some users want to set
-bpf_jit_enable to 1 by default, at the same time, they want to
-change it to 0 or 2 to debug, only enable CONFIG_BPF_JIT_DEFAULT_ON
-is a proper way in such a case.
-
-[PATCH bpf-next] bpf: trace jit code when enable BPF_JIT_ALWAYS_ON
-https://lore.kernel.org/bpf/20210326124030.1138964-1-Jianlin.Lv@arm.com/
-
-[PATCH bpf-next] bpf: support bpf_jit_enable=2 for CONFIG_BPF_JIT_ALWAYS_ON
-https://lore.kernel.org/bpf/20211231153550.3807430-1-houtao1@huawei.com/
-
-
-> use case? Also, why not add (e.g. mips) JIT to ARCH_WANT_DEFAULT_BPF_JIT
-> if the
-> CI suite passes with high degree/confidence?
-
-Yes, we can let the specific arch select ARCH_WANT_DEFAULT_BPF_JIT in 
-Kconfig, this commit only gives another chance to enable or disable 
-CONFIG_BPF_JIT_DEFAULT_ON manually when make menuconfig, this is useful
-to debug when develop JIT.
-
->
->> can select ARCH_WANT_DEFAULT_BPF_JIT for those archs if it is proper,
->> but at least for now, make BPF_JIT_DEFAULT_ON selectable can give them
->> a chance.
+On 28/02/22 11:58 am, Manivannan Sadhasivam wrote:
+> Hi,
+> 
+> On Mon, Feb 28, 2022 at 11:46:52AM +0530, Kishon Vijay Abraham I wrote:
+>> Hi Manivannan,
 >>
->> Additionally, with this patch, under !BPF_JIT_ALWAYS_ON, we can disable
->> BPF_JIT_DEFAULT_ON on the archs with ARCH_WANT_DEFAULT_BPF_JIT when make
->> menuconfig, it seems flexible for some developers.
+>> On 28/02/22 11:22 am, Manivannan Sadhasivam wrote:
+>>> The use of atomic notifier causes sleeping in atomic context bug when
+>>> the EPC core functions are used in the notifier chain. This is due to the
+>>> use of epc->lock (mutex) in core functions protecting the concurrent use of
+>>> EPC.
 >>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   kernel/bpf/Kconfig | 13 +++++++++++--
->>   1 file changed, 11 insertions(+), 2 deletions(-)
+>> The notification from the controller to the function driver is used for
+>> propagating interrupts to function driver and should be in interrupt context.
+>> How it should be handled maybe left to the function driver. I don't prefer
+>> moving everything to blocking notifier.
 >>
->> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
->> index f3db15a..8521874 100644
->> --- a/kernel/bpf/Kconfig
->> +++ b/kernel/bpf/Kconfig
->> @@ -54,6 +54,7 @@ config BPF_JIT
->>   config BPF_JIT_ALWAYS_ON
->>       bool "Permanently enable BPF JIT and remove BPF interpreter"
->>       depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
->> +    select BPF_JIT_DEFAULT_ON
->
-> Is the above needed if ...
->
->>       help
->>         Enables BPF JIT and removes BPF interpreter to avoid speculative
->>         execution of BPF instructions by the interpreter.
->> @@ -63,8 +64,16 @@ config BPF_JIT_ALWAYS_ON
->>         failure.
->>     config BPF_JIT_DEFAULT_ON
->> -    def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
->> -    depends on HAVE_EBPF_JIT && BPF_JIT
->> +    bool "Enable BPF JIT by default"
->> +    default y if ARCH_WANT_DEFAULT_BPF_JIT
->
-> ... we retain the prior `default y if ARCH_WANT_DEFAULT_BPF_JIT ||
-> BPF_JIT_ALWAYS_ON` ?
+> 
+> I agree that we need to handle it quick enough but I don't see any other valid
+> options to get rid of the issue. EPF driver may use a non-atomic notifier but
+> that seems to be an overkill workaround for something that could be fixed in the
+> EPC core.
+> 
+> And propagating interrupts is not going to work or needed all the time. Do you
+> forsee any issue with blocking notifier?
 
-After add
-
-   bool "Enable BPF JIT by default"
-
-if use
-
-   default y if ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
-
-under !ARCH_WANT_DEFAULT_BPF_JIT, when enable CONFIG_BPF_JIT_ALWAYS_ON
-manually through make menuconfig, CONFIG_BPF_JIT_DEFAULT_ON is not set
-automatically, it seems not reasonable, but I do not know the reason,
-maybe this is because CONFIG_BPF_JIT_ALWAYS_ON is user selectable rather
-than selected via Kconfig only (like ARCH_WANT_DEFAULT_BPF_JIT), so here
-let BPF_JIT_ALWAYS_ON select BPF_JIT_DEFAULT_ON.
-
->
->> +    depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
->
-> Why is the extra BPF_SYSCALL dependency needed? You could still have
-> this for cBPF->eBPF
-> translations when BPF syscall is compiled out (e.g. seccomp, sock/packet
-> filters, etc).
-
-Sorry, just copy-paste from "config BPF_JIT_ALWAYS_ON".
-
-If BPF_SYSCALL dependency is not needed by BPF_JIT_DEFAULT_ON,
-should we remove BPF_SYSCALL dependency in "config BPF_JIT_ALWAYS_ON"?
+I think any interrupt to the EP should be delivered to the function driver in
+interrupt context, it could be function level reset interrupt, hot reset
+interrupt, link state interrupt etc., These are right now not supported but it
+will use the same notification mechanism to propagate interrupt from controller
+driver to function driver.
 
 Thanks,
-Tiezhu
+Kishon
 
->
->> +    help
->> +      Enables BPF JIT by default to avoid speculative execution of BPF
->> +      instructions by the interpreter.
->> +
->> +      When CONFIG_BPF_JIT_DEFAULT_ON is enabled but
->> CONFIG_BPF_JIT_ALWAYS_ON
->> +      is disabled, /proc/sys/net/core/bpf_jit_enable is set to 1 by
->> default
->> +      and can be changed to 0 or 2.
->>     config BPF_UNPRIV_DEFAULT_OFF
->>       bool "Disable unprivileged BPF by default"
+> 
+>> I'm wondering how other users for CORE_INIT didn't see this issue.
+> 
+> This can be triggered with EPF test or NTB if CONFIG_DEBUG_ATOMIC_SLEEP is
+> enabled.
+> 
+> Thanks,
+> Mani
+> 
 >>
-
+>> Thanks,
+>> Kishon
+>>
+>>>
+>>> So switch to blocking notifier for getting rid of the bug as it runs in
+>>> non-atomic context and allows sleeping in notifier chain.
+>>>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> ---
+>>>
+>>> Changes in v2:
+>>>
+>>> * Removed the changes related to non-upstreamed patches
+>>>
+>>>  drivers/pci/endpoint/pci-epc-core.c | 6 +++---
+>>>  include/linux/pci-epc.h             | 4 ++--
+>>>  2 files changed, 5 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+>>> index 3bc9273d0a08..c4347f472618 100644
+>>> --- a/drivers/pci/endpoint/pci-epc-core.c
+>>> +++ b/drivers/pci/endpoint/pci-epc-core.c
+>>> @@ -693,7 +693,7 @@ void pci_epc_linkup(struct pci_epc *epc)
+>>>  	if (!epc || IS_ERR(epc))
+>>>  		return;
+>>>  
+>>> -	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+>>> +	blocking_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(pci_epc_linkup);
+>>>  
+>>> @@ -710,7 +710,7 @@ void pci_epc_init_notify(struct pci_epc *epc)
+>>>  	if (!epc || IS_ERR(epc))
+>>>  		return;
+>>>  
+>>> -	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
+>>> +	blocking_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(pci_epc_init_notify);
+>>>  
+>>> @@ -774,7 +774,7 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
+>>>  
+>>>  	mutex_init(&epc->lock);
+>>>  	INIT_LIST_HEAD(&epc->pci_epf);
+>>> -	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
+>>> +	BLOCKING_INIT_NOTIFIER_HEAD(&epc->notifier);
+>>>  
+>>>  	device_initialize(&epc->dev);
+>>>  	epc->dev.class = pci_epc_class;
+>>> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+>>> index a48778e1a4ee..04a2e74aed63 100644
+>>> --- a/include/linux/pci-epc.h
+>>> +++ b/include/linux/pci-epc.h
+>>> @@ -149,7 +149,7 @@ struct pci_epc {
+>>>  	/* mutex to protect against concurrent access of EP controller */
+>>>  	struct mutex			lock;
+>>>  	unsigned long			function_num_map;
+>>> -	struct atomic_notifier_head	notifier;
+>>> +	struct blocking_notifier_head	notifier;
+>>>  };
+>>>  
+>>>  /**
+>>> @@ -195,7 +195,7 @@ static inline void *epc_get_drvdata(struct pci_epc *epc)
+>>>  static inline int
+>>>  pci_epc_register_notifier(struct pci_epc *epc, struct notifier_block *nb)
+>>>  {
+>>> -	return atomic_notifier_chain_register(&epc->notifier, nb);
+>>> +	return blocking_notifier_chain_register(&epc->notifier, nb);
+>>>  }
+>>>  
+>>>  struct pci_epc *
+>>>

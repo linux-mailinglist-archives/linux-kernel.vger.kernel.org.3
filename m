@@ -2,99 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E114D2DBD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BE84D2DC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiCILPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        id S232033AbiCILPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiCILPt (ORCPT
+        with ESMTP id S232020AbiCILPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:15:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF41F13CA2B;
-        Wed,  9 Mar 2022 03:14:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 900B9B82023;
-        Wed,  9 Mar 2022 11:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5476CC340EE;
-        Wed,  9 Mar 2022 11:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646824488;
-        bh=k62VYnEAja+A8m7m/Ypa0GboSWV+2bBhbEgOgQIQVR4=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=ra455ULILUulZFobV379nzboqFYi3ADAbkEj4B9+/CzI/43yRfkwPIo+Z8h7C+BOX
-         n30vrJFpQF8OJ40Xlnp6jzeVzgMH+mg8pXx1IJQuOVaCunqMhcqlw9F0ISv1D1CUMg
-         dC9WRDkvN6X/0CGRKQ366APg3kv/sJtuYsyPxjclha11pA7YWrdZ2OW8ojm6qLZISn
-         6lTmlE+YPuUIItTJqxzYYv/tGAk+yPcNJtGgmaBEceyfCG6zaHvaC4g+HdHnKP057c
-         KG+uC9ssTeeYJNT273ofFgIgQJTrBEjbr8pdJzapwK9q4hzY0rE/6WTGO93pEXhNHE
-         XpuRYY3RcGDdQ==
-Received: by mail-wr1-f48.google.com with SMTP id q14so2477025wrc.4;
-        Wed, 09 Mar 2022 03:14:48 -0800 (PST)
-X-Gm-Message-State: AOAM5323QugK2H0HUaUycwEcOSPEiY6KeEldVDaE6Pmu9ODEuAL5Iq1V
-        +HdGQZOpN9CLLKGWnA/6JYOAYqUq/oBZJ6P7L5Q=
-X-Google-Smtp-Source: ABdhPJy6hfL3Lomm6LHCjFT02ifY5Z2dI7dos7tZhxKknO38FbpSc3bNemFJ7dwu98T+AWRaPXffZcT0e/onc5UvZKA=
-X-Received: by 2002:a5d:4387:0:b0:1ed:a13a:ef0c with SMTP id
- i7-20020a5d4387000000b001eda13aef0cmr15722930wrq.62.1646824486677; Wed, 09
- Mar 2022 03:14:46 -0800 (PST)
+        Wed, 9 Mar 2022 06:15:53 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF67713CECA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:14:53 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id q19so1689237pgm.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 03:14:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IsQsBuB2ms4XH7MMbYKCaAltmU40a94dVvRdCh2kPG8=;
+        b=giQbAvpiNC6GgihtPUmX/gFcKXYFcGs5sk/zxjgS1mngiwkVPSv4j6HBatM0A6SLlD
+         N8pUdXxYXl2dKA+Qime4DiOB5yxnMcG6y5PEEtMWzLJPHakjdt5TNPJ9vNIZBKiqfz5q
+         FIS9Y3LvOE9bG3rek35JoAtOfqqZLFepdhsm2MbOwIMeEuLWd+7m0UBTr8YeUl9qIqwH
+         DIMBlWDd/Hq4QUgfWKKEPdUYScu/rzE4O05+0ycytJSuR+bFfjPlArO5p5A6ZTAG0AFs
+         kK1ckGlUZqDk+8DjcadQrClsK0k3ZPNAGZ5w3AzjGd8bBNPWttN+iWpfE5e3PCWow/PV
+         ynGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IsQsBuB2ms4XH7MMbYKCaAltmU40a94dVvRdCh2kPG8=;
+        b=bvFQ0hif+Qtx5Zrrl4v+IUzKrk94mR5XJn5dDH4MjgzgCgkqPeyoF4IUtigmc14i5P
+         Jnn0EV1TRciksEZqbKQYYH2Thl99tFl5LkHkufkWo5uuDXQF1GYBFmxOcrzRTxHHXbZe
+         nH+Q69o/cYtlZ5YERSIJxo2mZqXDQiHjLCyjrKbKP4gh8383yYG7aoIDRnCr5He13c9O
+         0EOcBdnDHNqsthice9MVXWTIpDG+M6PrimK1EGksfwInpcl8utD2ZEVmv8zoBBx5Jy0M
+         PSEdJ5PXUtaQCn4N198PfLyQ980ZOzLwfFMRjRf7PgIClhpH/OP0YOYGs4wna3YwiWbN
+         IqKQ==
+X-Gm-Message-State: AOAM530AfrYqAMhWjhldGIJyaQzz5NYY5fLOpUhsFY6x+dj7ujIjnGZw
+        Rc40Ox0j/8Uhf3SGQldfNJ5Gi86eYtVcdg==
+X-Google-Smtp-Source: ABdhPJwBIGZHoRknu7XKYBKDZJFavSBHX1JbW99jXbsjdCSN8eEhyiUwRrZ9tgEjVnaIgmQI9H+4+g==
+X-Received: by 2002:a63:204d:0:b0:378:c9e5:bea6 with SMTP id r13-20020a63204d000000b00378c9e5bea6mr17841111pgm.573.1646824493366;
+        Wed, 09 Mar 2022 03:14:53 -0800 (PST)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id v66-20020a622f45000000b004f129e7767fsm2459618pfv.130.2022.03.09.03.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 03:14:52 -0800 (PST)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     corbet@lwn.net, hannes@cmpxchg.org, mingo@redhat.com,
+        peterz@infradead.org, surenb@google.com, ebiggers@google.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Martin Steigerwald <Martin.Steigerwald@proact.de>
+Subject: [PATCH v2] psi: report zeroes for CPU full at the system level
+Date:   Wed,  9 Mar 2022 19:14:45 +0800
+Message-Id: <20220309111445.86484-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a05:6000:1d93:0:0:0:0 with HTTP; Wed, 9 Mar 2022 03:14:45
- -0800 (PST)
-In-Reply-To: <HK2PR04MB38910EE3467822EBAB4CC79681099@HK2PR04MB3891.apcprd04.prod.outlook.com>
-References: <HK2PR04MB38914869B1FEE326CFE11779812D9@HK2PR04MB3891.apcprd04.prod.outlook.com>
- <CAKYAXd_hF+xYXNiawCZLYmnha+wSUSUCEJTVBw8v6UDYfjPiUg@mail.gmail.com> <HK2PR04MB38910EE3467822EBAB4CC79681099@HK2PR04MB3891.apcprd04.prod.outlook.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Wed, 9 Mar 2022 20:14:45 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8c+qTqa_ymymFeZmcar+35_CYMjwP41GpbbiMeGUYxjw@mail.gmail.com>
-Message-ID: <CAKYAXd8c+qTqa_ymymFeZmcar+35_CYMjwP41GpbbiMeGUYxjw@mail.gmail.com>
-Subject: Re: [PATCH] exfat: do not clear VolumeDirty in writeback
-To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
-Cc:     "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
-        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
-        "Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp" 
-        <Kohada.Tetsuhiro@dc.mitsubishielectric.co.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-03-08 19:55 GMT+09:00, Yuezhang.Mo@sony.com <Yuezhang.Mo@sony.com>:
-> Hi Namjae Jeon,
->
->> > +int exfat_clear_volume_dirty(struct super_block *sb) {
->> > +	if (sb->s_flags & (SB_SYNCHRONOUS | SB_DIRSYNC))
->> How about moving exfat_clear_volume_dirty() to IS_DIRSYNC() check in each
->> operations instead of this check?
->
-> I found that VolumeDirty keeps VOL_DIRTY until sync or umount regardless of
-> sync or dirsync enabled,
-> because there is no paired call to
-> exfat_set_volume_dirty()/exfat_clear_volume_dirty() in
-> __exfat_write_inode().
->
-> If exfat_set_volume_dirty()/exfat_clear_volume_dirty() is called in pairs in
-> __exfat_write_inode(),
-> it will cause frequent writing of bootsector.
->
-> So, how about removing exfat_clear_volume_dirty() from each operations,
-> except in exfat_sync_fs()?
-Okay. Please send the patch for this.
+Martin find it confusing when look at the /proc/pressure/cpu output,
+and found no hint about that CPU "full" line in psi Documentation.
 
-Thanks!
->
->
-> Best Regards,
-> Yuezhang Mo
->
+% cat /proc/pressure/cpu
+some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
+full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
+
+The PSI_CPU_FULL state is introduced by commit e7fcd7622823
+("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
+but also counted at the system level as a side effect.
+
+Naturally, the FULL state doesn't exist for the CPU resource at
+the system level. These "full" numbers can come from CPU idle
+schedule latency. For example, t1 is the time when task wakeup
+on an idle CPU, t2 is the time when CPU pick and switch to it.
+The delta of (t2 - t1) will be in CPU_FULL state.
+
+Another case all processes can be stalled is when all cgroups
+have been throttled at the same time, which unlikely to happen.
+
+Anyway, CPU_FULL metric is meaningless and confusing at the
+system level. So this patch will report zeroes for CPU full
+at the system level, and update psi Documentation accordingly.
+
+Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
+Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+Changes in v2:
+- update doc about the zeroes in CPU full at the system level.
+---
+ Documentation/accounting/psi.rst |  9 ++++-----
+ kernel/sched/psi.c               | 15 +++++++++------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
+index 860fe651d645..5e40b3f437f9 100644
+--- a/Documentation/accounting/psi.rst
++++ b/Documentation/accounting/psi.rst
+@@ -37,11 +37,7 @@ Pressure interface
+ Pressure information for each resource is exported through the
+ respective file in /proc/pressure/ -- cpu, memory, and io.
+ 
+-The format for CPU is as such::
+-
+-	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+-
+-and for memory and IO::
++The format is as such::
+ 
+ 	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+ 	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+@@ -58,6 +54,9 @@ situation from a state where some tasks are stalled but the CPU is
+ still doing productive work. As such, time spent in this subset of the
+ stall state is tracked separately and exported in the "full" averages.
+ 
++CPU full is undefined at the system level, but has been reported
++since 5.13, so it is set to zero for backward compatibility.
++
+ The ratios (in %) are tracked as recent trends over ten, sixty, and
+ three hundred second windows, which gives insight into short term events
+ as well as medium and long term trends. The total absolute stall time
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index e14358178849..97fd85c5143c 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1062,14 +1062,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ 	mutex_unlock(&group->avgs_lock);
+ 
+ 	for (full = 0; full < 2; full++) {
+-		unsigned long avg[3];
+-		u64 total;
++		unsigned long avg[3] = { 0, };
++		u64 total = 0;
+ 		int w;
+ 
+-		for (w = 0; w < 3; w++)
+-			avg[w] = group->avg[res * 2 + full][w];
+-		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
+-				NSEC_PER_USEC);
++		/* CPU FULL is undefined at the system level */
++		if (!(group == &psi_system && res == PSI_CPU && full)) {
++			for (w = 0; w < 3; w++)
++				avg[w] = group->avg[res * 2 + full][w];
++			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
++					NSEC_PER_USEC);
++		}
+ 
+ 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
+ 			   full ? "full" : "some",
+-- 
+2.20.1
+

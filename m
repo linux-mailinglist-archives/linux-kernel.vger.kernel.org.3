@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F784D3BFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8004D3BFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiCIVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S237064AbiCIVXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238445AbiCIVXA (ORCPT
+        with ESMTP id S234273AbiCIVXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:23:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D809A4E3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:22:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F314161AEF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 21:22:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07130C340E8;
-        Wed,  9 Mar 2022 21:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646860920;
-        bh=W/yJ31yvINnCkFPJ/WGugTbL/AIM/a5yU8NIPqHVdRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UzzbN3WQ/eHy7TvRMTESk9kdTBhqwF8NDHxan2+8yfJsxUELeQLn3SoTPooFQWO7S
-         9M/LZGEDxu9w3JQN7QbzfE+idZoWVsTSOB0hZeafpkOGSTkOFquc7SEUdvAmnxvTki
-         RzbP1qJ8CmiOFm87/iaSIlj7qGncpazig41NpCTMGfM3Q2ql8ZDwEv7N/ksJhcKXfi
-         hFkKNN7yvuQAp+xOGhasTH53g0wpuYhp21AiHy8KC+ommwlgZEyEnbJIe3tJizrFpC
-         ZgwCrdQuPYO+Lzpb3MCr+WQqwkbY73xYbFvXAOIi3PPGllaWZIjNxoQ/fe2AGW2yhh
-         ymFTJD/gW+qCw==
-Date:   Wed, 9 Mar 2022 22:21:57 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 03/19] context_tracking: Rename
- context_tracking_enter/exit() to ct_user_enter/exit()
-Message-ID: <20220309212157.GD68899@lothringen>
-References: <20220302154810.42308-1-frederic@kernel.org>
- <20220302154810.42308-4-frederic@kernel.org>
- <20220305140233.GV11184@worktop.programming.kicks-ass.net>
+        Wed, 9 Mar 2022 16:23:11 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479C89D07F;
+        Wed,  9 Mar 2022 13:22:12 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id q5so5031181ljb.11;
+        Wed, 09 Mar 2022 13:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=VLgjqBH7y19p60K4Q2Ak7wtKmRZ855mtbsvRlPCnkqo=;
+        b=JV7uq62mN7i7UY+NhyIwrofK7K7yFAIp5nBtQTM4ofMVYrsQ5p3JtLKfsksnYMy5i0
+         +G2KQlWUZ408FTElUX6qI3mVTxva7PfFjrY87KL6FXrDUyjFoT4bW2eiR0zlWTMQgwbB
+         us0F+bMEG3/iDEkQu+CMMm+oaXH8g+hwMy8zrrb96nDIEPNwYHvyhrfZV5KTRxGNFNrz
+         MquuR+V7GmpvpR4peeqIUozmbtVEvmQZyHqPQMlp2NTNDf9vz/9687bzI327w9J9TG2J
+         MxqI3JLktNaXMaKSa+LZpABInarWyXgEGEGC8B8UQ/co5gqWFwUDgxyCT+C73btA6Ek0
+         aA0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=VLgjqBH7y19p60K4Q2Ak7wtKmRZ855mtbsvRlPCnkqo=;
+        b=O+7pNEfCyCtUKxpmW55a+e2iyWrDLzka5sK44gsFpTe6VhST51IUgZzsZt6sfo1tdS
+         NfcqVLjXAlY+L1Oc8mMfCPBL5y0Cl1wWX4QowcRbCEVRv2N4HTmmOW0TCo7jCtumt9gA
+         cQeB++MkrujnuDwSNufO/RK2D3yWY7oVkv5GeAprUoIqdTfUPqztjblgluEfqWK9HPi2
+         /SzWif+ZZYR5ar/FceYdBPxV5JX3aaw1AwEHw5UPnPAL75/Pe0KV0jBFCLhrHqxIcWNT
+         NbxIJjpQovW6V1crMjtuIecgKUDTP44HFY4DwFL0g1Az8Bnq/CUqyfHDIw82/64ADMd/
+         BAUQ==
+X-Gm-Message-State: AOAM531xqg3/RCbDG7DwUowMAhLQ9azK6qAASjX32XbhgvDGWPHqNmTi
+        CZWUJbzP788bhcVID91wru9vJ8I2siQ=
+X-Google-Smtp-Source: ABdhPJwZG6GbW1AJfUAfYnSZnqYhCOE/OvJ7F6ZhFw538NDlqCRw//Jr6J9eBxJKOfQD0RBttEf0LQ==
+X-Received: by 2002:a2e:3e15:0:b0:247:d94b:c004 with SMTP id l21-20020a2e3e15000000b00247d94bc004mr954489lja.428.1646860930274;
+        Wed, 09 Mar 2022 13:22:10 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id bq30-20020a056512151e00b0044313dc8e74sm587455lfb.197.2022.03.09.13.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 13:22:09 -0800 (PST)
+Message-ID: <4078dca8-b5d7-7f84-5605-2f5a98563137@gmail.com>
+Date:   Thu, 10 Mar 2022 00:22:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220305140233.GV11184@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] NFC: port100: fix use-after-free in port100_send_complete
+Content-Language: en-US
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+References: <20220308185007.6987-1-paskripkin@gmail.com>
+ <cbdd5e41-7538-6d8f-344a-54a816c6d511@canonical.com>
+ <b46bfa75-2c87-61d9-c0fc-33efb2678f27@gmail.com>
+In-Reply-To: <b46bfa75-2c87-61d9-c0fc-33efb2678f27@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 03:02:33PM +0100, Peter Zijlstra wrote:
-> On Wed, Mar 02, 2022 at 04:47:54PM +0100, Frederic Weisbecker wrote:
-> > diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-> > index 83e050675b23..e8e58c10f135 100644
-> > --- a/kernel/context_tracking.c
-> > +++ b/kernel/context_tracking.c
-> > @@ -103,7 +103,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
-> >  }
-> >  EXPORT_SYMBOL_GPL(__ct_user_enter);
-> >  
-> > -void context_tracking_enter(enum ctx_state state)
-> > +void ct_user_enter(enum ctx_state state)
-> >  {
-> >  	unsigned long flags;
-> >  
-> > @@ -122,8 +122,8 @@ void context_tracking_enter(enum ctx_state state)
-> >  	__ct_user_enter(state);
-> >  	local_irq_restore(flags);
-> >  }
-> > -NOKPROBE_SYMBOL(context_tracking_enter);
-> > -EXPORT_SYMBOL_GPL(context_tracking_enter);
-> > +NOKPROBE_SYMBOL(ct_user_enter);
-> > +EXPORT_SYMBOL_GPL(ct_user_enter);
-> >  
-> >  /**
-> >   * user_enter_callable() - Unfortunate ASM callable version of user_enter() for
-> > @@ -173,7 +173,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
-> >  }
-> >  EXPORT_SYMBOL_GPL(__ct_user_exit);
-> >  
-> > -void context_tracking_exit(enum ctx_state state)
-> > +void ct_user_exit(enum ctx_state state)
-> >  {
-> >  	unsigned long flags;
-> >  
-> > @@ -184,8 +184,8 @@ void context_tracking_exit(enum ctx_state state)
-> >  	__ct_user_exit(state);
-> >  	local_irq_restore(flags);
-> >  }
-> > -NOKPROBE_SYMBOL(context_tracking_exit);
-> > -EXPORT_SYMBOL_GPL(context_tracking_exit);
-> > +NOKPROBE_SYMBOL(ct_user_exit);
-> > +EXPORT_SYMBOL_GPL(ct_user_exit);
-> >  
-> >  /**
-> >   * user_exit_callable() - Unfortunate ASM callable version of user_exit() for
+On 3/9/22 21:27, Pavel Skripkin wrote:
+> Hi Krzysztof,
 > 
-> Why is it NOKPROBE but not notrace, also local_irq_*() include explicit
-> tracepoints.
+> On 3/9/22 12:52, Krzysztof Kozlowski wrote:
+>> 
+>> 
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> 
+>> Thanks, this looks good. I think I saw similar patterns also in other
+>> drivers, e.g. pn533. I will check it later, but if you have spare time,
+>> feel free to investigate.
+>> 
+>> Similar cases (unresolved):
+>> https://syzkaller.appspot.com/bug?extid=1dc8b460d6d48d7ef9ca
 
-Again stuff I need to fix ahead. Thanks for catching that.
+This one is crazy :) No logs from driver at all. Even can't find where 
+probe failure comes from (or even is there any failures...)
 
-Thanks!
+>> https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
+
+Looks like this patch fixes it.
+
+>> https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
+>> 
+
+This one is already fixed. Fix bisection is bogus, but this bug is not 
+reproducible anymore.
+
+
+
+With regards,
+Pavel Skripkin

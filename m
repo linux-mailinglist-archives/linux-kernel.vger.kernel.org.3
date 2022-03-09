@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C0A4D3668
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080024D364B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236543AbiCIRHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S237368AbiCIRI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237029AbiCIRGX (ORCPT
+        with ESMTP id S237604AbiCIRIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:06:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B541B8C93;
-        Wed,  9 Mar 2022 08:56:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E4B7B82221;
-        Wed,  9 Mar 2022 16:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E769C340EC;
-        Wed,  9 Mar 2022 16:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646845003;
-        bh=kDMnZH3ho28GeAh47qD13Y8CWbmenm3wAL3cZzVX4RY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WZ/fu/uYkB4AJIYeqd2YGCJHbzXsMT7wtZryD15B5YtuYJZeMWLRRgwpit7N06+vW
-         UFi07RAEJ3kC3zLDtLzN51JqEn1mKwerx6wT4FhpgKMpWB8b/6guPjwWdZ0eZh4BqA
-         T1SgIlWeTDml1xiN59Jd8Q66goqaKW4tIa7iYP47RkGtbKaLDj23KE6gXjav4z0ONd
-         V8+1Hhmz1XXp+lkWrgbw/NGdZeC9kY5esWordEN8f5BNH285j6nkBC3KFnrjB5f1we
-         mI6dlmfz3YQXgDEIUBn4B0kxqBWN1knNHs/VhY5NpweCcWb+quwpefXveaeFIUWw4y
-         k7OawS80Qrozw==
-Date:   Wed, 9 Mar 2022 18:56:32 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs/kernel-parameters: update description of mem=
-Message-ID: <YijcQAs3neDA/N1w@kernel.org>
-References: <20220309122446.1118738-1-rppt@kernel.org>
- <faadb494-2ed9-f894-257d-9a70398a02b6@infradead.org>
+        Wed, 9 Mar 2022 12:08:38 -0500
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000355A14C;
+        Wed,  9 Mar 2022 08:58:11 -0800 (PST)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nRzdI-0001mC-K3; Wed, 09 Mar 2022 17:57:52 +0100
+Message-ID: <421f4fba-3e1c-b676-d74c-02c6c3f804d2@maciej.szmigiero.name>
+Date:   Wed, 9 Mar 2022 17:57:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <faadb494-2ed9-f894-257d-9a70398a02b6@infradead.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+References: <20220308043857.13652-1-nikunj@amd.com>
+ <20220308043857.13652-10-nikunj@amd.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH RFC v1 9/9] KVM: SVM: Pin SEV pages in MMU during
+ sev_launch_update_data()
+In-Reply-To: <20220308043857.13652-10-nikunj@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,76 +56,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 08:05:05AM -0800, Randy Dunlap wrote:
-> Hi Mike,
+On 8.03.2022 05:38, Nikunj A Dadhania wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> On 3/9/22 04:24, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > The existing description of mem= does not cover all the cases and
-> > differences between how architectures treat it.
-> > 
-> > Extend the description to match the code.
-> > 
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> > 
-> > This is in a way a followup for the discussion of mem= usage on MIPS:
-> > 
-> > https://lore.kernel.org/all/1646461289-31992-1-git-send-email-yangtiezhu@loongson.cn
-> > 
-> >  .../admin-guide/kernel-parameters.txt         | 20 +++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index f5a27f067db9..f3597841a031 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -2834,6 +2834,15 @@
-> >  			2 when the kernel is not able to see the whole system memory;
-> >  			3 memory that lies after 'mem=' boundary is excluded from
-> >  			 the hypervisor, then assigned to KVM guests.
-> > +			4 to limit the memory available for kdump kernel.
-> > +
-> > +			[ARC,MICROBLAZE] - the limit applies only to low memory,
-> > +			high memory is not affected.
-> > +
-> > +			[ARM64] - only limits memory covered by the linear
-> > +			mapping. The NOMAP regions are not affected.
-> > +
-> > +			[HEXAGON] - must be use to set the memory size, there is
+> Pin the memory for the data being passed to launch_update_data()
+> because it gets encrypted before the guest is first run and must
+> not be moved which would corrupt it.
 > 
-> Above line seems to be missing something?
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> [ * Use kvm_for_each_memslot_in_hva_range() to find slot and iterate
+>    * Updated sev_pin_memory_in_mmu() error handling.
+>    * As pinning/unpining pages is handled within MMU, removed
+>      {get,put}_user(). ]
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> ---
+>   arch/x86/kvm/svm/sev.c | 146 +++++++++++++++++++++++++++++++++++++----
+>   1 file changed, 134 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 7e39320fc65d..1c371268934b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -22,6 +22,7 @@
+>   #include <asm/trapnr.h>
+>   #include <asm/fpu/xcr.h>
+>   
+> +#include "mmu.h"
+>   #include "x86.h"
+>   #include "svm.h"
+>   #include "svm_ops.h"
+> @@ -428,9 +429,93 @@ static void *sev_alloc_pages(struct kvm_sev_info *sev, unsigned long uaddr,
+>   	return pages;
+>   }
+>   
+> +#define SEV_PFERR_RO (PFERR_USER_MASK)
+> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
+> +
+> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
+> +					   unsigned long size,
+> +					   unsigned long *npages)
+> +{
+> +	unsigned long hva_start, hva_end, uaddr, end, slot_start, slot_end;
+> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +	struct interval_tree_node *node;
+> +	struct kvm_memory_slot *slot;
+> +	struct kvm_memslots *slots;
+> +	int idx, ret = 0, i = 0;
+> +	struct kvm_vcpu *vcpu;
+> +	struct page **pages;
+> +	kvm_pfn_t pfn;
+> +	u32 err_code;
+> +	gfn_t gfn;
+> +
+> +	pages = sev_alloc_pages(sev, addr, size, npages);
+> +	if (IS_ERR(pages))
+> +		return pages;
+> +
+> +	vcpu = kvm_get_vcpu(kvm, 0);
+> +	if (mutex_lock_killable(&vcpu->mutex)) {
+> +		kvfree(pages);
+> +		return ERR_PTR(-EINTR);
+> +	}
+> +
+> +	vcpu_load(vcpu);
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +
+> +	kvm_mmu_load(vcpu);
+> +
+> +	end = addr + (*npages << PAGE_SHIFT);
+> +	slots = kvm_memslots(kvm);
+> +
+> +	kvm_for_each_memslot_in_hva_range(node, slots, addr, end) {
+> +		slot = container_of(node, struct kvm_memory_slot,
+> +				    hva_node[slots->node_idx]);
+> +		slot_start = slot->userspace_addr;
+> +		slot_end = slot_start + (slot->npages << PAGE_SHIFT);
+> +		hva_start = max(addr, slot_start);
+> +		hva_end = min(end, slot_end);
+> +
+> +		err_code = (slot->flags & KVM_MEM_READONLY) ?
+> +			SEV_PFERR_RO : SEV_PFERR_RW;
+> +
+> +		for (uaddr = hva_start; uaddr < hva_end; uaddr += PAGE_SIZE) {
+> +			if (signal_pending(current)) {
+> +				ret = -ERESTARTSYS;
+> +				break;
+> +			}
+> +
+> +			if (need_resched())
+> +				cond_resched();
+> +
+> +			/*
+> +			 * Fault in the page and sev_pin_page() will handle the
+> +			 * pinning
+> +			 */
+> +			gfn = hva_to_gfn_memslot(uaddr, slot);
+> +			pfn = kvm_mmu_map_tdp_page(vcpu, gfn_to_gpa(gfn),
+> +						   err_code, PG_LEVEL_4K);
+> +			if (is_error_noslot_pfn(pfn)) {
+> +				ret = -EFAULT;
+> +				break;
+> +			}
+> +			pages[i++] = pfn_to_page(pfn);
+> +		}
+> +	}
 
-Yes :)
- 
-> Otherwise looks good AFAIK.
-> 
-> >  
-> >  			[X86] Work as limiting max address. Use together
-> >  			with memmap= to avoid physical address space collisions.
-> > @@ -2844,6 +2853,17 @@
-> >  			in above case 3, memory may need be hot added after boot
-> >  			if system memory of hypervisor is not sufficient.
-> >  
-> > +	mem=nn[KMG]@ss[KMG]
-> > +			[ARM,MIPS] - override the memory layout reported by
-> > +			firmware.
-> > +			Define a memory region of size nn[KMG] starting at
-> > +			ss[KMG].
-> > +			Multiple different regions can be specified with
-> > +			multiple mem= parameters on the command line.
-> > +
-> > +	mem=nn[KMG]	[HEXAGON] Set the memory size.
-> > +			Must be specified, otherwise memory size will be 0.
-> > +
-> >  	mem=nopentium	[BUGS=X86-32] Disable usage of 4MB pages for kernel
-> >  			memory.
-> >  
-> 
-> -- 
-> ~Randy
+This algorithm looks much better than the previews one - thanks!
 
--- 
-Sincerely yours,
-Mike.
+By the way, as far as I know, there could be duplicates in the "page" array
+above since the same hva can be mapped to multiple gfns (in different memslots).
+Is the code prepared to deal with this possibility?
+
+Thanks,
+Maciej

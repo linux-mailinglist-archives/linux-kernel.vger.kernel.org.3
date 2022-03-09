@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386484D2D3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEBB4D2D41
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiCIKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S231273AbiCIKmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiCIKlr (ORCPT
+        with ESMTP id S230518AbiCIKls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:41:47 -0500
+        Wed, 9 Mar 2022 05:41:48 -0500
 Received: from CHE01-GV0-obe.outbound.protection.outlook.com (mail-gv0che01on2092.outbound.protection.outlook.com [40.107.23.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4E17307E;
-        Wed,  9 Mar 2022 02:40:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357B976E37;
+        Wed,  9 Mar 2022 02:40:50 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kO7zEBxJRqMu0JmjhpQF9pnaYYShHj4wRZvAsY5RqQ2Fv5N1TT2X1qpGHG6fsch1TvCQtgMf0wv58ZiZ1RV03InkmUaL8Shf2VaD9ey2LHHMNHuNFuUpVUOuRKZuJaRgopWmaka9fWhnte4MFaJRW5ORREUQcVuXmkJwZ9nenG74j1r2Br39E+W5i5AFKvLhifsk4T7aZfDy8qq4tDcXp2y7pGqRE4Edfj4S51toAH934N2ikpSwVIZCP/gskin+2TG1iccXAblAT2y2ZMLrPtyFdE3U441jiFCvjMARnHhub4fiO6fDz/FXEbEr37hHTktbEyB9Elz7d57ttPpeYQ==
+ b=IQWFhMPy/psNl/sFTmwqDEfVe0HJgPSKJ1Jedba1wFN/OZ5RMO75Lu1Z6DwuCXdkB/c+EjssqezA+BVDY0dXJL5KtRFIEyzazpVgSMtb068oH3KgaOYv+4nVphMcfXKIOOGslzAUZBUD+1uxdhiabsZb/5VdCx9RoRYFDzsV3DkRT/OjOj/BZ38dhJtlCpFi9evbELEStUji0RrbpUYccyuPNYSgH23u97BBC96NB4E1VXw4WV9S0r/8/XKU1vnvnaiBdmT3V6MyiMf7VcRObvmaXHOkNRFpV2GfGj2ibJx4BW8MilEcI4FU/3+EcRuE+FfXqGGABIHF3E8alZuKkg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2uD1/4Gq9DAank3lB+nLKJNfgqkbifHL7AgqWO2oPd4=;
- b=douNxSM3rtBUn2V5ftj518G0Nc1LZvIkrPO9ZI3EhW3VA1Kaw+Ol8uJCWZEZVhr6uorgz0oIAkQGn/NO07ug1pUiNrepOs8Wb085jNQESeOnLavJKq7OsU0rJGIcR6m4pyPpThMcIqJXkU8yogsyha10NprQ5b66uKpQa8B6qzUs5+QLQ+KLPPYiQ4Uth/sAv6Cw/2hPy+RHCRejcT/3gnk6KnI91DUnnuk/+1AHcG0yBwaLVxC54An5ESMfk8fNqJaO6TOZwh93Cp9M7ehLQXR4RbvenkQG9dEiGOmRKN6DNhpYG8mFXZS7UO136XAlXO/EaXrjetMwWVW0SK8Eag==
+ bh=03tsBzrBNZts1+8g5MU/lOY0z2f0yh3fK7Ci/FDeFqQ=;
+ b=k0AnZRfV/hd/kGH/xh7k0g0TCjCq2oPGF9qAw7ATSVdNI69sTAimjsvG95sK757IK9fCLTwEXeh0WrM9d+F4d204pd1raxb2MK9deS4wE6SfiRfhg3ZK+zN/kSAh5PPwPkOA01D5jPjD2giWv6gBizFB9ssigtmZzOwZzEIXPE/8WB6FIJ0zVKPldyznWLpUQh6NEOgSoYZTLSb8QyAQvfu8iK5pp41gCptCirPGLAQT7C5ljjSwu6hDU6cxHEjTNWtknl86dN5bziXm4i/J3koaw9G9C7Rj4eVlFaVuUZmFN8aPERKSFHoH9hyCN+AVc+sRijzRhrIUWvy6RzQ7KA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=netmodule.com; dmarc=pass action=none
  header.from=netmodule.com; dkim=pass header.d=netmodule.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=netmodule.onmicrosoft.com; s=selector2-netmodule-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2uD1/4Gq9DAank3lB+nLKJNfgqkbifHL7AgqWO2oPd4=;
- b=X/OYDV0U9VzhFKaAke1FHW3OwRsiO4FXWbeZzIsDJjmoJATqm+QEfDhBS4TqkCEc+h0UO13IoI+Sr/IZZ/EyoHGs4z1USXTQQb6MvRe3DZO1lsr3qVdCh82wHgjh+R9Z0yrznah97Ut/Ik9WLZcD5SCJDGucbqZjZwmhxx8+d3I=
+ bh=03tsBzrBNZts1+8g5MU/lOY0z2f0yh3fK7Ci/FDeFqQ=;
+ b=BW/dsrDKYYynOW1SanK8URC/ijSkD+/ZZVHnB7lBjLKJCPTIG3/5ijOJUisUoAQlKmrU1OMSfo5i240ZgJ94S2HSnj86+dzXMlvlOZdVnJWLmSRl5R010X0MnvXh6f9/VLKBX5g/u/BDIZaAzscvqKtZm0v9C5uazGbUub2nF7g=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=netmodule.com;
 Received: from ZR0P278MB0027.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:1a::12)
  by GV0P278MB0949.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:54::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 10:40:47 +0000
+ 2022 10:40:49 +0000
 Received: from ZR0P278MB0027.CHEP278.PROD.OUTLOOK.COM
  ([fe80::1132:a401:5946:ee88]) by ZR0P278MB0027.CHEP278.PROD.OUTLOOK.COM
  ([fe80::1132:a401:5946:ee88%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 10:40:47 +0000
+ 10:40:49 +0000
 From:   Marc Mattmueller <marc.mattmueller@netmodule.com>
 To:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Marc Mattmueller <marc.mattmueller@netmodule.com>
-Subject: [PATCH 1/2] mmc: core: update life time and pre eol info values on sysfs read
-Date:   Wed,  9 Mar 2022 11:40:20 +0100
-Message-Id: <5fe56c7fe12d48996ba557596b16b1cd0adca6a2.1646820083.git.marc.mattmueller@netmodule.com>
+Subject: [PATCH 2/2] mmc: core: add reliable write setting to sysfs and update on read
+Date:   Wed,  9 Mar 2022 11:40:21 +0100
+Message-Id: <d68d8c8edda35a050a6e92b0ff1d57dd3e7c61d6.1646820083.git.marc.mattmueller@netmodule.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1646820083.git.marc.mattmueller@netmodule.com>
 References: <cover.1646820083.git.marc.mattmueller@netmodule.com>
@@ -58,54 +58,54 @@ X-ClientProxiedBy: ZR0P278CA0185.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:910:1a::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e84f0d6-ac2d-4b32-5e86-08da01b94558
+X-MS-Office365-Filtering-Correlation-Id: 62ca70bb-3f4e-40c3-39eb-08da01b94674
 X-MS-TrafficTypeDiagnostic: GV0P278MB0949:EE_
-X-Microsoft-Antispam-PRVS: <GV0P278MB0949FE50773EAB6FCAA04205850A9@GV0P278MB0949.CHEP278.PROD.OUTLOOK.COM>
+X-Microsoft-Antispam-PRVS: <GV0P278MB09498AEA5E4B4FB71D048217850A9@GV0P278MB0949.CHEP278.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K9PcgFc6PKEwL4yNJ3VXMDE3pLdKUPqXTPlETJ4OJnFmKSNwS5bCP6SiSRixumcAEIrZNIrb+RRY2zvmDOQD9LJmXEPcZRm+TE2BnQaEGcp5DP+94C8QaUeENrewXlDiUx3Re4tl6xuiJfIdX1+fmTTVsxCG6Ca7tYC9cLD+fCV0KofrDuLww6XAN4Y2FAK7etrrkfqgQd3CNk+ewR4AXOmvfVdI1jUNQjB0iM+qj7IxQ2tUlraL3LpMaWTYGD3EHi/yF626rdVVxu6IhP+d4jv8XPvkreRXwF++kobqmqJiBB1IVg2cWWVttqKfNeFrc56evKSU9I0OvHJq8YYVOlLdxUM7v6HEAWl9EKiMSdAniMoYwwvWQpOJjtxroK+5NU3x20Pa4+z/Iht5yj21rA05ODaHX1FChvJ5l550ndxMgNawpDSZMbzuoYrsjFytVs/WLVL1aJq1wIZLVYof5zyvIx3BN1UGQFHBmhz03rWHquLVAYbw8gUip0jyJDay6pj8F3pciWCMY5gurw2uczZ9L/+9Hp15FvX4SlCOgcDI5HhMgGKIlyFFcDeuUEWEw04olAdWwy25pSZJNEt4IKzpNnI9RE8peWGkEt/uy+MSqTiTJdgh6qgMmHrbpsr+0KR30fYrREfHI1QjsYgpKv0xknPG6KdwXlTulRmKzPOUqxrdGPkZyJ/JGD2WV/Ic033rOv92Ou+F7ch1JhdAww==
+X-Microsoft-Antispam-Message-Info: w73ULT7TiCy1I3LIwtbFWuzr0O6XoS5H3DVdE2qcT6QopaKKzWTO8DqD+LBCA5Ihs3tzRbhmxX2kuMneA6o3zOfdK7YKjrD1P4+iRNE80G7KrJsNvPJx62p0CNtRtYQNnVD2uUTgIKxWc1tCjtMb63ED+dGM4BilgzGUJB0gaGS5QkNJBswM/4H7dP9O1zu8X+Xpdwb5deo8VGn91YvJZeNydseKRXIrkXEucxBCiwKYNY2yXnBHnJ+x6vBMDS5Li8S4v0aKMxuFChVpMRUcNx2PO7EmKlWHLXqGSB3SxlBs8fPQI15qj9JMQaGpQUGBF133Iv1KPhNu6pkHjaGwbWhGzBk/uOlfnSXhL36DcKojMqr8yb2Qox1IP4vvS0xux5A/xXDRqdETAREf21t/n7IQGxXhoqlka3h+oAYJav9bHLXSEHQ+wicN6dqDS2nlHcgqnHX0d2fGVyyh+Iv1jpy3WzJYeHKE5mJJDqOCN/gvcgwUe/9suyMC60LA6QFynH/DHlO5J+t4QY1e2+6D1bq+vPvW3KRzG229hMeI2bVC+3WyUG3WcsZqw+zf5DTPRcZzh7zs7h4CMoo+ndX76m+lxdwrVjGGvOvPwkmQ+GmijQ00mm5vDhzd4XJjGjE484mLVUx594rENuYQW1/4xaGWuyKpDOfl9sASgqoqI4ZlwM545P0wfz36OSCpNaE4+9NF6Jl/C/WqZsNLa1jTHw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0027.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(346002)(376002)(136003)(39830400003)(396003)(366004)(52116002)(107886003)(508600001)(2616005)(186003)(26005)(316002)(83380400001)(6512007)(36756003)(6486002)(6506007)(6666004)(2906002)(66476007)(66556008)(5660300002)(8676002)(4326008)(38100700002)(66946007)(38350700002)(44832011)(15650500001)(8936002)(86362001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aM/RTbNfmgq6aiyixkC07j+ZJFueNX9/UdRqjlM830PnedscGEOuUX/sKwcc?=
- =?us-ascii?Q?LOSoF1mBwae2NB/wrwQ1TR6uufs46Cch4Lxgn1CeelcYbAn6XQaSUpdStJTH?=
- =?us-ascii?Q?u/9Mx29dgG/b0LYfC2ib32vYsLP9FMrMISGBLVVK/TE9UtcggyehfjdxbwOU?=
- =?us-ascii?Q?6D2T5oP4TUvXaheqZIbk5zDUeZtlZoQSI6fQx8i8GNqRyIL1kZsFT5MzhXMX?=
- =?us-ascii?Q?s1sMBwv/u7lQhsM7WRCMFdSjgisePSfKDq0M+zogMkeFlsurUbb3eBw1bMMn?=
- =?us-ascii?Q?0QBGZqjU5CXIfX9KZZy/Sg7UP0IJuvygpNLpAOJ10umhdhYjUWyp69LhMwYs?=
- =?us-ascii?Q?WfWUyLenyT46bjK1Lrbp06BX19mttOUI26oqMSiY3cmBmH3uw4ehO+KMm8tE?=
- =?us-ascii?Q?/iqEiBKpx5jaoZmMKYt/sSt2oRYhR2kmiglB0CpYTHuvlfhoFa79W8z5q427?=
- =?us-ascii?Q?AjEw3gpkorCBNNag0iN6XvN9S7KEP6mjkZ4Qx4oWT3c0gHWXYaE5zvSSJaiQ?=
- =?us-ascii?Q?PsNWx/VuSJTd4Fg30u2bpUS5dCbL6sdN5XbVvS13DsCrZzOJfBLc/O/tea93?=
- =?us-ascii?Q?nbMxW8TPri17mWmwqT2SeL0+sabVEXOduzx7/gFf6BCDDQSkP2/Wy8QlTrBw?=
- =?us-ascii?Q?92eCrE6Bbb0+9PVYSjxV43EF/wH0HxZybRk9OPjRHHIb0wAY5tZYa1A10PvL?=
- =?us-ascii?Q?jNQFCR/5U3Pc1S3b3BoO78C+igJf8/kCkPTJQzHGvoPa8JI100SVf5vktuJz?=
- =?us-ascii?Q?tA0LxP03RDaeFz+1hjQiCziolXpeBQMjxMaozSoVJCG++Mrqbqlh4w0rWRqo?=
- =?us-ascii?Q?hcLNLRRMtgRucv6U84YTM30pYNuXRa558MOlIAFC8kORN71wkXJxb/2xxp0V?=
- =?us-ascii?Q?uHOpru2WGu4Fs9jTDlv+BhMLNLFeA+Ng8Uo0NgqozHiXDaSjIWiloqBEIbS7?=
- =?us-ascii?Q?JoG/jktomMQeywhXQW6fsPH0vwy81W6icL6ldGUPjSnVLtfCIyJ3CkEigPkB?=
- =?us-ascii?Q?0m9PwJIMtxOcz4Y6HGF75F1UB/x0hptqosvZqzzf3u/CKjXEmZ6+q1wWUDN9?=
- =?us-ascii?Q?OT+uQWlRwFrqdxFKCvDmv8GrLyAkS+SunYltytKyMAB3O3CY9DktFioX0Lsr?=
- =?us-ascii?Q?J9Uo2hAf7qcEVq5T0D5yuRiBlTBk6ci2paQnHNvId+w+DWL6lSkEeQMdvP7Z?=
- =?us-ascii?Q?+3ds1nS0KSFJPh0nnV1g4/+VLyGzLO17ABb0y4UpBc3fm9bBSUdpurgYfKph?=
- =?us-ascii?Q?jVNzKzuBT6AnHMxw5fekZsB9TqVqpifT1Cjf+F1ZUub7wVlBhTh9f456qLIs?=
- =?us-ascii?Q?bccu9J569W544lKeiHeTsxOWc8Tf279AGX2OEVB9fPcAaGlqp90uW8KH0usP?=
- =?us-ascii?Q?3bhyPaKZO/l8l0zHFyAXekB69xaa9HLapF1Sv6GrUC18NPD37OK3osfmrWp3?=
- =?us-ascii?Q?NqQ3dOdxWiRf0NZUVORq2+jYBSIHcRard6OQ90tE6lJ1y0bSCXAxJVxsYaz5?=
- =?us-ascii?Q?OMWGgR/YzSWWNbA880zcYsgO0lOllhA5g2Qz3P9XBltnicDr/7dsQ/2XYyMo?=
- =?us-ascii?Q?GTMwaMfXT5Co+wL576pEJZDg+CbBpXc/glb0TcGXXDrEmp5rBllnM/Qv5uXV?=
- =?us-ascii?Q?JvtSzj5ZUTCbsF+xV5eJ+gn/LRL55RFPCACvbRcOmDqqRGvZVpG64KH8Plhq?=
- =?us-ascii?Q?G/dPpw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cFZfWQ5h298N1mwg0L91NSYvCFSWNjZR4iL0RVcxaFcfZkwA6ILCTBubQbof?=
+ =?us-ascii?Q?32ArMQmc+Vjwz+i+L3rvuf1SDh5S0PMnlPGRgzdSRDZn5pDRWRyM8Js7dToF?=
+ =?us-ascii?Q?pIBLsYr7+07Xa7n6qWqS1zhS/azx25FkSPndMO1OZofRcKVCSm1p+S123PJo?=
+ =?us-ascii?Q?lYkiWOeQn3Pot2c6CUM36rZcSPLhUIPGFT2JckRfI7Doqj6TWZ1PkjQ3Dqxs?=
+ =?us-ascii?Q?bdMe1M2Cqy6bTqeLRg48JpDy4ds6Im+yXxBJHPtZ2aX3lmmzH1CdNYG/Hhr6?=
+ =?us-ascii?Q?wjcKaHd/vXpYw0Y3GqSLjzNu3EVeizuWQEbRsi/SspYIdsa526wJqSpY5VzI?=
+ =?us-ascii?Q?IddRngETq8bvL4JSBdsRMn3dS1cphKKy41PQoAR7aWbG0KKvTKSTi4vdl+8k?=
+ =?us-ascii?Q?yho/zBWzL9qrHWdvYggOp064OiVPusiFHEEwjLO6kL0WZvky6Qg/XZSDrzCe?=
+ =?us-ascii?Q?QbzTelujG5XO2jCWNsKDG760yMEbEMP3qpVAqtgTDvxGQ0wOZkU4vAH0KFqX?=
+ =?us-ascii?Q?HGzJs4Y8bttu1LNP4hU31BioYYjfj9JrxALgq2Y3rCOd5FMG+5Ke4kQw+oV5?=
+ =?us-ascii?Q?C2ScDlyMLGsS3pkeqJyqlVoYSD0Cb6MVADttJMeIdnLjK3yXZHdrKk92hPUZ?=
+ =?us-ascii?Q?FstPVyVLSW22oaJuj0Vy2M+eKLh0cWm2jwJI/WYyxbByW8K1cRE5+M7GtYZD?=
+ =?us-ascii?Q?fq5pUpwNa2GujiX9CvY2vMYg3GiqnFwUoh4rVaalybl9nrXA+naKQsq0Tml7?=
+ =?us-ascii?Q?A8LE49CqXg6DfYh6dLszoVBEpD815itJ4U7zLaHm5pbO9rNdHxR0LCE64upx?=
+ =?us-ascii?Q?OtYZh/ufF1t5QNZ892hNNLugZcg0wEaSsD01bfty5bGocvo7YE9G+Gyynogd?=
+ =?us-ascii?Q?JH7oMocrXS4Bnmm/ZkLbJ/1J54sMImAOFunGgCKN1kPRD1AULg2dpP1W6e1s?=
+ =?us-ascii?Q?s6rv+5Ebx5MxAeffo7gmgJwqsFqyDvVnFbKQYKvlmRHVOQGe4jiWKjtZ5pml?=
+ =?us-ascii?Q?qmbGXfJAFQ8ewcFS6ocMcCKu+IUgRKiNgb7sztx+AeYH2+i0sym+KA4kVA+Q?=
+ =?us-ascii?Q?fmpebzbIVMw5y6XZrNb6pj1sO0gmEYHwTcJHLhHhDNDd+3KLOijfGClYfa4Y?=
+ =?us-ascii?Q?1YNC0rSAkTWcCXRxLHvk6I0V5Fvr/hoDp057ybTJ9Ihx1Zm+XcfuziiZNcrx?=
+ =?us-ascii?Q?8yVDn3wkHChaLPNlOO+9oPmQCpBypoucLWh6oAQObWFLEaKjf9/JYYNqqfej?=
+ =?us-ascii?Q?9/1SdgeqyY88mOzomyjGUfonrgQ0QX+So9gXOWpWb+KVoSGpb+ZHO6DtzsJ8?=
+ =?us-ascii?Q?FBrNY8IbRVtxUAEeXfkzsnt/oY/bViREoJ3xmP1YRoH/8nJsMI2SuaxzsX13?=
+ =?us-ascii?Q?nMfjvblJECJAreDXjMEayYWSlH1lDcKn13sMft/gA/Bc36JU5iZGA8z8H6Ei?=
+ =?us-ascii?Q?iJejFvBRoy2EDC6NZPAybnrn9Rg9uOSGBWFPz5OfYgQps0hvCu5E3XYf3etp?=
+ =?us-ascii?Q?4tbfShFapEJnrw2CAD0plf8Enuoj7mv9VeIA8UNPbQy8k4QqZ2qNo2OkjDmr?=
+ =?us-ascii?Q?bt70O/S/GBEXsqzwHecD0Wa4xdlgZCASCncraRp4ep1aMT/3RZPOIsCOj5Lc?=
+ =?us-ascii?Q?mL9heqvrf1q0LnhL2QUMKjE0zzqsmkIifHDcHQZNH7FXrYCuMsJiWhsyyzzf?=
+ =?us-ascii?Q?rH4u8w=3D=3D?=
 X-OriginatorOrg: netmodule.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e84f0d6-ac2d-4b32-5e86-08da01b94558
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62ca70bb-3f4e-40c3-39eb-08da01b94674
 X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0027.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 10:40:47.1749
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 10:40:49.0195
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: dcdfa962-340b-405e-be0c-5bfcc8a0841e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v6KL9RKGaEeyCm/0YOO+H5P5eV7J+ZX/iFtz6v3bPy4V725BQMup4FLb1Oqjycc9E8xqypbLeDLF5RIrNHnOfD9d1/5Ll6EJ1QhlrJk4P/o=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Px+utMKj1+l4Kg1gDyswrs8kiMHqNV56U5gIFTaUbL1LXFtK0YKyOuVD9KJJlEOpjzhjcg/7cWjSUNezg5uEY3EAl9Apt/Vt0722qSFnwcU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0949
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -116,136 +116,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mmc estimated life time values and pre-eol info values were
-only read at start-up and were not updated on sysfs read.
-Thus, added update of the ext_csd structure on sysfs read of
-device_life_time_est_typ_a, device_life_time_est_typ_b and
-pre_eol_info.
+The mmc reliable write setting (from ext_csd) was not available
+on the sysfs.
+Thus, added rel_param and rel_write_set to sysfs and added the
+update of rel_write_set on sysfs read.
 
 Signed-off-by: Marc Mattmueller <marc.mattmueller@netmodule.com>
 ---
- drivers/mmc/core/mmc.c | 87 ++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 83 insertions(+), 4 deletions(-)
+ drivers/mmc/core/mmc.c   | 29 +++++++++++++++++++++++++++++
+ include/linux/mmc/card.h |  1 +
+ include/linux/mmc/mmc.h  |  1 +
+ 3 files changed, 31 insertions(+)
 
 diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
-index 43d1b9b2fa49..d9537c894e33 100644
+index d9537c894e33..a64d1ecb0de9 100644
 --- a/drivers/mmc/core/mmc.c
 +++ b/drivers/mmc/core/mmc.c
-@@ -357,6 +357,25 @@ static void mmc_manage_gp_partitions(struct mmc_card *card, u8 *ext_csd)
- /* Minimum partition switch timeout in milliseconds */
- #define MMC_MIN_PART_SWITCH_TIME	300
+@@ -364,6 +364,10 @@ static int mmc_update_ext_csd_runtime_params(struct mmc_card *card, u8 *ext_csd)
+ {
+ 	int err = 0;
  
-+/*
-+ * Update extended CSD parameters changing during runtime.
-+ */
-+static int mmc_update_ext_csd_runtime_params(struct mmc_card *card, u8 *ext_csd)
-+{
-+	int err = 0;
++	/* eMMC v4.41 or later */
++	if (card->ext_csd.rev >= 5)
++		card->ext_csd.rel_wr_set = ext_csd[EXT_CSD_WR_REL_SET];
 +
-+	/* eMMC v5 or later */
-+	if (card->ext_csd.rev >= 7) {
-+		card->ext_csd.pre_eol_info = ext_csd[EXT_CSD_PRE_EOL_INFO];
-+		card->ext_csd.device_life_time_est_typ_a =
-+			ext_csd[EXT_CSD_DEVICE_LIFE_TIME_EST_TYP_A];
-+		card->ext_csd.device_life_time_est_typ_b =
-+			ext_csd[EXT_CSD_DEVICE_LIFE_TIME_EST_TYP_B];
-+	}
-+
-+	return err;
-+}
-+
- /*
-  * Decode extended CSD.
-  */
-@@ -367,6 +386,16 @@ static int mmc_decode_ext_csd(struct mmc_card *card, u8 *ext_csd)
- 	struct device_node *np;
- 	bool broken_hpi = false;
+ 	/* eMMC v5 or later */
+ 	if (card->ext_csd.rev >= 7) {
+ 		card->ext_csd.pre_eol_info = ext_csd[EXT_CSD_PRE_EOL_INFO];
+@@ -587,6 +591,7 @@ static int mmc_decode_ext_csd(struct mmc_card *card, u8 *ext_csd)
+ 		}
  
-+	/*
-+	 * After once having initialized the ext_csd structure, we want to
-+	 * update only the changing parts. To check this the revistion is
-+	 * taken.
-+	 */
-+	if (card->ext_csd.rev != 0) {
-+		err = mmc_update_ext_csd_runtime_params(card, ext_csd);
-+		goto out;
-+	}
-+
- 	/* Version is coded in the CSD_STRUCTURE byte in the EXT_CSD register */
- 	card->ext_csd.raw_ext_csd_structure = ext_csd[EXT_CSD_STRUCTURE];
- 	if (card->csd.structure == 3) {
-@@ -791,10 +820,6 @@ MMC_DEV_ATTR(name, "%s\n", card->cid.prod_name);
+ 		card->ext_csd.rel_param = ext_csd[EXT_CSD_WR_REL_PARAM];
++		card->ext_csd.rel_wr_set = ext_csd[EXT_CSD_WR_REL_SET];
+ 		card->ext_csd.rst_n_function = ext_csd[EXT_CSD_RST_N_FUNCTION];
+ 
+ 		/*
+@@ -820,6 +825,7 @@ MMC_DEV_ATTR(name, "%s\n", card->cid.prod_name);
  MMC_DEV_ATTR(oemid, "0x%04x\n", card->cid.oemid);
  MMC_DEV_ATTR(prv, "0x%x\n", card->cid.prv);
  MMC_DEV_ATTR(rev, "0x%x\n", card->ext_csd.rev);
--MMC_DEV_ATTR(pre_eol_info, "0x%02x\n", card->ext_csd.pre_eol_info);
--MMC_DEV_ATTR(life_time, "0x%02x 0x%02x\n",
--	card->ext_csd.device_life_time_est_typ_a,
--	card->ext_csd.device_life_time_est_typ_b);
++MMC_DEV_ATTR(rel_param, "0x%02x\n", card->ext_csd.rel_param);
  MMC_DEV_ATTR(serial, "0x%08x\n", card->cid.serial);
  MMC_DEV_ATTR(enhanced_area_offset, "%llu\n",
  		card->ext_csd.enhanced_area_offset);
-@@ -807,6 +832,60 @@ MMC_DEV_ATTR(ocr, "0x%08x\n", card->ocr);
- MMC_DEV_ATTR(rca, "0x%04x\n", card->rca);
- MMC_DEV_ATTR(cmdq_en, "%d\n", card->ext_csd.cmdq_en);
+@@ -886,6 +892,27 @@ static ssize_t pre_eol_info_show(struct device *dev,
  
-+static int mmc_update_csd(struct mmc_card *card)
-+{
-+	int err = 0;
-+
-+	mmc_claim_host(card->host);
-+	err = mmc_read_ext_csd(card);
-+	mmc_release_host(card->host);
-+	return err;
-+}
-+
-+static ssize_t life_time_show(struct device *dev,
-+			      struct device_attribute *attr,
-+			      char *buf)
+ static DEVICE_ATTR_RO(pre_eol_info);
+ 
++static ssize_t rel_write_set_show(struct device *dev,
++				  struct device_attribute *attr,
++				  char *buf)
 +{
 +	int err = 0;
 +	struct mmc_card *card = mmc_dev_to_card(dev);
 +
-+	/* before eMMC v5 */
-+	if (card->ext_csd.rev < 7)
++	/* before eMMC v4.41 */
++	if (card->ext_csd.rev < 5)
 +		return sprintf(buf, "%s\n", "-");
 +
-+	/* eMMC v5 or later */
++	/* eMMC v4.41 or later */
 +	err = mmc_update_csd(card);
 +	if (err)
 +		return (ssize_t)err;
 +
-+	return sprintf(buf, "0x%02x 0x%02x\n",
-+				card->ext_csd.device_life_time_est_typ_a,
-+				card->ext_csd.device_life_time_est_typ_b);
++	return sprintf(buf, "0x%02x\n", card->ext_csd.rel_wr_set);
 +}
 +
-+static DEVICE_ATTR_RO(life_time);
-+
-+static ssize_t pre_eol_info_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	int err = 0;
-+	struct mmc_card *card = mmc_dev_to_card(dev);
-+
-+	/* before eMMC v5 */
-+	if (card->ext_csd.rev < 7)
-+		return sprintf(buf, "%s\n", "-");
-+
-+	/* eMMC v5 or later */
-+	err = mmc_update_csd(card);
-+	if (err)
-+		return (ssize_t)err;
-+
-+	return sprintf(buf, "0x%02x\n", card->ext_csd.pre_eol_info);
-+}
-+
-+static DEVICE_ATTR_RO(pre_eol_info);
++static DEVICE_ATTR_RO(rel_write_set);
 +
  static ssize_t mmc_fwrev_show(struct device *dev,
  			      struct device_attribute *attr,
  			      char *buf)
+@@ -931,6 +958,8 @@ static struct attribute *mmc_std_attrs[] = {
+ 	&dev_attr_oemid.attr,
+ 	&dev_attr_prv.attr,
+ 	&dev_attr_rev.attr,
++	&dev_attr_rel_param.attr,
++	&dev_attr_rel_write_set.attr,
+ 	&dev_attr_pre_eol_info.attr,
+ 	&dev_attr_life_time.attr,
+ 	&dev_attr_serial.attr,
+diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
+index 37f975875102..21c47893fcb4 100644
+--- a/include/linux/mmc/card.h
++++ b/include/linux/mmc/card.h
+@@ -48,6 +48,7 @@ struct mmc_ext_csd {
+ 	u8			sec_feature_support;
+ 	u8			rel_sectors;
+ 	u8			rel_param;
++	u8			rel_wr_set;
+ 	bool			enhanced_rpmb_supported;
+ 	u8			part_config;
+ 	u8			cache_ctrl;
+diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h
+index d9a65c6a8816..42afd442a70a 100644
+--- a/include/linux/mmc/mmc.h
++++ b/include/linux/mmc/mmc.h
+@@ -266,6 +266,7 @@ static inline bool mmc_ready_for_data(u32 status)
+ #define EXT_CSD_BKOPS_START		164	/* W */
+ #define EXT_CSD_SANITIZE_START		165     /* W */
+ #define EXT_CSD_WR_REL_PARAM		166	/* RO */
++#define EXT_CSD_WR_REL_SET		167	/* R/W */
+ #define EXT_CSD_RPMB_MULT		168	/* RO */
+ #define EXT_CSD_FW_CONFIG		169	/* R/W */
+ #define EXT_CSD_BOOT_WP			173	/* R/W */
 -- 
 2.20.1
 

@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A924D2A46
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5534F4D2A3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiCIICf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S229948AbiCIIDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiCIIC1 (ORCPT
+        with ESMTP id S230526AbiCIICx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:02:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF16169200
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:01:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B87A60F26
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:01:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C027C340EE;
-        Wed,  9 Mar 2022 08:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646812887;
-        bh=v3kCSOlPYnjQWLgSvNmxaNEN5wv4j9rO5qcLBkRkMHo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cDTY3XffBbD3A8QDjhNkD5yGc9ypqwpzzem4gW/Zd+oxcSuK8A5w/OrorKIxvhTLS
-         JvsZslWk7G6hy+OI/3rC9P7I+ln0NweMjX2ClnC+sDiMnkqjoT5dUVlcrr4MEXT5+d
-         COJ861hGPcAqeMT6xcirRBlbGwSYspIQrRBm/0L0QzISG4dEFE5gv5yZ7o2zx+QehK
-         I9O6JDgw7f+sFTTdQmwppzb0zJxrE5slb25ewrK+PNgVbFEhn7xz04lun+WI+pVAE2
-         uqtH70VBH/YqgZNr5tK/p+5lIORy1FlZRguXWPdekBuMrSHA8JMbZa5phEm6Rb7AqC
-         usSm+biJJvGTw==
-Date:   Wed, 9 Mar 2022 17:01:24 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org
-Subject: Re: tracing : bootconfig : Early boot config for non intrd systems
-Message-Id: <20220309170124.82dcfadbcda6f8ab6ed51797@kernel.org>
-In-Reply-To: <20220308174829.GA2471@pswork>
-References: <20220307184011.GA2570@pswork>
-        <20220308163600.3109f19854c7b051924f262b@kernel.org>
-        <20220308174829.GA2471@pswork>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 03:02:53 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1DE14ACA5;
+        Wed,  9 Mar 2022 00:01:51 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id q29so336823pgn.7;
+        Wed, 09 Mar 2022 00:01:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=9NCYkSh7WOOrI18nt+bZr9iw0Fk5iZ5BLxbcbUOhkXI=;
+        b=U/jET7sO/NExyFRaWRibiTJ+8oeoHq7sETxqJeQpSDONf935uV6TOOXjtgJAbwuMea
+         jfqTxMW4r/MyJbjR9ZI/lcJswrjmXClm1VUX1Co4+y/ZmpJz1nnBLnhJXSFNKFKLRKIw
+         gM8e8Z9+rEudkzM3dojRTuIa+5RtbOMbg5s6jtVCIl7M3tyic36fiKh5p9yvQaee+1iI
+         2ebxeR/MPfalVSkl3MKkr1P2La3av9sWkyB8TnLb+AEu3GeabbGIOHgqPL1uzFbrXt3G
+         mnk4LLyYoKFSZQ96rkWKfE761I1kSSz8+Ek14kvVc2XL06UdpVBWsbnkQxKtRKz0SCYh
+         Hnfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=9NCYkSh7WOOrI18nt+bZr9iw0Fk5iZ5BLxbcbUOhkXI=;
+        b=uftaobII1FeFJ02ph2ZvkaVxUkLaPW99jaaYbRuQUyqSInCZ+KB4dNzd9of6Oycd4l
+         Qi+nePFuSrfb0c6YZviRxySAixbEvBBqxAalP/a966lLlC8QiediKuDWuEYIE5qhrNP+
+         TLC8IpHyuIRDum9ECkHtCIL3D/MP6sIc/gcQwN32NcJJ3aqYhrg+SZSkV4X6o8hX7QgP
+         oqARyHIf9F2WIMdttHUn3YTeG6Lc8/HlfErJKulhSsC3X2KF+TXi0PdcANiDbQJrQdLt
+         CBlkDzmwmUBGXxDHaYEUAOlhnf2wDlZ65k6h6h4Bku4ZL1wWvrUO4ffuMTmqQHFcKjUJ
+         lw6Q==
+X-Gm-Message-State: AOAM530lzGVfPpDHBAvBnNZDKoDwx2a6HgK1mqyrM7oB72KGTT2ZaL/C
+        DC1R2J8AHeAHYmIrWsTQSUI=
+X-Google-Smtp-Source: ABdhPJyAHTOyodUFhv+sthTnW8YLvaPjdwpeM6UGkV/VWqBAwzUrCZ1pwbuiSBE3jtuSS8AVL75kyQ==
+X-Received: by 2002:a63:6b81:0:b0:380:4fc1:ee7b with SMTP id g123-20020a636b81000000b003804fc1ee7bmr11601711pgc.298.1646812910588;
+        Wed, 09 Mar 2022 00:01:50 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:486:47ca:79e4:f285:9205:e22])
+        by smtp.gmail.com with ESMTPSA id ay5-20020a056a00300500b004f6d510af4asm1489873pfb.124.2022.03.09.00.01.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Mar 2022 00:01:49 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski@canonical.com, lgirdwood@gmail.com,
+        cy_huang@richtek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/2] Add Richtek RT5190A PMIC support
+Date:   Wed,  9 Mar 2022 16:01:41 +0800
+Message-Id: <1646812903-32496-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 18:48:29 +0100
-Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-> Hello Masami Hiramatsu,
-> 
-> On Tue, Mar 08, 2022 at 04:36:00PM +0900, Masami Hiramatsu wrote:
-> > Hello Padmanabha,
-> > 
-> > On Mon, 7 Mar 2022 19:40:11 +0100
-> > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > 
-> > > Hello Masami Hiramatsu,
-> > > 
-> > > Thanks for detailed explanation on boot time tracing using early boot configuration file.
-> > > https://linuxfoundation.org/wp-content/uploads/boottrace-LF-live-2021-update.pdf
-> > > 
-> > > Also for https://lwn.net/Articles/806002/.
-> > > 
-> > > Latter link also states we can embed boot config into the kernel image for non intrd based system.
-> > 
-> > Ah, that was an original plan, but since no one interested in, I didn't implement it.
-> > So we still need the initrd for bootconfig.
-> >
-> Ok.
-> > > 
-> > > I tried searching mailing lists not able to find pointer for same.
-> > > 
-> > > A hint/pointer on how-to will be very helpful. 
-> > 
-> > BTW, what is your problem, could you share your use-case?
-> > 
-> 
-> I have hetrogenous system which donot use intrd.
-> 
-> The use-case is to capture __system wide__ event based tracing for
-> boot-up sequence, which also covers early stage of default init programs
-> used.
-> 
-> As buffer size is limited, will have hand-picked events set configured.
+This patch series add Richtek RT5190A PMIC support.
 
-Hm, so I guess you will boot linux from your custom bootloader (or binary loader on sub processor?).
+v2:
+1. use standard bindings regulator-min/max-microvolt to replace
+   fixed-microvolt property
+2. change dt-bindings sample node name from rt5190a@64 to pmic@64.
+3. add dt-binding header to defin e the opmode mapping number.
+4. refine 'richtek,mute-enable' description in dt-binding.
+4. due to fixed-microvolt property removal, use of_regulator_match to get
+   the regulator init data.
+5. fix checkpatch warning and error.
 
-Can you even try to add a dummy initrd? or are you OK to rebuild kernel for embedding the bootconfig data?
-If both don't work, the solution will be architecture or bootloader specific.
+ChiYuan Huang (2):
+  dt-bindings: regulator: Add bindings for Richtek RT5190A PMIC
+  regulator: rt5190a: Add support for Richtek RT5190A PMIC
 
-Thank you,
+ .../regulator/richtek,rt5190a-regulator.yaml       | 141 ++++++
+ drivers/regulator/Kconfig                          |  10 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/rt5190a-regulator.c              | 513 +++++++++++++++++++++
+ .../regulator/richtek,rt5190a-regulator.h          |  15 +
+ 5 files changed, 680 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml
+ create mode 100644 drivers/regulator/rt5190a-regulator.c
+ create mode 100644 include/dt-bindings/regulator/richtek,rt5190a-regulator.h
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.7.4
+

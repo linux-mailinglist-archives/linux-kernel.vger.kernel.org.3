@@ -2,349 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2D84D3358
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FCA4D3389
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbiCIQFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S234462AbiCIQHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234371AbiCIQER (ORCPT
+        with ESMTP id S234457AbiCIQHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:04:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0DBDB485;
-        Wed,  9 Mar 2022 08:02:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAA126166E;
-        Wed,  9 Mar 2022 16:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB5FBC340F3;
-        Wed,  9 Mar 2022 16:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646841760;
-        bh=XAkq8XILT2/wI/cK/Jl9Hd1vjUQTn3i8cTOoYDYzyoY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e5gXqMvOBHQwD2wPwt0T41nHDQjxMHiVFUEHhRePH8nQ52Iixx+SuPZahJ2hdTjEl
-         EjXCJNO7UYLPtA4cKNZzmIXAW1/6i8SFYfTVcq+iNNfMM7+ENefF5c/pGcujj2bBzI
-         oj50zfED9v7dVBZLJEzVZUQDFJHgwNgqWAeE/uu54CbzkoQFfuHoiLUlJNG7M+Bq/4
-         GCx+ZqCB6J8fW9wsiQUVCHsaoqbvt8gTNffbHb2nIgKXSKL9DlHNxoY+EZLSoAB9oL
-         N4K5BQyAp4rX4Fb6kmBgA1UJlpZiGLpvndGH9LlFUwj/omzpBCQrbwGOx3oY47X15G
-         9ZesJ/uO0IADw==
-Date:   Wed, 9 Mar 2022 18:01:56 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to
- the blacklist keyring
-Message-ID: <YijPdDULqQipqhjT@iki.fi>
-References: <20210712170313.884724-1-mic@digikod.net>
- <20210712170313.884724-6-mic@digikod.net>
- <YidDznCPSmFmfNwE@iki.fi>
- <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net>
- <YidX3jqNJeFfr1G1@iki.fi>
- <218eb9dc-d9bd-0173-5343-f44b58545aef@digikod.net>
+        Wed, 9 Mar 2022 11:07:13 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBCF141FC2;
+        Wed,  9 Mar 2022 08:03:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4XESlXPeXOjxfTF27DQNhWp+Y0hQJd2C+jSFpDWjp6Yrj2/mmTU6MRFLlZis/NQzFoJASca7CrzheuZdSPGdo+JudU5KDfI2hQLER7yUwjk6ECqDLGGEsJUQLO2NWeXM5jgVbg4ee1q15zZRPMtEyqH2bpxNNy8XARK5iWd5cwaN6NXQL8v4I9iTGmvE/Me2WUwMkN1Lu8lWOzdb+Rr9aHrz9y7U2e6YeL2unEZvBPETeS6WtcdJANNhsQzeCgevdTG+ks5UyqxU9LD3/OyhOY+XsmoBxuZTvzY2vcqUT06aYO49IRMIGPVjQSgmHRaWD4fHEVnBQJ8ggv/CGGxGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vrzP2UchQi43pCnpSUo0Ny3bsCPmouvmqf/3EbosyZ0=;
+ b=cv4b4ZPDEvjkByYsm8KKxF4Bod2pNRkUxDW8Qi40IhgZiOW9OB6Nug4bNyYevZzUfC7a7F942+IiIBtAP9ltUwQSo1PaS+7flrf4SNScN1inCbzE9fbmO0eicOD3FKdwnHIRMKgitcejZwanZO8EU5e6g26hWEtxvWQ9fF1i0/K+i2EoPyya2Exzb2sNPDzNsePlrx0HMOcL3iPExGB/y6Q690l7Xb9LXLHaJnOTE2U7VSuTv5cjJY67Lcv/U0IGABPaI7468bBQFwO5v6AUEDOwpP5QrkNO9Htf/OH+/ARXvrWZn6iQCJ7yuEkLRmT8yUk6U7QNdyclhsHc4oPVPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vrzP2UchQi43pCnpSUo0Ny3bsCPmouvmqf/3EbosyZ0=;
+ b=F4yzpfq+loHGNJhpMIukzSLrst1FLOqUmFutKjKJWHNFXAHNXXT+pmhSsBtyVcQ3w4iMCelMiM/P+JeaPz9gDmj8r6oxIRPvklr5P6neYP6ZQze/JdxfE/n36p0kNMbaWy/IjsHV+xg1/t8m2AsaxjxqshjRgIRn6euCfF4pBb0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by BYAPR12MB3126.namprd12.prod.outlook.com (2603:10b6:a03:df::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Wed, 9 Mar
+ 2022 16:03:20 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::8d44:d69b:b031:1d50]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::8d44:d69b:b031:1d50%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 16:03:20 +0000
+Message-ID: <7967cc8f-11af-0236-9ed6-ea9a84702965@amd.com>
+Date:   Wed, 9 Mar 2022 10:03:18 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] x86/mce: Unify vendors grading logic and provide AMD
+ machine error checks
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, yazen.ghannam@amd.com,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bilbao@vt.edu
+References: <20220308184133.712761-1-carlos.bilbao@amd.com>
+ <YievKnn5hSK0AvMt@nazgul.tnic>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <YievKnn5hSK0AvMt@nazgul.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR03CA0010.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::15) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <218eb9dc-d9bd-0173-5343-f44b58545aef@digikod.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8cf39534-9a1c-4b52-01de-08da01e654cc
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3126:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3126608C4C7F0ED3529B03BDF80A9@BYAPR12MB3126.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z6hO++RVHRefkxYcbKx3XT/2Usg6OVrvP7pMnOfvfD8/fo0B5gf5IhkU9qnNQ5BYyMU3BNAJttNA9BwJxvlgY1eV4qp6plmoRtMX7XocKl9Lu88jxYkzuftKxi4Fi6pIle5GN4Y87j/zbQlbPSmhqM6TOgdMQIDZorGqtg8WYzvxyz2TeYNCc8TLRMnEZDTEuW+s2YKMYqjRkPVWEwWDNa3t/bP+ctppVzjd46YxIkPZTBOoro94ES0wBjSLw1vRnDtp4y5oYxXEmZxc+NHyloXZTSOTGeze8wJrseN8AO4RCegR4FIuoUFOif2HPOP2o5k6FsMNCzhLVEjoqpcnZqyibpDhBUglhTGMdfG4oViz3qFDM0XKy5UF9gAZDpuvkiigFSR/2oLBgXp2/qa4/BFqAgWnBuZsnnBAANNKPtKB8gAob8kb13nS7Kg5A7bzrqxc6nlnAMBc6YBtZ8PZZEqosQRLRBqd2KqbwQHREJv8rYoJjzG1p6CRt21vHGV2aMc5aguFajJhlt1J06wFCloTqMX25reLImr8L7/eCuGFqKsRuZuNcWqP0uCABAI50GqPJ2EKDikHksD+/FHmApYOZFlBTwQwyOQT5cv6IgmjgPSUpS6Lk1ht9krZ+Nyv+pmNiVqUko9/NBPNMPJ55t3LkL7IIC3fbpx9DVgva8d4sLH1FtUIf2SdmGvhIZB+8nXuPbArLHbTQaHXJ5VX5OwzXYZK7j/35J0qxL9bpOPT+lU7X3GtR7FJQ4xez4Tw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(53546011)(8936002)(6486002)(6916009)(31686004)(36756003)(2906002)(508600001)(66476007)(66946007)(66556008)(31696002)(316002)(5660300002)(4326008)(8676002)(38100700002)(44832011)(83380400001)(26005)(186003)(2616005)(6512007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2JKQVR5MlpYK2R3QzFDVFdFZ2hZb0M1dmlRTzh4NkJCWnBKTEdhZVU5c1lC?=
+ =?utf-8?B?RzVSc2FaaXQzM2thNng4cFBkK0VOSFl0T2Y4djlMSndZZXd2RmxLVU9rTUc3?=
+ =?utf-8?B?Snc3dnQyaXNYM3lZT0RFYkNRNS9PSEhYVGN3ZzhBa29vaDVjOFNndjdUVTB1?=
+ =?utf-8?B?Yjg2T0x6RzBTc2NFa2pTYmNOMisyK0tMOWw3RVdUcE1TdmZ2TENmbmlKQis2?=
+ =?utf-8?B?UTd3QWJ6RmxLWjJ2bVNQeU11WHgxa1pEOUpFeWF1LzE3R1JTTlZxUWxEU24x?=
+ =?utf-8?B?RS9OTFBIcHVqWlBoWW12eEkxeGp2TzF3blBJZTI1RDRzNjlKLzRPNmVNdjBl?=
+ =?utf-8?B?eXpRSGVvUzc0UUx0R3dkSEc1NU9kalRmTEFOT3ZkTUZPSWpUdFowVlY4WmRZ?=
+ =?utf-8?B?eXZvNEd4ajU1S1VTbi84REhlUkFON0JqR3dlMnRNRVJ4dzZPWERuZ2plMDhB?=
+ =?utf-8?B?YkFUR1ZCMkRPSVM1OXNubjMvOUNrc0IwaFAyV1M0QzU0VzNBL0FIREVycmk4?=
+ =?utf-8?B?SVBIbGFudm9IcENtNlVTQmo1eUhhQXlQMW5YR3JQQWZRTnhycXc1TEZwWmVY?=
+ =?utf-8?B?cno4Y05nUHNsK3dieTFOYlNTU1ZpNnJrQzVqMUxVeGVvcEt4d2tsK1hMRDQ4?=
+ =?utf-8?B?SGJrZzBIaWtkbUp1QVh2MDlRbWdPRjBFbG11cjBqRFFZNjdYUC9WTHFkRk11?=
+ =?utf-8?B?N3ZLUHNSWFRXVk5UZDN5Z2F5dFBweThSRGZmWjBOWkM0Z3BGRTFRSm8rV3ps?=
+ =?utf-8?B?MHZpYUt4aHJETEx3RG9GdWhRTytZQnYzSHNxelFBVWVudUROaUNuakR5dTFO?=
+ =?utf-8?B?MGlJb1hFOGJ6ZCtXRVhXWmkrMndHODdwdEtnSW51S25Bb0lZbFE5VzVXOWpk?=
+ =?utf-8?B?QkRNYzlwcjBhVnI1VmswM3JmdGJrMUR1ZUtSM3A2MlR0YjczUm1iYk1QS0dm?=
+ =?utf-8?B?TmlDM3UrU1JjSCtTeXMzN0g0QktUWVVIQUV6dWVqZ3dGRWwwaXh0ODFUNmVH?=
+ =?utf-8?B?TjZNQXZlb3Rrcy9EYVk1czZXZXJpQnQybkFXTmZKbWR3R29KT0FaOC85QUpF?=
+ =?utf-8?B?aElVMTVWSGxZUGlISFBvZERRaVpLYi9wckhzSW1LVGNTVmhlQVpndmlqclBk?=
+ =?utf-8?B?d29jcnVnZVFWd1lEbFhGV21LWjBvSU1BZG4xK2ZpOVBtU3g2WjE2T3BDYU9m?=
+ =?utf-8?B?cEUreEp2T2FvYzE4QkhVYUZhWEZ5TGQxMXJnVCtQenpPbk1YMTBRWHVhL1BJ?=
+ =?utf-8?B?alVZd3gvUWJzOVludmkvbDl4cDJzQ0JhckpYeGtNM1dYR3h4Y3JDQVBGTUNB?=
+ =?utf-8?B?Y1FRY2pteTJPK3hJUTRWUzl0U0NVMHlvUjZIVlJtVkRKZitzblpjaTl4RWZj?=
+ =?utf-8?B?ekJXUmRtSlI5UWJMNjRsTkdrRVNBQjVOeUlaMzA4dkorRERnWmI2b3IwbTRq?=
+ =?utf-8?B?aWhHQkNCbXQveXNpRnJ2UysyZklScEVWbDd5bW9WWG0yTUk0dU1OakRuZHNC?=
+ =?utf-8?B?elFjdTNlaFE1eEMzWEJha29icEhBQ3J3VmNqTzNWYkdHZ2JXdEozNTZ4USsw?=
+ =?utf-8?B?MXpXaGc0aENIalhNSzYxejdiVlE3V0ZabFBTdmloL2x1dXZtcWwxK3FqTXlp?=
+ =?utf-8?B?cXAxK1FQVTZtMm1LTTFpZXkrUjFNZ2dEY3dYeXZ6WmZYUlc3M0F3L2gzcTFI?=
+ =?utf-8?B?SDZmM2JPNVhpRnZzZmRvVnRBdGFQb2JjSjE4dWNGYWZENUxtMm4rblc1R3pY?=
+ =?utf-8?B?UFhJQkNqeVJ0VWJoZTZRZlBOY21Wd3Nhb3dJQ1pZZmppcE9UV1pEZjdtb1hX?=
+ =?utf-8?B?S3llaFpsWXNlNHFEeS9DaEhwem1KRFdwY2U3OU1sV3I3cTliaVlhMGJDc2k5?=
+ =?utf-8?B?VW9BMm13Q3lQd1JnZWgxc3lESlN6dUxuY2dHUzV0V3Y1ZzdUOGpORkc0Mmx6?=
+ =?utf-8?B?KzRNR0ZTd3MvUGhKMWMzajVDc1NwMXJYZll2cXphVzN5RWphaEo5V1dBZXM5?=
+ =?utf-8?B?WUlpU2dPWkQ4QWlHbDBNSGRtNGVKSTVHTVZoMER0Ujlnd0cvSUI2WFZkTkUy?=
+ =?utf-8?B?a0w5bWlVekFaYTV6aGJyOEI5VUlZcEhzZFFLZVBGVUhnWDZEY2F2b1Ura0dR?=
+ =?utf-8?B?QnZoR0FVS3NlRkxwRUY3cU1ON2tBR2tyOHdQM0xuWHpMZzBWNDhBdktaN0hZ?=
+ =?utf-8?Q?KuK15eHni7ctfXfr/849ZYQ=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8cf39534-9a1c-4b52-01de-08da01e654cc
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 16:03:20.5764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0+5lKkU38iCRTkjq0yjCABz+I9KZ5jtaItD4dhY43rePxH6h5E+x0fCs6fzM2Wc5CqN9Tfb7bkNS0zCcEAAYiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3126
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 05:02:23PM +0100, Mickaël Salaün wrote:
+On 3/8/2022 1:32 PM, Borislav Petkov wrote:
+> On Tue, Mar 08, 2022 at 12:41:34PM -0600, Carlos Bilbao wrote:
+>> AMD's severity grading covers very few machine errors. In the graded cases
+>> there are no user-readable messages, complicating debugging of critical
+>> hardware errors. Furthermore, with the current implementation AMD MCEs have
+>> no support for the severities-coverage file. Adding new severities for AMD
+>> with the current logic would be too convoluted.
+>>
+>> Fix the above issues including AMD severities to the severity table, in
+>> combination with Intel MCEs. Unify the severity grading logic of both
+>> vendors. Label the vendor-specific cases (e.g. cases with different
+>> registers) where checks cannot be implicit with the available features.
+>>
+>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>> ---
+>>  arch/x86/include/asm/mce.h         |   7 ++
+>>  arch/x86/kernel/cpu/mce/severity.c | 188 +++++++++++++++--------------
+>>  2 files changed, 103 insertions(+), 92 deletions(-)
 > 
-> On 08/03/2022 14:19, Jarkko Sakkinen wrote:
-> > On Tue, Mar 08, 2022 at 01:18:28PM +0100, Mickaël Salaün wrote:
-> > > 
-> > > On 08/03/2022 12:53, Jarkko Sakkinen wrote:
-> > > > On Mon, Jul 12, 2021 at 07:03:13PM +0200, Mickaël Salaün wrote:
-> > > > > From: Mickaël Salaün <mic@linux.microsoft.com>
-> > > > > 
-> > > > > Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
-> > > > > to dynamically add new keys to the blacklist keyring.  This enables to
-> > > > > invalidate new certificates, either from being loaded in a keyring, or
-> > > > > from being trusted in a PKCS#7 certificate chain.  This also enables to
-> > > > > add new file hashes to be denied by the integrity infrastructure.
-> > > > > 
-> > > > > Being able to untrust a certificate which could have normaly been
-> > > > > trusted is a sensitive operation.  This is why adding new hashes to the
-> > > > > blacklist keyring is only allowed when these hashes are signed and
-> > > > > vouched by the builtin trusted keyring.  A blacklist hash is stored as a
-> > > > > key description.  The PKCS#7 signature of this description must be
-> > > > > provided as the key payload.
-> > > > > 
-> > > > > Marking a certificate as untrusted should be enforced while the system
-> > > > > is running.  It is then forbiden to remove such blacklist keys.
-> > > > > 
-> > > > > Update blacklist keyring, blacklist key and revoked certificate access rights:
-> > > > > * allows the root user to search for a specific blacklisted hash, which
-> > > > >     make sense because the descriptions are already viewable;
-> > > > > * forbids key update (blacklist and asymmetric ones);
-> > > > > * restricts kernel rights on the blacklist keyring to align with the
-> > > > >     root user rights.
-> > > > > 
-> > > > > See help in tools/certs/print-cert-tbs-hash.sh .
-> > > > > 
-> > > > > Cc: David Howells <dhowells@redhat.com>
-> > > > > Cc: David Woodhouse <dwmw2@infradead.org>
-> > > > > Cc: Eric Snowberg <eric.snowberg@oracle.com>
-> > > > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> > > > > Link: https://lore.kernel.org/r/20210712170313.884724-6-mic@digikod.net
-> > > > > ---
-> > > > > 
-> > > > > Changes since v6:
-> > > > > * Rebase on keys-cve-2020-26541-v3: commit ebd9c2ae369a ("integrity:
-> > > > >     Load mokx variables into the blacklist keyring").
-> > > > > 
-> > > > > Changes since v5:
-> > > > > * Rebase on keys-next, fix Kconfig conflict, and update the asymmetric
-> > > > >     key rights added to the blacklist keyring by the new
-> > > > >     add_key_to_revocation_list(): align with blacklist key rights by
-> > > > >     removing KEY_POS_WRITE as a safeguard, and add
-> > > > >     KEY_ALLOC_BYPASS_RESTRICTION to not be subject to
-> > > > >     restrict_link_for_blacklist() that only allows blacklist key types to
-> > > > >     be added to the keyring.
-> > > > > * Change the return code for restrict_link_for_blacklist() from -EPERM
-> > > > >     to -EOPNOTSUPP to align with asymmetric key keyrings.
-> > > > > 
-> > > > > Changes since v3:
-> > > > > * Update commit message for print-cert-tbs-hash.sh .
-> > > > > 
-> > > > > Changes since v2:
-> > > > > * Add comment for blacklist_key_instantiate().
-> > > > > ---
-> > > > >    certs/Kconfig     | 10 +++++
-> > > > >    certs/blacklist.c | 96 ++++++++++++++++++++++++++++++++++++-----------
-> > > > >    2 files changed, 85 insertions(+), 21 deletions(-)
-> > > > > 
-> > > > > diff --git a/certs/Kconfig b/certs/Kconfig
-> > > > > index 0fbe184ceca5..e0e524b7eff9 100644
-> > > > > --- a/certs/Kconfig
-> > > > > +++ b/certs/Kconfig
-> > > > > @@ -103,4 +103,14 @@ config SYSTEM_REVOCATION_KEYS
-> > > > >    	  containing X.509 certificates to be included in the default blacklist
-> > > > >    	  keyring.
-> > > > > +config SYSTEM_BLACKLIST_AUTH_UPDATE
-> > > > > +	bool "Allow root to add signed blacklist keys"
-> > > > > +	depends on SYSTEM_BLACKLIST_KEYRING
-> > > > > +	depends on SYSTEM_DATA_VERIFICATION
-> > > > > +	help
-> > > > > +	  If set, provide the ability to load new blacklist keys at run time if
-> > > > > +	  they are signed and vouched by a certificate from the builtin trusted
-> > > > > +	  keyring.  The PKCS#7 signature of the description is set in the key
-> > > > > +	  payload.  Blacklist keys cannot be removed.
-> > > > > +
-> > > > >    endmenu
-> > > > > diff --git a/certs/blacklist.c b/certs/blacklist.c
-> > > > > index b254c87ceb3a..486ce0dd8e9c 100644
-> > > > > --- a/certs/blacklist.c
-> > > > > +++ b/certs/blacklist.c
-> > > > > @@ -15,6 +15,7 @@
-> > > > >    #include <linux/err.h>
-> > > > >    #include <linux/seq_file.h>
-> > > > >    #include <linux/uidgid.h>
-> > > > > +#include <linux/verification.h>
-> > > > >    #include <keys/system_keyring.h>
-> > > > >    #include "blacklist.h"
-> > > > >    #include "common.h"
-> > > > > @@ -26,6 +27,9 @@
-> > > > >     */
-> > > > >    #define MAX_HASH_LEN	128
-> > > > > +#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
-> > > > > +			    KEY_USR_SEARCH | KEY_USR_VIEW)
-> > > > > +
-> > > > >    static const char tbs_prefix[] = "tbs";
-> > > > >    static const char bin_prefix[] = "bin";
-> > > > > @@ -80,19 +84,51 @@ static int blacklist_vet_description(const char *desc)
-> > > > >    	return 0;
-> > > > >    }
-> > > > > -/*
-> > > > > - * The hash to be blacklisted is expected to be in the description.  There will
-> > > > > - * be no payload.
-> > > > > - */
-> > > > > -static int blacklist_preparse(struct key_preparsed_payload *prep)
-> > > > > +static int blacklist_key_instantiate(struct key *key,
-> > > > > +		struct key_preparsed_payload *prep)
-> > > > >    {
-> > > > > -	if (prep->datalen > 0)
-> > > > > -		return -EINVAL;
-> > > > > -	return 0;
-> > > > > +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-> > > > > +	int err;
-> > > > > +#endif
-> > > > > +
-> > > > > +	/* Sets safe default permissions for keys loaded by user space. */
-> > > > > +	key->perm = BLACKLIST_KEY_PERM;
-> > > > > +
-> > > > > +	/*
-> > > > > +	 * Skips the authentication step for builtin hashes, they are not
-> > > > > +	 * signed but still trusted.
-> > > > > +	 */
-> > > > > +	if (key->flags & (1 << KEY_FLAG_BUILTIN))
-> > > > > +		goto out;
-> > > > > +
-> > > > > +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-> > > > > +	/*
-> > > > > +	 * Verifies the description's PKCS#7 signature against the builtin
-> > > > > +	 * trusted keyring.
-> > > > > +	 */
-> > > > > +	err = verify_pkcs7_signature(key->description,
-> > > > > +			strlen(key->description), prep->data, prep->datalen,
-> > > > > +			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-> > > > > +	if (err)
-> > > > > +		return err;
-> > > > > +#else
-> > > > > +	/*
-> > > > > +	 * It should not be possible to come here because the keyring doesn't
-> > > > > +	 * have KEY_USR_WRITE and the only other way to call this function is
-> > > > > +	 * for builtin hashes.
-> > > > > +	 */
-> > > > > +	WARN_ON_ONCE(1);
-> > > > > +	return -EPERM;
-> > > > > +#endif
-> > > > > +
-> > > > > +out:
-> > > > > +	return generic_key_instantiate(key, prep);
-> > > > >    }
-> > > > > -static void blacklist_free_preparse(struct key_preparsed_payload *prep)
-> > > > > +static int blacklist_key_update(struct key *key,
-> > > > > +		struct key_preparsed_payload *prep)
-> > > > >    {
-> > > > > +	return -EPERM;
-> > > > >    }
-> > > > >    static void blacklist_describe(const struct key *key, struct seq_file *m)
-> > > > > @@ -103,9 +139,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
-> > > > >    static struct key_type key_type_blacklist = {
-> > > > >    	.name			= "blacklist",
-> > > > >    	.vet_description	= blacklist_vet_description,
-> > > > > -	.preparse		= blacklist_preparse,
-> > > > > -	.free_preparse		= blacklist_free_preparse,
-> > > > > -	.instantiate		= generic_key_instantiate,
-> > > > > +	.instantiate		= blacklist_key_instantiate,
-> > > > > +	.update			= blacklist_key_update,
-> > > > >    	.describe		= blacklist_describe,
-> > > > >    };
-> > > > > @@ -154,8 +189,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
-> > > > >    				   hash,
-> > > > >    				   NULL,
-> > > > >    				   0,
-> > > > > -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
-> > > > > -				    KEY_USR_VIEW),
-> > > > > +				   BLACKLIST_KEY_PERM,
-> > > > >    				   KEY_ALLOC_NOT_IN_QUOTA |
-> > > > >    				   KEY_ALLOC_BUILT_IN);
-> > > > >    	if (IS_ERR(key)) {
-> > > > > @@ -232,8 +266,10 @@ int add_key_to_revocation_list(const char *data, size_t size)
-> > > > >    				   NULL,
-> > > > >    				   data,
-> > > > >    				   size,
-> > > > > -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW),
-> > > > > -				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN);
-> > > > > +				   KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH
-> > > > > +				   | KEY_USR_VIEW,
-> > > > > +				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN
-> > > > > +				   | KEY_ALLOC_BYPASS_RESTRICTION);
-> > > > >    	if (IS_ERR(key)) {
-> > > > >    		pr_err("Problem with revocation key (%ld)\n", PTR_ERR(key));
-> > > > > @@ -260,25 +296,43 @@ int is_key_on_revocation_list(struct pkcs7_message *pkcs7)
-> > > > >    }
-> > > > >    #endif
-> > > > > +static int restrict_link_for_blacklist(struct key *dest_keyring,
-> > > > > +		const struct key_type *type, const union key_payload *payload,
-> > > > > +		struct key *restrict_key)
-> > > > > +{
-> > > > > +	if (type == &key_type_blacklist)
-> > > > > +		return 0;
-> > > > > +	return -EOPNOTSUPP;
-> > > > > +}
-> > > > > +
-> > > > >    /*
-> > > > >     * Initialise the blacklist
-> > > > >     */
-> > > > >    static int __init blacklist_init(void)
-> > > > >    {
-> > > > >    	const char *const *bl;
-> > > > > +	struct key_restriction *restriction;
-> > > > >    	if (register_key_type(&key_type_blacklist) < 0)
-> > > > >    		panic("Can't allocate system blacklist key type\n");
-> > > > > +	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
-> > > > > +	if (!restriction)
-> > > > > +		panic("Can't allocate blacklist keyring restriction\n");
-> > > > 
-> > > > 
-> > > > This prevents me from taking this to my pull request. In moderns standards,
-> > > > no new BUG_ON(), panic() etc. should never added to the kernel.
-> > > > 
-> > > > I missed this in my review.
-> > > > 
-> > > > This should rather be e.g.
-> > > > 
-> > > >           restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
-> > > > 	if (!restriction) {
-> > > > 		pr_err("Can't allocate blacklist keyring restriction\n");
-> > > >                   return 0;
-> > > >           }
-> > > > 
-> > > > Unfortunately I need to drop this patch set, because adding new panic()
-> > > > is simply a no-go.
-> > > 
-> > > I agree that panic() is not great in general, but I followed the other part
-> > > of the code (just above) that do the same. This part of the kernel should
-> > > failed if critical memory allocation failed at boot time (only). It doesn't
-> > > impact the kernel once it is running. I don't think that just ignoring this
-> > > error with return 0 is fine, after all it's a critical error right?
-> > 
-> > It's not good reason enough to crash the whole kernel, even if it is a
-> > critical error (e.g. run-time foresincs). Even WARN() is not recommended
-> > these days [*].
+> Sorry, maybe you're too new to this and you probably haven't read the
+> old discussions we have had about the severity grading turd. In order to
+> save you some time: adding more to that macro insanity is not going to
+> happen.
 > 
-> I think that what Greg said in this email is that WARN*() should only be
-> used for cases that should never happen, it is definitely not deprecated,
-> but WARN_ON_ONCE() may be a better idea though. WARN*() helps detect such
-> thought-to-be-impossible cases, that can happen e.g. with code refactoring.
+> The AMD severity grading functions are *actually* readable vs this
+> abomination which I hate with passion.
 > 
-> A lot of initialization/boot code (e.g. without user space nor external
-> interactions, mostly __init functions) do panic if there is unexpected and
-> unrecoverable errors like failed memory allocations. I think handling such
-> errors otherwise would be more complex for no benefit. Moreover, delegating
-> such error handling to user space could create new (silent) issues.
-
-To crash the whole kernel, you should be able to clearly explain why it
-makes sense in the situation.
-
-> > 
-> > For the existing panic()-statements: I'm happy to review patches that
-> > render them out. >
-> > Not sure tho, if this fails should it be then "everything blacklisted".
-> > Just one thing to consider.
+> If you want to add more logic, you should add to mce_severity_amd(),
+> perhaps call other helper functions which grade based on a certain
+> aspect of the error type, split the logic, use comments, etc, but
+> *definitely* not this.
 > 
-> Well, if it fail it will be "nothing will work afterwards". Do you have a
-> working and useful scenario for this kind of error?
+> Thx.
+> 
 
-So you have zero chances to get a shell without blacklist just to do
-kernel forensics?
+Understood, sending a new patch in that direction.
 
-BR, Jarkko
+Thanks,
+Carlos

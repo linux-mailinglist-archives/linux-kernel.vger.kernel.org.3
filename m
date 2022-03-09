@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBE74D30C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E46314D30CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiCIOEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 09:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
+        id S233412AbiCIOHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiCIOEp (ORCPT
+        with ESMTP id S231383AbiCIOHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:04:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9153CC4E24
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:03:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646834625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wY6DJ3Ioz62fnPukSJTRdXvMi1FUgR+YwdIV4ZzZvHQ=;
-        b=IXo03VFMGR8uTsDJF+v0OahFVa3OMC+8JSUKZbk08Z8I2vn10oSqBgswbyy7Fmq5ezq7tr
-        hcG9Cqh6f9SUJBWFGUqfrGqTywBm0NW2UbTuKNCMaLlUui9zKToXrXtGKauu3/0o9nBl4i
-        XJJw+Ge5ZkdwGsLNX+xXgu/s2vrzTdw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-nZNfv5tYPUi-5xujwW1ZWw-1; Wed, 09 Mar 2022 09:03:44 -0500
-X-MC-Unique: nZNfv5tYPUi-5xujwW1ZWw-1
-Received: by mail-wr1-f70.google.com with SMTP id z1-20020adfec81000000b001f1f7e7ec99so794925wrn.17
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 06:03:44 -0800 (PST)
+        Wed, 9 Mar 2022 09:07:00 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA5D177D04
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:05:57 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id i66so1424912wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 06:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9qAOoHj6pXfBEaK0pgqOpVtUmae2rVK+HUiENC7VtPo=;
+        b=Cu9kv0KtKYA/7fzKJO1EF9fzAEDM9lsaVbE8iKKcXZV5FdHjCK+jvNM3uXzmTpcWNp
+         fbtHPyUpra3lA3fKUEwkRS/yf/rh1d0DDdb5Ihb3Eil42NjYzll0/TwW9lq5gq7tfZ09
+         xAq2EY7TJ4OxNBZBNJ0Hp3pnRGJ/yCt8tnPOg4ob5uxR0btb/mvsmPnTuRJyyF6GDNFO
+         6Xstisheq/5Si/NcDKPx9PrULPWxyP016sRllXPfRbO6EYGIT2A3MHSscou/iq4tK/J0
+         JkDwdwtV/CR7Lum5JO1AlI9b3E/GVZlbBtcAAUdZknV6JiQ5meUEU/pWx5bXtzxAiTx0
+         JfZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=wY6DJ3Ioz62fnPukSJTRdXvMi1FUgR+YwdIV4ZzZvHQ=;
-        b=LVr6gOBKN57CXQdlRT6e0fvmVKoptill6pWD+FMX42ZYMePaOaJsqN2yhQn4BblAC5
-         IA88AKw71S/Q2IGLb3UtI8fbJyjcU10zH+jPi3dCIO0e5CwDehCkHXiP7nsdO6Qmw5cx
-         aL1OUa9Ry7NWyinJGzXTXRL56yBBT5iCoKf2gMWRD9r0Z9c8HrfnrWMOWFVPTcFlOvb+
-         VFFigC4CPTwakP1VnKygwD4sb3Gx61yQxHYjdZq2WWXM7ECuhUt5lykDMYfzhdsHVYVv
-         NvtabO49Hd7OzJDgchQfMbAoo9tyuJNHTGx5T9xvzreKjTlRhMu7nm0OmVl+ra5p+v16
-         kLng==
-X-Gm-Message-State: AOAM5303xsPZ8zossoYcfd9m0NVqQ1CmTvM+CVgBff5aD/DQz0F1s3bE
-        C510eX+4jQZsiPxXipmucQfJopHE4Kl3TXxIK2nzWAWH012OEJ6nvmK2zE2qZXfBCJU3RugAPQY
-        M3JKd6/8lMJ6QNGs0axXiCQyY
-X-Received: by 2002:adf:e5d2:0:b0:1fb:768d:7d5 with SMTP id a18-20020adfe5d2000000b001fb768d07d5mr9190943wrn.256.1646834623328;
-        Wed, 09 Mar 2022 06:03:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyNBJfQGc2FmMdtt3mVPKQLbHOb+zj+vlrb2Ad8ZnI8Vtv4sYFZwCC94aOOQs1Mujr8yWTzvw==
-X-Received: by 2002:adf:e5d2:0:b0:1fb:768d:7d5 with SMTP id a18-20020adfe5d2000000b001fb768d07d5mr9190878wrn.256.1646834622656;
-        Wed, 09 Mar 2022 06:03:42 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id m128-20020a1ca386000000b003898b148bf0sm4996126wme.20.2022.03.09.06.03.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 06:03:41 -0800 (PST)
-Message-ID: <a7b27887-ce00-c173-a7e7-8ad3470154f5@redhat.com>
-Date:   Wed, 9 Mar 2022 15:03:33 +0100
+        bh=9qAOoHj6pXfBEaK0pgqOpVtUmae2rVK+HUiENC7VtPo=;
+        b=65+Vpxqqz3TbfBPfD4Q6wH+twJ3lhFkrCywmmmi2rF3ve3LKfQhCDjTjLUwkO4DVNO
+         VMZRPH+hzISfL8N5An/mY4GnH54zLixEcu0dtfGOvwbFMemcp6mlUqeb+dIO/UWxrFpa
+         ASjAbmiJEltNEpaIsbgA5h2H2s0433uyPNtwuAssU5cSYd02HNLQEENL8PKbyC7YP4h3
+         6N+aLJA91c8KcYB2BUBBvLmJrQk/1n/jkQpLK8AwtkftvnlD1uVO/S98n9lCuQkPdwTO
+         7xAV1/3wiRpI1vLXtsHhL9fqhNdYuzMjv8t6o37nRMLt2L34X7zrBmZHD7L2C6rhziU1
+         XQNg==
+X-Gm-Message-State: AOAM533vkJ3ZJUcQ9SXfYRow8FDmFTEnsdS74LxVxdeTmMS5TxZSRhAu
+        F9Hc77JsXWLPuGU29kxqIjWfdDqyeRlS5g==
+X-Google-Smtp-Source: ABdhPJwyja8v3kq5xhmLrPkjUFLztuqnNmIl49Kx2XGkHxoP4LVB3mxhXu2PCUrUTfjrW7ByM8NClw==
+X-Received: by 2002:a05:600c:589:b0:389:a59e:a53d with SMTP id o9-20020a05600c058900b00389a59ea53dmr7564018wmd.28.1646834755745;
+        Wed, 09 Mar 2022 06:05:55 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id a10-20020a7bc1ca000000b00389bc87db45sm1821323wmj.7.2022.03.09.06.05.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 06:05:55 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] ASoC: qcom: fix Kconfig for SC7280
+Date:   Wed,  9 Mar 2022 14:05:52 +0000
+Message-Id: <20220309140552.8065-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Kieran Bingham <kbingham@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@suse.de>
-References: <20210811122927.900604-1-mlevitsk@redhat.com>
- <20210811122927.900604-3-mlevitsk@redhat.com> <YTECUaPa9kySQxRX@google.com>
- <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
- <YifoysEvfnQgq59A@google.com>
- <3221c2385e1148fe0ee77d4717b52726e1db9d8d.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <3221c2385e1148fe0ee77d4717b52726e1db9d8d.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 13:31, Maxim Levitsky wrote:
-> Question: is it worth it? Since I am very busy with various things, this feature,
-> beeing just small debug help which I used once in a while doesn't get much time from me.
+select would force the symbol to value without checking the dependencies.
+In this case selecting TX and RX MACROs directly without checking its
+dependency on COMMON_CLK would break builds on platform which do no
+set COMMON_CLK.
+ex:
+WARNING: unmet direct dependencies detected for SND_SOC_LPASS_RX_MACRO
+  Depends on [n]: SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] && COMMON_CLK [=n]
+  Selected by [m]:
+  - SND_SOC_SC7280 [=m] && SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] &&
+	 SND_SOC_QCOM [=m] && I2C [=y] && SOUNDWIRE [=m]
 
-I agree it's not very much worth.
+move select to imply which should enforce symbol to be set to 'n' if any
+dependencies are not resolved.
 
-Paolo
+Fixes: 57350bd41c3a ("ASoC: qcom: SC7280: Add machine driver")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+Changes since v1:
+	- rebased on sound-next
+
+ sound/soc/qcom/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
+index 82f5eafb2f6c..28d0dfb4033c 100644
+--- a/sound/soc/qcom/Kconfig
++++ b/sound/soc/qcom/Kconfig
+@@ -195,8 +195,8 @@ config SND_SOC_SC7280
+ 	select SND_SOC_MAX98357A
+ 	select SND_SOC_WCD938X_SDW
+ 	select SND_SOC_LPASS_MACRO_COMMON
+-	select SND_SOC_LPASS_RX_MACRO
+-	select SND_SOC_LPASS_TX_MACRO
++	imply SND_SOC_LPASS_RX_MACRO
++	imply SND_SOC_LPASS_TX_MACRO
+ 	help
+ 	  Add support for audio on Qualcomm Technologies Inc.
+ 	  SC7280 SoC-based systems.
+-- 
+2.21.0
 

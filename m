@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCEF4D30B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700684D30BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbiCIOCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 09:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        id S233400AbiCIODl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbiCIOCf (ORCPT
+        with ESMTP id S233393AbiCIODj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:02:35 -0500
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E34177750;
-        Wed,  9 Mar 2022 06:01:37 -0800 (PST)
-Received: by mail-oo1-f48.google.com with SMTP id x26-20020a4a621a000000b00320d7d4af22so2966533ooc.4;
-        Wed, 09 Mar 2022 06:01:37 -0800 (PST)
+        Wed, 9 Mar 2022 09:03:39 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0183227CC5;
+        Wed,  9 Mar 2022 06:02:41 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id o106-20020a9d2273000000b005b21f46878cso1800231ota.3;
+        Wed, 09 Mar 2022 06:02:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9h+VgimDPzKmm9gQrMAZMjtCY2p52lqtdIgajQPtHeQ=;
-        b=eElDoaYdaT3uywPl7dbk+R2+Kbi0IgsnYlbUKx1DRn0dpgSh1ZDQff6DiImcdAt3mc
-         5jsXamm64t0X1EXFPnwyYyXHsj9Zlnwe8PwKnVJ6Vy5fxARte1b3kNRG7dwSI8l7XRpX
-         l24jwsZFtzWSoQouI07rlvFU2yfPXeYW7KepVnIbjG5LCNxadrWy3KpDTKyM8bQt5UTT
-         nou0AeECf/3wsu1FMfAgAgH4S7fXA8/3wuIMIxcuilRaMKl78fpF4T7cr8Wq3CvfyEvB
-         tJ989qDQ6iwDITP4ML7liJoZpRy3kSpDrPSVIK3LCYbYpb1XL2XnUtxhxW3Kfp3rLSa/
-         p8QQ==
-X-Gm-Message-State: AOAM531Z9TZ/L+emEOO67fConFY1DlhwRoAZvUTHkKmX27IyLX2ROzNa
-        R/oEKBp1v8zdz/nMxuOYtjG6cyjLiw==
-X-Google-Smtp-Source: ABdhPJzcmvCDmpMAhswz9z1pW8O+P9wv8DfR5j7J/fWLXWXeXEI66XrMiuplmmJGklJzt/HLpZ24dA==
-X-Received: by 2002:a05:6870:40ce:b0:da:5b07:231c with SMTP id l14-20020a05687040ce00b000da5b07231cmr5556887oal.284.1646834496465;
-        Wed, 09 Mar 2022 06:01:36 -0800 (PST)
+        bh=l2bsT/eha6vQRCunWyuGCCZHXPrqQ9VTlY5oTvI04YI=;
+        b=3nyGjQ6JPF6p/Ta+LUnBKDn14m30XR+P/5Ba27LvReYPxSUAIs3vrG6h24Z/k2stdq
+         Nb0nXfWpv+cnE39tXbzW+62X/c1WB0TXzUHUfk9VTM6TDx7hW6ClveWko/v3PEO1H48y
+         Ecpx/G11lxHIHK+djOQbBizxy5jeWMRV7rrlMh1Bx6QQQsmOXEhTYNkoSPvYGIaaeEWh
+         Szgf9PeqBg43bvf2r9nfTWQhijM4gXk4VmFBS/5lAAjVy02SqD3YudNUjAJRcQ1DuYdk
+         /ucsDWodaSen8qKBomvyH69aVNaoLcYun7PBfpLeoyAHeRAXjitnamczI73B8IDC6KTN
+         g3Vg==
+X-Gm-Message-State: AOAM533mLVTat3JbeIssiRSBq4HQYYpZwNr8S+cUq/DOpvoSRmN9Oial
+        3BsIYkMF/HaALgOI9IgtJQ==
+X-Google-Smtp-Source: ABdhPJzd/R0M9Di5kVne+hQYW3KIlYwUwdKbU/tPCjkd3SYy5tmwWk2sEh5o27IvJtXqUKCC5IpBMQ==
+X-Received: by 2002:a9d:325:0:b0:5b2:4b69:4e73 with SMTP id 34-20020a9d0325000000b005b24b694e73mr4181198otv.34.1646834560263;
+        Wed, 09 Mar 2022 06:02:40 -0800 (PST)
 Received: from rob (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d12-20020a056871040c00b000d9eed0f8fdsm922917oag.14.2022.03.09.06.01.35
+        by smtp.gmail.com with ESMTPSA id r21-20020a05683002f500b005b249ffa43fsm961722ote.22.2022.03.09.06.02.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 06:01:35 -0800 (PST)
-Received: (nullmailer pid 2795989 invoked by uid 1000);
-        Wed, 09 Mar 2022 14:01:34 -0000
-Date:   Wed, 9 Mar 2022 07:01:34 -0700
+        Wed, 09 Mar 2022 06:02:39 -0800 (PST)
+Received: (nullmailer pid 2797503 invoked by uid 1000);
+        Wed, 09 Mar 2022 14:02:38 -0000
+Date:   Wed, 9 Mar 2022 07:02:38 -0700
 From:   Rob Herring <robh@kernel.org>
-To:     nandhini.srikandan@intel.com
-Cc:     broonie@kernel.org, mgross@linux.intel.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, robh+dt@kernel.org,
-        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
-        linux-spi@vger.kernel.org, fancer.lancer@gmail.com,
-        kris.pan@intel.com, rashmi.a@intel.com, mahesh.r.vaidya@intel.com
-Subject: Re: [PATCH v4 1/3] dt-bindings: spi: Add bindings for Intel Thunder
- Bay SoC
-Message-ID: <20220309140134.GA2795938@robh.at.kernel.org>
-References: <20220308103331.4116-1-nandhini.srikandan@intel.com>
- <20220308103331.4116-2-nandhini.srikandan@intel.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     skomatineni@nvidia.com, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org, jonathanh@nvidia.com,
+        devicetree@vger.kernel.org, ashishsingha@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        broonie@kernel.org, ldewangan@nvidia.com, thierry.reding@gmail.com,
+        p.zabel@pengutronix.de
+Subject: Re: [PATCH v4] arm64: tegra: Add QSPI controllers on Tegra234
+Message-ID: <20220309140238.GA2797451@robh.at.kernel.org>
+References: <20220308183026.66394-1-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308103331.4116-2-nandhini.srikandan@intel.com>
+In-Reply-To: <20220308183026.66394-1-kyarlagadda@nvidia.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -68,15 +66,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Mar 2022 18:33:29 +0800, nandhini.srikandan@intel.com wrote:
-> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+On Wed, 09 Mar 2022 00:00:26 +0530, Krishna Yarlagadda wrote:
+> From: Ashish Singhal <ashishsingha@nvidia.com>
 > 
-> Add documentation for SPI controller in Intel Thunder Bay SoC.
+> This adds the QSPI controllers on the Tegra234 SoC and populates the
+> SPI NOR flash device for the Jetson AGX Orin platform.
 > 
-> Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> Signed-off-by: Ashish Singhal <ashishsingha@nvidia.com>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> v4:
+> sort definitions in include and dt files
+> 
+>  .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  | 12 ++++++++
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 28 +++++++++++++++++++
+>  include/dt-bindings/clock/tegra234-clock.h    |  8 ++++++
+>  include/dt-bindings/reset/tegra234-reset.h    |  2 ++
+>  4 files changed, 50 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

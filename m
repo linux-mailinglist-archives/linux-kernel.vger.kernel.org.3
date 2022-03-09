@@ -2,277 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21EE4D31FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761634D3203
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiCIPnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S233980AbiCIPpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233935AbiCIPnp (ORCPT
+        with ESMTP id S233944AbiCIPp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:43:45 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E223F302
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:42:45 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id u1so3654839wrg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3vcE2BzC19U1bToG3IklyZnpOHB0d1uOJ1vYdf0dl7s=;
-        b=M30F//gh49Flp6dEF31vRuWH1nH7zZdW/BSekGIDTpq2RJ2tpE7MDn+2/W/M1A7z84
-         EgazRXcOgBBzTwrUmrvtcy6BTd0vcPALha1VBEQebpFo/5Xp3K2hRsX3CvAdrxiR6juy
-         5gONkBihN57OScJYIiFx2i983dlUBPLJhKBqdIHnowvAcwuVXFCiiFaEi4MwdXghnDE1
-         aWt240Vzp7G8pJJNTAMc5qTeI8UQpbT4ub53O25WvEZ/FAV4/ith8YlkrGK/YKsUUvn+
-         RnpAbKoIAzqInUTqw8PGCI9GIS6YmApl+oHpVD2hCtH72jsDWSDjBIV0gu2odLsB/h+Y
-         4vnQ==
+        Wed, 9 Mar 2022 10:45:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 399BE7CDC6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:44:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646840667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EPv2czUPN4P3J0p1kuWcwN5wFtTDrdP4nhrIIWXDX5M=;
+        b=Hpu9PwjTqMsTTmSCUwXbwTMJ4N8tQnHtakP06hkNwLmBfyln43dlqp0qQOIPPh8OtYxhAq
+        Mh4Tz5uCHTxFazV+25+B2wro6zXe0T4Zb0ihjdVWp9Z8bpqYeP19ZJghtdUPn5MdFfflxR
+        +nI99401b9Gu9VEKWMDwV08tDWE+yCE=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-537-reYmD6LzNXiXKyOnHE8sKg-1; Wed, 09 Mar 2022 10:44:24 -0500
+X-MC-Unique: reYmD6LzNXiXKyOnHE8sKg-1
+Received: by mail-qv1-f69.google.com with SMTP id l4-20020a0cc204000000b00435ac16d67cso2394464qvh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:44:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3vcE2BzC19U1bToG3IklyZnpOHB0d1uOJ1vYdf0dl7s=;
-        b=AaSLe8RUjbbf9wmoei2V4vaxqOEAZIwOIZOytZVfdNni6M+wAV8YauygjSx4vTyt+B
-         mkHNllv33kqKGBfzhiVqYVJuBLSGJPQLNE+bLlrUjff1rrVt08z6M2hEJSk+/2eGO6op
-         gBqspbkYHicOwfAOs9UNkRQ4KKhz/oiqrb7vrOzCd0eyAE3nNQyaIlyaLBQ7mGBWCXfg
-         wXo+fd9Ko59hJgDgb4MIWKFf7Vcsql/QdUz+lcr94TRTIvn8nWwDXT7br/W2VBJaIlrX
-         0QPXEj2QGufqvBpNL2bQ7/In+HlMv/LkIGud+cWwINlJ/8r3KyeRTPwNj9HZfGnih5BM
-         J5wA==
-X-Gm-Message-State: AOAM532EPKZ9idoJKiJIOEkdzYD3iYQSSwq9DgwJaK9IkHlFElzbAKuI
-        8s48WVDOhVkS8FNURbPLovDUdQ==
-X-Google-Smtp-Source: ABdhPJw0ARLjLGciQKHKuoKW+S+Bhbrp6JrE6vOwrJuf9vxXeUdEXebJOntUcrVXov0tEG27/g2fCQ==
-X-Received: by 2002:adf:e348:0:b0:1f0:537:1807 with SMTP id n8-20020adfe348000000b001f005371807mr176822wrj.11.1646840564014;
-        Wed, 09 Mar 2022 07:42:44 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:1ffc:39b4:7538:de29? ([2a01:e34:ed2f:f020:1ffc:39b4:7538:de29])
-        by smtp.googlemail.com with ESMTPSA id n4-20020a05600c4f8400b00380e45cd564sm2257267wmq.8.2022.03.09.07.42.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 07:42:43 -0800 (PST)
-Message-ID: <949c4b4f-1741-6c5f-c23c-d619b02b40ee@linaro.org>
-Date:   Wed, 9 Mar 2022 16:42:41 +0100
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=EPv2czUPN4P3J0p1kuWcwN5wFtTDrdP4nhrIIWXDX5M=;
+        b=6/GwnhOXiEkgdv33+oTxR9iHjJ4ecOo6UOnBnxpd3dmRNEddB+dMzn2I2U6Rgh8Swu
+         d8b1gpb4+4py/wPiVyvwashXD7J7zj1Itd0YSTfSEcQYNOMoY9SoMTwcoHqiRUXSOrsk
+         dqxxuuGZZvBwB4QcYnrVwYWwwUJeko5wJcenT90UqD0pc3IRjKHOubT/iOdcWNLNPq+n
+         PrlqpVNstIIsZlqtJDxpsqoupocxCONRQ8Jsy+n8Yer4ql9Yer0Cnf6UwgrgAc+5TUqI
+         dPEc9AAZgUKYM1WrG51t7WFgv+TaXe5TM0dzpNyIjB51vqNIMYeBJaRjaBZ4D8Yd7vM1
+         2e3w==
+X-Gm-Message-State: AOAM530m/8gXtNiNkkNcHxMWtB8j/Zrp40qHuqjeiYVO43s2Zg6fXX/B
+        quLOl8KDLObHXgvnldxHhnBJ6b7fKWgCRbISrQC3xxWL3hyfWDcH/WpBvsvugQCuv/ktX89WNQk
+        1xps2FeiiB+khlkUNfbpFhR+E
+X-Received: by 2002:a05:622a:14c:b0:2e1:a5c5:87ac with SMTP id v12-20020a05622a014c00b002e1a5c587acmr247669qtw.246.1646840663738;
+        Wed, 09 Mar 2022 07:44:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyJNGuKSaMEHnpv0VBhlvfbOKgbucbJF29mIvY1nAjWMtgIj8s5DzxuGSPOhnzq5jp8Pwx3Hg==
+X-Received: by 2002:a05:622a:14c:b0:2e1:a5c5:87ac with SMTP id v12-20020a05622a014c00b002e1a5c587acmr247647qtw.246.1646840663386;
+        Wed, 09 Mar 2022 07:44:23 -0800 (PST)
+Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
+        by smtp.gmail.com with ESMTPSA id m6-20020ae9e006000000b0067d3e75e2a6sm549575qkk.19.2022.03.09.07.44.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 07:44:23 -0800 (PST)
+Message-ID: <b28618df1b6c31f42b75c8f759011444018bbece.camel@redhat.com>
+Subject: Re: [PATCH v2 05/19] netfs: Split netfs_io_* object handling out
+From:   Jeff Layton <jlayton@redhat.com>
+To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
+Cc:     Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 09 Mar 2022 10:44:22 -0500
+In-Reply-To: <164678197044.1200972.11511937252083343775.stgit@warthog.procyon.org.uk>
+References: <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk>
+         <164678197044.1200972.11511937252083343775.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/4] Thermal library and tools
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
- <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
- <bcfcf159c62a2a071a7bc7020f811fd9383af6de.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <bcfcf159c62a2a071a7bc7020f811fd9383af6de.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-03-08 at 23:26 +0000, David Howells wrote:
+> Split netfs_io_* object handling out into a file that's going to contain
+> object allocation, get and put routines.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: linux-cachefs@redhat.com
+> 
+> Link: https://lore.kernel.org/r/164622995118.3564931.6089530629052064470.stgit@warthog.procyon.org.uk/ # v1
+> ---
+> 
+>  fs/netfs/Makefile      |    6 ++
+>  fs/netfs/internal.h    |   18 +++++++
+>  fs/netfs/objects.c     |  123 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  fs/netfs/read_helper.c |  118 ----------------------------------------------
+>  4 files changed, 147 insertions(+), 118 deletions(-)
+>  create mode 100644 fs/netfs/objects.c
+> 
+> diff --git a/fs/netfs/Makefile b/fs/netfs/Makefile
+> index c15bfc966d96..939fd00a1fc9 100644
+> --- a/fs/netfs/Makefile
+> +++ b/fs/netfs/Makefile
+> @@ -1,5 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -netfs-y := read_helper.o stats.o
+> +netfs-y := \
+> +	objects.o \
+> +	read_helper.o
+> +
+> +netfs-$(CONFIG_NETFS_STATS) += stats.o
+>  
+>  obj-$(CONFIG_NETFS_SUPPORT) := netfs.o
+> diff --git a/fs/netfs/internal.h b/fs/netfs/internal.h
+> index b7f2c4459f33..cf7a3ddb16a4 100644
+> --- a/fs/netfs/internal.h
+> +++ b/fs/netfs/internal.h
+> @@ -5,17 +5,35 @@
+>   * Written by David Howells (dhowells@redhat.com)
+>   */
+>  
+> +#include <linux/netfs.h>
+> +#include <trace/events/netfs.h>
+> +
+>  #ifdef pr_fmt
+>  #undef pr_fmt
+>  #endif
+>  
+>  #define pr_fmt(fmt) "netfs: " fmt
+>  
+> +/*
+> + * objects.c
+> + */
+> +struct netfs_io_request *netfs_alloc_request(const struct netfs_request_ops *ops,
+> +					     void *netfs_priv,
+> +					     struct file *file);
+> +void netfs_get_request(struct netfs_io_request *rreq);
+> +void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async);
+> +void netfs_put_request(struct netfs_io_request *rreq, bool was_async);
+> +struct netfs_io_subrequest *netfs_alloc_subrequest(struct netfs_io_request *rreq);
+> +void netfs_put_subrequest(struct netfs_io_subrequest *subreq, bool was_async);
+> +void netfs_get_subrequest(struct netfs_io_subrequest *subreq);
+> +
+>  /*
+>   * read_helper.c
+>   */
+>  extern unsigned int netfs_debug;
+>  
+> +void netfs_rreq_work(struct work_struct *work);
+> +
+>  /*
+>   * stats.c
+>   */
+> diff --git a/fs/netfs/objects.c b/fs/netfs/objects.c
+> new file mode 100644
+> index 000000000000..f7383c28dc6e
+> --- /dev/null
+> +++ b/fs/netfs/objects.c
+> @@ -0,0 +1,123 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Object lifetime handling and tracing.
+> + *
+> + * Copyright (C) 2022 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#include <linux/slab.h>
+> +#include "internal.h"
+> +
+> +/*
+> + * Allocate an I/O request and initialise it.
+> + */
+> +struct netfs_io_request *netfs_alloc_request(
+> +	const struct netfs_request_ops *ops, void *netfs_priv,
+> +	struct file *file)
+> +{
+> +	static atomic_t debug_ids;
+> +	struct netfs_io_request *rreq;
+> +
+> +	rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
+> +	if (rreq) {
+> +		rreq->netfs_ops	= ops;
+> +		rreq->netfs_priv = netfs_priv;
+> +		rreq->inode	= file_inode(file);
+> +		rreq->i_size	= i_size_read(rreq->inode);
+> +		rreq->debug_id	= atomic_inc_return(&debug_ids);
+> +		INIT_LIST_HEAD(&rreq->subrequests);
+> +		INIT_WORK(&rreq->work, netfs_rreq_work);
+> +		refcount_set(&rreq->usage, 1);
+> +		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
+> +		if (ops->init_request)
+> +			ops->init_request(rreq, file);
+> +		netfs_stat(&netfs_n_rh_rreq);
+> +	}
+> +
+> +	return rreq;
+> +}
+> +
+> +void netfs_get_request(struct netfs_io_request *rreq)
+> +{
+> +	refcount_inc(&rreq->usage);
+> +}
+> +
+> +void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
+> +{
+> +	struct netfs_io_subrequest *subreq;
+> +
+> +	while (!list_empty(&rreq->subrequests)) {
+> +		subreq = list_first_entry(&rreq->subrequests,
+> +					  struct netfs_io_subrequest, rreq_link);
+> +		list_del(&subreq->rreq_link);
+> +		netfs_put_subrequest(subreq, was_async);
+> +	}
+> +}
+> +
+> +static void netfs_free_request(struct work_struct *work)
+> +{
+> +	struct netfs_io_request *rreq =
+> +		container_of(work, struct netfs_io_request, work);
+> +	netfs_clear_subrequests(rreq, false);
+> +	if (rreq->netfs_priv)
+> +		rreq->netfs_ops->cleanup(rreq->mapping, rreq->netfs_priv);
+> +	trace_netfs_rreq(rreq, netfs_rreq_trace_free);
+> +	if (rreq->cache_resources.ops)
+> +		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
+> +	kfree(rreq);
+> +	netfs_stat_d(&netfs_n_rh_rreq);
+> +}
+> +
+> +void netfs_put_request(struct netfs_io_request *rreq, bool was_async)
+> +{
+> +	if (refcount_dec_and_test(&rreq->usage)) {
+> +		if (was_async) {
+> +			rreq->work.func = netfs_free_request;
+> +			if (!queue_work(system_unbound_wq, &rreq->work))
+> +				BUG();
+> +		} else {
+> +			netfs_free_request(&rreq->work);
+> +		}
+> +	}
+> +}
+> +
+> +/*
+> + * Allocate and partially initialise an I/O request structure.
+> + */
+> +struct netfs_io_subrequest *netfs_alloc_subrequest(struct netfs_io_request *rreq)
+> +{
+> +	struct netfs_io_subrequest *subreq;
+> +
+> +	subreq = kzalloc(sizeof(struct netfs_io_subrequest), GFP_KERNEL);
+> +	if (subreq) {
+> +		INIT_LIST_HEAD(&subreq->rreq_link);
+> +		refcount_set(&subreq->usage, 2);
+> +		subreq->rreq = rreq;
+> +		netfs_get_request(rreq);
+> +		netfs_stat(&netfs_n_rh_sreq);
+> +	}
+> +
+> +	return subreq;
+> +}
+> +
+> +void netfs_get_subrequest(struct netfs_io_subrequest *subreq)
+> +{
+> +	refcount_inc(&subreq->usage);
+> +}
+> +
+> +static void __netfs_put_subrequest(struct netfs_io_subrequest *subreq,
+> +				   bool was_async)
+> +{
+> +	struct netfs_io_request *rreq = subreq->rreq;
+> +
+> +	trace_netfs_sreq(subreq, netfs_sreq_trace_free);
+> +	kfree(subreq);
+> +	netfs_stat_d(&netfs_n_rh_sreq);
+> +	netfs_put_request(rreq, was_async);
+> +}
+> +
+> +void netfs_put_subrequest(struct netfs_io_subrequest *subreq, bool was_async)
+> +{
+> +	if (refcount_dec_and_test(&subreq->usage))
+> +		__netfs_put_subrequest(subreq, was_async);
+> +}
+> diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
+> index 26d54055b17e..ef23ef9889d5 100644
+> --- a/fs/netfs/read_helper.c
+> +++ b/fs/netfs/read_helper.c
+> @@ -27,122 +27,6 @@ unsigned netfs_debug;
+>  module_param_named(debug, netfs_debug, uint, S_IWUSR | S_IRUGO);
+>  MODULE_PARM_DESC(netfs_debug, "Netfs support debugging mask");
+>  
+> -static void netfs_rreq_work(struct work_struct *);
+> -static void __netfs_put_subrequest(struct netfs_io_subrequest *, bool);
+> -
+> -static void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
+> -				 bool was_async)
+> -{
+> -	if (refcount_dec_and_test(&subreq->usage))
+> -		__netfs_put_subrequest(subreq, was_async);
+> -}
+> -
+> -static struct netfs_io_request *netfs_alloc_request(
+> -	const struct netfs_request_ops *ops, void *netfs_priv,
+> -	struct file *file)
+> -{
+> -	static atomic_t debug_ids;
+> -	struct netfs_io_request *rreq;
+> -
+> -	rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
+> -	if (rreq) {
+> -		rreq->netfs_ops	= ops;
+> -		rreq->netfs_priv = netfs_priv;
+> -		rreq->inode	= file_inode(file);
+> -		rreq->i_size	= i_size_read(rreq->inode);
+> -		rreq->debug_id	= atomic_inc_return(&debug_ids);
+> -		INIT_LIST_HEAD(&rreq->subrequests);
+> -		INIT_WORK(&rreq->work, netfs_rreq_work);
+> -		refcount_set(&rreq->usage, 1);
+> -		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
+> -		if (ops->init_request)
+> -			ops->init_request(rreq, file);
+> -		netfs_stat(&netfs_n_rh_rreq);
+> -	}
+> -
+> -	return rreq;
+> -}
+> -
+> -static void netfs_get_request(struct netfs_io_request *rreq)
+> -{
+> -	refcount_inc(&rreq->usage);
+> -}
+> -
+> -static void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
+> -{
+> -	struct netfs_io_subrequest *subreq;
+> -
+> -	while (!list_empty(&rreq->subrequests)) {
+> -		subreq = list_first_entry(&rreq->subrequests,
+> -					  struct netfs_io_subrequest, rreq_link);
+> -		list_del(&subreq->rreq_link);
+> -		netfs_put_subrequest(subreq, was_async);
+> -	}
+> -}
+> -
+> -static void netfs_free_request(struct work_struct *work)
+> -{
+> -	struct netfs_io_request *rreq =
+> -		container_of(work, struct netfs_io_request, work);
+> -	netfs_clear_subrequests(rreq, false);
+> -	if (rreq->netfs_priv)
+> -		rreq->netfs_ops->cleanup(rreq->mapping, rreq->netfs_priv);
+> -	trace_netfs_rreq(rreq, netfs_rreq_trace_free);
+> -	if (rreq->cache_resources.ops)
+> -		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
+> -	kfree(rreq);
+> -	netfs_stat_d(&netfs_n_rh_rreq);
+> -}
+> -
+> -static void netfs_put_request(struct netfs_io_request *rreq, bool was_async)
+> -{
+> -	if (refcount_dec_and_test(&rreq->usage)) {
+> -		if (was_async) {
+> -			rreq->work.func = netfs_free_request;
+> -			if (!queue_work(system_unbound_wq, &rreq->work))
+> -				BUG();
+> -		} else {
+> -			netfs_free_request(&rreq->work);
+> -		}
+> -	}
+> -}
+> -
+> -/*
+> - * Allocate and partially initialise an I/O request structure.
+> - */
+> -static struct netfs_io_subrequest *netfs_alloc_subrequest(
+> -	struct netfs_io_request *rreq)
+> -{
+> -	struct netfs_io_subrequest *subreq;
+> -
+> -	subreq = kzalloc(sizeof(struct netfs_io_subrequest), GFP_KERNEL);
+> -	if (subreq) {
+> -		INIT_LIST_HEAD(&subreq->rreq_link);
+> -		refcount_set(&subreq->usage, 2);
+> -		subreq->rreq = rreq;
+> -		netfs_get_request(rreq);
+> -		netfs_stat(&netfs_n_rh_sreq);
+> -	}
+> -
+> -	return subreq;
+> -}
+> -
+> -static void netfs_get_subrequest(struct netfs_io_subrequest *subreq)
+> -{
+> -	refcount_inc(&subreq->usage);
+> -}
+> -
+> -static void __netfs_put_subrequest(struct netfs_io_subrequest *subreq,
+> -				   bool was_async)
+> -{
+> -	struct netfs_io_request *rreq = subreq->rreq;
+> -
+> -	trace_netfs_sreq(subreq, netfs_sreq_trace_free);
+> -	kfree(subreq);
+> -	netfs_stat_d(&netfs_n_rh_sreq);
+> -	netfs_put_request(rreq, was_async);
+> -}
+> -
+>  /*
+>   * Clear the unread part of an I/O request.
+>   */
+> @@ -558,7 +442,7 @@ static void netfs_rreq_assess(struct netfs_io_request *rreq, bool was_async)
+>  	netfs_rreq_completed(rreq, was_async);
+>  }
+>  
+> -static void netfs_rreq_work(struct work_struct *work)
+> +void netfs_rreq_work(struct work_struct *work)
+>  {
+>  	struct netfs_io_request *rreq =
+>  		container_of(work, struct netfs_io_request, work);
+> 
+> 
 
-Hi Srinivas,
+Reviewed-by: Jeff Layton <jlayton@redhat.com>
 
-thanks for your feedbacks, I'll fix that.
-
-   -- Daniel
-
-
-On 28/02/2022 18:13, srinivas pandruvada wrote:
-> Hi Daniel,
-> On Thu, 2022-02-24 at 22:41 +0100, Daniel Lezcano wrote:
->>
->> Hi,
->>
->> What shall I do with this series? Is everyone ok with it?
->>
-> Some comments
-> 1. White space errors while applying
-> $git am ../daniel/\[PATCH\ v1\ 1_4\]\ tools_lib_thermal_\ Add\ a\
-> thermal\ library.mbox
-> Applying: tools/lib/thermal: Add a thermal library
-> .git/rebase-apply/patch:234: trailing whitespace.
-> clean:
-> .git/rebase-apply/patch:715: trailing whitespace.
-> 				
-> nla_get_u32(attrs[THERMAL_GENL_ATTR_TZ_TEMP]), arg);
-> .git/rebase-apply/patch:878: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:879: trailing whitespace.
-> struct thermal_handler;
-> .git/rebase-apply/patch:1103: trailing whitespace.
-> }	
-> warning: squelched 5 whitespace errors
-> warning: 10 lines add whitespace errors.
-> 
-> $git am ../daniel/\[PATCH\ v1\ 2_4\]\ tools_thermal_\ Add\ util\
-> library.mbox
-> Applying: tools/thermal: Add util library
-> .git/rebase-apply/patch:152: trailing whitespace.
-> clean:
-> .git/rebase-apply/patch:259: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:285: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:385: trailing whitespace.
-> 		
-> .git/rebase-apply/patch:392: trailing whitespace.
-> 		/*
-> warning: squelched 1 whitespace error
-> warning: 6 lines add whitespace errors.
-> $git am ../daniel/\[PATCH\ v1\ 3_4\]\ tools_thermal_\ A\ temperature\
-> capture\ tool.mbox
-> Applying: tools/thermal: A temperature capture tool
-> .git/rebase-apply/patch:165: trailing whitespace.
-> 	regex_t regex;	
-> .git/rebase-apply/patch:205: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:208: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:249: trailing whitespace.
-> 		
-> .git/rebase-apply/patch:265: trailing whitespace.
-> 	
-> warning: squelched 13 whitespace errors
-> warning: 18 lines add whitespace errors.
-> 
-> $ git am ../daniel/\[PATCH\ v1\ 4_4\]\ tools_thermal_\ Add\ thermal\
-> daemon\ skeleton.mbox
-> Applying: tools/thermal: Add thermal daemon skeleton
-> .git/rebase-apply/patch:170: trailing whitespace.
-> }		
-> .git/rebase-apply/patch:186: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:197: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:199: trailing whitespace.
-> 	
-> .git/rebase-apply/patch:348: trailing whitespace.
-> 	
-> warning: squelched 3 whitespace errors
-> warning: 8 lines add whitespace errors.
-> 
-> 
-> 2. No help or man page
-> thermal_engine has some options. There is no --help or man
-> 
-> 3. Silent failure
-> 
-> For example:
-> $sudo ./thermal-engine
-> 
-> 4.
-> sudo ./thermometer
-> Options;
->   * config: 'thermometer.conf'
->   * log level: '7'
->   * postfix: -2022-02-28_16:51:33
->   * output: .
-> 
-> What an user can do?
-> 
-> Thanks,
-> Srinivas
->   
->>
->>
->> On 18/02/2022 13:53, Daniel Lezcano wrote:
->>> This series provides a thermal library providing the basic callback
->>> oriented
->>> netlink communication and events with the thermal framework, a
->>> temperature
->>> capture tool and a thermal monitoring skeleton using the thermal
->>> library.
->>>
->>> Changelog:
->>>    - V1:
->>>       - Took into account RFC comments (unsubscribe, error enum,
->>> thermal daemon
->>>         renamed to thermal-engine)
->>>
->>> Daniel Lezcano (4):
->>>     tools/lib/thermal: Add a thermal library
->>>     tools/thermal: Add util library
->>>     tools/thermal: A temperature capture tool
->>>     tools/thermal: Add thermal daemon skeleton
->>>
->>>    tools/Makefile                                |  36 +-
->>>    tools/lib/thermal/.gitignore                  |   2 +
->>>    tools/lib/thermal/Build                       |   5 +
->>>    tools/lib/thermal/Makefile                    | 165 ++++++++
->>>    tools/lib/thermal/commands.c                  | 351
->>> ++++++++++++++++
->>>    tools/lib/thermal/events.c                    | 164 ++++++++
->>>    tools/lib/thermal/include/thermal.h           | 141 +++++++
->>>    tools/lib/thermal/libthermal.map              |  25 ++
->>>    tools/lib/thermal/libthermal.pc.template      |  12 +
->>>    tools/lib/thermal/sampling.c                  |  75 ++++
->>>    tools/lib/thermal/thermal.c                   | 126 ++++++
->>>    tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
->>>    tools/lib/thermal/thermal_nl.h                |  46 ++
->>>    tools/thermal/lib/Build                       |   3 +
->>>    tools/thermal/lib/Makefile                    | 158 +++++++
->>>    .../thermal/lib/libthermal_tools.pc.template  |  12 +
->>>    tools/thermal/lib/log.c                       |  77 ++++
->>>    tools/thermal/lib/log.h                       |  31 ++
->>>    tools/thermal/lib/mainloop.c                  | 135 ++++++
->>>    tools/thermal/lib/mainloop.h                  |  14 +
->>>    tools/thermal/lib/thermal-tools.h             |  10 +
->>>    tools/thermal/lib/uptimeofday.c               |  40 ++
->>>    tools/thermal/lib/uptimeofday.h               |  12 +
->>>    tools/thermal/thermal-engine/Build            |   2 +
->>>    tools/thermal/thermal-engine/Makefile         |  27 ++
->>>    tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
->>>    tools/thermal/thermometer/Build               |   2 +
->>>    tools/thermal/thermometer/Makefile            |  23 +
->>>    tools/thermal/thermometer/thermometer.c       | 393
->>> ++++++++++++++++++
->>>    tools/thermal/thermometer/thermometer.conf    |   5 +
->>>    30 files changed, 2591 insertions(+), 3 deletions(-)
->>>    create mode 100644 tools/lib/thermal/.gitignore
->>>    create mode 100644 tools/lib/thermal/Build
->>>    create mode 100644 tools/lib/thermal/Makefile
->>>    create mode 100644 tools/lib/thermal/commands.c
->>>    create mode 100644 tools/lib/thermal/events.c
->>>    create mode 100644 tools/lib/thermal/include/thermal.h
->>>    create mode 100644 tools/lib/thermal/libthermal.map
->>>    create mode 100644 tools/lib/thermal/libthermal.pc.template
->>>    create mode 100644 tools/lib/thermal/sampling.c
->>>    create mode 100644 tools/lib/thermal/thermal.c
->>>    create mode 100644 tools/lib/thermal/thermal_nl.c
->>>    create mode 100644 tools/lib/thermal/thermal_nl.h
->>>    create mode 100644 tools/thermal/lib/Build
->>>    create mode 100644 tools/thermal/lib/Makefile
->>>    create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
->>>    create mode 100644 tools/thermal/lib/log.c
->>>    create mode 100644 tools/thermal/lib/log.h
->>>    create mode 100644 tools/thermal/lib/mainloop.c
->>>    create mode 100644 tools/thermal/lib/mainloop.h
->>>    create mode 100644 tools/thermal/lib/thermal-tools.h
->>>    create mode 100644 tools/thermal/lib/uptimeofday.c
->>>    create mode 100644 tools/thermal/lib/uptimeofday.h
->>>    create mode 100644 tools/thermal/thermal-engine/Build
->>>    create mode 100644 tools/thermal/thermal-engine/Makefile
->>>    create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
->>>    create mode 100644 tools/thermal/thermometer/Build
->>>    create mode 100644 tools/thermal/thermometer/Makefile
->>>    create mode 100644 tools/thermal/thermometer/thermometer.c
->>>    create mode 100644 tools/thermal/thermometer/thermometer.conf
->>>
->>
->>
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

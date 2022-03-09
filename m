@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1164D3300
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A93E4D32A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiCIQKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S231675AbiCIQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234544AbiCIQHg (ORCPT
+        with ESMTP id S234242AbiCIQDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:07:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC98144F4A;
-        Wed,  9 Mar 2022 08:03:44 -0800 (PST)
+        Wed, 9 Mar 2022 11:03:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB7017F68E;
+        Wed,  9 Mar 2022 08:02:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FBC5615FA;
-        Wed,  9 Mar 2022 16:03:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E56AC340E8;
-        Wed,  9 Mar 2022 16:03:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2CC0B82227;
+        Wed,  9 Mar 2022 16:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 231F9C340EF;
+        Wed,  9 Mar 2022 16:02:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841821;
-        bh=wBLb1JgeLGCmIlJRSZ+nBqsfFArPm7x3PghLmULm8JI=;
+        s=korg; t=1646841739;
+        bh=Yd5n5DSjjVDG87tEbvo0EgJLSt9bMab9/62XTFXxw2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SukCp2OJzM8l1vjhHToKSkmwIeIs11hpbrsAozhfcD0Zr7HidyDKrRdJ9K5ymNHjo
-         DStrPiGJ4s4Z8qBojP1WqMC/rmMMhl+PmZaSugEj7tTQDR/EcZ5PMjRfA7qVblnIuP
-         guFdcjZRDQRQaOvvZabFcc5Y6YOWNAkqRKDWudEM=
+        b=CjppZY/ZYRAa0R27vl571e5RvLWymXxApIPj62RceGSDU6C//l2fXNMXJjn/TVs7z
+         U/GZowdkX8hgf2Sc0KxaMP3RG20Up6WFMuHIDlDrdIgzZq9SjKasyEJQAKihqDqFW+
+         kY7Uaq+t/h6hGI149Fuh9QzblVeQSHaM4Hb0XWf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 4.19 08/18] x86/speculation: Update link to AMD speculation whitepaper
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 4.14 15/18] ARM: use LOADADDR() to get load address of sections
 Date:   Wed,  9 Mar 2022 16:59:45 +0100
-Message-Id: <20220309155856.404068474@linuxfoundation.org>
+Message-Id: <20220309155856.544399732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155856.155540075@linuxfoundation.org>
-References: <20220309155856.155540075@linuxfoundation.org>
+In-Reply-To: <20220309155856.090281301@linuxfoundation.org>
+References: <20220309155856.090281301@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kim Phillips <kim.phillips@amd.com>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-commit e9b6013a7ce31535b04b02ba99babefe8a8599fa upstream.
+commit 8d9d651ff2270a632e9dc497b142db31e8911315 upstream.
 
-Update the link to the "Software Techniques for Managing Speculation
-on AMD Processors" whitepaper.
+Use the linker's LOADADDR() macro to get the load address of the
+sections, and provide a macro to set the start and end symbols.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/hw-vuln/spectre.rst |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/kernel/vmlinux-xip.lds.S |   19 ++++++++++++-------
+ arch/arm/kernel/vmlinux.lds.S     |   19 ++++++++++++-------
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
---- a/Documentation/admin-guide/hw-vuln/spectre.rst
-+++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-@@ -60,8 +60,8 @@ privileged data touched during the specu
- Spectre variant 1 attacks take advantage of speculative execution of
- conditional branches, while Spectre variant 2 attacks use speculative
- execution of indirect branches to leak privileged memory.
--See :ref:`[1] <spec_ref1>` :ref:`[5] <spec_ref5>` :ref:`[7] <spec_ref7>`
--:ref:`[10] <spec_ref10>` :ref:`[11] <spec_ref11>`.
-+See :ref:`[1] <spec_ref1>` :ref:`[5] <spec_ref5>` :ref:`[6] <spec_ref6>`
-+:ref:`[7] <spec_ref7>` :ref:`[10] <spec_ref10>` :ref:`[11] <spec_ref11>`.
+--- a/arch/arm/kernel/vmlinux-xip.lds.S
++++ b/arch/arm/kernel/vmlinux-xip.lds.S
+@@ -13,6 +13,11 @@
+ #include <asm/memory.h>
+ #include <asm/page.h>
  
- Spectre variant 1 (Bounds Check Bypass)
- ---------------------------------------
-@@ -746,7 +746,7 @@ AMD white papers:
++/* Set start/end symbol names to the LMA for the section */
++#define ARM_LMA(sym, section)						\
++	sym##_start = LOADADDR(section);				\
++	sym##_end = LOADADDR(section) + SIZEOF(section)
++
+ #define PROC_INFO							\
+ 	. = ALIGN(4);							\
+ 	VMLINUX_SYMBOL(__proc_info_begin) = .;				\
+@@ -149,19 +154,19 @@ SECTIONS
+ 	 * The vectors and stubs are relocatable code, and the
+ 	 * only thing that matters is their relative offsets
+ 	 */
+-	__vectors_start = .;
++	__vectors_lma = .;
+ 	.vectors 0xffff0000 : AT(__vectors_start) {
+ 		*(.vectors)
+ 	}
+-	. = __vectors_start + SIZEOF(.vectors);
+-	__vectors_end = .;
++	ARM_LMA(__vectors, .vectors);
++	. = __vectors_lma + SIZEOF(.vectors);
  
- .. _spec_ref6:
+-	__stubs_start = .;
+-	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_start) {
++	__stubs_lma = .;
++	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) {
+ 		*(.stubs)
+ 	}
+-	. = __stubs_start + SIZEOF(.stubs);
+-	__stubs_end = .;
++	ARM_LMA(__stubs, .stubs);
++	. = __stubs_lma + SIZEOF(.stubs);
  
--[6] `Software techniques for managing speculation on AMD processors <https://developer.amd.com/wp-content/resources/90343-B_SoftwareTechniquesforManagingSpeculation_WP_7-18Update_FNL.pdf>`_.
-+[6] `Software techniques for managing speculation on AMD processors <https://developer.amd.com/wp-content/resources/Managing-Speculation-on-AMD-Processors.pdf>`_.
+ 	PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
  
- ARM white papers:
+--- a/arch/arm/kernel/vmlinux.lds.S
++++ b/arch/arm/kernel/vmlinux.lds.S
+@@ -15,6 +15,11 @@
+ #include <asm/page.h>
+ #include <asm/pgtable.h>
+ 
++/* Set start/end symbol names to the LMA for the section */
++#define ARM_LMA(sym, section)						\
++	sym##_start = LOADADDR(section);				\
++	sym##_end = LOADADDR(section) + SIZEOF(section)
++
+ #define PROC_INFO							\
+ 	. = ALIGN(4);							\
+ 	VMLINUX_SYMBOL(__proc_info_begin) = .;				\
+@@ -170,19 +175,19 @@ SECTIONS
+ 	 * The vectors and stubs are relocatable code, and the
+ 	 * only thing that matters is their relative offsets
+ 	 */
+-	__vectors_start = .;
++	__vectors_lma = .;
+ 	.vectors 0xffff0000 : AT(__vectors_start) {
+ 		*(.vectors)
+ 	}
+-	. = __vectors_start + SIZEOF(.vectors);
+-	__vectors_end = .;
++	ARM_LMA(__vectors, .vectors);
++	. = __vectors_lma + SIZEOF(.vectors);
+ 
+-	__stubs_start = .;
+-	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_start) {
++	__stubs_lma = .;
++	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) {
+ 		*(.stubs)
+ 	}
+-	. = __stubs_start + SIZEOF(.stubs);
+-	__stubs_end = .;
++	ARM_LMA(__stubs, .stubs);
++	. = __stubs_lma + SIZEOF(.stubs);
+ 
+ 	PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
  
 
 

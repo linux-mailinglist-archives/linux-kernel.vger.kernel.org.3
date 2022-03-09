@@ -2,88 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4F34D2599
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216104D25EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiCIBJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S230135AbiCIBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiCIBJd (ORCPT
+        with ESMTP id S231298AbiCIBNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:09:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7950614CC8E;
-        Tue,  8 Mar 2022 16:51:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 133BB6131F;
-        Wed,  9 Mar 2022 00:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F04C340EB;
-        Wed,  9 Mar 2022 00:28:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646785683;
-        bh=7ts5yK9dKmm0RkdfCHFJSloLAhqqU7Px2Yg0dWLSehQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ATv15O2qyedqsb3YuOb+pBi9rlcdHwsQyp5MYExREL36OJLhpjs0c/jingYsBhxOp
-         LJE+8VdSlqsVvLTNVhILrTD80c0ttZ+b5qUAAQkqoYrO5TQ7achOli2LFW0qh2BfQo
-         zjfSikWfy042N+t+s2LLzcWQ3wkENXY2gRPGmnj6yLTueKYz3ahBZxAWgfdLsvIXad
-         t7zUVoK5dFhH05qJeyOmUQbXdeJBedmg3ZIubEWMYc9fyuv0x9ha4JySgJglhX7ahj
-         W4VZeGq92x4nI014iRF6vWc1Aif/RNO4npy0YZYQpy1u0U8lde62YU46dzALdMvc6l
-         MqQqIJ43/ygvw==
-Date:   Tue, 8 Mar 2022 16:28:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Jeffrey Ji <jeffreyjilinux@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Brian Vazquez <brianvv@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        jeffreyji <jeffreyji@google.com>
-Subject: Re: [PATCH v3 net-next] net-core: add rx_otherhost_dropped counter
-Message-ID: <20220308162802.0ecec1bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CANn89iKvP-8VpOrf_ppVVgsd4kQtAEFWkBVxKW4BP+rtu_Egrw@mail.gmail.com>
-References: <20220308212531.752215-1-jeffreyjilinux@gmail.com>
-        <d1b25466-6f83-591e-39a6-8fdbd56846fb@kernel.org>
-        <CANn89iKvP-8VpOrf_ppVVgsd4kQtAEFWkBVxKW4BP+rtu_Egrw@mail.gmail.com>
+        Tue, 8 Mar 2022 20:13:10 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8654A15879C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:56:18 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id g17so1041338lfh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dlXc7nO4VVenbG9TQJ/z1TWtkG9nDmF64Ost29V8AWc=;
+        b=fk9Kkf3UiaboVe5n2sPqRmsu9R/9pSJ0MBG82T7odsoD9Z+4tUrGity1EBUSVcd5bO
+         Ay+GVgtTlqOjk5DG157lanciRnAlDA9OLu41FZ3ehebtgoQkdRl4IX3y8PNM/lSEI5AP
+         dZRPNM6mHBzmKNa87ZpX/gBVrjQgnOz7vbrW0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dlXc7nO4VVenbG9TQJ/z1TWtkG9nDmF64Ost29V8AWc=;
+        b=YGVD+Q+fiXunJmLZ9gPqdq8JYgj6Lh8fq+bo0Qf+p/ZSYcLunbN770b/VuV/9+Jb/d
+         6dLWyNLNPTSDUNxUNf4mg8ojEmJSD7CmITpYFAZDaKQbMze3Hss/auYsP7X7lL1u1dWi
+         UvG2ugBEuZOAWy3HSaRrRm7PzG+FIz8mgK8peQshaDWlH3W5jvyJJUD6XtkHDbY4jFrA
+         6bJBjtNNYW+IiKjWzIdnSy8qlelTODVjZHrgcOqcyHRKJuMca52y13yYmoBf1wNmQxYZ
+         5q5Iq6H3L0TFe6Dju7LOLafXzkl+2AjBr1ltbt/Xz5jIQqh2LiS2xKzLfnRwcYWrjeAg
+         f1Hw==
+X-Gm-Message-State: AOAM532X51eiNjtOaPa40+DaR7GCDVMalmv7S8nMN1mKm6l1fuHVWGZA
+        Q1fvWw72uRToJ3a0JShoQMqr9/aI6tCAO6mKCAg=
+X-Google-Smtp-Source: ABdhPJzxiKdZrGW/psZjQD22B72hrb/aK1eFi029KadW+xrT0pF3YkWVx9q/DroWJTM77OJuzqILRA==
+X-Received: by 2002:a17:906:a148:b0:6cd:50c7:8d4d with SMTP id bu8-20020a170906a14800b006cd50c78d4dmr15512508ejb.641.1646785800129;
+        Tue, 08 Mar 2022 16:30:00 -0800 (PST)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id r6-20020a1709064d0600b006da7ca3e514sm98042eju.208.2022.03.08.16.29.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 16:29:59 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id p15so1468953ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:29:59 -0800 (PST)
+X-Received: by 2002:ac2:44a4:0:b0:445:8fc5:a12a with SMTP id
+ c4-20020ac244a4000000b004458fc5a12amr12499712lfm.27.1646785789558; Tue, 08
+ Mar 2022 16:29:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220308234723.3834941-1-yuzhao@google.com> <CAHk-=wi5wg=72exwHODJdVtAfqa1e85dGfjGftuhHQ5Z4v-DNA@mail.gmail.com>
+ <CAOUHufYFDawK6vmkQ16EQm7FSHresViifnxW2yj_RDuMSjJPjg@mail.gmail.com>
+In-Reply-To: <CAOUHufYFDawK6vmkQ16EQm7FSHresViifnxW2yj_RDuMSjJPjg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 8 Mar 2022 16:29:33 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgwgqJMyxbrxa-mY3cYh--BZ5JKDieVc=RfXR1mdqsYkQ@mail.gmail.com>
+Message-ID: <CAHk-=wgwgqJMyxbrxa-mY3cYh--BZ5JKDieVc=RfXR1mdqsYkQ@mail.gmail.com>
+Subject: Re: [PATCH v8 00/14] Multi-Gen LRU Framework
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 15:18:25 -0800 Eric Dumazet wrote:
-> > that's an expensive packet counter for a common path (e.g., hosting
-> > environments).  
-> 
-> This was the reason for the initial patch, using SNMP stat, being per cpu.
-> 
-> Adding per-device per-cpu data for this counter will increase cost of
-> netdevice dismantle phase,
-> and increase time for ndo_get_stats64(), especially on hosts with 256
-> or 512 cpus.
+On Tue, Mar 8, 2022 at 4:15 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> This sounds self-serving: our data centers want them, so I had to try.
 
-Two ways to solve this:
- - make dev->pcpu_refcnt point to a structure which holds both
-   refcnt and whatever stats
- - combine these stats into lstats, assuming the netdevs we care
-   about spawning / destroying fast are sw devices anyway;
-   struct rtnl_link_ops can indicate to the core if the driver
-   wants lstats (or just put how many bytes it wants), otherwise 
-   we'd only allocate enough mem for core's stats
+Heh. I'm not opposed to putting them back in, but if/when we merge the
+multi-gen LRU code, I really want people to be all testing the same
+thing.
 
-Option three - both.
+I also think that if we put them back in, that should come with
+
+ (a) performance numbers for the different cases
+
+ (b) hard guidance of what the numbers should be, and under what
+circumstances (ie giving the user enough information that he *can*
+answer the question for his configuration)
+
+ (c) some thought about perhaps making them possibly more dynamic than
+a hardcoded build-time value (assuming the numbers show that it's
+worth doing in the first place, of course)
+
+so I think that the support for the concept can/should be left in, but
+I think that kind of fancy "I want more generations or fewer
+tiers-per-generation because of XYZ" needs to be a separate issue with
+more explanation from the initial "This multi-gen LRU gives better
+performance" merge.
+
+Because as-is, I don't think those config options had nearly enough
+information associated with them to merit them existing.
+
+                  Linus

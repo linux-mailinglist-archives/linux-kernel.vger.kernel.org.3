@@ -2,186 +2,718 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781744D31AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BAA4D31B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbiCIPW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S232197AbiCIPYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiCIPWW (ORCPT
+        with ESMTP id S233819AbiCIPYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:22:22 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7327664D;
-        Wed,  9 Mar 2022 07:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646839283; x=1678375283;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=bO8okl1hmxh4t43D2Dtv8xfBbsfAGq22v5BCdLm8u9Y=;
-  b=RNxBVgstbJHZ15/dLji3qp1t5vUh3Khf/0SlXa8ZNnHPmiwHz5DL2Vuk
-   6GzNgXRGHbB4S+zSgNT9324OSQFeos8zlDiQvoeu2Jjovbw5cRaftjKyf
-   zCHrLwXuzjZgaGtciQiOI2TdHIFwCfUId6u1RBMZF4xspzkBKPRCCBLP0
-   Lm8mPyk6A5el5SaJTQ8vjLrhVhLLCdvEU8JAhf423XvMdPPr0n/hBXHoA
-   Ucfo93lmyKio8NM0J5k3NZi10AGHTruNtOtUnbTyYiw3bGrw5IXy0yJH5
-   ArL60GVgoAc/PXD+G6fe41J+xXSqfg2DJOeZEwo3ss0GP971No8cyje+c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="279726140"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="279726140"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 07:21:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="578415173"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2022 07:21:21 -0800
-Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 07:21:21 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Wed, 9 Mar 2022 07:21:21 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 9 Mar 2022 07:21:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BYFn0+2lsXeK274rp1vN0P7KpXU1HEXUaBIYhVWNd9zWLEWxkQHnZWfnrRDjTrI1cazgbkGjgcwqTF73O0Q4BMsQERvs0aeCz00qBsXIwWoes++L2lVL3qJ56v5Wh59OYNAhxUYy2iWVa/NTQc2L+rI3gDcPOQMqnuppt7903Wpa4AtblC+gKAhdkWRVVxLPYgRI/rnUdfVhgidHbWdKBN0YEI5FffbZnSWp7KMSr1GTUJ+pH29gyBek9Q/zsDHWnQ5GCd5fcOnlp1MHjJqqA7kthtsZPUlF0qc2gk96GEKzhwzUnwfCsgXaf6MWBX5JOHm8P94MzwUpZNrlAXm7iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H5KmzjRBdgbatTozem42m5aDHK2Dqi2ojWO2q7oq5B4=;
- b=dtydwFUl4t2Xb2r4diqZwH55pO71OSGdO63YpfNbUgeZGMB0s87l3ivtX+yAK3seW3pfXvYFYaqlr8US5d9cOM9E0e1/koi0BbMNFJVeVROqaLoefjmA/4dXBTNn7iwlXBltTlaSxUDe2Wmo9aAOHseHiFAYV3thN5/E+NJFsoD1Sh5EnUZkFyXdhbfwIKqVvpPo9CP5FaO9G/OPPsHGuqfO9OfkTuqYWjWVWRUQV38DJF7W/jV0B3Ony1VXUCYY0nNW99oMHL9FoNSvpmO0TymJyVTpqobys685Obu2yW87d/ve/l29HQPbyhmIGpdnOwNuEu9MT1MWMZteD5dRxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
- by CY4PR1101MB2071.namprd11.prod.outlook.com (2603:10b6:910:1a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Wed, 9 Mar
- 2022 15:21:17 +0000
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::dda5:a04:f265:68ad]) by MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::dda5:a04:f265:68ad%3]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 15:21:17 +0000
-Message-ID: <a52f9cfb-818f-6ed9-42aa-1385584c8103@intel.com>
-Date:   Wed, 9 Mar 2022 16:21:11 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.2
-Subject: Re: Bisected regression: 4287509b4d21 causes HP Spectre 14t-ea100 to
- overheat while suspended
-Content-Language: en-US
-To:     Philippe Troin <phil@fifi.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>
-References: <e1b3112fd6c8c889408915e9a849301d13acf2f1.camel@fifi.org>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-In-Reply-To: <e1b3112fd6c8c889408915e9a849301d13acf2f1.camel@fifi.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0014.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::19) To MW5PR11MB5810.namprd11.prod.outlook.com
- (2603:10b6:303:192::22)
+        Wed, 9 Mar 2022 10:24:02 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E981022BF3;
+        Wed,  9 Mar 2022 07:22:57 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4CAE21BF20D;
+        Wed,  9 Mar 2022 15:22:54 +0000 (UTC)
+Date:   Wed, 9 Mar 2022 16:22:52 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        claudiu.beznea@microchip.com, hverkuil-cisco@xs4all.nl,
+        nicolas.ferre@microchip.com
+Subject: Re: [PATCH v7 04/13] media: atmel: atmel-isc: implement media
+ controller
+Message-ID: <20220309152252.oz25pldorpred3cy@uno.localdomain>
+References: <20220307120423.2427631-1-eugen.hristev@microchip.com>
+ <20220307120423.2427631-5-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 99d3ba1a-d8a4-46db-f237-08da01e074e9
-X-MS-TrafficTypeDiagnostic: CY4PR1101MB2071:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1101MB2071ED25A6969689FD2CEE4ECB0A9@CY4PR1101MB2071.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RlGoKrpUvH/08Bs9wScY8iFvmXpmqfghkOHjtXfb16AQC97tAXQYTo7jfufeWKzRz8s4sPfapCEzZRgjcdJnJ/z5PqzEAYDCyL9JHfIJyMsNDe0dnXgnR/FR/1/n2OU8/B8xrIMQ3CmHGMvHqOpamdkw29i2CpQilejx0Ruie9pul0GZJtx+01qDXvIR6SilgZmBTZxFmqHIPvh1Q+Wzlt8YUwY6mQP2zAjLTgq8CLbhBG1ZbEgQCSk7hg85V9MPmELE6N+kRMMt27ztD+NbvE1HMoWCvYSttkVwSWV4MUMFwKqz8toQgoEoJr2FGZmXMMfR21HWPTwVTwIv0nXrIOKhJBmwBSYOwQrSswCjgQ1NzblMO0RYnNxKCbWvOmPswlR2IsaC1i4DidUzSNeUMr0L5CkBUiAIdo0a+IGcnbXBQlaDeFKSQPh2GqpnT70Lb3HQaKKYHa2I+dFDWygjoT2iZTvfL1RKo1epS/P8THHCPb1X77323tdLQXmK+fsts8B/Qpx+nIAfzsRSlpk/xDGzvp5xfFpzNn3ST20jPBO6CdH5uis1gv49jN9RYBF/3zzV76i85IeV5HcfcPPKcIp63tYdX/n3zvknjPlCzoHEPxnpr6xS25fiGaM8jcL2F86e9SwoLa9gc3/d58rTBjTaYxc7Ma54zo4+swUlue/KatoiFnOr3giHz0dL833p85WpdSNdLfcjam4vpyFCQKoadxigZ3D2B22BdaqvY4HYHJasAE6qk0zT02kJI1hXguVLhB3Fx0wmiFBRsrtdQbPOwy8OzQT3b3wFvbKXF/XtSIPQdRQaLZa219aXwLB0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31696002)(6486002)(6512007)(53546011)(508600001)(966005)(6666004)(6506007)(36916002)(186003)(83380400001)(82960400001)(66476007)(86362001)(2616005)(26005)(8936002)(5660300002)(31686004)(4326008)(8676002)(66556008)(66946007)(36756003)(15650500001)(4744005)(2906002)(6916009)(316002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmpvU1JnRTVxV1lCallCaVg0cWZuQ21VdTFoeUdjbkRRTU12Sk1xVUNtMzBj?=
- =?utf-8?B?Z214VUhiU1U0SEFhTWVqM3BTbUYyQ1hpemZjUDMyR055ZlNzcXdFeHAvc3Rz?=
- =?utf-8?B?czZpY21zVHBmS1RnZHFwSjdyL3k5aXVaVWZxenVRSmFYc29JU0kvQ2hhbGZY?=
- =?utf-8?B?TWJqWDRRbnMxSFpUNEloR1Vqdi9tYzNKMDBDbXpocUVDcGo1c2VzeWxpeFZu?=
- =?utf-8?B?UW9WT0hVemdCTzN4L09jQjZFUWpESy9BTXg4RitkN1lnQ2wyRjJ5ODJZNmt4?=
- =?utf-8?B?THIvT1hCcDdJbWcxTEc3OUN6bGJKMjRwT2JYN0ZTZXR5OG9NTGp6RzUxdEtO?=
- =?utf-8?B?SjdVbzJhQnY1bGhaUUVwdzhTNk94ZGdoYWpSRURMK1dCdW1aMWMxcUZxRUt0?=
- =?utf-8?B?eXg0QTA1bkdINFI5YVlyWXQ5dmRuUjBNNFN1N0JSTVkzZ0ZiQ0ZkZUV5M0My?=
- =?utf-8?B?bE9KYUFmUVNyUzZkNmVTRUFMeXZES1NvQ2Z1eUdtRmhwN2szT2lKNkI1T2l6?=
- =?utf-8?B?T0dUVzcvdjRHb0F4ZExmYjc4T0VjZmZYMDNUNkdtQStkV3gyR2pxUVBOdUFs?=
- =?utf-8?B?aTI1V2R3RHJ1S2k2SFJxMGJBTENPbER0S1oxS0NvM25mQ3B4bDkrc09TOTdF?=
- =?utf-8?B?Z0o2VGpmdWkwRVh0NFNqMzU4MXNWRnpXQkFrK2Y4ZndpalIydEdyMlV3WWpH?=
- =?utf-8?B?a1RBNkZGQnNKei9BeXExTkNwRS9MeVlKMUx6ZG4wSmVBQkE1b2cyTExQM0pE?=
- =?utf-8?B?RHdjTDcxYUFlWFcwcDNtKzN1V2tKaThBK3hWZ0JKczZWRjVvOXc2b2s4anow?=
- =?utf-8?B?emg5aTRqT21oRjkxb2JmckVqcGFEOTF2amE4SFFiNXZ5K01qUFM5K0U4LzU5?=
- =?utf-8?B?ZTcvSlhVRVVIRytkOHNWOWtBQjE5Ykk4SnZ0TXJIaWlZOEt2cVdEd05GbXo3?=
- =?utf-8?B?c1ROY01LN0toUnVjZlN4ZUdBc01IWkJJandpMWVWSGVXM3RZRWIyV2s1ZGJr?=
- =?utf-8?B?L21hcVhkM0l3RlRmcCtpVnpFSUt1cks4UVRBQm9DejllaWZHYnJxRmdKODF1?=
- =?utf-8?B?S200Z1AvV3FGZFoycGRsbzVEQ2g1N1FEajZtYjZLcExyR1BON3p6OXlkUGR0?=
- =?utf-8?B?cHRkVkIybzhqMUE4Zm10dk51VE54RldZQlZBUlF5UUVNLytvVURBYkpQczJi?=
- =?utf-8?B?M3hMWUdYOTlmZ0RiQzhNUkJHSHU0N3dHbE5yWlNHb1ZtVW82dDBNdVlBVkhL?=
- =?utf-8?B?VVhScEtyakd3UVN5TEIrKzR2WWdta3NscXhaWXRiSEF3YS82M0taTkgwb0FM?=
- =?utf-8?B?VG5ZV1A0cDlMWWJYMDlJQ1hhSWdPY24rejUxNUx6VVBmai8zTll3Z281bUth?=
- =?utf-8?B?RVgrNE1tQm43V2lJdnhSMGluTkdqMDdlb2Q0VjNXN3g2SEh0YlZTdnVFemhE?=
- =?utf-8?B?LzhCOVRMNmt4aVFsTFRhRkpQN3lkV05ickZvTjN5aklGM3kzdTNXYmQxNTBN?=
- =?utf-8?B?UVowcnJUWG1KdFJmUXIxUUhzczEvRDRCbWFnQUdWcmhWVExIZG1iQXZ5bGNH?=
- =?utf-8?B?aTFxVTB3dUN0WDFzYUZ0ZmtzQ1YzZ3N1THNkcWM3Qm1KSmlML01uU3MyTndw?=
- =?utf-8?B?Rm1Dc2pVVzNIOWVuNWYyOHdzaUw0bVdTVnlFdDd0NzV5Z2owUmtJWmZzZUFj?=
- =?utf-8?B?SEcxY0ZoVDlJNGpsTkd0bE1TK3Z1RHIwREFWdzNzOEJEdVRSZ0tHRjR2YjJM?=
- =?utf-8?B?WjB0a3EreW1OVm5Xd3VwUUUxalFpMUhYQVRPOXRnSk1FaGNCQ1R6ZWRoTjJn?=
- =?utf-8?B?WlJNb3BDVnhoeGRZNmpiTHdBNC94TnROUFpNZElMK2NxSVZHZFJXeWp4ZjBJ?=
- =?utf-8?B?TzlOOUhPT3dMbnNObngyTWcyOGR0Rk1mVFRxemUyY2tWZkhUT0dRRVl6MzZ2?=
- =?utf-8?B?WnkyZUMvQzV4UGNnQlVSMk1vWXAxVDhFbk9tWXZ1NDZXTElEeFEwYmNIR2Iw?=
- =?utf-8?B?VTIzWnk2MS9RdzZhMW5LdTVKS2x1OFQwZUo1djY4c21RWXdtY05uSHBWU21D?=
- =?utf-8?B?L0oyS3YzL1JuL0xZZkwvaEFNS3RYZzM2K0RObm9jYTJ1Sm1mblp4UDRLTzhj?=
- =?utf-8?B?U2ZNZzRraUZudmVtTnNVS2dqclM3WVVYb29COUNNeEY5VUlCN3Fla0loVXRt?=
- =?utf-8?B?YzQ0TnB4bXQrTnl0Q3Z0MU9MWmR2NkhPMjJIcmRKaGcyV1JYMDFIUkUzZkV0?=
- =?utf-8?Q?Ali10iD0Oz5fs/9RTLfo0nT/mr86HB0OTxbmARmaSg=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99d3ba1a-d8a4-46db-f237-08da01e074e9
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 15:21:17.5418
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0AdoH2NEkOo0ewiBr6xW6rqgu9p8OexufefAwh7dj9ltgSelFUmJkmV/l/kooFmAutxbw8aWKNwogr1gcMramaExOQtAJcT30HF4O75a7JE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2071
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220307120423.2427631-5-eugen.hristev@microchip.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/2022 4:50 AM, Philippe Troin wrote:
-> Linux 5.16.9 was working fine, but starting with 5.16.10 my main laptop
-> has been overheating while suspended.
-> I've also tried 5.16.11, 5.16.12 and 5.16.13 and they also show the
-> same issue (overheating while suspended).
+Hi Eugen,
+   sorry one more comment
+
+On Mon, Mar 07, 2022 at 02:04:14PM +0200, Eugen Hristev wrote:
+> Implement the support for media-controller.
+> This means that the capabilities of the driver have changed and now
+> it also advertises the IO_MC .
+> The driver will register its media device, and add the video entity to this
+> media device. The subdevices are registered to the same media device.
+> The ISC will have a base entity which is auto-detected as atmel_isc_base.
+> It will also register a subdevice that allows cropping of the incoming frame
+> to the maximum frame size supported by the ISC.
+> The ISC will create a link between the subdevice that is asynchronously
+> registered and the atmel_isc_scaler entity.
+> Then, the atmel_isc_scaler and atmel_isc_base are connected through another
+> link.
 >
-> I could not spot any difference between the dmesg messages issued
-> during suspend between a working version (5.16.9) and the the broken
-> ones (5.16.1[0-3]).
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+> Changes in v7:
+> - use maximum isc frame size as bounds always
 >
-> I've bisected the regression down to commit 4287509b4d21
-> https://lore.kernel.org/lkml/20220214092510.074083242@linuxfoundation.org/
+> Changes in v6:
+> - reworked a bit as suggested by Jacopo
+> - add try crops
 >
-> I have also tried reverting that change on top of 5.16.12, and the
-> overheating behavior is gone.
+> Changes in v5:
+> - reworked s_fmt to pass the same format from sink to source
+> - simplified enum_mbus_code
+> - separated tgt and bounds to report correctly in g_sel
+>
+> Changes in v4:
+> As suggested by Jacopo:
+> - renamed atmel_isc_mc to atmel_isc_scaler.c
+> - moved init_mc/clean_mc to isc_base file
+>
+> Changes in v2:
+> - implement try formats
+>
+>
+>  drivers/media/platform/atmel/Makefile         |   2 +-
+>  drivers/media/platform/atmel/atmel-isc-base.c |  75 ++++-
+>  .../media/platform/atmel/atmel-isc-scaler.c   | 271 ++++++++++++++++++
+>  drivers/media/platform/atmel/atmel-isc.h      |  37 +++
+>  .../media/platform/atmel/atmel-sama5d2-isc.c  |  14 +-
+>  .../media/platform/atmel/atmel-sama7g5-isc.c  |  12 +-
+>  6 files changed, 403 insertions(+), 8 deletions(-)
+>  create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
+>
+> diff --git a/drivers/media/platform/atmel/Makefile b/drivers/media/platform/atmel/Makefile
+> index 794e8f739287..f02d03df89d6 100644
+> --- a/drivers/media/platform/atmel/Makefile
+> +++ b/drivers/media/platform/atmel/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  atmel-isc-objs = atmel-sama5d2-isc.o
+>  atmel-xisc-objs = atmel-sama7g5-isc.o
+> -atmel-isc-common-objs = atmel-isc-base.o atmel-isc-clk.o
+> +atmel-isc-common-objs = atmel-isc-base.o atmel-isc-clk.o atmel-isc-scaler.o
+>
+>  obj-$(CONFIG_VIDEO_ATMEL_ISI) += atmel-isi.o
+>  obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE) += atmel-isc-common.o
+> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+> index 67b4a2323fed..448bf281c61a 100644
+> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+> @@ -1712,6 +1712,7 @@ static int isc_async_bound(struct v4l2_async_notifier *notifier,
+>  					      struct isc_device, v4l2_dev);
+>  	struct isc_subdev_entity *subdev_entity =
+>  		container_of(notifier, struct isc_subdev_entity, notifier);
+> +	int pad;
+>
+>  	if (video_is_registered(&isc->video_dev)) {
+>  		v4l2_err(&isc->v4l2_dev, "only supports one sub-device.\n");
+> @@ -1720,6 +1721,16 @@ static int isc_async_bound(struct v4l2_async_notifier *notifier,
+>
+>  	subdev_entity->sd = subdev;
+>
+> +	pad = media_entity_get_fwnode_pad(&subdev->entity, asd->match.fwnode,
+> +					  MEDIA_PAD_FL_SOURCE);
+> +	if (pad < 0) {
+> +		v4l2_err(&isc->v4l2_dev, "failed to find pad for %s\n",
+> +			 subdev->name);
+> +		return pad;
+> +	}
+> +
+> +	isc->remote_pad = pad;
+> +
+>  	return 0;
+>  }
+>
+> @@ -1734,8 +1745,8 @@ static void isc_async_unbind(struct v4l2_async_notifier *notifier,
+>  	v4l2_ctrl_handler_free(&isc->ctrls.handler);
+>  }
+>
+> -static struct isc_format *find_format_by_code(struct isc_device *isc,
+> -					      unsigned int code, int *index)
+> +struct isc_format *isc_find_format_by_code(struct isc_device *isc,
+> +					   unsigned int code, int *index)
+>  {
+>  	struct isc_format *fmt = &isc->formats_list[0];
+>  	unsigned int i;
+> @@ -1751,6 +1762,7 @@ static struct isc_format *find_format_by_code(struct isc_device *isc,
+>
+>  	return NULL;
+>  }
+> +EXPORT_SYMBOL_GPL(isc_find_format_by_code);
+>
+>  static int isc_formats_init(struct isc_device *isc)
+>  {
+> @@ -1767,7 +1779,7 @@ static int isc_formats_init(struct isc_device *isc)
+>  	       NULL, &mbus_code)) {
+>  		mbus_code.index++;
+>
+> -		fmt = find_format_by_code(isc, mbus_code.code, &i);
+> +		fmt = isc_find_format_by_code(isc, mbus_code.code, &i);
+>  		if (!fmt) {
+>  			v4l2_warn(&isc->v4l2_dev, "Mbus code %x not supported\n",
+>  				  mbus_code.code);
+> @@ -1893,7 +1905,8 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
+>  	vdev->queue		= q;
+>  	vdev->lock		= &isc->lock;
+>  	vdev->ctrl_handler	= &isc->ctrls.handler;
+> -	vdev->device_caps	= V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE;
+> +	vdev->device_caps	= V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE |
+> +				  V4L2_CAP_IO_MC;
+>  	video_set_drvdata(vdev, isc);
+>
+>  	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+> @@ -1903,8 +1916,19 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
+>  		goto isc_async_complete_err;
+>  	}
+>
+> +	ret = isc_scaler_link(isc);
+> +	if (ret < 0)
+> +		goto isc_async_complete_unregister_device;
+> +
+> +	ret = media_device_register(&isc->mdev);
+> +	if (ret < 0)
+> +		goto isc_async_complete_unregister_device;
+> +
+>  	return 0;
+>
+> +isc_async_complete_unregister_device:
+> +	video_unregister_device(vdev);
+> +
+>  isc_async_complete_err:
+>  	mutex_destroy(&isc->lock);
+>  	return ret;
+> @@ -1971,6 +1995,49 @@ int isc_pipeline_init(struct isc_device *isc)
+>  }
+>  EXPORT_SYMBOL_GPL(isc_pipeline_init);
+>
+> +int isc_mc_init(struct isc_device *isc, u32 ver)
+> +{
+> +	const struct of_device_id *match;
+> +	int ret;
+> +
+> +	isc->video_dev.entity.function = MEDIA_ENT_F_IO_V4L;
+> +	isc->video_dev.entity.flags = MEDIA_ENT_FL_DEFAULT;
+> +	isc->pads[ISC_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+> +
+> +	ret = media_entity_pads_init(&isc->video_dev.entity, ISC_PADS_NUM,
+> +				     isc->pads);
+> +	if (ret < 0) {
+> +		dev_err(isc->dev, "media entity init failed\n");
+> +		return ret;
+> +	}
+> +
+> +	isc->mdev.dev = isc->dev;
+> +
+> +	match = of_match_node(isc->dev->driver->of_match_table,
+> +			      isc->dev->of_node);
+> +
+> +	strscpy(isc->mdev.driver_name, KBUILD_MODNAME,
+> +		sizeof(isc->mdev.driver_name));
+> +	strscpy(isc->mdev.model, match->compatible, sizeof(isc->mdev.model));
+> +	snprintf(isc->mdev.bus_info, sizeof(isc->mdev.bus_info), "platform:%s",
+> +		 isc->v4l2_dev.name);
+> +	isc->mdev.hw_revision = ver;
+> +
+> +	media_device_init(&isc->mdev);
+> +
+> +	isc->v4l2_dev.mdev = &isc->mdev;
+> +
+> +	return isc_scaler_init(isc);
+> +}
+> +EXPORT_SYMBOL_GPL(isc_mc_init);
+> +
+> +void isc_mc_cleanup(struct isc_device *isc)
+> +{
+> +	media_entity_cleanup(&isc->video_dev.entity);
+> +	media_device_cleanup(&isc->mdev);
+> +}
+> +EXPORT_SYMBOL_GPL(isc_mc_cleanup);
+> +
+>  /* regmap configuration */
+>  #define ATMEL_ISC_REG_MAX    0xd5c
+>  const struct regmap_config isc_regmap_config = {
+> diff --git a/drivers/media/platform/atmel/atmel-isc-scaler.c b/drivers/media/platform/atmel/atmel-isc-scaler.c
+> new file mode 100644
+> index 000000000000..d3dd131fdae0
+> --- /dev/null
+> +++ b/drivers/media/platform/atmel/atmel-isc-scaler.c
+> @@ -0,0 +1,271 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Microchip Image Sensor Controller (ISC) Scaler entity support
+> + *
+> + * Copyright (C) 2022 Microchip Technology, Inc.
+> + *
+> + * Author: Eugen Hristev <eugen.hristev@microchip.com>
+> + *
+> + */
+> +
+> +#include <media/media-device.h>
+> +#include <media/media-entity.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#include "atmel-isc-regs.h"
+> +#include "atmel-isc.h"
+> +
+> +static void isc_scaler_prepare_fmt(struct v4l2_mbus_framefmt *framefmt)
+> +{
+> +	framefmt->colorspace = V4L2_COLORSPACE_SRGB;
+> +	framefmt->field = V4L2_FIELD_NONE;
+> +	framefmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> +	framefmt->quantization = V4L2_QUANTIZATION_DEFAULT;
+> +	framefmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+> +};
+> +
+> +static int isc_scaler_get_fmt(struct v4l2_subdev *sd,
+> +			      struct v4l2_subdev_state *sd_state,
+> +			      struct v4l2_subdev_format *format)
+> +{
+> +	struct isc_device *isc = container_of(sd, struct isc_device, scaler_sd);
+> +	struct v4l2_mbus_framefmt *v4l2_try_fmt;
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+> +		v4l2_try_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+> +							  format->pad);
+> +		format->format = *v4l2_try_fmt;
+> +
+> +		return 0;
+> +	}
+> +
+> +	format->format = isc->scaler_format[format->pad];
+> +
+> +	return 0;
+> +}
+> +
+> +static int isc_scaler_set_fmt(struct v4l2_subdev *sd,
+> +			      struct v4l2_subdev_state *sd_state,
+> +			      struct v4l2_subdev_format *req_fmt)
+> +{
+> +	struct isc_device *isc = container_of(sd, struct isc_device, scaler_sd);
+> +	struct v4l2_mbus_framefmt *v4l2_try_fmt;
+> +	struct isc_format *fmt;
+> +	unsigned int i;
+> +
+> +	/* Source format is fixed, we cannot change it */
+> +	if (req_fmt->pad == ISC_SCALER_PAD_SOURCE) {
+> +		req_fmt->format = isc->scaler_format[ISC_SCALER_PAD_SOURCE];
+> +		return 0;
+> +	}
+> +
+> +	/* There is no limit on the frame size on the sink pad */
+> +	v4l_bound_align_image(&req_fmt->format.width, 16, UINT_MAX, 0,
+> +			      &req_fmt->format.height, 16, UINT_MAX, 0, 0);
+> +
+> +	isc_scaler_prepare_fmt(&req_fmt->format);
+> +
+> +	fmt = isc_find_format_by_code(isc, req_fmt->format.code, &i);
+> +
+> +	if (!fmt)
+> +		fmt = &isc->formats_list[0];
+> +
+> +	req_fmt->format.code = fmt->mbus_code;
+> +
+> +	if (req_fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+> +		v4l2_try_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+> +							  req_fmt->pad);
+> +		*v4l2_try_fmt = req_fmt->format;
+> +		/* Trying on the sink pad makes the source pad change too */
+> +		v4l2_try_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+> +							  ISC_SCALER_PAD_SOURCE);
+> +		*v4l2_try_fmt = req_fmt->format;
+> +
+> +		v4l_bound_align_image(&v4l2_try_fmt->width,
+> +				      16, isc->max_width, 0,
+> +				      &v4l2_try_fmt->height,
+> +				      16, isc->max_height, 0, 0);
+> +		/* if we are just trying, we are done */
+> +		return 0;
+> +	}
+> +
+> +	isc->scaler_format[ISC_SCALER_PAD_SINK] = req_fmt->format;
+> +
+> +	/* The source pad is the same as the sink, but we have to crop it */
+> +	isc->scaler_format[ISC_SCALER_PAD_SOURCE] =
+> +		isc->scaler_format[ISC_SCALER_PAD_SINK];
+> +	v4l_bound_align_image
+> +		(&isc->scaler_format[ISC_SCALER_PAD_SOURCE].width, 16,
+> +		 isc->max_width, 0,
+> +		 &isc->scaler_format[ISC_SCALER_PAD_SOURCE].height, 16,
+> +		 isc->max_height, 0, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int isc_scaler_enum_mbus_code(struct v4l2_subdev *sd,
+> +				     struct v4l2_subdev_state *sd_state,
+> +				     struct v4l2_subdev_mbus_code_enum *code)
+> +{
+> +	struct isc_device *isc = container_of(sd, struct isc_device, scaler_sd);
+> +
+> +	/*
+> +	 * All formats supported by the ISC are supported by the scaler.
+> +	 * Advertise the formats which the ISC can take as input, as the scaler
+> +	 * entity cropping is part of the PFE module (parallel front end)
+> +	 */
+> +	if (code->index < isc->formats_list_size) {
+> +		code->code = isc->formats_list[code->index].mbus_code;
+> +		return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int isc_scaler_g_sel(struct v4l2_subdev *sd,
+> +			    struct v4l2_subdev_state *sd_state,
+> +			    struct v4l2_subdev_selection *sel)
+> +{
+> +	struct isc_device *isc = container_of(sd, struct isc_device, scaler_sd);
+> +
+> +	if (sel->pad == ISC_SCALER_PAD_SOURCE)
+> +		return -EINVAL;
+> +
+> +	if (sel->target == V4L2_SEL_TGT_CROP_BOUNDS) {
+> +		/* bounds are the maximum rectangle which ISC can take */
+> +		sel->r.height = isc->max_height;
+> +		sel->r.width = isc->max_width;
+> +		sel->r.left = 0;
+> +		sel->r.top = 0;
 
-OK, so it is not clear if this is a regression in -stable only or in the 
-mainline.
+Sorry in my previous reply I suggested to fix _BOUND to the max size, but
+what happens if the image format on the sink pad is smaller than max
+size ? As _BOUNDS should contains all valid crop rectangles and you
+don't have a set_selection which might change the CROP rectangle , I
+think for your case BOUND==CROP, otherwise you could end up with a
+BOUND rectangle larger than the input frame.
 
-Would it be possible to try 5.17-rc7 and see if the issue is still there?
+I would do something along the lines of:
+
+        switch (sel->target) {
+        case V4L2_SEL_TGT_CROP_BOUNDS:
+                /* Fall-through */
+        case V4L2_SEL_TGT_CROP:
+		/*
+		 * crop is done to the output format,
+		 * limited by ISC maximum size
+		 */
+		sel->r.height = isc->scaler_format[ISC_SCALER_PAD_SOURCE].height;
+		sel->r.width = isc->scaler_format[ISC_SCALER_PAD_SOURCE].width;
+		sel->r.left = 0;
+		sel->r.top = 0;
+
+                return 0;
+       default:
+                return -EINVAL;
 
 
+I'm sorry if this will require you a new version, I missed that in v6.
+Please let me know if you agree with my proposal.
+
+Feel free to add the tag in v8
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+
+Thanks
+   j
+
+> +	} else if (sel->target == V4L2_SEL_TGT_CROP) {
+> +		/*
+> +		 * crop is done to the output format,
+> +		 * limited by ISC maximum size
+> +		 */
+> +		sel->r.height = isc->scaler_format[ISC_SCALER_PAD_SOURCE].height;
+> +		sel->r.width = isc->scaler_format[ISC_SCALER_PAD_SOURCE].width;
+> +		sel->r.left = 0;
+> +		sel->r.top = 0;
+> +	} else {
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int isc_scaler_init_cfg(struct v4l2_subdev *sd,
+> +			       struct v4l2_subdev_state *sd_state)
+> +{
+> +	struct v4l2_mbus_framefmt *v4l2_try_fmt =
+> +		v4l2_subdev_get_try_format(sd, sd_state, 0);
+> +	struct v4l2_rect *try_crop;
+> +	struct isc_device *isc = container_of(sd, struct isc_device, scaler_sd);
+> +
+> +	*v4l2_try_fmt = isc->scaler_format[ISC_SCALER_PAD_SOURCE];
+> +
+> +	try_crop = v4l2_subdev_get_try_crop(sd, sd_state, 0);
+> +
+> +	try_crop->top = 0;
+> +	try_crop->left = 0;
+> +	try_crop->width = v4l2_try_fmt->width;
+> +	try_crop->height = v4l2_try_fmt->height;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_pad_ops isc_scaler_pad_ops = {
+> +	.enum_mbus_code = isc_scaler_enum_mbus_code,
+> +	.set_fmt = isc_scaler_set_fmt,
+> +	.get_fmt = isc_scaler_get_fmt,
+> +	.get_selection = isc_scaler_g_sel,
+> +	.init_cfg = isc_scaler_init_cfg,
+> +};
+> +
+> +static const struct v4l2_subdev_ops xisc_scaler_subdev_ops = {
+> +	.pad = &isc_scaler_pad_ops,
+> +};
+> +
+> +int isc_scaler_init(struct isc_device *isc)
+> +{
+> +	int ret;
+> +
+> +	v4l2_subdev_init(&isc->scaler_sd, &xisc_scaler_subdev_ops);
+> +
+> +	isc->scaler_sd.owner = THIS_MODULE;
+> +	isc->scaler_sd.dev = isc->dev;
+> +	snprintf(isc->scaler_sd.name, sizeof(isc->scaler_sd.name),
+> +		 "atmel_isc_scaler");
+> +
+> +	isc->scaler_sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	isc->scaler_sd.entity.function = MEDIA_ENT_F_PROC_VIDEO_SCALER;
+> +	isc->scaler_pads[ISC_SCALER_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+> +	isc->scaler_pads[ISC_SCALER_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> +
+> +	isc_scaler_prepare_fmt(&isc->scaler_format[ISC_SCALER_PAD_SOURCE]);
+> +	isc->scaler_format[ISC_SCALER_PAD_SOURCE].height = isc->max_height;
+> +	isc->scaler_format[ISC_SCALER_PAD_SOURCE].width = isc->max_width;
+> +	isc->scaler_format[ISC_SCALER_PAD_SOURCE].code =
+> +		 isc->formats_list[0].mbus_code;
+> +
+> +	isc->scaler_format[ISC_SCALER_PAD_SINK] =
+> +		 isc->scaler_format[ISC_SCALER_PAD_SOURCE];
+> +
+> +	ret = media_entity_pads_init(&isc->scaler_sd.entity,
+> +				     ISC_SCALER_PADS_NUM,
+> +				     isc->scaler_pads);
+> +	if (ret < 0) {
+> +		dev_err(isc->dev, "scaler sd media entity init failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = v4l2_device_register_subdev(&isc->v4l2_dev, &isc->scaler_sd);
+> +	if (ret < 0) {
+> +		dev_err(isc->dev, "scaler sd failed to register subdev\n");
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(isc_scaler_init);
+> +
+> +int isc_scaler_link(struct isc_device *isc)
+> +{
+> +	int ret;
+> +
+> +	ret = media_create_pad_link(&isc->current_subdev->sd->entity,
+> +				    isc->remote_pad, &isc->scaler_sd.entity,
+> +				    ISC_SCALER_PAD_SINK,
+> +				    MEDIA_LNK_FL_ENABLED |
+> +				    MEDIA_LNK_FL_IMMUTABLE);
+> +
+> +	if (ret < 0) {
+> +		dev_err(isc->dev, "Failed to create pad link: %s to %s\n",
+> +			isc->current_subdev->sd->entity.name,
+> +			isc->scaler_sd.entity.name);
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(isc->dev, "link with %s pad: %d\n",
+> +		isc->current_subdev->sd->name, isc->remote_pad);
+> +
+> +	ret = media_create_pad_link(&isc->scaler_sd.entity,
+> +				    ISC_SCALER_PAD_SOURCE,
+> +				    &isc->video_dev.entity, ISC_PAD_SINK,
+> +				    MEDIA_LNK_FL_ENABLED |
+> +				    MEDIA_LNK_FL_IMMUTABLE);
+> +
+> +	if (ret < 0) {
+> +		dev_err(isc->dev, "Failed to create pad link: %s to %s\n",
+> +			isc->scaler_sd.entity.name,
+> +			isc->video_dev.entity.name);
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(isc->dev, "link with %s pad: %d\n", isc->scaler_sd.name,
+> +		ISC_SCALER_PAD_SOURCE);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(isc_scaler_link);
+> +
+> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
+> index f9ad7ec6bd13..9cc69c3ae26d 100644
+> --- a/drivers/media/platform/atmel/atmel-isc.h
+> +++ b/drivers/media/platform/atmel/atmel-isc.h
+> @@ -183,6 +183,17 @@ struct isc_reg_offsets {
+>  	u32 his_entry;
+>  };
+>
+> +enum isc_mc_pads {
+> +	ISC_PAD_SINK	= 0,
+> +	ISC_PADS_NUM	= 1,
+> +};
+> +
+> +enum isc_scaler_pads {
+> +	ISC_SCALER_PAD_SINK	= 0,
+> +	ISC_SCALER_PAD_SOURCE	= 1,
+> +	ISC_SCALER_PADS_NUM	= 2,
+> +};
+> +
+>  /*
+>   * struct isc_device - ISC device driver data/config struct
+>   * @regmap:		Register map
+> @@ -258,6 +269,12 @@ struct isc_reg_offsets {
+>   *			be used as an input to the controller
+>   * @controller_formats_size:	size of controller_formats array
+>   * @formats_list_size:	size of formats_list array
+> + * @pads:		media controller pads for isc video entity
+> + * @mdev:		media device that is registered by the isc
+> + * @remote_pad:		remote pad on the connected subdevice
+> + * @scaler_sd:		subdevice for the scaler that isc registers
+> + * @scaler_pads:	media controller pads for the scaler subdevice
+> + * @scaler_format:	current format for the scaler subdevice
+>   */
+>  struct isc_device {
+>  	struct regmap		*regmap;
+> @@ -346,6 +363,19 @@ struct isc_device {
+>  	struct isc_format		*formats_list;
+>  	u32				controller_formats_size;
+>  	u32				formats_list_size;
+> +
+> +	struct {
+> +		struct media_pad		pads[ISC_PADS_NUM];
+> +		struct media_device		mdev;
+> +
+> +		u32				remote_pad;
+> +	};
+> +
+> +	struct {
+> +		struct v4l2_subdev		scaler_sd;
+> +		struct media_pad		scaler_pads[ISC_SCALER_PADS_NUM];
+> +		struct v4l2_mbus_framefmt	scaler_format[ISC_SCALER_PADS_NUM];
+> +	};
+>  };
+>
+>  extern const struct regmap_config isc_regmap_config;
+> @@ -357,4 +387,11 @@ int isc_clk_init(struct isc_device *isc);
+>  void isc_subdev_cleanup(struct isc_device *isc);
+>  void isc_clk_cleanup(struct isc_device *isc);
+>
+> +int isc_scaler_link(struct isc_device *isc);
+> +int isc_scaler_init(struct isc_device *isc);
+> +int isc_mc_init(struct isc_device *isc, u32 ver);
+> +void isc_mc_cleanup(struct isc_device *isc);
+> +
+> +struct isc_format *isc_find_format_by_code(struct isc_device *isc,
+> +					   unsigned int code, int *index);
+>  #endif
+> diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> index c5b9563e36cb..c244682ea22f 100644
+> --- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> +++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> @@ -553,6 +553,12 @@ static int atmel_isc_probe(struct platform_device *pdev)
+>  			break;
+>  	}
+>
+> +	regmap_read(isc->regmap, ISC_VERSION + isc->offsets.version, &ver);
+> +
+> +	ret = isc_mc_init(isc, ver);
+> +	if (ret < 0)
+> +		goto isc_probe_mc_init_err;
+> +
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+>  	pm_request_idle(dev);
+> @@ -562,7 +568,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+>  	ret = clk_prepare_enable(isc->ispck);
+>  	if (ret) {
+>  		dev_err(dev, "failed to enable ispck: %d\n", ret);
+> -		goto cleanup_subdev;
+> +		goto isc_probe_mc_init_err;
+>  	}
+>
+>  	/* ispck should be greater or equal to hclock */
+> @@ -572,7 +578,6 @@ static int atmel_isc_probe(struct platform_device *pdev)
+>  		goto unprepare_clk;
+>  	}
+>
+> -	regmap_read(isc->regmap, ISC_VERSION + isc->offsets.version, &ver);
+>  	dev_info(dev, "Microchip ISC version %x\n", ver);
+>
+>  	return 0;
+> @@ -580,6 +585,9 @@ static int atmel_isc_probe(struct platform_device *pdev)
+>  unprepare_clk:
+>  	clk_disable_unprepare(isc->ispck);
+>
+> +isc_probe_mc_init_err:
+> +	isc_mc_cleanup(isc);
+> +
+>  cleanup_subdev:
+>  	isc_subdev_cleanup(isc);
+>
+> @@ -600,6 +608,8 @@ static int atmel_isc_remove(struct platform_device *pdev)
+>
+>  	pm_runtime_disable(&pdev->dev);
+>
+> +	isc_mc_cleanup(isc);
+> +
+>  	isc_subdev_cleanup(isc);
+>
+>  	v4l2_device_unregister(&isc->v4l2_dev);
+> diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+> index 07a80b08bc54..9dc75eed0098 100644
+> --- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+> +++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+> @@ -547,15 +547,23 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+>  			break;
+>  	}
+>
+> +	regmap_read(isc->regmap, ISC_VERSION + isc->offsets.version, &ver);
+> +
+> +	ret = isc_mc_init(isc, ver);
+> +	if (ret < 0)
+> +		goto isc_probe_mc_init_err;
+> +
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+>  	pm_request_idle(dev);
+>
+> -	regmap_read(isc->regmap, ISC_VERSION + isc->offsets.version, &ver);
+>  	dev_info(dev, "Microchip XISC version %x\n", ver);
+>
+>  	return 0;
+>
+> +isc_probe_mc_init_err:
+> +	isc_mc_cleanup(isc);
+> +
+>  cleanup_subdev:
+>  	isc_subdev_cleanup(isc);
+>
+> @@ -576,6 +584,8 @@ static int microchip_xisc_remove(struct platform_device *pdev)
+>
+>  	pm_runtime_disable(&pdev->dev);
+>
+> +	isc_mc_cleanup(isc);
+> +
+>  	isc_subdev_cleanup(isc);
+>
+>  	v4l2_device_unregister(&isc->v4l2_dev);
+> --
+> 2.25.1
+>

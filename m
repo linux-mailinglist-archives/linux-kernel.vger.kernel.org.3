@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D141D4D33E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716CE4D3342
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiCIQRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        id S234960AbiCIQPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234961AbiCIQIR (ORCPT
+        with ESMTP id S236113AbiCIQJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:08:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076B7186425;
-        Wed,  9 Mar 2022 08:04:54 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFDA344F3;
+        Wed,  9 Mar 2022 08:07:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FA7661666;
-        Wed,  9 Mar 2022 16:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79032C340E8;
-        Wed,  9 Mar 2022 16:04:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D02D61797;
+        Wed,  9 Mar 2022 16:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770B4C340E8;
+        Wed,  9 Mar 2022 16:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841854;
-        bh=dBM59trElM9mKdvh5X3TAf3lhidiLDUO/YzmBUoNg2U=;
+        s=korg; t=1646842052;
+        bh=Mml45n5zWOY5XUlvrM0ABUbDBgc/vQ9ckQ54OR4R62A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K5t5+zNJiYw7WGXiPqxB2GJh5HTD5n7KomZqeuDVPkh3JkirnFn36eliPwGfhJHeN
-         WWtSKuBLAC4wdMETOI6fZS9YkD+bElkDCGJnfPlHogEuZlZ/uYAEKa5iIjcVrFS3Nh
-         PYJUUA1d5c4m6Q43wvIWVcfAfoEXVFa6xzeEHU5Y=
+        b=N5S/6w4Z1bmTl8EMglWEjMt8hNrcWWOfWGTSvcImK1ufoXFeBfKLlskchX4xwmd6R
+         6YjBT3soTFMorupWcB3mnRpaejqpqaV9QAbJMJYrQR7a8jiKwpJvkTbGnuNvncSL01
+         inIgG8eRw7DxGLv24QtBdtW+7tOYjJWOfxY3RtoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 18/18] ARM: fix build error when BPF_SYSCALL is disabled
-Date:   Wed,  9 Mar 2022 17:00:07 +0100
-Message-Id: <20220309155857.087915998@linuxfoundation.org>
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.15 24/43] arm64: entry: Make the trampoline cleanup optional
+Date:   Wed,  9 Mar 2022 17:00:08 +0100
+Message-Id: <20220309155900.437614562@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
-References: <20220309155856.552503355@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,31 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+From: James Morse <james.morse@arm.com>
 
-commit 330f4c53d3c2d8b11d86ec03a964b86dc81452f5 upstream.
+commit d739da1694a0eaef0358a42b76904b611539b77b upstream.
 
-It was missing a semicolon.
+Subsequent patches will add additional sets of vectors that use
+the same tricks as the kpti vectors to reach the full-fat vectors.
+The full-fat vectors contain some cleanup for kpti that is patched
+in by alternatives when kpti is in use. Once there are additional
+vectors, the cleanup will be needed in more cases.
 
-Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: 25875aa71dfe ("ARM: include unprivileged BPF status in Spectre V2 reporting").
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+But on big/little systems, the cleanup would be harmful if no
+trampoline vector were in use. Instead of forcing CPUs that don't
+need a trampoline vector to use one, make the trampoline cleanup
+optional.
+
+Entry at the top of the vectors will skip the cleanup. The trampoline
+vectors can then skip the first instruction, triggering the cleanup
+to run.
+
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/spectre.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kernel/entry.S |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/arch/arm/kernel/spectre.c
-+++ b/arch/arm/kernel/spectre.c
-@@ -10,7 +10,7 @@ static bool _unprivileged_ebpf_enabled(v
- #ifdef CONFIG_BPF_SYSCALL
- 	return !sysctl_unprivileged_bpf_disabled;
- #else
--	return false
-+	return false;
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -40,14 +40,18 @@
+ .Lventry_start\@:
+ #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+ 	.if	\el == 0
+-alternative_if ARM64_UNMAP_KERNEL_AT_EL0
++	/*
++	 * This must be the first instruction of the EL0 vector entries. It is
++	 * skipped by the trampoline vectors, to trigger the cleanup.
++	 */
++	b	.Lskip_tramp_vectors_cleanup\@
+ 	.if	\regsize == 64
+ 	mrs	x30, tpidrro_el0
+ 	msr	tpidrro_el0, xzr
+ 	.else
+ 	mov	x30, xzr
+ 	.endif
+-alternative_else_nop_endif
++.Lskip_tramp_vectors_cleanup\@:
+ 	.endif
  #endif
- }
  
+@@ -661,7 +665,7 @@ alternative_if_not ARM64_WORKAROUND_CAVI
+ 	prfm	plil1strm, [x30, #(1b - tramp_vectors)]
+ alternative_else_nop_endif
+ 	msr	vbar_el1, x30
+-	add	x30, x30, #(1b - tramp_vectors)
++	add	x30, x30, #(1b - tramp_vectors + 4)
+ 	isb
+ 	ret
+ .org 1b + 128	// Did we overflow the ventry slot?
 
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F52E4D3309
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0E14D341D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbiCIQOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S236242AbiCIQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiCIQJM (ORCPT
+        with ESMTP id S236155AbiCIQJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:09:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8882C142359;
-        Wed,  9 Mar 2022 08:06:43 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB499657A9;
+        Wed,  9 Mar 2022 08:07:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C328961798;
-        Wed,  9 Mar 2022 16:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF27C340E8;
-        Wed,  9 Mar 2022 16:06:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80F5161797;
+        Wed,  9 Mar 2022 16:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8968FC340E8;
+        Wed,  9 Mar 2022 16:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646842002;
-        bh=BjhNuDswWhutw0Va1gA9M+7Vl6Iaj6ZmKGq889IWLoA=;
+        s=korg; t=1646842066;
+        bh=8CsPEDtSRq+WyZJMx9PdQo5CL8eWcNCJjLJLpJcZxCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DkNy1eKFDnUpWRAkpwFrUC5IqAIa7pryxQTwAtOU5Bpl6v1l6JfNWIayTQ0LQmjsf
-         invSdo/G1bVOtIwTh0rkEomejEvi+0IIiiNc0AXjAgDteAfyOL1cbsZNC5C3wP0zPK
-         s/uQB41ecVKF9LU2QCV0U7kuzPmd0sPDryGIq0Y0=
+        b=ieKyaqzE/g7cHRFlUiZfHLH8chaaO9ljYASNV4hck5vIFFbU4Yf2lu8FHbnTrtISF
+         0nq3aER6oa9cfV9u3aFM4vp4diIJqKquskgyNQPcgX68em5jUnt+Sp4Nn+dEjA/RLu
+         LY3tDz9dBFmcWmU3wFu8qs3aPnmQF/1d1d0rC01A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>
-Subject: [PATCH 5.10 15/43] arm64: cputype: Add CPU implementor & types for the Apple M1 cores
+        stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: [PATCH 5.15 04/43] Documentation/hw-vuln: Update spectre doc
 Date:   Wed,  9 Mar 2022 16:59:48 +0100
-Message-Id: <20220309155859.685364689@linuxfoundation.org>
+Message-Id: <20220309155859.865664358@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
-References: <20220309155859.239810747@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +57,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 11ecdad722daafcac09c4859dddf31b3d46449bc upstream.
+commit 5ad3eb1132453b9795ce5fd4572b1c18b292cca9 upstream.
 
-The implementor will be used to condition the FIQ support quirk.
+Update the doc with the new fun.
 
-The specific CPU types are not used at the moment, but let's add them
-for documentation purposes.
+  [ bp: Massage commit message. ]
 
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+[fllinden@amazon.com: backported to 5.15]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/cputype.h |    6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/admin-guide/hw-vuln/spectre.rst   |   42 ++++++++++++++++--------
+ Documentation/admin-guide/kernel-parameters.txt |    8 +++-
+ 2 files changed, 35 insertions(+), 15 deletions(-)
 
---- a/arch/arm64/include/asm/cputype.h
-+++ b/arch/arm64/include/asm/cputype.h
-@@ -59,6 +59,7 @@
- #define ARM_CPU_IMP_NVIDIA		0x4E
- #define ARM_CPU_IMP_FUJITSU		0x46
- #define ARM_CPU_IMP_HISI		0x48
-+#define ARM_CPU_IMP_APPLE		0x61
+--- a/Documentation/admin-guide/hw-vuln/spectre.rst
++++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+@@ -131,6 +131,19 @@ steer its indirect branch speculations t
+ speculative execution's side effects left in level 1 cache to infer the
+ victim's data.
  
- #define ARM_CPU_PART_AEM_V8		0xD0F
- #define ARM_CPU_PART_FOUNDATION		0xD00
-@@ -99,6 +100,9 @@
- 
- #define HISI_CPU_PART_TSV110		0xD01
- 
-+#define APPLE_CPU_PART_M1_ICESTORM	0x022
-+#define APPLE_CPU_PART_M1_FIRESTORM	0x023
++Yet another variant 2 attack vector is for the attacker to poison the
++Branch History Buffer (BHB) to speculatively steer an indirect branch
++to a specific Branch Target Buffer (BTB) entry, even if the entry isn't
++associated with the source address of the indirect branch. Specifically,
++the BHB might be shared across privilege levels even in the presence of
++Enhanced IBRS.
 +
- #define MIDR_CORTEX_A53 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A53)
- #define MIDR_CORTEX_A57 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A57)
- #define MIDR_CORTEX_A72 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A72)
-@@ -127,6 +131,8 @@
- #define MIDR_NVIDIA_CARMEL MIDR_CPU_MODEL(ARM_CPU_IMP_NVIDIA, NVIDIA_CPU_PART_CARMEL)
- #define MIDR_FUJITSU_A64FX MIDR_CPU_MODEL(ARM_CPU_IMP_FUJITSU, FUJITSU_CPU_PART_A64FX)
- #define MIDR_HISI_TSV110 MIDR_CPU_MODEL(ARM_CPU_IMP_HISI, HISI_CPU_PART_TSV110)
-+#define MIDR_APPLE_M1_ICESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM)
-+#define MIDR_APPLE_M1_FIRESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM)
++Currently the only known real-world BHB attack vector is via
++unprivileged eBPF. Therefore, it's highly recommended to not enable
++unprivileged eBPF, especially when eIBRS is used (without retpolines).
++For a full mitigation against BHB attacks, it's recommended to use
++retpolines (or eIBRS combined with retpolines).
++
+ Attack scenarios
+ ----------------
  
- /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
- #define MIDR_FUJITSU_ERRATUM_010001		MIDR_FUJITSU_A64FX
+@@ -364,13 +377,15 @@ The possible values in this file are:
+ 
+   - Kernel status:
+ 
+-  ====================================  =================================
+-  'Not affected'                        The processor is not vulnerable
+-  'Vulnerable'                          Vulnerable, no mitigation
+-  'Mitigation: Full generic retpoline'  Software-focused mitigation
+-  'Mitigation: Full AMD retpoline'      AMD-specific software mitigation
+-  'Mitigation: Enhanced IBRS'           Hardware-focused mitigation
+-  ====================================  =================================
++  ========================================  =================================
++  'Not affected'                            The processor is not vulnerable
++  'Mitigation: None'                        Vulnerable, no mitigation
++  'Mitigation: Retpolines'                  Use Retpoline thunks
++  'Mitigation: LFENCE'                      Use LFENCE instructions
++  'Mitigation: Enhanced IBRS'               Hardware-focused mitigation
++  'Mitigation: Enhanced IBRS + Retpolines'  Hardware-focused + Retpolines
++  'Mitigation: Enhanced IBRS + LFENCE'      Hardware-focused + LFENCE
++  ========================================  =================================
+ 
+   - Firmware status: Show if Indirect Branch Restricted Speculation (IBRS) is
+     used to protect against Spectre variant 2 attacks when calling firmware (x86 only).
+@@ -584,12 +599,13 @@ kernel command line.
+ 
+ 		Specific mitigations can also be selected manually:
+ 
+-		retpoline
+-					replace indirect branches
+-		retpoline,generic
+-					google's original retpoline
+-		retpoline,amd
+-					AMD-specific minimal thunk
++                retpoline               auto pick between generic,lfence
++                retpoline,generic       Retpolines
++                retpoline,lfence        LFENCE; indirect branch
++                retpoline,amd           alias for retpoline,lfence
++                eibrs                   enhanced IBRS
++                eibrs,retpoline         enhanced IBRS + Retpolines
++                eibrs,lfence            enhanced IBRS + LFENCE
+ 
+ 		Not specifying this option is equivalent to
+ 		spectre_v2=auto.
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5267,8 +5267,12 @@
+ 			Specific mitigations can also be selected manually:
+ 
+ 			retpoline	  - replace indirect branches
+-			retpoline,generic - google's original retpoline
+-			retpoline,amd     - AMD-specific minimal thunk
++			retpoline,generic - Retpolines
++			retpoline,lfence  - LFENCE; indirect branch
++			retpoline,amd     - alias for retpoline,lfence
++			eibrs		  - enhanced IBRS
++			eibrs,retpoline   - enhanced IBRS + Retpolines
++			eibrs,lfence      - enhanced IBRS + LFENCE
+ 
+ 			Not specifying this option is equivalent to
+ 			spectre_v2=auto.
 
 

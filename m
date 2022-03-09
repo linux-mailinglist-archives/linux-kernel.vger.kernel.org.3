@@ -2,144 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36944D3A3D
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC0E4D3A3B
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237912AbiCITZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S237860AbiCITZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237814AbiCITYy (ORCPT
+        with ESMTP id S237879AbiCITY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:24:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E38E1FA41
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646853808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Z5XscNfbcs+yg9O+mP46TlJqahAAprLj05WH8utWWM=;
-        b=LcoYPrPKGmSsv2NWjJmHVTYX0GyYdeOd/48+7EwaTpCjqifnH1EDp9AziK7/VdF0m+Wttc
-        L17j9CzVpXCPs5BiN9sNmPbha9jVAVo+KjFUo+XC15ro9YZnTavYh2EzlSy4lf6QT65Pw+
-        ENNuiXgIs5IvhIqPshePxAq/Hsm0Zu8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-458-YdxP3QPhOBahVoSrble-Vg-1; Wed, 09 Mar 2022 14:23:24 -0500
-X-MC-Unique: YdxP3QPhOBahVoSrble-Vg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1E7EB1854E21;
-        Wed,  9 Mar 2022 19:23:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AAFF345D76;
-        Wed,  9 Mar 2022 19:23:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org>
-References: <8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org> <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk> <164678213320.1200972.16807551936267647470.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/19] netfs: Add a netfs inode context
+        Wed, 9 Mar 2022 14:24:58 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3EE4CD4F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:23:37 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so6172828pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CRfO2Ur95cYH1T7zyYInkNyjF7LOYfVUKmOdK5m6fo4=;
+        b=eo+ZV7IgG8oipmlrVkf+iyTgfnI2yr6eOTY+2cqs0Cnnymj5QR9/58HyPhuMaOWvVz
+         T5GybQaczXCeBogbj+W6OkXhhZislKNqbbd7hBHOkCILyRdusg2lqqBQt/CHfzFHa1VX
+         3F8aml9pD5RkBEkQnkGJyujePwV3Y0ubYKN3k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CRfO2Ur95cYH1T7zyYInkNyjF7LOYfVUKmOdK5m6fo4=;
+        b=R61ACvcJmCopAVSwXZAJ/RsIMqDIfK1H3oje+665HdJmycYlorIFv5T8RULCXvepRX
+         dDqdbAtpok2mwP6pcSROHm/V1miWSibBkB882hphuFcQHQSm4aG5/hxgGIAAaPLcEkZP
+         QsS7OaTfTuAKdiuvl0/yypzViicqiavI7mgNZzQYDZa9U5pcoSoHe+d1XMYnbcfYNBs7
+         wawqMw0cqTJGtXL57T6AeWHNGDGj3aV/KrLrye9Rta4IQxHsW1lyaUCL4P/Qba5zuoqX
+         ynl7j06AQXyntkLvdFNmHaSeYPo5kOSHaQ7TnPBr+WZhf9YUcN1NYZ5aIWZc5e/eeYpx
+         ff5g==
+X-Gm-Message-State: AOAM530c34+rtEoTI3mvuuHAoRv82EBoJfwpeH4u3Qf5Un6bi6PqDcMs
+        3edCG6AiYuB+U3mVQugVNXMUNQ==
+X-Google-Smtp-Source: ABdhPJzuoaKhZ+nLC7aSaHADhAHBM3PTsrUf2FTMjE4iFoVaufm9+Vfttgy/euDehCY12DjPFMx8qw==
+X-Received: by 2002:a17:902:f785:b0:14d:d2b6:b7c with SMTP id q5-20020a170902f78500b0014dd2b60b7cmr1046035pln.68.1646853817104;
+        Wed, 09 Mar 2022 11:23:37 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z23-20020a17090a609700b001bf5a1830f3sm3594359pji.10.2022.03.09.11.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 11:23:36 -0800 (PST)
+Date:   Wed, 9 Mar 2022 11:23:36 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, kernelci@groups.io,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/lkdtm: add config
+Message-ID: <202203091123.33E89F5@keescook>
+References: <20220217205620.2512094-1-usama.anjum@collabora.com>
+ <20220217205620.2512094-2-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1790299.1646853782.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 09 Mar 2022 19:23:02 +0000
-Message-ID: <1790300.1646853782@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217205620.2512094-2-usama.anjum@collabora.com>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
+On Fri, Feb 18, 2022 at 01:56:20AM +0500, Muhammad Usama Anjum wrote:
+> Add config option which is needed for SLAB_LINEAR_OVERFLOW test. It
+> needs KASAN enabled.
 
-> > Add a netfs_i_context struct that should be included in the network
-> > filesystem's own inode struct wrapper, directly after the VFS's inode
-> > struct, e.g.:
-> > =
+I'd prefer this use the SLAB_DEBUG options -- KASAN is very heavy.
 
-> > 	struct my_inode {
-> > 		struct {
-> > 			struct inode		vfs_inode;
-> > 			struct netfs_i_context	netfs_ctx;
-> > 		};
-> =
+-Kees
 
-> This seems a bit klunky.
->
-> I think it'd be better encapsulation to give this struct a name (e.g.
-> netfs_inode) and then have the filesystems replace the embedded
-> vfs_inode with a netfs_inode.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Fixes: 9c4f6ebc3665 ("lkdtm/heap: Add vmalloc linear overflow test")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/lkdtm/config | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+> index adc9fa60057c5..4e8af0f712f74 100644
+> --- a/tools/testing/selftests/lkdtm/config
+> +++ b/tools/testing/selftests/lkdtm/config
+> @@ -7,6 +7,7 @@ CONFIG_HARDENED_USERCOPY=y
+>  CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
+>  CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+>  CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+> +CONFIG_KASAN=y
+>  CONFIG_UBSAN=y
+>  CONFIG_UBSAN_BOUNDS=y
+>  CONFIG_UBSAN_TRAP=y
+> -- 
+> 2.30.2
+> 
 
-I think what you really want is:
-
-	struct my_inode : netfs_inode {
-	};
-
-right? ;-)
-
-> That way it's still just pointer math to get to the context from the
-> inode and vice versa, but the replacement seems a bit cleaner.
-> =
-
-> It might mean a bit more churn in the filesystems themselves as you
-> convert them, but most of them use macros or inline functions as
-> accessors so it shouldn't be _too_ bad.
-
-That's a lot of churn - and will definitely cause conflicts with other
-patches aimed at those filesystems.  I'd prefer to avoid that if I can.
-
-> > +static int ceph_init_request(struct netfs_io_request *rreq, struct fi=
-le *file)
-> > +{
-> > ...
-> > +}
-> > +
-> =
-
-> ^^^
-> The above change seems like it should be in its own patch. Wasn't it at
-> one point? Converting this to use init_request doesn't seem to rely on
-> the new embedded context.
-
-Well, I wrote it as a separate patch on the end for convenience, but I
-intended to merge it here otherwise ceph wouldn't be able to do readahead =
-for
-a few patches.
-
-I was thinking that it would require the context change to work and certai=
-nly
-it requires the error-return-from-init_request patch to work, but actually=
- it
-probably doesn't require the former so I could probably separate that bit =
-out
-and put it between 11 and 12.
-
-David
-
+-- 
+Kees Cook

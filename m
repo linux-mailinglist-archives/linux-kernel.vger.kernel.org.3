@@ -2,126 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7721F4D2BB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591344D2BBD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiCIJWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S232012AbiCIJXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiCIJWT (ORCPT
+        with ESMTP id S231792AbiCIJX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:22:19 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AB61662E8;
-        Wed,  9 Mar 2022 01:21:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mISzEt2kpLDxVrMYB0LqVDSxaufEiQuG4JuBl8KyN2MrU7UxqRvSKMgLAY7ABaaylFe3A05CkP5wfmlWwj/7Hj9GyK1LT56c4UJnGeExMM+r111kqnO+QB8MDPYzg1o9qTHk3YKNPqSZCTZ0wGbf/hEF/tVWU84/zEi6eb6rfUwa0VR9rTlxzaGgaoW4jqNMAONyZybnpW76ZUNvGH7FMAczeqys80j2D+0eyv3Fp5hJJSoUvkTZ95ZY54DqD7Ja3sT/BjI1+tAb9fBo8dfhtYtQmGWSzZR7jTb5WoIA4T9OV7tUvcvWyIeqHBYeQ/QcFd1GVq60i1/cjaqPApMhQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+vpoPLcwFCcskhEn8ed6SuoZpzlZoHjG0uOch9AnvSI=;
- b=NMYL9qJ2QPFmBvYLSFFGtIYyb8rkTAYR0NZkQfFGdL4i7SLngbxcj3ph8VpzRFHrIkEEL6tYJyvrhQScvJpV7cYP4qAzKgqwHdGmBN5FcHO4rtx0GWL+5ZE1fR6Oru9O9rwUxiUsByiBllN2H8m1z5ADrrZuq2ym3Kg8spfx9wx7PVF25Pz0Whxcfo4BEnrpn1zT4QW5d/Rj6OaaXRYypdCuvW8zDEA/dMnbWKZ+0hZcqpY3ZjZsLthBTJGUOrbLewlNihxzXC8ZN03Uczs9udmk8RBnEBQtNVoyxYGxWYB0FrKXaU0m8viLWjf4oVzXeGP0a4RpRIx4xbnCSunzBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=cornelisnetworks.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+vpoPLcwFCcskhEn8ed6SuoZpzlZoHjG0uOch9AnvSI=;
- b=oxAa/YD4x0nkfO8pNv+7R0zZbOQY0Jx4LkwpzpXYZwsIlDBsItGXGolDsQoHGPFvDtK72aIBm7lUPFzZyxH8ODXM8RvsziFjgkVZYo6EYN4l/tttVo2633fCtcvo9SW46ZziDI4QbUTbFTiM73twehdtFpuVzCWQfo3lJOZQyf0RElP+ew8wzFf0uIEs657iRTuQ/dJI+Tu+jHPJ8E3xdtuafFjD5jIeyjC6IBgAmd6e+EeMr3vbfsA6fMc/68VII47Xqe4kArCDhm5neAu6gQFfJJujx1JK2jkP+O42bBFkoipV9m1ddYPHnfUPCfOJUh1k29SeAhx8tIikeyinBw==
-Received: from BN6PR12MB1426.namprd12.prod.outlook.com (2603:10b6:404:22::16)
- by DM6PR12MB4156.namprd12.prod.outlook.com (2603:10b6:5:218::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Wed, 9 Mar
- 2022 09:21:19 +0000
-Received: from BN1PR14CA0030.namprd14.prod.outlook.com (2603:10b6:408:e3::35)
- by BN6PR12MB1426.namprd12.prod.outlook.com (2603:10b6:404:22::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 09:21:17 +0000
-Received: from BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e3:cafe::9e) by BN1PR14CA0030.outlook.office365.com
- (2603:10b6:408:e3::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Wed, 9 Mar 2022 09:21:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT061.mail.protection.outlook.com (10.13.177.144) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5038.14 via Frontend Transport; Wed, 9 Mar 2022 09:21:17 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 9 Mar
- 2022 09:21:15 +0000
-Received: from localhost (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Wed, 9 Mar 2022
- 01:21:14 -0800
-Date:   Wed, 9 Mar 2022 11:21:11 +0200
-From:   Leon Romanovsky <leonro@nvidia.com>
-To:     Yajun Deng <yajun.deng@linux.dev>
-CC:     <jgg@nvidia.com>, <selvin.xavier@broadcom.com>,
-        <galpress@amazon.com>, <sleybo@amazon.com>,
-        <liangwenpeng@huawei.com>, <liweihang@huawei.com>,
-        <mustafa.ismail@intel.com>, <shiraz.saleem@intel.com>,
-        <dennis.dalessandro@cornelisnetworks.com>,
-        <mike.marciniszyn@cornelisnetworks.com>, <zyjzyj2000@gmail.com>,
-        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH for-next 0/9] RDMA: get rid of create_user_ah
-Message-ID: <Yihxh3HdEqu3B2w9@unreal>
-References: <20220308143428.3401170-1-yajun.deng@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220308143428.3401170-1-yajun.deng@linux.dev>
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b71876c-11c6-47b8-8d84-08da01ae2a49
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1426:EE_|DM6PR12MB4156:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB14268D113E7B51921C5B75EABD0A9@BN6PR12MB1426.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uiLZgUiW1QEf/z92deHzzdKbz4UH0v0FUxJ0yBLnWFUsBg/BUd7qHkL8gg4xcPdPfqyMovzm1dcqdQpVh+fz46JCPCWLZsc2Vf64++WTkFuHO0zgQRHpbCLB+/gO1i97A42J5jcXRTEAoRow0IGRfl/HXHC3OtcWEjK8inaM0CzmFfYeUBsLyyNyW+Jq3KTS16YY2Tt6EFhlvzXK33RtKYge3EobNFN4LO5J5u8B65VMZZbUdREnlfLPgErGxbyMXz1tSFFOvsDRGeV/QhuyAUksQYjwMPBSC403dmm2OaOcrYAavgTkyUDhKM8SSGGQKThVK3OpIwAC1Oq480r4vkzhW4OvZjSH/mnJ1R8pl/4X0endephAjBzVRqsZmbiH3x8jECbiBT1KqrVn5MPOB2pUk5sAdzp0hNQf3P7VEbXP0rsRmPWtC66yfzIwK7HWLiZDWApqHz8leV+PbEUQML4763C5ldKMYZsZaIU5qhM7tKHN48Zx2aJJrX6OBrkT0AJ+OUExBe1qjYfz6BxhuZr/fZZNl2ki1bF7YbO4QK5/Y1tG6qYHggumtqgzxPXE4syHE1hIKHBOqoPgd4u/HGHYqANa/YXZ7NotLJcU5ir6AF0mnsX8CBOgQ6Vt/pnotd5IK5CLZd6XjzP+fR1QmKQpN5qM1QbL7/snu33bZKIyR/254ACKZ3BEysnuLAo0+dE3k1TsQpmBrtcJTWTnvkkMexDbuGQCTXwZL5J2aus=
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(7916004)(46966006)(36840700001)(40470700004)(86362001)(33716001)(186003)(508600001)(82310400004)(40460700003)(26005)(83380400001)(426003)(336012)(16526019)(6666004)(47076005)(9686003)(4326008)(5660300002)(2906002)(81166007)(70586007)(8676002)(70206006)(4744005)(54906003)(7416002)(36860700001)(316002)(356005)(6916009)(8936002)(26583001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 09:21:17.0028
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b71876c-11c6-47b8-8d84-08da01ae2a49
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4156
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 04:23:29 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5820C2DF9;
+        Wed,  9 Mar 2022 01:22:31 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m22so1838635pja.0;
+        Wed, 09 Mar 2022 01:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kBC32u2ogQlH4HEXRWs9S+Rg6olRvmlFhO2KCjmnIcg=;
+        b=RrtidET1m5TLgd0yHXsgj6NxmHQvuSQHbhT729edKluDynumIV4TuE7jEh84pismxv
+         6UIh5/uY+u8MKLJSIDrunE0DxnowSTPj9T2GX+QQGMCGxbqVsw0uy1iu+8/qSSbFJ53D
+         pbVkIFzCYXKo9eNC+XT5Z+9SHhQysu2bIhjD5JhwkoG9qkD+BOUieeiBD+e8k1WtWNW7
+         DEUR6zqLpX6U1upYKNriDW5zCjoaU9g0tR5wSsHTLhRa87avElWzjE9PE/G8+mm2qI/Z
+         cCoX61Wu3gZ0KXZB8lhMr19QPojuV2G/ppNlfD22dFv2x038V6ge35jkTEGEKWuSSFuo
+         SNtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kBC32u2ogQlH4HEXRWs9S+Rg6olRvmlFhO2KCjmnIcg=;
+        b=FhtVhvxGGtHNgalgLZArm5TPiY3brghWeLKoAxqsTYz3zrvw2rYCGpULUIcMFwSJXj
+         jGNfjNY6P6P45MjBNTBMuKbw2y2CoYpHXyQVk1lnAZhV6fNGv7IYcOxej5zpiStHs1wP
+         82Gyjns5VYHjLZvrR/5UzQZu1UDuaY2S5nKkqfEPFS/g7v4GiQ4U7T5Repc/uTHMX2Wn
+         EqqfnzJYpT0yAFzQcbJebv0n3VhO3l5e6x60RvJKdwl1wSHW8iOmzSSXHVIGKt56Fi8e
+         8I68wTH/1AAfojZVXz3qKZj6bk4gdeRZk2FFaHDG0JItXpD0VQAXMf+WSSUDiTYWBTD/
+         1dDg==
+X-Gm-Message-State: AOAM5337XhXIAiKh5ZNY+N8x292WWazd1VU31fCdXYl6n3FdJdTq/PXX
+        oECWIJ9beqIaANayd4MW3sNgxhjKfme8LV12bAN0Mg==
+X-Google-Smtp-Source: ABdhPJyieel0AiUVEPltiT/fQejzCzNmgj7kH0pTVTYL/XXGSm7DXmoFDD3auujWgDGUtF2WD8QyfQ==
+X-Received: by 2002:a17:90b:314:b0:1be:dc22:62f2 with SMTP id ay20-20020a17090b031400b001bedc2262f2mr9347868pjb.102.1646817750778;
+        Wed, 09 Mar 2022 01:22:30 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id d4-20020aa78e44000000b004f6aaa184c9sm2003574pfr.71.2022.03.09.01.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 01:22:30 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] rtc: gamecube: Fix refcount leak in gamecube_rtc_read_offset_from_sram
+Date:   Wed,  9 Mar 2022 09:22:25 +0000
+Message-Id: <20220309092225.6930-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:34:28PM +0800, Yajun Deng wrote:
-> The two members create_user_ah and create_ah in struct ib_device_ops
-> are very similar. we can use create_ah for all case. so get rid of
-> create_user_ah.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-1. Please read commit message and content of commit 676a80adba01
-("RDMA: Remove AH from uverbs_cmd_mask") that added that .create_user_ah()
-callback.
-2. You should send patches as a series that is threaded and not as
-stand-alone patches.
+Fixes: 86559400b3ef ("rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/rtc/rtc-gamecube.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks
+diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
+index f717b36f4738..18ca3b38b2d0 100644
+--- a/drivers/rtc/rtc-gamecube.c
++++ b/drivers/rtc/rtc-gamecube.c
+@@ -235,6 +235,7 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
+ 	}
+ 
+ 	ret = of_address_to_resource(np, 0, &res);
++	of_node_put(np);
+ 	if (ret) {
+ 		pr_err("no io memory range found\n");
+ 		return -1;
+-- 
+2.17.1
+

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576F34D3492
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB3A4D34CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235219AbiCIQZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S235237AbiCIQ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238099AbiCIQVR (ORCPT
+        with ESMTP id S238111AbiCIQVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Mar 2022 11:21:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DB7151D2B;
-        Wed,  9 Mar 2022 08:18:31 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC221520D3;
+        Wed,  9 Mar 2022 08:18:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC606195C;
-        Wed,  9 Mar 2022 16:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D6C3C340F3;
-        Wed,  9 Mar 2022 16:18:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 098EAB82020;
+        Wed,  9 Mar 2022 16:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4BBDC340E8;
+        Wed,  9 Mar 2022 16:18:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646842710;
-        bh=94Eezw0rkaghiNp0XtbPiQ+zQlAXCbVMeFdXKfkMh5s=;
+        s=k20201202; t=1646842727;
+        bh=moiyWWCvlKZ5DvlGhseaEz8RqE7nWQEU8CCZWeccmlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C6LT1CmR0bVDarGjCQscOX3e9yz6PuHfBl0WPjllTU0mSB5YnaJQpxJ27DYNufMey
-         4qlVhYoACC+m2VwYpAH/CFub3XmaweOMRZbUbi7WU/8qVTm3Cm4bBVn4t8fw/rgHTQ
-         3tRJzMhYg/CQ7lFfvFhKSrJSOFmE9QTlhsFGu6Rvgv75vwJQIvJ33ikS8UB95l1L4u
-         nOpCoXub6l2IbswKHG8MS86auduDp1Zg8f/Rj7bp3cmgmj+bzBv5HGXkGRMKrwb4bj
-         /yDRjRFovIgscpAyKrsOVMpzj12UbYPSipJ4ijaG0PfEfV+gHbqHsRbzR1omWrNQ8j
-         oX3ETFYEOqZ5w==
+        b=kq2vsmMDgjgy6pUZTBjbLkGXyb8N46iavvCJuwBHex0W/AoOhncAtbHMleeWB6vQo
+         G9VN5wxRGtTyYjNoRyaFz++u1fZQ7zswFICVptCT4GncK1q4iocr/gvHukKs5NlwVu
+         H9iPvagPy11xRbKp8amosi8sEJZEsY0UZuix7+LeqpUpPSU2BFX/yRNbqhhg9FC+39
+         nEImSK1Blf7KpACYxQix5OAE09VOucVqMiYFS1FevUh5dBBkqe8R9PyRkqVKwWQSuA
+         CvgfTNAKB6H2O3IviRiGFZtAv8HLb8YuoF/BIOaXO52GUoCEkZzzwZbCpUAU9bnR/s
+         5dCX1lresDl3g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 14/27] Bluetooth: hci_core: Fix leaking sent_cmd skb
-Date:   Wed,  9 Mar 2022 11:16:51 -0500
-Message-Id: <20220309161711.135679-14-sashal@kernel.org>
+Cc:     Casper Andersson <casper.casan@gmail.com>,
+        Joacim Zetterling <joacim.zetterling@westermo.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        UNGLinuxDriver@microchip.com, bjarni.jonasson@microchip.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 16/27] net: sparx5: Add #include to remove warning
+Date:   Wed,  9 Mar 2022 11:16:53 -0500
+Message-Id: <20220309161711.135679-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309161711.135679-1-sashal@kernel.org>
 References: <20220309161711.135679-1-sashal@kernel.org>
@@ -59,32 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Casper Andersson <casper.casan@gmail.com>
 
-[ Upstream commit dd3b1dc3dd050f1f47cd13e300732852414270f8 ]
+[ Upstream commit 90d4025285748448809701a44cf466a3f5443eaa ]
 
-sent_cmd memory is not freed before freeing hci_dev causing it to leak
-it contents.
+main.h uses NUM_TARGETS from main_regs.h, but
+the missing include never causes any errors
+because everywhere main.h is (currently)
+included, main_regs.h is included before.
+But since it is dependent on main_regs.h
+it should always be included.
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Casper Andersson <casper.casan@gmail.com>
+Reviewed-by: Joacim Zetterling <joacim.zetterling@westermo.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/microchip/sparx5/sparx5_main.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 6c00ce302f09..1c8fb27b155a 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -3969,6 +3969,7 @@ void hci_release_dev(struct hci_dev *hdev)
- 	hci_dev_unlock(hdev);
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
+index a1acc9b461f2..d40e18ce3293 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
+@@ -16,6 +16,8 @@
+ #include <linux/phylink.h>
+ #include <linux/hrtimer.h>
  
- 	ida_simple_remove(&hci_index_ida, hdev->id);
-+	kfree_skb(hdev->sent_cmd);
- 	kfree(hdev);
- }
- EXPORT_SYMBOL(hci_release_dev);
++#include "sparx5_main_regs.h"
++
+ /* Target chip type */
+ enum spx5_target_chiptype {
+ 	SPX5_TARGET_CT_7546    = 0x7546,  /* SparX-5-64  Enterprise */
 -- 
 2.34.1
 

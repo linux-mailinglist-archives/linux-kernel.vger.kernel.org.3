@@ -2,269 +2,602 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED984D31D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932B54D31DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiCIPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S233906AbiCIPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiCIPdh (ORCPT
+        with ESMTP id S231816AbiCIPfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:33:37 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2078.outbound.protection.outlook.com [40.92.99.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96D062E8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:32:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EE8CCH/hpycom55Mnu9POSIEINIktQQVMMf04+uPs0x/Z/dl/epMl1z/AvKQ/g/Rm/6pVNFKPoUny/SCV6kiQCfYg+dOr055bdrsb8z1LumLnsmA9JIHqP9dv7nDoAkwbHjlqHV4qHQddipPj9DpNVwqAPEXcG48yJigbpOwX8enBwA1GqrD+sCCk2Onv/84UcxpZnKNyFUqoB9SgEYYrRkir4VcS6G+mehUzjDglZcqQQL0GQCCGjxNb8TlEPtE2zIB0zZ2A/pETAifN6mYL1xQrFLaIzUA25tuyif0yLzCgtU0C45B5B+oC14avBvy/7ZA4HsHBruvh++zYvjA+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=95psHVVURXt6HiMTwWMsSBWjaRgfmiyT5/Z+NofyqGQ=;
- b=bf3CKnDjc344qRzB5qpzdYa04DZ+Cplmmi8ZaTKuh2P8kfu2THkOEiHh4WBNZEG9HK1TUpxVH/uhupptvggTeGBzKIu2NXenOwhanSyM0L3xeyWiewvIh9iGru0KMWoGrYkVvROQjATprCGqkcTtOhRZTZ3hfTxM5sdWWCQW8us5YnmBjkElKdRrUPMizwnRH8oU/L6qbgIMZQZEsrXCdokFmcLQJO7ADnHs0yr9K0x32Lb2mtMFivbQbOiIrBdZ5dHBIqvkJ44zPb2RuGM3CW2xSmHRNyoSeVxDql0uL1EuZkFe0iP2hEhY9StF8FKbTBHvucafoSZ83z2uCTEdhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:11e::14)
- by TYCP286MB0880.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:78::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 15:32:33 +0000
-Received: from TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
- ([fe80::d80d:59f5:2572:ab1d]) by TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
- ([fe80::d80d:59f5:2572:ab1d%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 15:32:33 +0000
-From:   Oscar Shiang <oscar0225@livemail.tw>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v11 00/13] extensible prctl task isolation interface and vmstat sync
-Date:   Wed,  9 Mar 2022 23:31:59 +0800
-Message-ID: <TYCP286MB1913B65EAA86A871FFF86AB5A10A9@TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <YidWQ28Jgs/FpmL1@fuller.cnet>
-References: <YidWQ28Jgs/FpmL1@fuller.cnet>
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [TMkQrxER+VRyjUELH47FDhVE+IN4sKSp]
-X-ClientProxiedBy: HK2PR02CA0158.apcprd02.prod.outlook.com
- (2603:1096:201:1f::18) To TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:11e::14)
-X-Microsoft-Original-Message-ID: <20220309153159.4152-1-oscar0225@livemail.tw>
+        Wed, 9 Mar 2022 10:35:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57C0107D0E;
+        Wed,  9 Mar 2022 07:34:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C401B8216D;
+        Wed,  9 Mar 2022 15:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEA5C340E8;
+        Wed,  9 Mar 2022 15:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646840056;
+        bh=TV95MBhKSCKP9nVEtQW0Jyit4w7bEmsJUAPYrD+2OeI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=uxPK2Y52hxeVPMpJmf72oYD1O59FwXg5Zwx1BnfsKLaHITiwjPErmpSRhJDSjuAzD
+         vOD0E5JMt9gSHX9TACHxel/gpdo36XLqAemy2Q0OmdomPRzRtFBlqhWQdJAfk7q6v3
+         iaSGWxJ+LA9r4accQnb+ARoCcbhzyRHvX8lCXzDeImRd0OlrywOKucHZVh6XIY/azb
+         L1T4kWYZWUSKPkilu1gFbTuOnkcMawQ/ddU0UaIvLLS1MWu1mArSlbwLRbvweYbn0d
+         B/Cc9OJ9gnQQ88rmPBQcCl7m5I8S3Ns28IOCDYtvT9ES5vkhLngTv6s7QnVb9Dg0V4
+         X79YAi5drO+pQ==
+Message-ID: <c18a1ccd52f8c88205cc1345d6fa73d3e9da5456.camel@kernel.org>
+Subject: Re: [PATCH v2 04/19] netfs: Finish off rename of netfs_read_request
+ to netfs_io_request
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
+Cc:     Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 09 Mar 2022 10:34:13 -0500
+In-Reply-To: <164678196111.1200972.5001114956865989528.stgit@warthog.procyon.org.uk>
+References: <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk>
+         <164678196111.1200972.5001114956865989528.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4147448a-c7ba-44c3-dfce-08da01e207cf
-X-MS-TrafficTypeDiagnostic: TYCP286MB0880:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 85wBzyDV/tqJz+5auEqwFz15o1mKQ2Vtl7ptwl2SuF0BkOq9Xv+oB6WWly70YSuEbPl+/nrn/VCxC5DjOKvNe3Vm82PdMjBrEFCLSKZ8hvIy7GsmLe/o6iNJAngGLXlarjYV2T8t5B5QqBHcNKJbGTySGHkteQX1YJsZikCZXRxHxPovBQRHUCiU9ZdHVsD3WDgzpb0m4SxCFUXqS2rSG70vsq39uBu1PTsCVoP3+GNhaZSl+DZFGNxcws2TxBkJVsd7qDz3b1/EzSfQ592tSVyKI65T3exQj+4HFxR4Hof8f1ey9+DTcAKA8V1aEfScusjnEptDkhbsWaNTclGmAy1WG8f+SKb8Qh1eMnSEyUmk+vlKW6qVotImQlYtpM15zWGqnhtOX38nz4AB7zA+a5+VnWKajyOkGuX6+AHeeJ3e50AaLMw+p4agtYCTHgBj5K8a9Mqc9Rqqy3Ck8fkMVu9KNZJcWqK1H3NUotTxW4Iu+kyUnl2yIRl1ASs5EaO41pE7xo7pESCPBLaS8LZGaEv1lM71FdFMUTURwBXxOzlNFhutvZfJ6K2aDmOQjC2iMOLXk2nPp62OOPw33Cft3En8/NSBatjKe3kpLMc1K4r3mmeoU14wklVDPNqSsGWh
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i89dXuuvgN1rE1fNSvOO+ZAccb2gDlBZwi7fkTfLVNl43kuVn+78E4YXl74e?=
- =?us-ascii?Q?jTkPNhJPetPtUcSH+giHWcKavN5o2EiHGjzrXe4egabeyQsX6grEMO2RIAdB?=
- =?us-ascii?Q?r+cY3gkIPI8y6GquY0LAtKTCN0NC3xGHqU0ywhuJBR5TwJKOrFNa99kKZEuS?=
- =?us-ascii?Q?DfuDX/t5fDrIuI7gTKXJC/89x6YiYXcI9jYi0Duqp4KEMBEgp63crGFPtked?=
- =?us-ascii?Q?1jtv0wDQXAd8ii2MwHSI6Aj8NMfDmlfFcNrhMjcciJanThzgtluWeQzLSKpR?=
- =?us-ascii?Q?OgwzhTfUN8HfGahuwU7Xan2lv7tNYk8DzTSGc5XSF4pzSRPQVM7E89AZ6IaB?=
- =?us-ascii?Q?hTb50Pz8/q73N0/rgipnrSdCtEF8BnPlvNxyjJkXENqtS9rd5JeAzDG1vBoh?=
- =?us-ascii?Q?SDYNIYPSWRg9NhjTKB0UZPOlX0PPN5IS4qG5iXosgm1XtBvR/045ixRmUTi9?=
- =?us-ascii?Q?Cg5Z5Q2fAeQjUNqg78yRLnPADolhZJJ6z4hEEMFct4bWa5I5MmRBVjFEJpV5?=
- =?us-ascii?Q?gf+79fwyeK698o7T2dhzyDkLmYgfIPuNagsrijiRRClKXNrfX9CfkV0y+ihy?=
- =?us-ascii?Q?9g45tbG1LjOKhbHx93v5+xkSbDqG7gR1X1cG5WMpDDgXRssw/mJw3EYhkKRD?=
- =?us-ascii?Q?v7Rl4Y7Jp0tzAx8ygXg0ace4ExO9Ciit20gYunU2Jrb5HKQL40vz1LAI0QgG?=
- =?us-ascii?Q?DMadGgmBkoB4UhrW2ljeYDUQ3kK+Joug/cH1BPrKfUGFnQDJH6LbJOSLCtaP?=
- =?us-ascii?Q?PochBOt60SaPxO9qkt4OFsEVNvwJHGvUGtJvX6Bvt6TkOlvm0LHG4Lgid5PR?=
- =?us-ascii?Q?X1RY5H89tF5ttlySq0xwbysLhkUKnwnr9t6Qxi7HxkWndK9Un/VZlzGAGUrY?=
- =?us-ascii?Q?KYvTV6dqgX0R1mpg0RjzbOKj7+VlH0poVo9xflhc/t45fPoqkaWYeROEJiAR?=
- =?us-ascii?Q?Tow4C2kgjGJLkfeL4dG35Q=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4147448a-c7ba-44c3-dfce-08da01e207cf
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 15:32:33.3990
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB0880
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mar 8, 2022, at 9:12 PM, Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> On Tue, Mar 08, 2022 at 02:32:46PM +0800, Oscar Shiang wrote:
-> > On Feb 24, 2022, at 1:31 AM, Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > > Hi Oscar,
-> > > 
-> > > On Sat, Feb 19, 2022 at 04:02:10PM +0800, Oscar Shiang wrote:
-> > > > Hi Marcelo,
-> > > > 
-> > > > I tried to apply your patches to kernel v5.15.18-rt28 and measured
-> > > > the latencies through oslat [1].
-> > > > 
-> > > > It turns out that the peak latency (around 100us) can drop to about 90us.
-> > > > The result is impressive since I only changed the guest's kernel
-> > > > instead of installing the patched kernel to both host and guest.
-> > > > 
-> > > > However, I am still curious about:
-> > > > 1) Why did I catch a bigger maximum latency in almost each of the
-> > > >   results of applying task isolation patches? Or does it come from
-> > > >   other reasons?
-> > > 
-> > > There are a number of things that need to be done in order to have an 
-> > > "well enough" isolated CPU so you can measure latency reliably:
-> > > 
-> > > * Boot a kernel with isolated CPU (or better, use realtime-virtual-host profile of
-> > > https://github.com/redhat-performance/tuned.git, which does a bunch of
-> > > other things to avoid interruptions to isolated CPUs).
-> > > * Apply the userspace patches at https://people.redhat.com/~mtosatti/task-isol-v6-userspace-patches/
-> > > to util-linux and rt-tests.
-> > > 
-> > > Run oslat with chisol:
-> > > 
-> > > chisol -q vmstat_sync -I conf oslat -c ...
-> > > 
-> > > Where chisol is from patched util-linux and oslat from patched rt-tests.
-> > > 
-> > > If you had "-f 1" (FIFO priority), on oslat, then the vmstat work would be hung.
-> > > 
-> > > Are you doing those things?
-> > > 
-> > > > 2) Why did we only get a 10us improvement on quiescing vmstat?
-> > > 
-> > > If you did not have FIFO priority on oslat, then other daemons 
-> > > could be interrupting it, so better make sure the 10us improvement 
-> > > you see is due to vmstat_flush workqueue work not executing anymore.
-> > > 
-> > > The testcase i use is: 
-> > > 
-> > > Stock kernel:
-> > > 
-> > > terminal 1: 
-> > > # oslat -f 1 -c X ...
-> > > 
-> > > terminal 2:
-> > > # echo 1 > /proc/sys/vm/stat_refresh
-> > > (hang)
-> > > 
-> > > Patched kernel:
-> > > 
-> > > terminal 1: 
-> > > # chisol -q vmstat_sync -I conf oslat -f 1 -c X ...
-> > > 
-> > > terminal 2:
-> > > # echo 1 > /proc/sys/vm/stat_refresh
-> > > # 
-> > 
-> > Sure, I did see the terminal hung during oslat with FIFO priority.
-> > 
-> > BTW, thanks for providing this test case. I used to run all workload stuff to just
-> > verify the improvement of task isolation. It is a more straightr- forward way to do.
-> > 
-> > > > [1]: The result and the test scripts I used can be found at
-> > > > https://gist.github.com/OscarShiang/8b530a00f472fd1c39f5979ee601516d#testing-task-isolation-via-oslat
-> > > 
-> > > OK, you seem to be doing everything necessary for chisol 
-> > > to work. Does /proc/pid/task_isolation of the oslat worker thread
-> > > (note its not the same pid as the main oslat thread) show "vmstat"
-> > > configured and activated for quiesce?
-> > 
-> > The status of task_isolation seems to be set properly with "vmstat" and activated
-> > 
-> > > However 100us is really high. You should be able to get < 10us with
-> > > realtime-virtual-host (i see 4us on an idle system).
-> > > 
-> > > The answer might be: because 10us is what it takes to execute
-> > > vmstat_worker on the isolated CPU (you can verify with tracepoints).
-> > > 
-> > > That time depends on the number of per-CPU vmstat variables that need flushing, 
-> > > i suppose...
-> > 
-> > Considering the interferences outside of the KVM, I have redone the measurements
-> > directly on my x86_64 computer [1].
-> > 
-> > As result, most of the latencies are down to 60us (and below). There are still
-> > some latencies larger than 80us, I am working on and trying to figure out the reason.
-> > 
-> > [1]: https://gist.github.com/OscarShiang/202eb691e649557fe3eaa5ec67a5aa82
+On Tue, 2022-03-08 at 23:26 +0000, David Howells wrote:
+> Adjust helper function names and comments after mass rename of
+> struct netfs_read_*request to struct netfs_io_*request.
 > 
-> Oscar,
+> Changes
+> =======
+> ver #2)
+>  - Make the changes in the docs also.
 > 
-> Did you confirm with hwlatdetect that the BIOS does not have long
-> running SMIs?
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: linux-cachefs@redhat.com
+> 
+> Link: https://lore.kernel.org/r/164622992433.3564931.6684311087845150271.stgit@warthog.procyon.org.uk/ # v1
+> ---
+> 
+>  Documentation/filesystems/netfs_library.rst |    4 +
+>  fs/9p/vfs_addr.c                            |    6 +-
+>  fs/afs/file.c                               |    4 +
+>  fs/cachefiles/io.c                          |    4 +
+>  fs/ceph/addr.c                              |    6 +-
+>  fs/netfs/read_helper.c                      |   83 ++++++++++++++-------------
+>  include/linux/netfs.h                       |   22 ++++---
+>  7 files changed, 65 insertions(+), 64 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/netfs_library.rst b/Documentation/filesystems/netfs_library.rst
+> index a997e2d4321d..4eb7e7b7b0fc 100644
+> --- a/Documentation/filesystems/netfs_library.rst
+> +++ b/Documentation/filesystems/netfs_library.rst
+> @@ -250,7 +250,7 @@ through which it can issue requests and negotiate::
+>  		int (*begin_cache_operation)(struct netfs_io_request *rreq);
+>  		void (*expand_readahead)(struct netfs_io_request *rreq);
+>  		bool (*clamp_length)(struct netfs_io_subrequest *subreq);
+> -		void (*issue_op)(struct netfs_io_subrequest *subreq);
+> +		void (*issue_read)(struct netfs_io_subrequest *subreq);
+>  		bool (*is_still_valid)(struct netfs_io_request *rreq);
+>  		int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+>  					 struct folio *folio, void **_fsdata);
+> @@ -305,7 +305,7 @@ The operations are as follows:
+>  
+>     This should return 0 on success and an error code on error.
+>  
+> - * ``issue_op()``
+> + * ``issue_read()``
+>  
+>     [Required] The helpers use this to dispatch a subrequest to the server for
+>     reading.  In the subrequest, ->start, ->len and ->transferred indicate what
+> diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+> index 7b79fabe7593..fdc1033a1546 100644
+> --- a/fs/9p/vfs_addr.c
+> +++ b/fs/9p/vfs_addr.c
+> @@ -28,10 +28,10 @@
+>  #include "fid.h"
+>  
+>  /**
+> - * v9fs_req_issue_op - Issue a read from 9P
+> + * v9fs_issue_read - Issue a read from 9P
+>   * @subreq: The read to make
+>   */
+> -static void v9fs_req_issue_op(struct netfs_io_subrequest *subreq)
+> +static void v9fs_issue_read(struct netfs_io_subrequest *subreq)
+>  {
+>  	struct netfs_io_request *rreq = subreq->rreq;
+>  	struct p9_fid *fid = rreq->netfs_priv;
+> @@ -106,7 +106,7 @@ static const struct netfs_request_ops v9fs_req_ops = {
+>  	.init_request		= v9fs_init_request,
+>  	.is_cache_enabled	= v9fs_is_cache_enabled,
+>  	.begin_cache_operation	= v9fs_begin_cache_operation,
+> -	.issue_op		= v9fs_req_issue_op,
+> +	.issue_read		= v9fs_issue_read,
+>  	.cleanup		= v9fs_req_cleanup,
+>  };
+>  
+> diff --git a/fs/afs/file.c b/fs/afs/file.c
+> index e55761f8858c..b19d635eed12 100644
+> --- a/fs/afs/file.c
+> +++ b/fs/afs/file.c
+> @@ -310,7 +310,7 @@ int afs_fetch_data(struct afs_vnode *vnode, struct afs_read *req)
+>  	return afs_do_sync_operation(op);
+>  }
+>  
+> -static void afs_req_issue_op(struct netfs_io_subrequest *subreq)
+> +static void afs_issue_read(struct netfs_io_subrequest *subreq)
+>  {
+>  	struct afs_vnode *vnode = AFS_FS_I(subreq->rreq->inode);
+>  	struct afs_read *fsreq;
+> @@ -401,7 +401,7 @@ const struct netfs_request_ops afs_req_ops = {
+>  	.is_cache_enabled	= afs_is_cache_enabled,
+>  	.begin_cache_operation	= afs_begin_cache_operation,
+>  	.check_write_begin	= afs_check_write_begin,
+> -	.issue_op		= afs_req_issue_op,
+> +	.issue_read		= afs_issue_read,
+>  	.cleanup		= afs_priv_cleanup,
+>  };
+>  
+> diff --git a/fs/cachefiles/io.c b/fs/cachefiles/io.c
+> index 6ac6fdbc70d3..b19f496db9ad 100644
+> --- a/fs/cachefiles/io.c
+> +++ b/fs/cachefiles/io.c
+> @@ -406,7 +406,7 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
+>  	}
+>  
+>  	if (test_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags)) {
+> -		__set_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags);
+> +		__set_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
+>  		why = cachefiles_trace_read_no_data;
+>  		goto out_no_object;
+>  	}
+> @@ -475,7 +475,7 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
+>  	goto out;
+>  
+>  download_and_store:
+> -	__set_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags);
+> +	__set_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
+>  out:
+>  	cachefiles_end_secure(cache, saved_cred);
+>  out_no_object:
+> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+> index 9d995f351079..9189257476f8 100644
+> --- a/fs/ceph/addr.c
+> +++ b/fs/ceph/addr.c
+> @@ -259,7 +259,7 @@ static bool ceph_netfs_issue_op_inline(struct netfs_io_subrequest *subreq)
+>  	size_t len;
+>  
+>  	__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
+> -	__clear_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags);
+> +	__clear_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
+>  
+>  	if (subreq->start >= inode->i_size)
+>  		goto out;
+> @@ -298,7 +298,7 @@ static bool ceph_netfs_issue_op_inline(struct netfs_io_subrequest *subreq)
+>  	return true;
+>  }
+>  
+> -static void ceph_netfs_issue_op(struct netfs_io_subrequest *subreq)
+> +static void ceph_netfs_issue_read(struct netfs_io_subrequest *subreq)
+>  {
+>  	struct netfs_io_request *rreq = subreq->rreq;
+>  	struct inode *inode = rreq->inode;
+> @@ -367,7 +367,7 @@ static void ceph_readahead_cleanup(struct address_space *mapping, void *priv)
+>  static const struct netfs_request_ops ceph_netfs_read_ops = {
+>  	.is_cache_enabled	= ceph_is_cache_enabled,
+>  	.begin_cache_operation	= ceph_begin_cache_operation,
+> -	.issue_op		= ceph_netfs_issue_op,
+> +	.issue_read		= ceph_netfs_issue_read,
+>  	.expand_readahead	= ceph_netfs_expand_readahead,
+>  	.clamp_length		= ceph_netfs_clamp_length,
+>  	.check_write_begin	= ceph_netfs_check_write_begin,
+> diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
+> index 50035d93f1dc..26d54055b17e 100644
+> --- a/fs/netfs/read_helper.c
+> +++ b/fs/netfs/read_helper.c
+> @@ -37,7 +37,7 @@ static void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
+>  		__netfs_put_subrequest(subreq, was_async);
+>  }
+>  
+> -static struct netfs_io_request *netfs_alloc_read_request(
+> +static struct netfs_io_request *netfs_alloc_request(
+>  	const struct netfs_request_ops *ops, void *netfs_priv,
+>  	struct file *file)
+>  {
+> @@ -63,13 +63,12 @@ static struct netfs_io_request *netfs_alloc_read_request(
+>  	return rreq;
+>  }
+>  
+> -static void netfs_get_read_request(struct netfs_io_request *rreq)
+> +static void netfs_get_request(struct netfs_io_request *rreq)
+>  {
+>  	refcount_inc(&rreq->usage);
+>  }
+>  
+> -static void netfs_rreq_clear_subreqs(struct netfs_io_request *rreq,
+> -				     bool was_async)
+> +static void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
+>  {
+>  	struct netfs_io_subrequest *subreq;
+>  
+> @@ -81,11 +80,11 @@ static void netfs_rreq_clear_subreqs(struct netfs_io_request *rreq,
+>  	}
+>  }
+>  
+> -static void netfs_free_read_request(struct work_struct *work)
+> +static void netfs_free_request(struct work_struct *work)
+>  {
+>  	struct netfs_io_request *rreq =
+>  		container_of(work, struct netfs_io_request, work);
+> -	netfs_rreq_clear_subreqs(rreq, false);
+> +	netfs_clear_subrequests(rreq, false);
+>  	if (rreq->netfs_priv)
+>  		rreq->netfs_ops->cleanup(rreq->mapping, rreq->netfs_priv);
+>  	trace_netfs_rreq(rreq, netfs_rreq_trace_free);
+> @@ -95,15 +94,15 @@ static void netfs_free_read_request(struct work_struct *work)
+>  	netfs_stat_d(&netfs_n_rh_rreq);
+>  }
+>  
+> -static void netfs_put_read_request(struct netfs_io_request *rreq, bool was_async)
+> +static void netfs_put_request(struct netfs_io_request *rreq, bool was_async)
+>  {
+>  	if (refcount_dec_and_test(&rreq->usage)) {
+>  		if (was_async) {
+> -			rreq->work.func = netfs_free_read_request;
+> +			rreq->work.func = netfs_free_request;
+>  			if (!queue_work(system_unbound_wq, &rreq->work))
+>  				BUG();
+>  		} else {
+> -			netfs_free_read_request(&rreq->work);
+> +			netfs_free_request(&rreq->work);
+>  		}
+>  	}
+>  }
+> @@ -121,14 +120,14 @@ static struct netfs_io_subrequest *netfs_alloc_subrequest(
+>  		INIT_LIST_HEAD(&subreq->rreq_link);
+>  		refcount_set(&subreq->usage, 2);
+>  		subreq->rreq = rreq;
+> -		netfs_get_read_request(rreq);
+> +		netfs_get_request(rreq);
+>  		netfs_stat(&netfs_n_rh_sreq);
+>  	}
+>  
+>  	return subreq;
+>  }
+>  
+> -static void netfs_get_read_subrequest(struct netfs_io_subrequest *subreq)
+> +static void netfs_get_subrequest(struct netfs_io_subrequest *subreq)
+>  {
+>  	refcount_inc(&subreq->usage);
+>  }
+> @@ -141,7 +140,7 @@ static void __netfs_put_subrequest(struct netfs_io_subrequest *subreq,
+>  	trace_netfs_sreq(subreq, netfs_sreq_trace_free);
+>  	kfree(subreq);
+>  	netfs_stat_d(&netfs_n_rh_sreq);
+> -	netfs_put_read_request(rreq, was_async);
+> +	netfs_put_request(rreq, was_async);
+>  }
+>  
+>  /*
+> @@ -216,7 +215,7 @@ static void netfs_read_from_server(struct netfs_io_request *rreq,
+>  				   struct netfs_io_subrequest *subreq)
+>  {
+>  	netfs_stat(&netfs_n_rh_download);
+> -	rreq->netfs_ops->issue_op(subreq);
+> +	rreq->netfs_ops->issue_read(subreq);
+>  }
+>  
+>  /*
+> @@ -225,8 +224,8 @@ static void netfs_read_from_server(struct netfs_io_request *rreq,
+>  static void netfs_rreq_completed(struct netfs_io_request *rreq, bool was_async)
+>  {
+>  	trace_netfs_rreq(rreq, netfs_rreq_trace_done);
+> -	netfs_rreq_clear_subreqs(rreq, was_async);
+> -	netfs_put_read_request(rreq, was_async);
+> +	netfs_clear_subrequests(rreq, was_async);
+> +	netfs_put_request(rreq, was_async);
+>  }
+>  
+>  /*
+> @@ -306,7 +305,7 @@ static void netfs_rreq_do_write_to_cache(struct netfs_io_request *rreq)
+>  	atomic_inc(&rreq->nr_copy_ops);
+>  
+>  	list_for_each_entry_safe(subreq, p, &rreq->subrequests, rreq_link) {
+> -		if (!test_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags)) {
+> +		if (!test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags)) {
+>  			list_del_init(&subreq->rreq_link);
+>  			netfs_put_subrequest(subreq, false);
+>  		}
+> @@ -336,7 +335,7 @@ static void netfs_rreq_do_write_to_cache(struct netfs_io_request *rreq)
+>  
+>  		atomic_inc(&rreq->nr_copy_ops);
+>  		netfs_stat(&netfs_n_rh_write);
+> -		netfs_get_read_subrequest(subreq);
+> +		netfs_get_subrequest(subreq);
+>  		trace_netfs_sreq(subreq, netfs_sreq_trace_write);
+>  		cres->ops->write(cres, subreq->start, &iter,
+>  				 netfs_rreq_copy_terminated, subreq);
+> @@ -378,9 +377,9 @@ static void netfs_rreq_unlock(struct netfs_io_request *rreq)
+>  	XA_STATE(xas, &rreq->mapping->i_pages, start_page);
+>  
+>  	if (test_bit(NETFS_RREQ_FAILED, &rreq->flags)) {
+> -		__clear_bit(NETFS_RREQ_WRITE_TO_CACHE, &rreq->flags);
+> +		__clear_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags);
+>  		list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
+> -			__clear_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags);
+> +			__clear_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
+>  		}
+>  	}
+>  
+> @@ -408,7 +407,7 @@ static void netfs_rreq_unlock(struct netfs_io_request *rreq)
+>  				pg_failed = true;
+>  				break;
+>  			}
+> -			if (test_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags))
+> +			if (test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags))
+>  				folio_start_fscache(folio);
+>  			pg_failed |= subreq_failed;
+>  			if (pgend < iopos + subreq->len)
+> @@ -453,13 +452,13 @@ static void netfs_rreq_unlock(struct netfs_io_request *rreq)
+>  static void netfs_rreq_short_read(struct netfs_io_request *rreq,
+>  				  struct netfs_io_subrequest *subreq)
+>  {
+> -	__clear_bit(NETFS_SREQ_SHORT_READ, &subreq->flags);
+> +	__clear_bit(NETFS_SREQ_SHORT_IO, &subreq->flags);
+>  	__set_bit(NETFS_SREQ_SEEK_DATA_READ, &subreq->flags);
+>  
+>  	netfs_stat(&netfs_n_rh_short_read);
+>  	trace_netfs_sreq(subreq, netfs_sreq_trace_resubmit_short);
+>  
+> -	netfs_get_read_subrequest(subreq);
+> +	netfs_get_subrequest(subreq);
+>  	atomic_inc(&rreq->nr_outstanding);
+>  	if (subreq->source == NETFS_READ_FROM_CACHE)
+>  		netfs_read_from_cache(rreq, subreq, NETFS_READ_HOLE_CLEAR);
+> @@ -493,10 +492,10 @@ static bool netfs_rreq_perform_resubmissions(struct netfs_io_request *rreq)
+>  			subreq->error = 0;
+>  			netfs_stat(&netfs_n_rh_download_instead);
+>  			trace_netfs_sreq(subreq, netfs_sreq_trace_download_instead);
+> -			netfs_get_read_subrequest(subreq);
+> +			netfs_get_subrequest(subreq);
+>  			atomic_inc(&rreq->nr_outstanding);
+>  			netfs_read_from_server(rreq, subreq);
+> -		} else if (test_bit(NETFS_SREQ_SHORT_READ, &subreq->flags)) {
+> +		} else if (test_bit(NETFS_SREQ_SHORT_IO, &subreq->flags)) {
+>  			netfs_rreq_short_read(rreq, subreq);
+>  		}
+>  	}
+> @@ -553,7 +552,7 @@ static void netfs_rreq_assess(struct netfs_io_request *rreq, bool was_async)
+>  	clear_bit_unlock(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
+>  	wake_up_bit(&rreq->flags, NETFS_RREQ_IN_PROGRESS);
+>  
+> -	if (test_bit(NETFS_RREQ_WRITE_TO_CACHE, &rreq->flags))
+> +	if (test_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags))
+>  		return netfs_rreq_write_to_cache(rreq);
+>  
+>  	netfs_rreq_completed(rreq, was_async);
+> @@ -642,8 +641,8 @@ void netfs_subreq_terminated(struct netfs_io_subrequest *subreq,
+>  
+>  complete:
+>  	__clear_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags);
+> -	if (test_bit(NETFS_SREQ_WRITE_TO_CACHE, &subreq->flags))
+> -		set_bit(NETFS_RREQ_WRITE_TO_CACHE, &rreq->flags);
+> +	if (test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags))
+> +		set_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags);
+>  
+>  out:
+>  	trace_netfs_sreq(subreq, netfs_sreq_trace_terminated);
+> @@ -674,7 +673,7 @@ void netfs_subreq_terminated(struct netfs_io_subrequest *subreq,
+>  		__clear_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags);
+>  	}
+>  
+> -	__set_bit(NETFS_SREQ_SHORT_READ, &subreq->flags);
+> +	__set_bit(NETFS_SREQ_SHORT_IO, &subreq->flags);
+>  	set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
+>  	goto out;
+>  
+> @@ -878,7 +877,7 @@ void netfs_readahead(struct readahead_control *ractl,
+>  	if (readahead_count(ractl) == 0)
+>  		goto cleanup;
+>  
+> -	rreq = netfs_alloc_read_request(ops, netfs_priv, ractl->file);
+> +	rreq = netfs_alloc_request(ops, netfs_priv, ractl->file);
+>  	if (!rreq)
+>  		goto cleanup;
+>  	rreq->mapping	= ractl->mapping;
+> @@ -916,7 +915,7 @@ void netfs_readahead(struct readahead_control *ractl,
+>  	return;
+>  
+>  cleanup_free:
+> -	netfs_put_read_request(rreq, false);
+> +	netfs_put_request(rreq, false);
+>  	return;
+>  cleanup:
+>  	if (netfs_priv)
+> @@ -953,7 +952,7 @@ int netfs_readpage(struct file *file,
+>  
+>  	_enter("%lx", folio_index(folio));
+>  
+> -	rreq = netfs_alloc_read_request(ops, netfs_priv, file);
+> +	rreq = netfs_alloc_request(ops, netfs_priv, file);
+>  	if (!rreq) {
+>  		if (netfs_priv)
+>  			ops->cleanup(folio_file_mapping(folio), netfs_priv);
+> @@ -975,7 +974,7 @@ int netfs_readpage(struct file *file,
+>  	netfs_stat(&netfs_n_rh_readpage);
+>  	trace_netfs_read(rreq, rreq->start, rreq->len, netfs_read_trace_readpage);
+>  
+> -	netfs_get_read_request(rreq);
+> +	netfs_get_request(rreq);
+>  
+>  	atomic_set(&rreq->nr_outstanding, 1);
+>  	do {
+> @@ -989,7 +988,8 @@ int netfs_readpage(struct file *file,
+>  	 * process.
+>  	 */
+>  	do {
+> -		wait_var_event(&rreq->nr_outstanding, atomic_read(&rreq->nr_outstanding) == 1);
+> +		wait_var_event(&rreq->nr_outstanding,
+> +			       atomic_read(&rreq->nr_outstanding) == 1);
+>  		netfs_rreq_assess(rreq, false);
+>  	} while (test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags));
+>  
+> @@ -999,7 +999,7 @@ int netfs_readpage(struct file *file,
+>  		ret = -EIO;
+>  	}
+>  out:
+> -	netfs_put_read_request(rreq, false);
+> +	netfs_put_request(rreq, false);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(netfs_readpage);
+> @@ -1122,7 +1122,7 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  	}
+>  
+>  	ret = -ENOMEM;
+> -	rreq = netfs_alloc_read_request(ops, netfs_priv, file);
+> +	rreq = netfs_alloc_request(ops, netfs_priv, file);
+>  	if (!rreq)
+>  		goto error;
+>  	rreq->mapping		= folio_file_mapping(folio);
+> @@ -1146,7 +1146,7 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  	 */
+>  	ractl._nr_pages = folio_nr_pages(folio);
+>  	netfs_rreq_expand(rreq, &ractl);
+> -	netfs_get_read_request(rreq);
+> +	netfs_get_request(rreq);
+>  
+>  	/* We hold the folio locks, so we can drop the references */
+>  	folio_get(folio);
+> @@ -1160,12 +1160,13 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  
+>  	} while (rreq->submitted < rreq->len);
+>  
+> -	/* Keep nr_outstanding incremented so that the ref always belongs to us, and
+> -	 * the service code isn't punted off to a random thread pool to
+> +	/* Keep nr_outstanding incremented so that the ref always belongs to
+> +	 * us, and the service code isn't punted off to a random thread pool to
+>  	 * process.
+>  	 */
+>  	for (;;) {
+> -		wait_var_event(&rreq->nr_outstanding, atomic_read(&rreq->nr_outstanding) == 1);
+> +		wait_var_event(&rreq->nr_outstanding,
+> +			       atomic_read(&rreq->nr_outstanding) == 1);
+>  		netfs_rreq_assess(rreq, false);
+>  		if (!test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags))
+>  			break;
+> @@ -1177,7 +1178,7 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  		trace_netfs_failure(rreq, NULL, ret, netfs_fail_short_write_begin);
+>  		ret = -EIO;
+>  	}
+> -	netfs_put_read_request(rreq, false);
+> +	netfs_put_request(rreq, false);
+>  	if (ret < 0)
+>  		goto error;
+>  
+> @@ -1193,7 +1194,7 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  	return 0;
+>  
+>  error_put:
+> -	netfs_put_read_request(rreq, false);
+> +	netfs_put_request(rreq, false);
+>  error:
+>  	folio_unlock(folio);
+>  	folio_put(folio);
+> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
+> index a2ca91cb7a68..f63de27d6f29 100644
+> --- a/include/linux/netfs.h
+> +++ b/include/linux/netfs.h
+> @@ -131,7 +131,7 @@ struct netfs_cache_resources {
+>   * Descriptor for a single component subrequest.
+>   */
+>  struct netfs_io_subrequest {
+> -	struct netfs_io_request *rreq;	/* Supervising read request */
+> +	struct netfs_io_request *rreq;		/* Supervising I/O request */
+>  	struct list_head	rreq_link;	/* Link in rreq->subrequests */
+>  	loff_t			start;		/* Where to start the I/O */
+>  	size_t			len;		/* Size of the I/O */
+> @@ -139,29 +139,29 @@ struct netfs_io_subrequest {
+>  	refcount_t		usage;
+>  	short			error;		/* 0 or error that occurred */
+>  	unsigned short		debug_index;	/* Index in list (for debugging output) */
+> -	enum netfs_io_source	source;		/* Where to read from */
+> +	enum netfs_io_source	source;		/* Where to read from/write to */
+>  	unsigned long		flags;
+> -#define NETFS_SREQ_WRITE_TO_CACHE	0	/* Set if should write to cache */
+> +#define NETFS_SREQ_COPY_TO_CACHE	0	/* Set if should copy the data to the cache */
+>  #define NETFS_SREQ_CLEAR_TAIL		1	/* Set if the rest of the read should be cleared */
+> -#define NETFS_SREQ_SHORT_READ		2	/* Set if there was a short read from the cache */
+> +#define NETFS_SREQ_SHORT_IO		2	/* Set if the I/O was short */
+>  #define NETFS_SREQ_SEEK_DATA_READ	3	/* Set if ->read() should SEEK_DATA first */
+>  #define NETFS_SREQ_NO_PROGRESS		4	/* Set if we didn't manage to read any data */
+>  };
+>  
+>  /*
+> - * Descriptor for a read helper request.  This is used to make multiple I/O
+> - * requests on a variety of sources and then stitch the result together.
+> + * Descriptor for an I/O helper request.  This is used to make multiple I/O
+> + * operations to a variety of data stores and then stitch the result together.
+>   */
+>  struct netfs_io_request {
+>  	struct work_struct	work;
+>  	struct inode		*inode;		/* The file being accessed */
+>  	struct address_space	*mapping;	/* The mapping being accessed */
+>  	struct netfs_cache_resources cache_resources;
+> -	struct list_head	subrequests;	/* Requests to fetch I/O from disk or net */
+> +	struct list_head	subrequests;	/* Contributory I/O operations */
+>  	void			*netfs_priv;	/* Private data for the netfs */
+>  	unsigned int		debug_id;
+> -	atomic_t		nr_outstanding;	/* Number of read ops in progress */
+> -	atomic_t		nr_copy_ops;	/* Number of write ops in progress */
+> +	atomic_t		nr_outstanding;	/* Number of ops in progress */
+> +	atomic_t		nr_copy_ops;	/* Number of copy-to-cache ops in progress */
+>  	size_t			submitted;	/* Amount submitted for I/O so far */
+>  	size_t			len;		/* Length of the request */
+>  	short			error;		/* 0 or error that occurred */
+> @@ -171,7 +171,7 @@ struct netfs_io_request {
+>  	refcount_t		usage;
+>  	unsigned long		flags;
+>  #define NETFS_RREQ_INCOMPLETE_IO	0	/* Some ioreqs terminated short or with error */
+> -#define NETFS_RREQ_WRITE_TO_CACHE	1	/* Need to write to the cache */
+> +#define NETFS_RREQ_COPY_TO_CACHE	1	/* Need to write to the cache */
+>  #define NETFS_RREQ_NO_UNLOCK_FOLIO	2	/* Don't unlock no_unlock_folio on completion */
+>  #define NETFS_RREQ_DONT_UNLOCK_FOLIOS	3	/* Don't unlock the folios on completion */
+>  #define NETFS_RREQ_FAILED		4	/* The request failed */
+> @@ -188,7 +188,7 @@ struct netfs_request_ops {
+>  	int (*begin_cache_operation)(struct netfs_io_request *rreq);
+>  	void (*expand_readahead)(struct netfs_io_request *rreq);
+>  	bool (*clamp_length)(struct netfs_io_subrequest *subreq);
+> -	void (*issue_op)(struct netfs_io_subrequest *subreq);
+> +	void (*issue_read)(struct netfs_io_subrequest *subreq);
+>  	bool (*is_still_valid)(struct netfs_io_request *rreq);
+>  	int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+>  				 struct folio *folio, void **_fsdata);
+> 
+> 
 
-Marcelo,
+Another (mostly) mechanical change...
 
-I have run hwlatdetect and the result is shown below:
-
-hwlatdetect:  test duration 900 seconds
-   detector: tracer
-   parameters:
-        Latency threshold: 0us
-        Sample window:     1000000us
-        Sample width:      500000us
-     Non-sampling period:  500000us
-        Output File:       test.report
-
-Starting test
-test finished
-Max Latency: 48us
-Samples recorded: 37
-Samples exceeding threshold: 37
-SMIs during run: 0
-report saved to test.report (37 samples)
-ts: 1646837340.346151918, inner:5, outer:9
-ts: 1646837351.550312752, inner:46, outer:45
-ts: 1646837381.549331178, inner:45, outer:0
-ts: 1646837400.008623200, inner:0, outer:9
-ts: 1646837425.578093371, inner:0, outer:8
-ts: 1646837429.587363003, inner:0, outer:1
-ts: 1646837436.549050243, inner:45, outer:45
-ts: 1646837580.005173999, inner:0, outer:9
-ts: 1646837605.591017161, inner:7, outer:8
-ts: 1646837635.552410329, inner:0, outer:1
-ts: 1646837639.246489489, inner:9, outer:5
-ts: 1646837645.426611917, inner:9, outer:5
-ts: 1646837651.550721975, inner:0, outer:1
-ts: 1646837728.549928137, inner:40, outer:47
-ts: 1646837756.281606376, inner:1, outer:8
-ts: 1646837757.492693661, inner:0, outer:1
-ts: 1646837759.355807689, inner:13, outer:13
-ts: 1646837761.590570928, inner:0, outer:1
-ts: 1646837762.382475433, inner:5, outer:9
-ts: 1646837764.185172836, inner:0, outer:9
-ts: 1646837768.675668348, inner:1, outer:0
-ts: 1646837776.485184319, inner:0, outer:1
-ts: 1646837777.544517878, inner:45, outer:41
-ts: 1646837855.549140154, inner:45, outer:0
-ts: 1646837886.492523509, inner:1, outer:0
-ts: 1646837897.544172247, inner:45, outer:0
-ts: 1646837933.550015925, inner:48, outer:48
-ts: 1646837981.546557947, inner:45, outer:45
-ts: 1646837998.051615598, inner:0, outer:1
-ts: 1646838030.550099263, inner:45, outer:0
-ts: 1646838072.549664559, inner:0, outer:46
-ts: 1646838106.571038324, inner:0, outer:1
-ts: 1646838107.547228682, inner:1, outer:0
-ts: 1646838114.549686904, inner:45, outer:45
-ts: 1646838162.549477219, inner:46, outer:47
-ts: 1646838180.014465679, inner:5, outer:9
-ts: 1646838237.486873064, inner:0, outer:1
-
-It seems that there is no SMI occurring (but some other latencies around 40us?)
-
-> Also, for the software part, you could save time by using the
-> realtime-virtual-host profile (check /usr/lib/tuned/realtime-virtual-host/
-> to see what its doing in addition to isolcpus=).
-
-Yes, I have switched to realtime-virtual-host profile with its kernel cmdline args.
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

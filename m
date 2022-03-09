@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA284D2716
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8954D267D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiCIBZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
+        id S230400AbiCIBZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiCIBZg (ORCPT
+        with ESMTP id S230390AbiCIBZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:25:36 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2078.outbound.protection.outlook.com [40.107.223.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0163F892;
-        Tue,  8 Mar 2022 17:24:31 -0800 (PST)
+        Tue, 8 Mar 2022 20:25:47 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::60f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286E73B00F;
+        Tue,  8 Mar 2022 17:24:39 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K35K/Nn2ZiRBWVd2x8IFkXs4Ky/jKn/PJalyVIMQVjhoKjstAc1mTm/5L/DQ8eByQKVxuQfi/WRchh/j5edwIvy/J4eAUtEPv6IELQxRPtBjWlkw9b1C6sEQW4Or3xVLngeJNwxcdI3wz2CR6J2WFE1OsjzHcsp2tkSRv7i1EBbfkEQOmlmqKW5UZSJLPiZBegmM6wCJ6o3Qaxl30gwAS8mn2R03fa921XhZB8uDrtwA0/9WzVotIVRYsA+qVv4OVGUeXET8qwUvim4GBD6lcdRrfCqxlJiT1RsS8HUeYurUADbJ5FD6ODTUjkqMDJF8YbRVuKExLXuXKXnNlIcyhw==
+ b=JlNmeGJ3gx3b0hyPimXPEoABlQ6CjhKbcL2w4cCvYk5TmkWhyUrxH3Km/GeEjdTjLhsp1vAlEfZj6Arl5hLtDDs+3i2nlB464wH0UK8eETTEeHp3jOUyVNyY2dbuT0KYlGJfttdFrqzDVCednfYS4PZgY8DuCO7xd8EH4sdVjC/tZ+SZ9IfR3/XJ5l5r7WBjUadxnhCbZiuX7PUKUB4QkuJnld0KamLx9kxx/Fb5PZJRM4PgGHhTmthN1r37A2y9Yu9+SKLGYR0NoD8GdFDaZlMKq1AY3G7nkYw6V0hUh0obfipq5Xhlcv2pfzQPloAu3gw1/0WYjgqexq/A/Koraw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LGweuggBnk3AQ02wK6JgGU6yJIbat/nGe/F8Ny3eduE=;
- b=JxcfeyY2ovhCiMyiJFYaQlnCGKvJhDu6anOs6W0iOmgM68uocBjOsqQ8rF7u0Xb98raMtuqvt416uvsN+G3bTvyyL3fIVsOXOEtzO7w7w8ZZKLKo4YApDGwORD5r/79tucPKuYMr21xgpVtDVV9x3xA+FcytGgHgSVLoJxdH5pMtSH+D6OzYFBlEMBVV+J9cxLo2CKS5bQJDZeb9FboMlZBA3Otzwxw81vEkFYRgeDNEWG0qYDW7q8DueQpXXlM/WAH0d0DYoMpkyy7PLgM61a78/O88rHnW/LfBrSFFMvUZFmGWCEFpP2eCYq3U2E6P1/5tfvdDVGiePXsyzxlEvQ==
+ bh=7a9NT+7g2SvJJ2LrITSmpa7sKSaQybXjwJIVx5Qi+QA=;
+ b=ad1X5toasTvfHNasO1XHfBvyDDTLBsnnHXZQ5DqmG6VpdRbQHS1LqU2wR9b7+TxHZ+T06U1kCj9+cgBDr0H0F6mTe/Z9WJREi1oX49mhTa0Zj4zGg/wz1bWyh5s+StvwdwgVoBBORSLOrTv2RAyuCWKWcJddWaNEvFVkvPdkwrchzbzgoYOPycoyytAEFdlBQ35gwezpDWaJFV4o69QOihxqNwzzRacaBAbTyeM5+6fTkp8ciarWmGC1rI1wNNsCpixG4+oHG7nLg7NWLDF1kigKZ2m0Oxidjlr/cRyQuc2gaTi7dKONTwx+aPJsb1Q3WaGLM+PvWP0Xhc1w9zNBsg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=rjwysocki.net smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LGweuggBnk3AQ02wK6JgGU6yJIbat/nGe/F8Ny3eduE=;
- b=GqC1L5wO/SuOi6OpEgBzDkVt3aoTL3gCAi2L9Rfpy7D72JzLenakxOkpAeB+cdITINMH48VbWoaf7SJ5H6AT0o0ZyDRD8nBdHcBQj1I+mfbl11FGkwufoGlJiHJXUK7H/uianud+aQL8Mgde9ssqh3K/Of27n8OxiotdKRx4q1g=
-Received: from CO2PR06CA0063.namprd06.prod.outlook.com (2603:10b6:104:3::21)
- by CH2PR12MB4325.namprd12.prod.outlook.com (2603:10b6:610:a9::14) with
+ bh=7a9NT+7g2SvJJ2LrITSmpa7sKSaQybXjwJIVx5Qi+QA=;
+ b=eQ4UMy/rL7Qkmmvsyy9MPB6iwcw9Gz9cdp+y0r9G8LgGXXTRCzmfRuOApkLEj31J8T2Bju4Lvil2+QI7PHvhdHTESP5uPUZZPyCcjrveHv/jA5DO4keZM/d0akSkLX90BlUX+pUlKphCNK7uJrQq6eUI+0X8f0yw4Q0Fq5zLUlI=
+Received: from MW4PR03CA0081.namprd03.prod.outlook.com (2603:10b6:303:b6::26)
+ by DM6PR12MB3196.namprd12.prod.outlook.com (2603:10b6:5:187::27) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 01:24:28 +0000
-Received: from CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:104:3:cafe::66) by CO2PR06CA0063.outlook.office365.com
- (2603:10b6:104:3::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.19; Wed, 9 Mar
+ 2022 01:24:33 +0000
+Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b6:cafe::f6) by MW4PR03CA0081.outlook.office365.com
+ (2603:10b6:303:b6::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Wed, 9 Mar 2022 01:24:28 +0000
+ Transport; Wed, 9 Mar 2022 01:24:33 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT037.mail.protection.outlook.com (10.13.174.91) with Microsoft SMTP
+ CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Wed, 9 Mar 2022 01:24:27 +0000
+ 15.20.5038.14 via Frontend Transport; Wed, 9 Mar 2022 01:24:32 +0000
 Received: from jinzhosu-System-Product-Name.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Tue, 8 Mar 2022 19:24:22 -0600
+ 15.1.2375.18; Tue, 8 Mar 2022 19:24:27 -0600
 From:   Jinzhou Su <Jinzhou.Su@amd.com>
 To:     <rjw@rjwysocki.net>, <linux-pm@vger.kernel.org>,
         <srinivas.pandruvada@linux.intel.com>, <dsmythies@telus.net>
@@ -62,9 +62,9 @@ CC:     <ray.huang@amd.com>, <viresh.kumar@linaro.org>,
         <deepak.sharma@amd.com>, <alexander.deucher@amd.com>,
         <xiaojian.du@amd.com>, <perry.yuan@amd.com>, <li.meng@amd.com>,
         <jinzhou.su@amd.com>, Jinzhou Su <Jinzhou.Su@amd.com>
-Subject: [PATCH v3 1/4] cpufreq: amd-pstate: Add more tracepoint for AMD P-State module
-Date:   Wed, 9 Mar 2022 09:23:48 +0800
-Message-ID: <20220309012351.616826-2-Jinzhou.Su@amd.com>
+Subject: [PATCH v3 2/4] tools/power/x86/intel_pstate_tracer: make tracer as a module
+Date:   Wed, 9 Mar 2022 09:23:49 +0800
+Message-ID: <20220309012351.616826-3-Jinzhou.Su@amd.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220309012351.616826-1-Jinzhou.Su@amd.com>
 References: <20220309012351.616826-1-Jinzhou.Su@amd.com>
@@ -76,209 +76,394 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fbb4bf1f-3448-4f2c-197f-08da016b8db9
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4325:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB4325B1C55BFAB9A11ACC1139900A9@CH2PR12MB4325.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9fdbbf84-b073-42ed-73e1-08da016b90fb
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3196:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3196483F29A806C45636ABAC900A9@DM6PR12MB3196.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lPc5STIeNwHYfQSGiF1dh86dH7m2qazYolCf+9dx2lOKJmhVSIjD+2l55LLN27i4TKlfMqIpyzKVDICN400DURdL6/AbPeKoOnBAiXfUGCFh7RVxJ45sCSEJu80mGyEUXx2hm+GRZe4KvuUhE6vVpAvFr0lMyBhrkrVRTq04dRGvUCFljD9j3yoEmNDN2k58TI0HjB+DG6urszT3x03At161qwB1dL+swBveSkUxvQvauYB9Dv4Yk5tSJpZWzErUNpBeZVEDaJ1GODeEssdvRMJ63Iu4rW/DEj/V5WXDOHlyxEu8z9UO0r3QvDpoJlh1m0kKbC7a9FDLFOU1Ws0j/dqYzEERf2T2oU90eidVV74prI9QcQUglJlB/CmZRIimT4k1Z/Y9lJs+OtqKZHbcqxtdyvWJtFs26PiWhJjD0hkdm0eMtfttc8w2eodC83ruhbUCqt/OoQ94JWxdUaEjkZ8PcNDXoBCsJvjBcwzO92uqD/bDIr6Xr3V9gJovBJgL/e0khyDA8UrV4TfA/nOQK3P5W4xqU7dnsz9/AuOaQyBAvUubdveHb2STBJcQThkmWQb4jEva9TNcmlPZqc4IR8GmnZYfClVlqyVYwHbhw/j6RYpXwhT0R3pIsxi8FKHJsTeFvY1YXdETrygM5NDRuUY+elqSf0kN2rrI7VdeNtKU1Szs4C1bOvB+62qfuopJlIDez1ZsywOJNQDLZqbSJw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(7696005)(8936002)(508600001)(86362001)(6666004)(5660300002)(1076003)(2906002)(186003)(26005)(16526019)(40460700003)(82310400004)(4326008)(8676002)(70206006)(81166007)(47076005)(110136005)(2616005)(356005)(36860700001)(316002)(426003)(336012)(54906003)(36756003)(83380400001)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 076oc/O3ZRdMzsDdYMJN9kPUNWw4Jf+rrMAGI1WuS/hweRvf9ltFTrDcr0BSxPYW/mOCewpPJexNM0bjU/L5ylP9kmUS1/ivnEOSSCHChC7fb/cOyw9rIglIuRso7AbBqYd5qI0wWm0lyVtVxC9zDi2aA+8IXyPMfZbX8QGTJ0gE3voMYGLkgm60YzRlaQdIoKnkzNKLMUBv6Z4kLu1MuWyrDbee4MUBfby64EiegOgU/mW70pVQiknSn5DKCY+MFAm0gQszA5J97HXfK4C10M/19xs9ZmiUj0FlSBaGB3/bJhU6D0Um9IszxPFIQ2rxQYHW5kiYRrKak6VHCdiihfduPIfdvBkPthq2+5/I1zG3RG4KLS6MHQNtYGv6gr80ZDSWqsUf6oIMr68KwAPryAYmk4nixb0AfQ0m6fYC5gQaUC1k7o/P0LBx6LnP88RScXL7rXCMIWHzM3Z+oJL+c7T0OX4TDOWsulX23qis1TTq4VBlaX6BDkf+F8R5NE5/YJgBEM65xmMw+tvmztyS3XJTRAEhmXtpTjZz4J5052Y5iX8+Jjvtnch9hA9AgjV5cVO0tyXg6iV+l+1o60eFaVrzQiPVAOJyL5D4LFFhkSWJ7KM+u9iqZ7zjYccGq/pqVX6caxnK0P9jsIrm0Aaq7FclPo3YaU9nlbejhIlsBtaAtH7l+OFCw78rj5ee4cG4Airgr8iYFYhR6+Yrex/nqKOiLFf+I8o8G+P756U3gH9G0wzDymdC5Plf3pv2QC+kmHPbQgKIgNaoT20Uib1P/w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(1076003)(54906003)(2906002)(110136005)(36756003)(8936002)(83380400001)(316002)(186003)(30864003)(2616005)(16526019)(86362001)(26005)(81166007)(356005)(70586007)(70206006)(8676002)(36860700001)(7696005)(4326008)(47076005)(5660300002)(508600001)(336012)(6666004)(426003)(40460700003)(82310400004)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 01:24:27.5317
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 01:24:32.9998
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbb4bf1f-3448-4f2c-197f-08da016b8db9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fdbbf84-b073-42ed-73e1-08da016b90fb
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4325
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3196
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add frequency, mperf, aperf and tsc in the trace. This can be used
-to debug and tune the performance of AMD P-state driver.
-
-Use the time difference between amd_pstate_update to calculate CPU
-frequency. There could be sleep in arch_freq_get_on_cpu, so do not
-use it here.
+Make intel_pstate_tracer as a module. Other trace event can import
+this module to analyze their trace data.
 
 Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-Co-developed-by: Huang Rui <ray.huang@amd.com>
-Signed-off-by: Huang Rui <ray.huang@amd.com>
+Acked-by: Doug Smythies <dsmythies@telus.net>
+Reviewed-by: Huang Rui <ray.huang@amd.com>
 ---
- drivers/cpufreq/amd-pstate-trace.h | 22 ++++++++++-
- drivers/cpufreq/amd-pstate.c       | 59 +++++++++++++++++++++++++++++-
- 2 files changed, 78 insertions(+), 3 deletions(-)
+ .../intel_pstate_tracer.py                    | 260 +++++++++---------
+ 1 file changed, 129 insertions(+), 131 deletions(-)
 
-diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
-index 647505957d4f..35f38ae67fb1 100644
---- a/drivers/cpufreq/amd-pstate-trace.h
-+++ b/drivers/cpufreq/amd-pstate-trace.h
-@@ -27,6 +27,10 @@ TRACE_EVENT(amd_pstate_perf,
- 	TP_PROTO(unsigned long min_perf,
- 		 unsigned long target_perf,
- 		 unsigned long capacity,
-+		 u64 freq,
-+		 u64 mperf,
-+		 u64 aperf,
-+		 u64 tsc,
- 		 unsigned int cpu_id,
- 		 bool changed,
- 		 bool fast_switch
-@@ -35,6 +39,10 @@ TRACE_EVENT(amd_pstate_perf,
- 	TP_ARGS(min_perf,
- 		target_perf,
- 		capacity,
-+		freq,
-+		mperf,
-+		aperf,
-+		tsc,
- 		cpu_id,
- 		changed,
- 		fast_switch
-@@ -44,6 +52,10 @@ TRACE_EVENT(amd_pstate_perf,
- 		__field(unsigned long, min_perf)
- 		__field(unsigned long, target_perf)
- 		__field(unsigned long, capacity)
-+		__field(unsigned long long, freq)
-+		__field(unsigned long long, mperf)
-+		__field(unsigned long long, aperf)
-+		__field(unsigned long long, tsc)
- 		__field(unsigned int, cpu_id)
- 		__field(bool, changed)
- 		__field(bool, fast_switch)
-@@ -53,15 +65,23 @@ TRACE_EVENT(amd_pstate_perf,
- 		__entry->min_perf = min_perf;
- 		__entry->target_perf = target_perf;
- 		__entry->capacity = capacity;
-+		__entry->freq = freq;
-+		__entry->mperf = mperf;
-+		__entry->aperf = aperf;
-+		__entry->tsc = tsc;
- 		__entry->cpu_id = cpu_id;
- 		__entry->changed = changed;
- 		__entry->fast_switch = fast_switch;
- 		),
+diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+index e15e20696d17..b46e9eb8f5aa 100755
+--- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+@@ -63,7 +63,7 @@ C_USEC = 3
+ C_SEC = 2
+ C_CPU = 1
  
--	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu cpu_id=%u changed=%s fast_switch=%s",
-+	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu freq=%llu mperf=%llu aperf=%llu tsc=%llu cpu_id=%u changed=%s fast_switch=%s",
- 		  (unsigned long)__entry->min_perf,
- 		  (unsigned long)__entry->target_perf,
- 		  (unsigned long)__entry->capacity,
-+		  (unsigned long long)__entry->freq,
-+		  (unsigned long long)__entry->mperf,
-+		  (unsigned long long)__entry->aperf,
-+		  (unsigned long long)__entry->tsc,
- 		  (unsigned int)__entry->cpu_id,
- 		  (__entry->changed) ? "true" : "false",
- 		  (__entry->fast_switch) ? "true" : "false"
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9ce75ed11f8e..7be38bc6a673 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -65,6 +65,18 @@ MODULE_PARM_DESC(shared_mem,
+-global sample_num, last_sec_cpu, last_usec_cpu, start_time, testname
++global sample_num, last_sec_cpu, last_usec_cpu, start_time, testname, trace_file
  
- static struct cpufreq_driver amd_pstate_driver;
+ # 11 digits covers uptime to 115 days
+ getcontext().prec = 11
+@@ -72,17 +72,17 @@ sample_num =0
+ last_sec_cpu = [0] * MAX_CPUS
+ last_usec_cpu = [0] * MAX_CPUS
  
-+/**
-+ * struct  amd_aperf_mperf
-+ * @aperf: actual performance frequency clock count
-+ * @mperf: maximum performance frequency clock count
-+ * @tsc:   time stamp counter
-+ */
-+struct amd_aperf_mperf {
-+	u64 aperf;
-+	u64 mperf;
-+	u64 tsc;
-+};
-+
- /**
-  * struct amd_cpudata - private CPU data for AMD P-State
-  * @cpu: CPU number
-@@ -81,6 +93,9 @@ static struct cpufreq_driver amd_pstate_driver;
-  * @min_freq: the frequency that mapped to lowest_perf
-  * @nominal_freq: the frequency that mapped to nominal_perf
-  * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
-+ * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
-+ * @prev: Last Aperf/Mperf/tsc count value read from register
-+ * @freq: current cpu frequency value
-  * @boost_supported: check whether the Processor or SBIOS supports boost mode
-  *
-  * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
-@@ -102,6 +117,10 @@ struct amd_cpudata {
- 	u32	nominal_freq;
- 	u32	lowest_nonlinear_freq;
+-def print_help():
+-    print('intel_pstate_tracer.py:')
++def print_help(driver_name):
++    print('%s_tracer.py:'%driver_name)
+     print('  Usage:')
+     print('    If the trace file is available, then to simply parse and plot, use (sudo not required):')
+-    print('      ./intel_pstate_tracer.py [-c cpus] -t <trace_file> -n <test_name>')
++    print('      ./%s_tracer.py [-c cpus] -t <trace_file> -n <test_name>'%driver_name)
+     print('    Or')
+-    print('      ./intel_pstate_tracer.py [--cpu cpus] ---trace_file <trace_file> --name <test_name>')
++    print('      ./%s_tracer.py [--cpu cpus] ---trace_file <trace_file> --name <test_name>'%driver_name)
+     print('    To generate trace file, parse and plot, use (sudo required):')
+-    print('      sudo ./intel_pstate_tracer.py [-c cpus] -i <interval> -n <test_name> -m <kbytes>')
++    print('      sudo ./%s_tracer.py [-c cpus] -i <interval> -n <test_name> -m <kbytes>'%driver_name)
+     print('    Or')
+-    print('      sudo ./intel_pstate_tracer.py [--cpu cpus] --interval <interval> --name <test_name> --memory <kbytes>')
++    print('      sudo ./%s_tracer.py [--cpu cpus] --interval <interval> --name <test_name> --memory <kbytes>'%driver_name)
+     print('    Optional argument:')
+     print('      cpus:   comma separated list of CPUs')
+     print('      kbytes: Kilo bytes of memory per CPU to allocate to the trace buffer. Default: 10240')
+@@ -323,7 +323,7 @@ def set_4_plot_linestyles(g_plot):
+     g_plot('set style line 3 linetype 1 linecolor rgb "purple" pointtype -1')
+     g_plot('set style line 4 linetype 1 linecolor rgb "blue" pointtype -1')
  
-+	struct amd_aperf_mperf cur;
-+	struct amd_aperf_mperf prev;
-+
-+	u64 freq;
- 	bool	boost_supported;
- };
+-def store_csv(cpu_int, time_pre_dec, time_post_dec, core_busy, scaled, _from, _to, mperf, aperf, tsc, freq_ghz, io_boost, common_comm, load, duration_ms, sample_num, elapsed_time, tsc_ghz):
++def store_csv(cpu_int, time_pre_dec, time_post_dec, core_busy, scaled, _from, _to, mperf, aperf, tsc, freq_ghz, io_boost, common_comm, load, duration_ms, sample_num, elapsed_time, tsc_ghz, cpu_mask):
+     """ Store master csv file information """
  
-@@ -211,6 +230,39 @@ static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
- 					    max_perf, fast_switch);
- }
+     global graph_data_present
+@@ -342,11 +342,9 @@ def store_csv(cpu_int, time_pre_dec, time_post_dec, core_busy, scaled, _from, _t
  
-+static inline bool amd_pstate_sample(struct amd_cpudata *cpudata)
-+{
-+	u64 aperf, mperf, tsc;
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+	rdmsrl(MSR_IA32_APERF, aperf);
-+	rdmsrl(MSR_IA32_MPERF, mperf);
-+	tsc = rdtsc();
-+
-+	if (cpudata->prev.mperf == mperf || cpudata->prev.tsc == tsc) {
-+		local_irq_restore(flags);
-+		return false;
-+	}
-+
-+	local_irq_restore(flags);
-+
-+	cpudata->cur.aperf = aperf;
-+	cpudata->cur.mperf = mperf;
-+	cpudata->cur.tsc =  tsc;
-+	cpudata->cur.aperf -= cpudata->prev.aperf;
-+	cpudata->cur.mperf -= cpudata->prev.mperf;
-+	cpudata->cur.tsc -= cpudata->prev.tsc;
-+
-+	cpudata->prev.aperf = aperf;
-+	cpudata->prev.mperf = mperf;
-+	cpudata->prev.tsc = tsc;
-+
-+	cpudata->freq = div64_u64((cpudata->cur.aperf * cpu_khz), cpudata->cur.mperf);
-+
-+	return true;
-+}
-+
- static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
- 			      u32 des_perf, u32 max_perf, bool fast_switch)
- {
-@@ -226,8 +278,11 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
- 	value &= ~AMD_CPPC_MAX_PERF(~0L);
- 	value |= AMD_CPPC_MAX_PERF(max_perf);
+     graph_data_present = True;
  
--	trace_amd_pstate_perf(min_perf, des_perf, max_perf,
--			      cpudata->cpu, (value != prev), fast_switch);
-+	if (trace_amd_pstate_perf_enabled() && amd_pstate_sample(cpudata)) {
-+		trace_amd_pstate_perf(min_perf, des_perf, max_perf, cpudata->freq,
-+			cpudata->cur.mperf, cpudata->cur.aperf, cpudata->cur.tsc,
-+				cpudata->cpu, (value != prev), fast_switch);
-+	}
+-def split_csv():
++def split_csv(current_max_cpu, cpu_mask):
+     """ seperate the all csv file into per CPU csv files. """
  
- 	if (value == prev)
- 		return;
+-    global current_max_cpu
+-
+     if os.path.exists('cpu.csv'):
+         for index in range(0, current_max_cpu + 1):
+             if cpu_mask[int(index)] != 0:
+@@ -381,27 +379,25 @@ def clear_trace_file():
+         print('IO error clearing trace file ')
+         sys.exit(2)
+ 
+-def enable_trace():
++def enable_trace(trace_file):
+     """ Enable trace """
+ 
+     try:
+-       open('/sys/kernel/debug/tracing/events/power/pstate_sample/enable'
+-                 , 'w').write("1")
++        open(trace_file,'w').write("1")
+     except:
+         print('IO error enabling trace ')
+         sys.exit(2)
+ 
+-def disable_trace():
++def disable_trace(trace_file):
+     """ Disable trace """
+ 
+     try:
+-       open('/sys/kernel/debug/tracing/events/power/pstate_sample/enable'
+-                 , 'w').write("0")
++       open(trace_file, 'w').write("0")
+     except:
+         print('IO error disabling trace ')
+         sys.exit(2)
+ 
+-def set_trace_buffer_size():
++def set_trace_buffer_size(memory):
+     """ Set trace buffer size """
+ 
+     try:
+@@ -421,7 +417,7 @@ def free_trace_buffer():
+         print('IO error freeing trace buffer ')
+         sys.exit(2)
+ 
+-def read_trace_data(filename):
++def read_trace_data(filename, cpu_mask):
+     """ Read and parse trace data """
+ 
+     global current_max_cpu
+@@ -481,135 +477,137 @@ def read_trace_data(filename):
+                 tsc_ghz = Decimal(0)
+                 if duration_ms != Decimal(0) :
+                     tsc_ghz = Decimal(tsc)/duration_ms/Decimal(1000000)
+-                store_csv(cpu_int, time_pre_dec, time_post_dec, core_busy, scaled, _from, _to, mperf, aperf, tsc, freq_ghz, io_boost, common_comm, load, duration_ms, sample_num, elapsed_time, tsc_ghz)
++                store_csv(cpu_int, time_pre_dec, time_post_dec, core_busy, scaled, _from, _to, mperf, aperf, tsc, freq_ghz, io_boost, common_comm, load, duration_ms, sample_num, elapsed_time, tsc_ghz, cpu_mask)
+ 
+             if cpu_int > current_max_cpu:
+                 current_max_cpu = cpu_int
+ # End of for each trace line loop
+ # Now seperate the main overall csv file into per CPU csv files.
+-    split_csv()
++    split_csv(current_max_cpu, cpu_mask)
+ 
+ def signal_handler(signal, frame):
+     print(' SIGINT: Forcing cleanup before exit.')
+     if interval:
+-        disable_trace()
++        disable_trace(trace_file)
+         clear_trace_file()
+         # Free the memory
+         free_trace_buffer()
+         sys.exit(0)
+ 
+-signal.signal(signal.SIGINT, signal_handler)
++if __name__ == "__main__":
++    trace_file = "/sys/kernel/debug/tracing/events/power/pstate_sample/enable"
++    signal.signal(signal.SIGINT, signal_handler)
+ 
+-interval = ""
+-filename = ""
+-cpu_list = ""
+-testname = ""
+-memory = "10240"
+-graph_data_present = False;
++    interval = ""
++    filename = ""
++    cpu_list = ""
++    testname = ""
++    memory = "10240"
++    graph_data_present = False;
+ 
+-valid1 = False
+-valid2 = False
++    valid1 = False
++    valid2 = False
+ 
+-cpu_mask = zeros((MAX_CPUS,), dtype=int)
++    cpu_mask = zeros((MAX_CPUS,), dtype=int)
+ 
+-try:
+-    opts, args = getopt.getopt(sys.argv[1:],"ht:i:c:n:m:",["help","trace_file=","interval=","cpu=","name=","memory="])
+-except getopt.GetoptError:
+-    print_help()
+-    sys.exit(2)
+-for opt, arg in opts:
+-    if opt == '-h':
+-        print()
++    try:
++        opts, args = getopt.getopt(sys.argv[1:],"ht:i:c:n:m:",["help","trace_file=","interval=","cpu=","name=","memory="])
++    except getopt.GetoptError:
++        print_help('intel_pstate')
++        sys.exit(2)
++    for opt, arg in opts:
++        if opt == '-h':
++            print_help('intel_pstate')
++            sys.exit()
++        elif opt in ("-t", "--trace_file"):
++            valid1 = True
++            location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
++            filename = os.path.join(location, arg)
++        elif opt in ("-i", "--interval"):
++            valid1 = True
++            interval = arg
++        elif opt in ("-c", "--cpu"):
++            cpu_list = arg
++        elif opt in ("-n", "--name"):
++            valid2 = True
++            testname = arg
++        elif opt in ("-m", "--memory"):
++            memory = arg
++
++    if not (valid1 and valid2):
++        print_help('intel_pstate')
+         sys.exit()
+-    elif opt in ("-t", "--trace_file"):
+-        valid1 = True
+-        location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+-        filename = os.path.join(location, arg)
+-    elif opt in ("-i", "--interval"):
+-        valid1 = True
+-        interval = arg
+-    elif opt in ("-c", "--cpu"):
+-        cpu_list = arg
+-    elif opt in ("-n", "--name"):
+-        valid2 = True
+-        testname = arg
+-    elif opt in ("-m", "--memory"):
+-        memory = arg
+-
+-if not (valid1 and valid2):
+-    print_help()
+-    sys.exit()
+-
+-if cpu_list:
+-    for p in re.split("[,]", cpu_list):
+-        if int(p) < MAX_CPUS :
+-            cpu_mask[int(p)] = 1
+-else:
+-    for i in range (0, MAX_CPUS):
+-        cpu_mask[i] = 1
+-
+-if not os.path.exists('results'):
+-    os.mkdir('results')
++
++    if cpu_list:
++        for p in re.split("[,]", cpu_list):
++            if int(p) < MAX_CPUS :
++                cpu_mask[int(p)] = 1
++    else:
++        for i in range (0, MAX_CPUS):
++            cpu_mask[i] = 1
++
++    if not os.path.exists('results'):
++        os.mkdir('results')
++        # The regular user needs to own the directory, not root.
++        fix_ownership('results')
++
++    os.chdir('results')
++    if os.path.exists(testname):
++        print('The test name directory already exists. Please provide a unique test name. Test re-run not supported, yet.')
++        sys.exit()
++    os.mkdir(testname)
+     # The regular user needs to own the directory, not root.
+-    fix_ownership('results')
+-
+-os.chdir('results')
+-if os.path.exists(testname):
+-    print('The test name directory already exists. Please provide a unique test name. Test re-run not supported, yet.')
+-    sys.exit()
+-os.mkdir(testname)
+-# The regular user needs to own the directory, not root.
+-fix_ownership(testname)
+-os.chdir(testname)
+-
+-# Temporary (or perhaps not)
+-cur_version = sys.version_info
+-print('python version (should be >= 2.7):')
+-print(cur_version)
+-
+-# Left as "cleanup" for potential future re-run ability.
+-cleanup_data_files()
+-
+-if interval:
+-    filename = "/sys/kernel/debug/tracing/trace"
+-    clear_trace_file()
+-    set_trace_buffer_size()
+-    enable_trace()
+-    print('Sleeping for ', interval, 'seconds')
+-    time.sleep(int(interval))
+-    disable_trace()
+-
+-current_max_cpu = 0
+-
+-read_trace_data(filename)
+-
+-if interval:
+-    clear_trace_file()
+-    # Free the memory
+-    free_trace_buffer()
+-
+-if graph_data_present == False:
+-    print('No valid data to plot')
+-    sys.exit(2)
+-
+-for cpu_no in range(0, current_max_cpu + 1):
+-    plot_perf_busy_with_sample(cpu_no)
+-    plot_perf_busy(cpu_no)
+-    plot_durations(cpu_no)
+-    plot_loads(cpu_no)
+-
+-plot_pstate_cpu_with_sample()
+-plot_pstate_cpu()
+-plot_load_cpu()
+-plot_frequency_cpu()
+-plot_duration_cpu()
+-plot_scaled_cpu()
+-plot_boost_cpu()
+-plot_ghz_cpu()
+-
+-# It is preferrable, but not necessary, that the regular user owns the files, not root.
+-for root, dirs, files in os.walk('.'):
+-    for f in files:
+-        fix_ownership(f)
+-
+-os.chdir('../../')
++    fix_ownership(testname)
++    os.chdir(testname)
++
++    # Temporary (or perhaps not)
++    cur_version = sys.version_info
++    print('python version (should be >= 2.7):')
++    print(cur_version)
++
++    # Left as "cleanup" for potential future re-run ability.
++    cleanup_data_files()
++
++    if interval:
++        filename = "/sys/kernel/debug/tracing/trace"
++        clear_trace_file()
++        set_trace_buffer_size(memory)
++        enable_trace(trace_file)
++        print('Sleeping for ', interval, 'seconds')
++        time.sleep(int(interval))
++        disable_trace(trace_file)
++
++    current_max_cpu = 0
++
++    read_trace_data(filename, cpu_mask)
++
++    if interval:
++        clear_trace_file()
++        # Free the memory
++        free_trace_buffer()
++
++    if graph_data_present == False:
++        print('No valid data to plot')
++        sys.exit(2)
++
++    for cpu_no in range(0, current_max_cpu + 1):
++        plot_perf_busy_with_sample(cpu_no)
++        plot_perf_busy(cpu_no)
++        plot_durations(cpu_no)
++        plot_loads(cpu_no)
++
++    plot_pstate_cpu_with_sample()
++    plot_pstate_cpu()
++    plot_load_cpu()
++    plot_frequency_cpu()
++    plot_duration_cpu()
++    plot_scaled_cpu()
++    plot_boost_cpu()
++    plot_ghz_cpu()
++
++    # It is preferrable, but not necessary, that the regular user owns the files, not root.
++    for root, dirs, files in os.walk('.'):
++        for f in files:
++            fix_ownership(f)
++
++    os.chdir('../../')
 -- 
 2.27.0
 

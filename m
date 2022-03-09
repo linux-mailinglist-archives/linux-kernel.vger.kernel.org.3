@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4634D323F
+	by mail.lfdr.de (Postfix) with ESMTP id EFB3E4D3240
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbiCIP5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
+        id S234056AbiCIP5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiCIP5Q (ORCPT
+        with ESMTP id S231785AbiCIP5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:57:16 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE10D13C255
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:56:16 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id qx21so5978593ejb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l6rzSBg+hycjyAg3vNgFOkzB2r7Wku4uLvqN81LLhjM=;
-        b=oAhEDWHOR+wZdZZD6U5/mkxMVidolVS6sz1LQJ3eelAui4Co0GyuNOPxYNkA+mrbNi
-         4eBicluFjI+EU0X1bYrUfywV5/WayNK9POkQeKQnRjA202XeqSF8jw2yYZqXmbKj6sEJ
-         38dJhL/a1cmVFwkEbTy06O8qVbW7kuymRt9oE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l6rzSBg+hycjyAg3vNgFOkzB2r7Wku4uLvqN81LLhjM=;
-        b=UPcU4K5PSI1qorsfbbUQemFeyw5UsCk1xW8JFSTkPeP09VPtkrTbqq7EMGo5c7djLF
-         f4nnIDEZTT5anNuym2CI8ZqOqz/VRtMHPxHqn4dg14zPey5ygbUSFWwvU1ACQOnNyeQo
-         q78BKp1sXDBnkp+hJCI6EOh3BOfk1e/a3VtIeNSUfdreDRbv4Easf9xNbb5a1zLi3mTj
-         BUHa0UZS4s/obO2lvUX9dNi6y3dKTY4Pwhy0maP+u3tIs338Qshn0arAs8TfJoysATVr
-         kXlbytA3peosZ6oTC0nCg8aRH9twJ6qWpHHnL5qYCFzr8ULYs3bMyqrZcIGs6+IhEql+
-         vwKg==
-X-Gm-Message-State: AOAM532JixvzNm2Di2UgxrLfUqqotnV8WCExxHfaiKvT1K8uQaCm4Sp5
-        AVP5wVJ/ghQ6vOm6Upk0CkNRgPkLOMxZVPcT
-X-Google-Smtp-Source: ABdhPJy2J9jIqO//fCGWWqMHJK8cx40nf9DHB78ORKm8eqzX3J4LMHbe6oWyjGcDvQAYqPEykZYoZQ==
-X-Received: by 2002:a17:907:6e1b:b0:6db:30f5:980c with SMTP id sd27-20020a1709076e1b00b006db30f5980cmr348196ejc.359.1646841375178;
-        Wed, 09 Mar 2022 07:56:15 -0800 (PST)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id gz20-20020a170907a05400b006d91b214235sm871550ejc.185.2022.03.09.07.56.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 07:56:14 -0800 (PST)
-Received: by mail-wr1-f51.google.com with SMTP id p9so3712308wra.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:56:14 -0800 (PST)
-X-Received: by 2002:a5d:5257:0:b0:1f0:1822:69ad with SMTP id
- k23-20020a5d5257000000b001f0182269admr229452wrc.342.1646841373661; Wed, 09
- Mar 2022 07:56:13 -0800 (PST)
+        Wed, 9 Mar 2022 10:57:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8F213C255
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:56:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85B7961650
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:56:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFFBC340E8;
+        Wed,  9 Mar 2022 15:56:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646841377;
+        bh=KVzxjGUGk6NYXxcaOKH+zrJvN87Ms5WfMwZNi9pdTgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lTwJVvmhuOCIPhLdib/xFfeu5wi7sqMuanevPJ4/ayYDsCQYPfIEAKx7/IaHxxxfS
+         RVcXrBlrawgTrF6GhJCuMOJfWG3Bdc/sdC977qjsJZs5LrMbQc/DLeVN2cJsizkkXo
+         08HTuDgMF1aG5h28lI021rZ+U8Ozsr1zCkKl0qDDZM3yY6mEwIs48pRvHaD5kd8TUY
+         QUxa/xaQWqt6KsBKyLblz233oPOocOEOZVAc80rUEM4Rllz77FKy/tnKJqpqUhNpTA
+         JOBsoCjOxi470qagokchg0EOmDKUAc7QEpQ5ZOjok/eXfAS4lof8CNYA18tNkGycHG
+         5mtllOqTdiiqQ==
+Date:   Wed, 9 Mar 2022 15:56:12 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     John Keeping <john@metanate.com>
+Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Daniel Beer <daniel.beer@igorinstitute.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: tas5805m: fix pdn polarity
+Message-ID: <YijOHNT0eqDyoviP@sirena.org.uk>
+References: <20220309135649.195277-1-john@metanate.com>
 MIME-Version: 1.0
-References: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
-In-Reply-To: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 9 Mar 2022 07:56:01 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=V4oicW6ZVVyE3sNYxAdaEiGdjAZC77o-wjn3=fmfL6eg@mail.gmail.com>
-Message-ID: <CAD=FV=V4oicW6ZVVyE3sNYxAdaEiGdjAZC77o-wjn3=fmfL6eg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/bridge: Add MAINTAINERS entry for DRM drivers for
- bridge chip bindings
-To:     dri-devel <dri-devel@lists.freedesktop.org>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="saKSD0Ud0ux1qrCM"
+Content-Disposition: inline
+In-Reply-To: <20220309135649.195277-1-john@metanate.com>
+X-Cookie: You will inherit millions of dollars.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,27 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Mar 8, 2022 at 11:07 AM Douglas Anderson <dianders@chromium.org> wrote:
->
-> The bindings for bridge chips should also get the same maintainers
-> entry so the right people get notified about bindings changes.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
+--saKSD0Ud0ux1qrCM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There didn't seem to be a reason to wait, so I pushed all 3 to
-drm-misc-next w/ collected tags
+On Wed, Mar 09, 2022 at 01:56:49PM +0000, John Keeping wrote:
 
-46db48f25ed1 drm/bridge: Add myself as a reviewer for the Parade
-PS8640 bridge chip
-59c217b3dde5 drm/bridge: Add myself as a reviewer for the TI SN65DSI86
-bridge chip
-73a46da4fa7c drm/bridge: Add MAINTAINERS entry for DRM drivers for
-bridge chip bindings
+> The binding defines the GPIO as "pdn-gpios" so when the GPIO is active
+> the expectation is that the power down signal is asserted and this is
+> how all other drivers using this GPIO name interpret the value.
 
--Doug
+> But the tas5805m driver inverts the sense from the normal expectation so
+> when the powerdown GPIO is logically asserted the chip is running.
+
+> This is a new driver that is not yet in a released kernel and has no
+> in-tree users of the binding so fix the sense of the GPIO so that
+> logically asserted means that the device is powered down.
+
+> - Rewrite commit message to make it more obvious that this is a change
+>   to the interpretation of the GPIO in the binding
+
+I'm still not seeing the functional change here.  The actual state of
+the GPIO is identical in both cases, all that's changing is the logical
+view internally to the kernel.
+
+--saKSD0Ud0ux1qrCM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIozhwACgkQJNaLcl1U
+h9ADgwf7BXCNab9gHFTGN3ia4g62mvxnNpcUe9ztentajumfMLfdgzTZ8r2PyHSs
+WQIrsZYfpnLxqerHODGQJX8WkdujBIPI2RJCt2tsaY334Ufc5nw3kc1r1a2rHODA
++0ZRJo5C9ddTXWW4hvV0FUzAc0pv6pG/vgh8uqpFakTH6xjmDI05o8Wv3kP0yQOv
+LalAGP5T59IH6yOsVaJt/2RaVAl6DngbjwIsdNTZl2kpOMaoBkYhmYcElAAefvUP
+iIBo1kq4bshF3B5s7rKKKDsVAonifhAqlAqsCWJMxK81wbIooEXA4xw/y/kmEzRM
+/71nhJZt/xkQWeIGyJs1X4dM2J0tFQ==
+=hDq2
+-----END PGP SIGNATURE-----
+
+--saKSD0Ud0ux1qrCM--

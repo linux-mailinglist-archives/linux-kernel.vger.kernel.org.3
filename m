@@ -2,114 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57734D28AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7464D28AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiCIGEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S229838AbiCIGF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiCIGEs (ORCPT
+        with ESMTP id S229509AbiCIGF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:04:48 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FB97C171
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:03:51 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id u3so2222233ybh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 22:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IupeTBPV0CwLiSouyNsLlNej2M8VfozXJBeb1wXs4oQ=;
-        b=YX63l3TuBE9WHvkLnj96DmhUI8+x1TUv5ps/J4Wdbj/N6Hyybd7haDR3I08A5pxdlA
-         +l2zeiIiDOTGGSSw+XV7u0/uKlVlUuIeRltWKMYPR+536T44a6R2gqtdTILVdexRCEQy
-         sP6q5P82Y9efU/Hm1lecDTdhH7rArXYU6n1dwDO9JMIXLFialuF7CPM1T+/0QIPMm2C3
-         rNsB0xW69cm7H+et2JlGu2BYfFD/kkqMAr1K0zAZEVGhroj6EJf30YvKmCc02TR5tX7P
-         PeVHn1U645aM4Oy1dFJ/Bv+EJYIi7kor1u1lljkqt9zvXBVPytkftVBdprPcCRKiP9K8
-         YeOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IupeTBPV0CwLiSouyNsLlNej2M8VfozXJBeb1wXs4oQ=;
-        b=gkQtsRiIO8Y7klSjqnHTVmvFjJ39CqmxDw663qlpCLbLjG/ZZXMEqQKN0x6df84h5L
-         l+0t/snqv+aLXMWCU6V8ZMo790+otse9g6+XIkLEajUWu/4NGvQaCuTbS3tmI1LDEk2G
-         xmejDvw534O0KrLlCcrDSc+jkygYNCDGEpP3ufCxQFWpZ2Ez+dEEqmV97Uhi1srAnHrw
-         eKsxRkHJ1Zonv/DTvgV6dL1GiPvFTyz8ZAXEAylpR0e+wu3AvWsPXk777FU3IMO76N86
-         d+PQZTj5thQ5FI2Gr0DayZ6xzQQXmgzzziWgwkM9PKlYRKPNZpc4j8hpnK3IjUQKGN2j
-         hVxQ==
-X-Gm-Message-State: AOAM533m/mu/+CdAe7LaQd1DTE0NappRyjGg0v9L8coD7RVifrBiCbJ3
-        xclqTMkiDe19KeHdYiGdV6sR6AgIjTgdnR43A/NRGA==
-X-Google-Smtp-Source: ABdhPJwMwHfZlnKRiebptjBPF0BQZhGKq+CXkoxVgCdFKhi4kh5G6U+X3lfyayuw+aUPTtdtHmrkaM0/ZtB9jQAQcwg=
-X-Received: by 2002:a05:6902:184:b0:628:233e:31fe with SMTP id
- t4-20020a056902018400b00628233e31femr14583650ybh.609.1646805830152; Tue, 08
- Mar 2022 22:03:50 -0800 (PST)
+        Wed, 9 Mar 2022 01:05:59 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123947C789;
+        Tue,  8 Mar 2022 22:05:00 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22964ie1029513;
+        Wed, 9 Mar 2022 00:04:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646805884;
+        bh=tFs5PFMWcC0txVuAfsKe7VrAX6diWqLbUfTm5GvmMME=;
+        h=From:To:CC:Subject:Date;
+        b=h54dv5iNtqQuaFAAI0Zfe/ukpi3/9ahSpim8Wjd2zTYX4CEylNbsOX7/l+EjYikL8
+         tdaaetS8pc5I4pQZooinYPNn6FQtZCbsoi6s+a5M1PZU7slW+sqnMEXwUwrOOnueEf
+         WeVTXBavaKUzWXXDT4wi1K6wN9H3mG17bWXxaNTU=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22964iqE037203
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Mar 2022 00:04:44 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
+ Mar 2022 00:04:44 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 9 Mar 2022 00:04:44 -0600
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22964eNu098487;
+        Wed, 9 Mar 2022 00:04:41 -0600
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Aswath Govindraju <a-govindraju@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-can@vger.kernel.org>
+Subject: [PATCH v4] phy: phy-can-transceiver: Add support for setting mux
+Date:   Wed, 9 Mar 2022 11:34:29 +0530
+Message-ID: <20220309060429.26366-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220309014705.1265861-1-liupeng256@huawei.com> <20220309014705.1265861-3-liupeng256@huawei.com>
-In-Reply-To: <20220309014705.1265861-3-liupeng256@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 9 Mar 2022 07:03:13 +0100
-Message-ID: <CANpmjNOU+M1ZaRTMPMCFE7pm8JXLKsWcMpMAsDmJXZUga3N7=A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: make kunit_test_timeout compatible with comment
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     brendanhiggins@google.com, glider@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        wangkefeng.wang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 02:29, 'Peng Liu' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> In function kunit_test_timeout, it is declared "300 * MSEC_PER_SEC"
-> represent 5min. However, it is wrong when dealing with arm64 whose
-> default HZ = 250, or some other situations. Use msecs_to_jiffies to
-> fix this, and kunit_test_timeout will work as desired.
->
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+On some boards, for routing CAN signals from controller to transceiver,
+muxes might need to be set. Therefore, add support for setting the mux by
+reading the mux-states property from the device tree node.
 
-Does this need a:
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+---
 
-Fixes: 5f3e06208920 ("kunit: test: add support for test abort")
+Changes since v3:
+- Rebased on top of the linux-next head
+- Dependencies are now merged in linux next.
+  84564481bc45 (mux: Add support for reading mux state from consumer DT node)
+- Dropped bindings patch from the series since it has been
+  picked up from the earlier version
+  https://lore.kernel.org/all/YieG22mgIzsL7TMn@robh.at.kernel.org/
 
-?
+Changes since v2:
+- Fixed the bindings removing the description about
+  the arguments in mux-states property
 
-> ---
->  lib/kunit/try-catch.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-> index 6b3d4db94077..f7825991d576 100644
-> --- a/lib/kunit/try-catch.c
-> +++ b/lib/kunit/try-catch.c
-> @@ -52,7 +52,7 @@ static unsigned long kunit_test_timeout(void)
->          * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
->          * the task will be killed and an oops generated.
->          */
-> -       return 300 * MSEC_PER_SEC; /* 5 min */
-> +       return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
+Changes since v1:
+- Fixed the description for mux-states property in bindings
+  file
+- appended declaration of variable ret in the end
 
-Why not just "300 * HZ" ?
+ drivers/phy/Kconfig               |  1 +
+ drivers/phy/phy-can-transceiver.c | 24 +++++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
->  }
->
->  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-> --
-> 2.18.0.huawei.25
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309014705.1265861-3-liupeng256%40huawei.com.
+diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+index 82b63e60c5a2..300b0f2b5f84 100644
+--- a/drivers/phy/Kconfig
++++ b/drivers/phy/Kconfig
+@@ -64,6 +64,7 @@ config USB_LGM_PHY
+ config PHY_CAN_TRANSCEIVER
+ 	tristate "CAN transceiver PHY"
+ 	select GENERIC_PHY
++	select MULTIPLEXER
+ 	help
+ 	  This option enables support for CAN transceivers as a PHY. This
+ 	  driver provides function for putting the transceivers in various
+diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+index 6f3fe37dee0e..95c6dbb52da7 100644
+--- a/drivers/phy/phy-can-transceiver.c
++++ b/drivers/phy/phy-can-transceiver.c
+@@ -10,6 +10,7 @@
+ #include<linux/module.h>
+ #include<linux/gpio.h>
+ #include<linux/gpio/consumer.h>
++#include <linux/mux/consumer.h>
+ 
+ struct can_transceiver_data {
+ 	u32 flags;
+@@ -21,13 +22,22 @@ struct can_transceiver_phy {
+ 	struct phy *generic_phy;
+ 	struct gpio_desc *standby_gpio;
+ 	struct gpio_desc *enable_gpio;
++	struct mux_state *mux_state;
+ };
+ 
+ /* Power on function */
+ static int can_transceiver_phy_power_on(struct phy *phy)
+ {
+ 	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
+-
++	int ret;
++
++	if (can_transceiver_phy->mux_state) {
++		ret = mux_state_select(can_transceiver_phy->mux_state);
++		if (ret) {
++			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
++			return ret;
++		}
++	}
+ 	if (can_transceiver_phy->standby_gpio)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+ 	if (can_transceiver_phy->enable_gpio)
+@@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
+ 	if (can_transceiver_phy->enable_gpio)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
++	if (can_transceiver_phy->mux_state)
++		mux_state_deselect(can_transceiver_phy->mux_state);
+ 
+ 	return 0;
+ }
+@@ -95,6 +107,16 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
+ 	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
+ 	drvdata = match->data;
+ 
++	if (of_property_read_bool(dev->of_node, "mux-states")) {
++		struct mux_state *mux_state;
++
++		mux_state = devm_mux_state_get(dev, NULL);
++		if (IS_ERR(mux_state))
++			return dev_err_probe(&pdev->dev, PTR_ERR(mux_state),
++					     "failed to get mux\n");
++		can_transceiver_phy->mux_state = mux_state;
++	}
++
+ 	phy = devm_phy_create(dev, dev->of_node,
+ 			      &can_transceiver_phy_ops);
+ 	if (IS_ERR(phy)) {
+-- 
+2.17.1
+

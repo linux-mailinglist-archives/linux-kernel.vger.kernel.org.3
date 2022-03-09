@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4589F4D29E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22454D29FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiCIH4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S230386AbiCIH4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiCIHzw (ORCPT
+        with ESMTP id S230009AbiCIHzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 02:55:52 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A071637E5;
-        Tue,  8 Mar 2022 23:54:51 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:54:48 -0000
+        Wed, 9 Mar 2022 02:55:53 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DD315F094;
+        Tue,  8 Mar 2022 23:54:52 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:54:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812489;
+        s=2020; t=1646812490;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ghqU1JMQe+TSWWz1QC7uNGGPUlIpPXY6JqKQATXV4+o=;
-        b=o8H6woaA5APr5mUpBnlox0sW5GFwDPNU3PGKZmaReM6iai07JXTm4Gqu4weLnpj7t9YMYm
-        OpvHPi2RPoXPB+1VQfqINn8jAM4pr64UgdkiLgXXu2fQMyZNrxwEK5YX+MDzNTW/W2HijX
-        LbdpUED5IGeseGhIoRU4383EzF+HEYnDrNlkjYCQbwPdql2v/j+seoWQrr9G78WW02Pz2i
-        2dm/JQRMZxq/V4qEG20ffPhWZoaA+I7C8Pmf5c1PlPPN+Cu3YtB6wb+mKbHWeEowD3W30B
-        VGIJju9vPiNVKL5ewVLXwJs71OTGjdrzRf7vvpLUwcwixFS9daJ8BX29aGBy9g==
+        bh=TOYPQX0hnM+UEqm4tGg4h48WYSQAELUj8VjwDxaWwG0=;
+        b=EXfjnplJsUG0nY4+7iIcM7wmwaL7X3NB35DmLdt3qrdYKYvaq9mUHRdB3kRaLpK9aZjMQB
+        jzlQvCDi31KjN52Uxy/K08sgrRXEkB4593MJIApQW2jXhFxyNKXAZtDYXTzGVTDUDcM/r1
+        1/zLYOTNQstnPdBYoMc9T9Un/3tx1PZLK4hY9NZJiuyqoVtkJzWjHlfU/RS9r2quAVhTvu
+        cg7KQRshx64oPJMj2m3DJIdwW2t6973GYMfxacsitBCWrOVYtHHxx/d91R+LhS72gFA3uH
+        1O0RB//3knQmg4DvbFLEcYikgGF3TSkKhnXfbJG1/wn6JGbu0/UOkRo3Ke5aKQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812489;
+        s=2020e; t=1646812490;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ghqU1JMQe+TSWWz1QC7uNGGPUlIpPXY6JqKQATXV4+o=;
-        b=CbUSZbz4D1RA3S8TT9ll+tbBS/wAIce/lWzZY28//ai8ZDHSpgU38Mwa+ZPxQrpMJuWcDS
-        xc9igLVSeAzhB4Cg==
+        bh=TOYPQX0hnM+UEqm4tGg4h48WYSQAELUj8VjwDxaWwG0=;
+        b=felNXmbPBsUU5xrhukDrpMU7EOIa8RIBv7ov6KWZxcOvXD4u/Tngc4tBHRwbT6e9RPPR3x
+        thqB+2R/lcblrkCQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Ignore extra-symbol code
+Subject: [tip: x86/core] objtool: Rename --duplicate to --lto
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154319.232019347@infradead.org>
-References: <20220308154319.232019347@infradead.org>
+In-Reply-To: <20220308154319.172584233@infradead.org>
+References: <20220308154319.172584233@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681248883.16921.6773689143011996224.tip-bot2@tip-bot2>
+Message-ID: <164681248980.16921.1319544160468023266.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,188 +67,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     7e37550e601931b79c4cd70ae13c67a01e66d981
-Gitweb:        https://git.kernel.org/tip/7e37550e601931b79c4cd70ae13c67a01e66d981
+Commit-ID:     5af720d0563adc652ac1e98bc4ab423ba1336927
+Gitweb:        https://git.kernel.org/tip/5af720d0563adc652ac1e98bc4ab423ba1336927
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:46 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:45 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:36 +01:00
 
-objtool: Ignore extra-symbol code
+objtool: Rename --duplicate to --lto
 
-There's a fun implementation detail on linking STB_WEAK symbols. When
-the linker combines two translation units, where one contains a weak
-function and the other an override for it. It simply strips the
-STB_WEAK symbol from the symbol table, but doesn't actually remove the
-code.
-
-The result is that when objtool is ran in a whole-archive kind of way,
-it will encounter *heaps* of unused (and unreferenced) code. All
-rudiments of weak functions.
-
-Additionally, when a weak implementation is split into a .cold
-subfunction that .cold symbol is left in place, even though completely
-unused.
-
-Teach objtool to ignore such rudiments by searching for symbol holes;
-that is, code ranges that fall outside the given symbol bounds.
-Specifically, ignore a sequence of unreachable instruction iff they
-occupy a single hole, additionally ignore any .cold subfunctions
-referenced.
-
-Both ld.bfd and ld.lld behave like this. LTO builds otoh can (and do)
-properly DCE weak functions.
+In order to prepare for LTO like objtool runs for modules, rename the
+duplicate argument to lto.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154319.232019347@infradead.org
+Link: https://lore.kernel.org/r/20220308154319.172584233@infradead.org
 ---
- tools/objtool/check.c               | 43 ++++++++++++++++++++-
- tools/objtool/elf.c                 | 60 ++++++++++++++++++++++++++++-
- tools/objtool/include/objtool/elf.h |  1 +-
- 3 files changed, 104 insertions(+)
+ scripts/link-vmlinux.sh                 | 2 +-
+ tools/objtool/builtin-check.c           | 4 ++--
+ tools/objtool/check.c                   | 7 ++++++-
+ tools/objtool/include/objtool/builtin.h | 2 +-
+ 4 files changed, 10 insertions(+), 5 deletions(-)
 
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 666f7bb..9b08dca 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -115,7 +115,7 @@ objtool_link()
+ 			objtoolcmd="orc generate"
+ 		fi
+ 
+-		objtoolopt="${objtoolopt} --duplicate"
++		objtoolopt="${objtoolopt} --lto"
+ 
+ 		if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
+ 			objtoolopt="${objtoolopt} --mcount"
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index 853af93..5c2fcaa 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -20,7 +20,7 @@
+ #include <objtool/objtool.h>
+ 
+ bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-     validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++     lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
+ 
+ static const char * const check_usage[] = {
+ 	"objtool check [<options>] file.o",
+@@ -40,7 +40,7 @@ const struct option check_options[] = {
+ 	OPT_BOOLEAN('b', "backtrace", &backtrace, "unwind on error"),
+ 	OPT_BOOLEAN('a', "uaccess", &uaccess, "enable uaccess checking"),
+ 	OPT_BOOLEAN('s', "stats", &stats, "print statistics"),
+-	OPT_BOOLEAN('d', "duplicate", &validate_dup, "duplicate validation for vmlinux.o"),
++	OPT_BOOLEAN(0, "lto", &lto, "whole-archive like runs"),
+ 	OPT_BOOLEAN('n', "noinstr", &noinstr, "noinstr validation for vmlinux.o"),
+ 	OPT_BOOLEAN('l', "vmlinux", &vmlinux, "vmlinux.o validation"),
+ 	OPT_BOOLEAN('M', "mcount", &mcount, "generate __mcount_loc"),
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index ae1d4f9..0e0e5b5 100644
+index 311bfc6..ae1d4f9 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -3346,6 +3346,49 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
- 	    !strcmp(insn->sec->name, ".altinstr_aux"))
- 		return true;
+@@ -3499,6 +3499,11 @@ int check(struct objtool_file *file)
+ {
+ 	int ret, warnings = 0;
  
-+	/*
-+	 * Whole archive runs might encounder dead code from weak symbols.
-+	 * This is where the linker will have dropped the weak symbol in
-+	 * favour of a regular symbol, but leaves the code in place.
-+	 *
-+	 * In this case we'll find a piece of code (whole function) that is not
-+	 * covered by a !section symbol. Ignore them.
-+	 */
-+	if (!insn->func && lto) {
-+		int size = find_symbol_hole_containing(insn->sec, insn->offset);
-+		unsigned long end = insn->offset + size;
-+
-+		if (!size) /* not a hole */
-+			return false;
-+
-+		if (size < 0) /* hole until the end */
-+			return true;
-+
-+		sec_for_each_insn_continue(file, insn) {
-+			/*
-+			 * If we reach a visited instruction at or before the
-+			 * end of the hole, ignore the unreachable.
-+			 */
-+			if (insn->visited)
-+				return true;
-+
-+			if (insn->offset >= end)
-+				break;
-+
-+			/*
-+			 * If this hole jumps to a .cold function, mark it ignore too.
-+			 */
-+			if (insn->jump_dest && insn->jump_dest->func &&
-+			    strstr(insn->jump_dest->func->name, ".cold")) {
-+				struct instruction *dest = insn->jump_dest;
-+				func_for_each_insn(file, dest->func, dest)
-+					dest->ignore = true;
-+			}
-+		}
-+
-+		return false;
-+	}
-+
- 	if (!insn->func)
- 		return false;
- 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 456ac22..d7b99a7 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -83,6 +83,31 @@ static int symbol_by_offset(const void *key, const struct rb_node *node)
- 	return 0;
- }
- 
-+struct symbol_hole {
-+	unsigned long key;
-+	const struct symbol *sym;
-+};
-+
-+/*
-+ * Find !section symbol where @offset is after it.
-+ */
-+static int symbol_hole_by_offset(const void *key, const struct rb_node *node)
-+{
-+	const struct symbol *s = rb_entry(node, struct symbol, node);
-+	struct symbol_hole *sh = (void *)key;
-+
-+	if (sh->key < s->offset)
-+		return -1;
-+
-+	if (sh->key >= s->offset + s->len) {
-+		if (s->type != STT_SECTION)
-+			sh->sym = s;
++	if (lto && !(vmlinux || module)) {
++		fprintf(stderr, "--lto requires: --vmlinux or --module\n");
 +		return 1;
 +	}
 +
-+	return 0;
-+}
-+
- struct section *find_section_by_name(const struct elf *elf, const char *name)
- {
- 	struct section *sec;
-@@ -162,6 +187,41 @@ struct symbol *find_symbol_containing(const struct section *sec, unsigned long o
- 	return NULL;
- }
+ 	arch_initial_func_cfi_state(&initial_func_cfi);
+ 	init_cfi_state(&init_cfi);
+ 	init_cfi_state(&func_cfi);
+@@ -3519,7 +3524,7 @@ int check(struct objtool_file *file)
+ 	if (list_empty(&file->insn_list))
+ 		goto out;
  
-+/*
-+ * Returns size of hole starting at @offset.
-+ */
-+int find_symbol_hole_containing(const struct section *sec, unsigned long offset)
-+{
-+	struct symbol_hole hole = {
-+		.key = offset,
-+		.sym = NULL,
-+	};
-+	struct rb_node *n;
-+	struct symbol *s;
-+
-+	/*
-+	 * Find the rightmost symbol for which @offset is after it.
-+	 */
-+	n = rb_find(&hole, &sec->symbol_tree, symbol_hole_by_offset);
-+
-+	/* found a symbol that contains @offset */
-+	if (n)
-+		return 0; /* not a hole */
-+
-+	/* didn't find a symbol for which @offset is after it */
-+	if (!hole.sym)
-+		return 0; /* not a hole */
-+
-+	/* @offset >= sym->offset + sym->len, find symbol after it */
-+	n = rb_next(&hole.sym->node);
-+	if (!n)
-+		return -1; /* until end of address space */
-+
-+	/* hole until start of next symbol */
-+	s = rb_entry(n, struct symbol, node);
-+	return s->offset - offset;
-+}
-+
- struct symbol *find_func_containing(struct section *sec, unsigned long offset)
- {
- 	struct rb_node *node;
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index d223367..22ba7e2 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -152,6 +152,7 @@ struct symbol *find_func_by_offset(struct section *sec, unsigned long offset);
- struct symbol *find_symbol_by_offset(struct section *sec, unsigned long offset);
- struct symbol *find_symbol_by_name(const struct elf *elf, const char *name);
- struct symbol *find_symbol_containing(const struct section *sec, unsigned long offset);
-+int find_symbol_hole_containing(const struct section *sec, unsigned long offset);
- struct reloc *find_reloc_by_dest(const struct elf *elf, struct section *sec, unsigned long offset);
- struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct section *sec,
- 				     unsigned long offset, unsigned int len);
+-	if (vmlinux && !validate_dup) {
++	if (vmlinux && !lto) {
+ 		ret = validate_vmlinux_functions(file);
+ 		if (ret < 0)
+ 			goto out;
+diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
+index 7b4b124..0cbe739 100644
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -9,7 +9,7 @@
+ 
+ extern const struct option check_options[];
+ extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-            validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
+ 
+ extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
+ 

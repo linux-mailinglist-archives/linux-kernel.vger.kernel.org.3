@@ -2,178 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F634D3DCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26F74D3DCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbiCJAAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S238345AbiCJABT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiCJAAl (ORCPT
+        with ESMTP id S231269AbiCJABR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:00:41 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C13FCE939;
-        Wed,  9 Mar 2022 15:59:42 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id j12so2696583ils.0;
-        Wed, 09 Mar 2022 15:59:42 -0800 (PST)
+        Wed, 9 Mar 2022 19:01:17 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BCE11475C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:00:16 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229Kd8cE022893;
+        Thu, 10 Mar 2022 00:00:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=S8RFF34OfACjlu7xXIpZpdtF6Pw1ycUBQoBAhDjzxWA=;
+ b=ksbomfLB2OJFIcwA53rXt8weoqiSCm7+3wz3f9b2QFuka9lQsxBWg3QYW1pUa2RV1q55
+ PktVNGgeb22UDO0d+AEKY/OQEfo1/84chLKh87xNqOLZYkmLtyKAp3lt/u+8ZrhPfkXV
+ ITFlUhd9JDvvfS+obArwGbmzBfQZqoHDr7m1P773mbyulcYJYNaGFtr/i0Fkh/dzPYL3
+ ZClGR6QsKVcjQ1u1inTWEkiMTRC7QDfdQhMXujwXF1wcwpBT9454lutPyfOligoEZqjS
+ Yexwunb0V3NwSK1mLQD7DJY/SgLFbZi0Q9ylfvBgp9e+2miBU4ISXhin0elyAWNrUZwM Iw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyrau7e1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Mar 2022 00:00:01 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 229NfRjf022228;
+        Thu, 10 Mar 2022 00:00:00 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by aserp3020.oracle.com with ESMTP id 3ekyp383ug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 23:59:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mh2TL/C8A4IC5CmvM5O93Hk1z2SZq4JLh5bRXBN0DvoUTQUhpsLXxteIs8oGdlMgU55pMxvn6huy5JYc0iV3lzuweMApsqydxQzOqkXV9Q73iA1PvsEZuK2HSFVAX8ykdHlU+Ml3vJAP693D5yslTjYXqz9Mqq2Rcct220AWPyDEVAwK5bPH0PoSIEIsJJkKzGzZEeB8bA1c4zaBMMSxJMg24/cHWz0OkyFhUn42YLD+uNVGoAuZl7YVIuebEgXdZWw97b5DtkqNR0ubmGEg+gm3WOdyk7IDz8938IrhpUTZrREGxg6eRHTB0SM0HrvNOYF34WnCARR5i6+O9twnHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S8RFF34OfACjlu7xXIpZpdtF6Pw1ycUBQoBAhDjzxWA=;
+ b=T8AZ8YGjZ+vmjDJrT6LtsFjBmQthhs2l9gaEB4SLY9LgDVZNTDT2ahGa34M3V9C2Qjyva/yXmvINSRW1M9A2q4SUU+PRKWCh3Vn8v8G1iGaSsGyo1iQPWpHMJsqL9hcmY5UjY23yUxzG+BKmvoOtW3P4/Wzmqc37+aCDFROSkFDx4yBDnEqfFEKYsCCZ0rz+SQnDY7oEMtdaBsfltLL5i2OOOjAlAjlxQB9/MhwJeoE60cd2Jdlpf7sv9eofuttp9e5qGSJXJJPfklylktaP6w3ol+GpieuFHJkSjiQE78oPnjyzIni+5L1h35z2pYfcmUF+t1XXNc5dbtE70W/r4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3P8g9u3vJUtm4A9yAvYJk4LsJmcVg6YYa9BoxTi+5uE=;
-        b=UYB0QDw15gPlPJVL+6PbqKCH9nJX4RkIyvB2ggYwFNGBCw3OdqQuuUIeWu8mihMlq9
-         hrDBH475fvEbUuFqBhvmTe1AmV1CbVuJpJjZhw5aSKvS5vxPyRwFUvHbSC64r6rWVYut
-         n0jbh1OIVxEl2raescQuWJKbp3QpnWdZZ1sQbShnuCiR3g2E4d5qPY+g9o9+sfYRcfal
-         lQZ8GUXQKLYkO2Jtj0atnzDg6KHB0JvC4wdR8ZNEImaf7ip7CkkiQmigsbJTcBB9xIqH
-         F8t9QYpo/3VjSyDBXvL1InsQq510U9Up/J5xTXEb0M+urukRRgqfEV5yUCOfLSTAJYui
-         IxTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3P8g9u3vJUtm4A9yAvYJk4LsJmcVg6YYa9BoxTi+5uE=;
-        b=tT3cfiilim6hy0RfdYy0ZTXmfF3rOPMti+Vnntn8m9lBARf50TnIipwAI3qDGBOBur
-         v5jal/+q/0NceUrQX3zk44H21Os7mXXGVCxS5cQhOuCnlcPUhaXUrvG2pMHKEvAAxbk0
-         ykET5fPIEOtVOyhxr+osNBCKkH11ZBqkZnLSh4jdYcs4KFuzWno4iV6pMYWJ3BjZGhMh
-         iMCO5SxB5dOBuhxckwVqovzO/7QHpTbIrgnvX+VXpcR//5EaNYiZY2a9ENipXApQexOE
-         MrHL+iQMEWCf5IKYfgicx3xsuSo6L/ll1ogexmFjiIf2jirLh7V/q3vwk2+aChcJ/x4Q
-         3NLw==
-X-Gm-Message-State: AOAM533qvzpC08oLksF8PuK7W+QRnsVE6n0vcuhI2yk1ILYpvow2Zirq
-        M8NEmZmvEh2dtoA9YzPaOflN0yKFtXzAN/Z/R1JQM3E/b7E=
-X-Google-Smtp-Source: ABdhPJwCn3UqWr0phlnPZ9sqqHZ276kAgETWITUftbU7qwrFqaSR3FSFMTK2H+dam0JN4lghiGM/8i9sPhK1OQCPaRo=
-X-Received: by 2002:a92:cf42:0:b0:2c6:2e92:800a with SMTP id
- c2-20020a92cf42000000b002c62e92800amr1530365ilr.28.1646870381500; Wed, 09 Mar
- 2022 15:59:41 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S8RFF34OfACjlu7xXIpZpdtF6Pw1ycUBQoBAhDjzxWA=;
+ b=BWxAvIZBFsJKFnb9K7FFJg6Yo0CReVwZn95IAAjWWbbEGjXsVnKYh33W6qfA4yP5m+i+F1x52cLAxPUZ6MoI5DrvDXErKNjDzSh6i/qakYwrdP6N20COoaXlAs3ZpYagm6XhdBWgU2vtqsOwtVhOuaa7KihjETzrppRtHVx67Lg=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DM5PR10MB1273.namprd10.prod.outlook.com (2603:10b6:4:11::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Wed, 9 Mar
+ 2022 23:59:57 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::51f1:9cb7:a497:f0f7]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::51f1:9cb7:a497:f0f7%5]) with mapi id 15.20.5061.021; Wed, 9 Mar 2022
+ 23:59:57 +0000
+Message-ID: <84f27dae-43ce-f623-84ed-90ecbb3a6b0f@oracle.com>
+Date:   Wed, 9 Mar 2022 15:59:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] mm/hwpoison: set PageHWPoison after taking page lock
+ in memory_failure_hugetlb()
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220309091449.2753904-1-naoya.horiguchi@linux.dev>
+ <CAHbLzkrmHS+nPbw1YZj-rE-ECgRr2nD40d-ZbxPvf05o-rmNcA@mail.gmail.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <CAHbLzkrmHS+nPbw1YZj-rE-ECgRr2nD40d-ZbxPvf05o-rmNcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR18CA0031.namprd18.prod.outlook.com
+ (2603:10b6:320:31::17) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-References: <20220308112832.6170-1-jj251510319013@gmail.com>
-In-Reply-To: <20220308112832.6170-1-jj251510319013@gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Thu, 10 Mar 2022 00:59:29 +0100
-Message-ID: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: return -EINVAL if no proper ep address available
-To:     Wei Ming Chen <jj251510319013@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000014bb2505d9d1e4ac"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 079a622b-b665-4ddf-3cca-08da0228e9e2
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1273:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR10MB1273B6D3C0D9EEBC24B08777E20A9@DM5PR10MB1273.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ApUJmT/eL+E2Q+WX2Wyq+60VUwbq0Ojkp8BvcKra3qLkfj1szZq0igNsgzjfr23O1lhRaIp4ft7uZmU4wJjfVf5B/tOp+0zk2L8nE/V4iYzAndy/dozhQYsVfXt1d/GP4UVfO7006BaGWufn9jIQnGvbUcGj60R01pDb2YKKdNBuM9vzqYosyITvYyVuZVoSj7vw8FUPVyPsmeDQFdDY8UtBR+AS3vGNzw49RasUBzo0ERYfUZHTrc8JuJofL7VSGXd27D+kfPgl0Ai4JaDO6zDgX5YbUuYbsnabIQlthfR8aSj99GeNdK6PFbAc1LYUAri0Dxq9QoMRqTqofh4hVMaodArdc7RRa18tG93S5sBsvSixrPtU8dtIyZoNK4L7LXko3GOfVFItHLxI+nIfsOHfyOQStUKWOKQHfETiXT2QSZJpBgl6d/v6TrxRwWUPDjoEpy8+qt2QJOK49Ni/qvqohvEoy5GMDg0E1N9B6w2hP7jwxDi7kmNg/FLSuitkklhDIiSoBDpT+jaHVNovXal1XwdRR+Af8FbuAHZJSo+yujNRED3phfsNcHd5DV3x6LvtOm6naOrrDUZ5xstab2m+B/tImDmzyu5duPueRAWf+hExY70FA6DYpBNtrAF6a0oFq0eCxUBc04W09AkJbmygvjgtDb7IOaiAYapjOTaTc0mGgq3yGR1NfT/Fi/1yEsB/f8+V7OBCzJHOp/22s0SLPDk01Cn9SRX9M30CQdmhbG4HP/uxW1+Kygh0SY2W
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(44832011)(8676002)(66946007)(66476007)(66556008)(83380400001)(4326008)(2906002)(316002)(186003)(36756003)(8936002)(38100700002)(110136005)(54906003)(38350700002)(31686004)(508600001)(86362001)(6486002)(31696002)(6512007)(53546011)(52116002)(6506007)(2616005)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3ZVdTI3TWdLQ2NGVlVVTStEWENFZFNWWE4ydHNvTlZRRENTTkEyWUZ2eUk2?=
+ =?utf-8?B?NG9VbGJscTdJRlpNczZnekovVUR2bHdVS3VmcmdJaS84K0lYU3pwaUpacWNV?=
+ =?utf-8?B?VTNaY1hXWTJoQ1JMVmc1TG1aY2JYVitiZ05HWUNZM2pqVktZWVBuTFEvOUJl?=
+ =?utf-8?B?NjlxcVdManhKTnRCMkJIM0pIbGRYZTN4QWk5UTZidEZIZTBYdkZzSWdGYnFy?=
+ =?utf-8?B?eUhzL0h5bk5UdHlKcmhxa2NsQitUVnNid05uUEFWRzg0dXhlMWhycnN3SWlU?=
+ =?utf-8?B?VEdYa1JDNC9tcXh0K1ptVUs1ZVpoa2FlTXBZWWJpdkhqTEVCbGdZdzFkdkVV?=
+ =?utf-8?B?YkQ1VVFvaDhyNTZuKzZyUnZsK3NWTlBqUlVXT0JJWmlsUTlydVZ2RjE5Zkwz?=
+ =?utf-8?B?QStiRFoza2FSMmJucmZSTGo4WWhhc1VoZDlLNmdRVUZ5eXNCdndsa0NvMjB2?=
+ =?utf-8?B?WE51YXZQUjFOMUI2d1daVk5NdUQvc3g0S25CanNKOGlmMEFJa0hQTmlPM1No?=
+ =?utf-8?B?bk40V09UYmRlSkY5cjJKYjNhblc5bzlnd2JpUTlxaHFUSkVGN05vR2JrZTFp?=
+ =?utf-8?B?d0VBbCtkbmducCtUNU1jR0oyazlGRnk2UGlRSDhxbE95YjFYVEhTWjhMaXZx?=
+ =?utf-8?B?KzJEUkxvNGNiVUxWaTVGT2owMEhraEF3NkpRZGsrNEJIQlZ5ZTdoemhhcFFI?=
+ =?utf-8?B?S0hwd2VZZDBQb0REWnljdmJuMDJjajYxYWhMaW5IV21zREpvU1FBZjBGWHRs?=
+ =?utf-8?B?M2o5cGJjYnlGT0tXTW5jTlhFVDNhK1YzK1NSdmQwUHNaV3JwdkNkTTZXOUIx?=
+ =?utf-8?B?VHZRWGs1bVNQaitXWkhad3dnRzU3eTlPQTJ4K24ybGdBaTAzZWV2QVFDbXVm?=
+ =?utf-8?B?S0pBL1M5MXdLUHdpeGpORCtpaE1jL1BKU1VSSWcvSkE0SXBzN0IzdmZyeGls?=
+ =?utf-8?B?d2wvMUlDMG0xMWdpN1greWRuOGc3bmxBWXlPRHhTZjFzMTlUbHVtK2JaVzEw?=
+ =?utf-8?B?cEd2c294bnFWUWVJK1RybENMeGtGOENOMlVNSHR0R245WFFQSE5UNENkSzVw?=
+ =?utf-8?B?ajgrYlByMkVCOGJSTURTVEhTK1UvZVpWNlJZc2pOR3F1bVhtYVRnUjJlOUtO?=
+ =?utf-8?B?K1BYYlVFUXJyRUR2TlJPZUZWbnBndGk5RVBwNTZXc2UwQ1k2M2wwYWxqOVZ0?=
+ =?utf-8?B?dVl2YnMxN0tjYW1zMEIxMW5adW9pc0VWTXVna1h3SXZGdUViblk2cVlSTlNu?=
+ =?utf-8?B?UDZBN1BlanNBUmVVU3FDTnZFS0NDRmtrQkY0OGc5OWNQRjJjbWRqcnV0bTF0?=
+ =?utf-8?B?QXVZS0ZXTm84S2hQYk5jRFdueG5jWE9jUzcyWFp6Qy8vM0R1M0pNd1hxcHNK?=
+ =?utf-8?B?bW9EbG1abE0ySFExT2QwVXc1ZFhLbjlJSjI2QStqWllQQXkxdnBNNDQ0QWdB?=
+ =?utf-8?B?ckllckRkMGFqczJtelpxc0I5L1ZYVkhHSEQwNXZlMjA3RE5hTTB2OFNUZFhG?=
+ =?utf-8?B?S1dLbFN0YTRDUjkxWGtoaEhOdEpoNVVJSmFJSU8zRE1CaStUNFpDUkFzMjAw?=
+ =?utf-8?B?dm40VlRVSGlGS1FmME5pcXVuMWtEUkFFeExFYk43TG9JU2h5UGRNM1JWUytW?=
+ =?utf-8?B?bmwvR3VsRHBLTVRGZHhNOFRWVS8vUlRxcHd3eVRhTHpxcWNySndQdXJuZzAz?=
+ =?utf-8?B?NUZJU0FhV1N0WllURzV6US9GakZtSjRITWJ2eDh4WXNYckdVT3ZNbFFqN09s?=
+ =?utf-8?B?ckhwSDdEcldjeEJtc0dkRHNBb3NEanBHTjMzelRmOTlaSDJtM3FVZ3pDejdV?=
+ =?utf-8?B?SklyUlRwY0FJQmZCUHNRVlR2aERHTkpyaFJxWVZGcE9xa3Rhbm5Oa2xtUHNo?=
+ =?utf-8?B?MjNodWpYV1Fib21zdERIN1JramhXNWZIbGhROEQwd2d0VWdyUUVPaWNEVGxC?=
+ =?utf-8?B?V2d3bE5LeU40THNhd1d4d1Y0YkxzUzdodnJXbTFJZVNmRnloNlhiR1FNVTJR?=
+ =?utf-8?B?UTExUmpidTFDRmdRODJOdWgzVWMyZit4QzVpbGJ3cXFrRWJHQnhubzM3SDhX?=
+ =?utf-8?B?V2E1dEZMaEVta3VzaGlmalRnbVRFdHNjNFo0Q0V6WUVwaFJFSjgxNGE0b2Fl?=
+ =?utf-8?B?eStESlBqaXhXWG00eGxzTmNsU2FIZlJ5a2QzRGlmejBmV2ZRKzU3K2sxSGVw?=
+ =?utf-8?Q?C/MprRPtvk1BJ/bg2JAmPD4=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 079a622b-b665-4ddf-3cca-08da0228e9e2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 23:59:57.3618
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f2RImW9FEkKd5jgQXoFWbTr2Ajv5VMf0XMlX8MHOxMXvpc9Zd2rJAxdp6NQVrN4KqcvwNIxVu1q9l+FhuIO4hw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1273
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10281 signatures=692062
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203090115
+X-Proofpoint-GUID: 9cylmeiCcELLhVyMuMbl3dYgtXLNWbV_
+X-Proofpoint-ORIG-GUID: 9cylmeiCcELLhVyMuMbl3dYgtXLNWbV_
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000014bb2505d9d1e4ac
-Content-Type: text/plain; charset="UTF-8"
+On 3/9/22 13:55, Yang Shi wrote:
+> On Wed, Mar 9, 2022 at 1:15 AM Naoya Horiguchi
+> <naoya.horiguchi@linux.dev> wrote:
+>>
+>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>
+>> There is a race condition between memory_failure_hugetlb() and hugetlb
+>> free/demotion, which causes setting PageHWPoison flag on the wrong page
+>> (which was a hugetlb when memory_failrue() was called, but was removed
+>> or demoted when memory_failure_hugetlb() is called).  This results in
+>> killing wrong processes.  So set PageHWPoison flag with holding page lock,
+>>
+>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>> ---
+>>  mm/memory-failure.c | 27 ++++++++++++---------------
+>>  1 file changed, 12 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index ac6492e36978..fe25eee8f9d6 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1494,24 +1494,11 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+>>         int res;
+>>         unsigned long page_flags;
+>>
+>> -       if (TestSetPageHWPoison(head)) {
+>> -               pr_err("Memory failure: %#lx: already hardware poisoned\n",
+>> -                      pfn);
+>> -               res = -EHWPOISON;
+>> -               if (flags & MF_ACTION_REQUIRED)
+>> -                       res = kill_accessing_process(current, page_to_pfn(head), flags);
+>> -               return res;
+>> -       }
+>> -
+>> -       num_poisoned_pages_inc();
+>> -
+>>         if (!(flags & MF_COUNT_INCREASED)) {
+>>                 res = get_hwpoison_page(p, flags);
+> 
+> I'm not an expert of hugetlb, I may be wrong. I'm wondering how this
+> could solve the race? Is the below race still possible?
+> 
+> __get_hwpoison_page()
+>   head = compound_head(page)
+> 
+> hugetlb demotion (1G --> 2M)
+>   get_hwpoison_huge_page(head, &hugetlb);
+> 
+> 
+> Then the head may point to a 2M page, but the hwpoisoned subpage is
+> not in that 2M range?
 
-On Tue, Mar 8, 2022 at 12:31 PM Wei Ming Chen <jj251510319013@gmail.com> wrote:
->
+That is correct.
 
-Hi,
+It is also possible that __free_pages(page, huge_page_order(h)) could have
+been called during this window.  So IIUC, head would have an increased ref
+count and pages would be freed to buddy when the memory error code drops the
+ref.  At that time, head would be marked as poisoned which could be different
+than actual page with poison.
 
-The commit name should be prefixed with "usb: raw-gadget:".
+An increased ref count, or page lock will not prevent hugetlb page demotion
+or (attempting) to free to buddy today.
 
-> If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
-> only support from ep1-ep4 for both in and out direction, it will return
-> -EBUSY originally.
->
-> I think it will be more intuitive if we return -EINVAL, Cuz -EBUSY sounds
-> like ep5in is not available now, but might be available in the future.
+There is already a patch in Andrew's tree to not demote hugetlb pages marked
+with poison.  This at least makes the demote code perform the same check as
+allocation code.  The race which started this discussion has been there for
+a while.  demotion opened another window, but that is now closed.
 
-Cuz -> because
-
->
-> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
-> ---
->  drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> index d86c3a36441e..b4cc083a7ca6 100644
-> --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> @@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
->         unsigned long flags;
->         struct usb_endpoint_descriptor *desc;
->         struct raw_ep *ep;
-> +       bool ep_num_matched = false;
->
->         desc = memdup_user((void __user *)value, sizeof(*desc));
->         if (IS_ERR(desc))
-> @@ -792,6 +793,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
->                 if (ep->addr != usb_endpoint_num(desc) &&
->                                 ep->addr != USB_RAW_EP_ADDR_ANY)
->                         continue;
-> +               ep_num_matched = true;
->                 if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
->                         continue;
->                 ep->ep->desc = desc;
-> @@ -815,6 +817,12 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
->                 goto out_unlock;
->         }
->
-> +       if (!ep_num_matched) {
-> +               dev_dbg(&dev->gadget->dev, "fail, no proper ep address available\n");
-> +               ret = -EINVAL;
-> +               goto out_free;
-> +       }
-
-Thinking more about this, we should cover the following cases:
-
-1. If there are no endpoints that match the provided descriptor, return EINVAL.
-
-2. If there are matching endpoints, but they are all already enabled,
-return EBUSY.
-
-A draft change is attached.
-
-What do you think?
-
-If the suggested change looks good, feel free to incorporate it into
-the version 2 of your patch.
-
-> +
->         dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
->         ret = -EBUSY;
->
-> --
-> 2.25.1
->
-
-Thanks!
-
---00000000000014bb2505d9d1e4ac
-Content-Type: text/x-patch; charset="US-ASCII"; name="raw-gadget-retval.patch"
-Content-Disposition: attachment; filename="raw-gadget-retval.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l0k813tg0>
-X-Attachment-Id: f_l0k813tg0
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvcmF3X2dhZGdldC5jIGIvZHJp
-dmVycy91c2IvZ2FkZ2V0L2xlZ2FjeS9yYXdfZ2FkZ2V0LmMKaW5kZXggZDg2YzNhMzY0NDFlLi5h
-MGQ1ZWRmMWIyYzUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvcmF3X2dh
-ZGdldC5jCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvcmF3X2dhZGdldC5jCkBAIC03
-ODcsMTMgKzc4NywxNCBAQCBzdGF0aWMgaW50IHJhd19pb2N0bF9lcF9lbmFibGUoc3RydWN0IHJh
-d19kZXYgKmRldiwgdW5zaWduZWQgbG9uZyB2YWx1ZSkKIAogCWZvciAoaSA9IDA7IGkgPCBkZXYt
-PmVwc19udW07IGkrKykgewogCQllcCA9ICZkZXYtPmVwc1tpXTsKLQkJaWYgKGVwLT5zdGF0ZSAh
-PSBTVEFURV9FUF9ESVNBQkxFRCkKLQkJCWNvbnRpbnVlOwogCQlpZiAoZXAtPmFkZHIgIT0gdXNi
-X2VuZHBvaW50X251bShkZXNjKSAmJgogCQkJCWVwLT5hZGRyICE9IFVTQl9SQVdfRVBfQUREUl9B
-TlkpCiAJCQljb250aW51ZTsKIAkJaWYgKCF1c2JfZ2FkZ2V0X2VwX21hdGNoX2Rlc2MoZGV2LT5n
-YWRnZXQsIGVwLT5lcCwgZGVzYywgTlVMTCkpCiAJCQljb250aW51ZTsKKwkJZXBfcHJvcHNfbWF0
-Y2hlZCA9IHRydWU7CisJCWlmIChlcC0+c3RhdGUgIT0gU1RBVEVfRVBfRElTQUJMRUQpCisJCQlj
-b250aW51ZTsKIAkJZXAtPmVwLT5kZXNjID0gZGVzYzsKIAkJcmV0ID0gdXNiX2VwX2VuYWJsZShl
-cC0+ZXApOwogCQlpZiAocmV0IDwgMCkgewpAQCAtODE1LDggKzgxNiwxMyBAQCBzdGF0aWMgaW50
-IHJhd19pb2N0bF9lcF9lbmFibGUoc3RydWN0IHJhd19kZXYgKmRldiwgdW5zaWduZWQgbG9uZyB2
-YWx1ZSkKIAkJZ290byBvdXRfdW5sb2NrOwogCX0KIAotCWRldl9kYmcoJmRldi0+Z2FkZ2V0LT5k
-ZXYsICJmYWlsLCBubyBnYWRnZXQgZW5kcG9pbnRzIGF2YWlsYWJsZVxuIik7Ci0JcmV0ID0gLUVC
-VVNZOworCWlmICghZXBfcHJvcHNfbWF0Y2hlZCkKKwkJZGV2X2RiZygmZGV2LT5nYWRnZXQtPmRl
-diwgImZhaWwsIGJhZCBlbmRwb2ludCBkZXNjcmlwdG9yXG4iKTsKKwkJcmV0ID0gLUVJTlZBTDsK
-Kwl9IGVsc2UgeworCQlkZXZfZGJnKCZkZXYtPmdhZGdldC0+ZGV2LCAiZmFpbCwgbm8gZW5kcG9p
-bnRzIGF2YWlsYWJsZVxuIik7CisJCXJldCA9IC1FQlVTWTsKKwl9CiAKIG91dF9mcmVlOgogCWtm
-cmVlKGRlc2MpOwo=
---00000000000014bb2505d9d1e4ac--
+IMO, it would be better to take a step back and look at the overall design
+and decide how to proceed.  There is also an effort underway to provide double
+mapping of hugetlb pages, and one of the target use cases is memory error
+handling.  This effort is in the very early stages, but it will certainly
+require setting poison on the (sub-)page with actual error rather than
+head page.  Perhaps something like what is done for THP today.  Nothing to
+address yet, but I just wanted to note there will be future changes in this
+area.
+-- 
+Mike Kravetz

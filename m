@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD54D2EFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCBB4D2EFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiCIMVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S231809AbiCIMWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbiCIMVZ (ORCPT
+        with ESMTP id S229744AbiCIMW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:21:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1D317584B;
-        Wed,  9 Mar 2022 04:20:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFC03B8213D;
-        Wed,  9 Mar 2022 12:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DBD6C340E8;
-        Wed,  9 Mar 2022 12:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646828424;
-        bh=RaV6K88b3L+HXsuscECSUuHuH+07EtXgyzZft0gRdcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GoREBFOUl14/i+Qq2IVSd9fjFkfETF6Sg34FaN5hBlxaLwgP2vPL6yKjLMEj8m5fI
-         tpfuEu0LfOhinnCcz1cwVyiCjB+EAS74dTpu9zvm1dIaEsonqHzUaTswDLdoA8s+vP
-         l2y1Nh+N9j5GySqkWrWPJCOSewK9s0gRKmHsmRJpu6Uo0fC78vNxdpiZPO3U9o6yEN
-         Z2xvzdY61aF9egf64Ve0ObbjG/k8a8E4CAAnV5eWXbG7mvQQIqYJUvzjRhXGQoPV+q
-         S4IBqoxKjyCcgfVVPmCam9iaO7PmYPTcU/7r5PuIziHDce7fViqdecfV0tg24IVhTd
-         d9crahvyQ3dng==
-Date:   Wed, 9 Mar 2022 12:20:20 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vladimir Murzin <vladimir.murzin@arm.com>
-Subject: Re: linux-next: manual merge of the arm64 tree with Linus' tree
-Message-ID: <20220309122019.GD397@willie-the-truck>
-References: <20220309094235.146df5bd@canb.auug.org.au>
+        Wed, 9 Mar 2022 07:22:29 -0500
+Received: from smtp77.iad3b.emailsrvr.com (smtp77.iad3b.emailsrvr.com [146.20.161.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE39F17584E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:21:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+        s=20190130-41we5z8j; t=1646828490;
+        bh=1ToLucqmLc0fECQ0cyF4pYdwXhpwTwSDM8erZd2a6qM=;
+        h=Date:Subject:To:From:From;
+        b=Zam3uuIj97II5VPV4O8Z+1dSDHpaq2d3ELQWZlV+7uzTa2eNK88Xgohl7YEfEJLkb
+         1rXkBvSIs56Me69JnHUS2MfFoPiv3nokcU8jaj6Up1+Awk/kVBAWIE3USSMQQJFcWe
+         cTlg59azPFIbW5S1Xa9yysCzMfU1PJ7TnKu9HN9s=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp10.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 8C56CE00CE;
+        Wed,  9 Mar 2022 07:21:29 -0500 (EST)
+Message-ID: <dc925476-dcd4-0540-61cf-f888e67220b7@mev.co.uk>
+Date:   Wed, 9 Mar 2022 12:21:28 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309094235.146df5bd@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 8/8] Constify comedi_lrange struct pointer
+Content-Language: en-GB
+To:     Hatim Muhammed <hatimmohammed369@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     greg@kroah.com, hsweeten@visionengravers.com
+References: <20220309091250.13290-1-hatimmohammed369@gmail.com>
+From:   Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+In-Reply-To: <20220309091250.13290-1-hatimmohammed369@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 2f4b55cc-ca97-4c16-9b39-bbcb1f7b3ce2-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,56 +52,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 09:42:35AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 09/03/2022 09:12, Hatim Muhammed wrote:
+> From: Hatim Muhammed <hatimmohammed369@gmail.com>
 > 
-> Today's linux-next merge of the arm64 tree got a conflict in:
+> Signed-off-by: Hatim Muhammed <hatimmohammed369@gmail.com>
+> ---
+>   drivers/comedi/drivers/das16.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->   arch/arm64/kernel/cpufeature.c
-> 
-> between commit:
-> 
->   228a26b91228 ("arm64: Use the clearbhb instruction in mitigations")
-> 
-> from Linus' tree and commit:
-> 
->   def8c222f054 ("arm64: Add support of PAuth QARMA3 architected algorithm")
-> 
-> from the arm64 tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/arm64/kernel/cpufeature.c
-> index d33687673f6b,32aa0eb3ed68..000000000000
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@@ -231,7 -226,10 +231,11 @@@ static const struct arm64_ftr_bits ftr_
->   };
+> diff --git a/drivers/comedi/drivers/das16.c b/drivers/comedi/drivers/das16.c
+> index 937a69ce0977..d1eeb5896f2d 100644
+> --- a/drivers/comedi/drivers/das16.c
+> +++ b/drivers/comedi/drivers/das16.c
+> @@ -956,7 +956,7 @@ static const struct comedi_lrange *das16_ai_range(struct comedi_device *dev,
 >   
->   static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
->  +	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_HIGHER_SAFE, ID_AA64ISAR2_CLEARBHB_SHIFT, 4, 0),
-> + 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_PTR_AUTH),
-> + 		       FTR_STRICT, FTR_EXACT, ID_AA64ISAR2_APA3_SHIFT, 4, 0),
-> + 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_PTR_AUTH),
-> + 		       FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_GPA3_SHIFT, 4, 0),
->   	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_RPRES_SHIFT, 4, 0),
->   	ARM64_FTR_END,
->   };
+>   	/* get any user-defined input range */
+>   	if (pg_type == das16_pg_none && (min || max)) {
+> -		struct comedi_lrange *lrange;
+> +		const struct comedi_lrange *lrange;
+>   		struct comedi_krange *krange;
+>   
+>   		/* allocate single-range range table */
+> @@ -990,7 +990,7 @@ static const struct comedi_lrange *das16_ao_range(struct comedi_device *dev,
+>   
+>   	/* get any user-defined output range */
+>   	if (min || max) {
+> -		struct comedi_lrange *lrange;
+> +		const struct comedi_lrange *lrange;
+>   		struct comedi_krange *krange;
+>   
+>   		/* allocate single-range range table */
 
-This (and https://lore.kernel.org/r/20220309093832.01585172@canb.auug.org.au)
-are due to the surprise spectre mitigations which landed yesterday. Now
-that's all public, I'll merge those changes into our for-next/core branch
-and these conflicts should all disappear.
+NAK.  I'm pretty sure this will result in new compiler warnings because 
+*lrange really isn't const.
 
-Thanks,
-
-Will
+-- 
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-

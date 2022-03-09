@@ -2,124 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7054D2C8A
+	by mail.lfdr.de (Postfix) with ESMTP id F32154D2C8C
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbiCIJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S232314AbiCIJxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiCIJxH (ORCPT
+        with ESMTP id S232300AbiCIJxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:53:07 -0500
-Received: from smtp.tom.com (smtprz15.163.net [106.3.154.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF12E16EAB4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:52:08 -0800 (PST)
-Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
-        by freemail02.tom.com (Postfix) with ESMTP id C2D2DB00D50
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:52:06 +0800 (CST)
-Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
-          by my-app02 (TOM SMTP Server) with SMTP ID -127490289
-          for <linux-kernel@vger.kernel.org>;
-          Wed, 09 Mar 2022 17:52:06 +0800 (CST)
-Received: from antispam1.tom.com (unknown [172.25.16.55])
-        by freemail02.tom.com (Postfix) with ESMTP id B00F5B00D47
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:52:06 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
-        t=1646819526; bh=dkS+wrRstCkqxCRo76GBz0Ojn6oVfokb7hed3lNt3e0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S3L3WfeV/FRG+zsY3stPQEDdErJZOXbj7ue4SQqJ24zoRqWk5zn8/owKvq0fFYEvg
-         auzIrpzsFqf04jDfSMu+genADr5lYWac72Kxe4SaYGgoUBjyQ3g+atHybe6txpeDj+
-         3wnx0Pi4u16WOTfUzcRs9WTQm6TXcU79SfatTDog=
-Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
-        by antispam1.tom.com (Postfix) with ESMTP id 9AA3ED415BB
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:52:06 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
-Received: from antispam1.tom.com ([127.0.0.1])
-        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VnCohanoUZHW for <linux-kernel@vger.kernel.org>;
-        Wed,  9 Mar 2022 17:52:04 +0800 (CST)
-Received: from localhost (unknown [101.93.196.13])
-        by antispam1.tom.com (Postfix) with ESMTPA id 954CCD4155F;
-        Wed,  9 Mar 2022 17:52:03 +0800 (CST)
-Date:   Wed, 9 Mar 2022 17:52:03 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH v2 1/2] nvmet-tcp: support specifying the
- congestion-control
-Message-ID: <20220309175203.00006ee2@tom.com>
-In-Reply-To: <20220309061541.GB31316@lst.de>
-References: <20220309053711.2561-1-sunmingbao@tom.com>
-        <20220309061541.GB31316@lst.de>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Wed, 9 Mar 2022 04:53:13 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA40E16F970
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:52:14 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4401B3F07E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:52:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646819533;
+        bh=U75FRdLGbZ3F+BR5tg2Db57c8QbYtEzo66rlGoHxRKA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=gTKaCzf8axqkYnK61BsdDpcMM28luPO81aTRtsHy0UP6f4Fh3Lo3ScP2s8IYE97WQ
+         8so6JQkTsoDu7dPLT7Of/pvHOOLs0mklZZtnAJ2o5QJxIzLewHS+ldCKMg+dCWgeU0
+         qeHLy2KV3HjiPDeefCqzcr3BE319IOW3+/VFqfHBgIxK4APjPNOPavkPdODcs6mh5+
+         3mTgislXzrXoccWMvb8RhPAGI41n3aF3e1jLhdtv9wkNP1mOVP5w7kA+GkL0oKdu9W
+         XlBm9yKVD01v0Gna44udhglojdjh+KB6KhQg/I1DI7CAgor2sBVBjaHzhgpjs5VdxV
+         2VVLbRC7uVVuQ==
+Received: by mail-ej1-f69.google.com with SMTP id jy20-20020a170907763400b006db62b6f4e0so1008334ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:52:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U75FRdLGbZ3F+BR5tg2Db57c8QbYtEzo66rlGoHxRKA=;
+        b=amHOWOY1+NhiRsbZ4yYpS8rSsUlLl6IvbyJMN3mMatE60IqLeJIU2gwMvxYrNrGyNQ
+         id3AkuB6nfpBvLnc6EXRXMbe0J6PKr9egQuUCif8vmK9wjdc9R8PNV/FdREtKX/BChN4
+         GzxL0iPwbGoJOa+LaEQjmfUtpTaM0qSsHg+tIPmgvRnbXkQRvX5RX8WN4s+gS2TxNmnN
+         INJ/fcWs2QhkjFxyrqfbAbO3pTAm6oNUC9jbgtvoNTQXJjLYSFDKDENqsZrAcNqpWFL/
+         9KnFbqUcsmDwlc/rSazHCqgU6WEBGj+6In+iqRQdLHWz09H9K7HqhWxyZCb56hPzVEw0
+         8pXw==
+X-Gm-Message-State: AOAM532lHmlP6/qbzXtqhaljwWVP/l57bCIngcULE1c15bQrkwJufSU/
+        98UwJxkzNjqbMJ3I6BPjCcwN+A+T302IJMta5Kb/NL9Dy8eYrr4h0BZ2kaSiC89EH2sSzfsuopH
+        IbK4PP8t6zNNxuxfYSf9a+e9EityY6l8t7YZT4l3XAA==
+X-Received: by 2002:a17:906:d1c4:b0:6d5:83bb:f58a with SMTP id bs4-20020a170906d1c400b006d583bbf58amr17198184ejb.672.1646819532930;
+        Wed, 09 Mar 2022 01:52:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxypo8WhHmI7QrJIfEnzBsw31JbIstN4NTAsHC8a7RLBqVyTNgRad9/mbPcfeKtI/FKHnDF1Q==
+X-Received: by 2002:a17:906:d1c4:b0:6d5:83bb:f58a with SMTP id bs4-20020a170906d1c400b006d583bbf58amr17198172ejb.672.1646819532666;
+        Wed, 09 Mar 2022 01:52:12 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id mp33-20020a1709071b2100b006db6dea7f9dsm373267ejc.168.2022.03.09.01.52.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 01:52:12 -0800 (PST)
+Message-ID: <cbdd5e41-7538-6d8f-344a-54a816c6d511@canonical.com>
+Date:   Wed, 9 Mar 2022 10:52:11 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] NFC: port100: fix use-after-free in port100_send_complete
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, sameo@linux.intel.com,
+        thierry.escande@linux.intel.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+References: <20220308185007.6987-1-paskripkin@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220308185007.6987-1-paskripkin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 07:15:41 +0100
-Christoph Hellwig <hch@lst.de> wrote:
+On 08/03/2022 19:50, Pavel Skripkin wrote:
+> Syzbot reported UAF in port100_send_complete(). The root case is in
+> missing usb_kill_urb() calls on error handling path of ->probe function.
+> 
+> port100_send_complete() accesses devm allocated memory which will be
+> freed on probe failure. We should kill this urbs before returning an
+> error from probe function to prevent reported use-after-free
+> 
+> Fail log:
+> 
+> BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+> Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
+> ...
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+>  __kasan_report mm/kasan/report.c:442 [inline]
+>  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+>  port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+>  __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
+> 
+> ...
+> 
+> Allocated by task 1255:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+>  kasan_set_track mm/kasan/common.c:45 [inline]
+>  set_alloc_info mm/kasan/common.c:436 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+>  __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+>  alloc_dr drivers/base/devres.c:116 [inline]
+>  devm_kmalloc+0x96/0x1d0 drivers/base/devres.c:823
+>  devm_kzalloc include/linux/device.h:209 [inline]
+>  port100_probe+0x8a/0x1320 drivers/nfc/port100.c:1502
+> 
+> Freed by task 1255:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+>  kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+>  kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+>  ____kasan_slab_free mm/kasan/common.c:366 [inline]
+>  ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
+>  kasan_slab_free include/linux/kasan.h:236 [inline]
+>  __cache_free mm/slab.c:3437 [inline]
+>  kfree+0xf8/0x2b0 mm/slab.c:3794
+>  release_nodes+0x112/0x1a0 drivers/base/devres.c:501
+>  devres_release_all+0x114/0x190 drivers/base/devres.c:530
+>  really_probe+0x626/0xcc0 drivers/base/dd.c:670
+> 
+> Reported-and-tested-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+> Fixes: 0347a6ab300a ("NFC: port100: Commands mechanism implementation")
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>  drivers/nfc/port100.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/nfc/port100.c b/drivers/nfc/port100.c
+> index d7db1a0e6be1..00d8ea6dcb5d 100644
+> --- a/drivers/nfc/port100.c
+> +++ b/drivers/nfc/port100.c
+> @@ -1612,7 +1612,9 @@ static int port100_probe(struct usb_interface *interface,
+>  	nfc_digital_free_device(dev->nfc_digital_dev);
+>  
+>  error:
+> +	usb_kill_urb(dev->in_urb);
+>  	usb_free_urb(dev->in_urb);
+> +	usb_kill_urb(dev->out_urb);
+>  	usb_free_urb(dev->out_urb);
+>  	usb_put_dev(dev->udev);
 
-> On Wed, Mar 09, 2022 at 01:37:11PM +0800, Mingbao Sun wrote:
-> > +		if (port->nport->tcp_congestion) {
-> > +			icsk_new =3D inet_csk(newsock->sk);
-> > +			if (icsk_new->icsk_ca_ops !=3D icsk->icsk_ca_ops) {
-> > +				pr_warn("congestion abnormal: expected %s, actual %s.\n",
-> > +					icsk->icsk_ca_ops->name,
-> > +					icsk_new->icsk_ca_ops->name);
-> > +			}
-> > +		} =20
->=20
-> What is the point of having this code?
 
-Well, this could happen in certain circumstances.
-Take the result from my test as an example:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-    - The congestion of the listening socket of the target was set to
-      =E2=80=98dctcp=E2=80=99.
+Thanks, this looks good. I think I saw similar patterns also in other
+drivers, e.g. pn533. I will check it later, but if you have spare time,
+feel free to investigate.
 
-    - But the congestion of the socket of the host side was set to
-      =E2=80=98cubic=E2=80=99.
+Similar cases (unresolved):
+https://syzkaller.appspot.com/bug?extid=1dc8b460d6d48d7ef9ca
+https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
+https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
 
-    - Then the congestion of the socket of the new connection at the
-      target side would automatically be altered to =E2=80=98dctcp-reno=E2=
-=80=99.
 
-In case tcp_congestion was explicitly set for the target, it can be
-supposed that the user attaches great importance to performance.
-So we=E2=80=99d better make the users aware that the system is not working
-in the way they expect.=20
-
-Thus the checking and warning was added here.
-
->=20
-> > +	if (nport->tcp_congestion) {
-> > +		strncpy(ca_name, nport->tcp_congestion, TCP_CA_NAME_MAX-1);
-> > +		optval =3D KERNEL_SOCKPTR(ca_name);
-> > +		ret =3D sock_common_setsockopt(port->sock, IPPROTO_TCP,
-> > +					     TCP_CONGESTION, optval,
-> > +					     strlen(ca_name));
-> > +		if (ret) {
-> > +			pr_err("failed to set port socket's congestion to %s: %d\n",
-> > +			       ca_name, ret);
-> > +			goto err_sock;
-> > +		}
-> > +	} =20
->=20
-> Same comment as for the host side.
-
-This will be handled as the host side in the next version.
+Best regards,
+Krzysztof

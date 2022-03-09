@@ -2,258 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AFC4D25F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F78B4D25FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiCIBOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S230269AbiCIBPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiCIBNW (ORCPT
+        with ESMTP id S231284AbiCIBNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:13:22 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DA3235
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646787406; x=1678323406;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=IU9EJdUsYdTjKhzRHBzqQif2QxxIdhXmLLx9zqanGZ4=;
-  b=T/qmoq12ynnp6W9BT39iFOuAVw68bMuSreI0dtAblz07mSxgf7b8oUVj
-   hdMclHa92q1DQVwUUlqQWyhJZKebKc8x9nAtt/bugquHyEbyizZOA1R/w
-   XtSFhWzLkyjbTjtgKQXQehHOz7fcmD5BBg06p7wFMIFTLBO04qLTKck9E
-   wAU/h/Mg5MTy1rGmfLNs8dXNLo08sV9XNSDTGLRzMC+FoXtmka1SB2BWc
-   H1E/WP9WoE/OWET18ML4y6hd72QhItDQz3Cbm+YkPej5GSqdisqGZ21/g
-   l8FnbwRHLCPWAH+tAzYZBYbxdTV4wNimg2QsHKrF23VnwTz2dtWBZpxsl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235462989"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="235462989"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:56:45 -0800
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="641969304"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:56:41 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 16/16] mm/migration: fix potential pte_unmap on an not
- mapped pte
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
-        <20220304093409.25829-17-linmiaohe@huawei.com>
-        <871qze5nmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <9c6873ae-7614-1178-8c9f-6e933a12e35b@huawei.com>
-Date:   Wed, 09 Mar 2022 08:56:39 +0800
-In-Reply-To: <9c6873ae-7614-1178-8c9f-6e933a12e35b@huawei.com> (Miaohe Lin's
-        message of "Tue, 8 Mar 2022 20:19:58 +0800")
-Message-ID: <877d94gczc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 8 Mar 2022 20:13:10 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00DF15878F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:56:16 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id k24so661919wrd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wbAfhbFyUGwe2Q5HZ4gVH7hz+BJKhZp/1dIJkpLWrYg=;
+        b=oPAjcdMKk2cbLSR0NXJPl2YEmIHZ9WRBbKIrDfh1EAFvaUhr+N8XmHO6RLfSQ4jZIB
+         HH32lTtvocQ3aFw0+L1BvytAwA00qmSTIRhPgYDW5bvxvuSckOReH75dbn6+SKgCti5W
+         6LF0obtutW0ITI/xSxNCKm5Gt3nBWGqCujHICGD7c/dmBCY4nzn1nk6PbTBurljXT0NE
+         WSuPGbUUGMW1XNsH+d5yNCdaFYBwn+X9XzNrAA8gSYwhbV5P1vbpukFZh6s3Zhx/OJkQ
+         9AF2wYbYahKsOk8Xj+r1EUjiSfBvGdUh9E5s/TodiCnl4b2GW1PhAWSzW0p4RrC+Ehy2
+         +/qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wbAfhbFyUGwe2Q5HZ4gVH7hz+BJKhZp/1dIJkpLWrYg=;
+        b=2yG9Z0ODf+lU0o+3IKHSK6vg1cQSigBM0k5NL0BYC0me+bVaARTDEeSK5pSm4wwygO
+         CkykCF+avG9R1y9v3gCFqKi/1MOcUVUqHcr23YJSkNOkaY542XqZB/4hmOMKBQ2UbAok
+         3SchGHKzfRVCTEsudVOiZ6t43v3VC1rguUxYkdYLCzL2DXnsIg7mB6PP6ul2g2pVe/Mf
+         qBYLKYiOB0CJrXMOhbWLi6EaqyzYSezoGh0kYfqCkB6zOGBBlb54TSpkdRe3hx1+4Edb
+         aUBpisfaAzf3fsH0LhdgMrn9mdMsTyRKXxu7F3DGW63LofdXI9dqK9cWH0i99Noda4n+
+         vlUw==
+X-Gm-Message-State: AOAM530ou+ubRqRjI2iWPuRAMGWJZkruxxEB9mcuL4kiCiI1FAKsxSYx
+        sqEgCtZ4ARvqhiMF7FlCSkgmY5WDllMZBbRzb6eLKCJZ
+X-Google-Smtp-Source: ABdhPJxfgZD8CgR/7M44RNEKX6Cd7Bp3Q9o+CLYddiReGvJz3GUsWhptZe9HM1Nrq5JSZmuGN0pej2+BoxLRYImgyD8=
+X-Received: by 2002:a5d:6344:0:b0:1f0:21ee:9705 with SMTP id
+ b4-20020a5d6344000000b001f021ee9705mr13938132wrw.93.1646787375187; Tue, 08
+ Mar 2022 16:56:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+ <d2290971-ea22-8203-631e-b896c76a994b@collabora.com> <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
+ <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
+In-Reply-To: <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 8 Mar 2022 16:56:43 -0800
+Message-ID: <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
-
-> On 2022/3/7 13:37, Huang, Ying wrote:
->> Miaohe Lin <linmiaohe@huawei.com> writes:
->> 
->>> __migration_entry_wait and migration_entry_wait_on_locked assume pte is
->>> always mapped from caller. But this is not the case when it's called from
->>> migration_entry_wait_huge and follow_huge_pmd. And a parameter unmap to
->>> indicate whether pte needs to be unmapped to fix this issue.
->> 
->> This seems a possible issue.
->> 
->> Have you tested it?  It appears that it's possible to trigger the
->> issue.  If so, you can paste the error log here.
+On Tue, Mar 8, 2022 at 3:36 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
 >
-> This might happen iff on x86 machine with HIGHMEM enabled which is uncommon
-> now (at least in my work environment).
-
-Yes.  32-bit isn't popular now.  But you can always test it via virtual
-machine.
-
-> So I can't paste the err log. And The
-> issues from this series mainly come from the code investigating with some tests.
-
-If not too complex, I still think it's better to test your code and
-verify the problem.
-
-Best Regards,
-Huang, Ying
-
-> Thanks. :)
+> On 3/9/22 01:24, Rob Clark wrote:
+> > On Tue, Mar 8, 2022 at 11:28 AM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
+> >>
+> >> On 3/8/22 19:29, Rob Clark wrote:
+> >>> On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
+> >>> <dmitry.osipenko@collabora.com> wrote:
+> >>>>
+> >>>> Hello,
+> >>>>
+> >>>> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
+> >>>> During OOM, the shrinker will release BOs that are marked as "not needed"
+> >>>> by userspace using the new madvise IOCTL. The userspace in this case is
+> >>>> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
+> >>>> allowing kernel driver to release memory of the cached shmem BOs on lowmem
+> >>>> situations, preventing OOM kills.
+> >>>
+> >>> Will host memory pressure already trigger shrinker in guest?
+> >>
+> >> The host memory pressure won't trigger shrinker in guest here. This
+> >> series will help only with the memory pressure within the guest using a
+> >> usual "virgl context".
+> >>
+> >> Having a host shrinker in a case of "virgl contexts" should be a
+> >> difficult problem to solve.
+> >
+> > Hmm, I think we just need the balloon driver to trigger the shrinker
+> > in the guest kernel?  I suppose a driver like drm/virtio might want to
+> > differentiate between host and guest pressure (ie. consider only
+> > objects that have host vs guest storage), but even without that,
+> > freeing up memory in the guest when host is under memory pressure
+> > seems worthwhile.  Maybe I'm over-simplifying?
 >
->> 
->> BTW: have you tested the other functionality issues in your patchset?
->> 
->> Best Regards,
->> Huang, Ying
->> 
->>> Fixes: 30dad30922cc ("mm: migration: add migrate_entry_wait_huge()")
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>  include/linux/migrate.h |  2 +-
->>>  include/linux/swapops.h |  4 ++--
->>>  mm/filemap.c            | 10 +++++-----
->>>  mm/hugetlb.c            |  2 +-
->>>  mm/migrate.c            | 14 ++++++++------
->>>  5 files changed, 17 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
->>> index 66a34eae8cb6..3ef4ff699bef 100644
->>> --- a/include/linux/migrate.h
->>> +++ b/include/linux/migrate.h
->>> @@ -41,7 +41,7 @@ extern int migrate_huge_page_move_mapping(struct address_space *mapping,
->>>  extern int migrate_page_move_mapping(struct address_space *mapping,
->>>  		struct page *newpage, struct page *page, int extra_count);
->>>  void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
->>> -				spinlock_t *ptl);
->>> +				spinlock_t *ptl, bool unmap);
->>>  void folio_migrate_flags(struct folio *newfolio, struct folio *folio);
->>>  void folio_migrate_copy(struct folio *newfolio, struct folio *folio);
->>>  int folio_migrate_mapping(struct address_space *mapping,
->>> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
->>> index d356ab4047f7..d66556875d7d 100644
->>> --- a/include/linux/swapops.h
->>> +++ b/include/linux/swapops.h
->>> @@ -213,7 +213,7 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
->>>  }
->>>  
->>>  extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->>> -					spinlock_t *ptl);
->>> +					spinlock_t *ptl, bool unmap);
->>>  extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->>>  					unsigned long address);
->>>  extern void migration_entry_wait_huge(struct vm_area_struct *vma,
->>> @@ -235,7 +235,7 @@ static inline int is_migration_entry(swp_entry_t swp)
->>>  }
->>>  
->>>  static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->>> -					spinlock_t *ptl) { }
->>> +					spinlock_t *ptl, bool unmap) { }
->>>  static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->>>  					 unsigned long address) { }
->>>  static inline void migration_entry_wait_huge(struct vm_area_struct *vma,
->>> diff --git a/mm/filemap.c b/mm/filemap.c
->>> index 8f7e6088ee2a..18c353d52aae 100644
->>> --- a/mm/filemap.c
->>> +++ b/mm/filemap.c
->>> @@ -1389,6 +1389,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->>>   * @ptep: mapped pte pointer. Will return with the ptep unmapped. Only required
->>>   *        for pte entries, pass NULL for pmd entries.
->>>   * @ptl: already locked ptl. This function will drop the lock.
->>> + * @unmap: indicating whether ptep need to be unmapped.
->>>   *
->>>   * Wait for a migration entry referencing the given page to be removed. This is
->>>   * equivalent to put_and_wait_on_page_locked(page, TASK_UNINTERRUPTIBLE) except
->>> @@ -1402,7 +1403,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
->>>   * there.
->>>   */
->>>  void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
->>> -				spinlock_t *ptl)
->>> +				spinlock_t *ptl, bool unmap)
->>>  {
->>>  	struct wait_page_queue wait_page;
->>>  	wait_queue_entry_t *wait = &wait_page.wait;
->>> @@ -1439,10 +1440,9 @@ void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
->>>  	 * a valid reference to the page, and it must take the ptl to remove the
->>>  	 * migration entry. So the page is valid until the ptl is dropped.
->>>  	 */
->>> -	if (ptep)
->>> -		pte_unmap_unlock(ptep, ptl);
->>> -	else
->>> -		spin_unlock(ptl);
->>> +	spin_unlock(ptl);
->>> +	if (unmap && ptep)
->>> +		pte_unmap(ptep);
->>>  
->>>  	for (;;) {
->>>  		unsigned int flags;
->>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>> index 07668781c246..8088128c25db 100644
->>> --- a/mm/hugetlb.c
->>> +++ b/mm/hugetlb.c
->>> @@ -6713,7 +6713,7 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
->>>  	} else {
->>>  		if (is_hugetlb_entry_migration(pte)) {
->>>  			spin_unlock(ptl);
->>> -			__migration_entry_wait(mm, (pte_t *)pmd, ptl);
->>> +			__migration_entry_wait(mm, (pte_t *)pmd, ptl, false);
->>>  			goto retry;
->>>  		}
->>>  		/*
->>> diff --git a/mm/migrate.c b/mm/migrate.c
->>> index 98a968e6f465..5519261f54fe 100644
->>> --- a/mm/migrate.c
->>> +++ b/mm/migrate.c
->>> @@ -281,7 +281,7 @@ void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked)
->>>   * When we return from this function the fault will be retried.
->>>   */
->>>  void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->>> -				spinlock_t *ptl)
->>> +				spinlock_t *ptl, bool unmap)
->>>  {
->>>  	pte_t pte;
->>>  	swp_entry_t entry;
->>> @@ -295,10 +295,12 @@ void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->>>  	if (!is_migration_entry(entry))
->>>  		goto out;
->>>  
->>> -	migration_entry_wait_on_locked(entry, ptep, ptl);
->>> +	migration_entry_wait_on_locked(entry, ptep, ptl, unmap);
->>>  	return;
->>>  out:
->>> -	pte_unmap_unlock(ptep, ptl);
->>> +	spin_unlock(ptl);
->>> +	if (unmap)
->>> +		pte_unmap(ptep);
->>>  }
->>>  
->>>  void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->>> @@ -306,14 +308,14 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->>>  {
->>>  	spinlock_t *ptl = pte_lockptr(mm, pmd);
->>>  	pte_t *ptep = pte_offset_map(pmd, address);
->>> -	__migration_entry_wait(mm, ptep, ptl);
->>> +	__migration_entry_wait(mm, ptep, ptl, true);
->>>  }
->>>  
->>>  void migration_entry_wait_huge(struct vm_area_struct *vma,
->>>  		struct mm_struct *mm, pte_t *pte)
->>>  {
->>>  	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), mm, pte);
->>> -	__migration_entry_wait(mm, pte, ptl);
->>> +	__migration_entry_wait(mm, pte, ptl, false);
->>>  }
->>>  
->>>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
->>> @@ -324,7 +326,7 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
->>>  	ptl = pmd_lock(mm, pmd);
->>>  	if (!is_pmd_migration_entry(*pmd))
->>>  		goto unlock;
->>> -	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl);
->>> +	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl, false);
->>>  	return;
->>>  unlock:
->>>  	spin_unlock(ptl);
->> .
->> 
+> Might be the opposite, i.e. me over-complicating :) The variant with
+> memory ballooning actually could be good and will work for all kinds of
+> virtio contexts universally. There will be some back-n-forth between
+> host and guest, but perhaps it will work okay. Thank you for the suggestion.
+>
+> >>> This is
+> >>> something I'm quite interested in for "virtgpu native contexts" (ie.
+> >>> native guest driver with new context type sitting on top of virtgpu),
+> >>
+> >> In a case of "native contexts" it should be doable, at least I can't see
+> >> any obvious problems. The madvise invocations could be passed to the
+> >> host using a new virtio-gpu command by the guest's madvise IOCTL
+> >> handler, instead-of/in-addition-to handling madvise in the guest's
+> >> kernel, and that's it.
+> >
+> > I think we don't want to do that, because MADV:WILLNEED would be by
+> > far the most frequent guest<->host synchronous round trip.  So from
+> > that perspective tracking madvise state in guest kernel seems quite
+> > attractive.
+>
+> This is a valid concern. I'd assume that the overhead should be
+> tolerable, but I don't have any actual perf numbers.
+
+jfwiw, MADV:WILLNEED is a *very* hot path for gl drivers, based on
+some measurements I did a while back with various apps/benchmarks..
+easily more than 10x the next most frequent ioctl (for MADV:WONTNEED
+and MADV:WILLNEED each, so more than 20x combined.. but MADV:WONTNEED
+can be async).
+
+But if the balloon triggering shrinker approach works out, that would
+be pretty great.. it seems like the easy option and doesn't require
+adding new host kernel uabi :-)
+
+BR,
+-R
+
+> > If we really can't track madvise state in the guest for dealing with
+> > host memory pressure, I think the better option is to introduce
+> > MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
+> > buffer is needed but the previous contents are not (as long as the GPU
+> > VA remains the same).  With this the host could allocate new pages if
+> > needed, and the guest would not need to wait for a reply from host.
+>
+> If variant with the memory ballooning will work, then it will be
+> possible to track the state within guest-only. Let's consider the
+> simplest variant for now.
+>
+> I'll try to implement the balloon driver support in the v2 and will get
+> back to you.
+>
+> >>> since that isn't using host storage
+> >>
+> >> s/host/guest ?
+> >
+> > Yes, sorry, I meant that it is not using guest storage.
+>
+> Thank you for the clarification.

@@ -2,150 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5FF4D2B62
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB224D2B70
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbiCIJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S231848AbiCIJKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiCIJH2 (ORCPT
+        with ESMTP id S231830AbiCIJKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:07:28 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C3B16AA6C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:06:29 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id qa43so3375065ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:06:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NQyR0zO7n2luNlcmsiExWGwlTndourCo+FKtAyqqPd0=;
-        b=RLyN0r6C5YbfWHtydEn0F2Yo1Ilq1I2Ep9wUVOiTvXKcyPLOAG36T4ueMr4NK7nYfY
-         3/FS81WFD1a9DbwGwq9PYX/AvewP3TUox3RAdeZmlB0Vj1V7LVblIbwPe8bu57lQUV2f
-         gSrXqDIrBCB90gRTOicbO3AUCZJnv1iN5uimZtdUM610+cPluso1wYLF/YX++EMKP6gv
-         8sJ3Du8s+FqwaqCQnydgPJTdyqSKSUqgBZOfjZff+Fw+4EWZFRyvc4v6SZyFzs0QTYw/
-         5vk/4RiWTMatEBjNZ731rQ9uKjojh6oGKnO62ZqnIcJjGakJciV8ZP7biuyafWr5nvAg
-         YjDA==
+        Wed, 9 Mar 2022 04:10:01 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C43214F9A4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:09:03 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2DB713F1AF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:09:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646816941;
+        bh=WzHkSBUQpjp6lbzAQCdNWpRnWZNKxL9bPgaE1U5jbzc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=iTMWEx5kqBub5kJk/mV3kyM3geHDAgrzoNcdYEak3SoCnDTQ7lHFRgjAmjBFTsSg2
+         Dux6BtpJmqELIWrRMpmKxnq79C9qqmfCGn9AjU/mZjwgdMXy8FB5AM7eo5VG350mCO
+         k93aSHfKHGMvY6kGN9yzM1tWdHRTk7zO1iPVQ+fVneVT+aF/TazfH/kSmD9Ni55r4t
+         9XxeG7imH8nvyZ9sWob3kLooBpkw33Dlc6QNg61qoZpM7bafu5no5GNMgxFpo5mK2l
+         /w8SGb1T+LzyCeMQYGw9JDi0KYhQrGOrimMOC9rG11JONAGo5LDoDQHApLpJmtPU9E
+         rXFrzqPbumo5A==
+Received: by mail-ej1-f70.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so941310ejk.16
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:09:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NQyR0zO7n2luNlcmsiExWGwlTndourCo+FKtAyqqPd0=;
-        b=plFj6npJV/zW6zXPQG7y8TnbvqVk7n//ycl8DgJcF54l9dSJRb0VYMHmALNGbZRT0/
-         MnGOrEjKBWf92ASqEfQyWyf1nJu6dABYv/kRUIPgLNhmlj6Y0Fj/nhHvSSvZ5M1wueO0
-         KKqBG6P1so5Q/tNoG9B29QpVt0XCQv8P785P2U/i2D4x+rZrZRqlt0lowZ82TngtETv8
-         /HS+j4I038etbhw6I/ip1Nb4YPNucEnrCeMpiPwfooxmNAWJjaV9RrTfUtLhxt6MJuIa
-         SlgAlAPDG7cspIQFxv2hAPKoRBNjrxZIc41jgOx42B4jRf69LXiqxnYp+KqdWwo49sGB
-         TA0A==
-X-Gm-Message-State: AOAM5331ejugSQx2HnLq29+JjUU7CKlw9UPTgj1TkPL2RS/SEVPLu92z
-        B/8SlZlP9qAo3zELfxqbBvCbHNZfi0EJDOmx
-X-Google-Smtp-Source: ABdhPJzA1/r17MIq+cc28OgCL3kMF/cCpX6eBCNvn19IDLs+wIkx2Jvfu4iue8sdQlon7LYrctH4ZQ==
-X-Received: by 2002:a17:907:6296:b0:6da:745b:7b40 with SMTP id nd22-20020a170907629600b006da745b7b40mr16849584ejc.750.1646816788283;
-        Wed, 09 Mar 2022 01:06:28 -0800 (PST)
-Received: from localhost.localdomain ([102.126.147.138])
-        by smtp.gmail.com with ESMTPSA id w22-20020a05640234d600b004165de83109sm518067edc.48.2022.03.09.01.06.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 01:06:27 -0800 (PST)
-From:   Hatim Muhammed <hatimmohammed369@gmail.com>
-X-Google-Original-From: Hatim Muhammed
-To:     linux-kernel@vger.kernel.org, greg@kroah.com
-Cc:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        Hatim Muhammed <hatimmohammed369@gmail.com>
-Subject: [PATCH 6/7] [Staging]: Removed an unnecessary #if
-Date:   Wed,  9 Mar 2022 11:06:24 +0200
-Message-Id: <20220309090624.12696-1-hatimmohammed369@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=WzHkSBUQpjp6lbzAQCdNWpRnWZNKxL9bPgaE1U5jbzc=;
+        b=t7gksT0/xI38kg7hZhKu98maJTg19ILExWSKI6wCrcRHQPf21BkKagOG1qEbfJIan8
+         vS1XfLXgttXEl8jQpILqt5kCKOBfc88+hxpWujW8lPt1f0POPOBmkiCO0t+zjyS82kHR
+         1iEjhjBoIIoWzBdq3UFfj+CcEeRnEqGFCnQ85PWsKp6U+IfBtcONBjjVoS0ULuuNS+8S
+         wZ7H9MdDbONHcHAx7u7Ho9LC6tFbOI4AtebmrK1QitJJxOok+ZzWGrYYbR1sYdyNMqSa
+         k6nXT23YcYOod4bO94hcvQ9k2xogpPzB+0j9WyrYkfClH2jwai9EsBY2dHIGyyqal2/2
+         7yug==
+X-Gm-Message-State: AOAM533zGLvolhUfJgMEBw7cQp+yNdbW0d7f+Mqm/GEEVi9JI6UlhSlh
+        JKLJyGUxIodO1eaPRkJA2DcjilY7CEKgKY5DwLQR1ASRHCg6FkZg9fBd4j3ox5AofCo9lE6yWEk
+        ABpyLz4e7LZb8UYXJZqQuLpGaDl6RpulHdV+yv/lfoQ==
+X-Received: by 2002:a17:906:31c1:b0:6c9:cfb3:4dd3 with SMTP id f1-20020a17090631c100b006c9cfb34dd3mr16530541ejf.392.1646816940895;
+        Wed, 09 Mar 2022 01:09:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyokg1UCn/6f42J+LUZN2KQU+wzLO/g3QE5jQNu/CJVwGdXXaVXsl0iCLmJT1kJ7fjTkbU2tQ==
+X-Received: by 2002:a17:906:31c1:b0:6c9:cfb3:4dd3 with SMTP id f1-20020a17090631c100b006c9cfb34dd3mr16530530ejf.392.1646816940747;
+        Wed, 09 Mar 2022 01:09:00 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id dz10-20020a0564021d4a00b0041665989a9csm533969edb.41.2022.03.09.01.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 01:08:59 -0800 (PST)
+Message-ID: <730c8fd2-111e-e028-43d0-0942df2ce188@canonical.com>
+Date:   Wed, 9 Mar 2022 10:08:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Add bindings for Richtek
+ RT5190A PMIC
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, broonie@kernel.org,
+        robh+dt@kernel.org
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <1646812903-32496-1-git-send-email-u0084500@gmail.com>
+ <1646812903-32496-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1646812903-32496-2-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hatim Muhammed <hatimmohammed369@gmail.com>
+On 09/03/2022 09:01, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add bindings for Richtek RT5190A PMIC.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../regulator/richtek,rt5190a-regulator.yaml       | 141 +++++++++++++++++++++
+>  .../regulator/richtek,rt5190a-regulator.h          |  15 +++
+>  2 files changed, 156 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml
+>  create mode 100644 include/dt-bindings/regulator/richtek,rt5190a-regulator.h
+> 
 
-This removed #if had 1 as its condition, hence it's body will always
-execute and its #else block will never
 
-Signed-off-by: Hatim Muhammed <hatimmohammed369@gmail.com>
----
- drivers/comedi/drivers/s526.c | 49 -----------------------------------
- 1 file changed, 49 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-diff --git a/drivers/comedi/drivers/s526.c b/drivers/comedi/drivers/s526.c
-index 9245c679a3c4..df9d240518ef 100644
---- a/drivers/comedi/drivers/s526.c
-+++ b/drivers/comedi/drivers/s526.c
-@@ -229,7 +229,6 @@ static int s526_gpct_insn_config(struct comedi_device *dev,
- 		 */
- 		devpriv->gpct_config[chan] = data[0];
- 
--#if 1
- 		/*  Set Counter Mode Register */
- 		val = data[1] & 0xffff;
- 		outw(val, dev->iobase + S526_GPCT_MODE_REG(chan));
-@@ -246,54 +245,6 @@ static int s526_gpct_insn_config(struct comedi_device *dev,
- 			 *      dev->iobase + S526_GPCT_CTRL_REG(chan));
- 			 */
- 		}
--#else
--		val = S526_GPCT_MODE_CTDIR_CTRL_QUAD;
--
--		/*  data[1] contains GPCT_X1, GPCT_X2 or GPCT_X4 */
--		if (data[1] == GPCT_X2)
--			val |= S526_GPCT_MODE_CLK_SRC_QUADX2;
--		else if (data[1] == GPCT_X4)
--			val |= S526_GPCT_MODE_CLK_SRC_QUADX4;
--		else
--			val |= S526_GPCT_MODE_CLK_SRC_QUADX1;
--
--		/*  When to take into account the indexpulse: */
--		/*
--		 * if (data[2] == GPCT_IndexPhaseLowLow) {
--		 * } else if (data[2] == GPCT_IndexPhaseLowHigh) {
--		 * } else if (data[2] == GPCT_IndexPhaseHighLow) {
--		 * } else if (data[2] == GPCT_IndexPhaseHighHigh) {
--		 * }
--		 */
--		/*  Take into account the index pulse? */
--		if (data[3] == GPCT_RESET_COUNTER_ON_INDEX) {
--			/*  Auto load with INDEX^ */
--			val |= S526_GPCT_MODE_AUTOLOAD_IXRISE;
--		}
--
--		/*  Set Counter Mode Register */
--		val = data[1] & 0xffff;
--		outw(val, dev->iobase + S526_GPCT_MODE_REG(chan));
--
--		/*  Load the pre-load register */
--		s526_gpct_write(dev, chan, data[2]);
--
--		/*  Write the Counter Control Register */
--		if (data[3])
--			outw(data[3] & 0xffff,
--			     dev->iobase + S526_GPCT_CTRL_REG(chan));
--
--		/*  Reset the counter if it is software preload */
--		if ((val & S526_GPCT_MODE_AUTOLOAD_MASK) ==
--		    S526_GPCT_MODE_AUTOLOAD_NONE) {
--			/*  Reset the counter */
--			outw(S526_GPCT_CTRL_CT_RESET,
--			     dev->iobase + S526_GPCT_CTRL_REG(chan));
--			/*  Load the counter from PR0 */
--			outw(S526_GPCT_CTRL_CT_LOAD,
--			     dev->iobase + S526_GPCT_CTRL_REG(chan));
--		}
--#endif
- 		break;
- 
- 	case INSN_CONFIG_GPCT_SINGLE_PULSE_GENERATOR:
--- 
-2.35.1
 
+Best regards,
+Krzysztof

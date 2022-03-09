@@ -2,374 +2,459 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0F54D3D69
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9814D3D73
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237861AbiCIXMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 18:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S237982AbiCIXOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 18:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbiCIXMg (ORCPT
+        with ESMTP id S234634AbiCIXN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 18:12:36 -0500
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F75122218
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:11:35 -0800 (PST)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 29AE0A3A20E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:11:35 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id S5Sxn2Khydx86S5Sxn7HLW; Wed, 09 Mar 2022 17:11:35 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i8kFLI+Tm1matLlL1pryUxp07vAmOodnzwuyFagel/M=; b=zhJH2MmiBH6AFaC8wv0loLP2Le
-        IGEUzZ+FXOcbE8+bBSgz6UDSIb6YEWWhCdyP+s4WQgfJnafBMAWTYaONRnMsrQsyksM98rFpYPKph
-        gZ9W9YJfMal8al9hSFLcIsp3VsKwJYBYlJSLdFDkR3nEGMQpNLRESfd4JCIG2pylFCuMbpNKvyjCZ
-        L2CJd/RqKSi5ZvNgjBJbSRlZhoO6Pr9B7BKd+edjZewEjZoGrR53ZyYcWrpmge5ehacAleiVV5nXi
-        F19RCor7X7d1w/9L7Z2LUfBUIbmjtzocfjvv+s+AIQfp/s33luqPxa8H2mX1Q93qOK10JiSgVPgjJ
-        J/TQbesA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57410 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nS5Sw-000GnA-GH; Wed, 09 Mar 2022 23:11:34 +0000
-Date:   Wed, 9 Mar 2022 15:11:33 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xiantao Hu <xt.hu@cqplus1.com>
-Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com, qinjian@cqplus1.com
-Subject: Re: [PATCH v7 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Message-ID: <20220309231133.GA3802268@roeck-us.net>
-References: <20220304081209.672-1-xt.hu@cqplus1.com>
- <20220304081209.672-3-xt.hu@cqplus1.com>
+        Wed, 9 Mar 2022 18:13:58 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDC6AC052;
+        Wed,  9 Mar 2022 15:12:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646867578; x=1678403578;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=CzX5fUe04+qtC5qlUYHJQXA4ixSlBJF4w8Ltzpt2og8=;
+  b=L+Ass3wMt8EAaSXPeFSUOwLNoiSPcXEJsQx79wo8l1qvmFASQKBbwLbr
+   ETegseoGMrnDlWoNLsxuiPpQPHsZv6Yg19M7MY8P0WaO/Q6piaQgQTqbe
+   OL5U+U/DKwBsOyXg9c9Kd6I0lD4tspoXHuojGFjGw+fP0W2FEEuWPbF24
+   2kl8zOlWwZUPlqyltviL72mWGLKv39bPOALLCZjS8gvMe1wrafNklb8XB
+   UIl3uSeAMaREkSlksWtyGAm30bpL/ZJC2SGY3Wew/HIpzi0qGYSGgNGJn
+   rX3a4ax2G1fdNvxbJJkcITIpCu7nlaWzEUhxVEfKvO0dEKvVfZ6Ksw1vx
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255056297"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="255056297"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 15:12:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="578570465"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2022 15:12:58 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Mar 2022 15:12:57 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Mar 2022 15:12:57 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Wed, 9 Mar 2022 15:12:57 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Wed, 9 Mar 2022 15:12:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hNnXS+eLvk6VM+9zYu59dcbjn3TB+XLGd0Al9rcqi5xVov12skSZQO6Y+GBRQ3slMwEfk+7+GAQWemtDkQHPgrui0hii37w1JBkpWfOfIx5LcAYrsmCwPZaA7q/DdQk+wqRFodzDMbOrkmcAsSRqTWB7FnvKRtSGCEtudzkwSQGr5bhMRfHoTNqny0UPaH4kvEzRKr7VwqAwfS1YkbiPmk0tsb/37qLUWGtuOaEckK3kb4rcYM8LVbm5Uh0HPBc7izPfedH/5Y0R9t4uh2qvPKfzbTXbL0sV4LezEbuqTGKFF3yGwiWSmUL9phbOhYR+32QIuo6jqQmIjD4NfLYHUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Mi68G+cNmKqwgq8rsmxkWbSaXdKMHh1ZdNAcn0q1Uc=;
+ b=TCqb6XkdXnVxQ5P/eWVqU/kBB9HKs1sHn9mz5YFp5IBWHmjpUdwhCW/mn/caOFbI98bbWMGq7Di6KMo2X8IR8SjhwROVU2nq2VlgIYRAY/MaXi+PfnfJ6CrJjrWnfoJUg8ebGSvc7f0vklDR9WNYhgXi1tY2nOI/DN5CgGJBJYYxp0xqpLLIfvmS9OR31eTyNLL3YS+h94Aq432HlpU7tauZGhtm6f2EUG9FMQ3MDxBOPoEi7yt14PGrEwaevzbT36h2L1onf48fxURSGgLMQTKs345hR3HDfUv2leqf5cUhJ3D05MKMY1DE3YHaUcN+KlGaaQhzhVU+6KwtXDgsKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by CH2PR11MB4296.namprd11.prod.outlook.com (2603:10b6:610:3c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Wed, 9 Mar
+ 2022 23:12:54 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::c044:86e4:5f8:e345]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::c044:86e4:5f8:e345%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 23:12:54 +0000
+Message-ID: <c6a9632e-cdcb-cf05-183e-a124e9cec0e2@intel.com>
+Date:   Wed, 9 Mar 2022 15:12:51 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 1/2] x86/fpu: Add a helper to prepare AMX state for
+ low-power CPU idle
+Content-Language: en-CA
+To:     Dave Hansen <dave.hansen@intel.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     <tglx@linutronix.de>, <dave.hansen@linux.intel.com>,
+        <peterz@infradead.org>, <bp@alien8.de>, <rafael@kernel.org>,
+        <ravi.v.shankar@intel.com>
+References: <20220309223431.26560-1-chang.seok.bae@intel.com>
+ <20220309223431.26560-2-chang.seok.bae@intel.com>
+ <bde83c5f-ffe9-d548-de08-de3e14738bf0@intel.com>
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+In-Reply-To: <bde83c5f-ffe9-d548-de08-de3e14738bf0@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PH0PR07CA0043.namprd07.prod.outlook.com
+ (2603:10b6:510:e::18) To PH0PR11MB4855.namprd11.prod.outlook.com
+ (2603:10b6:510:41::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304081209.672-3-xt.hu@cqplus1.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nS5Sw-000GnA-GH
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57410
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 68
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3b9e6a6a-3337-439e-4e2b-08da02225741
+X-MS-TrafficTypeDiagnostic: CH2PR11MB4296:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <CH2PR11MB42961514513197AF85E23E86D80A9@CH2PR11MB4296.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ezF14f2lWYfagAar8mNUpKfUjfxgEGbnDco+Nf6TwncvtNZoflITDvopZ/V5n6Olwzma6181VWEqQ2a3C0FoEEzoznAJUEEVNZKn5TXVG5siQka+UQOmYvVMWAEtSj6zsx97DLNg+mv0Px4vz6/JWLn+EYDoXIzRNf10nF9yvOZzptC+4odY+VeewbhYvYOHvsE87oArqOPAnGgRxWE0LwGKM7FNZKNa7PrOZLGqHRiCpdY1B2kBnmcAxzzqlMvpxHApJi6Xa0KCsnji8TOPcHqI8KExN23yx9M6XPXrP14BO1JExjxMXyESln9dv8PryXs5l9AL8yCxzlCybks5FIIehHJeQtQWMbH0YPXfVgIp77H57naJ7VwOwJo8v+Dmb3oFdQ+5GDUmbHN9MgNR7phaCkeQFJ9f/tUAVAbDZqb1UURrxK/gdkOZ9dC4EzpoSQcY+bCHenCh37TYgboWLPFNr2/q6e/CH6QgCj5x4poNb/qaFID0MbikXZKo7s5ffQQlaoLrb3N3EyfH2zKm7MTH3e+MOf3ePQtxFJGYQnSzdH2ychVVQcWsvWKVwGLeYD/qsHhVvWy7/pHEiqzuDbZVC9Ioom4JesQUuxtZGEuoxU31qUAWLUh5CRGCy5dAtI1w3L3a4Dbx0c35KbrpkEu36ogmZ52FVV1+Gty0N6YHh/qdkmfCs3Gbua52OpkzMqog632h+m87idzte4Z8hgpnsEzVSfuC7q/aM0qN4QDhEswNi5d6TZB6prZJJEahot31x0n2+YQsYxes7cWpOnEXsCy3QfRqo/9c9q8NuaICVit2sXzujWjcyH4vUlja0ILa+jIiG20cRcZ14WMiq3D562o+TCrF/qYudh3qkYQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(5660300002)(26005)(30864003)(6512007)(6666004)(6486002)(6506007)(31686004)(316002)(53546011)(83380400001)(4326008)(31696002)(8676002)(86362001)(508600001)(8936002)(66946007)(66476007)(66556008)(45080400002)(82960400001)(2906002)(2616005)(966005)(36756003)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MklhWGJTTUZrTEwvT2JOOG5Ba0lSWEFqdVVvVVlRL0tCN1M0cy9Pa1h4OCtB?=
+ =?utf-8?B?NG8wMGVOZWJtS3FvektUTEdOM1RQbWhPSzAwRzFQRXNSNDdKNDJ4ZHdCd2h3?=
+ =?utf-8?B?VU1nUW1ycGhFNTA4SzQ4V3JzV3d5NVJJTDF0cUpSdUFzc1dQNHRjQ3VJR3hj?=
+ =?utf-8?B?RXp1OUx2aDBKMDIrZzNTaUFSU3N0anVFSVRTZmdUSU44enY3Wk1ZMDB2VUFs?=
+ =?utf-8?B?UmtLemxjQzh1eFNLQnpMQzZrQ1J2SW9ORmpsVElBNjNuRGJrNllLL0xuSTRW?=
+ =?utf-8?B?R0loYktuVEhUZzgwWFEwZDNYSitFQk1nL3hsTEpCKzhnejN6UUpRS1RTbFFl?=
+ =?utf-8?B?K2xOUEFRMVg5UHZWZDhOeWE4VGllam03TlE3N3ZjOGFlZTZsMW1paGlnWDFR?=
+ =?utf-8?B?Vm41RHY1TEI3WFhVTVJzZGNKMi9hdWxYVTRQVTIrUDVXd3psUUdVS2ppZndG?=
+ =?utf-8?B?U1k0WDJnVWhZd3Foa1BmR2ZHSUxmdHBqUXRIQ0ZPOGNvNlp1RHlqMW16MHht?=
+ =?utf-8?B?T0Njakl0VlR1cGdBOGIwcXBUaGpRbUpmc1FUQk9LeGJuM3kyeHVIRUhRamJH?=
+ =?utf-8?B?cHViUGQzL3JvUWRGWVRCb1haR3k3WS9NUGUzUzRvTGVxV3FhaU9xajV6QTE5?=
+ =?utf-8?B?bHR3d2UzQXY0UE52a21oYm4zZXV0N2MvbFQ3T3FadEFtci9yYjFXM0xhbUNS?=
+ =?utf-8?B?OGFJdUpEWGxYN2hVdldFbzhwRVdYTmRqREo5NWJyNy9OOTAzWURqaHFtUXVL?=
+ =?utf-8?B?bGg2Ky8rY0RveTMrRjdOc0h0YlIxOWdCZkJuUEpNRnF4N05yek9keUU2N25x?=
+ =?utf-8?B?a0VDREdrVGZWWWhLSDdjZFVCV3BFV3VrQmtEOFczTWlCcGsrcGY3M1ZUb3FV?=
+ =?utf-8?B?djgzN091NE1PcXcxSSs1dHd1dFBLQzlSUG81MlFUaDE1WGF1ZG95ZlA5eEU2?=
+ =?utf-8?B?cjBnaWU4dEEzYURPQlRyaGxtdkkrSFp2YTE2NjEzNGRaWU1sQm10TERDaXRE?=
+ =?utf-8?B?c1ZEZkJDU1VXNnhmc3NTaDdiVStMNFJLcjFUbURXYUI1aXlib01ia1ZZYlJ2?=
+ =?utf-8?B?UisrRitsKy95NnJMZ1d2eExNS005R21RdDV1Q21sd2RPMjBQU0wyK2JSRG0w?=
+ =?utf-8?B?TjhEeHhpU1VuSHVJdzllRklNRCtCZmJLV2lsak1YdGJjSXJqQ1d6Nkg2WUxy?=
+ =?utf-8?B?cSttNWdseXUrSzZGSEZxNy8xSXJqVzlILzhQMkpucFUwMW5kdVhvbHNSMEli?=
+ =?utf-8?B?L0hWMCtQZ0RIbVYyVnl5ckZMcFF2U05XbFBueFdkQmY0L3V1K2Fsa2t5T25T?=
+ =?utf-8?B?c044TDVvVW42T3RxREpFZXRMV1FzZTNLRTlBblV3TXZrazR1bWtrMmF6eFRl?=
+ =?utf-8?B?c25BT3dlRlMxdE9HUFJMZURWZnhpVktjL25LZ2hueUdMNHlma2c2VHAxZmJa?=
+ =?utf-8?B?YUpwQmFFUE4yUmJpQkQzekZzdGFFdS9ubmRvZE1UbnhtbjZqWktHUFRiZlVu?=
+ =?utf-8?B?QmY0QmpwcjZwdllQNG0vS0duNW80S3Eyb3MxaTFRbWVxbDFKUlh4aEw5ZGR0?=
+ =?utf-8?B?d0lTcnYrRGVDa282WUhuN045Z0VqdXNtRFBNOWljdmZzbDNuSnNieElTNjBp?=
+ =?utf-8?B?VjI1QklGSWMyQy9zaVhPai9hZWlnUFB2QTdPczZjVTVsYVBjZUpjbnpsdjNa?=
+ =?utf-8?B?SFFWdGV1U3c2SGJPQXg3MWVFSkZKMkRvelZyTUMxMzRyOFM5MUxyWFVISmlB?=
+ =?utf-8?B?R0hGS1czSmRlbjVXblNpR3BBWFZNRHF3Y1ZzeU5MMk5XY2tOU2dPdjdKa3Fw?=
+ =?utf-8?B?UDRXWlZydDB5L1h6Z1lwTWlUQWNvZUo2RVZIaGRqUlU3dTl6NGhlL0N4Rk51?=
+ =?utf-8?B?QU1PQ0g2dC96emRtRWU1K21MR1FBbUxBdjczQnJGazZ5ZERlanBtenNvUkNO?=
+ =?utf-8?B?TGFQQ2ppQTBKcFpNUzg2WjF3ZVpZNGo3aXBtTHBDTk5RZXQwK0hsNWh6VUZt?=
+ =?utf-8?B?ejNpMGcvK3FSeDJ6RE02T0VTU093SjA1elJvdlRUUjRVaXQzM0gwOTNNZ2dN?=
+ =?utf-8?B?alR3VDVDcnhZT0V6U05pbDR3VzkwRmdKYTZ4MC9BczhNY2g2a3dIRlJkWS9Z?=
+ =?utf-8?B?QXZRMXl3bTFSVzR4aXZFTkp5dVc5cjFuOXdZaWNzSjlzNlFzSjJNWk5yV2Rz?=
+ =?utf-8?B?bTYzWWZkTlllOXhPNVFMbmlqb09yRUpSQ29iTXdCMmJMNUhVeDBzaVFBMmp4?=
+ =?utf-8?Q?0Kc2+rB/ozKPtyL1XwGIZD2R3WPy8ANFDbd2JjE1ao=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b9e6a6a-3337-439e-4e2b-08da02225741
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 23:12:54.3481
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w9/c77W4OJKGQ10EFFVcw5FJMzlOWbiDqR5e3HrC62Ss/aCyqjtJWzkMgjQ4vGhDgCXEXj3mNStmv+tgEtHg0EXCrsM3TCM+xr7cfsdimws=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4296
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 04:12:09PM +0800, Xiantao Hu wrote:
-> Sunplus SP7021 requires watchdog timer support.
-> Add watchdog driver to enable this.
+On 3/9/2022 2:46 PM, Dave Hansen wrote:
+> On 3/9/22 14:34, Chang S. Bae wrote:
+>> +/*
+>> + * Initialize register state that may prevent from entering low-power idle.
+>> + * This function will be invoked from the cpuidle driver only when needed.
+>> + */
+>> +void fpu_idle_fpregs(void)
+>> +{
+>> +	if (!fpu_state_size_dynamic())
+>> +		return;
 > 
-> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
+> Is this check just an optimization?  
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+No. 0day reported the splat [3] with the earlier code in v1 [1]:
 
-> ---
-> Changes in v7:
->  - Addressed all comments from Mr. Guenter Roeck.
->    Fix sp_wdt_ping() and add comment to explain the calculation.
+if (fpu_state_size_dynamic() && (xfeatures_in_use() & 
+XFEATURE_MASK_XTILE)) { ... }
+
+It looks like GCC-9 reordered to hit XGETBV without checking 
+fpu_state_size_dynamic(). So this line was separated to avoid that.
+
+> I'm having trouble imagining a situation where we would have:
 > 
->  MAINTAINERS                    |   1 +
->  drivers/watchdog/Kconfig       |  11 ++
->  drivers/watchdog/Makefile      |   1 +
->  drivers/watchdog/sunplus_wdt.c | 220 +++++++++++++++++++++++++++++++++
->  4 files changed, 233 insertions(+)
->  create mode 100644 drivers/watchdog/sunplus_wdt.c
+> 	(xfeatures_in_use() & XFEATURE_MASK_XTILE) == true
+> but
+> 	fpu_state_size_dynamic() == false
+
+Yes, I don't think we have such situation in practice.
+
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fe6cc971c..a1b3d76e2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
->  L:	linux-watchdog@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-> +F:	drivers/watchdog/sunplus_wdt.c
->  
->  SUPERH
->  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 9d222ba17..d3dbe8695 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called msc313e_wdt.
->  
-> +config SUNPLUS_WATCHDOG
-> +	tristate "Sunplus watchdog support"
-> +	depends on ARCH_SUNPLUS || COMPILE_TEST
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Say Y here to include support for the watchdog timer
-> +	  in Sunplus SoCs.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called sunplus_wdt.
-> +
->  # X86 (i386 + ia64 + x86_64) Architecture
->  
->  config ACQUIRE_WDT
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 2ee970641..0fa548ee6 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
->  obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
->  obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
->  obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
-> +obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
->  
->  # X86 (i386 + ia64 + x86_64) Architecture
->  obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-> diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
-> new file mode 100644
-> index 000000000..e2d8c532b
-> --- /dev/null
-> +++ b/drivers/watchdog/sunplus_wdt.c
-> @@ -0,0 +1,220 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * sunplus Watchdog Driver
-> + *
-> + * Copyright (C) 2021 Sunplus Technology Co., Ltd.
-> + *
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/watchdog.h>
-> +
-> +#define WDT_CTRL		0x00
-> +#define WDT_CNT			0x04
-> +
-> +#define WDT_STOP		0x3877
-> +#define WDT_RESUME		0x4A4B
-> +#define WDT_CLRIRQ		0x7482
-> +#define WDT_UNLOCK		0xAB00
-> +#define WDT_LOCK		0xAB01
-> +#define WDT_CONMAX		0xDEAF
-> +
-> +/* TIMEOUT_MAX = ffff0/90kHz =11.65, so longer than 11 seconds will time out. */
-> +#define SP_WDT_MAX_TIMEOUT	11U
-> +#define SP_WDT_DEFAULT_TIMEOUT	10
-> +
-> +#define STC_CLK			90000
-> +
-> +#define DEVICE_NAME		"sunplus-wdt"
-> +
-> +static unsigned int timeout;
-> +module_param(timeout, int, 0);
-> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-> +
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +
-> +struct sp_wdt_priv {
-> +	struct watchdog_device wdev;
-> +	void __iomem *base;
-> +	struct clk *clk;
-> +	struct reset_control *rstc;
-> +};
-> +
-> +static int sp_wdt_restart(struct watchdog_device *wdev,
-> +			  unsigned long action, void *data)
-> +{
-> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	void __iomem *base = priv->base;
-> +
-> +	writel(WDT_STOP, base + WDT_CTRL);
-> +	writel(WDT_UNLOCK, base + WDT_CTRL);
-> +	writel(0x0001, base + WDT_CNT);
-> +	writel(WDT_LOCK, base + WDT_CTRL);
-> +	writel(WDT_RESUME, base + WDT_CTRL);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sp_wdt_ping(struct watchdog_device *wdev)
-> +{
-> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	void __iomem *base = priv->base;
-> +	u32 count;
-> +
-> +	if (wdev->timeout > SP_WDT_MAX_TIMEOUT) {
-> +		/* WDT_CONMAX sets the count to the maximum (down-counting). */
-> +		writel(WDT_CONMAX, base + WDT_CTRL);
-> +	} else {
-> +		writel(WDT_UNLOCK, base + WDT_CTRL);
-> +		/*
-> +		 * Watchdog timer is a 20-bit down-counting based on STC_CLK.
-> +		 * This register bits[16:0] is from bit[19:4] of the watchdog
-> +		 * timer counter.
-> +		 */
-> +		count = (wdev->timeout * STC_CLK) >> 4;
-> +		writel(count, base + WDT_CNT);
-> +		writel(WDT_LOCK, base + WDT_CTRL);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sp_wdt_stop(struct watchdog_device *wdev)
-> +{
-> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	void __iomem *base = priv->base;
-> +
-> +	writel(WDT_STOP, base + WDT_CTRL);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sp_wdt_start(struct watchdog_device *wdev)
-> +{
-> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	void __iomem *base = priv->base;
-> +
-> +	writel(WDT_RESUME, base + WDT_CTRL);
-> +
-> +	return 0;
-> +}
-> +
-> +static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
-> +{
-> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	void __iomem *base = priv->base;
-> +	u32 val;
-> +
-> +	val = readl(base + WDT_CNT);
-> +	val &= 0xffff;
-> +	val = val << 4;
-> +
-> +	return val;
-> +}
-> +
-> +static const struct watchdog_info sp_wdt_info = {
-> +	.identity	= DEVICE_NAME,
-> +	.options	= WDIOF_SETTIMEOUT |
-> +			  WDIOF_MAGICCLOSE |
-> +			  WDIOF_KEEPALIVEPING,
-> +};
-> +
-> +static const struct watchdog_ops sp_wdt_ops = {
-> +	.owner		= THIS_MODULE,
-> +	.start		= sp_wdt_start,
-> +	.stop		= sp_wdt_stop,
-> +	.ping		= sp_wdt_ping,
-> +	.get_timeleft	= sp_wdt_get_timeleft,
-> +	.restart	= sp_wdt_restart,
-> +};
-> +
-> +static void sp_clk_disable_unprepare(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
-> +static void sp_reset_control_assert(void *data)
-> +{
-> +	reset_control_assert(data);
-> +}
-> +
-> +static int sp_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct sp_wdt_priv *priv;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(priv->clk))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clk), "Failed to get clock\n");
-> +
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to enable clock\n");
-> +
-> +	ret = devm_add_action_or_reset(dev, sp_clk_disable_unprepare, priv->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* The timer and watchdog shared the STC reset */
-> +	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-> +	if (IS_ERR(priv->rstc))
-> +		return dev_err_probe(dev, PTR_ERR(priv->rstc), "Failed to get reset\n");
-> +
-> +	reset_control_deassert(priv->rstc);
-> +
-> +	ret = devm_add_action_or_reset(dev, sp_reset_control_assert, priv->rstc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	priv->wdev.info = &sp_wdt_info;
-> +	priv->wdev.ops = &sp_wdt_ops;
-> +	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
-> +	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
-> +	priv->wdev.min_timeout = 1;
-> +	priv->wdev.parent = dev;
-> +
-> +	watchdog_set_drvdata(&priv->wdev, priv);
-> +	watchdog_init_timeout(&priv->wdev, timeout, dev);
-> +	watchdog_set_nowayout(&priv->wdev, nowayout);
-> +	watchdog_stop_on_reboot(&priv->wdev);
-> +	watchdog_set_restart_priority(&priv->wdev, 128);
-> +
-> +	return devm_watchdog_register_device(dev, &priv->wdev);
-> +}
-> +
-> +static const struct of_device_id sp_wdt_of_match[] = {
-> +	{.compatible = "sunplus,sp7021-wdt", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
-> +
-> +static struct platform_driver sp_wdt_driver = {
-> +	.probe = sp_wdt_probe,
-> +	.driver = {
-> +		   .name = DEVICE_NAME,
-> +		   .of_match_table = sp_wdt_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(sp_wdt_driver);
-> +
-> +MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
-> +MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
-> +MODULE_LICENSE("GPL");
+>> +	if (xfeatures_in_use() & XFEATURE_MASK_XTILE) {
+>> +		tile_release();
+>> +		fpregs_deactivate(&current->thread.fpu);
+>> +	}
+>> +}
+> 
+> xfeatures_in_use() isn't exactly expensive either.
+
+True.
+
+Thanks,
+Chang
+
+[1] 
+https://lore.kernel.org/lkml/20211104225226.5031-3-chang.seok.bae@intel.com/
+
+[2] 
+https://lore.kernel.org/lkml/20211104225226.5031-4-chang.seok.bae@intel.com/
+
+[3] 0-day report:
+
+FYI, we noticed the following commit (built with gcc-9):
+
+commit: 66951fd5ad7a2aabae7dc54be46a4eac667a082c ("x86/fpu: Prepare AMX 
+state for CPU idle") internal-devel devel-hourly-20220113-144327
+
+[chang: this refers to [2]. ]
+...
+
+on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 
+-m 16G
+
+caused below changes (please refer to attached dmesg/kmsg for entire 
+log/backtrace):
+
+[    1.767825][    T1] x86: Booting SMP configuration:
+[    1.768363][    T1] .... node  #0, CPUs:      #1
+[    0.113687][    T0] kvm-clock: cpu 1, msr 38a24a041, secondary cpu clock
+[    0.113687][    T0] masked ExtINT on CPU#1
+[    0.113687][    T0] smpboot: CPU 1 Converting physical 0 to logical die 1
+[    1.780411][    T0] general protection fault, maybe for address 0x1: 
+0000 [#1] SMP KASAN PTI
+[    1.781350][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 
+5.16.0-00004-g66951fd5ad7a #1
+[    1.781350][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 
+1996), BIOS 1.12.0-1 04/01/2014
+[ 1.781350][ T0] RIP: 0010:fpu_idle_fpregs 
+(kbuild/src/consumer/arch/x86/include/asm/fpu/xcr.h:12 
+kbuild/src/consumer/arch/x86/include/asm/fpu/xcr.h:32 
+kbuild/src/consumer/arch/x86/kernel/fpu/core.c:772)
+[ 1.781350][ T0] Code: 89 74 24 04 e8 d4 6e 82 00 8b 74 24 04 e9 f8 fe 
+ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 eb 01 c3 b9 01 00 
+00 00 <0f> 01 d0 a9 00 00 06 00 75 01 c3 55 53 c4 e2 78 49 c0 65 48 8b 
+2c All code ========
+    0:   89 74 24 04              mov    %esi,0x4(%rsp)
+    4:   e8 d4 6e 82 00           callq  0x826edd
+    9:   8b 74 24 04              mov    0x4(%rsp),%esi
+    d:   e9 f8 fe ff ff           jmpq   0xffffffffffffff0a
+   12:   66 66 2e 0f 1f 84 00     data16 nopw %cs:0x0(%rax,%rax,1)
+   19:   00 00 00 00
+   1d:   0f 1f 44 00 00           nopl   0x0(%rax,%rax,1)
+   22:   eb 01                    jmp    0x25
+   24:   c3                       retq
+   25:   b9 01 00 00 00           mov    $0x1,%ecx
+   2a:*  0f 01 d0                 xgetbv           <-- trapping instruction
+   2d:   a9 00 00 06 00           test   $0x60000,%eax
+   32:   75 01                    jne    0x35
+   34:   c3                       retq
+   35:   55                       push   %rbp
+   36:   53                       push   %rbx
+   37:   c4 e2 78 49              (bad)
+   3b:   c0 65 48 8b              shlb   $0x8b,0x48(%rbp)
+   3f:   2c                       .byte 0x2c
+
+Code starting with the faulting instruction 
+===========================================
+    0:   0f 01 d0                 xgetbv
+    3:   a9 00 00 06 00           test   $0x60000,%eax
+    8:   75 01                    jne    0xb
+    a:   c3                       retq
+    b:   55                       push   %rbp
+    c:   53                       push   %rbx
+    d:   c4 e2 78 49              (bad)
+   11:   c0 65 48 8b              shlb   $0x8b,0x48(%rbp)
+   15:   2c                       .byte 0x2c
+[    1.781350][    T0] RSP: 0000:ffffffff96007e50 EFLAGS: 00010047
+[    1.781350][    T0] RAX: 0000000000000001 RBX: ffffffff96022280 RCX: 
+0000000000000001
+[    1.781350][    T0] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 
+ffffffff96db7da0
+[    1.781350][    T0] RBP: 0000000000000000 R08: 0000000000000001 R09: 
+fffffbfff2db6fb5
+[    1.781350][    T0] R10: ffffffff96db7da7 R11: fffffbfff2db6fb4 R12: 
+fffffbfff2c04450
+[    1.781350][    T0] R13: ffffffff96db7da0 R14: dffffc0000000000 R15: 
+0000000000000000
+[    1.781350][    T0] FS:  0000000000000000(0000) 
+GS:ffff88839d600000(0000) knlGS:0000000000000000
+[    1.781350][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.781350][    T0] CR2: ffff88843ffff000 CR3: 0000000388a14000 CR4: 
+00000000000406f0
+[    1.781350][    T0] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[    1.781350][    T0] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
+0000000000000400
+[    1.781350][    T0] Call Trace:
+[    1.781350][    T0]  <TASK>
+[ 1.781350][ T0] ? arch_cpu_idle_enter 
+(kbuild/src/consumer/arch/x86/kernel/process.c:712)
+[ 1.781350][ T0] ? do_idle (kbuild/src/consumer/kernel/sched/idle.c:294)
+[ 1.781350][ T0] ? _raw_read_unlock_irqrestore 
+(kbuild/src/consumer/kernel/locking/spinlock.c:161)
+[ 1.781350][ T0] ? arch_cpu_idle_exit+0xc0/0xc0 [ 1.781350][ T0] ? 
+schedule (kbuild/src/consumer/arch/x86/include/asm/bitops.h:207 
+(discriminator 1) 
+kbuild/src/consumer/include/asm-generic/bitops/instrumented-non-atomic.h:135 
+(discriminator 1) kbuild/src/consumer/include/linux/thread_info.h:118 
+(discriminator 1) kbuild/src/consumer/include/linux/sched.h:2120 
+(discriminator 1) kbuild/src/consumer/kernel/sched/core.c:6328 
+(discriminator 1)) [ 1.781350][ T0] ? cpu_startup_entry 
+(kbuild/src/consumer/kernel/sched/idle.c:402 (discriminator 1)) [ 
+1.781350][ T0] ? start_kernel (kbuild/src/consumer/init/main.c:1137)
+[ 1.781350][ T0] ? secondary_startup_64_no_verify 
+(kbuild/src/consumer/arch/x86/kernel/head_64.S:283)
+[    1.781350][    T0]  </TASK>
+[    1.781350][    T0] Modules linked in:
+[    1.781350][    T0] ---[ end trace 2bef003d678c9f1a ]---
+[    1.781350][    T0] general protection fault, maybe for address 0x1: 
+0000 [#2] SMP KASAN PTI
+[    1.781350][    T0] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G      D 
+          5.16.0-00004-g66951fd5ad7a #1
+[ 1.781350][ T0] RIP: 0010:fpu_idle_fpregs 
+(kbuild/src/consumer/arch/x86/include/asm/fpu/xcr.h:12 
+kbuild/src/consumer/arch/x86/include/asm/fpu/xcr.h:32 
+kbuild/src/consumer/arch/x86/kernel/fpu/core.c:772)
+[    1.781350][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 
+1996), BIOS 1.12.0-1 04/01/2014
+[ 1.781350][ T0] Code: 89 74 24 04 e8 d4 6e 82 00 8b 74 24 04 e9 f8 fe 
+ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 eb 01 c3 b9 01 00 
+00 00 <0f> 01 d0 a9 00 00 06 00 75 01 c3 55 53 c4 e2 78 49 c0 65 48 8b 
+2c All code ========
+    0:   89 74 24 04              mov    %esi,0x4(%rsp)
+    4:   e8 d4 6e 82 00           callq  0x826edd
+    9:   8b 74 24 04              mov    0x4(%rsp),%esi
+    d:   e9 f8 fe ff ff           jmpq   0xffffffffffffff0a
+   12:   66 66 2e 0f 1f 84 00     data16 nopw %cs:0x0(%rax,%rax,1)
+   19:   00 00 00 00
+   1d:   0f 1f 44 00 00           nopl   0x0(%rax,%rax,1)
+   22:   eb 01                    jmp    0x25
+   24:   c3                       retq
+   25:   b9 01 00 00 00           mov    $0x1,%ecx
+   2a:*  0f 01 d0                 xgetbv           <-- trapping instruction
+   2d:   a9 00 00 06 00           test   $0x60000,%eax
+   32:   75 01                    jne    0x35
+   34:   c3                       retq
+   35:   55                       push   %rbp
+   36:   53                       push   %rbx
+   37:   c4 e2 78 49              (bad)
+   3b:   c0 65 48 8b              shlb   $0x8b,0x48(%rbp)
+   3f:   2c                       .byte 0x2c
+
+Code starting with the faulting instruction 
+===========================================
+    0:   0f 01 d0                 xgetbv
+    3:   a9 00 00 06 00           test   $0x60000,%eax
+    8:   75 01                    jne    0xb
+    a:   c3                       retq
+    b:   55                       push   %rbp
+    c:   53                       push   %rbx
+    d:   c4 e2 78 49              (bad)
+   11:   c0 65 48 8b              shlb   $0x8b,0x48(%rbp)
+   15:   2c                       .byte 0x2c
+[ 1.781350][ T0] RIP: 0010:fpu_idle_fpregs 
+(kbuild/src/consumer/arch/x86/include/asm/fpu/xcr.h:12 
+kbuild/src/consumer/arch/x86/include/asm/fpu/xcr.h:32 
+kbuild/src/consumer/arch/x86/kernel/fpu/core.c:772)
+[    1.781350][    T0] RSP: 0000:ffffffff96007e50 EFLAGS: 00010047
+[ 1.781350][ T0] Code: 89 74 24 04 e8 d4 6e 82 00 8b 74 24 04 e9 f8 fe 
+ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 eb 01 c3 b9 01 00 
+00 00 <0f> 01 d0 a9 00 00 06 00 75 01 c3 55 53 c4 e2 78 49 c0 65 48 8b 
+2c All code ========
+    0:   89 74 24 04              mov    %esi,0x4(%rsp)
+    4:   e8 d4 6e 82 00           callq  0x826edd
+    9:   8b 74 24 04              mov    0x4(%rsp),%esi
+    d:   e9 f8 fe ff ff           jmpq   0xffffffffffffff0a
+   12:   66 66 2e 0f 1f 84 00     data16 nopw %cs:0x0(%rax,%rax,1)
+   19:   00 00 00 00
+   1d:   0f 1f 44 00 00           nopl   0x0(%rax,%rax,1)
+   22:   eb 01                    jmp    0x25
+   24:   c3                       retq
+   25:   b9 01 00 00 00           mov    $0x1,%ecx
+   2a:*  0f 01 d0                 xgetbv           <-- trapping instruction
+   2d:   a9 00 00 06 00           test   $0x60000,%eax
+   32:   75 01                    jne    0x35
+   34:   c3                       retq
+   35:   55                       push   %rbp
+   36:   53                       push   %rbx
+   37:   c4 e2 78 49              (bad)
+   3b:   c0 65 48 8b              shlb   $0x8b,0x48(%rbp)
+   3f:   2c                       .byte 0x2c
+
+Code starting with the faulting instruction 
+===========================================
+    0:   0f 01 d0                 xgetbv
+    3:   a9 00 00 06 00           test   $0x60000,%eax
+    8:   75 01                    jne    0xb
+    a:   c3                       retq
+    b:   55                       push   %rbp
+    c:   53                       push   %rbx
+    d:   c4 e2 78 49              (bad)
+   11:   c0 65 48 8b              shlb   $0x8b,0x48(%rbp)
+   15:   2c                       .byte 0x2c
+[    1.781350][    T0]
+[    1.781350][    T0] RSP: 0000:ffffc9000010fdf8 EFLAGS: 00010047
+[    1.781350][    T0] RAX: 0000000000000001 RBX: ffffffff96022280 RCX: 
+0000000000000001
+[    1.781350][    T0]
+[    1.781350][    T0] RAX: 0000000000000001 RBX: ffff8881003e0000 RCX: 
+0000000000000001
+[    1.781350][    T0] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 
+ffffffff96db7da0
+[    1.781350][    T0] RBP: 0000000000000000 R08: 0000000000000001 R09: 
+fffffbfff2db6fb5
+[    1.781350][    T0] RBP: 0000000000000001 R08: 0000000000000001 R09: 
+fffffbfff2db6fb5
+[    1.781350][    T0] R10: ffffffff96db7da7 R11: fffffbfff2db6fb4 R12: 
+fffffbfff2c04450
+[    1.781350][    T0] R10: ffffffff96db7da7 R11: fffffbfff2db6fb4 R12: 
+ffffed102007c000
+[    1.781350][    T0] R13: ffffffff96db7da0 R14: dffffc0000000000 R15: 
+0000000000000000
+[    1.781350][    T0] FS:  0000000000000000(0000) 
+GS:ffff88839d600000(0000) knlGS:0000000000000000
+[    1.781350][    T0] FS:  0000000000000000(0000) 
+GS:ffff88839d700000(0000) knlGS:0000000000000000
+[    1.781350][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.781350][    T0] CR2: ffff88843ffff000 CR3: 0000000388a14000 CR4: 
+00000000000406f0
+[    1.781350][    T0] CR2: 0000000000000000 CR3: 0000000388a14000 CR4: 
+00000000000406e0
+[    1.781350][    T0] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[    1.781350][    T0] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
+0000000000000400
+[    1.781350][    T0] Kernel panic - not syncing: Fatal exception
+[    1.781350][    T0] Call Trace:
+[    1.781350][    T0]  <TASK>
+[ 1.781350][ T0] ? arch_cpu_idle_enter 
+(kbuild/src/consumer/arch/x86/kernel/process.c:712)
+[ 1.781350][ T0] ? do_idle (kbuild/src/consumer/kernel/sched/idle.c:294)
+[ 1.781350][ T0] ? _raw_spin_lock_irqsave 
+(kbuild/src/consumer/arch/x86/include/asm/atomic.h:202 
+kbuild/src/consumer/include/linux/atomic/atomic-instrumented.h:513 
+kbuild/src/consumer/include/asm-generic/qspinlock.h:82 
+kbuild/src/consumer/include/linux/spinlock.h:185 
+kbuild/src/consumer/include/linux/spinlock_api_smp.h:111 
+kbuild/src/consumer/kernel/locking/spinlock.c:162)
+[ 1.781350][ T0] ? arch_cpu_idle_exit+0xc0/0xc0
+

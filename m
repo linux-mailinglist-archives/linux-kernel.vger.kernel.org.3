@@ -2,133 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B5F4D2EBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2104D2EC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbiCIMI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S232033AbiCIMLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiCIMIr (ORCPT
+        with ESMTP id S229878AbiCIMLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:08:47 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D0A574AE;
-        Wed,  9 Mar 2022 04:07:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646827668; x=1678363668;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vQk3AJizw988FGYDrUIDXPHMUr2Qimpe9ZC0M79rv6I=;
-  b=jo68gqzlqJ2hsLClJFqdLGLQo/+4WrXFFd4S67Pr5DnttSmusjlP6trt
-   Oo2oFC5VxgzCqsBGdRD7cwZNjoiv0UCh4iH28pNe3X/rpa4gLktTXPR1c
-   TA7p+KXQETDCCf9o9hbuAmF3s68nNFmHkQ2/6ZT2hZim6jKsK21uWCzkV
-   3NYIsG0c/DKYJoYZKxJd7TbnYbDscdmFHBKBt9Pzol+OEJsMGJ30EYHV1
-   BVHG/POy1mxcp9NTWXr/qYdKy2OI8YuAjHYCobNrduXzoQ5LT9mi/iq9L
-   FEhzANU+WikPMtNHWdC0j8F2ooD/6pGdfMuFoARXxvLDUnpwCy8Uf1hKb
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,167,1643698800"; 
-   d="scan'208";a="151397211"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 05:07:47 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Mar 2022 05:07:46 -0700
-Received: from ROB-ULT-M68701.amer.actel.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 9 Mar 2022 05:07:44 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski@canonical.com>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH 3/3] dt-bindings: i2c: at91: Add SAMA7G5 compatible strings list
-Date:   Wed, 9 Mar 2022 14:07:14 +0200
-Message-ID: <20220309120714.51393-4-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220309120714.51393-1-sergiu.moga@microchip.com>
-References: <20220309120714.51393-1-sergiu.moga@microchip.com>
+        Wed, 9 Mar 2022 07:11:10 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5188B3C703
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:10:12 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id u61so3831437ybi.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 04:10:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cQLvcGskf9flSlq3jr8x/SzuljCHGLtYRtMn9KIcb0k=;
+        b=Y4QGOQ/6gZ1wN+BlJhrW6wUPKAoZias17oNdcpoJWoxIJLC+iFhWtFn6D8LW8u5fSJ
+         jvsztDkw8ZwUtTCUPH80/BRYh97f8dfU6M9FZGSH6q2RLl6Tm0NpGzs5JS3JAYihh8cq
+         BtmaASX7TYZKx2uh/04/OCIYu+8m/WUw51vxxZ5NMr+oZ7PgJP6PPwauEBh2UhgV5hmH
+         JNxWaK7l+w2GyxebZNw9ld8AgtUGa4g7E3vPGAjZ6HT8/XrVQ4mhRdWPp8IQnUHb6sfx
+         QPSsbToua1NUGFKAZMbC1+nb5PHSnG9e6iQimeBWx2c/f6pRfZKBJfsdlHp+a3SJZ1or
+         VeLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cQLvcGskf9flSlq3jr8x/SzuljCHGLtYRtMn9KIcb0k=;
+        b=ECVW4vdIWKtYHlrVVvMxlIojFcn5OHxQEm/8Tm0drqhd6GbGI2f2vRpevcvSJ3F5wy
+         0rfUbswWZZVuvsriacW1+zaxFKNPIMi4VpixxS8iBxffhl9wJu2czTqt9jjauuciXaX9
+         kSWXsmU+BHceK0JcbGMgS2QIHqlXUN6uCO6BgkjRYS/3zEWwClDxns0FAAh6/2qeFmVP
+         rsc/hcFvyZIuledye95taooOijHfnq+Id9XA1qHOga53zIbpr1oufOiXiVM0IF8RgEj5
+         cFXbpayYaRJPcYzKP6zATyOO7b5dOzQTSTC2F6Or9/poGxKGdK3bl2cU7PX1eAmccDpl
+         Wgsw==
+X-Gm-Message-State: AOAM530lGFLUZP172wlb9N3V/D/YTeM6SyWR7Rcz8wNxM+XBtaSq7Aqc
+        uSYoiR8tIlCpuYLyrFjfu4qvmZOM72RyVWZQvls=
+X-Google-Smtp-Source: ABdhPJzUt/vPIMAvKkMw9ZoQ1VV2XKJQz1l0qtx5xTgNbD+luDDCu86K2stqgGNGAEKdP9v2HRLn2nb8LvKQnWJwHRg=
+X-Received: by 2002:a25:8289:0:b0:623:dc4d:28e5 with SMTP id
+ r9-20020a258289000000b00623dc4d28e5mr15263229ybk.182.1646827811466; Wed, 09
+ Mar 2022 04:10:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211224161334.31123-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211224161334.31123-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 9 Mar 2022 12:09:45 +0000
+Message-ID: <CA+V-a8viRAW+YxhU=Krmc+zF3ixDOV8nL72PG7CP0iYU9onOhw@mail.gmail.com>
+Subject: Re: [PATCH] platform: goldfish: pipe: Use platform_get_irq() to get
+ the interrupt
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible strings list for SAMA7G5.
+Hi Greg,
 
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
----
- .../bindings/i2c/atmel,at91sam-i2c.yaml       | 38 ++++++++++++-------
- 1 file changed, 24 insertions(+), 14 deletions(-)
+I'm not sure how I missed you to add in the to list.
 
-diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-index d4aadbbd1a11..661a679b98cf 100644
---- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-@@ -16,10 +16,15 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            enum:
--              - atmel,sama5d4-i2c
--              - atmel,sama5d2-i2c
--              - microchip,sam9x60-i2c
-+            oneOf:
-+              - items:
-+                  - enum:
-+                      - atmel,sama5d4-i2c
-+                      - atmel,sama5d2-i2c
-+                      - microchip,sam9x60-i2c
-+              - items:
-+                  - const: microchip,sama7g5-i2c
-+                  - const: microchip,sam9x60-i2c
-     then:
-       properties:
-         i2c-sda-hold-time-ns:
-@@ -29,16 +34,21 @@ allOf:
- 
- properties:
-   compatible:
--    enum:
--      - atmel,at91rm9200-i2c
--      - atmel,at91sam9261-i2c
--      - atmel,at91sam9260-i2c
--      - atmel,at91sam9g20-i2c
--      - atmel,at91sam9g10-i2c
--      - atmel,at91sam9x5-i2c
--      - atmel,sama5d4-i2c
--      - atmel,sama5d2-i2c
--      - microchip,sam9x60-i2c
-+    oneOf:
-+      - items:
-+          - enum:
-+              - atmel,at91rm9200-i2c
-+              - atmel,at91sam9261-i2c
-+              - atmel,at91sam9260-i2c
-+              - atmel,at91sam9g20-i2c
-+              - atmel,at91sam9g10-i2c
-+              - atmel,at91sam9x5-i2c
-+              - atmel,sama5d4-i2c
-+              - atmel,sama5d2-i2c
-+              - microchip,sam9x60-i2c
-+      - items:
-+          - const: microchip,sama7g5-i2c
-+          - const: microchip,sam9x60-i2c
- 
-   reg:
-     maxItems: 1
--- 
-2.25.1
+On Fri, Dec 24, 2021 at 4:13 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
+>
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+>
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/platform/goldfish/goldfish_pipe.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+Do you want me to resend this patch?
 
+Cheers,
+Prabhakar
+
+> diff --git a/drivers/platform/goldfish/goldfish_pipe.c b/drivers/platform/goldfish/goldfish_pipe.c
+> index b67539f9848c..7737d56191d7 100644
+> --- a/drivers/platform/goldfish/goldfish_pipe.c
+> +++ b/drivers/platform/goldfish/goldfish_pipe.c
+> @@ -896,11 +896,9 @@ static int goldfish_pipe_probe(struct platform_device *pdev)
+>                 return -EINVAL;
+>         }
+>
+> -       r = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -       if (!r)
+> -               return -EINVAL;
+> -
+> -       dev->irq = r->start;
+> +       dev->irq = platform_get_irq(pdev, 0);
+> +       if (dev->irq < 0)
+> +               return dev->irq;
+>
+>         /*
+>          * Exchange the versions with the host device
+> --
+> 2.17.1
+>

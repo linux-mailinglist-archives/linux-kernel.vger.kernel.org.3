@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194354D3A1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D92D74D3A40
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237805AbiCITWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S237827AbiCITX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237693AbiCITWE (ORCPT
+        with ESMTP id S238174AbiCITXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:22:04 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB31113AF3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:20:53 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id e22so3910583ioe.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:20:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Q42zjW8xahSVhGaNilfnj63EHK+Wikk3dCoDovWBQQY=;
-        b=xvVcZ8t2hTLcYyaR8IdpNwhqebsi1HHxLkwIaDM05AD3lNV0N4AV12KaR0NWsN5GuQ
-         pdX87gjBv0H+CKrPZ+nNI3Y1CdEM7ga8ZJKA6pfpf7tU5IuKIkiLC+VBTLutyyiWlE+7
-         F7tJChmMw4gdInhfNtkjI0XJfVG2xMK14LP/L6QAkEBUaKr898KU7E0rxPJnYVRZXImV
-         QtseXyJto1X7M7YjX3jJ8R2PjtZcDYj53/RHDbrRbEPlQaKvWj16VP35butKsdr6RMuy
-         Untl7fwO6iB27zvzBwP+7A1quiRcAwNFJNjvPJ2Px8ntgSq96yBwRwuBqNv8dujSyoeK
-         ddbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Q42zjW8xahSVhGaNilfnj63EHK+Wikk3dCoDovWBQQY=;
-        b=QyeclIRFEcqlZIbu/e7u9hqclqs5fF/8Q0H5QGQf/EjKZlMspltnQRdmUUc+2+Zhh8
-         jm5bQDtOTMMp9sqzOyNjJ5X9pYbaV2vl/OoLI/xiLJb5Xw7A9HTSOHCYn6TQgLpwlA0U
-         OZE8oovrrudU9pNGG1+TaCPC+OGAV9xyZvseDhbr4Hm7rH3YgxLrKcAkwRLCDxxhF/pt
-         lSlQBjFQnxKgU4kULO5VMCj/kHWAuHscdyV0+/nMqCgWl9wtxWNytiv+ineDq+BpFo83
-         5EB4jIYesYTgGLmRrrhxWWqe6+Ac8s34myWcXSzcw9cP353jSKLPjCcbZ9ejwAaI8nbp
-         +LWQ==
-X-Gm-Message-State: AOAM530mt0vGgYEBuaWT8MKbrHEUTn18E427hNTDHwp4pzgDGlH/bkPD
-        MJYSVr9IhZnhmMnXdUwVaAjacg==
-X-Google-Smtp-Source: ABdhPJz9ICUaILN5z+iwfsY+OlIxZUZ6Tfiu+CkzHuqA9gUA/L8JZVq+gN3I234hfs6lurXOCK71Ug==
-X-Received: by 2002:a05:6602:2d51:b0:645:a9f2:82f3 with SMTP id d17-20020a0566022d5100b00645a9f282f3mr885134iow.9.1646853653196;
-        Wed, 09 Mar 2022 11:20:53 -0800 (PST)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id g8-20020a056602248800b006409fb2cbccsm1389182ioe.32.2022.03.09.11.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 11:20:52 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     djakov@kernel.org, bjorn.andersson@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 7/7] net: ipa: use IPA power device pointer
-Date:   Wed,  9 Mar 2022 13:20:37 -0600
-Message-Id: <20220309192037.667879-8-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220309192037.667879-1-elder@linaro.org>
-References: <20220309192037.667879-1-elder@linaro.org>
+        Wed, 9 Mar 2022 14:23:06 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECE0403D5;
+        Wed,  9 Mar 2022 11:22:04 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 5150B41EA7;
+        Wed,  9 Mar 2022 19:21:59 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v3 0/7] irqchip/apple-aic: Add support for AICv2
+Date:   Thu, 10 Mar 2022 04:21:16 +0900
+Message-Id: <20220309192123.152028-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ipa_power structure contains a copy of the IPA device pointer,
-so there's no need to pass it to ipa_interconnect_init().  We can
-also use that pointer for an error message in ipa_power_enable().
+Hi folks,
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_power.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+In the t6000/t6001 (M1 Pro / Max) SoCs, Apple introduced a new version
+of their interrupt controller. This is a significant departure from
+AICv1 and seems designed to better scale to larger chips. This series
+adds support for it to the existing AIC driver.
 
-diff --git a/drivers/net/ipa/ipa_power.c b/drivers/net/ipa/ipa_power.c
-index 8a564d72799da..16ece27d14d7e 100644
---- a/drivers/net/ipa/ipa_power.c
-+++ b/drivers/net/ipa/ipa_power.c
-@@ -71,7 +71,7 @@ struct ipa_power {
- };
- 
- /* Initialize interconnects required for IPA operation */
--static int ipa_interconnect_init(struct ipa_power *power, struct device *dev,
-+static int ipa_interconnect_init(struct ipa_power *power,
- 				 const struct ipa_interconnect_data *data)
- {
- 	struct icc_bulk_data *interconnect;
-@@ -89,7 +89,7 @@ static int ipa_interconnect_init(struct ipa_power *power, struct device *dev,
- 		interconnect++;
- 	}
- 
--	ret = of_icc_bulk_get(dev, power->interconnect_count,
-+	ret = of_icc_bulk_get(power->dev, power->interconnect_count,
- 			      power->interconnect);
- 	if (ret)
- 		return ret;
-@@ -123,7 +123,7 @@ static int ipa_power_enable(struct ipa *ipa)
- 
- 	ret = clk_prepare_enable(power->core);
- 	if (ret) {
--		dev_err(&ipa->pdev->dev, "error %d enabling core clock\n", ret);
-+		dev_err(power->dev, "error %d enabling core clock\n", ret);
- 		icc_bulk_disable(power->interconnect_count,
- 				 power->interconnect);
- 	}
-@@ -385,7 +385,7 @@ ipa_power_init(struct device *dev, const struct ipa_power_data *data)
- 	spin_lock_init(&power->spinlock);
- 	power->interconnect_count = data->interconnect_count;
- 
--	ret = ipa_interconnect_init(power, dev, data->interconnect_data);
-+	ret = ipa_interconnect_init(power, data->interconnect_data);
- 	if (ret)
- 		goto err_kfree;
- 
+Gone are CPU affinities; instead there seems to be some kind of
+"automagic" dispatch to willing CPU cores, and cores can also opt-out
+via an IMP-DEF sysreg (!). Right now the bootloader just sets up all
+cores to accept IRQs, and we ignore all this and let the magic
+algorithm pick a CPU to accept the IRQ. In the future, we might start
+making use of these finer-grained capabilities for e.g. better
+real-time guarantees (CPUs running RT threads might opt out of IRQs).
+
+Legacy IPI support is also gone, so this implements Fast IPI support.
+Fast IPIs are implemented entirely in the CPU core complexes, using
+FIQs and IMP-DEF sysregs. This is also supported on t8103/M1, so we
+enable it there too, but we keep the legacy AIC IPI codepath in case
+it is useful for backporting to older chips.
+
+This also adds support for multi-die AIC2 controllers. While no
+multi-die products exist yet, the AIC2 in t600x is built to support
+up to 2 dies, and it's pretty clear how it works, so let's implement
+it. If we're lucky, when multi-die products roll around, this will
+let us support them with only DT changes. In order to support the
+extra die dimension, this introduces a 4-argument IRQ phandle form
+(3-argument is always supported and just implies die 0).
+
+All register offsets are computed based on capability register values,
+which should allow forward-compatibility with future AIC2 variants...
+except for one. For some inexplicable reason, the number of actually
+implemented die register sets is nowhere to be found (t600x has 2,
+but claims 1 die in use and 8 dies max, neither of which is what we
+need), and this is necessary to compute the event register offset,
+which is page-aligned after the die register sets. We have no choice
+but to split this out in the device tree as its own reg entry. Apple
+also specify this offset in their ADT explicitly...
+
+Changes since v2:
+- Changed the DT binding to move the event register to its own reg entry
+- Minor error cleanup rework in patch 7
+
+Hector Martin (7):
+  PCI: apple: Change MSI handling to handle 4-cell AIC fwspec form
+  dt-bindings: interrupt-controller: apple,aic2: New binding for AICv2
+  irqchip/apple-aic: Add Fast IPI support
+  irqchip/apple-aic: Switch to irq_domain_create_tree and sparse hwirqs
+  irqchip/apple-aic: Dynamically compute register offsets
+  irqchip/apple-aic: Support multiple dies
+  irqchip/apple-aic: Add support for AICv2
+
+ .../interrupt-controller/apple,aic2.yaml      |  98 ++++
+ MAINTAINERS                                   |   2 +-
+ drivers/irqchip/irq-apple-aic.c               | 459 ++++++++++++++----
+ drivers/pci/controller/pcie-apple.c           |   2 +-
+ 4 files changed, 473 insertions(+), 88 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
+
 -- 
-2.32.0
+2.33.0
 

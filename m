@@ -2,91 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836F34D3A78
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E984D3A6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237942AbiCIThd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S237640AbiCITfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237898AbiCIThb (ORCPT
+        with ESMTP id S237228AbiCITe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:37:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10C21A4;
-        Wed,  9 Mar 2022 11:36:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36510B82398;
-        Wed,  9 Mar 2022 19:36:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E13C340E8;
-        Wed,  9 Mar 2022 19:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646854289;
-        bh=bbCEaeZ6kj/X8f+p8As796Wn0k/8aBP9PNr1a78uZNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lM4+beyoJs2qor9r9JVwhzgyyugqlkR/2q5Y97uShJ9WcvQosx9cmiBjHf6KMCnsu
-         QLbGWvruJxIG8YEyRhpKJaucuifcytA9/a+z4WCRnLBa6ws8VexY80WlZ+FL284/4z
-         nISI5Al8Cu67rJxNGt1VgmQZh9t2dlUnoheZi3m3z5B+1IhjTaPTk5u3zh4JxFB60w
-         H1b/YupgF5NKQi+a03frHhjSxvgQnATcLqCJGBphIcWpkn1TQ2ULrM9QsJsydwBwbe
-         cakvh71vbcL3J9AbusKlsi5r+WvGWqyMZ8L5seRXK8Kj9LqbckuE7mipJ58FvcnPKu
-         Xdrx9vOTE4gHA==
-Date:   Wed, 9 Mar 2022 11:31:26 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com
-Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
-Message-ID: <20220309193126.GA3950874@dhcp-10-100-145-180.wdc.com>
-References: <20220303201312.3255347-1-kbusch@kernel.org>
- <20220303201312.3255347-7-kbusch@kernel.org>
- <your-ad-here.call-01646770901-ext-3299@work.hours>
- <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
- <YigzoKRJ1EHFRZY9@sol.localdomain>
+        Wed, 9 Mar 2022 14:34:59 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58BA2BCF;
+        Wed,  9 Mar 2022 11:33:58 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id w27so5610906lfa.5;
+        Wed, 09 Mar 2022 11:33:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=LWE3j7gKPJN2iwgHmLsMzxFUFfpTb5xerj70IsfeOCw=;
+        b=KsffXGYM9XtBqHpc1H7EhtXCK35QkjKuwE0MMkXa/4OO3SBlRvjdLkqfH47ThLXlX0
+         jSjhA8xDrJ1ZVDHtPvYHGnM6ssMnY3pVT2PjZCKR2k6an+h+u1Y1z28yOiIsiMWwrUyO
+         DmCpeChdMh0v6SUpH9kWg6FybrKTbmL1+GD2Vw5c3Odp4wj2/zn9tlRWsoBA54IG3uAO
+         QfLAaucEgXzFcxe32zY9hfVN2KZIDPzd3hyF883MU8YweZs9U2YNo3ImUDOFIrrf6bgA
+         RWqKjjyHb+0Rsv48Sail6wTtCslhWJSUEoEpntRlias0Gl0Y3ldNFBW5DElN/RBPxpMx
+         h/uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=LWE3j7gKPJN2iwgHmLsMzxFUFfpTb5xerj70IsfeOCw=;
+        b=Emidfqu/lxPCcxZU5g/tWngVMIHtkz/vUG8leJMd3HgXB2o7nC9a/BNmSzJ9+wyY/W
+         I8SACBEo8oyuwBA3KVh9bCwaV833CF3OXg3XqIlcbqFUpgJdXcHuLZwL8WM8PmhlJOt6
+         dYaQBmpRf0GBFIEaZUlReTAAKoaRomvlqtrrh838wTODKANJSHufJa1VS6DC+hFHswix
+         w8sErHpqtJcFw8dpSIPxo+XbxKJV98o3y3Yz040KJN1puv7r1IdRfUU5f0GuKwhzxaAZ
+         /gVCfL2oSVVjlgr1olPaelfkeTG7TYy5pQVw+h5o0Y/mrg5eRigPmZcywdluCpTp1PAc
+         IY6w==
+X-Gm-Message-State: AOAM531kISp4FfBb6nYSOfQRpHuh5trPZOEGXLn8IiwBdV6xXTrd5DGE
+        Go49EeiNFrYijiaV/E4X5oPeUaToTyc=
+X-Google-Smtp-Source: ABdhPJzSdPFiI9KGYMda2XRWp6IPizyVl6+b7p9egmB3ZkYRRTxBIAx3RCGMQlkUkKfBP28nFlZe4Q==
+X-Received: by 2002:ac2:5616:0:b0:445:7115:41af with SMTP id v22-20020ac25616000000b00445711541afmr735572lfd.242.1646854436892;
+        Wed, 09 Mar 2022 11:33:56 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id z23-20020a2e3517000000b00247ebea6422sm601976ljz.13.2022.03.09.11.33.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 11:33:56 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------Fgg1wezJq9fnsbjfsArGE0th"
+Message-ID: <d9addbc6-b4bd-289e-9c57-87dc9034f6a2@gmail.com>
+Date:   Wed, 9 Mar 2022 22:33:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YigzoKRJ1EHFRZY9@sol.localdomain>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [syzbot] INFO: task hung in port100_probe
+Content-Language: en-US
+To:     syzbot <syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com>,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000c644cd05c55ca652@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000c644cd05c55ca652@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 08:57:04PM -0800, Eric Biggers wrote:
-> On Tue, Mar 08, 2022 at 12:27:47PM -0800, Keith Busch wrote:
-> > On Tue, Mar 08, 2022 at 09:21:41PM +0100, Vasily Gorbik wrote:
-> > > On Thu, Mar 03, 2022 at 12:13:10PM -0800, Keith Busch wrote:
-> > > > Hardware specific features may be able to calculate a crc64, so provide
-> > > > a framework for drivers to register their implementation. If nothing is
-> > > > registered, fallback to the generic table lookup implementation. The
-> > > > implementation is modeled after the crct10dif equivalent.
-> > > 
-> > > Hi Keith,
-> > > 
-> > > this is failing on big-endian systems. I get the following on s390:
-> > 
-> > Oh, I see the put_unaligned_le64() in chksum_final() was not the correct
-> > action. I'll send an update, thank you for the report.
+This is a multi-part message in MIME format.
+--------------Fgg1wezJq9fnsbjfsArGE0th
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 6/22/21 18:43, syzbot wrote:
+> Hello,
 > 
-> Or you could make the digests in your test vectors have have a consistent byte
-> order, probably little endian.  That's how "shash" algorithms in the crypto API
-> normally work, including crc32 and crc32c; they produce bytes as output.  I see
-> that crct10dif violates that convention, and I assume you copied it from there.
-> I'm not sure you should do that; crct10dif might be more of a one-off quirk.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    fd0aa1a4 Merge tag 'for-linus' of git://git.kernel.org/pub..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13e1500c300000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ca96a2d153c74b0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1792e284300000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ad9d48300000
+> 
 
-Right, I started with the t10dif implementation. I changed it to the
-unaligned accessor since you indicated the output buffer doesn't have an
-alignment guarantee.
 
-Perhaps I'm missing something, but it looks easier to just use the CPU
-native endianess here. The only users for t10 and rocksoft transform to
-big-endian for the wire protocol at the end, but there's no need to
-maintain a specific byte order before setting the payload.
+Hm, I can't reproduce this issue on top of my tree. Let's test my latest 
+port100 patch
+
+#syz test
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+
+
+
+
+With regards,
+Pavel Skripkin
+--------------Fgg1wezJq9fnsbjfsArGE0th
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+Y29tbWl0IDEzMWY3ZWJiOWEzZDhkMjcxZTNiMzg0ZWVmZDY5Yjk0YzBjZmM3ODQKQXV0aG9y
+OiBQYXZlbCBTa3JpcGtpbiA8cGFza3JpcGtpbkBnbWFpbC5jb20+CkRhdGU6ICAgVHVlIE1h
+ciA4IDIxOjQyOjAwIDIwMjIgKzAzMDAKCiAgICBORkM6IHBvcnQxMDA6IGZpeCB1c2UtYWZ0
+ZXItZnJlZSBpbiBwb3J0MTAwX3NlbmRfY29tcGxldGUKICAgIAogICAgU3l6Ym90IHJlcG9y
+dGVkIFVBRiBpbiBwb3J0MTAwX3NlbmRfY29tcGxldGUoKS4gVGhlIHJvb3QgY2FzZSBpcyBp
+bgogICAgbWlzc2luZyB1c2Jfa2lsbF91cmIoKSBjYWxscyBvbiBlcnJvciBoYW5kbGluZyBw
+YXRoIG9mIC0+cHJvYmUgZnVuY3Rpb24uCiAgICAKICAgIHBvcnQxMDBfc2VuZF9jb21wbGV0
+ZSgpIGFjY2Vzc2VzIGRldm0gYWxsb2NhdGVkIG1lbW9yeSB3aGljaCB3aWxsIGJlCiAgICBm
+cmVlZCBvbiBwcm9iZSBmYWlsdXJlLiBXZSBzaG91bGQga2lsbCB0aGlzIHVyYnMgYmVmb3Jl
+IHJldHVybmluZyBhbgogICAgZXJyb3IgZnJvbSBwcm9iZSBmdW5jdGlvbiB0byBwcmV2ZW50
+IHJlcG9ydGVkIHVzZS1hZnRlci1mcmVlCiAgICAKICAgIEZhaWwgbG9nOgogICAgCiAgICBC
+VUc6IEtBU0FOOiB1c2UtYWZ0ZXItZnJlZSBpbiBwb3J0MTAwX3NlbmRfY29tcGxldGUrMHgx
+NmUvMHgxYTAgZHJpdmVycy9uZmMvcG9ydDEwMC5jOjkzNQogICAgUmVhZCBvZiBzaXplIDEg
+YXQgYWRkciBmZmZmODg4MDFiYjU5NTQwIGJ5IHRhc2sga3NvZnRpcnFkLzIvMjYKICAgIC4u
+LgogICAgQ2FsbCBUcmFjZToKICAgICA8VEFTSz4KICAgICBfX2R1bXBfc3RhY2sgbGliL2R1
+bXBfc3RhY2suYzo4OCBbaW5saW5lXQogICAgIGR1bXBfc3RhY2tfbHZsKzB4Y2QvMHgxMzQg
+bGliL2R1bXBfc3RhY2suYzoxMDYKICAgICBwcmludF9hZGRyZXNzX2Rlc2NyaXB0aW9uLmNv
+bnN0cHJvcC4wLmNvbGQrMHg4ZC8weDMwMyBtbS9rYXNhbi9yZXBvcnQuYzoyNTUKICAgICBf
+X2thc2FuX3JlcG9ydCBtbS9rYXNhbi9yZXBvcnQuYzo0NDIgW2lubGluZV0KICAgICBrYXNh
+bl9yZXBvcnQuY29sZCsweDgzLzB4ZGYgbW0va2FzYW4vcmVwb3J0LmM6NDU5CiAgICAgcG9y
+dDEwMF9zZW5kX2NvbXBsZXRlKzB4MTZlLzB4MWEwIGRyaXZlcnMvbmZjL3BvcnQxMDAuYzo5
+MzUKICAgICBfX3VzYl9oY2RfZ2l2ZWJhY2tfdXJiKzB4MmIwLzB4NWMwIGRyaXZlcnMvdXNi
+L2NvcmUvaGNkLmM6MTY3MAogICAgCiAgICAuLi4KICAgIAogICAgQWxsb2NhdGVkIGJ5IHRh
+c2sgMTI1NToKICAgICBrYXNhbl9zYXZlX3N0YWNrKzB4MWUvMHg0MCBtbS9rYXNhbi9jb21t
+b24uYzozOAogICAgIGthc2FuX3NldF90cmFjayBtbS9rYXNhbi9jb21tb24uYzo0NSBbaW5s
+aW5lXQogICAgIHNldF9hbGxvY19pbmZvIG1tL2thc2FuL2NvbW1vbi5jOjQzNiBbaW5saW5l
+XQogICAgIF9fX19rYXNhbl9rbWFsbG9jIG1tL2thc2FuL2NvbW1vbi5jOjUxNSBbaW5saW5l
+XQogICAgIF9fX19rYXNhbl9rbWFsbG9jIG1tL2thc2FuL2NvbW1vbi5jOjQ3NCBbaW5saW5l
+XQogICAgIF9fa2FzYW5fa21hbGxvYysweGE2LzB4ZDAgbW0va2FzYW4vY29tbW9uLmM6NTI0
+CiAgICAgYWxsb2NfZHIgZHJpdmVycy9iYXNlL2RldnJlcy5jOjExNiBbaW5saW5lXQogICAg
+IGRldm1fa21hbGxvYysweDk2LzB4MWQwIGRyaXZlcnMvYmFzZS9kZXZyZXMuYzo4MjMKICAg
+ICBkZXZtX2t6YWxsb2MgaW5jbHVkZS9saW51eC9kZXZpY2UuaDoyMDkgW2lubGluZV0KICAg
+ICBwb3J0MTAwX3Byb2JlKzB4OGEvMHgxMzIwIGRyaXZlcnMvbmZjL3BvcnQxMDAuYzoxNTAy
+CiAgICAKICAgIEZyZWVkIGJ5IHRhc2sgMTI1NToKICAgICBrYXNhbl9zYXZlX3N0YWNrKzB4
+MWUvMHg0MCBtbS9rYXNhbi9jb21tb24uYzozOAogICAgIGthc2FuX3NldF90cmFjaysweDIx
+LzB4MzAgbW0va2FzYW4vY29tbW9uLmM6NDUKICAgICBrYXNhbl9zZXRfZnJlZV9pbmZvKzB4
+MjAvMHgzMCBtbS9rYXNhbi9nZW5lcmljLmM6MzcwCiAgICAgX19fX2thc2FuX3NsYWJfZnJl
+ZSBtbS9rYXNhbi9jb21tb24uYzozNjYgW2lubGluZV0KICAgICBfX19fa2FzYW5fc2xhYl9m
+cmVlKzB4ZmYvMHgxNDAgbW0va2FzYW4vY29tbW9uLmM6MzI4CiAgICAga2FzYW5fc2xhYl9m
+cmVlIGluY2x1ZGUvbGludXgva2FzYW4uaDoyMzYgW2lubGluZV0KICAgICBfX2NhY2hlX2Zy
+ZWUgbW0vc2xhYi5jOjM0MzcgW2lubGluZV0KICAgICBrZnJlZSsweGY4LzB4MmIwIG1tL3Ns
+YWIuYzozNzk0CiAgICAgcmVsZWFzZV9ub2RlcysweDExMi8weDFhMCBkcml2ZXJzL2Jhc2Uv
+ZGV2cmVzLmM6NTAxCiAgICAgZGV2cmVzX3JlbGVhc2VfYWxsKzB4MTE0LzB4MTkwIGRyaXZl
+cnMvYmFzZS9kZXZyZXMuYzo1MzAKICAgICByZWFsbHlfcHJvYmUrMHg2MjYvMHhjYzAgZHJp
+dmVycy9iYXNlL2RkLmM6NjcwCiAgICAKICAgIFJlcG9ydGVkLWFuZC10ZXN0ZWQtYnk6IHN5
+emJvdCsxNmJjYjEyN2ZiNzNiYWVlY2IxNEBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tCiAg
+ICBGaXhlczogMDM0N2E2YWIzMDBhICgiTkZDOiBwb3J0MTAwOiBDb21tYW5kcyBtZWNoYW5p
+c20gaW1wbGVtZW50YXRpb24iKQogICAgU2lnbmVkLW9mZi1ieTogUGF2ZWwgU2tyaXBraW4g
+PHBhc2tyaXBraW5AZ21haWwuY29tPgoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmZjL3BvcnQx
+MDAuYyBiL2RyaXZlcnMvbmZjL3BvcnQxMDAuYwppbmRleCBkN2RiMWEwZTZiZTEuLjAwZDhl
+YTZkY2I1ZCAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZmMvcG9ydDEwMC5jCisrKyBiL2RyaXZl
+cnMvbmZjL3BvcnQxMDAuYwpAQCAtMTYxMiw3ICsxNjEyLDkgQEAgc3RhdGljIGludCBwb3J0
+MTAwX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRlcmZhY2UsCiAJbmZjX2RpZ2l0
+YWxfZnJlZV9kZXZpY2UoZGV2LT5uZmNfZGlnaXRhbF9kZXYpOwogCiBlcnJvcjoKKwl1c2Jf
+a2lsbF91cmIoZGV2LT5pbl91cmIpOwogCXVzYl9mcmVlX3VyYihkZXYtPmluX3VyYik7CisJ
+dXNiX2tpbGxfdXJiKGRldi0+b3V0X3VyYik7CiAJdXNiX2ZyZWVfdXJiKGRldi0+b3V0X3Vy
+Yik7CiAJdXNiX3B1dF9kZXYoZGV2LT51ZGV2KTsKIAo=
+
+--------------Fgg1wezJq9fnsbjfsArGE0th--

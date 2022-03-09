@@ -2,100 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AEC4D28C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2C44D28CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiCIGNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
+        id S229909AbiCIGOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiCIGNo (ORCPT
+        with ESMTP id S229896AbiCIGOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:13:44 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB665C84D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:12:46 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id g26so2207084ybj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 22:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=//61snb4FzOH8xBVPrGQSTEOIUqrxrg6uRM2aNBozZM=;
-        b=aPuBcekGsi9P0Kiu8PsroQfxh8B7CEY6shdyL04CVPdMJL6Vm6jfWWpHEHG1Fy0XCI
-         GicYeww/yzqyXCzvC5YdjEZFIExYDrgeI/8dY4G6cnKzSNAeD1htsJz3jwdB7ZezvpcI
-         ylPESixpZyteiQ/IQRd2ehwVVjzir7EsJKcOixe1Z3QO8g8FDQoJfrNU45RyKvdfTHHu
-         P+FpBA+pNBsiQs8uFtzHz3kyaBobyaGwOMezcQjGxCeeFEOdfYGCAySUaS22L1nwRdd1
-         13S+33dJMoLs+nUmw8i2TilPRzHjdU82xpE2FGuCH9WG3bb3N5YFi01j1KSS7Oa2fDfu
-         9U6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=//61snb4FzOH8xBVPrGQSTEOIUqrxrg6uRM2aNBozZM=;
-        b=RKMJRecGjWQSFX3atD5Zd6wR5A41+s01avOyM9BZjTN/e52Ijn5ufOVaLssNgWEZc7
-         i37FWP1weTlPm5sfH9ouQoksgejYDLWmn1S6nQxZEin5LD/M4dZu5m23pfsE8fL8AS6v
-         u6utPk67epRQW43/fPZR8w4i6qSXsF2WTV6wNXXmpwktvrhGQxWs8zGIpL2G+vqD35eO
-         hHnVLzxqNxGfcRqCBKDUO8Zj03rMU9FNRpXzzkLdftF3AEZ4AR/MAJKxYAVb6X4hXcFG
-         GcnVuFB4bgqB0n3WlzeTKdY7B+CYQtAXoJJvi/qmcvqa94v0K6Qz58uxwlkd7jDeD9tB
-         y80w==
-X-Gm-Message-State: AOAM530BBvcsquF+BF8WDBSnfTrOdTwv2tLeKDcR2hLmen6PcR1NRgHT
-        x2+zd8b9nnFqIGGDA4oP1t7m6kHO3NuScwEZzDsKKg==
-X-Google-Smtp-Source: ABdhPJzBuek4ThwGw7LKMg2H3OQNOMTaq1RqGtFnxwre1s0xPWyQLGExZZ0bojDIycqhpJghZtJJ7rUAhAaGkCHK27w=
-X-Received: by 2002:a05:6902:203:b0:628:7b6f:2845 with SMTP id
- j3-20020a056902020300b006287b6f2845mr15356927ybs.533.1646806365542; Tue, 08
- Mar 2022 22:12:45 -0800 (PST)
+        Wed, 9 Mar 2022 01:14:06 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0427313D0F;
+        Tue,  8 Mar 2022 22:13:07 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KD21W1QSHz4xnG;
+        Wed,  9 Mar 2022 17:13:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646806386;
+        bh=XqViItOn2ErCKOtc6B8WmgwCnWCFyrtsZ+W9A1X429Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CjSlRilnXoLWHZ34aLJkLA2EUOl9n7fwaFiQOyA//QNeuHkSpaTRRRXL479pK90+e
+         Iw0ZemKxJZVxVrYoOLgYOg70V8sq+WUzJY855qBrqwjYbWwvyKrmXbAjgya96xylTb
+         52tCSVBJ1DwK4LfO8kvxDpIzQUNlEW/CJUcp+nSoLCMJwA8Z91nZaKaroVFI2VC2Bo
+         f79FyU7CBMcii4Uw4EYtGe3AdvR/U1T3Q9QBEH+5yEEsTKz7a8sDl89wOIexeWYjvk
+         1eey7yB4qF2oE12HOy1L2awh6p4pQgq+MxQH+1JRcTC6/zlfLd231No6t7b+LWMLS8
+         0pshHzn14RVrg==
+Date:   Wed, 9 Mar 2022 17:13:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the vhost tree
+Message-ID: <20220309171300.0500a07e@canb.auug.org.au>
+In-Reply-To: <20220307060012-mutt-send-email-mst@kernel.org>
+References: <20220307154011.6d456f28@canb.auug.org.au>
+        <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
+        <20220307211242.59fc0f0e@canb.auug.org.au>
+        <20220307060012-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-References: <20220309014705.1265861-1-liupeng256@huawei.com>
-In-Reply-To: <20220309014705.1265861-1-liupeng256@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 9 Mar 2022 07:12:08 +0100
-Message-ID: <CANpmjNMfkUSUEihTc2u_v6fOhHiyNOAOs2QROjCMEROMTbaxLQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] kunit: fix a UAF bug and do some optimization
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     brendanhiggins@google.com, glider@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        wangkefeng.wang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/z0Z3u/r4NsQg0OpZwH2n+re";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 02:29, 'Peng Liu' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> This series is to fix UAF when running kfence test case test_gfpzero,
-> which is time costly. This UAF bug can be easily triggered by setting
-> CONFIG_KFENCE_DYNAMIC_OBJECTS = 65535. Furthermore, some optimization
-> for kunit tests has been done.
+--Sig_/z0Z3u/r4NsQg0OpZwH2n+re
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, I've observed this problem before, so thanks for fixing.
+Hi Michael,
 
-It's CONFIG_KFENCE_NUM_OBJECTS (not "DYNAMIC") - please fix in all patches.
+On Mon, 7 Mar 2022 06:00:27 -0500 "Michael S. Tsirkin" <mst@redhat.com> wro=
+te:
+>
+> On Mon, Mar 07, 2022 at 09:12:42PM +1100, Stephen Rothwell wrote:
+> >=20
+> > On Mon, 7 Mar 2022 14:46:40 +0800 Xuan Zhuo <xuanzhuo@linux.alibaba.com=
+> wrote: =20
+> > >
+> > > Can you help me test this patch? I don't have an arm environment arou=
+nd me.
+> > >=20
+> > > Thanks
+> > >=20
+> > >=20
+> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > index 1fa2d632a994..4d629d1ea894 100644
+> > > --- a/drivers/net/virtio_net.c
+> > > +++ b/drivers/net/virtio_net.c
+> > > @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_i=
+nfo *vi,
+> > >=20
+> > >  err:
+> > >         netdev_err(vi->dev,
+> > > -                  "reset rx reset vq fail: rx queue index: %ld err: =
+%d\n",
+> > > +                  "reset rx reset vq fail: rx queue index: %td err: =
+%d\n",
+> > >                    rq - vi->rq, err);
+> > >         virtnet_napi_enable(rq->vq, &rq->napi);
+> > >         return err;
+> > > @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_i=
+nfo *vi,
+> > >=20
+> > >  err:
+> > >         netdev_err(vi->dev,
+> > > -                  "reset tx reset vq fail: tx queue index: %ld err: =
+%d\n",
+> > > +                  "reset tx reset vq fail: tx queue index: %td err: =
+%d\n",
+> > >                    sq - vi->sq, err);
+> > >         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
+> > >         return err; =20
+> >=20
+> > I had to apply that by hand, but it does work.
+> >=20
+> > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
+>=20
+> OK, I squashed this into the problematic patch. Thanks a lot!
 
+The warnings have reappeared today :-( and this fixup is not applied.
+Something got lost in the rebase/rewrite?
+--=20
+Cheers,
+Stephen Rothwell
 
-> Peng Liu (3):
->   kunit: fix UAF when run kfence test case test_gfpzero
->   kunit: make kunit_test_timeout compatible with comment
->   kfence: test: try to avoid test_gfpzero trigger rcu_stall
->
->  lib/kunit/try-catch.c   | 3 ++-
->  mm/kfence/kfence_test.c | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> --
-> 2.18.0.huawei.25
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309014705.1265861-1-liupeng256%40huawei.com.
+--Sig_/z0Z3u/r4NsQg0OpZwH2n+re
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIoRWwACgkQAVBC80lX
+0GwvvAf+JiZtIPumBs9xmURkDKuL8Yxm54lmJ81HoeYHzgI+nOrfEKjz+Hs5iQ+W
+pSK+0rMq1kQeOgbsaCWIPjQJxv3ZCjg36rGjynjyfKMe7eD9SF5d9tvwPqnNF340
+6wgyAJzpwrS+HF02fNSR1/5sTrB1uBAYqsl5Ti1JvRaH/ZHWJwkmNQlzChZ7EPPn
+c04nI883inhkiVzHpFe5k1WTzKhF0HyYu1G1eyR+pQ+MGH/pktC1ZPdSS6e8Y2Il
+8XVlt8K+qpCO1qWYK2+odwz0AsG/80fu8dLflXqqrZz+lp0oCnTdSYobWzwOcLva
+Y+TaccTI2GKY1PE8mG0ewJPCKfrrJg==
+=6W6U
+-----END PGP SIGNATURE-----
+
+--Sig_/z0Z3u/r4NsQg0OpZwH2n+re--

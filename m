@@ -2,171 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32154D2C8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CFF4D2C90
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbiCIJxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S232301AbiCIJyJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Mar 2022 04:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbiCIJxN (ORCPT
+        with ESMTP id S229922AbiCIJyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:53:13 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA40E16F970
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:52:14 -0800 (PST)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4401B3F07E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646819533;
-        bh=U75FRdLGbZ3F+BR5tg2Db57c8QbYtEzo66rlGoHxRKA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=gTKaCzf8axqkYnK61BsdDpcMM28luPO81aTRtsHy0UP6f4Fh3Lo3ScP2s8IYE97WQ
-         8so6JQkTsoDu7dPLT7Of/pvHOOLs0mklZZtnAJ2o5QJxIzLewHS+ldCKMg+dCWgeU0
-         qeHLy2KV3HjiPDeefCqzcr3BE319IOW3+/VFqfHBgIxK4APjPNOPavkPdODcs6mh5+
-         3mTgislXzrXoccWMvb8RhPAGI41n3aF3e1jLhdtv9wkNP1mOVP5w7kA+GkL0oKdu9W
-         XlBm9yKVD01v0Gna44udhglojdjh+KB6KhQg/I1DI7CAgor2sBVBjaHzhgpjs5VdxV
-         2VVLbRC7uVVuQ==
-Received: by mail-ej1-f69.google.com with SMTP id jy20-20020a170907763400b006db62b6f4e0so1008334ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:52:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=U75FRdLGbZ3F+BR5tg2Db57c8QbYtEzo66rlGoHxRKA=;
-        b=amHOWOY1+NhiRsbZ4yYpS8rSsUlLl6IvbyJMN3mMatE60IqLeJIU2gwMvxYrNrGyNQ
-         id3AkuB6nfpBvLnc6EXRXMbe0J6PKr9egQuUCif8vmK9wjdc9R8PNV/FdREtKX/BChN4
-         GzxL0iPwbGoJOa+LaEQjmfUtpTaM0qSsHg+tIPmgvRnbXkQRvX5RX8WN4s+gS2TxNmnN
-         INJ/fcWs2QhkjFxyrqfbAbO3pTAm6oNUC9jbgtvoNTQXJjLYSFDKDENqsZrAcNqpWFL/
-         9KnFbqUcsmDwlc/rSazHCqgU6WEBGj+6In+iqRQdLHWz09H9K7HqhWxyZCb56hPzVEw0
-         8pXw==
-X-Gm-Message-State: AOAM532lHmlP6/qbzXtqhaljwWVP/l57bCIngcULE1c15bQrkwJufSU/
-        98UwJxkzNjqbMJ3I6BPjCcwN+A+T302IJMta5Kb/NL9Dy8eYrr4h0BZ2kaSiC89EH2sSzfsuopH
-        IbK4PP8t6zNNxuxfYSf9a+e9EityY6l8t7YZT4l3XAA==
-X-Received: by 2002:a17:906:d1c4:b0:6d5:83bb:f58a with SMTP id bs4-20020a170906d1c400b006d583bbf58amr17198184ejb.672.1646819532930;
-        Wed, 09 Mar 2022 01:52:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxypo8WhHmI7QrJIfEnzBsw31JbIstN4NTAsHC8a7RLBqVyTNgRad9/mbPcfeKtI/FKHnDF1Q==
-X-Received: by 2002:a17:906:d1c4:b0:6d5:83bb:f58a with SMTP id bs4-20020a170906d1c400b006d583bbf58amr17198172ejb.672.1646819532666;
-        Wed, 09 Mar 2022 01:52:12 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id mp33-20020a1709071b2100b006db6dea7f9dsm373267ejc.168.2022.03.09.01.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 01:52:12 -0800 (PST)
-Message-ID: <cbdd5e41-7538-6d8f-344a-54a816c6d511@canonical.com>
-Date:   Wed, 9 Mar 2022 10:52:11 +0100
+        Wed, 9 Mar 2022 04:54:07 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 861D85C675
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:53:08 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-170-C9CSPsPAP3CiGXY-2Cczvg-1; Wed, 09 Mar 2022 09:53:06 +0000
+X-MC-Unique: C9CSPsPAP3CiGXY-2Cczvg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 9 Mar 2022 09:53:04 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 9 Mar 2022 09:53:04 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] powerpc: Use rol32() instead of opencoding in csum_fold()
+Thread-Topic: [PATCH] powerpc: Use rol32() instead of opencoding in
+ csum_fold()
+Thread-Index: AQHYM4tAZCIa7HBaKU201H+8JgoYL6y2y/IA
+Date:   Wed, 9 Mar 2022 09:53:04 +0000
+Message-ID: <d7840750e3694b30951540b4298da208@AcuMS.aculab.com>
+References: <794337eff7bb803d2c4e67d9eee635390c4c48fe.1646812553.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <794337eff7bb803d2c4e67d9eee635390c4c48fe.1646812553.git.christophe.leroy@csgroup.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] NFC: port100: fix use-after-free in port100_send_complete
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, sameo@linux.intel.com,
-        thierry.escande@linux.intel.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
-References: <20220308185007.6987-1-paskripkin@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220308185007.6987-1-paskripkin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 19:50, Pavel Skripkin wrote:
-> Syzbot reported UAF in port100_send_complete(). The root case is in
-> missing usb_kill_urb() calls on error handling path of ->probe function.
+From: Christophe Leroy
+> Sent: 09 March 2022 07:56
+...
+> diff --git a/arch/powerpc/include/asm/checksum.h b/arch/powerpc/include/asm/checksum.h
+> index 8321f6053a67..4b573a3b7e17 100644
+> --- a/arch/powerpc/include/asm/checksum.h
+> +++ b/arch/powerpc/include/asm/checksum.h
+> @@ -38,14 +38,15 @@ extern __wsum csum_and_copy_to_user(const void *src, void __user *dst,
+>   */
+>  static inline __sum16 csum_fold(__wsum sum)
+>  {
+> +	u32 tmp = (__force u32)sum;
+> +
+> +	/*
+> +	 * swap the two 16-bit halves of sum
+> +	 * if there is a carry from adding the two 16-bit halves,
+> +	 * it will carry from the lower half into the upper half,
+> +	 * giving us the correct sum in the upper half.
+> +	 */
+> +	return (__force __sum16)(~(tmp + rol32(tmp, 16)) >> 16);
+>  }
 > 
-> port100_send_complete() accesses devm allocated memory which will be
-> freed on probe failure. We should kill this urbs before returning an
-> error from probe function to prevent reported use-after-free
-> 
-> Fail log:
-> 
-> BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
-> Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
-> ...
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
->  __kasan_report mm/kasan/report.c:442 [inline]
->  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
->  port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
->  __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
-> 
-> ...
-> 
-> Allocated by task 1255:
->  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
->  kasan_set_track mm/kasan/common.c:45 [inline]
->  set_alloc_info mm/kasan/common.c:436 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:515 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:474 [inline]
->  __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
->  alloc_dr drivers/base/devres.c:116 [inline]
->  devm_kmalloc+0x96/0x1d0 drivers/base/devres.c:823
->  devm_kzalloc include/linux/device.h:209 [inline]
->  port100_probe+0x8a/0x1320 drivers/nfc/port100.c:1502
-> 
-> Freed by task 1255:
->  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
->  kasan_set_track+0x21/0x30 mm/kasan/common.c:45
->  kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
->  ____kasan_slab_free mm/kasan/common.c:366 [inline]
->  ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
->  kasan_slab_free include/linux/kasan.h:236 [inline]
->  __cache_free mm/slab.c:3437 [inline]
->  kfree+0xf8/0x2b0 mm/slab.c:3794
->  release_nodes+0x112/0x1a0 drivers/base/devres.c:501
->  devres_release_all+0x114/0x190 drivers/base/devres.c:530
->  really_probe+0x626/0xcc0 drivers/base/dd.c:670
-> 
-> Reported-and-tested-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
-> Fixes: 0347a6ab300a ("NFC: port100: Commands mechanism implementation")
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> ---
->  drivers/nfc/port100.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/nfc/port100.c b/drivers/nfc/port100.c
-> index d7db1a0e6be1..00d8ea6dcb5d 100644
-> --- a/drivers/nfc/port100.c
-> +++ b/drivers/nfc/port100.c
-> @@ -1612,7 +1612,9 @@ static int port100_probe(struct usb_interface *interface,
->  	nfc_digital_free_device(dev->nfc_digital_dev);
->  
->  error:
-> +	usb_kill_urb(dev->in_urb);
->  	usb_free_urb(dev->in_urb);
-> +	usb_kill_urb(dev->out_urb);
->  	usb_free_urb(dev->out_urb);
->  	usb_put_dev(dev->udev);
+>  static inline u32 from64to32(u64 x)
+> --
+> 2.34.1
 
+On the face of it that is pretty generic.
+Two shifts and an add (plus the invert and mask).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+I suspect it generates better code than the current x86 version
+which is:
 
-Thanks, this looks good. I think I saw similar patterns also in other
-drivers, e.g. pn533. I will check it later, but if you have spare time,
-feel free to investigate.
+static inline __sum16 csum_fold(__wsum sum)
+{
+	asm("addl %1, %0		;\n"
+	    "adcl $0xffff, %0	;\n"
+	    : "=r" (sum)
+	    : "r" ((__force u32)sum << 16),
+	      "0" ((__force u32)sum & 0xffff0000));
+	return (__force __sum16)(~(__force u32)sum >> 16);
+}
 
-Similar cases (unresolved):
-https://syzkaller.appspot.com/bug?extid=1dc8b460d6d48d7ef9ca
-https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
-https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
+Which looks like 2 shifts, a mask, add, adc..
+(Oh and the adc is two clocks on anything prior to Haswell.)
+Quite why it doesn't use 16bit add and adc is anybodies guess.
+Would still be shift, add, adc.
+So shift, add, shift is no worse.
 
+I wonder if any of the asm versions are actually better?
+Some are the same algorithm, some are a lot worse.
 
-Best regards,
-Krzysztof
+Generic is:
+static inline __sum16 csum_fold(__wsum csum)
+{
+	u32 sum = (__force u32)csum;
+	sum = (sum & 0xffff) + (sum >> 16);
+	sum = (sum & 0xffff) + (sum >> 16);
+	return (__force __sum16)~sum;
+}
+Clearly can be improved.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

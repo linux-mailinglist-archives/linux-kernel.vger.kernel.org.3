@@ -2,131 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CFF4D2C90
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3DB4D2C94
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiCIJyJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Mar 2022 04:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S232324AbiCIJzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiCIJyH (ORCPT
+        with ESMTP id S230522AbiCIJzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:54:07 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 861D85C675
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:53:08 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-170-C9CSPsPAP3CiGXY-2Cczvg-1; Wed, 09 Mar 2022 09:53:06 +0000
-X-MC-Unique: C9CSPsPAP3CiGXY-2Cczvg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 9 Mar 2022 09:53:04 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 9 Mar 2022 09:53:04 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] powerpc: Use rol32() instead of opencoding in csum_fold()
-Thread-Topic: [PATCH] powerpc: Use rol32() instead of opencoding in
- csum_fold()
-Thread-Index: AQHYM4tAZCIa7HBaKU201H+8JgoYL6y2y/IA
-Date:   Wed, 9 Mar 2022 09:53:04 +0000
-Message-ID: <d7840750e3694b30951540b4298da208@AcuMS.aculab.com>
-References: <794337eff7bb803d2c4e67d9eee635390c4c48fe.1646812553.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <794337eff7bb803d2c4e67d9eee635390c4c48fe.1646812553.git.christophe.leroy@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 9 Mar 2022 04:55:01 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED63D0040;
+        Wed,  9 Mar 2022 01:54:02 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id e186so3171987ybc.7;
+        Wed, 09 Mar 2022 01:54:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+14GjQ8VFEaJ8dUWynMaVtyaYThCk9kMBQ49ijA4dTw=;
+        b=VKmwmgf92bzfY8cmDqUGOnt1/KSNzaBsPztW7RcsPFS5ihfrbE3LZXxkU76GStXok+
+         nEtgfYFyngw0vww/JnP9DWYPihbigEDOZbSoCsRUPPrRbhseN0n7E1oXUffK4aszigYa
+         v7TQDrqYjqQGATxbamW4uZ9U6l2jPnM/XbaLGItllOfa1ff9x8jN6uM2BJRP/860pIQp
+         cBk9vMb64VaT36V2KEOhLQmb35S4ZdklzQcZ3KSQZNjcNNmUcel+JVbc3bsS+n+4rV/D
+         aV1SpOk23uiCu/iplJ4XNdkevjYkP7mZrX4cPmw0UYyJISDCeZvji/KEM5SNL9anmot5
+         21LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+14GjQ8VFEaJ8dUWynMaVtyaYThCk9kMBQ49ijA4dTw=;
+        b=5nrNzkpah+Gs9H/YGV/7SBfBePeYzHN5PpoRju41nCEERz3YrQd3W++r+1KHfxoEKg
+         zSPp7QkzP09CAFNlorlbYTkp6uSUGSsjNuqZdfujc/sc1SAZ4a2f7VhO9PF/RCKncyaE
+         AjA4NLlSIjQwXmLL82nJO5AmVtSKVTZ44xevg+7qEHUxaEefzxBLmqTCoEDt/n2B7JEU
+         O5S1e6glQCQTtUjUY56rIsvdbE9puYqKy/twy/XNH3Vc1GY7mwrdDaXI3uehPe1Y2ZqD
+         gKW83H+yxwYd9rsczcSPj8R7EdWyUCWhtabcoNV7eT924a5oZsjj50WMHDRnprfMmfpF
+         WNyQ==
+X-Gm-Message-State: AOAM530yYYZtPmZfNZ2rsWkhKu4QqBz6NISD/qFlPQUYhzCPs79n3wKc
+        eNEee+yPxtj9W0rjyjoSXQvAyqpTICvwjAcL+WY=
+X-Google-Smtp-Source: ABdhPJxmoGUidQHzeLMAoMH3lomCve4BKJC5Mqd1btsoVspGABW7oWKXkAbRZ8Q344/XkqB1JKs/1Bukd0nOxFFcmvw=
+X-Received: by 2002:a25:7504:0:b0:629:308e:9d95 with SMTP id
+ q4-20020a257504000000b00629308e9d95mr12948405ybc.106.1646819641703; Wed, 09
+ Mar 2022 01:54:01 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307162207.188028559@linuxfoundation.org> <Yid4BNbLm3mStBi2@debian>
+ <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
+ <CA+G9fYv74gGWQLkEZ4idGYri+F9BFV1+9=bz5L0+aophSzDdVA@mail.gmail.com>
+ <YifFMPFMp9gPnjPc@kroah.com> <CADVatmMs_+YN3YAajL95fy98iEgoeb-7qXA_ZJ7K3QsdHGG=oA@mail.gmail.com>
+ <8f97b76e-fe64-ad9e-fa46-9874df61c35d@roeck-us.net>
+In-Reply-To: <8f97b76e-fe64-ad9e-fa46-9874df61c35d@roeck-us.net>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Wed, 9 Mar 2022 09:53:25 +0000
+Message-ID: <CADVatmNXDx4-vrsyZBeRs8HHYfS3j8OPpS4CGnhQc=uyijgwvQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy
-> Sent: 09 March 2022 07:56
-...
-> diff --git a/arch/powerpc/include/asm/checksum.h b/arch/powerpc/include/asm/checksum.h
-> index 8321f6053a67..4b573a3b7e17 100644
-> --- a/arch/powerpc/include/asm/checksum.h
-> +++ b/arch/powerpc/include/asm/checksum.h
-> @@ -38,14 +38,15 @@ extern __wsum csum_and_copy_to_user(const void *src, void __user *dst,
->   */
->  static inline __sum16 csum_fold(__wsum sum)
->  {
-> +	u32 tmp = (__force u32)sum;
-> +
-> +	/*
-> +	 * swap the two 16-bit halves of sum
-> +	 * if there is a carry from adding the two 16-bit halves,
-> +	 * it will carry from the lower half into the upper half,
-> +	 * giving us the correct sum in the upper half.
-> +	 */
-> +	return (__force __sum16)(~(tmp + rol32(tmp, 16)) >> 16);
->  }
-> 
->  static inline u32 from64to32(u64 x)
-> --
-> 2.34.1
+On Wed, Mar 9, 2022 at 12:53 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/8/22 14:27, Sudip Mukherjee wrote:
+> > On Tue, Mar 8, 2022 at 9:05 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> >>
+> >> On Tue, Mar 08, 2022 at 11:08:10PM +0530, Naresh Kamboju wrote:
+> >>> Hi Greg,
+> >>>
+> >>> On Tue, 8 Mar 2022 at 21:40, Sudip Mukherjee <sudipm.mukherjee@gmail.com> wrote:
+> >>>>
+> >>>> On Tue, Mar 8, 2022 at 3:36 PM Sudip Mukherjee
+> >>>> <sudipm.mukherjee@gmail.com> wrote:
+> >>>>>
+> >>>>> Hi Greg,
+> >>>>>
+> >>>>> On Mon, Mar 07, 2022 at 05:28:50PM +0100, Greg Kroah-Hartman wrote:
+> >>>>>> This is the start of the stable review cycle for the 5.15.27 release.
+> >>>>>> There are 256 patches in this series, all will be posted as a response
+> >>>>>> to this one.  If anyone has any issues with these being applied, please
+> >>>>>> let me know.
+> >>>>>>
+> >>>>
+> >>>> <snip>
+> >>>>
+> >>>>>
+> >>>>> Mips failures,
+> >>>>>
+> >>>>> allmodconfig, gpr_defconfig and mtx1_defconfig fails with:
+> >>>
+> >
+> > <snip>
+> >
+> >>
+> >> Ah, I'll queue up the revert for that in the morning, thanks for finding
+> >> it.  Odd it doesn't trigger the same issue in 5.16.y.
+> >
+> > ohh.. thats odd. I don't build v5.16.y, so never thought of it.
+> > Just checked a little now, and I was expecting it to be fixed by:
+> > e5b40668e930 ("slip: fix macro redefine warning")
+> > but it still has the build error. I will check tomorrow morning what
+> > is missing in v5.15.y
+> > Please delay the revert till tomorrow afternoon.
+> >
+>
+> In case you did not get my other e-mail: You also need commit
+> b81e0c2372e ("block: drop unused includes in <linux/genhd.h>").
 
-On the face of it that is pretty generic.
-Two shifts and an add (plus the invert and mask).
+Thanks Guenter.
+And, I have now verified that both gpr_defconfig and mtx1_defconfig
+passes after cherry-picking these two commits.
 
-I suspect it generates better code than the current x86 version
-which is:
 
-static inline __sum16 csum_fold(__wsum sum)
-{
-	asm("addl %1, %0		;\n"
-	    "adcl $0xffff, %0	;\n"
-	    : "=r" (sum)
-	    : "r" ((__force u32)sum << 16),
-	      "0" ((__force u32)sum & 0xffff0000));
-	return (__force __sum16)(~(__force u32)sum >> 16);
-}
-
-Which looks like 2 shifts, a mask, add, adc..
-(Oh and the adc is two clocks on anything prior to Haswell.)
-Quite why it doesn't use 16bit add and adc is anybodies guess.
-Would still be shift, add, adc.
-So shift, add, shift is no worse.
-
-I wonder if any of the asm versions are actually better?
-Some are the same algorithm, some are a lot worse.
-
-Generic is:
-static inline __sum16 csum_fold(__wsum csum)
-{
-	u32 sum = (__force u32)csum;
-	sum = (sum & 0xffff) + (sum >> 16);
-	sum = (sum & 0xffff) + (sum >> 16);
-	return (__force __sum16)~sum;
-}
-Clearly can be improved.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Regards
+Sudip

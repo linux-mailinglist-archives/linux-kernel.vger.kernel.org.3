@@ -2,116 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932634D2738
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A1F4D272C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiCICSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 21:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S231585AbiCICY3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Mar 2022 21:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiCICSv (ORCPT
+        with ESMTP id S231279AbiCICYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 21:18:51 -0500
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DBB12A99;
-        Tue,  8 Mar 2022 18:17:41 -0800 (PST)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2292HRcQ025536;
-        Wed, 9 Mar 2022 11:17:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2292HRcQ025536
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1646792247;
-        bh=yrz8MJgeMKuvnz33SMeYLZ7Cine73+llQkRSU7j3OeY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QdLV+YuJnE3AuI25L44qDcEFha7V2tJikwuAbHrYtTptepmqS8wiUbtBjtqUKfiAe
-         GrVcq0Nf1zqBNYDN27k7DKPnorO++0pTgwRsKM/FmO+CaVio1dVjjmRHjNh7nvdN12
-         mnq8a/cyE3WVGk8FBI3Js7IexJIJXuXDmwovsVnUovEf7ioR8AbYSywB/qFq1Cly01
-         cLWX0DcMiW6S9JNVwcNjC5r7LbbjKr9K8LGSQJPy/07z/ZATjmEjMCk0Cd/RwvjwhZ
-         w/j0JU9CtFQ1+eQpoaJt6iY4/UdfEYRQ5jGuAiwMPNLt97UzDe1YtJpEAyhtL4FNAx
-         ZJAQuF3XM469w==
-X-Nifty-SrcIP: [209.85.216.43]
-Received: by mail-pj1-f43.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso3948310pjb.0;
-        Tue, 08 Mar 2022 18:17:27 -0800 (PST)
-X-Gm-Message-State: AOAM532cCXb1Lapn2tEZkEfzwpTyWd29qv3iaHi6klddHoAzQD3TQ7fa
-        4u6egYTHGbd8TGeN7LysFrpEoNM8HdQO+30SNrw=
-X-Google-Smtp-Source: ABdhPJyMpYSk5zXrKpcgek+899vxIgkJpkfAkc4Uc5APGsnHYk6hCj+dOoi9kSCk2xTpgtEh31/JWnYw2PXFOhrKljg=
-X-Received: by 2002:a17:902:eb84:b0:151:f80e:e98b with SMTP id
- q4-20020a170902eb8400b00151f80ee98bmr9234067plg.99.1646792246518; Tue, 08 Mar
- 2022 18:17:26 -0800 (PST)
+        Tue, 8 Mar 2022 21:24:25 -0500
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F0E1B65;
+        Tue,  8 Mar 2022 18:23:27 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2dbfe58670cso8316707b3.3;
+        Tue, 08 Mar 2022 18:23:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vRqEX4jehGb8mpHAHZanSBhzpnb3IlnL81jQ2qWnd2E=;
+        b=AgTQOJMBWm65wrlgk9F3vl0WIIVs6Ww7J4tQcKQpbJ4oO11NlpztuAdwAzxOrVOCET
+         DRSCQ7MkASEWAgWWUxEmsxnSOdKwoXkNcs3wg0chqlcXUziMTW1hkvde8vrHuMTraSvm
+         x7RNQU5CXUO0EP5OS1yvN6IvSyrH1MXD4thumq9Fb7Jh1IjTwGggquhPkwQ+f/3j2sJP
+         aLBVrqah46iUjU36xtRKUgqv83KvoYi9Zcw0DkJMmIHIcwKVPQBMa2RWJRk2nyGZinIq
+         Lr9rOA8+sScj6dNZQTkWQFUA1GxsLZPvbNhZNzPN9OwmXp9qbgFiFxBu9+jUtdDInA1l
+         /0hA==
+X-Gm-Message-State: AOAM531lhpn0enYcXzo5JHBZbw3mXE5X42ceVg2uxpEZibYAB/ORTjwz
+        aCHkSP66oPaVBJnR0mJWXoz2lBoL84B0msWFm7c=
+X-Google-Smtp-Source: ABdhPJzj7DyFzASBA892hVXyxQooQWrYYu3TtRehPlG6eBRsdpkOFy6LiFy+Mi6aV/QfgWrM4LUXLXbItwdvbKc6+AU=
+X-Received: by 2002:a0d:db09:0:b0:2dc:344f:7944 with SMTP id
+ d9-20020a0ddb09000000b002dc344f7944mr15041695ywe.45.1646792606156; Tue, 08
+ Mar 2022 18:23:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20220308215615.14183-1-arnd@kernel.org> <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 9 Mar 2022 11:16:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
-Message-ID: <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] [v4] Kbuild: std=gnu11 changes
+References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
+ <20220308141201.2343757-1-mailhol.vincent@wanadoo.fr> <CAHk-=whvGWbpsTa538CvQ9e=VF+m8WPQmES2y6-=0=-64uGkgg@mail.gmail.com>
+In-Reply-To: <CAHk-=whvGWbpsTa538CvQ9e=VF+m8WPQmES2y6-=0=-64uGkgg@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 9 Mar 2022 11:23:15 +0900
+Message-ID: <CAMZ6RqJ5Pyup4RgjMA5fG5Lt4tpA_tvv61snpKbF4DJAkPzdAg@mail.gmail.com>
+Subject: Re: [PATCH v2] linux/bits.h: GENMASK_INPUT_CHECK: reduce W=2 noise by
+ 31% treewide
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Alex Shi <alexs@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Marco Elver <elver@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 9:09 AM Linus Torvalds
+Hi Linus,
+
+On Wed. 9 Mar 2022 at 03:13, Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
->
-> On Tue, Mar 8, 2022 at 1:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> On Tue, Mar 8, 2022 at 6:12 AM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
 > >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > I've incorporated the feedback from Masahiro Yamada in this
-> > version, splitting out one more patch, rebasing on top of
-> > the kbuild tree, and changing the order of the patches.
-> >
-> > Please apply to the kbuild tree.
+> > This patch silences a -Wtypes-limits warning in GENMASK_INPUT_CHECK()
+> > which is accountable for 31% of all warnings when compiling with W=2.
 >
-> I'd actually like to see this as a separate branch, so that I can
-> merge it early - or other peoples git branches end up depending on it.
+> Please, just make the patch be "remote -Wtypes-limits".
+
+After this patch, the number of remaining -Wtype-limits drops by
+99.7% from 164714 to only 431 for an allyesconfig (some of which
+could be true positives). So I am inclined to keep
+-Wtype-limits at W=2 because it still catches some relevant
+issues. Aside from the issue pointed out here, it is not a hindrance.
+
+> Instead of making an already complicated check more complicated, and
+> making it more fragile.
+
+ACK, this patch makes it more complicated. About making it more
+fragile, lib/test_bits.c is here to catch issues and this patch
+passes those tests including the TEST_GENMASK_FAILURES.
+
+> I don't see why that int cast on h would be valid, for example. Why
+> just h?
+
+The compiler only complains on ((unsigned int)foo > 0) patterns,
+i.e. when h is unsigned and l is zero. The signness of l is not relevant
+here.
+
+> And should you not then check that the cast doesn't actually
+> change the value?
+
+The loss of precision only occurs on big values
+e.g. GENMASK(UINT_MAX + 1, 0).
+
+GENMASK (and GENMASK_ULL) already requires h and l to be between
+0 and 31 (or 63). Out of band positive values are caught by
+-Wshift-count-overflow (and negative values by
+-Wshift-count-negative).
+
+So the use cases in which the int cast would change h value are
+already caught elsewhere.
+
+> But the basic issue is that the compiler warns about bad things, and
+> the problem isn't the code, but the compiler.
+
+ACK, the code is not broken, the compiler is guilty. I tend to
+agree to the rule "if not broken, don’t fix", but I consider this
+patch to be *the exception* because of the outstanding level of
+noise generated here.
+
+If my message did not convince you, then I am fine to move
+-Wtypes-limits from W=2 to W=3 as a compromise. But this is not
+my preferred solution because some -Wtypes-limits warnings are
+useful.
 
 
-OK, I can apply this to a separate branch, kbuild-gnu11.
-(and I will queue this up shortly because it is already -rc7)
-
-Then, I will send two pull reqs in the next MW,
-but please note they will conflict with each other,
-between this gnu11 patch set and the following
-one in my usual kbuild branch:
-
-https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808035-1-quic_eberman@quicinc.com/
-
-
-I hope this is not a complex conflict, but please let me know
-if you have any requests to me.
-
-
-
-
-
-> Yeah, it shouldn't change anything on its own, but since it allows for
-> new syntax, we might have other things depending on it (I'm obviously
-> thinking of the list_for_each_entry() series that keeps getting
-> posted).
->
->                       Linus
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Yours sincerely,
+Vincent Mailhol

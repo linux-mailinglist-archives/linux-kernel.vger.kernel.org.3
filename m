@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F048A4D2A28
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D044D2A18
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiCIH55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S231484AbiCIH56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiCIH4j (ORCPT
+        with ESMTP id S231165AbiCIH4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Mar 2022 02:56:39 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CE4166A5C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F57166A64;
         Tue,  8 Mar 2022 23:55:16 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:55:13 -0000
+Date:   Wed, 09 Mar 2022 07:55:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812514;
+        s=2020; t=1646812515;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hsAIAiCvEF9bhk8WUkO5F1Z9BMt82PYR3uNBs/370GA=;
-        b=aVHzrXn6RLA7G87j/8PdnN+GyERQqrNM3q0h+gg2dQ0DSVvc6c8tP0kzJp9CsTtPm7sA4T
-        UAV56tMa+2HDoogI4LTBkCXKYbbai7gzLgJx0A1YRtldMyaMaJWr+oOob8VPXm0/HMXLRy
-        s11pT8zAXzEr2tVq8Blj29gcq6jgZgg/dOxcHCdcNEVjPDhvG48WTLXS61AARLrdQjZ0/b
-        jLaRUmyaXpzgD85Vw22umjmTYtGIoUdUJHLvyVz47gdZq/ozMNB88DPAnonK0lM31kQV4N
-        s09ttyS5uNH2mumv0JPWrhAHStIp2Jk4/i0XCcBfBIC/N3cR1Q8Fxouzg7XkZA==
+        bh=stA61fcD5w5nUsopVJOsKkSXIWNWdq3D/vij4lbqLwE=;
+        b=VUibsTKDBbgGzsbq4q6qMx/Aoxol9UAzj6LpEgNYLc8tln8fPvogo3ItTHymkBnMbKiYoU
+        OOWLwtDaAmKOakReUytOmQXqhE2mOyHIQMEb2t6X87f6QAdGhD9mK+ySMVywnDqJBMI/X2
+        q8ECZfDLtSrH/gDMlu/vflZWpCjiROlOeNu86uC3AMlxZkggBg7xLm+RBiQK0ldZcl7wv6
+        jCy+b6L9CWDaW9vG8Z2NB44X2M/MElrUp9xp5O/FDw81kXdZVGiy6uhkTgMSDYVSHEb31t
+        +j+JRE/bOU3j/nbXElfglljhy8oLgNlehOxxOs61uQ4nlX+XKvl9kqEHX5hySw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812514;
+        s=2020e; t=1646812515;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hsAIAiCvEF9bhk8WUkO5F1Z9BMt82PYR3uNBs/370GA=;
-        b=bFbRJR0g05b8ewf+e/XsIFkVRwQq3JgW4pXKR2XbJKlZI5HC9hFCHqKj03HRPC3iIrS5im
-        bnfGG0PeY585T0Bw==
+        bh=stA61fcD5w5nUsopVJOsKkSXIWNWdq3D/vij4lbqLwE=;
+        b=GOk+p18baovsu7e+EISWWgCA8cIIQHveuujvMcnqTLYH+tkrGixAJA571GxJJANXiKDwdT
+        mU7rzLxTwwTj8MCA==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Have WARN_FUNC fall back to sym+off
+Subject: [tip: x86/core] objtool,efi: Update __efi64_thunk annotation
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154317.461283840@infradead.org>
-References: <20220308154317.461283840@infradead.org>
+In-Reply-To: <20220308154317.402118218@infradead.org>
+References: <20220308154317.402118218@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681251341.16921.1310664348560537528.tip-bot2@tip-bot2>
+Message-ID: <164681251438.16921.12937403000114406105.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,36 +67,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     03232d0842453f256c278c377f9646e45eb57d98
-Gitweb:        https://git.kernel.org/tip/03232d0842453f256c278c377f9646e45eb57d98
+Commit-ID:     f99b84d14feba2ac011b1a21ceae4aa9e3fe49e8
+Gitweb:        https://git.kernel.org/tip/f99b84d14feba2ac011b1a21ceae4aa9e3fe49e8
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:16 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:15 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:27 +01:00
 
-objtool: Have WARN_FUNC fall back to sym+off
+objtool,efi: Update __efi64_thunk annotation
 
-Currently WARN_FUNC() either prints func+off and failing that prints
-sec+off, add an intermediate sym+off. This is useful when playing
-around with entry code.
+The current annotation relies on not running objtool on the file; this
+won't work when running objtool on vmlinux.o. Instead explicitly mark
+__efi64_thunk() to be ignored.
+
+This preserves the status quo, which is somewhat unfortunate. Luckily
+this code is hardly ever used.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154317.461283840@infradead.org
+Link: https://lore.kernel.org/r/20220308154317.402118218@infradead.org
 ---
- tools/objtool/include/objtool/warn.h | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/platform/efi/Makefile       | 1 -
+ arch/x86/platform/efi/efi_thunk_64.S | 6 ++++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-index d99c467..802cfda 100644
---- a/tools/objtool/include/objtool/warn.h
-+++ b/tools/objtool/include/objtool/warn.h
-@@ -22,6 +22,8 @@ static inline char *offstr(struct section *sec, unsigned long offset)
- 	unsigned long name_off;
+diff --git a/arch/x86/platform/efi/Makefile b/arch/x86/platform/efi/Makefile
+index 84b09c2..a502451 100644
+--- a/arch/x86/platform/efi/Makefile
++++ b/arch/x86/platform/efi/Makefile
+@@ -1,5 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-OBJECT_FILES_NON_STANDARD_efi_thunk_$(BITS).o := y
+ KASAN_SANITIZE := n
+ GCOV_PROFILE := n
  
- 	func = find_func_containing(sec, offset);
-+	if (!func)
-+		func = find_symbol_containing(sec, offset);
- 	if (func) {
- 		name = func->name;
- 		name_off = offset - func->offset;
+diff --git a/arch/x86/platform/efi/efi_thunk_64.S b/arch/x86/platform/efi/efi_thunk_64.S
+index 25799d7..854dd81 100644
+--- a/arch/x86/platform/efi/efi_thunk_64.S
++++ b/arch/x86/platform/efi/efi_thunk_64.S
+@@ -20,12 +20,14 @@
+  */
+ 
+ #include <linux/linkage.h>
++#include <linux/objtool.h>
+ #include <asm/page_types.h>
+ #include <asm/segment.h>
+ 
+ 	.text
+ 	.code64
+-SYM_CODE_START(__efi64_thunk)
++SYM_FUNC_START(__efi64_thunk)
++STACK_FRAME_NON_STANDARD __efi64_thunk
+ 	push	%rbp
+ 	push	%rbx
+ 
+@@ -79,7 +81,7 @@ SYM_CODE_START(__efi64_thunk)
+ 2:	pushl	$__KERNEL_CS
+ 	pushl	%ebp
+ 	lret
+-SYM_CODE_END(__efi64_thunk)
++SYM_FUNC_END(__efi64_thunk)
+ 
+ 	.bss
+ 	.balign 8

@@ -2,332 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9381A4D26BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0DB4D26FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiCICJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 21:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S231319AbiCICLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 21:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiCICJ1 (ORCPT
+        with ESMTP id S231295AbiCICK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 21:09:27 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2105.outbound.protection.outlook.com [40.107.243.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A00912AB2;
-        Tue,  8 Mar 2022 18:08:29 -0800 (PST)
+        Tue, 8 Mar 2022 21:10:57 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2096.outbound.protection.outlook.com [40.107.94.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7EB15A03;
+        Tue,  8 Mar 2022 18:09:59 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HG5JClYVJK51ttrLE/ADQbB5MzOv3/Ja1QYWTOuY6guMZf/BB8rBznl305ez328DsYjOcIuF0XVwSWyr4Fn9h4SE+EGfTNH+NsK1vLo+aDr0pI4P/Bwje2zvcVBXaqw1z7xUSxGVYbf0D2z7W7RKZUSYDIBmxHU8VtlEj58uMhCXFVHZtcoqeziSDBvQ7nVkmiuXbQqTOQ99boT+YgwgURcuINiTSBGsODwG24TZNLvBaLJvYYVGVd+MlJnlSCHzzA/C9kakepTjrnq5KH5yVQAO8f7aC/1fFmzsJE7dNZWft4NP6Kodea/myOg/G2y6pbgvgQiI8fII+mZDF2JGMg==
+ b=WiKDboI1IE/t2Tc6O7E/l9iQJJx9rxEelvOA+ovTDO7cYjkCJ+1xfzs0Ijg5Eu5bnjbGJ9EDBi4k+wlfEKLzI6ZNwtuqMG7UJI/ZkT4GSIk6716r1gu5Aviy1lTlYx2tkvDsaT2jXb0KAkLZ6JMRX+hzGsIH97EMHfcFRRQemz64VOb41bqjMYlkckPH/WJ3Ke2RDn4RuLwGmvQ+lwyHcSEUGbnw3Kahf4G+DhJT8TRHOQVkS8TMP4orp7aJsHybwiNRO18gHQRD4vyF/8i1pZfiiJlk0OuxlHW1MNnjfSNU4gm26o2zm++WbusrIXD1kbLbx4yKRjoilVpH7mUtPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KSIG8xyyG+EsYuBd/Yx9mjvz8c9I9RBO94R5frPgdEI=;
- b=Q5Pv1wY7TuXPDK64akBXHm6BaHAAi1tq3jHygHnL55NDE7XMhSoyGr5qe9qEm/aVryQa1whzpmvXYdlp+rr8G7lrmShCiSSjNuRLXco1R90i+7qmQjxsedWVRd6jrO6Ic4cxiTZBxXEHH1kXJrR7jmtPL1Otrgrh3SipyDhJiu9a68d/ssc8GrpkNO9rmnbCRL1UbkW/Mc2VC6x7ygI/YsJhV7USQCf7pDbADNQ3al/1xMuFvd2KCF7wCq8C4hEkd+zV40DjKXvnLfOnsHr/oJutvlmwqfRCNlNFbbEbAdCkEVawZLXkTFtc5TTargx0F3yKxWeMPpZ4xmWTU//ErQ==
+ bh=eteWAvycmXpyij3gbw+29byEw0P5jDvzQvvQI5Z5358=;
+ b=WyKvd88MX0lvmEN+7Qu1sPFCFJNANVTStYUu3DONV0nzfmAAmFo7ZgRqh5HJh+nyJDbArawH+SF6bOinTBWlBIz3pgjoLbRqbPr5zB1ibhc0cyn7093xxbS0RcJVt8AFbLBYN86IQ2xrF5k1M2nREtcjcQLOA9jzCwRYBM/riy1cM5q5DouowFo9cvrKC9rHAedqsHZHsqWxgjgasXXl7d14aVKScen8hY93QSjF7I6fPEAtKW3/VfSdQmONfH8tZPb3WHHT6m4dJNUFTDE2nb4jTpnDLaaMnmDtN0b652aLyhlIjm0yG4ws1xgP/0mnrGjw6r58iSP1q8j8+XBgyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KSIG8xyyG+EsYuBd/Yx9mjvz8c9I9RBO94R5frPgdEI=;
- b=LJqF/+EIdRie9o0W4RTK0E6CSVyEPIvFcdFxD+3iFoaddj/dlwhuKpIGaAfyJVUh3m2RAIQsK+PzjE8Pt2geNZmtl19sEiXfJTxeB845+18g4O6wibn641GztfG3MXK/Z0yNnfThUG86l5HYWCpGrT7eqr4VphKeGLUmuBQo5MM=
+ bh=eteWAvycmXpyij3gbw+29byEw0P5jDvzQvvQI5Z5358=;
+ b=EPVAhFuW306dSJyDezojdiuFxbi7jf/NZ6dqEVcmNte1OummMjPxuKBbMZTUekIWNEVrdIfavmlDGfIMV6jMZ6hg4IcYdHmd6l18S6KPbeTwqTL+bJEynPZjvNtE6SaYAATf/L5BORtTcAqDzK7XxxIDr8iH2Ek8Z629qsFOmKg=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- SN6PR01MB4288.prod.exchangelabs.com (2603:10b6:805:af::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.17; Wed, 9 Mar 2022 02:08:27 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::181b:1522:26bc:c243]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::181b:1522:26bc:c243%4]) with mapi id 15.20.5038.017; Wed, 9 Mar 2022
- 02:08:27 +0000
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-To:     lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
-        sudeep.holla@arm.com, rafael@kernel.org, linux@armlinux.org.uk
-Cc:     lenb@kernel.org, robert.moore@intel.com, james.morse@arm.com,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
-        scott@os.amperecomputing.com, darren@os.amperecomputing.com
-Subject: [PATCH v6 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic Dump and Reset device
-Date:   Tue,  8 Mar 2022 18:07:50 -0800
-Message-Id: <20220309020750.65399-3-ilkka@os.amperecomputing.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220309020750.65399-1-ilkka@os.amperecomputing.com>
-References: <20220309020750.65399-1-ilkka@os.amperecomputing.com>
-Content-Type: text/plain
-X-ClientProxiedBy: CH0PR03CA0423.namprd03.prod.outlook.com
- (2603:10b6:610:10e::6) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BN7PR04MB5362.namprd04.prod.outlook.com (2603:10b6:408:a::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Wed, 9 Mar
+ 2022 02:09:57 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 02:09:57 +0000
+Date:   Wed, 9 Mar 2022 10:09:49 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v8 1/3] usb: typec: tcpci: move tcpci.h to
+ include/linux/usb/ directory
+Message-ID: <20220309020949.GA1219327@anxtwsw-Precision-3640-Tower>
+References: <20220308073431.1217890-1-xji@analogixsemi.com>
+ <YicrpWig4kwdh2lg@kuha.fi.intel.com>
+ <0fa1e65c-949f-f492-f769-b1f5ed3b181d@roeck-us.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0fa1e65c-949f-f492-f769-b1f5ed3b181d@roeck-us.net>
+X-ClientProxiedBy: HK2PR03CA0061.apcprd03.prod.outlook.com
+ (2603:1096:202:17::31) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 398f6a29-7c67-491d-83e2-08da0171b2c7
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4288:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR01MB42882A7E8EB20A13CB055E1D9D0A9@SN6PR01MB4288.prod.exchangelabs.com>
+X-MS-Office365-Filtering-Correlation-Id: 46ce7a2d-b297-4522-fe82-08da0171e86d
+X-MS-TrafficTypeDiagnostic: BN7PR04MB5362:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR04MB536275D71E1DA53183E2B3D9C70A9@BN7PR04MB5362.namprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hpqksOmwqGzoL2y5FE4hVullZd23sDUpz3amesXv1lqwAD+xBsWZ2O5J54owji2ImHrC2EEPh7pfmLVJIck1tlWejPokibCDPSVbPDxWZHX9WzwRjjBLbtJAkMDVRGuERrbyyD81+8eOGy5v4hJ53c6pc9DaimjlwQdM6OHBfkRl1PvvFKtrlT1jmG5pSIa5167yEcL9aRoiw6O38R2qtDLphg+A1vqNDoVhs0S8IV3Z9X8qs1V6KF/ThuqvOGjfbvnc9Ye/JEmcG5f8+jV797hrCU0rw3xRVeePLUvgd+N1M+3L18gQIQnPlDanDviELAdsSIbCrbBA9/Sp0/EVE4afOx9q54LtNSUuUfelqrtTdMJjQpH2IW4ElrjkFmSl8sNxm7bZ2HMp684BvMBTyhcRmj9wDFbUXQEMFzIA4z8U87mJji6+44QWNjWqM7l/2aXGtTeH2wktEdWL89fS5bcYw4IGbo9yAF3xww2OQJ0HCSfjYlapsXtgFJ8QvFtzVhIC8/892xLWHFfMyc5Y/oO+AR8RIjKVKpDGzP9sZjCMFtX7TNZAOmRhbHRcKKad4QUVdl0Xutwj5M6lctwiaG5ZxRp0bCQ8GTAJqlIdDafONrax9abCw9JqdpU51vsVConQ+5tK3PwYSNRmqiLc7FqsqIo4MeRGKmeMNIa2s4FJ0jZtdf+2a+rmFzK94ozG5j2u3enWUDS8LoBt24TIM/ZJJEZPgg3tNzdVDg38wukLlUlHO4Mqm7ivKBxNxNsNIBex3SfI6YyTc7sflVhBSIMUR6LcwOS3bDeI8uFdcuVB7oCvCDz1Ln+AM4gCoj19
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(316002)(86362001)(66556008)(66476007)(6666004)(4326008)(5660300002)(966005)(83380400001)(8676002)(6486002)(38350700002)(26005)(1076003)(2616005)(186003)(7416002)(8936002)(38100700002)(107886003)(52116002)(6506007)(508600001)(6512007)(2906002)(41533002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: aZfy6o54SOFhKAQTOj/TM00z1Gh9IoXLaZGVBiW3kcRdnPl1XJvpgXjXxFWOdGZgpooU9zAN3LC7HFedjO1pE0G77Ktv9vojNUnRjVsiEROoW+uZYn8RYpgKh+DKhsTo2cAfIMz3EyJUt4ecwzEKJWj2XUjcxIyO5VP33+btQKW+0sXCQiRP/vAtxAl/7buIKT3hos6Hb68x9Frltz1Ydpbhb/kSNeFj33wV0b9zc77fvR3Jo33WFXkLZmHY3Bp0128Z9l6FF2+mn0IzpeoA8zN8c69IGdZFn/1M6ZifnEPDLN/Z2WvekpwKp2H8x0iY1Wfb/B0WYjjm2USdhVyPNlV3ALq9ucoCK2zh60TYIM1QQ3a3LeNyiOnLr5ZebsTjkjrar3/td6uApdXvu3O3g5TrUg/VYrN2pNJ/iqtyfPxR+7vgXFVbgNyVzWuyySH7mjAwxJHlqlYg3YEaPZ3A+dBaK+rPMVab7rQFdehqNqAJiO5dN4rsiTThFqcRASWNku8IYGxGulrgLpZh20xd8Utq1iFgoJQMbyc4Vi6/iXgbzhR/Ax35/hq1vY/lgEf5ZOOol9Ly4n9iCXfNo4bUlbWIr92W3ubpyyXXaq+QoAqVD9WM0+rYYpIgWq5RxFlr1BngHgxWMUjgzR/9R16PWtWpGDTOGhzoVxQO3f8mngcpoxpY/YMm4MLxCFjqnA9DxfIfahfR62W/f9fmUkw/3w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(5660300002)(4326008)(8676002)(66476007)(66556008)(38350700002)(86362001)(8936002)(33656002)(6916009)(54906003)(66946007)(316002)(33716001)(38100700002)(186003)(2906002)(6506007)(1076003)(9686003)(26005)(53546011)(6512007)(52116002)(55236004)(6486002)(6666004)(508600001)(83380400001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QjT00PZV4S8GsJk2deF73OxfkGeL0YCqlSgcVz81V7/cP+2CFA1yL4HNxcxD?=
- =?us-ascii?Q?4Yrf/OfjfDNByjB5idl4YL1zDUOKFk7uP5YaS3SjYCYWXUGzXxuAAg2q7J/x?=
- =?us-ascii?Q?Gt3OawvlSPBhHcq5nDFjqXJ1r/XPr12Joct/oyq5/B9GGTk42P3PBjFvH3LC?=
- =?us-ascii?Q?kdstKl5ys6Iisy8+yiktNG4iL1sXyuoZAO3oQxiojpO2gxYAgKZqdG1tOmqu?=
- =?us-ascii?Q?QFaiUjdZX1wbQHcsiq7TFSI3/ru7gwWMnFSvKytahTezseuOSgDY8aA2igrl?=
- =?us-ascii?Q?u0M/7zg4xlsO9+64vYi9dHGhGMmha7juvfRDgH+qrI82bYtdzYyXy9ThL/DM?=
- =?us-ascii?Q?Fc8yo53zVe1tg9qQ8t0Emz7BXmcVu6vCQU4DlNFTJ0Dbq3yr/P/W26wCST0X?=
- =?us-ascii?Q?lMXeiC7CyjcMM0R5KWsrqDrZ0PnkbZoSYFETV2n2QPd8P6VEJ97zsjY/rBHt?=
- =?us-ascii?Q?AsYoaN+S1Vfcwxa535LaF906W0mEVWNfpExKChnqOxhqbCt6yr+cohx2EQSF?=
- =?us-ascii?Q?W1s0Ja2uezwpE1+lp6PdscMyUGv7oGTd27MF3xtnIgnOI3dE7CCB/cV1gROQ?=
- =?us-ascii?Q?Zl1VV+ZHw1KmzIbnSPfYaWAofIsmxVSv1agUhZS4zqtl26msoUtxiR89U2Bc?=
- =?us-ascii?Q?tuptYySTbGs28KpfBg2e8bA8/2uJKFUsf1r/FYP7QeTXBgU734Nm2XCm+QwC?=
- =?us-ascii?Q?A5P+QyxHaMFUvA509dZtRsnkPmOaNMFe0ULek8BCJ/aCqwHxPjvJzjPxVSCk?=
- =?us-ascii?Q?23AFfhNdunIRX6Tb+1RdQr7i/GyH4kj1A41K4vWUjkbBHlokaIyNT0oizgkR?=
- =?us-ascii?Q?IVNKfoXlKfgnaQDNpRDMhW8maPjrImctEh4ml2oQ9rfRc4NRRbf/R+yXtjoB?=
- =?us-ascii?Q?Vw/58v4Vnx8ZGERa8j12ngGs2IC2ZknNL1l6wC5FqLkZzxYvgvX406jwnAN8?=
- =?us-ascii?Q?3CpMgl2LtqNiyFQa+xnUwRWSpEDHrdTUia6QARvBJxOenpqoXEwjenNj6yVm?=
- =?us-ascii?Q?qS4uNJcUWtcinlNIgSy/J1CeuMy/H9jsuPGNF9Ww0ZKf3qkUL3YyyFoUW0Yj?=
- =?us-ascii?Q?sED3K8vr2chhJFXOuCl1EbOtuBPfc//tKMBpaRhNgN9zFwhhMVJwNyzNSvS0?=
- =?us-ascii?Q?S+BtoqsN3OQZJm2GsSuEBQiZmYyooGGFQlfiAoIx8BAn5+DjZS9M7mwblAh4?=
- =?us-ascii?Q?6Gucy2vst51bpC02/KXQUUk9pzUruACrlFvxdrpPyH7+dKnyYJL8mPG6dloi?=
- =?us-ascii?Q?WQAsei/cvSNKiRc6kyaxP8c3ojKmSCSOfE+XKH7NBCIMj9zP3FVUMoD8JdEK?=
- =?us-ascii?Q?6bdvP+UJ+StfbgPAzFP0jseBAWiOsYdx+1VTFuFRN8UZAP30po/0Ykp5CHAL?=
- =?us-ascii?Q?3dF+rwFQFr6Myl+Ovm3kTn6J4IgAANouE02w34nACf9mg79CN1/b8ht36hrJ?=
- =?us-ascii?Q?/4OX73eVi0VgL8vINN2sn/QVymYzklbfwvCI6r0ODq+AWMTQp4IVXxO0Z3g5?=
- =?us-ascii?Q?QZAG4ngZfdwTXhDf7tLjhT1qAo/9NkjcA1j2r4u8iX+iIt+vzi6O5vFRW6Rk?=
- =?us-ascii?Q?B68Tr6++Y0RxQHK5ty0Q4UXucwBaZnPS/NHYIFTadWjwikXKQe4Nknp7N6MP?=
- =?us-ascii?Q?69GqXhRu5uoRHa+BcZ2ImU9929QlATj8HtBGbpppZUvC0ioFe1KsBBZzq7hj?=
- =?us-ascii?Q?7Ff0iUqqexPXtigk40UavnTsKaLQciU21qaO5kFrgPT7QK6mIYIBcBwHmsey?=
- =?us-ascii?Q?UrDCM1i/xQ=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 398f6a29-7c67-491d-83e2-08da0171b2c7
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5irJtAWe0SMSTM6Sq57Ger20Zy2hdtfi7c9+h46VLngDH/S73q3HkTcpNTV+?=
+ =?us-ascii?Q?iAoq7ylHIv+mh5eOz8xQH61LBwt7xKxMRsnxtthRCSiN1nATP49jpdwlmES4?=
+ =?us-ascii?Q?6QgMjdQC41B8CnB/m8dkyzwZRVl7qQm+apxfh7nWLQROzHzL1rxXmJUVkw0+?=
+ =?us-ascii?Q?iGL9p6LlwR5KSfiAEMZAHAyTU5dbV84Qpcz2UBePUcTqDZA+4RRVIvxdXwQC?=
+ =?us-ascii?Q?mZ7HQWbesjiVUKQcgOmp6gpNk6/SS4yteyH8kM6OZ0lDYAqSaO+NlzDbVW/2?=
+ =?us-ascii?Q?DLiiFKeP1SH5CYjHJVbhzCGnmBzZpZEI4kgJfIg0BoizkI5tMSss2iCI8hN+?=
+ =?us-ascii?Q?SwRAtIqPcZ4Kyc9aH9H3QiU+0m4x03FUSsSmzez67VpFIZCkoNQXiQB7fRja?=
+ =?us-ascii?Q?51yfAWAhQ/mF4GqN5tLNIMnyD9TAme7gvtlRAs781dnjCHZiVSLTBjfbOZkT?=
+ =?us-ascii?Q?LPeEae37b+FOAOuJ7gUzDQ40uINlNH3p1V4Pa6lrwxe1051VHTxX1emtzpC3?=
+ =?us-ascii?Q?dQuzgyV2ej1jmtmfsLRPxfPM1c5loOQVQrEVPhwwLvs6O89kVtEUWlMpELXB?=
+ =?us-ascii?Q?Ev0FICwUJHIj8mhb45Nbgy0SmfvkwHRD2CCd5UPKtalllzuqc4UF9KznVl1u?=
+ =?us-ascii?Q?ofSLMP60Rxx1LN9Sjj0Ind39s6nYNuzBI6WoQkfd28ui3o6KvgAxxGBXnHDM?=
+ =?us-ascii?Q?xBN3fIDFEpQfllbEWC7RwDb4a+WP0R7vi3i4+0R7fswa5g+a+g5zYWOMmKNe?=
+ =?us-ascii?Q?yfs6edgXTvkN1h6M+f0ooOc7765gKVNeMKMGZX3oe8bUN7UCAaVeccdtaebN?=
+ =?us-ascii?Q?EjVK4La7qU1aMaf/5qPQpqkhSYrSjA3Lnded5gK+FCgLfX9urcgyhgeKiTK8?=
+ =?us-ascii?Q?V9XuZK2QCYLWEuoa7sQt9eBr6KoD/Skw1QxWKZZ0loLs1UrFntkg5nXkU04N?=
+ =?us-ascii?Q?ZvjUCCKT+FL1BK2lrmioK2w6I+d8ezdvX5uRoRzNbrg8fe5Rkz7w2L58lZjz?=
+ =?us-ascii?Q?WksQiGpgOFpOktle5QJ26XE5fMKCAWkQNLvrHq/T//p/SCNVotTuC3Z1rfF3?=
+ =?us-ascii?Q?RzDcfFj+SNEtyrwSIC94q/WYjMqYP6ZdFA1hQ95/D0fK4sTAoQoLpdh1/oVO?=
+ =?us-ascii?Q?ruZhr3n69l4pwdmH/iC+qoUhxhzflY8RwGY9swBqkNWzPHygEFTUqTwu54vv?=
+ =?us-ascii?Q?JUV6XeAv7Jfy2HtvqRB+HKM+sOi5vtWAlQQmLawErY1PoM0JUSnKaZGSrfO3?=
+ =?us-ascii?Q?psu5W/uj5nCdPGzGCW/u+nBpXi0MKXRrYtCCgjtbjJh4uE+n7P2o2+VOusQf?=
+ =?us-ascii?Q?MwcL/me+HNYDXdmLQteUjqFsZPTsID4GXcyxiKvHKVyWgqG5LvuIQuAIXLof?=
+ =?us-ascii?Q?MHYLKb/bRHkPTzeR/6GoQt69vVRh7s6gw9c9w/yZRygNZlRdXCZQW5h5xDT2?=
+ =?us-ascii?Q?XshKLSUZuWsKuh9LfZ7vrJZIzi3o1P0Ho9AtN+bdlxzxfC4GFB7HnhavuUoA?=
+ =?us-ascii?Q?Pe7ej71xy4xkIWhVKxqZ/+DwdNXJIMCv1442WoDFFmKYzXZWhG/ScMcYRajK?=
+ =?us-ascii?Q?ms/3pY2Rpf+TL3XX7KMxr+0swuaCNFih72a6LD61zykO6+eUdT1X4tJvktUK?=
+ =?us-ascii?Q?6iLJ44TptWjojUYoR2Eiosg=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46ce7a2d-b297-4522-fe82-08da0171e86d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 02:08:27.2604
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 02:09:57.1456
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xV/BFOr//P0o2ppSgdJY6+gExUM+PonXbuetTT87AsZm55glJAEWR3VWi95Op18OtsK1fMB+VvbP4Ga6a0MPHukyf9dqGxiF/UfemZQsvKCFv9midNQmiPQkWMy3lExv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB4288
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: BRZl1fQla46JL/+hTVyVkTjqEMGtLaOYKiLz5OXuuR2w3p910eaFidp5B6jL7EgolUA19QMc6NW+inFplGqa1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR04MB5362
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
-Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
-issue diagnostic dump and reset via an SDEI event or an interrupt.
-This patch implements SDEI path.
+On Tue, Mar 08, 2022 at 06:41:27AM -0800, Guenter Roeck wrote:
+> On 3/8/22 02:10, Heikki Krogerus wrote:
+> > On Tue, Mar 08, 2022 at 03:34:28PM +0800, Xin Ji wrote:
+> > > As for convenience use TCPCI register definition, move tcpci.h to
+> > > include/linux/usb/ directory.
+> > 
+> > To be honest, I was still hoping for a better explanation here.
+> > 
+> > The reason why this header is made global is because some USB PD
+> > controllers - PD controllers consisting of a microcontroller
+> > (acting as the TCPM) and a port controller (TCPC) - may require that
+> > the driver for the PD controller accesses directly also the on-chip
+> > port controller in some cases.
+> > 
+> > I was hoping that that was explained in the commit message somehow.
+> > 
+> 
+> Same here.
+> 
+> Guenter
 
-[0] https://developer.arm.com/documentation/den0093/latest/
+Hi heikki, Guenter, OK, I'll add it in the commit message.
 
-Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
- drivers/acpi/arm64/Kconfig  |  10 ++++
- drivers/acpi/arm64/Makefile |   1 +
- drivers/acpi/arm64/agdi.c   | 116 ++++++++++++++++++++++++++++++++++++
- drivers/acpi/bus.c          |   2 +
- include/linux/acpi_agdi.h   |  13 ++++
- 5 files changed, 142 insertions(+)
- create mode 100644 drivers/acpi/arm64/agdi.c
- create mode 100644 include/linux/acpi_agdi.h
+Thanks,
+Xin
 
-diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
-index 6dba187f4f2e..d4a72835f328 100644
---- a/drivers/acpi/arm64/Kconfig
-+++ b/drivers/acpi/arm64/Kconfig
-@@ -8,3 +8,13 @@ config ACPI_IORT
- 
- config ACPI_GTDT
- 	bool
-+
-+config ACPI_AGDI
-+	bool "Arm Generic Diagnostic Dump and Reset Device Interface"
-+	depends on ARM_SDE_INTERFACE
-+	help
-+	  Arm Generic Diagnostic Dump and Reset Device Interface (AGDI) is
-+	  a standard that enables issuing a non-maskable diagnostic dump and
-+	  reset command.
-+
-+	  If set, the kernel parses AGDI table and listens for the command.
-diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
-index 66acbe77f46e..7b9e4045659d 100644
---- a/drivers/acpi/arm64/Makefile
-+++ b/drivers/acpi/arm64/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_ACPI_AGDI) 	+= agdi.o
- obj-$(CONFIG_ACPI_IORT) 	+= iort.o
- obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
- obj-y				+= dma.o
-diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
-new file mode 100644
-index 000000000000..4df337d545b7
---- /dev/null
-+++ b/drivers/acpi/arm64/agdi.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * This file implements handling of
-+ * Arm Generic Diagnostic Dump and Reset Interface table (AGDI)
-+ *
-+ * Copyright (c) 2022, Ampere Computing LLC
-+ */
-+
-+#define pr_fmt(fmt) "ACPI: AGDI: " fmt
-+
-+#include <linux/acpi.h>
-+#include <linux/arm_sdei.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/platform_device.h>
-+
-+struct agdi_data {
-+	int sdei_event;
-+};
-+
-+static int agdi_sdei_handler(u32 sdei_event, struct pt_regs *regs, void *arg)
-+{
-+	nmi_panic(regs, "Arm Generic Diagnostic Dump and Reset SDEI event issued");
-+	return 0;
-+}
-+
-+static int agdi_sdei_probe(struct platform_device *pdev,
-+			   struct agdi_data *adata)
-+{
-+	int err;
-+
-+	err = sdei_event_register(adata->sdei_event, agdi_sdei_handler, pdev);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to register for SDEI event %d",
-+			adata->sdei_event);
-+		return err;
-+	}
-+
-+	err = sdei_event_enable(adata->sdei_event);
-+	if (err)  {
-+		sdei_event_unregister(adata->sdei_event);
-+		dev_err(&pdev->dev, "Failed to enable event %d\n",
-+			adata->sdei_event);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int agdi_probe(struct platform_device *pdev)
-+{
-+	struct agdi_data *adata = dev_get_platdata(&pdev->dev);
-+
-+	if (!adata)
-+		return -EINVAL;
-+
-+	return agdi_sdei_probe(pdev, adata);
-+}
-+
-+static int agdi_remove(struct platform_device *pdev)
-+{
-+	struct agdi_data *adata = dev_get_platdata(&pdev->dev);
-+	int err, i;
-+
-+	err = sdei_event_disable(adata->sdei_event);
-+	if (err)
-+		return err;
-+
-+	for (i = 0; i < 3; i++) {
-+		err = sdei_event_unregister(adata->sdei_event);
-+		if (err != -EINPROGRESS)
-+			break;
-+
-+		schedule();
-+	}
-+
-+	return err;
-+}
-+
-+static struct platform_driver agdi_driver = {
-+	.driver = {
-+		.name = "agdi",
-+	},
-+	.probe = agdi_probe,
-+	.remove = agdi_remove,
-+};
-+
-+void __init acpi_agdi_init(void)
-+{
-+	struct acpi_table_agdi *agdi_table;
-+	struct agdi_data pdata;
-+	struct platform_device *pdev;
-+	acpi_status status;
-+
-+	status = acpi_get_table(ACPI_SIG_AGDI, 0,
-+				(struct acpi_table_header **) &agdi_table);
-+	if (ACPI_FAILURE(status))
-+		return;
-+
-+	if (agdi_table->flags & ACPI_AGDI_SIGNALING_MODE) {
-+		pr_warn("Interrupt signaling is not supported");
-+		goto err_put_table;
-+	}
-+
-+	pdata.sdei_event = agdi_table->sdei_event;
-+
-+	pdev = platform_device_register_data(NULL, "agdi", 0, &pdata, sizeof(pdata));
-+	if (IS_ERR(pdev))
-+		goto err_put_table;
-+
-+	if (platform_driver_register(&agdi_driver))
-+		platform_device_unregister(pdev);
-+
-+err_put_table:
-+	acpi_put_table((struct acpi_table_header *)agdi_table);
-+}
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index eaa511fc9c66..87b93f4df0cf 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -26,6 +26,7 @@
- #include <asm/mpspec.h>
- #include <linux/dmi.h>
- #endif
-+#include <linux/acpi_agdi.h>
- #include <linux/acpi_iort.h>
- #include <linux/acpi_viot.h>
- #include <linux/pci.h>
-@@ -1386,6 +1387,7 @@ static int __init acpi_init(void)
- 	acpi_debugger_init();
- 	acpi_setup_sb_notify_handler();
- 	acpi_viot_init();
-+	acpi_agdi_init();
- 	return 0;
- }
- 
-diff --git a/include/linux/acpi_agdi.h b/include/linux/acpi_agdi.h
-new file mode 100644
-index 000000000000..f477f0b452fa
---- /dev/null
-+++ b/include/linux/acpi_agdi.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ACPI_AGDI_H__
-+#define __ACPI_AGDI_H__
-+
-+#include <linux/acpi.h>
-+
-+#ifdef CONFIG_ACPI_AGDI
-+void __init acpi_agdi_init(void);
-+#else
-+static inline void acpi_agdi_init(void) {}
-+#endif
-+#endif /* __ACPI_AGDI_H__ */
--- 
-2.17.1
-
+> 
+> > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > 
+> > > ---
+> > > V7 -> V8: Fix Guanter's comment, remove unnecessary explain.
+> > > ---
+> > >   drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+> > >   drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+> > >   drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+> > >   drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+> > >   {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+> > >   5 files changed, 5 insertions(+), 7 deletions(-)
+> > >   rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+> > > 
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> > > index e07d26a3cd8e..9c907296596f 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpci.c
+> > > @@ -13,11 +13,10 @@
+> > >   #include <linux/property.h>
+> > >   #include <linux/regmap.h>
+> > >   #include <linux/usb/pd.h>
+> > > +#include <linux/usb/tcpci.h>
+> > >   #include <linux/usb/tcpm.h>
+> > >   #include <linux/usb/typec.h>
+> > > -#include "tcpci.h"
+> > > -
+> > >   #define	PD_RETRY_COUNT_DEFAULT			3
+> > >   #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+> > >   #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> > > index df2505570f07..4b6705f3d7b7 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> > > @@ -11,11 +11,10 @@
+> > >   #include <linux/module.h>
+> > >   #include <linux/regmap.h>
+> > >   #include <linux/usb/pd.h>
+> > > +#include <linux/usb/tcpci.h>
+> > >   #include <linux/usb/tcpm.h>
+> > >   #include <linux/usb/typec.h>
+> > > -#include "tcpci.h"
+> > > -
+> > >   #define PD_ACTIVITY_TIMEOUT_MS				10000
+> > >   #define TCPC_VENDOR_ALERT				0x80
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > > index f1bd9e09bc87..9e0338bce7ef 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > > @@ -11,10 +11,9 @@
+> > >   #include <linux/of.h>
+> > >   #include <linux/platform_device.h>
+> > >   #include <linux/regmap.h>
+> > > +#include <linux/usb/tcpci.h>
+> > >   #include <linux/usb/tcpm.h>
+> > > -#include "tcpci.h"
+> > > -
+> > >   #define MT6360_REG_VCONNCTRL1	0x8C
+> > >   #define MT6360_REG_MODECTRL2	0x8F
+> > >   #define MT6360_REG_SWRESET	0xA0
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > > index b56a0880a044..3291ca4948da 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > > @@ -10,9 +10,9 @@
+> > >   #include <linux/i2c.h>
+> > >   #include <linux/interrupt.h>
+> > >   #include <linux/gpio/consumer.h>
+> > > +#include <linux/usb/tcpci.h>
+> > >   #include <linux/usb/tcpm.h>
+> > >   #include <linux/regmap.h>
+> > > -#include "tcpci.h"
+> > >   #define RT1711H_VID		0x29CF
+> > >   #define RT1711H_PID		0x1711
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
+> > > similarity index 99%
+> > > rename from drivers/usb/typec/tcpm/tcpci.h
+> > > rename to include/linux/usb/tcpci.h
+> > > index b2edd45f13c6..20c0bedb8ec8 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci.h
+> > > +++ b/include/linux/usb/tcpci.h
+> > > @@ -9,6 +9,7 @@
+> > >   #define __LINUX_USB_TCPCI_H
+> > >   #include <linux/usb/typec.h>
+> > > +#include <linux/usb/tcpm.h>
+> > >   #define TCPC_VENDOR_ID			0x0
+> > >   #define TCPC_PRODUCT_ID			0x2
+> > > -- 
+> > > 2.25.1
+> > 

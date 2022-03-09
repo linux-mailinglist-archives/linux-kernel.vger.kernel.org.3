@@ -2,71 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C0C4D3C99
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC854D3C9A
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237767AbiCIWHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S238504AbiCIWIK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Mar 2022 17:08:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236636AbiCIWHf (ORCPT
+        with ESMTP id S235954AbiCIWII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:07:35 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D90011EF36
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:06:36 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id n15so3185193plh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:06:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4umDXsTj1CldyJcysNP+Nnq3pVu2iPQxmtjAZsmbWQc=;
-        b=fonhPV0Eq1KKbf2UvQA+KGAibGPw26KwBtm0dM70xCxj6ATohjtHnwM9d6UdiJ4pES
-         TtwRiVhwuqVmD1pMJN1AjZmG+ufDLj8RIalRJKwWBNl6MUbtTzyxogX/ltfosrYrsK1W
-         ukbHTdoheSpC4mi3+swuWKJMWUMvllUxyoHhA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4umDXsTj1CldyJcysNP+Nnq3pVu2iPQxmtjAZsmbWQc=;
-        b=N+7A8zY++23bqquJ9iiS33rmLRyRsJ7k+UsE91wGWqleYuVHs1TDsDuCcqRMI1cZqq
-         2Mee29vxEXtCa9Fc5mgCXhi4MjBMf2IZkBbRFjrZJuokXwPp5xnndisTDcce64vANltN
-         /xwrW9pX44Xvajr5F4Sd0qnH4t7YHa0KFpNcgbnritn2kJtKBb+syulmbUptdLwQ5irK
-         OniwRiCMciqu2C6QRQ/ex4r9nHdO72dFp1GFVw2+S/gbZ6y4dyjgCbb14YxJpfuhLR0t
-         l8frVX/hGEwFuoEFRRK6knv4gtZKvcawRnZdxQZd4zkltDfHCOMVlmV2SZZ2i5Rl90Qf
-         lALQ==
-X-Gm-Message-State: AOAM531RZJMbQr0zlipbR08f6vjbUO8gdiur/zJzYeOjZwtvZQK0krOr
-        iTWu3T4VJGYXmoAO5UVXQzocYA==
-X-Google-Smtp-Source: ABdhPJzGofjm+FGYBG97TRW7gxvFjqmZFdCBX6uEyrkbYPtSeUo2O0Yh6GCX+Sushx4dJa23puvXbA==
-X-Received: by 2002:a17:902:7404:b0:151:c3f9:e43a with SMTP id g4-20020a170902740400b00151c3f9e43amr1839188pll.12.1646863595999;
-        Wed, 09 Mar 2022 14:06:35 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u8-20020a056a00098800b004f702473553sm4134935pfg.6.2022.03.09.14.06.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 14:06:35 -0800 (PST)
-Date:   Wed, 9 Mar 2022 14:06:35 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yanteng Si <siyanteng01@gmail.com>, linux-mips@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Only use current_stack_pointer on GCC
-Message-ID: <202203091406.E94510FD@keescook>
-References: <20220309204537.390428-1-keescook@chromium.org>
- <YikTQRql+il3HbrK@dev-arch.thelio-3990X>
+        Wed, 9 Mar 2022 17:08:08 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531A120184
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:07:07 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nS4SO-0007xe-Vw; Wed, 09 Mar 2022 23:06:57 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
+        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        wens@csie.org, maxime@cerno.tech, gfavor@ventanamicro.com,
+        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
+        mick@ics.forth.gr, allen.baum@esperantotech.com,
+        jscheid@ventanamicro.com, rtrauben@gmail.com, samuel@sholland.org,
+        cmuellner@linux.com, philipp.tomsich@vrull.eu
+Subject: Re: [PATCH v7 00/13] riscv: support for Svpbmt and D1 memory types
+Date:   Wed, 09 Mar 2022 23:06:55 +0100
+Message-ID: <9863388.BuYlmvG7s8@diego>
+In-Reply-To: <2347714.EJkkgcx2xJ@diego>
+References: <mhng-4052f547-4a01-44ca-9286-97cc57819fbc@palmer-ri-x1c9> <2347714.EJkkgcx2xJ@diego>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YikTQRql+il3HbrK@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,55 +49,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 01:51:13PM -0700, Nathan Chancellor wrote:
-> Nit: I think the subject needs to be updated (I assume this was written
-> before Nick's fix?).
+Am Dienstag, 8. März 2022, 12:56:20 CET schrieb Heiko Stübner:
+> Hi Palmer,
 > 
-> On Wed, Mar 09, 2022 at 12:45:37PM -0800, Kees Cook wrote:
-> > Unfortunately, Clang did not have support for "sp" as a global register
-> > definition, and was crashing after the addition of current_stack_pointer.
-> > This has been fixed in Clang 15, but earlier Clang versions need to
-> > avoid this code, so add a versioned test and revert back to the
-> > open-coded asm instances. Fixes Clang build error:
+> Am Dienstag, 8. März 2022, 01:47:25 CET schrieb Palmer Dabbelt:
+> > On Mon, 07 Mar 2022 12:52:57 PST (-0800), heiko@sntech.de wrote:
+> > > Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+> > > for things like non-cacheable pages or I/O memory pages.
+> > >
+> > >
+> > > So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+> > > types) using the alternatives framework.
+> > >
+> > > This includes a number of changes to the alternatives mechanism itself.
+> > > The biggest one being the move to a more central location, as I expect
+> > > in the future, nearly every chip needing some sort of patching, be it
+> > > either for erratas or for optional features (svpbmt or others).
+> > >
+> > > Detection of the svpbmt functionality is done via Atish's isa extension
+> > > handling series [0] and thus does not need any dt-parsing of its own
+> > > anymore.
+> > >
+> > > The series also introduces support for the memory types of the D1
+> > > which are implemented differently to svpbmt. But when patching anyway
+> > > it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+> > > location.
+> > >
+> > > The only slightly bigger difference is that the "normal" type is not 0
+> > > as with svpbmt, so kernel patches for this PMA type need to be applied
+> > > even before the MMU is brought up, so the series introduces a separate
+> > > stage for that.
+> > >
+> > >
+> > > In theory this series is 3 parts:
+> > > - sbi cache-flush / null-ptr
 > > 
-> > fatal error: error in backend: Invalid register name global variable
+> > That first patch looks like an acceptable candidate for fixes.  If 
+> > there's a regression that manifests I'm happy to take it, but if it's 
+> > only possible to manifest a crash with the new stuff then I'm OK just 
+> > holding off until the merge window.
+> 
+> While right now only my poking around the early init via alternatives
+> is affected, the problem exists for everyone.
+> 
+> I.e. I do consider flush_icache_all() to be generic enough that we
+> should expect someone trying to call this in some early code-path
+> as well.
+> 
+> But any call to flush_icache_all() before sbi_init() ran will cause the
+> breakage that is fixed by patch1 .
+> 
+> 
+> So it doesn't look like any _current_ code path has that issue, but
+> it might be good to just pick patch1 for the next merge window
+> individually?
+> 
+> 
+> 
+> > > - alternatives improvements
+> > > - svpbmt+d1
+> > >
+> > > So expecially patches from the first 2 areas could be applied when
+> > > deemed ready, I just thought to keep it together to show-case where
+> > > the end-goal is and not requiring jumping between different series.
+> > >
+> > >
+> > > I picked the recipient list from the previous versions, hopefully
+> > > I didn't forget anybody.
+> > >
+> > > changes in v7:
+> > > - fix typo in patch1 (Atish)
+> > > - moved to Atish's isa-extension framework
+> > > - and therefore move regular boot-alternatives directly behind fill_hwcaps
+> > > - change T-Head errata Kconfig text (Atish)
 > > 
-> > Fixes: 200ed341b864 ("mips: Implement "current_stack_pointer"")
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Yanteng Si <siyanteng01@gmail.com>
-> > Cc: linux-mips@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Thanks for sending this!
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> > ---
-> >  arch/mips/Kconfig                   | 2 +-
-> >  arch/mips/include/asm/thread_info.h | 2 ++
-> >  arch/mips/kernel/irq.c              | 3 ++-
-> >  arch/mips/lib/uncached.c            | 4 +++-
-> >  4 files changed, 8 insertions(+), 3 deletions(-)
+> > I was just poking around v6, so I have some minor comments there.  None 
+> > of those need to block merging this, but I am getting a bunch of build 
+> > failures under allmodconfig
 > > 
-> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > index 3f58b45fc953..15769013f46e 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -4,7 +4,7 @@ config MIPS
-> >  	default y
-> >  	select ARCH_32BIT_OFF_T if !64BIT
-> >  	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
-> > -	select ARCH_HAS_CURRENT_STACK_POINTER
-> > +	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 150000
+> >     $ make.riscv allmodconfig
+> >     #
+> >     # configuration written to .config
+> >     #
+> >     $ make.riscv mm/kasan/init.o
+> >       SYNC    include/config/auto.conf.cmd
+> >       CALL    scripts/atomic/check-atomics.sh
+> >       CC      arch/riscv/kernel/asm-offsets.s
+> >       CALL    scripts/checksyscalls.sh
+> >       CC      mm/kasan/init.o
+> >     ./arch/riscv/include/asm/pgtable.h: Assembler messages:
+> >     ./arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
+> >     make[2]: *** [scripts/Makefile.build:288: mm/kasan/init.o] Error 1
+> >     make[1]: *** [scripts/Makefile.build:550: mm/kasan] Error 2
+> >     make: *** [Makefile:1831: mm] Error 2
+> > 
+> > Unfortunately my build box just blew up so I haven't had time to confim 
+> > this still exists on v7, but nothing's jumping out as a fix.  I've put 
+> > this on the riscv-d1 branch at kernel.org/palmer/linux, not sure exactly 
+> > what's going on but I'm guessing one of the macros has gone off the 
+> > rails.  I'm going to look at something else (as this one at least 
+> > depends on Atish's patches), but LMK if you've got the time to look into 
+> > this or if I should.
 > 
-> Nit: This can be 140000, as release/14.x has received the fix:
+> Yeah, we now depend on Atish's isa-extension parsing (same for my cmo
+> series and some more series I saw on the list), so getting that into a
+> mergeable position would be really great :-)
 > 
-> https://github.com/llvm/llvm-project/commit/0826716786cd4a8c7cbcb8c01e4d9fac46b7a17a
+> "attempt to move .org backwards" seems to be the telltale sign of the
+> alternatives blocks not matching up in size. While I definitly didn't see
+> anything like this in my tests on qemu + d1, I'll try to investigate where
+> that comes from.
 
-Oh! Excellent. Thanks; I missed that it made the branch. I'll send a v2.
+Hmm, looking at your branch [0] it seems that you're missing
+patch7 that introduces the no-compressed-instruction thingy
+for alternatives.
 
--- 
-Kees Cook
+And missing that patch will of course cause the size issue.
+
+The patch has made its way to the actual mailing lists [1], so I guess
+it "just" somehow didn't reach your inbox due to some mail hickup?
+
+
+Heiko
+
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-d1
+[1] https://lore.kernel.org/all/20220307205310.1905628-8-heiko@sntech.de/
+
+
+> > > changes in v6:
+> > > - rebase onto 5.17-rc1
+> > > - handle sbi null-ptr differently
+> > > - improve commit messages
+> > > - use riscv,mmu as property name
+> > >
+> > > changes in v5:
+> > > - move to use alternatives for runtime-patching
+> > > - add D1 variant
+> > >
+> > >
+> > > [0] https://lore.kernel.org/r/20220222204811.2281949-2-atishp@rivosinc.com
+> > >
+> > >
+> > > Heiko Stuebner (12):
+> > >   riscv: prevent null-pointer dereference with sbi_remote_fence_i
+> > >   riscv: integrate alternatives better into the main architecture
+> > >   riscv: allow different stages with alternatives
+> > >   riscv: implement module alternatives
+> > >   riscv: implement ALTERNATIVE_2 macro
+> > >   riscv: extend concatenated alternatives-lines to the same length
+> > >   riscv: prevent compressed instructions in alternatives
+> > >   riscv: move boot alternatives to after fill_hwcap
+> > >   riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+> > >   riscv: add cpufeature handling via alternatives
+> > >   riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+> > >   riscv: add memory-type errata for T-Head
+> > >
+> > > Wei Fu (1):
+> > >   riscv: add RISC-V Svpbmt extension support
+> > >
+> > >  arch/riscv/Kconfig.erratas                  |  29 +++--
+> > >  arch/riscv/Kconfig.socs                     |   1 -
+> > >  arch/riscv/Makefile                         |   2 +-
+> > >  arch/riscv/errata/Makefile                  |   2 +-
+> > >  arch/riscv/errata/sifive/errata.c           |  17 ++-
+> > >  arch/riscv/errata/thead/Makefile            |   1 +
+> > >  arch/riscv/errata/thead/errata.c            |  85 +++++++++++++++
+> > >  arch/riscv/include/asm/alternative-macros.h | 114 +++++++++++---------
+> > >  arch/riscv/include/asm/alternative.h        |  16 ++-
+> > >  arch/riscv/include/asm/errata_list.h        |  52 +++++++++
+> > >  arch/riscv/include/asm/fixmap.h             |   2 -
+> > >  arch/riscv/include/asm/hwcap.h              |   1 +
+> > >  arch/riscv/include/asm/pgtable-32.h         |  17 +++
+> > >  arch/riscv/include/asm/pgtable-64.h         |  79 +++++++++++++-
+> > >  arch/riscv/include/asm/pgtable-bits.h       |  10 --
+> > >  arch/riscv/include/asm/pgtable.h            |  53 +++++++--
+> > >  arch/riscv/include/asm/vendorid_list.h      |   1 +
+> > >  arch/riscv/kernel/Makefile                  |   1 +
+> > >  arch/riscv/{errata => kernel}/alternative.c |  48 +++++++--
+> > >  arch/riscv/kernel/cpu.c                     |   1 +
+> > >  arch/riscv/kernel/cpufeature.c              |  80 +++++++++++++-
+> > >  arch/riscv/kernel/module.c                  |  29 +++++
+> > >  arch/riscv/kernel/sbi.c                     |  10 +-
+> > >  arch/riscv/kernel/setup.c                   |   2 +
+> > >  arch/riscv/kernel/smpboot.c                 |   4 -
+> > >  arch/riscv/kernel/traps.c                   |   2 +-
+> > >  arch/riscv/mm/init.c                        |   1 +
+> > >  27 files changed, 546 insertions(+), 114 deletions(-)
+> > >  create mode 100644 arch/riscv/errata/thead/Makefile
+> > >  create mode 100644 arch/riscv/errata/thead/errata.c
+> > >  rename arch/riscv/{errata => kernel}/alternative.c (59%)
+> > 
+> 
+> 
+
+
+
+

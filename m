@@ -2,117 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485074D3D32
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297EC4D3D42
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238813AbiCIWlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S238357AbiCIWoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiCIWln (ORCPT
+        with ESMTP id S233039AbiCIWoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:41:43 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AE712220F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:40:44 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id g19so3493483pfc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:40:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pvPyQOUK1Gw9CokGjQgnCkQhkHHplgDsrtGMviZ3X7A=;
-        b=BaBvApgiq6eKkKHjV5y9VNHSX8YDVNOkXj5MayW95Bs0iCadLeVSVrBWCSdznB/PA4
-         0gKQ2wbaRy7xLMnNrIapT0t2YDCwEkZbX6Z2RsTW+Vxjk9bX0Nl42o76dLzzL3OdIF+b
-         8qXFqJI1VXyVwT/F93OTri8tbdhSHqlQOdcASY9uXy8RcNqd6XwZwMCNRWhyh2QG/Nea
-         9XCa2PeR7oijZX6OcHOj3mt6MMzGw0+QbQea2MlyfD7hGKunuDfDz2l+8uzuyyeBH6fr
-         TBk2OQETxmRVJeM0n+PhbCEGu8kAyfbQXYuQNAAZ2ouSFjKQ+gE076+73neyZ7eCz52M
-         wcCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=pvPyQOUK1Gw9CokGjQgnCkQhkHHplgDsrtGMviZ3X7A=;
-        b=iMcOhwtH+Off9uiIP4pGERoxZUFR5Pc/LN/v8KYU8g7IkcUsQR1NiFbd4cAJE8IOjG
-         sxQ8xF//tyc/mhax3I3dFvCrJ1ZMai3+Q/kuse+D19xLUVZM35Itut/Tk6/zU0boS0Qj
-         91CeWRDm7DB6SODU9+up3vLVIuXwJPO8iaAqpHyCPmSWP+HC5SNqg7F3xibWU6CEebl/
-         KST59KEZsGb0us5vqdyAEJUkceG7runt/ng7C0GbMEV6oVZJTTBYzgCaGCcstA9sQIU4
-         SdvmmNohUo3B5J8ndgjLeQOveZ4Q2iyLD/5oBamZ+N5eJ+KM17A18j6iEguTXbqgatRB
-         h9bA==
-X-Gm-Message-State: AOAM532PE52OzgmBjTz/LqFUawq1NS0ogWSIjIoKkYdicdMgRdf36Tmc
-        7ryj56MfvAzjYeOmRwMqVvU=
-X-Google-Smtp-Source: ABdhPJw3G9FAPbU5cZQShJnDrdis4xALn9ruAKxBY0EJXFu4TjXvyQ0wqkxKipN1LGB2EDM5nIH+dg==
-X-Received: by 2002:a65:61ad:0:b0:378:8f01:7674 with SMTP id i13-20020a6561ad000000b003788f017674mr1576104pgv.314.1646865643638;
-        Wed, 09 Mar 2022 14:40:43 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:aee3:831e:b1d0:905f])
-        by smtp.gmail.com with ESMTPSA id 2-20020a631342000000b0037487b6b018sm3166928pgt.0.2022.03.09.14.40.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 14:40:43 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 9 Mar 2022 14:40:41 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Chris Goldsworthy <cgoldswo@codeaurora.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        John Dias <joaodias@google.com>
-Subject: Re: [PATCH] mm: fs: fix lru_cache_disabled race in bh_lru
-Message-ID: <Yiks6WHATBtLZtmM@google.com>
-References: <20220308180709.2017638-1-minchan@kernel.org>
- <20220309140627.eeaa069daa921dbef64f8970@linux-foundation.org>
+        Wed, 9 Mar 2022 17:44:07 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9D348E57
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:43:07 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id BF8BE1F40661
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646865785;
+        bh=jsjzbcmTnfVGkp3QHzcBzKjX2sCnocD0pKPWjEy4458=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YNLTTZpG7z2VY1gTHKOwcdIQtHX7dEHDiMwfH2V+6v+TGwxpzf4t2YsPUrgVPkeDe
+         bu4h4nEFokW+YEmKwiXmucWHGLyE0pv9OeNZybfs+hNZepNFkalNT/hpAy7b+f1kUT
+         N8EUJ89x5gY/yohavW0kBmYJ9MrkYWGwCVZwzB0UNhPlu05ELkcMgk7cBE/3uASnuL
+         k79eaenyTax2o85pGQfuLzWwdQ+qJRlCbDvTsKc0/nGJaA6WLZPRrufAQc8U7SmF2/
+         rH4hFdf5Z9gPpM6gn65YBInoRzkP5nsNT46WwwOdxk7nsiIu608i97Vb7tySICvnB8
+         t2iHOlETzllew==
+Message-ID: <285bf619-8c05-f2f4-3aeb-e013fba8754a@collabora.com>
+Date:   Thu, 10 Mar 2022 01:43:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309140627.eeaa069daa921dbef64f8970@linux-foundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+ <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
+ <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
+ <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
+ <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
+ <05e1fe61-1c29-152f-414b-cd6a44525af0@collabora.com>
+ <CAF6AEGvf81epGOs7Zh4WK-7mkXRApO2p-h4g8dTuk4xtc1HOeg@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGvf81epGOs7Zh4WK-7mkXRApO2p-h4g8dTuk4xtc1HOeg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 02:06:27PM -0800, Andrew Morton wrote:
-> On Tue,  8 Mar 2022 10:07:09 -0800 Minchan Kim <minchan@kernel.org> wrote:
+On 3/10/22 00:51, Rob Clark wrote:
+> On Wed, Mar 9, 2022 at 12:06 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> On 3/9/22 03:56, Rob Clark wrote:
+>>>> If we really can't track madvise state in the guest for dealing with
+>>>> host memory pressure, I think the better option is to introduce
+>>>> MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
+>>>> buffer is needed but the previous contents are not (as long as the GPU
+>>>> VA remains the same).  With this the host could allocate new pages if
+>>>> needed, and the guest would not need to wait for a reply from host.
+>>> If variant with the memory ballooning will work, then it will be
+>>> possible to track the state within guest-only. Let's consider the
+>>> simplest variant for now.
+>>>
+>>> I'll try to implement the balloon driver support in the v2 and will get
+>>> back to you.
+>>>
+>>
+>> I looked at the generic balloon driver and looks like this not what we
+>> want because:
+>>
+>> 1. Memory ballooning is primarily about handling memory overcommit
+>> situations. I.e. when there are multiple VMs consuming more memory than
+>> available in the system. Ballooning allows host to ask guest to give
+>> unused pages back to host and host could give pages to other VMs.
+>>
+>> 2. Memory ballooning operates with guest memory pages only. I.e. each
+>> ballooned page is reported to/from host in a form of page's DMA address.
+>>
+>> 3. There is no direct connection between host's OOM events and the
+>> balloon manager. I guess host could watch system's memory pressure and
+>> inflate VMs' balloons on low memory, releasing the guest's memory to the
+>> system, but apparently this use-case not supported by anyone today, at
+>> least I don't see Qemu supporting it.
+>>
 > 
-> > Check lru_cache_disabled under bh_lru_lock. Otherwise, it could
-> > introduce race below and it fails to migrate pages containing
-> > buffer_head.
-> > 
-> >    CPU 0					CPU 1
-> > 
-> > bh_lru_install
-> >                                        lru_cache_disable
-> >   lru_cache_disabled = false
-> >                                        atomic_inc(&lru_disable_count);
-> > 				       invalidate_bh_lrus_cpu of CPU 0
-> > 				       bh_lru_lock
-> > 				       __invalidate_bh_lrus
-> > 				       bh_lru_unlock
-> >   bh_lru_lock
-> >   install the bh
-> >   bh_lru_unlock
+> hmm, on CrOS I do see balloon getting used to balance host vs guest
+> memory.. but admittedly I've not yet looked closely at how that works,
+> and it does seem like we have some things that are not yet upstream
+> all over the place (not to mention crosvm vs qemu)
+
+That's interesting, I missed that CrOS uses a customized ballooning.
+
+>> So the virtio-balloon driver isn't very useful for us as-is.
+>>
+>> One possible solution could be to create something like a new
+>> virtio-shrinker device or add shrinker functionality to the virtio-gpu
+>> device, allowing host to ask guests to drop shared caches. Host then
+>> should become a PSI handler. I think this should be doable in a case of
+>> crosvm. In a case of GNU world, it could take a lot of effort to get
+>> everything to upstreamable state, at first there is a need to
+>> demonstrate real problem being solved by this solution.
 > 
-> What are the user-visible runtime effects of this bug?
+> I guess with 4GB chromebooks running one or more VMs in addition to
+> lots of browser tabs in the host, it shouldn't be too hard to
+> demonstrate a problem ;-)
 
-Once the race happens, CMA allocation fails, which is critical for
-the workload CMA allocation depends.
+But then guest also should have a significant amount of BOs in cache to
+purge, which potentially could be solved using a timer approach.
 
+> (but also, however we end up solving that, certainly shouldn't block
+> this series)
+
+Sure, there is no problem with extending shrinker functionality with
+more features later on, so the host's shrinker isn't a blocker.
+
+>> The other minor issue is that only integrated GPUs may use system's
+>> memory and even then they could use a dedicated memory carveout, i.e.
+>> releasing VRAM BOs may not help with host's OOM. In case of virgl
+>> context we have no clue about where buffers are physically located. On
+>> the other hand, in the worst case dropping host caches just won't help
+>> with OOM.
 > 
-> Is a cc:stable needed?
-
-Ah, missed it. I think it would be rare to trigger the race considering
-how CMA allocation would be rare but once it happens, it makes the CMA
-allocation failure, which is critical for some. And the patch size is
-small enough so I think it's worth to add in the stable.
-
+> Userspace should know whether the BO has CPU storage, so I don't think
+> this should be a problem virtio_gpu needs to worry about
 > 
-> Should there be a reported-by?
+>> It's now unclear how we should proceed with the host-side shrinker
+>> support. Thoughts?
+>>
+>> We may start easy and instead of thinking about host-side shrinker, we
+>> could make VirtIO-GPU driver to expire cached BOs after a certain
+>> timeout. Mesa already uses timeout-based BO caching, but it doesn't have
+>> an alarm timer and simply checks expiration when BO is allocated. Should
+>> be too much trouble to handle timers within Mesa since it's executed in
+>> application context, easier to do it in kernel, like VC4 driver does it
+>> for example. This is not good as a proper memory shrinker, but could be
+>> good enough in practice.
+> 
+> I think that, given virgl uses host storage, guest shrinker should be
+> still useful.. so I think continue with this series.
 
-I found it on my own while I reviewed Marcelo's other patchset so
-I don't think we need to add my reported-by.
+Guest shrinker indeed will be useful for virgl today. I was already
+questioning why virgl needs both host and guest storages, maybe it will
+move to a host-only storage approach in the future.
 
-Andrew, please tell me if you want me resend it.
+I think the variant with the timer expiration actually could be
+interesting to try because it should allow host to purge its VM BOs by
+itself, preventing host OOMs.
+
+> For host shrinker, I'll have to look more at when crosvm triggers
+> balloon inflation.  I could still go the MADV:WILLNEED_REPLACE
+> approach instead, which does have the advantage of host kernel not
+> relying on host userspace or vm having a chance to run in order to
+> release pages.  The downside (perhaps?) is it would be more specific
+> to virtgpu-native-context and less so to virgl or venus (but I guess
+> there doesn't currently exist a way for madvise to be useful for vk
+> drivers).
+
+I'll also take a look at what CrOS does, maybe it has some interesting
+ideas.

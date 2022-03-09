@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D703C4D34CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D31D4D34C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiCIQ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S233133AbiCIQ0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238171AbiCIQVa (ORCPT
+        with ESMTP id S238177AbiCIQVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:21:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC89148930;
-        Wed,  9 Mar 2022 08:20:04 -0800 (PST)
+        Wed, 9 Mar 2022 11:21:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AE9B71;
+        Wed,  9 Mar 2022 08:20:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D5B0B82221;
-        Wed,  9 Mar 2022 16:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 079E0C340F4;
-        Wed,  9 Mar 2022 16:19:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5462C6195D;
+        Wed,  9 Mar 2022 16:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F17AC340EC;
+        Wed,  9 Mar 2022 16:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646842801;
-        bh=UqwiPp2qBmb+7tKFdE0+ShqjTMU9taITEwrPGtd63H8=;
+        s=k20201202; t=1646842819;
+        bh=KxyRlOyUxc84zYC6QXsIDrt+eRE+gpXYHahoT4dc/go=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DDGcuyCE5ZhPqxGu8+Ob3cYd37b7gDEYOvj4+XyN4PsSb1wyMEkvwztcKeRFxvDf/
-         MGPcu8yWVNMuijaOzxhearyZn/uczWWfHycf775w96N5rZ4m5/UPKjTWtFSjfiT01A
-         wH+O1xkeR/KRiHkN27kNSTl5/Gvnj1G8PgSfWmLH4g6MWhxqJRrZqpsEc1ZhI/VhTp
-         PuDZCDbuG7hpr7JkXQtjFZeVmnC1U889fnlWTPhNnlu+lBWtXbUta8u0OLFSb7rH1Z
-         5vKlQs1Uh0AKgHgXVYmaGWxElUJbF1YUnpN2b8uOnbUVlmPLGf/6PbxVVEQgdrSu9x
-         eWQYBRKqR/m4w==
+        b=MqEVLOCu/YZE6XizBTgFLWjH52Zbf56SWHIDxAHuSSj7cibEfVXSZhvvZFf4pSHfn
+         pToWdLQlyMx/nuDCdnU7EmdBMdWRD9p6itMPbSzOZ1Ib+dARxqfyJHNxpGUvPDwi3/
+         NpOa/JSgjnWHUdws2Isoba4JNn3cH2vWjC+GZze8j3qRiZ9Wz2FKiUYnFuWdL8fTMF
+         jM+YICCH2LBRtp6L3UOToewzzRBiY6cAyfeWgkJtJBluHSw8tqOOaNHS2pwUdwhIO5
+         Z+3IhJo754mPP5cNCghr3PcZrOP3WiG90J0nohAPLyJabryP2ARUWKyBb7vRtp0vRN
+         IjgafA7k3DgJQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yan Yan <evitayan@google.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 03/24] xfrm: Fix xfrm migrate issues when address family changes
-Date:   Wed,  9 Mar 2022 11:19:22 -0500
-Message-Id: <20220309161946.136122-3-sashal@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        jbx6244@gmail.com, maccraft123mc@gmail.com,
+        linus.walleij@linaro.org, paul.kocialkowski@bootlin.com,
+        macromorgan@hotmail.com, zhangqing@rock-chips.com,
+        benjamin.gaignard@collabora.com, cnemo@tutanota.com,
+        ezequiel@vanguardiasur.com.ar, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.15 05/24] arm64: dts: rockchip: align pl330 node name with dtschema
+Date:   Wed,  9 Mar 2022 11:19:24 -0500
+Message-Id: <20220309161946.136122-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309161946.136122-1-sashal@kernel.org>
 References: <20220309161946.136122-1-sashal@kernel.org>
@@ -58,56 +64,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yan Yan <evitayan@google.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit e03c3bba351f99ad932e8f06baa9da1afc418e02 ]
+[ Upstream commit 8fd9415042826c7609c588e5ef45f3e84237785f ]
 
-xfrm_migrate cannot handle address family change of an xfrm_state.
-The symptons are the xfrm_state will be migrated to a wrong address,
-and sending as well as receiving packets wil be broken.
+Fixes dtbs_check warnings like:
 
-This commit fixes it by breaking the original xfrm_state_clone
-method into two steps so as to update the props.family before
-running xfrm_init_state. As the result, xfrm_state's inner mode,
-outer mode, type and IP header length in xfrm_state_migrate can
-be updated with the new address family.
+  dmac@ff240000: $nodename:0: 'dmac@ff240000' does not match '^dma-controller(@.*)?$'
 
-Tested with additions to Android's kernel unit test suite:
-https://android-review.googlesource.com/c/kernel/tests/+/1885354
-
-Signed-off-by: Yan Yan <evitayan@google.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220129175429.298836-1-krzysztof.kozlowski@canonical.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_state.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/rockchip/px30.dtsi   | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-index 291236d7676f..f7bfa1916968 100644
---- a/net/xfrm/xfrm_state.c
-+++ b/net/xfrm/xfrm_state.c
-@@ -1578,9 +1578,6 @@ static struct xfrm_state *xfrm_state_clone(struct xfrm_state *orig,
- 	memcpy(&x->mark, &orig->mark, sizeof(x->mark));
- 	memcpy(&x->props.smark, &orig->props.smark, sizeof(x->props.smark));
+diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
+index 248ebb61aa79..5200d0bbd9e9 100644
+--- a/arch/arm64/boot/dts/rockchip/px30.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+@@ -711,7 +711,7 @@ rktimer: timer@ff210000 {
+ 		clock-names = "pclk", "timer";
+ 	};
  
--	if (xfrm_init_state(x) < 0)
--		goto error;
--
- 	x->props.flags = orig->props.flags;
- 	x->props.extra_flags = orig->props.extra_flags;
+-	dmac: dmac@ff240000 {
++	dmac: dma-controller@ff240000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x0 0xff240000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+index da84be6f4715..3cbe83e6fb9a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+@@ -489,7 +489,7 @@ pwm3: pwm@ff1b0030 {
+ 		status = "disabled";
+ 	};
  
-@@ -1667,6 +1664,11 @@ struct xfrm_state *xfrm_state_migrate(struct xfrm_state *x,
- 	if (!xc)
- 		return NULL;
- 
-+	xc->props.family = m->new_family;
-+
-+	if (xfrm_init_state(xc) < 0)
-+		goto error;
-+
- 	memcpy(&xc->id.daddr, &m->new_daddr, sizeof(xc->id.daddr));
- 	memcpy(&xc->props.saddr, &m->new_saddr, sizeof(xc->props.saddr));
- 
+-	dmac: dmac@ff1f0000 {
++	dmac: dma-controller@ff1f0000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x0 0xff1f0000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 

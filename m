@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638B44D3169
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4766C4D3170
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiCIPFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S233738AbiCIPHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:07:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiCIPFc (ORCPT
+        with ESMTP id S231591AbiCIPHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:05:32 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB4914D259;
-        Wed,  9 Mar 2022 07:04:32 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 505268C4;
-        Wed,  9 Mar 2022 16:04:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646838270;
-        bh=gq6PcsAoQxhIfL4EM3xCongxEseifjmoDcqpLyOPPLY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=AjG7FtuGePYveAiWSlQ+5TdVC0gyRdXY+lvnOD/kAjo3oxXRvI4n+OhIlAQWjq1pD
-         /3QbFegHtqK8+JnbYYg/eMOdW8T1+AKNgTltOkjTZd8CWBGemeAAmA6g5Q9ofviAA8
-         +ia5YAxadRN+tFGpNNgwYWz5LFH/TLe3H+vwoc1A=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220309115507.30019-1-laurentiu.palcu@oss.nxp.com>
-References: <20220309115507.30019-1-laurentiu.palcu@oss.nxp.com>
-Subject: Re: [PATCH v2] media: i2c: rdacm2x: properly set subdev entity function
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Niklas =?utf-8?q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rob Herring <robh@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Date:   Wed, 09 Mar 2022 15:04:28 +0000
-Message-ID: <164683826808.123014.1703937676440784435@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 10:07:33 -0500
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC28A17E35D;
+        Wed,  9 Mar 2022 07:06:29 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgCXn3thwihiy+U3AA--.54686S2;
+        Wed, 09 Mar 2022 23:06:12 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jreuter@yaina.de, kuba@kernel.org, davem@davemloft.net,
+        ralf@linux-mips.org, thomas@osterried.de,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] ax25: Fix memory leaks caused by ax25_cb_del()
+Date:   Wed,  9 Mar 2022 23:06:08 +0800
+Message-Id: <20220309150608.112090-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgCXn3thwihiy+U3AA--.54686S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWktrW3ZrW8CryrGryrXrb_yoWrWr4DpF
+        W8uay5ArZrtr1ruF48Gr97WF18A34DK39xGFy5ZFyIka47Jwn5JrWft3yUJFy3JrZ5JF48
+        X347Ww48Zr4DuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMDAVZdtYkSWQAHs4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Laurentiu Palcu (2022-03-09 11:55:06)
-> The subdevice entity function was left unset, which produces a warning
-> when probing the device:
->=20
-> mxc-md bus@58000000:camera: Entity type for entity rdacm20 19-0051 was
-> not initialized!
->=20
-> This patch will set entity function to MEDIA_ENT_F_CAM_SENSOR and leave
-> flags unset.
->=20
-> Fixes: 34009bffc1c6 ("media: i2c: Add RDACM20 driver")
-> Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev to
+avoid UAF bugs") and commit feef318c855a ("ax25: fix UAF bugs of
+net_device caused by rebinding operation") increase the refcounts of
+ax25_dev and net_device in ax25_bind() and decrease the matching refcounts
+in ax25_kill_by_device() in order to prevent UAF bugs. But there are memory
+leaks.
 
-Ohh, I've never seen a use case for two fixes tags before.
-I don't think this requires two patches to implement the fix though.
+If we use ax25_bind() to increase the refcounts of ax25_dev and
+net_device, then, use ax25_cb_del() invoked by ax25_destroy_socket()
+to delete ax25_cb in hlist before calling ax25_kill_by_device(), the
+decrements of refcounts in ax25_kill_by_device() will not be executed,
+because ax25_cb is deleted from the hlist.
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+This patch adds two flags in ax25_dev in order to prevent memory leaks.
+If we bind successfully, then, use ax25_cb_del() to delete ax25_cb,
+the two "test_bit" condition checks in ax25_kill_by_device() could
+pass and the refcounts could be decreased properly.
 
-> Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-> ---
-> Changes in v2:
->         * leave entity flags unset;
->=20
-> Cheers,
-> Laurentiu
->=20
->  drivers/media/i2c/rdacm20.c | 2 +-
->  drivers/media/i2c/rdacm21.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-> index 025a610de893..9c6f66cab564 100644
-> --- a/drivers/media/i2c/rdacm20.c
-> +++ b/drivers/media/i2c/rdacm20.c
-> @@ -611,7 +611,7 @@ static int rdacm20_probe(struct i2c_client *client)
->                 goto error_free_ctrls;
-> =20
->         dev->pad.flags =3D MEDIA_PAD_FL_SOURCE;
-> -       dev->sd.entity.flags |=3D MEDIA_ENT_F_CAM_SENSOR;
-> +       dev->sd.entity.function =3D MEDIA_ENT_F_CAM_SENSOR;
->         ret =3D media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
->         if (ret < 0)
->                 goto error_free_ctrls;
-> diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-> index 12ec5467ed1e..ef31cf5f23ca 100644
-> --- a/drivers/media/i2c/rdacm21.c
-> +++ b/drivers/media/i2c/rdacm21.c
-> @@ -583,7 +583,7 @@ static int rdacm21_probe(struct i2c_client *client)
->                 goto error_free_ctrls;
-> =20
->         dev->pad.flags =3D MEDIA_PAD_FL_SOURCE;
-> -       dev->sd.entity.flags |=3D MEDIA_ENT_F_CAM_SENSOR;
-> +       dev->sd.entity.function =3D MEDIA_ENT_F_CAM_SENSOR;
->         ret =3D media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
->         if (ret < 0)
->                 goto error_free_ctrls;
-> --=20
-> 2.17.1
->
+Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
+Fixes: feef318c855a ("ax25: fix UAF bugs of net_device caused by rebinding operation")
+Reported-by: Thomas Osterried <thomas@osterried.de>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ include/net/ax25.h  |  7 +++++--
+ net/ax25/af_ax25.c  | 10 ++++++----
+ net/ax25/ax25_dev.c |  3 ++-
+ 3 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/include/net/ax25.h b/include/net/ax25.h
+index 8221af1811d..50b3eacada0 100644
+--- a/include/net/ax25.h
++++ b/include/net/ax25.h
+@@ -157,7 +157,9 @@ enum {
+ #define AX25_DEF_PACLEN		256			/* Paclen=256 */
+ #define	AX25_DEF_PROTOCOL	AX25_PROTO_STD_SIMPLEX	/* Standard AX.25 */
+ #define AX25_DEF_DS_TIMEOUT	180000			/* DAMA timeout 3 minutes */
+-
++#define AX25_DEV_INIT    0
++#define AX25_DEV_KILL    1
++#define AX25_DEV_BIND    2
+ typedef struct ax25_uid_assoc {
+ 	struct hlist_node	uid_node;
+ 	refcount_t		refcount;
+@@ -240,8 +242,9 @@ typedef struct ax25_dev {
+ 	ax25_dama_info		dama;
+ #endif
+ 	refcount_t		refcount;
++	unsigned long   kill_flag;
++	unsigned long   bind_flag;
+ } ax25_dev;
+-
+ typedef struct ax25_cb {
+ 	struct hlist_node	ax25_node;
+ 	ax25_address		source_addr, dest_addr;
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 6bd09718077..5519448378d 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -86,6 +86,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ again:
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
++			set_bit(AX25_DEV_KILL, &ax25_dev->kill_flag);
+ 			sk = s->sk;
+ 			if (!sk) {
+ 				spin_unlock_bh(&ax25_list_lock);
+@@ -114,9 +115,12 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 			goto again;
+ 		}
+ 	}
++	if(!test_bit(AX25_DEV_KILL, &ax25_dev->kill_flag) && test_bit(AX25_DEV_BIND, &ax25_dev->bind_flag)) {
++		dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
++		ax25_dev_put(ax25_dev);
++	}
+ 	spin_unlock_bh(&ax25_list_lock);
+ }
+-
+ /*
+  *	Handle device status changes.
+  */
+@@ -1132,13 +1136,11 @@ static int ax25_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
+ done:
+ 	ax25_cb_add(ax25);
+ 	sock_reset_flag(sk, SOCK_ZAPPED);
+-
++	set_bit(AX25_DEV_BIND, &ax25_dev->bind_flag);
+ out:
+ 	release_sock(sk);
+-
+ 	return err;
+ }
+-
+ /*
+  *	FIXME: nonblock behaviour looks like it may have a bug.
+  */
+diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
+index d2a244e1c26..7c40914e5c9 100644
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -77,7 +77,8 @@ void ax25_dev_device_up(struct net_device *dev)
+ 	ax25_dev->values[AX25_VALUES_PACLEN]	= AX25_DEF_PACLEN;
+ 	ax25_dev->values[AX25_VALUES_PROTOCOL]  = AX25_DEF_PROTOCOL;
+ 	ax25_dev->values[AX25_VALUES_DS_TIMEOUT]= AX25_DEF_DS_TIMEOUT;
+-
++	ax25_dev->kill_flag = AX25_DEV_INIT;
++	ax25_dev->bind_flag = AX25_DEV_INIT;
+ #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
+ 	ax25_ds_setup_timer(ax25_dev);
+ #endif
+--
+2.17.1
+

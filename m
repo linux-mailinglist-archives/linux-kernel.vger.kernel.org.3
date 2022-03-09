@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70954D2E33
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4E44D2E35
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiCILhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S231768AbiCILg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:36:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbiCILhJ (ORCPT
+        with ESMTP id S229492AbiCILg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:37:09 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21C1156C48;
-        Wed,  9 Mar 2022 03:36:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646825770; x=1678361770;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yZfd0yrdxn/084b8ilGpKvAPRKSOPL9X9NLFEQ6Zec4=;
-  b=TqbndIKRQfXGqdZohH6BxI3WszQWEuIfPIFOkmkghYnaydDprrljKbus
-   ya8mTJtCIXSZT0ljxJf1shO33hAxgEacW8V+N0W7by3u02pXnX+Q7oEB0
-   0KuiIYH3L/sKlVEOsHxqaUJcJiKPUcnHNtgOxkIfKHfUEXL6HCWM1xXX1
-   OuYH6oxg3j2LwItjgTW5AfFyZArpasVGeDyw01JS/rrkLkrBeY6Per1hI
-   LhMXvEH20eLOuOd8+TUueBw16J/xeAFw1gX4hri/pN7ABV2+up22L0RBZ
-   DFolcJdEb/YpWHHKylTuQx4vRJ8O+F8xAmFX2RxXIOHXzGOfYXV3P5Tcx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318181507"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="318181507"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 03:36:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="688269779"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2022 03:36:06 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRubt-0003Ap-F2; Wed, 09 Mar 2022 11:36:05 +0000
-Date:   Wed, 9 Mar 2022 19:35:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Wang Qing <wangqing@vivo.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Sean Paul <sean@poorly.run>, Dan Carpenter <error27@gmail.com>
-Subject: Re: [PATCH v1 06/10] drm/msm/a6xx: Propagate OOB set error
-Message-ID: <202203091923.2RD2Ech3-lkp@intel.com>
-References: <20220302225551.v1.6.I7f93862e5dfa6eb1cc3e6d3d4e5e83022a491a94@changeid>
+        Wed, 9 Mar 2022 06:36:56 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A71154D31
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:35:58 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229BJ10F030689;
+        Wed, 9 Mar 2022 11:35:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=O2BUNUTzGb+7cQ8rm8DHMyjnM+LWM5EfmcO0Tz4pHzw=;
+ b=Xjv54iykDrpDbsZcGuj81AUJEypYqnHR1rz8TI+lyQAewWuFK9fxoso/EO3KdJA6grAw
+ 5YrgU/9v/HZ+9HDbgFacb20zYwfuR9uBPjMQzE1nzYUz/V1N3iRIPWKvKiLEcQbumj3O
+ OHqFADbes+gvcjgtT34s5k4pvZ3NFE01i2pbYp7Td8QMPsgzcEi1fXAkCRW/GXHNLYK7
+ TehAImu6qsW5fHNIgQ+pdSZ/uMl6TUaQox/pnzwUgpeiFgs7dCBQTxE3BgtbL4LCIA6N
+ +JlGmY5NeBqXseK5+0QjMuiwhVJWWTv4zGsPeMnI/PNwnIkSOR5Ew9LHDitbafgBUEXI Ug== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3enww82uda-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 11:35:36 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 229BXlLq014484;
+        Wed, 9 Mar 2022 11:35:33 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3ekyg90h15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 11:35:33 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 229BZVXD50397678
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Mar 2022 11:35:31 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DF9042047;
+        Wed,  9 Mar 2022 11:35:31 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E74E442042;
+        Wed,  9 Mar 2022 11:35:30 +0000 (GMT)
+Received: from localhost (unknown [9.43.9.116])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Mar 2022 11:35:30 +0000 (GMT)
+Date:   Wed, 09 Mar 2022 17:05:29 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v1 2/4] powerpc/ftrace: Refactor ftrace_{regs_}caller
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <ec286d2cc6989668a96f14543275437d2f3f0e3a.1645099283.git.christophe.leroy@csgroup.eu>
+        <9d7df9e4fc98a86051489f61d3c9bc67f92f7e27.1645099283.git.christophe.leroy@csgroup.eu>
+        <1646326634.jzerx009p9.naveen@linux.ibm.com>
+        <5c0a3a26-ee52-a4f7-9bc2-b38f27a12a76@csgroup.eu>
+In-Reply-To: <5c0a3a26-ee52-a4f7-9bc2-b38f27a12a76@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302225551.v1.6.I7f93862e5dfa6eb1cc3e6d3d4e5e83022a491a94@changeid>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1646825481.p25t8oi12m.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EuvBYT_Q0yDRCRNv2BxaO7OCSMM--y8m
+X-Proofpoint-GUID: EuvBYT_Q0yDRCRNv2BxaO7OCSMM--y8m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-09_04,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0
+ mlxlogscore=986 phishscore=0 mlxscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203090063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,300 +92,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akhil,
+Christophe Leroy wrote:
+>=20
+>=20
+> Le 03/03/2022 =C3=A0 17:59, Naveen N. Rao a =C3=A9crit=C2=A0:
+>> Christophe Leroy wrote:
+>>
+>> The ability to disable ftrace in certain code paths through=20
+>> paca_struct->ftrace_enabled will also be relevant on ppc32 - it will be=20
+>> nice if it can be introduced there.
+>=20
+> Ah ? I understood from commit ea678ac627e0 ("powerpc64/ftrace: Add a=20
+> field in paca to disable ftrace in unsafe code paths") that it was for=20
+> when it runs in real mode. PPC32 doesn't run any C code in real mode.
 
-Thank you for the patch! Perhaps something to improve:
+It likely isn't necessary in that case.
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next v5.17-rc7 next-20220308]
-[cannot apply to tegra-drm/drm/tegra/for-next airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>=20
+> Are there any other situations that real_mode where we'd like to disable=20
+> it ? If so we could use the thread_struct as we don't have paca on PPC32.
 
-url:    https://github.com/0day-ci/linux/commits/Akhil-P-Oommen/Support-for-GMU-coredump-and-some-related-improvements/20220303-013028
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: s390-randconfig-m031-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091923.2RD2Ech3-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
+For ppc64, we use this flag to disable certain paths in kvm, kexec,=20
+mce/hmi and idle/hotplug. If none of those are problematic on ppc32,=20
+then this isn't necessary.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-smatch warnings:
-drivers/gpu/drm/msm/adreno/a6xx_gpu.c:894 hw_init() warn: inconsistent indenting
+Thanks,
+- Naveen
 
-vim +894 drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-
-   874	
-   875	#define A6XX_INT_MASK (A6XX_RBBM_INT_0_MASK_CP_AHB_ERROR | \
-   876		  A6XX_RBBM_INT_0_MASK_RBBM_ATB_ASYNCFIFO_OVERFLOW | \
-   877		  A6XX_RBBM_INT_0_MASK_CP_HW_ERROR | \
-   878		  A6XX_RBBM_INT_0_MASK_CP_IB2 | \
-   879		  A6XX_RBBM_INT_0_MASK_CP_IB1 | \
-   880		  A6XX_RBBM_INT_0_MASK_CP_RB | \
-   881		  A6XX_RBBM_INT_0_MASK_CP_CACHE_FLUSH_TS | \
-   882		  A6XX_RBBM_INT_0_MASK_RBBM_ATB_BUS_OVERFLOW | \
-   883		  A6XX_RBBM_INT_0_MASK_RBBM_HANG_DETECT | \
-   884		  A6XX_RBBM_INT_0_MASK_UCHE_OOB_ACCESS | \
-   885		  A6XX_RBBM_INT_0_MASK_UCHE_TRAP_INTR)
-   886	
-   887	static int hw_init(struct msm_gpu *gpu)
-   888	{
-   889		struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-   890		struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-   891		int ret;
-   892	
-   893		/* Make sure the GMU keeps the GPU on while we set it up */
- > 894		 ret = a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
-   895	
-   896		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_CNTL, 0);
-   897	
-   898		/*
-   899		 * Disable the trusted memory range - we don't actually supported secure
-   900		 * memory rendering at this point in time and we don't want to block off
-   901		 * part of the virtual memory space.
-   902		 */
-   903		gpu_write64(gpu, REG_A6XX_RBBM_SECVID_TSB_TRUSTED_BASE_LO,
-   904			REG_A6XX_RBBM_SECVID_TSB_TRUSTED_BASE_HI, 0x00000000);
-   905		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_TRUSTED_SIZE, 0x00000000);
-   906	
-   907		/* Turn on 64 bit addressing for all blocks */
-   908		gpu_write(gpu, REG_A6XX_CP_ADDR_MODE_CNTL, 0x1);
-   909		gpu_write(gpu, REG_A6XX_VSC_ADDR_MODE_CNTL, 0x1);
-   910		gpu_write(gpu, REG_A6XX_GRAS_ADDR_MODE_CNTL, 0x1);
-   911		gpu_write(gpu, REG_A6XX_RB_ADDR_MODE_CNTL, 0x1);
-   912		gpu_write(gpu, REG_A6XX_PC_ADDR_MODE_CNTL, 0x1);
-   913		gpu_write(gpu, REG_A6XX_HLSQ_ADDR_MODE_CNTL, 0x1);
-   914		gpu_write(gpu, REG_A6XX_VFD_ADDR_MODE_CNTL, 0x1);
-   915		gpu_write(gpu, REG_A6XX_VPC_ADDR_MODE_CNTL, 0x1);
-   916		gpu_write(gpu, REG_A6XX_UCHE_ADDR_MODE_CNTL, 0x1);
-   917		gpu_write(gpu, REG_A6XX_SP_ADDR_MODE_CNTL, 0x1);
-   918		gpu_write(gpu, REG_A6XX_TPL1_ADDR_MODE_CNTL, 0x1);
-   919		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_ADDR_MODE_CNTL, 0x1);
-   920	
-   921		/* enable hardware clockgating */
-   922		a6xx_set_hwcg(gpu, true);
-   923	
-   924		/* VBIF/GBIF start*/
-   925		if (adreno_is_a640_family(adreno_gpu) ||
-   926		    adreno_is_a650_family(adreno_gpu)) {
-   927			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE0, 0x00071620);
-   928			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE1, 0x00071620);
-   929			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE2, 0x00071620);
-   930			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
-   931			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
-   932			gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x3);
-   933		} else {
-   934			gpu_write(gpu, REG_A6XX_RBBM_VBIF_CLIENT_QOS_CNTL, 0x3);
-   935		}
-   936	
-   937		if (adreno_is_a630(adreno_gpu))
-   938			gpu_write(gpu, REG_A6XX_VBIF_GATE_OFF_WRREQ_EN, 0x00000009);
-   939	
-   940		/* Make all blocks contribute to the GPU BUSY perf counter */
-   941		gpu_write(gpu, REG_A6XX_RBBM_PERFCTR_GPU_BUSY_MASKED, 0xffffffff);
-   942	
-   943		/* Disable L2 bypass in the UCHE */
-   944		gpu_write(gpu, REG_A6XX_UCHE_WRITE_RANGE_MAX_LO, 0xffffffc0);
-   945		gpu_write(gpu, REG_A6XX_UCHE_WRITE_RANGE_MAX_HI, 0x0001ffff);
-   946		gpu_write(gpu, REG_A6XX_UCHE_TRAP_BASE_LO, 0xfffff000);
-   947		gpu_write(gpu, REG_A6XX_UCHE_TRAP_BASE_HI, 0x0001ffff);
-   948		gpu_write(gpu, REG_A6XX_UCHE_WRITE_THRU_BASE_LO, 0xfffff000);
-   949		gpu_write(gpu, REG_A6XX_UCHE_WRITE_THRU_BASE_HI, 0x0001ffff);
-   950	
-   951		if (!adreno_is_a650_family(adreno_gpu)) {
-   952			/* Set the GMEM VA range [0x100000:0x100000 + gpu->gmem - 1] */
-   953			gpu_write64(gpu, REG_A6XX_UCHE_GMEM_RANGE_MIN_LO,
-   954				REG_A6XX_UCHE_GMEM_RANGE_MIN_HI, 0x00100000);
-   955	
-   956			gpu_write64(gpu, REG_A6XX_UCHE_GMEM_RANGE_MAX_LO,
-   957				REG_A6XX_UCHE_GMEM_RANGE_MAX_HI,
-   958				0x00100000 + adreno_gpu->gmem - 1);
-   959		}
-   960	
-   961		gpu_write(gpu, REG_A6XX_UCHE_FILTER_CNTL, 0x804);
-   962		gpu_write(gpu, REG_A6XX_UCHE_CACHE_WAYS, 0x4);
-   963	
-   964		if (adreno_is_a640_family(adreno_gpu) ||
-   965		    adreno_is_a650_family(adreno_gpu))
-   966			gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x02000140);
-   967		else
-   968			gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x010000c0);
-   969		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x8040362c);
-   970	
-   971		if (adreno_is_a660_family(adreno_gpu))
-   972			gpu_write(gpu, REG_A6XX_CP_LPAC_PROG_FIFO_SIZE, 0x00000020);
-   973	
-   974		/* Setting the mem pool size */
-   975		gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 128);
-   976	
-   977		/* Setting the primFifo thresholds default values,
-   978		 * and vccCacheSkipDis=1 bit (0x200) for A640 and newer
-   979		*/
-   980		if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
-   981			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
-   982		else if (adreno_is_a640_family(adreno_gpu) || adreno_is_7c3(adreno_gpu))
-   983			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
-   984		else if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
-   985			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
-   986		else
-   987			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00180000);
-   988	
-   989		/* Set the AHB default slave response to "ERROR" */
-   990		gpu_write(gpu, REG_A6XX_CP_AHB_CNTL, 0x1);
-   991	
-   992		/* Turn on performance counters */
-   993		gpu_write(gpu, REG_A6XX_RBBM_PERFCTR_CNTL, 0x1);
-   994	
-   995		/* Select CP0 to always count cycles */
-   996		gpu_write(gpu, REG_A6XX_CP_PERFCTR_CP_SEL(0), PERF_CP_ALWAYS_COUNT);
-   997	
-   998		a6xx_set_ubwc_config(gpu);
-   999	
-  1000		/* Enable fault detection */
-  1001		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL,
-  1002			(1 << 30) | 0x1fffff);
-  1003	
-  1004		gpu_write(gpu, REG_A6XX_UCHE_CLIENT_PF, 1);
-  1005	
-  1006		/* Set weights for bicubic filtering */
-  1007		if (adreno_is_a650_family(adreno_gpu)) {
-  1008			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_0, 0);
-  1009			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_1,
-  1010				0x3fe05ff4);
-  1011			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_2,
-  1012				0x3fa0ebee);
-  1013			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_3,
-  1014				0x3f5193ed);
-  1015			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_4,
-  1016				0x3f0243f0);
-  1017		}
-  1018	
-  1019		/* Protect registers from the CP */
-  1020		a6xx_set_cp_protect(gpu);
-  1021	
-  1022		if (adreno_is_a660_family(adreno_gpu)) {
-  1023			gpu_write(gpu, REG_A6XX_CP_CHICKEN_DBG, 0x1);
-  1024			gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x0);
-  1025		}
-  1026	
-  1027		/* Set dualQ + disable afull for A660 GPU */
-  1028		if (adreno_is_a660(adreno_gpu))
-  1029			gpu_write(gpu, REG_A6XX_UCHE_CMDQ_CONFIG, 0x66906);
-  1030	
-  1031		/* Enable expanded apriv for targets that support it */
-  1032		if (gpu->hw_apriv) {
-  1033			gpu_write(gpu, REG_A6XX_CP_APRIV_CNTL,
-  1034				(1 << 6) | (1 << 5) | (1 << 3) | (1 << 2) | (1 << 1));
-  1035		}
-  1036	
-  1037		/* Enable interrupts */
-  1038		gpu_write(gpu, REG_A6XX_RBBM_INT_0_MASK, A6XX_INT_MASK);
-  1039	
-  1040		ret = adreno_hw_init(gpu);
-  1041		if (ret)
-  1042			goto out;
-  1043	
-  1044		ret = a6xx_ucode_init(gpu);
-  1045		if (ret)
-  1046			goto out;
-  1047	
-  1048		/* Set the ringbuffer address */
-  1049		gpu_write64(gpu, REG_A6XX_CP_RB_BASE, REG_A6XX_CP_RB_BASE_HI,
-  1050			gpu->rb[0]->iova);
-  1051	
-  1052		/* Targets that support extended APRIV can use the RPTR shadow from
-  1053		 * hardware but all the other ones need to disable the feature. Targets
-  1054		 * that support the WHERE_AM_I opcode can use that instead
-  1055		 */
-  1056		if (adreno_gpu->base.hw_apriv)
-  1057			gpu_write(gpu, REG_A6XX_CP_RB_CNTL, MSM_GPU_RB_CNTL_DEFAULT);
-  1058		else
-  1059			gpu_write(gpu, REG_A6XX_CP_RB_CNTL,
-  1060				MSM_GPU_RB_CNTL_DEFAULT | AXXX_CP_RB_CNTL_NO_UPDATE);
-  1061	
-  1062		/*
-  1063		 * Expanded APRIV and targets that support WHERE_AM_I both need a
-  1064		 * privileged buffer to store the RPTR shadow
-  1065		 */
-  1066	
-  1067		if (adreno_gpu->base.hw_apriv || a6xx_gpu->has_whereami) {
-  1068			if (!a6xx_gpu->shadow_bo) {
-  1069				a6xx_gpu->shadow = msm_gem_kernel_new(gpu->dev,
-  1070					sizeof(u32) * gpu->nr_rings,
-  1071					MSM_BO_WC | MSM_BO_MAP_PRIV,
-  1072					gpu->aspace, &a6xx_gpu->shadow_bo,
-  1073					&a6xx_gpu->shadow_iova);
-  1074	
-  1075				if (IS_ERR(a6xx_gpu->shadow))
-  1076					return PTR_ERR(a6xx_gpu->shadow);
-  1077	
-  1078				msm_gem_object_set_name(a6xx_gpu->shadow_bo, "shadow");
-  1079			}
-  1080	
-  1081			gpu_write64(gpu, REG_A6XX_CP_RB_RPTR_ADDR_LO,
-  1082				REG_A6XX_CP_RB_RPTR_ADDR_HI,
-  1083				shadowptr(a6xx_gpu, gpu->rb[0]));
-  1084		}
-  1085	
-  1086		/* Always come up on rb 0 */
-  1087		a6xx_gpu->cur_ring = gpu->rb[0];
-  1088	
-  1089		gpu->cur_ctx_seqno = 0;
-  1090	
-  1091		/* Enable the SQE_to start the CP engine */
-  1092		gpu_write(gpu, REG_A6XX_CP_SQE_CNTL, 1);
-  1093	
-  1094		ret = a6xx_cp_init(gpu);
-  1095		if (ret)
-  1096			goto out;
-  1097	
-  1098		/*
-  1099		 * Try to load a zap shader into the secure world. If successful
-  1100		 * we can use the CP to switch out of secure mode. If not then we
-  1101		 * have no resource but to try to switch ourselves out manually. If we
-  1102		 * guessed wrong then access to the RBBM_SECVID_TRUST_CNTL register will
-  1103		 * be blocked and a permissions violation will soon follow.
-  1104		 */
-  1105		ret = a6xx_zap_shader_init(gpu);
-  1106		if (!ret) {
-  1107			OUT_PKT7(gpu->rb[0], CP_SET_SECURE_MODE, 1);
-  1108			OUT_RING(gpu->rb[0], 0x00000000);
-  1109	
-  1110			a6xx_flush(gpu, gpu->rb[0]);
-  1111			if (!a6xx_idle(gpu, gpu->rb[0]))
-  1112				return -EINVAL;
-  1113		} else if (ret == -ENODEV) {
-  1114			/*
-  1115			 * This device does not use zap shader (but print a warning
-  1116			 * just in case someone got their dt wrong.. hopefully they
-  1117			 * have a debug UART to realize the error of their ways...
-  1118			 * if you mess this up you are about to crash horribly)
-  1119			 */
-  1120			dev_warn_once(gpu->dev->dev,
-  1121				"Zap shader not enabled - using SECVID_TRUST_CNTL instead\n");
-  1122			gpu_write(gpu, REG_A6XX_RBBM_SECVID_TRUST_CNTL, 0x0);
-  1123			ret = 0;
-  1124		} else {
-  1125			return ret;
-  1126		}
-  1127	
-  1128	out:
-  1129		/*
-  1130		 * Tell the GMU that we are done touching the GPU and it can start power
-  1131		 * management
-  1132		 */
-  1133		a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
-  1134	
-  1135		if (a6xx_gpu->gmu.legacy) {
-  1136			/* Take the GMU out of its special boot mode */
-  1137			a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_BOOT_SLUMBER);
-  1138		}
-  1139	
-  1140		return ret;
-  1141	}
-  1142	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E82D4D2A54
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0084D2A55
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiCIIFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S231180AbiCIIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiCIIFd (ORCPT
+        with ESMTP id S229541AbiCIIHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:05:33 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CF9710D5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:04:34 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id q7-20020a7bce87000000b00382255f4ca9so2840043wmj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 00:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=U1D/3A7OGVZLniswJ8+s6z6Hi+6szsOAA85P72ar9O4=;
-        b=oXXmdxSa9EK6PyApp1vchkzTPZQjHDdJA2RhBUOj685CSyBtqbbl1sfN+Opd04o/w9
-         rgl0Lu9ILcp0+8aNQo39SMl7gZFK7BxzWO5+l/9OVoB3AsHrvNp+LiJ2hyu8w+xXsSkP
-         li1E968Ru6mwKyqk0Q1OfrenTNITj0+uGoLufw38g7hWrnR2Knok6ni1QX9xyTBkAnI4
-         veLjferX2gyXo8bx36F5vrz5MQHnbOT54ot25FvEE5t7Q3zJoAP+hfwme0ZX9oVwHDIc
-         3/XGdcYpMMTEqvfAGDtYgptGNPV3A1yOKHAiPUEoI7ZJfPsr2BKrjbjXxuzSfV+/zqhD
-         V0Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=U1D/3A7OGVZLniswJ8+s6z6Hi+6szsOAA85P72ar9O4=;
-        b=BRYS+CcxVIxNYAw24N8ojefoHuVuJdLw+e6RykfnQ74bn9sERmtvm2azjl/UQ25tXk
-         cM7jHP8rRmkm2eDEyfBrKzZoXpkSPHhts6ycZncfWi5jWsJ7g6nodXFLyK+pOcxrNy2c
-         fU8KxUuwtIktW+XqnEqIObtXPj1niGe+2vOO3Vk+8P3rmJg1M5AP4AJZJSDRzPwsVjwM
-         +XbmwtNnm0d8Ir16vpE8Vf3LKtox7esFDO5hWsQeAr1X5nfHb9q2kTlXPwsUFsK3NOGr
-         /ojRo94Ery39ud1Dd5qhULkOekgjT9cDaOjpkNKj8j180gSMJ5zhXNMDW/C6B+7e7m6R
-         tJuQ==
-X-Gm-Message-State: AOAM530I5uoNAk8s77rK5+gLkk4zhutQQT9fPZ3g9OBH2XCmQ2uYxb+m
-        h4GoaQge+V2ZwkFFml2doqP22Q==
-X-Google-Smtp-Source: ABdhPJxWAnPzNAFriE/hOf1GBpLWPZEaTw/EytIGyGix86yk1qL/T8KwVPxgeXpbYVmDGBWcOyborg==
-X-Received: by 2002:a05:600c:a45:b0:346:5e67:cd54 with SMTP id c5-20020a05600c0a4500b003465e67cd54mr6430729wmq.127.1646813073133;
-        Wed, 09 Mar 2022 00:04:33 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:e587:9f12:6489:6b8? ([2001:861:44c0:66c0:e587:9f12:6489:6b8])
-        by smtp.gmail.com with ESMTPSA id ay24-20020a05600c1e1800b00389a420e1ecsm967251wmb.37.2022.03.09.00.04.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 00:04:32 -0800 (PST)
-Message-ID: <9fb21623-60e1-fe35-b740-9577f096f84e@baylibre.com>
-Date:   Wed, 9 Mar 2022 09:04:31 +0100
+        Wed, 9 Mar 2022 03:07:30 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07330167F8D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:06:30 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:806d:fd89:4c52:5c02])
+        by baptiste.telenet-ops.be with bizsmtp
+        id 486U270095Lieee0186UDl; Wed, 09 Mar 2022 09:06:28 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nRrL1-003HA0-MI; Wed, 09 Mar 2022 09:06:27 +0100
+Date:   Wed, 9 Mar 2022 09:06:27 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     kernel test robot <lkp@intel.com>
+cc:     Farzad Farshchi <farzadfr@gmail.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: Re: [esmil:visionfive 55/61] nvdla_core_callbacks.c:undefined
+ reference to `__udivdi3'
+In-Reply-To: <202203090611.3NpTkqvn-lkp@intel.com>
+Message-ID: <alpine.DEB.2.22.394.2203090905560.780932@ramsan.of.borg>
+References: <202203090611.3NpTkqvn-lkp@intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/3] drm/bridge: Add MAINTAINERS entry for DRM drivers for
- bridge chip bindings
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 20:06, Douglas Anderson wrote:
-> The bindings for bridge chips should also get the same maintainers
-> entry so the right people get notified about bindings changes.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
->   MAINTAINERS | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0216d2ffe728..a73179d55d00 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6403,6 +6403,7 @@ R:	Jonas Karlman <jonas@kwiboo.se>
->   R:	Jernej Skrabec <jernej.skrabec@gmail.com>
->   S:	Maintained
->   T:	git git://anongit.freedesktop.org/drm/drm-misc
-> +F:	Documentation/devicetree/bindings/display/bridge/
->   F:	drivers/gpu/drm/bridge/
->   
->   DRM DRIVERS FOR EXYNOS
+On Wed, 9 Mar 2022, kernel test robot wrote:
+> tree:   https://github.com/esmil/linux visionfive
+> head:   b75fcbba0e03fd9655bc4c8854422d51474664d3
+> commit: 6146bd9336a5f9d2bb66d6a394863600b61afeb5 [55/61] nvdla: add NVDLA driver
+> config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203090611.3NpTkqvn-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>        chmod +x ~/bin/make.cross
+>        # https://github.com/esmil/linux/commit/6146bd9336a5f9d2bb66d6a394863600b61afeb5
+>        git remote add esmil https://github.com/esmil/linux
+>        git fetch --no-tags esmil visionfive
+>        git checkout 6146bd9336a5f9d2bb66d6a394863600b61afeb5
+>        # save the config file to linux build tree
+>        mkdir build_dir
+>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>   m68k-linux-ld: drivers/nvdla/nvdla_core_callbacks.o: in function `dla_get_time_us':
+>>> nvdla_core_callbacks.c:(.text+0x396): undefined reference to `__udivdi3'
+>   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+From 1df1db244324a715b93af89586e4cce720ad2c94 Mon Sep 17 00:00:00 2001
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 9 Mar 2022 09:03:03 +0100
+Subject: [PATCH] nvdla: Use div_u64() in dla_get_time_us()
+
+On 32-bit (e.g. m68k allyesconfig):
+
+     m68k-linux-ld: drivers/nvdla/nvdla_core_callbacks.o: in function `dla_get_time_us':
+     nvdla_core_callbacks.c:(.text+0x396): undefined reference to `__udivdi3'
+
+dla_get_time_us() does a 64-by-32 division, hence div_u64() must be
+used instead of a plain division.
+
+Fixes: 6146bd9336a5f9d2 ("nvdla: add NVDLA driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+Feel free to fold into the original.
+
+  drivers/nvdla/nvdla_core_callbacks.c | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/nvdla/nvdla_core_callbacks.c b/drivers/nvdla/nvdla_core_callbacks.c
+index 6d461624adfbda33..e296562d259b7124 100644
+--- a/drivers/nvdla/nvdla_core_callbacks.c
++++ b/drivers/nvdla/nvdla_core_callbacks.c
+@@ -38,6 +38,7 @@
+  #include <linux/interrupt.h>
+  #include <linux/irq.h>
+  #include <linux/irqdomain.h>
++#include <linux/math64.h>
+  #include <linux/module.h>
+  #include <linux/of.h>
+  #include <linux/of_device.h>
+@@ -121,7 +122,7 @@ void *dla_memcpy(void *dest, const void *src, uint64_t len)
+
+  int64_t dla_get_time_us(void)
+  {
+-	return ktime_get_ns() / NSEC_PER_USEC;
++	return div_u64(ktime_get_ns(), NSEC_PER_USEC);
+  }
+
+  void dla_reg_write(void *driver_context, uint32_t addr, uint32_t reg)
+-- 
+2.25.1
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds

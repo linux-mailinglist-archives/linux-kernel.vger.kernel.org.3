@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9EB4D2B93
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801804D2B95
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiCIJOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S231263AbiCIJOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiCIJOf (ORCPT
+        with ESMTP id S231912AbiCIJOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:14:35 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC70D54
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:13:35 -0800 (PST)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 819E03F4C2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646817214;
-        bh=DWve8mUzjjNi/DaGPnOk7W3TtiB3wUxX/ugKfBnsP20=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=gPQuIz9S15FrfE4hSaPrPJ7ItBAJ2RWh5SR6aH79lK4NBe5WsLG9yJTDzltEa76B6
-         +pT2NImiu8nv6da4yL3rWaQRz0BAAx541W1YJ0afdbnGraBIEulxs94FKyRBDlXMN3
-         VZG9XgzXTJ+zg67yANpDvP2ivjQQ68rX+nV+9S1C9mcE4IkggPN8LGkR58tTd7NGSl
-         FKNOOglFSheu20xek9NIUGTBcFoZnp/iDgmuwEAvssJqoRAXMYeKUmCnfcu9ku4Dkf
-         bH7cNdcgy/oBWNM9SjL4msOJKBl/AByoNmIOrmoIhTUP5cQdC/Ui6dXUSBmT5HItn5
-         USEqszgErdZ0A==
-Received: by mail-ej1-f69.google.com with SMTP id k21-20020a1709063e1500b006d0777c06d6so975408eji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:13:34 -0800 (PST)
+        Wed, 9 Mar 2022 04:14:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C7A9986D1
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646817224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mOG/PAqse9zSZ2yDOcQfN7jOgLfXTKKr0q59fyoMcwk=;
+        b=SnLNvXkLc3ZAkrnRXLk1YE1dZ9FdMB1l8OCFROiMK6MKyBpmHoQWfmOalO1KGUiL2fppGU
+        QLELloxrO3O5TmEtKOjUdWzUvC1BJ0zWP4BLGjVHwqyyRtGvz6ZVQmkozWTUHpjcfY+Lyw
+        I6aLxLs9lCOZpZd4RV7Uq1x+sA1eOOI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-oGiPHFRUPniWP8K0EM3Etg-1; Wed, 09 Mar 2022 04:13:42 -0500
+X-MC-Unique: oGiPHFRUPniWP8K0EM3Etg-1
+Received: by mail-wr1-f71.google.com with SMTP id n4-20020a5d4844000000b001f1ed76e943so536347wrs.22
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:13:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DWve8mUzjjNi/DaGPnOk7W3TtiB3wUxX/ugKfBnsP20=;
-        b=5T5GNoejQMbrGtnuexqdcFfGnogW+mn+qZ4Vn0/772O3h7QDCD1mU8TyjtgnTbr0Dg
-         QOYzMe2MNSCKdRPny6wG17uPixFmzlN+ucI2m4zGALXe/He/vSxV3x/k2fA2Shcki4/0
-         rXTWdIECIU4AAAagBL51gY2uIFWJfWfwZ+S/x9RPlE7tikfU+901LS8jecUL4ro9iAW7
-         iDad6q4Gi7uayj6WrNsRolVpb9QKfvUfI464MD0AqBN/NhUnh08mirSdKsBf78jSM6FJ
-         xxP2/hUmj8TDcW4Ps5PiSd9thDacph9x5bj6BedXW6yUWrFwZh+mJkXGMd81RukMlhf3
-         GiMA==
-X-Gm-Message-State: AOAM532YVQgpg6C7nVqnRCfX09JxcBChAPmS5xKAuVSfCg+ErdDBdmb/
-        1znieNXSofm9DIOfc9Kx7qRFomSH/xs+8NNZB79is3NDEpTTuUU8/2RE5ZethkEx4Y44+Qzb3Uq
-        34RmRcmIv/I3wZEbe25oURozoRFpw2PXKaafX2ThbBg==
-X-Received: by 2002:a17:907:7849:b0:6d5:87bd:5602 with SMTP id lb9-20020a170907784900b006d587bd5602mr16471507ejc.349.1646817214166;
-        Wed, 09 Mar 2022 01:13:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyaayiRmg6jlQ9OnyXmW7jxsQHTWWXcd8Bg4GTp0MUrRybx25RZqMcDfYHZw8faWNI/n5LJoA==
-X-Received: by 2002:a17:907:7849:b0:6d5:87bd:5602 with SMTP id lb9-20020a170907784900b006d587bd5602mr16471490ejc.349.1646817213950;
-        Wed, 09 Mar 2022 01:13:33 -0800 (PST)
-Received: from [192.168.68.108] (p5087f509.dip0.t-ipconnect.de. [80.135.245.9])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm513258edx.58.2022.03.09.01.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 01:13:33 -0800 (PST)
-Message-ID: <8e6684df-7b6e-ccb5-b123-2dc8337442bd@canonical.com>
-Date:   Wed, 9 Mar 2022 10:13:32 +0100
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=mOG/PAqse9zSZ2yDOcQfN7jOgLfXTKKr0q59fyoMcwk=;
+        b=hx6Vo1zFI52ulu0WTzstZmbZVTS0/sn0dqbVJ+Bomznf+GpB6B1ovBTAj0reu4VhoG
+         36WehHRdWrTUhFa4HQgnmB82okC/KZ+/igI7c1yuPRwk+VdDJ8cRS/sNkea6twIHMF4I
+         oXhzQCV2MhOepDtFlJr4idY+LBHeqZ5a0LyNrd3xdgEgXbZaXKFFHgZ1sYXLp/yz6Pf5
+         hE1pst9d7f54B8eyiCwO5CzWUpvE2NJLpdiec5OpKBML2bB4/HLboS1DGi6bFwPNjUw1
+         sKj/b0q6guE7pi4Yf8Cf1U4VEub19AJhwJnh5cQPDGareksdjlhxnV/dPqgmc+JCVPWD
+         nIDA==
+X-Gm-Message-State: AOAM533zwBQs4kttKY1Ck2HDzy0iufk20AD9FutBwu5iNRjXJaaXgw8n
+        Z2Pa20oe+csyW+v0krlx7iChrXew8v/sfSjCur7R+hIxz7u7ee31UArWAWVrKbchdItKfbqtCQa
+        mScVc8sHmmLhOL1nrin8RtseS
+X-Received: by 2002:a05:6000:168e:b0:1f1:faf1:23b7 with SMTP id y14-20020a056000168e00b001f1faf123b7mr9640373wrd.150.1646817221588;
+        Wed, 09 Mar 2022 01:13:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJweaBimAyyZrv7VWly/q07XyzC7p7a2C8mkUhFK+5TKB0vl3lp2QMtC0tGVt1RE5UTRPIOE3w==
+X-Received: by 2002:a05:6000:168e:b0:1f1:faf1:23b7 with SMTP id y14-20020a056000168e00b001f1faf123b7mr9640353wrd.150.1646817221338;
+        Wed, 09 Mar 2022 01:13:41 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id i8-20020a7bc948000000b003898dfd7990sm1227337wml.29.2022.03.09.01.13.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 01:13:40 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 1/1] x86/hyperv: Output host build info as normal
+ Windows version number
+In-Reply-To: <20220308204657.v2xdbtx6qsx6n44s@liuwe-devbox-debian-v2>
+References: <1646767364-2234-1-git-send-email-mikelley@microsoft.com>
+ <20220308204657.v2xdbtx6qsx6n44s@liuwe-devbox-debian-v2>
+Date:   Wed, 09 Mar 2022 10:13:39 +0100
+Message-ID: <87ee3ba3p8.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net: netdevsim: fix byte order on ipsec debugfs file
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220308135106.890270-1-kleber.souza@canonical.com>
- <20220308215851.397817bd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Kleber Souza <kleber.souza@canonical.com>
-In-Reply-To: <20220308215851.397817bd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.03.22 06:58, Jakub Kicinski wrote:
-> On Tue,  8 Mar 2022 14:51:06 +0100 Kleber Sacilotto de Souza wrote:
->> When adding a new xfrm state, the data provided via struct xfrm_state
->> is stored in network byte order. This needs to be taken into
->> consideration when exporting the SAs data to userspace via debugfs,
->> otherwise the content will depend on the system endianness. Fix this by
->> converting all multi-byte fields from network to host order.
->>
->> Also fix the selftest script which was expecting the data as exported by
->> a little-endian system, which was inverted.
->>
->> Fixes: 7699353da875 ("netdevsim: add ipsec offload testing")
->> Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test")
->> Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
-> 
-> Then the struct members need to have the correct types,
-> as is this patch adds sparse warnings (build with C=1).
+Wei Liu <wei.liu@kernel.org> writes:
 
-Hi Jakub,
+> (Cc Vitaly)
+>
+> On Tue, Mar 08, 2022 at 11:22:44AM -0800, Michael Kelley wrote:
+>> Hyper-V provides host version number information that is output in
+>> text form by a Linux guest when it boots. For whatever reason, the
+>> formatting has historically been non-standard. Change it to output
+>> in normal Windows version format for better readability.
+>> 
+>> Similar code for ARM64 guests already outputs in normal Windows
+>> version format.
+>> 
+>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-Thank you for the review. I'll fix it and send a v2 shortly.
+Works for me, thanks!
 
-Kleber
+>
+> Applied to hyperv-next. Thanks.
+
+-- 
+Vitaly
+

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCE44D27CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F9B4D27D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229474AbiCIEKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S229517AbiCIEK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 23:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiCIEKw (ORCPT
+        with ESMTP id S229476AbiCIEKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:10:52 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236BD12D91B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:09:55 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id o8so908962pgf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 20:09:55 -0800 (PST)
+        Tue, 8 Mar 2022 23:10:54 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DFE12D91B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:09:56 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id w4so871964ply.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 20:09:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kfr5m2PRqnND1bCrQVSYfXTF8HBTyqcn2+yeFt5oR7M=;
-        b=OTwW3d49hx7PReFEjXfxIs2X8WMnlL+pxohujjDzVggLSnjMshhSQ/QsrcJQRUeDxh
-         oVx/rQ6nNJFVbFGv0dyK8T8Yz6BMptDlAKEM0nYXB2dgrk3daFdobewXvRYPp11Id2Gh
-         Kbk4b7yjSgP5v/91Fa6hBeeE5W7glIUtJuUpdlCt61mujhnGppmT1MrSjBb/04B50jem
-         Bp5uHs3sKVaGRm8DETQjStaPbbG7No0QyS5nTLN9Yn6Hzas7fswFuuisc+fKkqiEtfzx
-         FjU/y2KCt18GQ6G3IVTK96KfV+BtgN/DIr8RgdpG0LUCedSTMk5qRXvW5rouL0flzuwZ
-         oivw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sDJ/41RHMLJzc98gGAPcQbU38m8lJtFcZEeAQmDlWXg=;
+        b=iQ1Xu9+KRLGk0BykNH8il9ywJGSsmPyAQqOlV3l/pxf4PFQLoBoKwwD/HStlelSUii
+         MI0YwU75WlO+H7tV3Bs4IEQlMb2qoq056pREkMc0OmlGLbzstdVLayMfyYu5hvcBRMAh
+         faPWPDEy2VsZfAWsut2EOLCLGKsP3K6U4PC4tTSdEL+BRsJdaAndwE5ncg0t5/xy1Iit
+         cafsMw5cxGkPgrb50e0dVmnQLZmCtT+u7AMB+lJ2SSTrHI/nl2Q022svPS6Uwr0e9k8J
+         IP2T7SwAGuumvLldrrZ+VqjcKCAkedc4gNXJHLlAJ5ezRxV2PsBsnPdjp+tVQfyyGXLu
+         lrwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kfr5m2PRqnND1bCrQVSYfXTF8HBTyqcn2+yeFt5oR7M=;
-        b=cIRTSHPt+hxVEQvvpvm22vLkIcFyZa8f4klidaqtznQn1ke15X/+JFeZS+oa1EcGqu
-         FvIxQn0SwyzCBjyPQi0Vbbx9+P3xx0/K7XnPAN2tdTb1OdyGSLEoEos1G7A3H16uw/3u
-         yB48homDZxIv5/K9NK3aNZ3SU+z2CfUii28ViFNXzY9Dye56qvMDuRRfyHTt/xBpbZ18
-         P8DfFACKkWN6J6pPe5rtAiu1sNwqk45ZaLuPcaX5c49veITfGfLugluG/rYZYzmnxsRL
-         kAIE3l2xYO2HLkqtS8lEtBv9+yYrMukMwE8BIjPGM1Q3BNOtluHialgLJCMxIYwb0LDY
-         Ospg==
-X-Gm-Message-State: AOAM532ggmm3KGevUfrnQgp3QIW7QZhX6HP7yBcI70zJJknz2bG6xzzR
-        E91Xp8UZdfkWeRoEoegURKc=
-X-Google-Smtp-Source: ABdhPJyqsd9QoxJNxes8scCRZ0Z54fuC+h0Jh3Dc4ivlMWdu6Je3/jtzA7eH43h5l4nOv/+PlamJOQ==
-X-Received: by 2002:a05:6a00:1516:b0:4f6:fad6:f0a7 with SMTP id q22-20020a056a00151600b004f6fad6f0a7mr14762628pfu.21.1646798994088;
-        Tue, 08 Mar 2022 20:09:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sDJ/41RHMLJzc98gGAPcQbU38m8lJtFcZEeAQmDlWXg=;
+        b=1nIRwtUb54k1xKTqqxg3oeosRV3zCEjES3bHpj301Vv98CiYH1ezGlXNP4JhC54e8l
+         pXQIhVljrS5mjCjdYa1xfxIksBWXWDCa220lPovbQKu/3RnxTFixWv8rXWVxJaKbNrQ9
+         i6f2Tb4hHZgEajX5S5McZX0nM5taZvvj77Gb8u68rjiz32AeLgR045KlGCWv9TWfDS3l
+         9tQhhKD5gZByvv4riTXLAi8h6TxgvT/seQXELqdkwMWsLIW9szyunHIp+7YcONWioYvH
+         9Ggeo+9mcPZhrmKrCQcXL+n79WtBRDQBlb2mgEx807Rn7DzI9Y7H3BOBhiLvpsr7bwFC
+         WtTQ==
+X-Gm-Message-State: AOAM5336q6m5vpG1Hg/X4Spy3GLJuMULRUOaSc3s5vkv5SEnSgUprg0J
+        VW7jn27c/nRjbkRNjJiDVPc=
+X-Google-Smtp-Source: ABdhPJzT3DRsIcsG+zRTkFd04b8ZK+tnf7HVmnYglGEMoJ6nd7BlbRxOAMSBiiWHUImJ5P/hcidTlQ==
+X-Received: by 2002:a17:90b:4c43:b0:1bf:8585:9baa with SMTP id np3-20020a17090b4c4300b001bf85859baamr8400928pjb.60.1646798995695;
+        Tue, 08 Mar 2022 20:09:55 -0800 (PST)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id g5-20020a655805000000b003643e405b56sm604343pgr.24.2022.03.08.20.09.52
+        by smtp.gmail.com with ESMTPSA id g5-20020a655805000000b003643e405b56sm604343pgr.24.2022.03.08.20.09.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 20:09:53 -0800 (PST)
+        Tue, 08 Mar 2022 20:09:55 -0800 (PST)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -63,10 +63,12 @@ Cc:     linux-kernel@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Nick Piggin <npiggin@gmail.com>, x86@kernel.org
-Subject: [PATCH v3 0/5] mm/mprotect: avoid unnecessary TLB flushes
-Date:   Tue,  8 Mar 2022 20:10:38 -0800
-Message-Id: <20220309041043.302261-1-namit@vmware.com>
+Subject: [PATCH v3 1/5] x86: Detection of Knights Landing A/D leak
+Date:   Tue,  8 Mar 2022 20:10:39 -0800
+Message-Id: <20220309041043.302261-2-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220309041043.302261-1-namit@vmware.com>
+References: <20220309041043.302261-1-namit@vmware.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,56 +83,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-This patch-set is intended to remove unnecessary TLB flushes during
-mprotect() syscalls. Once this patch-set make it through, similar
-and further optimizations for MADV_COLD and userfaultfd would be
-possible.
+Knights Landing has a issue that a thread setting A or D bits may not do
+so atomically against checking the present bit.  A thread which is going
+to page fault may still set those bits, even though the present bit was
+already atomically cleared.
 
-Sorry for the time between it took me to get to v3.
+This implies that when the kernel clears present atomically, some time
+later the supposed to be zero entry could be corrupted with stray A or D
+bits.
 
-Basically, there are 3 optimizations in this patch-set:
-1. Use TLB batching infrastructure to batch flushes across VMAs and
-   do better/fewer flushes. This would also be handy for later
-   userfaultfd enhancements.
-2. Avoid TLB flushes on permission demotion. This optimization is
-   the one that provides most of the performance benefits. Note that
-   the previous batching infrastructure changes are needed for that to
-   happen.
-3. Avoiding TLB flushes on change_huge_pmd() that are only needed to
-   prevent the A/D bits from changing.
+Since the PTE could be already used for storing a swap index, or a NUMA
+migration index, this cannot be tolerated. Most of the time the kernel
+detects the problem, but in some rare cases it may not.
 
-Andrew asked for some benchmark numbers. I do not have an easy
-determinate macrobenchmark in which it is easy to show benefit. I therre
-ran a microbenchmark: a loop that does the following on anonymous
-memory, just as a sanity check to see that time is saved by avoiding TLB
-flushes. The loop goes:
-
-	mprotect(p, PAGE_SIZE, PROT_READ)
-	mprotect(p, PAGE_SIZE, PROT_READ|PROT_WRITE)
-	*p = 0; // make the page writable
-
-The test was run in KVM guest with 1 or 2 threads (the second thread
-was busy-looping). I measured the time (cycles) of each operation:
-
-		1 thread		2 threads
-		mmots	+patch		mmots	+patch
-PROT_READ	3494	2725 (-22%)	8630	7788 (-10%)
-PROT_READ|WRITE	3952	2724 (-31%)	9075	2865 (-68%)
-
-[ mmots = v5.17-rc6-mmots-2022-03-06-20-38 ]
-
-The exact numbers are really meaningless, but the benefit is clear.
-There are 2 interesting results though. 
-
-(1) PROT_READ is cheaper, while one can expect it not to be affected.
-This is presumably due to TLB miss that is saved
-
-(2) Without memory access (*p = 0), the speedup of the patch is even
-greater. In that scenario mprotect(PROT_READ) also avoids the TLB flush.
-As a result both operations on the patched kernel take roughly ~1500
-cycles (with either 1 or 2 threads), whereas on mmotm their cost is as
-high as presented in the table.
-
+This patch adds an interface to detect the bug, which will be used in a
+following patch.
 
 Cc: Andi Kleen <ak@linux.intel.com>
 Cc: Andrea Arcangeli <aarcange@redhat.com>
@@ -145,51 +112,40 @@ Cc: Will Deacon <will@kernel.org>
 Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
 Cc: x86@kernel.org
+Link: https://lore.kernel.org/lkml/1465919919-2093-1-git-send-email-lukasz.anaczkowski@intel.com/
+Signed-off-by: Nadav Amit <namit@vmware.com>
+---
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ arch/x86/kernel/cpu/intel.c        | 5 +++++
+ 2 files changed, 6 insertions(+)
 
---
-
-v2 -> v3:
-* Fix orders of patches (order could lead to breakage)
-* Better comments
-* Clearer KNL detection [Dave]
-* Assertion on PF error-code [Dave]
-* Comments, code, function names improvements [PeterZ]
-* Flush on access-bit clearing on PMD changes to follow the way
-  flushing on x86 is done today in the kernel.
-
-v1 -> v2:
-* Wrong detection of permission demotion [Andrea]
-* Better comments [Andrea]
-* Handle THP [Andrea]
-* Batching across VMAs [Peter Xu]
-* Avoid open-coding PTE analysis
-* Fix wrong use of the mmu_gather()
-
-Nadav Amit (5):
-  x86: Detection of Knights Landing A/D leak
-  x86/mm: check exec permissions on fault
-  mm/mprotect: use mmu_gather
-  mm/mprotect: do not flush on permission promotion
-  mm: avoid unnecessary flush on change_huge_pmd()
-
- arch/x86/include/asm/cpufeatures.h   |  1 +
- arch/x86/include/asm/pgtable.h       |  5 ++
- arch/x86/include/asm/pgtable_types.h |  2 +
- arch/x86/include/asm/tlbflush.h      | 82 ++++++++++++++++++++++++
- arch/x86/kernel/cpu/intel.c          |  5 ++
- arch/x86/mm/fault.c                  | 22 ++++++-
- arch/x86/mm/pgtable.c                | 10 +++
- fs/exec.c                            |  6 +-
- include/asm-generic/tlb.h            | 14 +++++
- include/linux/huge_mm.h              |  5 +-
- include/linux/mm.h                   |  5 +-
- include/linux/pgtable.h              | 20 ++++++
- mm/huge_memory.c                     | 19 ++++--
- mm/mprotect.c                        | 94 +++++++++++++++-------------
- mm/pgtable-generic.c                 |  8 +++
- mm/userfaultfd.c                     |  6 +-
- 16 files changed, 248 insertions(+), 56 deletions(-)
-
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 67ef0e81c7dc..184b299dbf12 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -442,5 +442,6 @@
+ #define X86_BUG_TAA			X86_BUG(22) /* CPU is affected by TSX Async Abort(TAA) */
+ #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
+ #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
++#define X86_BUG_PTE_LEAK		X86_BUG(25) /* PTE may leak A/D bits after clear */
+ 
+ #endif /* _ASM_X86_CPUFEATURES_H */
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 8321c43554a1..74780fef3f12 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -296,6 +296,11 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+ 		}
+ 	}
+ 
++	if (c->x86_model == INTEL_FAM6_XEON_PHI_KNL) {
++		pr_info_once("Enabling PTE leaking workaround\n");
++		set_cpu_bug(c, X86_BUG_PTE_LEAK);
++	}
++
+ 	/*
+ 	 * Intel Quark Core DevMan_001.pdf section 6.4.11
+ 	 * "The operating system also is required to invalidate (i.e., flush)
 -- 
 2.25.1
 

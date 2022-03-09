@@ -2,547 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662914D27BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FAE4D26E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbiCID0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 22:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        id S231749AbiCID3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 22:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbiCID0x (ORCPT
+        with ESMTP id S231751AbiCID3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 22:26:53 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B433165AF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 19:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646796354; x=1678332354;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Gth5hINsnvAcq51cqIrJAOXK3LeiVlry6Zr5SVVDeeo=;
-  b=Q0y4t6xwNwUJBo2CGucyOvA2MX9oKTc9zkCfGPCJD4L2qhTKUxAZOHeU
-   T3UDwf+7zCg19ctym1mikY+fIypunmRNfSlz/7aXe1KSWK1JJ8pOcjilJ
-   dTifctmjGfgiGlzVCy5/k8MWPCIrZLGjq7FARxZngegU8O+jzRwrfuUx0
-   C27XKOe8lJcmy20gLfWnYtieDUq7oS7MRR9w8d0sH9uTlfMbUmPfpS4mp
-   hCCPY8yT7XPIj3COIBUd7cHAZaZzfwQLcQQqEuDXQLGG4v5a7IJ6PnxY+
-   BJchdDoq8Logz5TEkvMkVRgpgEtEHwQXN/qDLGtm6qAga2lq5LUDKjHSc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="252446020"
-X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="252446020"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 19:25:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="537837159"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2022 19:25:49 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRmxQ-0002UL-JP; Wed, 09 Mar 2022 03:25:48 +0000
-Date:   Wed, 9 Mar 2022 11:25:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10
- 2362/9999] mm/page_pinner.c:304:22: warning: variable 'page_pinner' set but
- not used
-Message-ID: <202203091120.mN0fCHUE-lkp@intel.com>
+        Tue, 8 Mar 2022 22:29:07 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2114.outbound.protection.outlook.com [40.107.215.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB41B606C0;
+        Tue,  8 Mar 2022 19:28:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V56K7EIW9YgAiDgn69YTQWbgN43B5iYFQ5GrnR4JbPfnsIrpkI3y0lliy+HUQq7Pl5ejdC/1omrvq5KFtd33GLk5c1n5SIUUY+r9Joqb8SiBp4Bhg8OrxnZhBVxiOBkfcPZws5CPtTSfwoVhMgo+Et3hjBv4XK+yRv6d7HCjjmHWD5gxSR1wZF6wFDRRhyczv9+fKzA7tAdZOrdevjfvj7K9zvTVNRFcT33ye3ayXjnk3VweHr2w3P/mSvooHnfCgaHDOAczjN9NZsgmWJ6WXHIgCPe4f+79jzpOliz05el+4PafjcDh27bqMYnL5dw/BMSu5q4+4NYaWqie6ofrPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PsTvfaPVIz0ijZDWkEoP5d1+44dwkiCSKx6ak8H2HVM=;
+ b=JZgOj3IVcp3s7cTGGRJ9a2i4BpVLCTCQOiGbDa6VOcatDoQ6Q/+Ox8un1uA5MgsabbQXEnoeweILZzQ60fQb4MMUT3TKpSUPbCO2yDEJEMWjwe+X3ccCdV65giedT4X768zKLLWzLe+a/8Cb7D1vQ00T/LZi3KZifBe+tBjnqNFUDjPdFVQC1mxFnoRQr+vHlR+RZ7ziiA7bh0NKN6z4Vk87X1I+TxEaMJPlXq95UkTbpQEVamC0MK+82JkBUSFRSWZQUkNUlR9kzOb6F0etAGOyh4HBjNjr58drCI68Hppuvn5M/FZy7jtdT33GW9sivWbEtkGeUctnWmUfFRjI0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PsTvfaPVIz0ijZDWkEoP5d1+44dwkiCSKx6ak8H2HVM=;
+ b=lXnURFZZkobP3Vwl5eKoTUSGhADuFhT5DTvDSB6jTTaDoY4FuJpBF6jsd7cHGv22w/NNIo12MqcHIXoGw+EhKNYtrySj6MbdkS1p08MQGpAO4fcJa6KQvQS/aDg5uktMRWTrPDNe0fxEp40fITDmQkXtlz76LNqVi7smZJSplL4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by SG2PR06MB2523.apcprd06.prod.outlook.com (2603:1096:4:5e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.18; Wed, 9 Mar
+ 2022 03:28:03 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 03:28:03 +0000
+Message-ID: <86879fb3-e3f8-7857-2ed9-490340f3c6fe@vivo.com>
+Date:   Wed, 9 Mar 2022 11:27:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
+Content-Language: en-US
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Christy Lee <christylee@fb.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc:     "zhengkui_guo@outlook.com" <zhengkui_guo@outlook.com>
+References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net>
+ <20220309032325.1526-1-guozhengkui@vivo.com>
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+In-Reply-To: <20220309032325.1526-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR0302CA0011.apcprd03.prod.outlook.com
+ (2603:1096:3:2::21) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9fb83627-2f4e-424b-447d-08da017cd1a2
+X-MS-TrafficTypeDiagnostic: SG2PR06MB2523:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB2523BD20D0CDEE217337271CC70A9@SG2PR06MB2523.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ps3+QzsgvD/uehJyJgzKDK9I+usQHH2RwOwCCugJz/CO4AFLYIb074j9jus1N/aawmizV1pA8aN0k9OyFZOQgj4Ru75FI2vSQwvzQ6vEjB2ybauSPMANtpbCvq2YojCe0fIvm+4p7iLObaBwKzMA/FQcboK5kFyr0UIF/GGoLXoUrU8Sqmfuo/6HsPDoE9FMqPtk73E/aYmF6Mi47ZgT6qslmdKT4OkrOvdPBrVGc8xPCQdSWASFih2xJfoDJ4sTHut63lawerpH24LITeczp6kRH1iRAKKegLtnirILDu9iBSoREtl+E/Md1j7MYsHb84I83N3yhcEPZcwmcu7WiBX2GeqoXZ1X2EC2RAvJAY9Gs5YlhiQ0YRFuzFVi/QcUyLdnP4qflBbVGAcMpSqjkrNj+Ti/jC5ftg5PbZg9EV5r++1EJzwByMdf2PV5DQXGO9botil0+UnSoVBlHU9Wpk5YdzlLvzwlkf2KM2VzamQaeo2DB6EIUdLHFMbPSlMNTN8s7ijB3h5b84pXW3wTa1FtPKxcDFl6f8BUUMwpvnxM7riQnkPZXBQDeCGZSMyVr+sWayo8cQ9NblxJi/iWA51DnxgMq/I1rMTH8MVjIu3xq5gZweE5KvtjWQ6PvqhPwNCEwkDndr1D/emyKI6F5YtrjXeJJeRYlB157XoSjXjGhiRV0BPhlZ7L1XcQF08WWuHoXXQTmYXp/4vcET2Yu2mC5yTa5tBlbiBHJLFfY9iP08uJcgCzsqr6nRz3tUZq2E5rt9Ew7t8FFJykBoCLrXKrtkqLavs81bGDgGHrKqg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(83380400001)(86362001)(38100700002)(38350700002)(7416002)(31696002)(186003)(921005)(30864003)(8936002)(5660300002)(36756003)(2906002)(26005)(66476007)(4326008)(8676002)(66946007)(66556008)(6666004)(6506007)(6512007)(52116002)(53546011)(31686004)(6486002)(508600001)(110136005)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OUVINkJSQ0FFMGtRRWtYaE1JanRoWkNzQjZSbzVGWFFveFViVFpHRmhzY1U3?=
+ =?utf-8?B?QjFoZnpSSlVVZURQSmxVMlhHbEpvK0FaS0FsRlhNSnh5KzJibS9UblNxQ1k0?=
+ =?utf-8?B?V3Ewai9TUTFEL01hOEZsdFhTajFNaHQ1NCtVU3Joc1JPWEh2QTRYOUx6dnp4?=
+ =?utf-8?B?dzVuNktmRm11c1VZZ3ZOZ2hYOVBFRmRRZkxKQ2EybFA3SlpoVmtaS1pOeER1?=
+ =?utf-8?B?MkpqU2Q1N3p1UVVheHI1TkxaVEFoSkNkemdjblFhdFo0elFGb0M5WEhQRTg1?=
+ =?utf-8?B?ejVONW55MDFyRVhWeElqVm12NjRSa0FNT2ZWVVZpUFJLeDFNM2FOR0k2NWNG?=
+ =?utf-8?B?Vk1kMmxtRi84aW92eEl5ek90Tjc5b3hDMmJIR3hIbzVEN2c5blpBcmdyRXdh?=
+ =?utf-8?B?b0xKemtjQXNYZG1PSTV5d2FIdS80dXE5T1J6VVhkZEhvUDNJKzcwMmZZbDBq?=
+ =?utf-8?B?eTVVcVlPenlJNkI2eDFWNEtQYStFRDB3ZjN3MEJJWVBUZ0lKUWdQKy9NZFlF?=
+ =?utf-8?B?RTZEWHBrRUpWUmNKOHYyOVJkUE56WlIzNy91R3hDd3BtUmIyUUZ0NkJjbVBh?=
+ =?utf-8?B?d1JPZzZXM1I4cHpkcWVSbThqcnBVR2FGL1NDK2RRWkIvdWdzbDkrdTZkOGUy?=
+ =?utf-8?B?OG5UWERpN3dSVXViMVNhaEc1OUxlejF0NG1DN1dFaWpuV1d1YW1PVHVKd2Q3?=
+ =?utf-8?B?Yzg4bWROdFgvU0NIa2psaTNNN2JocS9jdTlLYVpPcW5vY2kwMUd0RnVEKytk?=
+ =?utf-8?B?V3dUR3dIWFR2N1hDSEE4UXljVnJRMjk4Z2czT3VzYnd3YTIzZEVqK29VN3Bv?=
+ =?utf-8?B?RXo0YUlyUGNPaEJFQTF5dy9USEllRWFiR2ZDSVRHOTJmbjF2bHpyUU5mWWNQ?=
+ =?utf-8?B?QjVTMWFLUHVxcDd0aG05VlhIaGJ1bWFaUmZPRFhZWitDelEzY05jOTB4OGdP?=
+ =?utf-8?B?eC9mV0s3aWp1bko1eTZzVCtyL0lranJkVWtwTEY5MEtzUWpvaWYxdUxCSnNs?=
+ =?utf-8?B?T1lkakVlRHl4R3BxWDE2ZTZ1bGdSNmVhM005emxodXUyTWlhSXVZYUIrd1Fv?=
+ =?utf-8?B?VDQ5V3poNmNCNlh6NnNDblNWUy9UMXAxNTZXWm54SnRVSHRyZWMxbVdpdkFx?=
+ =?utf-8?B?V01OVytzMkk0NDdBM3dPTGZaOHBvRU1wbnBPVzV0K01iVVVXcUpoYjVIVUJ2?=
+ =?utf-8?B?OTFiaWNMRVBpa0ttZ09YZXNCYWtmMGVjOFNNMGpVaXhFQlprYnE1QU5qQkVk?=
+ =?utf-8?B?MnpCTEswQnlkeFRpNUhkY1VkME01d1FySTVKQ2h0U2lkOE95bzZpZDlmNkR4?=
+ =?utf-8?B?Ky9ERzEvRUkwQm8vK2JRaHRQekNieWdGNW5YMVZ6Wm1lcWVQV0wwTW90MXgy?=
+ =?utf-8?B?SWsrTjk5UmNtZC90WkpGRVpHOHRvOXJpdkhGbEdpTHV5ZnFiaUlxak5jUFB6?=
+ =?utf-8?B?VzYvdEZZd2hLci9GUHRqZVQxYlVZaUd4U29KbTY4UHJnUm40b0RDYzB2NkNj?=
+ =?utf-8?B?ZDJuSStqY1FRcnhiV29UUXFXd3JTT093dTF4ZHg0dFB1a0pZcS8vYVhMdEFl?=
+ =?utf-8?B?SDhkOThmWUliUTBLODFDMlBHTWdWWnFkM3pGTWVBRG9Va3l2UVpkamZtYjAx?=
+ =?utf-8?B?cDhHUzZza256YWJ6bk13Tmp4OGdlR2c1UFpPcWU0dUF1REp0TVdGUzJINTBk?=
+ =?utf-8?B?TUs2aytKUXFOM2o0SVFuRWtqMWFNZnhwODYzdURNV2R1N2NseTIrdnRzRmky?=
+ =?utf-8?B?cmptSW1ibVlhME5Ha3h5VllsejR4cXhoU0ZLMHdRTitCUmNjS3kwelQvdW93?=
+ =?utf-8?B?YnlnbWIyUHl5YWRwVkpsZVpxN1J5R3lJN3VTNE1mVjRlWlhVbjB0SDUwRWFH?=
+ =?utf-8?B?ZU1MN0pOVVRtZEtwd1M2cm9QOWdrMkUvckJrOG1RUjFkbEtvZHo0eWVVYlNa?=
+ =?utf-8?B?cjBjNTBWQktlMTZ2aFVrdUpWWVNVMzlPdkNZdWdZNEZoODNla1ZyNWpLSnow?=
+ =?utf-8?B?a0xNRzd3MHlXSUNFTUtSajNkbS9UQUEvanJQcUFIdVJTb3VLNWVqQ3NNOVJk?=
+ =?utf-8?B?RXdkZEUwcnlPdVg5M0lyc1o1bjJhSnp0OEZrZ3dUT3A3QjU3dC94L0xWZWk3?=
+ =?utf-8?B?T2J1bEVRd3BxWWk0QW9IcFpoa0NjVktqSTh3ZWRQenBXRWpBYWd5WEgyV0M2?=
+ =?utf-8?Q?L1tp/BMdDSurMFJZSydsKbQ=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fb83627-2f4e-424b-447d-08da017cd1a2
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 03:28:03.3022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XvXagKyyvEocFwCapPIjvZYD4wOAxsu7p9GSbeS05zdJfm73ZEIsUmjugRx3mCjfASM0DRFNHSvF35q/6R0p5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2523
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10
-head:   fcaaaaae6d4c72eb4084dc136acd478ad09fe0f0
-commit: ddc4a48797352076586ef3ab79c6bfaba08fd06e [2362/9999] ANDROID: mm: page_pinner: introduce failure_tracking feature
-config: x86_64-randconfig-c007-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091120.mN0fCHUE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/ddc4a48797352076586ef3ab79c6bfaba08fd06e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10
-        git checkout ddc4a48797352076586ef3ab79c6bfaba08fd06e
-        # save the config file to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer 
+Sorry for my mistake. I forgot to change commit message. I will send 
+another patch.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> mm/page_pinner.c:304:22: warning: variable 'page_pinner' set but not used [-Wunused-but-set-variable]
-           struct page_pinner *page_pinner;
-                               ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_MIPI_DSI
-   Depends on HAS_IOMEM && DRM
-   Selected by
-   - GKI_HIDDEN_DRM_CONFIGS
-   WARNING: unmet direct dependencies detected for DRM_KMS_CMA_HELPER
-   Depends on HAS_IOMEM && DRM
-   Selected by
-   - GKI_HIDDEN_DRM_CONFIGS
-   WARNING: unmet direct dependencies detected for DRM_GEM_CMA_HELPER
-   Depends on HAS_IOMEM && DRM
-   Selected by
-   - GKI_HIDDEN_DRM_CONFIGS
-
-
-clang-analyzer warnings: (new ones prefixed by >>)
-               ^~~~~~
-   drivers/scsi/myrb.c:478:56: note: Left side of '&&' is false
-           if (status == MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS &&
-                                                                 ^
-   drivers/scsi/myrb.c:481:6: note: 'status' is not equal to MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS
-           if (status != MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS) {
-               ^~~~~~
-   drivers/scsi/myrb.c:481:2: note: Taking true branch
-           if (status != MYRB_NO_STDBY_RBLD_OR_CHECK_IN_PROGRESS) {
-           ^
-   drivers/scsi/myrb.c:483:23: note: The left operand of '-' is a garbage value
-                           rbld_buf.ldev_size - rbld_buf.blocks_left;
-                           ~~~~~~~~~~~~~~~~~~ ^
-   drivers/scsi/myrb.c:1937:24: warning: The left operand of '!=' is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
-           if (rbld_buf.ldev_num != sdev->id ||
-                                 ^
-   drivers/scsi/myrb.c:2160:9: note: Calling 'rebuild_show'
-           return rebuild_show(dev, attr, buf);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:1927:29: note: Left side of '&&' is false
-           struct scsi_device *sdev = to_scsi_device(dev);
-                                      ^
-   include/scsi/scsi_device.h:244:2: note: expanded from macro 'to_scsi_device'
-           container_of(d, struct scsi_device, sdev_gendev)
-           ^
-   include/linux/kernel.h:853:61: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-                                                                      ^
-   drivers/scsi/myrb.c:1927:29: note: Taking false branch
-           struct scsi_device *sdev = to_scsi_device(dev);
-                                      ^
-   include/scsi/scsi_device.h:244:2: note: expanded from macro 'to_scsi_device'
-           container_of(d, struct scsi_device, sdev_gendev)
-           ^
-   include/linux/kernel.h:853:2: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:323:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:311:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:303:3: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ^
-   drivers/scsi/myrb.c:1927:29: note: Loop condition is false.  Exiting loop
-           struct scsi_device *sdev = to_scsi_device(dev);
-                                      ^
-   include/scsi/scsi_device.h:244:2: note: expanded from macro 'to_scsi_device'
-           container_of(d, struct scsi_device, sdev_gendev)
-           ^
-   include/linux/kernel.h:853:2: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:323:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:311:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:301:2: note: expanded from macro '__compiletime_assert'
-           do {                                                            \
-           ^
-   drivers/scsi/myrb.c:1932:6: note: Assuming the condition is false
-           if (sdev->channel < myrb_logical_channel(sdev->host))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:1932:2: note: Taking false branch
-           if (sdev->channel < myrb_logical_channel(sdev->host))
-           ^
-   drivers/scsi/myrb.c:1935:11: note: Calling 'myrb_get_rbld_progress'
-           status = myrb_get_rbld_progress(cb, &rbld_buf);
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:451:6: note: Assuming 'rbld_buf' is null
-           if (!rbld_buf)
-               ^~~~~~~~~
-   drivers/scsi/myrb.c:451:2: note: Taking true branch
-           if (!rbld_buf)
-           ^
-   drivers/scsi/myrb.c:452:3: note: Returning without writing to 'rbld->ldev_num'
-                   return MYRB_STATUS_RBLD_NOT_CHECKED;
-                   ^
-   drivers/scsi/myrb.c:1935:11: note: Returning from 'myrb_get_rbld_progress'
-           status = myrb_get_rbld_progress(cb, &rbld_buf);
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/myrb.c:1937:24: note: The left operand of '!=' is a garbage value
-           if (rbld_buf.ldev_num != sdev->id ||
-               ~~~~~~~~~~~~~~~~~ ^
-   Suppressed 18 warnings (6 in non-user code, 12 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
->> mm/page_pinner.c:312:2: warning: Value stored to 'page_pinner' is never read [clang-analyzer-deadcode.DeadStores]
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/page_pinner.c:312:2: note: Value stored to 'page_pinner' is never read
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (5 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   12 warnings generated.
-   drivers/scsi/smartpqi/smartpqi_init.c:1650:4: warning: Value stored to 'count' is never read [clang-analyzer-deadcode.DeadStores]
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1650:4: note: Value stored to 'count' is never read
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1662:4: warning: Value stored to 'count' is never read [clang-analyzer-deadcode.DeadStores]
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1662:4: note: Value stored to 'count' is never read
-                           count += scnprintf(buffer + count,
-                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:2117:19: warning: Access to field 'wwid' results in a dereference of a null pointer (loaded from variable 'phys_lun_ext_entry') [clang-analyzer-core.NullDereference]
-                           device->wwid = phys_lun_ext_entry->wwid;
-                                          ^~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1976:7: note: Calling 'pqi_get_device_lists'
-           rc = pqi_get_device_lists(ctrl_info, &physdev_list, &logdev_list);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1001:6: note: 'rc' is 0
-           if (rc)
-               ^~
-   drivers/scsi/smartpqi/smartpqi_init.c:1001:2: note: Taking false branch
-           if (rc)
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1006:6: note: 'rc' is 0
-           if (rc)
-               ^~
-   drivers/scsi/smartpqi/smartpqi_init.c:1006:2: note: Taking false branch
-           if (rc)
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1016:6: note: 'logdev_data' is non-null
-           if (logdev_data) {
-               ^~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1016:2: note: Taking true branch
-           if (logdev_data) {
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1031:6: note: Assuming 'internal_logdev_list' is non-null
-           if (!internal_logdev_list) {
-               ^~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1031:2: note: Taking false branch
-           if (!internal_logdev_list) {
-           ^
-   drivers/scsi/smartpqi/smartpqi_init.c:1047:2: note: Returning zero, which participates in a condition later
-           return 0;
-           ^~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1976:7: note: Returning from 'pqi_get_device_lists'
-           rc = pqi_get_device_lists(ctrl_info, &physdev_list, &logdev_list);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/smartpqi/smartpqi_init.c:1977:6: note: 'rc' is 0
-           if (rc)
-               ^~
-   drivers/scsi/smartpqi/smartpqi_init.c:1977:2: note: Taking false branch
-           if (rc)
---
-           __X64_SYS_STUBx(x, name, __VA_ARGS__)                           \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/syscall_wrapper.h:96:2: note: expanded from macro '__X64_SYS_STUBx'
-           __SYS_STUBx(x64, sys##name,                                     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/syscall_wrapper.h:79:10: note: expanded from macro '__SYS_STUBx'
-                   return __se_##name(__VA_ARGS__);                        \
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   note: expanded from here
-   fs/pipe.c:1013:1: note: Calling '__do_sys_pipe'
-   SYSCALL_DEFINE1(pipe, int __user *, fildes)
-   ^
-   include/linux/syscalls.h:213:36: note: expanded from macro 'SYSCALL_DEFINE1'
-   #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:224:2: note: expanded from macro 'SYSCALL_DEFINEx'
-           __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/syscall_wrapper.h:234:14: note: expanded from macro '__SYSCALL_DEFINEx'
-                   long ret = __do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: expanded from here
-   fs/pipe.c:1015:9: note: Calling 'do_pipe2'
-           return do_pipe2(fildes, 0);
-                  ^~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:992:10: note: Calling '__do_pipe_flags'
-           error = __do_pipe_flags(fd, files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:941:2: note: Taking false branch
-           if (flags & ~(O_CLOEXEC | O_NONBLOCK | O_DIRECT | O_NOTIFICATION_PIPE))
-           ^
-   fs/pipe.c:944:10: note: Calling 'create_pipe_files'
-           error = create_pipe_files(files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:899:7: note: 'inode' is non-null
-           if (!inode)
-                ^~~~~
-   fs/pipe.c:899:2: note: Taking false branch
-           if (!inode)
-           ^
-   fs/pipe.c:902:2: note: Taking false branch
-           if (flags & O_NOTIFICATION_PIPE) {
-           ^
-   fs/pipe.c:914:2: note: Taking false branch
-           if (IS_ERR(f)) {
-           ^
-   fs/pipe.c:924:2: note: Taking true branch
-           if (IS_ERR(res[0])) {
-           ^
-   fs/pipe.c:944:10: note: Returning from 'create_pipe_files'
-           error = create_pipe_files(files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:945:6: note: Assuming 'error' is 0
-           if (error)
-               ^~~~~
-   fs/pipe.c:945:2: note: Taking false branch
-           if (error)
-           ^
-   fs/pipe.c:949:6: note: Assuming 'error' is >= 0
-           if (error < 0)
-               ^~~~~~~~~
-   fs/pipe.c:949:2: note: Taking false branch
-           if (error < 0)
-           ^
-   fs/pipe.c:954:6: note: Assuming 'error' is >= 0
-           if (error < 0)
-               ^~~~~~~~~
-   fs/pipe.c:954:2: note: Taking false branch
-           if (error < 0)
-           ^
-   fs/pipe.c:961:2: note: Returning zero, which participates in a condition later
-           return 0;
-           ^~~~~~~~
-   fs/pipe.c:992:10: note: Returning from '__do_pipe_flags'
-           error = __do_pipe_flags(fd, files, flags);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:993:7: note: 'error' is 0
-           if (!error) {
-                ^~~~~
-   fs/pipe.c:993:2: note: Taking true branch
-           if (!error) {
-           ^
-   fs/pipe.c:994:7: note: Assuming the condition is true
-                   if (unlikely(copy_to_user(fildes, fd, sizeof(fd)))) {
-                       ^
-   include/linux/compiler.h:78:40: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                             ^~~~
-   fs/pipe.c:994:3: note: Taking false branch
-                   if (unlikely(copy_to_user(fildes, fd, sizeof(fd)))) {
-                   ^
-   fs/pipe.c:1002:4: note: 2nd function call argument is an uninitialized value
-                           fd_install(fd[1], files[1]);
-                           ^                 ~~~~~~~~
-   Suppressed 10 warnings (5 in non-user code, 5 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
->> mm/page_pinner.c:312:2: warning: Value stored to 'page_pinner' is never read [clang-analyzer-deadcode.DeadStores]
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/page_pinner.c:312:2: note: Value stored to 'page_pinner' is never read
-           page_pinner = get_page_pinner(page_ext);
-           ^             ~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (5 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   Suppressed 4 warnings (4 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   14 warnings generated.
-   drivers/scsi/aic7xxx/aic79xx_osm.c:561:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcpy(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER, Rev " AIC79XX_DRIVER_VERSION "\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:561:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
-           strcpy(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER, Rev " AIC79XX_DRIVER_VERSION "\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:563:2: warning: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcat(bp, ahd->description);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:563:2: note: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-           strcat(bp, ahd->description);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:564:2: warning: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcat(bp, ">\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:564:2: note: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-           strcat(bp, ">\n"
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:567:2: warning: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcat(bp, ahd_info);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:567:2: note: Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-           strcat(bp, ahd_info);
-           ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:649:2: warning: Value stored to 'tinfo' is never read [clang-analyzer-deadcode.DeadStores]
-           tinfo = ahd_fetch_transinfo(ahd, channel, ahd->our_id,
-           ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:649:2: note: Value stored to 'tinfo' is never read
-           tinfo = ahd_fetch_transinfo(ahd, channel, ahd->our_id,
-           ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:1239:3: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-                   strcpy(new_name, buf);
-                   ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:1239:3: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
-                   strcpy(new_name, buf);
-                   ^~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:2257:2: warning: Value stored to 'saved_scsiid' is never read [clang-analyzer-deadcode.DeadStores]
-           saved_scsiid = ahd_inb(ahd, SAVED_SCSIID);
-           ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/aic7xxx/aic79xx_osm.c:2257:2: note: Value stored to 'saved_scsiid' is never read
-           saved_scsiid = ahd_inb(ahd, SAVED_SCSIID);
-           ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 7 warnings (6 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   kernel/trace/ring_buffer.c:1985:2: warning: Value stored to 'size' is never read [clang-analyzer-deadcode.DeadStores]
-           size = nr_pages * BUF_PAGE_SIZE;
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ring_buffer.c:1985:2: note: Value stored to 'size' is never read
-           size = nr_pages * BUF_PAGE_SIZE;
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (5 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   11 warnings generated.
-   kernel/trace/trace.c:353:2: warning: Access to field 'next' results in a dereference of a null pointer [clang-analyzer-core.NullDereference]
-           rcu_assign_pointer(*p, (*p)->next);
-           ^
-   include/linux/rcupdate.h:424:35: note: expanded from macro 'rcu_assign_pointer'
-           uintptr_t _r_a_p__v = (uintptr_t)(v);                                 \
-                                            ^
-   kernel/trace/trace.c:396:2: note: Value assigned to 'ftrace_exports_list'
-           mutex_lock(&ftrace_export_lock);
-           ^
-
-vim +/page_pinner +304 mm/page_pinner.c
-
-   300	
-   301	void __page_pinner_migration_failed(struct page *page)
-   302	{
-   303		struct page_ext *page_ext = lookup_page_ext(page);
- > 304		struct page_pinner *page_pinner;
-   305		depot_stack_handle_t handle;
-   306		unsigned long flags;
-   307		unsigned int idx;
-   308	
-   309		if (unlikely(!page_ext))
-   310			return;
-   311	
- > 312		page_pinner = get_page_pinner(page_ext);
-   313		if (!test_bit(PAGE_EXT_PINNER_MIGRATION_FAILED, &page_ext->flags))
-   314			return;
-   315	
-   316		handle = save_stack(GFP_NOWAIT|__GFP_NOWARN);
-   317	
-   318		spin_lock_irqsave(&acf_pinner.lock, flags);
-   319		idx = acf_pinner.index++;
-   320		acf_pinner.index %= LONTERM_PIN_BUCKETS;
-   321	
-   322		acf_pinner.pinner[idx].handle = handle;
-   323		acf_pinner.pinner[idx].ts_usec = ktime_to_us(ktime_get_boottime());
-   324		acf_pinner.pinner[idx].page_flags = page->flags;
-   325		acf_pinner.pinner[idx].page_mt = get_pageblock_migratetype(page);
-   326		acf_pinner.pinner[idx].pfn = page_to_pfn(page);
-   327		spin_unlock_irqrestore(&acf_pinner.lock, flags);
-   328	}
-   329	EXPORT_SYMBOL(__page_pinner_migration_failed);
-   330	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 2022/3/9 11:22, Guo Zhengkui wrote:
+> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
+> 
+> Use `ARRAY_SIZE(arr)` instead of forms like `sizeof(arr)/sizeof(arr[0])`.
+> 
+> syscall.c and test_rdonly_maps.c don't contain header files which
+> implement ARRAY_SIZE() macro. So I add `#include <linux/kernel.h>`,
+> in which ARRAY_SIZE(arr) not only calculates the size of `arr`, but also
+> checks that `arr` is really an array (using __must_be_array(arr)).
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> ---
+>   .../selftests/bpf/prog_tests/cgroup_attach_autodetach.c     | 2 +-
+>   .../testing/selftests/bpf/prog_tests/cgroup_attach_multi.c  | 2 +-
+>   .../selftests/bpf/prog_tests/cgroup_attach_override.c       | 2 +-
+>   tools/testing/selftests/bpf/prog_tests/global_data.c        | 6 +++---
+>   tools/testing/selftests/bpf/prog_tests/obj_name.c           | 2 +-
+>   tools/testing/selftests/bpf/progs/syscall.c                 | 3 ++-
+>   tools/testing/selftests/bpf/progs/test_rdonly_maps.c        | 3 ++-
+>   tools/testing/selftests/bpf/test_cgroup_storage.c           | 2 +-
+>   tools/testing/selftests/bpf/test_lru_map.c                  | 4 ++--
+>   tools/testing/selftests/bpf/test_sock_addr.c                | 6 +++---
+>   tools/testing/selftests/bpf/test_sockmap.c                  | 4 ++--
+>   11 files changed, 19 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
+> index 858916d11e2e..9367bd2f0ae1 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
+> @@ -14,7 +14,7 @@ static int prog_load(void)
+>   		BPF_MOV64_IMM(BPF_REG_0, 1), /* r0 = 1 */
+>   		BPF_EXIT_INSN(),
+>   	};
+> -	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+> +	size_t insns_cnt = ARRAY_SIZE(prog);
+>   
+>   	return bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
+>   			       prog, insns_cnt, "GPL", 0,
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
+> index 38b3c47293da..db0b7bac78d1 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
+> @@ -63,7 +63,7 @@ static int prog_load_cnt(int verdict, int val)
+>   		BPF_MOV64_IMM(BPF_REG_0, verdict), /* r0 = verdict */
+>   		BPF_EXIT_INSN(),
+>   	};
+> -	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+> +	size_t insns_cnt = ARRAY_SIZE(prog);
+>   	int ret;
+>   
+>   	ret = bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
+> index 356547e849e2..9421a5b7f4e1 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
+> @@ -16,7 +16,7 @@ static int prog_load(int verdict)
+>   		BPF_MOV64_IMM(BPF_REG_0, verdict), /* r0 = verdict */
+>   		BPF_EXIT_INSN(),
+>   	};
+> -	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+> +	size_t insns_cnt = ARRAY_SIZE(prog);
+>   
+>   	return bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
+>   			       prog, insns_cnt, "GPL", 0,
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data.c b/tools/testing/selftests/bpf/prog_tests/global_data.c
+> index 6fb3d3155c35..027685858925 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data.c
+> @@ -29,7 +29,7 @@ static void test_global_data_number(struct bpf_object *obj, __u32 duration)
+>   		{ "relocate .rodata reference", 10, ~0 },
+>   	};
+>   
+> -	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>   		err = bpf_map_lookup_elem(map_fd, &tests[i].key, &num);
+>   		CHECK(err || num != tests[i].num, tests[i].name,
+>   		      "err %d result %llx expected %llx\n",
+> @@ -58,7 +58,7 @@ static void test_global_data_string(struct bpf_object *obj, __u32 duration)
+>   		{ "relocate .bss reference",    4, "\0\0hello" },
+>   	};
+>   
+> -	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>   		err = bpf_map_lookup_elem(map_fd, &tests[i].key, str);
+>   		CHECK(err || memcmp(str, tests[i].str, sizeof(str)),
+>   		      tests[i].name, "err %d result \'%s\' expected \'%s\'\n",
+> @@ -92,7 +92,7 @@ static void test_global_data_struct(struct bpf_object *obj, __u32 duration)
+>   		{ "relocate .data reference",   3, { 41, 0xeeeeefef, 0x2111111111111111ULL, } },
+>   	};
+>   
+> -	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>   		err = bpf_map_lookup_elem(map_fd, &tests[i].key, &val);
+>   		CHECK(err || memcmp(&val, &tests[i].val, sizeof(val)),
+>   		      tests[i].name, "err %d result { %u, %u, %llu } expected { %u, %u, %llu }\n",
+> diff --git a/tools/testing/selftests/bpf/prog_tests/obj_name.c b/tools/testing/selftests/bpf/prog_tests/obj_name.c
+> index 6194b776a28b..7093edca6e08 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/obj_name.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/obj_name.c
+> @@ -20,7 +20,7 @@ void test_obj_name(void)
+>   	__u32 duration = 0;
+>   	int i;
+>   
+> -	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>   		size_t name_len = strlen(tests[i].name) + 1;
+>   		union bpf_attr attr;
+>   		size_t ncopy;
+> diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
+> index e550f728962d..62e6fa49a4ab 100644
+> --- a/tools/testing/selftests/bpf/progs/syscall.c
+> +++ b/tools/testing/selftests/bpf/progs/syscall.c
+> @@ -6,6 +6,7 @@
+>   #include <bpf/bpf_tracing.h>
+>   #include <../../../tools/include/linux/filter.h>
+>   #include <linux/btf.h>
+> +#include <bpf_util.h>
+>   
+>   char _license[] SEC("license") = "GPL";
+>   
+> @@ -82,7 +83,7 @@ int bpf_prog(struct args *ctx)
+>   	static __u64 value = 34;
+>   	static union bpf_attr prog_load_attr = {
+>   		.prog_type = BPF_PROG_TYPE_XDP,
+> -		.insn_cnt = sizeof(insns) / sizeof(insns[0]),
+> +		.insn_cnt = ARRAY_SIZE(insns),
+>   	};
+>   	int ret;
+>   
+> diff --git a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+> index fc8e8a34a3db..a500f2c15970 100644
+> --- a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+> +++ b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+> @@ -3,6 +3,7 @@
+>   
+>   #include <linux/ptrace.h>
+>   #include <linux/bpf.h>
+> +#include <bpf_util.h>
+>   #include <bpf/bpf_helpers.h>
+>   
+>   const struct {
+> @@ -64,7 +65,7 @@ int full_loop(struct pt_regs *ctx)
+>   {
+>   	/* prevent compiler to optimize everything out */
+>   	unsigned * volatile p = (void *)&rdonly_values.a;
+> -	int i = sizeof(rdonly_values.a) / sizeof(rdonly_values.a[0]);
+> +	int i = ARRAY_SIZE(rdonly_values.a);
+>   	unsigned iters = 0, sum = 0;
+>   
+>   	/* validate verifier can allow full loop as well */
+> diff --git a/tools/testing/selftests/bpf/test_cgroup_storage.c b/tools/testing/selftests/bpf/test_cgroup_storage.c
+> index 5b8314cd77fd..d6a1be4d8020 100644
+> --- a/tools/testing/selftests/bpf/test_cgroup_storage.c
+> +++ b/tools/testing/selftests/bpf/test_cgroup_storage.c
+> @@ -36,7 +36,7 @@ int main(int argc, char **argv)
+>   		BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
+>   		BPF_EXIT_INSN(),
+>   	};
+> -	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+> +	size_t insns_cnt = ARRAY_SIZE(prog);
+>   	int error = EXIT_FAILURE;
+>   	int map_fd, percpu_map_fd, prog_fd, cgroup_fd;
+>   	struct bpf_cgroup_storage_key key;
+> diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
+> index 6e6235185a86..563bbe18c172 100644
+> --- a/tools/testing/selftests/bpf/test_lru_map.c
+> +++ b/tools/testing/selftests/bpf/test_lru_map.c
+> @@ -878,11 +878,11 @@ int main(int argc, char **argv)
+>   	assert(nr_cpus != -1);
+>   	printf("nr_cpus:%d\n\n", nr_cpus);
+>   
+> -	for (f = 0; f < sizeof(map_flags) / sizeof(*map_flags); f++) {
+> +	for (f = 0; f < ARRAY_SIZE(map_flags); f++) {
+>   		unsigned int tgt_free = (map_flags[f] & BPF_F_NO_COMMON_LRU) ?
+>   			PERCPU_FREE_TARGET : LOCAL_FREE_TARGET;
+>   
+> -		for (t = 0; t < sizeof(map_types) / sizeof(*map_types); t++) {
+> +		for (t = 0; t < ARRAY_SIZE(map_types); t++) {
+>   			test_lru_sanity0(map_types[t], map_flags[f]);
+>   			test_lru_sanity1(map_types[t], map_flags[f], tgt_free);
+>   			test_lru_sanity2(map_types[t], map_flags[f], tgt_free);
+> diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
+> index f0c8d05ba6d1..f3d5d7ac6505 100644
+> --- a/tools/testing/selftests/bpf/test_sock_addr.c
+> +++ b/tools/testing/selftests/bpf/test_sock_addr.c
+> @@ -723,7 +723,7 @@ static int xmsg_ret_only_prog_load(const struct sock_addr_test *test,
+>   		BPF_MOV64_IMM(BPF_REG_0, rc),
+>   		BPF_EXIT_INSN(),
+>   	};
+> -	return load_insns(test, insns, sizeof(insns) / sizeof(struct bpf_insn));
+> +	return load_insns(test, insns, ARRAY_SIZE(insns));
+>   }
+>   
+>   static int sendmsg_allow_prog_load(const struct sock_addr_test *test)
+> @@ -795,7 +795,7 @@ static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test)
+>   		BPF_EXIT_INSN(),
+>   	};
+>   
+> -	return load_insns(test, insns, sizeof(insns) / sizeof(struct bpf_insn));
+> +	return load_insns(test, insns, ARRAY_SIZE(insns));
+>   }
+>   
+>   static int recvmsg4_rw_c_prog_load(const struct sock_addr_test *test)
+> @@ -858,7 +858,7 @@ static int sendmsg6_rw_dst_asm_prog_load(const struct sock_addr_test *test,
+>   		BPF_EXIT_INSN(),
+>   	};
+>   
+> -	return load_insns(test, insns, sizeof(insns) / sizeof(struct bpf_insn));
+> +	return load_insns(test, insns, ARRAY_SIZE(insns));
+>   }
+>   
+>   static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test)
+> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+> index 1ba7e7346afb..dfb4f5c0fcb9 100644
+> --- a/tools/testing/selftests/bpf/test_sockmap.c
+> +++ b/tools/testing/selftests/bpf/test_sockmap.c
+> @@ -1786,7 +1786,7 @@ static int populate_progs(char *bpf_file)
+>   		i++;
+>   	}
+>   
+> -	for (i = 0; i < sizeof(map_fd)/sizeof(int); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(map_fd); i++) {
+>   		maps[i] = bpf_object__find_map_by_name(obj, map_names[i]);
+>   		map_fd[i] = bpf_map__fd(maps[i]);
+>   		if (map_fd[i] < 0) {
+> @@ -1867,7 +1867,7 @@ static int __test_selftests(int cg_fd, struct sockmap_options *opt)
+>   	}
+>   
+>   	/* Tests basic commands and APIs */
+> -	for (i = 0; i < sizeof(test)/sizeof(struct _test); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(test); i++) {
+>   		struct _test t = test[i];
+>   
+>   		if (check_whitelist(&t, opt) != 0)

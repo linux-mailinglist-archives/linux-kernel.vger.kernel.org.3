@@ -2,194 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8D54D3B64
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521B44D3B67
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238228AbiCIUwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S235686AbiCIUwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238243AbiCIUwJ (ORCPT
+        with ESMTP id S238252AbiCIUw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:52:09 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750039728B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:51:09 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id g19so3294806pfc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 12:51:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PRuLGiKcgeniLC3aDTEnQaGDsSncDSNRKzBTC6T4h/U=;
-        b=KWJul6uaiJTImsNot7Nu/MBSEElHc19LQWouzDAkOsKJHkjDIKBbmpfVgP9AQ1gkUO
-         UwkOFXL1OpeFHsZWEanIFGUj3QGsseh+QD+BdrrudiYEzbWqWw55Ne2/eofJHTt8xLpx
-         WpPjDC4SYm4ErM16Q1YBSENiwrR7xnrZeRZ7FYX1avb5KqKaiDUX96htk8iGcLUmT8Uc
-         xL32SStiGnlRlxjDaM/97ntdEcVDVuspqvimDzvjF5HXd7hA9r+VDoDGIupXPgn7eRuS
-         5o02NB2c3IRezQ5wlPAua/zSaUr5ypc/hPb3YkzlD0r25q3lReHqzzSkdlDrnfjAZH+S
-         847Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PRuLGiKcgeniLC3aDTEnQaGDsSncDSNRKzBTC6T4h/U=;
-        b=ljf0LaFjYu38F55I59vQIzSRstrVhDaGEUv71XGS/rFlj3cXDoKAQYxlqeDeaaYkDL
-         /njqczitR+HQvBEaVy9eZgh9S9op1YMHAUsKrCtJJhNpoUXiBEJ8fTlLppJyelWhPveV
-         omsb7ynN1drJRZadgd3/wEFJTl1IfodSMaiAt9tZVvrXmU3tjSNYPzuLWfakMXq5dFfm
-         Jwd8pDpg83eQR5GFDQdCYryIuD5/4J9d96DEltCUfYQ+V1OxdnemtJSyI976e7XDONGh
-         1D5vPN8GIsYJmWxhBaDN1kiuEqadMEEJG5YfV4JtRS7UDANXDaQ5Lv4CThTCglDTRKne
-         R/HA==
-X-Gm-Message-State: AOAM531sITQKI9VvGhmixdvQbW8tz+e1tugbHlX7wwpaAljFCiG4+TTO
-        24AMtYFfQBQvtvgHCxtLevQ=
-X-Google-Smtp-Source: ABdhPJxhKZ1SFC/gANrS86QFTadnD9Lns7/2sSdDa97GeaJXio+Ecxci3LautFmffvxq+3eGW9FCDw==
-X-Received: by 2002:a63:ce48:0:b0:373:ac94:f489 with SMTP id r8-20020a63ce48000000b00373ac94f489mr1293946pgi.622.1646859068956;
-        Wed, 09 Mar 2022 12:51:08 -0800 (PST)
-Received: from localhost.localdomain ([103.85.9.4])
-        by smtp.gmail.com with ESMTPSA id m11-20020a17090a3f8b00b001bc299e0aefsm7259674pjc.56.2022.03.09.12.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 12:51:08 -0800 (PST)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH v2 2/2] staging: r8188eu: proper error handling in rtw_init_drv_sw
-Date:   Thu, 10 Mar 2022 02:20:47 +0530
-Message-Id: <20220309205047.45981-3-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220309205047.45981-1-makvihas@gmail.com>
-References: <20220309205047.45981-1-makvihas@gmail.com>
+        Wed, 9 Mar 2022 15:52:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920FBAD101;
+        Wed,  9 Mar 2022 12:51:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41A93B823D5;
+        Wed,  9 Mar 2022 20:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7F2C340E8;
+        Wed,  9 Mar 2022 20:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646859081;
+        bh=ZUQl8VjoXzxjjlXQpxYp7jLs7LQAHPOAzRTYa+vp71A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OA2O0miFItD1GHJrCIsLcNp/1NSkFzqK3+DHFFnITaEAz3K16E084xNgS+fnzfxuR
+         1xOUjrDjKC2W01GEFNLrd6UtCBwcoNQx1x/59BO748C3St6B1LWOfWPH+PBzYjYJ+o
+         hR+sXMcR/E3SuBL+qrjH1Jazsze+eG+u2vbZXxx/LWMq9jOdMGKaaazjUyW/qJDj8q
+         kMjfK+iooKeaxEKd+EyX0Km6mYoUHNJythjG8Xx42lsl3z6WN68Kvz2wIbcAgsFIwn
+         1EmLs2bbIFKYhVabtERmpj1z2B/wBcq9OQW+fXlWmHDN2PvaDyvH5szu2020JEA9E4
+         lXKI2AZ9GqVWg==
+Date:   Wed, 9 Mar 2022 13:51:13 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yanteng Si <siyanteng01@gmail.com>, linux-mips@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Only use current_stack_pointer on GCC
+Message-ID: <YikTQRql+il3HbrK@dev-arch.thelio-3990X>
+References: <20220309204537.390428-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309204537.390428-1-keescook@chromium.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code inside rtw_init_drv_sw() calls various init functions to
-populate the padapter structure and checks for their return values
-respectively.
-But if one of the functions in middle fails then it simply returns
-_FAIL instead of proper logging and calling freeing counterparts
-of previous init functions.
-This leads to various memory leaks and can be found in
-/sys/kernel/debug/kmemleak if kernel is compiled with DEBUG_KMEMLEAK=y.
+Nit: I think the subject needs to be updated (I assume this was written
+before Nick's fix?).
 
-Fix this and keep the success and error separate.
+On Wed, Mar 09, 2022 at 12:45:37PM -0800, Kees Cook wrote:
+> Unfortunately, Clang did not have support for "sp" as a global register
+> definition, and was crashing after the addition of current_stack_pointer.
+> This has been fixed in Clang 15, but earlier Clang versions need to
+> avoid this code, so add a versioned test and revert back to the
+> open-coded asm instances. Fixes Clang build error:
+> 
+> fatal error: error in backend: Invalid register name global variable
+> 
+> Fixes: 200ed341b864 ("mips: Implement "current_stack_pointer"")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Yanteng Si <siyanteng01@gmail.com>
+> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for
-RTL8188eu driver")
+Thanks for sending this!
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
-Tested on Comfast CF-WU810N RTL8188EUS wireless adapter.
----
- drivers/staging/r8188eu/os_dep/os_intfs.c | 60 ++++++++++++++++++-----
- 1 file changed, 47 insertions(+), 13 deletions(-)
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-index 197568422..f59b23dc6 100644
---- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-+++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-@@ -469,32 +469,46 @@ u8 rtw_reset_drv_sw(struct adapter *padapter)
- 
- u8 rtw_init_drv_sw(struct adapter *padapter)
- {
--	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL)
-+	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "rtw_init_cmd_priv failed\n");
- 		return _FAIL;
-+	}
- 
- 	padapter->cmdpriv.padapter = padapter;
- 
--	if ((rtw_init_evt_priv(&padapter->evtpriv)) == _FAIL)
--		return _FAIL;
-+	if ((rtw_init_evt_priv(&padapter->evtpriv)) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "rtw_init_evt_priv failed\n");
-+		goto free_cmd_priv;
-+	}
- 
--	if (rtw_init_mlme_priv(padapter) == _FAIL)
--		return _FAIL;
-+	if (rtw_init_mlme_priv(padapter) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "rtw_init_mlme_priv failed\n");
-+		goto free_evt_priv;
-+	}
- 
- 	rtw_init_wifidirect_timers(padapter);
- 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
- 	reset_global_wifidirect_info(padapter);
- 
--	if (init_mlme_ext_priv(padapter) == _FAIL)
--		return _FAIL;
-+	if (init_mlme_ext_priv(padapter) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "init_mlme_ext_priv failed\n");
-+		goto free_mlme_priv;
-+	}
- 
--	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
--		return _FAIL;
-+	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "_rtw_init_xmit_priv failed\n");
-+		goto free_mlme_ext;
-+	}
- 
--	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
--		return _FAIL;
-+	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "_rtw_init_recv_priv failed\n");
-+		goto free_xmit_priv;
-+	}
- 
--	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
--		return _FAIL;
-+	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL) {
-+		dev_err(dvobj_to_dev(padapter->dvobj), "_rtw_init_sta_priv failed\n");
-+		goto free_recv_priv;
-+	}
- 
- 	padapter->stapriv.padapter = padapter;
- 
-@@ -510,6 +524,26 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
- 	spin_lock_init(&padapter->br_ext_lock);
- 
- 	return _SUCCESS;
-+
-+free_recv_priv:
-+	_rtw_free_recv_priv(&padapter->recvpriv);
-+
-+free_xmit_priv:
-+	_rtw_free_xmit_priv(&padapter->xmitpriv);
-+
-+free_mlme_ext:
-+	free_mlme_ext_priv(&padapter->mlmeextpriv);
-+
-+free_mlme_priv:
-+	rtw_free_mlme_priv(&padapter->mlmepriv);
-+
-+free_evt_priv:
-+	rtw_free_evt_priv(&padapter->evtpriv);
-+
-+free_cmd_priv:
-+	rtw_free_cmd_priv(&padapter->cmdpriv);
-+
-+	return _FAIL;
- }
- 
- void rtw_cancel_all_timer(struct adapter *padapter)
--- 
-2.30.2
+> ---
+>  arch/mips/Kconfig                   | 2 +-
+>  arch/mips/include/asm/thread_info.h | 2 ++
+>  arch/mips/kernel/irq.c              | 3 ++-
+>  arch/mips/lib/uncached.c            | 4 +++-
+>  4 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 3f58b45fc953..15769013f46e 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -4,7 +4,7 @@ config MIPS
+>  	default y
+>  	select ARCH_32BIT_OFF_T if !64BIT
+>  	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
+> -	select ARCH_HAS_CURRENT_STACK_POINTER
+> +	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 150000
 
+Nit: This can be 140000, as release/14.x has received the fix:
+
+https://github.com/llvm/llvm-project/commit/0826716786cd4a8c7cbcb8c01e4d9fac46b7a17a
+
+>  	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
+>  	select ARCH_HAS_FORTIFY_SOURCE
+>  	select ARCH_HAS_KCOV
+> diff --git a/arch/mips/include/asm/thread_info.h b/arch/mips/include/asm/thread_info.h
+> index 4463348d2372..ecae7470faa4 100644
+> --- a/arch/mips/include/asm/thread_info.h
+> +++ b/arch/mips/include/asm/thread_info.h
+> @@ -69,7 +69,9 @@ static inline struct thread_info *current_thread_info(void)
+>  	return __current_thread_info;
+>  }
+>  
+> +#ifdef CONFIG_ARCH_HAS_CURRENT_STACK_POINTER
+>  register unsigned long current_stack_pointer __asm__("sp");
+> +#endif
+>  
+>  #endif /* !__ASSEMBLY__ */
+>  
+> diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
+> index fc313c49a417..5e11582fe308 100644
+> --- a/arch/mips/kernel/irq.c
+> +++ b/arch/mips/kernel/irq.c
+> @@ -75,8 +75,9 @@ void __init init_IRQ(void)
+>  #ifdef CONFIG_DEBUG_STACKOVERFLOW
+>  static inline void check_stack_overflow(void)
+>  {
+> -	unsigned long sp = current_stack_pointer;
+> +	unsigned long sp;
+>  
+> +	__asm__ __volatile__("move %0, $sp" : "=r" (sp));
+>  	sp &= THREAD_MASK;
+>  
+>  	/*
+> diff --git a/arch/mips/lib/uncached.c b/arch/mips/lib/uncached.c
+> index f8d4ca046c3e..f80a67c092b6 100644
+> --- a/arch/mips/lib/uncached.c
+> +++ b/arch/mips/lib/uncached.c
+> @@ -40,7 +40,9 @@ unsigned long run_uncached(void *func)
+>  	register long ret __asm__("$2");
+>  	long lfunc = (long)func, ufunc;
+>  	long usp;
+> -	long sp = current_stack_pointer;
+> +	long sp;
+> +
+> +	__asm__("move %0, $sp" : "=r" (sp));
+>  
+>  	if (sp >= (long)CKSEG0 && sp < (long)CKSEG2)
+>  		usp = CKSEG1ADDR(sp);
+> -- 
+> 2.32.0
+> 

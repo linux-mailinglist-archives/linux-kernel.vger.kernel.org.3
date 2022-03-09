@@ -2,92 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39E44D39F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C954D39E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237228AbiCITTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S236068AbiCITTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237602AbiCITT3 (ORCPT
+        with ESMTP id S237621AbiCITTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:19:29 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E3811477D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:18:20 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id s15so2737725qtk.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:18:20 -0800 (PST)
+        Wed, 9 Mar 2022 14:19:30 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5101168FB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:18:26 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so4044863oot.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:18:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V59HgvRc61glNOVchpXeR9lrKfDnI5JVZxCRrOe4PRw=;
-        b=iI4AVJfDe2rTLVR5kFUQ47GJYK0B64dsIEiT0iiLSmBiX/DirSdJUpyJg1gkefekcd
-         7rZpVe2BLc878GhnKz7ojbP41jmTM/KchQ5Rr+DmAMxO1Tr5AJXQpbvV7Wu/9KbHXGSW
-         1cEi85cR1+tl0b3zerdE35IYi3cjOJhODO4pcmugXZhgtEHUS5Q/mppaZKrA0xq8choB
-         sqKnLqxJ5LAVyge5tVouHdQ+SY3H6pMT6vO1LnjN2WAMYUhUJzpTH6AvCDFhw39/i4Ly
-         Oo/ERGpImlyfJsA0F269mgwQIeJEqoQqqtFgevrd9EnVCJrtdIzX5C0O/ca/mjG1lql3
-         SPxw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=RTkHcVtz6Xj+gST8HDWpAZrHsZcT5ReHhL3eO1pEfMs=;
+        b=z4Oq8hg5oMUC/28l4I7mskqErza640vBkufG2k65W2hvzZ7DIoDp3bIAvrMNmm5Cv/
+         slGBQW64NT9dnHPHly3gphqYVHfaBpsn9o/EKnAcayNpZtN4V09r5V5ibuQlNIY062YR
+         KoAEffvGuuHIF/I/Kk3owWwANF2DW1ZrB191OuewOirfI/0ZxbxFx0QJPEQx7rM5Znpz
+         H7eVzsNkZ1+wWexOG7Kfq79Kjk7H1FmFlm3XlENVb5KqGjlLodYVRh8RG0FwRKnwlEFu
+         HiUmlfblpD1d7oViQwfrKtwcg6N35SKPVQE2Npbpskwei4/bvTnzpI4WxHR4lyCuW5ZF
+         idBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V59HgvRc61glNOVchpXeR9lrKfDnI5JVZxCRrOe4PRw=;
-        b=Q4t7kdYkBQBc7R6qryRgHBguEi7YyG1KA0iAdOxS7T+qcks498qBXztfB7xrF45TxX
-         jeTD5mqtgvGeqEbMZU5IZoeuLknx6c42vwgzetwiQy06vwNmbVljm8gH6tTfqts+LjAp
-         h7dee/0lAAolBJPpGiLFPwArkvPvXyW1NNHBZBlx57wwBYbs71QXRpC0ytiSLGAqqBCq
-         3u11ZWIChKp3n8SVZcLB/NrpUpQIMoS56ednrZRWgdx7rfa5ovgBj/9Ke5BDInrmWsxt
-         INkD130eGxBRHAYgf20Imi4uoMgMDC4v8EEaklLnZhd8GKyMw2ys0TRrlCXvEFdl0BNm
-         qDSw==
-X-Gm-Message-State: AOAM5338DVI5s17iTF8X54SJhJ2V7XUBwqclzZVrBhwYlkrWoWEEsr/A
-        SVLM3m5A2r/8iXCl3Zh38tMZdQ==
-X-Google-Smtp-Source: ABdhPJwojhJ2jO+Hc+klRruTOm98kS9CL/R0u4elp0+vS8geZsyq/412gxGCq0Y/QKSQEu64XQ2pZA==
-X-Received: by 2002:ac8:7dc6:0:b0:2de:708:3e3a with SMTP id c6-20020ac87dc6000000b002de07083e3amr1026671qte.459.1646853500165;
-        Wed, 09 Mar 2022 11:18:20 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id z6-20020ae9c106000000b0067d3b9ef387sm876005qki.28.2022.03.09.11.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 11:18:19 -0800 (PST)
-Date:   Wed, 9 Mar 2022 14:18:19 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     cgel.zte@gmail.com
-Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: remove PSI annotations from submit_bio
-Message-ID: <Yij9eygSYy5MSIA0@cmpxchg.org>
-References: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=RTkHcVtz6Xj+gST8HDWpAZrHsZcT5ReHhL3eO1pEfMs=;
+        b=0nUdubk7kDNa0DlMnlPkddCtj0I86L24qN/T5aAAQILCXpDyYZhJbgEBACHB3t62GA
+         6w5t5LoX+diZ2A2nFd3/vIuK92el4RA6iLZvr4i89D+R00K/AeH75vrRmZnxG0lTG/kc
+         M0/9MoIfVUUTxm++plqokyujXpYnim/Xatyy08Yw4NSoiAUZC9y07GpRk2SaLQGwnnId
+         9zlUCLvCd6m+VqWi7Dmmit9MXqarJXQfKiEqwRZ/33o35WjPEMr4X3FouPgsfdqP+yvK
+         N471sNY2zC47G6p6gXO0qlY7nquC2XpL6CNn3/+/dC5yLWnVeV3/zgbRthrkaXQalljl
+         7ayg==
+X-Gm-Message-State: AOAM5335qMSzoDC/M2+nWc51gBXYO6Md2c6oMLWSjkhHp/wqKTpbl/E7
+        cBz9lrys8EExjPmkS8Xk2j7AUw==
+X-Google-Smtp-Source: ABdhPJzDE/5CGA3LZQsgx1FDGKFVh6iantpGNAhQgr1CqxPTN17zW+Uucq3WVOE6mYNTtMFU5jp3nQ==
+X-Received: by 2002:a4a:907:0:b0:320:f948:a8dc with SMTP id 7-20020a4a0907000000b00320f948a8dcmr591034ooa.61.1646853505295;
+        Wed, 09 Mar 2022 11:18:25 -0800 (PST)
+Received: from [192.168.17.16] ([189.219.74.147])
+        by smtp.gmail.com with ESMTPSA id m21-20020a056820051500b0031d0841b87esm1403489ooj.34.2022.03.09.11.18.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 11:18:24 -0800 (PST)
+Message-ID: <322280c2-8673-949c-ffd4-4e804a030b89@linaro.org>
+Date:   Wed, 9 Mar 2022 13:18:23 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4.9 00/24] 4.9.306-rc1 review
+Content-Language: en-US
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220309155856.295480966@linuxfoundation.org>
+ <2f501345-e847-668e-7ca3-23af49b69224@linaro.org>
+In-Reply-To: <2f501345-e847-668e-7ca3-23af49b69224@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 09:43:24AM +0000, cgel.zte@gmail.com wrote:
-> From: Yang Yang <yang.yang29@zte.com.cn>
-> 
-> psi tracks the time spent submitting the IO of refaulting pages[1].
-> But after we tracks refault stalls from swap_readpage[2][3], there
-> is no need to do so anymore. Since swap_readpage already includes
-> IO submitting time.
-> 
-> [1] commit b8e24a9300b0 ("block: annotate refault stalls from IO submission")
-> [2] commit 937790699be9 ("mm/page_io.c: annotate refault stalls from swap_readpage")
-> [3] commit 2b413a1a728f ("mm: page_io: fix psi memory pressure error on cold swapins")
-> 
-> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-> Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Hello!
 
-It's still needed by file cache refaults!
+On 09/03/22 12:40, Daniel Díaz wrote:
+> Hello!
+> 
+> On 09/03/22 09:59, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 4.9.306 release.
+>> There are 24 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.306-rc1.gz
+>> or in the git tree and branch at:
+>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
+> 
+> Regressions found.
+> 
+> The following Arm combinations fail to build:
+> - arm-gcc-8-bcm2835_defconfig
+> - arm-gcc-8-imx_v6_v7_defconfig
+> - arm-gcc-8-omap2plus_defconfig
+> - arm-gcc-9-bcm2835_defconfig
+> - arm-gcc-9-imx_v6_v7_defconfig
+> - arm-gcc-9-omap2plus_defconfig
+> - arm-gcc-10-bcm2835_defconfig
+> - arm-gcc-10-imx_v6_v7_defconfig
+> - arm-gcc-10-omap2plus_defconfig
+> - arm-gcc-11-bcm2835_defconfig
+> - arm-gcc-11-imx_v6_v7_defconfig
+> - arm-gcc-11-omap2plus_defconfig
+> 
+> Messages look like this:
+> 
+>    /builds/linux/arch/arm/kernel/entry-common.S: Assembler messages:
+>    /builds/linux/arch/arm/kernel/entry-common.S:155: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/kernel/entry-common.S:164: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/kernel/entry-common.o] Error 1
+>    /builds/linux/arch/arm/kernel/entry-armv.S: Assembler messages:
+>    /builds/linux/arch/arm/kernel/entry-armv.S:1124: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/kernel/entry-armv.S:1147: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/kernel/entry-armv.S:1170: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/kernel/entry-armv.S:1193: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/kernel/entry-armv.S:1232: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/kernel/entry-armv.o] Error 1
+>    /builds/linux/arch/arm/mm/cache-v7.S: Assembler messages:
+>    /builds/linux/arch/arm/mm/cache-v7.S:63: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/mm/cache-v7.S:136: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/mm/cache-v7.S:170: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/mm/cache-v7.S:298: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/cache-v7.o] Error 1
+>    /builds/linux/arch/arm/mm/tlb-v7.S: Assembler messages:
+>    /builds/linux/arch/arm/mm/tlb-v7.S:88: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/tlb-v7.o] Error 1
+>    /builds/linux/arch/arm/mm/proc-v7-2level.S: Assembler messages:
+>    /builds/linux/arch/arm/mm/proc-v7-2level.S:58: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/mm/proc-v7-2level.S:60: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    /builds/linux/arch/arm/mm/proc-v7.S:61: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+>    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/proc-v7.o] Error 1
+>    make[2]: Target '__build' not remade because of errors.
 
-NAK
+Here's what the bisection throws for this one:
+
+# bad: [2ef7c55895217efa8183111969710960a529d3cd] Linux 4.9.306-rc1
+# good: [41b13534ea8aa554d4e987650e24da5510258752] ARM: use LOADADDR() to get load address of sections
+git bisect start '2ef7c55895217efa8183111969710960a529d3cd' '41b13534ea8aa554d4e987650e24da5510258752'
+# bad: [fd723e642aacb60567beda736ebb062db44b8349] ARM: include unprivileged BPF status in Spectre V2 reporting
+git bisect bad fd723e642aacb60567beda736ebb062db44b8349
+# bad: [d0002ea56072220ddab72bb6e31a32350c01b44e] ARM: Spectre-BHB workaround
+git bisect bad d0002ea56072220ddab72bb6e31a32350c01b44e
+# first bad commit: [d0002ea56072220ddab72bb6e31a32350c01b44e] ARM: Spectre-BHB workaround
+commit d0002ea56072220ddab72bb6e31a32350c01b44e
+Author: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Date:   Thu Feb 10 16:05:45 2022 +0000
+     ARM: Spectre-BHB workaround
+     
+     comomit b9baf5c8c5c356757f4f9d8180b5e9d234065bc3 upstream.
+     
+     Workaround the Spectre BHB issues for Cortex-A15, Cortex-A57,
+     Cortex-A72, Cortex-A73 and Cortex-A75. We also include Brahma B15 as
+     well to be safe, which is affected by Spectre V2 in the same ways as
+     Cortex-A15.
+     
+     Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+     Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+     [changes due to lack of SYSTEM_FREEING_INITMEM - gregkh]
+     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  arch/arm/include/asm/assembler.h  | 10 +++++
+  arch/arm/include/asm/spectre.h    |  4 ++
+  arch/arm/kernel/entry-armv.S      | 79 ++++++++++++++++++++++++++++++++++++---
+  arch/arm/kernel/entry-common.S    | 24 ++++++++++++
+  arch/arm/kernel/spectre.c         |  4 ++
+  arch/arm/kernel/traps.c           | 38 +++++++++++++++++++
+  arch/arm/kernel/vmlinux-xip.lds.S | 18 +++++++--
+  arch/arm/kernel/vmlinux.lds.S     | 18 +++++++--
+  arch/arm/mm/Kconfig               | 10 +++++
+  arch/arm/mm/proc-v7-bugs.c        | 76 +++++++++++++++++++++++++++++++++++++
+  10 files changed, 269 insertions(+), 12 deletions(-)
+
+
+Reverting made the build pass.
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org

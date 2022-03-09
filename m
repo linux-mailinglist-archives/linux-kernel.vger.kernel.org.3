@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA5C4D2B8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF6A4D2B9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbiCIJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S230336AbiCIJSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:18:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiCIJQL (ORCPT
+        with ESMTP id S229475AbiCIJSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:16:11 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE5E157220
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:15:11 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646817309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=olA4r4ZgiOAYFwlfl2Yy38K26xuaM/avMHUMNx9O8Pk=;
-        b=Bp0HuafFKD3+SWGE1W6sp5tYOmKpDRTvBmmbJbFH2VoI5+vvTvUn4qBD3vW6fwAHOp6hze
-        OH+jL3Hl0ab+4sDc+0O6YJyzDe52fZyzlHJ0VWxDnTsmaoEuGrASOlcny2Fogx+psvDrvW
-        DacQxNeNOxNniz57xHkRJepZ7hDkDbA=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] mm/hwpoison: set PageHWPoison after taking page lock in memory_failure_hugetlb()
-Date:   Wed,  9 Mar 2022 18:14:49 +0900
-Message-Id: <20220309091449.2753904-1-naoya.horiguchi@linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 04:18:14 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D775D16E7E5;
+        Wed,  9 Mar 2022 01:17:16 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id b8so1770599pjb.4;
+        Wed, 09 Mar 2022 01:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=aEzrS2PE1KETN7BwFBNCY3C6S3nrsSHP5KWZyXBcdRc=;
+        b=aZZk2KpRZQqGz0PSLYzj/p5onyZm29EV1v0s/9N/ftYnkE3uZPvUbtwtSd8/KExEUL
+         gJEHWQ5XoL8j3cHV+DwwY2HbvUMWLNAyAtL4b9n18bw94TDyAwS76dpfo1TL1gMSi8Bm
+         X1OuhVD4ll92HZIi0PHVuaab1Ypc0VQSYDOI1JyiTF2bwBXBO+bvRLGNSYW7TYC+ZldX
+         MtifsgnPTuFMMnM3fv5VxRdwykkn4UoWzopGxsDPQeLH0dA2UBayZVmguoBoMm94NnAX
+         NeeGaA1+sDxu2e6Yf3JJrc1g9vekU2FM/tyNNNK3Il5ZLKdxInBx7eLDAkkslFFJYSm4
+         4thA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=aEzrS2PE1KETN7BwFBNCY3C6S3nrsSHP5KWZyXBcdRc=;
+        b=QszoH/6Sgk2ZLqdw2jV0grP0extkGeS0g0pLeUle9+JNmi1D3oSMkh3B8Iim35Xn/D
+         6dLIF+ZI60zXnHJ93YSsCwe2fYIxCseKls3O/UyT3g4xwOmYl9y+sAIX1iQK5E7dQ4oh
+         WvbH8VZt+O2sbDyQVRYzYqA4rA002+rBcEzIIrs3TLNK2RP67BYudtsaAOcJtAMhw/dH
+         GyCL374t99UIH6We8MPbtlrTehc4XWCInwyrAzpyRgbTq5IvW4/D7QxyNrTduAmEoZxy
+         lYnzcbqBv01W1L/757DOob31IF0ykv8Ktgyu76IW59kkzBlOR8/SAF5UGVVW9LJ8hdZ0
+         FLNw==
+X-Gm-Message-State: AOAM533QpN7nO24iJJNaEpPkLRX1Y6B0meQtF2vsf1ASpjtJOFwl2K+V
+        1HYL6KVKthhuR2TqFg+JlMt5bkPZ7cVcQtmU9GA=
+X-Google-Smtp-Source: ABdhPJwEOC5WOrkJSmQNkYtXsu7npejbiABCxHhexU92EdsCQLpawdbqX16QC0seN3xuJyqr9XhBjg==
+X-Received: by 2002:a17:903:40c7:b0:151:a640:d69e with SMTP id t7-20020a17090340c700b00151a640d69emr21228754pld.121.1646817436345;
+        Wed, 09 Mar 2022 01:17:16 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q21-20020a63e215000000b00373efe2cbcbsm1676461pgh.80.2022.03.09.01.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 01:17:16 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
+Date:   Wed,  9 Mar 2022 09:17:10 +0000
+Message-Id: <20220309091711.3850-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-There is a race condition between memory_failure_hugetlb() and hugetlb
-free/demotion, which causes setting PageHWPoison flag on the wrong page
-(which was a hugetlb when memory_failrue() was called, but was removed
-or demoted when memory_failure_hugetlb() is called).  This results in
-killing wrong processes.  So set PageHWPoison flag with holding page lock,
-
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Fixes: 2121aa3e2312 ("mips: cdmm: Add mti,mips-cdmm dtb node support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- mm/memory-failure.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ drivers/bus/mips_cdmm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index ac6492e36978..fe25eee8f9d6 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1494,24 +1494,11 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	int res;
- 	unsigned long page_flags;
- 
--	if (TestSetPageHWPoison(head)) {
--		pr_err("Memory failure: %#lx: already hardware poisoned\n",
--		       pfn);
--		res = -EHWPOISON;
--		if (flags & MF_ACTION_REQUIRED)
--			res = kill_accessing_process(current, page_to_pfn(head), flags);
--		return res;
--	}
--
--	num_poisoned_pages_inc();
--
- 	if (!(flags & MF_COUNT_INCREASED)) {
- 		res = get_hwpoison_page(p, flags);
- 		if (!res) {
- 			lock_page(head);
- 			if (hwpoison_filter(p)) {
--				if (TestClearPageHWPoison(head))
--					num_poisoned_pages_dec();
- 				unlock_page(head);
- 				return -EOPNOTSUPP;
- 			}
-@@ -1544,13 +1531,16 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	page_flags = head->flags;
- 
- 	if (hwpoison_filter(p)) {
--		if (TestClearPageHWPoison(head))
--			num_poisoned_pages_dec();
- 		put_page(p);
- 		res = -EOPNOTSUPP;
- 		goto out;
+diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+index 626dedd110cb..fca0d0669aa9 100644
+--- a/drivers/bus/mips_cdmm.c
++++ b/drivers/bus/mips_cdmm.c
+@@ -351,6 +351,7 @@ phys_addr_t __weak mips_cdmm_phys_base(void)
+ 	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
+ 	if (np) {
+ 		err = of_address_to_resource(np, 0, &res);
++		of_node_put(np);
+ 		if (!err)
+ 			return res.start;
  	}
- 
-+	if (TestSetPageHWPoison(head))
-+		goto already_hwpoisoned;
-+
-+	num_poisoned_pages_inc();
-+
- 	/*
- 	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
- 	 * simply disable it. In order to make it work properly, we need
-@@ -1576,6 +1566,13 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- out:
- 	unlock_page(head);
- 	return res;
-+already_hwpoisoned:
-+	unlock_page(head);
-+	pr_err("Memory failure: %#lx: already hardware poisoned\n", pfn);
-+	res = -EHWPOISON;
-+	if (flags & MF_ACTION_REQUIRED)
-+		res = kill_accessing_process(current, page_to_pfn(head), flags);
-+	return res;
- }
- 
- static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
 -- 
-2.25.1
+2.17.1
 

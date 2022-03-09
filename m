@@ -2,58 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36B84D281D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4764D2813
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiCIFPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 00:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S229591AbiCIFJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 00:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiCIFPA (ORCPT
+        with ESMTP id S229512AbiCIFJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 00:15:00 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABDCB15F087
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:14:01 -0800 (PST)
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxsM6XNyhiB38FAA--.25846S3;
-        Wed, 09 Mar 2022 13:13:59 +0800 (CST)
-Subject: Re: [PATCH] mm: reduce tlb flush range when changing vma protection
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-References: <20220309025721.3051365-1-maobibo@loongson.cn>
- <87861C77-F203-40A5-814D-A3541081064E@gmail.com>
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <47b0425d-811e-aeae-3d3d-6b7e730540de@loongson.cn>
-Date:   Wed, 9 Mar 2022 13:13:59 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Wed, 9 Mar 2022 00:09:26 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7F26424;
+        Tue,  8 Mar 2022 21:08:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646802508; x=1678338508;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0+sd2pP56VQ690VP+LpLZGMChhV5dm2QjqdC8vtAGUs=;
+  b=aSPixVMtDh8JipF+Mp0LTOVMfde8Zejl59B6DeCA2kbdd1L2AfiNLEyD
+   KiYpOvoqSWZLHfIbgoyieoo/Rh4DTe2B869dXVwnXX7Fcepaz8q83D0mG
+   GnaAvboyjM8MbkuJHGt2LmxFXagPiJ+7oyRyHvaIYmztcnmc+ux0/gbjo
+   mioXHY3O3mIW94Lz9iQO63HtdM4sVHw9lluz2QlySQ+mnOnkdvQMAr3eZ
+   IP1k8oqe3JGpeEnJC845IrFdb9nlPY4t3yva7yC6q91Oc2xo+HMhO6XBQ
+   OEcJSNhDynbrib8kxC1lOFCR19j6zht9M40J3vQvRWDQZEyjQePccdw2j
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253718724"
+X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
+   d="scan'208";a="253718724"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:08:27 -0800
+X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
+   d="scan'208";a="537858342"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:08:21 -0800
+Date:   Wed, 9 Mar 2022 13:21:52 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+Message-ID: <20220309052013.GA2915@gao-cwp>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+ <20220225082223.18288-7-guang.zeng@intel.com>
+ <Yifg4bea6zYEz1BK@google.com>
 MIME-Version: 1.0
-In-Reply-To: <87861C77-F203-40A5-814D-A3541081064E@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9BxsM6XNyhiB38FAA--.25846S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr15tF45Jr4kWF4UCw45Jrb_yoWDJrXE9r
-        9Fka97Cw1DZrZ7ta1IqF4rtrs5Xw1UAa15Zw4jqr9Fv3s0yaySvan2gr9Fka98CFW8Crnx
-        WwnFqwsavr1avjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkI
-        ecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcV
-        WlDUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yifg4bea6zYEz1BK@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,34 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yeap, your patch is general and better than mine, it can solve the issue.
-please drop my patch.
+On Tue, Mar 08, 2022 at 11:04:01PM +0000, Sean Christopherson wrote:
+>On Fri, Feb 25, 2022, Zeng Guang wrote:
+>> From: Maxim Levitsky <mlevitsk@redhat.com>
+>> 
+>> No normal guest has any reason to change physical APIC IDs,
+>
+>I don't think we can reasonably assume this, my analysis in the link (that I just
+>realized I deleted from context here) shows it's at least plausible that an existing
+>guest could rely on the APIC ID being writable.  And that's just one kernel, who
+>know what else is out there, especially given that people use KVM to emulate really
+>old stuff, often on really old hardware.
 
-regards
-bibo, mao
+Making xAPIC ID readonly is not only based on your analysis, but also Intel SDM
+clearly saying writable xAPIC ID is processor model specific and ***software should
+avoid writing to xAPIC ID***.
 
-On 03/09/2022 12:14 PM, Nadav Amit wrote:
-> 
-> 
->> On Mar 8, 2022, at 6:57 PM, Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> numa worker will periodically change vma prot with PROT_NONE, by
->> default it will scan 256M vma memory size with pmd stepping size.
->> If there are fewer pages changed with PROT_NONE, tlb flush is called
->> with pmd size. This patch will calculate flush range for those
->> pages with pte prot changed, it will reduce size for tlb flush.
->>
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> 
-> Hi Bibo,
-> 
-> I finally managed to make v3 of a patchiest, which I think does
-> something similar to what you are looking for (without introducing
-> yet another TLB batching mechanism).
-> 
-> Have a look at [1] and let me know if that would satisfy you.
-> 
-> 
-> [1] https://lore.kernel.org/linux-mm/20220309041043.302261-4-namit@vmware.com/T/#u
-> 
+If writable xAPIC ID support should be retained and is tied to a module param,
+live migration would depend on KVM's module params: e.g., migrate a VM with
+modified xAPIC ID (apic_id_readonly off on this system) to one with
+xapic_id_readonly on would fail, right? Is this failure desired? if not, we need to
+have a VM-scope control. e.g., add an inhibitor of APICv (XAPIC_ID_MODIFIED) and
+disable APICv forever for this VM if its vCPUs or QEMU modifies xAPIC ID.
 
+>
+>Practically speaking, anyone that wants to deploy IPIv is going to have to make
+>the switch at some point, but that doesn't help people running legacy crud that
+>don't care about IPIv.
+>
+>I was thinking a module param would be trivial, and it is (see below) if the
+>param is off by default.  A module param will also provide a convenient opportunity
+>to resolve the loophole reported by Maxim[1][2], though it's a bit funky.
+
+Could you share the links?
+
+>
+>Anyways, with an off-by-default module param, we can just do:
+>
+>	if (!enable_apicv || !cpu_has_vmx_ipiv() || !xapic_id_readonly)
+>		enable_ipiv = false;
+>
+>Forcing userspace to take advantage of IPIv is rather annoying, but it's not the
+>end of world.
+>
+>Having the param on by default is a mess.  Either we break userspace (above), or
+>we only kinda break userspace by having it on iff IPIv is on, but then we end up
+>with cyclical dependency hell.  E.g. userspace makes xAPIC ID writable and forces
+>on IPIv, which one "wins"? And if it's on by default, we can't fix the loophole
+>in KVM_SET_LAPIC.
+
+We are fine with having this param off by default.

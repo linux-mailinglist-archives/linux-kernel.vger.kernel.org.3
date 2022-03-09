@@ -2,110 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642424D3098
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7637D4D309E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiCINzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S233313AbiCIN4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbiCINzE (ORCPT
+        with ESMTP id S229774AbiCIN4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:55:04 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD17B7164
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:54:05 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id c20so2928106edr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:54:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=58ItMAXsny1L+anxiMU9T6c9Palwcv7/9rI4u4RF93Y=;
-        b=LYmpyqEhPpVCocyivY6GecOg7VdFQVfvuY/trXXPIDCWFXVealEM2nKhk5VMPe0EMK
-         m6qP02dLPOJq6r4nOvTFvnwOUclUvGGqDzMsMJhrsPyxHmvD4GjCd1i+QSV/mnNeT8j6
-         O+23IpoeL1BMxMPL6/6Ym/d7C6qeAoVTAG0ncKVyVYpczZbzqVdLcin2+mEWIbDNWNBQ
-         AaXb6/JF0JgdXpI/qhxbqBsA6BdIb24KNnS+/lMuNYvjJlwSKY2krkdmsj848HxCHIe1
-         D0LyHRSHEr5iAGL/SdaVKi3XAvGcTWayQRWV6UwePmTyYn3wOk0Q99oO4aHes4yL5X0U
-         qjrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=58ItMAXsny1L+anxiMU9T6c9Palwcv7/9rI4u4RF93Y=;
-        b=L0cONwK/DkXf2RKEgc12vdM7OtkKML6AWhE3oSYJOcYV120jUwBZ5taiVc7PW+uG+l
-         YwhvkVu2KARfIjnDwAJ13TP7aryV+OvIoRYzAuLmJsssqCXhW+14ubvS/tE2ta7y/F59
-         xgdzLm7DM6Z18YiLlo59qIiS4DjW4GSdEirEFqVPvVOl0OJMGr7ldX3BFB0d5EdcZw+h
-         WlaYv8nvs7/P4ZR8fbYmzk8AIhEGwqOxWgJypwpOOHqqzcGMyLGZ06lPG1/IqACfg51y
-         P+xQWNBSVlru9XntU7YccS+nYT2JJ2i1BMDgHn2kFn0ftO6WkS8Tm2zNAv6NYFfzWspG
-         hG7Q==
-X-Gm-Message-State: AOAM5337KFooPVNSwaYfzy3yD/DKlQ354CZN0bRkQDJ7AJGXJCDG+ik5
-        DAXhV0IRPiItiSa0gcukLKmXDM3HkwoZoj+8uc1CWg==
-X-Google-Smtp-Source: ABdhPJyIqqjIhDdsKFYeGKRq2VBngVbOH/FmX+MjBEvKAOVvgdA9H+3Kga13rb0K5Vbd78rsqsqnasGn7vBfUfzwWng=
-X-Received: by 2002:a05:6402:1747:b0:415:ee04:47e1 with SMTP id
- v7-20020a056402174700b00415ee0447e1mr21018226edx.229.1646834044075; Wed, 09
- Mar 2022 05:54:04 -0800 (PST)
+        Wed, 9 Mar 2022 08:56:10 -0500
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DB0F17129B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=+LiqS
+        C7WgziMlv/nNb/0VCH3ABcsSrI+VV/R7iTCCdA=; b=Rn20ap+DHV0iFXWuDDCCy
+        QWqDoohGfRHB6T0iUj+8RT9S74OUtAnkiCXARpHwNTUD091QcyTvlU7MGHo36OWd
+        wW7eU3X/BMynd2VGQN9ft5vAxfi0otFlco+f/wgiuyGNP87HiZ/S064fPJ7wWpuP
+        gSgxbvQ9hRMLcTBGRiMqkU=
+Received: from localhost.localdomain (unknown [120.204.77.140])
+        by smtp13 (Coremail) with SMTP id EcCowABnf8ePsShisPxEGw--.28457S4;
+        Wed, 09 Mar 2022 21:54:53 +0800 (CST)
+From:   lizhe <sensor1010@163.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, lizhe <sensor1010@163.com>
+Subject: [PATCH] drivers/dd.c :  Remove the initial value of the global variable
+Date:   Wed,  9 Mar 2022 05:54:18 -0800
+Message-Id: <20220309135418.31101-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220309083753.1561921-1-liupeng256@huawei.com> <20220309083753.1561921-3-liupeng256@huawei.com>
-In-Reply-To: <20220309083753.1561921-3-liupeng256@huawei.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 9 Mar 2022 07:53:52 -0600
-Message-ID: <CAGS_qxp_aaWEhuKQ9P897HHndRqbNpdS-vUsJooikQiOXrqL7g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kunit: make kunit_test_timeout compatible with comment
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     brendanhiggins@google.com, glider@google.com, elver@google.com,
-        dvyukov@google.com, akpm@linux-foundation.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, wangkefeng.wang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowABnf8ePsShisPxEGw--.28457S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XFWUZF45ur47Kw4UCFyrtFb_yoWxKwb_Ca
+        n7WFZrXryYgr4kCF15Aw13Zr9Fga1fZr4vyw4ftrya9ay7J3WrK3WDuFy5Aw4rWr90qFZF
+        yr4Yqr1Uur1DCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRN1v3DUUUUU==
+X-Originating-IP: [120.204.77.140]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBog6+q1aEC6xU9AAAss
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 2:19 AM 'Peng Liu' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> In function kunit_test_timeout, it is declared "300 * MSEC_PER_SEC"
-> represent 5min. However, it is wrong when dealing with arm64 whose
-> default HZ = 250, or some other situations. Use msecs_to_jiffies to
-> fix this, and kunit_test_timeout will work as desired.
->
-> Fixes: 5f3e06208920 ("kunit: test: add support for test abort")
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+The global variable driver_deferred_probe_enable has
+a default value of false and does not need to be
+initialized to false.
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: lizhe <sensor1010@163.com>
+---
+ drivers/base/dd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for catching this!
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index f47cab21430f..7fcd895d49be 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -152,7 +152,7 @@ void driver_deferred_probe_del(struct device *dev)
+ 	mutex_unlock(&deferred_probe_mutex);
+ }
+ 
+-static bool driver_deferred_probe_enable = false;
++static bool driver_deferred_probe_enable;
+ /**
+  * driver_deferred_probe_trigger() - Kick off re-probing deferred devices
+  *
+-- 
+2.25.1
 
-> ---
->  lib/kunit/try-catch.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-> index 6b3d4db94077..f7825991d576 100644
-> --- a/lib/kunit/try-catch.c
-> +++ b/lib/kunit/try-catch.c
-> @@ -52,7 +52,7 @@ static unsigned long kunit_test_timeout(void)
->          * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
->          * the task will be killed and an oops generated.
->          */
-> -       return 300 * MSEC_PER_SEC; /* 5 min */
-> +       return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
->  }
->
->  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-> --
-> 2.18.0.huawei.25
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220309083753.1561921-3-liupeng256%40huawei.com.

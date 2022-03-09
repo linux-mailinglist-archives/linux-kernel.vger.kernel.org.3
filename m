@@ -2,174 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F78B4D25FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D534D25ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiCIBPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S229967AbiCIBO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiCIBNK (ORCPT
+        with ESMTP id S231245AbiCIBNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:13:10 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00DF15878F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:56:16 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k24so661919wrd.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wbAfhbFyUGwe2Q5HZ4gVH7hz+BJKhZp/1dIJkpLWrYg=;
-        b=oPAjcdMKk2cbLSR0NXJPl2YEmIHZ9WRBbKIrDfh1EAFvaUhr+N8XmHO6RLfSQ4jZIB
-         HH32lTtvocQ3aFw0+L1BvytAwA00qmSTIRhPgYDW5bvxvuSckOReH75dbn6+SKgCti5W
-         6LF0obtutW0ITI/xSxNCKm5Gt3nBWGqCujHICGD7c/dmBCY4nzn1nk6PbTBurljXT0NE
-         WSuPGbUUGMW1XNsH+d5yNCdaFYBwn+X9XzNrAA8gSYwhbV5P1vbpukFZh6s3Zhx/OJkQ
-         9AF2wYbYahKsOk8Xj+r1EUjiSfBvGdUh9E5s/TodiCnl4b2GW1PhAWSzW0p4RrC+Ehy2
-         +/qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wbAfhbFyUGwe2Q5HZ4gVH7hz+BJKhZp/1dIJkpLWrYg=;
-        b=2yG9Z0ODf+lU0o+3IKHSK6vg1cQSigBM0k5NL0BYC0me+bVaARTDEeSK5pSm4wwygO
-         CkykCF+avG9R1y9v3gCFqKi/1MOcUVUqHcr23YJSkNOkaY542XqZB/4hmOMKBQ2UbAok
-         3SchGHKzfRVCTEsudVOiZ6t43v3VC1rguUxYkdYLCzL2DXnsIg7mB6PP6ul2g2pVe/Mf
-         qBYLKYiOB0CJrXMOhbWLi6EaqyzYSezoGh0kYfqCkB6zOGBBlb54TSpkdRe3hx1+4Edb
-         aUBpisfaAzf3fsH0LhdgMrn9mdMsTyRKXxu7F3DGW63LofdXI9dqK9cWH0i99Noda4n+
-         vlUw==
-X-Gm-Message-State: AOAM530ou+ubRqRjI2iWPuRAMGWJZkruxxEB9mcuL4kiCiI1FAKsxSYx
-        sqEgCtZ4ARvqhiMF7FlCSkgmY5WDllMZBbRzb6eLKCJZ
-X-Google-Smtp-Source: ABdhPJxfgZD8CgR/7M44RNEKX6Cd7Bp3Q9o+CLYddiReGvJz3GUsWhptZe9HM1Nrq5JSZmuGN0pej2+BoxLRYImgyD8=
-X-Received: by 2002:a5d:6344:0:b0:1f0:21ee:9705 with SMTP id
- b4-20020a5d6344000000b001f021ee9705mr13938132wrw.93.1646787375187; Tue, 08
- Mar 2022 16:56:15 -0800 (PST)
+        Tue, 8 Mar 2022 20:13:08 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A9B18020C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:03:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646787784; x=1678323784;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=scepsH2Uv6wYPB3QkRsBNH+h+6F589st9pGGxe9r+3I=;
+  b=TCXwdhKa1bdyQnwUq4CvK5rKJIpeGlxDRSCD+1bMKsVFAqGqDNL7ZhL+
+   ktzZkQWmKjV6rLO6UWpfHW11lyjKlnGSEqqueMIfm2nP5uFFKXZj4Chn/
+   Sh8WBdHn+QveD0zhKuCORWSp0cbhEDhAgsab79sEvaSZ/txB5WMTOwvsm
+   uCCMuPb9g3cdIf3LyQa/2mSSUdLMp1XCKaExGzLGbS6QbOJptwZx6hJhr
+   EKUK7E84h73D0K++71k66p1fHD9Bu/SXVCFto56915ro+Rn9UcOAN8NL1
+   mZpLrVBz2qgrF3NA6i4pIsT4PfnHfc0YjthDpm39GC+KvWLs95P/P26BL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318083476"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="318083476"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:02:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="510312196"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 08 Mar 2022 17:02:45 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRkiy-0002Hl-N9; Wed, 09 Mar 2022 01:02:44 +0000
+Date:   Wed, 9 Mar 2022 09:02:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huazhong Tan <tanhuazhong@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning:
+ 'strncpy' specified bound depends on the length of the source argument
+Message-ID: <202203090830.THfDfibc-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
- <d2290971-ea22-8203-631e-b896c76a994b@collabora.com> <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
- <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
-In-Reply-To: <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 8 Mar 2022 16:56:43 -0800
-Message-ID: <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 3:36 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 3/9/22 01:24, Rob Clark wrote:
-> > On Tue, Mar 8, 2022 at 11:28 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >>
-> >> On 3/8/22 19:29, Rob Clark wrote:
-> >>> On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
-> >>> <dmitry.osipenko@collabora.com> wrote:
-> >>>>
-> >>>> Hello,
-> >>>>
-> >>>> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
-> >>>> During OOM, the shrinker will release BOs that are marked as "not needed"
-> >>>> by userspace using the new madvise IOCTL. The userspace in this case is
-> >>>> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
-> >>>> allowing kernel driver to release memory of the cached shmem BOs on lowmem
-> >>>> situations, preventing OOM kills.
-> >>>
-> >>> Will host memory pressure already trigger shrinker in guest?
-> >>
-> >> The host memory pressure won't trigger shrinker in guest here. This
-> >> series will help only with the memory pressure within the guest using a
-> >> usual "virgl context".
-> >>
-> >> Having a host shrinker in a case of "virgl contexts" should be a
-> >> difficult problem to solve.
-> >
-> > Hmm, I think we just need the balloon driver to trigger the shrinker
-> > in the guest kernel?  I suppose a driver like drm/virtio might want to
-> > differentiate between host and guest pressure (ie. consider only
-> > objects that have host vs guest storage), but even without that,
-> > freeing up memory in the guest when host is under memory pressure
-> > seems worthwhile.  Maybe I'm over-simplifying?
->
-> Might be the opposite, i.e. me over-complicating :) The variant with
-> memory ballooning actually could be good and will work for all kinds of
-> virtio contexts universally. There will be some back-n-forth between
-> host and guest, but perhaps it will work okay. Thank you for the suggestion.
->
-> >>> This is
-> >>> something I'm quite interested in for "virtgpu native contexts" (ie.
-> >>> native guest driver with new context type sitting on top of virtgpu),
-> >>
-> >> In a case of "native contexts" it should be doable, at least I can't see
-> >> any obvious problems. The madvise invocations could be passed to the
-> >> host using a new virtio-gpu command by the guest's madvise IOCTL
-> >> handler, instead-of/in-addition-to handling madvise in the guest's
-> >> kernel, and that's it.
-> >
-> > I think we don't want to do that, because MADV:WILLNEED would be by
-> > far the most frequent guest<->host synchronous round trip.  So from
-> > that perspective tracking madvise state in guest kernel seems quite
-> > attractive.
->
-> This is a valid concern. I'd assume that the overhead should be
-> tolerable, but I don't have any actual perf numbers.
+Hi Huazhong,
 
-jfwiw, MADV:WILLNEED is a *very* hot path for gl drivers, based on
-some measurements I did a while back with various apps/benchmarks..
-easily more than 10x the next most frequent ioctl (for MADV:WONTNEED
-and MADV:WILLNEED each, so more than 20x combined.. but MADV:WONTNEED
-can be async).
+FYI, the error/warning still remains.
 
-But if the balloon triggering shrinker approach works out, that would
-be pretty great.. it seems like the easy option and doesn't require
-adding new host kernel uabi :-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   92f90cc9fe0e7a984ea3d4bf3d120e30ba8a2118
+commit: 77e9184869c9fb00a482357ea8eef3bd7ae3d45a net: hns3: refactor dump bd info of debugfs
+date:   10 months ago
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203090830.THfDfibc-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=77e9184869c9fb00a482357ea8eef3bd7ae3d45a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 77e9184869c9fb00a482357ea8eef3bd7ae3d45a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/
 
-BR,
--R
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > If we really can't track madvise state in the guest for dealing with
-> > host memory pressure, I think the better option is to introduce
-> > MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
-> > buffer is needed but the previous contents are not (as long as the GPU
-> > VA remains the same).  With this the host could allocate new pages if
-> > needed, and the guest would not need to wait for a reply from host.
->
-> If variant with the memory ballooning will work, then it will be
-> possible to track the state within guest-only. Let's consider the
-> simplest variant for now.
->
-> I'll try to implement the balloon driver support in the v2 and will get
-> back to you.
->
-> >>> since that isn't using host storage
-> >>
-> >> s/host/guest ?
-> >
-> > Yes, sorry, I meant that it is not using guest storage.
->
-> Thank you for the clarification.
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c: In function 'hns3_dbg_fill_content.constprop':
+>> drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     127 |                         strncpy(pos, items[i].name, strlen(items[i].name));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:125:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     125 |                         strncpy(pos, result[i], strlen(result[i]));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'hns3_dbg_fill_content',
+       inlined from 'hns3_dbg_tx_bd_info' at drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:432:2:
+>> drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     127 |                         strncpy(pos, items[i].name, strlen(items[i].name));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'hns3_dbg_fill_content',
+       inlined from 'hns3_dbg_rx_bd_info' at drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:358:2:
+>> drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     127 |                         strncpy(pos, items[i].name, strlen(items[i].name));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strncpy +127 drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
+
+   114	
+   115	static void hns3_dbg_fill_content(char *content, u16 len,
+   116					  const struct hns3_dbg_item *items,
+   117					  const char **result, u16 size)
+   118	{
+   119		char *pos = content;
+   120		u16 i;
+   121	
+   122		memset(content, ' ', len);
+   123		for (i = 0; i < size; i++) {
+   124			if (result)
+   125				strncpy(pos, result[i], strlen(result[i]));
+   126			else
+ > 127				strncpy(pos, items[i].name, strlen(items[i].name));
+   128	
+   129			pos += strlen(items[i].name) + items[i].interval;
+   130		}
+   131	
+   132		*pos++ = '\n';
+   133		*pos++ = '\0';
+   134	}
+   135	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

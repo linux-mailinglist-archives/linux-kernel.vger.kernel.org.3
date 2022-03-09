@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8494D308A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAAF4D3094
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbiCINvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S232546AbiCINyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiCINvx (ORCPT
+        with ESMTP id S231794AbiCINyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:51:53 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E6D1637EE;
-        Wed,  9 Mar 2022 05:50:48 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so1501412wmb.3;
-        Wed, 09 Mar 2022 05:50:48 -0800 (PST)
+        Wed, 9 Mar 2022 08:54:40 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D030EB2E15
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:53:41 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id p8so2356038pfh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:53:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t36AjXfGdpizP8k4vNw4tUmA5qCcB85SL95no+CKwL4=;
-        b=p7IsLRlIaH0BJaVFy8cb1OpdHYPaV0pVTmTT9yx8ZUM5QZLAPnKbf0s/AiTURwVNry
-         pTnCYOU+OifDD7UDvESPqv+O4Dt2ngS5Ov2+lBOO84v0JNns7/EJl7cDJl5avXQih/7V
-         0csgKcUWjxOxNDE99ugIvhQGiv9/Npq7XeFayJoTOjkiOgG0w3vr3RwnRm2EKwfNfKwg
-         nl3G30X1w2ZdImOMHCb6xh/qQozmKXIoO0z0xny8cjThGgsXLXUJPXuuowSELbedNLAG
-         EblPOm+P+jmU9T5eVMkww9Aw48pdGj07169YzxMHr7O/oOfZAzcHfw92bjpoWc6gvznO
-         zG1g==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ovut23uayW/dOdtWDs48IgggZZNTYQQls77E5j7ziJo=;
+        b=VIbYQAPb5RgoGgeAmm6IcIn34FSd/45TsQD5QpOmlspgU2+VrP96K3dsSWJP8m9JuD
+         UxUWdVtN6W+s0x7ONlSzJMnYdQknafc4EYiVvCwGbT85eGhBU3gk7EfC3hghMWzVns8D
+         p2JVOEiIgLCFslyAuFCU0ftqrzhHjuFIQzjrC/xzSf/40+ITXctmK1RiQDf0515ROaOp
+         K520bIOqwp3w/xIO4U7iMcJhcs6czKueeCQ15Rvl4bIXe5B/ILWxW6J2vB8pHQr2/5mJ
+         qeerGdcPbZdA9ESvHdjgZqdkBErURJuwmnD36r0wApRiYNrh4MxRPER65QzEUwhH4ZAf
+         43Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t36AjXfGdpizP8k4vNw4tUmA5qCcB85SL95no+CKwL4=;
-        b=JL8X7OIRk8uPJzq/Fo4c0/nvUgOuNPPBF/NNc5bpqDfgViZ+vT6/DvDJWsODAKScfi
-         VEkYmdGby2oWQ242TNlpXG85c8T7RdryqnJDjy/de97+KVQYDWx93+X1DfOF0ooEtjeE
-         H+4ZTru5lZLbeahQkvjZvFTCd1pA6EaPziNzbq7SGPLtDl31Dknavo/S7ULbecsja+3r
-         yFRc8XBriiUiA2jizI6M12n4RuKKDO9hYWe54jl+J5t61eAg96SQIHuVBs2TyjlaAhmd
-         whf3pQdQbBDqIE/rOCQdf81U8ZVK1CMklrIraRZoEzrCSEoUqkq92MnBsqAFzpotGnl9
-         Ul+g==
-X-Gm-Message-State: AOAM530ZHsDSNxV0qV2xvTKjH/QtdLX9NSnTiKZoXGRFXCoMec4y3oXG
-        JjWSBlrKSaBZd0iImalixcM=
-X-Google-Smtp-Source: ABdhPJyK+WypfRN4CaAxoOi/2/rku7wS3h7Lb70KqzVu+/Y2SFv8Ty71vvCb+jZSBoyALsYbctxueQ==
-X-Received: by 2002:a7b:c2f7:0:b0:389:860c:6d3d with SMTP id e23-20020a7bc2f7000000b00389860c6d3dmr3445296wmk.116.1646833846960;
-        Wed, 09 Mar 2022 05:50:46 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id v188-20020a1cacc5000000b00384b71a50d5sm1827211wme.24.2022.03.09.05.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 05:50:46 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <bdb527f3-9281-1f25-c6c7-a8538455bfa3@redhat.com>
-Date:   Wed, 9 Mar 2022 14:50:41 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ovut23uayW/dOdtWDs48IgggZZNTYQQls77E5j7ziJo=;
+        b=vNSR72TW2mYjh2Z/uM4Iq6p8pgVto+/RI4P+DGXSV0Upx9pvUMazZM0DvQvPIq+r96
+         dBg6LjSQXbA5OzFLVk3bF+6OXjjXUh1VmpU1ETmWFoPCMWDA1N5BkqxjsIm8deaXG6GA
+         6lxWknEGw0IjB3SXPz6WxunfPXAhJQw1Rj0OVjbym+PYClNT54NmepoleoETPN8wCG13
+         SOayrfYPkoMRQwHmbSbKWxcpvXKBE2Bw1w8s+UGegyBsM4DqNsUhOBfuvUaQy7xfyRd9
+         +yVuOoli8hx9GCf8ll+UJnvRTG23N3T4+e0P0jk9jiNVtDsQOaUFoIYqtpe0s6RKNvRQ
+         417g==
+X-Gm-Message-State: AOAM532JPU8wj7HIirVNO6Hc5HpHJ6B6vz0rTWeOFbZLo5Yd3052jgSn
+        iq97Ll6AU5bxULmoaz/9q1jbNCqd3MQ8gbnufIwg+A==
+X-Google-Smtp-Source: ABdhPJyjDkbzTtT/IWdlit5fMgUxFD/5gMRctZhnTrPtEVnm6o5Bd+AYivSovav9lczEHpwiGcWbWq4H/k4r+8kqHVI=
+X-Received: by 2002:a05:6a00:24cf:b0:4f7:38ea:9fd5 with SMTP id
+ d15-20020a056a0024cf00b004f738ea9fd5mr6810052pfv.0.1646834021278; Wed, 09 Mar
+ 2022 05:53:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 7/7] KVM: x86: SVM: allow AVIC to co-exist with a
- nested guest running
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>
-References: <20220301143650.143749-1-mlevitsk@redhat.com>
- <20220301143650.143749-8-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220301143650.143749-8-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220228183955.25508-1-jose.exposito89@gmail.com>
+ <164609067646.2361501.15747139249939190799@Monstersaurus> <20220303183720.GA334969@elementary>
+ <164634476693.3683041.3124143336848085499@Monstersaurus> <164639597452.3492470.16590890112062103735@Monstersaurus>
+In-Reply-To: <164639597452.3492470.16590890112062103735@Monstersaurus>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 9 Mar 2022 14:53:30 +0100
+Message-ID: <CAG3jFytLEHbzOHoGSoTk3WSHUBDns64aZWPwUFmhrUrQzncXGg@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: switch to devm_drm_of_get_bridge
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        andrzej.hajda@intel.com, linux-pwm@vger.kernel.org,
+        jonas@kwiboo.se, airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
+        jernej.skrabec@gmail.com, thierry.reding@gmail.com,
+        laurent.pinchart@ideasonboard.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, maxime@cerno.tech
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,32 +74,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 15:36, Maxim Levitsky wrote:
->   	bool activate;
-> @@ -9690,7 +9695,9 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
->   
->   	down_read(&vcpu->kvm->arch.apicv_update_lock);
->   
-> -	activate = kvm_apicv_activated(vcpu->kvm);
-> +	activate = kvm_apicv_activated(vcpu->kvm) &&
-> +		   !vcpu_has_apicv_inhibit_condition(vcpu);
-> +
->   	if (vcpu->arch.apicv_active == activate)
->   		goto out;
->   
+On Fri, 4 Mar 2022 at 13:12, Kieran Bingham
+<kieran.bingham@ideasonboard.com> wrote:
+>
+> Hi Jos=C3=A9
+>
+> Quoting Kieran Bingham (2022-03-03 21:59:26)
+> > Quoting Jos=C3=A9 Exp=C3=B3sito (2022-03-03 18:37:20)
+> > > On Mon, Feb 28, 2022 at 11:24:36PM +0000, Kieran Bingham wrote:
+> > > > Hi Jos=C3=A9
+> > > >
+> > > > Quoting Jos=C3=A9 Exp=C3=B3sito (2022-02-28 18:39:54)
+> > > > > The function "drm_of_find_panel_or_bridge" has been deprecated in
+> > > > > favor of "devm_drm_of_get_bridge".
+> > > > >
+> > > > > Switch to the new function and reduce boilerplate.
+> > > > >
+> > > > > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com=
+>
+> > > > > ---
+> > > > >  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 8 +-------
+> > > > >  1 file changed, 1 insertion(+), 7 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/=
+drm/bridge/ti-sn65dsi86.c
+> > > > > index dab8f76618f3..fb8e16ed7e90 100644
+> > > > > --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> > > > > +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> > > > > @@ -1232,15 +1232,9 @@ static int ti_sn_bridge_probe(struct auxil=
+iary_device *adev,
+> > > > >  {
+> > > > >         struct ti_sn65dsi86 *pdata =3D dev_get_drvdata(adev->dev.=
+parent);
+> > > > >         struct device_node *np =3D pdata->dev->of_node;
+> > > > > -       struct drm_panel *panel;
+> > > > >         int ret;
+> > > > >
+> > > > > -       ret =3D drm_of_find_panel_or_bridge(np, 1, 0, &panel, NUL=
+L);
+> > > > > -       if (ret)
+> > > > > -               return dev_err_probe(&adev->dev, ret,
+> > > > > -                                    "could not find any panel no=
+de\n");
+> > > > > -
+> > > > > -       pdata->next_bridge =3D devm_drm_panel_bridge_add(pdata->d=
+ev, panel);
+> > > > > +       pdata->next_bridge =3D devm_drm_of_get_bridge(pdata->dev,=
+ np, 1, 0);
+> > > >
+> > > > Yikes, I was about to rely on this panel variable to determine if t=
+he
+> > > > device is a panel or a display port connector. (Well, I am relying =
+on
+> > > > it, and patches are hoping to be reposted this week).
+> > > >
+> > > > Is there expected to be another way to identify if the next connect=
+ion
+> > > > is a panel or a bridge?
+> > > >
+> > > > Regards
+> > >
+> > > Hi Kieran,
+> > >
+> > > I'm getting started in the DRM subsystem. I couldn't tell if there is=
+ a
+> > > good way to access the panel pointer... I didn't manage to find it, b=
+ut
+> > > hopefully someone with more experience can point us to a solution.
+> > >
+> > > Since you mentioned display port, I'm not sure if in your case checki=
+ng
+> > > "pdata->next_bridge->type" could be good enough.
+>
+> Actually, it is. And I think this is actually cleaner (both here, and in
+> the series I'm working on).
+>
+> > > Anyway, if this patch causes you problems, please go ahead and ignore=
+ it.
+> > > I'm sure the series you are working on are more important than removi=
+ng
+> > > a deprecated function :)
+> >
+> > If it's deprecated, I don't want to block it's removal. Hopefully I can
+> > resume my work on this tomorrow so I can check to see what I can parse.
+> > Thanks for the lead on the bridge type, I'm sure I've seen that around
+> > too so hopefully that's enough. If it is, I'll rebase my work on top of
+> > your patch and retest.
+>
+> So - my series is now working with a bit of adaptation to run on top of
+> your patch, and I think the overall result is better. So:
+>
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>
 
-Perhaps the callback could be named vcpu_apicv_inhibit_reasons, and it would
-return APICV_INHIBIT_REASON_NESTED?  Then instead of the new function
-vcpu_has_apicv_inhibit_condition(), you would have
-
-bool kvm_vcpu_apicv_activated(struct vcpu_kvm *kvm)
-{
-	ulong vm_reasons = READ_ONCE(vcpu->kvm->arch.apicv_inhibit_reasons);
-	ulong vcpu_reasons = static_call(kvm_x86_vcpu_apicv_inhibit_reasons)(vcpu);
-         return (vm_reasons | vcpu_reasons) == 0;
-}
-EXPORT_SYMBOL_GPL(kvm_cpu_apicv_activated);
-
-It's mostly aesthetics, but it would also be a bit more self explanatory I think.
-
-Paolo
+Applied to drm-misc-next.

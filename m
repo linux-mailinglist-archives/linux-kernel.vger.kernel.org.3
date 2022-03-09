@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED134D3620
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3187B4D375B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiCIQhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S234340AbiCIQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbiCIQaK (ORCPT
+        with ESMTP id S236747AbiCIQaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:30:10 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DF4D2248;
-        Wed,  9 Mar 2022 08:23:30 -0800 (PST)
+        Wed, 9 Mar 2022 11:30:11 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDC6B716D;
+        Wed,  9 Mar 2022 08:23:31 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2A9E540004;
+        by mail.gandi.net (Postfix) with ESMTPSA id E0B98240009;
         Wed,  9 Mar 2022 16:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646843006;
+        t=1646843007;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ytygVa3qkTtXwTlH3LvvKqalT9tgD2Iy4CHoUD5lQvA=;
-        b=E0cnyiwuGl0cSFbtbbhDtAGpo/9vEBj2+7o9qELZ8yCn8HenhzbFXVY2xwFQGonZ9ck7pw
-        StssGfzlLbdec9sXs+xoMR/7pKS8qRvQegz0XiWVOvFDct/e10tC7KO+LtpjuCBvGkO/xV
-        YENDgIHLJUbaLgpGzoLTKiuCOLjqjteL6doSqKL/+gRd/qb/zGHRNHrD1xkkX0syrCsLOm
-        JI6IHavcoGMwvyQAhzoO/jh6x/dcjVwgL0Wga3HW4dHm3nL3oO35AmGZlzgC/Ly0hy4mPo
-        UKrly/v7HnIYoUxb5xvCL2uBQH1Lj2YIA+TgvgwLqo4o8fdkRqI1HxQUzGaN+Q==
+        bh=coI9dHiEDla2UWdQmgJo3RqzSn/x2jsOBDPcmLF0OMA=;
+        b=lPfBLiFyojVXU6VpeZdM6VZbM+NGcwhS7FhZ3kcucl/s9JxBXpEXRi76iyRh9wz7HaeSxf
+        JkcIz5JNR/YMHJszjiWmKkn5fpP6iGyThNkYaoMspqk1hV3cW6OcnxGlu+3v3je6IEQFnL
+        QguVi3vPpdfmultBnEGMOmuQimg9fwZV/wFBkoam0wgzR9+pOkuY8LasXfqAvkOUxZ6qNp
+        9frx+ucWHVUHCTN2zYN+skYfXIQ9oXfBMHht6bFIhFqmQgkW8HbFuAbv1KV26jZZfykJPM
+        oWg9K+u2+mEDnzuKCTX0TY7A23P4MHoncsck2qUUsTLykfsUN6BOz+mo+YSXMg==
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/29] rtc: pcf85063: set RTC_FEATURE_ALARM_RES_2S
-Date:   Wed,  9 Mar 2022 17:22:44 +0100
-Message-Id: <20220309162301.61679-13-alexandre.belloni@bootlin.com>
+Subject: [PATCH 14/29] rtc: pcf8523: switch to RTC_FEATURE_UPDATE_INTERRUPT
+Date:   Wed,  9 Mar 2022 17:22:45 +0100
+Message-Id: <20220309162301.61679-14-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
 References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
@@ -52,27 +52,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PCF85063 doesn't support UIE because setting an alarm to fire every
-second confuses the chip and the fastest we can go is an alarm every 2
-seconds.
+Stop using uie_unsupported and clear RTC_FEATURE_UPDATE_INTERRUPT instead.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-pcf85063.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/rtc/rtc-pcf8523.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-index 3c2477454063..9760824ec199 100644
---- a/drivers/rtc/rtc-pcf85063.c
-+++ b/drivers/rtc/rtc-pcf85063.c
-@@ -616,6 +616,7 @@ static int pcf85063_probe(struct i2c_client *client)
- 	pcf85063->rtc->ops = &pcf85063_rtc_ops;
- 	pcf85063->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
- 	pcf85063->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+	set_bit(RTC_FEATURE_ALARM_RES_2S, pcf85063->rtc->features);
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf85063->rtc->features);
- 	clear_bit(RTC_FEATURE_ALARM, pcf85063->rtc->features);
+diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+index baa89f431ebd..cd55fdfe1d39 100644
+--- a/drivers/rtc/rtc-pcf8523.c
++++ b/drivers/rtc/rtc-pcf8523.c
+@@ -450,7 +450,7 @@ static int pcf8523_probe(struct i2c_client *client,
+ 	rtc->ops = &pcf8523_rtc_ops;
+ 	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	rtc->range_max = RTC_TIMESTAMP_END_2099;
+-	rtc->uie_unsupported = 1;
++	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
  
+ 	if (client->irq > 0) {
+ 		err = regmap_write(pcf8523->regmap, PCF8523_TMR_CLKOUT_CTRL, 0x38);
 -- 
 2.35.1
 

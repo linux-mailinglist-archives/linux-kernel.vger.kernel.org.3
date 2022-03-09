@@ -2,219 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C494D27C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8414D27D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiCIESB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S229575AbiCIER4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 23:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiCIERx (ORCPT
+        with ESMTP id S229542AbiCIERw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:17:53 -0500
+        Tue, 8 Mar 2022 23:17:52 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D703BBDD
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:16:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099B23BBCA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:16:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646799415; x=1678335415;
+  t=1646799413; x=1678335413;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WqTbJFB2GOpTxks0g8Gxoq6JzJPPmOhJlCkExqIauBE=;
-  b=k7aG5xmY1eDTRsRxZF00ijUz+YnUOGC/pwiq/5Z9EbFNtUl0JQj+SIiU
-   3Nk/zFWKgYwh2tLxtu80pQGkS3SOaJVS48t5uSuvaRmDjeJ9RhWxWr4L+
-   FygkTWtwVV8pzP/rPdCrJL+yIW4Huh52sDq/JCwt+8OITCdruTktv/yxm
-   WTT5CS5OCleKUcfUgQfkabgNsLvusLtgUWrn4W9IgGaNCzyh5HGjV53pa
-   6Qh2oH+AY4Bg27BCtiR7nGu86PBhu83DQClaGvN3xTwfOQ0G2SqSeUY9q
-   BexBZJzq6aQ3+pogMnlXFCg+GvTKS6aFQwi1glLlK5x0YCSroTxpSf6u4
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254822227"
+  bh=m5hemrX99Q8swhDMExzepY49u8qc7Xc6Pkfz0sx3ock=;
+  b=Jn1Mi6I+x8zNmHqIOTS0IFjTiHdIzftsCY1ero3Uq6tCLz1BeHv1CCF6
+   uRIFjtAkHrl3PNo1obxa6DTvljwPV+57i9C05+GC1hWCxmKSY+/mj1o8/
+   QnNFgE6Fy123Q1EH0XArHYOTlz9b4tv+T0hzi8OkZ+Y6YTsfB3b+B8g+L
+   K6027YlTqGuwh77rW+ColLPKc8nGxAuGLtfK/1Gj9vyntPpAqw7clPhL0
+   ca3TXkBQqbaZ5HmeHqih3JguQxbsOreRgXD0ezQEVYyUidbFxhzRCxen4
+   cc+OslPG3ZzyL5VIoX6UiR3Al7qT2zD6WLQQVUsvbrGjYz1zN1HUbHg72
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254822226"
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="254822227"
+   d="scan'208";a="254822226"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 20:16:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="711794238"
+   d="scan'208";a="711794237"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
   by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 20:16:50 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nRnko-0002ZB-7k; Wed, 09 Mar 2022 04:16:50 +0000
-Date:   Wed, 9 Mar 2022 12:16:43 +0800
+        id 1nRnko-0002ZD-87; Wed, 09 Mar 2022 04:16:50 +0000
+Date:   Wed, 9 Mar 2022 12:16:46 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Balakrishna Godavarthi <bgodavar@codeaurora.org>
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
-Subject: drivers/bluetooth/hci_qca.c:996:26: sparse: sparse: cast to
- restricted __le16
-Message-ID: <202203091200.HA9qx4ka-lkp@intel.com>
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: [agd5f:amd-staging-drm-next 1275/1294]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:5089: warning: expecting
+ prototype for amdgpu_device_gpu_recover(). Prototype was for
+ amdgpu_device_gpu_recover_imp() instead
+Message-ID: <202203091213.hLKpINpS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   92f90cc9fe0e7a984ea3d4bf3d120e30ba8a2118
-commit: d841502c79e3fda2ba0e8d64f9eb00e9dd884af0 Bluetooth: hci_qca: Collect controller memory dump during SSR
-date:   2 years, 2 months ago
-config: parisc-randconfig-s031-20220212 (https://download.01.org/0day-ci/archive/20220309/202203091200.HA9qx4ka-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce:
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
+head:   ce6c5ef3286516fd6bed1180e415bdc6a98f3b91
+commit: 92fc842d9da15ae9b14dc964d115e250c7b568e1 [1275/1294] drm/amdgpu: Serialize non TDR gpu recovery with TDRs
+config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203091213.hLKpINpS-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d841502c79e3fda2ba0e8d64f9eb00e9dd884af0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d841502c79e3fda2ba0e8d64f9eb00e9dd884af0
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f amd-staging-drm-next
+        git checkout 92fc842d9da15ae9b14dc964d115e250c7b568e1
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/bluetooth/hci_qca.c: note: in included file (through arch/parisc/include/uapi/asm/unistd.h, arch/parisc/include/asm/unistd.h, include/uapi/linux/unistd.h, ...):
-   ./arch/parisc/include/generated/uapi/asm/unistd_32.h:380:41: sparse: sparse: no newline at end of file
->> drivers/bluetooth/hci_qca.c:996:26: sparse: sparse: cast to restricted __le16
->> drivers/bluetooth/hci_qca.c:996:26: sparse: sparse: cast to restricted __le16
->> drivers/bluetooth/hci_qca.c:996:26: sparse: sparse: cast to restricted __le16
->> drivers/bluetooth/hci_qca.c:996:26: sparse: sparse: cast to restricted __le16
-   drivers/bluetooth/hci_qca.c:997:26: sparse: sparse: cast to restricted __le16
-   drivers/bluetooth/hci_qca.c:997:26: sparse: sparse: cast to restricted __le16
-   drivers/bluetooth/hci_qca.c:997:26: sparse: sparse: cast to restricted __le16
-   drivers/bluetooth/hci_qca.c:997:26: sparse: sparse: cast to restricted __le16
->> drivers/bluetooth/hci_qca.c:1011:37: sparse: sparse: cast to restricted __le32
->> drivers/bluetooth/hci_qca.c:1011:37: sparse: sparse: cast to restricted __le32
->> drivers/bluetooth/hci_qca.c:1011:37: sparse: sparse: cast to restricted __le32
->> drivers/bluetooth/hci_qca.c:1011:37: sparse: sparse: cast to restricted __le32
->> drivers/bluetooth/hci_qca.c:1011:37: sparse: sparse: cast to restricted __le32
->> drivers/bluetooth/hci_qca.c:1011:37: sparse: sparse: cast to restricted __le32
-   drivers/bluetooth/hci_qca.c:1078:5: sparse: sparse: symbol 'qca_controller_memdump_event' was not declared. Should it be static?
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:5089: warning: expecting prototype for amdgpu_device_gpu_recover(). Prototype was for amdgpu_device_gpu_recover_imp() instead
 
-vim +996 drivers/bluetooth/hci_qca.c
 
-   968	
-   969	static void qca_controller_memdump(struct work_struct *work)
-   970	{
-   971		struct qca_data *qca = container_of(work, struct qca_data,
-   972						    ctrl_memdump_evt);
-   973		struct hci_uart *hu = qca->hu;
-   974		struct sk_buff *skb;
-   975		struct qca_memdump_event_hdr *cmd_hdr;
-   976		struct qca_memdump_data *qca_memdump = qca->qca_memdump;
-   977		struct qca_dump_size *dump;
-   978		char *memdump_buf;
-   979		char nullBuff[QCA_DUMP_PACKET_SIZE] = { 0 };
-   980		u16 opcode, seq_no;
-   981		u32 dump_size;
-   982	
-   983		while ((skb = skb_dequeue(&qca->rx_memdump_q))) {
-   984	
-   985			if (!qca_memdump) {
-   986				qca_memdump = kzalloc(sizeof(struct qca_memdump_data),
-   987						      GFP_ATOMIC);
-   988				if (!qca_memdump)
-   989					return;
-   990	
-   991				qca->qca_memdump = qca_memdump;
-   992			}
-   993	
-   994			qca->memdump_state = QCA_MEMDUMP_COLLECTING;
-   995			cmd_hdr = (void *) skb->data;
- > 996			opcode = __le16_to_cpu(cmd_hdr->opcode);
-   997			seq_no = __le16_to_cpu(cmd_hdr->seq_no);
-   998			skb_pull(skb, sizeof(struct qca_memdump_event_hdr));
-   999	
-  1000			if (!seq_no) {
-  1001	
-  1002				/* This is the first frame of memdump packet from
-  1003				 * the controller, Disable IBS to recevie dump
-  1004				 * with out any interruption, ideally time required for
-  1005				 * the controller to send the dump is 8 seconds. let us
-  1006				 * start timer to handle this asynchronous activity.
-  1007				 */
-  1008				clear_bit(QCA_IBS_ENABLED, &qca->flags);
-  1009				set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
-  1010				dump = (void *) skb->data;
-> 1011				dump_size = __le32_to_cpu(dump->dump_size);
-  1012				if (!(dump_size)) {
-  1013					bt_dev_err(hu->hdev, "Rx invalid memdump size");
-  1014					kfree_skb(skb);
-  1015					return;
-  1016				}
-  1017	
-  1018				bt_dev_info(hu->hdev, "QCA collecting dump of size:%u",
-  1019					    dump_size);
-  1020				mod_timer(&qca->memdump_timer, (jiffies +
-  1021					  msecs_to_jiffies(MEMDUMP_TIMEOUT_MS)));
-  1022	
-  1023				skb_pull(skb, sizeof(dump_size));
-  1024				memdump_buf = vmalloc(dump_size);
-  1025				qca_memdump->memdump_buf_head = memdump_buf;
-  1026				qca_memdump->memdump_buf_tail = memdump_buf;
-  1027			}
-  1028	
-  1029			memdump_buf = qca_memdump->memdump_buf_tail;
-  1030	
-  1031			/* If sequence no 0 is missed then there is no point in
-  1032			 * accepting the other sequences.
-  1033			 */
-  1034			if (!memdump_buf) {
-  1035				bt_dev_err(hu->hdev, "QCA: Discarding other packets");
-  1036				kfree(qca_memdump);
-  1037				kfree_skb(skb);
-  1038				qca->qca_memdump = NULL;
-  1039				return;
-  1040			}
-  1041	
-  1042			/* There could be chance of missing some packets from
-  1043			 * the controller. In such cases let us store the dummy
-  1044			 * packets in the buffer.
-  1045			 */
-  1046			while ((seq_no > qca_memdump->current_seq_no + 1) &&
-  1047				seq_no != QCA_LAST_SEQUENCE_NUM) {
-  1048				bt_dev_err(hu->hdev, "QCA controller missed packet:%d",
-  1049					   qca_memdump->current_seq_no);
-  1050				memcpy(memdump_buf, nullBuff, QCA_DUMP_PACKET_SIZE);
-  1051				memdump_buf = memdump_buf + QCA_DUMP_PACKET_SIZE;
-  1052				qca_memdump->received_dump += QCA_DUMP_PACKET_SIZE;
-  1053				qca_memdump->current_seq_no++;
-  1054			}
-  1055	
-  1056			memcpy(memdump_buf, (unsigned char *) skb->data, skb->len);
-  1057			memdump_buf = memdump_buf + skb->len;
-  1058			qca_memdump->memdump_buf_tail = memdump_buf;
-  1059			qca_memdump->current_seq_no = seq_no + 1;
-  1060			qca_memdump->received_dump += skb->len;
-  1061			qca->qca_memdump = qca_memdump;
-  1062			kfree_skb(skb);
-  1063			if (seq_no == QCA_LAST_SEQUENCE_NUM) {
-  1064				bt_dev_info(hu->hdev, "QCA writing crash dump of size %d bytes",
-  1065					   qca_memdump->received_dump);
-  1066				memdump_buf = qca_memdump->memdump_buf_head;
-  1067				dev_coredumpv(&hu->serdev->dev, memdump_buf,
-  1068					      qca_memdump->received_dump, GFP_KERNEL);
-  1069				del_timer(&qca->memdump_timer);
-  1070				kfree(qca->qca_memdump);
-  1071				qca->qca_memdump = NULL;
-  1072				qca->memdump_state = QCA_MEMDUMP_COLLECTED;
-  1073			}
-  1074		}
-  1075	
+vim +5089 drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+
+e6c6338f393b74 Jack Zhang            2021-03-08  5075  
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5076  /**
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5077   * amdgpu_device_gpu_recover - reset the asic and recover scheduler
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5078   *
+982a820bac1b64 Mauro Carvalho Chehab 2020-10-21  5079   * @adev: amdgpu_device pointer
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5080   * @job: which job trigger hang
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5081   *
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5082   * Attempt to reset the GPU if it has hung (all asics).
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5083   * Attempt to do soft-reset or full-reset and reinitialize Asic
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5084   * Returns 0 for success or an error on failure.
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5085   */
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5086  
+92fc842d9da15a Andrey Grodzovsky     2021-12-17  5087  int amdgpu_device_gpu_recover_imp(struct amdgpu_device *adev,
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5088  			      struct amdgpu_job *job)
+26bc534094ed45 Andrey Grodzovsky     2018-11-22 @5089  {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5090  	struct list_head device_list, *device_list_handle =  NULL;
+7dd8c205eaedfa Evan Quan             2020-04-16  5091  	bool job_signaled = false;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5092  	struct amdgpu_hive_info *hive = NULL;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5093  	struct amdgpu_device *tmp_adev = NULL;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5094  	int i, r = 0;
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5095  	bool need_emergency_restart = false;
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5096  	bool audio_suspended = false;
+e6c6338f393b74 Jack Zhang            2021-03-08  5097  	int tmp_vram_lost_counter;
+04442bf70debb1 Lijo Lazar            2021-03-16  5098  	struct amdgpu_reset_context reset_context;
+04442bf70debb1 Lijo Lazar            2021-03-16  5099  
+04442bf70debb1 Lijo Lazar            2021-03-16  5100  	memset(&reset_context, 0, sizeof(reset_context));
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5101  
+6e3cd2a9a6ac32 Mauro Carvalho Chehab 2020-10-23  5102  	/*
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5103  	 * Special case: RAS triggered and full reset isn't supported
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5104  	 */
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5105  	need_emergency_restart = amdgpu_ras_need_emergency_restart(adev);
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5106  
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5107  	/*
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5108  	 * Flush RAM to disk so that after reboot
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5109  	 * the user can read log and see why the system rebooted.
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5110  	 */
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5111  	if (need_emergency_restart && amdgpu_ras_get_context(adev)->reboot) {
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5112  		DRM_WARN("Emergency reboot.");
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5113  
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5114  		ksys_sync_helper();
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5115  		emergency_restart();
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5116  	}
+d5ea093eebf022 Andrey Grodzovsky     2019-08-22  5117  
+b823821f2244ad Le Ma                 2019-11-27  5118  	dev_info(adev->dev, "GPU %s begin!\n",
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5119  		need_emergency_restart ? "jobs stop":"reset");
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5120  
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5121  	/*
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5122  	 * Here we trylock to avoid chain of resets executing from
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5123  	 * either trigger by jobs on different adevs in XGMI hive or jobs on
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5124  	 * different schedulers for same device while this TO handler is running.
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5125  	 * We always reset all schedulers for device and all devices for XGMI
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5126  	 * hive so that should take care of them too.
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5127  	 */
+175ac6ec6bd8db Zhigang Luo           2021-11-26  5128  	if (!amdgpu_sriov_vf(adev))
+d95e8e97e2d522 Dennis Li             2020-08-18  5129  		hive = amdgpu_get_xgmi_hive(adev);
+53b3f8f40e6cff Dennis Li             2020-08-19  5130  	if (hive) {
+53b3f8f40e6cff Dennis Li             2020-08-19  5131  		if (atomic_cmpxchg(&hive->in_reset, 0, 1) != 0) {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5132  			DRM_INFO("Bailing on TDR for s_job:%llx, hive: %llx as another already in progress",
+0b2d2c2eecf27f Andrey Grodzovsky     2019-08-27  5133  				job ? job->base.id : -1, hive->hive_id);
+d95e8e97e2d522 Dennis Li             2020-08-18  5134  			amdgpu_put_xgmi_hive(hive);
+ff99849b00fef5 Jingwen Chen          2021-07-20  5135  			if (job && job->vm)
+91fb309d8294be Horace Chen           2021-01-20  5136  				drm_sched_increase_karma(&job->base);
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5137  			return 0;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5138  		}
+53b3f8f40e6cff Dennis Li             2020-08-19  5139  		mutex_lock(&hive->hive_lock);
+53b3f8f40e6cff Dennis Li             2020-08-19  5140  	}
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5141  
+04442bf70debb1 Lijo Lazar            2021-03-16  5142  	reset_context.method = AMD_RESET_METHOD_NONE;
+04442bf70debb1 Lijo Lazar            2021-03-16  5143  	reset_context.reset_req_dev = adev;
+04442bf70debb1 Lijo Lazar            2021-03-16  5144  	reset_context.job = job;
+04442bf70debb1 Lijo Lazar            2021-03-16  5145  	reset_context.hive = hive;
+04442bf70debb1 Lijo Lazar            2021-03-16  5146  	clear_bit(AMDGPU_NEED_FULL_RESET, &reset_context.flags);
+04442bf70debb1 Lijo Lazar            2021-03-16  5147  
+91fb309d8294be Horace Chen           2021-01-20  5148  	/*
+91fb309d8294be Horace Chen           2021-01-20  5149  	 * lock the device before we try to operate the linked list
+91fb309d8294be Horace Chen           2021-01-20  5150  	 * if didn't get the device lock, don't touch the linked list since
+91fb309d8294be Horace Chen           2021-01-20  5151  	 * others may iterating it.
+91fb309d8294be Horace Chen           2021-01-20  5152  	 */
+91fb309d8294be Horace Chen           2021-01-20  5153  	r = amdgpu_device_lock_hive_adev(adev, hive);
+91fb309d8294be Horace Chen           2021-01-20  5154  	if (r) {
+91fb309d8294be Horace Chen           2021-01-20  5155  		dev_info(adev->dev, "Bailing on TDR for s_job:%llx, as another already in progress",
+91fb309d8294be Horace Chen           2021-01-20  5156  					job ? job->base.id : -1);
+91fb309d8294be Horace Chen           2021-01-20  5157  
+91fb309d8294be Horace Chen           2021-01-20  5158  		/* even we skipped this reset, still need to set the job to guilty */
+ff99849b00fef5 Jingwen Chen          2021-07-20  5159  		if (job && job->vm)
+91fb309d8294be Horace Chen           2021-01-20  5160  			drm_sched_increase_karma(&job->base);
+91fb309d8294be Horace Chen           2021-01-20  5161  		goto skip_recovery;
+91fb309d8294be Horace Chen           2021-01-20  5162  	}
+91fb309d8294be Horace Chen           2021-01-20  5163  
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5164  	/*
+9e94d22c008585 Evan Quan             2020-04-16  5165  	 * Build list of devices to reset.
+9e94d22c008585 Evan Quan             2020-04-16  5166  	 * In case we are in XGMI hive mode, resort the device list
+9e94d22c008585 Evan Quan             2020-04-16  5167  	 * to put adev in the 1st position.
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5168  	 */
+9e94d22c008585 Evan Quan             2020-04-16  5169  	INIT_LIST_HEAD(&device_list);
+175ac6ec6bd8db Zhigang Luo           2021-11-26  5170  	if (!amdgpu_sriov_vf(adev) && (adev->gmc.xgmi.num_physical_nodes > 1)) {
+655ce9cb13b596 shaoyunl              2021-03-04  5171  		list_for_each_entry(tmp_adev, &hive->device_list, gmc.xgmi.head)
+655ce9cb13b596 shaoyunl              2021-03-04  5172  			list_add_tail(&tmp_adev->reset_list, &device_list);
+655ce9cb13b596 shaoyunl              2021-03-04  5173  		if (!list_is_first(&adev->reset_list, &device_list))
+655ce9cb13b596 shaoyunl              2021-03-04  5174  			list_rotate_to_front(&adev->reset_list, &device_list);
+655ce9cb13b596 shaoyunl              2021-03-04  5175  		device_list_handle = &device_list;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5176  	} else {
+655ce9cb13b596 shaoyunl              2021-03-04  5177  		list_add_tail(&adev->reset_list, &device_list);
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5178  		device_list_handle = &device_list;
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5179  	}
+26bc534094ed45 Andrey Grodzovsky     2018-11-22  5180  
+12ffa55da60f83 Andrey Grodzovsky     2019-08-30  5181  	/* block all schedulers and reset given job's ring */
+655ce9cb13b596 shaoyunl              2021-03-04  5182  	list_for_each_entry(tmp_adev, device_list_handle, reset_list) {
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5183  		/*
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5184  		 * Try to put the audio codec into suspend state
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5185  		 * before gpu reset started.
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5186  		 *
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5187  		 * Due to the power domain of the graphics device
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5188  		 * is shared with AZ power domain. Without this,
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5189  		 * we may change the audio hardware from behind
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5190  		 * the audio driver's back. That will trigger
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5191  		 * some audio codec errors.
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5192  		 */
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5193  		if (!amdgpu_device_suspend_display_audio(tmp_adev))
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5194  			audio_suspended = true;
+3f12acc8d6d4b2 Evan Quan             2020-04-21  5195  
+9e94d22c008585 Evan Quan             2020-04-16  5196  		amdgpu_ras_set_error_query_ready(tmp_adev, false);
+9e94d22c008585 Evan Quan             2020-04-16  5197  
+52fb44cf30fc6b Evan Quan             2020-04-16  5198  		cancel_delayed_work_sync(&tmp_adev->delayed_init_work);
+52fb44cf30fc6b Evan Quan             2020-04-16  5199  
+428890a3fec131 shaoyunl              2021-11-29  5200  		if (!amdgpu_sriov_vf(tmp_adev))
+9e94d22c008585 Evan Quan             2020-04-16  5201  			amdgpu_amdkfd_pre_reset(tmp_adev);
+9e94d22c008585 Evan Quan             2020-04-16  5202  
+fdafb3597a2cc4 Evan Quan             2019-06-26  5203  		/*
+fdafb3597a2cc4 Evan Quan             2019-06-26  5204  		 * Mark these ASICs to be reseted as untracked first
+fdafb3597a2cc4 Evan Quan             2019-06-26  5205  		 * And add them back after reset completed
+fdafb3597a2cc4 Evan Quan             2019-06-26  5206  		 */
+fdafb3597a2cc4 Evan Quan             2019-06-26  5207  		amdgpu_unregister_gpu_instance(tmp_adev);
+fdafb3597a2cc4 Evan Quan             2019-06-26  5208  
+087451f372bf76 Evan Quan             2021-10-19  5209  		drm_fb_helper_set_suspend_unlocked(adev_to_drm(adev)->fb_helper, true);
+565d1941557756 Evan Quan             2020-03-11  5210  
+f1c1314be42971 xinhui pan            2019-07-04  5211  		/* disable ras on ALL IPs */
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5212  		if (!need_emergency_restart &&
+b823821f2244ad Le Ma                 2019-11-27  5213  		      amdgpu_device_ip_need_full_reset(tmp_adev))
+f1c1314be42971 xinhui pan            2019-07-04  5214  			amdgpu_ras_suspend(tmp_adev);
+f1c1314be42971 xinhui pan            2019-07-04  5215  
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5216  		for (i = 0; i < AMDGPU_MAX_RINGS; ++i) {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5217  			struct amdgpu_ring *ring = tmp_adev->rings[i];
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5218  
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5219  			if (!ring || !ring->sched.thread)
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5220  				continue;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5221  
+0b2d2c2eecf27f Andrey Grodzovsky     2019-08-27  5222  			drm_sched_stop(&ring->sched, job ? &job->base : NULL);
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5223  
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5224  			if (need_emergency_restart)
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5225  				amdgpu_job_stop_all_jobs_on_sched(&ring->sched);
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5226  		}
+8f8c80f4300967 Jingwen Chen          2021-02-25  5227  		atomic_inc(&tmp_adev->gpu_reset_counter);
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5228  	}
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5229  
+bb5c7235eaafb4 Wenhui Sheng          2020-07-13  5230  	if (need_emergency_restart)
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5231  		goto skip_sched_resume;
+7c6e68c777f109 Andrey Grodzovsky     2019-09-13  5232  
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5233  	/*
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5234  	 * Must check guilty signal here since after this point all old
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5235  	 * HW fences are force signaled.
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5236  	 *
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5237  	 * job->base holds a reference to parent fence
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5238  	 */
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5239  	if (job && job->base.s_fence->parent &&
+7dd8c205eaedfa Evan Quan             2020-04-16  5240  	    dma_fence_is_signaled(job->base.s_fence->parent)) {
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5241  		job_signaled = true;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5242  		dev_info(adev->dev, "Guilty job already signaled, skipping HW reset");
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5243  		goto skip_hw_reset;
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5244  	}
+1d721ed679db18 Andrey Grodzovsky     2019-04-18  5245  
+
+:::::: The code at line 5089 was first introduced by commit
+:::::: 26bc534094ed45fdedef6b4ce8b96030340c5ce7 drm/amdgpu: Refactor GPU reset for XGMI hive case
+
+:::::: TO: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

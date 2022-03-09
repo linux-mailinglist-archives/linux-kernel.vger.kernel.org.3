@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF4E4D35D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9109B4D3656
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238241AbiCIQnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S235533AbiCIQdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbiCIQa3 (ORCPT
+        with ESMTP id S235408AbiCIQ1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:30:29 -0500
+        Wed, 9 Mar 2022 11:27:30 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B613EB32A;
-        Wed,  9 Mar 2022 08:23:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924412BB1A;
+        Wed,  9 Mar 2022 08:22:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C628B81EE7;
-        Wed,  9 Mar 2022 16:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39CDC36AE3;
-        Wed,  9 Mar 2022 16:23:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F121B82224;
+        Wed,  9 Mar 2022 16:22:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87DBC340F5;
+        Wed,  9 Mar 2022 16:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646843016;
-        bh=OBXfi4VcdeTm+WG6l3L0sBwKEoyLvrQ3WE58KFiugeY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gN6gUuOWCa7DzJXTWhq4BUb1hY8UPxP6Xtp7kuAdCqy2p4LfLY+DuLkVjPgjiXdE+
-         Ax8Jc0XAcVQNFLKh3RfLaIoBl2G8t1PFVmFyKwu46wahDzVH4ErQWAN+i4rDKhusn9
-         XzMhBuAaXTnX4hxnM10YlOgb1AxoVE3hPKtyiCD7SHzpRhVYjALR3boCnxABtfQqfW
-         QdsBA/YLT2QwRGd74HgNT+D+Qd/dq882aeifEKlAQbTjFvGoHqxjZ8+WxFcRReO1sn
-         CzQGtCE39fJe0Jj/eu9peD0ef+rf//YdLsYmLSpak0rpK2HefmWqwQ60gZm7mADYzh
-         bHvR4Ul6xFsIA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 20/20] kselftest/vm: fix tests build with old libc
-Date:   Wed,  9 Mar 2022 11:21:58 -0500
-Message-Id: <20220309162158.136467-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220309162158.136467-1-sashal@kernel.org>
-References: <20220309162158.136467-1-sashal@kernel.org>
+        s=k20201202; t=1646842948;
+        bh=Yu0TsGuK32wvpI2+J3C3f/SaYvUuvXGxBS3dMIFnfLU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h2MtXokjWYFs0We/K82MchVDJRT1q2LJL8bcsbZCMfN5nEsD6B+w9AxkaN1rlEnqu
+         WSb9e+zw67BL7Gx33sqqqjc8SfbrYHCzjzJDJZzLrq3c70IQaRzteA5VdXj8y+TS0N
+         d/LxuzQRymJujghUd2UKHCaeE3MCFl3FhDwEWhzl9X/5sQsYSdTeOSzeaz6mltrBXy
+         rljTXKzcUASWuiuzfVi2RChiUxTRg/0V2o1/Akok3DZN+ZPyNtS+IlUCPuIFeIM+m/
+         S7uryCUvdbPHrSA2jjRWhdH/e2q5yJ8VSgvAvhLcnC9SXCW2JLqG3vtWxwWwk2KgrH
+         w+HAoifCtfwaA==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nRz50-00E6Ab-6y; Wed, 09 Mar 2022 17:22:26 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Walls <awalls@md.metrocast.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Michael Krufky <mkrufky@linuxtv.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux1394-devel@lists.sourceforge.net
+Subject: [PATCH 0/5] media: sort Makefile entries
+Date:   Wed,  9 Mar 2022 17:22:20 +0100
+Message-Id: <cover.1646842741.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,45 +60,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+Entries at Makefiles end being merged on random order. 
 
-[ Upstream commit b773827e361952b3f53ac6fa4c4e39ccd632102e ]
+Sort them on alphabetical order. I'm preparing similar changes for Kconfig
+entries too.
 
-The error message when I build vm tests on debian10 (GLIBC 2.28):
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-    userfaultfd.c: In function `userfaultfd_pagemap_test':
-    userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
-    in this function); did you mean `MADV_RANDOM'?
-      if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
-                                         ^~~~~~~~~~~~
-                                         MADV_RANDOM
+Mauro Carvalho Chehab (5):
+  media: xc2028: rename the driver from tuner-xc2028
+  media: platform: Makefile: group some Makefile options
+  media: Makefiles: remove extra spaces
+  media: dvb-frontend: remove TUNER_ from some DVB frontend Kconfig
+    options
+  media: Makefiles: sort entries where it fits
 
-This patch includes these newer definitions from UAPI linux/mman.h, is
-useful to fix tests build on systems without these definitions in glibc
-sys/mman.h.
+ .../admin-guide/media/i2c-cardlist.rst        |   2 +-
+ MAINTAINERS                                   |   2 +-
+ drivers/media/Makefile                        |   4 +-
+ drivers/media/cec/platform/Makefile           |  16 +-
+ drivers/media/common/Makefile                 |   4 +-
+ drivers/media/common/b2c2/Kconfig             |   4 +-
+ drivers/media/common/videobuf2/Makefile       |   6 +-
+ drivers/media/dvb-frontends/Kconfig           |   8 +-
+ drivers/media/dvb-frontends/Makefile          | 192 +++++++++---------
+ drivers/media/dvb-frontends/cx24113.h         |   2 +-
+ drivers/media/dvb-frontends/dib0070.h         |   2 +-
+ drivers/media/dvb-frontends/dib0090.h         |   2 +-
+ drivers/media/dvb-frontends/itd1000.h         |   2 +-
+ drivers/media/firewire/Makefile               |   2 +-
+ drivers/media/i2c/Makefile                    |  92 ++++-----
+ drivers/media/pci/Makefile                    |  18 +-
+ drivers/media/pci/cx18/cx18-driver.c          |   2 +-
+ drivers/media/pci/cx18/cx18-dvb.c             |   2 +-
+ drivers/media/pci/cx18/cx18-gpio.c            |   2 +-
+ drivers/media/pci/cx23885/Kconfig             |   2 +-
+ drivers/media/pci/cx23885/cx23885-cards.c     |   2 +-
+ drivers/media/pci/cx23885/cx23885-dvb.c       |   2 +-
+ drivers/media/pci/cx23885/cx23885-video.c     |   2 +-
+ drivers/media/pci/cx88/cx88.h                 |   2 +-
+ drivers/media/pci/ivtv/ivtv-driver.c          |   2 +-
+ drivers/media/pci/ivtv/ivtv-gpio.c            |   2 +-
+ drivers/media/pci/saa7134/saa7134-cards.c     |   2 +-
+ drivers/media/pci/saa7134/saa7134-dvb.c       |   2 +-
+ drivers/media/platform/Makefile               | 147 ++++++--------
+ drivers/media/radio/Makefile                  |  42 ++--
+ drivers/media/rc/Makefile                     |  45 ++--
+ drivers/media/rc/keymaps/Makefile             |  33 +--
+ drivers/media/spi/Makefile                    |   5 +-
+ drivers/media/test-drivers/Makefile           |  13 +-
+ drivers/media/tuners/Makefile                 |  66 +++---
+ drivers/media/tuners/tuner-types.c            |   2 +-
+ .../{tuner-xc2028-types.h => xc2028-types.h}  |   6 +-
+ .../media/tuners/{tuner-xc2028.c => xc2028.c} |   6 +-
+ .../media/tuners/{tuner-xc2028.h => xc2028.h} |   2 +-
+ drivers/media/tuners/xc4000.c                 |   2 +-
+ drivers/media/usb/Makefile                    |  25 +--
+ drivers/media/usb/dvb-usb/Kconfig             |   6 +-
+ drivers/media/usb/dvb-usb/cxusb.c             |   2 +-
+ drivers/media/usb/dvb-usb/dib0700_devices.c   |   2 +-
+ drivers/media/usb/em28xx/em28xx-i2c.c         |   2 +-
+ drivers/media/usb/em28xx/em28xx.h             |   2 +-
+ drivers/media/usb/gspca/Makefile              |  88 ++++----
+ drivers/media/usb/tm6000/tm6000-cards.c       |   2 +-
+ drivers/media/usb/tm6000/tm6000-dvb.c         |   2 +-
+ drivers/media/usb/tm6000/tm6000-i2c.c         |   2 +-
+ drivers/media/v4l2-core/Makefile              |  29 ++-
+ drivers/media/v4l2-core/tuner-core.c          |   2 +-
+ 52 files changed, 450 insertions(+), 465 deletions(-)
+ rename drivers/media/tuners/{tuner-xc2028-types.h => xc2028-types.h} (96%)
+ rename drivers/media/tuners/{tuner-xc2028.c => xc2028.c} (99%)
+ rename drivers/media/tuners/{tuner-xc2028.h => xc2028.h} (99%)
 
-Link: https://lkml.kernel.org/r/20220227055330.43087-2-zhouchengming@bytedance.com
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/vm/userfaultfd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index d418ca5f9039..034245ea397f 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -46,6 +46,7 @@
- #include <signal.h>
- #include <poll.h>
- #include <string.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
 -- 
-2.34.1
+2.35.1
+
 

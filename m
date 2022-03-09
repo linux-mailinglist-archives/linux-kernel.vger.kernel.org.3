@@ -2,127 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385274D391E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B801F4D392D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbiCISsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S236808AbiCISt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237316AbiCISsS (ORCPT
+        with ESMTP id S236796AbiCIStX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:48:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 986C21A39C1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646851638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v3nc17BUtz+qPmTypFBvwUPQaSTBnMDANsUTpV88wwo=;
-        b=XdOxSVZTHvYZUZUlFlXKn8DlyTdx+x6xBvzCEYcuiOoUEcmChfiR3KguqqapJ7A7bNSCni
-        caBa08he3GiV0eab7lBby3oXpd/e9UzKuqZ/VyKHslO6sckXpwLYBaWuR4prBZf/1CCFSl
-        9W8c2xWJ1h5ed+sTa3oFYOpuJXOkLzE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-SmPA6lSgNtuPrLh9_cijCg-1; Wed, 09 Mar 2022 13:47:17 -0500
-X-MC-Unique: SmPA6lSgNtuPrLh9_cijCg-1
-Received: by mail-wm1-f72.google.com with SMTP id h206-20020a1c21d7000000b003552c13626cso2953640wmh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 10:47:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v3nc17BUtz+qPmTypFBvwUPQaSTBnMDANsUTpV88wwo=;
-        b=tnBMgby1IWthqN75myEpcDFhbziAyNHbDBiSjF2rUmC4b5hKaYQGqu43eYcveuVQ2B
-         7YqkhVOtrhGGux5C1e3XMgFpHZeCfzptBIOVoMARIi2rxae+u2T/WtyugSEWLwXdx6Es
-         HZ5Lt0ZzjDpQFwaHCoWtBXP3SDTgFGXakxD+t26aDa2kkZqrHocoM7KbhuMYItMigdNY
-         8lIy0/xLx9CPdFZtD4Ji49B0QQNFaPNlf5ghQF8Me3BuEtFVZdOO51zVgu6hk3epNw2T
-         FbB8muejtoQzZ+n1iXTcYn3E6dzI7ioZQtxL515svrjklBMsdlagaMifmoLA8pD8PEJ3
-         /0WA==
-X-Gm-Message-State: AOAM5314dIm7clH81tfBGzJBoFNC7izDgutxRFgL53yyChAM7WP18Og0
-        yLgXZUiofmryheBABXHM7NZE4n2h9Oo5lJWTcfOW4QJN4W0CPB+3D8EejZ/mg51BZaZrnS4orcp
-        s4c+wXvjA3SDz4Qy3G1pnGuW1
-X-Received: by 2002:a05:6000:1a52:b0:1f0:2d62:2bbb with SMTP id t18-20020a0560001a5200b001f02d622bbbmr769999wry.614.1646851635727;
-        Wed, 09 Mar 2022 10:47:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw9OJCzl0unpcmM0QiwDwLYC4TXVttgEnD6Q8PEWAqXMM5Vs4LdirN5xhBqiLXAVn8NCdOCSA==
-X-Received: by 2002:a05:6000:1a52:b0:1f0:2d62:2bbb with SMTP id t18-20020a0560001a5200b001f02d622bbbmr769967wry.614.1646851635462;
-        Wed, 09 Mar 2022 10:47:15 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id n17-20020a05600c3b9100b00389d6331f93sm989468wms.3.2022.03.09.10.47.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 10:47:14 -0800 (PST)
-Message-ID: <6a7f13d1-ed00-b4a6-c39b-dd8ba189d639@redhat.com>
-Date:   Wed, 9 Mar 2022 19:47:12 +0100
+        Wed, 9 Mar 2022 13:49:23 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB54171EC2;
+        Wed,  9 Mar 2022 10:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=i5b4RZa7ZGU8BzAqKcxR7htqsIE/qrDUybnyPYPDJl8=; b=SFNj4S76wlmtds4dW0mXQqzRvG
+        S6RzZt/BN8ktkWjDJJrWn+WFAei1UEg/UzAfSu2rIz/L3aVo8HWRmERv4VEHY62nEiK6PjT1ja64S
+        OvVEqvEqA0tjijVhBFGspAPKjUtVKvj22qe536MwoaAd+Bx1lZx6WbuRsKykzsk9q4NdllKG2f06v
+        xNvz94eGUkoa+seoJoGW/ForRiU2sldlLWzYH8bH5GqSAyUocCAI+CV06QI3nJwG6gfHh9Otw8bpW
+        jj6K18cMXv/vI+oF8D8YI4/1IIYuCZ6cMzSGUydDW3+myuKI2Hh/uKnMf1Pitg3TsPrx06RJ89ZZh
+        O6DAGeeg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57752)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nS1MB-0002OU-Um; Wed, 09 Mar 2022 18:48:19 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nS1M9-0008Bp-CW; Wed, 09 Mar 2022 18:48:17 +0000
+Date:   Wed, 9 Mar 2022 18:48:17 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
+ __read_once_word_nocheck
+Message-ID: <Yij2cZVKwPexGsTf@shell.armlinux.org.uk>
+References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
+ <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
+ <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk>
+ <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+ <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+ <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 4/7] KVM: x86: nSVM: support PAUSE filter threshold and
- count when cpu_pm=on
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>
-References: <20220301143650.143749-1-mlevitsk@redhat.com>
- <20220301143650.143749-5-mlevitsk@redhat.com>
- <CALMp9eRjY6sX0OEBeYw4RsQKSjKvXKWOqRe=GVoQnmjy6D8deg@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALMp9eRjY6sX0OEBeYw4RsQKSjKvXKWOqRe=GVoQnmjy6D8deg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 19:35, Jim Mattson wrote:
-> I didn't think pause filtering was virtualizable, since the value of
-> the internal counter isn't exposed on VM-exit.
+On Wed, Mar 09, 2022 at 06:43:42PM +0100, Ard Biesheuvel wrote:
+> On Wed, 9 Mar 2022 at 18:11, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 09, 2022 at 10:08:25PM +0530, Naresh Kamboju wrote:
+> > > Hi Russell,
+> > >
+> > > On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
+> > > <linux@armlinux.org.uk> wrote:
+> > > >
+> > > > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> > > > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > > > >
+> > > <trim>
+> > > > Well, we unwound until:
+> > > >
+> > > >  __irq_svc from migrate_disable+0x0/0x70
+> > > >
+> > > > and then crashed - and the key thing there is that we're at the start
+> > > > of migrate_disable() when we took an interrupt.
+> > > >
+> > > > For some reason, this triggers an access to address 0x10, which faults.
+> > > > We then try unwinding again, and successfully unwind all the way back
+> > > > to the same point (the line above) which then causes the unwinder to
+> > > > again access address 0x10, and the cycle repeats with the stack
+> > > > growing bigger and bigger.
+> > > >
+> > > > I'd suggest also testing without the revert but with my patch.
+> > >
+> > > I have tested your patch on top of linux next-20220309 and still see kernel
+> > > crash as below [1]. build link [2].
+> > >
+> > > [   26.812060] 8<--- cut here ---
+> > > [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+> > > [   26.816139] [b6a3ab70] *pgd=fb28a835
+> > > [   26.817770] Internal error: : 1b [#1] SMP ARM
+> > > [   26.819636] Modules linked in:
+> > > [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+> > > 5.17.0-rc7-next-20220309 #1
+> > > [   26.824519] Hardware name: Generic DT based system
+> > > [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+> > > [   26.829856] LR is at unwind_frame+0x7dc/0xab4
+> > >
+> > > - Naresh
+> > >
+> > > [1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
+> > > [2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/
+> >
+> > I think the problem has just moved:
+> >
+> > [   27.113085]  __irq_svc from __copy_to_user_std+0x24/0x378
+> >
+> > The code at the start of __copy_to_user_std is:
+> >
+> >    0:   e3a034bf        mov     r3, #-1090519040        ; 0xbf000000
+> >    4:   e243c001        sub     ip, r3, #1
+> >    8:   e05cc000        subs    ip, ip, r0
+> >    c:   228cc001        addcs   ip, ip, #1
+> >   10:   205cc002        subscs  ip, ip, r2
+> >   14:   33a00000        movcc   r0, #0
+> >   18:   e320f014        csdb
+> >   1c:   e3a03000        mov     r3, #0
+> >   20:   e92d481d        push    {r0, r2, r3, r4, fp, lr}
+> >   24:   e1a0b00d        mov     fp, sp
+> >
+> > and the unwind information will be:
+> >
+> > 0xc056f14c <arm_copy_to_user+0x1c>: @0xc0b89b84
+> >   Compact model index: 1
+> >   0x9b      vsp = r11
+> >   0xb1 0x0d pop {r0, r2, r3}
+> >   0x84 0x81 pop {r4, r11, r14}
+> >   0xb0      finish
+> >
+> > The problem is that the unwind information says "starting at offset
+> > 0x1c, to unwind do the following operations". The first of which is
+> > to move r11 (fp) to the stack pointer. However, r11 isn't setup
+> > until function offset 0x24. You've hit that instruction, which hasn't
+> > executed yet, but the stack has been modified by pushing r0, r2-r4,
+> > fp and lr onto it.
+> >
+> > Given this, there is no way that the unwinder (as it currently stands)
+> > can do its job properly between 0x1c and 0x24.
+> >
+> > I don't think this is specifically caused by Ard's patches, but by
+> > the addition of KASAN, which has the effect of calling the unwinder
+> > at random points in the kernel (when an interrupt happens) and it's
+> > clear from the above that there are windows in the code where, if
+> > we attempt to unwind using the unwind information, we faill fail
+> > because the program state is not consistent with the unwind
+> > information.
+> >
+> > Ard's patch that changes:
+> >
+> >         ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
+> >
+> > to use get_kernel_nofault() should have the effect of protecting
+> > against the oops, but the side effect is that it is fundamentally not
+> > possible with the way these things are to unwind at these points -
+> > which means its not possible to get a stacktrace there.
+> >
+> > So, I don't think this is a "new" problem, but a weakness of using
+> > the unwinder to get a backtrace for KASAN.
+> >
 > 
-> On bare metal, for instance, assuming the hypervisor doesn't intercept
-> CPUID, the following code would quickly trigger a PAUSE #VMEXIT with
-> the filter count set to 2.
-> 
-> 1:
-> pause
-> cpuid
-> jmp 1
-> 
-> Since L0 intercepts CPUID, however, L2 will exit to L0 on each loop
-> iteration, and when L0 resumes L2, the internal counter will be set to
-> 2 again. L1 will never see a PAUSE #VMEXIT.
-> 
-> How do you handle this?
-> 
+> It essentially means that we cannot unwind through asynchronous
+> exceptions, and so we should probably make the svc_entry macro
+> .nounwind, instead of pretending that we can reliably unwind through
+> it.
 
-I would expect that the same would happen on an SMI or a host interrupt.
+Doesn't that impact the ability to debug the kernel over things like
+oopses and the like?
 
-	1:
-	pause
-	outl al, 0xb2
-	jmp 1
-
-In general a PAUSE vmexit will mostly benefit the VM that is pausing, so 
-having a partial implementation would be better than disabling it 
-altogether.
-
-Paolo
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AED24D35B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE8E4D3784
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236707AbiCIRGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S236980AbiCIRGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237570AbiCIRDE (ORCPT
+        with ESMTP id S238108AbiCIRDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:03:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F15F01B2AFB
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:51:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646844675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ciXf/kDeXmAL/6RIvTYI6KZ9lH0wgG0xeQwUhPXRPo=;
-        b=Fr8PVEWzW23g589L41311HRt+hUngvzSxPNGaHcwQ5okgisvfHclXg7yG9lXaY+mjmTLZ0
-        bV77WQDF7E6gvs9GtaFBlCxht1s6I9DrMbb5dpuOum34uSWC2Q2hwH142tV/gKse8zuamJ
-        25fcuB818slZk9whDmtlikE/i0DLhF8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-FaGyAfbkPYijqRtMS18osg-1; Wed, 09 Mar 2022 11:51:14 -0500
-X-MC-Unique: FaGyAfbkPYijqRtMS18osg-1
-Received: by mail-wm1-f71.google.com with SMTP id k41-20020a05600c1ca900b00389a2b983efso1024357wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:51:13 -0800 (PST)
+        Wed, 9 Mar 2022 12:03:47 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853B4DB3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:52:08 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id t14so2459938pgr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:52:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6KqZ+Z5UPWBbo9cgdXZ4MdKH+Wlw8hd8QXmAI2N9QRQ=;
+        b=J99Vvb0ONIbaADp14yM94aFL0jj0jde417xZ8cBorSpy5rp/y9vz4xQpHermBeV2II
+         tm1m/OBpK3Ta/oR22Zr7EAhfs2pi1TIZ2YC7W6x6ivwirbX5U1uRJ5iUQsHXiT2Me7mM
+         wrzs6smjAUuMzcRS+JNUsMjtKbWYqhO7HS3cc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0ciXf/kDeXmAL/6RIvTYI6KZ9lH0wgG0xeQwUhPXRPo=;
-        b=rakEOW7KmQNvPyoxpYvgfuC/uFttfE29bnjzzMS0Dor/1VCUozdTa5guGHuLO46qLv
-         /P528C7bxv9VcinefN0HXQ4oLcntykUMADTuG/FZzyAlEUnR79mwdHP6doTTgPJ2ngES
-         CTjwy8QcZiFmVcRDuyNJOYM1hOe5RgfvL08WMgWejMLcVJob9ZtzZPwrkXMZN94Kc2gq
-         Pz1Ya4DPiZY3CajfIC0Zl9cEAlCcxOC+RYqPQffySNPU1Ev08fNy9bnh5eN1w05deBmt
-         cSlcY+sNa3t91bUeAPiSRV40jIRKRefWIUdZD3Hz3iGnUM2DhYuPglYxNI/EeU+dDiu8
-         mqbA==
-X-Gm-Message-State: AOAM533H8eblABXOGMCHYR2N193GWOC6HxUK55/fcvs+DUH6JzkGP360
-        Wjiaj2s0xr598aBUWOTOQtWGWq90IAEgE4N4RWv5H+yPMXOzQEwn6Gp3icH+/Vpn3BM02V6HsRQ
-        uSoayg4b5PKjb0mmn5au0gsRZ
-X-Received: by 2002:a5d:638b:0:b0:203:787e:c17f with SMTP id p11-20020a5d638b000000b00203787ec17fmr424779wru.250.1646844672782;
-        Wed, 09 Mar 2022 08:51:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwA+tfh26XUx+xmyq2nalkKMHvS2HVfplNvpDg8s9jAzd4fUnvCw/p4zg7E4ldS/LrrMS6S9w==
-X-Received: by 2002:a5d:638b:0:b0:203:787e:c17f with SMTP id p11-20020a5d638b000000b00203787ec17fmr424763wru.250.1646844672560;
-        Wed, 09 Mar 2022 08:51:12 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id n15-20020a05600c4f8f00b003842f011bc5sm5877090wmq.2.2022.03.09.08.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 08:51:11 -0800 (PST)
-Message-ID: <e2917bf1-ec0c-65b3-0bb5-a03ed01b0856@redhat.com>
-Date:   Wed, 9 Mar 2022 17:51:09 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6KqZ+Z5UPWBbo9cgdXZ4MdKH+Wlw8hd8QXmAI2N9QRQ=;
+        b=09pT63PZIY2353Hh27ysVKV6Cl7ykCTXM7Dq69svGdI4rlJwlJ2HHLVf+xukTwL14m
+         B15qkoQ3WeNNdNlmbZFwMloXwGlg/J4RSvM65vqQMUWZilzj9Pnn7MDViSsideHTsPmP
+         yjfESgDa5+IYE1HsqR6+HrKO57npEVLKaE1s0X9S459PckiKOGy/d9Ekp5WjacwPbo9g
+         OhAAJ0q74QW8d9sBZ5RGFnLrdBbTl9z2IUcqu2CBqm5YpeaZTFolAwYyG6TUa4OoKP+W
+         wPdNG+HgAb2EqaXZgue8eDoZdeWx2805DrwHUqOT3qaoXwI2ATRBPFjlEZV16Rxjq/56
+         cqlw==
+X-Gm-Message-State: AOAM532Vr22N/RVLDuhhzVSa6FORQg0k1cMZ/CiO0XUSiY6X+2yGlEPl
+        ZKeWEtWOPlPNUScKtj+asmYRCaYj5HxHZA==
+X-Google-Smtp-Source: ABdhPJwwguQVMuWVSYkg2NtpANow16e+5pJrZ16rzbm25K5HrODyYQryYc61eYOmenMPigAJPVLx/Q==
+X-Received: by 2002:a63:515:0:b0:379:460f:7bda with SMTP id 21-20020a630515000000b00379460f7bdamr521879pgf.534.1646844727485;
+        Wed, 09 Mar 2022 08:52:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g10-20020a056a001a0a00b004f7454e4f63sm3517086pfv.189.2022.03.09.08.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 08:52:07 -0800 (PST)
+Date:   Wed, 9 Mar 2022 08:52:06 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202203090847.81E8862@keescook>
+References: <20220309211029.0c766cac@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.10] KVM: x86: Yield to IPI target vCPU only if
- it is busy
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Li RongQing <lirongqing@baidu.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, kvm@vger.kernel.org
-References: <20220309164645.138079-1-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220309164645.138079-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309211029.0c766cac@canb.auug.org.au>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 17:46, Sasha Levin wrote:
-> From: Li RongQing <lirongqing@baidu.com>
+On Wed, Mar 09, 2022 at 09:10:29PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> [ Upstream commit 9ee83635d872812f3920209c606c6ea9e412ffcc ]
+> After merging the kspp tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> When sending a call-function IPI-many to vCPUs, yield to the
-> IPI target vCPU which is marked as preempted.
+> In file included from include/linux/bitops.h:33,
+>                  from include/linux/kernel.h:22,
+>                  from drivers/platform/x86/thinkpad_acpi.c:37:
+> drivers/platform/x86/thinkpad_acpi.c: In function 'tpacpi_dytc_profile_init':
+> arch/x86/include/asm/bitops.h:207:22: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
+>   207 |                 (addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+>       |                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/platform/x86/thinkpad_acpi.c:10385:18: note: while referencing 'output'
+> 10385 |         int err, output;
+>       |                  ^~~~~~
 > 
-> but when emulating HLT, an idling vCPU will be voluntarily
-> scheduled out and mark as preempted from the guest kernel
-> perspective. yielding to idle vCPU is pointless and increase
-> unnecessary vmexit, maybe miss the true preempted vCPU
+> Actually the test_bit() in line 10409.
 > 
-> so yield to IPI target vCPU only if vCPU is busy and preempted
+> Caused by commit
 > 
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> Message-Id: <1644380201-29423-1-git-send-email-lirongqing@baidu.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/x86/kernel/kvm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   e1c21608e3cf ("platform/x86: thinkpad_acpi: Add PSC mode support")
 > 
-> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-> index 7462b79c39de..8fe6eb5bed3f 100644
-> --- a/arch/x86/kernel/kvm.c
-> +++ b/arch/x86/kernel/kvm.c
-> @@ -590,7 +590,7 @@ static void kvm_smp_send_call_func_ipi(const struct cpumask *mask)
->   
->   	/* Make sure other vCPUs get a chance to run if they need to. */
->   	for_each_cpu(cpu, mask) {
-> -		if (vcpu_is_preempted(cpu)) {
-> +		if (!idle_cpu(cpu) && vcpu_is_preempted(cpu)) {
->   			kvm_hypercall1(KVM_HC_SCHED_YIELD, per_cpu(x86_cpu_to_apicid, cpu));
->   			break;
->   		}
+> from the drivers-x86 tree interacting with the enablement of
+> -Werror=array-bounds.
+> 
+> I have reverted that commit for today.
 
-NACK
+Looking at https://lore.kernel.org/all/20220225182505.7234-1-markpearson@lenovo.com/
 
+The problem is with the cast of "int output" to "unsigned long". Past
+fixes have either made the variable unsigned long, or adding a new
+variable and removal of casts. e.g. this pseudo-patch:
+
++	unsigned long bits;
+
+	...
++	bits = output;
+-	if (test_bit(DYTC_FC_MMC, (void *)&output)) { /* MMC MODE */
++	if (test_bit(DYTC_FC_MMC, &bits)) { /* MMC MODE */
+
+...
+
+-	} else if (test_bit(DYTC_FC_PSC, (void *)&output)) { /*PSC MODE */
++	} else if (test_bit(DYTC_FC_PSC, &bits)) { /*PSC MODE */
+
+
+
+-- 
+Kees Cook

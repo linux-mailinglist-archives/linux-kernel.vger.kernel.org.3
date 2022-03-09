@@ -2,125 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6994D3744
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DAC4D3722
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiCIRBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S235889AbiCIRBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235797AbiCIRBC (ORCPT
+        with ESMTP id S236187AbiCIRBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:01:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68802105AAE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646844467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R+Ih3YtGyWyTixz3Aclx/Os2sciMyuCYkFjO6tpHUqw=;
-        b=gy90+q9+Ov8tHWo4m6ChCKtDS90M0aeCGjM5CEXoaMxp5r0O8OT2xWcUELkdd89yR0bbpM
-        YOJgjULZq32FZMHSBSn3LrOuXjytkiVm8UR9hRUv2hWK0FVFi+5GAw4OZTF/5U4NOs1jns
-        PizRtZ5ElScFeoLW2fk5YaObgrNqs3I=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-463--4i141PwOc6F6HHbYsrXqA-1; Wed, 09 Mar 2022 11:47:46 -0500
-X-MC-Unique: -4i141PwOc6F6HHbYsrXqA-1
-Received: by mail-ej1-f69.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so1596331ejk.16
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:47:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R+Ih3YtGyWyTixz3Aclx/Os2sciMyuCYkFjO6tpHUqw=;
-        b=ioLcVP6miB4OuqJ6CtU5jaM9j7NPABo2ICjEDWGgvM+SDTAW42mUcu2icFUTJCweXC
-         V7NL8XUp3qasSjSt4WufBTTw+wWXH+0de2R8pVcPrnEnF4TXqxIYPzCCzZpYxQU5F67g
-         0+LePr36Pp80CNT9hjWC6E7XrKxJh/M/fvrlm3824jVGFsi/FSQDPaG+IN9rOY5DO5ap
-         GzRRSTiKmQiyp0Je/QEUOhZ0xSqBHyw6MGwLCRufCHRe3CFX2EfPzTVQjPWKrEhNYZC0
-         dMSk6xTf5TdCj76pFLwfpRsL1Hckicptqy0opOWQ+8zh53bj8PV6GHAsoSDPcyCdEwPC
-         htZg==
-X-Gm-Message-State: AOAM533acHQrUHPYybomrLuKHolK2ey6COyJ7mtRSF7H1sLCKxLxSfp9
-        gDY/0jdHIIZkTR7mN0HSGNHx1VquQGtXnTAF9E7Cys2o21Rl9aHarCz7YbyEkNdiKnjr3EbL7fp
-        POG17mP3dGd6/lp0ykc6zvGkF
-X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr347243edy.332.1646844465040;
-        Wed, 09 Mar 2022 08:47:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzv9CwpdD58CoUfTld7CeyhBYPnaNZPQgN9uEBEcu4bVuCDmHzx51HtCSC/TfYvP+E3+h9ELQ==
-X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr347214edy.332.1646844464775;
-        Wed, 09 Mar 2022 08:47:44 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id f5-20020a17090624c500b006cee6661b6esm950257ejb.10.2022.03.09.08.47.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 08:47:43 -0800 (PST)
-Message-ID: <4ca2844c-c9df-8eff-5773-17340759d8ea@redhat.com>
-Date:   Wed, 9 Mar 2022 17:47:41 +0100
+        Wed, 9 Mar 2022 12:01:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DA49AE4E;
+        Wed,  9 Mar 2022 08:48:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16283B82214;
+        Wed,  9 Mar 2022 16:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0311C340E8;
+        Wed,  9 Mar 2022 16:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646844474;
+        bh=r4HgBdigGRlJ/gib60srGnwEHU/ybPJ/Pd5UYLaa/5U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TkB1wVXvtcj4gyhPwRPqGBevqJcu1ebizXT5hVQfLlCLJu0HjHSQFhBjiA90sZyW4
+         84Qk1XhX1Q+Bsc9Em4xWdS19uoHVfuHqZKKhfRoBin4C9ot1Jr44QfbIyiIBO1e5sV
+         /T0Ktjq+RltVNFwG+9bWx2xKgD/zz3OmZyah08+LdZawEt+VM28xzIMqYaLB9sIE/v
+         bYyTvQT3bc7sgiHnBvF9oMyaDCy5UPZSPtEFU/2juhlKfByltD85BLk5cyhCTletGF
+         t0irZ7Zax720mXqo+CE73vHHJyIiVR+cSPc+2vFIpHmd+jtPrAVgbv2eMZe0P4NVdD
+         CDtwqUeZmtDIw==
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2db2add4516so30019627b3.1;
+        Wed, 09 Mar 2022 08:47:54 -0800 (PST)
+X-Gm-Message-State: AOAM5315oTcghjA2LsSoY8iAdBIAbIrhSO9zOYZ/jScTrrg4Ao4TWXBe
+        siFHYHHWZgpXmBlstqn6B+0Yc61A20yMM2R44KU=
+X-Google-Smtp-Source: ABdhPJwTrLVc12ChigXAssUQnpoojMnDXnWV9IDaS2JOgpBGIvi5QMCh/lM/0MimigCSJq7lMdHUuhCmzuZDIH6dDVg=
+X-Received: by 2002:a81:854:0:b0:2db:255b:dd6 with SMTP id 81-20020a810854000000b002db255b0dd6mr585378ywi.140.1646844473928;
+ Wed, 09 Mar 2022 08:47:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.4] KVM: x86: Yield to IPI target vCPU only if
- it is busy
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Li RongQing <lirongqing@baidu.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, kvm@vger.kernel.org
-References: <20220309164655.138121-1-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220309164655.138121-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
+ <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk> <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk> <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+In-Reply-To: <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 9 Mar 2022 17:47:42 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFG5m5qfs9W9BfULj36kA-mTxtGZgkRLbgtaATLnPYb1g@mail.gmail.com>
+Message-ID: <CAMj1kXFG5m5qfs9W9BfULj36kA-mTxtGZgkRLbgtaATLnPYb1g@mail.gmail.com>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 17:46, Sasha Levin wrote:
-> From: Li RongQing <lirongqing@baidu.com>
-> 
-> [ Upstream commit 9ee83635d872812f3920209c606c6ea9e412ffcc ]
-> 
-> When sending a call-function IPI-many to vCPUs, yield to the
-> IPI target vCPU which is marked as preempted.
-> 
-> but when emulating HLT, an idling vCPU will be voluntarily
-> scheduled out and mark as preempted from the guest kernel
-> perspective. yielding to idle vCPU is pointless and increase
-> unnecessary vmexit, maybe miss the true preempted vCPU
-> 
-> so yield to IPI target vCPU only if vCPU is busy and preempted
-> 
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> Message-Id: <1644380201-29423-1-git-send-email-lirongqing@baidu.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/x86/kernel/kvm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-> index 6ff2c7cac4c4..77e4d875a468 100644
-> --- a/arch/x86/kernel/kvm.c
-> +++ b/arch/x86/kernel/kvm.c
-> @@ -543,7 +543,7 @@ static void kvm_smp_send_call_func_ipi(const struct cpumask *mask)
->   
->   	/* Make sure other vCPUs get a chance to run if they need to. */
->   	for_each_cpu(cpu, mask) {
-> -		if (vcpu_is_preempted(cpu)) {
-> +		if (!idle_cpu(cpu) && vcpu_is_preempted(cpu)) {
->   			kvm_hypercall1(KVM_HC_SCHED_YIELD, per_cpu(x86_cpu_to_apicid, cpu));
->   			break;
->   		}
+On Wed, 9 Mar 2022 at 17:38, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Hi Russell,
+>
+> On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > >
+> <trim>
+> > Well, we unwound until:
+> >
+> >  __irq_svc from migrate_disable+0x0/0x70
+> >
+> > and then crashed - and the key thing there is that we're at the start
+> > of migrate_disable() when we took an interrupt.
+> >
+> > For some reason, this triggers an access to address 0x10, which faults.
+> > We then try unwinding again, and successfully unwind all the way back
+> > to the same point (the line above) which then causes the unwinder to
+> > again access address 0x10, and the cycle repeats with the stack
+> > growing bigger and bigger.
+> >
+> > I'd suggest also testing without the revert but with my patch.
+>
+> I have tested your patch on top of linux next-20220309 and still see kernel
+> crash as below [1]. build link [2].
+>
+> [   26.812060] 8<--- cut here ---
+> [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+> [   26.816139] [b6a3ab70] *pgd=fb28a835
+> [   26.817770] Internal error: : 1b [#1] SMP ARM
+> [   26.819636] Modules linked in:
+> [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+> 5.17.0-rc7-next-20220309 #1
+> [   26.824519] Hardware name: Generic DT based system
+> [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+> [   26.829856] LR is at unwind_frame+0x7dc/0xab4
+>
 
-NACK
+Thanks Naresh,
 
+Is this something that could be bisected? With the unwind change
+reverted, it is not obvious where the problem originated. Also, could
+you check whether it is reproducible on the ARM tree? (for-next on
+git://git.armlinux.org.uk/~rmk/linux-arm.git)
+
+Unfortunately, after having been able to reproduce this locally, the
+issue went away when I did the revert, so I am no longer seeing the
+problem.
+
+-- 
+Ard.

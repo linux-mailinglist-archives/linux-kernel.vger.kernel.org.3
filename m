@@ -2,150 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D73D4D3AC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69C54D3AD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238093AbiCIUFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S238099AbiCIUKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236983AbiCIUFb (ORCPT
+        with ESMTP id S231898AbiCIUKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:05:31 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB0D24BC3;
-        Wed,  9 Mar 2022 12:04:31 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:38326)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nS2Xh-00CxEg-Pi; Wed, 09 Mar 2022 13:04:17 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34642 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nS2Xe-0012kW-1P; Wed, 09 Mar 2022 13:04:17 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Theodore Ts'o <tytso@mit.edu>, X86 ML <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        =?utf-8?Q?M=C3=A5ns_Rullg=C3=A5rd?= <mans@mansr.com>,
-        Michael Cree <mcree@orcon.net.nz>,
-        <linux-arch@vger.kernel.org>, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220113160115.5375-1-bp@alien8.de> <YeBzxuO0wLn/B2Ew@mit.edu>
-        <YeCuNapJLK4M5sat@zn.tnic>
-        <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
-        <YeHLIDsjGB944GSP@zn.tnic>
-        <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
-        <YeHQmbMYyy92AbBp@zn.tnic> <YeKyBP5rac8sVvWw@zn.tnic>
-        <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
-Date:   Wed, 09 Mar 2022 14:03:42 -0600
-In-Reply-To: <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de> (John
-        Paul Adrian Glaubitz's message of "Sat, 15 Jan 2022 20:42:59 +0100")
-Message-ID: <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 9 Mar 2022 15:10:47 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF4EA1473;
+        Wed,  9 Mar 2022 12:09:48 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so2565033otl.6;
+        Wed, 09 Mar 2022 12:09:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l/Y0orG9IQYI6xXeORs6dX5FqeH3cCXmO8RJhBrMe4c=;
+        b=KzUcXG+M1geM2fDorFpsleyafRdyPW9hPdY/aRSipPM2CgE6Bjqz8bj8ZOPSCsfFBH
+         1MkMLhs6QHFtHLuVQFSnNV6O9iNflRUF8W/0NbC4wMsjh+zd2lnMNhKjGmDzwnTlnB9B
+         TORq9vvIUdbCFpExeZ2onIxiHI0hviqutChGmEURminZUS1UmClgPwPlx8+mnm/Mk60A
+         /lIusYWZX1WwbVqxf8YCP5djfaJLpSfcDpBOik8+sp2qyg8Qk1DOC45iC5yfeSCAdOtl
+         CpslrTI0Mm9jlnorG7ps9+ST1hw9E3V2SE8qF3UvABj5klytmo0gG+trwbLBB6Y9bYml
+         lBHg==
+X-Gm-Message-State: AOAM533ZRSVz/qGNAtgHrHxBLvEvQXJhNyfBLIka3tpTKm9TbsZrNIYJ
+        1mOgVDV4PFQi6aGczPHhhBJhFEVbzTUUtQ==
+X-Google-Smtp-Source: ABdhPJyJEsLNSasJ9qqPtlIyypXG3n1yKrUAcLPuryL9NkiSTkSEhaobT5U8PGjK8szlTjMGsq8TkA==
+X-Received: by 2002:a05:6830:1ac4:b0:5b2:319a:8c3 with SMTP id r4-20020a0568301ac400b005b2319a08c3mr799214otc.203.1646856587411;
+        Wed, 09 Mar 2022 12:09:47 -0800 (PST)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id l3-20020a056830268300b005b21c30a3c5sm1526742otu.29.2022.03.09.12.09.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 12:09:47 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id k9-20020a056830242900b005ad25f8ebfdso2563225ots.7;
+        Wed, 09 Mar 2022 12:09:47 -0800 (PST)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr1323277ywb.132.1646856254887; Wed, 09
+ Mar 2022 12:04:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nS2Xe-0012kW-1P;;;mid=<87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+e4yH+BUF7W62HMdvNWWMejYj/t+Qtgp8=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220214133710.3278506-1-javierm@redhat.com> <20220214133710.3278506-4-javierm@redhat.com>
+In-Reply-To: <20220214133710.3278506-4-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Mar 2022 21:04:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUuTAsqpx4=WnosfyjLo-t9ryQPQMaE1OeMBk4Ws9DTpQ@mail.gmail.com>
+Message-ID: <CAMuHMdUuTAsqpx4=WnosfyjLo-t9ryQPQMaE1OeMBk4Ws9DTpQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux PWM List <linux-pwm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 3142 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (0.3%), b_tie_ro: 9 (0.3%), parse: 0.97 (0.0%),
-         extract_message_metadata: 22 (0.7%), get_uri_detail_list: 2.4 (0.1%),
-        tests_pri_-1000: 25 (0.8%), tests_pri_-950: 1.24 (0.0%),
-        tests_pri_-900: 1.02 (0.0%), tests_pri_-90: 91 (2.9%), check_bayes: 89
-        (2.8%), b_tokenize: 10 (0.3%), b_tok_get_all: 9 (0.3%), b_comp_prob:
-        2.4 (0.1%), b_tok_touch_all: 64 (2.0%), b_finish: 0.95 (0.0%),
-        tests_pri_0: 1994 (63.4%), check_dkim_signature: 0.52 (0.0%),
-        check_dkim_adsp: 3.8 (0.1%), poll_dns_idle: 977 (31.1%), tests_pri_10:
-        3.1 (0.1%), tests_pri_500: 991 (31.5%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH] a.out: Stop building a.out/osf1 support on alpha and m68k
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Javier,
 
-There has been repeated discussion on removing a.out support, the most
-recent was[1].  Having read through a bunch of the discussion it looks
-like no one has see any reason why we need to keep a.out support.
+On Mon, Feb 14, 2022 at 2:37 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> This adds a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
+> OLED display controllers.
+>
+> It's only the core part of the driver and a bus specific driver is needed
+> for each transport interface supported by the display controllers.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-The m68k maintainer has even come out in favor of removing a.out
-support[2].
+> --- /dev/null
+> +++ b/drivers/gpu/drm/solomon/ssd130x.c
 
-At a practical level with only two rarely used architectures building
-a.out support, it gets increasingly hard to test and to care about.
-Which means the code will almost certainly bit-rot.
+> +static int ssd130x_update_rect(struct ssd130x_device *ssd130x, u8 *buf,
+> +                              struct drm_rect *rect)
+> +{
+> +       unsigned int x = rect->x1;
+> +       unsigned int y = rect->y1;
+> +       unsigned int width = drm_rect_width(rect);
+> +       unsigned int height = drm_rect_height(rect);
+> +       unsigned int line_length = DIV_ROUND_UP(width, 8);
+> +       unsigned int pages = DIV_ROUND_UP(y % 8 + height, 8);
+> +       u32 array_idx = 0;
+> +       int ret, i, j, k;
+> +       u8 *data_array = NULL;
+> +
+> +       data_array = kcalloc(width, pages, GFP_KERNEL);
+> +       if (!data_array)
+> +               return -ENOMEM;
+> +
+> +       /*
+> +        * The screen is divided in pages, each having a height of 8
+> +        * pixels, and the width of the screen. When sending a byte of
+> +        * data to the controller, it gives the 8 bits for the current
+> +        * column. I.e, the first byte are the 8 bits of the first
+> +        * column, then the 8 bits for the second column, etc.
+> +        *
+> +        *
+> +        * Representation of the screen, assuming it is 5 bits
+> +        * wide. Each letter-number combination is a bit that controls
+> +        * one pixel.
+> +        *
+> +        * A0 A1 A2 A3 A4
+> +        * B0 B1 B2 B3 B4
+> +        * C0 C1 C2 C3 C4
+> +        * D0 D1 D2 D3 D4
+> +        * E0 E1 E2 E3 E4
+> +        * F0 F1 F2 F3 F4
+> +        * G0 G1 G2 G3 G4
+> +        * H0 H1 H2 H3 H4
+> +        *
+> +        * If you want to update this screen, you need to send 5 bytes:
+> +        *  (1) A0 B0 C0 D0 E0 F0 G0 H0
+> +        *  (2) A1 B1 C1 D1 E1 F1 G1 H1
+> +        *  (3) A2 B2 C2 D2 E2 F2 G2 H2
+> +        *  (4) A3 B3 C3 D3 E3 F3 G3 H3
+> +        *  (5) A4 B4 C4 D4 E4 F4 G4 H4
+> +        */
+> +
+> +       ret = ssd130x_set_col_range(ssd130x, ssd130x->col_offset + x, width);
+> +       if (ret < 0)
+> +               goto out_free;
+> +
+> +       ret = ssd130x_set_page_range(ssd130x, ssd130x->page_offset + y / 8, pages);
+> +       if (ret < 0)
+> +               goto out_free;
+> +
+> +       for (i = y / 8; i < y / 8 + pages; i++) {
+> +               int m = 8;
+> +
+> +               /* Last page may be partial */
+> +               if (8 * (i + 1) > ssd130x->height)
+> +                       m = ssd130x->height % 8;
+> +               for (j = x; j < x + width; j++) {
+> +                       u8 data = 0;
+> +
+> +                       for (k = 0; k < m; k++) {
+> +                               u8 byte = buf[(8 * i + k) * line_length + j / 8];
 
-Let's see if anyone cares about a.out support on the last two
-architectures that build it, by disabling the build of the support in
-Kconfig.  If anyone cares, this can be easily reverted, and we can then
-have a discussion about what it is going to take to support a.out
-binaries in the long term.
+As buf does not point to (0, 0), the above is not correct if rect.x1 !=
+0 or rect.y1 != 0.  After fixing that, writing more than one text line
+to the console works, but I still see an issue with updates where the
+rectangle size and/or position are not aligned to 8 pixels horizontally.
+Will do more investigation, and send fixes...
 
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org
-[1] https://lkml.kernel.org/r/20220113160115.5375-1-bp@alien8.de
-[2] https://lkml.kernel.org/r/CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
+> +                               u8 bit = (byte >> (j % 8)) & 1;
+> +
+> +                               data |= bit << k;
+> +                       }
+> +                       data_array[array_idx++] = data;
+> +               }
+> +       }
+> +
+> +       ret = ssd130x_write_data(ssd130x, data_array, width * pages);
+> +
+> +out_free:
+> +       kfree(data_array);
+> +       return ret;
+> +}
+> +
+> +static void ssd130x_clear_screen(struct ssd130x_device *ssd130x)
+> +{
+> +       u8 *buf = NULL;
+> +       struct drm_rect fullscreen = {
+> +               .x1 = 0,
+> +               .x2 = ssd130x->width,
+> +               .y1 = 0,
+> +               .y2 = ssd130x->height,
+> +       };
+> +
+> +       buf = kcalloc(ssd130x->width, ssd130x->height, GFP_KERNEL);
 
-Kees do you think you could add this to your execve branch?
+This buffer is larger than needed. Will send a fix.
 
-I think this should be a complimentary patch to Borislav Petkov's patch
-at the top of this tread to remove a.out support on x86.
+> +       if (!buf)
+> +               return;
+> +
+> +       ssd130x_update_rect(ssd130x, buf, &fullscreen);
+> +
+> +       kfree(buf);
+> +}
+> +
+> +static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
+> +                               struct drm_rect *rect)
+> +{
+> +       struct ssd130x_device *ssd130x = drm_to_ssd130x(fb->dev);
+> +       void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
+> +       int ret = 0;
+> +       u8 *buf = NULL;
+> +
+> +       buf = kcalloc(fb->width, fb->height, GFP_KERNEL);
 
- arch/alpha/Kconfig | 1 -
- arch/m68k/Kconfig  | 1 -
- 2 files changed, 2 deletions(-)
+This buffer is much larger than needed. Will send a fix.
 
-diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-index 4e87783c90ad..14c97acea351 100644
---- a/arch/alpha/Kconfig
-+++ b/arch/alpha/Kconfig
-@@ -12,7 +12,6 @@ config ALPHA
- 	select FORCE_PCI if !ALPHA_JENSEN
- 	select PCI_DOMAINS if PCI
- 	select PCI_SYSCALL if PCI
--	select HAVE_AOUT
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_PCSPKR_PLATFORM
- 	select HAVE_PERF_EVENTS
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 936e1803c7c7..268b3860d40d 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -17,7 +17,6 @@ config M68K
- 	select GENERIC_CPU_DEVICES
- 	select GENERIC_IOMAP
- 	select GENERIC_IRQ_SHOW
--	select HAVE_AOUT if MMU
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_DEBUG_BUGVERBOSE
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS if !CPU_HAS_NO_UNALIGNED
--- 
-2.29.2
+> +       if (!buf)
+> +               return -ENOMEM;
+> +
+> +       drm_fb_xrgb8888_to_mono_reversed(buf, 0, vmap, fb, rect);
+> +
+> +       ssd130x_update_rect(ssd130x, buf, rect);
+> +
+> +       kfree(buf);
+> +
+> +       return ret;
+> +}
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

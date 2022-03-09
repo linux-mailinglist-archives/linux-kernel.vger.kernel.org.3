@@ -2,99 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868D44D25FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AFC4D25F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiCIBP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S230143AbiCIBOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiCIBNV (ORCPT
+        with ESMTP id S231439AbiCIBNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:13:21 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C663158EA4;
-        Tue,  8 Mar 2022 16:56:44 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2290uJh5032621;
-        Wed, 9 Mar 2022 00:56:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=4aVxwyeD2G4aJ13Isb/s8+ZwAEF2AuWYkvaBomm/JKk=;
- b=kHgaffANgvHzTSZJ46ZtEWlnPxjbQ30eNnAcGmfXdZn5S6UxLYL6DPreoxyfVE627YA+
- 3CpJnandNQOcLBbYEGCd7D7SzuD6+D5m/NnFLgQJBvjkvyGuKlH0MUkl6CHdsJOvzues
- iU8jN5ohP7/mb1MyGEg/R3j77nszf6eXoHGoz8/bqNklrJmUzztvtjEnu7iFle7ztjN/
- quenmZJ9JkMyrrh60m3uXT7gryH9TeaspDwKc1LOFfNaYEf6+cStM+yQEkL/7wpZoebm
- i3boAI6OgGgxMsQaoRTcNA7eaU8Z66nyqaex/uLfsVfkNH28JE3F4yeAsbPkxWbDfMa1 aQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3enxs0fdkr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Mar 2022 00:56:42 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2290ugoG005484;
-        Wed, 9 Mar 2022 00:56:42 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3enxs0fdkc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Mar 2022 00:56:42 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2290mRTX026754;
-        Wed, 9 Mar 2022 00:56:39 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ekyg90q5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Mar 2022 00:56:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2290jQRs50135422
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Mar 2022 00:45:26 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48D38A4040;
-        Wed,  9 Mar 2022 00:56:36 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98817A4051;
-        Wed,  9 Mar 2022 00:56:35 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.68.74])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed,  9 Mar 2022 00:56:35 +0000 (GMT)
-Date:   Wed, 9 Mar 2022 01:56:22 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     "Jason J. Herne" <jjherne@linux.ibm.com>
-Cc:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
-        kwankhede@nvidia.com, fiuczy@linux.ibm.com,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v18 08/18] s390/vfio-ap: allow assignment of unavailable
- AP queues to mdev device
-Message-ID: <20220309015623.41543d75.pasic@linux.ibm.com>
-In-Reply-To: <439f929f-9d15-c33c-b40d-88dd06cebd85@linux.ibm.com>
-References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
-        <20220215005040.52697-9-akrowiak@linux.ibm.com>
-        <97681738-50a1-976d-9f0f-be326eab7202@linux.ibm.com>
-        <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
-        <439f929f-9d15-c33c-b40d-88dd06cebd85@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Tue, 8 Mar 2022 20:13:22 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DA3235
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646787406; x=1678323406;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=IU9EJdUsYdTjKhzRHBzqQif2QxxIdhXmLLx9zqanGZ4=;
+  b=T/qmoq12ynnp6W9BT39iFOuAVw68bMuSreI0dtAblz07mSxgf7b8oUVj
+   hdMclHa92q1DQVwUUlqQWyhJZKebKc8x9nAtt/bugquHyEbyizZOA1R/w
+   XtSFhWzLkyjbTjtgKQXQehHOz7fcmD5BBg06p7wFMIFTLBO04qLTKck9E
+   wAU/h/Mg5MTy1rGmfLNs8dXNLo08sV9XNSDTGLRzMC+FoXtmka1SB2BWc
+   H1E/WP9WoE/OWET18ML4y6hd72QhItDQz3Cbm+YkPej5GSqdisqGZ21/g
+   l8FnbwRHLCPWAH+tAzYZBYbxdTV4wNimg2QsHKrF23VnwTz2dtWBZpxsl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235462989"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="235462989"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:56:45 -0800
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="641969304"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:56:41 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
+        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
+        <minchan@kernel.org>, <apopple@nvidia.com>,
+        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
+        <almasrymina@google.com>, <jhubbard@nvidia.com>,
+        <rcampbell@nvidia.com>, <peterx@redhat.com>,
+        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 16/16] mm/migration: fix potential pte_unmap on an not
+ mapped pte
+References: <20220304093409.25829-1-linmiaohe@huawei.com>
+        <20220304093409.25829-17-linmiaohe@huawei.com>
+        <871qze5nmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <9c6873ae-7614-1178-8c9f-6e933a12e35b@huawei.com>
+Date:   Wed, 09 Mar 2022 08:56:39 +0800
+In-Reply-To: <9c6873ae-7614-1178-8c9f-6e933a12e35b@huawei.com> (Miaohe Lin's
+        message of "Tue, 8 Mar 2022 20:19:58 +0800")
+Message-ID: <877d94gczc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GA7MBmohm27r3Zs2kEBhAhj3DjFWk2M6
-X-Proofpoint-ORIG-GUID: LKkedgjD1fvryOKywwrOlMlSNoswUhsZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-08_09,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- bulkscore=0 mlxlogscore=537 clxscore=1015 adultscore=0 spamscore=0
- suspectscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203090000
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,41 +70,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 10:39:09 -0500
-"Jason J. Herne" <jjherne@linux.ibm.com> wrote:
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-> On 3/7/22 07:31, Tony Krowiak wrote:
-> >>> +         * If the input apm and aqm belong to the matrix_mdev's matrix,
-> >>> +         * then move on to the next.
-> >>> +         */
-> >>> +        if (mdev_apm == matrix_mdev->matrix.apm &&
-> >>> +            mdev_aqm == matrix_mdev->matrix.aqm)
-> >>>               continue;  
-> >>
-> >> We may have a problem here. This check seems like it exists to stop you from
-> >> comparing an mdev's apm/aqm with itself. Obviously comparing an mdev's newly
-> >> updated apm/aqm with itself would cause a false positive sharing check, right?
-> >> If this is the case, I think the comment should be changed to reflect that.  
-> > 
-> > You are correct, this check is performed to prevent comparing an mdev to
-> > itself, I'll improve the comment.
-> >   
-> >>
-> >> Aside from the comment, what stops this particular series of if statements from
-> >> allowing us to configure a second mdev with the exact same apm/aqm values as an
-> >> existing mdev? If we do, then this check's continue will short circuit the rest
-> >> of the function thereby allowing that 2nd mdev even though it should be a
-> >> sharing violation.  
-> > 
-> > I don't see how this is possible.  
-> 
-> You are correct. I missed the fact that you are comparing pointers here, and not
-> values. Apologies. Now that I understand the code, I agree that this is fine as is.
-> 
+> On 2022/3/7 13:37, Huang, Ying wrote:
+>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>> 
+>>> __migration_entry_wait and migration_entry_wait_on_locked assume pte is
+>>> always mapped from caller. But this is not the case when it's called from
+>>> migration_entry_wait_huge and follow_huge_pmd. And a parameter unmap to
+>>> indicate whether pte needs to be unmapped to fix this issue.
+>> 
+>> This seems a possible issue.
+>> 
+>> Have you tested it?  It appears that it's possible to trigger the
+>> issue.  If so, you can paste the error log here.
+>
+> This might happen iff on x86 machine with HIGHMEM enabled which is uncommon
+> now (at least in my work environment).
 
-I believe clarifying the 'belongs to' vs 'is a part of' stuff is still
-worthwhile, because 'belongs to' does beg the question you asked. Thus
-IMHO it is good that you raised the question.
+Yes.  32-bit isn't popular now.  But you can always test it via virtual
+machine.
 
-Regards,
-Halil
+> So I can't paste the err log. And The
+> issues from this series mainly come from the code investigating with some tests.
+
+If not too complex, I still think it's better to test your code and
+verify the problem.
+
+Best Regards,
+Huang, Ying
+
+> Thanks. :)
+>
+>> 
+>> BTW: have you tested the other functionality issues in your patchset?
+>> 
+>> Best Regards,
+>> Huang, Ying
+>> 
+>>> Fixes: 30dad30922cc ("mm: migration: add migrate_entry_wait_huge()")
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>>  include/linux/migrate.h |  2 +-
+>>>  include/linux/swapops.h |  4 ++--
+>>>  mm/filemap.c            | 10 +++++-----
+>>>  mm/hugetlb.c            |  2 +-
+>>>  mm/migrate.c            | 14 ++++++++------
+>>>  5 files changed, 17 insertions(+), 15 deletions(-)
+>>>
+>>> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+>>> index 66a34eae8cb6..3ef4ff699bef 100644
+>>> --- a/include/linux/migrate.h
+>>> +++ b/include/linux/migrate.h
+>>> @@ -41,7 +41,7 @@ extern int migrate_huge_page_move_mapping(struct address_space *mapping,
+>>>  extern int migrate_page_move_mapping(struct address_space *mapping,
+>>>  		struct page *newpage, struct page *page, int extra_count);
+>>>  void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>>> -				spinlock_t *ptl);
+>>> +				spinlock_t *ptl, bool unmap);
+>>>  void folio_migrate_flags(struct folio *newfolio, struct folio *folio);
+>>>  void folio_migrate_copy(struct folio *newfolio, struct folio *folio);
+>>>  int folio_migrate_mapping(struct address_space *mapping,
+>>> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+>>> index d356ab4047f7..d66556875d7d 100644
+>>> --- a/include/linux/swapops.h
+>>> +++ b/include/linux/swapops.h
+>>> @@ -213,7 +213,7 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
+>>>  }
+>>>  
+>>>  extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>>> -					spinlock_t *ptl);
+>>> +					spinlock_t *ptl, bool unmap);
+>>>  extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>>  					unsigned long address);
+>>>  extern void migration_entry_wait_huge(struct vm_area_struct *vma,
+>>> @@ -235,7 +235,7 @@ static inline int is_migration_entry(swp_entry_t swp)
+>>>  }
+>>>  
+>>>  static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>>> -					spinlock_t *ptl) { }
+>>> +					spinlock_t *ptl, bool unmap) { }
+>>>  static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>>  					 unsigned long address) { }
+>>>  static inline void migration_entry_wait_huge(struct vm_area_struct *vma,
+>>> diff --git a/mm/filemap.c b/mm/filemap.c
+>>> index 8f7e6088ee2a..18c353d52aae 100644
+>>> --- a/mm/filemap.c
+>>> +++ b/mm/filemap.c
+>>> @@ -1389,6 +1389,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>>>   * @ptep: mapped pte pointer. Will return with the ptep unmapped. Only required
+>>>   *        for pte entries, pass NULL for pmd entries.
+>>>   * @ptl: already locked ptl. This function will drop the lock.
+>>> + * @unmap: indicating whether ptep need to be unmapped.
+>>>   *
+>>>   * Wait for a migration entry referencing the given page to be removed. This is
+>>>   * equivalent to put_and_wait_on_page_locked(page, TASK_UNINTERRUPTIBLE) except
+>>> @@ -1402,7 +1403,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>>>   * there.
+>>>   */
+>>>  void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>>> -				spinlock_t *ptl)
+>>> +				spinlock_t *ptl, bool unmap)
+>>>  {
+>>>  	struct wait_page_queue wait_page;
+>>>  	wait_queue_entry_t *wait = &wait_page.wait;
+>>> @@ -1439,10 +1440,9 @@ void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>>>  	 * a valid reference to the page, and it must take the ptl to remove the
+>>>  	 * migration entry. So the page is valid until the ptl is dropped.
+>>>  	 */
+>>> -	if (ptep)
+>>> -		pte_unmap_unlock(ptep, ptl);
+>>> -	else
+>>> -		spin_unlock(ptl);
+>>> +	spin_unlock(ptl);
+>>> +	if (unmap && ptep)
+>>> +		pte_unmap(ptep);
+>>>  
+>>>  	for (;;) {
+>>>  		unsigned int flags;
+>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>> index 07668781c246..8088128c25db 100644
+>>> --- a/mm/hugetlb.c
+>>> +++ b/mm/hugetlb.c
+>>> @@ -6713,7 +6713,7 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>>  	} else {
+>>>  		if (is_hugetlb_entry_migration(pte)) {
+>>>  			spin_unlock(ptl);
+>>> -			__migration_entry_wait(mm, (pte_t *)pmd, ptl);
+>>> +			__migration_entry_wait(mm, (pte_t *)pmd, ptl, false);
+>>>  			goto retry;
+>>>  		}
+>>>  		/*
+>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>> index 98a968e6f465..5519261f54fe 100644
+>>> --- a/mm/migrate.c
+>>> +++ b/mm/migrate.c
+>>> @@ -281,7 +281,7 @@ void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked)
+>>>   * When we return from this function the fault will be retried.
+>>>   */
+>>>  void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>>> -				spinlock_t *ptl)
+>>> +				spinlock_t *ptl, bool unmap)
+>>>  {
+>>>  	pte_t pte;
+>>>  	swp_entry_t entry;
+>>> @@ -295,10 +295,12 @@ void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>>>  	if (!is_migration_entry(entry))
+>>>  		goto out;
+>>>  
+>>> -	migration_entry_wait_on_locked(entry, ptep, ptl);
+>>> +	migration_entry_wait_on_locked(entry, ptep, ptl, unmap);
+>>>  	return;
+>>>  out:
+>>> -	pte_unmap_unlock(ptep, ptl);
+>>> +	spin_unlock(ptl);
+>>> +	if (unmap)
+>>> +		pte_unmap(ptep);
+>>>  }
+>>>  
+>>>  void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>> @@ -306,14 +308,14 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>>  {
+>>>  	spinlock_t *ptl = pte_lockptr(mm, pmd);
+>>>  	pte_t *ptep = pte_offset_map(pmd, address);
+>>> -	__migration_entry_wait(mm, ptep, ptl);
+>>> +	__migration_entry_wait(mm, ptep, ptl, true);
+>>>  }
+>>>  
+>>>  void migration_entry_wait_huge(struct vm_area_struct *vma,
+>>>  		struct mm_struct *mm, pte_t *pte)
+>>>  {
+>>>  	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), mm, pte);
+>>> -	__migration_entry_wait(mm, pte, ptl);
+>>> +	__migration_entry_wait(mm, pte, ptl, false);
+>>>  }
+>>>  
+>>>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+>>> @@ -324,7 +326,7 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
+>>>  	ptl = pmd_lock(mm, pmd);
+>>>  	if (!is_pmd_migration_entry(*pmd))
+>>>  		goto unlock;
+>>> -	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl);
+>>> +	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl, false);
+>>>  	return;
+>>>  unlock:
+>>>  	spin_unlock(ptl);
+>> .
+>> 

@@ -2,103 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A7C4D2FD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B32F4D2FD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiCINUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S232585AbiCINXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiCINUu (ORCPT
+        with ESMTP id S229738AbiCINXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:20:50 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D57E17289A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:19:50 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id u124so2240795vsb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:19:50 -0800 (PST)
+        Wed, 9 Mar 2022 08:23:42 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87643377F4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:22:43 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id z3so1918485plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:22:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
-        b=LnejyCzOIh3SXgKZDqKBcMT1XI5Awxa7srTgbnEmmaU3IVJMCeMLrOAsOkqgzwv/vM
-         HF/+XvQc6v3QxDDKPBIEPSDGgQM7LFHgv50Ua1iOJsFLooxHJW79Dc0UgwYgTO8f+EGM
-         lrU5+jhBT2WBo16pAcDXccfeH0uckvC5sDIjayQq3YJFO3MRwUHVtb4sIyGVnidt4QlC
-         V+mkcEiJsdi0uibgFMP7uXqRfp15Np0tQFZuwllTfZyK8dvrshYy+7ZKNaOs1rmLdAAJ
-         mGuVO2gYFz39kyV8go5x2HuIuZApPQ1gydwElpCkYYV7yjQztSa1vvHUHCy4i6vA34GW
-         V/bA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nFpUu9dr27noPEr7QirbOcRxKdELB7gGpnSLhYA/8gk=;
+        b=u91UGLmWfLry7Qd6UFWNi+UaDteJUJDXdAl658I7tK+Z9YPKkYp1+M814Yrj8LoQkD
+         fYknxzvizgkRxib8MSrjAxFehpP/x5dgDGjjbFsC39p+PHvkvtA1DolgdBAzPJU6SmyG
+         RaNiTUBSrIFpYc1ynXq1YpI377jkv9iEDe9vE3LFtAUV29xTLMZcnaDY/25dFhcIUC+Y
+         d2+TXjv2ruxUWa7In6j5dHHpL91wtEOPc64pDbVhFVS6XyZha9Kjk6E2rUiN5L0PFPmm
+         cxfuvyhePMtYCF6HnQnwHwZQ6ApfixdNaTxIUggcWjdqRRzZy48cG8Nrv70E0rEbe76+
+         yNng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
-        b=hg02JBpRQK9ENKn6BRU01mb2apCnvYMpk45j1zsLIc8vhffgSxwOX+nrjnOYs94MBV
-         85t9VfpFBwOkQodsZUi3Eee/2P2eCLWBZgQ226ScaMmVngmISrTAAOgoblaBGlTo8MVZ
-         I51ZzSHRdf6SaRwg7BApetXFWR+vWlg0OGBVtVYYi6B8LRLKWaQL2H3SnlHMIKTxqLDz
-         SKCcWwb6mPlHvRl80MeaFU5LXA6TSZ8l0U0yW/uP7a4OZRnY2RyB+LfQk3NZG50gdzja
-         xLoAfxKekOWumP3yF2Z32mnHANlcgCea5qIC0/e5r9Zl7ZShG+aSktLFktTrDGNQ+qBN
-         5ldA==
-X-Gm-Message-State: AOAM531+dWVfAsKjybbnG0+1P5VbNysDGjERO36nwq7eXpBcZ5BsMDkq
-        J88It1+91wDnf6toRbCDrq8K07Xv5eXE6grlKko=
-X-Google-Smtp-Source: ABdhPJyRRilmzk1/yP3S+eFkDi7pZv3nfFeyCoiIEWipOIxZVdy29AunsgJKCXwMk58ueKa6J2IYmLNwzSFsc3T9Pvw=
-X-Received: by 2002:a67:1dc1:0:b0:31e:650d:a7ad with SMTP id
- d184-20020a671dc1000000b0031e650da7admr9589738vsd.85.1646831988680; Wed, 09
- Mar 2022 05:19:48 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nFpUu9dr27noPEr7QirbOcRxKdELB7gGpnSLhYA/8gk=;
+        b=5pKO1tELWS1HK8RaH6uDl+R+JPduS1spOTAfV3raCjheMe7jAh+2JYWi9a9j/157r6
+         kKNoMbjdxjLdAhtfDPnbn5irLdNpL02cM73iEGlXP0Pytm7Me9ZrRmDsIJHBqsEFRbc0
+         bfMNEzZ+IciNx2Qx2NcSJBp3/COBXcaZrWLMildpAJEj7S6cS6IP3J5Bsrxjse1ZTLtq
+         3sZTMH+LKnEQovMpoglA5PRFvxyfq/j8OxsO6/DdVAuOjRHBRHx8XBuwVEb0QP6fxISZ
+         rHgGQJ5SlQe5RlWXylwd9D9ok5CaDhkvhg4r7m8GF9fhFu0x76YM9sbYIs1qOireswOw
+         6tkg==
+X-Gm-Message-State: AOAM533KCcjt3lzNB/FHURaErB2OPs8miiJOKeoNXZnDv+Ls4a48W26D
+        ek+fXmkE59UctzyHeJVIKQI0BAtkJPpMzSh3MDOXpw==
+X-Google-Smtp-Source: ABdhPJxairSjptuZC/cMBulWljGFXF9/fDim8+cVb5GOFlehI0cit3Yq/MqRNr4EydbX1nuYFckLml5X2cTV8HjYvPc=
+X-Received: by 2002:a17:902:7044:b0:14e:e1b1:bb0e with SMTP id
+ h4-20020a170902704400b0014ee1b1bb0emr22498860plt.65.1646832162896; Wed, 09
+ Mar 2022 05:22:42 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ab0:3ae:0:0:0:0:0 with HTTP; Wed, 9 Mar 2022 05:19:48 -0800 (PST)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <tz649296@gmail.com>
-Date:   Wed, 9 Mar 2022 05:19:48 -0800
-Message-ID: <CACC2Mgh-e2Lth55ZiWiLNm+d1V1Dxv7VGv2DzVxDTf2h=5+uuw@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
+References: <20220309073637.3591-1-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220309073637.3591-1-rex-bc.chen@mediatek.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 9 Mar 2022 14:22:31 +0100
+Message-ID: <CAG3jFysXP3vs0uWAykQHckE1KBZr6PfE990mOny-6n=AHP2zHA@mail.gmail.com>
+Subject: Re: [RESEND V11 0/3] force hsa hbp hfp packets multiple of lanenum to
+ avoid screen shift
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     daniel@ffwll.ch, airlied@linux.ie,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        xji@analogixsemi.com, jitao.shi@mediatek.com,
+        xinlei.lee@mediatek.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e2f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4865]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tz649296[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lilywilliam989[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [tz649296[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hi Dear,
+On Wed, 9 Mar 2022 at 08:36, Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+>
+> Resend v11:
+>  - Resend this series for reviewing.
+>  - Rebase to 5.17-rc7.
+>
+> Changes since v10:
+>  - Rebase to 5.17-rc3.
+>  - Add more maintainers.
+>
+> Changes since v9:
+>  - Change description of "MIPI_DSI_HS_PKT_END_ALIGNED".
+>  - Use mode_flags directly instead of another variable on patch [2/3].
+>  - Add explanation of implementation in mtk_dsi.c on commit message of [2/3].
+>
+> Changes since v8:
+>  - Use mode_flags to control this limitation instead of "hs_packet_end_aligned".
+>  - Add new bit definition "MIPI_DSI_HS_PKT_END_ALIGNED" for mode_flags.
+>
+> Changes since v7:
+>  - Rebase to kernel 5.16
+>  - Add tags of reviewed-by and acked-by.
+>  - Add detailed commit message for flag "hs_packet_end_aligned" in DSI common driver.
+>
+> Changes since v6:
+>  - Add "bool hs_packet_end_aligned" in "struct mipi_dsi_device" to control the dsi aligned.
+>  - Config the "hs_packet_end_aligned" in ANX7725 .attach().
+>
+> Changes since v5:
+>  - Search the anx7625 compatible as flag to control dsi output aligned.
+>
+> Changes since v4:
+>  - Move "dt-bindings: drm/bridge: anx7625: add force_dsi_end_without_null" before
+>    "drm/mediatek: force hsa hbp hfp packets multiple of lanenum to avoid".
+>  - Retitle "dt-bindings: drm/bridge: anx7625: add force_dsi_end_without_null".
+>
+> Rex-BC Chen (3):
+>   drm/dsi: transfer DSI HS packets ending at the same time
+>   drm/mediatek: implement the DSI HS packets aligned
+>   drm/bridge: anx7625: config hs packets end aligned to avoid screen
+>     shift
+>
+>  drivers/gpu/drm/bridge/analogix/anx7625.c |  3 ++-
+>  drivers/gpu/drm/mediatek/mtk_dsi.c        | 12 ++++++++++++
+>  include/drm/drm_mipi_dsi.h                |  2 ++
+>  3 files changed, 16 insertions(+), 1 deletion(-)
+>
+> --
+> 2.18.0
+>
 
-My name is Lily William, I am from the United States of America. It's my
-pleasure to contact you for a new and special friendship. I will be glad to
-see your reply so we can get to know each other better.
-
-Yours
-Lily
+Applied to drm-misc-next

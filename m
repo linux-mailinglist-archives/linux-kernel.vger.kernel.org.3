@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81B34D3405
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896B64D32DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237472AbiCIQUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S235136AbiCIQQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234649AbiCIQK5 (ORCPT
+        with ESMTP id S236238AbiCIQJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:10:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D3EC0842;
-        Wed,  9 Mar 2022 08:09:14 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2553CA56;
+        Wed,  9 Mar 2022 08:08:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCA37B8222A;
-        Wed,  9 Mar 2022 16:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C786C340E8;
-        Wed,  9 Mar 2022 16:09:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA54DB82222;
+        Wed,  9 Mar 2022 16:08:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D707C340E8;
+        Wed,  9 Mar 2022 16:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646842151;
-        bh=z7p40pY35hoI0dlU3jaT5G+091WhUUE7jq8tnccKr70=;
+        s=korg; t=1646842117;
+        bh=iUx/VZAJZIJBMnOjtvNPH0MOwTkKmvTeDE8haWcGsAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HZFv58tF6D0J7Eke3uoynW/zaIiy9Cl3BcVjdTJBjwignim97dAEeUcCIL+ywpjLE
-         ZgYtu4BfqAiJNH+JaFlAq49fETk4HzOVsEMKwjClVuPruDBxmhJ8ZwhjxhldkeqmnR
-         T4piA2l7aOg8lO8U9cJKqsLv95t2qZrgdis5qDas=
+        b=xDQsX2oq2rGDoWVbRGBaqlIvLa5KsBAECTZr8gxLzcgq09jwW1vPlnu+E7XTBnN0M
+         WieQidU5tCCj2ajV3kV3mj99heLEVPu1uiS9Jzkzu1iJ0PphZsQgeyT99WQQkwqEmz
+         K/XbASHOZRuvzjS+L1ReVD3ih9MtMp6ZWJO+UP3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.16 16/37] arm64: cpufeature: add HWCAP for FEAT_RPRES
-Date:   Wed,  9 Mar 2022 17:00:17 +0100
-Message-Id: <20220309155859.560502544@linuxfoundation.org>
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.15 34/43] arm64: entry: Add macro for reading symbol addresses from the trampoline
+Date:   Wed,  9 Mar 2022 17:00:18 +0100
+Message-Id: <20220309155900.721701578@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
-References: <20220309155859.086952723@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,107 +54,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joey Gouly <joey.gouly@arm.com>
+From: James Morse <james.morse@arm.com>
 
-commit 1175011a7d0030d49dc9c10bde36f08f26d0a8ee upstream.
+commit b28a8eebe81c186fdb1a0078263b30576c8e1f42 upstream.
 
-Add a new HWCAP to detect the Increased precision of Reciprocal Estimate
-and Reciprocal Square Root Estimate feature (FEAT_RPRES), introduced in Armv8.7.
+The trampoline code needs to use the address of symbols in the wider
+kernel, e.g. vectors. PC-relative addressing wouldn't work as the
+trampoline code doesn't run at the address the linker expected.
 
-Also expose this to userspace in the ID_AA64ISAR2_EL1 feature register.
+tramp_ventry uses a literal pool, unless CONFIG_RANDOMIZE_BASE is
+set, in which case it uses the data page as a literal pool because
+the data page can be unmapped when running in user-space, which is
+required for CPUs vulnerable to meltdown.
 
-Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211210165432.8106-4-joey.gouly@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Pull this logic out as a macro, instead of adding a third copy
+of it.
+
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/arm64/cpu-feature-registers.rst |    8 ++++++++
- Documentation/arm64/elf_hwcaps.rst            |    4 ++++
- arch/arm64/include/asm/hwcap.h                |    1 +
- arch/arm64/include/uapi/asm/hwcap.h           |    1 +
- arch/arm64/kernel/cpufeature.c                |    2 ++
- arch/arm64/kernel/cpuinfo.c                   |    1 +
- 6 files changed, 17 insertions(+)
+ arch/arm64/kernel/entry.S |   37 ++++++++++++++++---------------------
+ 1 file changed, 16 insertions(+), 21 deletions(-)
 
---- a/Documentation/arm64/cpu-feature-registers.rst
-+++ b/Documentation/arm64/cpu-feature-registers.rst
-@@ -283,6 +283,14 @@ infrastructure:
-      | AFP                          | [47-44] |    y    |
-      +------------------------------+---------+---------+
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -646,6 +646,15 @@ alternative_else_nop_endif
+ 	sub	\dst, \dst, PAGE_SIZE
+ 	.endm
  
-+  9) ID_AA64ISAR2_EL1 - Instruction set attribute register 2
-+
-+     +------------------------------+---------+---------+
-+     | Name                         |  bits   | visible |
-+     +------------------------------+---------+---------+
-+     | RPRES                        | [7-4]   |    y    |
-+     +------------------------------+---------+---------+
-+
++	.macro tramp_data_read_var	dst, var
++#ifdef CONFIG_RANDOMIZE_BASE
++	tramp_data_page		\dst
++	add	\dst, \dst, #:lo12:__entry_tramp_data_\var
++	ldr	\dst, [\dst]
++#else
++	ldr	\dst, =\var
++#endif
++	.endm
  
- Appendix I: Example
- -------------------
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -255,6 +255,10 @@ HWCAP2_AFP
- 
-     Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
- 
-+HWCAP2_RPRES
-+
-+    Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -107,6 +107,7 @@
- #define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
- #define KERNEL_HWCAP_ECV		__khwcap2_feature(ECV)
- #define KERNEL_HWCAP_AFP		__khwcap2_feature(AFP)
-+#define KERNEL_HWCAP_RPRES		__khwcap2_feature(RPRES)
+ #define BHB_MITIGATION_NONE	0
+ #define BHB_MITIGATION_LOOP	1
+@@ -676,13 +685,8 @@ alternative_else_nop_endif
+ 	b	.
+ 2:
+ 	tramp_map_kernel	x30
+-#ifdef CONFIG_RANDOMIZE_BASE
+-	tramp_data_page		x30
+ alternative_insn isb, nop, ARM64_WORKAROUND_QCOM_FALKOR_E1003
+-	ldr	x30, [x30]
+-#else
+-	ldr	x30, =vectors
+-#endif
++	tramp_data_read_var	x30, vectors
+ alternative_if_not ARM64_WORKAROUND_CAVIUM_TX2_219_PRFM
+ 	prfm	plil1strm, [x30, #(1b - \vector_start)]
+ alternative_else_nop_endif
+@@ -765,7 +769,12 @@ SYM_CODE_END(tramp_exit_compat)
+ 	.pushsection ".rodata", "a"
+ 	.align PAGE_SHIFT
+ SYM_DATA_START(__entry_tramp_data_start)
++__entry_tramp_data_vectors:
+ 	.quad	vectors
++#ifdef CONFIG_ARM_SDE_INTERFACE
++__entry_tramp_data___sdei_asm_handler:
++	.quad	__sdei_asm_handler
++#endif /* CONFIG_ARM_SDE_INTERFACE */
+ SYM_DATA_END(__entry_tramp_data_start)
+ 	.popsection				// .rodata
+ #endif /* CONFIG_RANDOMIZE_BASE */
+@@ -932,14 +941,7 @@ SYM_CODE_START(__sdei_asm_entry_trampoli
+ 	 * Remember whether to unmap the kernel on exit.
+ 	 */
+ 1:	str	x4, [x1, #(SDEI_EVENT_INTREGS + S_SDEI_TTBR1)]
+-
+-#ifdef CONFIG_RANDOMIZE_BASE
+-	tramp_data_page		x4
+-	add	x4, x4, #:lo12:__sdei_asm_trampoline_next_handler
+-	ldr	x4, [x4]
+-#else
+-	ldr	x4, =__sdei_asm_handler
+-#endif
++	tramp_data_read_var     x4, __sdei_asm_handler
+ 	br	x4
+ SYM_CODE_END(__sdei_asm_entry_trampoline)
+ NOKPROBE(__sdei_asm_entry_trampoline)
+@@ -962,13 +964,6 @@ SYM_CODE_END(__sdei_asm_exit_trampoline)
+ NOKPROBE(__sdei_asm_exit_trampoline)
+ 	.ltorg
+ .popsection		// .entry.tramp.text
+-#ifdef CONFIG_RANDOMIZE_BASE
+-.pushsection ".rodata", "a"
+-SYM_DATA_START(__sdei_asm_trampoline_next_handler)
+-	.quad	__sdei_asm_handler
+-SYM_DATA_END(__sdei_asm_trampoline_next_handler)
+-.popsection		// .rodata
+-#endif /* CONFIG_RANDOMIZE_BASE */
+ #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
  
  /*
-  * This yields a mask that user programs can use to figure out what
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -77,5 +77,6 @@
- #define HWCAP2_MTE		(1 << 18)
- #define HWCAP2_ECV		(1 << 19)
- #define HWCAP2_AFP		(1 << 20)
-+#define HWCAP2_RPRES		(1 << 21)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -226,6 +226,7 @@ static const struct arm64_ftr_bits ftr_i
- };
- 
- static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_RPRES_SHIFT, 4, 0),
- 	ARM64_FTR_END,
- };
- 
-@@ -2490,6 +2491,7 @@ static const struct arm64_cpu_capabiliti
- #endif /* CONFIG_ARM64_MTE */
- 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
- 	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
-+	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_RPRES_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
- 	{},
- };
- 
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -96,6 +96,7 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_MTE]		= "mte",
- 	[KERNEL_HWCAP_ECV]		= "ecv",
- 	[KERNEL_HWCAP_AFP]		= "afp",
-+	[KERNEL_HWCAP_RPRES]		= "rpres",
- };
- 
- #ifdef CONFIG_COMPAT
 
 

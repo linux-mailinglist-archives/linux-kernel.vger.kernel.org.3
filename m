@@ -2,75 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F024D255A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE1B4D2521
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiCIBGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:06:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S229822AbiCIBFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiCIBF4 (ORCPT
+        with ESMTP id S229793AbiCIBEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:05:56 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E79D555E;
-        Tue,  8 Mar 2022 16:44:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=L9e08i3DItUQuyDe2VxAmhXOyMvqb9ieclWvN98wlFQ=; b=odNoSo01fjvZjs9AFVZGAoVrEf
-        HXN4gT8/e7RFLfP/gLG/DVJGuGd2hVuMrox0/RYoEKyP0oJmax9cE2YwiBg2wC09Td/eyIvNoJxTx
-        we7+5oFFwBLi0g05GbYZElSTyW+5ItWg0dLxlQBj3DnFZD+EaYwpVzwDRSJEk+g56xXUJIMHiF9Ks
-        JGK1OA/HAYAHuTkHb0ZSI7vfEDwKVyduCDAAiwd84xDgdlAl0HNchPNHBn46RyNehrmJsgSsADRMb
-        0vVV0q/4Z4K0kZjEPMW86ksBxjzkufXHgPCQgbEObFJ9BxVik18r37FV/0fI9v8PzcIVvViuJzGji
-        CWm1D7fg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57728)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nRjxD-00018V-QB; Wed, 09 Mar 2022 00:13:23 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nRjxB-0007Mi-PF; Wed, 09 Mar 2022 00:13:21 +0000
-Date:   Wed, 9 Mar 2022 00:13:21 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH] net: phy: correct spelling error of media in
- documentation
-Message-ID: <YifxIeVdQzJ3lqEI@shell.armlinux.org.uk>
-References: <20220309062544.3073-1-colin.foster@in-advantage.com>
+        Tue, 8 Mar 2022 20:04:42 -0500
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF57D131F74;
+        Tue,  8 Mar 2022 16:42:16 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:34420)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nRjy1-00AoKs-FO; Tue, 08 Mar 2022 17:14:13 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34136 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nRjy0-00EJ6q-01; Tue, 08 Mar 2022 17:14:13 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     <linux-kernel@vger.kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>, <linux-api@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
+        <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Tue, 08 Mar 2022 18:13:34 -0600
+In-Reply-To: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Mon, 03 Jan 2022 15:30:02 -0600")
+Message-ID: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309062544.3073-1-colin.foster@in-advantage.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nRjy0-00EJ6q-01;;;mid=<87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19JrCxd+AEL/F62BtJfkuZkeiMsizbIS8Q=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;<linux-kernel@vger.kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 518 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 13 (2.5%), b_tie_ro: 11 (2.2%), parse: 1.73
+        (0.3%), extract_message_metadata: 7 (1.4%), get_uri_detail_list: 4.2
+        (0.8%), tests_pri_-1000: 6 (1.2%), tests_pri_-950: 1.82 (0.4%),
+        tests_pri_-900: 1.44 (0.3%), tests_pri_-90: 72 (13.9%), check_bayes:
+        70 (13.5%), b_tokenize: 17 (3.3%), b_tok_get_all: 11 (2.1%),
+        b_comp_prob: 3.3 (0.6%), b_tok_touch_all: 35 (6.8%), b_finish: 0.95
+        (0.2%), tests_pri_0: 385 (74.4%), check_dkim_signature: 0.88 (0.2%),
+        check_dkim_adsp: 3.4 (0.7%), poll_dns_idle: 1.31 (0.3%), tests_pri_10:
+        4.0 (0.8%), tests_pri_500: 12 (2.4%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 00/13] Removing tracehook.h
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:25:44PM -0800, Colin Foster wrote:
-> The header file incorrectly referenced "median-independant interface"
-> instead of media. Correct this typo.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Fixes: 4069a572d423 ("net: phy: Document core PHY structures")
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+While working on cleaning up do_exit I have been having to deal with the
+code in tracehook.h.  Unfortunately the code in tracehook.h does not
+make sense as organized.
 
-Thanks!
+This set of changes reorganizes things so that tracehook.h no longer
+exists, and so that it's current contents are organized in a fashion
+that is a little easier to understand.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+The biggest change is that I lean into the fact that get_signal
+always calls task_work_run and removes the logic that tried to
+be smart and decouple task_work_run and get_signal as it has proven
+to not be effective.
+
+This is a conservative change and I am not changing the how things
+like signal_pending operate (although it is probably justified).
+
+A new header resume_user_mode.h is added to hold resume_user_mode_work
+which was previously known as tracehook_notify_resume.
+
+Eric W. Biederman (13):
+      ptrace: Move ptrace_report_syscall into ptrace.h
+      ptrace/arm: Rename tracehook_report_syscall report_syscall
+      ptrace: Create ptrace_report_syscall_{entry,exit} in ptrace.h
+      ptrace: Remove arch_syscall_{enter,exit}_tracehook
+      ptrace: Remove tracehook_signal_handler
+      task_work: Remove unnecessary include from posix_timers.h
+      task_work: Introduce task_work_pending
+      task_work: Call tracehook_notify_signal from get_signal on all architectures
+      task_work: Decouple TIF_NOTIFY_SIGNAL and task_work
+      signal: Move set_notify_signal and clear_notify_signal into sched/signal.h
+      resume_user_mode: Remove #ifdef TIF_NOTIFY_RESUME in set_notify_resume
+      resume_user_mode: Move to resume_user_mode.h
+      tracehook: Remove tracehook.h
+
+ MAINTAINERS                          |   1 -
+ arch/Kconfig                         |   5 +-
+ arch/alpha/kernel/ptrace.c           |   5 +-
+ arch/alpha/kernel/signal.c           |   4 +-
+ arch/arc/kernel/ptrace.c             |   5 +-
+ arch/arc/kernel/signal.c             |   4 +-
+ arch/arm/kernel/ptrace.c             |  12 +-
+ arch/arm/kernel/signal.c             |   4 +-
+ arch/arm64/kernel/ptrace.c           |  14 +--
+ arch/arm64/kernel/signal.c           |   4 +-
+ arch/csky/kernel/ptrace.c            |   5 +-
+ arch/csky/kernel/signal.c            |   4 +-
+ arch/h8300/kernel/ptrace.c           |   5 +-
+ arch/h8300/kernel/signal.c           |   4 +-
+ arch/hexagon/kernel/process.c        |   4 +-
+ arch/hexagon/kernel/signal.c         |   1 -
+ arch/hexagon/kernel/traps.c          |   6 +-
+ arch/ia64/kernel/process.c           |   4 +-
+ arch/ia64/kernel/ptrace.c            |   6 +-
+ arch/ia64/kernel/signal.c            |   1 -
+ arch/m68k/kernel/ptrace.c            |   6 +-
+ arch/m68k/kernel/signal.c            |   4 +-
+ arch/microblaze/kernel/ptrace.c      |   5 +-
+ arch/microblaze/kernel/signal.c      |   4 +-
+ arch/mips/kernel/ptrace.c            |   5 +-
+ arch/mips/kernel/signal.c            |   4 +-
+ arch/nds32/include/asm/syscall.h     |   2 +-
+ arch/nds32/kernel/ptrace.c           |   5 +-
+ arch/nds32/kernel/signal.c           |   4 +-
+ arch/nios2/kernel/ptrace.c           |   5 +-
+ arch/nios2/kernel/signal.c           |   4 +-
+ arch/openrisc/kernel/ptrace.c        |   5 +-
+ arch/openrisc/kernel/signal.c        |   4 +-
+ arch/parisc/kernel/ptrace.c          |   7 +-
+ arch/parisc/kernel/signal.c          |   4 +-
+ arch/powerpc/kernel/ptrace/ptrace.c  |   8 +-
+ arch/powerpc/kernel/signal.c         |   4 +-
+ arch/riscv/kernel/ptrace.c           |   5 +-
+ arch/riscv/kernel/signal.c           |   4 +-
+ arch/s390/include/asm/entry-common.h |   1 -
+ arch/s390/kernel/ptrace.c            |   1 -
+ arch/s390/kernel/signal.c            |   5 +-
+ arch/sh/kernel/ptrace_32.c           |   5 +-
+ arch/sh/kernel/signal_32.c           |   4 +-
+ arch/sparc/kernel/ptrace_32.c        |   5 +-
+ arch/sparc/kernel/ptrace_64.c        |   5 +-
+ arch/sparc/kernel/signal32.c         |   1 -
+ arch/sparc/kernel/signal_32.c        |   4 +-
+ arch/sparc/kernel/signal_64.c        |   4 +-
+ arch/um/kernel/process.c             |   4 +-
+ arch/um/kernel/ptrace.c              |   5 +-
+ arch/x86/kernel/ptrace.c             |   1 -
+ arch/x86/kernel/signal.c             |   5 +-
+ arch/x86/mm/tlb.c                    |   1 +
+ arch/xtensa/kernel/ptrace.c          |   5 +-
+ arch/xtensa/kernel/signal.c          |   4 +-
+ block/blk-cgroup.c                   |   2 +-
+ fs/coredump.c                        |   1 -
+ fs/exec.c                            |   1 -
+ fs/io-wq.c                           |   6 +-
+ fs/io_uring.c                        |  11 +-
+ fs/proc/array.c                      |   1 -
+ fs/proc/base.c                       |   1 -
+ include/asm-generic/syscall.h        |   2 +-
+ include/linux/entry-common.h         |  47 +-------
+ include/linux/entry-kvm.h            |   2 +-
+ include/linux/posix-timers.h         |   1 -
+ include/linux/ptrace.h               |  78 ++++++++++++
+ include/linux/resume_user_mode.h     |  64 ++++++++++
+ include/linux/sched/signal.h         |  17 +++
+ include/linux/task_work.h            |   5 +
+ include/linux/tracehook.h            | 226 -----------------------------------
+ include/uapi/linux/ptrace.h          |   2 +-
+ kernel/entry/common.c                |  19 +--
+ kernel/entry/kvm.c                   |   9 +-
+ kernel/exit.c                        |   3 +-
+ kernel/livepatch/transition.c        |   1 -
+ kernel/seccomp.c                     |   1 -
+ kernel/signal.c                      |  23 ++--
+ kernel/task_work.c                   |   4 +-
+ kernel/time/posix-cpu-timers.c       |   1 +
+ mm/memcontrol.c                      |   2 +-
+ security/apparmor/domain.c           |   1 -
+ security/selinux/hooks.c             |   1 -
+ 84 files changed, 317 insertions(+), 462 deletions(-)
+
+Eric

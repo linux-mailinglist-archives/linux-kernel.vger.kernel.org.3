@@ -2,70 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE76F4D2EE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A604D2EE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiCIMSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S231809AbiCIMTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiCIMSU (ORCPT
+        with ESMTP id S230519AbiCIMTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:18:20 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD45172E78;
-        Wed,  9 Mar 2022 04:17:21 -0800 (PST)
-Received: from zn.tnic (p200300ea971938596e73e4c94fe320f4.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3859:6e73:e4c9:4fe3:20f4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6BC571EC03AD;
-        Wed,  9 Mar 2022 13:17:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646828235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=7MY4HXqj5XqaNgJLI88QF2HIbx0/gisjpXBmuJzwj2E=;
-        b=ACUyalTi2pM4J8TSgiV8b0CRxVbxWxF+h264ye4VfLffWR2XKGJZ9TmFhfhN5pTYmHyecJ
-        hyV8Yuxv3xBBpy8nFlutFfW2T+Xxla8SpGTSZQBPs6mjAdG6SIIhh7+JRgVTpy9WUdOOfG
-        ZYdWbMoUues6/t32QN8itpEmL36BhiU=
-Date:   Wed, 9 Mar 2022 13:17:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     wang.yi59@zte.com.cn
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
-        up2wing@gmail.com, wang.liang82@zte.com.cn, liu.yi24@zte.com.cn
-Subject: Re: [PATCH] KVM: SVM: fix panic on out-of-bounds guest IRQ
-Message-ID: <Yiia0S+pDNHlAhSE@zn.tnic>
-References: <2bd92846-381b-f083-754a-89dfcdccc90c@redhat.com>
- <202203091827565144689@zte.com.cn>
+        Wed, 9 Mar 2022 07:19:08 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0E2EAC5D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:18:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646828289; x=1678364289;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7QsU93+Hmc3TWJrVTMFYY0/oZ8urJfIJRWeYfj9wL+Y=;
+  b=nbNpCn3Kd8rKpiVdDonVzlb7qPu1hagE3H5citerTXot2XQutBcKjxAv
+   82PIX6rWGGL021EBYcQ+1wmHQn5ox6fH+M/FJlG+dyLlzpyuoiGJ8INR6
+   FaBEjQLD7S6DS/iqCC3qDFiaVuiCoTtNi5j8Lt6hHZ+bHIr9h0jlppQBQ
+   A7ETfn2Snt0KuZtVSPNFp1TBkx+kQMYl1q8g0gnqdzDPuBonz4WikMHG9
+   QAEpkCKfFJYvf2gEFwYH2gh/GwiwIPF+r+7CID1X/1s0wXGTBE88V2yJa
+   Ez/I9jPTe9Ppy+eXIgZjhhLBIU0tjQ0YBoiWW6bpFHK068bKwCL98vvY2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235568748"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="235568748"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 04:18:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="547605939"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Mar 2022 04:18:07 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRvGY-0003Dc-Px; Wed, 09 Mar 2022 12:18:06 +0000
+Date:   Wed, 9 Mar 2022 20:17:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/12] WARNING: modpost:
+ vmlinux.o(.text+0xd102d6): Section mismatch in reference from the function
+ __of_remove_property_sysfs() to the variable .init.text:.L0
+Message-ID: <202203092049.VcyMVRt9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202203091827565144689@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 06:27:56PM +0800, wang.yi59@zte.com.cn wrote:
-> The Signed-off-by chain is not wrong, I (Yi Wang) wrote this patch and Yi Liu
-> co-developed it.
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   5e8dcc1ce6c0e41770619875b11fd66e26bc7bc7
+commit: b3a105362f319c01ed074b19345679271bb364f8 [11/12] HID: magicmouse: add support for Macbook trackpads
+config: riscv-randconfig-r042-20220308 (https://download.01.org/0day-ci/archive/20220309/202203092049.VcyMVRt9-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/b3a105362f319c01ed074b19345679271bb364f8
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout b3a105362f319c01ed074b19345679271bb364f8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-What to do in such cases is well documented. For the future, make sure
-you look at
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Documentation/process/submitting-patches.rst
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
--- 
-Regards/Gruss,
-    Boris.
+>> WARNING: modpost: vmlinux.o(.text+0xd102d6): Section mismatch in reference from the function __of_remove_property_sysfs() to the variable .init.text:.L0
+The function __of_remove_property_sysfs() references
+the variable __init .L0 .
+This is often because __of_remove_property_sysfs lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0xd10312): Section mismatch in reference from the function __of_update_property_sysfs() to the variable .init.text:.L0
+The function __of_update_property_sysfs() references
+the variable __init .L0 .
+This is often because __of_update_property_sysfs lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0xdc7e28): Section mismatch in reference from the function mcb_bus_put() to the variable .exit.text:.L0
+The function mcb_bus_put() references a variable in an exit section.
+Often the variable .L0 has valid usage outside the exit section
+and the fix is to remove the __exit annotation of .L0 .
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0xd75d34): Section mismatch in reference from the function devm_iio_kfifo_buffer_setup_ext() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xf2e068): Section mismatch in reference from the function vcc_ioctl() to the variable .exit.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x12b4): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF741
+<< WARNING: modpost: vmlinux.o(.text+0xd75d34): Section mismatch in reference from the function devm_iio_kfifo_buffer_setup_ext() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xf2e068): Section mismatch in reference from the function vcc_ioctl() to the variable .exit.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x12b4): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF741
+<< WARNING: modpost: vmlinux.o(.text+0xd75d34): Section mismatch in reference from the function devm_iio_kfifo_buffer_setup_ext() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xf2e068): Section mismatch in reference from the function vcc_ioctl() to the variable .exit.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x12b4): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF741
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

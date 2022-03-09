@@ -2,177 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF5B4D3C66
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8702E4D3C6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 22:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbiCIVwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 16:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S238478AbiCIVzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 16:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiCIVwE (ORCPT
+        with ESMTP id S234811AbiCIVzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:52:04 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5AE4B1CA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:51:04 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k24so5079670wrd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 13:51:04 -0800 (PST)
+        Wed, 9 Mar 2022 16:55:04 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBA955237
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:54:04 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id g17so6197904lfh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 13:54:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wB+NOcZPjuBQ7I++42cwqpD+y9hE+iVjMiQbLppxTXQ=;
-        b=S5ziUcSwcWcbqql4ryBgFaU9gKpCBE1RLKnQP7DR/A/4pJO6wUAXSOpyOC/PimqW0K
-         enPHbFGVz/35MIg78/PK2T2OmkRBZlHkZvRYSg31B27Ojy6Ymwd7fNI8qSHlnt75iSVX
-         UzwdOpu2dZf0hwZ4B9nww9hl9WhRfSTUI35DLGd0M9FKMZKdlpVsVn4yPoxhx+DAiqkm
-         NSylcRRoIzknJ19apuqe5z+3Z1yNmpa0sIlQBa5ZBFZjdmun0ZFn9enrkE9px7gNyuSR
-         9sEAsMuA2MFx4TFTw0bsjNEJRtihF96nvJDmKiSuS83NE1nUoynqmTX/VcJAh8K/tiTO
-         15mA==
+        bh=CUMQksGgCdQmcHrJcF66PznC3AjKKF/X4cilDJy65/w=;
+        b=d+gHv8c+vxZcULWVQVZgmkK5hNAQs6Bxjw7N1RsVhrfDlZF7oSU2rRiN85oK+lQjVq
+         fJXUwTPySu5+R6mo42EroOgWo0BOK+OjTerHV+hSZr+8QBPhhaBXZcEbV967exOsMccX
+         WIwQIMmhgp/lyWPrq8NFTZFD209Xd+5mvSQlgunNCXwSuXDXYn84YVgNEZRAd4V2svWu
+         C7K2YASRRhkc4BMI4nqARSOhGX2SegCS0mu0VPIth78rpspBAqWnw+gVrvd3b9N2U/w9
+         TG5HXSdM9WG53grpcyEFaHmeC6aKnwg+sdOmBUOfgFfyH/jysQ7amBkGCxZgbjJalzFu
+         rUvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wB+NOcZPjuBQ7I++42cwqpD+y9hE+iVjMiQbLppxTXQ=;
-        b=KnAPklWYgC8tEQp2p6NwxjSJgjmIcaez9r0Y65z2pYhoXJcqTXMYilHBwrjN4cWT61
-         +BnQmzddbDsW7EebuoRPhTD3yuYUExe+qiHaezwq6omfERl/AkTga6oPIzj1hGfhTWqO
-         FgFdlaVlL0AsSHvJzvyjYpmK7ZV66Qz19BWHGAUDp/TVG7Kil7Ipb76EmxcFCSOsTAkR
-         Spwn6ZhWO7K99v3pn4FBpY6w1Y0L8QUg3U+0UD6A7g0uL44kYYusFgQJl/e6Ql0FooZd
-         litY2xKu1qDUYiOgiw1I5ee56dCiKBLsKfzKRUv+oZ9iEy8eiYAxU2gqSFYeKmDLYXrZ
-         k+oA==
-X-Gm-Message-State: AOAM533Y+2Z2gvWZWgdUwGIBfGdGVSwwBe+wzBPAfC2GGUWekqvlSdEQ
-        /QF4AgHp17VuU70dZNAp7HnWwJq4QReDCFekzUI=
-X-Google-Smtp-Source: ABdhPJz2ayymHz8VybPKo5wyBEMKvIoEykqiV82sROIEpsyQSqwGfjcsaesHGo/FmmgPPT5CBmcho8SDwODf8kuYNoU=
-X-Received: by 2002:adf:914f:0:b0:1ed:bb92:d0cc with SMTP id
- j73-20020adf914f000000b001edbb92d0ccmr1224465wrj.297.1646862663329; Wed, 09
- Mar 2022 13:51:03 -0800 (PST)
+        bh=CUMQksGgCdQmcHrJcF66PznC3AjKKF/X4cilDJy65/w=;
+        b=RJKjTUmRRGQArLRqq65nv4wEkhCaoQS+NCcOmmgSF0M+OgN/vVQ35+UmYeSi5oltVi
+         +wdyWYmFt9DyfL1yrR2VkKaRzeBUCxJ5MpZV9KJNBsy49+JwHLFWe3luLscoZvNWP6D2
+         oyrGR6bDJ+WYJmnNDO10GJ/q+ZioBQJrxVaFeUudoy7xMgQUoiXXyVZdlI0qREUE3HWz
+         LIlz6LtD/kE7GclBQEegckIA9GCaaRczyFIo+1kauC7jd8K1OkTTCoU6jvHUUmHMQYB9
+         Q5FVs2Hh9WxZz8QhaZYGYDXM4fcYRL/aSAkLEVt3SkyqkrHtt9MZ3AskO2Lhs63ZDXDe
+         lHWA==
+X-Gm-Message-State: AOAM5317KkubCgLkMtGMaXIkhoa9hEjQqAp3W5UPK1BHxvL/Zney7mN3
+        cFP69VZuXAOxjXONkKQ9V41rWtDgT2bpda0YWiLtJw==
+X-Google-Smtp-Source: ABdhPJzCxFT3dV8gojSRQ4YAikZ6dGu6NuaatVUte2DQRtdeETHIEzS6FLUxjVZqUU2RsWwhnDqKYQp3Aem765MNgqc=
+X-Received: by 2002:ac2:5feb:0:b0:448:2707:6bfd with SMTP id
+ s11-20020ac25feb000000b0044827076bfdmr1082389lfg.380.1646862842545; Wed, 09
+ Mar 2022 13:54:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
- <d2290971-ea22-8203-631e-b896c76a994b@collabora.com> <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
- <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com> <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
- <05e1fe61-1c29-152f-414b-cd6a44525af0@collabora.com>
-In-Reply-To: <05e1fe61-1c29-152f-414b-cd6a44525af0@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 9 Mar 2022 13:51:42 -0800
-Message-ID: <CAF6AEGvf81epGOs7Zh4WK-7mkXRApO2p-h4g8dTuk4xtc1HOeg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rob Clark <robdclark@chromium.org>
+References: <20220309191633.2307110-1-nathan@kernel.org>
+In-Reply-To: <20220309191633.2307110-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 9 Mar 2022 13:53:50 -0800
+Message-ID: <CAKwvOdkrgtyE3rU8Xa2B8QQJ1ZErSTB9PDuikPF6=4D4Q80XVQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: Do not include __READ_ONCE() block in assembly files
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 12:06 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+On Wed, Mar 9, 2022 at 11:19 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> On 3/9/22 03:56, Rob Clark wrote:
-> >> If we really can't track madvise state in the guest for dealing with
-> >> host memory pressure, I think the better option is to introduce
-> >> MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
-> >> buffer is needed but the previous contents are not (as long as the GPU
-> >> VA remains the same).  With this the host could allocate new pages if
-> >> needed, and the guest would not need to wait for a reply from host.
-> > If variant with the memory ballooning will work, then it will be
-> > possible to track the state within guest-only. Let's consider the
-> > simplest variant for now.
-> >
-> > I'll try to implement the balloon driver support in the v2 and will get
-> > back to you.
-> >
+> When building arm64 defconfig + CONFIG_LTO_CLANG_{FULL,THIN}=y after
+> commit 558c303c9734 ("arm64: Mitigate spectre style branch history side
+> channels"), the following error occurs:
 >
-> I looked at the generic balloon driver and looks like this not what we
-> want because:
+>   <instantiation>:4:2: error: invalid fixup for movz/movk instruction
+>    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
+>    ^
 >
-> 1. Memory ballooning is primarily about handling memory overcommit
-> situations. I.e. when there are multiple VMs consuming more memory than
-> available in the system. Ballooning allows host to ask guest to give
-> unused pages back to host and host could give pages to other VMs.
+> Marc figured out that moving "#include <linux/init.h>" in
+> include/linux/arm-smccc.h into a !__ASSEMBLY__ block resolves it. The
+> full include chain with CONFIG_LTO=y from include/linux/arm-smccc.h:
 >
-> 2. Memory ballooning operates with guest memory pages only. I.e. each
-> ballooned page is reported to/from host in a form of page's DMA address.
+> include/linux/init.h
+> include/linux/compiler.h
+> arch/arm64/include/asm/rwonce.h
+> arch/arm64/include/asm/alternative-macros.h
+> arch/arm64/include/asm/assembler.h
 >
-> 3. There is no direct connection between host's OOM events and the
-> balloon manager. I guess host could watch system's memory pressure and
-> inflate VMs' balloons on low memory, releasing the guest's memory to the
-> system, but apparently this use-case not supported by anyone today, at
-> least I don't see Qemu supporting it.
+> The asm/alternative-macros.h include in asm/rwonce.h only happens when
+> CONFIG_LTO is set, which ultimately casues asm/assembler.h to be
+> included before the definition of ARM_SMCCC_ARCH_WORKAROUND_3. As a
+> result, the preprocessor does not expand ARM_SMCCC_ARCH_WORKAROUND_3 in
+> __mitigate_spectre_bhb_fw, which results in the error above.
+>
+> Avoid this problem by just avoiding the CONFIG_LTO=y __READ_ONCE() block
+> in asm/rwonce.h with assembly files, as nothing in that block is useful
+> to assembly files, which allows ARM_SMCCC_ARCH_WORKAROUND_3 to be
+> properly expanded with CONFIG_LTO=y builds.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
+> Link: https://lore.kernel.org/r/20220309155716.3988480-1-maz@kernel.org/
+> Reported-by: Marc Zyngier <maz@kernel.org>
+> Acked-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Thanks for taking point on all of the BHB fallout.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>
+> This is based on current mainline; if it should be based on a specific
+> arm64 branch, please let me know.
+>
+> As 558c303c9734 is going to stable, I marked this for stable as well to
+> avoid breaking Android. I used e35123d83ee3 for the fixes tag to make it
+> clear to the stable team this should only go where that commit is
+> present. If a different fixes tag should be used, please feel free to
+> substitute.
+>
+>  arch/arm64/include/asm/rwonce.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> index 1bce62fa908a..56f7b1d4d54b 100644
+> --- a/arch/arm64/include/asm/rwonce.h
+> +++ b/arch/arm64/include/asm/rwonce.h
+> @@ -5,7 +5,7 @@
+>  #ifndef __ASM_RWONCE_H
+>  #define __ASM_RWONCE_H
+>
+> -#ifdef CONFIG_LTO
+> +#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
+>
+>  #include <linux/compiler_types.h>
+>  #include <asm/alternative-macros.h>
+> @@ -66,7 +66,7 @@
+>  })
+>
+>  #endif /* !BUILD_VDSO */
+> -#endif /* CONFIG_LTO */
+> +#endif /* CONFIG_LTO && !__ASSEMBLY__ */
+>
+>  #include <asm-generic/rwonce.h>
+>
+>
+> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+> --
+> 2.35.1
 >
 
-hmm, on CrOS I do see balloon getting used to balance host vs guest
-memory.. but admittedly I've not yet looked closely at how that works,
-and it does seem like we have some things that are not yet upstream
-all over the place (not to mention crosvm vs qemu)
 
->
-> So the virtio-balloon driver isn't very useful for us as-is.
->
-> One possible solution could be to create something like a new
-> virtio-shrinker device or add shrinker functionality to the virtio-gpu
-> device, allowing host to ask guests to drop shared caches. Host then
-> should become a PSI handler. I think this should be doable in a case of
-> crosvm. In a case of GNU world, it could take a lot of effort to get
-> everything to upstreamable state, at first there is a need to
-> demonstrate real problem being solved by this solution.
-
-I guess with 4GB chromebooks running one or more VMs in addition to
-lots of browser tabs in the host, it shouldn't be too hard to
-demonstrate a problem ;-)
-
-(but also, however we end up solving that, certainly shouldn't block
-this series)
-
-> The other minor issue is that only integrated GPUs may use system's
-> memory and even then they could use a dedicated memory carveout, i.e.
-> releasing VRAM BOs may not help with host's OOM. In case of virgl
-> context we have no clue about where buffers are physically located. On
-> the other hand, in the worst case dropping host caches just won't help
-> with OOM.
-
-Userspace should know whether the BO has CPU storage, so I don't think
-this should be a problem virtio_gpu needs to worry about
-
-> It's now unclear how we should proceed with the host-side shrinker
-> support. Thoughts?
->
-> We may start easy and instead of thinking about host-side shrinker, we
-> could make VirtIO-GPU driver to expire cached BOs after a certain
-> timeout. Mesa already uses timeout-based BO caching, but it doesn't have
-> an alarm timer and simply checks expiration when BO is allocated. Should
-> be too much trouble to handle timers within Mesa since it's executed in
-> application context, easier to do it in kernel, like VC4 driver does it
-> for example. This is not good as a proper memory shrinker, but could be
-> good enough in practice.
-
-I think that, given virgl uses host storage, guest shrinker should be
-still useful.. so I think continue with this series.
-
-For host shrinker, I'll have to look more at when crosvm triggers
-balloon inflation.  I could still go the MADV:WILLNEED_REPLACE
-approach instead, which does have the advantage of host kernel not
-relying on host userspace or vm having a chance to run in order to
-release pages.  The downside (perhaps?) is it would be more specific
-to virtgpu-native-context and less so to virgl or venus (but I guess
-there doesn't currently exist a way for madvise to be useful for vk
-drivers).
-
-BR,
--R
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,194 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C954D39E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0266C4D39F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbiCITTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
+        id S237578AbiCITUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237621AbiCITTa (ORCPT
+        with ESMTP id S237602AbiCITUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:19:30 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5101168FB
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:18:26 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so4044863oot.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=RTkHcVtz6Xj+gST8HDWpAZrHsZcT5ReHhL3eO1pEfMs=;
-        b=z4Oq8hg5oMUC/28l4I7mskqErza640vBkufG2k65W2hvzZ7DIoDp3bIAvrMNmm5Cv/
-         slGBQW64NT9dnHPHly3gphqYVHfaBpsn9o/EKnAcayNpZtN4V09r5V5ibuQlNIY062YR
-         KoAEffvGuuHIF/I/Kk3owWwANF2DW1ZrB191OuewOirfI/0ZxbxFx0QJPEQx7rM5Znpz
-         H7eVzsNkZ1+wWexOG7Kfq79Kjk7H1FmFlm3XlENVb5KqGjlLodYVRh8RG0FwRKnwlEFu
-         HiUmlfblpD1d7oViQwfrKtwcg6N35SKPVQE2Npbpskwei4/bvTnzpI4WxHR4lyCuW5ZF
-         idBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=RTkHcVtz6Xj+gST8HDWpAZrHsZcT5ReHhL3eO1pEfMs=;
-        b=0nUdubk7kDNa0DlMnlPkddCtj0I86L24qN/T5aAAQILCXpDyYZhJbgEBACHB3t62GA
-         6w5t5LoX+diZ2A2nFd3/vIuK92el4RA6iLZvr4i89D+R00K/AeH75vrRmZnxG0lTG/kc
-         M0/9MoIfVUUTxm++plqokyujXpYnim/Xatyy08Yw4NSoiAUZC9y07GpRk2SaLQGwnnId
-         9zlUCLvCd6m+VqWi7Dmmit9MXqarJXQfKiEqwRZ/33o35WjPEMr4X3FouPgsfdqP+yvK
-         N471sNY2zC47G6p6gXO0qlY7nquC2XpL6CNn3/+/dC5yLWnVeV3/zgbRthrkaXQalljl
-         7ayg==
-X-Gm-Message-State: AOAM5335qMSzoDC/M2+nWc51gBXYO6Md2c6oMLWSjkhHp/wqKTpbl/E7
-        cBz9lrys8EExjPmkS8Xk2j7AUw==
-X-Google-Smtp-Source: ABdhPJzDE/5CGA3LZQsgx1FDGKFVh6iantpGNAhQgr1CqxPTN17zW+Uucq3WVOE6mYNTtMFU5jp3nQ==
-X-Received: by 2002:a4a:907:0:b0:320:f948:a8dc with SMTP id 7-20020a4a0907000000b00320f948a8dcmr591034ooa.61.1646853505295;
-        Wed, 09 Mar 2022 11:18:25 -0800 (PST)
-Received: from [192.168.17.16] ([189.219.74.147])
-        by smtp.gmail.com with ESMTPSA id m21-20020a056820051500b0031d0841b87esm1403489ooj.34.2022.03.09.11.18.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 11:18:24 -0800 (PST)
-Message-ID: <322280c2-8673-949c-ffd4-4e804a030b89@linaro.org>
-Date:   Wed, 9 Mar 2022 13:18:23 -0600
+        Wed, 9 Mar 2022 14:20:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E50165D0D;
+        Wed,  9 Mar 2022 11:19:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA62CB82398;
+        Wed,  9 Mar 2022 19:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE562C36AE3;
+        Wed,  9 Mar 2022 19:18:58 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="maxLcaMK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646853537;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YReXvjHUbAAhDAs2s/JP83U4bEs+VmUCWZJEXNYLMXM=;
+        b=maxLcaMKxbEJy2aJqFkh5KSz00MMwDd5WE0jcrb7fhMVvweE6+dEh0aJPCjqGh9zDYdirj
+        EFVvGjMjf8VsPfeGswlJWDZkL4UJanUIyLn6j0H3w8volTxE3MqJPhM8lDDSVLTsUGh4PS
+        wEC9/UUCXyZGi7ngyi+tAlege7FEoI0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d2039f6e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 9 Mar 2022 19:18:56 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH v2] random: reseed more often immediately after booting
+Date:   Wed,  9 Mar 2022 12:18:50 -0700
+Message-Id: <20220309191850.1508953-1-Jason@zx2c4.com>
+In-Reply-To: <20220309152653.1244096-1-Jason@zx2c4.com>
+References: <20220309152653.1244096-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4.9 00/24] 4.9.306-rc1 review
-Content-Language: en-US
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220309155856.295480966@linuxfoundation.org>
- <2f501345-e847-668e-7ca3-23af49b69224@linaro.org>
-In-Reply-To: <2f501345-e847-668e-7ca3-23af49b69224@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+In order to chip away at the "premature first" problem, we augment our
+existing entropy accounting with increased reseedings at boot. The idea
+is that at boot, we're getting entropy from various places, and we're
+not very sure which of early boot entropy is good and which isn't. Even
+when we're crediting the entropy, we're still not totally certain that
+it's any good. Since boot is the one time (aside from a compromise) that
+we have zero entropy, it's important that we shephard entropy into the
+crng fairly often. At the same time, we don't want a "premature next"
+problem, whereby an attacker can brute force individual bits of added
+entropy. In lieu of going full-on Fortuna (for now), we can pick a
+simpler strategy of just reseeding more often during the first 5 minutes
+after boot. This is still bounded by the 256-bit entropy credit
+requirement, so we'll skip a reseeding if we haven't reached that, but
+in case entropy /is/ coming in, this ensures that it makes its way into
+the crng rather rapidly during these early stages. For this we start at
+5 seconds after boot, and double that interval until it's more than 5
+minutes. After that, we then move to our normal schedule of reseeding
+not more than once per 5 minutes.
 
-On 09/03/22 12:40, Daniel Díaz wrote:
-> Hello!
-> 
-> On 09/03/22 09:59, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 4.9.306 release.
->> There are 24 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.306-rc1.gz
->> or in the git tree and branch at:
->>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
-> 
-> Regressions found.
-> 
-> The following Arm combinations fail to build:
-> - arm-gcc-8-bcm2835_defconfig
-> - arm-gcc-8-imx_v6_v7_defconfig
-> - arm-gcc-8-omap2plus_defconfig
-> - arm-gcc-9-bcm2835_defconfig
-> - arm-gcc-9-imx_v6_v7_defconfig
-> - arm-gcc-9-omap2plus_defconfig
-> - arm-gcc-10-bcm2835_defconfig
-> - arm-gcc-10-imx_v6_v7_defconfig
-> - arm-gcc-10-omap2plus_defconfig
-> - arm-gcc-11-bcm2835_defconfig
-> - arm-gcc-11-imx_v6_v7_defconfig
-> - arm-gcc-11-omap2plus_defconfig
-> 
-> Messages look like this:
-> 
->    /builds/linux/arch/arm/kernel/entry-common.S: Assembler messages:
->    /builds/linux/arch/arm/kernel/entry-common.S:155: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/kernel/entry-common.S:164: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/kernel/entry-common.o] Error 1
->    /builds/linux/arch/arm/kernel/entry-armv.S: Assembler messages:
->    /builds/linux/arch/arm/kernel/entry-armv.S:1124: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/kernel/entry-armv.S:1147: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/kernel/entry-armv.S:1170: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/kernel/entry-armv.S:1193: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/kernel/entry-armv.S:1232: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/kernel/entry-armv.o] Error 1
->    /builds/linux/arch/arm/mm/cache-v7.S: Assembler messages:
->    /builds/linux/arch/arm/mm/cache-v7.S:63: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/mm/cache-v7.S:136: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/mm/cache-v7.S:170: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/mm/cache-v7.S:298: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/cache-v7.o] Error 1
->    /builds/linux/arch/arm/mm/tlb-v7.S: Assembler messages:
->    /builds/linux/arch/arm/mm/tlb-v7.S:88: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/tlb-v7.o] Error 1
->    /builds/linux/arch/arm/mm/proc-v7-2level.S: Assembler messages:
->    /builds/linux/arch/arm/mm/proc-v7-2level.S:58: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/mm/proc-v7-2level.S:60: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    /builds/linux/arch/arm/mm/proc-v7.S:61: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
->    make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/proc-v7.o] Error 1
->    make[2]: Target '__build' not remade because of errors.
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v1->v2:
+- Simplified arithmetic, prevented overflow.
 
-Here's what the bisection throws for this one:
+ drivers/char/random.c | 27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
-# bad: [2ef7c55895217efa8183111969710960a529d3cd] Linux 4.9.306-rc1
-# good: [41b13534ea8aa554d4e987650e24da5510258752] ARM: use LOADADDR() to get load address of sections
-git bisect start '2ef7c55895217efa8183111969710960a529d3cd' '41b13534ea8aa554d4e987650e24da5510258752'
-# bad: [fd723e642aacb60567beda736ebb062db44b8349] ARM: include unprivileged BPF status in Spectre V2 reporting
-git bisect bad fd723e642aacb60567beda736ebb062db44b8349
-# bad: [d0002ea56072220ddab72bb6e31a32350c01b44e] ARM: Spectre-BHB workaround
-git bisect bad d0002ea56072220ddab72bb6e31a32350c01b44e
-# first bad commit: [d0002ea56072220ddab72bb6e31a32350c01b44e] ARM: Spectre-BHB workaround
-commit d0002ea56072220ddab72bb6e31a32350c01b44e
-Author: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Date:   Thu Feb 10 16:05:45 2022 +0000
-     ARM: Spectre-BHB workaround
-     
-     comomit b9baf5c8c5c356757f4f9d8180b5e9d234065bc3 upstream.
-     
-     Workaround the Spectre BHB issues for Cortex-A15, Cortex-A57,
-     Cortex-A72, Cortex-A73 and Cortex-A75. We also include Brahma B15 as
-     well to be safe, which is affected by Spectre V2 in the same ways as
-     Cortex-A15.
-     
-     Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-     Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-     [changes due to lack of SYSTEM_FREEING_INITMEM - gregkh]
-     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-  arch/arm/include/asm/assembler.h  | 10 +++++
-  arch/arm/include/asm/spectre.h    |  4 ++
-  arch/arm/kernel/entry-armv.S      | 79 ++++++++++++++++++++++++++++++++++++---
-  arch/arm/kernel/entry-common.S    | 24 ++++++++++++
-  arch/arm/kernel/spectre.c         |  4 ++
-  arch/arm/kernel/traps.c           | 38 +++++++++++++++++++
-  arch/arm/kernel/vmlinux-xip.lds.S | 18 +++++++--
-  arch/arm/kernel/vmlinux.lds.S     | 18 +++++++--
-  arch/arm/mm/Kconfig               | 10 +++++
-  arch/arm/mm/proc-v7-bugs.c        | 76 +++++++++++++++++++++++++++++++++++++
-  10 files changed, 269 insertions(+), 12 deletions(-)
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 0ceda9a12bfe..8c08186205f4 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -333,6 +333,27 @@ static void crng_fast_key_erasure(u8 key[CHACHA_KEY_SIZE],
+ 	memzero_explicit(first_block, sizeof(first_block));
+ }
+ 
++/*
++ * Return whether the crng seed is considered to be sufficiently
++ * old that a reseeding might be attempted. This is the case 5,
++ * 10, 20, 40, 80, and 160 seconds after boot, and after if the
++ * last reseeding was CRNG_RESEED_INTERVAL ago.
++ */
++static bool crng_has_old_seed(void)
++{
++	static unsigned int next_init_secs = 5;
++
++	if (unlikely(next_init_secs < CRNG_RESEED_INTERVAL / HZ)) {
++		unsigned int uptime = min_t(u64, INT_MAX, ktime_get_seconds());
++		if (uptime >= READ_ONCE(next_init_secs)) {
++			WRITE_ONCE(next_init_secs, 5U << fls(uptime / 5));
++			return true;
++		}
++		return false;
++	}
++	return time_after(jiffies, READ_ONCE(base_crng.birth) + CRNG_RESEED_INTERVAL);
++}
++
+ /*
+  * This function returns a ChaCha state that you may use for generating
+  * random data. It also returns up to 32 bytes on its own of random data
+@@ -366,10 +387,10 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
+ 	}
+ 
+ 	/*
+-	 * If the base_crng is more than 5 minutes old, we reseed, which
+-	 * in turn bumps the generation counter that we check below.
++	 * If the base_crng is old enough, we try to reseed, which in turn
++	 * bumps the generation counter that we check below.
+ 	 */
+-	if (unlikely(time_after(jiffies, READ_ONCE(base_crng.birth) + CRNG_RESEED_INTERVAL)))
++	if (unlikely(crng_has_old_seed()))
+ 		crng_reseed(false);
+ 
+ 	local_lock_irqsave(&crngs.lock, flags);
+-- 
+2.35.1
 
-
-Reverting made the build pass.
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org

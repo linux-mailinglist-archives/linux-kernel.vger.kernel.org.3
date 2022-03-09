@@ -2,107 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722254D39A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12064D39E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiCITPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S232389AbiCITRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236906AbiCITPh (ORCPT
+        with ESMTP id S237596AbiCITRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:15:37 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB7510DA6E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:14:37 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id q4so2561732qki.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:14:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aNqfcNEZGjceg+UV7MiCwR4m/+vO50KsZYIOCuJEo8c=;
-        b=36TrIEKdsMjnR7Chc525qevaBESCl1mKL2De489X86GnsLdsf4+mvQ1ZMcNIROMSYO
-         yCGltj6ZHmV85LAY5X414jSI2M/X7EfReqYx80ZB/lbKZ1isvIgHAPVIFhlizprCE4ie
-         Rv93uyCm/H5c37PhSni5oMcTlfdNeprBpFPl7p/siwSBpl+kCtHyK0kbv3lUG8mnKnom
-         GAvEvDWMFHbGqzSwiuB8gkgYut4pT3apuanO8FxlqpXDlX/5tFjUmE2Tq4oH6Yvim8ce
-         dtQ39d8dHPjJiTABTKoBL0erxyMfA2nDOSqWW6viiYnWIOLaybhG0+AxgBbt8+zKuhK8
-         QhFQ==
+        Wed, 9 Mar 2022 14:17:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A19A114FDE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:15:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646853359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8u+7tNvLmG2m1vlbYy9gZs+lrLcAJdUTzhBQfTfm8/8=;
+        b=O7t0FW80LUUT6EURtnWxl/IXgOMQHMp68fx0y/ZjEJdUXhOXIvp9QINI92BTehKQaONA5Q
+        +vkO9KW+FxwPctsdJ9+gpirjmL87jhnVs1WW0UJAU/mOadEN6XP+iKcGNF+OaLTQ53CXcg
+        +rdgpxe80NbQUp9gKkngqKsJbClcPvY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-167-ZEXxmVxUNCG9LOwA8h2yQg-1; Wed, 09 Mar 2022 14:15:57 -0500
+X-MC-Unique: ZEXxmVxUNCG9LOwA8h2yQg-1
+Received: by mail-wm1-f72.google.com with SMTP id m34-20020a05600c3b2200b0038115c73361so1136792wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:15:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aNqfcNEZGjceg+UV7MiCwR4m/+vO50KsZYIOCuJEo8c=;
-        b=MUKwldYKhDEumROKyUJNtacpaK1Gby7C2VC0JjnI6QW84Iz4+GjbfUmKJhoaTpTznA
-         iQ6ZFIvLp4yI4YKN8GoCbIMjBR/Wfo1aAsI0hMap7pNSm6NC+DRo8VZZnlru9mVfR2VE
-         77jLN75Bg44YBFyb7JsIZ7G5paHBoHACva+3KrQv94WhzePNNtXjGvZHibEfC608oUrG
-         6T3FEjUiMWVRvXQNzlHl7mmAa/fhp1IU8dYf5PV1RYHeSWyQY5WeiyBt+y/5/qrRAZmN
-         a6KyCoPeIG2Hv2f/s6yQ0/5AW8LVcY5GBhHdOwFpB9cLiTgMGygb4EqRA0zTF/HywAHZ
-         EfXw==
-X-Gm-Message-State: AOAM531kJo7lTnzp2+ImHXcJcH3x9jNuhOTE8v0gwZ/xAlaL6A8TjAlo
-        IErWHNn4PTdlIiRtUbGb6gDamw==
-X-Google-Smtp-Source: ABdhPJxEad5S6wPK7a2NTjRrfC58JrsVr52wJnsXTsUalVv0RC3OWfazfcQbMinjlmvU76c5q/g2lg==
-X-Received: by 2002:a05:620a:2941:b0:67d:243d:3b7d with SMTP id n1-20020a05620a294100b0067d243d3b7dmr802338qkp.46.1646853276922;
-        Wed, 09 Mar 2022 11:14:36 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id n13-20020ac85b4d000000b002de6fe91d2fsm1795510qtw.68.2022.03.09.11.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 11:14:36 -0800 (PST)
-Date:   Wed, 9 Mar 2022 14:14:35 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        surenb@google.com, ebiggers@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        Martin Steigerwald <Martin.Steigerwald@proact.de>
-Subject: Re: [PATCH v2] psi: report zeroes for CPU full at the system level
-Message-ID: <Yij8m9qHtvNKyGMK@cmpxchg.org>
-References: <20220309111445.86484-1-zhouchengming@bytedance.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=8u+7tNvLmG2m1vlbYy9gZs+lrLcAJdUTzhBQfTfm8/8=;
+        b=Bftuc6sJC8xL5ITAg5cj1GaedR1tvGW1lAAVKNQJeBkh7Xuy/D7Ds6B/hUHdyOcN0K
+         ZZdeDWVSnOBKLCRF2VOtyZJP3fwLnQ02s3MWJdT/PsvZwQERxBHVGM1inrGA0oMtxDiL
+         WZWuom8Q9NjLe1D/wlanOfHz2N8wUg74vWjbLKCiltUF3LYYQaubEYSKQk71Vej/0XMj
+         P7+s54AKesyCkr+PCWaf2zC2+5w1h83i9h121JplOUqDU+NJowq+t8gzYYsRbJuYQ9vd
+         vbORB+r2uMurnDFjqd90M/a5k+9cQZ7/e3lrTMIYcKhdPy7X+LO+wZJl8jqodsZWXpAS
+         bBrA==
+X-Gm-Message-State: AOAM532Xw8Px3LYZcMmBsLosjsSUK9bXG+UbJ+COev+AkbhWBcvUxJwT
+        nQ8+wRopbvIm23bubepmU8krO3phGVeYd6omCNq/uIy/gF95xuZjzNbJBByCTlq9ci8eaJy34Y2
+        bLWHso1jU4zUUdqd6jzfb0zDo
+X-Received: by 2002:a5d:59a2:0:b0:1f1:f3af:a069 with SMTP id p2-20020a5d59a2000000b001f1f3afa069mr845949wrr.581.1646853356489;
+        Wed, 09 Mar 2022 11:15:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxcP9keRv3UQ3cTcwHG1pYQLWUkqChIRH1t4JepaQN83RkcZ7XWUgDLb5f6ntlqfCFWdEszAA==
+X-Received: by 2002:a5d:59a2:0:b0:1f1:f3af:a069 with SMTP id p2-20020a5d59a2000000b001f1f3afa069mr845925wrr.581.1646853356230;
+        Wed, 09 Mar 2022 11:15:56 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:6300:8418:c653:d01f:3bd2? (p200300cbc70763008418c653d01f3bd2.dip0.t-ipconnect.de. [2003:cb:c707:6300:8418:c653:d01f:3bd2])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05600c3b9100b00389d6331f93sm1085737wms.3.2022.03.09.11.15.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 11:15:55 -0800 (PST)
+Message-ID: <a01de28c-2195-eab3-fd3c-0e8ad3f58040@redhat.com>
+Date:   Wed, 9 Mar 2022 20:15:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309111445.86484-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 3/9] mm: slightly clarify KSM logic in do_swap_page()
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Linux MM <linux-mm@kvack.org>
+References: <20220131162940.210846-1-david@redhat.com>
+ <20220131162940.210846-4-david@redhat.com>
+ <CAHbLzkpoNeSPyzGV9arXK7BrVWpERy0yGRggn1ZaRam8RrHyRQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHbLzkpoNeSPyzGV9arXK7BrVWpERy0yGRggn1ZaRam8RrHyRQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 07:14:45PM +0800, Chengming Zhou wrote:
-> Martin find it confusing when look at the /proc/pressure/cpu output,
-> and found no hint about that CPU "full" line in psi Documentation.
+On 09.03.22 19:48, Yang Shi wrote:
+> On Mon, Jan 31, 2022 at 8:33 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> Let's make it clearer that KSM might only have to copy a page
+>> in case we have a page in the swapcache, not if we allocated a fresh
+>> page and bypassed the swapcache. While at it, add a comment why this is
+>> usually necessary and merge the two swapcache conditions.
+>>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+>>  mm/memory.c | 38 +++++++++++++++++++++++---------------
+>>  1 file changed, 23 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index 923165b4c27e..3c91294cca98 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -3615,21 +3615,29 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>>                 goto out_release;
+>>         }
+>>
+>> -       /*
+>> -        * Make sure try_to_free_swap or reuse_swap_page or swapoff did not
 > 
-> % cat /proc/pressure/cpu
-> some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
-> full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
-> 
-> The PSI_CPU_FULL state is introduced by commit e7fcd7622823
-> ("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
-> but also counted at the system level as a side effect.
-> 
-> Naturally, the FULL state doesn't exist for the CPU resource at
-> the system level. These "full" numbers can come from CPU idle
-> schedule latency. For example, t1 is the time when task wakeup
-> on an idle CPU, t2 is the time when CPU pick and switch to it.
-> The delta of (t2 - t1) will be in CPU_FULL state.
-> 
-> Another case all processes can be stalled is when all cgroups
-> have been throttled at the same time, which unlikely to happen.
-> 
-> Anyway, CPU_FULL metric is meaningless and confusing at the
-> system level. So this patch will report zeroes for CPU full
-> at the system level, and update psi Documentation accordingly.
-> 
-> Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
-> Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> We could remove the reference to "reuse_swap_page", right?
+>
+Yes, I noticed this a couple of days ago as well and already have a
+patch prepared for that ("mm: adjust stale comment in do_swap_page()
+mentioning reuse_swap_page()" at
+https://github.com/davidhildenbrand/linux/commits/cow_fixes_part_3)
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+If Andrew wants, we can fix that up directly before sending upstream or
+I'll simply include that patch when sending out part2 v2.
 
-Peter, would you mind picking this up for 5.18?
+(I want to avoid sending another series just for this)
 
 Thanks!
+
+-- 
+Thanks,
+
+David / dhildenb
+

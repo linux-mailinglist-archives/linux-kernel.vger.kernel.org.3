@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80734D2D15
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C414B4D2D18
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiCIKZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S230061AbiCIK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiCIKZq (ORCPT
+        with ESMTP id S229895AbiCIK2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:25:46 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98CC156C66
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:24:47 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id t5so1850967pfg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 02:24:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Ce2OWqbOvhVGvkh9CKalayGwAHAmYG9YoQa70H7zwHk=;
-        b=nhsB643oL1z7gSz9OhPKaYTp92GH9sg+/1DuFdJZk1fKbP62NAfuUgyhqycQ1FqFo+
-         5rmoZlZtyivfZVAfYIzmCykCkAF7VU1tcpTtbcye+FzMNUMSpsDn1HqQQBeUEfkEWQYp
-         phjIaBxXla2Fnmq5PQsLvQJ35lNRalRiFJpTO3Ize16CEx26rLuoCAWTk4XyO7syLutA
-         J3tc9yg10WtAbYAUMBfgpJ+sR6FFaDtRA436mFodx2KdMVDsvM4z+cFoBv+/3JIWLk8M
-         LpVMxj0oNuGCkXxkgBd9K3GEPtyHQUZeXY/NhLKujU7sDdSUUiB/QiXt1QbA8U9hCvIC
-         UjkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Ce2OWqbOvhVGvkh9CKalayGwAHAmYG9YoQa70H7zwHk=;
-        b=tQRlnfYVc9h28Iw3G0zJ1KmgtaSKJbb/YwHNLTq8u/X20YIsxyfzTVaKbLoQhjdATJ
-         YoK6zBJfKRZv30PAg5bgRggAWnsTeB3ecFD35j5kOVAxX3yEIDd8x+TizjbvQJg/kqUF
-         O+DQM5DzWmLC4W91ugE1qEPC0Si23/4r9PKI6vSeREdWSo0vRyxFZB483s288z60WbNw
-         DDrJVDLxunqN3pTNji2DveUWBSLroiCdNwnMk5BlQ9P3mWWQuvZs4i6v0A86wvdo9gEn
-         o0pNLHK30P59MadIykT0u4p6LiEB52b+kEI7VmLkqPCBx3mmlGxak1BlmJvaMlr3ed8p
-         C3gQ==
-X-Gm-Message-State: AOAM532BdLSsRvp5kKb/ATvGmCcjErKga0whYa2ZjKvPplzx8c7rtkPa
-        BO3a/yIfPHSX5vLusLZ7Dwo=
-X-Google-Smtp-Source: ABdhPJwWk0jNGLAAdDoKZXq4XIQ1YkfcmM4HG7VGwMH/fxjxX2ftGdpC0zjfa6zFKyVMKy6b1+9O+g==
-X-Received: by 2002:a63:3d48:0:b0:374:4b15:76e4 with SMTP id k69-20020a633d48000000b003744b1576e4mr17404308pga.593.1646821487378;
-        Wed, 09 Mar 2022 02:24:47 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm2369076pfx.34.2022.03.09.02.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 02:24:47 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shannon Zhao <shannon.zhao@linaro.org>,
-        Julien Grall <julien.grall@arm.com>,
-        xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] arm/xen: Fix refcount leak in xen_dt_guest_init
-Date:   Wed,  9 Mar 2022 10:24:41 +0000
-Message-Id: <20220309102442.14726-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 05:28:04 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A78156C69
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646821625; x=1678357625;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1RtcjiPKars0DUovoo5BiTa0g/dRvTO5f8Y5QaVXTDA=;
+  b=DZei64nOxFAn8JF/yCa9ycr1TzYKcCr0p9sDo2Jy5VZqZ4UHidLWKwIP
+   aAWTTrlaG5LlMdvh+8JJkNh7rCrV37lsuhZ2R/kX24oAOcrz/LVpYUzs+
+   ijmzzYBP1olTAZtGNnwBr5RXw4ElvhcbMRZeo3ZVQlznA++Y+AEyqfIPI
+   XfFLwmaT2hHlabIZ8yFgIU9fZHygfD2QmIKObux4KxiqyDr8gYKa8zfKC
+   0lzPd10XfWSpDPa7wQlckraVWF5+pMl8sJ3PwdzpYofh8gfN0TrtaxZGr
+   11uDipJTGiOvVKAYn25+tv97c+rSvzTwbne2r3F0m8W9uxtg0d7QzvgSB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="341371223"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="341371223"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 02:27:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="711894688"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2022 02:27:03 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRtX5-00035Z-1m; Wed, 09 Mar 2022 10:27:03 +0000
+Date:   Wed, 9 Mar 2022 18:26:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Chenyi Qiang <chenyi.qiang@intel.com>
+Subject: [intel-tdx:kvm 24/193] arch/x86/kernel/cpu/tsx.c:186:5: warning: no
+ previous prototype for 'tsx_ctrl_clear'
+Message-ID: <202203091850.dfwae6UT-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+tree:   https://github.com/intel/tdx.git kvm
+head:   7a7d51d52f45bbd82e264c7f940d74491305f5ce
+commit: 2c9aac7eef8430d99ae51f243da09dd7892dc9cd [24/193] x86/cpu/tsx: Add helper functions to save/restore IA32_TSX_CTRL MSR
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220309/202203091850.dfwae6UT-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/2c9aac7eef8430d99ae51f243da09dd7892dc9cd
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm
+        git checkout 2c9aac7eef8430d99ae51f243da09dd7892dc9cd
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/
 
-Fixes: 9b08aaa3199a ("ARM: XEN: Move xen_early_init() before efi_init()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/tsx.c:186:5: warning: no previous prototype for 'tsx_ctrl_clear' [-Wmissing-prototypes]
+     186 | u64 tsx_ctrl_clear(void)
+         |     ^~~~~~~~~~~~~~
+>> arch/x86/kernel/cpu/tsx.c:199:6: warning: no previous prototype for 'tsx_ctrl_restore' [-Wmissing-prototypes]
+     199 | void tsx_ctrl_restore(u64 tsx_ctrl)
+         |      ^~~~~~~~~~~~~~~~
+
+
+vim +/tsx_ctrl_clear +186 arch/x86/kernel/cpu/tsx.c
+
+   184	
+   185	/* Clear the MSR_TSX_CTRL and return the old value if supported */
+ > 186	u64 tsx_ctrl_clear(void)
+   187	{
+   188		u64 tsx_ctrl = 0;
+   189	
+   190		if (ia32_tsx_ctrl_supported) {
+   191			rdmsrl(MSR_IA32_TSX_CTRL, tsx_ctrl);
+   192			if (tsx_ctrl & MSR_TSX_CTRL_MASK)
+   193				wrmsrl(MSR_IA32_TSX_CTRL, tsx_ctrl & ~MSR_TSX_CTRL_MASK);
+   194		}
+   195		return tsx_ctrl;
+   196	}
+   197	EXPORT_SYMBOL_GPL(tsx_ctrl_clear);
+   198	
+ > 199	void tsx_ctrl_restore(u64 tsx_ctrl)
+
 ---
- arch/arm/xen/enlighten.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
-index ec5b082f3de6..262f45f686b6 100644
---- a/arch/arm/xen/enlighten.c
-+++ b/arch/arm/xen/enlighten.c
-@@ -424,6 +424,7 @@ static void __init xen_dt_guest_init(void)
- 
- 	if (of_address_to_resource(xen_node, GRANT_TABLE_INDEX, &res)) {
- 		pr_err("Xen grant table region is not found\n");
-+		of_node_put(xen_node);
- 		return;
- 	}
- 	xen_grant_frames = res.start;
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,85 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9499F4D3974
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97C64D397E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237192AbiCITFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S236872AbiCITGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiCITFX (ORCPT
+        with ESMTP id S229514AbiCITGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:05:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DB12180B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:04:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 321E7B82365
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 19:04:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04029C340E8;
-        Wed,  9 Mar 2022 19:04:20 +0000 (UTC)
-Date:   Wed, 9 Mar 2022 19:04:17 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fixes for 5.17
-Message-ID: <Yij6MY63Lhg0icIg@arm.com>
+        Wed, 9 Mar 2022 14:06:20 -0500
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.145.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADEF6F482
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:05:20 -0800 (PST)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 0479760A7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 13:05:18 -0600 (CST)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id S1ccn1gXkXvvJS1ccnNGVY; Wed, 09 Mar 2022 13:05:18 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=en7m1+CRbmjrhxJoGwb18dUJTu8IAG17F03NTg7F3T8=; b=Hc7tjH45SgN1jipbwVbpR7TTEn
+        pxV0oDwUk4lrKSy0jMJAAelyIpr7oNrLYlifz/coqqJSSZCERXkLFOYPn62iuF+wKZGpzX1fqUZ1c
+        pDla/g9/p8Sm/e3GeeB2K1VA0iSDg25VXOeHc0Mc6Uqe4JGHIwiDdU1znRj1pyMkd3ObR2UA+5Pxy
+        cF16v6JPN0IUD8AUlXQb5N//Ci7ij1mjwZ5DMsuOsjrM9KNLkzsot5LgMdY/8UXoWhWmDqoky6GjS
+        qj+KJuN0ucjX0GsODEOAKPMmrV2JRnbuE5dstGY08Jw6dFdFYG67qyH6kNcSl8V8mQV4ygBnBMgDP
+        tf8Y60gQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54200)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nS1cb-0023qO-KB; Wed, 09 Mar 2022 19:05:17 +0000
+Message-ID: <37efd441-7fe4-1aa4-a41b-19d30b652c5c@roeck-us.net>
+Date:   Wed, 9 Mar 2022 11:05:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 00/37] 5.16.14-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220309155859.086952723@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220309155859.086952723@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nS1cb-0023qO-KB
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54200
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 12
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 3/9/22 08:00, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.14 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
+> 
 
-Please pull the arm64 fixes below. I expect another pull request today
-or tomorrow with a small fix for building BHB with clang LTO enabled
-(some include order messing up defines).
+Almost all arm builds, all branches from 4.9.y to 5.16.y:
 
-Thanks.
+Error log:
+arch/arm/common/secure_cntvoff.S: Assembler messages:
+arch/arm/common/secure_cntvoff.S:24: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+arch/arm/common/secure_cntvoff.S:27: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+arch/arm/common/secure_cntvoff.S:29: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
 
-The following changes since commit 4f6de676d94ee8ddfc2e7e7cd935fc7cb2feff3a:
+bisect log:
 
-  arm64: Correct wrong label in macro __init_el2_gicv3 (2022-02-14 18:37:07 +0000)
+# bad: [3416254dac79ea26e08dffde371ab1fd3130223c] Linux 5.16.14-rc1
+# good: [6273c309621c9dd61c9c3f6d63f5d56ee2d89c73] Linux 5.16.13
+git bisect start 'HEAD' 'v5.16.13'
+# bad: [4403d69931dbc17659845d2d710602bbe35b4398] KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
+git bisect bad 4403d69931dbc17659845d2d710602bbe35b4398
+# good: [6f0cf3a1eb8b46a5d652a395ba25a59c32a86692] ARM: report Spectre v2 status through sysfs
+git bisect good 6f0cf3a1eb8b46a5d652a395ba25a59c32a86692
+# bad: [87e96a363eb4a62b65bb974a46d518a87153cd1c] arm64: add ID_AA64ISAR2_EL1 sys register
+git bisect bad 87e96a363eb4a62b65bb974a46d518a87153cd1c
+# good: [654f0a73f042662a36155a0cafa30db846ccb5a9] ARM: use LOADADDR() to get load address of sections
+git bisect good 654f0a73f042662a36155a0cafa30db846ccb5a9
+# bad: [91bdae56c40ee6de675fba6ac283311c92c437ce] ARM: include unprivileged BPF status in Spectre V2 reporting
+git bisect bad 91bdae56c40ee6de675fba6ac283311c92c437ce
+# bad: [95ff4cb3b696a581d6166f0d754771bf9af5e27b] ARM: Spectre-BHB workaround
+git bisect bad 95ff4cb3b696a581d6166f0d754771bf9af5e27b
+# first bad commit: [95ff4cb3b696a581d6166f0d754771bf9af5e27b] ARM: Spectre-BHB workaround
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-
-for you to fetch changes up to b859ebedd1e730bbda69142fca87af4e712649a1:
-
-  arm64: kasan: fix include error in MTE functions (2022-03-09 15:27:21 +0000)
-
-----------------------------------------------------------------
-- Fix compilation of eBPF object files that indirectly include
-  mte-kasan.h.
-
-- Fix test for execute-only permissions with EPAN (Enhanced Privileged
-  Access Never, ARMv8.7 feature).
-
-----------------------------------------------------------------
-Catalin Marinas (1):
-      arm64: Ensure execute-only permissions are not allowed without EPAN
-
-Paul Semel (1):
-      arm64: kasan: fix include error in MTE functions
-
- arch/arm64/Kconfig                    |  3 ---
- arch/arm64/include/asm/mte-kasan.h    |  1 +
- arch/arm64/include/asm/pgtable-prot.h |  4 ++--
- arch/arm64/include/asm/pgtable.h      | 11 -----------
- arch/arm64/mm/mmap.c                  | 17 +++++++++++++++++
- 5 files changed, 20 insertions(+), 16 deletions(-)
-
--- 
-Catalin
+Guenter

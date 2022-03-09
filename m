@@ -2,109 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EA44D31F0
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7DB4D31ED
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbiCIPlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S233947AbiCIPlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiCIPlj (ORCPT
+        with ESMTP id S233919AbiCIPlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:41:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88923107095
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:40:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646840439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bpTV0suVR5QE7kK/w7jo7ZMF5WkTt6GdUr/IKjM2dG0=;
-        b=deH1xj8k/1Gm3v8HcekyoH5zGVWvJiY6EoUZSlmDJeILu6jW/+GFkvRMzrRu0hKoqVOsVJ
-        jhxmOe5tuH3lfX9tr1JwhSDNuAMJo6jugBABFUz894FLEHMPHFBeYxEgb+Wl4fjWc39ZGa
-        IUySaEPO9lxg1yShStTLzYHP8AVP2Mc=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-xzPPMAQEPdypLOBT26B5qA-1; Wed, 09 Mar 2022 10:40:38 -0500
-X-MC-Unique: xzPPMAQEPdypLOBT26B5qA-1
-Received: by mail-ej1-f71.google.com with SMTP id h22-20020a1709060f5600b006b11a2d3dcfso1508866ejj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:40:38 -0800 (PST)
+        Wed, 9 Mar 2022 10:41:44 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D087E15DDE3;
+        Wed,  9 Mar 2022 07:40:44 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id g6-20020a9d6486000000b005acf9a0b644so1988688otl.12;
+        Wed, 09 Mar 2022 07:40:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bpTV0suVR5QE7kK/w7jo7ZMF5WkTt6GdUr/IKjM2dG0=;
-        b=FtPNoCDY5zbkUrMBLz8gd2YIVfrMJ0edaK4qTzYlRl2bBeR3+SgChQNi/71/ocXuyj
-         xV0HeRyhurGa+vS3IGy17GeAM+tJ+HNQXphyWg0f2KQXyTpAAjbNjs8YRLaidExlegCo
-         KcF8tmRHhbOG99tjH4wO0WFwi+0bhd+umTWEy4t2gA7kszgTu6e280K4NDs2xhkzjkJL
-         B5wmxmx8Heg5cPMZWg8woDMBFi6loQStteApCtCoCFrJUYYgjbF/7MpThjaiJlRGhwxn
-         M2PxzOFLZuNNBBbcyV4a45X/We5qVZnFDYZkW30nn8iWLzUlsMvoup6rMxFIRCJJOK/N
-         oZtw==
-X-Gm-Message-State: AOAM533YOBtNon9enWv/tIDM7U2hVuEa/jFihAOmGa1G8r+lcYTUWPx5
-        Up7eGshY16H59kOE2UbjokirDA4/56+V7DTyPIL4SOn0i5PIfKril2bU9bwmgHHiz17pLjmObRU
-        XfmnrSZsm4LVUvxc8qX6dAfcM
-X-Received: by 2002:a17:906:3283:b0:6ce:78f9:fafd with SMTP id 3-20020a170906328300b006ce78f9fafdmr319002ejw.534.1646840437307;
-        Wed, 09 Mar 2022 07:40:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzsvi69xGcmVAH2G4r9q7CbVDDDecTBatSShtA1zS0xb4AM7c6XC/M/UuI1zB3KNCKERAEjLw==
-X-Received: by 2002:a17:906:3283:b0:6ce:78f9:fafd with SMTP id 3-20020a170906328300b006ce78f9fafdmr318981ejw.534.1646840437056;
-        Wed, 09 Mar 2022 07:40:37 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id i5-20020a05640242c500b00416701e9466sm978505edc.26.2022.03.09.07.40.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 07:40:36 -0800 (PST)
-Message-ID: <130fe0c3-bd86-18b6-056a-94bdd7072837@redhat.com>
-Date:   Wed, 9 Mar 2022 16:40:35 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=8+eCR37KVwGF95t89hLUFTDz+ycvmadBjeALw7ulW5A=;
+        b=xVntQhgeeKljYARd2f264Tu7xrSXLnyLv4Lm3flyIVm8FrNeyUGAX11dpVcmXGlejx
+         MDvde2M0LFKyMvB60TOqf1iD35s2gVOrTbXgMyQGjgeQy4jKZ7KgnLRnE3kYRuuaarhH
+         1sd628GBocisqBeyMExncCd5qZrYur4C4powzB6JSnbTTCBwGAaCllSn6oY/iVVPfaHr
+         Z3QJR0ZHc72bvSdHFRDpCMBW8ullUNHhLdjakKjBiRLVOZ0X2DthNocqRdzq2tIGGNqr
+         dW8UcRcILTdQIz2z5pDxelZSihn0hX1+x8ulbqWw1v74TgrT1DzsWt7kodkFgPvqHLCE
+         Iedw==
+X-Gm-Message-State: AOAM532XzclPVwL3fHydfz+gAFVnyoHc/rr3OuxL4+5+uK1Hu88b947J
+        ZiJqIy4W/nbC6LOSkA+CYQ==
+X-Google-Smtp-Source: ABdhPJxg9vJ1cq92V9hMC80Uz8lMvWf5o0iCwZzyfJ8FsXTT0jeVNLvW3K+TWWBLFoFKk9J+PdCzGQ==
+X-Received: by 2002:a9d:7005:0:b0:5af:4489:208 with SMTP id k5-20020a9d7005000000b005af44890208mr162237otj.306.1646840443990;
+        Wed, 09 Mar 2022 07:40:43 -0800 (PST)
+Received: from rob (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n62-20020acabd41000000b002d97bda3870sm1080781oif.53.2022.03.09.07.40.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 07:40:43 -0800 (PST)
+Received: (nullmailer pid 3205945 invoked by uid 1000);
+        Wed, 09 Mar 2022 15:40:41 -0000
+Date:   Wed, 9 Mar 2022 08:40:41 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Tom Rini <trini@konsulko.com>, Simon Glass <sjg@chromium.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ricardo Salveti <ricardo@foundries.io>,
+        Jorge Ramirez-Ortiz <jorge@foundries.io>,
+        Sean Anderson <seanga2@gmail.com>, devicetree@vger.kernel.org,
+        u-boot@lists.denx.de, linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3] dt-bindings: nvmem: add U-Boot environment variables
+ binding
+Message-ID: <20220309154041.GA3202199@robh.at.kernel.org>
+References: <20220228131250.16943-1-zajec5@gmail.com>
+ <578e243d-2273-add3-898c-959888c2a155@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 08/25] KVM: x86/mmu: split cpu_mode from mmu_role
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-9-pbonzini@redhat.com> <YiemuYKEFjqFvDlL@google.com>
- <175b89f0-14a6-2309-041f-69314d9f191a@redhat.com>
- <YijJ/3frxdLAsuKV@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YijJ/3frxdLAsuKV@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <578e243d-2273-add3-898c-959888c2a155@xilinx.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 16:38, Sean Christopherson wrote:
-> Can we instead tweak that patch to make it and kvm_calc_shadow_npt_root_page_role() be
+On Wed, Mar 09, 2022 at 02:42:43PM +0100, Michal Simek wrote:
 > 
-> 	static union kvm_mmu_role
-> 	kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
-> 					union kvm_mmu_role cpu_role)
-> 	{
-> 		union kvm_mmu_role root_role = cpu_role;
 > 
-> 		if (!cpu_role.ext.efer_lma)
-> 			root_role.base.level = PT32E_ROOT_LEVEL;
-> 		else if (cpu_role.ext.cr4_la57)
-> 			root_role.base.level = PT64_ROOT_5LEVEL;
-> 		else
-> 			root_role.base.level = PT64_ROOT_4LEVEL;
+> On 2/28/22 14:12, Rafał Miłecki wrote:
+> > From: Rafał Miłecki <rafal@milecki.pl>
+> > 
+> > U-Boot uses environment variables for storing device setup data. It
+> > usually needs to be accessed by a bootloader, kernel and often
+> > user-space.
+> > 
+> > This binding allows describing environment data located in a raw flash
+> > partition. It's treated as NVMEM device and can be reused later for
+> > other storage devices.
+> > 
+> > Using DT should be cleaner than hardcoding & duplicating such info in
+> > multiple places. Bootloader & kernel can share DTS and user-space can
+> > try reading it too or just have correct data exposed by a kernel.
+> > 
+> > A custom "compatible" string allows system to automatically load
+> > relevant NVMEM driver but phandle can be also used for reading raw
+> > location.
+> > 
+> > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> > ---
+> > V2: Update descriptions to don't make this binding MTD (flash partition)
+> >      specific. Mention multiple possible storage ways.
+> > V3: Drop
+> >      allOf:
+> >        - $ref: nvmem.yaml#
+> >      as we don't use anything rom the nvmem.yaml. Thanks Rob.
+> > ---
+> >   .../devicetree/bindings/nvmem/u-boot,env.yaml | 62 +++++++++++++++++++
+> >   MAINTAINERS                                   |  5 ++
+> >   2 files changed, 67 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+> > new file mode 100644
+> > index 000000000000..e70b2a60cb9a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+> > @@ -0,0 +1,62 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/nvmem/u-boot,env.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: U-Boot environment variables
+> > +
+> > +description: |
+> > +  U-Boot uses environment variables to store device parameters and
+> > +  configuration. They may be used for booting process, setup or keeping end user
+> > +  info.
+> > +
+> > +  Data is stored using U-Boot specific formats (variant specific header and NUL
+> > +  separated key-value pairs).
+> > +
+> > +  Environment data can be stored on various storage entities, e.g.:
+> > +  1. Raw flash partition
+> > +  2. UBI volume
+> > +
+> > +  This binding allows marking storage device (as containing env data) and
+> > +  specifying used format.
+> > +
+> > +  Right now only flash partition case is covered but it may be extended to e.g.
+> > +  UBI volumes in the future.
+> > +
+> > +maintainers:
+> > +  - Rafał Miłecki <rafal@milecki.pl>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: A standalone env data block
+> > +        const: u-boot,env
+> > +      - description: Two redundant blocks with active one flagged
+> > +        const: u-boot,env-redundant-bool
+> > +      - description: Two redundant blocks with active having higher counter
+> > +        const: u-boot,env-redundant-count
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    partitions {
+> > +        compatible = "fixed-partitions";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +
+> > +        partition@0 {
+> > +            reg = <0x0 0x40000>;
+> > +            label = "u-boot";
+> > +            read-only;
+> > +        };
+> > +
+> > +        env: partition@40000 {
+> > +            compatible = "u-boot,env";
+> > +            reg = <0x40000 0x10000>;
+> > +        };
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index db8052bc1d26..24fc181a7e6c 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -19958,6 +19958,11 @@ W:	http://linuxtv.org
+> >   T:	git git://linuxtv.org/media_tree.git
+> >   F:	drivers/media/pci/tw686x/
+> > +U-BOOT ENVIRONMENT VARIABLES
+> > +M:	Rafał Miłecki <rafal@milecki.pl>
+> > +S:	Maintained
+> > +F:	Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+> > +
+> >   UACCE ACCELERATOR FRAMEWORK
+> >   M:	Zhangfei Gao <zhangfei.gao@linaro.org>
+> >   M:	Zhou Wang <wangzhou1@hisilicon.com>
 > 
-> 		return root_role;
-> 	}
+> I think that parsing these partitions is quite sw intensive process and I
+> can't still see the value to have compatible string here.
 
-Yep, figured the same in the meanwhile.
+It's always good to know what a node represents.
 
-Paolo
+> I would prefer to have just any link from u-boot node to partition instead.
 
+That's a separate issue and having 'compatible' in no way disallows 
+that.
+
+Rob

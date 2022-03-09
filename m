@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D84E4D330C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A985C4D33FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiCIQOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S236852AbiCIQTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbiCIQJJ (ORCPT
+        with ESMTP id S236144AbiCIQJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:09:09 -0500
+        Wed, 9 Mar 2022 11:09:39 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D05141FC3;
-        Wed,  9 Mar 2022 08:06:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108185A147;
+        Wed,  9 Mar 2022 08:07:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9534EB82220;
-        Wed,  9 Mar 2022 16:06:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF1A4C340EF;
-        Wed,  9 Mar 2022 16:06:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A4C0B82220;
+        Wed,  9 Mar 2022 16:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C23EFC340E8;
+        Wed,  9 Mar 2022 16:07:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841970;
-        bh=J6wXw2OY/SEj7WgYtzb95YfVux64kBMGaFrb3rNLZiI=;
+        s=korg; t=1646842061;
+        bh=mQatgqh/6NzDSIrRy2F06cmfP6PjNZfpbO5vp69JtKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1zXMlypdHVoHEUkTBxgztx+jIjULf7Wx0EZuU30I0KBagqWKbuW2X+3LKVM9Xl7VJ
-         mMgCgE8BpShLRnDr1YAsJOohZyZTh0wz7yVk374nUWvuFieFf8bhl4Id/CMl/zkAjN
-         /5iezSQk8aokciKZO9K/dY4CrUZwvA7Ovem1WQfE=
+        b=ydpuCa+KKB+FhLyy5h32VapSInSirBJ37+vL6obOmegDjMgoi7xE40+ai+u5sFZyS
+         Hg7FhDzbNJWiDiNcgrkLr9YxblvFKhdUdJjyPBeynzAx6Z8eBF4GFbSHtSfrTq56aO
+         /aSjHbvgAkIPje4PJlbrWpWlQH7cGYWDvZnuQqH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         James Morse <james.morse@arm.com>
-Subject: [PATCH 5.10 38/43] KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
+Subject: [PATCH 5.15 27/43] arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
 Date:   Wed,  9 Mar 2022 17:00:11 +0100
-Message-Id: <20220309155900.341144934@linuxfoundation.org>
+Message-Id: <20220309155900.523625225@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
-References: <20220309155859.239810747@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,252 +58,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: James Morse <james.morse@arm.com>
 
-commit 5bdf3437603d4af87f9c7f424b0c8aeed2420745 upstream.
+commit 6c5bf79b69f911560fbf82214c0971af6e58e682 upstream.
 
-CPUs vulnerable to Spectre-BHB either need to make an SMC-CC firmware
-call from the vectors, or run a sequence of branches. This gets added
-to the hyp vectors. If there is no support for arch-workaround-1 in
-firmware, the indirect vector will be used.
+Systems using kpti enter and exit the kernel through a trampoline mapping
+that is always mapped, even when the kernel is not. tramp_valias is a macro
+to find the address of a symbol in the trampoline mapping.
 
-kvm_init_vector_slots() only initialises the two indirect slots if
-the platform is vulnerable to Spectre-v3a. pKVM's hyp_map_vectors()
-only initialises __hyp_bp_vect_base if the platform is vulnerable to
-Spectre-v3a.
+Adding extra sets of vectors will expand the size of the entry.tramp.text
+section to beyond 4K. tramp_valias will be unable to generate addresses
+for symbols beyond 4K as it uses the 12 bit immediate of the add
+instruction.
 
-As there are about to more users of the indirect vectors, ensure
-their entries in hyp_spectre_vector_selector[] are always initialised,
-and __hyp_bp_vect_base defaults to the regular VA mapping.
+As there are now two registers available when tramp_alias is called,
+use the extra register to avoid the 4K limit of the 12 bit immediate.
 
-The Spectre-v3a check is moved to a helper
-kvm_system_needs_idmapped_vectors(), and merged with the code
-that creates the hyp mappings.
-
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/cpucaps.h |    3 +
- arch/arm64/include/asm/kvm_asm.h |    6 +++
- arch/arm64/include/asm/kvm_mmu.h |    3 +
- arch/arm64/include/asm/mmu.h     |    6 +++
- arch/arm64/kernel/proton-pack.c  |   47 +++++++++++++++++++++++++++
- arch/arm64/kvm/arm.c             |    3 +
- arch/arm64/kvm/hyp/smccc_wa.S    |   66 +++++++++++++++++++++++++++++++++++++++
- 7 files changed, 130 insertions(+), 4 deletions(-)
+ arch/arm64/kernel/entry.S |   13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
---- a/arch/arm64/include/asm/cpucaps.h
-+++ b/arch/arm64/include/asm/cpucaps.h
-@@ -66,7 +66,8 @@
- #define ARM64_HAS_TLB_RANGE			56
- #define ARM64_MTE				57
- #define ARM64_WORKAROUND_1508412		58
-+#define ARM64_SPECTRE_BHB			59
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -103,9 +103,12 @@
+ .org .Lventry_start\@ + 128	// Did we overflow the ventry slot?
+ 	.endm
  
--#define ARM64_NCAPS				59
-+#define ARM64_NCAPS				60
+-	.macro tramp_alias, dst, sym
++	.macro tramp_alias, dst, sym, tmp
+ 	mov_q	\dst, TRAMP_VALIAS
+-	add	\dst, \dst, #(\sym - .entry.tramp.text)
++	adr_l	\tmp, \sym
++	add	\dst, \dst, \tmp
++	adr_l	\tmp, .entry.tramp.text
++	sub	\dst, \dst, \tmp
+ 	.endm
  
- #endif /* __ASM_CPUCAPS_H */
---- a/arch/arm64/include/asm/kvm_asm.h
-+++ b/arch/arm64/include/asm/kvm_asm.h
-@@ -35,6 +35,8 @@
- #define KVM_VECTOR_PREAMBLE	(2 * AARCH64_INSN_SIZE)
+ 	/*
+@@ -429,10 +432,10 @@ alternative_else_nop_endif
+ #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+ 	bne	4f
+ 	msr	far_el1, x29
+-	tramp_alias	x30, tramp_exit_native
++	tramp_alias	x30, tramp_exit_native, x29
+ 	br	x30
+ 4:
+-	tramp_alias	x30, tramp_exit_compat
++	tramp_alias	x30, tramp_exit_compat, x29
+ 	br	x30
+ #endif
+ 	.else
+@@ -998,7 +1001,7 @@ alternative_if_not ARM64_UNMAP_KERNEL_AT
+ alternative_else_nop_endif
  
- #define __SMCCC_WORKAROUND_1_SMC_SZ 36
-+#define __SMCCC_WORKAROUND_3_SMC_SZ 36
-+#define __SPECTRE_BHB_LOOP_SZ       44
- 
- #define KVM_HOST_SMCCC_ID(id)						\
- 	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
-@@ -199,6 +201,10 @@ extern void __vgic_v3_init_lrs(void);
- extern u32 __kvm_get_mdcr_el2(void);
- 
- extern char __smccc_workaround_1_smc[__SMCCC_WORKAROUND_1_SMC_SZ];
-+extern char __smccc_workaround_3_smc[__SMCCC_WORKAROUND_3_SMC_SZ];
-+extern char __spectre_bhb_loop_k8[__SPECTRE_BHB_LOOP_SZ];
-+extern char __spectre_bhb_loop_k24[__SPECTRE_BHB_LOOP_SZ];
-+extern char __spectre_bhb_loop_k32[__SPECTRE_BHB_LOOP_SZ];
- 
- /*
-  * Obtain the PC-relative address of a kernel symbol
---- a/arch/arm64/include/asm/kvm_mmu.h
-+++ b/arch/arm64/include/asm/kvm_mmu.h
-@@ -237,7 +237,8 @@ static inline void *kvm_get_hyp_vector(v
- 	void *vect = kern_hyp_va(kvm_ksym_ref(__kvm_hyp_vector));
- 	int slot = -1;
- 
--	if (cpus_have_const_cap(ARM64_SPECTRE_V2) && data->fn) {
-+	if ((cpus_have_const_cap(ARM64_SPECTRE_V2) ||
-+	     cpus_have_const_cap(ARM64_SPECTRE_BHB)) && data->template_start) {
- 		vect = kern_hyp_va(kvm_ksym_ref(__bp_harden_hyp_vecs));
- 		slot = data->hyp_vectors_slot;
- 	}
---- a/arch/arm64/include/asm/mmu.h
-+++ b/arch/arm64/include/asm/mmu.h
-@@ -67,6 +67,12 @@ typedef void (*bp_hardening_cb_t)(void);
- struct bp_hardening_data {
- 	int			hyp_vectors_slot;
- 	bp_hardening_cb_t	fn;
-+
-+	/*
-+	 * template_start is only used by the BHB mitigation to identify the
-+	 * hyp_vectors_slot sequence.
-+	 */
-+	const char *template_start;
- };
- 
- DECLARE_PER_CPU_READ_MOSTLY(struct bp_hardening_data, bp_hardening_data);
---- a/arch/arm64/kernel/proton-pack.c
-+++ b/arch/arm64/kernel/proton-pack.c
-@@ -220,9 +220,9 @@ static void __copy_hyp_vect_bpi(int slot
- 	__flush_icache_range((uintptr_t)dst, (uintptr_t)dst + SZ_2K);
- }
- 
-+static DEFINE_RAW_SPINLOCK(bp_lock);
- static void install_bp_hardening_cb(bp_hardening_cb_t fn)
- {
--	static DEFINE_RAW_SPINLOCK(bp_lock);
- 	int cpu, slot = -1;
- 	const char *hyp_vecs_start = __smccc_workaround_1_smc;
- 	const char *hyp_vecs_end = __smccc_workaround_1_smc +
-@@ -253,6 +253,7 @@ static void install_bp_hardening_cb(bp_h
- 
- 	__this_cpu_write(bp_hardening_data.hyp_vectors_slot, slot);
- 	__this_cpu_write(bp_hardening_data.fn, fn);
-+	__this_cpu_write(bp_hardening_data.template_start, hyp_vecs_start);
- 	raw_spin_unlock(&bp_lock);
- }
- #else
-@@ -819,3 +820,47 @@ enum mitigation_state arm64_get_spectre_
- {
- 	return spectre_bhb_state;
- }
-+
-+static int kvm_bhb_get_vecs_size(const char *start)
-+{
-+	if (start == __smccc_workaround_3_smc)
-+		return __SMCCC_WORKAROUND_3_SMC_SZ;
-+	else if (start == __spectre_bhb_loop_k8 ||
-+		 start == __spectre_bhb_loop_k24 ||
-+		 start == __spectre_bhb_loop_k32)
-+		return __SPECTRE_BHB_LOOP_SZ;
-+
-+	return 0;
-+}
-+
-+void kvm_setup_bhb_slot(const char *hyp_vecs_start)
-+{
-+	int cpu, slot = -1, size;
-+	const char *hyp_vecs_end;
-+
-+	if (!IS_ENABLED(CONFIG_KVM) || !is_hyp_mode_available())
-+		return;
-+
-+	size = kvm_bhb_get_vecs_size(hyp_vecs_start);
-+	if (WARN_ON_ONCE(!hyp_vecs_start || !size))
-+		return;
-+	hyp_vecs_end = hyp_vecs_start + size;
-+
-+	raw_spin_lock(&bp_lock);
-+	for_each_possible_cpu(cpu) {
-+		if (per_cpu(bp_hardening_data.template_start, cpu) == hyp_vecs_start) {
-+			slot = per_cpu(bp_hardening_data.hyp_vectors_slot, cpu);
-+			break;
-+		}
-+	}
-+
-+	if (slot == -1) {
-+		slot = atomic_inc_return(&arm64_el2_vector_last_slot);
-+		BUG_ON(slot >= BP_HARDEN_EL2_SLOTS);
-+		__copy_hyp_vect_bpi(slot, hyp_vecs_start, hyp_vecs_end);
-+	}
-+
-+	__this_cpu_write(bp_hardening_data.hyp_vectors_slot, slot);
-+	__this_cpu_write(bp_hardening_data.template_start, hyp_vecs_start);
-+	raw_spin_unlock(&bp_lock);
-+}
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -1337,7 +1337,8 @@ static int kvm_map_vectors(void)
- 	 * !SV2 +  HEL2 -> allocate one vector slot and use exec mapping
- 	 *  SV2 +  HEL2 -> use hardened vectors and use exec mapping
- 	 */
--	if (cpus_have_const_cap(ARM64_SPECTRE_V2)) {
-+	if (cpus_have_const_cap(ARM64_SPECTRE_V2) ||
-+	    cpus_have_const_cap(ARM64_SPECTRE_BHB)) {
- 		__kvm_bp_vect_base = kvm_ksym_ref(__bp_harden_hyp_vecs);
- 		__kvm_bp_vect_base = kern_hyp_va(__kvm_bp_vect_base);
- 	}
---- a/arch/arm64/kvm/hyp/smccc_wa.S
-+++ b/arch/arm64/kvm/hyp/smccc_wa.S
-@@ -30,3 +30,69 @@ SYM_DATA_START(__smccc_workaround_1_smc)
- 1:	.org __smccc_workaround_1_smc + __SMCCC_WORKAROUND_1_SMC_SZ
- 	.org 1b
- SYM_DATA_END(__smccc_workaround_1_smc)
-+
-+	.global		__smccc_workaround_3_smc
-+SYM_DATA_START(__smccc_workaround_3_smc)
-+	esb
-+	sub	sp, sp, #(8 * 4)
-+	stp	x2, x3, [sp, #(8 * 0)]
-+	stp	x0, x1, [sp, #(8 * 2)]
-+	mov	w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-+	smc	#0
-+	ldp	x2, x3, [sp, #(8 * 0)]
-+	ldp	x0, x1, [sp, #(8 * 2)]
-+	add	sp, sp, #(8 * 4)
-+1:	.org __smccc_workaround_3_smc + __SMCCC_WORKAROUND_3_SMC_SZ
-+	.org 1b
-+SYM_DATA_END(__smccc_workaround_3_smc)
-+
-+	.global	__spectre_bhb_loop_k8
-+SYM_DATA_START(__spectre_bhb_loop_k8)
-+	esb
-+	sub	sp, sp, #(8 * 2)
-+	stp	x0, x1, [sp, #(8 * 0)]
-+	mov	x0, #8
-+2:	b	. + 4
-+	subs	x0, x0, #1
-+	b.ne	2b
-+	dsb	nsh
-+	isb
-+	ldp	x0, x1, [sp, #(8 * 0)]
-+	add	sp, sp, #(8 * 2)
-+1:	.org __spectre_bhb_loop_k8 + __SPECTRE_BHB_LOOP_SZ
-+	.org 1b
-+SYM_DATA_END(__spectre_bhb_loop_k8)
-+
-+	.global	__spectre_bhb_loop_k24
-+SYM_DATA_START(__spectre_bhb_loop_k24)
-+	esb
-+	sub	sp, sp, #(8 * 2)
-+	stp	x0, x1, [sp, #(8 * 0)]
-+	mov	x0, #8
-+2:	b	. + 4
-+	subs	x0, x0, #1
-+	b.ne	2b
-+	dsb	nsh
-+	isb
-+	ldp	x0, x1, [sp, #(8 * 0)]
-+	add	sp, sp, #(8 * 2)
-+1:	.org __spectre_bhb_loop_k24 + __SPECTRE_BHB_LOOP_SZ
-+	.org 1b
-+SYM_DATA_END(__spectre_bhb_loop_k24)
-+
-+	.global	__spectre_bhb_loop_k32
-+SYM_DATA_START(__spectre_bhb_loop_k32)
-+	esb
-+	sub	sp, sp, #(8 * 2)
-+	stp	x0, x1, [sp, #(8 * 0)]
-+	mov	x0, #8
-+2:	b	. + 4
-+	subs	x0, x0, #1
-+	b.ne	2b
-+	dsb	nsh
-+	isb
-+	ldp	x0, x1, [sp, #(8 * 0)]
-+	add	sp, sp, #(8 * 2)
-+1:	.org __spectre_bhb_loop_k32 + __SPECTRE_BHB_LOOP_SZ
-+	.org 1b
-+SYM_DATA_END(__spectre_bhb_loop_k32)
+ #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+-	tramp_alias	dst=x5, sym=__sdei_asm_exit_trampoline
++	tramp_alias	dst=x5, sym=__sdei_asm_exit_trampoline, tmp=x3
+ 	br	x5
+ #endif
+ SYM_CODE_END(__sdei_asm_handler)
 
 

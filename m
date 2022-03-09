@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ABA4D3D16
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE274D3D15
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238751AbiCIWhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S238767AbiCIWhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiCIWhK (ORCPT
+        with ESMTP id S238759AbiCIWhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:37:10 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FDB1216B9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:36:11 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so6582678pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:36:11 -0800 (PST)
+        Wed, 9 Mar 2022 17:37:16 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0B91216AD
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:36:17 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so3590550pju.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:36:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KaZ7UiCMXi8qMFjPqiV4xU9nDrqqMiEGUN4hXGJXHL0=;
-        b=f1Vc4QOkkBXv6009fjawNvWMX9OxrPebOlqoDZEQhDLnw1gEwD14g81AO62Vc7PZSM
-         0iUzd91hEUZhS3UI0SmnX5hGatAnQKj7z52vrmX9o+qdBDkPUNoKaAeC/GcOm6q8vJel
-         Y6wwFooGD3tTJpth4TUXsPLxLc5l2TEewJTu8J1oywVo4m7NRv+/ucWEgDn2C9iXl5vL
-         i6y5BReYAhUiEHPwojq307v1ALmQ+QoXaD1bJS2QpqJPJs7fbDzdjillX1xuPVOViKfI
-         sgCFjbKq19VXiVd3eTk8UiJqCaSkb9L/im9cUALFc1QHRFlr7I/yIoyoyLtq4A25KUTP
-         200Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FmpTWN4T4djFzifgdW7xTG68jo1eOkFvfiyN6GxfsZU=;
+        b=hvIqZw4AKd2bH3e95nicvcqmIukTQbZd40KsnkkiGKvyXtoulo2r1IX23KcexV6U0w
+         l0SzLC68k3tXSiVSxOpy8i9Ni2lLvHrobFu+zrbiCY3vYhdAr8zazS8KSa2z9cme58iv
+         FEZyhNRCHAZ3F2KVp6dp2VdWY6SLQujdyV3ps=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KaZ7UiCMXi8qMFjPqiV4xU9nDrqqMiEGUN4hXGJXHL0=;
-        b=C9wiKp3BLOqzd6dQopw2C4fBjM1J0CJIWHcRYKAPEJGsvZCGvFRaF1qS/yrCzymXIn
-         RWUkX5ejZXNCiLSjCVkoJJ9duRDxMBwzWsUMK76zioQjq8ZOoXsGzwaHf7OsXE8bt1Ub
-         xmGhI7ZA45wRCwXAEDhBnD5ELVuQttlR+HVyU2ydHoVGahF7p+ssYuzY2ytLyMHp09uK
-         yz9o7HR578/zWeDxBWbhbg8GUZWcYZy9Tu+SReso+el6X1YFUzVduS2LKvOPzkrRsIk4
-         uIn1SJyFNA+aXt0Oi/CN+cTpeRe4LN4uxmVd5osYPGBIqpTLNYHpFqj3WZavdSFATp7N
-         lCHQ==
-X-Gm-Message-State: AOAM5326KBH3z7O+wWP/4VXXwDIgqTuOdMx2oEHrlLF8RAIiKdgTQyk5
-        IweoWIxgt1Pe4oshMLlaVPc=
-X-Google-Smtp-Source: ABdhPJweOMbhERmw1l+0POpTBXvnE5YjxPi6T3FchbPLhWMokyMkH/qrladgyIE5jlyra7QRpDmbpA==
-X-Received: by 2002:a17:90b:4d8a:b0:1be:f5f1:89d3 with SMTP id oj10-20020a17090b4d8a00b001bef5f189d3mr1794464pjb.79.1646865370688;
-        Wed, 09 Mar 2022 14:36:10 -0800 (PST)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:6f34:be93:349a:f478])
-        by smtp.gmail.com with ESMTPSA id z16-20020a056a00241000b004f3a647ae89sm4023446pfh.174.2022.03.09.14.36.09
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FmpTWN4T4djFzifgdW7xTG68jo1eOkFvfiyN6GxfsZU=;
+        b=2q27m3c4THdck2aabPQXK2Qsrv8erCT+iRE7IjfzR6zF7avBw8SPEw+J7aByxRy9iV
+         By+KQa9tgTdpgCz9cQB9sSEzkS4UkxAtd5H3j6z8RLsVOn2AjLm84JVt6luL1arMz5yR
+         a2Y3In4h1Xomevwyo0HG3zLV2BZhqSqPtSo5sdzyopUCyUGYsaqouleeIOml3yNGHwjy
+         NliKAWStQyaIdr2hhLOtOGs6pCn2LjWajJiONRJniuDfRmgZXtOz9+uv7kpQ8CKdlIpv
+         ObFRIPk2vvECzjsLw3dLjC7w8F2/C0OzTIU6ZG+wyVydPRkxE5K/UXQOETkt1w0vqD00
+         n2Iw==
+X-Gm-Message-State: AOAM531ubtXDXSmAqKyVQzIpYeZWGySvQevA44ru3v+xymR8M+w61w0h
+        mmV2/vmrEzxQpzp0aXcUeLHEdzRYpAttzQ==
+X-Google-Smtp-Source: ABdhPJxQitLcXeTLZ1hrDFoJSxWNlyNub5e4cU/hT9gC10JLChMT93GRq2CM3TKzF7PTWN2/xzOEGg==
+X-Received: by 2002:a17:902:6903:b0:151:6781:9397 with SMTP id j3-20020a170902690300b0015167819397mr1995753plk.137.1646865376671;
+        Wed, 09 Mar 2022 14:36:16 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w27-20020a637b1b000000b00380437ab89asm3320926pgc.50.2022.03.09.14.36.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 14:36:09 -0800 (PST)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-xtensa@linux-xtensa.org
-Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] xtensa: add kernel ABI selection to Kconfig
-Date:   Wed,  9 Mar 2022 14:35:57 -0800
-Message-Id: <20220309223557.1253417-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 09 Mar 2022 14:36:16 -0800 (PST)
+Date:   Wed, 9 Mar 2022 14:36:15 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 09/13] task_work: Decouple TIF_NOTIFY_SIGNAL and task_work
+Message-ID: <202203091436.24F9B63B18@keescook>
+References: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+ <20220309162454.123006-9-ebiederm@xmission.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309162454.123006-9-ebiederm@xmission.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,84 +71,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add choice to use default or call0 ABI for the kernel code. If call0 ABI
-is chosen add '-mabi=call0' to the flags. The toolchain support for this
-option is rather new so only enable it when the compiler supports it.
+On Wed, Mar 09, 2022 at 10:24:50AM -0600, Eric W. Biederman wrote:
+> There are a small handful of reasons besides pending signals that the
+> kernel might want to break out of interruptible sleeps.  The flag
+> TIF_NOTIFY_SIGNAL and the helpers that set and clear TIF_NOTIFY_SIGNAL
+> provide that the infrastructure for breaking out of interruptible
+> sleeps and entering the return to user space slow path for those
+> cases.
+> 
+> Expand tracehook_notify_signal inline in it's callers and remove it,
+> which makes clear that TIF_NOTIFY_SIGNAL and task_work are separate
+> concepts.
+> 
+> Update the comment on set_notify_signal to more accurately describe
+> it's purpose.
+> 
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/xtensa/Kconfig  | 35 +++++++++++++++++++++++++++++++++++
- arch/xtensa/Makefile |  4 ++++
- 2 files changed, 39 insertions(+)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index b324f6743073..cf03ed54c8f0 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -92,6 +92,9 @@ config CPU_BIG_ENDIAN
- config CPU_LITTLE_ENDIAN
- 	def_bool !CPU_BIG_ENDIAN
- 
-+config CC_HAVE_CALL0_ABI
-+	def_bool $(success,test "$(shell,echo __XTENSA_CALL0_ABI__ | $(CC) -mabi=call0 -E -P - 2>/dev/null)" = 1)
-+
- menu "Processor type and features"
- 
- choice
-@@ -250,6 +253,38 @@ config FAST_SYSCALL_SPILL_REGISTERS
- 
- 	  If unsure, say N.
- 
-+choice
-+	prompt "Kernel ABI"
-+	default KERNEL_ABI_DEFAULT
-+	help
-+	  Select ABI for the kernel code. This ABI is independent of the
-+	  supported userspace ABI and any combination of the
-+	  kernel/userspace ABI is possible and should work.
-+
-+	  In case both kernel and userspace support only call0 ABI
-+	  all register windows support code will be omitted from the
-+	  build.
-+
-+	  If unsure, choose the default ABI.
-+
-+config KERNEL_ABI_DEFAULT
-+	bool "Default ABI"
-+	help
-+	  Select this option to compile kernel code with the default ABI
-+	  selected for the toolchain.
-+	  Normally cores with windowed registers option use windowed ABI and
-+	  cores without it use call0 ABI.
-+
-+config KERNEL_ABI_CALL0
-+	bool "Call0 ABI" if CC_HAVE_CALL0_ABI
-+	help
-+	  Select this option to compile kernel code with call0 ABI even with
-+	  toolchain that defaults to windowed ABI.
-+	  When this option is not selected the default toolchain ABI will
-+	  be used for the kernel code.
-+
-+endchoice
-+
- config USER_ABI_CALL0
- 	bool
- 
-diff --git a/arch/xtensa/Makefile b/arch/xtensa/Makefile
-index 725cd4cd8b30..5097caa7bf0c 100644
---- a/arch/xtensa/Makefile
-+++ b/arch/xtensa/Makefile
-@@ -35,6 +35,10 @@ KBUILD_CFLAGS += -ffreestanding -D__linux__
- KBUILD_CFLAGS += -pipe -mlongcalls -mtext-section-literals
- KBUILD_CFLAGS += $(call cc-option,-mforce-no-pic,)
- KBUILD_CFLAGS += $(call cc-option,-mno-serialize-volatile,)
-+ifneq ($(CONFIG_KERNEL_ABI_CALL0),)
-+KBUILD_CFLAGS += -mabi=call0
-+KBUILD_AFLAGS += -mabi=call0
-+endif
- 
- KBUILD_AFLAGS += -mlongcalls -mtext-section-literals
- 
 -- 
-2.30.2
-
+Kees Cook

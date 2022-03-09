@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43E94D2EF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598DD4D2EF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiCIMVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S232735AbiCIMVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiCIMVK (ORCPT
+        with ESMTP id S232621AbiCIMVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:21:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DCE17582B;
-        Wed,  9 Mar 2022 04:20:12 -0800 (PST)
+        Wed, 9 Mar 2022 07:21:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D0E17582D;
+        Wed,  9 Mar 2022 04:20:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B34836195D;
-        Wed,  9 Mar 2022 12:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 168F3C36AEA;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85401B8213E;
+        Wed,  9 Mar 2022 12:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D187C36AE5;
         Wed,  9 Mar 2022 12:20:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1646828411;
-        bh=kJaF+ry8ZeG8rywYXUAcA39LdaW+YS/y+1HyUP/75+8=;
+        bh=0XEpp0FKMngNskFh6CWjMaR6cEtFFazS3Zu9FWMFrr8=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rli28Qea+ZJ/Nj5BsiFsrccdIR49lRnwxs8MGEjMZxT3Gm9BJs8W0g6d4h2fdgMMQ
-         hPSkCTTEuD32aW5yUu5qStHE+aSinZjulWtAzSfqB1npsksLaLXhfcX9cDkrIFOdiq
-         CBfp+pMydP3N/68KiaTDgfrF4dsMg6gdeBHazhgBol86DFxKMOUO/TODP65FaLk9vS
-         TS2+FFhErYbYDFLplJVtw98XCI5q5gHimfjtuUZbP1IrDzUOxfco7P9XaLBYSbG65R
-         1EoZ3aMr0F60QNJb0YlGXUOW414hdiX/oBcAsdrGq8BkQla+vml1Z9Ley6xU1KbPCJ
-         9OIj8CmUbmvMg==
+        b=Yx0chSj/eaoPC2hfCTW9G2AbAymR32XIPGvqchO7pJF5R+ieU5dM/kulsyOWH+37V
+         M63w1SclaePNUN1Kdh2I376zjBZXZ/Kb9xkOLrnadijLyVDP4txMAYEgVWUhIVOYmU
+         u0Y2oMAz5SELKxM27fmT5udU3E1wzmbGu9iwX8Xs90flvA9yzalBK23M8I7kHzRgnM
+         +MTqQlejdviioAoSbPzctg+wWahhROPqD1eDlnxyQ6E+wsOX4F+cyj+PCPggvhQQtg
+         WQhXphK424hos5ObDXLGkIm68PRKGT6JMR2yWUu9qntDS0Qz9a+SLPGr49maqvo0Hv
+         4juoLWGrKXsZA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2F66F0383B;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9ECDF0383C;
         Wed,  9 Mar 2022 12:20:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: ti: cpts: Handle error for clk_enable
+Subject: Re: [PATCH] net:mcf8390: Use platform_get_irq() to get the interrupt
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164682841099.19405.11150136599486334013.git-patchwork-notify@kernel.org>
+Message-Id: <164682841095.19405.17387917087764965957.git-patchwork-notify@kernel.org>
 Date:   Wed, 09 Mar 2022 12:20:10 +0000
-References: <20220308064007.1043691-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220308064007.1043691-1-jiasheng@iscas.ac.cn>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     davem@davemloft.net, kuba@kernel.org, gustavoars@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220308064309.2078172-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220308064309.2078172-1-chi.minghao@zte.com.cn>
+To:     Lv Ruyi <cgel.zte@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn,
+        zealci@zte.com.cn
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,19 +63,21 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Tue,  8 Mar 2022 14:40:07 +0800 you wrote:
-> As the potential failure of the clk_enable(),
-> it should be better to check it and return error
-> if fails.
+On Tue,  8 Mar 2022 06:43:09 +0000 you wrote:
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 > 
-> Fixes: 8a2c9a5ab4b9 ("net: ethernet: ti: cpts: rework initialization/deinitialization")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> It is not recommened to use platform_get_resource(pdev, IORESOURCE_IRQ)
+> for requesting IRQ's resources any more, as they can be not ready yet in
+> case of DT-booting.
+> 
+> platform_get_irq() instead is a recommended way for getting IRQ even if
+> it was not retrieved earlier.
 > 
 > [...]
 
 Here is the summary with links:
-  - net: ethernet: ti: cpts: Handle error for clk_enable
-    https://git.kernel.org/netdev/net/c/6babfc6e6fab
+  - net:mcf8390: Use platform_get_irq() to get the interrupt
+    https://git.kernel.org/netdev/net/c/2a760554dcba
 
 You are awesome, thank you!
 -- 

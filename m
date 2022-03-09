@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A797F4D36EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666534D35EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbiCIQ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S235621AbiCIQ1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238032AbiCIQVO (ORCPT
+        with ESMTP id S238112AbiCIQVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:21:14 -0500
+        Wed, 9 Mar 2022 11:21:17 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778B2BB01;
-        Wed,  9 Mar 2022 08:17:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E981520C8;
+        Wed,  9 Mar 2022 08:18:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13DC2B821FD;
-        Wed,  9 Mar 2022 16:17:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED288C340EC;
-        Wed,  9 Mar 2022 16:17:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7497B82212;
+        Wed,  9 Mar 2022 16:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5560AC340EC;
+        Wed,  9 Mar 2022 16:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646842672;
-        bh=7D3pUXqXjHzFHv7MUp8ajskK4tYH1lFUmXAWGDVys2o=;
+        s=k20201202; t=1646842717;
+        bh=5nw7cHt/RTx/pOOhvfo54s8PdS6J/svkQh4QT7q+nsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d24K6rXBeFma+DRehRgtoQeVRn0TxhhzldaBLecJfNcmWoTW5UfD7wpwpEVG6NTXV
-         Q1eCK+cSzqnUzvMDeOjkyFiRZSAbXZ3FXI4/D/UrT9MowVS60lNiDPuEL5KyhVwg3Q
-         2xu7Ci4+XYkJ5zvcVp2FOJmq4J+J9cwtb65qGquVOc0eIJYMNtkuig+/jhXOz83oOU
-         0Z7NLUYdJ1bXr0ptfjThYO+o8kinTuKtl7WVNWALbBmPEocjh0T1DL1L5CMM0CnbIh
-         46Ov5mXs1X0e32N+EY7ak98yUgvk94/ocd/9LDPm++F1Q3Sqq0WvNMg3lgz70ynYBy
-         dQ04hkD6cCINQ==
+        b=GukQMC97WCrzAVZhWvKq5okxJCfazL+a7s3G8EmohL41lMUOYwhgKlTdR3eTuHQXj
+         u7q/NTDMFtYKjr4gpoKnyi5cBOFVZRoiXkHuTILYAZnfTSz1k2CSbjuWNt5FqEjDNq
+         pRhie7+uLxu3b9EjZLwmslpSy8X+wYaw0vYUl2kF2zmL5lo1nBXW4mxfTq3uv+zKuj
+         zNH7YL5WptzdA1htWGW41a9mfBvUJROokWohBjotsGWKZag3XnnGWkQIa5bi6WDlwg
+         kzXP29jGvUtpDEB/4o3BKwhSNW0jTDyTx9SpR1Jnw7Uw2mb15vOVRbUYYkePAV2hAe
+         x4aqqBJoMGH7A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
-        jbx6244@gmail.com, benjamin.gaignard@collabora.com,
-        jon.lin@rock-chips.com, paul.kocialkowski@bootlin.com,
-        macromorgan@hotmail.com, maccraft123mc@gmail.com,
-        zhangqing@rock-chips.com, davem@davemloft.net, knaerzche@gmail.com,
-        cnemo@tutanota.com, ezequiel@vanguardiasur.com.ar,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.16 06/27] arm64: dts: rockchip: align pl330 node name with dtschema
-Date:   Wed,  9 Mar 2022 11:16:43 -0500
-Message-Id: <20220309161711.135679-6-sashal@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Pavel Machek <pavel@denx.de>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
+        davem@davemloft.net, kuba@kernel.org, stefan.maetje@esd.eu,
+        mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 15/27] can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
+Date:   Wed,  9 Mar 2022 11:16:52 -0500
+Message-Id: <20220309161711.135679-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309161711.135679-1-sashal@kernel.org>
 References: <20220309161711.135679-1-sashal@kernel.org>
@@ -64,49 +62,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-[ Upstream commit 8fd9415042826c7609c588e5ef45f3e84237785f ]
+[ Upstream commit c5048a7b2c23ab589f3476a783bd586b663eda5b ]
 
-Fixes dtbs_check warnings like:
+Register the CAN device only when all the necessary initialization is
+completed. This patch makes sure all the data structures and locks are
+initialized before registering the CAN device.
 
-  dmac@ff240000: $nodename:0: 'dmac@ff240000' does not match '^dma-controller(@.*)?$'
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20220129175429.298836-1-krzysztof.kozlowski@canonical.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://lore.kernel.org/all/20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Pavel Machek <pavel@denx.de>
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/px30.dtsi   | 2 +-
- arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 00f50b05d55a..b72874c16a71 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -711,7 +711,7 @@ rktimer: timer@ff210000 {
- 		clock-names = "pclk", "timer";
- 	};
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 137eea4c7bad..4871428859fd 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1716,15 +1716,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
  
--	dmac: dmac@ff240000 {
-+	dmac: dma-controller@ff240000 {
- 		compatible = "arm,pl330", "arm,primecell";
- 		reg = <0x0 0xff240000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index 39db0b85b4da..b822533dc7f1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-@@ -489,7 +489,7 @@ pwm3: pwm@ff1b0030 {
- 		status = "disabled";
- 	};
+ 	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
+ 		       RCANFD_NAPI_WEIGHT);
++	spin_lock_init(&priv->tx_lock);
++	devm_can_led_init(ndev);
++	gpriv->ch[priv->channel] = priv;
+ 	err = register_candev(ndev);
+ 	if (err) {
+ 		dev_err(&pdev->dev,
+ 			"register_candev() failed, error %d\n", err);
+ 		goto fail_candev;
+ 	}
+-	spin_lock_init(&priv->tx_lock);
+-	devm_can_led_init(ndev);
+-	gpriv->ch[priv->channel] = priv;
+ 	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
+ 	return 0;
  
--	dmac: dmac@ff1f0000 {
-+	dmac: dma-controller@ff1f0000 {
- 		compatible = "arm,pl330", "arm,primecell";
- 		reg = <0x0 0xff1f0000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 

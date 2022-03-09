@@ -2,127 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216104D25EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05024D255F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiCIBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S231144AbiCIBJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiCIBNK (ORCPT
+        with ESMTP id S230519AbiCIBJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:13:10 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8654A15879C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:56:18 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id g17so1041338lfh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dlXc7nO4VVenbG9TQJ/z1TWtkG9nDmF64Ost29V8AWc=;
-        b=fk9Kkf3UiaboVe5n2sPqRmsu9R/9pSJ0MBG82T7odsoD9Z+4tUrGity1EBUSVcd5bO
-         Ay+GVgtTlqOjk5DG157lanciRnAlDA9OLu41FZ3ehebtgoQkdRl4IX3y8PNM/lSEI5AP
-         dZRPNM6mHBzmKNa87ZpX/gBVrjQgnOz7vbrW0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dlXc7nO4VVenbG9TQJ/z1TWtkG9nDmF64Ost29V8AWc=;
-        b=YGVD+Q+fiXunJmLZ9gPqdq8JYgj6Lh8fq+bo0Qf+p/ZSYcLunbN770b/VuV/9+Jb/d
-         6dLWyNLNPTSDUNxUNf4mg8ojEmJSD7CmITpYFAZDaKQbMze3Hss/auYsP7X7lL1u1dWi
-         UvG2ugBEuZOAWy3HSaRrRm7PzG+FIz8mgK8peQshaDWlH3W5jvyJJUD6XtkHDbY4jFrA
-         6bJBjtNNYW+IiKjWzIdnSy8qlelTODVjZHrgcOqcyHRKJuMca52y13yYmoBf1wNmQxYZ
-         5q5Iq6H3L0TFe6Dju7LOLafXzkl+2AjBr1ltbt/Xz5jIQqh2LiS2xKzLfnRwcYWrjeAg
-         f1Hw==
-X-Gm-Message-State: AOAM532X51eiNjtOaPa40+DaR7GCDVMalmv7S8nMN1mKm6l1fuHVWGZA
-        Q1fvWw72uRToJ3a0JShoQMqr9/aI6tCAO6mKCAg=
-X-Google-Smtp-Source: ABdhPJzxiKdZrGW/psZjQD22B72hrb/aK1eFi029KadW+xrT0pF3YkWVx9q/DroWJTM77OJuzqILRA==
-X-Received: by 2002:a17:906:a148:b0:6cd:50c7:8d4d with SMTP id bu8-20020a170906a14800b006cd50c78d4dmr15512508ejb.641.1646785800129;
-        Tue, 08 Mar 2022 16:30:00 -0800 (PST)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
-        by smtp.gmail.com with ESMTPSA id r6-20020a1709064d0600b006da7ca3e514sm98042eju.208.2022.03.08.16.29.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 16:29:59 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id p15so1468953ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:29:59 -0800 (PST)
-X-Received: by 2002:ac2:44a4:0:b0:445:8fc5:a12a with SMTP id
- c4-20020ac244a4000000b004458fc5a12amr12499712lfm.27.1646785789558; Tue, 08
- Mar 2022 16:29:49 -0800 (PST)
+        Tue, 8 Mar 2022 20:09:33 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F0214CC87
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:51:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646787115; x=1678323115;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=rTewoYY5iGutquVo0W7aUnC1d1O9Xf62XUlk7Bo0QUQ=;
+  b=GYVAVapQiDYTUgv/rnTsr7PnNCcG9BAhC6/xMJ3F82g0X87L+Iweofc7
+   zr5j9jsWGahnayF85wKx1QLanKCUbl1B6dTRSeu7lS2LLQ8vJnLXOhCl0
+   sCU/o5dX4A9Mcdf+3whjnDYkbgvvVotB4Z/CA3BQf9w6Fmg5aM4j3GCu4
+   u7j+meckmwi0QoZZYJEs8vvm58mMVYm4p8pCaZy9Mo4/ToycG2M7d3KeI
+   3yNnqhgisTrIYN/hWSEllZTrnJIhS9bk7A07yoA7Ei93bHodVjZs2g2Yn
+   jC2ibZPnim4AD1wruuxeUNZwEjP0UQZJYo8U9emqgfvw6T6XTLk+zSIKL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254790602"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="254790602"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:29:44 -0800
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="537793799"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:29:42 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH -V11 2/9] mm/migrate: update node demotion order on
+ hotplug events
+References: <20210721063926.3024591-1-ying.huang@intel.com>
+        <20210721063926.3024591-2-ying.huang@intel.com>
+        <eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com>
+        <f5edb9dc-8b25-47c2-9905-09e88e41861b@intel.com>
+        <4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com>
+        <87pmnb3ccr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <YicvnkVODh5qbxTC@localhost.localdomain>
+        <86383ac9-e5f2-1a2e-dd19-02e39714a3fd@intel.com>
+        <Yiem+4YbComC0EGC@localhost.localdomain>
+Date:   Wed, 09 Mar 2022 08:29:40 +0800
+In-Reply-To: <Yiem+4YbComC0EGC@localhost.localdomain> (Oscar Salvador's
+        message of "Tue, 8 Mar 2022 19:56:59 +0100")
+Message-ID: <87k0d4ge8b.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220308234723.3834941-1-yuzhao@google.com> <CAHk-=wi5wg=72exwHODJdVtAfqa1e85dGfjGftuhHQ5Z4v-DNA@mail.gmail.com>
- <CAOUHufYFDawK6vmkQ16EQm7FSHresViifnxW2yj_RDuMSjJPjg@mail.gmail.com>
-In-Reply-To: <CAOUHufYFDawK6vmkQ16EQm7FSHresViifnxW2yj_RDuMSjJPjg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Mar 2022 16:29:33 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgwgqJMyxbrxa-mY3cYh--BZ5JKDieVc=RfXR1mdqsYkQ@mail.gmail.com>
-Message-ID: <CAHk-=wgwgqJMyxbrxa-mY3cYh--BZ5JKDieVc=RfXR1mdqsYkQ@mail.gmail.com>
-Subject: Re: [PATCH v8 00/14] Multi-Gen LRU Framework
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 4:15 PM Yu Zhao <yuzhao@google.com> wrote:
+Oscar Salvador <osalvador@suse.de> writes:
+
+> On Tue, Mar 08, 2022 at 09:07:20AM -0800, Dave Hansen wrote:
+>> On 3/8/22 02:27, Oscar Salvador wrote:
+>> > @@ -2043,7 +2044,12 @@ static void __init init_cpu_node_state(void)
+>> >  static int vmstat_cpu_online(unsigned int cpu)
+>> >  {
+>> >  	refresh_zone_stat_thresholds();
+>> > -	node_set_state(cpu_to_node(cpu), N_CPU);
+>> > +
+>> > +	if (!node_state(cpu_to_node(cpu), N_CPU)) {
+>> > +		node_set_state(cpu_to_node(cpu), N_CPU);
+>> > +		set_migration_target_nodes();
+>> > +	}
+>> > +
+>> >  	return 0;
+>> >  }
+>> > 
+>> > @@ -2066,6 +2072,8 @@ static int vmstat_cpu_dead(unsigned int cpu)
+>> >  		return 0;
+>> > 
+>> >  	node_clear_state(node, N_CPU);
+>> > +	set_migration_target_nodes();
+>> > +
+>> >  	return 0;
+>> >  }
+>> 
+>> Yeah, those callbacks do look like they're reinventing the wheel.  This
+>> is a much more direct way of doing it.
 >
-> This sounds self-serving: our data centers want them, so I had to try.
+> Then let me play a bit more with it and I can cook a patch unless
+> someone feels strong against it.
 
-Heh. I'm not opposed to putting them back in, but if/when we merge the
-multi-gen LRU code, I really want people to be all testing the same
-thing.
+This looks good to me, Thanks!
 
-I also think that if we put them back in, that should come with
-
- (a) performance numbers for the different cases
-
- (b) hard guidance of what the numbers should be, and under what
-circumstances (ie giving the user enough information that he *can*
-answer the question for his configuration)
-
- (c) some thought about perhaps making them possibly more dynamic than
-a hardcoded build-time value (assuming the numbers show that it's
-worth doing in the first place, of course)
-
-so I think that the support for the concept can/should be left in, but
-I think that kind of fancy "I want more generations or fewer
-tiers-per-generation because of XYZ" needs to be a separate issue with
-more explanation from the initial "This multi-gen LRU gives better
-performance" merge.
-
-Because as-is, I don't think those config options had nearly enough
-information associated with them to merit them existing.
-
-                  Linus
+Best Regards,
+Huang, Ying

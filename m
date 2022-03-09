@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3689F4D2FBC
+	by mail.lfdr.de (Postfix) with ESMTP id 825B44D2FBD
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbiCINM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
+        id S231889AbiCINM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbiCINMv (ORCPT
+        with ESMTP id S233061AbiCINMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:12:51 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC6E14995C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:11:52 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id o8so1907238pgf.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:11:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9k5ASJ+8ZwpoiVsY+cd28Kwawdvc5Dokf8I22Nf6p8I=;
-        b=lmlcLNySJRwwAdyMM0kUOmPqt2QWeDfkjqv+aXCn2rZMDT9CzciavDhBp7tZUYm7Jj
-         prwcU800WohbtViLYYMo+sUyXDhtC+PtIGLSsOquAX9MDwgdiwbV7nLgjziSj/sEEeCb
-         AxGlx4gwYnHjTuupqg3Mne5YjIIzmmELU9kS7+NvvYCYG6/KQQd+BiZEERCH3snb87AJ
-         OsU7D/y/Eks4BjRZQVJY2LcxzsbKv8jZxkXIK2nnmUpfzPvmlEKSv+GbzFeqsxBZAIK4
-         1DPVY846LTA+vzKyY08LKAF6yCpnAjfpHMD6F7aEat6MNsS/3e8SAG4lzbxoeLSGh+wo
-         CvqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9k5ASJ+8ZwpoiVsY+cd28Kwawdvc5Dokf8I22Nf6p8I=;
-        b=kYDDJHlHRL6uL8tcv2kHdhjiojL7iMPdB3OpEgdlnt0dQAtzb9zL15gxjcKWO3xaMx
-         xmOH/+40T/21BeCDPH3Gxg8h1zFvNFhOTrQQZzzh23JaPR4Uufvw7QVtWAbTxvWXPkuK
-         TXMmLkE0dREU+loCReLrvMJSvMFlkHXcgeR+5xmV693rnZiYxlWdOsTeRuCa+7H/efxg
-         8aRYWn/tw+QMfLhq9QV70d+eGOrrUwB6ERTT6T7LDSwgfCZQVtLj4JuP3rHv3dmmP+GP
-         SEzHofiGR6TRtIjxjkgSCvfUsCogZdtiU4bhpt6NDqVCh0IHYYGbnHqFAFIYHWcGt8V6
-         st4Q==
-X-Gm-Message-State: AOAM532QqN7UvCaLHHf40eazueHX6jHyJo/riG2SME4yrQSy3XSLi1qF
-        3Lx4DO+SWm9Yj0hrFZb+WH9dLqemxoW5uK8L0fMULzas2o4=
-X-Google-Smtp-Source: ABdhPJzJoBIea+ONqm7kG9R7LfL08H6VWsuonLa9GEaUO3s9YMjVHyIroXpOU2frJd/1BU5OWyZkaQgl8T1hFZEM6qg=
-X-Received: by 2002:a63:105f:0:b0:37f:f637:7adb with SMTP id
- 31-20020a63105f000000b0037ff6377adbmr18085281pgq.201.1646831511832; Wed, 09
- Mar 2022 05:11:51 -0800 (PST)
+        Wed, 9 Mar 2022 08:12:54 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26495128DCC;
+        Wed,  9 Mar 2022 05:11:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=QsyLvqtN/yV+ncyNzH22OgydtJL5VdIrk4utNTTIsnc=; b=qaQeA88+jr7QiC7JRb/KSCRxRp
+        znTQn30epe+AV9TZClGAZrw2TcIgkEa1QYrQw92co4deoE+NQVFmJ+ip6DjFa+7AHNdbUWSTVhRhD
+        pTZwTwcme9UU2YizvwLEQaTy27bk4BPHsX/bXsmwhIXchddn4Yd8hiiKedHcVhHG37hw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nRw6a-009xq0-62; Wed, 09 Mar 2022 14:11:52 +0100
+Date:   Wed, 9 Mar 2022 14:11:52 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org
+Subject: Re: [PATCH net-next] net: lan966x: Improve the CPU TX bitrate.
+Message-ID: <YiinmN+VBWRxN5l4@lunn.ch>
+References: <20220308165727.4088656-1-horatiu.vultur@microchip.com>
+ <YifMSUA/uZoPnpf1@lunn.ch>
+ <20220308223000.vwdc6tk6wa53x64c@soft-dev3-1.localhost>
 MIME-Version: 1.0
-References: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
- <9fb21623-60e1-fe35-b740-9577f096f84e@baylibre.com>
-In-Reply-To: <9fb21623-60e1-fe35-b740-9577f096f84e@baylibre.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 9 Mar 2022 14:11:40 +0100
-Message-ID: <CAG3jFyvS_bRNs1tBxbEyH6VDP4OoitoyAeOusUqEckT6LRxuUw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/bridge: Add MAINTAINERS entry for DRM drivers for
- bridge chip bindings
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308223000.vwdc6tk6wa53x64c@soft-dev3-1.localhost>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 09:04, Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> On 08/03/2022 20:06, Douglas Anderson wrote:
-> > The bindings for bridge chips should also get the same maintainers
-> > entry so the right people get notified about bindings changes.
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >   MAINTAINERS | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 0216d2ffe728..a73179d55d00 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -6403,6 +6403,7 @@ R:      Jonas Karlman <jonas@kwiboo.se>
-> >   R:  Jernej Skrabec <jernej.skrabec@gmail.com>
-> >   S:  Maintained
-> >   T:  git git://anongit.freedesktop.org/drm/drm-misc
-> > +F:   Documentation/devicetree/bindings/display/bridge/
-> >   F:  drivers/gpu/drm/bridge/
-> >
-> >   DRM DRIVERS FOR EXYNOS
->
-> Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+On Tue, Mar 08, 2022 at 11:30:00PM +0100, Horatiu Vultur wrote:
+> The 03/08/2022 22:36, Andrew Lunn wrote:
+> > 
+> > >  static int lan966x_port_inj_ready(struct lan966x *lan966x, u8 grp)
+> > >  {
+> > > -     u32 val;
+> > > +     unsigned long time = jiffies + usecs_to_jiffies(READL_TIMEOUT_US);
+> > > +     int ret = 0;
+> > >
+> > > -     return readx_poll_timeout_atomic(lan966x_port_inj_status, lan966x, val,
+> > > -                                      QS_INJ_STATUS_FIFO_RDY_GET(val) & BIT(grp),
+> > > -                                      READL_SLEEP_US, READL_TIMEOUT_US);
+> > > +     while (!(lan_rd(lan966x, QS_INJ_STATUS) &
+> > > +              QS_INJ_STATUS_FIFO_RDY_SET(BIT(grp)))) {
+> > > +             if (time_after(jiffies, time)) {
+> > > +                     ret = -ETIMEDOUT;
+> > > +                     break;
+> > > +             }
+> > 
+> > Did you try setting READL_SLEEP_US to 0? readx_poll_timeout_atomic()
+> > explicitly supports that.
+> 
+> I have tried but it didn't improve. It was the same as before.
 
-Acked-by: Robert Foss <robert.foss@linaro.org>
+The reason i recommend ipoll.h is that your implementation has the
+usual bug, which iopoll does not have. Since you are using _atomic()
+it is less of an issue, but it still exists.
+
+     while (!(lan_rd(lan966x, QS_INJ_STATUS) &
+              QS_INJ_STATUS_FIFO_RDY_SET(BIT(grp)))) {
+
+Say you take an interrupt here
+
+             if (time_after(jiffies, time)) {
+                     ret = -ETIMEDOUT;
+                     break;
+             }
+
+
+The interrupt takes a while, so that by the time you get to
+time_after(), you have reached your timeout. So -ETIMEDOUT is
+returned. But in fact, the hardware has done its thing, and if you
+where to read the status the bit would be set, and you should actually
+return O.K, not an error.
+
+iopoll does another check of the status before deciding to return
+-ETIMEDOUT or O.K.
+
+If you decide to simply check the status directly after the write, i
+suggest you then use readx_poll_timeout_atomic() if you do need to
+poll.
+
+	Andrew

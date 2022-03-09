@@ -2,167 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DBC4D26AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C02B4D26D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbiCIC6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 21:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S231557AbiCIC6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 21:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiCIC6C (ORCPT
+        with ESMTP id S231533AbiCIC6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 21:58:02 -0500
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 18:57:02 PST
-Received: from esa15.fujitsucc.c3s2.iphmx.com (esa15.fujitsucc.c3s2.iphmx.com [68.232.156.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5862F76651;
-        Tue,  8 Mar 2022 18:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1646794623; x=1678330623;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=JJd0yyPl/tuCxhNMaAuXbRzgHDz7X6UWmQHZ7RqCBb0=;
-  b=NQI5vqonHI+2ZI2WBzLLDY3ZPHzYMiQX67mJENVVFFtXG/pft2z+9bW4
-   irWJguV/nvu18rRalXaEMKSC21P+PaGkoHCuUsQH/eISs3bfYkOv+Jm4q
-   /OSOY8UU0NzvfI6XoxAw+y06/KvArNkxUsGec7iSkjmPy0M9g2qrU/IKD
-   0W2XXAlysO8KePfrqUw86h/Z7mgRrtCXBFf5uqix/4BwKRCbY8hvpTkHS
-   2fBa4gyKbltLf69EgOtzfPVTDD4eomPzsC0JzmYrY9S/AdpLoAGkNN9FD
-   8hH96o2dTpO1XW2b7aZkvkfbfj7G0lOCHlbJY9tTo6FfrNgs+1tcDTejL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="51263877"
-X-IronPort-AV: E=Sophos;i="5.90,166,1643641200"; 
-   d="scan'208";a="51263877"
-Received: from mail-os0jpn01lp2112.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.112])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 11:55:52 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=odks6oJNpgJJlWCUK+juChGwSvoU5M2R/9v1zZEwiRdyNm2gYsAFCbbR+3B0l2ljG/PvQvqbvGcSkMC0R16Gxg1O3pr7LBsw9gu0mdxsle3b1oaitShu9UB4hQLZ4ql9DkJg+rrjo8UsiIiG0Rrz7HWbDZbwSry7fIa8/e3f4H1WT7wJgZPqeRgPEPWffLUPA2G74wkWMio3k8QYeQ19Whu9HN5ns7zfLRwCLBqLIUep7kjrq0Jdh6czW8NZ9yiEtcMPdaQWlDGK2VWsCKffcLi7yMch+2nd1GDnYPaW62L1Bm9vzffL7WMJLnmZ4n8uvog5bUo6rQdxoAokXWxcPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JJd0yyPl/tuCxhNMaAuXbRzgHDz7X6UWmQHZ7RqCBb0=;
- b=ObGOJoORrihcUE0vm7IqTy4pvmalux6YKUspVcwmo4yfUXL3MImxpYU+HCL3q0ccA3aa2RON3L6ROke1ka7wBGAn46Ne3pD1Sz8uEZYTzhPCQrWWyizpwiv3LoXWbtQ88plNJW0CcWPsPFC3U4spDjJzFzmZUd/KybFsn+KxK+tmJUcDvFR9MNSOjpFXvJKf7Mk1x+lHsFKbrUrsKHBbEQULNi19KjE4Xlvhi16cP5tSFU+iJKRLX1hKIPDI1HQv6wLQFR37cLCiEXqI88Wgor8HRKRV6+XZFlMZ3iq/sPFK0vdnQ0PIOBZAcjNKoENkzL4B2B3bQoadNJLHa6503w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
+        Tue, 8 Mar 2022 21:58:17 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F23122226;
+        Tue,  8 Mar 2022 18:57:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JJd0yyPl/tuCxhNMaAuXbRzgHDz7X6UWmQHZ7RqCBb0=;
- b=Hyf+NGGJWkSK4JlPSTU284ZaswHELgT+GxJlM3AyEdu7eWZ5h8h6NVBpWOVOrqACny83tip+foIB8cG9YCzhWPCvc0dGAq81tC7bWPOAnvBYhSmMyeqEb6mTv9mFtCRk3R7dQum3wPjuaxLniLKysg6abS6WKcsWgu8yKsXdfiI=
-Received: from OSZPR01MB7050.jpnprd01.prod.outlook.com (2603:1096:604:13e::5)
- by TY2PR01MB2331.jpnprd01.prod.outlook.com (2603:1096:404:75::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.18; Wed, 9 Mar
- 2022 02:55:49 +0000
-Received: from OSZPR01MB7050.jpnprd01.prod.outlook.com
- ([fe80::e8a9:971f:52b9:8d07]) by OSZPR01MB7050.jpnprd01.prod.outlook.com
- ([fe80::e8a9:971f:52b9:8d07%9]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 02:55:49 +0000
-From:   "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "soc@kernel.org" <soc@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "peterz@infradead.org" <peterz@infradead.org>
-Subject: Re: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Thread-Topic: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Thread-Index: AQHYL5N9NH7YBhS2wU+ZKVA80VMN6ayz07gAgAFqVqI=
-Date:   Wed, 9 Mar 2022 02:55:49 +0000
-Message-ID: <OSZPR01MB705082EC83690A56ECC2BE79EB099@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-References: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
- <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
- <CAFA6WYMESyto9bFtk2qNBMi40BkJOoUKpYtAScXjb3yunhHTJA@mail.gmail.com>
-In-Reply-To: <CAFA6WYMESyto9bFtk2qNBMi40BkJOoUKpYtAScXjb3yunhHTJA@mail.gmail.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=True;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-03-09T02:55:48.605Z;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
-suggested_attachment_session_id: fa229cd5-699f-884b-76ee-bdd4b157060b
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3cf82cfe-22da-49e5-99bd-08da01785102
-x-ms-traffictypediagnostic: TY2PR01MB2331:EE_
-x-microsoft-antispam-prvs: <TY2PR01MB23313B0841B8472EE4784A68EB0A9@TY2PR01MB2331.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5yR0RZH4velhonDxb/YFR1OAtJvvezfW4aTu6xGq4/KYSDFjWPD9+xUzbILbiEgU6NPTLcL6LXaXCVCEvBKcsYMSZlDGdEguhNc0Xosz0WxCU37+E2gmfN0NoQJaVqDG/VFOULiW+OT6cAoclgxMSujrsnzK/Nqgd/kR3xMeC0o+i7IBYzAS7HWUjIZPlU0860IZ5lpaSluOfWHobw9yiuTbpWFy1efhfYzGnKBoxqXjQObaHfpUPVRgop7XiY7/F+bnmutrWmxcmzzdgYp21TAh9UWm17jkfwSYHo7PRNdHZoltEfP25yFvUPEbUfRmPNUENogs1lP4os757O6/IXPV8gsal5Ts/nwllQ9v8wLtkwApYuYMaNnZMPjacX6cjM+VDmo66LvChbn/xLWEVn7Lh6tStQa3mtHMjlynfvOu2AQ3jT3X3ra2B8TtAjQDsj6VaD1hcBGFuK4fbLYYpALqf9s55uuiGQ+D9gQ0MwHo+aVP9aHa2KiH13IB85enqZUExEgHvZI+cK3vI4abRXTg5GWpViW3TJQTYQFmnMv18PuOvE7D0SFFcjPcnzoCTesbH5cr1Y9OfCfDwn5Wyi9RpyR/SDUg+0XH+MZbBaMX2z0hqYdMxJFLrIdRode9XdJXidolT3kU1MS22CAzsAJpvEChuLtrEJAcShVHlGJ7y0aj1h/yO2Jt82MyhvU/t+sERz7XL4CU7CtuaTt7yA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB7050.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(186003)(7696005)(33656002)(26005)(6506007)(38070700005)(71200400001)(9686003)(508600001)(54906003)(86362001)(55016003)(316002)(8936002)(4744005)(6916009)(66556008)(64756008)(7416002)(66476007)(66446008)(122000001)(8676002)(66946007)(76116006)(52536014)(5660300002)(38100700002)(82960400001)(85182001)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?ekg1OGV1cFBLNHN0TlcrUFluL2Rra3hjcDBXRFZkK2QwWjg5aUloU0xn?=
- =?iso-2022-jp?B?N3FobUpsdzRmVXRNeTEyd1AwUm9FdE43d3Bia3JxWnlGRXdtZnVrRzhL?=
- =?iso-2022-jp?B?aHRaTURzMTZXdTZSOHUyY3lvUjVwcVllYVBPSndRYXYxUE5ZTGdQTitK?=
- =?iso-2022-jp?B?TGtlSnpaZVBiTlpocUNXeGtmVzUxUm55bzZMbmZuOVR6dTA3ZFdUbHg3?=
- =?iso-2022-jp?B?UUJ5bURFbE9QZXdqcjduU1dPZjJDeHdpOHB1OWlURXFyVkoyVzkzcmZi?=
- =?iso-2022-jp?B?QjBjb0tycUhlcTdJYmIvZnVLSC9YcG41Y21MbktwdFIxNVVWQURKWjA1?=
- =?iso-2022-jp?B?cDNnZzhsekRMK2tSTnR6SFBhVDRLbEJrNjhDUFRleXRuM1owNnJuMHVJ?=
- =?iso-2022-jp?B?M3Y1OFN1ejNYTmdvU29VcmFkRDFjTHJQd1JlTFlzRHJGdmVQSlQxTnBz?=
- =?iso-2022-jp?B?QXdNSnpJZkFKYVRJSlZGWjBPdmFodTgyY1ZPSjFUUUdPOEQ2NjBYWktt?=
- =?iso-2022-jp?B?UmxZQmhINHYvVmJlTkNZUVVwL25QWUF6QXNydi9ybDFqck1KT2cwbXMy?=
- =?iso-2022-jp?B?U1cxbCtRUGtTTXFETEVWend2NTJyT0cxR3dzNlZWWTUvc0NRNERVQWJ5?=
- =?iso-2022-jp?B?MXBnSlY1b3kwVVN1Zi92dXZXbVJCb1o2RWNSSHkzUEFKckNxTjIvdUsy?=
- =?iso-2022-jp?B?aUlGcmZtMkdYdEhaVnFxVjFqL01EYjZweFRhOE9aWndIcnBqSm9xQXBz?=
- =?iso-2022-jp?B?SXFkc0c1Yk5XY3VxTVVKeEc2eCthQUlXcmQxc3BUZWFhTjd4S2tFanpC?=
- =?iso-2022-jp?B?OUlRekl3d05FNzVpUnhvZmNteGxVbWFSTzdPcGVzYnM4QXJ5MzZLeGxa?=
- =?iso-2022-jp?B?bDJzdFIwQWZ2NDR4RXpkNTZrNmU3RjFPMFgrT0IxeGZnZk9mMFN2Ukhn?=
- =?iso-2022-jp?B?Q2JvM2MwNzFENjBJa2hWbG9CU0phR0ZoUmI4emZQUWNmWTJPOU5VMUxz?=
- =?iso-2022-jp?B?K050K1JTTW05NURURW1wajVuZlIwb3FoVENoMkRjbTl4YWR3ZDRFUlhz?=
- =?iso-2022-jp?B?NlFxdC80QUxTWW5KVW55UVFGZWhzdEx1Mld2OHBXdjBUTEZVZVZ6bXRo?=
- =?iso-2022-jp?B?OElkMEUwSURXRDQvZ1FtQzYzZ1R6Z041QzlkZlBJL0YxSlJ1MU1lWG9J?=
- =?iso-2022-jp?B?d2xsdEQ5Q3RodjRXZDNWeVBVYkpwbFFOZ01xSHh0MlRtUHUvUzlvMC9G?=
- =?iso-2022-jp?B?VVZCMno2OHQ3TjZCVTdnbGRuWnpsMGJYTWt6YUliVjN0SkJnTmNoRTJQ?=
- =?iso-2022-jp?B?RUw2ME9wcTA2UG1NMFlNSTFBeS93ODRBempra0hBVVJKeW5ZanZ2THVS?=
- =?iso-2022-jp?B?clcwZTdqYmpDSDExL1YvNWxkcy9vS1lMaWVHeHZ5c04zbEVqMUdCcVBo?=
- =?iso-2022-jp?B?VGc2cXZ4UlBaYldIQ3p0cXFRQzZPbll4UzBDekErbVdDR0JlWkMrWGhT?=
- =?iso-2022-jp?B?OTdFUlBiTnBHaUVIb2ROckdRbk5mbDhQbXJBSlgvc1EzTVVGemhDd21R?=
- =?iso-2022-jp?B?NG1wakRvUlI3Q09TcWNOUURML3hCblNxd2c2aFdFcjdvNGdEU1czVWhQ?=
- =?iso-2022-jp?B?dlhuUncydHBrQ3RtaW9DTExKRjBMWkJ6UEh1RDFlYnBEaFNBKzVOdE15?=
- =?iso-2022-jp?B?MjVrZGIrRHVFSjQyZzhpMzI4dGxUbU5Xd2ZIbmFBYkNRbm9oYURBTjBz?=
- =?iso-2022-jp?B?S2tadU8vM20wbHRGSm1VOE9zVWNjb2F5bjFFOUJYTXkzSHExdzA5K3pG?=
- =?iso-2022-jp?B?N3liZU1nQ05paElrRlhhdmNnWHJpb01jWUl2SGEyeDZKYVRNMDNDeE90?=
- =?iso-2022-jp?B?UjJwL2ExR1hiQUsrOG1qU0V1UkN5UTQ2VERPVHAxTmVxMEdsT1FkdzZs?=
- =?iso-2022-jp?B?U1YwMjBkaENUeGxtODIyTGxWaURQS2o2emlFbVpTdy9zL3ErNmlwYVky?=
- =?iso-2022-jp?B?THNnc0lRWXR3Tm83aXMxcGt0T2xmbTI5cVhaWWQ4TmxUSWNLSG9aSHhH?=
- =?iso-2022-jp?B?cDBlaEhrQUhETUN5N2ZUV09kZDVmRHIvUUtoS1YzaFhNZ013U2pVUWxT?=
- =?iso-2022-jp?B?OWFYVXBVVVpid2d5dFN1SExpZjlUaWV0UTBUQVBYVmJ2SktDY2JZNHVi?=
- =?iso-2022-jp?B?RGhSSktUbFRFcFYzUXRKNFNnYzZMYzBIZ1lQOVYvUy8vaXFsWU1tcmt6?=
- =?iso-2022-jp?B?TjY1KzZsYWFaWlpBVkFzejlQajFudzU3YzZzMWI4K2Y4cDdtR2FSS3Ux?=
- =?iso-2022-jp?B?ckNWdDhoZzljb2JVY0tJQjF0Y1l4VjJzbmp5RHFqTHlpcDdyWXFtYmtB?=
- =?iso-2022-jp?B?dStYeHdnZGtaUmlGQTZJWndMQk5EVWxaWHFKNXpQVFlERk81UTNrMWZF?=
- =?iso-2022-jp?B?QkFXODNnPT0=?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646794636; x=1678330636;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/6orijhYB1/V+Qoz6qfONCjhMSnQhyh2RiYXK66WPPc=;
+  b=LHH5ySt5zoPQikci6eCc2m39RLCRjZt4efk7ZgtsvwiF9NIZkiR0wvBU
+   jzl10xyBwIZ5dIHe0s6aLoVCAcCr6MZs6th0je7ESF9V2tTuiT8d5TgSh
+   SWnGaX0Jrz1ctVpmG5r3uTXQF2Vmgt9g8LepAi+EupD2GapVgEhhVk87s
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Mar 2022 18:57:15 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 18:57:15 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 8 Mar 2022 18:57:15 -0800
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
+ 18:57:11 -0800
+Message-ID: <7db54684-2637-ba82-7146-c8a559337933@quicinc.com>
+Date:   Wed, 9 Mar 2022 10:57:08 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB7050.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cf82cfe-22da-49e5-99bd-08da01785102
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2022 02:55:49.2706
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l8dhBNZUEzT9TP7GPu12kGZJJ68K9f+SqJlnZCh8teQ/8a4V7s/6spqwhaaF/3gPu0YlldDUaHrsoOiW0YYwGQqSixo1D/Iy0YlTwHPoe7I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2331
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2] coresight: core: Fix coresight device probe failure
+ issue
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Tingwei Zhang" <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20220304082350.30069-1-quic_jinlmao@quicinc.com>
+ <c77c93bb-f863-47c8-0ba0-3fc63530a9e1@arm.com>
+ <ea6219df-0a10-8e8d-4848-a28704a9f98e@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <ea6219df-0a10-8e8d-4848-a28704a9f98e@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -170,15 +78,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sumit,=0A=
-=0A=
-> Would it be possible to pass a dynamic sysrq key from BMC to the host=0A=
-> as that would unleash the true power of sysrq in an NMI context=0A=
-> capable of launching kdb as one example?=0A=
-=0A=
-A64FX's BMC supports a subset of the ipmitool command but it doesn't=0A=
-have the ability to dynamically send additional information such as the=0A=
-sysrq key, so I don't think it's possible.=0A=
-=0A=
-Thank you=0A=
-Hitomi Hasegawa=
+Hi Suzuki,
+
+On 3/8/2022 9:36 PM, Suzuki K Poulose wrote:
+> On 08/03/2022 11:56, Suzuki K Poulose wrote:
+>> Hi Jinlong
+>>
+>> On 04/03/2022 08:23, Mao Jinlong wrote:
+>>> It is possibe that probe failure issue happens when the device
+>>> and its child_device's probe happens at the same time.
+>>> In coresight_make_links, has_conns_grp is true for parent, but
+>>> has_conns_grp is false for child device as has_conns_grp is set
+>>> to true in coresight_create_conns_sysfs_group. The probe of parent
+>>> device will fail at this condition. Add has_conns_grp check for
+>>> child device before make the links and make the process from
+>>> device_register to connection_create be atomic to avoid this
+>>> probe failure issue.
+>>>
+>>> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+>>> Suggested-by: Mike Leach <mike.leach@linaro.org>
+>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>>> ---
+>>>   drivers/hwtracing/coresight/coresight-core.c | 12 ++++++------
+>>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>>> b/drivers/hwtracing/coresight/coresight-core.c
+>>> index 88653d1c06a4..b3e3bc59c09b 100644
+>>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>>> @@ -1382,7 +1382,7 @@ static int coresight_fixup_device_conns(struct 
+>>> coresight_device *csdev)
+>>>               continue;
+>>>           conn->child_dev =
+>>> coresight_find_csdev_by_fwnode(conn->child_fwnode);
+>>> -        if (conn->child_dev) {
+>>> +        if (conn->child_dev && conn->child_dev->has_conns_grp) {
+>>>               ret = coresight_make_links(csdev, conn,
+>>>                              conn->child_dev);
+>>>               if (ret)
+>>> @@ -1594,7 +1594,8 @@ struct coresight_device 
+>>> *coresight_register(struct coresight_desc *desc)
+>>>       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+>>>       if (!refcnts) {
+>>>           ret = -ENOMEM;
+>>> -        goto err_free_csdev;
+>>> +        kfree(csdev);
+>>> +        goto err_out;
+>>>       }
+>>>       csdev->refcnt = refcnts;
+>>> @@ -1619,8 +1620,10 @@ struct coresight_device 
+>>> *coresight_register(struct coresight_desc *desc)
+>>>       csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
+>>>       dev_set_name(&csdev->dev, "%s", desc->name);
+>>> +    mutex_lock(&coresight_mutex);
+>>>       ret = device_register(&csdev->dev);
+>>>       if (ret) {
+>>> +        mutex_unlock(&coresight_mutex);
+>>>           put_device(&csdev->dev);
+>>>           /*
+>>>            * All resources are free'd explicitly via
+>>> @@ -1634,6 +1637,7 @@ struct coresight_device 
+>>> *coresight_register(struct coresight_desc *desc)
+>>>           ret = etm_perf_add_symlink_sink(csdev);
+>>>           if (ret) {
+>>> +            mutex_unlock(&coresight_mutex);
+>>>               device_unregister(&csdev->dev);
+>>>               /*
+>>>                * As with the above, all resources are free'd
+>>> @@ -1645,8 +1649,6 @@ struct coresight_device 
+>>> *coresight_register(struct coresight_desc *desc)
+>>>           }
+>>>       }
+>>> -    mutex_lock(&coresight_mutex);
+>>> -
+>>>       ret = coresight_create_conns_sysfs_group(csdev);
+>>>       if (!ret)
+>>>           ret = coresight_fixup_device_conns(csdev);
+>>> @@ -1663,8 +1665,6 @@ struct coresight_device 
+>>> *coresight_register(struct coresight_desc *desc)
+>>>       return csdev;
+>>> -err_free_csdev:
+>>> -    kfree(csdev);
+>>>   err_out:
+>>>       /* Cleanup the connection information */
+>>>       coresight_release_platform_data(NULL, desc->pdata);
+>>
+>> Could we consolidate the unlock sequence to a single point with 
+>> something like this (untested):
+>>
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index af00dca8d1ac..198ee140c6e6 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -1571,6 +1571,7 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       int nr_refcnts = 1;
+>>       atomic_t *refcnts = NULL;
+>>       struct coresight_device *csdev;
+>> +    bool registered = false;
+>>
+>>       csdev = kzalloc(sizeof(*csdev), GFP_KERNEL);
+>>       if (!csdev) {
+>> @@ -1591,7 +1592,8 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+>>       if (!refcnts) {
+>>           ret = -ENOMEM;
+>> -        goto err_free_csdev;
+>> +        kfree(csdev);
+>> +        goto err_out;
+>>       }
+>>
+>>       csdev->refcnt = refcnts;
+>> @@ -1616,6 +1618,13 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
+>>       dev_set_name(&csdev->dev, "%s", desc->name);
+>>
+>> +    /*
+>> +     * Make sure the device registration and the connection fixup
+>> +     * are synchronised, so that we don't see uninitialised devices
+>> +     * on the coresight bus while trying to resolve the connections.
+>> +     */
+>> +    mutex_lock(&coresight_mutex);
+>> +
+>>       ret = device_register(&csdev->dev);
+>>       if (ret) {
+>>           put_device(&csdev->dev);
+>> @@ -1623,7 +1632,7 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>            * All resources are free'd explicitly via
+>>            * coresight_device_release(), triggered from put_device().
+>>            */
+>> -        goto err_out;
+>> +        goto out_unlock;
+>>       }
+>>
+>>       if (csdev->type == CORESIGHT_DEV_TYPE_SINK ||
+>> @@ -1638,11 +1647,11 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>                * from put_device(), which is in turn called from
+>>                * function device_unregister().
+>>                */
+>> -            goto err_out;
+>> +            goto out_unlock;
+>>           }
+>>       }
+>> -
+>> -    mutex_lock(&coresight_mutex);
+>> +    /* Device is now registered */
+>> +    registered = true;
+>>
+>>       ret = coresight_create_conns_sysfs_group(csdev);
+>>       if (!ret)
+>> @@ -1652,16 +1661,15 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       if (!ret && cti_assoc_ops && cti_assoc_ops->add)
+>>           cti_assoc_ops->add(csdev);
+>>
+>> +out_unlock:
+>>       mutex_unlock(&coresight_mutex);
+>> -    if (ret) {
+>> +    /* Success */
+>> +    if (!ret)
+>> +        return csdev;
+>> +
+>> +    /* Unregister the device if needed */
+>> +    if (registered)
+>>           coresight_unregister(csdev);
+>> -        return ERR_PTR(ret);
+>> -    }
+>
+> Apologies, this should be preserved :
+>
+> i.e,
+>     if (registered) {
+>         coresight_unregister(csdev);
+>         return ERR_PTR(ret);
+>     }
+I will test with your changes and get back to you later.
+
+Thanks
+Jinlong Mao
+>
+> Thanks
+> Suzuki

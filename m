@@ -2,176 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E8F4D3CD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021504D3CCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbiCIWVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
+        id S238605AbiCIWV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiCIWVm (ORCPT
+        with ESMTP id S233383AbiCIWV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:21:42 -0500
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2F5119841;
-        Wed,  9 Mar 2022 14:20:42 -0800 (PST)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4EAFC200002;
-        Wed,  9 Mar 2022 22:20:37 +0000 (UTC)
-From:   Ilya Maximets <i.maximets@ovn.org>
-To:     Jakub Kicinski <kuba@kernel.org>, Roi Dayan <roid@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Aaron Conole <aconole@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>
-Subject: [PATCH net-next v2] net: openvswitch: fix uAPI incompatibility with existing user space
-Date:   Wed,  9 Mar 2022 23:20:33 +0100
-Message-Id: <20220309222033.3018976-1-i.maximets@ovn.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 17:21:56 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E1711985B;
+        Wed,  9 Mar 2022 14:20:57 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso4643545ooi.3;
+        Wed, 09 Mar 2022 14:20:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=WuHDc6v3uOzowGHm6UtrQZFQgPa2xYn/b0QP1E2NrtU=;
+        b=KhJ0RQRFRhPkrZkSlix08XmES6Br3IPbNm9XbyDkApL25a/QIyMAwdVEphsmD3bUP3
+         3VrUvp5iw0j10rRizSnzupBEpXDA+KsshhUbfFXXMcS2A3VYJugEYGvqkux9J2y+dgYg
+         4PsXAo7M5urDT9JumCwt9l8vEvW7H/kNc7hai22vaHM1J98dg6D4kelZMxsNMWFVCe+f
+         mQwwAs6ZUJ4KZ3UKG2M/3UCKCl0UYHWSfMZh5oORe8Z9OsjxwEv4twm8iiatEODixYFY
+         Q8kwXTvp9oK9p9lTmLyNQ4UnsYtYlYwqVr1u+5L/vh4OIF+eem4TinP/gMduCBuskUwI
+         oVng==
+X-Gm-Message-State: AOAM533CDgpPEidT7ltivdu9D6atZJYn8Z80s7HioTYq6UZYTlSCgk0a
+        I/d4bSRaDpzMQ6f/q1H4XF31x11eJg==
+X-Google-Smtp-Source: ABdhPJzC7IxSe0nOpoXmKQ/dOW3QU1tV9W+5+0lyQ81LhaDWeK5vDEdYVAh0tg5gibz3hZx90nYcCg==
+X-Received: by 2002:a4a:be82:0:b0:320:d362:88e6 with SMTP id o2-20020a4abe82000000b00320d36288e6mr972107oop.21.1646864456837;
+        Wed, 09 Mar 2022 14:20:56 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n13-20020a056820054d00b0032106118fb3sm1638596ooj.37.2022.03.09.14.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 14:20:56 -0800 (PST)
+Received: (nullmailer pid 326440 invoked by uid 1000);
+        Wed, 09 Mar 2022 22:20:55 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     claudiu.beznea@microchip.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, nicolas.ferre@microchip.com
+In-Reply-To: <20220309120714.51393-3-sergiu.moga@microchip.com>
+References: <20220309120714.51393-1-sergiu.moga@microchip.com> <20220309120714.51393-3-sergiu.moga@microchip.com>
+Subject: Re: [PATCH 2/3] dt-bindings: i2c: convert i2c-at91 to json-schema
+Date:   Wed, 09 Mar 2022 16:20:55 -0600
+Message-Id: <1646864455.115517.326439.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Few years ago OVS user space made a strange choice in the commit [1]
-to define types only valid for the user space inside the copy of a
-kernel uAPI header.  '#ifndef __KERNEL__' and another attribute was
-added later.
+On Wed, 09 Mar 2022 14:07:13 +0200, Sergiu Moga wrote:
+> Convert I2C binding for Atmel/Microchip SoCs to Device Tree Schema
+> format.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> ---
+>  .../bindings/i2c/atmel,at91sam-i2c.yaml       | 144 ++++++++++++++++++
+>  .../devicetree/bindings/i2c/i2c-at91.txt      |  82 ----------
+>  2 files changed, 144 insertions(+), 82 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-at91.txt
+> 
 
-This leads to the inevitable clash between user space and kernel types
-when the kernel uAPI is extended.  The issue was unveiled with the
-addition of a new type for IPv6 extension header in kernel uAPI.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to the
-older user space application, application tries to parse it as
-OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message as
-malformed.  Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied along with
-every IPv6 packet that goes to the user space, IPv6 support is fully
-broken.
+yamllint warnings/errors:
 
-Fixing that by bringing these user space attributes to the kernel
-uAPI to avoid the clash.  Strictly speaking this is not the problem
-of the kernel uAPI, but changing it is the only way to avoid breakage
-of the older user space applications at this point.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.example.dt.yaml:0:0: /example-0/i2c@f8034600/eeprom@1a: failed to match any schema with compatible: ['wm8731']
 
-These 2 types are explicitly rejected now since they should not be
-passed to the kernel.  Additionally, OVS_KEY_ATTR_TUNNEL_INFO moved
-out from the '#ifdef __KERNEL__' as there is no good reason to hide
-it from the userspace.  And it's also explicitly rejected now, because
-it's for in-kernel use only.
+doc reference errors (make refcheckdocs):
 
-Comments with warnings were added to avoid the problem coming back.
+See https://patchwork.ozlabs.org/patch/1603370
 
-(1 << type) converted to (1ULL << type) to avoid integer overflow on
-OVS_KEY_ATTR_IPV6_EXTHDRS, since it equals 32 now.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
- [1] beb75a40fdc2 ("userspace: Switching of L3 packets in L2 pipeline")
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extension header support")
-Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com
-Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295bfd6521b0068b4cd12f6de507c
-Reported-by: Roi Dayan <roid@nvidia.com>
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
----
+pip3 install dtschema --upgrade
 
-Version 2:
-
-  - (1 << type) --> (1ULL << type) to fix the integer overflow.
-
-  - Tested with OVS 2.13 LTS and latest OVS 2.17 releases:
-
-    * 'make check-kernel' and 'check-system-userspace' testsuites succeeded.
-      ('make check-kernel' fails with the current net-next without the patch)
-
-    * 'make check-offloads' fails HW offloading tests, but this is not a
-      kernel's fault.  OVS offloading fails to handle perfectly valid cases
-      where kernel and user space are parsing different number of packet
-      fields (ODP_FIT_TOO_LITTLE and ODP_FIT_TOO_MUCH cases).  The problem is
-      purely in user space and can not be fixed by kernel changes.
-      FWIW, quick'n'dirty version of a fix for the OVS user space may look
-      like this: https://pastebin.com/qR0ZjvQ7
-
- include/uapi/linux/openvswitch.h | 18 ++++++++++++++----
- net/openvswitch/flow_netlink.c   | 13 ++++++++++---
- 2 files changed, 24 insertions(+), 7 deletions(-)
-
-diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
-index 9d1710f20505..ce3e1738d427 100644
---- a/include/uapi/linux/openvswitch.h
-+++ b/include/uapi/linux/openvswitch.h
-@@ -351,11 +351,21 @@ enum ovs_key_attr {
- 	OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
- 	OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
- 	OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
--	OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
- 
--#ifdef __KERNEL__
--	OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
--#endif
-+	/* User space decided to squat on types 29 and 30.  They are defined
-+	 * below, but should not be sent to the kernel.
-+	 *
-+	 * WARNING: No new types should be added unless they are defined
-+	 *          for both kernel and user space (no 'ifdef's).  It's hard
-+	 *          to keep compatibility otherwise.
-+	 */
-+	OVS_KEY_ATTR_PACKET_TYPE,   /* be32 packet type */
-+	OVS_KEY_ATTR_ND_EXTENSIONS, /* IPv6 Neighbor Discovery extensions */
-+
-+	OVS_KEY_ATTR_TUNNEL_INFO,   /* struct ip_tunnel_info.
-+				     * For in-kernel use only.
-+				     */
-+	OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
- 	__OVS_KEY_ATTR_MAX
- };
- 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 8b4124820f7d..5176f6ccac8e 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -346,7 +346,7 @@ size_t ovs_key_attr_size(void)
- 	/* Whenever adding new OVS_KEY_ FIELDS, we should consider
- 	 * updating this function.
- 	 */
--	BUILD_BUG_ON(OVS_KEY_ATTR_TUNNEL_INFO != 30);
-+	BUILD_BUG_ON(OVS_KEY_ATTR_MAX != 32);
- 
- 	return    nla_total_size(4)   /* OVS_KEY_ATTR_PRIORITY */
- 		+ nla_total_size(0)   /* OVS_KEY_ATTR_TUNNEL */
-@@ -482,7 +482,14 @@ static int __parse_flow_nlattrs(const struct nlattr *attr,
- 			return -EINVAL;
- 		}
- 
--		if (attrs & (1 << type)) {
-+		if (type == OVS_KEY_ATTR_PACKET_TYPE ||
-+		    type == OVS_KEY_ATTR_ND_EXTENSIONS ||
-+		    type == OVS_KEY_ATTR_TUNNEL_INFO) {
-+			OVS_NLERR(log, "Key type %d is not supported", type);
-+			return -EINVAL;
-+		}
-+
-+		if (attrs & (1ULL << type)) {
- 			OVS_NLERR(log, "Duplicate key (type %d).", type);
- 			return -EINVAL;
- 		}
-@@ -495,7 +502,7 @@ static int __parse_flow_nlattrs(const struct nlattr *attr,
- 		}
- 
- 		if (!nz || !is_all_zero(nla_data(nla), nla_len(nla))) {
--			attrs |= 1 << type;
-+			attrs |= 1ULL << type;
- 			a[type] = nla;
- 		}
- 	}
--- 
-2.34.1
+Please check and re-submit.
 

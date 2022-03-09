@@ -2,108 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D4F4D31F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6704D31F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiCIPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S233961AbiCIPme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233956AbiCIPl5 (ORCPT
+        with ESMTP id S231348AbiCIPmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:41:57 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22DA177D0C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:40:58 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id q19so2262832pgm.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:40:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=awNm7ncYJS5runeS2crmI62S72vDnlHWFXIoD08zsCQ=;
-        b=L95s3l8KwvKSoVBp7CenGSpuMYCVVN7GYKixyJEeDlmj6to8MhL0pIcnvDahgNOvxi
-         JfjZ0TGsVg8yLTggwW59sBAVvTyJ2+ahvDMzZ1X/cpIaGcZw/Yfu+FTW13ogQdC5gcUx
-         WduOO+A0oDbV8KctSwlgphgr4QbcVJIbd4eTAk9QTeMSmzdnIvnMpo4DZt6s3GqCCXWQ
-         I9FjVUcItyTicv7V147R87ZLFIeV9kXVghbdYNWZYNmZvi5YRVLgDg/4HmWm3BJp0jeP
-         tBfOIvJm8gJ5J9VEv9NMcb8m5DNZx/lSzmLslFTLe9wlqmNqqJUqnt1TS7+FBUg/Et+J
-         4D3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=awNm7ncYJS5runeS2crmI62S72vDnlHWFXIoD08zsCQ=;
-        b=nIT6xDEir1SVVqGwYJl9K3sGJkBf1Jw2aztm5Xm2Q3Gnox65yKJko8doe4lhXnngvi
-         4atU5SjvvdOVzsEZMncixZpyI5EsW9vGUFlIgMzlkX73buJnfw+tsxfeaqUnKfa3e6dH
-         tILogc6KXsEEGvp7MqJ7KpijZMcOF/NZlXSVSBkzy1r5qyPyhFpdFuFJTDbTzmlezmcH
-         Zdg7Pj4W6QL7RFbCT6WRj/wVoCPOM4tG+6GAD14iC75g8cPy0X1Akq1j48HjRumNWLrX
-         ai8KFl2ULZH2K2iEMPtNV/le0amlr/k1Sivg3eeGJKSwsMdll1xDzgZISMZ/m0Xs/Df0
-         NHlw==
-X-Gm-Message-State: AOAM533BxstbiLJVthnjU6TlTH9Y1TAdCiCvuIkWncAjDXpi/SBo02S3
-        5SIHCDWMfr6DU+na361YsSkIng==
-X-Google-Smtp-Source: ABdhPJy0fy+gKxWpiweokALKmNhNvXvpZLPvXf3Aa/Du9Pmy7tGAgvR6HKEPghwWq0MWpSuGrYsfnQ==
-X-Received: by 2002:a05:6a00:ac1:b0:4f1:29e4:b3a1 with SMTP id c1-20020a056a000ac100b004f129e4b3a1mr295081pfl.63.1646840457963;
-        Wed, 09 Mar 2022 07:40:57 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o1-20020a637e41000000b003804d0e2c9esm2819543pgn.35.2022.03.09.07.40.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 07:40:57 -0800 (PST)
-Date:   Wed, 9 Mar 2022 15:40:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Kieran Bingham <kbingham@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
-Message-ID: <YijKhYNjZpG7EX9y@google.com>
-References: <20210811122927.900604-1-mlevitsk@redhat.com>
- <20210811122927.900604-3-mlevitsk@redhat.com>
- <YTECUaPa9kySQxRX@google.com>
- <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
- <YifoysEvfnQgq59A@google.com>
- <3221c2385e1148fe0ee77d4717b52726e1db9d8d.camel@redhat.com>
- <a7b27887-ce00-c173-a7e7-8ad3470154f5@redhat.com>
+        Wed, 9 Mar 2022 10:42:33 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB5D17C430
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:41:32 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KDGdP4YVVz9sSh;
+        Wed,  9 Mar 2022 16:41:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Sf-CINmH9zVP; Wed,  9 Mar 2022 16:41:29 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KDGdP3NhXz9sQv;
+        Wed,  9 Mar 2022 16:41:29 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5ECF38B780;
+        Wed,  9 Mar 2022 16:41:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Lvh8lYiafQd6; Wed,  9 Mar 2022 16:41:29 +0100 (CET)
+Received: from [192.168.202.27] (unknown [192.168.202.27])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B31918B763;
+        Wed,  9 Mar 2022 16:41:27 +0100 (CET)
+Message-ID: <8bba9ed8-ae1f-7c98-fde5-808927935447@csgroup.eu>
+Date:   Wed, 9 Mar 2022 16:41:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7b27887-ce00-c173-a7e7-8ad3470154f5@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 00/23] Add generic vdso_base tracking
+Content-Language: fr-FR
+To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
+References: <20210611180242.711399-1-dima@arista.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20210611180242.711399-1-dima@arista.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022, Paolo Bonzini wrote:
-> On 3/9/22 13:31, Maxim Levitsky wrote:
-> > Question: is it worth it? Since I am very busy with various things, this
-> > feature, beeing just small debug help which I used once in a while doesn't
-> > get much time from me.
-> 
-> I agree it's not very much worth.
+Hi Dmitry,
 
-I don't have a use case, was just trying to find the bottom of my inbox and came
-across this thread.
+I'm wondering the status of this series.
+
+Wondering what to do while reviewing pending powerpc patches and 
+especially 
+https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20201103171336.98883-1-ldufour@linux.ibm.com/ 
+
+
+Christophe
+
+Le 11/06/2021 à 20:02, Dmitry Safonov a écrit :
+> v3 Changes:
+> - Migrated arch/powerpc to vdso_base
+> - Added x86/selftest for unmapped vdso & no landing on fast syscall
+> - Review comments from Andy & Christophe (thanks!)
+> - Amended s/born process/execed process/ everywhere I noticed
+> - Build robot warning on cast from __user pointer
+> 
+> I've tested it on x86, I would appreciate any help with
+> Tested-by on arm/arm64/mips/powerpc/s390/... platforms.
+> 
+> One thing I've noticed while cooking this and haven't found a clean
+> way to solve is zero-terminated .pages[] array in vdso mappings, which
+> is not always zero-terminated but works by the reason of
+> VM_DONTEXPAND on mappings.
+> 
+> v2 Changes:
+> - Rename user_landing to vdso_base as it tracks vDSO VMA start address,
+>    rather than the explicit address to land (Andy)
+> - Reword and don't use "new-execed" and "new-born" task (Andy)
+> - Fix failures reported by build robot
+> 
+> Started from discussion [1], where was noted that currently a couple of
+> architectures support mremap() for vdso/sigpage, but not munmap().
+> If an application maps something on the ex-place of vdso/sigpage,
+> later after processing signal it will land there (good luck!)
+> 
+> Patches set is based on linux-next (next-20201123) and it depends on
+> changes in x86/cleanups (those reclaim TIF_IA32/TIF_X32) and also
+> on my changes in akpm (fixing several mremap() issues).
+> 
+> Logically, the patches set divides on:
+> - patch       1: a cleanup for patches in x86/cleanups
+> - patches  2-13: cleanups for arch_setup_additional_pages()
+> - patches 13-14: x86 signal changes for unmapped vdso
+> - patches 15-22: provide generic vdso_base in mm_struct
+> - patch      23: selftest for unmapped vDSO & fast syscalls
+> 
+> In the end, besides cleanups, it's now more predictable what happens for
+> applications with unmapped vdso on architectures those support .mremap()
+> for vdso/sigpage.
+> 
+> I'm aware of only one user that unmaps vdso - Valgrind [2].
+> (there possibly are more, but this one is "special", it unmaps vdso, but
+>   not vvar, which confuses CRIU [Checkpoint Restore In Userspace], that's
+>   why I'm aware of it)
+> 
+
+I'm wondering the status of this series.
+
+Wondering what to do while reviewing pending powerpc patches and 
+especially 
+https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20201103171336.98883-1-ldufour@linux.ibm.com/ 
+
+
+Christophe
+

@@ -2,249 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEC54D3996
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1CF4D3999
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbiCITLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S237313AbiCITLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbiCITLQ (ORCPT
+        with ESMTP id S232890AbiCITLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:11:16 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D043141FC8;
-        Wed,  9 Mar 2022 11:10:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646853016; x=1678389016;
-  h=message-id:date:subject:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=gpU10WDAU+BeImAoHnsY1t27mbtIVjh2Mwm2zI++Yu8=;
-  b=n5+Ubc6ySufVFKYp8n3K6AUgqm1joLcYOuP32nW7Kv9xXtzQj4e8tHxG
-   pYSxKgRzkr2uOTgC1ygyDXYCdfkAiVvs09n78UELA3oDwssZbUB/smYkb
-   zqsqHwie3WWxTonwgSGrwMliec2dRQS6eDzsM3ZHwN/+isouO4QpnCFq1
-   k6aY6xBbK5ot5ubVpMvJt6rvbUuM9F7SxyBW4WYrJtJjJptS2iCNIxMHj
-   Xx5iQvZi6ZyL3tezQpFeyOmWtVSQLPqmF8MqaAuokV/0cT2tYhF1XXDYH
-   34eMjYTkt9eybxp9hap/qS+ztLZ5Za4pQowYxXi7PBFc/P+9fDe1uyuqW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235017651"
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="235017651"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 11:10:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="554254177"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2022 11:10:15 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 11:10:15 -0800
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 11:10:14 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Wed, 9 Mar 2022 11:10:14 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 9 Mar 2022 11:10:14 -0800
+        Wed, 9 Mar 2022 14:11:48 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C5E142341
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:10:49 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229J69Td030956;
+        Wed, 9 Mar 2022 19:10:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Q8pQBqpEuS6OCq05PP17wKku2KSmi9Lvr6ltXFqbuyU=;
+ b=j4zcFQ/0wh9rpzGO8TEqmD4XfcgugIOJ3bvgCmXSxFPZkTwTe2wb9UK/kbvykWWKkx3U
+ J/remhQkkhEDmxn6/z2aNE8Tb6nlBulf7JfaK7Uj+k97Yvsv2ftxajd5Lzw5dKnijh7V
+ eD2+Tn18LtxeNmMKjwlGBNjUxcHVuj9WM1aid9Hpd49S9+EyTHMYHhirAvgZWANyajK3
+ TVnxBMQ9soN/yeBlJpTs5hCvi8g3N0yF0sFQX2vYA0LpF3BF72e5cKcJPSOGaf7AfAKn
+ tJ1N0VE8ILenCDmL4dR7L/ljfKwlg0jF5SRBh+lDt9Xo0VYkzgm20Kcz8JzmWGRVa+tP ag== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyratnyc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 19:10:38 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 229J1V52147511;
+        Wed, 9 Mar 2022 19:10:37 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2177.outbound.protection.outlook.com [104.47.55.177])
+        by aserp3020.oracle.com with ESMTP id 3ekyp348m9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 19:10:37 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SOvpImeFZA2Q5Ox/6Bihq6Rq046lF/OqQRLMR/N75E9yPxA6TKkR3J+odq+O77lUseFAL87YDuAkRkxRa8Cl5ImmrOt/HDe9/TV/yS58B2vy4AepJZ/9JGTZtgRIO73r4W/mmsdfS7bYf8ScpDP4fC9eIGRkg/zDW7AP7XXMLZSSHYozMndjgCLIZBcqJiz2oEYtGOfcPeKuhvf58ai2E0aAUKwPpeGxL0oljwqaMR7rxaepUAignD4jIMF6Z6T2JgCaivs9/dNXuVkzfTziPlySt6i6WUQJ6SPc66sHH+zyWVhxGb2HOL1CL5ZbMXJPmdE2R6JehGp64om5WP7emg==
+ b=SCPVZlN1CeM3pfHIu+Ypb8HHA3TukCm9oSG/hPSpDPxgBGrGUxO/Atfn5Uyb4tFHR5T9IeiM/WW4m77pPaKpXngjSoCV/N1H5H+cMEyJRrd6SvQmHjmT8gL5jPFkYB9AzaSOVyqxIqfrbRKexFjgDNElYz0r5tz3C8J/3+E4VpDCBI6fGAPHYtbKjq25yyCQMRAeZe2k0vTdCvLSlgzkMqfCA/Lfmkp2cOF65bba47Oc+1J4NtVTPP2ktfLbVZHnAvctPQUWjJRaW4vFZhuiNUXLjelVUT4S5UkVLACYsxGMoe9Xc8Z1MhtCkDrp1I+VHsSMa5/Cj2ACWwo0R4ctIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lmxj9hlf2PLASe8wmpdcBAuGq7KiF7ZGl9rLCspVbkw=;
- b=fco3OimsXT1dVISiU/a4XyDgrwlW9AHEGhmjjboI3PvpYkPGrNsYMzLCDNkUqC5e4eo5bf3X9SqifSXRYjAwI7afbOBwbf03b1OraK0b82A4z7ZhuFF/dAqh+Ws6JQTQe+YGr/yy5BsI0p0B00CjRMtv2zX2bao8uuLYm/6khCV773T6p0zM4sWTIcirsWu/CXc05eCvkiF3LGCJ0uRP9NjmquvQoKvZsm21XLzuptKFCyCPjoAQYxMASj/dq48V387DKVOdxtCDOO5QxDyQtQmlyOae5XRPoXcK3yXbz9Gvv2asWDQcJkD7von/dC6t0XhvDivs9FQ57wgzmkPLXQ==
+ bh=Q8pQBqpEuS6OCq05PP17wKku2KSmi9Lvr6ltXFqbuyU=;
+ b=gnmpGLR1t/4VeD031wmS5EOcp7+q9kt/UmbTNWhOgNfF/AB46Bcy4INr9WcHZVscyeSZy3nLes3G6SWDg+DLxVhOP10Sc8v8nvSF4OPgrQiHs4Gv9QPwX7qxjZodjbJAMVieEH9pA3j8tnj8YyJ/cxEcXOfq5KU1PlSz3SCCJKM+1Smzvrf1zrHv+1/yItCHMT0oKLcQCbg6jXhlkfGOfN+2A2uBUNhhHtZl7yeix5HO74LxbivpXmoIDnZbnAQrlzh3C2ltNPCEi7C5qDe6TyPXfLplYlZHYMZQpxYtJghMb560J4gvnSHCGQGLGbJDVdnPf5lJp6IA0QWJVivABg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by MWHPR11MB1712.namprd11.prod.outlook.com (2603:10b6:300:29::23) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q8pQBqpEuS6OCq05PP17wKku2KSmi9Lvr6ltXFqbuyU=;
+ b=LMc0w1/nv0mcwRHpjeeOZgBLoykAyHDVBNsX/0waoaiigAoAxIPNJR4WB5T8x23K/SHBvaVPxRn3Gwgyp7vjoVzvCxlhuh81/KF83GukiyXcpEIiU+gUkvyDBmtk4en+e3I/UIFQYxs9HLM9PBpzIMZ+rvmscTL2tzQfz8q70pg=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM5PR10MB1483.namprd10.prod.outlook.com (2603:10b6:3:11::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
- 2022 19:10:11 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::55e4:9a32:8e6f:4774]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::55e4:9a32:8e6f:4774%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 19:10:11 +0000
-Message-ID: <a79df871-5c7c-ff25-1cdf-508750c8d802@intel.com>
-Date:   Wed, 9 Mar 2022 11:10:07 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [RFC PATCH v2.1 14/30] x86/sgx: Support restricting of enclave
- page permissions
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.21; Wed, 9 Mar
+ 2022 19:10:35 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8df4:1db9:57f2:a96a]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8df4:1db9:57f2:a96a%3]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 19:10:35 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH mmotm] mempolicy: mbind_range() set_policy() after
+ vma_merge()
+Thread-Topic: [PATCH mmotm] mempolicy: mbind_range() set_policy() after
+ vma_merge()
+Thread-Index: AQHYL4FzWFkyFnZUSku+xBH1UQyT+KyvkiKAgAAEfoCAAD4yAIAANciAgAAH1YCABZtSAIAAWzUAgAD+FoCAAGyYgA==
+Date:   Wed, 9 Mar 2022 19:10:35 +0000
+Message-ID: <20220309191023.34fmzibc2u5tcinw@revolver>
+References: <319e4db9-64ae-4bca-92f0-ade85d342ff@google.com>
+ <20220304184927.vkq6ewn6uqtcesma@revolver>
+ <20220304190531.6giqbnnaka4xhovx@revolver>
+ <6038ebc2-bc88-497d-a3f3-5936726fb023@google.com>
+ <20220305020021.qmwg5dkham4lyz6v@revolver>
+ <29eac73-4f94-1688-3834-8bd6687a18@google.com>
+ <20220308160552.d3dlcaclkqnlkzzj@revolver>
+ <6036627b-6110-cc58-ca1-a6f736553dd@google.com>
+ <105e1620-5cf2-fecd-27e7-21a6045cc3ac@suse.cz>
+In-Reply-To: <105e1620-5cf2-fecd-27e7-21a6045cc3ac@suse.cz>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>, <linux-sgx@vger.kernel.org>
-CC:     Nathaniel McCallum <nathaniel@profian.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-References: <20220304093524.397485-1-jarkko@kernel.org>
- <20220304093524.397485-14-jarkko@kernel.org> <YihqwiU3Dr5mvMQx@iki.fi>
- <Yih00gFMaJhLIgxa@iki.fi> <5e89a3be-0760-b1b4-7693-2f3d9ac5066b@intel.com>
-In-Reply-To: <5e89a3be-0760-b1b4-7693-2f3d9ac5066b@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR21CA0064.namprd21.prod.outlook.com
- (2603:10b6:300:db::26) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6a3158a6-024b-45bb-99cd-08da02007d6e
+x-ms-traffictypediagnostic: DM5PR10MB1483:EE_
+x-microsoft-antispam-prvs: <DM5PR10MB1483A9421C9BBF869D353D40FD0A9@DM5PR10MB1483.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: z7Thcgwblh9r99eSeT0BmOsjS1H1BLcSXDvdlQW3OvBdt5y4OqVmGuWLRdRY9TT3sEJrfCq6tweQ1/v7Rutmux04zSIWtysrjkxt7HbsLVzYwnylCzZ1mP6BObhVMgfwrFxvGXUYo37RHDJ+eNxjAsX1xpCCiiMHNvsLqykD7QapVLiGkrUYAza1xQiS2P8lGMfTxx0mouIZkZ/5IwNJM0WE9rO2gXdZ99cEe+NOUvW4yVfI4pbLOjDRigmPqyRTNgFxcvym/DN72dFv+EN4hU/AMm/4Wuqaqr+zGMn297Ua7LpRmT+J0+wMENhP1KV0bUSR/zPWyYVfACO2FIAM8trjOtcH6k9QewFUrt7jSWboGOENFNcivXT0dIav5a5nMd+CEoFbiIY01nPjLWBtAvCdUuJTa2UCI2+JJByM6ftLdv2Yg3NZgUPoZROL80pQqks5+uGx6BXOBYE2YFCC6KS3y9KtlDoYc5D8NtNAsShywEhSTkjfDyQ2Ig3VfiDackAl3E30geWLvHEZB9VD7AulvsSscmUwAIe/rPK/NGplv1DSN2hHR/xtdoG2pT//zOoMWvoX0tL7MOtiq0AZ807G0Zmj7A8su03uzywzfnTlRY1Ccpolglxvu3Ypa4QfJ/6Py683nYO3X/PHnI5JAb9mHYSFAnfAeUvEBeP89gZBAt33L3nWldaSO6Benvy6nw9WznrX43doGxITlpQHjA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(122000001)(44832011)(2906002)(86362001)(186003)(26005)(1076003)(316002)(38070700005)(6916009)(83380400001)(33716001)(5660300002)(54906003)(8936002)(38100700002)(64756008)(66556008)(66476007)(66446008)(6512007)(9686003)(508600001)(91956017)(66946007)(53546011)(76116006)(6506007)(8676002)(71200400001)(4326008)(6486002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HCPqVWm0sTc++ohJBhlca1gW3sjOiuOeeNFrCjKn1gJgPqYtRI+3Pxlgyb40?=
+ =?us-ascii?Q?JZ/yT8ZPX+0v3FW6XK3WN1LBl0zDLEkcv2BUeaSMOhUw2sHhk5oWfOqi8wy+?=
+ =?us-ascii?Q?iTmb8RmPKfKVfsuoJ/aR8cT6YHdfPVkoUPwidsueiXwczqWjZjc4eUF5rR4B?=
+ =?us-ascii?Q?YUDZo0YCrl6G7/39wXc3GW0fF5efoCjFvqeoEKGPkhnXZNJ0m3ENw9aeq21v?=
+ =?us-ascii?Q?0pejLLJN/vEavvJ2FUGDfV+Z643KyuDLcq4rVwdo6TRZ+PnfSmFfgYRz4HKm?=
+ =?us-ascii?Q?ThkfN9UChCFALo5oM9CryQrPYqGM2TzuGZuQ9jXXNkvoeS1YSQN8IPqNkpo/?=
+ =?us-ascii?Q?QrMun7f7M3sv47TSXYHme083erwGGyohLpjrkrWSVFyXrLjMMJpwKTLVGMbP?=
+ =?us-ascii?Q?kqmehGevNY4egbLjzBF7u6/dEeXRK5figBTgZRl1Tvhwvsb8FBkGdAL9FHI2?=
+ =?us-ascii?Q?GK8WlJfxTBxS6f38lrWMbTXmdVGuT36jDaXgzSB49Tv9xjArzvbj+iVtMP55?=
+ =?us-ascii?Q?Nvrzww3a6dIGIlaDD/JnypbGwx+BOMU5MXsJVW3JjYKLP2MEv8M0j2kwftBu?=
+ =?us-ascii?Q?US5pr/Q77T29OoE79y1A7BI0qn/kftywSHsSd3m7OtOcyxX2iIDzvSuAAfIB?=
+ =?us-ascii?Q?AszR4LCjH2ekmM8cDY0yo2GD0sJolrKC75J1Pir6qBYYeM9oMwrjRxVEKy1Y?=
+ =?us-ascii?Q?46tchXZ3B35v5EMsPZPKrtMx9kSky5iLa8C7zeKrNMdK75Q6wlFT9ANOqgcp?=
+ =?us-ascii?Q?DzxpDAPNYfZ9CAi2xwQkqbY2cjnPVaZAWlGCYLuZToDV1hA8W/cy16pLPCbp?=
+ =?us-ascii?Q?1t1qj15YDDtYZaQv5r0SU8QpHxj3DL1PMSGuZmNqepR2950oEbUj92hozdkG?=
+ =?us-ascii?Q?5JVNQfwgdWV/RzOoACc4Jnf9fDEquywDKnhBun+OpXNvUnCl24yN86jC1CO+?=
+ =?us-ascii?Q?k8U0116lMd4ICCKXPjtyTCvLb7SbfVXqo5zOYjXMB3mcYOv1D3I3/IT2m224?=
+ =?us-ascii?Q?+4B9ir94XDzRz0UqZaY5SCSQqPTYu7UyXoncVk6JEZ1qjCUQaFhp60PAEj2H?=
+ =?us-ascii?Q?yxD5YqERsjsQy3+He/6sBSEGtzZ6MZUxZxqOc+olY1flmZxx5DDLvN4Q1Plr?=
+ =?us-ascii?Q?lPRSgeFsmGW7o2GcYpOwWHpbGytF7oSksRg5XKk6LqhXFjFMDokadf+DiBbQ?=
+ =?us-ascii?Q?L6ijWNZ46qirnugl4eoY7puE2S+QukorvM9SuUy1+yorgqnJJi+/8J+T42to?=
+ =?us-ascii?Q?T+orGhOnAhS/ksSX1Nn9lf4KFPEPL2wS5BwdndNg3kh5IddWRptFrCJsbNde?=
+ =?us-ascii?Q?3GxzJBEEDL/1AYV5u8LjdRpZgvET66+VsH5DtBFpMqLgo2J8LaSb9IhKugNl?=
+ =?us-ascii?Q?WBXDJ+mgpiXnCHrbklIzj2g7jiXYHc2kjIQBCdaUSvRMmWp6t1/rEW/sxcrf?=
+ =?us-ascii?Q?XzLex+0GWwINAx9wtK9ukoeKSozygIOOstMLrkdRwCWpG+msKC2MBw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A15DAF7AC4A4B4459E329AA8AABD66D9@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 826c1113-1927-440c-221c-08da02006f14
-X-MS-TrafficTypeDiagnostic: MWHPR11MB1712:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR11MB1712C0A2C7C195BA9B66515AF80A9@MWHPR11MB1712.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7BLhu4zYqZiscUY5DgfOa9s8QslOaWHhNukCI9oPbA8G+BnSnnIzpuzVwSzFfcZXwTXHhuhaEOUmWZn+iFWaG3cwrSEnuhx4eKpgCVeb7qXde064SKclh6oru3l7ylFGkwsDhaXDAmsByNhaoi62qj5XRbZ5xDrCINdy0y8AKzsYO5wTY8FEjqjKaEn/aEUSPkqOaudJP8ufmldXpt9yvMj/c62A7fjway6WIVjjXFHtjzrO/k0iSbb8VLu8u4uQZLvCYdZL1hthcfvxYDxtbxW7UZjXM2/HSW6JCBvKhpt2P8/gop4LdoMiCFKISZ8bA3d+ykCJ40uSEQaKq965DxJpUc9axE/LnyyMcEPXW1330X9M8E+ZqOuZSfjXGOMB4gJ2NNX5QwvQJvAzCIjj5eD42Jz2o8E8dIgS/BFS9ZeRU9b+mlXOaYBDc32m1iF1QpZLUe53bMzEX17wxHqsgXQ/3syxPUSnUbzBOHEWTzi5dQJm6hVH3WIMsP5GXFwhuSA0Gg8m95gRrd24Ms4ort5XhKXsw5X0KXB8DPU8BeSHBbVmQs6IRD+2v5DFcsZS2VDErsIRzkE3JyU/N4bZQCnn1/MVa6cdhxo4ACTao4lYziIhgQCqaRLLshOpCo/gje0nVdgLkuLx0ChlMbTyRmIvSQze+jvQdrIu0Reco5II3GaSuP7e3JbiixTEQmzTSINv4rHMWx0i2YuP2oNR8JFqfQ23GUz94xNDW+lZnVgsz1vXAGKSEVVoZq2OI3cqEO2j04ArAHcxvO3fFZH68+M7ASTdpUHdmmclA5Ge+6VyE/l4J5ysVMglSkl5NX9j
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6666004)(8676002)(8936002)(5660300002)(2616005)(7416002)(66556008)(6512007)(66476007)(4326008)(66946007)(83380400001)(54906003)(53546011)(6506007)(26005)(2906002)(186003)(44832011)(86362001)(316002)(38100700002)(82960400001)(508600001)(966005)(6486002)(31686004)(31696002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0M4b2p2WGd2NldJQTh4NngzUUMwUXhveUNhYnlkcURyTlBWajkzb0VpTmto?=
- =?utf-8?B?dnZ2S0VVWGxqNS9sWG1DaGxFUkZXRS8vVjV6U0RlZWF2N0JPSGRZSXc5cjlI?=
- =?utf-8?B?T0ZaTFZVWkhtelFlamN0WnBzdXNuK1dxK2QyRWFUZC8xM1hqa291WUFaUEpW?=
- =?utf-8?B?SnJUOFRzRzg0YVhmYll2NXVsT3VBUDhLOFdTUUU3dnhXaVl0QUpRaXNSaFhm?=
- =?utf-8?B?a2E0azFXSTBjSldPdUtzdkhWMUdzc2Z6djhwZnY5N1dUdjZyempDb3hWNDNK?=
- =?utf-8?B?d01wN1MzMHR4SVJpYTNxc3FQU0hpUm4rVzZyQmpTVU15QU5paWNFdUhuN093?=
- =?utf-8?B?aDJqdjBrZmdkL0JNUGpUcTY4aFdYSHBmUlZZVHl2ZXY1N0NHY2I2YWoxeWIy?=
- =?utf-8?B?ZERoaEl1SU50LzRBVEJWWVZQdWEyckFScmJUMzlPUkkrNWdRS0xCZHhDZWhx?=
- =?utf-8?B?Y1Y0bEUyUnZtZlhzUEtqOFpPcThDV09qMjAwZlltc1N3NU0xeWRHK0JkZHJE?=
- =?utf-8?B?alFBNkt1NzlXZVVPdW5FaVNRcENsdENqVTV6WU14SmZMOVl5S05nUmJWY3NW?=
- =?utf-8?B?RUkrRTNUaWUwbWxDWVRtdnNnenRhZjBENVdzSTNqQVh1NWhQZlZvWkxEYTBO?=
- =?utf-8?B?cXhGN0JkdGowOXdkWjhiK1AyblVNMVRmR3BaaGtPdncva0J5akRlOExNTDBF?=
- =?utf-8?B?aGduckVxQ0RkQU9YODRndU1sQkh6QTVOSzBtUXplbElPN2N2VTZkUElBcW1p?=
- =?utf-8?B?Skw1dUFCVHBCNGx5SU9DQ1diY2QwaTk3RWtKMlJhY214UXFjN0ZyQ095NENH?=
- =?utf-8?B?N2l2ZDYxd1I0ejZiUWQ0dVRXZjJJWWwvai9KQ1JkU2pOR2gvT1Z6cE1MS2Rz?=
- =?utf-8?B?Q3dKQ0hJSEE5RjVZektLYnRZZGUzcFFZRTlBMGxWSFhXWFNnYTdHZUNTNlUv?=
- =?utf-8?B?WS9NTk81bUllWUpsZi9vb2RVaEVEVWJqb3ROUmVxRGI3elMvdDFMVW1GQ003?=
- =?utf-8?B?L1g5cEVpTkt6aUFJNU5ERXNZQjNVZ2wwaFBPMHQwbWt6TEFVNmFHdExmYzZT?=
- =?utf-8?B?SVFLZXZJaExoZk5WRTduVXFmZ3ZaUDcwNmNaUnR2RktlYXFLRjdQL1ZFQ1Vp?=
- =?utf-8?B?NUloNWQwMjlwZW5GMXJNMUJPMFlWTjNNa0dFbEsvSU92cHpJZUExNElUZ3l3?=
- =?utf-8?B?eTdpbVVXTUt5RERIU29Gd3ppVlpuVzRXRFkrT0xCYk1zTUR4clhrWEN1dklW?=
- =?utf-8?B?N1pGMWczTS80NnBPdWpkSzcxaXcxN2VGOXlSWmM3M0dzcEVveGRXQU1veXli?=
- =?utf-8?B?dUNISGJoQmxwYnJsQUR2cHNKRG1qREZEdXlwLzFLcENQWitYR2p3MitHb1dR?=
- =?utf-8?B?cHRDVVB6ODdpV3MyaFV6dktualJGb3dNaFFuOFdsZzRnU0h4R2UrUGNNUG83?=
- =?utf-8?B?clg1eHg1N09ncG5pbG1GVUtGcUNXVDhxOGxEM0lZcTVybUpzaTNnaGJJYTZz?=
- =?utf-8?B?eERMVHZuVk0zc1Q0R2JZMGFVWHhIN293Snd3VFRLL2ZEU0VSeE1CZ2Y5S2dK?=
- =?utf-8?B?MXEyUTZKYzhvNzRkZ0cwekFtUThUV0o1R2VmejlqOUlZMU95YThSSXdSVzlB?=
- =?utf-8?B?RWxlVmpJcEl4eFA3VklMS1VnNW5JOG1ZVWhLRTZGRzh5UkR0ZFo4MUw3N1Z3?=
- =?utf-8?B?K1VVTjRmaEZoS2luVkNORk1qNllrTkJmZTlwd0RpNTNKMVBIWVZaZkpaTnQ3?=
- =?utf-8?B?aktXS2ZmVEM0aURQK2w1dU0vL1JBYjkrWmdnN3FJMmMzVDl4emRXb2hYbkJU?=
- =?utf-8?B?RVVmNDRBVWtBWFN0UlJwYkhFaUQzcHRIMjh5dDNTTnJDSDNMd0duUUM4NXFp?=
- =?utf-8?B?YVVSNityNVNuSk9EdU1oTjhwOGYvWENsaFlaN2JjbjZpbTY5alM2a2FScnRn?=
- =?utf-8?B?ZENFRk1MYTd4NnEvUnBlN2JRNzBhWWU2TUlsMi95WTU0dWlwMlZlTUpzZDNy?=
- =?utf-8?B?OXRXVHVZMldzd3FxT3pRN1dmd3hveU1nQUxHRThXM2ZvWC9Oa2ZSOFVFS2hR?=
- =?utf-8?B?bzBJWVE1anlxcEdEWTZEVjR0M3ZtcTRnVlVMSzc3aDF4UHpneXJIRDVnd2E3?=
- =?utf-8?B?YnQ4NC9ua1BRbWJlUDhBS3hTQmNFVXFQeGtvSXRvWlRkRzMzcHJieEFpeWZ2?=
- =?utf-8?B?NkJMTTRYUHo3aHNwVkhycExrNlNFOGJwUklSTXB1YXpKTHVVNWZzN3FEdXEw?=
- =?utf-8?Q?kaBZ396aekiqA4V7t1ctYhNxz/iQquTgzr1hDRox78=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 826c1113-1927-440c-221c-08da02006f14
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 19:10:11.6473
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a3158a6-024b-45bb-99cd-08da02007d6e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2022 19:10:35.2908
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kur6AUFjq324CAGG/SiaBowVc9pZ0XKepE4lAmPM6MtK1fEqRDKrPubDcOzkTRLj/jQbBJcnK3ZeS7ADZAGD9t6Ng5pVljQPkAUw8FnW7Bg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1712
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zuprw01+nSdXuZKLx4H4YcbFK0bH9a4DvyrZKM9k9Mx00mGXBFUN1WFzrQ/TDZ/Brb5PcyUNRgOofM59WXfdJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1483
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10281 signatures=692062
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203090103
+X-Proofpoint-GUID: 4DNpVlvWR-9ddGlgDG6Enm411MPlOKSV
+X-Proofpoint-ORIG-GUID: 4DNpVlvWR-9ddGlgDG6Enm411MPlOKSV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+* Vlastimil Babka <vbabka@suse.cz> [220309 07:41]:
+> On 3/8/22 22:32, Hugh Dickins wrote:
+> > On Tue, 8 Mar 2022, Liam Howlett wrote:
+> >> * Hugh Dickins <hughd@google.com> [220304 21:29]:
+> >> > On Sat, 5 Mar 2022, Liam Howlett wrote:
+> >> > > * Hugh Dickins <hughd@google.com> [220304 17:48]:
+> >> > > > On Fri, 4 Mar 2022, Liam Howlett wrote:
+> >> > > > > * Liam R. Howlett <Liam.Howlett@Oracle.com> [220304 13:49]:
+> >> > > > > > * Hugh Dickins <hughd@google.com> [220303 23:36]:
+> >> > > > >=20
+> >> > > > > I just thought of something after my initial email
+> >> > > > >=20
+> >> > > > > How does the ->set_policy() requirement on tmpfs play out for =
+the
+> >> > > > > mpol_equal() check earlier in that for loop?
+> >> > > >=20
+> >> > > > It took me a while to page all this back in (and remind myself o=
+f
+> >> > > > what is case 8) to answer that question!
+> >> > > >=20
+> >> > > > The answer is that the mpol_equal() check at the top of the loop=
+ is on
+> >> > > > an existing, unmodified vma; so it's right to assume that any ne=
+cessary
+> >> > > > set_policy() has already been done.
+> >> > > >=20
+> >> > > > Whereas the mpol_equal() check being removed in this patch, is b=
+eing
+> >> > > > done on a vma which may have just been extended to cover a great=
+er range:
+> >> > > > so although the relevant set_policy() may have already been done=
+ on a part
+> >> > > > of its range, there is now another part which needs the policy a=
+pplied.
+> >> > >=20
+> >> > > Doesn't the policy get checked during vma_merge()?  Specifically t=
+he
+> >> > > mpol_equal(policy, vma_policy(next)) check?
+> >> >=20
+> >> > Sorry, I'm reduced to the unhelpful reply of "Yes. So?"
+> >> >=20
+> >> > If vma_merge() finds that vma's new_pol allows it to be merged with =
+prev,
+> >> > that still requires mbind_range() (or its call to vma_replace_policy=
+())
+> >> > to set_policy() on prev (now assigned to vma), to apply that new_pol=
+ to
+> >> > the extension of prev - vma_merge() would have checked mpol_equal(),
+> >> > but would not have done the set_policy().
+> >>=20
+> >> I must be missing something.  If mpol_equal() isn't sufficient to ensu=
+re
+> >> we don't need to set_policy(), then why are the other vma_merge() case=
+s
+> >> okay - such as madvise_update_vma() and mlock_fixup()?  Won't the mem
+> >> policy change in the same way in these cases?
+> >=20
+> > mlock provides a good example to compare.
+> >=20
+> > Mlocking pages is the business of mlock(), and mlock_fixup() needs to
+> > attend to mm->locked_vm, and calling something to mark as PageMlocked
+> > those pages already in the area now covered by mlock.  But it doesn't
+> > need to worry about set_policy(), that's not its business, and is
+> > unaffected by mlock changes (though merging of vmas needs mpol_equal()
+> > to check that policy is the same, and merging and splitting of vmas
+> > need to maintain the refcount of the shared policy if any).
+> >=20
+> > Whereas NUMA mempolicy is the business of mbind(), and mbind_range()
+> > needs to attend to vma->vm_policy, and if it's a mapping of something
+> > supporting a shared set_policy(), call that to establish the new range
+> > on the object mapped.  But it doesn't need to worry about mm->locked_vm
+> > or whether pages are Mlocked, that's not its business, and is unaffecte=
+d
+> > by mbind changes (though merging of vmas needs to check VM_LOCKED among
+> > other flags to check that they are the same before it can merge).
+>=20
+> So if I understand correctly, we have case 8 of vma_merge():
+>=20
+>     AAAA
+> PPPPNNNNXXXX
+> becomes
+> PPPPXXXXXXXX 8
+>=20
+> N is vma with some old policy different from new_pol
+> A is the range where we change to new policy new_pol, which happens to be
+> the same as existing policy of X
+> Thus vma_merge() extends vma X to include range A - the vma N
+> vma_merge() succeeds because it's passed new_pol to do the compatibility
+> checks (although N still has the previous policy)
+>=20
+> Before Hugh's patch we would then realize "oh X already has new_pol, noth=
+ing
+> to do". Note that this AFAICS doesn't affect actual pages migration betwe=
+en
+> nodes, because that happens outside of mbind_range(). But it causes us to
+> skip vma_replace_policy(), which causes us to skip vm_ops->set_policy, wh=
+ere
+> tmpfs does something important (we could maybe argue that Hugh didn't
+> specify the user visible effects of this exactly enough :) what is "leavi=
+ng
+> the new mbind unenforced" - are pages not migrated in this case?).
+>=20
+> HTH (if I'm right),
+> Vlastimil
+>=20
+> > Does that help?
+> >=20
 
-Apologies, after thinking about this more I believe that I misunderstood
-your proposal in my original answer.
+I think so.  You want to set the mpol the same across the vma because we
+are specifically calling mbind, but it isn't necessary because the mpol
+is equivalent but not the same mpol?  I guess I have the same question
+as Vlastimil brought up - why does tmpfs need this?
 
-On 3/9/2022 8:59 AM, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 3/9/2022 1:35 AM, Jarkko Sakkinen wrote:
->> On Wed, Mar 09, 2022 at 10:52:22AM +0200, Jarkko Sakkinen wrote:
->>> On Fri, Mar 04, 2022 at 11:35:08AM +0200, Jarkko Sakkinen wrote:
->>>> +#define SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS \
->>>> +	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_perm)
->>>
->>> What if this was replaced with just SGX_IOC_ENCLAVE_RESET_PAGES, which
->>> would simply do EMODPR with PROT_NONE? The main ingredient of EMODPR is to
->>> flush out the TLB's, and move a page to pending state, which cannot be done
->>> from inside the enclave.
 
-Why not keep the flexibility of supporting all permission restrictions?
-
-It is already possible to call SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS with PROT_NONE, no?
-
-> I see the main ingredient as running EMODPR to restrict the EPCM permissions. If
-> the user wants to use SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS just to flush TLB it is
-> already possible since attempting to use EMODPR to relax permissions does not
-> change any permissions (although it still sets EPCM.PR) but yet will still
-> flush the TLB.
-> 
-> Even so, you have a very good point that removing SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
-> removes the ability for users to flush the TLB after an EMODPE. If there are
-> thus PTEs present at the time the user runs EMODPE the pages would not be
-> accessible with the new permissions.
-> 
-> Repurposing SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS with PROT_NONE to accomplish
-> this is not efficient because:
-> - For the OS to flush the TLB the enclave pages need not be in the EPC but
->   in order to run EMODPR the enclave page needs to be in the EPC. In an 
->   oversubscribed environment running EMODPR unnecessarily can thus introduce
->   a significant delay. Please see the performance comparison I did in
->   https://lore.kernel.org/linux-sgx/77e81306-6b03-4b09-2df2-48e09e2e79d5@intel.com/
->   The test shows that running EMODPR unnecessarily can be orders of magnitude slower.
-> - Running EMODPR on an enclave page sets the EPCM.PR bin in the enclave page
->   that needs to be cleared with an EACCEPT from within the enclave.
->   If the user just wants to reset the TLB after running EMODPE then it should
->   not be necessary to run EACCEPT again to reset EPCM.PR.
-> 
-> Resetting the TLB is exactly what SGX_IOC_ENCLAVE_RELAX_PERMISSIONS did in an 
-> efficient way - it is quick (no need to load pages into EPC) and it does not
-> require EACCEPT to clear EPCM.PR. 
-> 
-> It looks like we need SGX_IOC_ENCLAVE_RELAX_PERMISSIONS back. We could
-> rename it to SGX_IOC_ENCLAVE_RESET_PAGES if you prefer.
-> 
->>> It's there because of microarchitecture constraints, and less so to work as
->>> a reasonable permission control mechanism (actually it does terrible job on
->>> that side and only confuses).
->>>
->>> Once you have this magic TLB reset button in place you can just do one
->>> EACCEPT and EMODPE inside the enclave and you're done.
->>>
->>> This is also kind of atomic in the sense that EACCEPT free's a page with no
->>> rights so no misuse can happend before EMODPE has tuned EPCM.
->>
->> I wonder if this type of pattern could be made work out for Graphene:
->>
->> 1. SGX_IOC_ENCLAVE_RESET_PAGES
->> 2. EACCEPT + EMODPE
->>
->> This kind of delivers EMODP that everyone has been looking for.
-> 
-
-As I understand it this is currently possible with
-SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS.
-
-Reinette
+Thanks,
+Liam
 

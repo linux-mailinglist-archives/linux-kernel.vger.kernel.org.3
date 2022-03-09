@@ -2,155 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EAE4D28A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E13C4D28A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiCIGCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S229564AbiCIGDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiCIGC3 (ORCPT
+        with ESMTP id S229476AbiCIGDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:02:29 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D723516111E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:01:31 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id cx5so1419970pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 22:01:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kcevlsyX45S/Hs4PDG56PNJGS3qbrRGtHL6niPzRHnY=;
-        b=HnzXBO4oekApP/g7/vkFeOIByJVtdG5Qws7E+wxbSI68GmPXFUzJRt4GmX95ytIsrd
-         BYwzBnjb3CefVFvxfuSSnAmE1koKwzeZrJpvcgi7XVbtw2SMkpqxxjlVg3RcImSWNbsc
-         vnXffs3oREuUZGk06U8i0nokJl7DXauIKg0zdjSAxseRSNJcdq5ahzU8FSAo2KldzL1A
-         IoamfzRriD6U7IdeVQobndfx2CXEalHjL8YJZxnJGMCMp5xICVjU0twGyr5zTf3NniKV
-         dy9MWnI0dO7EL1s+8FT0wwDtF1Lh9eNRdXgBfMHuKtEKR5tq69IhslPQPSJ211m69ywb
-         vERQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kcevlsyX45S/Hs4PDG56PNJGS3qbrRGtHL6niPzRHnY=;
-        b=U5m6n0A/6l9vidDw8nEIt4vIE9zNf/V+FtyYM4ia81aRoSgXDt/akXm8+b0K7JSAyJ
-         ngmcwkeU3OWTDI1tUFsCRn6/BIl84S4zUksqwhk1GdaWtpzDpcGU2RmssyFESTPU4RUM
-         9K8JwdlvQQDcOtgZMNxiUZ0L1/QhB1p+B+FjZXV4cye6BV+VMbIPCsApEsGOEfdrOBHX
-         QUXfsjXMD48A4VVqDx6WQUA0fXW6JqU3wtP+A/uBa8MpHxkeDA5zB5oH5tZujatBcx80
-         puXvhGav14IJa+e7R2ommS1e/OFGoAGDFKoG5gffAv5P9PRD/uf+0wNPoZBgcatyDLPH
-         5lHw==
-X-Gm-Message-State: AOAM5321IZZIMjNv/gNQK5bCtwTkRBWd9T1AxIDSdqMQGXJBP4p64Zge
-        uI9xblR/ZW4LVpO5N6vrjjM8cg==
-X-Google-Smtp-Source: ABdhPJxHlzjX2z1M+HRZG2YfkjXprz/P3vNuoWngAMGkjIaBQ6Tk6GVwQ0+Q/ZjC9IYTLtFG4JjcNQ==
-X-Received: by 2002:a17:902:e889:b0:14f:c4bc:677b with SMTP id w9-20020a170902e88900b0014fc4bc677bmr21129060plg.68.1646805690611;
-        Tue, 08 Mar 2022 22:01:30 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056a00198f00b004f7109da1c4sm1044146pfl.205.2022.03.08.22.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 22:01:29 -0800 (PST)
-Date:   Wed, 9 Mar 2022 06:01:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
- unconditionally
-Message-ID: <YihCtvDps/qJ2TOW@google.com>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
- <20220225082223.18288-7-guang.zeng@intel.com>
- <Yifg4bea6zYEz1BK@google.com>
- <20220309052013.GA2915@gao-cwp>
+        Wed, 9 Mar 2022 01:03:37 -0500
+Received: from smtp.tom.com (smtprz15.163.net [106.3.154.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA2DC0B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:02:36 -0800 (PST)
+Received: from my-app01.tom.com (my-app01.tom.com [127.0.0.1])
+        by freemail01.tom.com (Postfix) with ESMTP id E70B31E8C29C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:02:34 +0800 (CST)
+Received: from my-app01.tom.com (HELO smtp.tom.com) ([127.0.0.1])
+          by my-app01 (TOM SMTP Server) with SMTP ID 622032670
+          for <linux-kernel@vger.kernel.org>;
+          Wed, 09 Mar 2022 14:02:34 +0800 (CST)
+Received: from antispam3.tom.com (unknown [172.25.16.54])
+        by freemail01.tom.com (Postfix) with ESMTP id D3F461E8C026
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:02:34 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
+        t=1646805754; bh=IGp1gaFSRkr0bRuTshmneZHpJzfNKx2kLBUG7hKanOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OB60kjhuLaWLKZ2x1M+Vm6VJ1sA+EbduMqmZjFuyZZ1scokXzX4pS8olL3s2/iIP1
+         DdHREnJMDeWSxyXCjNHMzoA+mzOhAmNlIBwM9jyFkzXOqOtmRdv41b1OviXXcH3fbr
+         VrmfoXkJPXEfDIugvTYFSJgsWPekjMancj/JTTMY=
+Received: from antispam3.tom.com (antispam3.tom.com [127.0.0.1])
+        by antispam3.tom.com (Postfix) with ESMTP id D3BAA9C1C25
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:02:34 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at antispam3.tom.com
+Received: from antispam3.tom.com ([127.0.0.1])
+        by antispam3.tom.com (antispam3.tom.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XX_7xSpsTlth for <linux-kernel@vger.kernel.org>;
+        Wed,  9 Mar 2022 14:02:34 +0800 (CST)
+Received: from localhost (unknown [101.93.196.13])
+        by antispam3.tom.com (Postfix) with ESMTPA id 80CC59C078A;
+        Wed,  9 Mar 2022 14:02:31 +0800 (CST)
+Date:   Wed, 9 Mar 2022 14:02:30 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 1/2] nvmet-tcp: support specifying the
+ congestion-control
+Message-ID: <20220309140230.00000e5e@tom.com>
+In-Reply-To: <20220309053711.2561-1-sunmingbao@tom.com>
+References: <20220309053711.2561-1-sunmingbao@tom.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309052013.GA2915@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TL;DR: Maxim, any objection to yet another inhibit?  Any potential issues you can think of?
+The patch v1 for target side also inserted some calls to
+networking APIs in the generic part (configfs.c) for validating
+the congestion-control specified by the user.
 
-On Wed, Mar 09, 2022, Chao Gao wrote:
-> On Tue, Mar 08, 2022 at 11:04:01PM +0000, Sean Christopherson wrote:
-> >On Fri, Feb 25, 2022, Zeng Guang wrote:
-> >> From: Maxim Levitsky <mlevitsk@redhat.com>
-> >> 
-> >> No normal guest has any reason to change physical APIC IDs,
-> >
-> >I don't think we can reasonably assume this, my analysis in the link (that I just
-> >realized I deleted from context here) shows it's at least plausible that an existing
-> >guest could rely on the APIC ID being writable.  And that's just one kernel, who
-> >know what else is out there, especially given that people use KVM to emulate really
-> >old stuff, often on really old hardware.
-> 
-> Making xAPIC ID readonly is not only based on your analysis, but also Intel SDM
-> clearly saying writable xAPIC ID is processor model specific and ***software should
-> avoid writing to xAPIC ID***.
+Per the comments from Christoph Hellwig on=20
+=E2=80=98[PATCH 2/2] nvme-tcp: support specifying the congestion-control=E2=
+=80=99
+(the patch for the host side), here delete these calls.
 
-Intel isn't the only vendor KVM supports, and xAPIC ID is fully writable according
-to AMD's docs and AMD's hardware.  x2APIC is even (indirectly) writable, but luckily
-KVM has never modeled that...
-
-Don't get me wrong, I would love to make xAPIC ID read-only, and I fully agree
-that the probability of breaking someone's setup is very low, I just don't think
-the benefits of forcing it are worth the risk of breaking userspace.
-
-> If writable xAPIC ID support should be retained and is tied to a module param,
-> live migration would depend on KVM's module params: e.g., migrate a VM with
-> modified xAPIC ID (apic_id_readonly off on this system) to one with
-> xapic_id_readonly on would fail, right? Is this failure desired?
-
-Hrm, I was originally thinking it's not a terrible outcome, but I was assuming
-that userspace would gracefully handle migration failure.  That's a bad assumption.
-
-> if not, we need to have a VM-scope control. e.g., add an inhibitor of APICv
-> (XAPIC_ID_MODIFIED) and disable APICv forever for this VM if its vCPUs or
-> QEMU modifies xAPIC ID.
-
-Inhibiting APICv if IPIv is enabled (implied for AMD's AVIC) is probably a better
-option than a module param.  I was worried about ending up with silently degraded
-VM performance, but that's easily solved by adding a stat to track APICv inhibitions,
-which would be useful for other cases too (getting AMD's AVIC enabled is comically
-difficult).
-
-That would also let us drop the code buggy avic_handle_apic_id_update().
-
-And it wouldn't necessarily have to be forever, though I agree that's a perfectly
-fine approach until we have data that shows anything fancier is necessary.
-
-> >Practically speaking, anyone that wants to deploy IPIv is going to have to make
-> >the switch at some point, but that doesn't help people running legacy crud that
-> >don't care about IPIv.
-> >
-> >I was thinking a module param would be trivial, and it is (see below) if the
-> >param is off by default.  A module param will also provide a convenient opportunity
-> >to resolve the loophole reported by Maxim[1][2], though it's a bit funky.
-> 
-> Could you share the links?
-
-Doh, sorry (they're both in this one).
-
-https://lore.kernel.org/all/20220301135526.136554-5-mlevitsk@redhat.com
+Since the tcp_congestion specified by the user could also get
+checked later within sock_common_setsockopt in nvmet_tcp_add_port.
+So this deletion brings little downside.

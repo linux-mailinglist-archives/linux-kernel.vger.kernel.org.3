@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052054D367D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCD94D353C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiCIRQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
+        id S236540AbiCIRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238400AbiCIROS (ORCPT
+        with ESMTP id S238893AbiCIRPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:14:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95B8512AB5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:09:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646845772;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s/o3sPCCWF9DwYJSFG90KCzdlkqUEgVretFfIHQN8Mo=;
-        b=KJHU7sZm+Y7z0eh5zxuTsbBP1SmJjv7KMk2tHQJOm6859mQz2bON6BOrGqdlI5mJPcM28t
-        lUWeyTcgQREK8AbunBA20ZOAaxJtnSIQZJBvdhS9qN5r/BB8kQMcAGj8igObxynTit/KbE
-        zl1u7gGY/5TMSK48IgHVpAETmUO8Stk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-362-T5WUUdbbMmGXVTHoigC-hA-1; Wed, 09 Mar 2022 12:09:31 -0500
-X-MC-Unique: T5WUUdbbMmGXVTHoigC-hA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4BAEE1854E2A;
-        Wed,  9 Mar 2022 17:09:30 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA28B866F1;
-        Wed,  9 Mar 2022 17:09:29 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     vkuznets@redhat.com, jmattson@google.com
-Subject: [PATCH 2/2] KVM: x86: synthesize CPUID leaf 0x80000021h if useful
-Date:   Wed,  9 Mar 2022 12:09:28 -0500
-Message-Id: <20220309170928.1032664-3-pbonzini@redhat.com>
-In-Reply-To: <20220309170928.1032664-1-pbonzini@redhat.com>
-References: <20220309170928.1032664-1-pbonzini@redhat.com>
+        Wed, 9 Mar 2022 12:15:12 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3193015697C;
+        Wed,  9 Mar 2022 09:11:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0XOxoRhCxn4RuwbyrCrk6t3swVtPgJmu2MdScDyPqbQ=; b=mcg579PjLxcqqpzqmD4TRDh0KO
+        Xt0CJkuEF3rXPN1ImSzHh6Zt+thXoFDboFMnj8ugMCZZKUaIEVUXKcmvirOBNEMELY3Pxu/2zX5YG
+        r+VBiq0o+GX45wMXXny2eh9NxP71vd1ZpJNQPeG63R8Z/+SsqlFBYAWCIQMcENH6J/E51sljsf88X
+        E5oU7FtUDYgMnVs0JQzM4JfuM/paCLg9B7YP48F0cCiITKZ16aD2+nYxfZTuuu10ARHL0Oy04RsPn
+        Rv8nuvFfBpUBzV8AL/5DUKmbw9UWRXkqjXosDRTNuPtwZYpHZivlxTgEXuftAgwAYeeH0TFqL1YcO
+        SF5eQmsg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57748)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nRzqi-0002Gq-67; Wed, 09 Mar 2022 17:11:44 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nRzqe-00088O-RE; Wed, 09 Mar 2022 17:11:40 +0000
+Date:   Wed, 9 Mar 2022 17:11:40 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
+ __read_once_word_nocheck
+Message-ID: <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
+ <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
+ <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk>
+ <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,70 +71,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guests should have X86_BUG_NULL_SEG if and only if the host has the bug.
-Use the info from static_cpu_has_bug to form the 0x80000021 CPUID leaf
-that was defined for Zen3.  Userspace can then set the bit even on older
-CPUs that do not have the bug, such as Zen2.
+On Wed, Mar 09, 2022 at 10:08:25PM +0530, Naresh Kamboju wrote:
+> Hi Russell,
+> 
+> On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > >
+> <trim>
+> > Well, we unwound until:
+> >
+> >  __irq_svc from migrate_disable+0x0/0x70
+> >
+> > and then crashed - and the key thing there is that we're at the start
+> > of migrate_disable() when we took an interrupt.
+> >
+> > For some reason, this triggers an access to address 0x10, which faults.
+> > We then try unwinding again, and successfully unwind all the way back
+> > to the same point (the line above) which then causes the unwinder to
+> > again access address 0x10, and the cycle repeats with the stack
+> > growing bigger and bigger.
+> >
+> > I'd suggest also testing without the revert but with my patch.
+> 
+> I have tested your patch on top of linux next-20220309 and still see kernel
+> crash as below [1]. build link [2].
+> 
+> [   26.812060] 8<--- cut here ---
+> [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+> [   26.816139] [b6a3ab70] *pgd=fb28a835
+> [   26.817770] Internal error: : 1b [#1] SMP ARM
+> [   26.819636] Modules linked in:
+> [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+> 5.17.0-rc7-next-20220309 #1
+> [   26.824519] Hardware name: Generic DT based system
+> [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+> [   26.829856] LR is at unwind_frame+0x7dc/0xab4
+> 
+> - Naresh
+> 
+> [1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
+> [2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/
 
-Do the same for X86_FEATURE_LFENCE_RDTSC as well, since various processors
-have had very different ways of detecting it and not all of them are
-available to userspace.
+I think the problem has just moved:
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/cpuid.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+[   27.113085]  __irq_svc from __copy_to_user_std+0x24/0x378
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 30832aad402f..58b0b4e0263c 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -723,6 +723,19 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
- 		/* Hypervisor leaves are always synthesized by __do_cpuid_func.  */
- 		return entry;
- 
-+	case 0x80000000:
-+		/*
-+		 * 0x80000021 is sometimes synthesized by __do_cpuid_func, which
-+		 * would result in out-of-bounds calls to do_host_cpuid.
-+		 */
-+		{
-+			static int max_cpuid_80000000;
-+			if (!READ_ONCE(max_cpuid_80000000))
-+				WRITE_ONCE(max_cpuid_80000000, cpuid_eax(0x80000000));
-+			if (function > READ_ONCE(max_cpuid_80000000))
-+				return entry;
-+		}
-+
- 	default:
- 		break;
- 	}
-@@ -1069,6 +1082,14 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		break;
- 	case 0x80000000:
- 		entry->eax = min(entry->eax, 0x80000021);
-+		/*
-+		 * Serializing LFENCE is reported in a multitude of ways,
-+		 * and NullSegClearsBase is not reported in CPUID on Zen2;
-+		 * help userspace by providing the CPUID leaf ourselves.
-+		 */
-+		if (static_cpu_has(X86_FEATURE_LFENCE_RDTSC)
-+		    || !static_cpu_has_bug(X86_BUG_NULL_SEG))
-+			entry->eax = max(entry->eax, 0x80000021);
- 		break;
- 	case 0x80000001:
- 		cpuid_entry_override(entry, CPUID_8000_0001_EDX);
-@@ -1155,6 +1176,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		 *   EAX      13     PCMSR, Prefetch control MSR
- 		 */
- 		entry->eax &= BIT(0) | BIT(2) | BIT(6);
-+		if (static_cpu_has(X86_FEATURE_LFENCE_RDTSC))
-+			entry->eax |= BIT(2);
-+		if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
-+			entry->eax |= BIT(6);
- 		break;
- 	/*Add support for Centaur's CPUID instruction*/
- 	case 0xC0000000:
+The code at the start of __copy_to_user_std is:
+
+   0:   e3a034bf        mov     r3, #-1090519040        ; 0xbf000000
+   4:   e243c001        sub     ip, r3, #1
+   8:   e05cc000        subs    ip, ip, r0
+   c:   228cc001        addcs   ip, ip, #1
+  10:   205cc002        subscs  ip, ip, r2
+  14:   33a00000        movcc   r0, #0
+  18:   e320f014        csdb
+  1c:   e3a03000        mov     r3, #0
+  20:   e92d481d        push    {r0, r2, r3, r4, fp, lr}
+  24:   e1a0b00d        mov     fp, sp
+
+and the unwind information will be:
+
+0xc056f14c <arm_copy_to_user+0x1c>: @0xc0b89b84
+  Compact model index: 1
+  0x9b      vsp = r11
+  0xb1 0x0d pop {r0, r2, r3}
+  0x84 0x81 pop {r4, r11, r14}
+  0xb0      finish
+
+The problem is that the unwind information says "starting at offset
+0x1c, to unwind do the following operations". The first of which is
+to move r11 (fp) to the stack pointer. However, r11 isn't setup
+until function offset 0x24. You've hit that instruction, which hasn't
+executed yet, but the stack has been modified by pushing r0, r2-r4,
+fp and lr onto it.
+
+Given this, there is no way that the unwinder (as it currently stands)
+can do its job properly between 0x1c and 0x24.
+
+I don't think this is specifically caused by Ard's patches, but by
+the addition of KASAN, which has the effect of calling the unwinder
+at random points in the kernel (when an interrupt happens) and it's
+clear from the above that there are windows in the code where, if
+we attempt to unwind using the unwind information, we faill fail
+because the program state is not consistent with the unwind
+information.
+
+Ard's patch that changes:
+
+	ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
+
+to use get_kernel_nofault() should have the effect of protecting
+against the oops, but the side effect is that it is fundamentally not
+possible with the way these things are to unwind at these points -
+which means its not possible to get a stacktrace there.
+
+So, I don't think this is a "new" problem, but a weakness of using
+the unwinder to get a backtrace for KASAN.
+
+Do you have any way to work out exactly when this problem first
+appeared?
+
 -- 
-2.31.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

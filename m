@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C8F4D2A00
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3734D29F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 08:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiCIHzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 02:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S230132AbiCIHzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 02:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiCIHzm (ORCPT
+        with ESMTP id S229776AbiCIHzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Mar 2022 02:55:42 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A91D14864D;
-        Tue,  8 Mar 2022 23:54:43 -0800 (PST)
-Date:   Wed, 09 Mar 2022 07:54:40 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22447148646;
+        Tue,  8 Mar 2022 23:54:44 -0800 (PST)
+Date:   Wed, 09 Mar 2022 07:54:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646812481;
+        s=2020; t=1646812482;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rj/cesRBawHvdzO+Ag4+K//9IArRbFmLROuEDP9l8WY=;
-        b=yfwp5ZYbuUGj11UrdnmLuBwG8eOs/dIHNqYnRD1FTYQAgHaf15sLMElIZdVREyomGyQJAr
-        swB6N9pgZqDOI+4WN+V/mRJuoysWXW6I45VDRDK+Z0oZvylcNWmQaaeDWvr3A8z0RHjojN
-        jMgsTUz5u6MunkYlTrFPXCHaPC8/QH7gUwnp+4LmZgHFcfYGMe13UR8fR/gxfg1e06NrwA
-        jKPbd0xbtyX0og664eNiAuRolnqDzdrtj7SX2UhExSAdWxZKx62shoMC4280xBnbmnekfd
-        CuDKVyAy/IdJf75eNKbsOAKlwuYeJdvMZTyOQbPGi5QHmdjjMCZV/woQTVaNug==
+        bh=wfdTmZztAZEn/sNpjfzciE7jkHzg7WHLamDwqHzd5Og=;
+        b=jFUGjDkxneNGwDOTXo3Pb6DCHg6LN36CR2wWSQXa14viCvfUaikcmAw69uWxfb6CHxu2pC
+        Hve2uZy8wogs1nNWOlwhUxMCIFgFNKa7sYQbllgbbQx+vnPGO2zZm2jDZ3O32g1tAxQDDa
+        nphgjTa3X5L1gUGLl9+gU2Rfu4eWRuTpOqHsrZ1+hKLKavaxFjuRmohUfve4zxY8RsG5hd
+        h/vNBP0EhxGosfsoXdA/jqk6xSSbXwK/JN8++BFzkVmqVuVuo8Y1l51HCF5zYSh3PpQOKh
+        OHa7pr6HHU1503KeclaqTHgfUgPhjh4IsxCuH1QFHpDq8S4KEwJKisMpk0sQXg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646812481;
+        s=2020e; t=1646812482;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rj/cesRBawHvdzO+Ag4+K//9IArRbFmLROuEDP9l8WY=;
-        b=Wk+T8AvbHrponxmMz3rIzWQooZKGDvwA9S3dCKmdB3szqhhNwAHM8t1oMnb5yYaJJ4OhMK
-        6a3PJuU2VrWzraCg==
+        bh=wfdTmZztAZEn/sNpjfzciE7jkHzg7WHLamDwqHzd5Og=;
+        b=E+gpwbTAIVRhOkESqGTrESO79m8B6gLauksj+DVZUQoRIRQSO0FntmW0gIL6MluokqqEMc
+        6a3rFXE8qjTVehDQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Validate IBT assumptions
+Subject: [tip: x86/core] objtool: Add IBT/ENDBR decoding
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154319.705110141@infradead.org>
-References: <20220308154319.705110141@infradead.org>
+In-Reply-To: <20220308154319.645963517@infradead.org>
+References: <20220308154319.645963517@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164681248077.16921.17389060394715228165.tip-bot2@tip-bot2>
+Message-ID: <164681248177.16921.6620445780101579265.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,372 +67,126 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     b87d2fcee36218d6303e18deba489d0521c77c6f
-Gitweb:        https://git.kernel.org/tip/b87d2fcee36218d6303e18deba489d0521c77c6f
+Commit-ID:     df280fcb49f91de003afcac7b4da806d3ded52d6
+Gitweb:        https://git.kernel.org/tip/df280fcb49f91de003afcac7b4da806d3ded52d6
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:54 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:53 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 08 Mar 2022 23:53:38 +01:00
 
-objtool: Validate IBT assumptions
+objtool: Add IBT/ENDBR decoding
 
-Intel IBT requires that every indirect JMP/CALL targets an ENDBR
-instructions, failing this #CP happens and we die. Similarly, all
-exception entries should be ENDBR.
+Intel IBT requires the target of any indirect CALL or JMP instruction
+to be the ENDBR instruction; optionally it allows those two
+instructions to have a NOTRACK prefix in order to avoid this
+requirement.
 
-Find all code relocations and ensure they're either an ENDBR
-instruction or ANNOTATE_NOENDBR. For the exceptions look for
-UNWIND_HINT_IRET_REGS at sym+0 not being ENDBR.
+The kernel will not enable the use of NOTRACK, as such any occurence
+of it in compiler generated code should be flagged.
+
+Teach objtool to Decode ENDBR instructions and WARN about NOTRACK
+prefixes.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154319.705110141@infradead.org
+Link: https://lore.kernel.org/r/20220308154319.645963517@infradead.org
 ---
- tools/objtool/builtin-check.c           |   4 +-
- tools/objtool/check.c                   | 210 ++++++++++++++++++++++-
- tools/objtool/include/objtool/builtin.h |   3 +-
- tools/objtool/include/objtool/objtool.h |   3 +-
- 4 files changed, 215 insertions(+), 5 deletions(-)
+ tools/objtool/arch/x86/decode.c      | 34 +++++++++++++++++++++++----
+ tools/objtool/include/objtool/arch.h |  1 +-
+ 2 files changed, 30 insertions(+), 5 deletions(-)
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 5c2fcaa..fc6975a 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -20,7 +20,8 @@
- #include <objtool/objtool.h>
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index 479e769..943cb41 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -103,6 +103,18 @@ unsigned long arch_jump_destination(struct instruction *insn)
+ #define rm_is_mem(reg)	(mod_is_mem() && !is_RIP() && rm_is(reg))
+ #define rm_is_reg(reg)	(mod_is_reg() && modrm_rm == (reg))
  
- bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
--     lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
-+     lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
-+     ibt;
++static bool has_notrack_prefix(struct insn *insn)
++{
++	int i;
++
++	for (i = 0; i < insn->prefixes.nbytes; i++) {
++		if (insn->prefixes.bytes[i] == 0x3e)
++			return true;
++	}
++
++	return false;
++}
++
+ int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
+ 			    unsigned long offset, unsigned int maxlen,
+ 			    unsigned int *len, enum insn_type *type,
+@@ -112,7 +124,7 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 	const struct elf *elf = file->elf;
+ 	struct insn insn;
+ 	int x86_64, ret;
+-	unsigned char op1, op2, op3,
++	unsigned char op1, op2, op3, prefix,
+ 		      rex = 0, rex_b = 0, rex_r = 0, rex_w = 0, rex_x = 0,
+ 		      modrm = 0, modrm_mod = 0, modrm_rm = 0, modrm_reg = 0,
+ 		      sib = 0, /* sib_scale = 0, */ sib_index = 0, sib_base = 0;
+@@ -137,6 +149,8 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 	if (insn.vex_prefix.nbytes)
+ 		return 0;
  
- static const char * const check_usage[] = {
- 	"objtool check [<options>] file.o",
-@@ -47,6 +48,7 @@ const struct option check_options[] = {
- 	OPT_BOOLEAN('B', "backup", &backup, "create .orig files before modification"),
- 	OPT_BOOLEAN('S', "sls", &sls, "validate straight-line-speculation"),
- 	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
-+	OPT_BOOLEAN(0, "ibt", &ibt, "validate ENDBR placement"),
- 	OPT_END(),
++	prefix = insn.prefixes.bytes[0];
++
+ 	op1 = insn.opcode.bytes[0];
+ 	op2 = insn.opcode.bytes[1];
+ 	op3 = insn.opcode.bytes[2];
+@@ -492,6 +506,12 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 			/* nopl/nopw */
+ 			*type = INSN_NOP;
+ 
++		} else if (op2 == 0x1e) {
++
++			if (prefix == 0xf3 && (modrm == 0xfa || modrm == 0xfb))
++				*type = INSN_ENDBR;
++
++
+ 		} else if (op2 == 0x38 && op3 == 0xf8) {
+ 			if (insn.prefixes.nbytes == 1 &&
+ 			    insn.prefixes.bytes[0] == 0xf2) {
+@@ -636,20 +656,24 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 		break;
+ 
+ 	case 0xff:
+-		if (modrm_reg == 2 || modrm_reg == 3)
++		if (modrm_reg == 2 || modrm_reg == 3) {
+ 
+ 			*type = INSN_CALL_DYNAMIC;
++			if (has_notrack_prefix(&insn))
++				WARN("notrack prefix found at %s:0x%lx", sec->name, offset);
+ 
+-		else if (modrm_reg == 4)
++		} else if (modrm_reg == 4) {
+ 
+ 			*type = INSN_JUMP_DYNAMIC;
++			if (has_notrack_prefix(&insn))
++				WARN("notrack prefix found at %s:0x%lx", sec->name, offset);
+ 
+-		else if (modrm_reg == 5)
++		} else if (modrm_reg == 5) {
+ 
+ 			/* jmpf */
+ 			*type = INSN_CONTEXT_SWITCH;
+ 
+-		else if (modrm_reg == 6) {
++		} else if (modrm_reg == 6) {
+ 
+ 			/* push from mem */
+ 			ADD_OP(op) {
+diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
+index 76bae30..9b19cc3 100644
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -27,6 +27,7 @@ enum insn_type {
+ 	INSN_STD,
+ 	INSN_CLD,
+ 	INSN_TRAP,
++	INSN_ENDBR,
+ 	INSN_OTHER,
  };
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 3f28ca4..28163ea 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -417,8 +417,16 @@ static int decode_instructions(struct objtool_file *file)
- 				return -1;
- 			}
- 
--			sym_for_each_insn(file, func, insn)
-+			sym_for_each_insn(file, func, insn) {
- 				insn->func = func;
-+				if (insn->type == INSN_ENDBR) {
-+					if (insn->offset == insn->func->offset) {
-+						file->nr_endbr++;
-+					} else {
-+						file->nr_endbr_int++;
-+					}
-+				}
-+			}
- 		}
- 	}
- 
-@@ -1170,6 +1178,19 @@ static void add_retpoline_call(struct objtool_file *file, struct instruction *in
- 
- 	annotate_call_site(file, insn, false);
- }
-+
-+static bool same_function(struct instruction *insn1, struct instruction *insn2)
-+{
-+	return insn1->func->pfunc == insn2->func->pfunc;
-+}
-+
-+static bool is_first_func_insn(struct instruction *insn)
-+{
-+	return insn->offset == insn->func->offset ||
-+	       (insn->type == INSN_ENDBR &&
-+		insn->offset == insn->func->offset + insn->len);
-+}
-+
- /*
-  * Find the destination instructions for all jumps.
-  */
-@@ -1250,8 +1271,8 @@ static int add_jump_destinations(struct objtool_file *file)
- 				insn->func->cfunc = insn->jump_dest->func;
- 				insn->jump_dest->func->pfunc = insn->func;
- 
--			} else if (insn->jump_dest->func->pfunc != insn->func->pfunc &&
--				   insn->jump_dest->offset == insn->jump_dest->func->offset) {
-+			} else if (!same_function(insn, insn->jump_dest) &&
-+				   is_first_func_insn(insn->jump_dest)) {
- 				/* internal sibling call (without reloc) */
- 				add_call_dest(file, insn, insn->jump_dest->func, true);
- 			}
-@@ -1841,6 +1862,16 @@ static int read_unwind_hints(struct objtool_file *file)
- 
- 		insn->hint = true;
- 
-+		if (ibt && hint->type == UNWIND_HINT_TYPE_REGS_PARTIAL) {
-+			struct symbol *sym = find_symbol_by_offset(insn->sec, insn->offset);
-+
-+			if (sym && sym->bind == STB_GLOBAL &&
-+			    insn->type != INSN_ENDBR && !insn->noendbr) {
-+				WARN_FUNC("UNWIND_HINT_IRET_REGS without ENDBR",
-+					  insn->sec, insn->offset);
-+			}
-+		}
-+
- 		if (hint->type == UNWIND_HINT_TYPE_FUNC) {
- 			insn->cfi = &func_cfi;
- 			continue;
-@@ -1882,6 +1913,9 @@ static int read_noendbr_hints(struct objtool_file *file)
- 			return -1;
- 		}
- 
-+		if (insn->type == INSN_ENDBR)
-+			WARN_FUNC("ANNOTATE_NOENDBR on ENDBR", insn->sec, insn->offset);
-+
- 		insn->noendbr = 1;
- 	}
- 
-@@ -2121,6 +2155,9 @@ static int decode_sections(struct objtool_file *file)
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Must be before read_unwind_hints() since that needs insn->noendbr.
-+	 */
- 	ret = read_noendbr_hints(file);
- 	if (ret)
- 		return ret;
-@@ -3062,6 +3099,111 @@ static struct instruction *next_insn_to_validate(struct objtool_file *file,
- 	return next_insn_same_sec(file, insn);
- }
- 
-+static struct instruction *
-+validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
-+{
-+	struct instruction *dest;
-+	struct section *sec;
-+	unsigned long off;
-+
-+	sec = reloc->sym->sec;
-+	off = reloc->sym->offset;
-+
-+	if ((reloc->sec->base->sh.sh_flags & SHF_EXECINSTR) &&
-+	    (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32))
-+		off += arch_dest_reloc_offset(reloc->addend);
-+	else
-+		off += reloc->addend;
-+
-+	dest = find_insn(file, sec, off);
-+	if (!dest)
-+		return NULL;
-+
-+	if (dest->type == INSN_ENDBR)
-+		return NULL;
-+
-+	if (reloc->sym->static_call_tramp)
-+		return NULL;
-+
-+	return dest;
-+}
-+
-+static void warn_noendbr(const char *msg, struct section *sec, unsigned long offset,
-+			 struct instruction *dest)
-+{
-+	WARN_FUNC("%srelocation to !ENDBR: %s+0x%lx", sec, offset, msg,
-+		  dest->func ? dest->func->name : dest->sec->name,
-+		  dest->func ? dest->offset - dest->func->offset : dest->offset);
-+}
-+
-+static void validate_ibt_dest(struct objtool_file *file, struct instruction *insn,
-+			      struct instruction *dest)
-+{
-+	if (dest->func && dest->func == insn->func) {
-+		/*
-+		 * Anything from->to self is either _THIS_IP_ or IRET-to-self.
-+		 *
-+		 * There is no sane way to annotate _THIS_IP_ since the compiler treats the
-+		 * relocation as a constant and is happy to fold in offsets, skewing any
-+		 * annotation we do, leading to vast amounts of false-positives.
-+		 *
-+		 * There's also compiler generated _THIS_IP_ through KCOV and
-+		 * such which we have no hope of annotating.
-+		 *
-+		 * As such, blanket accept self-references without issue.
-+		 */
-+		return;
-+	}
-+
-+	if (dest->noendbr)
-+		return;
-+
-+	warn_noendbr("", insn->sec, insn->offset, dest);
-+}
-+
-+static void validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
-+{
-+	struct instruction *dest;
-+	struct reloc *reloc;
-+
-+	switch (insn->type) {
-+	case INSN_CALL:
-+	case INSN_CALL_DYNAMIC:
-+	case INSN_JUMP_CONDITIONAL:
-+	case INSN_JUMP_UNCONDITIONAL:
-+	case INSN_JUMP_DYNAMIC:
-+	case INSN_JUMP_DYNAMIC_CONDITIONAL:
-+	case INSN_RETURN:
-+		/*
-+		 * We're looking for code references setting up indirect code
-+		 * flow. As such, ignore direct code flow and the actual
-+		 * dynamic branches.
-+		 */
-+		return;
-+
-+	case INSN_NOP:
-+		/*
-+		 * handle_group_alt() will create INSN_NOP instruction that
-+		 * don't belong to any section, ignore all NOP since they won't
-+		 * carry a (useful) relocation anyway.
-+		 */
-+		return;
-+
-+	default:
-+		break;
-+	}
-+
-+	for (reloc = insn_reloc(file, insn);
-+	     reloc;
-+	     reloc = find_reloc_by_dest_range(file->elf, insn->sec,
-+					      reloc->offset + 1,
-+					      (insn->offset + insn->len) - (reloc->offset + 1))) {
-+		dest = validate_ibt_reloc(file, reloc);
-+		if (dest)
-+			validate_ibt_dest(file, insn, dest);
-+	}
-+}
-+
- /*
-  * Follow the branch starting at the given instruction, and recursively follow
-  * any other branches (jumps).  Meanwhile, track the frame pointer state at
-@@ -3271,6 +3413,9 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 			break;
- 		}
- 
-+		if (ibt)
-+			validate_ibt_insn(file, insn);
-+
- 		if (insn->dead_end)
- 			return 0;
- 
-@@ -3556,6 +3701,53 @@ static int validate_functions(struct objtool_file *file)
- 	return warnings;
- }
- 
-+static int validate_ibt(struct objtool_file *file)
-+{
-+	struct section *sec;
-+	struct reloc *reloc;
-+
-+	for_each_sec(file, sec) {
-+		bool is_data;
-+
-+		/* already done in validate_branch() */
-+		if (sec->sh.sh_flags & SHF_EXECINSTR)
-+			continue;
-+
-+		if (!sec->reloc)
-+			continue;
-+
-+		if (!strncmp(sec->name, ".orc", 4))
-+			continue;
-+
-+		if (!strncmp(sec->name, ".discard", 8))
-+			continue;
-+
-+		if (!strncmp(sec->name, ".debug", 6))
-+			continue;
-+
-+		if (!strcmp(sec->name, "_error_injection_whitelist"))
-+			continue;
-+
-+		if (!strcmp(sec->name, "_kprobe_blacklist"))
-+			continue;
-+
-+		is_data = strstr(sec->name, ".data") || strstr(sec->name, ".rodata");
-+
-+		list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
-+			struct instruction *dest;
-+
-+			dest = validate_ibt_reloc(file, reloc);
-+			if (is_data && dest && !dest->noendbr) {
-+				warn_noendbr("data ", reloc->sym->sec,
-+					     reloc->sym->offset + reloc->addend,
-+					     dest);
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int validate_reachable_instructions(struct objtool_file *file)
- {
- 	struct instruction *insn;
-@@ -3583,6 +3775,11 @@ int check(struct objtool_file *file)
- 		return 1;
- 	}
- 
-+	if (ibt && !lto) {
-+		fprintf(stderr, "--ibt requires: --lto\n");
-+		return 1;
-+	}
-+
- 	arch_initial_func_cfi_state(&initial_func_cfi);
- 	init_cfi_state(&init_cfi);
- 	init_cfi_state(&func_cfi);
-@@ -3629,6 +3826,13 @@ int check(struct objtool_file *file)
- 		goto out;
- 	warnings += ret;
- 
-+	if (ibt) {
-+		ret = validate_ibt(file);
-+		if (ret < 0)
-+			goto out;
-+		warnings += ret;
-+	}
-+
- 	if (!warnings) {
- 		ret = validate_reachable_instructions(file);
- 		if (ret < 0)
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index 0cbe739..c39dbfa 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -9,7 +9,8 @@
- 
- extern const struct option check_options[];
- extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
--	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
-+	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
-+	    ibt;
- 
- extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
- 
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index f99fbc6..fa3c7fa 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -28,6 +28,9 @@ struct objtool_file {
- 	struct list_head mcount_loc_list;
- 	bool ignore_unreachables, c_file, hints, rodata;
- 
-+	unsigned int nr_endbr;
-+	unsigned int nr_endbr_int;
-+
- 	unsigned long jl_short, jl_long;
- 	unsigned long jl_nop_short, jl_nop_long;
  

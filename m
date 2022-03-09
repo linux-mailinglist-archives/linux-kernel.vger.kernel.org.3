@@ -2,251 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCA84D35D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9A14D3802
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237530AbiCIRFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S236804AbiCIRGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238844AbiCIREI (ORCPT
+        with ESMTP id S239217AbiCIREr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:04:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3F39AD8A;
-        Wed,  9 Mar 2022 08:52:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C30E61B45;
-        Wed,  9 Mar 2022 16:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F6CC340EC;
-        Wed,  9 Mar 2022 16:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646844755;
-        bh=wIeGbE6Q41oIhTY+lLUbah8qqKEMzvsX86DStRQLx9g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ajZf+msEiuAWYsEHyAa1la9mmAEWm9CLYkJ001PCn+OQvcazGSJy3d9bN2D8B8QOl
-         5AmoJJMr61AzJpz/9+Ut/VwC1v4hD8jL5NrR+B7Tcg/own5k4BGYTnt/h4otdOlDEa
-         5nzPVdlP12f35p/OQIYWEAYEpd+EMx+VJpxJ9RwcIpFERATK2geEjU5UtMXmU3dMTt
-         8+VCsgjtIlQWdTx6ECnl08vIoCehsmH4HavcgIT1iTq9WjSopxA4kmJQ4PjDaBaak/
-         zxymJkFfufPzJLXiDgcXeJwV6wBNC7DrdpaFm2CX46qY7OsD49zaSn1Xoof0/8QlTi
-         63TkLPMr13Wtg==
-Message-ID: <4cbb2bb06eafb8f03135fc377ced779102004ea7.camel@kernel.org>
-Subject: Re: [PATCH v2 11/19] netfs: Change ->init_request() to return an
- error code
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
-Cc:     Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 09 Mar 2022 11:52:32 -0500
-In-Reply-To: <164678212401.1200972.16537041523832944934.stgit@warthog.procyon.org.uk>
-References: <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk>
-         <164678212401.1200972.16537041523832944934.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 9 Mar 2022 12:04:47 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924A24E384;
+        Wed,  9 Mar 2022 08:53:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646844838; x=1678380838;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=G1bxJYJjdpOMIN9t5kCC7s1P+jSUFkfrs8BPxS710Wc=;
+  b=CzaCxILhaCxCeS8I4q1i2qRBmkoucslpOvMYYv+zI/94BUv8sSBdXkzX
+   Xud7QqTXfBdsEaH8ml6HGuOLwW53bs4EKejyd4UhgGHtdUiZGyattDx+D
+   gjUInaH9uTyveEWHiw9SdVkDdfFZ3Jazf2Y2wcKTX+IHBQGdJ9DUjC3eU
+   oLNbjVFgLnXKDzb4xAbD2oi7/iFvRZ5Sklcg9VzIXrtKccZ6FqAjOGiAF
+   lnC2dCL31FK64EMXEjRuttzGIU2Q/zejWclg7HGpx77Dyn6JFq+SxapQU
+   2PgCPzvBwX98ernD0PH9JCsD8BYwEHPXKjabi1IMzPJ3BIsluBe5XmOX0
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643698800"; 
+   d="scan'208";a="148646595"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 09:53:57 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 9 Mar 2022 09:53:56 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Wed, 9 Mar 2022 09:53:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QIl2VVBrPGeLYh/QaUiQjwK6ZZVz0HlM7tIJrI5Z5VZo0FsyQYm7cDEZtNqgh76uZ2FaXAUfw6bfK0K+WV62/9EDkGeK6PU3J40vID43DFdw9HzdOl7nC3wdTPvLz7oQnC3G7UismX21wOZfMd+mK82tQP/5sBQ/RQ/gFhGF8A1EMwtXwg0BwBUOHXUjBGdAMerAurORLBSWbcGJv1TSytnyapaSeVrVqWx8TOzp4sAE8clKeNnfqzkyG28GyIVVwcTw737jSBst+ZjgnqEncJJZFMoQP5xCc2HoDMGBr65dHD0lPPq2RczqDqChCfktRyJRnJ29tBzh811pGlCOoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G1bxJYJjdpOMIN9t5kCC7s1P+jSUFkfrs8BPxS710Wc=;
+ b=iROAJBanC45D/SWeAo+sO49yz6Obw4ls4pYaIblmPKIx3baFTEyItnCYerZgRLBYm+VXe+VyQDwqmaeecjkLlZybmoaSXNyEC0XzFSZZUf6qQoCKEOwfVeWsAgdaFZQ54ata8yXo3DBlQk3cfPmZKAh9WV9hX59sjma/CeBubp0yLfe4qk59ZcY+EBACJEd5SPPKZKRvs+gIfo5FkytY92MV+OpYuqW3AE7q9pZMHdcv+meHhO4ZIrWo64Cm6rTYA1nK5l6QINK8I571LHcEKq5vPMlJyvtqlPjq1r3RfkKkTNLFVMFSDmNQaShm3BWguy7/tjkC7QX6yHehykiQkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G1bxJYJjdpOMIN9t5kCC7s1P+jSUFkfrs8BPxS710Wc=;
+ b=PrnMEfgb7/A3DBvPhTja5P+vE2+1fJAvBm+yBDfMF3E66MkN88z5I8hOS7iDWXfTGblADzKoOgpOnmUAID29a+mB0o72iIhZSACGPI9lp8JhKIcGXyXFXCX9ZafQxgsEYwFPsqWgE8q2Lo4gh/BeQLQnSCLlgD7QpYK81bvqTX4=
+Received: from DM8PR11MB5687.namprd11.prod.outlook.com (2603:10b6:8:22::7) by
+ DM6PR11MB3852.namprd11.prod.outlook.com (2603:10b6:5:13a::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5061.21; Wed, 9 Mar 2022 16:53:46 +0000
+Received: from DM8PR11MB5687.namprd11.prod.outlook.com
+ ([fe80::fc32:96a4:933f:194f]) by DM8PR11MB5687.namprd11.prod.outlook.com
+ ([fe80::fc32:96a4:933f:194f%4]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 16:53:46 +0000
+From:   <Codrin.Ciubotariu@microchip.com>
+To:     <colin.i.king@gmail.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <perex@perex.cz>, <tiwai@suse.com>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Claudiu.Beznea@microchip.com>, <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH][next] ASoC: atmel: mchp-pdmc: Fix spelling mistake
+ "microchopnes" -> "microphones"
+Thread-Topic: [PATCH][next] ASoC: atmel: mchp-pdmc: Fix spelling mistake
+ "microchopnes" -> "microphones"
+Thread-Index: AQHYM9SadTAEADrffUavYDImKC5Uaqy3RNIA
+Date:   Wed, 9 Mar 2022 16:53:46 +0000
+Message-ID: <5438f75c-607c-f6a1-e403-bc07444d2ec4@microchip.com>
+References: <20220309164116.178685-1-colin.i.king@gmail.com>
+In-Reply-To: <20220309164116.178685-1-colin.i.king@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7cafb27f-8069-499c-5e75-08da01ed60be
+x-ms-traffictypediagnostic: DM6PR11MB3852:EE_
+x-microsoft-antispam-prvs: <DM6PR11MB3852692635C90F967042B5B1E70A9@DM6PR11MB3852.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NTl50PGhtPW1FAaAiNZPmF1AQCWPe6aknoNvCNjoaOnl1Vyj4FLCi2PU911dQJuPbcpCDP7LWgeMEIESwa7hDQ2+P//szM5KZOphqhRoCsCR+I43CxXNegkGslwC+HV7qEw/VM5VEp2llxgzzIsMZyf45uziHkXGOmosT/IltZ1GTSk3sP8y/av1ZxgjM530BftAoiZbNjXnP0oXS+9tz5nd6+h3xcDUtkY18HLpYR7m9mK5p0aBCzMsFScapfmEpnBlbAX/b0yDGXlRKQaMULmQA4pk9DrCPkMvCLcsSZlUU/sbUuspPfY3ZqCjLqjkjV9oOZWohlT0/Cc9Ly91FepHgk/Pk1Uqehqnu7A3QfBl7tJH2sGt6lZUzINOioa5w6TIgIiSapTlqhuNBAfs54RYFkh6Fedaztu8QmmBPAtrdqgdAJz9c59UtyZFU+DH/b0WfH1+u85nHuejJC048X4avrTebHjp87uf8lP64J50QZgUZHWO5J1ZxvEDSDg1IJycdqF4VksqHoUCdsfkvvdheKACsANaEAUMvT6k2kX2RQ4bK6utIAmyBJCAQ7u96gy67PBgxppJ6W7xqAGXslzCiN4GfD5xtYiFCSUjHbJ7UgBHGB3rU8xrJNgVveArFPM3TXfAWzaEuu7RWB7DU31hfzxvOlOigrV1aZ7m8FvbtG3ZXHexBLokbnuUTcZBcW8xOQJz3TO4rOar7PGrayuHkZPwlvAuF145cpeVh+sR5CaBC8oplB1liyEgoA1y/gtpGlz7M6uPAOH3KhtSQEs0U0xnqKP5udiUBNSy0j0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5687.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(122000001)(921005)(83380400001)(6486002)(54906003)(5660300002)(110136005)(71200400001)(7416002)(76116006)(8676002)(4326008)(8936002)(66446008)(66556008)(64756008)(66476007)(66946007)(316002)(91956017)(2616005)(26005)(186003)(508600001)(6512007)(53546011)(2906002)(38070700005)(31696002)(6506007)(86362001)(36756003)(31686004)(558084003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MklwL1NicWdOeURVQWp3K3QvdkpMNWdLKzNqb0dWampTSXFXQkpEVjBzUTZW?=
+ =?utf-8?B?QlRhaGtBOVRaNll5eEdTYkhJK1l3eGNUMnBWWDFZeTQzU3k3Q1d3bk91anQ1?=
+ =?utf-8?B?WXRQZUtLazB6M3BDYXNjOFpDamx1QS9wMnV5QUVqLzA3Vk9QK0hkcEUzd0Fk?=
+ =?utf-8?B?VkF6NVFBWGttL2ZDQWVTM1piQ3VRS1pLNytIM2lsNDFja01MUE1XelcxWUZU?=
+ =?utf-8?B?RDBiZUJ2TDN5eDd4ZzNTYmJMd29XYzBmQ241dmwra2pJQXA3cUMwVzQ5VzlF?=
+ =?utf-8?B?WXUwUDJaS2dzbEU0SzN5ekJwcXJnbzdRREMweWtiK2lXQkRxV3lTRjZqWGtF?=
+ =?utf-8?B?bDBlWWUwZW9lenY0RU56MlBoQkNjUi9XVUJVRS9TNzFaNmdiVlc2cmw3a3hW?=
+ =?utf-8?B?VmVPMXdkNlVTRW4rTmtoSG5jVlU4NTJZRTFFMzQzSlJFL2NrWWc3MmlQNTBR?=
+ =?utf-8?B?aFRZRy93VzZ4aE4yeHJzaWpOdFRLRlRaeTRna3Q4OTVlaDhUdm4rWmNZMUZh?=
+ =?utf-8?B?akdJZDFVR3NyZmZGZDBlOHRlYXN2ZzJsWk84YkNSTWtLZHN0UEUwZDdwSDlI?=
+ =?utf-8?B?cjQ1Nm5KclZiRkNUOHMrTDVPZ2lLOVBCemUwcWU1SmIwVlA5RVNtd3l4SmQ2?=
+ =?utf-8?B?YmdVSXhOOGViOEduNVpYNGxVK1ltcUFwYWY5YTFCTGhLWDNRUlBJS2tCMGdI?=
+ =?utf-8?B?NGx6NVZGaUFBUkZERDVXTmdBTGxLdUVhWXcwN0xTb2JBUE5oM2QxUk9hVzB2?=
+ =?utf-8?B?dERGcXBCaW5xVG50YTNycnR6a1k2a0J3emlHeTFmOWgreE5VTk1pZzhiTGtR?=
+ =?utf-8?B?THkvamhtZC9xdlY3STFoY1F3NVN0cTRrd2dCRlgzdWd5SEJjQW1JWUFQSkNx?=
+ =?utf-8?B?TDhLVi9uMFhPWnZ6UmsvNTE1aDJKdlNkdWV0N0NaaWc2WnlhelZ4N1dEelVB?=
+ =?utf-8?B?RHhVS1BVZTMvUXExdEdjMGcxT3hONWhKL3JFMDZpR1FxYWo3S3B0WFlRNkpq?=
+ =?utf-8?B?TnJGd2IvT3AvS3o5alQ2ays3NjJQQXZpT0EweHBBNCs5c2dXdkY3S1VWTEtm?=
+ =?utf-8?B?Z0ZjZUVNdEZiVzdJNi9qYy8yN3JiVTQvZlVpcFZER1p1K0xUMkRTOE8zMUdl?=
+ =?utf-8?B?OXcrU3JJV29XcXBkZ1IwelVwdmEvcFU5WU5kNWRwQmlJVWlGaW54amZLUHNX?=
+ =?utf-8?B?bTJIemd1M2lyNlBIeGtyUEE0c2c5dC9XY1ZvMXg1WHlOUmlNc1hFRTBSYjhE?=
+ =?utf-8?B?N2NBdlg1cmxKY1ZGeUpqV0dSZTkyV09zMjhac1BQM2xEWnJFMlVTTm9NZ0xq?=
+ =?utf-8?B?eDc2NGUrZVVYZEVaVEVJYnlYZXg2NmFkUXBBMzRzREU3WXR6eXdiUktSeWYx?=
+ =?utf-8?B?V094aXJkMkp5OEREWHpqbkhxNzRjN054NnU4cnVqVzZ5bnUzOEpQU2RtOUti?=
+ =?utf-8?B?OXJxUlU5UExmSmVLUVJxOUpZS21UQVJkcVBuNEt4bXhPanp3WHNyaWU2MkpE?=
+ =?utf-8?B?KzRYbTNHcXJYSnB3V2p4U2Z3OU9NOHBQNitlVzJvNGh0bmY5WC9wNWFlZ3p1?=
+ =?utf-8?B?S0hyTW5nVDhCcGF3Nks0a0wxVTU1WmZ5akk3eFpDUm9lcDVhTkppbVUzc1lS?=
+ =?utf-8?B?dmVPOHlrQjZKRjhHWTAyUW90ZjNZMVI2bUt5aU9yekFJSnYyeVpOQ09VQU55?=
+ =?utf-8?B?K3JPY2lvYTZBdVBySFpRc21WYUxTWklsM2M0Q2ZMeEpHckg0N3pZN0dxNmtv?=
+ =?utf-8?B?aGhQekZLZlpLMVpNQUh3S2dubnFqc2x4R1R6T1ZpekZnSmdqRTc5VVZxTUpU?=
+ =?utf-8?B?VDh1VVFWNWJBMVE4ZGs4QkVoWk1mcGd0RkNFK2pCbktyamRBQVhlOXJsemVn?=
+ =?utf-8?B?NEtjQVh2WjZWOGhNOHdHL0JhNUZJRGMyVFZBcGRpbmJCbktYRzI0TDBwWFMy?=
+ =?utf-8?B?Ym5LMTZqMDJSNWFoTjlSaVovZHlHTG10MlR5NFpLWkhYQkYyblliaXBtSE1T?=
+ =?utf-8?B?ZXBLWjJERnBRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BCAC9BAA75825A4B86F647C3C3DEE5E7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5687.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7cafb27f-8069-499c-5e75-08da01ed60be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2022 16:53:46.7218
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /zHR/SvegeQRbuhiAllaX8iEld8iDEwDe5SaK01R6ggDEWfp0L7JdlSKFGmQuM3adgZmHBtpfxKjoGbq450SVlX8xPe4lahUaLA3BX1XcAM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3852
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 23:28 +0000, David Howells wrote:
-> Change the request initialisation function to return an error code so that
-> the network filesystem can return a failure (ENOMEM, for example).
-> 
-> This will also allow ceph to abort a ->readahead() op if the server refuses
-> to give it a cap allowing local caching from within the netfslib framework
-> (errors aren't passed back through ->readahead(), so returning, say,
-> -ENOBUFS will cause the op to be aborted).
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
-> ---
-> 
->  fs/9p/vfs_addr.c       |    3 ++-
->  fs/afs/file.c          |    3 ++-
->  fs/netfs/objects.c     |   41 ++++++++++++++++++++++++-----------------
->  fs/netfs/read_helper.c |   20 ++++++++++++--------
->  include/linux/netfs.h  |    2 +-
->  5 files changed, 41 insertions(+), 28 deletions(-)
-> 
-> diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-> index fdc1033a1546..91d3926c9559 100644
-> --- a/fs/9p/vfs_addr.c
-> +++ b/fs/9p/vfs_addr.c
-> @@ -56,12 +56,13 @@ static void v9fs_issue_read(struct netfs_io_subrequest *subreq)
->   * @rreq: The read request
->   * @file: The file being read from
->   */
-> -static void v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
-> +static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
->  {
->  	struct p9_fid *fid = file->private_data;
->  
->  	refcount_inc(&fid->count);
->  	rreq->netfs_priv = fid;
-> +	return 0;
->  }
->  
->  /**
-> diff --git a/fs/afs/file.c b/fs/afs/file.c
-> index b19d635eed12..6469d7f98ef5 100644
-> --- a/fs/afs/file.c
-> +++ b/fs/afs/file.c
-> @@ -359,9 +359,10 @@ static int afs_symlink_readpage(struct file *file, struct page *page)
->  	return ret;
->  }
->  
-> -static void afs_init_request(struct netfs_io_request *rreq, struct file *file)
-> +static int afs_init_request(struct netfs_io_request *rreq, struct file *file)
->  {
->  	rreq->netfs_priv = key_get(afs_file_key(file));
-> +	return 0;
->  }
->  
->  static bool afs_is_cache_enabled(struct inode *inode)
-> diff --git a/fs/netfs/objects.c b/fs/netfs/objects.c
-> index 986d7a9d25dd..ae18827e156b 100644
-> --- a/fs/netfs/objects.c
-> +++ b/fs/netfs/objects.c
-> @@ -20,27 +20,34 @@ struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
->  {
->  	static atomic_t debug_ids;
->  	struct netfs_io_request *rreq;
-> +	int ret;
->  
->  	rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
-> -	if (rreq) {
-> -		rreq->start	= start;
-> -		rreq->len	= len;
-> -		rreq->origin	= origin;
-> -		rreq->netfs_ops	= ops;
-> -		rreq->netfs_priv = netfs_priv;
-> -		rreq->mapping	= mapping;
-> -		rreq->inode	= file_inode(file);
-> -		rreq->i_size	= i_size_read(rreq->inode);
-> -		rreq->debug_id	= atomic_inc_return(&debug_ids);
-> -		INIT_LIST_HEAD(&rreq->subrequests);
-> -		INIT_WORK(&rreq->work, netfs_rreq_work);
-> -		refcount_set(&rreq->ref, 1);
-> -		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
-> -		if (ops->init_request)
-> -			ops->init_request(rreq, file);
-> -		netfs_stat(&netfs_n_rh_rreq);
-> +	if (!rreq)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	rreq->start	= start;
-> +	rreq->len	= len;
-> +	rreq->origin	= origin;
-> +	rreq->netfs_ops	= ops;
-> +	rreq->netfs_priv = netfs_priv;
-> +	rreq->mapping	= mapping;
-> +	rreq->inode	= file_inode(file);
-> +	rreq->i_size	= i_size_read(rreq->inode);
-> +	rreq->debug_id	= atomic_inc_return(&debug_ids);
-> +	INIT_LIST_HEAD(&rreq->subrequests);
-> +	INIT_WORK(&rreq->work, netfs_rreq_work);
-> +	refcount_set(&rreq->ref, 1);
-> +	__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
-> +	if (rreq->netfs_ops->init_request) {
-> +		ret = rreq->netfs_ops->init_request(rreq, file);
-> +		if (ret < 0) {
-> +			kfree(rreq);
-> +			return ERR_PTR(ret);
-> +		}
->  	}
->  
-> +	netfs_stat(&netfs_n_rh_rreq);
->  	return rreq;
->  }
->  
-> diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
-> index dea085715286..b5176f4320f4 100644
-> --- a/fs/netfs/read_helper.c
-> +++ b/fs/netfs/read_helper.c
-> @@ -768,7 +768,7 @@ void netfs_readahead(struct readahead_control *ractl,
->  				   readahead_pos(ractl),
->  				   readahead_length(ractl),
->  				   NETFS_READAHEAD);
-> -	if (!rreq)
-> +	if (IS_ERR(rreq))
->  		goto cleanup;
->  
->  	if (ops->begin_cache_operation) {
-> @@ -842,11 +842,9 @@ int netfs_readpage(struct file *file,
->  	rreq = netfs_alloc_request(folio->mapping, file, ops, netfs_priv,
->  				   folio_file_pos(folio), folio_size(folio),
->  				   NETFS_READPAGE);
-> -	if (!rreq) {
-> -		if (netfs_priv)
-> -			ops->cleanup(folio_file_mapping(folio), netfs_priv);
-> -		folio_unlock(folio);
-> -		return -ENOMEM;
-> +	if (IS_ERR(rreq)) {
-> +		ret = PTR_ERR(rreq);
-> +		goto alloc_error;
->  	}
->  
->  	if (ops->begin_cache_operation) {
-> @@ -887,6 +885,11 @@ int netfs_readpage(struct file *file,
->  out:
->  	netfs_put_request(rreq, false, netfs_rreq_trace_put_hold);
->  	return ret;
-> +alloc_error:
-> +	if (netfs_priv)
-> +		ops->cleanup(folio_file_mapping(folio), netfs_priv);
-> +	folio_unlock(folio);
-> +	return ret;
->  }
->  EXPORT_SYMBOL(netfs_readpage);
->  
-> @@ -1007,12 +1010,13 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
->  		goto have_folio_no_wait;
->  	}
->  
-> -	ret = -ENOMEM;
->  	rreq = netfs_alloc_request(mapping, file, ops, netfs_priv,
->  				   folio_file_pos(folio), folio_size(folio),
->  				   NETFS_READ_FOR_WRITE);
-> -	if (!rreq)
-> +	if (IS_ERR(rreq)) {
-> +		ret = PTR_ERR(rreq);
->  		goto error;
-> +	}
->  	rreq->no_unlock_folio	= folio_index(folio);
->  	__set_bit(NETFS_RREQ_NO_UNLOCK_FOLIO, &rreq->flags);
->  	netfs_priv = NULL;
-> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-> index 7dc741d9b21b..4b99e38f73d9 100644
-> --- a/include/linux/netfs.h
-> +++ b/include/linux/netfs.h
-> @@ -193,7 +193,7 @@ struct netfs_io_request {
->   */
->  struct netfs_request_ops {
->  	bool (*is_cache_enabled)(struct inode *inode);
-> -	void (*init_request)(struct netfs_io_request *rreq, struct file *file);
-> +	int (*init_request)(struct netfs_io_request *rreq, struct file *file);
->  	int (*begin_cache_operation)(struct netfs_io_request *rreq);
->  	void (*expand_readahead)(struct netfs_io_request *rreq);
->  	bool (*clamp_length)(struct netfs_io_subrequest *subreq);
-> 
-> 
-
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+T24gMDkuMDMuMjAyMiAxODo0MSwgQ29saW4gSWFuIEtpbmcgd3JvdGU6DQo+IFRoZXJlIGlzIGEg
+c3BlbGxpbmcgbWlzdGFrZSBpbiBhIGRldl9pbmZvIG1lc3NhZ2UuIEZpeCBpdC4NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IENvbGluIElhbiBLaW5nIDxjb2xpbi5pLmtpbmdAZ21haWwuY29tPg0KDQpS
+ZXZpZXdlZC1ieTogQ29kcmluIENpdWJvdGFyaXUgPGNvZHJpbi5jaXVib3Rhcml1QG1pY3JvY2hp
+cC5jb20+DQoNClRoYW5rcyENCg==

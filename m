@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59884D318A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BA34D3190
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiCIPQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S233785AbiCIPQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233638AbiCIPQt (ORCPT
+        with ESMTP id S233778AbiCIPQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:16:49 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C88A17AEDF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:15:50 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so5550771pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:15:50 -0800 (PST)
+        Wed, 9 Mar 2022 10:16:54 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428DE17BC6E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:15:55 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v4so2619376pjh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:15:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7oYPf+ghIhV7r+agWznZ0k2zJGmzHc0daLWva3ZBCac=;
-        b=COl2loy9SV2d5sun+kPh40dPD0uGJOmS+/HkjmD2g2sSi2FHFxzlJZwt31HkP+3V0F
-         4wsmGvHnFNxW6j2LvyLHbCXk/MnsifYWuPnFHaXdeucHJzX2d/KJ1yzclKujTX2NqXYT
-         5gPTt8JUb9d+Ce4LHMAY7+ciBYT0UWDEsV/3lEIRHR821NweJNebF0QqehCnig3e07K/
-         DqHxiZKPmUekzY5YimL/O9+/RkZwCKR6p59ST0gnQdq5RqLTYZTpVpi19NYYJKFWbHfm
-         bfXp4+NJXCFz5sZ4Qpp9g+agOQoOJnEmahdWRFTX6ryBqY8GF6wMx15vxOntf3vEUMHm
-         5MNA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=B/IcWlT+PDOAuKFhHBO22sb+SfpqtrQ61LlKL6Ry12Q=;
+        b=t7sc/C5jUWt89kTrhEtmyKtFqcGc5bNY8RrjGzLXl4wr1SmRJfVT0gI4LIKyn8QLDW
+         91TbWh95XTGlepNVumZwd+GfBoe27+cmIBINILwepPfBjuuh8bHclLORplrQRXcmJQd5
+         mWcPaMBP8ZvmTo4VMVn1Hg7UtP6U6Umx3yEIZHeznMJBZT/WDG3s+eOXFY2q25Vvrzlp
+         HDIlFxSWWWTnYtkwHIEK+l1prXbJ3ajK16V317xMfXoHehaY4+utvsIoECK1Bauz8mjd
+         moaTLvtlKCQq7ekft3iWrGnG8gD0H+lb28Yxo6CrIL+c7RTxqFM+UDUxqBw5NGKjq5cE
+         dpOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7oYPf+ghIhV7r+agWznZ0k2zJGmzHc0daLWva3ZBCac=;
-        b=WpoQLsy4bCT+W3IzuYArUNwfAfBkZLbrrBJ4wm54PuPimKR+6R4qD7vGv6uSG6UoFS
-         ws1WEfhHk2m8mh7/LQRHk50zkmCTI7u5GNRghXMWlNw7H8Qbvr4efcSAmleYO81P4V+m
-         aQZWRsffFBIeJCm9v+VNl2HjzAtTsGGDb+zi2ZMKPcN9lbjraw1QUEletiZ+SjWSmxTj
-         riXwQWthcZIQ3k0tuB1EYNdB1LG94SiOxtHi3X2OwuJXbgM8gGgjGh8u2nnHSw0Eww0i
-         r0oLnxr83kwRQF5plVdkllDIsOwn6+E/gtcS42T7K4oZekNj+1qEev9GpkqZ1eZxSJMD
-         v86w==
-X-Gm-Message-State: AOAM533VmZ8B3FtfInl+DUi/CVP8FSM5F+0jiA7hFSSd8k7+zlQ2jA6T
-        AcFfepEmrZRBBDyaw0pvjl21
-X-Google-Smtp-Source: ABdhPJzargKg1hYsYHqo1V8JbHKjOSnLSHJDtPS7/77n29fkgbS1+gT/nrJMALny/6sQsEC8S/yQ+Q==
-X-Received: by 2002:a17:902:cec8:b0:151:cac8:f0a2 with SMTP id d8-20020a170902cec800b00151cac8f0a2mr142925plg.12.1646838949472;
-        Wed, 09 Mar 2022 07:15:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=B/IcWlT+PDOAuKFhHBO22sb+SfpqtrQ61LlKL6Ry12Q=;
+        b=xmgNErUVAmMl0YccfrIGlwcmdvOb/laI9VzKn6o0q2EIL972GQ1jB3GoEAyidm5OlJ
+         bBf5ilXmHbMWDpiLOY7Iovc8xA0ZD04tARPvdIKibCDgCS1qhjDYxyCQZX4nunqv1PJ3
+         4p1Iti452BZ5tAb/DoQRq9dh47xBsIk6yYrZHUe9/t6nMDH/k9Rj4rygLV7PzGDEWIjt
+         uwZuYCdVFvf3+wmwr6/t0KJT05mzk37MAAg1w64yHiwf4F6huFo3zKee8ODflBcOBuwn
+         92X9LFo0ROqJI6N9sCr1UTFFoah8SxmpWvw4a5qEYfGXcGn71JVBf9o5HWpH0wkXDEsf
+         tiiQ==
+X-Gm-Message-State: AOAM531k6g7OIO/aK+35gpdPIbKqq4Q8AIfkWjTRmv41u7dz5zhExnR5
+        x0rXkK0EkY8HvyrGTWMWEmRw
+X-Google-Smtp-Source: ABdhPJwAOG34hjqTjNfdA7pWvCnPSiGY4m4NrhjpikXMG87mhNgOOsYgr4P3RiYYkBNP6WPqd0LBjQ==
+X-Received: by 2002:a17:902:dacc:b0:151:c216:2772 with SMTP id q12-20020a170902dacc00b00151c2162772mr23086584plx.107.1646838954708;
+        Wed, 09 Mar 2022 07:15:54 -0800 (PST)
 Received: from localhost.localdomain ([117.193.208.22])
-        by smtp.gmail.com with ESMTPSA id p25-20020a637419000000b0037fa57520adsm2727425pgc.27.2022.03.09.07.15.44
+        by smtp.gmail.com with ESMTPSA id p25-20020a637419000000b0037fa57520adsm2727425pgc.27.2022.03.09.07.15.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 07:15:48 -0800 (PST)
+        Wed, 09 Mar 2022 07:15:54 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
         krzk+dt@kernel.org
@@ -55,16 +55,20 @@ Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         angelogioacchino.delregno@somainline.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 0/2] Convert Qcom CPUFREQ HW binding to YAML
-Date:   Wed,  9 Mar 2022 20:45:39 +0530
-Message-Id: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Hector Yuan <hector.yuan@mediatek.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v2 1/2] dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an example
+Date:   Wed,  9 Mar 2022 20:45:40 +0530
+Message-Id: <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,36 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Qcom CPUFREQ HW don't have the support for generic performance domains yet.
+So use MediaTek CPUFREQ HW that has the support available in mainline.
 
-Patch 2/2 was submitted separately [1] but Rob's bot reported errors related to
-the performance domain binding that used Qcom CPUFREQ as an example. But Qcom
-CPUFREQ driver doesn't support the generic performance domains yet.
+This also silences the below dtschema warnings for "cpufreq-qcom-hw.yaml":
 
-So I've added a patch 1/2 that fixes the warning by using MediaTek CPUFREQ as
-the example and added both patches to this series.
+Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: reg: [[305397760, 4096]] is too short
+        From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clocks' is a required property
+        From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clock-names' is a required property
+        From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#freq-domain-cells' is a required property
+        From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#performance-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
 
-Thanks,
-Mani
+Cc: Hector Yuan <hector.yuan@mediatek.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ .../bindings/dvfs/performance-domain.yaml          | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-[1] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211005044920.78544-1-manivannan.sadhasivam@linaro.org/
-
-Changes in v2:
-
-* Moved dvfs binding patch to 1/2 for avoiding DT Bot error.
-* Added Krzysztof to "To" list.
-
-Manivannan Sadhasivam (2):
-  dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an example
-  dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
-
- .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
- .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 201 ++++++++++++++++++
- .../bindings/dvfs/performance-domain.yaml     |  14 +-
- 3 files changed, 211 insertions(+), 176 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
- create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-
+diff --git a/Documentation/devicetree/bindings/dvfs/performance-domain.yaml b/Documentation/devicetree/bindings/dvfs/performance-domain.yaml
+index c8b91207f34d..9e0bcf1a89fe 100644
+--- a/Documentation/devicetree/bindings/dvfs/performance-domain.yaml
++++ b/Documentation/devicetree/bindings/dvfs/performance-domain.yaml
+@@ -52,10 +52,16 @@ additionalProperties: true
+ 
+ examples:
+   - |
+-    performance: performance-controller@12340000 {
+-        compatible = "qcom,cpufreq-hw";
+-        reg = <0x12340000 0x1000>;
+-        #performance-domain-cells = <1>;
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        performance: performance-controller@11bc00 {
++            compatible = "mediatek,cpufreq-hw";
++            reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
++
++            #performance-domain-cells = <1>;
++        };
+     };
+ 
+     // The node above defines a performance controller that is a performance
 -- 
 2.25.1
 

@@ -2,63 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5482A4D2F75
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3898D4D2F78
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbiCIMwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
+        id S232880AbiCIMxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbiCIMwe (ORCPT
+        with ESMTP id S232966AbiCIMxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:52:34 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D6617777E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:51:35 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CB26F1F382;
-        Wed,  9 Mar 2022 12:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646830293; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 9 Mar 2022 07:53:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4231F177D06
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:52:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646830323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QkquTILc7aEHvGG2BhXXypdsFY/K4IZMrpqZS6leWTc=;
-        b=oVG3ZhWViFKiI1T3xF4qLO4s1THrZ/YK8ZHTa9oZGqyV+r1BpDMEH9gVzhFv/gjqoDF9IK
-        BszTnNrwrsFAfqYNEd0J+l3XppRAsQNTsW52MN4spcM3HJJPibRfU+vFmCRkJDgd4YdSFD
-        uEgfWgyP774lgMeRR7OZ24zCZg4P48w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646830293;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QkquTILc7aEHvGG2BhXXypdsFY/K4IZMrpqZS6leWTc=;
-        b=o+dfUm+iSID+6POQ+JDMUVw1Z5Do1EXfhsfo5qLBfWhM69bdVrE0QN5W9s+VUtGz8ILK6Q
-        /XiuSAsrtRaBNnDQ==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 27C92A3B85;
-        Wed,  9 Mar 2022 12:51:28 +0000 (UTC)
-Date:   Wed, 9 Mar 2022 13:51:33 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com,
-        rostedt@goodmis.org, mhiramat@kernel.org,
-        alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-In-Reply-To: <20220308153011.021123062@infradead.org>
-Message-ID: <alpine.LSU.2.21.2203090959150.672@pobox.suse.cz>
-References: <20220308153011.021123062@infradead.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        bh=MVrNBje8P4Tjl99yqsqfstxvyHvyJTjfoJ0XzHjnkFs=;
+        b=YBu+lGxlOvH8L+YVlsBFtbhqqZmvA084VweXW+9ABzUF5IPsBxegCC4S+rzl1qKAFRF1PH
+        xXFOLRv1pcL1Brmys842q9LWK54JJTrXoc3D/gdmwusLEK3g+gLnrouMVX2Sg3aF9FK3cc
+        MM0FJJoJjrxX+9VpRzfe35Vjm3arL/s=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-EaH9-qWwPm-QnnD8FVsuzw-1; Wed, 09 Mar 2022 07:52:00 -0500
+X-MC-Unique: EaH9-qWwPm-QnnD8FVsuzw-1
+Received: by mail-wr1-f71.google.com with SMTP id m18-20020a5d4a12000000b00203731460e6so732657wrq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 04:52:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MVrNBje8P4Tjl99yqsqfstxvyHvyJTjfoJ0XzHjnkFs=;
+        b=8Bb2PyoQJcH6l8nz2AO0gYKns/CuObT29v7U111Zv/T2HPC7WpkKTgCNKmtcgYOuhX
+         lfjhHjVKn6zLmfKrB74/La7vvjfCBR9jxKpDwev3Bxut8djTRfGFJvFnEfUB82NSBDWg
+         ZudbURhBskSfF5Tp5OD1hHDCWKk5FGWeozIYIio1payyfykKs66xKzwrOnVODAT/GD7B
+         5B/DvFrLE3AA127s58vxWMdJKt6gnoF2+XYWmO9LAljuvDwnGsA/fSavNQ8rR4HdlFCf
+         SgnMYM/uii9LaDKO4KQyT1DXijMMyehvz7aODg+HcwAO7hURus0yxmTfHtY/ZFbQGDjh
+         WoIQ==
+X-Gm-Message-State: AOAM532G8h1ha7mHpE7WFmLJuLUDTS3hjaL+2fFEn6JGiyQ0amy+fK7V
+        QzrDsEeDt72y3e6CkFmR44Qx+y09lu+fkRsXKjMo++FaHWviC30lAFoDLSepoUR+bWZxmq55U8U
+        gnJGVz3XRBa6KvdMu5RVXWhj4
+X-Received: by 2002:adf:8b9e:0:b0:1f0:25ca:6d81 with SMTP id o30-20020adf8b9e000000b001f025ca6d81mr15523231wra.247.1646830319032;
+        Wed, 09 Mar 2022 04:51:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJznCED2hDWfMPlEh09LTikM9n8nFo++5o/PkgFE4Sete3s/9brY/cGIrZsveiDmJHMiONU+4Q==
+X-Received: by 2002:adf:8b9e:0:b0:1f0:25ca:6d81 with SMTP id o30-20020adf8b9e000000b001f025ca6d81mr15523208wra.247.1646830318754;
+        Wed, 09 Mar 2022 04:51:58 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n2-20020a056000170200b001f1e16f3c53sm1643997wrc.51.2022.03.09.04.51.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 04:51:58 -0800 (PST)
+Message-ID: <d7a8d183-fe2b-99b1-9730-eddb040f6d1e@redhat.com>
+Date:   Wed, 9 Mar 2022 13:51:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 03/10] drm/client: Use actual bpp when allocating frame
+ buffers
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1646683502.git.geert@linux-m68k.org>
+ <8f29a983d42d9d68bd8cae2f9481d3c139f8750a.1646683502.git.geert@linux-m68k.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <8f29a983d42d9d68bd8cae2f9481d3c139f8750a.1646683502.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +90,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022, Peter Zijlstra wrote:
-
-> Hopefully last posting...
+On 3/7/22 21:52, Geert Uytterhoeven wrote:
+> When allocating a frame buffer, the number of bits per pixel needed is
+> derived from the deprecated drm_format_info.cpp[] field.  While this
+> works for formats using less than 8 bits per pixel, it does lead to a
+> large overallocation.
 > 
-> Since last time:
+> Reduce memory consumption by using the actual number of bits per pixel
+> instead.
 > 
->  - updated the ftrace_location() patch (naveen, rostedt)
->  - added a few comments and clarifications (bpetkov)
->  - disable jump-tables (joao)
->  - verified clang-14-rc2 works
->  - fixed a whole bunch of objtool unreachable insn issue
->  - picked up a few more tags
-> 
-> Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
 
-FWIW objtool changes look good to me. 
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-I only came across 
+-- 
+Best regards,
 
-arch/x86/kernel/head_64.o: warning: objtool: .noinstr.text: unexpected end of section
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-with CC_HAS_IBT=n, which you already know about.
-
-CC_HAS_IBT=y compilation gives
-
-vmlinux.o: warning: objtool: xen_vcpu_setup()+0xa3: unreachable instruction
-
-Miroslav

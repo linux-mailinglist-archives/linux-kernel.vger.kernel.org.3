@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A824D35BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9415D4D35AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbiCIQ2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
+        id S235973AbiCIQ2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238184AbiCIQVb (ORCPT
+        with ESMTP id S238200AbiCIQVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:21:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911BCE2C;
-        Wed,  9 Mar 2022 08:20:29 -0800 (PST)
+        Wed, 9 Mar 2022 11:21:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45352F43;
+        Wed,  9 Mar 2022 08:20:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AE9AB82020;
-        Wed,  9 Mar 2022 16:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19924C340E8;
-        Wed,  9 Mar 2022 16:20:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D69E9616F3;
+        Wed,  9 Mar 2022 16:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19896C340E8;
+        Wed,  9 Mar 2022 16:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646842826;
-        bh=HpRMXrDjf1wbttzgKZQ+8dZZH7glTcRjszHuyCdbnfc=;
+        s=k20201202; t=1646842837;
+        bh=cOnmEJ3SL4r6/v5TFjAJCqaqodqDNHZuOq9BLJmSKYw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EuMiEA2mXyjFFKEAUzXbHuO8O3MNamkOEifKMuuynckt0d8LWL8SLhrFz4qQgNQER
-         RXOA/fVFMh04MRHtB+flIs4dkD2X8NwRM+y9OOKL4PPoN5eld1eF29BRVedHHJ7yDz
-         auuLbSLBJ8slEqSL3WoK7UWwFscDMVnZd/g6AU1odPYU47SR0qWKGN/IzIFoTIah4x
-         fnenm+Q5xgs2/0BRPqm487dDLu6OPb9jnaCpGob0DtzkiLBt1oemLg0Gbg48RCGfU/
-         xTf11fMMWdp1vtcKlwoIhSSWa1BtxPBEdpzcxnaljU+EAsk/VkwhsUqXDYjMmX/3Rb
-         kWEKMSy7Gb1Kg==
+        b=sVqErGRDb4PusR7Sg0nxtxq5gEX/eEp590HRRepQqTCIFLvpghM/lw7+hhDe1zjAH
+         iFDbL2lVpXI1vPYXkRRQFR3Oz9BMb/QaCfdUc5n+WmQIdyHb5nS/79p5ukoaTmh3Qe
+         1vXsWKZxubzrrFehUyOYyIAaxE+64ATojLvbewrY2M9YUcLRekurrjZXhBlK2wO5Pb
+         u8rEYSr6fsDJZmi32J0zuDhXmc6jL8RUZ4pUjNN0belRHVkpt57jpmaNYvjcJ9XcLm
+         6URUyMvqfum1+JkxC6czuuFVOZIeQ9sQHfITaEI8+iaEZY31BmsvGPFs2VyRnW/Noa
+         XNtk9STv1ZVwQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
-        jbx6244@gmail.com, helen.koike@collabora.com,
-        briannorris@chromium.org, dianders@chromium.org,
-        zhangqing@rock-chips.com, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 06/24] arm64: dts: rockchip: reorder rk3399 hdmi clocks
-Date:   Wed,  9 Mar 2022 11:19:25 -0500
-Message-Id: <20220309161946.136122-6-sashal@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 09/24] ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
+Date:   Wed,  9 Mar 2022 11:19:28 -0500
+Message-Id: <20220309161946.136122-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309161946.136122-1-sashal@kernel.org>
 References: <20220309161946.136122-1-sashal@kernel.org>
@@ -62,39 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 2e8a8b5955a000cc655f7e368670518cbb77fe58 ]
+[ Upstream commit 3916c3619599a3970d3e6f98fb430b7c46266ada ]
 
-The binding specifies the clock order to "cec", "grf", "vpll". Reorder
-the clocks accordingly.
+crypto-controller had a typo, fix it.
+In the same time, rename it to just crypto
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Link: https://lore.kernel.org/r/20220126145549.617165-19-s.hauer@pengutronix.de
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220209120355.1985707-1-clabbe@baylibre.com
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/rk3288.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 3871c7fd83b0..00f1d036dfe0 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1802,10 +1802,10 @@ hdmi: hdmi@ff940000 {
- 		interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH 0>;
- 		clocks = <&cru PCLK_HDMI_CTRL>,
- 			 <&cru SCLK_HDMI_SFR>,
--			 <&cru PLL_VPLL>,
-+			 <&cru SCLK_HDMI_CEC>,
- 			 <&cru PCLK_VIO_GRF>,
--			 <&cru SCLK_HDMI_CEC>;
--		clock-names = "iahb", "isfr", "vpll", "grf", "cec";
-+			 <&cru PLL_VPLL>;
-+		clock-names = "iahb", "isfr", "cec", "grf", "vpll";
- 		power-domains = <&power RK3399_PD_HDCP>;
- 		reg-io-width = <4>;
- 		rockchip,grf = <&grf>;
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 4dcdcf17c977..66ff5db53c5a 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -971,7 +971,7 @@ i2s: i2s@ff890000 {
+ 		status = "disabled";
+ 	};
+ 
+-	crypto: cypto-controller@ff8a0000 {
++	crypto: crypto@ff8a0000 {
+ 		compatible = "rockchip,rk3288-crypto";
+ 		reg = <0x0 0xff8a0000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.34.1
 

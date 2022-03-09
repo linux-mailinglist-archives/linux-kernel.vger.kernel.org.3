@@ -2,137 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF704D2C06
+	by mail.lfdr.de (Postfix) with ESMTP id B7F794D2C07
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbiCIJbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S232126AbiCIJbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbiCIJbH (ORCPT
+        with ESMTP id S232125AbiCIJbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:31:07 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAACF16EAA0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:30:08 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KD6Nv0b01z9sSV;
-        Wed,  9 Mar 2022 10:30:07 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ooq6_0FsSdGe; Wed,  9 Mar 2022 10:30:07 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KD6Nt6qh0z9sSR;
-        Wed,  9 Mar 2022 10:30:06 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D7EB78B77E;
-        Wed,  9 Mar 2022 10:30:06 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id pOpmT6DffnpU; Wed,  9 Mar 2022 10:30:06 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.3])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 88E9C8B763;
-        Wed,  9 Mar 2022 10:30:06 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2299Tscg3598467
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 9 Mar 2022 10:29:54 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2299TqDE3598460;
-        Wed, 9 Mar 2022 10:29:52 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc: Remove find_current_mm_pte()
-Date:   Wed,  9 Mar 2022 10:29:50 +0100
-Message-Id: <ec79f462a3bfa8365b7df505e574d5d85246bc68.1646818177.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Mar 2022 04:31:33 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D54A516EA98;
+        Wed,  9 Mar 2022 01:30:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69DBC1650;
+        Wed,  9 Mar 2022 01:30:34 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BF583FA20;
+        Wed,  9 Mar 2022 01:30:33 -0800 (PST)
+Date:   Wed, 9 Mar 2022 09:30:32 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sean Kelley <skelley@nvidia.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/3] x86, ACPI: rename init_freq_invariance_cppc to
+ arch_init_invariance_cppc
+Message-ID: <YihzuD9G8IV4/P7m@arm.com>
+References: <20220302180913.13229-1-ionela.voinescu@arm.com>
+ <20220302180913.13229-2-ionela.voinescu@arm.com>
+ <CAJZ5v0i9iEx56vDwBsxhYcPKcfa2TF9HQqDOGK96Dfpjs3evQA@mail.gmail.com>
+ <CAJZ5v0jke695COCAkYNOzOcqF7yPPP5p-YPv+E8rOP=qqoVf9g@mail.gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1646818188; l=2526; s=20211009; h=from:subject:message-id; bh=h44Sg5AgvIMvJpGkxPGM0gq65QXd16xNa43MAsRSfio=; b=oHkiv4ZIEp7UvFFwzb2z/ajNVIwFcw+hXyjZMtTPV39nDHiMTygEQApsjKlwdgTeYlYy4PBdfQ2k JJCXgKLsAox3Wfh8ffT2Z/AwuimMsc2zUcKoli3ayLGN2lw+AZsE
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jke695COCAkYNOzOcqF7yPPP5p-YPv+E8rOP=qqoVf9g@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Last usage of find_current_mm_pte() was removed by
-commit 15759cb054ef ("powerpc/perf/callchain: Use
-__get_user_pages_fast in read_user_stack_slow")
+On Tuesday 08 Mar 2022 at 19:22:10 (+0100), Rafael J. Wysocki wrote:
+> On Tue, Mar 8, 2022 at 7:05 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Wed, Mar 2, 2022 at 7:10 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> > >
+> > > init_freq_invariance_cppc() was called in acpi_cppc_processor_probe(),
+> > > after CPU performance information and controls were populated from the
+> > > per-cpu _CPC objects.
+> > >
+> > > But these _CPC objects provide information that helps with both CPU
+> > > (u-arch) and frequency invariance. Therefore, change the function name
+> > > to a more generic one, while adding the arch_ prefix, as this function
+> > > is expected to be defined differently by different architectures.
+> > >
+> > > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > Tested-by: Valentin Schneider <valentin.schneider@arm.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Ingo Molnar <mingo@redhat.com>
+> > > Cc: Giovanni Gherdovich <ggherdovich@suse.cz>
+> > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> >
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> That said it will conflict with this series from Rui:
+> 
+> https://lore.kernel.org/linux-acpi/20220214101450.356047-1-ray.huang@amd.com/
+> 
+> applied by me a while ago.
+> 
+> Maybe consider rebasing when this gets to linux-next ->
 
-Remove it.
+Will do that!
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/pte-walk.h | 25 -------------------------
- arch/powerpc/mm/book3s64/pgtable.c  |  4 ++--
- 2 files changed, 2 insertions(+), 27 deletions(-)
+> 
+> > and who's expected to pick this up?
+> 
+> -> and then I guess I can pick it up if everybody agrees.
 
-diff --git a/arch/powerpc/include/asm/pte-walk.h b/arch/powerpc/include/asm/pte-walk.h
-index 714a35f0d425..73c22c579a79 100644
---- a/arch/powerpc/include/asm/pte-walk.h
-+++ b/arch/powerpc/include/asm/pte-walk.h
-@@ -60,29 +60,4 @@ static inline phys_addr_t ppc_find_vmap_phys(unsigned long addr)
- 	return pa;
- }
- 
--/*
-- * This is what we should always use. Any other lockless page table lookup needs
-- * careful audit against THP split.
-- */
--static inline pte_t *find_current_mm_pte(pgd_t *pgdir, unsigned long ea,
--					 bool *is_thp, unsigned *hshift)
--{
--	pte_t *pte;
--
--	VM_WARN(!arch_irqs_disabled(), "%s called with irq enabled\n", __func__);
--	VM_WARN(pgdir != current->mm->pgd,
--		"%s lock less page table lookup called on wrong mm\n", __func__);
--	pte = __find_linux_pte(pgdir, ea, is_thp, hshift);
--
--#if defined(CONFIG_DEBUG_VM) &&						\
--	!(defined(CONFIG_HUGETLB_PAGE) || defined(CONFIG_TRANSPARENT_HUGEPAGE))
--	/*
--	 * We should not find huge page if these configs are not enabled.
--	 */
--	if (hshift)
--		WARN_ON(*hshift);
--#endif
--	return pte;
--}
--
- #endif /* _ASM_POWERPC_PTE_WALK_H */
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
-index 79ce3c22a29d..41a41357799d 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -98,14 +98,14 @@ static void do_serialize(void *arg)
- }
- 
- /*
-- * Serialize against find_current_mm_pte which does lock-less
-+ * Serialize against __find_linux_pte() which does lock-less
-  * lookup in page tables with local interrupts disabled. For huge pages
-  * it casts pmd_t to pte_t. Since format of pte_t is different from
-  * pmd_t we want to prevent transit from pmd pointing to page table
-  * to pmd pointing to huge page (and back) while interrupts are disabled.
-  * We clear pmd to possibly replace it with page table pointer in
-  * different code paths. So make sure we wait for the parallel
-- * find_current_mm_pte to finish.
-+ * __find_linux_pte() to finish.
-  */
- void serialize_against_pte_lookup(struct mm_struct *mm)
- {
--- 
-2.34.1
+Many thanks, Rafael!
 
+> 
+> > > ---
+> > >  arch/x86/include/asm/topology.h | 2 +-
+> > >  drivers/acpi/cppc_acpi.c        | 6 +++---
+> > >  2 files changed, 4 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+> > > index 2f0b6be8eaab..5ec70f186775 100644
+> > > --- a/arch/x86/include/asm/topology.h
+> > > +++ b/arch/x86/include/asm/topology.h
+> > > @@ -223,7 +223,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
+> > >
+> > >  #if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
+> > >  void init_freq_invariance_cppc(void);
+> > > -#define init_freq_invariance_cppc init_freq_invariance_cppc
+> > > +#define arch_init_invariance_cppc init_freq_invariance_cppc
+> > >  #endif
+> > >
+> > >  #endif /* _ASM_X86_TOPOLOGY_H */
+> > > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> > > index 866560cbb082..bfd142ab4e07 100644
+> > > --- a/drivers/acpi/cppc_acpi.c
+> > > +++ b/drivers/acpi/cppc_acpi.c
+> > > @@ -633,8 +633,8 @@ static bool is_cppc_supported(int revision, int num_ent)
+> > >   *  )
+> > >   */
+> > >
+> > > -#ifndef init_freq_invariance_cppc
+> > > -static inline void init_freq_invariance_cppc(void) { }
+> > > +#ifndef arch_init_invariance_cppc
+> > > +static inline void arch_init_invariance_cppc(void) { }
+> > >  #endif
+> > >
+> > >  /**
+> > > @@ -816,7 +816,7 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+> > >                 goto out_free;
+> > >         }
+> > >
+> > > -       init_freq_invariance_cppc();
+> > > +       arch_init_invariance_cppc();
+> > >
+> > >         kfree(output.pointer);
+> > >         return 0;
+> > > --
+> > > 2.25.1
+> > >

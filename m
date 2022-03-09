@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC654D2F68
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B544D2F6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbiCIMte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S232851AbiCIMuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiCIMtZ (ORCPT
+        with ESMTP id S232816AbiCIMuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:49:25 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FF63F30F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:48:25 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id q20so1305963wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 04:48:25 -0800 (PST)
+        Wed, 9 Mar 2022 07:50:01 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458953F30F;
+        Wed,  9 Mar 2022 04:49:03 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id t19so1852015plr.5;
+        Wed, 09 Mar 2022 04:49:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dEkbfPIsKnwjaI2kDEzkTmYsVV370wWk1OOrQivXzv8=;
-        b=lmDyPs4TomAqORCQt7bvXiRJDosW/4o6zJlrE9aG5ioQzf3RA5iQgiysLYQfXySlh7
-         TO3Mjd19IHNJY9tk4efQ1cCJehYDz5yeswxyImceL5S/9pnp40r+LVCmbrh7BquzLlIE
-         LneAAXcFUXd9sz02HSXI4wlQuzKlJiPhuLEUr6Mu0E30g0Ys1GAL6k6fCrlGVzr7SRW/
-         F+pRs8MJCsLMydsBs95kyUZH74cgp/T94SqezuHiI8Fm/AVFiwwGVyaerX3K1AjVdUQQ
-         F+3GEiH5mG6aKIVU1hisGiauer0W926KzgjkO8rl1U8atUHqbV/GVrzHRPHoG0yg1y3F
-         6CjQ==
+        h=from:to:subject:date:message-id;
+        bh=gmzfDc79SJaw0O2J8OrdJVxDniuiRhZZSCsFjJqsgqU=;
+        b=hqHHbC4f33ri/ELlINMm1EGRqrT6SfD0ZFHEaHa0Zgu6ZHRJIpolnRhwLLG6NAPkbZ
+         HHqltR8DP748UgQc8n/vfGJVT0W27pKIHw+/Ib9zBSDe55UbQKPjCkNC9zxtlTtKBK7M
+         qCevSfewjeIT023qhBz09+5y0mbg5k6WXWTZaMbpWP/+kIB/4VPxAspE/eVXPKrofxbC
+         Jd614Xt+Nhv4TTFNK+vNKWb0Z6JG7e9XjHrq2U/1UbIGWr/Om4pvWKvYQ+foRwUSsMjI
+         gRRl9qSVS8X6eDQ6bDPRaSQFbJAws8EaQV5aSzPi91rsTEeKhE6FpnRxwqpQ7vP320rM
+         wjhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dEkbfPIsKnwjaI2kDEzkTmYsVV370wWk1OOrQivXzv8=;
-        b=mwXWho+lyxy175Pt6+QevsdmEYmvuYBaWRacQ4dnEuAwE3Eumu/mvU7wihIiC2l+9T
-         CYB88x0/TX3oCKIruvN4g+TjPSADUAMiXdmoDQyWK0a/jT8q7r4IvkpXFHsvu7WSh1Cf
-         e+0WswYZwIHHRsIgWhyvAqimz2EZKe+oTcpDNjweTeQTJcpYAHUUIJbjqWnERD07Dg9+
-         qrivpj3GhOPzlmYUSeNPGfyE8kn83qdmg+CCNTMgbDeTaoM+ajmGpv5PD+zCBNNUaXHj
-         P9a+WPMfHZTmbVNtLMM8imZRgvorigwdjZGkRbOAAcwV01qzWz5lG2d9ByjT8ST+5GsK
-         Vu1A==
-X-Gm-Message-State: AOAM5334XRPrJN4RHkEVJYNou4u553FArh6wRtAV8vFBNfkIPSi8K4iw
-        bHEyRffx9SbJzSNnhoLSu7M=
-X-Google-Smtp-Source: ABdhPJykQjSaVV6GH2izGx0H3jrk4OebEHXamou2u5NeTdSiw3QwRx7HVt6vqj4BZUYMgSFXBRupng==
-X-Received: by 2002:a1c:acc6:0:b0:380:e35f:ff1f with SMTP id v189-20020a1cacc6000000b00380e35fff1fmr7476109wme.52.1646830104358;
-        Wed, 09 Mar 2022 04:48:24 -0800 (PST)
-Received: from [192.168.1.99] (31-34-241-225.abo.bbox.fr. [31.34.241.225])
-        by smtp.gmail.com with ESMTPSA id o12-20020adfa10c000000b001efb97fae48sm1658108wro.80.2022.03.09.04.48.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 04:48:24 -0800 (PST)
-Message-ID: <465ffdb2-06fe-c35d-c37e-6fa19b0c84b1@gmail.com>
-Date:   Wed, 9 Mar 2022 13:48:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] arm64: kasan: fix include error in MTE functions
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, andreyknvl@google.com,
-        vincenzo.frascino@arm.com, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, paul.semel@datadoghq.com
-References: <bacb5387-2992-97e4-0c48-1ed925905bee@gmail.com>
- <20220309113935.GA352@willie-the-truck>
-From:   Paul Semel <semelpaul@gmail.com>
-In-Reply-To: <20220309113935.GA352@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=gmzfDc79SJaw0O2J8OrdJVxDniuiRhZZSCsFjJqsgqU=;
+        b=kkVjrNgqko+EljZgR4EqV9B4Y2ZM7qcqyHUK2ppLO/UlK4zgHw58kxGJcvUUxPkl+O
+         4aiXhY/1Tlh/xl1fwMxhAUSrRDWvZw5jteie5fHoktC11zG77w5XtKkurjRbK9yn+uvb
+         +YweddFci+rcsZCqfRQzpM2d5iXw4UBhUpEw2ed38gdKUmGQFgu01eleLQ9N3+wvDZu5
+         lE87+HJJJ/selYX3Xd3IILFYn33qnO8LgmUhvs2/sVPwLbi0Zv9mjgI4htcN46zlB682
+         MhEPKtYuxpZbsaGMSlA4/tf7VgGmoUbA3xJV2YTixUhZgbvLFon1+PVnM/vn/rIywm0S
+         wu9g==
+X-Gm-Message-State: AOAM533W4q7dl6MZgxPwb079uS9xqFegVF/voJ//UUWlfz8W8hbc3Vw1
+        8ZYkBZu37M/yJHzeFoR4u19E03MfEGi51o3IPyWncA==
+X-Google-Smtp-Source: ABdhPJwy69AcSthvPd1Jwa4D/eCjVma76OudGhtMQzni4PgKe7zYNLgFb6mVdJmX/5YGFr/o8D6oKQ==
+X-Received: by 2002:a17:902:ec8d:b0:151:cab8:9aa9 with SMTP id x13-20020a170902ec8d00b00151cab89aa9mr22320338plg.173.1646830142783;
+        Wed, 09 Mar 2022 04:49:02 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id h18-20020a056a00231200b004f72b290994sm3083024pfh.180.2022.03.09.04.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 04:49:02 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Girish K S <ks.giri@samsung.com>,
+        Vasanth Ananthan <vasanth.a@samsung.com>,
+        Yuvaraj Kumar C D <yuvaraj.cd@gmail.com>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] phy: samsung: Fix missing of_node_put() in exynos_sata_phy_probe
+Date:   Wed,  9 Mar 2022 12:48:52 +0000
+Message-Id: <20220309124856.32632-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 12:39, Will Deacon wrote:> Do you know where this issue was 
-introduced? I can't tell whether this patch
-> is a fix for 5.17, or something needed only for 5.18 (and if so, which tree
-> introduced the problem).
+The device_node pointer is returned by of_parse_phandle() with refcount
+incremented. We should use of_node_put() on it when done.
 
-This seems to have been introduced by 
-2cb34276427a093e2d7cc6ea63ac447bad1ff4c1 if I am not mistaking. In which 
-case, I guess this is a fix for 5.17.
+Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/phy/samsung/phy-exynos5250-sata.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-
+diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
+index 9ec234243f7c..6c305a3fe187 100644
+--- a/drivers/phy/samsung/phy-exynos5250-sata.c
++++ b/drivers/phy/samsung/phy-exynos5250-sata.c
+@@ -187,6 +187,7 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 
+ 	sata_phy->client = of_find_i2c_device_by_node(node);
++	of_node_put(node);
+ 	if (!sata_phy->client)
+ 		return -EPROBE_DEFER;
+ 
 -- 
-Paul Semel
+2.17.1
+

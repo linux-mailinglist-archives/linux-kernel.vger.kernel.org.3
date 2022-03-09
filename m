@@ -2,151 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4502A4D3655
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CB14D3672
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbiCIQvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S238378AbiCIQvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiCIQd4 (ORCPT
+        with ESMTP id S235472AbiCIQez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:33:56 -0500
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72969E9C6;
-        Wed,  9 Mar 2022 08:29:27 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:35982)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nRzBm-0032OW-NN; Wed, 09 Mar 2022 09:29:26 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34582 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nRzBl-005i1Z-OH; Wed, 09 Mar 2022 09:29:26 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Denys Vlasenko <vda.linux@googlemail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <liam.howlett@oracle.com>,
-        Jann Horn <jannh@google.com>, linux-mm@kvack.org
-References: <20220131153740.2396974-1-willy@infradead.org>
-        <871r0nriy4.fsf@email.froward.int.ebiederm.org>
-        <YfgKw5z2uswzMVRQ@casper.infradead.org>
-        <877dafq3bw.fsf@email.froward.int.ebiederm.org>
-        <YfgPwPvopO1aqcVC@casper.infradead.org>
-        <CAG48ez3MCs8d8hjBfRSQxwUTW3o64iaSwxF=UEVtk+SEme0chQ@mail.gmail.com>
-        <87bkzroica.fsf_-_@email.froward.int.ebiederm.org>
-        <87h788fdaw.fsf_-_@email.froward.int.ebiederm.org>
-        <202203081342.1924AD9@keescook>
-Date:   Wed, 09 Mar 2022 10:29:10 -0600
-In-Reply-To: <202203081342.1924AD9@keescook> (Kees Cook's message of "Tue, 8
-        Mar 2022 13:49:32 -0800")
-Message-ID: <877d93dr8p.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 9 Mar 2022 11:34:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C94A0BF4;
+        Wed,  9 Mar 2022 08:29:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2E01B820D3;
+        Wed,  9 Mar 2022 16:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CC2C340F7;
+        Wed,  9 Mar 2022 16:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646843392;
+        bh=6NcM3s9FUXJzXCNhdm5FnAc37hj/GF+Xkb2PBQn28cQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WDai5sJOP0tmymKTQzKf2ANe1AJWqo9ZRi44HfcNQ4Fnz4JXyv0gB9vtsCG53l4Ye
+         5XrtOF3s3VtGSAsBXi4AJmZHD9KpUys8ZZVVNdFkKlXE6/X7q68DA66xieesEWaZPA
+         +viuT/Ra3kI4UZnTGpANJbgxYK9K2fMq/IHwD1PmooN+HMaJ05iipM/o/1WqJBnp9M
+         GX9/vI1YQfCM8WHyFtgQrXVZKIatk4MBQ68HA9upWZOw0xuN9ZXp1t9+8HAfMZt/Ld
+         1dCaW/7ph0w3hrjmrDq8UNwuzU8uxcRjgqUBMih+CD8ndTqnAS8GQi8ISQuB0fyJ3K
+         N5F41RqMqMV1A==
+Date:   Wed, 9 Mar 2022 10:29:50 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v9 00/11] vgaarb: Rework default VGA device selection
+Message-ID: <20220309162950.GA55262@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nRzBl-005i1Z-OH;;;mid=<877d93dr8p.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+n6dmJ5h9NeMXTcHx08GyxJ8itHy6uo48=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225221523.GA385757@bhelgaas>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 430 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 12 (2.7%), b_tie_ro: 10 (2.3%), parse: 0.84
-        (0.2%), extract_message_metadata: 11 (2.5%), get_uri_detail_list: 1.76
-        (0.4%), tests_pri_-1000: 13 (3.0%), tests_pri_-950: 1.42 (0.3%),
-        tests_pri_-900: 1.16 (0.3%), tests_pri_-90: 92 (21.4%), check_bayes:
-        89 (20.7%), b_tokenize: 7 (1.6%), b_tok_get_all: 9 (2.2%),
-        b_comp_prob: 2.3 (0.5%), b_tok_touch_all: 66 (15.4%), b_finish: 1.12
-        (0.3%), tests_pri_0: 287 (66.7%), check_dkim_signature: 0.55 (0.1%),
-        check_dkim_adsp: 2.9 (0.7%), poll_dns_idle: 0.50 (0.1%), tests_pri_10:
-        2.1 (0.5%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [GIT PULL] Fix fill_files_note
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On Fri, Feb 25, 2022 at 04:15:23PM -0600, Bjorn Helgaas wrote:
+> On Thu, Feb 24, 2022 at 04:47:42PM -0600, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > Current default VGA device selection fails in some cases because part of it
+> > is done in the vga_arb_device_init() subsys_initcall, and some arches
+> > enumerate PCI devices in pcibios_init(), which runs *after* that.
+> > 
+> > The big change from the v8 posting is that this moves vgaarb.c from
+> > drivers/gpu/vga to drivers/pci because it really has nothing to do with
+> > GPUs or DRM.
+> 
+> I provisionally applied this to pci/vga and put it into -next just
+> to get a little runtime on it.
+> 
+> But I'd prefer not to unilaterally yank this out of drivers/gpu
+> without a consensus from the GPU folks that this is the right thing to
+> do.
+> 
+> Any thoughts?  If it seems OK to you, I think patch 1/11 (the move
+> itself) is all you would need to look at, although of course I would
+> still be grateful for any review and feedback on the rest.
+> 
+> After it's in drivers/pci, all the blame for any issues would come my
+> way.
 
-> On Tue, Mar 08, 2022 at 01:35:03PM -0600, Eric W. Biederman wrote:
->> 
->> Kees,
->> 
->> Please pull the coredump-vma-snapshot-fix branch from the git tree:
->> 
->>   git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git coredump-vma-snapshot-fix
->> 
->>   HEAD: 390031c942116d4733310f0684beb8db19885fe6 coredump: Use the vma snapshot in fill_files_note
->> 
->> Matthew Wilcox has reported that a missing mmap_lock in file_files_note,
->> which could cause trouble.
->> 
->> Refactor the code and clean it up so that the vma snapshot makes
->> it to fill_files_note, and then use the vma snapshot in fill_files_note.
->> 
->> Eric W. Biederman (5):
->>       coredump: Move definition of struct coredump_params into coredump.h
->>       coredump: Snapshot the vmas in do_coredump
->>       coredump: Remove the WARN_ON in dump_vma_snapshot
->>       coredump/elf: Pass coredump_params into fill_note_info
->>       coredump: Use the vma snapshot in fill_files_note
->> 
->>  fs/binfmt_elf.c          | 66 ++++++++++++++++++++++--------------------------
->>  fs/binfmt_elf_fdpic.c    | 18 +++++--------
->>  fs/binfmt_flat.c         |  1 +
->>  fs/coredump.c            | 59 ++++++++++++++++++++++++++++---------------
->>  include/linux/binfmts.h  | 13 +---------
->>  include/linux/coredump.h | 20 ++++++++++++---
->>  6 files changed, 93 insertions(+), 84 deletions(-)
->> 
->> ---
->> 
->> Kees I realized I needed to rebase this on Jann Horn's commit
->> 84158b7f6a06 ("coredump: Also dump first pages of non-executable ELF
->> libraries").  Unfortunately before I got that done I got distracted and
->> these changes have been sitting in limbo for most of the development
->> cycle.  Since you are running a tree that is including changes like this
->> including Jann's can you please pull these changes into your tree.
->
-> Sure! Can you make a signed tag for this pull?
+Ping?  This has been in -next since the Feb 28 tree, and I plan to
+ask Linus to include it during the v5.18 merge window (which will
+probably open Mar 13) unless somebody objects.
 
-Not yet.
-
-Hopefully I will get the time to set that up soon, but I am not at all
-setup to do signed tags at this point.
-
-> If it helps, my workflow look like this, though I assume there might be
-> better ways. (tl;dr: "git tag -s TAG BRANCH")
->
->
-> PULL_BRANCH=name-of-branch
-> BASE=sha-of-base
-> FOR=someone
-> TOPIC=topic-name
->
-> TAG="for-$FOR/$TOPIC"
-> SIGNED=~/.pull-request-signed-"$TAG"
-> echo "$TOPIC update" > "$SIGNED"
-> git request-pull "$BASE" git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git "$PULL_BRANCH" | awk '{print "# " $0}' >> "$SIGNED"
-> vi "$SIGNED"
->
-> git tag -sF "$SIGNED" "$TAG" "$PULL_BRANCH"
-> git push origin "$PULL_BRANCH"
-> git push origin +"$TAG"
-
-Thanks.  That looks like a good place to start.
-
-Eric
+Bjorn

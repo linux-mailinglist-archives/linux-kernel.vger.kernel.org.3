@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CE74D39E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F9B4D39EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237565AbiCITRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S237564AbiCITRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237480AbiCITQb (ORCPT
+        with ESMTP id S237494AbiCITQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:16:31 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A271107E2;
-        Wed,  9 Mar 2022 11:15:29 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id i66so1939505wma.5;
-        Wed, 09 Mar 2022 11:15:29 -0800 (PST)
+        Wed, 9 Mar 2022 14:16:32 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA781107ED;
+        Wed,  9 Mar 2022 11:15:30 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id e24so4562499wrc.10;
+        Wed, 09 Mar 2022 11:15:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hldPsR9u6qgwtLMZcTNitQaUGyr4m6295BrOOfQZurE=;
-        b=fz41RZyU+tFO6Amyy88pjHELi3GGmsiEe3L9ZnC1HRHHQggBcogVlCxfP6z+TJkrO5
-         6G+mzbrFvQL8Huf7tmWxvm8Fy1O3Gl5tEs0M1VTa3xhOm9Pjzs5PMOjTAmiTlIbJTYga
-         OU3CQpyEhwlpSTmgrmRnL2iphCPrBH6sPhsPkiFi2dzyjbs6cQqBE3SVDSuolEPmtZae
-         1NuyEd5vlwYNuIXM2HEIqgbgoC17q0NKyeTOaS6jymCHVcXp0Gubi93iGSP3la1x/xzo
-         qqpsQNHbxbZdjdTVBXjREbqYIaKMOneu4bK0jKgR45j7oYHHp+pIvniLPjyH0QC1sYkW
-         0+tQ==
+        bh=MLDmPA5aYPf6HW2iGF7P6X1focqrWhxUx4u2SFHvrtw=;
+        b=chweFq1KW6JbTYPzrmXBEponbNvlxKQq8Crk2X3CtA06zk854MeuchhY5HCRpvSNNt
+         oOzzmSkHj4zHoLGHDOU8R7HxurZN5CUjbYwwa78libNk0bvoX2yQmG11/26Yw18g1y+q
+         dMFvRWu3y/D9148+UokFxXJu2FGlAiqm+e4MuWqaZdYfasrWxmgLFSprH0d0P3dffDfA
+         C7KEp6+xFhzKQxzusqfsUaAPywlpekcNO3K8X0OBFnIALvxFIWQRFW81I3VkfXAzd2ec
+         Y3Li5qTQaU5Irldg4hBvQ8oFp5E8WdS8pQ6oc017L7Rk9ZjPb0c3P98Pa32nWKc0t10C
+         qfTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hldPsR9u6qgwtLMZcTNitQaUGyr4m6295BrOOfQZurE=;
-        b=ghK5Up3hlZXowy7f2Ah4HYljZR/Jlo9ttpTZYnysX4hHuKjcFI1jc9CqSbqtU2i+tT
-         nvYqIT8SeNXxMtkjmrWnOBXJBrGSiq/kvMOHCcU/NaFOLJQK1sN/ATzMsyTh2ANkeeMn
-         mHKE0Z8zdgD/Q/Eetppqv02rtjyrVAC6LLuMd7aSRu0rnrLCbkETsvzry2uWZhPruJfQ
-         Umb6O+n+DN562Rl5a+yaU07422YgDPZZWXYslL5pAZ/4qYBLAN9LG9tejzU54LV9FvQh
-         Ofebnyf8yGson+PfkzS5bEA4tSq/H/MAH6jqVYpDc1aN/hPX273fKElAEcqZQE7sT3zv
-         pZLg==
-X-Gm-Message-State: AOAM530m4lwhXJUPdrrpJ89YSBuGpjyqPpUKxyzeTtb9XKJOCEQJFJhk
-        FtyaVo0QvApHBX2USqx79qRrBvLygu8=
-X-Google-Smtp-Source: ABdhPJzA3jmM4mchAGe0tHfk7/7el4ZBHGpYEM0ttQVivdDl/LWIaYk8vD2V4o5ICOfIy/8HP6WbBw==
-X-Received: by 2002:a7b:c114:0:b0:381:f7ee:e263 with SMTP id w20-20020a7bc114000000b00381f7eee263mr8852329wmi.30.1646853327670;
-        Wed, 09 Mar 2022 11:15:27 -0800 (PST)
+        bh=MLDmPA5aYPf6HW2iGF7P6X1focqrWhxUx4u2SFHvrtw=;
+        b=VDDxZJnTeQzlrFSVnpLSmgVWVFZl3eXf+JV4rYetJwgxf/XJgQ833XNGHKS9DL3bbx
+         oBfHa1dt/9lPWjHHmPXtbLd9+7wVShlDlHn2AzDPYB7ZqkN082mWxn+CxJx2DX99Abyk
+         mYF3EOSFXynm6LHztifZzLcj4GaUPOonQkxeKh+7jaQRmf8thg9SUFYWnaWCW3JlIqO+
+         z/RyuYUIruEIsUuo6mapWqcoH6V+eGcIeE+H2xZHY2uq1G/GCTixXqVjgh5oOnSMvWxa
+         drhZIFdraJG8M5GOuqH6l7MOtZLwYfvVON8eOotpgCJY3ln9/x90ZFqrPTwHUC6E3g49
+         fqYg==
+X-Gm-Message-State: AOAM533zbDdxd83JbUFGgHwP3OcPnSDU7kANn+gLRhQexYcPDRBX4ln9
+        FIq1aS1Kkm7FrIGsrc7JmBw=
+X-Google-Smtp-Source: ABdhPJxxVmM9QRxCRtTKQFzoqBsP8L2rxvUO13uhTsNZUayNVsgNURrvtdq0fNtNEO6KpyPI9AzzKQ==
+X-Received: by 2002:a5d:62cd:0:b0:1f0:23d2:b38c with SMTP id o13-20020a5d62cd000000b001f023d2b38cmr892007wrv.82.1646853329043;
+        Wed, 09 Mar 2022 11:15:29 -0800 (PST)
 Received: from Ansuel-xps.localdomain (host-79-47-249-147.retail.telecomitalia.it. [79.47.249.147])
-        by smtp.googlemail.com with ESMTPSA id w6-20020a5d6806000000b002036515dda7sm2396699wru.33.2022.03.09.11.15.26
+        by smtp.googlemail.com with ESMTPSA id w6-20020a5d6806000000b002036515dda7sm2396699wru.33.2022.03.09.11.15.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 11:15:27 -0800 (PST)
+        Wed, 09 Mar 2022 11:15:28 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Jonathan McDowell <noodles@earth.li>
-Subject: [PATCH v3 09/18] ARM: dts: qcom: add smem node for ipq8064
-Date:   Wed,  9 Mar 2022 20:01:43 +0100
-Message-Id: <20220309190152.7998-10-ansuelsmth@gmail.com>
+Subject: [PATCH v3 10/18] ARM: dts: qcom: add saw for l2 cache and kraitcc for ipq8064
+Date:   Wed,  9 Mar 2022 20:01:44 +0100
+Message-Id: <20220309190152.7998-11-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309190152.7998-1-ansuelsmth@gmail.com>
 References: <20220309190152.7998-1-ansuelsmth@gmail.com>
@@ -74,48 +74,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing smem node for ipq8064.
+Add saw compatible for l2 cache and kraitcc node for ipq8064 dtsi.
+Also declare clock-output-names for acc0 and acc1 and qsb fixed clock
+for the secondary mux.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 Tested-by: Jonathan McDowell <noodles@earth.li>
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 34 +++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 6768f7ba0d04..c579fb09e768 100644
+index c579fb09e768..7df1c1482220 100644
 --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
 +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -906,6 +906,11 @@ lcc: clock-controller@28000000 {
- 			#reset-cells = <1>;
- 		};
+@@ -298,6 +298,12 @@ smem: smem@41000000 {
+ 	};
  
-+		sfpb_mutex_block: syscon@1200600 {
-+			compatible = "syscon";
-+			reg = <0x01200600 0x100>;
+ 	clocks {
++		qsb: qsb {
++			compatible = "fixed-clock";
++			clock-frequency = <384000000>;
++			#clock-cells = <0>;
 +		};
 +
- 		pcie0: pci@1b500000 {
- 			compatible = "qcom,pcie-ipq8064";
- 			reg = <0x1b500000 0x1000
-@@ -1330,4 +1335,17 @@ sdcc3: mmc@12180000 {
- 			};
+ 		cxo_board {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+@@ -504,11 +510,19 @@ IRQ_TYPE_EDGE_RISING)>,
+ 		acc0: clock-controller@2088000 {
+ 			compatible = "qcom,kpss-acc-v1";
+ 			reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
++			clock-output-names = "acpu0_aux";
++			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
++			clock-names = "pll8_vote", "pxo";
++			#clock-cells = <0>;
  		};
- 	};
+ 
+ 		acc1: clock-controller@2098000 {
+ 			compatible = "qcom,kpss-acc-v1";
+ 			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
++			clock-output-names = "acpu1_aux";
++			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
++			clock-names = "pll8_vote", "pxo";
++			#clock-cells = <0>;
+ 		};
+ 
+ 		adm_dma: dma-controller@18300000 {
+@@ -532,17 +546,23 @@ adm_dma: dma-controller@18300000 {
+ 		};
+ 
+ 		saw0: regulator@2089000 {
+-			compatible = "qcom,saw2";
++			compatible = "qcom,saw2", "qcom,apq8064-saw2-v1.1-cpu", "syscon";
+ 			reg = <0x02089000 0x1000>, <0x02009000 0x1000>;
+ 			regulator;
+ 		};
+ 
+ 		saw1: regulator@2099000 {
+-			compatible = "qcom,saw2";
++			compatible = "qcom,saw2", "qcom,apq8064-saw2-v1.1-cpu", "syscon";
+ 			reg = <0x02099000 0x1000>, <0x02009000 0x1000>;
+ 			regulator;
+ 		};
+ 
++		saw_l2: regulator@02012000 {
++			compatible = "qcom,saw2", "syscon";
++			reg = <0x02012000 0x1000>;
++			regulator;
++		};
 +
-+	sfpb_mutex: sfpb-mutex {
-+		compatible = "qcom,sfpb-mutex";
-+		syscon = <&sfpb_mutex_block 4 4>;
+ 		gsbi2: gsbi@12480000 {
+ 			compatible = "qcom,gsbi-v1.0.0";
+ 			cell-index = <2>;
+@@ -899,6 +919,16 @@ l2cc: clock-controller@2011000 {
+ 			clock-output-names = "acpu_l2_aux";
+ 		};
+ 
++		kraitcc: clock-controller {
++			compatible = "qcom,krait-cc-v1";
++			clocks = <&gcc PLL9>, <&gcc PLL10>, <&gcc PLL12>,
++				 <&acc0>, <&acc1>, <&l2cc>, <&qsb>;
++			clock-names = "hfpll0", "hfpll1", "hfpll_l2",
++				      "acpu0_aux", "acpu1_aux", "acpu_l2_aux",
++				      "qsb";
++			#clock-cells = <1>;
++		};
 +
-+		#hwlock-cells = <1>;
-+	};
-+
-+	smem {
-+		compatible = "qcom,smem";
-+		memory-region = <&smem>;
-+		hwlocks = <&sfpb_mutex 3>;
-+	};
- };
+ 		lcc: clock-controller@28000000 {
+ 			compatible = "qcom,lcc-ipq8064";
+ 			reg = <0x28000000 0x1000>;
 -- 
 2.34.1
 

@@ -2,132 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3584D3D97
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFCD4D3D64
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238886AbiCIXcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 18:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S236648AbiCIXK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 18:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiCIXcT (ORCPT
+        with ESMTP id S229898AbiCIXKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 18:32:19 -0500
-X-Greylist: delayed 1460 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Mar 2022 15:31:20 PST
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC332119413
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:31:20 -0800 (PST)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 982551BC8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:06:59 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id S5OVnRO1Z22u3S5OVnB9zU; Wed, 09 Mar 2022 17:06:59 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=d9Pj9k0JNH8SUjGrNlVfpwb0uWjmzh22akXzSnwgw0c=; b=rmdVolCQVW9S9lBuuetI/MtrZr
-        oX/qOdvDQd+546CwDLIO70GhQ6P22WhZuIqNFA2uxpFwp+PUAWGNgM0Mo+C8W9MJl5TDS9wChh1vq
-        il5GOzwPz/CYfnBj3lRalIxlvq20Hww5g2d/kdCCPiH3tRinT470AbCwz5KJXvWuXZiDQTjjvGjbK
-        8Xs4xbEQPmyU7sMhZifoo+oWNWwP3STJY3ldX0NDa7FR3Zpue80qKYkx24kq6d3jQg2D9AvHRTCW5
-        ydNBP/Zq360MgkkEUd3D7dmboCN9Tlyp89zbAbMKgXZABSG1Ej6/YzrpBdsJLTvlRQADWCTLfNEU7
-        NBYN5nnQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57404 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nS5OU-000E8V-Pr; Wed, 09 Mar 2022 23:06:58 +0000
-Date:   Wed, 9 Mar 2022 15:06:57 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: watchdog: renesas,wdt: Document RZ/V2L
- SoC
-Message-ID: <20220309230657.GA3801916@roeck-us.net>
-References: <20220301122332.14796-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 9 Mar 2022 18:10:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2B74E3BA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:09:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7D40B82443
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 23:09:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D513C340E8;
+        Wed,  9 Mar 2022 23:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646867392;
+        bh=ibHZIpp5hEnoCg+q6FN9PuIaT2D/qY/GSosZEsHZ2tg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=afb38Szwtnh5oFv17U8cT3v2S5KMa3QRhS+q5FQbRxe7JHYT3NhJQJki4rTuLxswW
+         0qCh1fHS8MANQH8HeheJisbcT8i7df3kTd+cndZzquefKyfGLsqf+NmgHMRofZs9QQ
+         5MO1K1l8btLqsExCflkVGk+2Kv+7M1IysDylbohfUtcb92VWvN6M/OdQOk593Q7apB
+         S1olQJxl3DGtaVmqlizg7730+1n0cojCShDMYqT83yUL0iPCWov/uzymg/pmk15KQe
+         91d0tTDn13RuH+4/mCaLsM3l/xdYxeWbcu3R8ITcvhSv2xPAwIRPmf2xG0FurClY6E
+         49WI3dJFpRtMw==
+Date:   Wed, 9 Mar 2022 17:09:50 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [lpieralisi-pci:pci/rcar 2/2]
+ drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires:
+ data-barriers
+Message-ID: <20220309230950.GA89632@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301122332.14796-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nS5OU-000E8V-Pr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57404
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 36
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <202203091741.IetDk7a7-lkp@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 12:23:32PM +0000, Lad Prabhakar wrote:
-> Document RZ/V2L WDT bindings. RZ/V2L WDT is identical to one found
-> on the RZ/G2L SoC. No driver changes are required as generic compatible
-> string "renesas,rzg2l-wdt" will be used as a fallback.
+On Wed, Mar 09, 2022 at 05:04:28PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git pci/rcar
+> head:   9775965dbae50a04f12879179d6d6fb58f240d6b
+> commit: 9775965dbae50a04f12879179d6d6fb58f240d6b [2/2] PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception
+> config: arm-randconfig-c002-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091741.IetDk7a7-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/commit/?id=9775965dbae50a04f12879179d6d6fb58f240d6b
+>         git remote add lpieralisi-pci https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
+>         git fetch --no-tags lpieralisi-pci pci/rcar
+>         git checkout 9775965dbae50a04f12879179d6d6fb58f240d6b
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 > 
-> While at it, drop the comment "# RZ/G2L" for "renesas,rzg2l-wdt"
-> compatible string as this will avoid changing the line for every new
-> SoC addition.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/pci/controller/pcie-rcar-host.c:139:3: error: instruction requires: data-barriers
+>                    __rcar_pci_rw_reg_workaround("str")
+>                    ^
+>    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+>                    "2:     isb\n"                                          \
+>                     ^
+>    <inline asm>:2:4: note: instantiated into assembly here
+>    2:      isb
+>            ^
+>    drivers/pci/controller/pcie-rcar-host.c:153:3: error: instruction requires: data-barriers
+>                    __rcar_pci_rw_reg_workaround("ldr")
+>                    ^
+>    drivers/pci/controller/pcie-rcar-host.c:120:4: note: expanded from macro '__rcar_pci_rw_reg_workaround'
+>                    "2:     isb\n"                                          \
+>                     ^
+>    <inline asm>:2:4: note: instantiated into assembly here
+>    2:      isb
+>            ^
+>    2 errors generated.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I don't know how to fix this.  We currently have these on Lorenzo's
+pci/rcar branch:
 
-> ---
-> v1->v2:
-> * Included RB tags
-> * Drop the comment "# RZ/G2L" for "renesas,rzg2l-wdt" compatible string
->   as suggested by Geert.
+  9775965dbae5 ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
+  de6b5097f58b ("PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()")
+
+To avoid this error, for now I have cherry-picked de6b5097f58b to a
+local pci/host/rcar branch and dropped 9775965dbae5.
+
+> vim +139 drivers/pci/controller/pcie-rcar-host.c
 > 
-> v1:
-> https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-> 20220227225309.28098-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> ---
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>    132	
+>    133	static int rcar_pci_write_reg_workaround(struct rcar_pcie *pcie, u32 val,
+>    134						 unsigned int reg)
+>    135	{
+>    136		int error = PCIBIOS_SUCCESSFUL;
+>    137	#ifdef CONFIG_ARM
+>    138		asm volatile(
+>  > 139			__rcar_pci_rw_reg_workaround("str")
+>    140		: "+r"(error):"r"(val), "r"(pcie->base + reg) : "memory");
+>    141	#else
+>    142		rcar_pci_write_reg(pcie, val, reg);
+>    143	#endif
+>    144		return error;
+>    145	}
+>    146	
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> index 91a98ccd4226..146ae20eacbb 100644
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> @@ -22,7 +22,8 @@ properties:
->        - items:
->            - enum:
->                - renesas,r9a07g044-wdt    # RZ/G2{L,LC}
-> -          - const: renesas,rzg2l-wdt     # RZ/G2L
-> +              - renesas,r9a07g054-wdt    # RZ/V2L
-> +          - const: renesas,rzg2l-wdt
->  
->        - items:
->            - enum:
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

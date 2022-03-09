@@ -2,167 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4766C4D3170
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3480B4D3172
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbiCIPHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:07:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        id S233758AbiCIPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiCIPHd (ORCPT
+        with ESMTP id S229742AbiCIPIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:07:33 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC28A17E35D;
-        Wed,  9 Mar 2022 07:06:29 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app2 (Coremail) with SMTP id by_KCgCXn3thwihiy+U3AA--.54686S2;
-        Wed, 09 Mar 2022 23:06:12 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jreuter@yaina.de, kuba@kernel.org, davem@davemloft.net,
-        ralf@linux-mips.org, thomas@osterried.de,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] ax25: Fix memory leaks caused by ax25_cb_del()
-Date:   Wed,  9 Mar 2022 23:06:08 +0800
-Message-Id: <20220309150608.112090-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgCXn3thwihiy+U3AA--.54686S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFWktrW3ZrW8CryrGryrXrb_yoWrWr4DpF
-        W8uay5ArZrtr1ruF48Gr97WF18A34DK39xGFy5ZFyIka47Jwn5JrWft3yUJFy3JrZ5JF48
-        X347Ww48Zr4DuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMDAVZdtYkSWQAHs4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 9 Mar 2022 10:08:04 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2CF17EDA3;
+        Wed,  9 Mar 2022 07:07:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CJjpvJ4D4oTHJIjBPxT3Y89iE6XRNUaLU9GXpNtInfs=; b=H7OaOGWjz19gTjjW4S4SqlPnjc
+        a5h0H3XnKuP2v/h+dtFrdEgwN6wzr7OyrYdu6GA5cvXsD7jhiOiNS9Ul8PC1SMlshTQOpILMLft64
+        GvTxp/TgNH2Sv/LnYe1t1H51u2cMSp9bb+ZxnquJgWs8NC9RKKnsz4AqtCEQZDaHHPrsx1B3RyIrK
+        KwGdQQuU/0FrDGGzExnbUcqhJS0ETYJKJVwasum8XWSiYeTcUmEhcnRrAi5OFFK6UNGMmjiuj2MxZ
+        E3eqMaXoymwhaNJmPv6ZmGvJcOAdW0m8baVUq3xQFSIgkY2Yy4NtKFOuYTbfU5LF4hFb0rAqG2ofU
+        mNITWItQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57744)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nRxu0-0001yY-8z; Wed, 09 Mar 2022 15:07:00 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nRxtw-000828-Uq; Wed, 09 Mar 2022 15:06:56 +0000
+Date:   Wed, 9 Mar 2022 15:06:56 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
+ __read_once_word_nocheck
+Message-ID: <YijCkHHhpleeADAO@shell.armlinux.org.uk>
+References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
+ <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
+ <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev to
-avoid UAF bugs") and commit feef318c855a ("ax25: fix UAF bugs of
-net_device caused by rebinding operation") increase the refcounts of
-ax25_dev and net_device in ax25_bind() and decrease the matching refcounts
-in ax25_kill_by_device() in order to prevent UAF bugs. But there are memory
-leaks.
+On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > On Wed, 9 Mar 2022 at 19:37, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > On Wed, 9 Mar 2022 at 16:16, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > >
+> > > > On Wed, 9 Mar 2022 at 11:37, Russell King (Oracle)
+> > > > <linux@armlinux.org.uk> wrote:
+> > > > >
+> > > > > On Wed, Mar 09, 2022 at 03:18:12PM +0530, Naresh Kamboju wrote:
+> > > > > > While boting linux next-20220308 on BeagleBoard-X15 and qemu arm the following
+> > > > > > kernel crash reported which is CONFIG_KASAN enabled build [1] & [2].
+> > > > >
+> > > > > The unwinder is currently broken in linux-next. Please try reverting
+> > > > > 532319b9c418 ("ARM: unwind: disregard unwind info before stack frame is
+> > > > > set up")
+> >
+> > I have reverted the suggested commit and built and boot failed due to reported
+> > kernel crash [1].
+> >
+> > - Naresh
+> >
+> 
+> Thanks Naresh,
+> 
+> This looks like it might be related to the issue Russell just sent a fix for:
+> https://lore.kernel.org/linux-arm-kernel/CAMj1kXEqp2UmsyUe1eWErtpMk3dGEFZyyno3nqydC_ML0bwTLw@mail.gmail.com/T/#t
+> 
+> Could you please try that?
 
-If we use ax25_bind() to increase the refcounts of ax25_dev and
-net_device, then, use ax25_cb_del() invoked by ax25_destroy_socket()
-to delete ax25_cb in hlist before calling ax25_kill_by_device(), the
-decrements of refcounts in ax25_kill_by_device() will not be executed,
-because ax25_cb is deleted from the hlist.
+Well, we unwound until:
 
-This patch adds two flags in ax25_dev in order to prevent memory leaks.
-If we bind successfully, then, use ax25_cb_del() to delete ax25_cb,
-the two "test_bit" condition checks in ax25_kill_by_device() could
-pass and the refcounts could be decreased properly.
+ __irq_svc from migrate_disable+0x0/0x70
 
-Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
-Fixes: feef318c855a ("ax25: fix UAF bugs of net_device caused by rebinding operation")
-Reported-by: Thomas Osterried <thomas@osterried.de>
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- include/net/ax25.h  |  7 +++++--
- net/ax25/af_ax25.c  | 10 ++++++----
- net/ax25/ax25_dev.c |  3 ++-
- 3 files changed, 13 insertions(+), 7 deletions(-)
+and then crashed - and the key thing there is that we're at the start
+of migrate_disable() when we took an interrupt.
 
-diff --git a/include/net/ax25.h b/include/net/ax25.h
-index 8221af1811d..50b3eacada0 100644
---- a/include/net/ax25.h
-+++ b/include/net/ax25.h
-@@ -157,7 +157,9 @@ enum {
- #define AX25_DEF_PACLEN		256			/* Paclen=256 */
- #define	AX25_DEF_PROTOCOL	AX25_PROTO_STD_SIMPLEX	/* Standard AX.25 */
- #define AX25_DEF_DS_TIMEOUT	180000			/* DAMA timeout 3 minutes */
--
-+#define AX25_DEV_INIT    0
-+#define AX25_DEV_KILL    1
-+#define AX25_DEV_BIND    2
- typedef struct ax25_uid_assoc {
- 	struct hlist_node	uid_node;
- 	refcount_t		refcount;
-@@ -240,8 +242,9 @@ typedef struct ax25_dev {
- 	ax25_dama_info		dama;
- #endif
- 	refcount_t		refcount;
-+	unsigned long   kill_flag;
-+	unsigned long   bind_flag;
- } ax25_dev;
--
- typedef struct ax25_cb {
- 	struct hlist_node	ax25_node;
- 	ax25_address		source_addr, dest_addr;
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index 6bd09718077..5519448378d 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -86,6 +86,7 @@ static void ax25_kill_by_device(struct net_device *dev)
- again:
- 	ax25_for_each(s, &ax25_list) {
- 		if (s->ax25_dev == ax25_dev) {
-+			set_bit(AX25_DEV_KILL, &ax25_dev->kill_flag);
- 			sk = s->sk;
- 			if (!sk) {
- 				spin_unlock_bh(&ax25_list_lock);
-@@ -114,9 +115,12 @@ static void ax25_kill_by_device(struct net_device *dev)
- 			goto again;
- 		}
- 	}
-+	if(!test_bit(AX25_DEV_KILL, &ax25_dev->kill_flag) && test_bit(AX25_DEV_BIND, &ax25_dev->bind_flag)) {
-+		dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
-+		ax25_dev_put(ax25_dev);
-+	}
- 	spin_unlock_bh(&ax25_list_lock);
- }
--
- /*
-  *	Handle device status changes.
-  */
-@@ -1132,13 +1136,11 @@ static int ax25_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
- done:
- 	ax25_cb_add(ax25);
- 	sock_reset_flag(sk, SOCK_ZAPPED);
--
-+	set_bit(AX25_DEV_BIND, &ax25_dev->bind_flag);
- out:
- 	release_sock(sk);
--
- 	return err;
- }
--
- /*
-  *	FIXME: nonblock behaviour looks like it may have a bug.
-  */
-diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
-index d2a244e1c26..7c40914e5c9 100644
---- a/net/ax25/ax25_dev.c
-+++ b/net/ax25/ax25_dev.c
-@@ -77,7 +77,8 @@ void ax25_dev_device_up(struct net_device *dev)
- 	ax25_dev->values[AX25_VALUES_PACLEN]	= AX25_DEF_PACLEN;
- 	ax25_dev->values[AX25_VALUES_PROTOCOL]  = AX25_DEF_PROTOCOL;
- 	ax25_dev->values[AX25_VALUES_DS_TIMEOUT]= AX25_DEF_DS_TIMEOUT;
--
-+	ax25_dev->kill_flag = AX25_DEV_INIT;
-+	ax25_dev->bind_flag = AX25_DEV_INIT;
- #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
- 	ax25_ds_setup_timer(ax25_dev);
- #endif
---
-2.17.1
+For some reason, this triggers an access to address 0x10, which faults.
+We then try unwinding again, and successfully unwind all the way back
+to the same point (the line above) which then causes the unwinder to
+again access address 0x10, and the cycle repeats with the stack
+growing bigger and bigger.
 
+I'd suggest also testing without the revert but with my patch.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

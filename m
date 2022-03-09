@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F45B4D38E6
+	by mail.lfdr.de (Postfix) with ESMTP id 242B14D38E5
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbiCISfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:35:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S235578AbiCISff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbiCISf3 (ORCPT
+        with ESMTP id S230427AbiCISfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:35:29 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13781125518
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:34:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646850870; x=1678386870;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GIWK4kzGBVCR6XE/sdxgzDKmNpJgEWFwIqcJpN/JMRw=;
-  b=HjMNLRUim/TXYW+8x8+ePbBJVITtAAL3Iv60htFoO3jjDdmCbtO6fULI
-   jh1tzxdf9Cne5z45mVixmBOpFYvWsr5HAyvvbMFW+wtXJclL/hqAgPJLl
-   sh8ek8l2tI7YMeTzzH7xPHWwd3AgcNKDYz+WEMG/gT+fNclYxE3HGP0ak
-   5U20cudqQ+lisC+rIrHxzYMYP/6lZFed8gU6rJMXTrh52Eg3BvE0wDYjH
-   e3HDAk9TUeA2IyI5pZLQ4JYt19fYB+MOPzCnwV6hxbzHRu1NzeD2xZXsl
-   SDzT2Mngk0lhwWv7T32/+vpX+HojuQ0HsLJgANLP65bkf3H+vN3Nku4CJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="252630266"
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="252630266"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 10:34:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="547733826"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Mar 2022 10:34:25 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nS18h-0003hU-IH; Wed, 09 Mar 2022 18:34:23 +0000
-Date:   Thu, 10 Mar 2022 02:33:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Swathi Sridhar <swatsrid@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Mark Salyzyn <salyzyn@google.com>,
-        Patrick Daly <pdaly@codeaurora.org>,
-        Prakash Gupta <guptap@codeaurora.org>,
-        Qingqing Zhou <qqzhou@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        Shiraz Hashim <shashim@codeaurora.org>,
-        Sudarshan Rajagopalan <sudaraja@codeaurora.org>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        Vinayak Menon <vinmenon@codeaurora.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 558/9999] io-pgtable.c:undefined reference to `iommu_debugfs_top'
-Message-ID: <202203100235.mOo7SPyo-lkp@intel.com>
+        Wed, 9 Mar 2022 13:35:32 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC57125518
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:34:33 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d17so3051976pfv.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 10:34:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=12MTmTpu13hq53lEoH6MFWeYg7xR2/fBkzr+0Z6u0Ck=;
+        b=MRRIsrlb2tD1c03r1HRBl9H3yV2f6E76atCl9PpgIr+Y1r8mp8mEEz3g6AjnN0F/AB
+         Riqw5V8wHiW0NirwZWoSeYLXhojIBGQceu/lx7Dy2Hxr+1RJUihoh0a8Tm6gHHTdj7OJ
+         UAlf0bjJIMErj04+OidGI99baw9exx5hBg3kKm2hhQOJ9bBEA9p8gZowZeZOZqTMyZHW
+         NExOBYafwY7M/GnHpOE1vm6V3TracFbCMj24rDko7OyJfM0JBrukvNRzwFPziGnwht8/
+         +jBrE2BRn+YBlHlf8l9xRD5om2A6tgGqCzzl+7tWAOAmzW+trkose8cdfzWG0BDp2g4W
+         YiVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=12MTmTpu13hq53lEoH6MFWeYg7xR2/fBkzr+0Z6u0Ck=;
+        b=oLFhz9p15rn4SJJjvrpeZFl4Hq/d45S/5JL9gEqDlV4Ux04ZvCJoGFWM50IrE/VwQ3
+         bO+nqDgbml1Yds6Nbzp2IV3ETtfzSJKESHp4TGrYtIzqv2k3+SAngM07nuHupg1sAL+q
+         MVUxv3vHYri9IfO59DDa0HtaYFwuf6Q9QOlDjeaPfSDxKDIcWkwPVx0so+ulx4ybZOk5
+         9DljowCvQJUzLE3nMQcI83mF7aWi8iB5mFeG8B1zx3/DhSUaIyAC9D2SjoYnWgT8IPS8
+         hoDaJZuNme0/eIh9O4NJyjc+z7hXN4WeKgvAiDXWbAtNKQqrbD3T6GxjIG1B9zRhDi8Z
+         2ISA==
+X-Gm-Message-State: AOAM531fFtrFUrtolf9PnTntwky2t7/ZOd+7J+t5k3hYMV2Q3fb6jDE3
+        oRnqIuahX6cY2dyMoZ+bPuPnYDbGBPw7KW3z8nr3NA==
+X-Google-Smtp-Source: ABdhPJyY9Pzhn8MeMgK0ZEOtq9SIHuzHEgfHwVIwVHOYoOPZHQJfQ5DNisp4IqmBvfdFAK/GaG0qA7iLFovv2I5S3Cs=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr897536pgb.74.1646850872623; Wed, 09 Mar
+ 2022 10:34:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <164610292916.2682974.12924748003366352335.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <164610294030.2682974.642590821548098371.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <20220309181843.000003fe@Huawei.com>
+In-Reply-To: <20220309181843.000003fe@Huawei.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 9 Mar 2022 10:34:21 -0800
+Message-ID: <CAPcyv4g+++6oc8RQf2vRChR+Utk08r7AhQ9Ma_JOyojz1adTqw@mail.gmail.com>
+Subject: Re: [PATCH 02/11] cxl/core: Refactor a cxl_lock_class() out of cxl_nested_lock()
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cxl@vger.kernel.org, Linux NVDIMM <nvdimm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   3fba6c6e70994eff4dcc5be475c9d2bd3848b83d
-commit: e24979f0e7bff01a70f00a01fccc5d62f6f980aa [558/9999] ANDROID: GKI: iommu: Snapshot of vendor changes
-config: arc-randconfig-r036-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100235.mOo7SPyo-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e24979f0e7bff01a70f00a01fccc5d62f6f980aa
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout e24979f0e7bff01a70f00a01fccc5d62f6f980aa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+On Wed, Mar 9, 2022 at 10:19 AM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Mon, 28 Feb 2022 18:49:00 -0800
+> Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> > In preparation for upleveling device_lock() lockdep annotation support into
+> > the core, provide a helper to retrieve the lock class. This lock_class
+> > will be used with device_set_lock_class() to idenify the CXL nested
+>
+> idenify?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Indeed.
 
-All errors (new ones prefixed by >>):
+>
+> > locking rules.
+> >
+> > Cc: Alison Schofield <alison.schofield@intel.com>
+> > Cc: Vishal Verma <vishal.l.verma@intel.com>
+> > Cc: Ira Weiny <ira.weiny@intel.com>
+> > Cc: Ben Widawsky <ben.widawsky@intel.com>
+> > Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+>
+> Otherwise looks fine to me.
+>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-   arceb-elf-ld: drivers/iommu/io-pgtable.o: in function `io_pgtable_init':
->> io-pgtable.c:(.init.text+0xc): undefined reference to `iommu_debugfs_top'
->> arceb-elf-ld: io-pgtable.c:(.init.text+0xc): undefined reference to `iommu_debugfs_top'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks!

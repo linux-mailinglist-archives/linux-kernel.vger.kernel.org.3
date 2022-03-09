@@ -2,146 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C3E4D2ED7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21C94D2ED6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiCIMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S232549AbiCIMPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiCIMP2 (ORCPT
+        with ESMTP id S230022AbiCIMPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:15:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D23CCA312
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:14:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646828069;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8Kl3CbAiIPf88g8wafhD6r4bIq/M8sPBvoSh/EABNic=;
-        b=ifIXb1CxpAHM/v6TIiVgzqAzW6q99B3G0fyHOJ0llFT8IJbimoJ4zP+T2iiOknzsSXFczf
-        b/1cPzwQLTVH3xi0sfG3PqC0U2lCljsorf6uZ5efRhVpi7OJVFEJxn0eU1GrOsO4m03GNw
-        EA7txhwfdnwBjJ3bYxNwWeYvnQvkdGM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-ms-FKMVfNhijyTAZXwktyA-1; Wed, 09 Mar 2022 07:14:28 -0500
-X-MC-Unique: ms-FKMVfNhijyTAZXwktyA-1
-Received: by mail-wm1-f70.google.com with SMTP id 20-20020a05600c231400b00389886f6b23so890179wmo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 04:14:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8Kl3CbAiIPf88g8wafhD6r4bIq/M8sPBvoSh/EABNic=;
-        b=ko3KykIamA7wYDzck+qtSeXNH5NV/LCJ83kly9IqW7LyQE6z9OYAyLgz4ABQsOI4hn
-         AC5Df2p+NUb/9IhxT4zx688RhnyUkWKRBiVlWk/FZw0dOhW2R19typ+tfnO6vx7VSG0Q
-         KdlBzAlUj57NHxdY1YKhYl9aPcOjaKFAeqHDhojadgLF0YtNeb37dXJXlAM21JRNYTR2
-         921ohc93GC6njNqU87QVV/WdmQxbmvRQyRru3lltjgC24VBxeV0wIVNoZrpcpAIybLIX
-         xVmUmYFI9esl3P9K+X52doHzmhIhpVxYyKSVcCU7KxqFBKwXOdZ45lBwNohM+17GQAGr
-         pdgQ==
-X-Gm-Message-State: AOAM530zdb3CmtZta4gxGWgEYHN6XKgFtn1JcZ1Vo2n/Kun6cBq7MAUZ
-        6HC70grcQIt7wXRVnCVf9aOvyzpWt+3WzcwqQJRvlq4X3EANd43hz2XI9XoT5iLVE+mlEUhDxLt
-        2M3lZXzO89immS1ejYTM2txti
-X-Received: by 2002:a5d:648c:0:b0:1ed:b04d:300 with SMTP id o12-20020a5d648c000000b001edb04d0300mr13166106wri.347.1646828066930;
-        Wed, 09 Mar 2022 04:14:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx3UMGGyzhv+uJG0YcGPT0R4FgUq8Duwca8TEkpNAynB28fPmXTqBLd6qfLu7hu31ClWemckA==
-X-Received: by 2002:a5d:648c:0:b0:1ed:b04d:300 with SMTP id o12-20020a5d648c000000b001edb04d0300mr13166094wri.347.1646828066722;
-        Wed, 09 Mar 2022 04:14:26 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m185-20020a1c26c2000000b003899ed333ffsm4684434wmm.47.2022.03.09.04.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 04:14:17 -0800 (PST)
-Message-ID: <fd6ec463-f46d-0813-5d87-a00c07739e01@redhat.com>
-Date:   Wed, 9 Mar 2022 13:14:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Linux PWM List <linux-pwm@vger.kernel.org>
-References: <20220214133710.3278506-1-javierm@redhat.com>
- <20220214133710.3278506-4-javierm@redhat.com>
- <CAMuHMdU+29x4ZHLAiPiReyLKw_VYBCCLw0bCoQmw9s6sQ4Bxcw@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAMuHMdU+29x4ZHLAiPiReyLKw_VYBCCLw0bCoQmw9s6sQ4Bxcw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 9 Mar 2022 07:15:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B573BD2FE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:14:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DBBF5B8212B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84755C340E8;
+        Wed,  9 Mar 2022 12:14:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646828057;
+        bh=DBzUzrZXVxY0V/vwcWBhWaoNtaT2PMO3+fnyHLXqVkU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oGRjwHnQDaCnEZmeLKCaAIl+6HiZ2T+QXbOAMF4B3AyzSJd0NGscCGkrBwjI/x60o
+         Ncl15MmO2Xke5Ln5leRaQRPtYcX3/7Je1wFEhussSGVkC2l56URqUu4PlIMzHkJqiZ
+         Mk/hZiR8DOgZDp7TUmbtstuxukzemnSiyo+LnuTFKOOE/wSeo1fkrHxGxRIRvO5lfK
+         SWhxY67k1TMJaGV89LIsM91z37Iw+lmHHoBC0U8kJ5ZxXuCZC1Bb2wsk5Gwk/+5V0F
+         T9sXLiFvZISun6f3iegF6bulxSo0Uh6QHIj2kpK8wxyuT2SFnYxiyI68oTNbMtTdxd
+         G2LYOAJsLY6Gg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRvCp-00DJRG-5a; Wed, 09 Mar 2022 12:14:15 +0000
+Date:   Wed, 09 Mar 2022 12:14:14 +0000
+Message-ID: <87tuc7z5k9.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, Will Deacon <will@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, f.hetzelt@tu-berlin.de,
+        david.kaplan@amd.com, konrad.wilk@oracle.com,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>, keirf@google.com
+Subject: Re: [PATCH V3 05/10] virtio-pci: harden INTX interrupts
+In-Reply-To: <20220309060703-mutt-send-email-mst@kernel.org>
+References: <20211019070152.8236-1-jasowang@redhat.com>
+        <20211019070152.8236-6-jasowang@redhat.com>
+        <87wnh3z9nm.wl-maz@kernel.org>
+        <20220309060703-mutt-send-email-mst@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mst@redhat.com, jasowang@redhat.com, will@kernel.org, virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org, f.hetzelt@tu-berlin.de, david.kaplan@amd.com, konrad.wilk@oracle.com, boqun.feng@gmail.com, tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org, keirf@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 17:30, Geert Uytterhoeven wrote:
-> Hi Javier,
+On Wed, 09 Mar 2022 11:27:42 +0000,
+"Michael S. Tsirkin" <mst@redhat.com> wrote:
 > 
-> On Mon, Feb 14, 2022 at 2:37 PM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
->> This adds a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
->> OLED display controllers.
->>
->> It's only the core part of the driver and a bus specific driver is needed
->> for each transport interface supported by the display controllers.
->>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> On Wed, Mar 09, 2022 at 10:45:49AM +0000, Marc Zyngier wrote:
+> > [Adding Will to check on my understanding of the interactions between
+> >  spinlocks and WRITE_ONCE()]
+> > 
+> > On Tue, 19 Oct 2021 08:01:47 +0100,
+> > Jason Wang <jasowang@redhat.com> wrote:
+> > > 
+> > > This patch tries to make sure the virtio interrupt handler for INTX
+> > > won't be called after a reset and before virtio_device_ready(). We
+> > > can't use IRQF_NO_AUTOEN since we're using shared interrupt
+> > > (IRQF_SHARED). So this patch tracks the INTX enabling status in a new
+> > > intx_soft_enabled variable and toggle it during in
+> > > vp_disable/enable_vectors(). The INTX interrupt handler will check
+> > > intx_soft_enabled before processing the actual interrupt.
+> > > 
+> > > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > Cc: Paul E. McKenney <paulmck@kernel.org>
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > ---
+> > >  drivers/virtio/virtio_pci_common.c | 23 +++++++++++++++++++++--
+> > >  drivers/virtio/virtio_pci_common.h |  1 +
+> > >  2 files changed, 22 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+> > > index 8d8f83aca721..1bce254a462a 100644
+> > > --- a/drivers/virtio/virtio_pci_common.c
+> > > +++ b/drivers/virtio/virtio_pci_common.c
+> > > @@ -30,8 +30,16 @@ void vp_disable_cbs(struct virtio_device *vdev)
+> > >  	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+> > >  	int i;
+> > >  
+> > > -	if (vp_dev->intx_enabled)
+> > > +	if (vp_dev->intx_enabled) {
+> > > +		/*
+> > > +		 * The below synchronize() guarantees that any
+> > > +		 * interrupt for this line arriving after
+> > > +		 * synchronize_irq() has completed is guaranteed to see
+> > > +		 * intx_soft_enabled == false.
+> > > +		 */
+> > > +		WRITE_ONCE(vp_dev->intx_soft_enabled, false);
+> > >  		synchronize_irq(vp_dev->pci_dev->irq);
+> > > +	}
+> > >  
+> > >  	for (i = 0; i < vp_dev->msix_vectors; ++i)
+> > >  		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> > > @@ -43,8 +51,16 @@ void vp_enable_cbs(struct virtio_device *vdev)
+> > >  	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+> > >  	int i;
+> > >  
+> > > -	if (vp_dev->intx_enabled)
+> > > +	if (vp_dev->intx_enabled) {
+> > > +		disable_irq(vp_dev->pci_dev->irq);
+> > > +		/*
+> > > +		 * The above disable_irq() provides TSO ordering and
+> > > +		 * as such promotes the below store to store-release.
+> > > +		 */
+> > > +		WRITE_ONCE(vp_dev->intx_soft_enabled, true);
+> > 
+> > What do you mean by TSO here? AFAICT, the CPU is allowed hoist this
+> > write up into the lock used by disable_irq(), as the unlock only has
+> > release semantics. Is that what you are relying on? I don't see how
+> > this upgrades WRITE_ONCE() to have release semantics.
+> > 
+> > > +		enable_irq(vp_dev->pci_dev->irq);
+> > 
+> > Same thing does here: my understanding is that the write can be pushed
+> > down into the lock, which has acquire semantics only.
+> > 
+> > Thanks,
+> > 
+> > 	M.
 > 
-> Thanks for your patch, which is now commit a61732e808672cfa ("drm:
-> Add driver for Solomon SSD130x OLED displays") in drm/drm-next
+> Overall I feel what we are doing here is very standard and should be
+> pretty common for a driver that wants to be protected against a
+> malicious device:
 > 
-> Sorry for the delay, but finally I gave it a try on my Adafruit
-> FeatherWing 128x32 OLED.
-> Some of the weird issues (cursor disappears after printing some text,
-> more text also doesn't appear until I clear the display) are still there.
+> 
+> 1- get IRQ
+> 2- initialize device with IRQ
+> 3- enable IRQ
+> 
+> Doing it in the core kernel helps make sure interrupts are
+> not lost if they trigger during 2.
 
-I see. Thought that I tested using it as a console and it did work
-correctly for me. I'll do more tests again.
+But this isn't the core kernel. You're doing that in some random
+driver (and even more, only for the PCI version of that driver).
 
-> Unfortunately a regression was introduced since your v3: printed
-> text is mirrored upside-down. I.e. "E" is rendered correctly, but "L"
-> turns into "Γ" (Greek Gamma).
-> I suspect something went wrong with the display initialization
-> sequence.
->
+> 
+> Without core kernel support one has to refactor the driver along the lines of:
+> 
+> a- initialize driver
+> b- get IRQ
+> c- initialize device with IRQ
+> 
+> and this is often tricky especially if one wants to do things like
+> discover device configuration and reconfigure the driver accordingly.
 
-Could you please try Chen-Yu's fix for the COM scan direction mask ?
+But this isn't what this patch is about, is it? You are just tracking
+whether interrupts are enabled or not. To which my reply to you on the
+previous patch still applies (this is the wrong place to track such
+state).
 
-https://lists.freedesktop.org/archives/dri-devel/2022-March/345915.html
+You also haven't answered my question: what are your ordering
+expectations wrt the WRITE_ONCE() above? The comment says 'TSO', and I
+don't really understand how this is enforced.
 
-I made a mistake when converting to use the GENMASK() and FIELD_PREP()
-macros in v4 as suggested by Andy. The SSD130X_SET_COM_SCAN_DIR_MASK
-wasn't correct which would explain the output to be vertically flipped.
+Thanks,
+
+	M.
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Without deviation from the norm, progress is not possible.

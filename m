@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F474D3B52
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669314D3B5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238191AbiCIUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S236625AbiCIUvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238199AbiCIUqp (ORCPT
+        with ESMTP id S236410AbiCIUvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:46:45 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6086E35E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:45:40 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso3381729pjq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 12:45:40 -0800 (PST)
+        Wed, 9 Mar 2022 15:51:15 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75B61EEEA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:50:14 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so4351104oos.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 12:50:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ERN4EHsAehnzKKHh1D2+nTh+Py8x5Rp5HMGDjFluxr8=;
-        b=cpibhiHH+V6FoD7AGaa89Pnpr1MqQbNAw3c0vVDSFoQFk3yUy7H4dCYYXfTWAmXrOs
-         l8GpE3EWh8KFbr1MAh3LU6KqfHECUwSRcaIveHTwEvCwWTWJkfTWeEBuHrdJRNvVcsLT
-         qHHY3jztnSlnXprm7bX5SKwQ2E493nxBs4RT4=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=w86PkjB8Iuxia7REaPfco2O01L0ZyZq9lCWCqy/ewuY=;
+        b=xlFS8gRVuuOEEuVQNAx7gGWhnhMf61G7Jmu2DBVGKLX8o78japRhdPPNRro7RzEK4p
+         gdZE06h8pKvjn5xQO7jU602Vpt7ZQ6WsvjwlvtDipalIiuhgWRd+r3pPYBv6Vp6zWAh6
+         jahQwSvZtSh6rOmj3qlhF/VAViM1dmeD+uByLUfUA7Iflxv3FBPPYzj4NV89rIM+OB9h
+         OYlyrhSYxLv3wEHSUUwFn99fejyw8fgiBD7YJTpwcOSWfEVROHHdebPiQNEJ1ZTP/s+K
+         jrcilkV7ckbr1KN7/+CIFMGSw57o0Xjk1FGeRD+qPimN6nku7iexorrBZZ5CrFcXXjaR
+         82Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ERN4EHsAehnzKKHh1D2+nTh+Py8x5Rp5HMGDjFluxr8=;
-        b=avQLOKEcch92GiU2hodn4LxDyEQw5A/B8Cq51oz3bUL1VrhEFIsa3amY3AVMsi8Z2Y
-         c47Om1suLywyNBUJTVbLuPnuQCIiQGegURB4tYa/Dq/nbomV6jboJiXbxcV/IQ6rwdOB
-         18TIzFh3VObH8Q8pE+gZ/u+FhtulHrUqOrej2CdvIv8ZbVTzxVziB5OQjkbjGmiKonOF
-         1cxZ4hJKOE8Fh7ZViVMF09F7drz7WYfJMK1QYa9jvVjZaNe+08xuRvzIfnwTC3GXWi39
-         69omsJw4EDumDyK+ISglOYaYOqDupsQqbQptVUjSaEt6K6D6+QR+3Dqs1S7qp+EplkUT
-         7/jA==
-X-Gm-Message-State: AOAM531xBMH+cofAEVC/ystwudiF1njCYPCYQgG6Jo5aKDdMuVTNqgMy
-        1Hcc4czOWtz9n0hno/W9l7QDJg==
-X-Google-Smtp-Source: ABdhPJzUHtWrv+KW+UL90YnTzk6+LrU87Z4C7tNuo2i9t4ZS9YtNksuPK+owbWcQ8enR1zl7uRCZYQ==
-X-Received: by 2002:a17:90a:7bc5:b0:1be:eef4:b961 with SMTP id d5-20020a17090a7bc500b001beeef4b961mr12201271pjl.29.1646858740334;
-        Wed, 09 Mar 2022 12:45:40 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 16-20020a056a00073000b004dfe2217090sm4111014pfm.200.2022.03.09.12.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 12:45:40 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yanteng Si <siyanteng01@gmail.com>, linux-mips@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] MIPS: Only use current_stack_pointer on GCC
-Date:   Wed,  9 Mar 2022 12:45:37 -0800
-Message-Id: <20220309204537.390428-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        bh=w86PkjB8Iuxia7REaPfco2O01L0ZyZq9lCWCqy/ewuY=;
+        b=fzqPu49xg3QVhcA9EYbUjG76+UdJ6U9MjnC+YrA5zqwAuifsRSwc8RqasUo007eKzR
+         FWqzcEDYlvrYPsH5NzaGBG1svMZH6M9gCSWJNTTlEjNfjkqf5Ea51RBGcL5sMwvHaEZI
+         bjMn1b7unNDz0hMmUMPaN0afFiVTZ9g5z8z8M6lYfXYRkid8R4Q8pukWa8D4cH9jo3+/
+         Ph6MA9HaMHRMEWDIp19NDi+jRhBJbO0LJsl32aujNqz84+CJ7F0aSIMmNCDak65PMcy9
+         7aMHEFqHDv2KI5H6q40RjoJd175nEJ4+lL4dXBPcc3zgLDFixouKsnJ6x8UvZ1zAyk5a
+         6auA==
+X-Gm-Message-State: AOAM531D9gDG9pyNeyCTrPkTgfyA9q2acJvgXRvs0qAs33E+SG8whTqg
+        4aFGlAhcWbs/qaggdSqmrUS/Cg==
+X-Google-Smtp-Source: ABdhPJyx86MIBVEmlex2bqLZuX/0m4w80vL0DPUkjMjV71cpA368aD9iAoL0GOqDVLAyCG9E9yeKoQ==
+X-Received: by 2002:a05:6870:e74c:b0:da:b3f:3238 with SMTP id t12-20020a056870e74c00b000da0b3f3238mr814295oak.232.1646859013563;
+        Wed, 09 Mar 2022 12:50:13 -0800 (PST)
+Received: from [192.168.17.16] ([189.219.74.147])
+        by smtp.gmail.com with ESMTPSA id l14-20020a056820030e00b00320edaf9b8esm1413555ooe.44.2022.03.09.12.50.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 12:50:13 -0800 (PST)
+Message-ID: <d6f2a085-9d76-03d6-9b88-aec5769a50d8@linaro.org>
+Date:   Wed, 9 Mar 2022 14:50:11 -0600
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2946; h=from:subject; bh=mJJlcMAOHOUY1LaTM6CaPuzsaMVsrZSzurV5C9KyV08=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiKRHwT/gRY3du4lkTuPbFhzgpqXfYeWapwif0U9xk 4yZK6xKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYikR8AAKCRCJcvTf3G3AJjnMEA CzTpygscG3HkIXS1hEPEscabCr9RpEuJhqQZXV8xRtoQXwrE2xeA0Uzv/rB4oF/Cd58H1w7442Hjs5 +ElxOHaJB/oGPmAJfKoArhK1r7b8Eb9AseY8z6brFbjRwsIpASiwzatqfrqBelCySWBMyKM30+bnvl Y3cxwrGBKrgJfkSo8hgbg2ysttwY/eOCpuZvoLrFL6DDZ1ku1YLomALhq+ujqRrLFWQsz/6aXI4Eks g1hVpufdlwo10713WyE6x/q8tHLF8DaaFK3ILTSL7qRVqinr2WiIgpbiRAD32ouad9jfNP3pPLDxPI 9a+HfL3fK8/exJ9C9kSNuHxFADYNml/bacRhohBGoDmX/tHJ2RZvwaY2mc+LKs+V8U6eXvCpiMjsxJ KRvGsHdcVONj+RRntX0Mzhj/UgYZ0/QfUo6+qCgqmRSlfvqeeeEJIAzYs96lWz1/L6yTMYdxhUvqTs bqViRba8Mx/muLUPqoazxhUxdlODBf2MmQj5dAe5JA+SNOC6hdlsGTWFqyK+sdJTKKbRzWH2tVjXj0 LZLBjJvNi41ZiLfT0Oae3pEqxHIvtcnztyO8kt0UzAKMaNmsHHmC8RwJBU0jr7ImjONFAZVEjv5yl2 NtUvzJAtB5MsSouKr9u4+MPJEVASs4gCzxhDzJfUdHyp5WbkYQEs2XsawC7Q==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.4 00/18] 5.4.184-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220309155856.552503355@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,86 +78,346 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, Clang did not have support for "sp" as a global register
-definition, and was crashing after the addition of current_stack_pointer.
-This has been fixed in Clang 15, but earlier Clang versions need to
-avoid this code, so add a versioned test and revert back to the
-open-coded asm instances. Fixes Clang build error:
+Hello!
 
-fatal error: error in backend: Invalid register name global variable
+On 09/03/22 09:59, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.184 release.
+> There are 18 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.184-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Fixes: 200ed341b864 ("mips: Implement "current_stack_pointer"")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Yanteng Si <siyanteng01@gmail.com>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/mips/Kconfig                   | 2 +-
- arch/mips/include/asm/thread_info.h | 2 ++
- arch/mips/kernel/irq.c              | 3 ++-
- arch/mips/lib/uncached.c            | 4 +++-
- 4 files changed, 8 insertions(+), 3 deletions(-)
+Regressions found.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 3f58b45fc953..15769013f46e 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -4,7 +4,7 @@ config MIPS
- 	default y
- 	select ARCH_32BIT_OFF_T if !64BIT
- 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
--	select ARCH_HAS_CURRENT_STACK_POINTER
-+	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 150000
- 	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_KCOV
-diff --git a/arch/mips/include/asm/thread_info.h b/arch/mips/include/asm/thread_info.h
-index 4463348d2372..ecae7470faa4 100644
---- a/arch/mips/include/asm/thread_info.h
-+++ b/arch/mips/include/asm/thread_info.h
-@@ -69,7 +69,9 @@ static inline struct thread_info *current_thread_info(void)
- 	return __current_thread_info;
- }
- 
-+#ifdef CONFIG_ARCH_HAS_CURRENT_STACK_POINTER
- register unsigned long current_stack_pointer __asm__("sp");
-+#endif
- 
- #endif /* !__ASSEMBLY__ */
- 
-diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
-index fc313c49a417..5e11582fe308 100644
---- a/arch/mips/kernel/irq.c
-+++ b/arch/mips/kernel/irq.c
-@@ -75,8 +75,9 @@ void __init init_IRQ(void)
- #ifdef CONFIG_DEBUG_STACKOVERFLOW
- static inline void check_stack_overflow(void)
- {
--	unsigned long sp = current_stack_pointer;
-+	unsigned long sp;
- 
-+	__asm__ __volatile__("move %0, $sp" : "=r" (sp));
- 	sp &= THREAD_MASK;
- 
- 	/*
-diff --git a/arch/mips/lib/uncached.c b/arch/mips/lib/uncached.c
-index f8d4ca046c3e..f80a67c092b6 100644
---- a/arch/mips/lib/uncached.c
-+++ b/arch/mips/lib/uncached.c
-@@ -40,7 +40,9 @@ unsigned long run_uncached(void *func)
- 	register long ret __asm__("$2");
- 	long lfunc = (long)func, ufunc;
- 	long usp;
--	long sp = current_stack_pointer;
-+	long sp;
-+
-+	__asm__("move %0, $sp" : "=r" (sp));
- 
- 	if (sp >= (long)CKSEG0 && sp < (long)CKSEG2)
- 		usp = CKSEG1ADDR(sp);
--- 
-2.32.0
+The following Arm combinations failed to build:
+- arm-clang-11-allnoconfig
+- arm-clang-11-at91_dt_defconfig
+- arm-clang-11-axm55xx_defconfig
+- arm-clang-11-bcm2835_defconfig
+- arm-clang-11-clps711x_defconfig
+- arm-clang-11-davinci_all_defconfig
+- arm-clang-11-defconfig
+- arm-clang-11-exynos_defconfig
+- arm-clang-11-footbridge_defconfig
+- arm-clang-11-imx_v4_v5_defconfig
+- arm-clang-11-imx_v6_v7_defconfig
+- arm-clang-11-integrator_defconfig
+- arm-clang-11-ixp4xx_defconfig
+- arm-clang-11-keystone_defconfig
+- arm-clang-11-lpc32xx_defconfig
+- arm-clang-11-mini2440_defconfig
+- arm-clang-11-multi_v5_defconfig
+- arm-clang-11-mxs_defconfig
+- arm-clang-11-nhk8815_defconfig
+- arm-clang-11-omap1_defconfig
+- arm-clang-11-omap2plus_defconfig
+- arm-clang-11-orion5x_defconfig
+- arm-clang-11-pxa910_defconfig
+- arm-clang-11-s3c2410_defconfig
+- arm-clang-11-s3c6400_defconfig
+- arm-clang-11-s5pv210_defconfig
+- arm-clang-11-sama5_defconfig
+- arm-clang-11-shmobile_defconfig
+- arm-clang-11-tinyconfig
+- arm-clang-11-u8500_defconfig
+- arm-clang-11-vexpress_defconfig
+- arm-clang-12-allnoconfig
+- arm-clang-12-at91_dt_defconfig
+- arm-clang-12-axm55xx_defconfig
+- arm-clang-12-bcm2835_defconfig
+- arm-clang-12-clps711x_defconfig
+- arm-clang-12-davinci_all_defconfig
+- arm-clang-12-defconfig
+- arm-clang-12-exynos_defconfig
+- arm-clang-12-footbridge_defconfig
+- arm-clang-12-imx_v4_v5_defconfig
+- arm-clang-12-imx_v6_v7_defconfig
+- arm-clang-12-integrator_defconfig
+- arm-clang-12-ixp4xx_defconfig
+- arm-clang-12-keystone_defconfig
+- arm-clang-12-lpc32xx_defconfig
+- arm-clang-12-mini2440_defconfig
+- arm-clang-12-multi_v5_defconfig
+- arm-clang-12-mxs_defconfig
+- arm-clang-12-nhk8815_defconfig
+- arm-clang-12-omap1_defconfig
+- arm-clang-12-omap2plus_defconfig
+- arm-clang-12-orion5x_defconfig
+- arm-clang-12-pxa910_defconfig
+- arm-clang-12-s3c2410_defconfig
+- arm-clang-12-s3c6400_defconfig
+- arm-clang-12-s5pv210_defconfig
+- arm-clang-12-sama5_defconfig
+- arm-clang-12-shmobile_defconfig
+- arm-clang-12-tinyconfig
+- arm-clang-12-u8500_defconfig
+- arm-clang-12-vexpress_defconfig
+- arm-clang-13-allnoconfig
+- arm-clang-13-at91_dt_defconfig
+- arm-clang-13-axm55xx_defconfig
+- arm-clang-13-bcm2835_defconfig
+- arm-clang-13-clps711x_defconfig
+- arm-clang-13-davinci_all_defconfig
+- arm-clang-13-defconfig
+- arm-clang-13-exynos_defconfig
+- arm-clang-13-footbridge_defconfig
+- arm-clang-13-imx_v4_v5_defconfig
+- arm-clang-13-imx_v6_v7_defconfig
+- arm-clang-13-integrator_defconfig
+- arm-clang-13-ixp4xx_defconfig
+- arm-clang-13-keystone_defconfig
+- arm-clang-13-lpc32xx_defconfig
+- arm-clang-13-mini2440_defconfig
+- arm-clang-13-multi_v5_defconfig
+- arm-clang-13-mxs_defconfig
+- arm-clang-13-nhk8815_defconfig
+- arm-clang-13-omap1_defconfig
+- arm-clang-13-omap2plus_defconfig
+- arm-clang-13-orion5x_defconfig
+- arm-clang-13-pxa910_defconfig
+- arm-clang-13-s3c2410_defconfig
+- arm-clang-13-s3c6400_defconfig
+- arm-clang-13-s5pv210_defconfig
+- arm-clang-13-sama5_defconfig
+- arm-clang-13-shmobile_defconfig
+- arm-clang-13-tinyconfig
+- arm-clang-13-u8500_defconfig
+- arm-clang-13-vexpress_defconfig
+- arm-clang-14-allnoconfig
+- arm-clang-14-at91_dt_defconfig
+- arm-clang-14-axm55xx_defconfig
+- arm-clang-14-bcm2835_defconfig
+- arm-clang-14-clps711x_defconfig
+- arm-clang-14-davinci_all_defconfig
+- arm-clang-14-defconfig
+- arm-clang-14-exynos_defconfig
+- arm-clang-14-footbridge_defconfig
+- arm-clang-14-imx_v4_v5_defconfig
+- arm-clang-14-imx_v6_v7_defconfig
+- arm-clang-14-integrator_defconfig
+- arm-clang-14-ixp4xx_defconfig
+- arm-clang-14-keystone_defconfig
+- arm-clang-14-lpc32xx_defconfig
+- arm-clang-14-mini2440_defconfig
+- arm-clang-14-multi_v5_defconfig
+- arm-clang-14-mxs_defconfig
+- arm-clang-14-nhk8815_defconfig
+- arm-clang-14-omap1_defconfig
+- arm-clang-14-omap2plus_defconfig
+- arm-clang-14-orion5x_defconfig
+- arm-clang-14-pxa910_defconfig
+- arm-clang-14-s3c2410_defconfig
+- arm-clang-14-s3c6400_defconfig
+- arm-clang-14-s5pv210_defconfig
+- arm-clang-14-sama5_defconfig
+- arm-clang-14-shmobile_defconfig
+- arm-clang-14-tinyconfig
+- arm-clang-14-u8500_defconfig
+- arm-clang-14-vexpress_defconfig
+- arm-clang-nightly-allnoconfig
+- arm-clang-nightly-at91_dt_defconfig
+- arm-clang-nightly-axm55xx_defconfig
+- arm-clang-nightly-bcm2835_defconfig
+- arm-clang-nightly-clps711x_defconfig
+- arm-clang-nightly-davinci_all_defconfig
+- arm-clang-nightly-defconfig
+- arm-clang-nightly-exynos_defconfig
+- arm-clang-nightly-footbridge_defconfig
+- arm-clang-nightly-imx_v4_v5_defconfig
+- arm-clang-nightly-imx_v6_v7_defconfig
+- arm-clang-nightly-integrator_defconfig
+- arm-clang-nightly-ixp4xx_defconfig
+- arm-clang-nightly-keystone_defconfig
+- arm-clang-nightly-lpc32xx_defconfig
+- arm-clang-nightly-mini2440_defconfig
+- arm-clang-nightly-multi_v5_defconfig
+- arm-clang-nightly-mxs_defconfig
+- arm-clang-nightly-nhk8815_defconfig
+- arm-clang-nightly-omap1_defconfig
+- arm-clang-nightly-omap2plus_defconfig
+- arm-clang-nightly-orion5x_defconfig
+- arm-clang-nightly-pxa910_defconfig
+- arm-clang-nightly-s3c2410_defconfig
+- arm-clang-nightly-s3c6400_defconfig
+- arm-clang-nightly-s5pv210_defconfig
+- arm-clang-nightly-sama5_defconfig
+- arm-clang-nightly-shmobile_defconfig
+- arm-clang-nightly-tinyconfig
+- arm-clang-nightly-u8500_defconfig
+- arm-clang-nightly-vexpress_defconfig
+- arm-gcc-8-bcm2835_defconfig
+- arm-gcc-8-imx_v6_v7_defconfig
+- arm-gcc-8-omap2plus_defconfig
+- arm-gcc-9-bcm2835_defconfig
+- arm-gcc-9-imx_v6_v7_defconfig
+- arm-gcc-9-omap2plus_defconfig
+- arm-gcc-10-bcm2835_defconfig
+- arm-gcc-10-imx_v6_v7_defconfig
+- arm-gcc-10-omap2plus_defconfig
+- arm-gcc-11-bcm2835_defconfig
+- arm-gcc-11-imx_v6_v7_defconfig
+- arm-gcc-11-omap2plus_defconfig
 
+Clang failures look like this (like mini2440_defconfig with clang-12 here):
+
+   ld.lld: error: ./arch/arm/kernel/vmlinux.lds:98: AT expected, but got NOCROSSREFS
+   >>>  __vectors_lma = .; OVERLAY 0xffff0000 : NOCROSSREFS AT(__vectors_lma) { .vectors { *(.vectors) } .vectors.bhb.loop8 { *(.vectors.bhb.loop8) } .vectors.bhb.bpiall { *(.vectors.bhb.bpiall) } } __vectors_start = LOADADDR(.vectors); __vectors_end = LOADADDR(.vectors) + SIZEOF(.vectors); __vectors_bhb_loop8_start = LOADADDR(.vectors.bhb.loop8); __vectors_bhb_loop8_end = LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __vectors_bhb_bpiall_start = LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bpiall_end = LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); . = __vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.bpiall); __stubs_lma = .; .stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) { *(.stubs) } __stubs_start = LOADADDR(.stubs); __stubs_end = LOADADDR(.stubs) + SIZEOF(.stubs); . = __stubs_lma + SIZEOF(.stubs); PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
+   >>>                                          ^
+   make[1]: *** [/builds/linux/Makefile:1100: vmlinux] Error 1
+
+
+These are the kind of failures that GCC is throwing (omap2plus_defconfig on gcc-10):
+
+   builds/linux/arch/arm/kernel/entry-common.S: Assembler messages:
+   /builds/linux/arch/arm/kernel/entry-common.S:175: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-common.S:184: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/kernel/entry-common.o] Error 1
+   /builds/linux/arch/arm/common/secure_cntvoff.S: Assembler messages:
+   /builds/linux/arch/arm/common/secure_cntvoff.S:24: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/common/secure_cntvoff.S:27: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/common/secure_cntvoff.S:29: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/common/secure_cntvoff.o] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [/builds/linux/Makefile:1734: arch/arm/common] Error 2
+   /builds/linux/arch/arm/kernel/entry-armv.S: Assembler messages:
+   /builds/linux/arch/arm/kernel/entry-armv.S:1093: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1116: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1139: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1162: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1201: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/kernel/entry-armv.o] Error 1
+   /builds/linux/arch/arm/mm/cache-v7.S: Assembler messages:
+   /builds/linux/arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mm/cache-v7.o] Error 1
+   /builds/linux/arch/arm/mm/tlb-v7.S: Assembler messages:
+   /builds/linux/arch/arm/mm/tlb-v7.S:85: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mm/tlb-v7.o] Error 1
+   /builds/linux/arch/arm/mm/proc-v7-2level.S: Assembler messages:
+   /builds/linux/arch/arm/mm/proc-v7-2level.S:55: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/proc-v7-2level.S:57: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/proc-v7.S:59: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/proc-v7.S:183: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mm/proc-v7.o] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [/builds/linux/Makefile:1734: arch/arm/mm] Error 2
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S: Assembler messages:
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:91: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:131: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:193: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:205: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:223: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:274: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep44xx.S:342: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mach-omap2/sleep44xx.o] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [/builds/linux/Makefile:1734: arch/arm/kernel] Error 2
+   /builds/linux/arch/arm/mach-omap2/sleep34xx.S: Assembler messages:
+   /builds/linux/arch/arm/mach-omap2/sleep34xx.S:174: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep34xx.S:308: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mach-omap2/sleep34xx.o] Error 1
+   /builds/linux/arch/arm/mach-omap2/sleep33xx.S: Assembler messages:
+   /builds/linux/arch/arm/mach-omap2/sleep33xx.S:58: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep33xx.S:125: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep33xx.S:192: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mach-omap2/sleep33xx.o] Error 1
+   /builds/linux/arch/arm/mach-omap2/sleep43xx.S: Assembler messages:
+   /builds/linux/arch/arm/mach-omap2/sleep43xx.S:98: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mach-omap2/sleep43xx.S:320: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:345: arch/arm/mach-omap2/sleep43xx.o] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [/builds/linux/Makefile:1734: arch/arm/mach-omap2] Error 2
+
+
+The following i386/x86_64 combinations failed to build:
+- i386-gcc-8-allnoconfig
+- i386-gcc-8-i386_defconfig
+- i386-gcc-8-tinyconfig
+- i386-gcc-9-allnoconfig
+- i386-gcc-9-i386_defconfig
+- i386-gcc-9-tinyconfig
+- i386-gcc-10-allnoconfig
+- i386-gcc-10-defconfig
+- i386-gcc-10-tinyconfig
+- i386-gcc-11-allnoconfig
+- i386-gcc-11-defconfig
+- i386-gcc-11-tinyconfig
+- x86_64-clang-11-allnoconfig
+- x86_64-clang-11-tinyconfig
+- x86_64-clang-11-x86_64_defconfig
+- x86_64-clang-12-allnoconfig
+- x86_64-clang-12-tinyconfig
+- x86_64-clang-12-x86_64_defconfig
+- x86_64-clang-13-allnoconfig
+- x86_64-clang-13-tinyconfig
+- x86_64-clang-13-x86_64_defconfig
+- x86_64-clang-14-allnoconfig
+- x86_64-clang-14-tinyconfig
+- x86_64-clang-14-x86_64_defconfig
+- x86_64-clang-nightly-allnoconfig
+- x86_64-clang-nightly-tinyconfig
+- x86_64-clang-nightly-x86_64_defconfig
+- x86_64-gcc-8-allnoconfig
+- x86_64-gcc-8-tinyconfig
+- x86_64-gcc-8-x86_64_defconfig
+- x86_64-gcc-9-allnoconfig
+- x86_64-gcc-9-tinyconfig
+- x86_64-gcc-9-x86_64_defconfig
+- x86_64-gcc-10-allnoconfig
+- x86_64-gcc-10-defconfig
+- x86_64-gcc-10-tinyconfig
+- x86_64-gcc-11-allnoconfig
+- x86_64-gcc-11-defconfig
+- x86_64-gcc-11-tinyconfig
+
+On x86_64 (allnoconfig, gcc-10) this is the output:
+
+   /builds/linux/arch/x86/entry/entry_64.S: Assembler messages:
+   /builds/linux/arch/x86/entry/entry_64.S:1732: Warning: no instruction mnemonic suffix given and no register operands; using default for `sysret'
+   /builds/linux/arch/x86/kernel/cpu/bugs.c: In function 'spectre_v2_select_mitigation':
+   /builds/linux/arch/x86/kernel/cpu/bugs.c:973:34: error: implicit declaration of function 'unprivileged_ebpf_enabled' [-Werror=implicit-function-declaration]
+     973 |  if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[4]: *** [/builds/linux/scripts/Makefile.build:262: arch/x86/kernel/cpu/bugs.o] Error 1
+   make[4]: Target '__build' not remade because of errors.
+   make[3]: *** [/builds/linux/scripts/Makefile.build:497: arch/x86/kernel/cpu] Error 2
+   make[3]: Target '__build' not remade because of errors.
+   make[2]: *** [/builds/linux/scripts/Makefile.build:497: arch/x86/kernel] Error 2
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [/builds/linux/Makefile:1734: arch/x86] Error 2
+
+Then on i386 (defconfig, gcc-10) very similar error:
+
+   /builds/linux/arch/x86/kernel/cpu/bugs.c: In function 'spectre_v2_select_mitigation':
+   /builds/linux/arch/x86/kernel/cpu/bugs.c:973:34: error: implicit declaration of function 'unprivileged_ebpf_enabled' [-Werror=implicit-function-declaration]
+     973 |  if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[4]: *** [/builds/linux/scripts/Makefile.build:262: arch/x86/kernel/cpu/bugs.o] Error 1
+   make[4]: Target '__build' not remade because of errors.
+   make[3]: *** [/builds/linux/scripts/Makefile.build:497: arch/x86/kernel/cpu] Error 2
+   make[3]: Target '__build' not remade because of errors.
+   make[2]: *** [/builds/linux/scripts/Makefile.build:497: arch/x86/kernel] Error 2
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [/builds/linux/Makefile:1734: arch/x86] Error 2
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org

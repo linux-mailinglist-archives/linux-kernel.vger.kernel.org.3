@@ -2,49 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0989F4D2A9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742E54D2AA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiCII2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S231351AbiCII3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiCII2O (ORCPT
+        with ESMTP id S231180AbiCII3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:28:14 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE146C12DD;
-        Wed,  9 Mar 2022 00:27:15 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 75846101C67; Wed,  9 Mar 2022 08:27:11 +0000 (UTC)
-Date:   Wed, 9 Mar 2022 08:27:11 +0000
-From:   Sean Young <sean@mess.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 01/28] bpf: add new is_sys_admin_prog_type()
- helper
-Message-ID: <Yihk34SLS6ZYS01D@gofer.mess.org>
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-2-benjamin.tissoires@redhat.com>
+        Wed, 9 Mar 2022 03:29:04 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6E3BF5A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:28:04 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KD4z35hmpzBrTF;
+        Wed,  9 Mar 2022 16:26:07 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Mar 2022 16:28:01 +0800
+Subject: Re: [PATCH 04/16] mm/migration: reduce the rcu lock duration
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
+        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
+        <minchan@kernel.org>, <apopple@nvidia.com>,
+        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
+        <almasrymina@google.com>, <jhubbard@nvidia.com>,
+        <rcampbell@nvidia.com>, <peterx@redhat.com>,
+        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220304093409.25829-1-linmiaohe@huawei.com>
+ <20220304093409.25829-5-linmiaohe@huawei.com>
+ <8735ju7as9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <2eb3fc34-3c81-394f-3bca-8eb00027afcf@huawei.com>
+ <87y21key4q.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <2d25a580-5241-13be-f1d7-88d05b349819@huawei.com>
+Date:   Wed, 9 Mar 2022 16:28:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304172852.274126-2-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <87y21key4q.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,73 +64,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 06:28:25PM +0100, Benjamin Tissoires wrote:
-> LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
+On 2022/3/9 9:02, Huang, Ying wrote:
+> Miaohe Lin <linmiaohe@huawei.com> writes:
 > 
-> Extract a new helper for it, it will be also used for the HID bpf
-> implementation.
+>> On 2022/3/7 10:32, Huang, Ying wrote:
+>>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>>>
+>>>> rcu_read_lock is required by grabbing the task refcount but it's not
+>>>> needed for ptrace_may_access. So we could release the rcu lock after
+>>>> task refcount is successfully grabbed to reduce the rcu holding time.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/migrate.c | 3 +--
+>>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>>> index da5a81052468..26943bd819e8 100644
+>>>> --- a/mm/migrate.c
+>>>> +++ b/mm/migrate.c
+>>>> @@ -1907,17 +1907,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
+>>>>  		return ERR_PTR(-ESRCH);
+>>>>  	}
+>>>>  	get_task_struct(task);
+>>>> +	rcu_read_unlock();
+>>>>  
+>>>>  	/*
+>>>>  	 * Check if this process has the right to modify the specified
+>>>>  	 * process. Use the regular "ptrace_may_access()" checks.
+>>>>  	 */
+>>>>  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+>>>> -		rcu_read_unlock();
+>>>>  		mm = ERR_PTR(-EPERM);
+>>>>  		goto out;
+>>>>  	}
+>>>> -	rcu_read_unlock();
+>>>>  
+>>>>  	mm = ERR_PTR(security_task_movememory(task));
+>>>>  	if (IS_ERR(mm))
+>>>
+>>> Digged some history via `git blame`, found that the RCU read lock is
+>>> extended in the following commit,
+>>>
+>>> "
+>>> 3268c63eded4612a3d07b56d1e02ce7731e6608e
+>>> Author:     Christoph Lameter <cl@linux.com>
+>>> AuthorDate: Wed Mar 21 16:34:06 2012 -0700
+>>> Commit:     Linus Torvalds <torvalds@linux-foundation.org>
+>>> CommitDate: Wed Mar 21 17:54:58 2012 -0700
+>>>
+>>> mm: fix move/migrate_pages() race on task struct
+>>>
+>>> Migration functions perform the rcu_read_unlock too early.  As a result
+>>> the task pointed to may change from under us.  This can result in an oops,
+>>> as reported by Dave Hansen in https://lkml.org/lkml/2012/2/23/302.
+>>>
+>>> The following patch extend the period of the rcu_read_lock until after the
+>>> permissions checks are done.  We also take a refcount so that the task
+>>> reference is stable when calling security check functions and performing
+>>> cpuset node validation (which takes a mutex).
+>>>
+>>> The refcount is dropped before actual page migration occurs so there is no
+>>> change to the refcounts held during page migration.
+>>>
+>>> Also move the determination of the mm of the task struct to immediately
+>>> before the do_migrate*() calls so that it is clear that we switch from
+>>> handling the task during permission checks to the mm for the actual
+>>> migration.  Since the determination is only done once and we then no
+>>> longer use the task_struct we can be sure that we operate on a specific
+>>> address space that will not change from under us.
+>>> "
+>>>
+>>> After that, the permission checking has been changed from __task_cred()
+>>> to ptrace_may_access().  So the situation may change somewhat.  Cced
+>>
+>> In ptrace_may_access, __task_cred is access while holding the rcu read lock.
+>> It seems this is ensured by the ptrace_may_access itself.
 > 
-> Cc: Sean Young <sean@mess.org>
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
-For BPF_PROG_TYPE_LIRC_MODE2, I don't think this change will break userspace.
-This is called from ir-keytable(1) which is called from udev. It should have
-all the necessary permissions.
-
-In addition, the vast majority IR decoders are non-bpf. bpf ir decoders have
-very few users at the moment.
-
-Acked-by: Sean Young <sean@mess.org>
-
-
-Sean
-
+> Please read the patch above.  Before extending rcu_read_lock protected
+> region, __task_cred() is protected by rcu_read_lock already.  The patch
+> above combines 2 regions into 1.
 > 
-> ---
+
+Yep, you're right. Thanks.
+
+> Best Regards,
+> Huang, Ying
 > 
-> new in v2
-> ---
->  kernel/bpf/syscall.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+>>> some names found in git history to verify.
+>>
+>> Thanks for your carefulness.
+>>
+>>>
+>>> Best Regards,
+>>> Huang, Ying
+>>> .
+>>>
+> .
 > 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index db402ebc5570..cc570891322b 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
->  	case BPF_PROG_TYPE_LWT_SEG6LOCAL:
->  	case BPF_PROG_TYPE_SK_SKB:
->  	case BPF_PROG_TYPE_SK_MSG:
-> -	case BPF_PROG_TYPE_LIRC_MODE2:
->  	case BPF_PROG_TYPE_FLOW_DISSECTOR:
->  	case BPF_PROG_TYPE_CGROUP_DEVICE:
->  	case BPF_PROG_TYPE_CGROUP_SOCK:
-> @@ -2202,6 +2201,17 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
->  	}
->  }
->  
-> +static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
-> +{
-> +	switch (prog_type) {
-> +	case BPF_PROG_TYPE_LIRC_MODE2:
-> +	case BPF_PROG_TYPE_EXT: /* extends any prog */
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
->  /* last field in 'union bpf_attr' used by this command */
->  #define	BPF_PROG_LOAD_LAST_FIELD core_relo_rec_size
->  
-> @@ -2252,6 +2262,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
->  		return -EPERM;
->  	if (is_perfmon_prog_type(type) && !perfmon_capable())
->  		return -EPERM;
-> +	if (is_sys_admin_prog_type(type) && !capable(CAP_SYS_ADMIN))
-> +		return -EPERM;
->  
->  	/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
->  	 * or btf, we need to check which one it is
-> -- 
-> 2.35.1
+

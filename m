@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095634D28FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8814D28FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiCIGbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S230054AbiCIGb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiCIGbM (ORCPT
+        with ESMTP id S230041AbiCIGbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:31:12 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5253414561B;
-        Tue,  8 Mar 2022 22:30:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9D9EFCE1D7F;
-        Wed,  9 Mar 2022 06:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B2001C340F7;
-        Wed,  9 Mar 2022 06:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646807410;
-        bh=3M4MKg7rpgfaMb+u02OrdlJdFEkHXrF7Y9UAR8ezcGI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O+WJlU+Yc4ZTvxANti2QDaf46YrvLqiHlgnoG3yJ2nCnDx3FGpaoGWw3RDaLM7gII
-         KCMvIdwwt34S7q9xzkgWIwDhu0lgMwN7ZmMUBZSXNpxQRUS719HGiGjCbf3km0NO+Z
-         z+0M7JPJEgtKTKDF1QEdgbnoCPGUGZfns+iBNhdJq192vx5yIp+4mwYdxxbFFB2TuK
-         +okHtkNRSYJjnX0uek1EPi2T2RrU0q/02ZjpxKUWLifRTENH1M3kSF8jr0JFs/kOV/
-         f+8n7hxYeu2FEAk+twJMO1/iu0dg8nPvPr6aQ92MB3n/W5R5uDqFZO5Cjoc5rVDBTX
-         wyZ0KMDHtpIdQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C422E73C2D;
-        Wed,  9 Mar 2022 06:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 9 Mar 2022 01:31:55 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A871390E6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:30:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646807457; x=1678343457;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8hoFVocM0OPzK/8uk2k/0MdxFwzM0jMpOpo4BpqyI2Y=;
+  b=YSNwDwTaR9/kxWNGFWlt3ubxlq+Itp99G1zfP2jFzBZWz5FBEHsqar+I
+   9VJOAsiq3OSdwxksLxO+ztodJsybH6JCU9PM24HMFnxK//BuvmV6NXSYT
+   GqHm/+Gxb/qaAyhS68m+Dj8IiqXzSP80+OOU4mQk17CI6RyPw1rVFnGZH
+   AbgpweeiqmYkEWSSD3242EyZarcUVnWP9E7B/VHrCHFnpoFClOW9x6ld0
+   cAjvuYcV2eSWbwgGu9uHB2Vjx7auTZDpoy7gFV04suyCEotWWuQ9v5iLK
+   b2mhN3JkWEVsFb6rp86QGjCwwGA0T52rlsO8cvyTQLltRA8wuWYLuKpq3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234852399"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="234852399"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 22:30:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="495736191"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 22:30:55 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRpqY-0002kE-V3; Wed, 09 Mar 2022 06:30:54 +0000
+Date:   Wed, 9 Mar 2022 14:30:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mhiramat:kprobes/fprobe 12/12] test_fprobe.c:undefined reference to
+ `kunit_do_assertion'
+Message-ID: <202203091456.318D4uj5-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] net: prestera: acl: make read-only array client_map
- static const
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164680741063.15140.5277351972560162204.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Mar 2022 06:30:10 +0000
-References: <20220307221349.164585-1-colin.i.king@gmail.com>
-In-Reply-To: <20220307221349.164585-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     tchornyi@marvell.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +61,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fprobe
+head:   0bd36e652ac2be74b19f414d0b20aaef6521ac82
+commit: 0bd36e652ac2be74b19f414d0b20aaef6521ac82 [12/12] fprobe: Add a selftest for fprobe
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220309/202203091456.318D4uj5-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=0bd36e652ac2be74b19f414d0b20aaef6521ac82
+        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
+        git fetch --no-tags mhiramat kprobes/fprobe
+        git checkout 0bd36e652ac2be74b19f414d0b20aaef6521ac82
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Mon,  7 Mar 2022 22:13:49 +0000 you wrote:
-> Don't populate the read-only array client_map  on the stack but
-> instead make it static const. Also makes the object code a little
-> smaller.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/net/ethernet/marvell/prestera/prestera_acl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
-Here is the summary with links:
-  - [next] net: prestera: acl: make read-only array client_map static const
-    https://git.kernel.org/netdev/net-next/c/d82a6c5ef9dc
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `fp_exit_handler':
+>> test_fprobe.c:(.text+0x1b0): undefined reference to `kunit_do_assertion'
+>> arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x268): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x304): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x3b0): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x444): undefined reference to `kunit_do_assertion'
+>> arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x4d0): undefined reference to `kunit_unary_assert_format'
+>> arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x4d4): undefined reference to `kunit_binary_assert_format'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `fp_entry_handler':
+   test_fprobe.c:(.text+0x630): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x6cc): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x760): undefined reference to `kunit_unary_assert_format'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x770): undefined reference to `kunit_binary_assert_format'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `test_fprobe_syms':
+   test_fprobe.c:(.text+0x8d8): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x96c): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x9f8): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0xa8c): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0xb14): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o:test_fprobe.c:(.text+0xb9c): more undefined references to `kunit_do_assertion' follow
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `test_fprobe_syms':
+>> test_fprobe.c:(.text+0xc30): undefined reference to `kunit_binary_assert_format'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `test_fprobe':
+   test_fprobe.c:(.text+0xd98): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0xe2c): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0xeb8): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0xf4c): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0xfd4): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o:test_fprobe.c:(.text+0x105c): more undefined references to `kunit_do_assertion' follow
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `test_fprobe':
+   test_fprobe.c:(.text+0x10ec): undefined reference to `kunit_binary_assert_format'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `test_fprobe_entry':
+   test_fprobe.c:(.text+0x1244): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x12d8): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x136c): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x13ec): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: test_fprobe.c:(.text+0x1480): undefined reference to `kunit_do_assertion'
+   arm-linux-gnueabi-ld: lib/test_fprobe.o:test_fprobe.c:(.text+0x14fc): more undefined references to `kunit_do_assertion' follow
+   arm-linux-gnueabi-ld: lib/test_fprobe.o: in function `test_fprobe_entry':
+   test_fprobe.c:(.text+0x1610): undefined reference to `kunit_binary_assert_format'
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

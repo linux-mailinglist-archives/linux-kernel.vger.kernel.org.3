@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6B14D2792
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1235A4D279C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiCIBiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S230499AbiCIBif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiCIBiB (ORCPT
+        with ESMTP id S230464AbiCIBiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:38:01 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE10BABB9;
-        Tue,  8 Mar 2022 17:37:01 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id g1so1371090ybe.4;
-        Tue, 08 Mar 2022 17:37:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O0sfGtZZs/DCXFYwja5rvdRYEUrfDeT/e0HTIIylfkg=;
-        b=l4rVX7J5aBaez9SIxbPd0e7Jjd3gHLMAN0Wc6zzGVSMOeK42ZvHs4Bc6lPiS3ZUbcP
-         UGfCmxnSojCAZ7N33msSaTo1U/B3GcMw/aU5OW1WbFaHZV4Kfqz8d5pj05HQ6p1mlBKy
-         pP18JcugAEvOPH3EYM6mjWtlQlZQUiR/CY9JQLvd5d5h/vE916blcoH3puN20a64FRTo
-         moYha8UiaO0SM4KXzK+aIJQtJ6e4dm+iQTFrrPDmBI5c+Aai4QH42R3nEqYGo7JjxQp1
-         dt1vhyW91fdU0yaxlC5qTRgj9jwdMqXPjqcyheLeIWhTRaLL2dnFYqm6ZjyElb2KEfg+
-         0mVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O0sfGtZZs/DCXFYwja5rvdRYEUrfDeT/e0HTIIylfkg=;
-        b=vq00slQHt/ogoQgrtUVrJgQEwUeyyEua9Ptk51LhGQbi3l2vyknoaPTyw7xUadJ170
-         t+MgdyknYSbi91Bz2Nv10q/7gCu7gZGsy4aT+NSmOz+aCPz/ya8fePaTJbi6aEJOwEBv
-         4NP+K6kEA6/BXiRrVb203i7GlSYS9qo8B/Ba3uV8AFISZCQdmLsPvgAh3stOQs+tPypy
-         mpub7g+1fyl8SE4Ahz17RrAIJ/FG+rcTuki97wmpucxsekNbm7vv1U8W0Wn3YfP2cYc3
-         fZVTUM4AcHXUZBqog5fKmSguSGawKQamEwabFQ4QjcCNsTJTzXOwbIHTWMpg37GMU1Gl
-         FMxA==
-X-Gm-Message-State: AOAM531lcvJqSseyAE3TJtAca5m63iUz0QBG+5H4h42B4DUB4Iigxa9W
-        MJp6ypD+jUsyA6CuMzkMo1xvAn9EvP6g5eTy1xo=
-X-Google-Smtp-Source: ABdhPJxMIyvION8ePOZdB98YZI9JKX8ZRb3j37BxlHfi1wJE3Bb7ujT/4fdLL51UsvBXV+Elqab/qhiDOZQARSNnIps=
-X-Received: by 2002:a25:1b45:0:b0:628:833c:f3af with SMTP id
- b66-20020a251b45000000b00628833cf3afmr14352135ybb.138.1646789821221; Tue, 08
- Mar 2022 17:37:01 -0800 (PST)
+        Tue, 8 Mar 2022 20:38:25 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDE5BF953;
+        Tue,  8 Mar 2022 17:37:25 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCvvM5DSQz4xdl;
+        Wed,  9 Mar 2022 12:37:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1646789841;
+        bh=p1p4VSMUJYVQ87kKlKJCoseMUR6jFyJEysr+m3gIwi0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kg4LLqW19iBCuq6n4YWNFuQaigJTPm2LPygRh+xs6IVrctsXaXt3ILv9VhGErZIg6
+         De9njLj/wF5dAdJJLt5SxO61eaCgUqPMe1isTs6EegH4AnCAlKz4BRMBcBMYg+fF/o
+         L1VMXucsVKKJhzcj0i7Mi/DrmHB78UZ9JVE+OGdyuInE474Tu3KF5VA3O8PaX7Hqq8
+         EmehPbpWFGyHpvLOOoRZhgQmFdZPeiCEk4eqcTMrx7/Tj/FNsQEICY4kKzlXp/H91c
+         yU/06lKGdyFkDF9YlPTi3xCkMehPi73O1kmPCk1nG8uGpdhh1XnCRgrOxpbFcJvNhC
+         bej463KEgL1IQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Michael Ellerman <patch-notifications@ellerman.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+In-Reply-To: <164674125384.3322453.12551849351633372798.b4-ty@ellerman.id.au>
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+ <164674125384.3322453.12551849351633372798.b4-ty@ellerman.id.au>
+Date:   Wed, 09 Mar 2022 12:37:14 +1100
+Message-ID: <87r17bnbxx.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <1646727529-11774-1-git-send-email-wanpengli@tencent.com> <6e57aad6-1322-8a3d-6dfa-ff010a61a9a9@redhat.com>
-In-Reply-To: <6e57aad6-1322-8a3d-6dfa-ff010a61a9a9@redhat.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Wed, 9 Mar 2022 09:36:50 +0800
-Message-ID: <CANRm+Cw9m81HQN-kFYSiaoXOaaJHEQS77D-wwVv=hzmkOLpZ7g@mail.gmail.com>
-Subject: Re: [PATCH] x86/kvm: Don't waste kvmclock memory if there is nopv parameter
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 at 20:13, Paolo Bonzini <pbonzini@redhat.com> wrote:
+Michael Ellerman <patch-notifications@ellerman.id.au> writes:
+> On Tue, 15 Feb 2022 13:40:55 +0100, Christophe Leroy wrote:
+>> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+>> on those three architectures because LKDTM messes up function
+>> descriptors with functions.
+>> 
+>> This series does some cleanup in the three architectures and
+>> refactors function descriptors so that it can then easily use it
+>> in a generic way in LKDTM.
+>> 
+>> [...]
 >
-> On 3/8/22 09:18, Wanpeng Li wrote:
-> > From: Wanpeng Li <wanpengli@tencent.com>
-> >
-> > When the "nopv" command line parameter is used, it should not waste
-> > memory for kvmclock.
-> >
-> > Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> > ---
-> >   arch/x86/kernel/kvmclock.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
-> > index c5caa73..16333ba 100644
-> > --- a/arch/x86/kernel/kvmclock.c
-> > +++ b/arch/x86/kernel/kvmclock.c
-> > @@ -239,7 +239,7 @@ static void __init kvmclock_init_mem(void)
-> >
-> >   static int __init kvm_setup_vsyscall_timeinfo(void)
-> >   {
-> > -     if (!kvm_para_available() || !kvmclock)
-> > +     if (!kvm_para_available() || !kvmclock || nopv)
-> >               return 0;
-> >
-> >       kvmclock_init_mem();
->
-> Perhaps instead !kvm_para_available() && nopv should clear the kvmclock
-> variable?
+> Applied to powerpc/next.
 
-Do you mean if (!kvm_para_available() && nopv) return 0? I
-misunderstand why they are the same. :)
+I also have it in an rc2-based topic branch if there are any merge
+conflicts that people want to resolve, I don't see any in linux-next at
+the moment though.
 
-    Wanpeng
+https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/func-desc-lkdtm
+
+cheers

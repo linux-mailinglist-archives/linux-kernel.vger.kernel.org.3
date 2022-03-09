@@ -2,190 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F08C4D27E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959264D27F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiCIEjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        id S229505AbiCIErm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 23:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCIEjA (ORCPT
+        with ESMTP id S229480AbiCIErk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:39:00 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B35AA41;
-        Tue,  8 Mar 2022 20:38:01 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2294bqpv118071;
-        Tue, 8 Mar 2022 22:37:52 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1646800672;
-        bh=WGbku9FUkxZtK/LL7SBY1MK//mVyianmQOGT9iKKMuI=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=rHJpyuhC3g2VBKvgRHkBuQZ/z7ElJq0HHBpvbMs39cMZGwaozC0w5fLbwIyrEbUmP
-         +MZWb4vx6ly5jJQojtOQwJp8uITCdXO4sA6kycPt2YM1DTJtXoj/dXR6ch/6DPveI+
-         Ouz4lAJpCdxjf7iMFRS/BUgHwjuIG6BFkhDk3mH0=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2294bqXF041740
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Mar 2022 22:37:52 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 8
- Mar 2022 22:37:52 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 8 Mar 2022 22:37:52 -0600
-Received: from [10.250.233.186] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2294bmIh017591;
-        Tue, 8 Mar 2022 22:37:49 -0600
-Subject: Re: [PATCH v2] PCI: endpoint: Use blocking notifier instead of atomic
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <lorenzo.pieralisi@arm.com>, Vidya Sagar <vidyas@nvidia.com>,
-        <kw@linux.com>, <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
-        <dmitry.baryshkov@linaro.org>
-References: <20220228055240.24774-1-manivannan.sadhasivam@linaro.org>
- <e151083b-c15a-7baa-3423-84bd1881105a@ti.com>
- <20220228062830.GA37219@thinkpad>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <a66ccea3-b854-75d7-dc3d-6c9bb2057a0d@ti.com>
-Date:   Wed, 9 Mar 2022 10:07:47 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 8 Mar 2022 23:47:40 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F14ECC60
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:46:41 -0800 (PST)
+Date:   Tue, 8 Mar 2022 20:46:33 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1646801200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pwPV72PK1nbe959AqXG9dY/mbkFvNIqcqS9VHLE0tU8=;
+        b=QtHSuJVvrFTsqhCvASuavohNw4WO/ZWGycg0/KZlAj3qVCXoZ8XMbkRahm41T0E4b7/lbs
+        utpz03UkJt10RFWA//YLsfZxseA31jqI3uM/T8MWVY+efOFjniVPBkVtZREm/S6SVrCCFk
+        TcTozsytGmI9G8rVj3Z7B14RjvBIb54=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH-mm v2] mm/list_lru: Optimize
+ memcg_reparent_list_lru_node()
+Message-ID: <YigxKUONWa4iBYvk@carbon.dhcp.thefacebook.com>
+References: <20220309011824.1454619-1-longman@redhat.com>
+ <YigNVbz/h8wzNjs/@carbon.dhcp.thefacebook.com>
+ <54ea34a9-e261-3521-ce11-efc59c9a803c@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220228062830.GA37219@thinkpad>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54ea34a9-e261-3521-ce11-efc59c9a803c@redhat.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mani,
+On Tue, Mar 08, 2022 at 10:12:48PM -0500, Waiman Long wrote:
+> On 3/8/22 21:13, Roman Gushchin wrote:
+> > On Tue, Mar 08, 2022 at 08:18:24PM -0500, Waiman Long wrote:
+> > > Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
+> > > to be race free"), we are tracking the total number of lru
+> > > entries in a list_lru_node in its nr_items field.  In the case of
+> > > memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
+> > > is 0.  We don't even need to take the nlru->lock as no new lru entry
+> > > could be added by a racing list_lru_add() to the draining src_idx memcg
+> > > at this point.
+> > > 
+> > > Signed-off-by: Waiman Long <longman@redhat.com>
+> > > ---
+> > >   mm/list_lru.c | 6 ++++++
+> > >   1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/mm/list_lru.c b/mm/list_lru.c
+> > > index ba76428ceece..c669d87001a6 100644
+> > > --- a/mm/list_lru.c
+> > > +++ b/mm/list_lru.c
+> > > @@ -394,6 +394,12 @@ static void memcg_reparent_list_lru_node(struct list_lru *lru, int nid,
+> > >   	int dst_idx = dst_memcg->kmemcg_id;
+> > >   	struct list_lru_one *src, *dst;
+> > > +	/*
+> > > +	 * If there is no lru entry in this nlru, we can skip it immediately.
+> > > +	 */
+> > > +	if (!READ_ONCE(nlru->nr_items))
+> > > +		return;
+> > This is a per-node counter, not a per-memcg, right?
+> Right. list_lru_node is a per-node structure inside list_lru.
+> > If so, do we optimize for the case when all lru items belong to one node and
+> > others are empty?
+> 
+> That is actually the case that I am trying to optimize for.
+> 
+> If a system has many containers. It is also likely each container may mount
+> one or more container specific filesystems. Since a container likely use
+> just a few cpus, it is highly that only the list_lru_node that contains
+> those cpus will be utilized while the rests may be empty.
+> 
+> I got the idea of doing this patch when I was looking at a crash dump
+> related to the list_lru code. That particular crash dump has more than 13k
+> list_lru's and thousands of mount points. I had notice even if nr_items of a
+> list_lru_node is 0, it still tries to transfer lru entries from source idx
+> to dest idx. Without doing an lock/unlock and loading a cacheline from the
+> memcg_lrus, it can save some time. That can be substantial saving if we are
+> talking about thousands of list_lru's.
 
-On 28/02/22 11:58 am, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> On Mon, Feb 28, 2022 at 11:46:52AM +0530, Kishon Vijay Abraham I wrote:
->> Hi Manivannan,
->>
->> On 28/02/22 11:22 am, Manivannan Sadhasivam wrote:
->>> The use of atomic notifier causes sleeping in atomic context bug when
->>> the EPC core functions are used in the notifier chain. This is due to the
->>> use of epc->lock (mutex) in core functions protecting the concurrent use of
->>> EPC.
->>
->> The notification from the controller to the function driver is used for
->> propagating interrupts to function driver and should be in interrupt context.
->> How it should be handled maybe left to the function driver. I don't prefer
->> moving everything to blocking notifier.
->>
-> 
-> I agree that we need to handle it quick enough but I don't see any other valid
-> options to get rid of the issue. EPF driver may use a non-atomic notifier but
-> that seems to be an overkill workaround for something that could be fixed in the
-> EPC core.
-> 
-> And propagating interrupts is not going to work or needed all the time. Do you
-> forsee any issue with blocking notifier?
+Cool! Makes total sense to me. Thanks for the explanation!
+Would you mind to add this text to the commit log?
 
-I think any interrupt to the EP should be delivered to the function driver in
-interrupt context, it could be function level reset interrupt, hot reset
-interrupt, link state interrupt etc., These are right now not supported but it
-will use the same notification mechanism to propagate interrupt from controller
-driver to function driver.
+Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Thanks,
-Kishon
-
-> 
->> I'm wondering how other users for CORE_INIT didn't see this issue.
-> 
-> This can be triggered with EPF test or NTB if CONFIG_DEBUG_ATOMIC_SLEEP is
-> enabled.
-> 
-> Thanks,
-> Mani
-> 
->>
->> Thanks,
->> Kishon
->>
->>>
->>> So switch to blocking notifier for getting rid of the bug as it runs in
->>> non-atomic context and allows sleeping in notifier chain.
->>>
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> ---
->>>
->>> Changes in v2:
->>>
->>> * Removed the changes related to non-upstreamed patches
->>>
->>>  drivers/pci/endpoint/pci-epc-core.c | 6 +++---
->>>  include/linux/pci-epc.h             | 4 ++--
->>>  2 files changed, 5 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
->>> index 3bc9273d0a08..c4347f472618 100644
->>> --- a/drivers/pci/endpoint/pci-epc-core.c
->>> +++ b/drivers/pci/endpoint/pci-epc-core.c
->>> @@ -693,7 +693,7 @@ void pci_epc_linkup(struct pci_epc *epc)
->>>  	if (!epc || IS_ERR(epc))
->>>  		return;
->>>  
->>> -	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
->>> +	blocking_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
->>>  }
->>>  EXPORT_SYMBOL_GPL(pci_epc_linkup);
->>>  
->>> @@ -710,7 +710,7 @@ void pci_epc_init_notify(struct pci_epc *epc)
->>>  	if (!epc || IS_ERR(epc))
->>>  		return;
->>>  
->>> -	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
->>> +	blocking_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
->>>  }
->>>  EXPORT_SYMBOL_GPL(pci_epc_init_notify);
->>>  
->>> @@ -774,7 +774,7 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
->>>  
->>>  	mutex_init(&epc->lock);
->>>  	INIT_LIST_HEAD(&epc->pci_epf);
->>> -	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
->>> +	BLOCKING_INIT_NOTIFIER_HEAD(&epc->notifier);
->>>  
->>>  	device_initialize(&epc->dev);
->>>  	epc->dev.class = pci_epc_class;
->>> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
->>> index a48778e1a4ee..04a2e74aed63 100644
->>> --- a/include/linux/pci-epc.h
->>> +++ b/include/linux/pci-epc.h
->>> @@ -149,7 +149,7 @@ struct pci_epc {
->>>  	/* mutex to protect against concurrent access of EP controller */
->>>  	struct mutex			lock;
->>>  	unsigned long			function_num_map;
->>> -	struct atomic_notifier_head	notifier;
->>> +	struct blocking_notifier_head	notifier;
->>>  };
->>>  
->>>  /**
->>> @@ -195,7 +195,7 @@ static inline void *epc_get_drvdata(struct pci_epc *epc)
->>>  static inline int
->>>  pci_epc_register_notifier(struct pci_epc *epc, struct notifier_block *nb)
->>>  {
->>> -	return atomic_notifier_chain_register(&epc->notifier, nb);
->>> +	return blocking_notifier_chain_register(&epc->notifier, nb);
->>>  }
->>>  
->>>  struct pci_epc *
->>>
+Thanks!

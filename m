@@ -2,150 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12064D39E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96F94D39E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiCITRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S237594AbiCITUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237596AbiCITRL (ORCPT
+        with ESMTP id S237632AbiCITUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:17:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A19A114FDE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:15:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646853359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8u+7tNvLmG2m1vlbYy9gZs+lrLcAJdUTzhBQfTfm8/8=;
-        b=O7t0FW80LUUT6EURtnWxl/IXgOMQHMp68fx0y/ZjEJdUXhOXIvp9QINI92BTehKQaONA5Q
-        +vkO9KW+FxwPctsdJ9+gpirjmL87jhnVs1WW0UJAU/mOadEN6XP+iKcGNF+OaLTQ53CXcg
-        +rdgpxe80NbQUp9gKkngqKsJbClcPvY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-ZEXxmVxUNCG9LOwA8h2yQg-1; Wed, 09 Mar 2022 14:15:57 -0500
-X-MC-Unique: ZEXxmVxUNCG9LOwA8h2yQg-1
-Received: by mail-wm1-f72.google.com with SMTP id m34-20020a05600c3b2200b0038115c73361so1136792wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:15:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=8u+7tNvLmG2m1vlbYy9gZs+lrLcAJdUTzhBQfTfm8/8=;
-        b=Bftuc6sJC8xL5ITAg5cj1GaedR1tvGW1lAAVKNQJeBkh7Xuy/D7Ds6B/hUHdyOcN0K
-         ZZdeDWVSnOBKLCRF2VOtyZJP3fwLnQ02s3MWJdT/PsvZwQERxBHVGM1inrGA0oMtxDiL
-         WZWuom8Q9NjLe1D/wlanOfHz2N8wUg74vWjbLKCiltUF3LYYQaubEYSKQk71Vej/0XMj
-         P7+s54AKesyCkr+PCWaf2zC2+5w1h83i9h121JplOUqDU+NJowq+t8gzYYsRbJuYQ9vd
-         vbORB+r2uMurnDFjqd90M/a5k+9cQZ7/e3lrTMIYcKhdPy7X+LO+wZJl8jqodsZWXpAS
-         bBrA==
-X-Gm-Message-State: AOAM532Xw8Px3LYZcMmBsLosjsSUK9bXG+UbJ+COev+AkbhWBcvUxJwT
-        nQ8+wRopbvIm23bubepmU8krO3phGVeYd6omCNq/uIy/gF95xuZjzNbJBByCTlq9ci8eaJy34Y2
-        bLWHso1jU4zUUdqd6jzfb0zDo
-X-Received: by 2002:a5d:59a2:0:b0:1f1:f3af:a069 with SMTP id p2-20020a5d59a2000000b001f1f3afa069mr845949wrr.581.1646853356489;
-        Wed, 09 Mar 2022 11:15:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxcP9keRv3UQ3cTcwHG1pYQLWUkqChIRH1t4JepaQN83RkcZ7XWUgDLb5f6ntlqfCFWdEszAA==
-X-Received: by 2002:a5d:59a2:0:b0:1f1:f3af:a069 with SMTP id p2-20020a5d59a2000000b001f1f3afa069mr845925wrr.581.1646853356230;
-        Wed, 09 Mar 2022 11:15:56 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:6300:8418:c653:d01f:3bd2? (p200300cbc70763008418c653d01f3bd2.dip0.t-ipconnect.de. [2003:cb:c707:6300:8418:c653:d01f:3bd2])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05600c3b9100b00389d6331f93sm1085737wms.3.2022.03.09.11.15.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 11:15:55 -0800 (PST)
-Message-ID: <a01de28c-2195-eab3-fd3c-0e8ad3f58040@redhat.com>
-Date:   Wed, 9 Mar 2022 20:15:54 +0100
+        Wed, 9 Mar 2022 14:20:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3D4114FC4;
+        Wed,  9 Mar 2022 11:19:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7700DB82396;
+        Wed,  9 Mar 2022 19:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FE1C340E8;
+        Wed,  9 Mar 2022 19:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646853551;
+        bh=mZ0YOFOw30QUQWww8HEgcbPZ7ISUs/jOLiEzn+8383E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jYYWjfr7qHblMTfR0x3UegRLIdjcsCfTQN4OejzagH6Yfbo3B3Zo2vNiDSO7dCFbh
+         6eUgwXUcTXPWszRSF9FhQGqPRlOMms/v6yPVCxsOLOu5Mr4xYtNlnAXJC9TwfKjv8f
+         HzDDXmaqMTPCW321oAC2T6cYAVTWoNY7fzDzRZZzgmvLKl9of+ODytuREB9LrYYoYr
+         ADbd7m1FqnZKrRhoI3xudSm3bEkbpJRDQ2uJN9DjDgsrsMO46wxYdAl2Ye6xx+XWQY
+         az03UbI6T6si1J8pHOKey6tnwq8clOy/pJcSU9dEY+grd7ROciynKK9h6gPAIE4IOb
+         XIrTSJSKh9JRA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH] arm64: Do not include __READ_ONCE() block in assembly files
+Date:   Wed,  9 Mar 2022 12:16:34 -0700
+Message-Id: <20220309191633.2307110-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/9] mm: slightly clarify KSM logic in do_swap_page()
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Linux MM <linux-mm@kvack.org>
-References: <20220131162940.210846-1-david@redhat.com>
- <20220131162940.210846-4-david@redhat.com>
- <CAHbLzkpoNeSPyzGV9arXK7BrVWpERy0yGRggn1ZaRam8RrHyRQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAHbLzkpoNeSPyzGV9arXK7BrVWpERy0yGRggn1ZaRam8RrHyRQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.03.22 19:48, Yang Shi wrote:
-> On Mon, Jan 31, 2022 at 8:33 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> Let's make it clearer that KSM might only have to copy a page
->> in case we have a page in the swapcache, not if we allocated a fresh
->> page and bypassed the swapcache. While at it, add a comment why this is
->> usually necessary and merge the two swapcache conditions.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>  mm/memory.c | 38 +++++++++++++++++++++++---------------
->>  1 file changed, 23 insertions(+), 15 deletions(-)
->>
->> diff --git a/mm/memory.c b/mm/memory.c
->> index 923165b4c27e..3c91294cca98 100644
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -3615,21 +3615,29 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->>                 goto out_release;
->>         }
->>
->> -       /*
->> -        * Make sure try_to_free_swap or reuse_swap_page or swapoff did not
-> 
-> We could remove the reference to "reuse_swap_page", right?
->
-Yes, I noticed this a couple of days ago as well and already have a
-patch prepared for that ("mm: adjust stale comment in do_swap_page()
-mentioning reuse_swap_page()" at
-https://github.com/davidhildenbrand/linux/commits/cow_fixes_part_3)
+When building arm64 defconfig + CONFIG_LTO_CLANG_{FULL,THIN}=y after
+commit 558c303c9734 ("arm64: Mitigate spectre style branch history side
+channels"), the following error occurs:
 
-If Andrew wants, we can fix that up directly before sending upstream or
-I'll simply include that patch when sending out part2 v2.
+  <instantiation>:4:2: error: invalid fixup for movz/movk instruction
+   mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
+   ^
 
-(I want to avoid sending another series just for this)
+Marc figured out that moving "#include <linux/init.h>" in
+include/linux/arm-smccc.h into a !__ASSEMBLY__ block resolves it. The
+full include chain with CONFIG_LTO=y from include/linux/arm-smccc.h:
 
-Thanks!
+include/linux/init.h
+include/linux/compiler.h
+arch/arm64/include/asm/rwonce.h
+arch/arm64/include/asm/alternative-macros.h
+arch/arm64/include/asm/assembler.h
 
+The asm/alternative-macros.h include in asm/rwonce.h only happens when
+CONFIG_LTO is set, which ultimately casues asm/assembler.h to be
+included before the definition of ARM_SMCCC_ARCH_WORKAROUND_3. As a
+result, the preprocessor does not expand ARM_SMCCC_ARCH_WORKAROUND_3 in
+__mitigate_spectre_bhb_fw, which results in the error above.
+
+Avoid this problem by just avoiding the CONFIG_LTO=y __READ_ONCE() block
+in asm/rwonce.h with assembly files, as nothing in that block is useful
+to assembly files, which allows ARM_SMCCC_ARCH_WORKAROUND_3 to be
+properly expanded with CONFIG_LTO=y builds.
+
+Cc: stable@vger.kernel.org
+Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
+Link: https://lore.kernel.org/r/20220309155716.3988480-1-maz@kernel.org/
+Reported-by: Marc Zyngier <maz@kernel.org>
+Acked-by: James Morse <james.morse@arm.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+This is based on current mainline; if it should be based on a specific
+arm64 branch, please let me know.
+
+As 558c303c9734 is going to stable, I marked this for stable as well to
+avoid breaking Android. I used e35123d83ee3 for the fixes tag to make it
+clear to the stable team this should only go where that commit is
+present. If a different fixes tag should be used, please feel free to
+substitute.
+
+ arch/arm64/include/asm/rwonce.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+index 1bce62fa908a..56f7b1d4d54b 100644
+--- a/arch/arm64/include/asm/rwonce.h
++++ b/arch/arm64/include/asm/rwonce.h
+@@ -5,7 +5,7 @@
+ #ifndef __ASM_RWONCE_H
+ #define __ASM_RWONCE_H
+ 
+-#ifdef CONFIG_LTO
++#if defined(CONFIG_LTO) && !defined(__ASSEMBLY__)
+ 
+ #include <linux/compiler_types.h>
+ #include <asm/alternative-macros.h>
+@@ -66,7 +66,7 @@
+ })
+ 
+ #endif	/* !BUILD_VDSO */
+-#endif	/* CONFIG_LTO */
++#endif	/* CONFIG_LTO && !__ASSEMBLY__ */
+ 
+ #include <asm-generic/rwonce.h>
+ 
+
+base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 

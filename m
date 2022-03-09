@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161944D2DA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E501A4D2DA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiCILKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S231858AbiCILJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiCILKE (ORCPT
+        with ESMTP id S230061AbiCILJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:10:04 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98424125C9F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646824146; x=1678360146;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Eo9nlWOx53qpkkW31pjZzB7mIGz1Skew6VqvHY4/bCE=;
-  b=Q15VrMHhoZn41t5jQRh4Bnygod4eSnwFM02VwhOGpMqY0wsSxatorIiv
-   9sJ0pPTrCsTBas/X4bS2cHQMBnWue+cg4AbvF1VnRfKGffzzFFlVy1IFU
-   GBT9fzpqI9R3BC4MoqbXHing51o9aQFifNrK6ShGMjpsouNDAQAu15tHy
-   Zc9Qs0REp1+6dEvJRo5oKGV9GGhKtEeF4hCh6P6YJaK7Rx9BaSJq/GOtL
-   ledOuK2f+40vxWeaYIY067PUdm5D4IsrdPFILxpd4NlMXFFGPcGHd0UJp
-   CehI2uXKmF2CvKfxymlqwLSgTdR/oEOZL9osnzHRcpSnBd3WCh7srGHhV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="341379429"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="341379429"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 03:09:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="547590288"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Mar 2022 03:09:05 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRuBk-000391-LY; Wed, 09 Mar 2022 11:09:04 +0000
-Date:   Wed, 9 Mar 2022 19:08:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Liu Yi L <yi.l.liu@intel.com>
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc6 37/40] undefined reference to
- `iommufd_vfio_check_extension'
-Message-ID: <202203091936.QAP99zL8-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 9 Mar 2022 06:09:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B79122F7D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:08:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B88EB818A3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:08:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E4E6C340EE;
+        Wed,  9 Mar 2022 11:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646824124;
+        bh=ng2JSDbQw7mvfS7zfNM8AQVtCJQU3H0RSVnFT4FnpDM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K2jEH4bh2vxbHrxPVJUWy/9k2eCqWR1ut5JQVxeJjxbCxw1J9BGLU8fOS3Wc5V/Pr
+         jp54rb/MHHznLOp7BelHI2V05JY0u3pQS6v9j1gX40zpW6JAUbTuyV30YXRoxWXQEV
+         i3mJhbZ5XYlElaSVUtu7WyfPLh+sixwP0iijl0IZYadBv8Y6G/buogCRl8YBTO9QPI
+         6a1GIXBHCigwaRPXbCct95MvJo7A4Fd2qAxH6TZdKgg++ZHhQVlvf8i2HQ49msvEGJ
+         b7qsScHwj0aRfv4alYkTU7Jzjq9UvWtPoRdc76RoyJYqqjQp6+7VE4QXhjc8LF1i4H
+         mGXwqS+YveEaQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRuBN-00DIUz-Tp; Wed, 09 Mar 2022 11:08:42 +0000
+Date:   Wed, 09 Mar 2022 11:08:41 +0000
+Message-ID: <87v8wnz8li.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, f.hetzelt@tu-berlin.de,
+        david.kaplan@amd.com, konrad.wilk@oracle.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>, keirf@google.com
+Subject: Re: [PATCH V3 04/10] virtio_pci: harden MSI-X interrupts
+In-Reply-To: <20220308113119-mutt-send-email-mst@kernel.org>
+References: <20211019070152.8236-1-jasowang@redhat.com>
+        <20211019070152.8236-5-jasowang@redhat.com>
+        <87y21kzd3f.wl-maz@kernel.org>
+        <20220308113119-mutt-send-email-mst@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mst@redhat.com, tglx@linutronix.de, jasowang@redhat.com, virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org, f.hetzelt@tu-berlin.de, david.kaplan@amd.com, konrad.wilk@oracle.com, peterz@infradead.org, paulmck@kernel.org, keirf@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,34 +73,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc6
-head:   cde3fc107eb3877b1055b6c5cd048c18d6f5b8d5
-commit: a3f133279ae994c62f5a14dbcd334564651484c8 [37/40] vfio: Add iommufd VFIO compat support to group_fd
-config: microblaze-randconfig-m031-20220308 (https://download.01.org/0day-ci/archive/20220309/202203091936.QAP99zL8-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/a3f133279ae994c62f5a14dbcd334564651484c8
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc6
-        git checkout a3f133279ae994c62f5a14dbcd334564651484c8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
+On Tue, 08 Mar 2022 16:35:52 +0000,
+"Michael S. Tsirkin" <mst@redhat.com> wrote:
+> 
+> On Tue, Mar 08, 2022 at 03:19:16PM +0000, Marc Zyngier wrote:
+> > On Tue, 19 Oct 2021 08:01:46 +0100,
+> > Jason Wang <jasowang@redhat.com> wrote:
+> > > 
+> > > We used to synchronize pending MSI-X irq handlers via
+> > > synchronize_irq(), this may not work for the untrusted device which
+> > > may keep sending interrupts after reset which may lead unexpected
+> > > results. Similarly, we should not enable MSI-X interrupt until the
+> > > device is ready. So this patch fixes those two issues by:
+> > > 
+> > > 1) switching to use disable_irq() to prevent the virtio interrupt
+> > >    handlers to be called after the device is reset.
+> > > 2) using IRQF_NO_AUTOEN and enable the MSI-X irq during .ready()
+> > > 
+> > > This can make sure the virtio interrupt handler won't be called before
+> > > virtio_device_ready() and after reset.
+> > > 
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > Cc: Paul E. McKenney <paulmck@kernel.org>
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > ---
+> > >  drivers/virtio/virtio_pci_common.c | 27 +++++++++++++++++++++------
+> > >  drivers/virtio/virtio_pci_common.h |  6 ++++--
+> > >  drivers/virtio/virtio_pci_legacy.c |  5 +++--
+> > >  drivers/virtio/virtio_pci_modern.c |  6 ++++--
+> > >  4 files changed, 32 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+> > > index b35bb2d57f62..8d8f83aca721 100644
+> > > --- a/drivers/virtio/virtio_pci_common.c
+> > > +++ b/drivers/virtio/virtio_pci_common.c
+> > > @@ -24,8 +24,8 @@ MODULE_PARM_DESC(force_legacy,
+> > >  		 "Force legacy mode for transitional virtio 1 devices");
+> > >  #endif
+> > >  
+> > > -/* wait for pending irq handlers */
+> > > -void vp_synchronize_vectors(struct virtio_device *vdev)
+> > > +/* disable irq handlers */
+> > > +void vp_disable_cbs(struct virtio_device *vdev)
+> > >  {
+> > >  	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+> > >  	int i;
+> > > @@ -34,7 +34,20 @@ void vp_synchronize_vectors(struct virtio_device *vdev)
+> > >  		synchronize_irq(vp_dev->pci_dev->irq);
+> > >  
+> > >  	for (i = 0; i < vp_dev->msix_vectors; ++i)
+> > > -		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> > > +		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> > > +}
+> > > +
+> > > +/* enable irq handlers */
+> > > +void vp_enable_cbs(struct virtio_device *vdev)
+> > > +{
+> > > +	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+> > > +	int i;
+> > > +
+> > > +	if (vp_dev->intx_enabled)
+> > > +		return;
+> > > +
+> > > +	for (i = 0; i < vp_dev->msix_vectors; ++i)
+> > > +		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> > 
+> > This results in a splat at boot time if you set maxcpus=<whatever>,
+> > see below. Enabling interrupts that are affinity managed is *bad*. You
+> > don't even know whether the CPU which is supposed to handle this is
+> > online or not.
+> > 
+> > The core kernel notices it, shouts and keeps the interrupt disabled,
+> > but this should be fixed. The whole point of managed interrupts is to
+> > let them be dealt with outside of the drivers, and tied into the CPUs
+> > being brought up and down. If virtio needs (for one reason or another)
+> > to manage interrupts on its own, so be it. But this patch isn't the
+> > way to do it, I'm afraid.
+> > 
+> > 	M.
+> 
+> Thanks for reporting this!
+> 
+> What virtio is doing here isn't unique however.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Then it is even worse than I though. Can you point me to the other
+drivers doing such thing?
 
-All errors (new ones prefixed by >>):
+> If device driver is to be hardened against device sending interrupts
+> while driver is initializing/cleaning up, it needs kernel to provide
+> capability to disable these.
+>
+> If we then declare that that is impossible for managed interrupts
+> then that will mean most devices can't use managed interrupts
+> because ideally we'd have all drivers hardened.
 
-   microblaze-linux-ld: drivers/vfio/vfio.o: in function `vfio_external_check_extension':
->> (.text+0x14dc): undefined reference to `iommufd_vfio_check_extension'
-   microblaze-linux-ld: drivers/vfio/vfio.o: in function `__vfio_group_unset_container':
->> (.text+0x1554): undefined reference to `vfio_group_unset_iommufd'
-   microblaze-linux-ld: drivers/vfio/vfio.o: in function `vfio_group_set_container':
->> (.text+0x1d50): undefined reference to `vfio_group_set_iommufd'
+What I find odd is that you want to do the interrupt hardening in the
+individual endpoint drivers. This makes everything complicated, and
+just doesn't scale.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The natural place for this sort of checks would be in the interrupt
+controller driver, which has all the state as its disposal, and is
+guaranteed to be able to take the right course of action if it sees
+something that contradicts its internal state tracking (affinity,
+masking, interrupt life cycle in general).
+
+Because even if you were allowed to mess with the enable state, this
+doesn't give you any guarantee that the interrupt is delivered on the
+correct CPU either.
+
+> Thomas I think you were the one who suggested enabling/disabling
+> interrupts originally - thoughts?
+> 
+> Feedback appreciated.
+
+Feedback given.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEFC4D2786
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6D34D2672
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiCIBUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S230194AbiCIBYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiCIBUl (ORCPT
+        with ESMTP id S231150AbiCIBY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:20:41 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D044A1409F9
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:14:25 -0800 (PST)
+        Tue, 8 Mar 2022 20:24:26 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B3F3A1A8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646788465; x=1678324465;
+  t=1646788981; x=1678324981;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oE02vI4yneAw15d53fN+S9tmER+pyOaZpag7Z2NIsfk=;
-  b=PbfDpeO/KhFym1Kf293DvFgKFUrFuLzJgQHFQ+weubQFGcTgRCmtyKyn
-   eZBe99nin94p27zZ0WmoZDJBxqsiC+05YthsDjieZvbcHNqgnUNwfhsgN
-   btOeNXlbt35QVyuCYD+cjbFWd96YN2OKGoyQcB2C4uUWAeqV+YJ0gGdNp
-   SftnubO+0ySDwrNVCGL0YyYZxSVtQWLS+xsYROGF982xwjVyZEV+i3fh6
-   CReP1IOCgBhFuejUrYZPXjIXJN8y8GkALXIVub5RsXauq/Thm8i7p9w/N
-   wOA6uoIlQbbHPIMbhvfpxarjUEcPgywX7ph4In2Z75zJ9NRz8PQUgyRTR
+  bh=xtRs6oi+J5auIPKJEANNMf/Y0ox4XmKqILRhR300NLg=;
+  b=TR5VvBvol+FCRVEehNeXGpNpbRiYwhcNMrqIFwsRHaQ0KMVklPsys7jB
+   va39S5qZ/nnqiv+H/aL9eqSy08L0T4EoHJrMwXZ3QaX2ivWIGZ+aWF/Rz
+   yTRWSDErgXB4LT62hlXdC31E8AMI/OeuhAGEVtYZxerv2HeGOFf8y6BUw
+   3M+rVbYerCICE+XOeFHDY6Rirky1lNt4HfYOAcxxhr9HL5TRuMVMi2fvw
+   KS79qZTCBvDTfSodgGC8Y8y3h6EXkK/VuDvTUZU/M5SHp8C+k7r2vEBnR
+   Ul6I7OrNmQlbp1Ep1XynVECcXSFoqYUWBj/By3xQZOTIFmsgxyctCb4gF
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="341286923"
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253686606"
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="341286923"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:12:48 -0800
+   d="scan'208";a="253686606"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:12:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="711754590"
+   d="scan'208";a="495664617"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2022 17:12:45 -0800
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 17:12:45 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nRksf-0002IZ-19; Wed, 09 Mar 2022 01:12:45 +0000
-Date:   Wed, 9 Mar 2022 09:12:32 +0800
+        id 1nRksf-0002Ic-1d; Wed, 09 Mar 2022 01:12:45 +0000
+Date:   Wed, 9 Mar 2022 09:12:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Liam Mark <lmark@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Laura Abbott <lauraa@codeaurora.org>,
-        Patrick Daly <pdaly@codeaurora.org>,
-        Mark Salyzyn <salyzyn@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 552/9999] arch/xtensa/kernel/pci-dma.c:205:17: error: too few arguments to
- function 'dma_common_free_remap'
-Message-ID: <202203090909.9xSg55aP-lkp@intel.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [ebiederm-user-namespace:coredump-vma-snapshot-fix 1/5]
+ fs/binfmt_flat.c:121:36: error: incomplete definition of type 'struct
+ coredump_params'
+Message-ID: <202203090943.0a2uUHMd-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,77 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   3fba6c6e70994eff4dcc5be475c9d2bd3848b83d
-commit: 9257548d3c05e6fe98399729a796a23d801e027e [552/9999] ANDROID: GKI: dma-mapping: Add dma_remap functions
-config: xtensa-buildonly-randconfig-r001-20220307 (https://download.01.org/0day-ci/archive/20220309/202203090909.9xSg55aP-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git coredump-vma-snapshot-fix
+head:   390031c942116d4733310f0684beb8db19885fe6
+commit: a99a3e2efaf1f4454eb5c9176f47e66de075b134 [1/5] coredump: Move definition of struct coredump_params into coredump.h
+config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20220309/202203090943.0a2uUHMd-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a2e9c68fcd4425fbce7380746e916966f00a39a0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/9257548d3c05e6fe98399729a796a23d801e027e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 9257548d3c05e6fe98399729a796a23d801e027e
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=a99a3e2efaf1f4454eb5c9176f47e66de075b134
+        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
+        git fetch --no-tags ebiederm-user-namespace coredump-vma-snapshot-fix
+        git checkout a99a3e2efaf1f4454eb5c9176f47e66de075b134
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from include/linux/ioport.h:13,
-                    from include/linux/device.h:15,
-                    from include/linux/dma-contiguous.h:56,
-                    from arch/xtensa/kernel/pci-dma.c:18:
-   include/linux/dma-mapping.h: In function 'dma_map_resource':
-   arch/xtensa/include/asm/page.h:182:16: warning: comparison of unsigned expression in '>= 0' is always true [-Wtype-limits]
-     182 |         ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
-         |                ^~
-   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/dma-mapping.h:339:9: note: in expansion of macro 'BUG_ON'
-     339 |         BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
-         |         ^~~~~~
-   include/linux/dma-mapping.h:339:16: note: in expansion of macro 'pfn_valid'
-     339 |         BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
-         |                ^~~~~~~~~
-   arch/xtensa/kernel/pci-dma.c: In function 'arch_dma_free':
->> arch/xtensa/kernel/pci-dma.c:205:17: error: too few arguments to function 'dma_common_free_remap'
-     205 |                 dma_common_free_remap(vaddr, size, VM_MAP);
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/dma-noncoherent.h:5,
-                    from arch/xtensa/kernel/pci-dma.c:19:
-   include/linux/dma-mapping.h:467:6: note: declared here
-     467 | void dma_common_free_remap(void *cpu_addr, size_t size, unsigned long vm_flags,
-         |      ^~~~~~~~~~~~~~~~~~~~~
+>> fs/binfmt_flat.c:121:36: error: incomplete definition of type 'struct coredump_params'
+                   current->comm, current->pid, cprm->siginfo->si_signo);
+                                                ~~~~^
+   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                              ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   include/linux/binfmts.h:11:8: note: forward declaration of 'struct coredump_params'
+   struct coredump_params;
+          ^
+   1 error generated.
 
 
-vim +/dma_common_free_remap +205 arch/xtensa/kernel/pci-dma.c
+vim +121 fs/binfmt_flat.c
 
-5a0015d62668e64 Chris Zankel        2005-06-23  192  
-3f2bbf443e21584 Christoph Hellwig   2018-06-19  193  void arch_dma_free(struct device *dev, size_t size, void *vaddr,
-00085f1efa387a8 Krzysztof Kozlowski 2016-08-03  194  		dma_addr_t dma_handle, unsigned long attrs)
-5a0015d62668e64 Chris Zankel        2005-06-23  195  {
-9d2ffe5c62554f2 Max Filippov        2016-04-25  196  	unsigned long count = PAGE_ALIGN(size) >> PAGE_SHIFT;
-6137e4166004e2e Max Filippov        2018-02-14  197  	struct page *page;
-6137e4166004e2e Max Filippov        2018-02-14  198  
-adbfa4e6f996895 Max Filippov        2018-02-14  199  	if (attrs & DMA_ATTR_NO_KERNEL_MAPPING) {
-adbfa4e6f996895 Max Filippov        2018-02-14  200  		page = vaddr;
-2cc15e802b250a1 Max Filippov        2018-07-11  201  	} else if (platform_vaddr_uncached(vaddr)) {
-2cc15e802b250a1 Max Filippov        2018-07-11  202  		page = virt_to_page(platform_vaddr_to_cached(vaddr));
-6137e4166004e2e Max Filippov        2018-02-14  203  	} else {
-6137e4166004e2e Max Filippov        2018-02-14  204  #ifdef CONFIG_MMU
-6137e4166004e2e Max Filippov        2018-02-14 @205  		dma_common_free_remap(vaddr, size, VM_MAP);
+^1da177e4c3f415 Linus Torvalds   2005-04-16  111  
+^1da177e4c3f415 Linus Torvalds   2005-04-16  112  /****************************************************************************/
+^1da177e4c3f415 Linus Torvalds   2005-04-16  113  /*
+^1da177e4c3f415 Linus Torvalds   2005-04-16  114   * Routine writes a core dump image in the current directory.
+^1da177e4c3f415 Linus Torvalds   2005-04-16  115   * Currently only a stub-function.
+^1da177e4c3f415 Linus Torvalds   2005-04-16  116   */
+^1da177e4c3f415 Linus Torvalds   2005-04-16  117  
+f6151dfea21496d Masami Hiramatsu 2009-12-17  118  static int flat_core_dump(struct coredump_params *cprm)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  119  {
+4adbb6ac4b807e2 Nicolas Pitre    2016-07-24  120  	pr_warn("Process %s:%d received signr %d and should have core dumped\n",
+13c3f50c914e6a5 Nicolas Pitre    2016-07-24 @121  		current->comm, current->pid, cprm->siginfo->si_signo);
+13c3f50c914e6a5 Nicolas Pitre    2016-07-24  122  	return 1;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  123  }
+^1da177e4c3f415 Linus Torvalds   2005-04-16  124  
 
-:::::: The code at line 205 was first introduced by commit
-:::::: 6137e4166004e2ec383ac05d5ca15831f4668806 xtensa: support DMA buffers in high memory
+:::::: The code at line 121 was first introduced by commit
+:::::: 13c3f50c914e6a51d11e1aba4a85c2223e197e13 binfmt_flat: assorted cleanups
 
-:::::: TO: Max Filippov <jcmvbkbc@gmail.com>
-:::::: CC: Max Filippov <jcmvbkbc@gmail.com>
+:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
+:::::: CC: Greg Ungerer <gerg@linux-m68k.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

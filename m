@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243D14D3071
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BDC4D3087
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiCINtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S233187AbiCINuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbiCINt2 (ORCPT
+        with ESMTP id S230288AbiCINuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:49:28 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCBA149BB6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:48:29 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so5283722pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:48:29 -0800 (PST)
+        Wed, 9 Mar 2022 08:50:15 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AD114FFFB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:49:16 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id n31-20020a05600c3b9f00b003898fc06f1eso3439890wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 05:49:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Awv2807Q48rVf5K7n4tpsQ5KWBJDVYHY3kmCWNGk/aI=;
-        b=wcsOfALNDGWwsppDVr612z56RIFdWApQ9M7wYfkJMq8/nhsKXsyw0kUUx2ytQ3ByPz
-         zxpSHo1d+oR+6+rDhvl/kyJW7BR7yQAr/q++8bz8KhQVUiUscD8mN7mE4ATjdySjvqnq
-         einFiM8EQ7zx0LK5iXHZClxZkmp13xYREyuO/zvxbFnzaxyub6tECJA89p37uOCS9WUa
-         j0bT5jMYmF+ZZRn6G/BQ02rNDkquRPi5dwKuD+O6u2EX14z1GLCiPowGsop2oYdThZIL
-         u4gd1htJyC834tEP9cAT+ZzpmcnuaD6AADdllgz/iFBuh31TRqz9TQwAuG1DUu8vor1y
-         B50w==
+        bh=hEp4/u1ISx6prQ1+5HYrYVrc6JvgAFZ71gig22l5Las=;
+        b=oLu5m4G/KWOAsm3K5P6GU7uvlI6qVJgVM/Lq6PB0Y+0LmStBo41/4SsVMuPSs/1kq1
+         GaPXXQE5GNtRHcaxunMvSTJfVlrJyvgM/L6kBN1KMPXiTE3ZoMN0p1+VaQvUmkvbZyfd
+         1+sIpKDdlmiUt3E8zKJLKX6oJiERHTjNIKiRziLCh8LaGc/ZElKyi0j+Ie5umaFL6wIL
+         6RzTPdgvieiJSWJCaAHfjcQnuXfWm6NLcfHty3F82ifA1mYCxlRAtIm6BSPlAjxHBiqK
+         WxUv33k4o3v0tYmZtf+Xs+FXozi28WBL+WUA6k4/l0rkQW5ceuqbS53j1fic5reAOa0A
+         8+jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Awv2807Q48rVf5K7n4tpsQ5KWBJDVYHY3kmCWNGk/aI=;
-        b=s7ahhuiVHI/1iMEx+4J2RBEyJZBRRWBUs49wuUUJyjdFuAl8X79j7Rd5McUMv+NZkg
-         xsFIzbIXPoo8hjlEETWnfP58bD1jjR308+KT3b25HFAcGDEq7edq6KyxuKuPyNSCSAjw
-         47TN+1UobZIrm9gg32+HIYOEUY1hNJOdARfqpk3TZJhPpusgAbWbRpn98k9XIw2gPq0y
-         gL5V0KQXvVsaznKgDJvqr9jC1NjYVMea1hwY84A8vKzHI3618ZV6gWQBMG6mto0Lh/8x
-         hrHdi8/89RkrwlA7tIEOrUsxl3/macg3W9bZOoS4OPtkU9i39AEJiEMqBqS7yY52N8w1
-         2+xg==
-X-Gm-Message-State: AOAM531qaGe8NPFW6jKb/OQBZtzpFeOflDuHW9BDS4HFm4W/luB28MBa
-        GpXVI6PFzuN3ziPYkNXfJ84B02VXGyEV0kh00TLPYQ==
-X-Google-Smtp-Source: ABdhPJxxGgkv/4ONjg/97nbBdxzNOqwNnUzRdkuGoFC3g9OqxkCMUZRKN+0ZNpfJPSVMPuq50dxWQN74mQ3jU4SqXbA=
-X-Received: by 2002:a17:90b:124c:b0:1bc:369b:7db5 with SMTP id
- gx12-20020a17090b124c00b001bc369b7db5mr10521690pjb.179.1646833709168; Wed, 09
- Mar 2022 05:48:29 -0800 (PST)
+        bh=hEp4/u1ISx6prQ1+5HYrYVrc6JvgAFZ71gig22l5Las=;
+        b=uBtijFLbvY8NY1qqEdOKvf9U6xto3zS6i+Jbw6//pH4L9RysTQNXiRHzQac3fCbt2U
+         Pqks9XzIKhn+M7B/ycIAWtKKG/7LqDzTuqPUEOv4ZJpg7mqpiv99WPVwfaj3vcyVYEVF
+         VbOCig06y2HXsDTUoyEVjbhRJtE7Txruv0NHVsTEnzecnjOSiKaXcRZHXu+R667ZCA7D
+         Vfc3DuJDp8+YhraZ78xNl1jdbdmdtZs9lmOD/pmcule+NA0TxlfZkRzdIj4qT6qQXbZH
+         KRVKpviP99Qj0SDLejjyLOsWm6fO3idXPdxnH3SmMpyhZBaNp8MpZgLQnmLqrVDbHKYo
+         iozA==
+X-Gm-Message-State: AOAM533vMzVAX03t0tbtpRzzJ6VwkiNKawPj6RkwUqTHg/VHg+XMD18q
+        MSA9UxI8XOF5myrW5dplqGXndAuS9hSIMGI9OSQDAw==
+X-Google-Smtp-Source: ABdhPJxyflo0xL3BS2EgPzN6gokR3hCnb1YBfMDLmPh1P4pSUXAbtGWXjS+Lt+8QbtGTrgoWm3KDa6PiTZHUUCt3fh0=
+X-Received: by 2002:a05:600c:1548:b0:389:cde3:35cc with SMTP id
+ f8-20020a05600c154800b00389cde335ccmr4249426wmg.133.1646833754937; Wed, 09
+ Mar 2022 05:49:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20220303201943.501746-1-trix@redhat.com> <CAKwvOdnoV_SsFuWWJd4nOOd1vGG6_-gg-KvdOg4_NHuRp7_WfA@mail.gmail.com>
- <5b6a10bd-5650-2924-d1cc-e4664a0e7255@redhat.com>
-In-Reply-To: <5b6a10bd-5650-2924-d1cc-e4664a0e7255@redhat.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 9 Mar 2022 14:48:18 +0100
-Message-ID: <CAG3jFyuBuJmr=NJROWHyEQqW9qng6KtwhJ1a9ACUEGfZ7g-Mxg@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: anx7625: check the return on anx7625_aux_trans
-To:     Tom Rix <trix@redhat.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        nathan@kernel.org, xji@analogixsemi.com, sam@ravnborg.org,
-        tzungbi@google.com, pihsun@chromium.org, maxime@cerno.tech,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, hsinyi@chromium.org
+References: <20220309113117.1126-1-mike.leach@linaro.org> <YiiUePW2DESezPLo@bogus>
+In-Reply-To: <YiiUePW2DESezPLo@bogus>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 9 Mar 2022 13:49:04 +0000
+Message-ID: <CAJ9a7VgvLF7304DLtKsDsNcq9hJo9n-Ek049KiWG1tMAT9ox3w@mail.gmail.com>
+Subject: Re: [PATCH RESEND 0/1] arm64: dts: Juno CTI device tree additions
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     liviu.dudau@arm.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        robh+dt@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -73,70 +69,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 02:45, Tom Rix <trix@redhat.com> wrote:
+Hi Sudeep,
+
+On Wed, 9 Mar 2022 at 11:50, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
->
-> On 3/8/22 2:57 PM, Nick Desaulniers wrote:
-> > On Thu, Mar 3, 2022 at 12:19 PM <trix@redhat.com> wrote:
-> >> From: Tom Rix <trix@redhat.com>
-> >>
-> >> Clang static analysis reports this issue
-> >> anx7625.c:876:13: warning: The left operand of '&' is
-> >>    a garbage value
-> >>    if (!(bcap & 0xOA01)) {
-> >>          ~~~~ ^
-> >>
-> >> bcap is only set by a successful call to
-> >> anx7625_aux_trans().  So check.
-> >>
-> >> Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
-> > Is this the correct Fixes tag?
-> yes
-> > I think it should be
+> On Wed, Mar 09, 2022 at 11:31:16AM +0000, Mike Leach wrote:
+> > This is a resend of a patch from some time ago (04/2020)[1] which seems to
+> > have fallen through the cracks - most likely as last time I mistakenly
+> > tagged it as dt-bindings: rather than dts:
 > >
-> > Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid
-> > through aux channel")
 >
-> This one changes the name of the function
+> Quite likely, but I vaguely remember this and I assume the bindings had
+> on-going discussions at that time.
 >
-> -       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
-> +       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
->
-> A return check from the earlier commit, when this block of code came
-> into existence, is when it was first needed.
->
-> Tom
->
+> > I am planning a release of additional CTI configuration examples, which
+> > include some for Juno - so this is now needed upstream to support that work.
 > >
-> > instead.
+> > Patch unchanged, other than a correction to the subject.
 > >
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> >> ---
-> >>   drivers/gpu/drm/bridge/analogix/anx7625.c | 5 ++++-
-> >>   1 file changed, 4 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> >> index 633618bafd75d..f02ac079ed2ec 100644
-> >> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> >> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> >> @@ -872,7 +872,10 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
-> >>          }
-> >>
-> >>          /* Read downstream capability */
-> >> -       anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
-> >> +       ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
-> >> +       if (ret < 0)
-> >> +               return ret;
-> >> +
-> >>          if (!(bcap & 0x01)) {
-> >>                  pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
-> >>                  return 0;
-> >> --
-> >> 2.26.3
-> >>
-> >
+>
+> That may not work. I haven't tried applying but it would be good to
+> post it rebasing on -next at this moment or after v5.18-rc1 is released.
+> I have already sent v5.18 material, so I need to queue this for v5.19.
+> So preferable post the rebase version at v5.18-rc1 in 2+ weeks time.
+> We have had some restructuring including the new scmi version of DTB
+> in the mainline or queued in -next at the moment.
 >
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+I did check it on coresight/next (5.17-rc3) and it was fine.
 
-Applied to drm-misc-next.
+However re-doing for 5.18 is no problem as anything that depends on it
+will be on there or later anyway.
+
+Will rebase and  repost when 5.18-rc1 becomes available.
+
+Thanks
+
+Mike
+
+> Sorry for missing this last time.
+>
+> > [1] https://lore.kernel.org/linux-arm-kernel/20200415201330.15894-1-mike.leach@linaro.org/
+> >
+> >
+> > Mike Leach (1):
+> >   arm64: dts: arm:  Juno - add CTI entries to device tree
+> >
+>
+> No need of the cover letter for one patch, just post the patch next time.
+>
+> --
+> Regards,
+> Sudeep
+
+
+
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

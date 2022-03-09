@@ -2,194 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092B74D27C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B244D2760
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiCIC6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 21:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S231573AbiCIDAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 22:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiCIC6a (ORCPT
+        with ESMTP id S231533AbiCIDAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 21:58:30 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 288EF3EAB6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:57:28 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxvxORFyhi1W0FAA--.123S2;
-        Wed, 09 Mar 2022 10:57:21 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: reduce tlb flush range when changing vma protection
-Date:   Tue,  8 Mar 2022 21:57:21 -0500
-Message-Id: <20220309025721.3051365-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Tue, 8 Mar 2022 22:00:01 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036D8134DE1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:59:04 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id n15so813919plh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 18:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=spacecubics-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g5MHqhyRAvMJEIygnpqs4s9C8dwI28dlr5hbuf+tGdY=;
+        b=w45iZX907cG/aaBaR/56rFZNCTIi99WnfB+0ACkYqOiNvywwJF0JgdbOQg7Z6KsLfe
+         Z8b2IizBvB0OE3LcnE+yNWFkrk7zhyHvs936KLO1kk6KR+rXPDmWHrtIIwCBkkmp0Kou
+         f4NOP7/Utuq9x75690VJOtL7Q4s9uTpYESLYsH6tBUHxf/oUQas1IcJUPnPJZ9tXwMJZ
+         n8GoQDnEn0P7Xj1vXaffjsouIqStgDoeO1p1D2aNn/18QlE3OiGes5uZzPBU6UWWDiNr
+         BZPZzzIsVgzpEpY8bmDff8kIQrc+VRAjSBbbnIZizwfrC80r0SVVotYm4tpSLVABtbvu
+         bKUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g5MHqhyRAvMJEIygnpqs4s9C8dwI28dlr5hbuf+tGdY=;
+        b=XDo5aREJnCpFKpRt41p7xqGAs+1UBOMvP7E7e0SFZI3QF9PkrqxWaWVrhDX/C0p2PO
+         xx4f9H8wB++ogYgRL/FUroSS8hISnQeebwjjKn0asTiD/vqalIxD3DH/TrHb0K0b6ilh
+         YxIlWdjiDL9LxDoNoQ7Z9STpo2y+Eyc53PIZr1IcqahxqHISNGmCtMcGCpsuNXrc1ygY
+         2ZM8D3p3ERqI5aAFlnTJF8dhB3Mvmp99XQDeYjLB8+r9PoANiXDncK/y+HMlodNDmhVn
+         dP4xb21mXTtMhdEe/cPlq6x1duzpeqtaRa9g7XEolXYbsbTu/y1F/VdQpTzSnmRCW0m5
+         Y6aA==
+X-Gm-Message-State: AOAM531/bafRaJn7geHzfyhnvzvDOQwoX3m424w/+NeOvl1ZeQ3eve5d
+        pDBpOCX93TYxHZLKbIqMfrPRhC4bIHKQu+05W+p9zg==
+X-Google-Smtp-Source: ABdhPJx6gIuB0ETKC5IdKG3N0AifUmdKV55gnSE4Xr4Buukiwf3ar64hKVfVW22ZPivJHacPqRfEJMAPvffMOT9QvXI=
+X-Received: by 2002:a17:903:2c7:b0:14f:fc47:5a2f with SMTP id
+ s7-20020a17090302c700b0014ffc475a2fmr20654160plk.112.1646794743333; Tue, 08
+ Mar 2022 18:59:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxvxORFyhi1W0FAA--.123S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZrWkZryfZr45uFWfZw17Awb_yoW7JF1UpF
-        48Ka4ktF42q3yqgF9xZrW5Z343Jw17Xa1xAa9FgasYqFn8ta43XFy3GayF9r15AFykZF9I
-        yayaqw1vkw47Z3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220307185314.11228-1-paskripkin@gmail.com> <CAMZ6RqKEALqGSh-tr_jTbQWca0wHK7t96yR3N-r625pbM4cUSw@mail.gmail.com>
+ <52da93cd-6a78-1b77-6a86-c338c7cb11e9@gmail.com>
+In-Reply-To: <52da93cd-6a78-1b77-6a86-c338c7cb11e9@gmail.com>
+From:   Yasushi SHOJI <yashi@spacecubics.com>
+Date:   Wed, 9 Mar 2022 11:58:52 +0900
+Message-ID: <CAGLTpn+p=bJUe14qpP664JMY9_xKTr5UQ3bEmpiOXFvK5S3prg@mail.gmail.com>
+Subject: Re: [PATCH RFT] can: mcba_usb: properly check endpoint type
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-numa worker will periodically change vma prot with PROT_NONE, by
-default it will scan 256M vma memory size with pmd stepping size.
-If there are fewer pages changed with PROT_NONE, tlb flush is called
-with pmd size. This patch will calculate flush range for those
-pages with pte prot changed, it will reduce size for tlb flush.
+Hi Pavel,
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- mm/mprotect.c | 39 +++++++++++++++++++++++++++++----------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+On Tue, Mar 8, 2022 at 5:06 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> On 3/8/22 03:23, Vincent MAILHOL wrote:
+> >> [PATCH RFT] can: mcba_usb: properly check endpoint type
+> > It is RFC, not RFT :)
+> > I guess you went on some manual editing. Next time, you can just let
+> > git add the tag for you by doing:
+> > | git format-patch --rfc ...
+> >
+>
+> I marked it as RFT, because I wanted someone to test it. But indeed with
+> my lack of usb knowledge it should have been RFC :)
 
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 2887644fd150..a9f51a998dc8 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -35,9 +35,23 @@
- 
- #include "internal.h"
- 
-+typedef struct {
-+	unsigned long start;
-+	unsigned long end;
-+} tlb_range;
-+
-+static inline void add_tlb_range(tlb_range *range, unsigned long start,
-+		unsigned long end)
-+{
-+	if (start < range->start)
-+		range->start = start;
-+	if (end > range->end)
-+		range->end = end;
-+}
-+
- static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 		unsigned long addr, unsigned long end, pgprot_t newprot,
--		unsigned long cp_flags)
-+		unsigned long cp_flags, tlb_range *range)
- {
- 	pte_t *pte, oldpte;
- 	spinlock_t *ptl;
-@@ -138,6 +152,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 				ptent = pte_mkwrite(ptent);
- 			}
- 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
-+			add_tlb_range(range, addr, addr + PAGE_SIZE);
- 			pages++;
- 		} else if (is_swap_pte(oldpte)) {
- 			swp_entry_t entry = pte_to_swp_entry(oldpte);
-@@ -184,6 +199,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 
- 			if (!pte_same(oldpte, newpte)) {
- 				set_pte_at(vma->vm_mm, addr, pte, newpte);
-+				add_tlb_range(range, addr, addr + PAGE_SIZE);
- 				pages++;
- 			}
- 		}
-@@ -221,7 +237,7 @@ static inline int pmd_none_or_clear_bad_unless_trans_huge(pmd_t *pmd)
- 
- static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
- 		pud_t *pud, unsigned long addr, unsigned long end,
--		pgprot_t newprot, unsigned long cp_flags)
-+		pgprot_t newprot, unsigned long cp_flags, tlb_range *tlb)
- {
- 	pmd_t *pmd;
- 	unsigned long next;
-@@ -267,6 +283,7 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
- 				if (nr_ptes) {
- 					if (nr_ptes == HPAGE_PMD_NR) {
- 						pages += HPAGE_PMD_NR;
-+						add_tlb_range(tlb, addr, next);
- 						nr_huge_updates++;
- 					}
- 
-@@ -277,7 +294,7 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
- 			/* fall through, the trans huge pmd just split */
- 		}
- 		this_pages = change_pte_range(vma, pmd, addr, next, newprot,
--					      cp_flags);
-+					      cp_flags, tlb);
- 		pages += this_pages;
- next:
- 		cond_resched();
-@@ -293,7 +310,7 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
- 
- static inline unsigned long change_pud_range(struct vm_area_struct *vma,
- 		p4d_t *p4d, unsigned long addr, unsigned long end,
--		pgprot_t newprot, unsigned long cp_flags)
-+		pgprot_t newprot, unsigned long cp_flags, tlb_range *range)
- {
- 	pud_t *pud;
- 	unsigned long next;
-@@ -305,7 +322,7 @@ static inline unsigned long change_pud_range(struct vm_area_struct *vma,
- 		if (pud_none_or_clear_bad(pud))
- 			continue;
- 		pages += change_pmd_range(vma, pud, addr, next, newprot,
--					  cp_flags);
-+					  cp_flags, range);
- 	} while (pud++, addr = next, addr != end);
- 
- 	return pages;
-@@ -313,7 +330,7 @@ static inline unsigned long change_pud_range(struct vm_area_struct *vma,
- 
- static inline unsigned long change_p4d_range(struct vm_area_struct *vma,
- 		pgd_t *pgd, unsigned long addr, unsigned long end,
--		pgprot_t newprot, unsigned long cp_flags)
-+		pgprot_t newprot, unsigned long cp_flags, tlb_range *range)
- {
- 	p4d_t *p4d;
- 	unsigned long next;
-@@ -325,7 +342,7 @@ static inline unsigned long change_p4d_range(struct vm_area_struct *vma,
- 		if (p4d_none_or_clear_bad(p4d))
- 			continue;
- 		pages += change_pud_range(vma, p4d, addr, next, newprot,
--					  cp_flags);
-+					  cp_flags, range);
- 	} while (p4d++, addr = next, addr != end);
- 
- 	return pages;
-@@ -338,24 +355,26 @@ static unsigned long change_protection_range(struct vm_area_struct *vma,
- 	struct mm_struct *mm = vma->vm_mm;
- 	pgd_t *pgd;
- 	unsigned long next;
--	unsigned long start = addr;
- 	unsigned long pages = 0;
-+	tlb_range range;
- 
- 	BUG_ON(addr >= end);
- 	pgd = pgd_offset(mm, addr);
- 	flush_cache_range(vma, addr, end);
-+	range.start = end;
-+	range.end = addr;
- 	inc_tlb_flush_pending(mm);
- 	do {
- 		next = pgd_addr_end(addr, end);
- 		if (pgd_none_or_clear_bad(pgd))
- 			continue;
- 		pages += change_p4d_range(vma, pgd, addr, next, newprot,
--					  cp_flags);
-+					  cp_flags, &range);
- 	} while (pgd++, addr = next, addr != end);
- 
- 	/* Only flush the TLB if we actually modified any entries: */
- 	if (pages)
--		flush_tlb_range(vma, start, end);
-+		flush_tlb_range(vma, range.start, range.end);
- 	dec_tlb_flush_pending(mm);
- 
- 	return pages;
+l didn't know RFT to mean "Request for Testing" :D
+
+I have the device and do testing.  Do you have test code I can run?
+
+Best Regards,
 -- 
-2.31.1
-
+              yashi

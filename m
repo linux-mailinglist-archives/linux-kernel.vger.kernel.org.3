@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00234D2BA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56524D2BB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiCIJVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S232003AbiCIJW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbiCIJVH (ORCPT
+        with ESMTP id S231996AbiCIJW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:21:07 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EEA1662E8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:20:08 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s10so2067684edd.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Nx24Pu2EtMIRNca2MHSzdGAjeTosa0c/taIRiMOtw1w=;
-        b=Ebr2QynI5+t+8mrz83naeQWY1VBsYxUnEqRo8KV3wLAUgUfHhYg2ycxWNFFW6JCsl5
-         8l7S58NSbq4paJt8UktEBhpQrMxMYU7roFGK/bRK4Vv022j28QtzHq4Lp8E3Z8TRqJrG
-         6zDXYHdtc+pCBcucUn13KzRTRJArWv3H1XKqbAMB4r7o5zE/iSwN7hfjzu+HRZxRuGpk
-         +c0x3jejRmSZRK60roVk4RuAVbvh0Aw3u92mN4VWCfqhKEO2XPv9YDCTxc9TBYxh6sm6
-         ihfMclaidwhuYjaGvNtWNx1c1UNo8nbHC0fM9OOWowhS6HSLdssJ4F/tPTVYnIWLAjuk
-         1Nyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Nx24Pu2EtMIRNca2MHSzdGAjeTosa0c/taIRiMOtw1w=;
-        b=BhzNOPp/mCnivc5+7fG+c9lP9y1tIEdTkpoLlE1uWdktYBp4iGT2R5J6U1G+ntzdKg
-         Dx8btrSmWLfxG+PHG+By7xpq8NhOAjy1LPZKdPHq3jbSWbcbpA3is3J+JWg1nfPTO9v3
-         cAJ3lANxEzfRb29quCW445N/QKHRcljPMGArYwrgRxeFvCHneuAYhEMiroRMBFdP6hnY
-         e7bcpmI3HF36HLpvP1z23M/DWpbpEijgve8cWOZ5mbyMCWwFZZ8PTO3n3wUJ1zaJeWap
-         dWqyPw0TJ95oTMR+zHD9ud5K/KqLWcRLfgGBa8X30dDruguLAMjTb79Bg4ovEzFuyiig
-         1rNQ==
-X-Gm-Message-State: AOAM533nx9nGf0e8olQT2seTpXjIswzP/evy2TKVcxEMRG9SACQ7lydZ
-        TQOZlMjPSQU+KYQQwllgctAmeEoTMI7XEJNl
-X-Google-Smtp-Source: ABdhPJwlr/F3OrZaJ4msyWEoYHHKLGLeqryW4s0iXM2qWM9whSkmMEfDgyK8NOaJxoR84NZSwkIdOg==
-X-Received: by 2002:a05:6402:1e94:b0:416:44fa:ef49 with SMTP id f20-20020a0564021e9400b0041644faef49mr14497527edf.0.1646817607277;
-        Wed, 09 Mar 2022 01:20:07 -0800 (PST)
-Received: from localhost.localdomain ([102.126.147.138])
-        by smtp.gmail.com with ESMTPSA id r29-20020a50c01d000000b00415fb0dc793sm535180edb.47.2022.03.09.01.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 01:20:06 -0800 (PST)
-From:   Hatim Muhammed <hatimmohammed369@gmail.com>
-X-Google-Original-From: Hatim Muhammed
-To:     linux-kernel@vger.kernel.org
-Cc:     greg@kroah.com, abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        Hatim Muhammed <hatimmohammed369@gmail.com>
-Subject: [PATCH 10/10] Constify comedi_lrange struct pointers
-Date:   Wed,  9 Mar 2022 11:20:03 +0200
-Message-Id: <20220309092003.13928-1-hatimmohammed369@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 04:22:26 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA381662E8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:21:27 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KD65J6dCKz1GCJ4;
+        Wed,  9 Mar 2022 17:16:36 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Mar
+ 2022 17:21:25 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <cl@linux.com>, <penberg@kernel.org>,
+        <rientjes@google.com>, <iamjoonsoo.kim@lge.com>, <vbabka@suse.cz>
+CC:     <roman.gushchin@linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] mm/slub: remove forced_order parameter in calculate_sizes
+Date:   Wed, 9 Mar 2022 17:20:36 +0800
+Message-ID: <20220309092036.50844-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hatim Muhammed <hatimmohammed369@gmail.com>
+Since commit 32a6f409b693 ("mm, slub: remove runtime allocation order
+changes"), forced_order is always -1. Remove this unneeded parameter
+to simplify the code.
 
-Signed-off-by: Hatim Muhammed <hatimmohammed369@gmail.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- drivers/comedi/drivers/jr3_pci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/slub.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/comedi/drivers/jr3_pci.c b/drivers/comedi/drivers/jr3_pci.c
-index 951c23fa0369..f2a750a9112c 100644
---- a/drivers/comedi/drivers/jr3_pci.c
-+++ b/drivers/comedi/drivers/jr3_pci.c
-@@ -90,8 +90,8 @@ struct jr3_pci_dev_private {
- };
+diff --git a/mm/slub.c b/mm/slub.c
+index 180354d7e741..7f09901ae6b2 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4038,7 +4038,7 @@ static void set_cpu_partial(struct kmem_cache *s)
+  * calculate_sizes() determines the order and the distribution of data within
+  * a slab object.
+  */
+-static int calculate_sizes(struct kmem_cache *s, int forced_order)
++static int calculate_sizes(struct kmem_cache *s)
+ {
+ 	slab_flags_t flags = s->flags;
+ 	unsigned int size = s->object_size;
+@@ -4142,10 +4142,7 @@ static int calculate_sizes(struct kmem_cache *s, int forced_order)
+ 	size = ALIGN(size, s->align);
+ 	s->size = size;
+ 	s->reciprocal_size = reciprocal_value(size);
+-	if (forced_order >= 0)
+-		order = forced_order;
+-	else
+-		order = calculate_order(size);
++	order = calculate_order(size);
  
- union jr3_pci_single_range {
--	struct comedi_lrange l;
--	char _reserved[offsetof(struct comedi_lrange, range[1])];
-+	const struct comedi_lrange l;
-+	char _reserved[offsetof(const struct comedi_lrange, range[1])];
- };
+ 	if ((int)order < 0)
+ 		return 0;
+@@ -4181,7 +4178,7 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+ 	s->random = get_random_long();
+ #endif
  
- enum jr3_pci_poll_state {
+-	if (!calculate_sizes(s, -1))
++	if (!calculate_sizes(s))
+ 		goto error;
+ 	if (disable_higher_order_debug) {
+ 		/*
+@@ -4191,7 +4188,7 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+ 		if (get_order(s->size) > get_order(s->object_size)) {
+ 			s->flags &= ~DEBUG_METADATA_FLAGS;
+ 			s->offset = 0;
+-			if (!calculate_sizes(s, -1))
++			if (!calculate_sizes(s))
+ 				goto error;
+ 		}
+ 	}
 -- 
-2.35.1
+2.23.0
 

@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387C14D2807
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A3F4D2796
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiCIE6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        id S231803AbiCIDxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 22:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCIE6w (ORCPT
+        with ESMTP id S231785AbiCIDx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:58:52 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C888DE8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:57:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646801874; x=1678337874;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4+tpppr2nS3z3jqvQ18eYrd8CDvGD+af7zUmyFkKqOM=;
-  b=dwacL0R33tFthWwCBDO8gqzEfqy+uqZ2aYCodcgr+K3wVrBmPoaJAYfn
-   WSDT+UGRb7keKEtnQuaK7UUJ2LVIucg3VdqvlHB/L3fhdYJ+24OwrRhJK
-   kbeygL1QXQExTdmUeOe4cp0tREkYkeb2Z/9QIUPOxCMAP6lSHLrYKAA5Y
-   2dzaI22Z+66od9ysbhE8OtZcZrOzO2SkDrqFoL+D24IbKGlqTcSEAT4bD
-   lCCpY/Jj+zCs1PgBzDgsmXoJIPrnI9VzhGiOHvvjV3DhnDLSr7bFB0iEk
-   3tLdphXONablYHLsSJwcBR5WHVYzgHDInZROKmDNN8fxg2WKd7QsQqnxI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318114731"
-X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="318114731"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 20:57:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="643913005"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 20:57:52 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRoOV-0002c8-6N; Wed, 09 Mar 2022 04:57:51 +0000
-Date:   Wed, 9 Mar 2022 12:57:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/5.10 9971/9999]
- arch/arm/kernel/spectre.c:13:14: error: expected ';' after return statement
-Message-ID: <202203091205.qc6V73C4-lkp@intel.com>
+        Tue, 8 Mar 2022 22:53:29 -0500
+X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 19:52:29 PST
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3105F93;
+        Tue,  8 Mar 2022 19:52:28 -0800 (PST)
+Received: from mxde.zte.com.cn (unknown [10.35.8.63])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4KCymf24yFz1FH2k;
+        Wed,  9 Mar 2022 11:46:42 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4KCymL6cn9z9vxpP;
+        Wed,  9 Mar 2022 11:46:26 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4KCymH2jSgzdmX8h;
+        Wed,  9 Mar 2022 11:46:23 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4KCymC4rBbzCBHnN;
+        Wed,  9 Mar 2022 11:46:19 +0800 (CST)
+Received: from szxlzmapp02.zte.com.cn ([10.5.231.79])
+        by mse-fl1.zte.com.cn with SMTP id 2293kAWN075179;
+        Wed, 9 Mar 2022 11:46:10 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from fox-cloudhost8.localdomain (unknown [10.234.72.110])
+        by smtp (Zmail) with SMTP;
+        Wed, 9 Mar 2022 11:46:10 +0800
+X-Zmail-TransId: 3e8162282301005-d1ec4
+From:   Yi Wang <wang.yi59@zte.com.cn>
+To:     pbonzini@redhat.com
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
+        wang.yi59@zte.com.cn, up2wing@gmail.com, wang.liang82@zte.com.cn,
+        Yi Liu <liu.yi24@zte.com.cn>
+Subject: [PATCH] KVM: SVM: fix panic on out-of-bounds guest IRQ
+Date:   Wed,  9 Mar 2022 19:30:25 +0800
+Message-Id: <20220309113025.44469-1-wang.yi59@zte.com.cn>
+X-Mailer: git-send-email 2.33.0.rc0.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2293kAWN075179
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 62282321.000 by FangMail milter!
+X-FangMail-Envelope: 1646797602/4KCymf24yFz1FH2k/62282321.000/10.35.8.63/[10.35.8.63]/mxde.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 62282321.000/4KCymf24yFz1FH2k
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,49 +76,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   fbf58a03f7a4df716d2470b8badfa0cada9e6fde
-commit: 06036e20ed2d16694cd91fd64fe6f031756c138c [9971/9999] ARM: include unprivileged BPF status in Spectre V2 reporting
-config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20220309/202203091205.qc6V73C4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=06036e20ed2d16694cd91fd64fe6f031756c138c
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout 06036e20ed2d16694cd91fd64fe6f031756c138c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/
+As guest_irq is coming from KVM_IRQFD API call, it may trigger
+crash in svm_update_pi_irte() due to out-of-bounds:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+crash> bt
+PID: 22218  TASK: ffff951a6ad74980  CPU: 73  COMMAND: "vcpu8"
+ #0 [ffffb1ba6707fa40] machine_kexec at ffffffff8565b397
+ #1 [ffffb1ba6707fa90] __crash_kexec at ffffffff85788a6d
+ #2 [ffffb1ba6707fb58] crash_kexec at ffffffff8578995d
+ #3 [ffffb1ba6707fb70] oops_end at ffffffff85623c0d
+ #4 [ffffb1ba6707fb90] no_context at ffffffff856692c9
+ #5 [ffffb1ba6707fbf8] exc_page_fault at ffffffff85f95b51
+ #6 [ffffb1ba6707fc50] asm_exc_page_fault at ffffffff86000ace
+    [exception RIP: svm_update_pi_irte+227]
+    RIP: ffffffffc0761b53  RSP: ffffb1ba6707fd08  RFLAGS: 00010086
+    RAX: ffffb1ba6707fd78  RBX: ffffb1ba66d91000  RCX: 0000000000000001
+    RDX: 00003c803f63f1c0  RSI: 000000000000019a  RDI: ffffb1ba66db2ab8
+    RBP: 000000000000019a   R8: 0000000000000040   R9: ffff94ca41b82200
+    R10: ffffffffffffffcf  R11: 0000000000000001  R12: 0000000000000001
+    R13: 0000000000000001  R14: ffffffffffffffcf  R15: 000000000000005f
+    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+ #7 [ffffb1ba6707fdb8] kvm_irq_routing_update at ffffffffc09f19a1 [kvm]
+ #8 [ffffb1ba6707fde0] kvm_set_irq_routing at ffffffffc09f2133 [kvm]
+ #9 [ffffb1ba6707fe18] kvm_vm_ioctl at ffffffffc09ef544 [kvm]
+#10 [ffffb1ba6707ff10] __x64_sys_ioctl at ffffffff85935474
+#11 [ffffb1ba6707ff40] do_syscall_64 at ffffffff85f921d3
+#12 [ffffb1ba6707ff50] entry_SYSCALL_64_after_hwframe at ffffffff8600007c
+    RIP: 00007f143c36488b  RSP: 00007f143a4e04b8  RFLAGS: 00000246
+    RAX: ffffffffffffffda  RBX: 00007f05780041d0  RCX: 00007f143c36488b
+    RDX: 00007f05780041d0  RSI: 000000004008ae6a  RDI: 0000000000000020
+    RBP: 00000000000004e8   R8: 0000000000000008   R9: 00007f05780041e0
+    R10: 00007f0578004560  R11: 0000000000000246  R12: 00000000000004e0
+    R13: 000000000000001a  R14: 00007f1424001c60  R15: 00007f0578003bc0
+    ORIG_RAX: 0000000000000010  CS: 0033  SS: 002b
 
-All errors (new ones prefixed by >>):
+Vmx have been fix this in commit 3a8b0677fc61 (KVM: VMX: Do not BUG() on
+out-of-bounds guest IRQ), so we can just copy source from that to fix
+this.
 
->> arch/arm/kernel/spectre.c:13:14: error: expected ';' after return statement
-           return false
-                       ^
-                       ;
-   1 error generated.
-
-
-vim +13 arch/arm/kernel/spectre.c
-
-     7	
-     8	static bool _unprivileged_ebpf_enabled(void)
-     9	{
-    10	#ifdef CONFIG_BPF_SYSCALL
-    11		return !sysctl_unprivileged_bpf_disabled;
-    12	#else
-  > 13		return false
-    14	#endif
-    15	}
-    16	
-
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Signed-off-by: Yi Liu <liu.yi24@zte.com.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/x86/kvm/svm/avic.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index fb3e20791338..f59b93d8e95a 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -783,7 +783,7 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
+ {
+ 	struct kvm_kernel_irq_routing_entry *e;
+ 	struct kvm_irq_routing_table *irq_rt;
+-	int idx, ret = -EINVAL;
++	int idx, ret = 0;
+ 
+ 	if (!kvm_arch_has_assigned_device(kvm) ||
+ 	    !irq_remapping_cap(IRQ_POSTING_CAP))
+@@ -794,7 +794,13 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
+ 
+ 	idx = srcu_read_lock(&kvm->irq_srcu);
+ 	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
+-	WARN_ON(guest_irq >= irq_rt->nr_rt_entries);
++
++	if (guest_irq >= irq_rt->nr_rt_entries ||
++		hlist_empty(&irq_rt->map[guest_irq])) {
++		pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
++			     guest_irq, irq_rt->nr_rt_entries);
++		goto out;
++	}
+ 
+ 	hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
+ 		struct vcpu_data vcpu_info;
+-- 
+2.33.0.rc0.dirty

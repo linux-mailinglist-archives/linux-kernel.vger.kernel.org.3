@@ -2,183 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B94D2B1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09BB4D2B28
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbiCIJAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S231676AbiCIJBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiCIJAU (ORCPT
+        with ESMTP id S231688AbiCIJBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:00:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E823F8A2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:59:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CB9C81F382;
-        Wed,  9 Mar 2022 08:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646816359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wLJltizetGHjLy0bZkVmUTitFEvO6Iw9LN4l/yyRS9g=;
-        b=xJMU4JKBSqycf0f11ZqQDeTWq8g0sgu8sXlzxDvY3ymXsnEjo2mL3To6E1LhAjb3XPzIN3
-        5CAUmI3rligO9NMeQ9QbqUSIZmntFRr7OlIAUumTmUJrFwRet1a4g1lgiy7C2ZmD7VVxmb
-        FfE2tY0p/LbhZKpRBCZ7S8QXYzSmHqw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646816359;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wLJltizetGHjLy0bZkVmUTitFEvO6Iw9LN4l/yyRS9g=;
-        b=FVf+aJpycFvcYs5csUbOIGvtOk4h/lSiBWKtewL8ZuNuCp//g+2yxksSChU0hjt780ptOA
-        X+8qpbgpPd8ebIBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 75B1F13B71;
-        Wed,  9 Mar 2022 08:59:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zqAWG2dsKGLzGAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 09 Mar 2022 08:59:19 +0000
-Message-ID: <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
-Date:   Wed, 9 Mar 2022 09:59:18 +0100
+        Wed, 9 Mar 2022 04:01:10 -0500
+Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06F8483A0;
+        Wed,  9 Mar 2022 01:00:07 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 111E120DCBD4
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <45fa6cff-948f-93e0-388c-42da30e70efb@omp.ru>
+Date:   Wed, 9 Mar 2022 12:00:03 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+Subject: Re: [PATCH V3] ata: pata_pxa: Use platform_get_irq() to get the
+ interrupt
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>
-Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------m91zCDjNLtfE3G4JVLYLEQQq"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <cgel.zte@gmail.com>
+CC:     <chi.minghao@zte.com.cn>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zealci@zte.com.cn>
+References: <d1dfb244-eda3-b5c6-c6bd-c0294a9a4a94@opensource.wdc.com>
+ <20220309072834.2081944-1-chi.minghao@zte.com.cn>
+ <4ce9ad67-7102-1ad8-2726-5e96aecfde80@opensource.wdc.com>
+ <d4f60079-9a99-c8e6-4a3c-4c77597cc151@gmail.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <d4f60079-9a99-c8e6-4a3c-4c77597cc151@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------m91zCDjNLtfE3G4JVLYLEQQq
-Content-Type: multipart/mixed; boundary="------------OBPBu7VXBcmaoAijlAdrHv6p";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gert Wollny <gert.wollny@collabora.com>
-Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux-foundation.org,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+On 09.03.2022 11:55, Sergei Shtylyov wrote:
 
---------------OBPBu7VXBcmaoAijlAdrHv6p
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+>>> From: Minghao Chi <chi.minghao@zte.com.cn>
+>>>
+>>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+>>> allocation of IRQ resources in DT core code, this causes an issue
+>>> when using hierarchical interrupt domains using "interrupts" property
+>>> in the node as this bypasses the hierarchical setup and messes up the
+>>> irq chaining.
+>>>
+>>> In preparation for removal of static setup of IRQ resource from DT core
+>>> code use platform_get_irq().
+>>>
+>>> v1->v2:
+>>>      - Use more specific in the subject: ata: pata_pxa:
+>>>      - Switch to returning 'irq'
+>>> v2->v3:
+>>>      - drop the unlikely()
+>>
+>> Looks good. FYI, the changelog above should be placed under the "---"
+>> after your Signed-off-by so that it does not stay as part of the commit
+>> message. No need to resend, I will remove this when applying.
+>>
+>> Sergey,
+>>
+>> Review OK ?
+> 
+>     Yes.
 
-SGkNCg0KQW0gMDguMDMuMjIgdW0gMTQ6MTcgc2NocmllYiBEbWl0cnkgT3NpcGVua286DQo+
-IEhlbGxvLA0KPiANCj4gVGhpcyBwYXRjaHNldCBpbnRyb2R1Y2VzIG1lbW9yeSBzaHJpbmtl
-ciBmb3IgdGhlIFZpcnRJTy1HUFUgRFJNIGRyaXZlci4NCj4gRHVyaW5nIE9PTSwgdGhlIHNo
-cmlua2VyIHdpbGwgcmVsZWFzZSBCT3MgdGhhdCBhcmUgbWFya2VkIGFzICJub3QgbmVlZGVk
-Ig0KPiBieSB1c2Vyc3BhY2UgdXNpbmcgdGhlIG5ldyBtYWR2aXNlIElPQ1RMLiBUaGUgdXNl
-cnNwYWNlIGluIHRoaXMgY2FzZSBpcw0KPiB0aGUgTWVzYSBWaXJHTCBkcml2ZXIsIGl0IHdp
-bGwgbWFyayB0aGUgY2FjaGVkIEJPcyBhcyAibm90IG5lZWRlZCIsDQo+IGFsbG93aW5nIGtl
-cm5lbCBkcml2ZXIgdG8gcmVsZWFzZSBtZW1vcnkgb2YgdGhlIGNhY2hlZCBzaG1lbSBCT3Mg
-b24gbG93bWVtDQo+IHNpdHVhdGlvbnMsIHByZXZlbnRpbmcgT09NIGtpbGxzLg0KDQpWaXJ0
-aW8tZ3B1IGlzIGJ1aWxkIG9uIHRvcCBvZiBHRU0gc2htZW0gaGVscGVycy4gSSBoYXZlIGEg
-cHJvdG90eXBlIA0KcGF0Y2hzZXQgdGhhdCBhZGRzIGEgc2hyaW5rZXIgdG8gdGhlc2UgaGVs
-cGVycy4gSWYgeW91IHdhbnQgdG8gZ28gDQpmdXJ0aGVyLCB5b3UgY291bGQgaW1wbGVtZW50
-IHNvbWV0aGluZyBsaWtlIHRoYXQgaW5zdGVhZC4gUGFuZnJvc3QgYW5kIA0KbGltYSBhbHNv
-IGhhdmUgdGhlaXIgb3duIHNocmlua2VyIGFuZCBjb3VsZCBjZXJ0YWlubHkgYmUgY29udmVy
-dGVkIHRvIA0KdGhlIGdlbS1zaG1lbSBzaHJpbmtlci4NCg0KQmVzdCByZWdhcmRzDQpUaG9t
-YXMNCg0KPiANCj4gVGhpcyBwYXRjaHNldCBpbmNsdWRlcyBjb3VwbGUgZml4ZXMgZm9yIHBy
-b2JsZW1zIEkgZm91bmQgd2hpbGUgd2FzIHdvcmtpbmcNCj4gb24gdGhlIHNocmlua2VyLCBp
-dCBhbHNvIGluY2x1ZGVzIHByZXJlcXVpc2l0ZSBETUEgQVBJIHVzYWdlIGltcHJvdmVtZW50
-DQo+IG5lZWRlZCBieSB0aGUgc2hyaW5rZXIuDQo+IA0KPiBUaGUgTWVzYSBhbmQgSUdUIHBh
-dGNoZXMgd2lsbCBiZSBrZXB0IG9uIGhvbGQgdW50aWwgdGhpcyBrZXJuZWwgc2VyaWVzDQo+
-IHdpbGwgYmUgYXBwcm92ZWQgYW5kIGFwcGxpZWQuDQo+IA0KPiBUaGlzIHBhdGNoc2V0IHdh
-cyB0ZXN0ZWQgdXNpbmcgUWVtdSBhbmQgY3Jvc3ZtLCBpbmNsdWRpbmcgYm90aCBjYXNlcyBv
-Zg0KPiBJT01NVSBvZmYvb24uDQo+IA0KPiBNZXNhOiBodHRwczovL2dpdGxhYi5mcmVlZGVz
-a3RvcC5vcmcvZGlnZXR4L21lc2EvLS9jb21taXRzL3ZpcmdsLW1hZHZpc2UNCj4gSUdUOiAg
-aHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL2RpZ2V0eC9pZ3QtZ3B1LXRvb2xzLy0v
-dHJlZS92aXJ0aW8tbWFkdmlzZQ0KPiANCj4gRG1pdHJ5IE9zaXBlbmtvICg1KToNCj4gICAg
-ZHJtL3ZpcnRpbzogQ29ycmVjdCBkcm1fZ2VtX3NobWVtX2dldF9zZ190YWJsZSgpIGVycm9y
-IGhhbmRsaW5nDQo+ICAgIGRybS92aXJ0aW86IENoZWNrIHdoZXRoZXIgdHJhbnNmZXJyZWQg
-MkQgQk8gaXMgc2htZW0NCj4gICAgZHJtL3ZpcnRpbzogVW5sb2NrIEdFTSByZXNlcnZhdGlv
-bnMgaW4gZXJyb3IgY29kZSBwYXRoDQo+ICAgIGRybS92aXJ0aW86IEltcHJvdmUgRE1BIEFQ
-SSB1c2FnZSBmb3Igc2htZW0gQk9zDQo+ICAgIGRybS92aXJ0aW86IEFkZCBtZW1vcnkgc2hy
-aW5rZXINCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL3ZpcnRpby9NYWtlZmlsZSAgICAgICAg
-ICAgICAgIHwgICAzICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL3ZpcnRpby92aXJ0Z3B1X2Ry
-di5jICAgICAgICAgIHwgIDIyICsrKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vdmlydGlvL3Zp
-cnRncHVfZHJ2LmggICAgICAgICAgfCAgMzEgKysrKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
-dmlydGlvL3ZpcnRncHVfZ2VtLmMgICAgICAgICAgfCAgODQgKysrKysrKysrKysrDQo+ICAg
-ZHJpdmVycy9ncHUvZHJtL3ZpcnRpby92aXJ0Z3B1X2dlbV9zaHJpbmtlci5jIHwgMTI0ICsr
-KysrKysrKysrKysrKysrKw0KPiAgIGRyaXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9p
-b2N0bC5jICAgICAgICB8ICAzNyArKysrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vdmlydGlv
-L3ZpcnRncHVfa21zLmMgICAgICAgICAgfCAgMTcgKystDQo+ICAgZHJpdmVycy9ncHUvZHJt
-L3ZpcnRpby92aXJ0Z3B1X29iamVjdC5jICAgICAgIHwgIDYzICsrKy0tLS0tLQ0KPiAgIGRy
-aXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9wbGFuZS5jICAgICAgICB8ICAxNyArKy0N
-Cj4gICBkcml2ZXJzL2dwdS9kcm0vdmlydGlvL3ZpcnRncHVfdnEuYyAgICAgICAgICAgfCAg
-MzAgKysrLS0NCj4gICBpbmNsdWRlL3VhcGkvZHJtL3ZpcnRncHVfZHJtLmggICAgICAgICAg
-ICAgICAgfCAgMTQgKysNCj4gICAxMSBmaWxlcyBjaGFuZ2VkLCAzNzMgaW5zZXJ0aW9ucygr
-KSwgNjkgZGVsZXRpb25zKC0pDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
-L2RybS92aXJ0aW8vdmlydGdwdV9nZW1fc2hyaW5rZXIuYw0KPiANCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+    Ugh, replied from the wrong account. I had provided my Reviewed-by: tag 
+already...
 
---------------OBPBu7VXBcmaoAijlAdrHv6p--
+>     Although, strictly speaking, we still need to check for IRQ0 as well...
 
---------------m91zCDjNLtfE3G4JVLYLEQQq
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+    The platform_get_irq() patch preventing IRQ0 hasn't landed still...
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIobGYFAwAAAAAACgkQlh/E3EQov+Aw
-Xw/+NZ6+Z4Hl4awSRJX+RCgDRUdZJFYUtQZRGGoyqG9NxUsqZDkH5VWiCEXdj23sf+yR5fk1lI/Y
-Ofo7kkmJ7UOSkDgtsi3H9W20kawjK191fopEOL64v7eSvLfOOGzMM6h77c3rrWhclcoVsTD/pQCL
-XH3hRYI/SMN8yO13tuzFEvcVBUIFDXPR/4+WeFzc3WiscvLM8QhvgtfoQUz3A15JYJ/e9r2YBSyQ
-Ohw3bsomzQa+5HZRabVbYaZWjn+VP49s9F+gltcFTt6y6uRpRMulGOjpOBkEty8JwxK0kguLLnKE
-QLNfleigSzzE5IdAtWirJHX8BCLf2CZaK8Vk2tT0EiE7IM5exJ3KxPzhvuT62JJ0cK5MCtNhjBY6
-VtmJDJrYD10KgEBLu3R+7iXD61wZ/mw7LvJFjxQ06u9eicmzInFMZE1pgTuynj4apjqy2SQYck4P
-1bjpr1tRxC/60NIJ87DNkQAT1aRhRs2guYNNMgoTSQzjVgjRqRAnaAQ1OfHgOSjuYBqEjdoWgh2p
-MfwAdsf17+JrA9fwifgUqiAXZTZens8sH2TILyOkzQ3tcKCpt567iaytn6jn/3Cb2xqNDTwD7BKC
-8dkEeoi3sVGuUMfqncGrYzx7EABPmZltDU3fnemEf1XOAyevBg/msIx75tXIO0B+ndtd62VP4b8E
-zOg=
-=c7Ll
------END PGP SIGNATURE-----
-
---------------m91zCDjNLtfE3G4JVLYLEQQq--
+MBR, Sergey

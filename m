@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94AF4D434F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DAF4D4351
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240717AbiCJJUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:20:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
+        id S235761AbiCJJUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240703AbiCJJTz (ORCPT
+        with ESMTP id S240725AbiCJJUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:19:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52AC11AA26;
-        Thu, 10 Mar 2022 01:18:54 -0800 (PST)
+        Thu, 10 Mar 2022 04:20:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328A313913C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:19:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E23F61CD7;
-        Thu, 10 Mar 2022 09:18:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4332C340E8;
-        Thu, 10 Mar 2022 09:18:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD9A961C64
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3AAC36AF4;
+        Thu, 10 Mar 2022 09:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646903933;
-        bh=1kXsgB9RV7owj+bfYobvcObXKkekftRuOqeuY/yo8YM=;
+        s=korg; t=1646903944;
+        bh=OhpNF8WViNL36unydTb9lJvXpzj1iKydclWlldKejA8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NhQUyrve6zFpPyG4bg/VdpU3KoaIm93JG6oJhIPk//76LOrevyQ0Iv1Nw3tuaiLLK
-         y/C61OIIhmyNvMuFbSOYHiy4bDWVEtFUYlc/HUNK4Ib9dlsPQGa+002L4l3carbMCX
-         UiPIgUbhVbgOZN5LAABOArb+URxAQGvKfPDXtj9I=
-Date:   Wed, 9 Mar 2022 19:24:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/18] 4.19.234-rc1 review
-Message-ID: <Yijw3wz29xNiIhWl@kroah.com>
-References: <20220309155856.155540075@linuxfoundation.org>
- <CADVatmMODnr1vQ3VGLOACT16wLEFA6hFrTzY44VdPO2M7gX+iw@mail.gmail.com>
+        b=X+mo8Ku6PDmkuYG+dP+vMfeZVH4RSVdYuglzgukjP7KGC6+WpTWKEedCc3JAJFNqN
+         eOmr/iCfygmbKi/ml0lM6KYErYaVJHt3zhhABlLV0seUR5UJaI7nd1LbPMeSZaiWD6
+         Tw98ZEIKZiCCXIZOb6KjHGnCX2UDknr54dhcgRtE=
+Date:   Wed, 9 Mar 2022 19:33:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vishnu Dasa <vdasa@vmware.com>
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
+        bryantan@vmware.com, rjalisatgi@vmware.com
+Subject: Re: [PATCH] VMCI: Fix a couple of failure paths in
+ vmci_guest_probe_device()
+Message-ID: <Yijy5miaTI3GIXDZ@kroah.com>
+References: <1646850296-49445-1-git-send-email-vdasa@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADVatmMODnr1vQ3VGLOACT16wLEFA6hFrTzY44VdPO2M7gX+iw@mail.gmail.com>
+In-Reply-To: <1646850296-49445-1-git-send-email-vdasa@vmware.com>
 X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
         DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -59,30 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 06:08:19PM +0000, Sudip Mukherjee wrote:
-> Hi Greg,
+On Wed, Mar 09, 2022 at 10:24:56AM -0800, Vishnu Dasa wrote:
+> notification_bitmap may not be released when VMCI_CAPS_DMA_DATAGRAM
+> capability is missing from the device.  Add missing
+> 'err_free_notification_bitmap' label and use it instead of
+> 'err_free_data_buffers' to avoid this.
 > 
-> On Wed, Mar 9, 2022 at 4:03 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 4.19.234 release.
-> > There are 18 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> > Anything received after that time might be too late.
+> free_irq() may be called to free an interrupt that was not
+> allocated.  Add missing 'if' statement to check for
+> exclusive_vectors when freeing interrupt 1.
 > 
-> My tests are still running, but just an initial result for you,
-> 
-> x86_64 defconfig fails with:
-> arch/x86/kernel/cpu/bugs.c: In function 'spectre_v2_select_mitigation':
-> arch/x86/kernel/cpu/bugs.c:973:41: error: implicit declaration of
-> function 'unprivileged_ebpf_enabled'
-> [-Werror=implicit-function-declaration]
->   973 |         if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Reviewed-by: Bryan Tan <bryantan@vmware.com>
+> Reviewed-by: Rajesh Jalisatgi <rjalisatgi@vmware.com>
+> Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
+> ---
+> The patches which introduced these bugs are not in any released
+> kernels nor RC yet, so this fix does not need to be backported.
 
-It's in a .h file, how can it be undefined?  Must be a include path
-somewhere, let me dig...
+So this has to get into 5.17-final?  If not, it should be backported to
+5.17, right?  You should always include the "Fixes:" tag in the commit
+message so that we can figure this out.
 
+And shouldn't this be 2 different patches?  Please break up.
 
+thanks,
+
+greg k-h

@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4A64D34AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E844D34CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbiCIQ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S232558AbiCIQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238193AbiCIQVd (ORCPT
+        with ESMTP id S238151AbiCIQV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:21:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4141132;
-        Wed,  9 Mar 2022 08:20:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE2BB61926;
-        Wed,  9 Mar 2022 16:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85538C340F4;
-        Wed,  9 Mar 2022 16:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646842833;
-        bh=2qoYap93Lv7+DpPy/KPh09IFRziERvaOX6sizGltWBo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=psP+H/x9QYusA0s0Lf21o5ExYG8FOHyXCwVVYNBVFaTnxEB93F5T6WuJ5kW/i/lZQ
-         RGGZaozJF9kiTomp1CJm4yTdsA5/RIOl7J1UkzyBO0iLxo5mot/nnafDnZ+io3vMCd
-         IW5eA9e3MMQrpRrD55BZnHvCYAkgptD8g/RU3kBGg2vQ/B34kftlaKtfa/m431az67
-         X+1SQ5s56WCs+/Oy2ltL+JvnhJIz14Cc+Rn6UZnOxhuUSo1aQPwkCzT0NGyE149223
-         IYz96ubOBoFZsWsqgU6YmIqypE5O0SCcNIHtMkM/9h5XeJ8Q8x9ggrTO9aIlzODDZS
-         8BoocCUlBcf0g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 08/24] ARM: dts: rockchip: reorder rk322x hmdi clocks
-Date:   Wed,  9 Mar 2022 11:19:27 -0500
-Message-Id: <20220309161946.136122-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220309161946.136122-1-sashal@kernel.org>
-References: <20220309161946.136122-1-sashal@kernel.org>
+        Wed, 9 Mar 2022 11:21:29 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4207F14344A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:19:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=C6/n0ZrR9zK0w+X6zEmOY3Yoka9sh8gy0v8jEkCxVM0=; b=jcRm9
+        kijG8+vrjh62enKeAf0xrHMHEKBQlQXSoeBHCpx8oi19tOnyErNk8jyFl0Pl4EJi8YjihK/v7Sida
+        c2Yi3KNHOoL1NE2KtaZTwQ5uvucLWA9wNHTTk6vcJ8+MP3MXZOJ6d535TgvSjDOmN1GyWiiFrmYIH
+        zYrwaeUtM1rMePyAVAD350+y6z9c4px6rjU5M6UAhFv4ExYli0Bn9L8GYyPB64Um5V11we5kfRiY6
+        eHOZ/6E3Zg7OsDEaa/u2yQ1r7d1nPwCVq3X7H0NrZRyfz2DBCHVdN/PQZBo5K6wh5Hv5XS/DLHFYJ
+        6uPcXOREdAB6QiM+Q3CT+xrPmFY5A==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1nRz2D-0004Ud-2p; Wed, 09 Mar 2022 16:19:33 +0000
+Date:   Wed, 9 Mar 2022 16:19:31 +0000
+From:   John Keeping <john@metanate.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Daniel Beer <daniel.beer@igorinstitute.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: tas5805m: fix pdn polarity
+Message-ID: <YijTk0/UTXpjFiRq@donbot>
+References: <20220309135649.195277-1-john@metanate.com>
+ <YijOHNT0eqDyoviP@sirena.org.uk>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YijOHNT0eqDyoviP@sirena.org.uk>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+On Wed, Mar 09, 2022 at 03:56:12PM +0000, Mark Brown wrote:
+> On Wed, Mar 09, 2022 at 01:56:49PM +0000, John Keeping wrote:
+> 
+> > The binding defines the GPIO as "pdn-gpios" so when the GPIO is active
+> > the expectation is that the power down signal is asserted and this is
+> > how all other drivers using this GPIO name interpret the value.
+> 
+> > But the tas5805m driver inverts the sense from the normal expectation so
+> > when the powerdown GPIO is logically asserted the chip is running.
+> 
+> > This is a new driver that is not yet in a released kernel and has no
+> > in-tree users of the binding so fix the sense of the GPIO so that
+> > logically asserted means that the device is powered down.
+> 
+> > - Rewrite commit message to make it more obvious that this is a change
+> >   to the interpretation of the GPIO in the binding
+> 
+> I'm still not seeing the functional change here.  The actual state of
+> the GPIO is identical in both cases, all that's changing is the logical
+> view internally to the kernel.
 
-[ Upstream commit be4e65bdffab5f588044325117df77dad7e9c45a ]
+Ah, sorry, I'm considering it functional since it changes the device
+tree ABI.
 
-The binding specifies the clock order to "iahb", "isfr", "cec". Reorder
-the clocks accordingly.
-
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Link: https://lore.kernel.org/r/20220210142353.3420859-1-s.hauer@pengutronix.de
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm/boot/dts/rk322x.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/rk322x.dtsi b/arch/arm/boot/dts/rk322x.dtsi
-index 75af99c76d7e..f31cf1df892b 100644
---- a/arch/arm/boot/dts/rk322x.dtsi
-+++ b/arch/arm/boot/dts/rk322x.dtsi
-@@ -718,8 +718,8 @@ hdmi: hdmi@200a0000 {
- 		interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
- 		assigned-clocks = <&cru SCLK_HDMI_PHY>;
- 		assigned-clock-parents = <&hdmi_phy>;
--		clocks = <&cru SCLK_HDMI_HDCP>, <&cru PCLK_HDMI_CTRL>, <&cru SCLK_HDMI_CEC>;
--		clock-names = "isfr", "iahb", "cec";
-+		clocks = <&cru PCLK_HDMI_CTRL>, <&cru SCLK_HDMI_HDCP>, <&cru SCLK_HDMI_CEC>;
-+		clock-names = "iahb", "isfr", "cec";
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&hdmii2c_xfer &hdmi_hpd &hdmi_cec>;
- 		resets = <&cru SRST_HDMI_P>;
--- 
-2.34.1
-
+Used with the same device tree with, say, GPIO_ACTIVE_HIGH the physical
+state of the GPIO will change as a result of this patch and the device
+tree needs to be updated to use GPIO_ACTIVE_LOW.

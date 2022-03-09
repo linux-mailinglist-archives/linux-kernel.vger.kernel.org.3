@@ -2,126 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7394D2F90
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5604D2F93
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiCINAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S232939AbiCINAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbiCINAJ (ORCPT
+        with ESMTP id S230310AbiCINAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:00:09 -0500
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7C514FFEF;
-        Wed,  9 Mar 2022 04:59:10 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 794E5300271E9;
-        Wed,  9 Mar 2022 13:59:08 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 6E99C43D590; Wed,  9 Mar 2022 13:59:08 +0100 (CET)
-Date:   Wed, 9 Mar 2022 13:59:08 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
-Message-ID: <20220309125908.GA9283@wunner.de>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
- <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com>
- <20220306184857.GA19394@wunner.de>
- <c2607267-798b-d7a0-86f6-4a729c22911f@linux.intel.com>
- <9c2d96c0-44cf-c84c-5ff7-34c74716a23b@linux.intel.com>
+        Wed, 9 Mar 2022 08:00:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BDBF171ED7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:59:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646830788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SFPZnRqA444gLBla00f7r4rvBmtg5YJUlHA0p/BeLGU=;
+        b=jVfBT8ETwjZlHtfNCZpuZuX1v2Ms9AW0T/dsnGqvBzPNUih2xzgJbikLGVOSJFiSqLq1dh
+        16NfFW64Ls48HS9GfWqR1uYgftjK5MMWEhlMWeu0MbeoykhOlLriPdvcPlEkvjmjZVhz3h
+        wWSakM9aJegYi08bWhdrA7EOcX/Skng=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-yYfIO_BUOC-I-QDFxQirPw-1; Wed, 09 Mar 2022 07:59:45 -0500
+X-MC-Unique: yYfIO_BUOC-I-QDFxQirPw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 567CB1091DA2;
+        Wed,  9 Mar 2022 12:59:42 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DA09D22E01;
+        Wed,  9 Mar 2022 12:59:34 +0000 (UTC)
+Message-ID: <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
+Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Chao Gao <chao.gao@intel.com>
+Cc:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
+Date:   Wed, 09 Mar 2022 14:59:33 +0200
+In-Reply-To: <YihCtvDps/qJ2TOW@google.com>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+         <20220225082223.18288-7-guang.zeng@intel.com> <Yifg4bea6zYEz1BK@google.com>
+         <20220309052013.GA2915@gao-cwp> <YihCtvDps/qJ2TOW@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9c2d96c0-44cf-c84c-5ff7-34c74716a23b@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 02:19:39PM +0200, Ilpo J�rvinen wrote:
-> Now that it has been pretty much established that anything called "rts" 
-> should be applied to DE as well, I took another look on implementing these 
-> delays.
+On Wed, 2022-03-09 at 06:01 +0000, Sean Christopherson wrote:
+> TL;DR: Maxim, any objection to yet another inhibit?  Any potential issues you can think of?
 > 
-> It turns out to be impractical to do/ineffective because "serial clock 
-> periods" are used as the unit by the HW ("serial clock periods" is not as 
-> clearly defined by the datasheet as I'd like but it is most likely based 
-> on the high-rated uartclk cycles). With the uartclk I've on test HW, the 
-> combined delay with max turnaround time and DE assert/de-assert timings 
-> cannot do even the smallest possible non-zero value (1 msec). That's 
-> because the TAT and DET registers allow only 16-bit and 8-bit values for 
-> delays.
+> On Wed, Mar 09, 2022, Chao Gao wrote:
+> > On Tue, Mar 08, 2022 at 11:04:01PM +0000, Sean Christopherson wrote:
+> > > On Fri, Feb 25, 2022, Zeng Guang wrote:
+> > > > From: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > 
+> > > > No normal guest has any reason to change physical APIC IDs,
+> > > 
+> > > I don't think we can reasonably assume this, my analysis in the link (that I just
+> > > realized I deleted from context here) shows it's at least plausible that an existing
+> > > guest could rely on the APIC ID being writable.  And that's just one kernel, who
+> > > know what else is out there, especially given that people use KVM to emulate really
+> > > old stuff, often on really old hardware.
+> > 
+> > Making xAPIC ID readonly is not only based on your analysis, but also Intel SDM
+> > clearly saying writable xAPIC ID is processor model specific and ***software should
+> > avoid writing to xAPIC ID***.
+> 
+> Intel isn't the only vendor KVM supports, and xAPIC ID is fully writable according
+> to AMD's docs and AMD's hardware.  x2APIC is even (indirectly) writable, but luckily
+> KVM has never modeled that...
+> 
+> Don't get me wrong, I would love to make xAPIC ID read-only, and I fully agree
+> that the probability of breaking someone's setup is very low, I just don't think
+> the benefits of forcing it are worth the risk of breaking userspace.
+> 
+> > If writable xAPIC ID support should be retained and is tied to a module param,
+> > live migration would depend on KVM's module params: e.g., migrate a VM with
+> > modified xAPIC ID (apic_id_readonly off on this system) to one with
+> > xapic_id_readonly on would fail, right? Is this failure desired?
+> 
+> Hrm, I was originally thinking it's not a terrible outcome, but I was assuming
+> that userspace would gracefully handle migration failure.  That's a bad assumption.
+> 
+> > if not, we need to have a VM-scope control. e.g., add an inhibitor of APICv
+> > (XAPIC_ID_MODIFIED) and disable APICv forever for this VM if its vCPUs or
+> > QEMU modifies xAPIC ID.
+> 
+> Inhibiting APICv if IPIv is enabled (implied for AMD's AVIC) is probably a better
+> option than a module param.  I was worried about ending up with silently degraded
+> VM performance, but that's easily solved by adding a stat to track APICv inhibitions,
+> which would be useful for other cases too (getting AMD's AVIC enabled is comically
+> difficult).
+> 
+> That would also let us drop the code buggy avic_handle_apic_id_update().
+> 
+> And it wouldn't necessarily have to be forever, though I agree that's a perfectly
+> fine approach until we have data that shows anything fancier is necessary.
+> 
+> > > Practically speaking, anyone that wants to deploy IPIv is going to have to make
+> > > the switch at some point, but that doesn't help people running legacy crud that
+> > > don't care about IPIv.
+> > > 
+> > > I was thinking a module param would be trivial, and it is (see below) if the
+> > > param is off by default.  A module param will also provide a convenient opportunity
+> > > to resolve the loophole reported by Maxim[1][2], though it's a bit funky.
+> > 
+> > Could you share the links?
+> 
+> Doh, sorry (they're both in this one).
+> 
+> https://lore.kernel.org/all/20220301135526.136554-5-mlevitsk@redhat.com
+> 
 
-A mistake was made when RS-485 support was introduced in the kernel
-more than 10 years ago with commits c26c56c0 and 93f3350c:
+My opinion on this subject is very simple: we need to draw the line somewhere.
+ 
+There is balance between supporting (poorly) unused hardware features and
+not supporting them at all.
+ 
+Writable APIC id is not just some legacy feature like task switch but a 
+feature that is frowned upon in both Intel and AMD manual:
+ 
+Yes, look at AMD's SDM at:
+ 
+"16.3.3 Local APIC ID
+ 
+Unique local APIC IDs are assigned to each CPU core in the system. The value is determined by
+hardware, based on the number of CPU cores on the processor and the node ID of the processor.
+ 
+The APIC ID is located in the APIC ID register at APIC offset 20h. See Figure 16-3. It is model
+dependent, whether software can modify the APIC ID Register. The initial value of the APIC ID (after
+a reset) is the value returned in CPUID function 0000_0001h_EBX[31:24]."
+ 
+ 
+Also in section '16.12 x2APIC_ID' of SDM it is mentioned:
+ 
+ 
+RDMSR. An RDMSR of MSR 0802h returns the x2APIC_ID in EAX[31:0]. The x2APIC_ID is a
+read-only register. 
+ 
+Attempting to write MSR 802h or attempting to read this MSR when not in x2APIC
+mode causes a #GP(0) exception. See 16.11 “Accessing x2APIC Registers”.
+ 
+ 
+CPUID. The x2APIC ID is reported by the following CPUID functions Fn0000_000B (Extended
+Topology Enumeration) and CPUID Fn8000_001E (Extended APIC ID) as follows:
+ 
+ 
+From this you can also infer that x2apic id is assigned once on boot, and same value is
+reported in CPUID and in MSR 0x0802.
+ 
+ 
+The fact that one can outsmart the microcode, change apic id and then switch to
+x2apic mode, is more a like a microcode bug that a feature IMHO, that nobody
+bothered to fix since nobody uses it.
+ 
+ 
+Sean, please don't get me wrong, I used to think differently on this - 
+I implemented PDPTRS migration in kvm, although in retrospect I probably shouldn't.
 
-The delays were defined in msec, but if you look at datasheets of
-RS-485 transceivers, they only need a delay in the nanosecond or
-single-digit usec range.
+I also understand your concerns - and I am not going to fight over this, a module
+param for read only apic id, will work for me.
+ 
+All I wanted to do is to make KVM better by simplifying it - KVM is already as complex
+as it can get, anything to make it simpler is welcome IMHO.
+ 
+ 
+Best regards,
+	Maxim Levitsky
+ 
+ 
+ 
+ 
 
-Here's a collection of delays I compiled two years ago:
-
-                                 DrvEnable-to-Output    DriverPropagation
-          MAX13450E/MAX13451E    5200 ns                 800 ns
-          MAXM22510              2540 ns                1040 ns
-          MAXM22511                80 ns                  65 ns
-          SN65HVD72              9000 ns                1000 ns
-          SN65HVD75              7000 ns                  17 ns
-          SN65HVD78              8000 ns                  15 ns
-          SN65HVD485E            2600 ns                  30 ns
-          ADM1486                  15 ns                  17 ns
-          ADM3485/ADM3490/ADM3491 900 ns                  35 ns
-          ADM3483/ADM3488        1300 ns                1500 ns
-          XR33193                2000 ns                1300 ns
-
-Because these delays are so short, it is usually sufficient to set
-them to zero in struct serial_rs485.
-
-I've begun a commit to change the delays to nsec, it's still a WIP:
-
-https://github.com/l1k/linux/commit/2c08878b63d6
-
-This is a little tricky because the delays are user-space ABI,
-so great care is needed to avoid breakage.  Also, every rs485
-driver with support for delays needs to be touched.  Some
-UARTs have fixed delays which depend on different clocks,
-other UARTs support configurable delays.  Another complication
-is that delay calculations easily overflow with nsec because
-the numbers become quite large.
-
-A positive side effect of changing the delays to nsec is that
-the horrible hrtimer kludge for rs485 software emulation in the
-8250_port.c can be eliminated.  Also, all the illegal mdelay()s
-in spinlocked context (e.g. serial console output) are replaced
-by much more reasonable ndelay()s.
-
-Eliminating the hrtimer kludge in 8250_port.c might also make these
-runtime PM patches by Andy simpler:
-
-https://lore.kernel.org/linux-serial/20211115084203.56478-8-tony@atomide.com/
-
-My suggestion would be to set the delays to zero for now in 8250_dw.c
-and implement proper delay handling after I've finished the conversion
-to nsec.
-
-Thanks,
-
-Lukas

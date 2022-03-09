@@ -2,102 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8174D2CBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370824D2CBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiCIKD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        id S231759AbiCIKFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiCIKDx (ORCPT
+        with ESMTP id S229501AbiCIKFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:03:53 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B381710B9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:02:45 -0800 (PST)
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQ6C0-1nnnj133YW-00M5Yh for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022
- 11:02:43 +0100
-Received: by mail-wr1-f54.google.com with SMTP id p9so2121542wra.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 02:02:43 -0800 (PST)
-X-Gm-Message-State: AOAM531QGw3veECBOMNhPFoyInnV7ua6/opyg9HTeb9fyyrdP1q2wTiz
-        7NPdXr33rzJPahlfSVUl3XWhXBJOSQLKMiK26YI=
-X-Google-Smtp-Source: ABdhPJwgkE8297GnOt7TTEbR/TrVC0SZLwL1B0Ochv9s5Yu6J38a4vXCAEDpRuE4kakjuYoCPOko8LRH1gaACfFyprU=
-X-Received: by 2002:a5d:6810:0:b0:203:7cbb:20be with SMTP id
- w16-20020a5d6810000000b002037cbb20bemr711554wru.219.1646820163359; Wed, 09
- Mar 2022 02:02:43 -0800 (PST)
+        Wed, 9 Mar 2022 05:05:05 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046E013CEF7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:04:07 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2dc242a79beso16637177b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 02:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Snnx2gCzpEJKOVry4K+to5AuKutoJTTCZRIqxcxA9Nk=;
+        b=ZoGSXpWHdTYaLziLCfUaWUf3m1iTHxUZqAHXTFCoiNG9YYUbShXsEwbpmc+xfCAViy
+         MsyoeP3h9gtdIGxclP+Bm5yQqDX5yJJFVmiOhE2v+dY/WDs4ua8HSIN5swxC77NUXv4F
+         baUj8KL1I7hWYZ1+Nm2PACBxxRpn4JvZZNQNcpxG/IDZIclwjZngWLQ3MfEtzu/yoGS1
+         2DFBncpJCiTFZk70jLQRET515HnC/JGGCYxdfJbma5Q7wfxZY7XqiigOVCHvEY3YPaRk
+         2d35iOQgZpDFRCr31RCQWvR19lWSmEVQ3gYnG33V933UM3axMOT6a/BdpNHD/GCHg3Jc
+         9A4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Snnx2gCzpEJKOVry4K+to5AuKutoJTTCZRIqxcxA9Nk=;
+        b=z6cqUSqZgIcf1AE9LECPB3JNQhJbD1Uc71551F3AxeWI4ukB1BFg73yfenUOqt69nb
+         FitjNHe5rBp7zyQatb+ZWk5ei7w+4dXGK+d9Q5tJgV9Hz4BjHuF4yCanl+HmCM5N0v9p
+         jfSV8VUR+KxCki3U1sUK+PiQiNcr3qDYbIqjDn8XirnB3fm3duCs62XobENshKmemFQg
+         AhUXQhvxDt6p98C8u/EP5nSuen90hlBi9Wgd8qhTEcj+xRuXIMCN3cYZ+1OccZ9Mm0Ax
+         OeLQlMx2KBPepdLEBNRzodr7JoTd3FgkAA0ApEko6+5gXLy+yeHJWB3zEinpLOTdwLMq
+         4Oxg==
+X-Gm-Message-State: AOAM5315ttxrx0Aa7vIsAI9fV0c1yrTmlbKgm/CHAgBMzBTPuE7/FDVs
+        9yn7Ssp/Op9+IeactKOhW5BBnbmLeYOECcIoEVu0kw==
+X-Google-Smtp-Source: ABdhPJzfh0259sDflgr3TRJzqUoYoF5lrF6coJwBqb1KbMrihdQh7+BYnKkeVezNkQCMEMleBRmlOArjIB/8uTRgEyI=
+X-Received: by 2002:a81:8985:0:b0:2dc:472:ff3f with SMTP id
+ z127-20020a818985000000b002dc0472ff3fmr16171043ywf.333.1646820245970; Wed, 09
+ Mar 2022 02:04:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20220309052842.247031-1-michael@michaelkloos.com>
-In-Reply-To: <20220309052842.247031-1-michael@michaelkloos.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 9 Mar 2022 11:02:27 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2Mr_z6h7eg1O8ZN5_qE-o+8KFFBum3CxyuDYeF50s1dw@mail.gmail.com>
-Message-ID: <CAK8P3a2Mr_z6h7eg1O8ZN5_qE-o+8KFFBum3CxyuDYeF50s1dw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
-To:     "Michael T. Kloos" <michael@michaelkloos.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220309083753.1561921-1-liupeng256@huawei.com> <20220309083753.1561921-2-liupeng256@huawei.com>
+In-Reply-To: <20220309083753.1561921-2-liupeng256@huawei.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 9 Mar 2022 11:03:28 +0100
+Message-ID: <CANpmjNPkewkNv32+LFA8bHixL8E=Cm_deVttoqTeTMO5aeOtSQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kunit: fix UAF when run kfence test case test_gfpzero
+To:     Peng Liu <liupeng256@huawei.com>
+Cc:     brendanhiggins@google.com, glider@google.com, dvyukov@google.com,
+        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        wangkefeng.wang@huawei.com, Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:eUPeBs8nu9lonOVUtsH3evuG9vL6qAzG37iPHHX+3lkuvoR6dPe
- z2MH0YfiG8Uovt6yTmDCI8UY+zCCy0FR4FFrBUTr6MOpu49cLY0xWeqvrX6hK98HKkoY9f1
- HW430hjtJcPzPxplPd/W5B8rPhlBpAV2W4bxRfJ6qr+i5ZJMVIwDYHBCg4XuHjiF4bIS68T
- 6rCKCWOYCKQU/9PXcre7w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cxkPjTEjR9U=:y3p+S67eYq+cn6t7T7Dd5S
- qbVoq3utFoCbv92MHn+DApvHeS4LDHoRJRXQfrqjoFFER8FNkzBMIw+iqzN1FWbKERtqQqN0r
- LZ1fhmosSd/9BAZbivNk73E4Nd7GGg/tY8yGMAYRb4M05Wk3u4/q2JUBYBxdNt5jXv15bAH7k
- LWVpxsK524Ihj1RqRTQZOKWcu9R13ZldhdgbCTNBBm4RPoCTI7EY/FL6rR9q1lwLXBnyy2O/l
- 1PiwFAJHfqR73i5GBILTQvID+LleJQmnKUZeM9lmRUEvk4KNt7JdGNqvewI6fT2J0JIJ2MmT6
- HHsAgfzX0RXQdsRTMxxpMsOagyYc+4yOujrI0bD2axKgyZXRdJh1x0q/+zAaO5SZIZl+6pCDo
- zX6t1mB08jChejjzFSr/naRqSuPb+KrJpJmmWBRTg6eQ/srzpgK02yETk/w53cFBNc7QhEwHI
- sdHu5oI410ephnbZOwQPzmmADKrCbQOIl/a3g9psjKF/zREQHOrR5YiDhkWLf3JLPiE+mqKST
- LGjLBAqMusbiQbSX29zz9zab/22T3cKs+PW0hyrdebueCTuVAm1gaV6bdBK1AvkLWU3CtZTcK
- WU63gtRcGOujRfNYYTbwsAtOvgDEwxZKYnHT2OvyBLbdMGM5DcuU2UnihtQJhqHlCN++We91w
- kz/zEDQtzOHohBNCpgy4BZBWPsjDzyvyw7vkliwdnr0o+BZUcAaNRJo/kBpXmedwdM5A=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 6:28 AM Michael T. Kloos
-<michael@michaelkloos.com> wrote:
+On Wed, 9 Mar 2022 at 09:19, 'Peng Liu' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
 >
-> Added a new config symbol RISCV_ISA_M to enable the usage of the
-> multiplication, division, and remainder (modulus) instructions
-> from the M-extension.  This configures the march build flag to
-> either include or omit it.
+> Kunit will create a new thread to run an actual test case, and the
+> main process will wait for the completion of the actual test thread
+> until overtime. The variable "struct kunit test" has local property
+> in function kunit_try_catch_run, and will be used in the test case
+> thread. Task kunit_try_catch_run will free "struct kunit test" when
+> kunit runs overtime, but the actual test case is still run and an
+> UAF bug will be triggered.
 >
-> I didn't find any assembly using any of the instructions from
-> the M-extension.  However, the BPF JIT is a complicating factor.
-> Currently, it emits M-extension instructions to implement various
-> BPF operations.  For now, I have made HAVE_EBPF_JIT depend on
-> CONFIG_RISCV_ISA_M.
+> The above problem has been both observed in a physical machine and
+> qemu platform when running kfence kunit tests. The problem can be
+> triggered when setting CONFIG_KFENCE_NUM_OBJECTS = 65535. Under
+> this setting, the test case test_gfpzero will cost hours and kunit
+> will run to overtime. The follows show the panic log.
 >
-> I have added the supplementary integer arithmetic functions in
-> the file "arch/riscv/lib/ext_m_supplement.c".  All the code
-> contained in this file is wrapped in an ifndef contingent on the
-> presence of CONFIG_RISCV_ISA_M.
+>   BUG: unable to handle page fault for address: ffffffff82d882e9
 >
-> Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
+>   Call Trace:
+>    kunit_log_append+0x58/0xd0
+>    ...
+>    test_alloc.constprop.0.cold+0x6b/0x8a [kfence_test]
+>    test_gfpzero.cold+0x61/0x8ab [kfence_test]
+>    kunit_try_run_case+0x4c/0x70
+>    kunit_generic_run_threadfn_adapter+0x11/0x20
+>    kthread+0x166/0x190
+>    ret_from_fork+0x22/0x30
+>   Kernel panic - not syncing: Fatal exception
+>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+>   Ubuntu-1.8.2-1ubuntu1 04/01/2014
+>
+> To solve this problem, the test case thread should be stopped when
+> the kunit frame runs overtime. The stop signal will send in function
+> kunit_try_catch_run, and test_gfpzero will handle it.
+>
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
 
-The patch looks fine to me, but I increasingly get the feeling that the
-entire platform feature selection in Kconfig should be guarded with
-a global flag that switches between "fully generic" and "fully custom"
-builds, where the generic kernel assumes that all the standard
-features (64-bit, C, M, FPU, MMU, UEFI, ...) are present, the
-incompatible options (XIP, PHYS_RAM_BASE_FIXED,
-CMDLINE_FORCE, BUILTIN_DTB, ...) are force-disabled,
-and all optional features (V/B/P/H extensions, custom instructions,
-platform specific device drivers, ...) are runtime detected.
+Reviewed-by: Marco Elver <elver@google.com>
 
-At the moment, those three types are listed at the same level,
-which gives the impression that they can be freely mixed.
+Also Cc'ing more KUnit folks to double-check this is the right solution.
 
-         Arnd
+> ---
+>  lib/kunit/try-catch.c   | 1 +
+>  mm/kfence/kfence_test.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
+> index be38a2c5ecc2..6b3d4db94077 100644
+> --- a/lib/kunit/try-catch.c
+> +++ b/lib/kunit/try-catch.c
+> @@ -78,6 +78,7 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
+>         if (time_remaining == 0) {
+>                 kunit_err(test, "try timed out\n");
+>                 try_catch->try_result = -ETIMEDOUT;
+> +               kthread_stop(task_struct);
+>         }
+>
+>         exit_code = try_catch->try_result;
+> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+> index 50dbb815a2a8..caed6b4eba94 100644
+> --- a/mm/kfence/kfence_test.c
+> +++ b/mm/kfence/kfence_test.c
+> @@ -623,7 +623,7 @@ static void test_gfpzero(struct kunit *test)
+>                         break;
+>                 test_free(buf2);
+>
+> -               if (i == CONFIG_KFENCE_NUM_OBJECTS) {
+> +               if (kthread_should_stop() || (i == CONFIG_KFENCE_NUM_OBJECTS)) {
+>                         kunit_warn(test, "giving up ... cannot get same object back\n");
+>                         return;
+>                 }
+> --
+> 2.18.0.huawei.25
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309083753.1561921-2-liupeng256%40huawei.com.

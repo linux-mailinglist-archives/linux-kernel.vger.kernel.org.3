@@ -2,107 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB374D2C35
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480454D2C42
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiCIJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S230166AbiCIJig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiCIJhN (ORCPT
+        with ESMTP id S229758AbiCIJid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:37:13 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E482939E7
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:36:15 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1A50C3F1C5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646818574;
-        bh=vgJXPJxV0L+vAaGNHZUa0pyZRilCw3Wji1ihg6t2p5g=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=pYKMWNXmR681ZhCslMiROvJkXFM0yK7Z4FqkFaXpgaGx5AOJ2BpdEv65sPMwkIDj2
-         C/qQQRzwMMX7LV31vK9azVXyuYIbsUNZ4dGf+oNKszE1S8qaWuwiQrtyV+lrth1Qgg
-         RU8TQM218qVREfBHELS8iEHnPpQ3o186uxQFG95rLiYYOBpu7pPIAEWX4HSbGWbn1T
-         X5erYCpC6LXEfkZMnYCjVfarm4e1sSZFny9kzPInLrVLY/pCZFIshGNaQj/zRyOQEv
-         iDZDhq/RMXmspqBsRN7ffQ3xSskhpCmhFbr6JSUhs5x5rUO7oecJWymy0G60rCb36u
-         N3TCMMf9d3uKw==
-Received: by mail-ed1-f72.google.com with SMTP id n11-20020a50cc4b000000b00415e939bf9eso953856edi.22
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:36:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vgJXPJxV0L+vAaGNHZUa0pyZRilCw3Wji1ihg6t2p5g=;
-        b=36ntxRtmSqPLzUTELOGuQuUbwOjcBVVOJGhYcPCaqO8AOT83ly5HD2KjwNwcP+pnOE
-         3Ol9b9wKc8fVaRO3yD/Fg4ArUV/MdWHWsFx/pd77JzNUbAEE1R7+ine2qI0e/KvCsryh
-         gILDsfUbXWqdf55GBjteLcCup1dD36fR8lAdJzik4YcjewclQQrqzLwcdmFaT7nkBAZC
-         3gk3pApZcJpXlEYtokwlP+5xG3381BuK+0pzhZsbvwmUxlkcAravRcDfwykCHN+uQwt3
-         gi6gOJw8Guk82Oz/oCj2oSzxOeYIEhUvEm05jRS+RZ46NH1i8AO9Uk/zWXkX2+4b8fwD
-         8YqQ==
-X-Gm-Message-State: AOAM531w6u+qGNqjIEBKsI6jxvTHmXihJb4S2j6EBtlG4HdQ3BhvOY+0
-        wCqPhCGFgjNhTw/d6jVjVzaXWCxSapj9bcNP0QgvzAmqpnT4XHIjAEUql3c5hSWsipwu6uU1aPD
-        WGSyyCePoseuESPl/nCdI4dH+9lzcdtrKfTh35ovvyA==
-X-Received: by 2002:a17:906:f41:b0:6d5:c6bc:fbc7 with SMTP id h1-20020a1709060f4100b006d5c6bcfbc7mr16234670ejj.541.1646818573802;
-        Wed, 09 Mar 2022 01:36:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxqJfkq2ncyoyHFJqrP5yMmZhK6ZJIwjOk5HnVSwV0BZkhtpkJH5FaPNRu22hHODgSjQwGtxA==
-X-Received: by 2002:a17:906:f41:b0:6d5:c6bc:fbc7 with SMTP id h1-20020a1709060f4100b006d5c6bcfbc7mr16234652ejj.541.1646818573591;
-        Wed, 09 Mar 2022 01:36:13 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id a7-20020a170906468700b006da636fdbe3sm496370ejr.105.2022.03.09.01.36.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 01:36:13 -0800 (PST)
-Message-ID: <a96004cf-155f-22e7-8b1d-7168f3187598@canonical.com>
-Date:   Wed, 9 Mar 2022 10:36:12 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: gpu: mali-bifrost: Document RZ/V2L SoC
-Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Wed, 9 Mar 2022 04:38:33 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B4322C;
+        Wed,  9 Mar 2022 01:37:31 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2298h6MX031941;
+        Wed, 9 Mar 2022 03:36:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=/InPwi8jAKZ+siM2hnnrk2bIAROnKidpBMLsmg6Eass=;
+ b=HeTr03wE90HGdUTB9YcKuUKkfu/6m1NooQt9gMGQC2S3uQO+sPak1YgfUoY/wh3kac14
+ m1rVSZUv8xp42c2mt9xDXZXOG1hTSB2u8GQWzNyvdyEGtNuiCdELnTZmtui2IIoC+nPA
+ wDsUJR8qrMK9hwO1B+qqT4hbpi924qFeORmQZ1J0Vgl15V9/RKAPbnY3rQV1W+NE+Iso
+ 1YecifcopQo29D74eWDj1jYm7zu+pgzbCi6WUf3ifiZkgCAU4RzaOu+ruCr4P966XhPD
+ Wu8KR2ST8Pf2pDvabg2NNWroP1xX7GqLOXu/mH8Bw0ZpPPXCPRQuYka3+etKCoiPfJ9z cA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3em656negp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 09 Mar 2022 03:36:44 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 9 Mar
+ 2022 09:36:42 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Wed, 9 Mar 2022 09:36:42 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 56B2446C;
+        Wed,  9 Mar 2022 09:36:42 +0000 (UTC)
+Date:   Wed, 9 Mar 2022 09:36:42 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220308211543.3081-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220308211543.3081-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 16/16] ASoC: cs35l41: Support external boost
+Message-ID: <20220309093642.GH38351@ediswmail.ad.cirrus.com>
+References: <20220308171730.454587-1-tanureal@opensource.cirrus.com>
+ <20220308171730.454587-17-tanureal@opensource.cirrus.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220308171730.454587-17-tanureal@opensource.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: jOGKrTjWPG07-Pl5HHQCB9c0mOLhvKCQ
+X-Proofpoint-GUID: jOGKrTjWPG07-Pl5HHQCB9c0mOLhvKCQ
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 22:15, Lad Prabhakar wrote:
-> The Renesas RZ/V2L SoC (a.k.a R9A07G054) has a Bifrost Mali-G31 GPU,
-> add a compatible string for it.
+On Tue, Mar 08, 2022 at 05:17:30PM +0000, Lucas Tanure wrote:
+> Add support for external boost voltage, where GPIO1 must control a
+> switch to isolate CS35L41 from the external Boost Voltage
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 > ---
->  Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
 
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+Thanks,
+Charles

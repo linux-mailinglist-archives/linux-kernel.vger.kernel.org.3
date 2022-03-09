@@ -2,151 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A3F4D2796
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789154D280C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbiCIDxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 22:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S229557AbiCIFCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 00:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiCIDx3 (ORCPT
+        with ESMTP id S229460AbiCIFC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 22:53:29 -0500
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 19:52:29 PST
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3105F93;
-        Tue,  8 Mar 2022 19:52:28 -0800 (PST)
-Received: from mxde.zte.com.cn (unknown [10.35.8.63])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4KCymf24yFz1FH2k;
-        Wed,  9 Mar 2022 11:46:42 +0800 (CST)
-Received: from mxus.zte.com.cn (unknown [10.207.168.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxde.zte.com.cn (FangMail) with ESMTPS id 4KCymL6cn9z9vxpP;
-        Wed,  9 Mar 2022 11:46:26 +0800 (CST)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxus.zte.com.cn (FangMail) with ESMTPS id 4KCymH2jSgzdmX8h;
-        Wed,  9 Mar 2022 11:46:23 +0800 (CST)
-Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        Wed, 9 Mar 2022 00:02:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB9610BBC9;
+        Tue,  8 Mar 2022 21:01:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4KCymC4rBbzCBHnN;
-        Wed,  9 Mar 2022 11:46:19 +0800 (CST)
-Received: from szxlzmapp02.zte.com.cn ([10.5.231.79])
-        by mse-fl1.zte.com.cn with SMTP id 2293kAWN075179;
-        Wed, 9 Mar 2022 11:46:10 +0800 (GMT-8)
-        (envelope-from wang.yi59@zte.com.cn)
-Received: from fox-cloudhost8.localdomain (unknown [10.234.72.110])
-        by smtp (Zmail) with SMTP;
-        Wed, 9 Mar 2022 11:46:10 +0800
-X-Zmail-TransId: 3e8162282301005-d1ec4
-From:   Yi Wang <wang.yi59@zte.com.cn>
-To:     pbonzini@redhat.com
-Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
-        wang.yi59@zte.com.cn, up2wing@gmail.com, wang.liang82@zte.com.cn,
-        Yi Liu <liu.yi24@zte.com.cn>
-Subject: [PATCH] KVM: SVM: fix panic on out-of-bounds guest IRQ
-Date:   Wed,  9 Mar 2022 19:30:25 +0800
-Message-Id: <20220309113025.44469-1-wang.yi59@zte.com.cn>
-X-Mailer: git-send-email 2.33.0.rc0.dirty
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDCD66189F;
+        Wed,  9 Mar 2022 05:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD7EC340E8;
+        Wed,  9 Mar 2022 05:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646802090;
+        bh=u9AmhLjdiMXokE3skjPX/ILUo3bIn8slqzpW3UOIBlA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ru9BR2NmSn2/u7Ecwepa5h03WaDRzPvnoHxzDKws3BGyKBx19D8fsYu3cUwUeVGSU
+         WFLjc5s2ikPFp2FimuYhyt3tmbdWG+yKEQC24QGJeiZA8TbZerfqKyYczV5swN3/16
+         Ka1Mf3l99L4NnOlBo3M2KOk5ZLOtm70aZavnFUMdCuESwsLC/ffBeEz6p1BKBtzQCO
+         NGsj2TPRb+KOA5UO5fkz5h0QPRJvW5EogZ+z41LK5HyKoGoKk5j1WoYufKaKfZDke2
+         5w83RohUFDDJLuMGkI1HCmDShSJ558YDfiaBjRcD3l5Zw2lVDJnNW+8DCpOWd/r8do
+         yJzLbqG1GyPCw==
+Message-ID: <ff2e1007-5883-5178-6415-326d6ae69c34@kernel.org>
+Date:   Tue, 8 Mar 2022 22:01:27 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2293kAWN075179
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 62282321.000 by FangMail milter!
-X-FangMail-Envelope: 1646797602/4KCymf24yFz1FH2k/62282321.000/10.35.8.63/[10.35.8.63]/mxde.zte.com.cn/<wang.yi59@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 62282321.000/4KCymf24yFz1FH2k
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
+Content-Language: en-US
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
+        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
+References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
+ <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
+ <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
+ <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org>
+ <45522c89-a3b4-4b98-232b-9c69470124a3@linaro.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <45522c89-a3b4-4b98-232b-9c69470124a3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As guest_irq is coming from KVM_IRQFD API call, it may trigger
-crash in svm_update_pi_irte() due to out-of-bounds:
+On 3/8/22 12:46 PM, Tadeusz Struk wrote:
+> That fails in the same way:
+> 
+> skbuff: skb_over_panic: text:ffffffff83e7b48b len:65575 put:65575
+> head:ffff888101f8a000 data:ffff888101f8a088 tail:0x100af end:0x6c0
+> dev:<NULL>
+> ------------[ cut here ]------------
+> kernel BUG at net/core/skbuff.c:113!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 1852 Comm: repro Not tainted
+> 5.17.0-rc7-00020-gea4424be1688-dirty #19
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35
+> RIP: 0010:skb_panic+0x173/0x175
+> 
+> I'm not sure how it supposed to help since it doesn't change the
+> alloclen at all.
 
-crash> bt
-PID: 22218  TASK: ffff951a6ad74980  CPU: 73  COMMAND: "vcpu8"
- #0 [ffffb1ba6707fa40] machine_kexec at ffffffff8565b397
- #1 [ffffb1ba6707fa90] __crash_kexec at ffffffff85788a6d
- #2 [ffffb1ba6707fb58] crash_kexec at ffffffff8578995d
- #3 [ffffb1ba6707fb70] oops_end at ffffffff85623c0d
- #4 [ffffb1ba6707fb90] no_context at ffffffff856692c9
- #5 [ffffb1ba6707fbf8] exc_page_fault at ffffffff85f95b51
- #6 [ffffb1ba6707fc50] asm_exc_page_fault at ffffffff86000ace
-    [exception RIP: svm_update_pi_irte+227]
-    RIP: ffffffffc0761b53  RSP: ffffb1ba6707fd08  RFLAGS: 00010086
-    RAX: ffffb1ba6707fd78  RBX: ffffb1ba66d91000  RCX: 0000000000000001
-    RDX: 00003c803f63f1c0  RSI: 000000000000019a  RDI: ffffb1ba66db2ab8
-    RBP: 000000000000019a   R8: 0000000000000040   R9: ffff94ca41b82200
-    R10: ffffffffffffffcf  R11: 0000000000000001  R12: 0000000000000001
-    R13: 0000000000000001  R14: ffffffffffffffcf  R15: 000000000000005f
-    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
- #7 [ffffb1ba6707fdb8] kvm_irq_routing_update at ffffffffc09f19a1 [kvm]
- #8 [ffffb1ba6707fde0] kvm_set_irq_routing at ffffffffc09f2133 [kvm]
- #9 [ffffb1ba6707fe18] kvm_vm_ioctl at ffffffffc09ef544 [kvm]
-#10 [ffffb1ba6707ff10] __x64_sys_ioctl at ffffffff85935474
-#11 [ffffb1ba6707ff40] do_syscall_64 at ffffffff85f921d3
-#12 [ffffb1ba6707ff50] entry_SYSCALL_64_after_hwframe at ffffffff8600007c
-    RIP: 00007f143c36488b  RSP: 00007f143a4e04b8  RFLAGS: 00000246
-    RAX: ffffffffffffffda  RBX: 00007f05780041d0  RCX: 00007f143c36488b
-    RDX: 00007f05780041d0  RSI: 000000004008ae6a  RDI: 0000000000000020
-    RBP: 00000000000004e8   R8: 0000000000000008   R9: 00007f05780041e0
-    R10: 00007f0578004560  R11: 0000000000000246  R12: 00000000000004e0
-    R13: 000000000000001a  R14: 00007f1424001c60  R15: 00007f0578003bc0
-    ORIG_RAX: 0000000000000010  CS: 0033  SS: 002b
+alloclen is a function of fraglen and fraglen is a function of datalen.
 
-Vmx have been fix this in commit 3a8b0677fc61 (KVM: VMX: Do not BUG() on
-out-of-bounds guest IRQ), so we can just copy source from that to fix
-this.
 
-Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
-Signed-off-by: Yi Liu <liu.yi24@zte.com.cn>
----
- arch/x86/kvm/svm/avic.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index fb3e20791338..f59b93d8e95a 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -783,7 +783,7 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
- {
- 	struct kvm_kernel_irq_routing_entry *e;
- 	struct kvm_irq_routing_table *irq_rt;
--	int idx, ret = -EINVAL;
-+	int idx, ret = 0;
- 
- 	if (!kvm_arch_has_assigned_device(kvm) ||
- 	    !irq_remapping_cap(IRQ_POSTING_CAP))
-@@ -794,7 +794,13 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
- 
- 	idx = srcu_read_lock(&kvm->irq_srcu);
- 	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
--	WARN_ON(guest_irq >= irq_rt->nr_rt_entries);
-+
-+	if (guest_irq >= irq_rt->nr_rt_entries ||
-+		hlist_empty(&irq_rt->map[guest_irq])) {
-+		pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
-+			     guest_irq, irq_rt->nr_rt_entries);
-+		goto out;
-+	}
- 
- 	hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
- 		struct vcpu_data vcpu_info;
--- 
-2.33.0.rc0.dirty

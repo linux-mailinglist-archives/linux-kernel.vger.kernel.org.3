@@ -2,138 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88344D3B5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6098A4D3B60
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238208AbiCIUvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229868AbiCIUwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238214AbiCIUvt (ORCPT
+        with ESMTP id S238195AbiCIUwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:51:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F0065499
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:50:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8407DB823CF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 20:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45758C340F3;
-        Wed,  9 Mar 2022 20:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1646859047;
-        bh=OgKg/0vp35QJf41JfruLbYi6bvW8ZM/QnzZq2U4YFCY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QRaMnKngT/vueTUdBgVKEAtGsWlVUdZXX+uG41GutJ9FLINk1O67xy3/cWX3W7oPn
-         jircwk4P6VKvPxc64gnZagjIAZ1t6ChGboVcx9qnAkdD3LwH/eZksTQh2mD/9pzlLJ
-         jxBmjx/d1KMvw6qMDBV9EEaWDJAUejijZv8WaFK8=
-Date:   Wed, 9 Mar 2022 12:50:45 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v3 3/9] mm: slightly clarify KSM logic in do_swap_page()
-Message-Id: <20220309125045.b04d20235a7260afceaf04d6@linux-foundation.org>
-In-Reply-To: <a01de28c-2195-eab3-fd3c-0e8ad3f58040@redhat.com>
-References: <20220131162940.210846-1-david@redhat.com>
-        <20220131162940.210846-4-david@redhat.com>
-        <CAHbLzkpoNeSPyzGV9arXK7BrVWpERy0yGRggn1ZaRam8RrHyRQ@mail.gmail.com>
-        <a01de28c-2195-eab3-fd3c-0e8ad3f58040@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 15:52:06 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F35696834
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:51:02 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso5104512pjc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 12:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=suRNmv6R67HpMji5/xf/olL00ZEMpVSYsMjDd2Yupcs=;
+        b=aZspRFy9P0OU6RMmNAybc+fl4/Ya6uKHWiIz5KFSKXo3O6dhVOTo1nCehdIcpGf4sR
+         iIHlbU2DcVvkuuhsYoewXDghk82DXsVPh6VC177KLLR8kYJuBUTBp4ZodOLQGkn19eFj
+         1BJfzFNtQDHPqL9aH6Rygua/qOTObAFPA2E5lYZMezbrjI1eTTTqlALGk6jwQwSdExlg
+         Lvw9gWk1CWCeH5ri0RAq/+Ju7qfxfyS7wiOXlcoETI+pTeyvQ681frFDxRuBkD0A+vNg
+         IOcObX3Rb9nTC+azrw61/BzLo7UV0ro6VFKeaRtvXIHWdMoyQi97ZCHM0/jdWgvTYeeF
+         fGKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=suRNmv6R67HpMji5/xf/olL00ZEMpVSYsMjDd2Yupcs=;
+        b=N6pEoPpNtgwaX30v3plvb/B5Uc6CIpd9X/1MAYo2pFscF4WKxrs/SRGZQ5/79hJu/T
+         HknHRe7GSkFE6vLTVxdQBYfLnHgF8VYtMmhHy9uya1F8DxFebcDrNsNKgvIOdzzesJT+
+         zwXif5kU0V651+vvpd9fNjDuPi9nAe97wy2VX9blAhJvLjFmT9matA9cN711rE3p+drg
+         lSfvxwEj0wPMC75Pz8lB0h64ewCTIYC/SUuoT6lqx622Y0isRzYHRpKnr7ND08VjTfzf
+         MmSu8gHy/V9TQRTq3dz95apseCIF3BSm6HiD+1ChiEiIZr4KHe4WfXzJAJyfJjNqFZiN
+         Ul1w==
+X-Gm-Message-State: AOAM532ZXChWqE/QmaIKwbGULEgMSLRq4/D84OKlorG3ZDXuc6aMauEM
+        tlRp+X8mMpTYqgegmB8BjCvv/N3yyEI47w==
+X-Google-Smtp-Source: ABdhPJytxunVsvk4zBdKbaY75AOod7nkz/wTIxFKKwQjzou1amumLklanF/WocA6j5yYvYFPGp+dqQ==
+X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id bc8-20020a170902930800b0014edef5e6b5mr1467317plb.73.1646859061860;
+        Wed, 09 Mar 2022 12:51:01 -0800 (PST)
+Received: from localhost.localdomain ([103.85.9.4])
+        by smtp.gmail.com with ESMTPSA id m11-20020a17090a3f8b00b001bc299e0aefsm7259674pjc.56.2022.03.09.12.50.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 12:51:01 -0800 (PST)
+From:   Vihas Makwana <makvihas@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vihas Makwana <makvihas@gmail.com>
+Subject: [PATCH v2 0/2] staging: r8188eu: improve error handling
+Date:   Thu, 10 Mar 2022 02:20:45 +0530
+Message-Id: <20220309205047.45981-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 20:15:54 +0100 David Hildenbrand <david@redhat.com> wrote:
+This patchset improves error handling in rtw_init_drv_sw() and
+fixes some memory leaks.
 
-> On 09.03.22 19:48, Yang Shi wrote:
-> > On Mon, Jan 31, 2022 at 8:33 AM David Hildenbrand <david@redhat.com> wrote:
-> >>
-> >> Let's make it clearer that KSM might only have to copy a page
-> >> in case we have a page in the swapcache, not if we allocated a fresh
-> >> page and bypassed the swapcache. While at it, add a comment why this is
-> >> usually necessary and merge the two swapcache conditions.
-> >>
-> >> Signed-off-by: David Hildenbrand <david@redhat.com>
-> >> ---
-> >>  mm/memory.c | 38 +++++++++++++++++++++++---------------
-> >>  1 file changed, 23 insertions(+), 15 deletions(-)
-> >>
-> >> diff --git a/mm/memory.c b/mm/memory.c
-> >> index 923165b4c27e..3c91294cca98 100644
-> >> --- a/mm/memory.c
-> >> +++ b/mm/memory.c
-> >> @@ -3615,21 +3615,29 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >>                 goto out_release;
-> >>         }
-> >>
-> >> -       /*
-> >> -        * Make sure try_to_free_swap or reuse_swap_page or swapoff did not
-> > 
-> > We could remove the reference to "reuse_swap_page", right?
-> >
-> Yes, I noticed this a couple of days ago as well and already have a
-> patch prepared for that ("mm: adjust stale comment in do_swap_page()
-> mentioning reuse_swap_page()" at
-> https://github.com/davidhildenbrand/linux/commits/cow_fixes_part_3)
-> 
-> If Andrew wants, we can fix that up directly before sending upstream or
-> I'll simply include that patch when sending out part2 v2.
-> 
-> (I want to avoid sending another series just for this)
+v1->v2:
+Added fixes tag in patch 2/2.
+Used dev_err instead of pr_err as it prefixes the error with
+device info.
 
-Thanks, I did this.  The same change plus gratuitous comment reflowing.
+Vihas Makwana (2):
+  staging: r8188eu: call rtl8188eu_free_recv_priv from
+    _rtw_free_recv_priv
+  staging: r8188eu: proper error handling in rtw_init_drv_sw
 
---- a/mm/memory.c~mm-slightly-clarify-ksm-logic-in-do_swap_page-fix
-+++ a/mm/memory.c
-@@ -3609,11 +3609,11 @@ vm_fault_t do_swap_page(struct vm_fault
- 
- 	if (swapcache) {
- 		/*
--		 * Make sure try_to_free_swap or reuse_swap_page or swapoff did
--		 * not release the swapcache from under us.  The page pin, and
--		 * pte_same test below, are not enough to exclude that.  Even if
--		 * it is still swapcache, we need to check that the page's swap
--		 * has not changed.
-+		 * Make sure try_to_free_swap or swapoff did not release the
-+		 * swapcache from under us.  The page pin, and pte_same test
-+		 * below, are not enough to exclude that.  Even if it is still
-+		 * swapcache, we need to check that the page's swap has not
-+		 * changed.
- 		 */
- 		if (unlikely(!PageSwapCache(page) ||
- 			     page_private(page) != entry.val))
-_
+ drivers/staging/r8188eu/core/rtw_recv.c   |  1 +
+ drivers/staging/r8188eu/os_dep/os_intfs.c | 60 ++++++++++++++++++-----
+ 2 files changed, 48 insertions(+), 13 deletions(-)
+
+-- 
+2.30.2
 

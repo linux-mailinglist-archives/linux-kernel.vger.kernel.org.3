@@ -2,97 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376D94D2A73
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9D04D2A7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiCIISU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        id S231263AbiCIIUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiCIISS (ORCPT
+        with ESMTP id S229955AbiCIIU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:18:18 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31AC166E0E;
-        Wed,  9 Mar 2022 00:17:18 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id a14so1238069qtx.12;
-        Wed, 09 Mar 2022 00:17:18 -0800 (PST)
+        Wed, 9 Mar 2022 03:20:29 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FA54705C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 00:19:30 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so4531119pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 00:19:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TCM0UJU71vFmyCpvtGIqyRExM308THX8NeEE98HuLyw=;
+        b=gwfkCt1GAlSaodP0da2aU5ijkHHXhqGoGlbjYk663NKD1SrXZapaIevPk4V/BUsure
+         XiII23Bedvc2rrKNeyYHYgjzXv3KsoB/+4Ds30KpSr3Hr7y6/5lPopHFM4TlRI6kWXre
+         Gw6nP8e1NrtRAvosc5MyiQqEphN740qAPvBYzGespEErPvbb8F4EihlrxY7PhQYVE09t
+         WaoUfdZaOOMahJ4Qo03Y9jny8wu9pCQgUcmYnHbi5Zw/GeYRaMhj7D/cpJWfQf8j7eHj
+         0sgV14InB6YZRPViUaBp6GXwi8BQZFWV84uGIwCxj5o9JwyIxCgGdEeVcECDAUVLL4eB
+         imbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=35/fzUJmyZh70VM9SdFaR6MnuP0bGFW2YUKkfdLZvtY=;
-        b=zzG6gwLgkifK3NHs5l5W1mPnbMjdYn46UtmzYYMPZwdQYD5couPR/uUPBm6t1YFirv
-         7XK2BGCegVzuGKhXW5HrfdY0T17+rUlK1Xu6cVM+Z35CSrr/ClJmPo9p5t7jchZota2w
-         bujy7xf/E2lKqnLbLY9PCFvFmluLy/SSCnTe3uz7QQ6RqCbBhs4RtOJ3nzs3Zexo9APq
-         QS52b3LfRs4mwTbgHcZMOZSjNaOPVM6IZOSRMqmIcwOrVIEbJpCyUp4ZYqX/Wh4RLRjT
-         IA9XVtYa0nVHUJx+0rtIzbsCqamR5CeaifdjPDT05tlW3/7rlTsuyuvJ7G3ybzYouxZH
-         x5zg==
-X-Gm-Message-State: AOAM532VRFC/uIT2I+wBdNGokQlY7aKh4ZhPexkVjuyXniLeTt5H50py
-        XOQ74GeWyUR+7T0kjD1v0v/POdzCrv3/6Q==
-X-Google-Smtp-Source: ABdhPJy5NUZ1e22kMEvbrC3NoR38LNeI0GEHpPtEAwp6L8m2FR1dzz9+fYtJomuTQ1sat7Z0f5zxRw==
-X-Received: by 2002:ac8:59d5:0:b0:2e0:775e:ed9e with SMTP id f21-20020ac859d5000000b002e0775eed9emr4385680qtf.419.1646813837622;
-        Wed, 09 Mar 2022 00:17:17 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id q8-20020a05622a04c800b002e06d7c1eabsm925904qtx.16.2022.03.09.00.17.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 00:17:16 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2dbfe58670cso14305817b3.3;
-        Wed, 09 Mar 2022 00:17:16 -0800 (PST)
-X-Received: by 2002:a81:6dd1:0:b0:2dc:56d1:1dae with SMTP id
- i200-20020a816dd1000000b002dc56d11daemr15691271ywc.479.1646813836049; Wed, 09
- Mar 2022 00:17:16 -0800 (PST)
+        bh=TCM0UJU71vFmyCpvtGIqyRExM308THX8NeEE98HuLyw=;
+        b=lvae2uwSgMy4EGKLzR9DDMVs7oIQWXSOlwrmT1nJBAgAi58Kmg0tfYzvBqm7c+McrN
+         aXAVNSXMjNsf/ACbeI1gtUI81WLVIKhQydKFWbCdf0ke2DOUO2KGAJZ4/Ouw/q67nL/L
+         gQ6CQux7oehML8Q5oJSw96QRHJ8mxEvRSiKne8wv0BG370eM20kcl8Lv8zk85XVqmthk
+         Axg4m17qTjEr9+uxYyNYpUJeOKXXSo8jA8WbLrAKxaydMVmuGWXoplnOfH92zwUl1IDQ
+         /DaVac3nGjsJEIDKVqXguE69OwjaDICE+CwJxmu/jfmY4RvA3vrvWutDOUs6Qnykl1dg
+         DBEA==
+X-Gm-Message-State: AOAM532qWPR9FUpFVnu8DcgnX8IdXhqkmQH33NSl6B7kja9oLS4X8vPJ
+        09FYJaoo+Ir6p2m4VaURol7qyHztB7hN5YnzKYyugxZabFFUUw==
+X-Google-Smtp-Source: ABdhPJz045akFz//p5zwqF9zhV51bLG2qLT/+7QeGLl2UBCq6zdhnpxyjgYFb71IUkYVcraRmuyxI8DKbl+UEJaKq6w=
+X-Received: by 2002:a17:90b:1c03:b0:1bf:5720:f8a1 with SMTP id
+ oc3-20020a17090b1c0300b001bf5720f8a1mr9120979pjb.100.1646813969912; Wed, 09
+ Mar 2022 00:19:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220308212315.4551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220308212315.4551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Mar 2022 09:17:04 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXpZrfuXBh1-mfv2z9aaUpUEjotCgr-i70sv72WN55_dw@mail.gmail.com>
-Message-ID: <CAMuHMdXpZrfuXBh1-mfv2z9aaUpUEjotCgr-i70sv72WN55_dw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/V2L bindings
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220307110328.2557655-1-sumit.garg@linaro.org>
+ <20220307142356.ksx7k5xalqlsxnqk@maple.lan> <CAFA6WYNdc5fTk61GB2siLj-EkTtRE0u6fq-MtqF3Zt1uwJqJCw@mail.gmail.com>
+ <20220308154601.2f2v4aqsny3ta52a@maple.lan>
+In-Reply-To: <20220308154601.2f2v4aqsny3ta52a@maple.lan>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 9 Mar 2022 13:49:18 +0530
+Message-ID: <CAFA6WYO7j7U89GgCH3ffZgFzGLES_ZqOO8Q6B_dbewZ0dCF+_w@mail.gmail.com>
+Subject: Re: [RFT v4] tty/sysrq: Make sysrq handler NMI aware
+To:     Daniel Thompson <daniel.thompson@linaro.org>,
+        gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, hasegawa-hitomi@fujitsu.com,
+        dianders@chromium.org, jirislaby@kernel.org,
+        jason.wessel@windriver.com, linux-kernel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, arnd@arndb.de,
+        peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 10:23 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document RZ/V2L TSU bindings. The TSU block on RZ/V2L is identical to one
-> found on RZ/G2L SoC. No driver changes are required as generic compatible
-> string "renesas,rzg2l-tsu" will be used as a fallback.
+On Tue, 8 Mar 2022 at 21:16, Daniel Thompson <daniel.thompson@linaro.org> wrote:
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> On Tue, Mar 08, 2022 at 08:13:43PM +0530, Sumit Garg wrote:
+> > Hi Daniel,
+> >
+> > On Mon, 7 Mar 2022 at 19:53, Daniel Thompson <daniel.thompson@linaro.org> wrote:
+> > >
+> > > On Mon, Mar 07, 2022 at 04:33:28PM +0530, Sumit Garg wrote:
+> > > > Allow a magic sysrq to be triggered from an NMI context. This is done
+> > > > via marking some sysrq actions as NMI safe. Safe actions will be allowed
+> > > > to run from NMI context whilst that cannot run from an NMI will be queued
+> > > > as irq_work for later processing.
+> > > >
+> > > > <snip>
+> > > >
+> > > > @@ -566,12 +573,46 @@ static void __sysrq_put_key_op(int key, const struct sysrq_key_op *op_p)
+> > > >               sysrq_key_table[i] = op_p;
+> > > >  }
+> > > >
+> > > > +static atomic_t sysrq_key = ATOMIC_INIT(-1);
+> > > > +
+> > > > +static void sysrq_do_irq_work(struct irq_work *work)
+> > > > +{
+> > > > +     const struct sysrq_key_op *op_p;
+> > > > +     int orig_suppress_printk;
+> > > > +     int key = atomic_read(&sysrq_key);
+> > > > +
+> > > > +     orig_suppress_printk = suppress_printk;
+> > > > +     suppress_printk = 0;
+> > > > +
+> > > > +     rcu_sysrq_start();
+> > > > +     rcu_read_lock();
+> > > > +
+> > > > +     op_p = __sysrq_get_key_op(key);
+> > > > +     if (op_p)
+> > > > +             op_p->handler(key);
+> > > > +
+> > > > +     rcu_read_unlock();
+> > > > +     rcu_sysrq_end();
+> > > > +
+> > > > +     suppress_printk = orig_suppress_printk;
+> > > > +     atomic_set(&sysrq_key, -1);
+> > > > +}
+> > > > +
+> > > > +static DEFINE_IRQ_WORK(sysrq_irq_work, sysrq_do_irq_work);
+> > > > +
+> > > >  void __handle_sysrq(int key, bool check_mask)
+> > > >  {
+> > > >       const struct sysrq_key_op *op_p;
+> > > >       int orig_log_level;
+> > > >       int orig_suppress_printk;
+> > > >       int i;
+> > > > +     bool irq_work = false;
+> > > > +
+> > > > +     /* Skip sysrq handling if one already in progress */
+> > > > +     if (atomic_cmpxchg(&sysrq_key, -1, key) != -1) {
+> > > > +             pr_warn("Skip sysrq key: %i as one already in progress\n", key);
+> > > > +             return;
+> > > > +     }
+> > >
+> > > Doesn't this logic needlessly jam sysrq handling if the irq_work cannot
+> > > be undertaken?
+> > >
+> >
+> > Here this is done purposefully to ensure synchronisation of three
+> > contexts while handling sysrq:
+> > 1. Thread context
+> > 2. IRQ context
+> > 3. NMI context
+>
+> Why is it necessary to provide such synchronization?
+>
+> Also, if there really is an existing bug in the way thread and irq
+> contexts interact (e.g. something we can tickle without NMI being
+> involved) then that should probably be tackled in a separate patch
+> and with an explanation of the synchronization problem.
+>
+>
+> > > A console user could unwittingly attempt an !nmi_safe SysRq action on
+> > > a damaged system that cannot service interrupts. Logic that prevents
+> > > things like backtrace, ftrace dump, kgdb or reboot is actively harmful
+> > > to that user's capability to figure out why their original sysrq doesn't
+> > > work.
+> >
+> > I see your point.
+> >
+> > >
+> > > I think the logic to prohibht multiple deferred sysrqs should only
+> > > be present on code paths where we are actually going to defer the sysrq.
+> > >
+> >
+> > It's not only there to prohibit multiple deferred sysrq (as that alone
+> > could be handled by irq_work_queue()) but rather to avoid parallelism
+> > scenarios that Doug mentioned on prior versions.
+>
+> I'm afraid I'm still a little lost here. I've only done a quick review
+> but sysrq's entry/exit protocols look like they are intended to handle
+> stacked contexts. This shouldn't be all that suprising since, even
+> without your changes, a sysrq triggered by an irq will interrupt
+> a sysrq triggered using /proc/sysrq-trigger .
+>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Yeah you are right. I see problems with how globals like
+"suppress_printk" and "console_loglevel" are modified and restored
+within __handle_sysrq(). A concurrent sysrq may easily lead to
+incorrect value restoration as an example below:
 
-Gr{oetje,eeting}s,
+Thread 1
+                      Thread 2
+orig_suppress_printk = suppress_printk; # here value is 1
+suppress_printk = 0;
 
-                        Geert
+                            orig_suppress_printk = suppress_printk; #
+here value is 0
+suppress_printk = orig_suppress_printk; # here value is 1
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+                            suppress_printk = 0;
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+                            suppress_printk = orig_suppress_printk;
+#incorrect value restored as 0
+
+Greg,
+
+Do let me know if I am missing something otherwise I will create a
+separate patch for this issue.
+
+-Sumit
+
+>
+> > How about the following add-on change to allow passthrough for broken
+> > irq_work systems?
+>
+> My question ultimately boils down to whether the existing logic
+> is necessary, not whether we can make it even more complex!
+>
+> So before thinking too much about this change I think it would be
+> useful to have a clear example of the circumstances that you think
+> it will not be safe to run an NMI-safe sysrq from an NMI.
+>
+>
+> Daniel.
+>
+>
+> > diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+> > index 005c9f9e0004..0a91d3ccf862 100644
+> > --- a/drivers/tty/sysrq.c
+> > +++ b/drivers/tty/sysrq.c
+> > @@ -608,6 +608,15 @@ void __handle_sysrq(int key, bool check_mask)
+> >         int i;
+> >         bool irq_work = false;
+> >
+> > +       /*
+> > +        * Handle a case if irq_work cannot be undertaken on a damaged
+> > +        * system stuck in hard lockup and cannot service interrupts.
+> > +        * In such cases we shouldn't atleast block NMI safe handlers
+> > +        * that doesn't depend on irq_work.
+> > +        */
+> > +       if (irq_work_is_pending(&sysrq_irq_work))
+> > +               atomic_set(&sysrq_key, -1);
+> > +
+> >         /* Skip sysrq handling if one already in progress */
+> >         if (atomic_cmpxchg(&sysrq_key, -1, key) != -1) {
+> >                 pr_warn("Skip sysrq key: %i as one already in progress\n", key);
+> >
+> > -Sumit
+> >
+> > >
+> > > Daniel.

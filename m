@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516454D3575
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6994D3744
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbiCIRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S232704AbiCIRBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiCIRBB (ORCPT
+        with ESMTP id S235797AbiCIRBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:01:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC4FB1052AF
+        Wed, 9 Mar 2022 12:01:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68802105AAE
         for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:47:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646844461;
+        s=mimecast20190719; t=1646844467;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GtHZAmMaUYAx0LRBNry1Z8g5yS/lTA9TMVV6Zdqr9HI=;
-        b=BYfrRTalkZ7ByBaYceTjXgQMZ8rw5k4wRj7NlM4FQOrjeGqY9eTRUhlBjPvn+A89TpShO2
-        OtOC3QX8nXF6dzvFPF7aNxzGr3+fXj3/XSmFumX02tdMHzgJPQGe1EDmGuMDYOP6Nuc+zT
-        q97VgYpSiuPSEqYgdO5pz3pjA9Mfmi0=
+        bh=R+Ih3YtGyWyTixz3Aclx/Os2sciMyuCYkFjO6tpHUqw=;
+        b=gy90+q9+Ov8tHWo4m6ChCKtDS90M0aeCGjM5CEXoaMxp5r0O8OT2xWcUELkdd89yR0bbpM
+        YOJgjULZq32FZMHSBSn3LrOuXjytkiVm8UR9hRUv2hWK0FVFi+5GAw4OZTF/5U4NOs1jns
+        PizRtZ5ElScFeoLW2fk5YaObgrNqs3I=
 Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
  [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-274--FDnHRUINxOZlu-W9BcJUQ-1; Wed, 09 Mar 2022 11:47:39 -0500
-X-MC-Unique: -FDnHRUINxOZlu-W9BcJUQ-1
-Received: by mail-ej1-f69.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so1594057ejw.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:47:38 -0800 (PST)
+ us-mta-463--4i141PwOc6F6HHbYsrXqA-1; Wed, 09 Mar 2022 11:47:46 -0500
+X-MC-Unique: -4i141PwOc6F6HHbYsrXqA-1
+Received: by mail-ej1-f69.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so1596331ejk.16
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:47:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=GtHZAmMaUYAx0LRBNry1Z8g5yS/lTA9TMVV6Zdqr9HI=;
-        b=SakN3tsyfF85tuaBhLLOFrn3E+bFbi8J1Yy6+wC5+K0eC5Q05cVRiVGAa0BoIJr7Zu
-         53M8SIeCbNhYhyiitDqPn54xJOJ7y1rG88CPRsl2rWQ1V91p42tjHY38Twq7p6akQUWW
-         88Ruzcmr3DFEH6xzRm4bZDygtxmuEAPLOlccZkcPETcST82VzYYp+Bji97ohDrxO0Vas
-         //6yPNdjSPT03BAesBG6hG6jkCni9iNPpzFNQMM25DPXdSMTTD9qCK/AHYxCYSTYQw96
-         o5EymtjYqEgzMC+ExAd/quqrgV/Ekb953q2F5P9RMcADfJ1mPxily4jXLxTJvmeZ1KI2
-         d26w==
-X-Gm-Message-State: AOAM533CAPcuFFgKMwSBV3iKwSGeWij9a6jk9jm/6UiLMv0kw5/jg3ut
-        oIbTCIxTVWrRhHwlFWc2h1RvgG6w992Ooi+H9GWvnK50Y+7NvAHc/C2xmk+3ZMG1a6HaErnqz75
-        y4ddoP0g3BxrjOaHIWSwyJgAT
-X-Received: by 2002:a17:907:60ca:b0:6da:8f25:7983 with SMTP id hv10-20020a17090760ca00b006da8f257983mr631820ejc.106.1646844457789;
-        Wed, 09 Mar 2022 08:47:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw7W66bmqFbu8gYAU5N0gz7/+fCQJtGeEoAcf1WlMCvUxsd/Rx1EWoj8m+ZeeL+r81lz05NDA==
-X-Received: by 2002:a17:907:60ca:b0:6da:8f25:7983 with SMTP id hv10-20020a17090760ca00b006da8f257983mr631795ejc.106.1646844457559;
-        Wed, 09 Mar 2022 08:47:37 -0800 (PST)
+        bh=R+Ih3YtGyWyTixz3Aclx/Os2sciMyuCYkFjO6tpHUqw=;
+        b=ioLcVP6miB4OuqJ6CtU5jaM9j7NPABo2ICjEDWGgvM+SDTAW42mUcu2icFUTJCweXC
+         V7NL8XUp3qasSjSt4WufBTTw+wWXH+0de2R8pVcPrnEnF4TXqxIYPzCCzZpYxQU5F67g
+         0+LePr36Pp80CNT9hjWC6E7XrKxJh/M/fvrlm3824jVGFsi/FSQDPaG+IN9rOY5DO5ap
+         GzRRSTiKmQiyp0Je/QEUOhZ0xSqBHyw6MGwLCRufCHRe3CFX2EfPzTVQjPWKrEhNYZC0
+         dMSk6xTf5TdCj76pFLwfpRsL1Hckicptqy0opOWQ+8zh53bj8PV6GHAsoSDPcyCdEwPC
+         htZg==
+X-Gm-Message-State: AOAM533acHQrUHPYybomrLuKHolK2ey6COyJ7mtRSF7H1sLCKxLxSfp9
+        gDY/0jdHIIZkTR7mN0HSGNHx1VquQGtXnTAF9E7Cys2o21Rl9aHarCz7YbyEkNdiKnjr3EbL7fp
+        POG17mP3dGd6/lp0ykc6zvGkF
+X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr347243edy.332.1646844465040;
+        Wed, 09 Mar 2022 08:47:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzv9CwpdD58CoUfTld7CeyhBYPnaNZPQgN9uEBEcu4bVuCDmHzx51HtCSC/TfYvP+E3+h9ELQ==
+X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr347214edy.332.1646844464775;
+        Wed, 09 Mar 2022 08:47:44 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm908648ejj.74.2022.03.09.08.47.36
+        by smtp.googlemail.com with ESMTPSA id f5-20020a17090624c500b006cee6661b6esm950257ejb.10.2022.03.09.08.47.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
-Message-ID: <63493d06-0b6c-9993-2315-64033dd041d6@redhat.com>
-Date:   Wed, 9 Mar 2022 17:47:35 +0100
+        Wed, 09 Mar 2022 08:47:43 -0800 (PST)
+Message-ID: <4ca2844c-c9df-8eff-5773-17340759d8ea@redhat.com>
+Date:   Wed, 9 Mar 2022 17:47:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.15] KVM: x86: Yield to IPI target vCPU only if
+Subject: Re: [PATCH MANUALSEL 5.4] KVM: x86: Yield to IPI target vCPU only if
  it is busy
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
@@ -69,9 +69,9 @@ To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
 Cc:     Li RongQing <lirongqing@baidu.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         x86@kernel.org, kvm@vger.kernel.org
-References: <20220309164632.137995-1-sashal@kernel.org>
+References: <20220309164655.138121-1-sashal@kernel.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220309164632.137995-1-sashal@kernel.org>
+In-Reply-To: <20220309164655.138121-1-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -109,10 +109,10 @@ On 3/9/22 17:46, Sasha Levin wrote:
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-> index b656456c3a94..49f19e572a25 100644
+> index 6ff2c7cac4c4..77e4d875a468 100644
 > --- a/arch/x86/kernel/kvm.c
 > +++ b/arch/x86/kernel/kvm.c
-> @@ -565,7 +565,7 @@ static void kvm_smp_send_call_func_ipi(const struct cpumask *mask)
+> @@ -543,7 +543,7 @@ static void kvm_smp_send_call_func_ipi(const struct cpumask *mask)
 >   
 >   	/* Make sure other vCPUs get a chance to run if they need to. */
 >   	for_each_cpu(cpu, mask) {

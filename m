@@ -2,78 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07254D323C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4634D323F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiCIPzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S234047AbiCIP5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiCIPzF (ORCPT
+        with ESMTP id S229825AbiCIP5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:55:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9718613AA21;
-        Wed,  9 Mar 2022 07:54:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 022F86164F;
-        Wed,  9 Mar 2022 15:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25E1C340E8;
-        Wed,  9 Mar 2022 15:54:04 +0000 (UTC)
-Date:   Wed, 9 Mar 2022 10:54:03 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org, mtosatti <mtosatti@redhat.com>
-Subject: Re: Warning when exiting osnoise tracer
-Message-ID: <20220309105403.66d2b6ef@gandalf.local.home>
-In-Reply-To: <eeb95928-02cf-a38c-8079-d2bbf4edb7e7@kernel.org>
-References: <c898d1911f7f9303b7e14726e7cc9678fbfb4a0e.camel@redhat.com>
-        <eeb95928-02cf-a38c-8079-d2bbf4edb7e7@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 9 Mar 2022 10:57:16 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE10D13C255
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:56:16 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id qx21so5978593ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l6rzSBg+hycjyAg3vNgFOkzB2r7Wku4uLvqN81LLhjM=;
+        b=oAhEDWHOR+wZdZZD6U5/mkxMVidolVS6sz1LQJ3eelAui4Co0GyuNOPxYNkA+mrbNi
+         4eBicluFjI+EU0X1bYrUfywV5/WayNK9POkQeKQnRjA202XeqSF8jw2yYZqXmbKj6sEJ
+         38dJhL/a1cmVFwkEbTy06O8qVbW7kuymRt9oE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l6rzSBg+hycjyAg3vNgFOkzB2r7Wku4uLvqN81LLhjM=;
+        b=UPcU4K5PSI1qorsfbbUQemFeyw5UsCk1xW8JFSTkPeP09VPtkrTbqq7EMGo5c7djLF
+         f4nnIDEZTT5anNuym2CI8ZqOqz/VRtMHPxHqn4dg14zPey5ygbUSFWwvU1ACQOnNyeQo
+         q78BKp1sXDBnkp+hJCI6EOh3BOfk1e/a3VtIeNSUfdreDRbv4Easf9xNbb5a1zLi3mTj
+         BUHa0UZS4s/obO2lvUX9dNi6y3dKTY4Pwhy0maP+u3tIs338Qshn0arAs8TfJoysATVr
+         kXlbytA3peosZ6oTC0nCg8aRH9twJ6qWpHHnL5qYCFzr8ULYs3bMyqrZcIGs6+IhEql+
+         vwKg==
+X-Gm-Message-State: AOAM532JixvzNm2Di2UgxrLfUqqotnV8WCExxHfaiKvT1K8uQaCm4Sp5
+        AVP5wVJ/ghQ6vOm6Upk0CkNRgPkLOMxZVPcT
+X-Google-Smtp-Source: ABdhPJy2J9jIqO//fCGWWqMHJK8cx40nf9DHB78ORKm8eqzX3J4LMHbe6oWyjGcDvQAYqPEykZYoZQ==
+X-Received: by 2002:a17:907:6e1b:b0:6db:30f5:980c with SMTP id sd27-20020a1709076e1b00b006db30f5980cmr348196ejc.359.1646841375178;
+        Wed, 09 Mar 2022 07:56:15 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id gz20-20020a170907a05400b006d91b214235sm871550ejc.185.2022.03.09.07.56.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 07:56:14 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id p9so3712308wra.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:56:14 -0800 (PST)
+X-Received: by 2002:a5d:5257:0:b0:1f0:1822:69ad with SMTP id
+ k23-20020a5d5257000000b001f0182269admr229452wrc.342.1646841373661; Wed, 09
+ Mar 2022 07:56:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
+In-Reply-To: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 9 Mar 2022 07:56:01 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=V4oicW6ZVVyE3sNYxAdaEiGdjAZC77o-wjn3=fmfL6eg@mail.gmail.com>
+Message-ID: <CAD=FV=V4oicW6ZVVyE3sNYxAdaEiGdjAZC77o-wjn3=fmfL6eg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] drm/bridge: Add MAINTAINERS entry for DRM drivers for
+ bridge chip bindings
+To:     dri-devel <dri-devel@lists.freedesktop.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 08:25:56 +0100
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+Hi,
 
-> On 3/8/22 18:30, Nicolas Saenz Julienne wrote:
-> > While running next-20220307, on a system with isolated CPUs (don't know if
-> > relevant but less tested code-path), I see this after killing (ctrl-C) the
-> > following trace command:
-> > 
-> > 	trace-cmd record -e all -M 10 -p osnoise --poll
-> > 
-> > Note that this is *without* my recent osnoise patch.  
-> 
-> yeah, your patch does not hit this part of the code.
-> 
-> > [  129.925474] ------------[ cut here ]------------
+On Tue, Mar 8, 2022 at 11:07 AM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> The bindings for bridge chips should also get the same maintainers
+> entry so the right people get notified about bindings changes.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-I'm surprised that my tests did not hit this.
+There didn't seem to be a reason to wait, so I pushed all 3 to
+drm-misc-next w/ collected tags
 
-I've been running a lot of trace-cmd tests lately (to try and release 3.0!)
-and I have osnoise tracer enabled in these tests.
+46db48f25ed1 drm/bridge: Add myself as a reviewer for the Parade
+PS8640 bridge chip
+59c217b3dde5 drm/bridge: Add myself as a reviewer for the TI SN65DSI86
+bridge chip
+73a46da4fa7c drm/bridge: Add MAINTAINERS entry for DRM drivers for
+bridge chip bindings
 
-Hmm, it's just a warning that doesn't appear to cause any damage. I just
-tried it out, and sure enough it triggered. The problem is that my
-trace-cmd tests do not check dmesg :-/  Maybe I need to change that, as I
-only looked at the result of the test, and because the tests spits out a
-lot of noise to dmesg, I can easily miss warnings there. I'll add a test to
-look for Call Traces at the end of the test.
-
-Thanks for the report.
-
--- Steve
+-Doug

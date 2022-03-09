@@ -2,162 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D164D2E6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439344D2E68
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiCILtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S232420AbiCILtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiCILtf (ORCPT
+        with ESMTP id S232201AbiCILtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:49:35 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFCA3980E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:48:34 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2299hRx6015367;
-        Wed, 9 Mar 2022 11:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=aEjQQ7CwS5FIlcz6O6aa5bNh6h1ZX7sZy/lVkJVuFIk=;
- b=Bj2fw76CKsXaGsVL99cEGA4BSCphraRt+nghAIsyDYVxcOsDDDYvkZYYq4yiCs8thb9x
- sVHpcfm+3xpXnpzOH0DWCYYDAbaYS8j40UNYicdos3Xzeuh8JA6Y7pRVBKMMozkne/7b
- RzBpljCnkhT6/kLH1GoOAw67jUZXCzvdL7Qyxd2u5emIoXAVIwDS9Qt9cjjd5bWsRpiH
- 0iyRsrIcTF/4CdzWPDssDy3CGRcCkoL0I+Gl89/pVqxup/LhZLL0ttopaYQJq6EXG29d
- 5wYVg2E3fIIcIgP54o4xaUye7Wh12YWomzFCGgM5wQn4gr8Xe1QrPEzmro0dS4UCWAEr 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eny192bf5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Mar 2022 11:47:58 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 229Bjw60021788;
-        Wed, 9 Mar 2022 11:47:57 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eny192be5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Mar 2022 11:47:56 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 229BgX0Z003721;
-        Wed, 9 Mar 2022 11:47:54 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ekyg91xk4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Mar 2022 11:47:54 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 229Blp0P10092874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Mar 2022 11:47:51 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1E97A405F;
-        Wed,  9 Mar 2022 11:47:51 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32F94A405B;
-        Wed,  9 Mar 2022 11:47:51 +0000 (GMT)
-Received: from localhost (unknown [9.43.9.116])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Mar 2022 11:47:51 +0000 (GMT)
-Date:   Wed, 09 Mar 2022 17:17:49 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ndesaulniers@google.com, samitolvanen@google.com, x86@kernel.org
-References: <20220225083647.12ceb54b@gandalf.local.home>
-        <1646159447.ngbqgzj71t.naveen@linux.ibm.com>
-        <20220301142016.22e787fb@gandalf.local.home>
-        <Yh9vF8REB1JlhQCJ@hirez.programming.kicks-ass.net>
-        <20220302110138.6d2abcec@gandalf.local.home>
-        <20220302144716.1772020c@gandalf.local.home>
-        <Yh/Y2FHw90m00owK@hirez.programming.kicks-ass.net>
-        <1646300416.yyrqygami4.naveen@linux.ibm.com>
-        <YiC89O5WtsU871Sf@hirez.programming.kicks-ass.net>
-        <20220303093413.387ee6f1@gandalf.local.home>
-        <YiDlx0J1KMNP39if@hirez.programming.kicks-ass.net>
-In-Reply-To: <YiDlx0J1KMNP39if@hirez.programming.kicks-ass.net>
+        Wed, 9 Mar 2022 06:49:11 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5879E171EEF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:48:09 -0800 (PST)
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MfqCF-1o3RL42ODZ-00gGuL for <linux-kernel@vger.kernel.org>; Wed, 09 Mar
+ 2022 12:48:07 +0100
+Received: by mail-wr1-f44.google.com with SMTP id h15so2592525wrc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 03:48:07 -0800 (PST)
+X-Gm-Message-State: AOAM530sDQ4h1UpFt+fZR3OEV1C3XLKKa0c1c3VpB/ic/DKKCHSxhft8
+        Yy7bGpF9wcJCZtSN/+Vc/gYRSv4QCa+cfNRRoD0=
+X-Google-Smtp-Source: ABdhPJx8CmrEkP9lIy7Z5de0qkV2NmzIOzmwBGL9JST+3PaDpmd2sG65KYvqwn/RglW3lLU3PwBwOhS6PRPEiVwkkUI=
+X-Received: by 2002:adf:e181:0:b0:1f7:7d5e:c3bb with SMTP id
+ az1-20020adfe181000000b001f77d5ec3bbmr8821463wrb.12.1646826487258; Wed, 09
+ Mar 2022 03:48:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1646826381.jb2bpilh3a.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WDcRevT--b2xYhsYPyJl_7I37NJIzcZm
-X-Proofpoint-ORIG-GUID: 52f7x1GDCOQIhy__DVPU6s-xHNFnpXyT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-09_04,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 phishscore=0 mlxscore=0 spamscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203090063
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220309052842.247031-1-michael@michaelkloos.com>
+ <CAK8P3a2Mr_z6h7eg1O8ZN5_qE-o+8KFFBum3CxyuDYeF50s1dw@mail.gmail.com> <e936de26-95b7-1eed-008e-8d025b638265@michaelkloos.com>
+In-Reply-To: <e936de26-95b7-1eed-008e-8d025b638265@michaelkloos.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 9 Mar 2022 12:47:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a33g1D2mE2Z_ZsukMCBZ3gCGdDbH+2osHZe0Y8GoO_5UA@mail.gmail.com>
+Message-ID: <CAK8P3a33g1D2mE2Z_ZsukMCBZ3gCGdDbH+2osHZe0Y8GoO_5UA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
+To:     "Michael T. Kloos" <michael@michaelkloos.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:DfQbHoCGD30olWfmn00WWrwJm36gsGzi2gl8xkAxfg4UF5SUWZP
+ xxjdnkOXHaEs6B5MoIE8y/8QJM3XpNIOcob5RVq9B2+Sv0HGsJZb9iquo394Rz1NjVKPeUU
+ B/6z64IlrJznToOC+kG7lx3fRKgjGe1/6m0uJ2U/dc/REDKPCxm/4LpJuKhPZzICLB3SZrd
+ sksTPmu1BA5IJzuEa7OtA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pKYYSIcRy1Y=:rdOHeu3gLfOEag6BgUa6Zw
+ inEWJLEnjgi5NI8vpjVe5HHLRpTL/cSSiaDwqr4XgWOSXgErhWVluJmiNRe8mBBqldRCdRTVN
+ nXMVfFD/grANRZnGMCXWZ08Tek1DfneFJ/QmSoAIKRXOk9W0IHHNpsaONRNw616a0ymPq1fRY
+ ldDz9q5Ak4Nr9o7qgt+cMfVJ84Ne5nKsOvELSEJbF13/g0gSJa0nHGqSAdq8vKNeOTY5x5SOU
+ mO7s+67ZMDJhUbmo2KKcB+Lt48HWjlGmJhUO2ZJWMmxKAsbpPimI90oa9agTuyWiNTji2lPwr
+ Ar7AEld7mYjDa2Be3bzYQVjgaTpVevYDBqM8QBcoKUYlCDPeu1GOHRxA5mK+KSBo4FgcdJf3a
+ TOXIcM3lDtydS8wSPG1PmmVLKJ4J6OlnrjcCmtu2p4z7f5l0JghlC5YUsC2BUbwAVpbLGPp/2
+ 76HNSL9rcriKQR0Nt7vbqv1dqEpTbW2LPSjXrqv7aM/H88Zuy5NXIzfHt+HXvQoV5cpU8WQYz
+ scFJvIzJqYaUkTI1QutFuB3L1K6k1GGZFh9XqMgLpY1YkZzpw3pKoyetRLncpuWftmjv/JGNZ
+ PzIZU7qvsBK5sBkEl0FL6KHgKPpCKRTHb9qSmUHiDY7M87bNOrVwTM6KbOrhlPvPFz1WW/ojZ
+ MlRtqdztVO7xlYyj32CVjSN86PGqpW22jZQWJu2SwmhLh6SEzzCuP3E09zIL08GtV3mY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra wrote:
-> On Thu, Mar 03, 2022 at 09:34:13AM -0500, Steven Rostedt wrote:
->> On Thu, 3 Mar 2022 14:04:52 +0100
->> Peter Zijlstra <peterz@infradead.org> wrote:
->>=20
->> > > @@ -1596,7 +1596,7 @@ static int check_ftrace_location(struct kprobe=
- *p)
->> > > {
->> > > 	unsigned long ftrace_addr;
->> > >=20
->> > > -	ftrace_addr =3D ftrace_location((unsigned long)p->addr);
->> > > +	ftrace_addr =3D ftrace_location_range((unsigned long)p->addr, (uns=
-igned long)p->addr); =20
->> >=20
->> > Yes, although perhaps a new helper. I'll go ponder during lunch.
->>=20
->> Is there more places to add that to make it worth creating a helper?
->=20
-> This is what I ended up with, I've looked at all ftrace_location() sites
-> there are, seems to work too, both the built-in boot time ftrace tests
-> and the selftests work splat-less.
->=20
-> I should update the Changelog some though.
->=20
-> Naveen also mentioned register_ftrace_direct() could be further cleaned
-> up, but I didn't want to do too much in once go.
+On Wed, Mar 9, 2022 at 12:43 PM Michael T. Kloos
+<michael@michaelkloos.com> wrote:
+>
+> Thank you for your feedback.  I don't really have much of an
+> opinion about that right now aside from that I know where things
+> are in the current structure and am comfortable.  My goal with this
+> contribution was to keep it in-line with the current config
+> structure.  Hence, I put it right next to the menuconfig option
+> to control CONFIG_RISCV_ISA_C under Platform Type.
+>
+> I wouldn't necessarily be opposed to rethinking the way platform
+> feature selection is presented in menuconfig.  If people feel that
+> most users will be looking for an rv64gc config and that it should
+> be made for clear, perhaps it could be done.  I would need to do
+> more thinking about how exactly that would look.
+>
+> I do think that it is outside the scope of this patch.  Were you
+> working on something like that and worried about a merge conflict?
 
-Not a problem, I can send those as cleanups atop this series.
+As I said, I think your patch is ok, and I have no objections to it
+being merged. It's just one more option among others that
+can cause problems if users get it wrong.
 
->=20
-> ---
->=20
-> Subject: x86/ibt,ftrace: Search for __fentry__ location
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Wed Feb 23 10:01:38 CET 2022
->=20
-> Have ftrace_location() search the symbol for the __fentry__ location
-> when it isn't at func+0 and use this for {,un}register_ftrace_direct().
->=20
-> This avoids a whole bunch of assumptions about __fentry__ being at
-> func+0.
->=20
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
-
-This version looks good to me.
-Acked-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-
-
-Thanks,
-Naveen
-
+       Arnd

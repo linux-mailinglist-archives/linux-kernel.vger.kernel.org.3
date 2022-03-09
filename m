@@ -2,124 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126624D3B37
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F784D3B3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 21:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236625AbiCIUjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 15:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S238142AbiCIUkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 15:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236176AbiCIUjU (ORCPT
+        with ESMTP id S236566AbiCIUkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 15:39:20 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4BD527F3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:38:19 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id v28so4893114ljv.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 12:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/yeinogDeuOBTA+RgXs0VaNGe2cwXag06ouy/qbMCCs=;
-        b=eAKctOojBAW5vDxW9VxH+BGy31s6He186/PWHaAwIkHLzVegn5dhGdivM4jeg72UAe
-         GkML1gmaFxGvszjifGcmZzmlorfKxzX8XLPWQ94CkkGCi+OMrgGduicTJGG3qmRhfXQA
-         JD8i+KL7gGnY5EOdq35cteeedEM2EWl62TU3Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/yeinogDeuOBTA+RgXs0VaNGe2cwXag06ouy/qbMCCs=;
-        b=mSszR6HAo6THBeAMrhlWQJMN21stDrVFsosjCZRaHaCrhf7EXSNjH/0FaAR3icndfe
-         mdG04qjHxVPYSfiXhtMhUJVEqBX8u+f9MczUJP+Jp/QJqg5wBOhEXLlze/Mv9qJOgXua
-         IHfcS/sFOx0SeJCeuZORiij8F4AD6OnagmU6B1Q1KdjxT5mREgXNzQ7Lzk7xIWVlArtE
-         8gy99hXo02zq7YiAMcrHBWrCWUn4jo3D04SSR0xSLLmhFJuHna4xqGByZxFG6OiM/tTr
-         pWUPs9qWvkF3Kk27AA1MUgEuLwPpRZ8Q8qoG4OtNoCj7jX/CVGuC7BxSSd5MxR9btcl0
-         BlYw==
-X-Gm-Message-State: AOAM530awpCFiAmkwRz7LeLQa8omDaEK7cegMyuN2pQuHgFyq4WaqA2H
-        b1FasY1OAGpkKjI0gqupY1O+GoqVj0ry9C0DZws=
-X-Google-Smtp-Source: ABdhPJxras7Z8dZSesnSMBLQ8VnaBYn4g56yHK6mX7GaiHZ5uA8MGxNeZlFA7jumfgQTnqeAQptPTA==
-X-Received: by 2002:a2e:8256:0:b0:246:3e95:77e8 with SMTP id j22-20020a2e8256000000b002463e9577e8mr821130ljh.493.1646858297930;
-        Wed, 09 Mar 2022 12:38:17 -0800 (PST)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id f15-20020a2e6a0f000000b0023e429778fasm625131ljc.56.2022.03.09.12.38.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 12:38:11 -0800 (PST)
-Received: by mail-lj1-f177.google.com with SMTP id bn33so4911770ljb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 12:38:11 -0800 (PST)
-X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id
- v4-20020a2e9904000000b00247ec95fdeemr823721lji.291.1646858290905; Wed, 09 Mar
- 2022 12:38:10 -0800 (PST)
+        Wed, 9 Mar 2022 15:40:33 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22DD9EBA8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 12:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646858374; x=1678394374;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=0uWpjRp/Vo5q8YVz1wzLlP1EMBE9VkkchbITpxeIAdE=;
+  b=nxiUViPbw1/ecT/n9TH6A0LbjRqgYamyU7Au10SmIqG3hsfDTGpBa9WD
+   V/kMP7Orkg+z9MZ3haTqRoB5yHcwGew/2YEIa/bwtsXq8SpUWIt9G6XKA
+   Cb4oONspSGq3zYMbHjaPFoggAtqsblONwNGHU/W1awIYjSm2cG18RClK1
+   eOGr0FSa8dOdgarh3Z2p8OCqCN9dtiuq8giZTvJIQbjDu+cQCNM2SN3+L
+   W0LPlOdheKRJKiF3NVybwCPWI2U+ZB18s5PQKbN4YHHDTXXdiWk1a2K7B
+   SvgYldcsWdbxABP5g9gHzbMIbXCtrL8ufS0e04WCf0YY7yEcfDfS6aJGR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="279820379"
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="279820379"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 12:39:33 -0800
+X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
+   d="scan'208";a="642294953"
+Received: from sli6-mobl.amr.corp.intel.com (HELO [10.209.104.236]) ([10.209.104.236])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 12:39:32 -0800
+Message-ID: <d6db956d-38b5-c3bc-611d-c947e246a36e@intel.com>
+Date:   Wed, 9 Mar 2022 12:39:26 -0800
 MIME-Version: 1.0
-References: <20220113160115.5375-1-bp@alien8.de> <YeBzxuO0wLn/B2Ew@mit.edu>
- <YeCuNapJLK4M5sat@zn.tnic> <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
- <YeHLIDsjGB944GSP@zn.tnic> <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
- <YeHQmbMYyy92AbBp@zn.tnic> <YeKyBP5rac8sVvWw@zn.tnic> <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
- <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 9 Mar 2022 12:37:54 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg+TYsns5JvNds6BVG7ezdg8uM_z9m8uJBcRDANdd7csw@mail.gmail.com>
-Message-ID: <CAHk-=wg+TYsns5JvNds6BVG7ezdg8uM_z9m8uJBcRDANdd7csw@mail.gmail.com>
-Subject: Re: [PATCH] a.out: Stop building a.out/osf1 support on alpha and m68k
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, X86 ML <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
-        Michael Cree <mcree@orcon.net.nz>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-29-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv5 28/30] x86/tdx: ioapic: Add shared bit for IOAPIC base
+ address
+In-Reply-To: <20220302142806.51844-29-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 12:04 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Let's see if anyone cares about a.out support on the last two
-> architectures that build it, by disabling the build of the support in
-> Kconfig.
+On 3/2/22 06:28, Kirill A. Shutemov wrote:
+> +static void io_apic_set_fixmap_nocache(enum fixed_addresses idx,
+> +				       phys_addr_t phys)
+> +{
+> +	pgprot_t flags = FIXMAP_PAGE_NOCACHE;
+> +
+> +	flags = pgprot_decrypted(flags);
+> +	__set_fixmap(idx, phys, flags);
+> +}
 
-Oh, I'm pretty sure we can't do this.
+This is only used by the "io_apic".  No need to add the "_nocache".  Maybe:
 
-a.out on alpha is afaik still very much alive - well, as alive as
-anything alpha is - although it's called "ECOFF".
+static void io_apic_set_fixmap(enum fixed_addresses idx, ...
+{
+	pgprot_t flags = FIXMAP_PAGE_NOCACHE;
 
-It's the native Tru64 (aka "DEC OSF/1", aka "Digital UNIX") format, so
-it's more than some old legacy Linux thing.
+	/*
+	 * Ensure fixmaps for IOAPIC MMIO respect memory
+	 * encryption pgprot bits, just like normal ioremap():
+	 */
+	flags = pgprot_decrypted(flags);
 
-We still call it "a.out", but the history is that a.out with some
-extensions became COFF, which then became ECOFF, so our a.out code
-really covers the whole gamut.
-
-Yeah, we don't actually parse any of the extensions that make COFF
-what it is, or ECOFF what _it_ is, but the a.out loader ends up
-working "well enough" for simple binaries by using ugly code like
-
-  #define N_TXTOFF(x) \
-    ((long) N_MAGIC(x) == ZMAGIC ? 0 : \
-     (sizeof(struct exec) + (x).fh.f_nscns*SCNHSZ + SCNROUND - 1) &
-~(SCNROUND - 1))
-
-which jumps over all the section headers.
-
-But sure, it would be interesting to know if any alpha people care - I
-just have this suspicion that we can't drop it that easily because of
-the non-Linux legacy.
-
-                   Linus
+	__set_fixmap(idx, phys, flags);
+}

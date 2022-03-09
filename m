@@ -2,205 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7DB4D31ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D4F4D31F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbiCIPlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S233919AbiCIPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiCIPlo (ORCPT
+        with ESMTP id S233956AbiCIPl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:41:44 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D087E15DDE3;
-        Wed,  9 Mar 2022 07:40:44 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id g6-20020a9d6486000000b005acf9a0b644so1988688otl.12;
-        Wed, 09 Mar 2022 07:40:44 -0800 (PST)
+        Wed, 9 Mar 2022 10:41:57 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22DA177D0C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:40:58 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id q19so2262832pgm.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:40:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=awNm7ncYJS5runeS2crmI62S72vDnlHWFXIoD08zsCQ=;
+        b=L95s3l8KwvKSoVBp7CenGSpuMYCVVN7GYKixyJEeDlmj6to8MhL0pIcnvDahgNOvxi
+         JfjZ0TGsVg8yLTggwW59sBAVvTyJ2+ahvDMzZ1X/cpIaGcZw/Yfu+FTW13ogQdC5gcUx
+         WduOO+A0oDbV8KctSwlgphgr4QbcVJIbd4eTAk9QTeMSmzdnIvnMpo4DZt6s3GqCCXWQ
+         I9FjVUcItyTicv7V147R87ZLFIeV9kXVghbdYNWZYNmZvi5YRVLgDg/4HmWm3BJp0jeP
+         tBfOIvJm8gJ5J9VEv9NMcb8m5DNZx/lSzmLslFTLe9wlqmNqqJUqnt1TS7+FBUg/Et+J
+         4D3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8+eCR37KVwGF95t89hLUFTDz+ycvmadBjeALw7ulW5A=;
-        b=xVntQhgeeKljYARd2f264Tu7xrSXLnyLv4Lm3flyIVm8FrNeyUGAX11dpVcmXGlejx
-         MDvde2M0LFKyMvB60TOqf1iD35s2gVOrTbXgMyQGjgeQy4jKZ7KgnLRnE3kYRuuaarhH
-         1sd628GBocisqBeyMExncCd5qZrYur4C4powzB6JSnbTTCBwGAaCllSn6oY/iVVPfaHr
-         Z3QJR0ZHc72bvSdHFRDpCMBW8ullUNHhLdjakKjBiRLVOZ0X2DthNocqRdzq2tIGGNqr
-         dW8UcRcILTdQIz2z5pDxelZSihn0hX1+x8ulbqWw1v74TgrT1DzsWt7kodkFgPvqHLCE
-         Iedw==
-X-Gm-Message-State: AOAM532XzclPVwL3fHydfz+gAFVnyoHc/rr3OuxL4+5+uK1Hu88b947J
-        ZiJqIy4W/nbC6LOSkA+CYQ==
-X-Google-Smtp-Source: ABdhPJxg9vJ1cq92V9hMC80Uz8lMvWf5o0iCwZzyfJ8FsXTT0jeVNLvW3K+TWWBLFoFKk9J+PdCzGQ==
-X-Received: by 2002:a9d:7005:0:b0:5af:4489:208 with SMTP id k5-20020a9d7005000000b005af44890208mr162237otj.306.1646840443990;
-        Wed, 09 Mar 2022 07:40:43 -0800 (PST)
-Received: from rob (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n62-20020acabd41000000b002d97bda3870sm1080781oif.53.2022.03.09.07.40.42
+         :mime-version:content-disposition:in-reply-to;
+        bh=awNm7ncYJS5runeS2crmI62S72vDnlHWFXIoD08zsCQ=;
+        b=nIT6xDEir1SVVqGwYJl9K3sGJkBf1Jw2aztm5Xm2Q3Gnox65yKJko8doe4lhXnngvi
+         4atU5SjvvdOVzsEZMncixZpyI5EsW9vGUFlIgMzlkX73buJnfw+tsxfeaqUnKfa3e6dH
+         tILogc6KXsEEGvp7MqJ7KpijZMcOF/NZlXSVSBkzy1r5qyPyhFpdFuFJTDbTzmlezmcH
+         Zdg7Pj4W6QL7RFbCT6WRj/wVoCPOM4tG+6GAD14iC75g8cPy0X1Akq1j48HjRumNWLrX
+         ai8KFl2ULZH2K2iEMPtNV/le0amlr/k1Sivg3eeGJKSwsMdll1xDzgZISMZ/m0Xs/Df0
+         NHlw==
+X-Gm-Message-State: AOAM533BxstbiLJVthnjU6TlTH9Y1TAdCiCvuIkWncAjDXpi/SBo02S3
+        5SIHCDWMfr6DU+na361YsSkIng==
+X-Google-Smtp-Source: ABdhPJy0fy+gKxWpiweokALKmNhNvXvpZLPvXf3Aa/Du9Pmy7tGAgvR6HKEPghwWq0MWpSuGrYsfnQ==
+X-Received: by 2002:a05:6a00:ac1:b0:4f1:29e4:b3a1 with SMTP id c1-20020a056a000ac100b004f129e4b3a1mr295081pfl.63.1646840457963;
+        Wed, 09 Mar 2022 07:40:57 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o1-20020a637e41000000b003804d0e2c9esm2819543pgn.35.2022.03.09.07.40.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 07:40:43 -0800 (PST)
-Received: (nullmailer pid 3205945 invoked by uid 1000);
-        Wed, 09 Mar 2022 15:40:41 -0000
-Date:   Wed, 9 Mar 2022 08:40:41 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Tom Rini <trini@konsulko.com>, Simon Glass <sjg@chromium.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ricardo Salveti <ricardo@foundries.io>,
-        Jorge Ramirez-Ortiz <jorge@foundries.io>,
-        Sean Anderson <seanga2@gmail.com>, devicetree@vger.kernel.org,
-        u-boot@lists.denx.de, linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V3] dt-bindings: nvmem: add U-Boot environment variables
- binding
-Message-ID: <20220309154041.GA3202199@robh.at.kernel.org>
-References: <20220228131250.16943-1-zajec5@gmail.com>
- <578e243d-2273-add3-898c-959888c2a155@xilinx.com>
+        Wed, 09 Mar 2022 07:40:57 -0800 (PST)
+Date:   Wed, 9 Mar 2022 15:40:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
+Message-ID: <YijKhYNjZpG7EX9y@google.com>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+ <20210811122927.900604-3-mlevitsk@redhat.com>
+ <YTECUaPa9kySQxRX@google.com>
+ <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
+ <YifoysEvfnQgq59A@google.com>
+ <3221c2385e1148fe0ee77d4717b52726e1db9d8d.camel@redhat.com>
+ <a7b27887-ce00-c173-a7e7-8ad3470154f5@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <578e243d-2273-add3-898c-959888c2a155@xilinx.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <a7b27887-ce00-c173-a7e7-8ad3470154f5@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 02:42:43PM +0100, Michal Simek wrote:
+On Wed, Mar 09, 2022, Paolo Bonzini wrote:
+> On 3/9/22 13:31, Maxim Levitsky wrote:
+> > Question: is it worth it? Since I am very busy with various things, this
+> > feature, beeing just small debug help which I used once in a while doesn't
+> > get much time from me.
 > 
-> 
-> On 2/28/22 14:12, Rafał Miłecki wrote:
-> > From: Rafał Miłecki <rafal@milecki.pl>
-> > 
-> > U-Boot uses environment variables for storing device setup data. It
-> > usually needs to be accessed by a bootloader, kernel and often
-> > user-space.
-> > 
-> > This binding allows describing environment data located in a raw flash
-> > partition. It's treated as NVMEM device and can be reused later for
-> > other storage devices.
-> > 
-> > Using DT should be cleaner than hardcoding & duplicating such info in
-> > multiple places. Bootloader & kernel can share DTS and user-space can
-> > try reading it too or just have correct data exposed by a kernel.
-> > 
-> > A custom "compatible" string allows system to automatically load
-> > relevant NVMEM driver but phandle can be also used for reading raw
-> > location.
-> > 
-> > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> > ---
-> > V2: Update descriptions to don't make this binding MTD (flash partition)
-> >      specific. Mention multiple possible storage ways.
-> > V3: Drop
-> >      allOf:
-> >        - $ref: nvmem.yaml#
-> >      as we don't use anything rom the nvmem.yaml. Thanks Rob.
-> > ---
-> >   .../devicetree/bindings/nvmem/u-boot,env.yaml | 62 +++++++++++++++++++
-> >   MAINTAINERS                                   |  5 ++
-> >   2 files changed, 67 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> > new file mode 100644
-> > index 000000000000..e70b2a60cb9a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> > @@ -0,0 +1,62 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/nvmem/u-boot,env.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: U-Boot environment variables
-> > +
-> > +description: |
-> > +  U-Boot uses environment variables to store device parameters and
-> > +  configuration. They may be used for booting process, setup or keeping end user
-> > +  info.
-> > +
-> > +  Data is stored using U-Boot specific formats (variant specific header and NUL
-> > +  separated key-value pairs).
-> > +
-> > +  Environment data can be stored on various storage entities, e.g.:
-> > +  1. Raw flash partition
-> > +  2. UBI volume
-> > +
-> > +  This binding allows marking storage device (as containing env data) and
-> > +  specifying used format.
-> > +
-> > +  Right now only flash partition case is covered but it may be extended to e.g.
-> > +  UBI volumes in the future.
-> > +
-> > +maintainers:
-> > +  - Rafał Miłecki <rafal@milecki.pl>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - description: A standalone env data block
-> > +        const: u-boot,env
-> > +      - description: Two redundant blocks with active one flagged
-> > +        const: u-boot,env-redundant-bool
-> > +      - description: Two redundant blocks with active having higher counter
-> > +        const: u-boot,env-redundant-count
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    partitions {
-> > +        compatible = "fixed-partitions";
-> > +        #address-cells = <1>;
-> > +        #size-cells = <1>;
-> > +
-> > +        partition@0 {
-> > +            reg = <0x0 0x40000>;
-> > +            label = "u-boot";
-> > +            read-only;
-> > +        };
-> > +
-> > +        env: partition@40000 {
-> > +            compatible = "u-boot,env";
-> > +            reg = <0x40000 0x10000>;
-> > +        };
-> > +    };
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index db8052bc1d26..24fc181a7e6c 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -19958,6 +19958,11 @@ W:	http://linuxtv.org
-> >   T:	git git://linuxtv.org/media_tree.git
-> >   F:	drivers/media/pci/tw686x/
-> > +U-BOOT ENVIRONMENT VARIABLES
-> > +M:	Rafał Miłecki <rafal@milecki.pl>
-> > +S:	Maintained
-> > +F:	Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> > +
-> >   UACCE ACCELERATOR FRAMEWORK
-> >   M:	Zhangfei Gao <zhangfei.gao@linaro.org>
-> >   M:	Zhou Wang <wangzhou1@hisilicon.com>
-> 
-> I think that parsing these partitions is quite sw intensive process and I
-> can't still see the value to have compatible string here.
+> I agree it's not very much worth.
 
-It's always good to know what a node represents.
-
-> I would prefer to have just any link from u-boot node to partition instead.
-
-That's a separate issue and having 'compatible' in no way disallows 
-that.
-
-Rob
+I don't have a use case, was just trying to find the bottom of my inbox and came
+across this thread.

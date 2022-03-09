@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351BC4D2F67
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FA84D3142
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbiCIMtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
+        id S233647AbiCIOtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbiCIMsp (ORCPT
+        with ESMTP id S233644AbiCIOtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:48:45 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF827B1F;
-        Wed,  9 Mar 2022 04:47:45 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KDBgH5NJVz1GCK2;
-        Wed,  9 Mar 2022 20:42:51 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 20:47:40 +0800
-Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
- (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Mar
- 2022 20:47:40 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Wu Bo <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH v3 3/3] scsi:libiscsi: teradown iscsi_cls_conn gracefully
-Date:   Wed, 9 Mar 2022 20:57:59 -0500
-Message-ID: <20220310015759.3296841-4-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220310015759.3296841-1-haowenchao@huawei.com>
-References: <20220310015759.3296841-1-haowenchao@huawei.com>
+        Wed, 9 Mar 2022 09:49:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA1B4ECDF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646837304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kNOo8tfVdsLHz4CQT9H/dwfufzZQMSYbZ0RQG+jvDRA=;
+        b=LmxtdvHjuXz259xN0Lwi7/Oc/lqx2hKDSwtT5vomyd+Gx9eyj0hTyUW23BRwWI/4r1W7cN
+        eLjvHyl+qOPtqWj5L6VJczh4QPMZWvlec9m+N5xxSNMqVKcC+mpKS/Xr19QT/Ac8XurnEb
+        zBIxJ53MnFv1XGvZdG+PDpEQl8TYpa8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-Twi0WZCcN3eEsb6D9b_wiA-1; Wed, 09 Mar 2022 09:48:20 -0500
+X-MC-Unique: Twi0WZCcN3eEsb6D9b_wiA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D27221006AA6;
+        Wed,  9 Mar 2022 14:48:19 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 485F2106D5D3;
+        Wed,  9 Mar 2022 14:48:05 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 718D7416D5DC; Wed,  9 Mar 2022 08:24:21 -0300 (-03)
+Date:   Wed, 9 Mar 2022 08:24:21 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>
+Subject: Re: [PATCH v7 1/2] KVM: LAPIC: Make lapic timer unpinned
+Message-ID: <YiiOZaQCf1K653MS@fuller.cnet>
+References: <1562376411-3533-1-git-send-email-wanpengli@tencent.com>
+ <1562376411-3533-2-git-send-email-wanpengli@tencent.com>
+ <ab523b0e930129a100d306d0959445665eb69457.camel@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ab523b0e930129a100d306d0959445665eb69457.camel@infradead.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,117 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 1b8d0300a3e9 ("scsi: libiscsi: Fix UAF in
-iscsi_conn_get_param()/iscsi_conn_teardown()") fixed an UAF in
-iscsi_conn_get_param() and introduced 2 tmp_xxx varibles, the
-implement looks ugly.
+On Wed, Mar 09, 2022 at 10:26:51AM +0100, David Woodhouse wrote:
+> On Sat, 2019-07-06 at 09:26 +0800, Wanpeng Li wrote:
+> > From: Wanpeng Li <wanpengli@tencent.com>
+> > 
+> > Commit 61abdbe0bcc2 ("kvm: x86: make lapic hrtimer pinned") pinned the
+> > lapic timer to avoid to wait until the next kvm exit for the guest to
+> > see KVM_REQ_PENDING_TIMER set. There is another solution to give a kick
+> > after setting the KVM_REQ_PENDING_TIMER bit, make lapic timer unpinned
+> > will be used in follow up patches.
+> > 
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: Radim Krčmář <rkrcmar@redhat.com>
+> > Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> > Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> > ---
+> >  arch/x86/kvm/lapic.c | 8 ++++----
+> >  arch/x86/kvm/x86.c   | 6 +-----
+> >  2 files changed, 5 insertions(+), 9 deletions(-)
+> 
+> ...
+> 
+> 
+> > @@ -2510,7 +2510,7 @@ void __kvm_migrate_apic_timer(struct kvm_vcpu *vcpu)
+> >  
+> >  	timer = &vcpu->arch.apic->lapic_timer.timer;
+> >  	if (hrtimer_cancel(timer))
+> > -		hrtimer_start_expires(timer, HRTIMER_MODE_ABS_PINNED);
+> > +		hrtimer_start_expires(timer, HRTIMER_MODE_ABS);
+> >  }
+> >  
+> >  /*
+> 
+> Wait, in that case why are we even bothering to cancel and restart the
+> timer? I thought the whole point of that was to pin it to the *new* CPU
+> that this vCPU is running on.
+> 
+> If not, can't we just kill __kvm_migrate_apic_timer() off completely
+> not?
 
-We can fix this UAF with the help of device_del() gracefully.
-Call iscsi_remove_conn() at the beginning of iscsi_conn_teardown would
-make userspace unable to see iscsi_cls_conn any more, then we can free
-memory safely.
-And remove iscsi_destroy_conn() by hand since it is not used now.
+Current code looks like this:
 
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
-Signed-off-by: Wu Bo <wubo40@huawei.com>
----
- drivers/scsi/libiscsi.c             | 10 +++++-----
- drivers/scsi/scsi_transport_iscsi.c | 27 +++++----------------------
- include/scsi/scsi_transport_iscsi.h |  1 -
- 3 files changed, 10 insertions(+), 28 deletions(-)
+void __kvm_migrate_apic_timer(struct kvm_vcpu *vcpu)
+{
+        struct hrtimer *timer;
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 38e68b449c08..da583a39b307 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -3109,8 +3109,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- {
- 	struct iscsi_conn *conn = cls_conn->dd_data;
- 	struct iscsi_session *session = conn->session;
--	char *tmp_persistent_address = conn->persistent_address;
--	char *tmp_local_ipaddr = conn->local_ipaddr;
-+
-+	iscsi_remove_conn(cls_conn);
- 
- 	del_timer_sync(&conn->transport_timer);
- 
-@@ -3132,6 +3132,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	spin_lock_bh(&session->frwd_lock);
- 	free_pages((unsigned long) conn->data,
- 		   get_order(ISCSI_DEF_MAX_RECV_SEG_LEN));
-+	kfree(conn->persistent_address);
-+	kfree(conn->local_ipaddr);
- 	/* regular RX path uses back_lock */
- 	spin_lock_bh(&session->back_lock);
- 	kfifo_in(&session->cmdpool.queue, (void*)&conn->login_task,
-@@ -3142,9 +3144,7 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	spin_unlock_bh(&session->frwd_lock);
- 	mutex_unlock(&session->eh_mutex);
- 
--	iscsi_destroy_conn(cls_conn);
--	kfree(tmp_persistent_address);
--	kfree(tmp_local_ipaddr);
-+	iscsi_put_conn(cls_conn);
- }
- EXPORT_SYMBOL_GPL(iscsi_conn_teardown);
- 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index fc33000a6af9..d0f996d14782 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2165,7 +2165,11 @@ static int iscsi_iter_destroy_conn_fn(struct device *dev, void *data)
- {
- 	if (!iscsi_is_conn_dev(dev))
- 		return 0;
--	return iscsi_destroy_conn(iscsi_dev_to_conn(dev));
-+
-+	iscsi_remove_conn(iscsi_dev_to_conn(dev));
-+	iscsi_put_conn(iscsi_dev_to_conn(dev));
-+
-+	return 0;
- }
- 
- void iscsi_remove_session(struct iscsi_cls_session *session)
-@@ -2437,27 +2441,6 @@ void iscsi_remove_conn(struct iscsi_cls_conn *conn)
- }
- EXPORT_SYMBOL_GPL(iscsi_remove_conn);
- 
--/**
-- * iscsi_destroy_conn - destroy iscsi class connection
-- * @conn: iscsi cls session
-- *
-- * This can be called from a LLD or iscsi_transport.
-- */
--int iscsi_destroy_conn(struct iscsi_cls_conn *conn)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&connlock, flags);
--	list_del(&conn->conn_list);
--	spin_unlock_irqrestore(&connlock, flags);
--
--	transport_unregister_device(&conn->dev);
--	ISCSI_DBG_TRANS_CONN(conn, "Completing conn destruction\n");
--	device_unregister(&conn->dev);
--	return 0;
--}
--EXPORT_SYMBOL_GPL(iscsi_destroy_conn);
--
- void iscsi_put_conn(struct iscsi_cls_conn *conn)
- {
- 	put_device(&conn->dev);
-diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
-index 4af6768e8195..aedbc4488149 100644
---- a/include/scsi/scsi_transport_iscsi.h
-+++ b/include/scsi/scsi_transport_iscsi.h
-@@ -447,7 +447,6 @@ extern int iscsi_add_conn(struct iscsi_cls_conn *conn);
- extern void iscsi_remove_conn(struct iscsi_cls_conn *conn);
- extern void iscsi_put_conn(struct iscsi_cls_conn *conn);
- extern void iscsi_get_conn(struct iscsi_cls_conn *conn);
--extern int iscsi_destroy_conn(struct iscsi_cls_conn *conn);
- extern void iscsi_unblock_session(struct iscsi_cls_session *session);
- extern void iscsi_block_session(struct iscsi_cls_session *session);
- extern int iscsi_scan_finished(struct Scsi_Host *shost, unsigned long time);
--- 
-2.32.0
+        if (!lapic_in_kernel(vcpu) ||
+                kvm_can_post_timer_interrupt(vcpu)) <----------
+                return;
+
+        timer = &vcpu->arch.apic->lapic_timer.timer;
+        if (hrtimer_cancel(timer))
+                hrtimer_start_expires(timer, HRTIMER_MODE_ABS_HARD);
+}
+
+Yeah, should be HRTIMER_MODE_ABS_PINNED AFAICS.
 

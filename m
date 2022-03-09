@@ -2,400 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347FB4D369F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FAD4D3818
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237273AbiCIRm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S234319AbiCIRo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbiCIRmZ (ORCPT
+        with ESMTP id S232251AbiCIRoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:42:25 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4085710E05F;
-        Wed,  9 Mar 2022 09:41:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TtAYKsOKd4RpTYVTd/5cTzJ8Rs2Uc6M/91d+hTPDJXv/pFaelS7AamlBZ0oNISDSiHhrHAb6taKTKPjXA6poeutJm3Jc8gdZYKeOMKD3NxZyB7s5lyke3NI4TL+Af1rLuDBqOrlB3uguBXMJKjqXVPDBM8J966hPT14fXds3FlaD9uWnGS7rcCeQ96Svs3hzOI0ZujSeJcMQvNkiER+9d/0xzerpH2N3pYxa5quq1mhY9nKZXXQWZXi0th7zn5lDYgVYgUSne/mFxspUxMvCoEUebDTzmQoYOJ6UeQK7qcFcUlqdgs0aCXCKgsgHgffOKXBmblGqUw1cj03J7o5Xrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eCV9iZfMU0Umm/A0C9lE5BNEFZUXnPTwJPhrq++V8n4=;
- b=Q98+oD8p3gWI2epW3iuDDCXBWjVJ9iqRJoDikWCd0Ps7f6UGb3Aof+OF0e/rpA64QFoCpkWrFE5GUiJJ/99LpleUtce4dew7TikG5WkGHfsanFroyY2f8uw60WEbwTGno+Sq/ZYAE5S6VyUCACsQI/77AoKAh0n7TSUEQDKxKBQTVuChPmA7lzsv+8eWWBLdWv/mPCEf3mKuZ3s52SdYOynpZQLYsrDJgztbQaoq6HI0HErg4LfBfFdf6CELzitWo8Bt9/FwmoqPajkMZ5u4PnGe1VGxJyicCHo/lxCPU94CShLZjmuku4AxQ71O07S/7Rr1wzK/hIIZj25/SA/orQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eCV9iZfMU0Umm/A0C9lE5BNEFZUXnPTwJPhrq++V8n4=;
- b=kamb3Iw5D0A6k9WX/Nj/TWy8yNqzJLh+m+Uy9fnO54nMp83s6Yd8MdGIoeFuYA+oN6IugKlFFsVr/tTkVXQu67rrRrUmPVTU0b+EpGb5CC41r4lGVfjc4vKJDEI/mLHphswOEHTQbEHqpVROFvTM7+/YLLjcITb9gFnWyYfsf58=
-Received: from MW4PR04CA0148.namprd04.prod.outlook.com (2603:10b6:303:84::33)
- by BN6PR1201MB0081.namprd12.prod.outlook.com (2603:10b6:405:4f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.21; Wed, 9 Mar
- 2022 17:41:22 +0000
-Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::f6) by MW4PR04CA0148.outlook.office365.com
- (2603:10b6:303:84::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16 via Frontend
- Transport; Wed, 9 Mar 2022 17:41:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Wed, 9 Mar 2022 17:41:21 +0000
-Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 9 Mar 2022 11:41:19 -0600
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <bp@alien8.de>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH] x86/mce: Cover grading of AMD machine error checks
-Date:   Wed, 9 Mar 2022 11:41:07 -0600
-Message-ID: <20220309174107.6113-1-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 9 Mar 2022 12:44:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260F46B0B3;
+        Wed,  9 Mar 2022 09:43:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B519B61286;
+        Wed,  9 Mar 2022 17:43:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1798CC340E8;
+        Wed,  9 Mar 2022 17:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646847835;
+        bh=a5PgoVvuNySzgBZpGcZCtX+h5khHjPeO7S+X48zKzTs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a0HT4zRzuSs9jQ5O/5BxEyHaYURlidHqCbchmxw8Ehaz0vJk7dfg3Py4cgWC9f1fJ
+         +DAmz3L8EjDDJwSI5qtFne6Gi1AZCml4NkXk8lsusuGtILI3PGOG3zAiUiUOQcfCps
+         Jj07PLBGXX67VBMlzTUz2acUeKHd9jKHJX2J9DUGH0lsz+q3HcGH46pq8mQU0cFmvQ
+         LOV6dWBc3MsW8KDtiGUdX5xAXYqQaMZswdZlIjC/kuCtusbMGp0OvG4hfaJSEfMeFd
+         GD3z6BwPFRaSV//gw+rseJgHSvHAoecanFvYtTv4j+nRpR98xyJw9n2Rkq7tW86XY3
+         9EMMBnKwdZAvQ==
+Received: by mail-yb1-f170.google.com with SMTP id x200so5934714ybe.6;
+        Wed, 09 Mar 2022 09:43:55 -0800 (PST)
+X-Gm-Message-State: AOAM531Pkqr71IwUvY/3J/QtD0hw4r+FrlH9sjMYPLvZtJkyotcR+Ypo
+        0/M7U92UdfaVq1I9sHGUZXHhQFQbu0GKC5cM+oY=
+X-Google-Smtp-Source: ABdhPJwRFscGfoVaLTwJwW8OGKuAqe4YSSksgoU5hmT4IrIrqx4LLS4eV4r+L8FF/Z7ZaAEChTcC53t8AHp9MKB26f4=
+X-Received: by 2002:a25:53c4:0:b0:628:a0de:b4d6 with SMTP id
+ h187-20020a2553c4000000b00628a0deb4d6mr697013ybb.299.1646847833996; Wed, 09
+ Mar 2022 09:43:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b664bd2c-8453-4236-e850-08da01f40612
-X-MS-TrafficTypeDiagnostic: BN6PR1201MB0081:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR1201MB0081FA150082573B73E59A55F80A9@BN6PR1201MB0081.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NxtLQbxqA04ZF/3Odhfw4Au4GjxO5MBa25vnl2aQMeURJbVtm/e8HtIJcO+9dZk+LIFX6Zuw1ghT5J/OIa75OROfyZrQNA2QficK7jAcS+fhw8qd7TKiGpgE/ubR28da5w2K6E01delgMiYaQB1NAkPnLkXfPvpZR4wQfpLRyxQH5IWaAlaNTRjoR3AJp6B+O0YNQVXzongczZcJ5j/60hGButO1N9smT9GuoU8bDc/wpJfC5mJ1PO5twW8CYlhJLr6s1uLpAUmF16ivWdy6UhptQu4SfhqNfMEe0bfToDazrJsPl98anrzy3Pv6iL36EiIE6Kid8B4PY81+hU4oUrDF5n2z8gn5onj43Ssfwlor1y1RFd0lAMJaBqi2DNe351P/lAw8Ufy3w1yGf6lKSwGNS9UeJAOiJbZ3KI0i2k/1uEJOLb8NOdUt5Ao2FZ3xkgP4rG7Pxg4eWo9NoBHPbJRrybCoDFnbsA1aBfzhpoLJRi6KjgSth///7fJY8ncKLcVLfRxl481zxwyf0NKlhRZrJLw/Ss8ecF/wpfoE9CVs0k2Hn1sTVkPftjqD5hILD6TObvMNIvHLlDnZvXHS0nZyI44sMveLbghzGacMwAvRQiQ8F/FfWPmMOyIE/OsmiBwpFwafkG3SbOaTmrVzYP9B7mas22nZ4AvFZeBA1Ii/pT8y04HSsRFRZ8qNUB8e3cmJSqFqTdOeftuQaJUULw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2616005)(316002)(426003)(54906003)(336012)(6916009)(4326008)(70586007)(8676002)(82310400004)(70206006)(508600001)(83380400001)(86362001)(40460700003)(5660300002)(26005)(186003)(6666004)(2906002)(8936002)(16526019)(7696005)(36860700001)(36756003)(44832011)(47076005)(1076003)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 17:41:21.0022
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b664bd2c-8453-4236-e850-08da01f40612
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0081
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
+ <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk> <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk> <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+ <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+In-Reply-To: <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 9 Mar 2022 18:43:42 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+Message-ID: <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD's severity grading covers very few machine errors. In the graded cases
-there are no user-readable messages, complicating debugging of critical
-hardware errors.
+On Wed, 9 Mar 2022 at 18:11, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Wed, Mar 09, 2022 at 10:08:25PM +0530, Naresh Kamboju wrote:
+> > Hi Russell,
+> >
+> > On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > >
+> > > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> > > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > > >
+> > <trim>
+> > > Well, we unwound until:
+> > >
+> > >  __irq_svc from migrate_disable+0x0/0x70
+> > >
+> > > and then crashed - and the key thing there is that we're at the start
+> > > of migrate_disable() when we took an interrupt.
+> > >
+> > > For some reason, this triggers an access to address 0x10, which faults.
+> > > We then try unwinding again, and successfully unwind all the way back
+> > > to the same point (the line above) which then causes the unwinder to
+> > > again access address 0x10, and the cycle repeats with the stack
+> > > growing bigger and bigger.
+> > >
+> > > I'd suggest also testing without the revert but with my patch.
+> >
+> > I have tested your patch on top of linux next-20220309 and still see kernel
+> > crash as below [1]. build link [2].
+> >
+> > [   26.812060] 8<--- cut here ---
+> > [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+> > [   26.816139] [b6a3ab70] *pgd=fb28a835
+> > [   26.817770] Internal error: : 1b [#1] SMP ARM
+> > [   26.819636] Modules linked in:
+> > [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+> > 5.17.0-rc7-next-20220309 #1
+> > [   26.824519] Hardware name: Generic DT based system
+> > [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+> > [   26.829856] LR is at unwind_frame+0x7dc/0xab4
+> >
+> > - Naresh
+> >
+> > [1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
+> > [2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/
+>
+> I think the problem has just moved:
+>
+> [   27.113085]  __irq_svc from __copy_to_user_std+0x24/0x378
+>
+> The code at the start of __copy_to_user_std is:
+>
+>    0:   e3a034bf        mov     r3, #-1090519040        ; 0xbf000000
+>    4:   e243c001        sub     ip, r3, #1
+>    8:   e05cc000        subs    ip, ip, r0
+>    c:   228cc001        addcs   ip, ip, #1
+>   10:   205cc002        subscs  ip, ip, r2
+>   14:   33a00000        movcc   r0, #0
+>   18:   e320f014        csdb
+>   1c:   e3a03000        mov     r3, #0
+>   20:   e92d481d        push    {r0, r2, r3, r4, fp, lr}
+>   24:   e1a0b00d        mov     fp, sp
+>
+> and the unwind information will be:
+>
+> 0xc056f14c <arm_copy_to_user+0x1c>: @0xc0b89b84
+>   Compact model index: 1
+>   0x9b      vsp = r11
+>   0xb1 0x0d pop {r0, r2, r3}
+>   0x84 0x81 pop {r4, r11, r14}
+>   0xb0      finish
+>
+> The problem is that the unwind information says "starting at offset
+> 0x1c, to unwind do the following operations". The first of which is
+> to move r11 (fp) to the stack pointer. However, r11 isn't setup
+> until function offset 0x24. You've hit that instruction, which hasn't
+> executed yet, but the stack has been modified by pushing r0, r2-r4,
+> fp and lr onto it.
+>
+> Given this, there is no way that the unwinder (as it currently stands)
+> can do its job properly between 0x1c and 0x24.
+>
+> I don't think this is specifically caused by Ard's patches, but by
+> the addition of KASAN, which has the effect of calling the unwinder
+> at random points in the kernel (when an interrupt happens) and it's
+> clear from the above that there are windows in the code where, if
+> we attempt to unwind using the unwind information, we faill fail
+> because the program state is not consistent with the unwind
+> information.
+>
+> Ard's patch that changes:
+>
+>         ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
+>
+> to use get_kernel_nofault() should have the effect of protecting
+> against the oops, but the side effect is that it is fundamentally not
+> possible with the way these things are to unwind at these points -
+> which means its not possible to get a stacktrace there.
+>
+> So, I don't think this is a "new" problem, but a weakness of using
+> the unwinder to get a backtrace for KASAN.
+>
 
-Fix the above issues extending the current grading logic for AMD with cases
-not previously considered and their corresponding messages.
+It essentially means that we cannot unwind through asynchronous
+exceptions, and so we should probably make the svc_entry macro
+.nounwind, instead of pretending that we can reliably unwind through
+it.
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
----
- arch/x86/include/asm/mce.h         |   6 +
- arch/x86/kernel/cpu/mce/severity.c | 232 +++++++++++++++++++++++++----
- 2 files changed, 205 insertions(+), 33 deletions(-)
+For these annotation purposes, where the interrupt was taken is not
+terribly interesting anyway, terminating the stacktrace earlier might
+even recover some performance lost to KASAN overhead.
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index cc73061e7255..6b1ef40f8580 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -50,6 +50,12 @@
- #define MCI_STATUS_POISON	BIT_ULL(43)  /* access poisonous data */
- #define MCI_STATUS_SCRUB	BIT_ULL(40)  /* Error detected during scrub operation */
- 
-+/* AMD Error codes from PPR(s) section 3.1 Machine Check Architecture */
-+#define ERRORCODE_T_MSK GENMASK(3, 2) /* Mask for transaction type bits */
-+#define ERRORCODE_M_MSK GENMASK(7, 4) /* Mask for memory transaction type */
-+#define ERRORCODE_T_DATA  0x4  /* Transaction type of error is Data */
-+#define ERRORCODE_M_FETCH 0x50 /* Memory transaction type of error is Instruction Fetch */
-+
- /*
-  * McaX field if set indicates a given bank supports MCA extensions:
-  *  - Deferred error interrupt type is specifiable by bank.
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 1add86935349..764c6caf4bfe 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -327,59 +327,225 @@ static __always_inline int mce_severity_amd_smca(struct mce *m, enum context err
- }
- 
- /*
-- * See AMD Error Scope Hierarchy table in a newer BKDG. For example
-- * 49125_15h_Models_30h-3Fh_BKDG.pdf, section "RAS Features"
-+ * Evaluate the severity of a data load error for AMD systems, depending
-+ * on the context in which the MCE happened.
-  */
--static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
-+static inline int mce_grade_data_amd(enum context ctx, char **severity_msg)
- {
--	enum context ctx = error_context(m, regs);
-+	WARN_ON(!severity_msg);
-+
-+	switch (ctx) {
-+	case IN_USER:
-+		*severity_msg = "Action required: data load error in user process";
-+		return MCE_AR_SEVERITY;
-+	case IN_KERNEL_RECOV:
-+		*severity_msg = "Action required: data load in kernel recoverable area";
-+		return MCE_AR_SEVERITY;
-+	case IN_KERNEL:
-+		*severity_msg = "Data load in unrecoverable area of kernel";
-+		return MCE_PANIC_SEVERITY;
-+	default:
-+		*severity_msg = "Data load in unknown context";
-+		return MCE_PANIC_SEVERITY;
-+	}
-+}
- 
--	/* Processor Context Corrupt, no need to fumble too much, die! */
--	if (m->status & MCI_STATUS_PCC)
-+/*
-+ * Evaluate the severity of an instruction fetch error for AMD systems,
-+ * depending on the context in which the MCE happened.
-+ */
-+static inline int mce_grade_fetch_amd(enum context ctx, char **severity_msg)
-+{
-+	WARN_ON(!severity_msg);
-+
-+	switch (ctx) {
-+	case IN_USER:
-+		*severity_msg = "Action required: instruction fetch in user process";
-+		return MCE_AR_SEVERITY;
-+	case IN_KERNEL_RECOV:
-+		*severity_msg = "Instruction fetch in kernel recoverable area";
-+#ifdef CONFIG_MEMORY_FAILURE
-+		return MCE_AR_SEVERITY;
-+#else /* !MCE_PANIC_SEVERITY */
- 		return MCE_PANIC_SEVERITY;
-+#endif
-+	case IN_KERNEL:
-+		*severity_msg = "Instruction fetch error in kernel";
-+		return MCE_PANIC_SEVERITY;
-+	default:
-+		*severity_msg = "Instruction fetch error in unknown context";
-+		return MCE_PANIC_SEVERITY;
-+	}
-+}
- 
--	if (m->status & MCI_STATUS_UC) {
-+/*
-+ * Evaluate the severity of a memory poison error for AMD systems,
-+ * depending on the context in which the MCE happened.
-+ */
-+static inline int mce_grade_poison_amd(enum context ctx, char **severity_msg)
-+{
- 
--		if (ctx == IN_KERNEL)
--			return MCE_PANIC_SEVERITY;
-+	WARN_ON(!severity_msg);
-+
-+	switch (ctx) {
-+	case IN_USER:
-+		*severity_msg = "Attempt to consume poisoned data in user process";
-+		return MCE_AR_SEVERITY;
-+	case IN_KERNEL_RECOV:
-+		*severity_msg = "Attempt to consume poisoned memory in kernel recoverable area";
-+#ifdef CONFIG_MEMORY_FAILURE
-+		return MCE_AR_SEVERITY;
-+#else /* !CONFIG_MEMORY_FAILURE */
-+		return MCE_PANIC_SEVERITY;
-+#endif
-+	case IN_KERNEL:
-+		*severity_msg = "Attempt to consume poisoned data in kernel context";
-+		return MCE_PANIC_SEVERITY;
-+	default:
-+		*severity_msg = "Poisoned data consumption in unknown context";
-+		return MCE_PANIC_SEVERITY;
-+	}
-+}
-+
-+/*
-+ * Evaluate the severity of deferred errors for AMD systems, for which only
-+ * scrub error is interesting to notify an action requirement.
-+ */
-+static noinstr int mce_grade_deferred_amd(struct mce *m, enum context ctx, char **msg)
-+{
-+	int ret;
-+
-+	WARN_ON(!msg);
- 
-+	if (m->status & MCI_STATUS_SCRUB) {
-+		ret = MCE_AR_SEVERITY;
-+		*msg = "Action required: Error detected on a scrub operation";
-+	} else {
- 		/*
--		 * On older systems where overflow_recov flag is not present, we
--		 * should simply panic if an error overflow occurs. If
--		 * overflow_recov flag is present and set, then software can try
--		 * to at least kill process to prolong system operation.
-+		 * deferred error: poll handler catches these and adds to mce_ring so
-+		 * memory-failure can take recovery actions.
- 		 */
--		if (mce_flags.overflow_recov) {
--			if (mce_flags.smca)
--				return mce_severity_amd_smca(m, ctx);
-+		ret = MCE_DEFERRED_SEVERITY;
-+		*msg = "Deferred";
-+	}
- 
--			/* kill current process */
--			return MCE_AR_SEVERITY;
-+	return ret;
-+}
-+
-+/*
-+ * Evaluate the severity of an overflow error for AMD systems, dependent on
-+ * the recoverable features available.
-+ */
-+static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx, char **msg)
-+{
-+	int ret;
-+
-+	WARN_ON(!msg);
-+
-+	if (ctx == IN_KERNEL) {
-+		*msg = "Uncorrectable error in kernel context";
-+		return MCE_PANIC_SEVERITY;
-+	}
-+
-+	/*
-+	 * On older systems where overflow_recov flag is not present, we
-+	 * should simply panic if an error overflow occurs. If
-+	 * overflow_recov flag is present and set, then software can try
-+	 * to at least kill process to prolong system operation.
-+	 */
-+	if (mce_flags.overflow_recov) {
-+		*msg = "Uncorrected recoverable error";
-+		if (mce_flags.smca) {
-+			ret = mce_severity_amd_smca(m, ctx);
-+			if (ret == MCE_PANIC_SEVERITY)
-+				*msg = "Uncorrected unrecoverable error";
- 		} else {
--			/* at least one error was not logged */
--			if (m->status & MCI_STATUS_OVER)
--				return MCE_PANIC_SEVERITY;
-+			/* kill current process */
-+			ret = MCE_AR_SEVERITY;
- 		}
-+		return ret;
-+	}
- 
--		/*
--		 * For any other case, return MCE_UC_SEVERITY so that we log the
--		 * error and exit #MC handler.
--		 */
--		return MCE_UC_SEVERITY;
-+	/* at least one error was not logged */
-+	if (m->status & MCI_STATUS_OVER) {
-+		*msg = "Overflow uncorrected";
-+		return MCE_PANIC_SEVERITY;
- 	}
- 
- 	/*
--	 * deferred error: poll handler catches these and adds to mce_ring so
--	 * memory-failure can take recovery actions.
-+	 * For any other case, return MCE_UC_SEVERITY so that we log the
-+	 * error and exit #MC handler.
- 	 */
--	if (m->status & MCI_STATUS_DEFERRED)
--		return MCE_DEFERRED_SEVERITY;
-+	*msg = "Uncorrected overflow error";
-+	return MCE_UC_SEVERITY;
-+}
-+
-+/*
-+ * See AMD PPR(s) section 3.1 Machine Check Architecture
-+ */
-+static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
-+{
-+	enum context ctx = error_context(m, regs);
-+	char *severity_msg;
-+	int ret;
- 
- 	/*
--	 * corrected error: poll handler catches these and passes responsibility
--	 * of decoding the error to EDAC
-+	 * Default return values. The poll handler catches these and passes
-+	 * responsibility of decoding them to EDAC
- 	 */
--	return MCE_KEEP_SEVERITY;
-+	ret = MCE_KEEP_SEVERITY;
-+	severity_msg = "Corrected error";
-+
-+	if (m->status & MCI_STATUS_DEFERRED) {
-+		ret = mce_grade_deferred_amd(m, ctx, &severity_msg);
-+		goto amd_severity;
-+	}
-+
-+	/* If the UC bit is not set, the error has been corrected */
-+	if (!(m->status & MCI_STATUS_UC)) {
-+		ret = MCE_KEEP_SEVERITY;
-+		severity_msg = "Corrected error";
-+		goto amd_severity;
-+	}
-+
-+	if (m->status & MCI_STATUS_POISON) {
-+		ret = mce_grade_poison_amd(ctx, &severity_msg);
-+		goto amd_severity;
-+	}
-+
-+	/* Processor Context Corrupt, no need to fumble too much, die! */
-+	if (m->status & MCI_STATUS_PCC) {
-+		severity_msg = "Processor Context Corrupt";
-+		ret = MCE_PANIC_SEVERITY;
-+		goto amd_severity;
-+	}
-+
-+	if ((m->status & ERRORCODE_T_MSK) == ERRORCODE_T_DATA) {
-+		ret = mce_grade_data_amd(ctx, &severity_msg);
-+		goto amd_severity;
-+	}
-+
-+	if ((m->status & ERRORCODE_M_MSK) == ERRORCODE_M_FETCH) {
-+		ret = mce_grade_fetch_amd(ctx, &severity_msg);
-+		goto amd_severity;
-+	}
-+
-+	if (m->status & MCI_STATUS_OVER) {
-+		ret = mce_grade_overflow_amd(m, ctx, &severity_msg);
-+		goto amd_severity;
-+	}
-+
-+	if (ctx == IN_KERNEL) {
-+		ret = MCE_PANIC_SEVERITY;
-+		severity_msg = "Uncorrectable error in kernel context";
-+	}
-+
-+amd_severity:
-+
-+	if (msg)
-+		*msg = severity_msg;
-+
-+	return ret;
- }
- 
- static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
+Naresh, please try the patch below.
 
-base-commit: 7f1b8e0d6360178e3527d4f14e6921c254a86035
--- 
-2.27.0
+diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
+index 5609ca8ae46a..0d8ae1a14643 100644
+--- a/arch/arm/kernel/entry-armv.S
++++ b/arch/arm/kernel/entry-armv.S
+@@ -184,12 +184,12 @@ ENDPROC(__und_invalid)
 
+        .macro  svc_entry, stack_hole=0, trace=1, uaccess=1, overflow_check=1
+  UNWIND(.fnstart               )
++ UNWIND(.cantunwind            )
+        sub     sp, sp, #(SVC_REGS_SIZE + \stack_hole)
+  THUMB(        add     sp, r1          )       @ get SP in a GPR without
+  THUMB(        sub     r1, sp, r1      )       @ using a temp register
+
+        .if     \overflow_check
+- UNWIND(.save  {r0 - pc}       )
+        do_overflow_check (SVC_REGS_SIZE + \stack_hole)
+        .endif

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73DA4D3550
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2321C4D365E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiCIQiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S236692AbiCIQsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236774AbiCIQaM (ORCPT
+        with ESMTP id S236863AbiCIQaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:30:12 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4522DBD1A;
-        Wed,  9 Mar 2022 08:23:35 -0800 (PST)
+        Wed, 9 Mar 2022 11:30:24 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26273E2363;
+        Wed,  9 Mar 2022 08:23:41 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D0945E000A;
-        Wed,  9 Mar 2022 16:23:27 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id A393D240019;
+        Wed,  9 Mar 2022 16:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
         t=1646843008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2PhtHtkZZK9HVygDdN0GO9ORgJzMGpc/jqGFpWnt+qY=;
-        b=Sf/JZRCNGnB/mfrS8gcLIpXPU5kpdNmN86Dw5+3Lt8CxCP2QsrQhaHFXVTfjUN4QOUOrqN
-        Dg/fdxER+W9SL9f1cmhugp1MIcXrhPuh/w4plaaZr11unaGTCszSTU4UXpVNN0VNPW7dHR
-        GQwQRGk1PgklhJx4yUwRmqModUqzTaPpEWjFgUZTWB3zapCLq1Xw9BXu3x6UJEhUd3Gb7l
-        GpzgUvyIzNun1/Gonmj7RwppQcrlOAQqyPz8FD11JMSu2xIxrOq4yvEVegP2IRxYColyMH
-        GHySL4m9EoPJk5Iy+/fKchN91tSTGObJUtyph859oo9SQRq5pjKtZxwsciQTHQ==
+        bh=aUotff3zpT1sC8hzBqBp8VQHTf/m2FqGZrZW1U0mj9k=;
+        b=G+ngI32dI1uVwTxIzHcDRECjcX8vfjipgxtV+AwdgRfVJ+CO125DPI2Wya4w3MWeOMtx4+
+        nFgj8LyQRKD+oWDXKXPziTot9BtHnTg83+fZd3bfDxYGOsXANk5mX9gBr51VaPtSFjkwPw
+        gWUlAVJv7ts01jh+StzHudPcKSVH6HnjuydXDriHJDPSK8ypJt5zB5M0GbNwrh+pIKVsWd
+        28WRSquVGrlZsvwhlKVQ9lVipt2rvGd5m8he2TPOAOkQh+vg+NlG2yPgTK13+4t6xgwZlM
+        c2uaT5yzE4f4rVdQMJ/sIENhjdHuNDV0gst7dDbP1xSnk0/KI1TQIPwY+R6cfQ==
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 15/29] rtc: pcf8523: let the core handle the alarm resolution
-Date:   Wed,  9 Mar 2022 17:22:46 +0100
-Message-Id: <20220309162301.61679-15-alexandre.belloni@bootlin.com>
+Subject: [PATCH 16/29] rtc: pcf8563: let the core handle the alarm resolution
+Date:   Wed,  9 Mar 2022 17:22:47 +0100
+Message-Id: <20220309162301.61679-16-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
 References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
@@ -58,16 +58,16 @@ instead of up.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-pcf8523.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/rtc/rtc-pcf8563.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
-index cd55fdfe1d39..b1b1943de844 100644
---- a/drivers/rtc/rtc-pcf8523.c
-+++ b/drivers/rtc/rtc-pcf8523.c
-@@ -212,14 +212,6 @@ static int pcf8523_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *tm)
- 	if (err < 0)
- 		return err;
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index c8bddfb94129..530f06c810fa 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -330,19 +330,6 @@ static int pcf8563_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *tm)
+ 	unsigned char buf[4];
+ 	int err;
  
 -	/* The alarm has no seconds, round up to nearest minute */
 -	if (tm->time.tm_sec) {
@@ -77,17 +77,22 @@ index cd55fdfe1d39..b1b1943de844 100644
 -		rtc_time64_to_tm(alarm_time, &tm->time);
 -	}
 -
- 	regs[0] = bin2bcd(tm->time.tm_min);
- 	regs[1] = bin2bcd(tm->time.tm_hour);
- 	regs[2] = bin2bcd(tm->time.tm_mday);
-@@ -450,6 +442,7 @@ static int pcf8523_probe(struct i2c_client *client,
- 	rtc->ops = &pcf8523_rtc_ops;
- 	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
- 	rtc->range_max = RTC_TIMESTAMP_END_2099;
-+	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features);
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
- 
- 	if (client->irq > 0) {
+-	dev_dbg(dev, "%s, min=%d hour=%d wday=%d mday=%d "
+-		"enabled=%d pending=%d\n", __func__,
+-		tm->time.tm_min, tm->time.tm_hour, tm->time.tm_wday,
+-		tm->time.tm_mday, tm->enabled, tm->pending);
+-
+ 	buf[0] = bin2bcd(tm->time.tm_min);
+ 	buf[1] = bin2bcd(tm->time.tm_hour);
+ 	buf[2] = bin2bcd(tm->time.tm_mday);
+@@ -566,6 +553,7 @@ static int pcf8563_probe(struct i2c_client *client,
+ 	pcf8563->rtc->ops = &pcf8563_rtc_ops;
+ 	/* the pcf8563 alarm only supports a minute accuracy */
+ 	pcf8563->rtc->uie_unsupported = 1;
++	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, pcf8563->rtc->features);
+ 	pcf8563->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	pcf8563->rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 	pcf8563->rtc->set_start_time = true;
 -- 
 2.35.1
 

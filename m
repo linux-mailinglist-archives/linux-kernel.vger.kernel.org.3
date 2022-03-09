@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADD14D37AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 415A34D3731
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236341AbiCIQh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
+        id S233029AbiCIQhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:37:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236777AbiCIQaM (ORCPT
+        with ESMTP id S236782AbiCIQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Mar 2022 11:30:12 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EF9DCE07;
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F59DCE0A;
         Wed,  9 Mar 2022 08:23:36 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3CD80240003;
-        Wed,  9 Mar 2022 16:23:30 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1638AE0003;
+        Wed,  9 Mar 2022 16:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646843010;
+        t=1646843011;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b1v8hoEMEPlpmNJSzmlXHIwdl3V5o7G8xMhECs9EIvM=;
-        b=poGiOXCwGlvoMhV7VbU1v92bZuHnzzilvQU8JhLEAp8Bn9qMhrXWW9eA4E07HHNSvUaBh4
-        9ASh8wTtWpcMl7ysUfDo6e7BEIGarzFkCwT2TnSu4YyVYRWIZrORHp7DzfnVQwmnJesu7v
-        3CyyU3AheWaDOE7zjxPby7FzaOWGijK5Epz49sn4VhOV3vylCERf5h4xnoehlzKprDTWOY
-        2bCiEV6/BuVS6Z8VC1ULlsk3yepSO9io8nC7A9XtBk1VPtVHhYLOgwQh//5tktGnHSm8IO
-        Qztsg3533tg1Hm145/ubAHr/UOWAURqnJCuj8T4H0kaCI3p5HPJFuYwEcqt6Xw==
+        bh=pSmk4sUYJJ0tW7JycQ6lW6OYgIsK9QVxC2+po6YZlJY=;
+        b=FfQS0qjf7yzl8hGEISX3HfTD2r9xr7ms9Uc6G5EKlNmPyFA0EF/qdInSaW5E990N7XLbWl
+        x2IRKEoEjCyZZ+2pO4u8dIaovbDK0+hPZYrZALz1jHJQWvvxkhED3nsqQrCp+v5BsjP2cH
+        TlbhekPHh8mfcO7Xb4jv2xz/ooQUB0/6DsziSpNCLcwVyuT0sJRQigGBPw5nfoMk9MGV/L
+        j+HBT2+jBSffJkxIYQ0y++YAPhbw0ZWNrzngz8VitAATIFsn+kgIqsiw/gYtW9mJkc0Tvi
+        0KnyM2BRr7KD4KGEZKJSCFxFyazjVpQKEIDrqih7bx85sHa1rIs1gM9LWGmvnw==
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 18/29] rtc: spear: switch to devm_rtc_allocate_device
-Date:   Wed,  9 Mar 2022 17:22:49 +0100
-Message-Id: <20220309162301.61679-18-alexandre.belloni@bootlin.com>
+Subject: [PATCH 19/29] rtc: spear: set range
+Date:   Wed,  9 Mar 2022 17:22:50 +0100
+Message-Id: <20220309162301.61679-19-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
 References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
@@ -51,52 +51,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to devm_rtc_allocate_device/devm_rtc_register_device, this allows
-for further improvement of the driver.
+While the RTC can store dates from year 0000 to 9999, leap years where not
+tested fro 2100. The driver currently stores tm_year directly which will
+probably fail at that time or more probably in 2300.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-spear.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/rtc/rtc-spear.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
-index b4a520056b1a..1b40380aaba2 100644
+index 1b40380aaba2..e386bd714b52 100644
 --- a/drivers/rtc/rtc-spear.c
 +++ b/drivers/rtc/rtc-spear.c
-@@ -352,6 +352,10 @@ static int spear_rtc_probe(struct platform_device *pdev)
- 	if (!config)
- 		return -ENOMEM;
- 
-+	config->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(config->rtc))
-+		return PTR_ERR(config->rtc);
-+
- 	/* alarm irqs */
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
-@@ -380,17 +384,13 @@ static int spear_rtc_probe(struct platform_device *pdev)
- 	spin_lock_init(&config->lock);
+@@ -385,6 +385,8 @@ static int spear_rtc_probe(struct platform_device *pdev)
  	platform_set_drvdata(pdev, config);
  
--	config->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
--					&spear_rtc_ops, THIS_MODULE);
--	if (IS_ERR(config->rtc)) {
--		dev_err(&pdev->dev, "can't register RTC device, err %ld\n",
--				PTR_ERR(config->rtc));
--		status = PTR_ERR(config->rtc);
--		goto err_disable_clock;
--	}
--
-+	config->rtc->ops = &spear_rtc_ops;
+ 	config->rtc->ops = &spear_rtc_ops;
++	config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
++	config->rtc->range_min = RTC_TIMESTAMP_END_9999;
  	config->rtc->uie_unsupported = 1;
  
-+	status = devm_rtc_register_device(config->rtc);
-+	if (status)
-+		goto err_disable_clock;
-+
- 	if (!device_can_wakeup(&pdev->dev))
- 		device_init_wakeup(&pdev->dev, 1);
- 
+ 	status = devm_rtc_register_device(config->rtc);
 -- 
 2.35.1
 

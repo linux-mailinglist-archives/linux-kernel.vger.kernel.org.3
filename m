@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BA54D2900
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095634D28FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiCIGcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S230028AbiCIGbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiCIGca (ORCPT
+        with ESMTP id S230017AbiCIGbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:32:30 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FF216203A;
-        Tue,  8 Mar 2022 22:31:32 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V6hi7Gt_1646807489;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6hi7Gt_1646807489)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Mar 2022 14:31:30 +0800
-Message-ID: <1646807409.605431-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: linux-next: build warning after merge of the vhost tree
-Date:   Wed, 9 Mar 2022 14:30:09 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220307154011.6d456f28@canb.auug.org.au>
- <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
- <20220307211242.59fc0f0e@canb.auug.org.au>
- <20220307060012-mutt-send-email-mst@kernel.org>
- <20220309171300.0500a07e@canb.auug.org.au>
- <1646806544.818761-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1646806544.818761-1-xuanzhuo@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 01:31:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5253414561B;
+        Tue,  8 Mar 2022 22:30:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9D9EFCE1D7F;
+        Wed,  9 Mar 2022 06:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2001C340F7;
+        Wed,  9 Mar 2022 06:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646807410;
+        bh=3M4MKg7rpgfaMb+u02OrdlJdFEkHXrF7Y9UAR8ezcGI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=O+WJlU+Yc4ZTvxANti2QDaf46YrvLqiHlgnoG3yJ2nCnDx3FGpaoGWw3RDaLM7gII
+         KCMvIdwwt34S7q9xzkgWIwDhu0lgMwN7ZmMUBZSXNpxQRUS719HGiGjCbf3km0NO+Z
+         z+0M7JPJEgtKTKDF1QEdgbnoCPGUGZfns+iBNhdJq192vx5yIp+4mwYdxxbFFB2TuK
+         +okHtkNRSYJjnX0uek1EPi2T2RrU0q/02ZjpxKUWLifRTENH1M3kSF8jr0JFs/kOV/
+         f+8n7hxYeu2FEAk+twJMO1/iu0dg8nPvPr6aQ92MB3n/W5R5uDqFZO5Cjoc5rVDBTX
+         wyZ0KMDHtpIdQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C422E73C2D;
+        Wed,  9 Mar 2022 06:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] net: prestera: acl: make read-only array client_map
+ static const
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164680741063.15140.5277351972560162204.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Mar 2022 06:30:10 +0000
+References: <20220307221349.164585-1-colin.i.king@gmail.com>
+In-Reply-To: <20220307221349.164585-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     tchornyi@marvell.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 14:15:44 +0800, Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> On Wed, 9 Mar 2022 17:13:00 +1100, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > Hi Michael,
-> >
-> > On Mon, 7 Mar 2022 06:00:27 -0500 "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > >
-> > > On Mon, Mar 07, 2022 at 09:12:42PM +1100, Stephen Rothwell wrote:
-> > > >
-> > > > On Mon, 7 Mar 2022 14:46:40 +0800 Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > > >
-> > > > > Can you help me test this patch? I don't have an arm environment around me.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > >
-> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > index 1fa2d632a994..4d629d1ea894 100644
-> > > > > --- a/drivers/net/virtio_net.c
-> > > > > +++ b/drivers/net/virtio_net.c
-> > > > > @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_info *vi,
-> > > > >
-> > > > >  err:
-> > > > >         netdev_err(vi->dev,
-> > > > > -                  "reset rx reset vq fail: rx queue index: %ld err: %d\n",
-> > > > > +                  "reset rx reset vq fail: rx queue index: %td err: %d\n",
-> > > > >                    rq - vi->rq, err);
-> > > > >         virtnet_napi_enable(rq->vq, &rq->napi);
-> > > > >         return err;
-> > > > > @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_info *vi,
-> > > > >
-> > > > >  err:
-> > > > >         netdev_err(vi->dev,
-> > > > > -                  "reset tx reset vq fail: tx queue index: %ld err: %d\n",
-> > > > > +                  "reset tx reset vq fail: tx queue index: %td err: %d\n",
-> > > > >                    sq - vi->sq, err);
-> > > > >         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
-> > > > >         return err;
-> > > >
-> > > > I had to apply that by hand, but it does work.
-> > > >
-> > > > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > >
-> > > OK, I squashed this into the problematic patch. Thanks a lot!
-> >
-> > The warnings have reappeared today :-( and this fixup is not applied.
-> > Something got lost in the rebase/rewrite?
->
-> Sorry for that.
->
-> The patch of the fix I submitted before was not merged locally. When the patch
-> set of v7 was released yesterday, this fix patch was not included.
+Hello:
 
-I see that Jason is reviewing, and when he completes the review, I will re-post
-the patch set. And according to his meaning, it will be split into two patch
-sets.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks.
+On Mon,  7 Mar 2022 22:13:49 +0000 you wrote:
+> Don't populate the read-only array client_map  on the stack but
+> instead make it static const. Also makes the object code a little
+> smaller.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/net/ethernet/marvell/prestera/prestera_acl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [next] net: prestera: acl: make read-only array client_map static const
+    https://git.kernel.org/netdev/net-next/c/d82a6c5ef9dc
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
->
->
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >

@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1F54D3CAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ACF4D3C9C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbiCIWMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S235954AbiCIWJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbiCIWMj (ORCPT
+        with ESMTP id S233630AbiCIWJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:12:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C2C120EB6;
-        Wed,  9 Mar 2022 14:11:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F4DC61B7A;
-        Wed,  9 Mar 2022 22:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54141C340E8;
-        Wed,  9 Mar 2022 22:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646863898;
-        bh=HmvsiGSQjiI2xl+jRt4WuuLlCbjPYieEVzKyv095jlE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tXQ9MrxxiOVy0rvnjrr+4mCAfLwOshejb+bZvqHFsZ7PzD/IYjZaB308J3WYkBfXl
-         IsDrgMLZBIeJgm+ySMqyQ9fcP8YfCQx0DP61pj8nPEfeTsk1DTyEBKnWoHtZvgv+FU
-         dtDdngC1UoDgsugR9qvosbWHo4KIjIDXa1JNCxPKWMXvUajcBF9lZ9qdtW1F+mHkND
-         XW3z9/ItiXaOMcsXolyFUal6uzgRMK7+JsdwKa4lAW+jOAiDhJo2+mWWQ2DGbEQ30r
-         TftbIrZ+JYmobAG0qQ62IGHS4dcBCQyVVpJjfEcNQq4ks5X87TYGuB7MzjPt0/HKoy
-         1CnAHJ2ZM1kcQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] ARM: Do not use NOCROSSREFS directive with ld.lld
-Date:   Wed,  9 Mar 2022 15:07:27 -0700
-Message-Id: <20220309220726.1525113-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 17:09:09 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F58120185
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:08:09 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id r22so5193069ljd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vrzRO7DmEsu3cOettTYwW7UCWoPESsH1sMNrUtKi/nA=;
+        b=D6wVcBiWwb900bMY/FETws43aV7d/ko8szzVk+WS/1DR8zDMaY02pV3MC0tbljgnh0
+         WzWCdAtyOwpv/1w8DCR8AZ6HTvBBoLgi0tmfvoHNHVgaE0PG1ZMJdGiaE0dVMTR2N5Iq
+         kSr/dWbefbXW+jTenAzDyNmg7qSGnPTV6OdpU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vrzRO7DmEsu3cOettTYwW7UCWoPESsH1sMNrUtKi/nA=;
+        b=CKHAFMU0NHm6tHD7wVcNKaT6AQwAcLMJf5fySZ4wm6W6jm4aLMY4nPSUSxxDtj+dSC
+         WV0h+eaVsC2VXNVNMGc9qh/iR9Q696F6viPjoBW9zHgstUpoLTdV2ibid2gEb+pbx/Du
+         k9evWFuu8Npa6k7bYLTrTJjpBWguTKw59PlgIBT4YeGabAi+4hRS/zX0FYd1u3daqjcp
+         mVvATwzfQogJgOVcpwNkahN5Hr0ZeO/7YgNgXd04CMpnkgQv8jv7NqumWiadebGvU4Fy
+         PsrRJMRzzQb+ymDL6Hqi3KUBbvKMZcnhL1mfy3IVlQ6EMeXOl6yl29znpnpzaacFG7Q5
+         g6Gg==
+X-Gm-Message-State: AOAM532BFv0Ou+XTUSx0bvzLRIvzMv472MUchBDIfDqrFf4WR4Q9B1tW
+        NJPVICwpFlCwVCfa2oypkOBpI5KDeOWw94SVva8=
+X-Google-Smtp-Source: ABdhPJxDY2sf+prQYT9d54b822bb0lo3B90gRvMIK6iP4lIO/7rrEsFE3k2YK/nan1MRhGRW6gGutQ==
+X-Received: by 2002:a2e:b88d:0:b0:246:8b8c:a90d with SMTP id r13-20020a2eb88d000000b002468b8ca90dmr1037719ljp.265.1646863687797;
+        Wed, 09 Mar 2022 14:08:07 -0800 (PST)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac25d66000000b0044315401373sm608997lft.29.2022.03.09.14.08.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 14:08:07 -0800 (PST)
+Received: by mail-lj1-f175.google.com with SMTP id o6so5205114ljp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:08:07 -0800 (PST)
+X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
+ i19-20020a05651c121300b00247e2d9cddamr1025987lja.443.1646863686763; Wed, 09
+ Mar 2022 14:08:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YikTHqjv4S6ZQ3Fv@casper.infradead.org>
+In-Reply-To: <YikTHqjv4S6ZQ3Fv@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 9 Mar 2022 14:07:50 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiKSXZyKu+LhZjXp+UnDa7kcOyPPG+C8n3K-3AQ3KgMhA@mail.gmail.com>
+Message-ID: <CAHk-=wiKSXZyKu+LhZjXp+UnDa7kcOyPPG+C8n3K-3AQ3KgMhA@mail.gmail.com>
+Subject: Re: [RFC] Free up a page flag
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ld.lld does not support the NOCROSSREFS directive at the moment, which
-breaks the build after commit b9baf5c8c5c3 ("ARM: Spectre-BHB
-workaround"):
+On Wed, Mar 9, 2022 at 12:50 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> We're always running out of page flags.  Here's an attempt to free one
+> up for the next time somebody wants one.
 
-  ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got NOCROSSREFS
+Ugh. This is too ugly for words.
 
-Support for this directive will eventually be implemented, at which
-point a version check can be added. To avoid breaking the build in the
-meantime, just define NOCROSSREFS to nothing when using ld.lld, with a
-link to the issue for tracking.
+I wouldn't mind something along the conceptual lines of "these bits
+are only used for this type", but I think it would need to be much
+more organized and explicit, not this kind of randomness.
 
-Cc: stable@vger.kernel.org
-Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1609
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
+For example, quite a few of the page bits really only make sense for
+the "page cache and anonymous pages" kind.
 
-Since b9baf5c8c5c3 has been backported to stable, I have marked this for
-stable as well, using a Fixes tag to notate that this should go back to
-all releases that have b9baf5c8c5c3, not to indicate any blame of
-b9baf5c8c5c3, as this is clearly an ld.lld deficiency.
+I think this includes some really fundamental bits like the lock bit
+(and the associated waiters bit), along with a lot of the "owner" aka
+"this can be used by the filesystem" bits.
 
-It would be nice if this could be applied directly to unblock our CI if
-there are no objections.
+I think it _also_ includes all the LRU and workingset bits etc.
 
- arch/arm/include/asm/vmlinux.lds.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+So if we consider that kind of case the "normal" case, the not-normal
+case is likely (a) slab, (b) reserved pages and (c) zspages.,
 
-diff --git a/arch/arm/include/asm/vmlinux.lds.h b/arch/arm/include/asm/vmlinux.lds.h
-index 0ef21bfae9f6..fad45c884e98 100644
---- a/arch/arm/include/asm/vmlinux.lds.h
-+++ b/arch/arm/include/asm/vmlinux.lds.h
-@@ -26,6 +26,14 @@
- #define ARM_MMU_DISCARD(x)	x
- #endif
- 
-+/*
-+ * ld.lld does not support NOCROSSREFS:
-+ * https://github.com/ClangBuiltLinux/linux/issues/1609
-+ */
-+#ifdef CONFIG_LD_IS_LLD
-+#define NOCROSSREFS
-+#endif
-+
- /* Set start/end symbol names to the LMA for the section */
- #define ARM_LMA(sym, section)						\
- 	sym##_start = LOADADDR(section);				\
+Which is pretty close to your "xyzzy" bit (I think you came to the
+same list of "slab or reserved" conclusion because of the fundamental
+issues above), but my point is that I think this approach is
+acceptable if we make it much less random, and make it a lot more
+explicit and thought through.
 
-base-commit: e7e19defa57580d679bf0d03f8a34933008a7930
--- 
-2.35.1
+And we'd probably need to actually *verify* that we don't do things
+like lock (or LRU) those non-normal pages.
 
+We already have some page flag bits that are only used for those kinds
+of odd pages: the page_flags field is used only for zspages, but other
+pages can (misuse) that field for PG_buddy/offline/etc. That whole
+thing is particularly ugly in how it tries to make sure there are is
+no mapcount use of it.
+
+So I do think something like your "xyzzy" bit can work, but I'd really
+want it to be a lot more explicit and a lot less random than "let's
+encode two special bits this way".
+
+                   Linus

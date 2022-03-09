@@ -2,165 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9974F4D25CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C114D2540
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiCIBOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S230099AbiCIBMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiCIBNI (ORCPT
+        with ESMTP id S230194AbiCIBL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:13:08 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F05169218
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:02:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646787772; x=1678323772;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=WqYjw0riMyrcnpYGzd3LwwF0KxaWZQvCdtVqi7q+5xA=;
-  b=GgJtk2hZrmj1cZwgI3jFXwY0P10qfGVucqzbI/VaO2Cvb0QNsoY9IB/V
-   9PXcnWzvjICSQaMce59SR/VFL7FpW/+SYuQ+atcZ6IFIx9pLB5trsUwbl
-   24Zjjvzc+FUUn5L0xh1zU/NReNtd9bDG27w2R5JqzueygMLcBzwb4k6PO
-   8veErQmxMqiUYtXyTBCgdKlnc0qC1/67ECCjL+sr7IAZauErrhUWOyWbU
-   cV2VXxUwSfYwTVZq5OTj2dZocGXSlWyiYQaKA/pe+ElDrQZsGxD8TCrKZ
-   rx7yUHbvpAtJSx2EpS5YdJuxlW6XEoZT76NHbCRhLcaZdPFG2MeAcDFU6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242298570"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="242298570"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:02:52 -0800
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="513330922"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 17:02:47 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "David Howells" <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 04/16] mm/migration: reduce the rcu lock duration
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
-        <20220304093409.25829-5-linmiaohe@huawei.com>
-        <8735ju7as9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <2eb3fc34-3c81-394f-3bca-8eb00027afcf@huawei.com>
-Date:   Wed, 09 Mar 2022 09:02:45 +0800
-In-Reply-To: <2eb3fc34-3c81-394f-3bca-8eb00027afcf@huawei.com> (Miaohe Lin's
-        message of "Tue, 8 Mar 2022 20:09:15 +0800")
-Message-ID: <87y21key4q.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 8 Mar 2022 20:11:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74155EB323;
+        Tue,  8 Mar 2022 17:03:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08B2D612E3;
+        Wed,  9 Mar 2022 01:03:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2FAC340EC;
+        Wed,  9 Mar 2022 01:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646787837;
+        bh=mx9Fa9vJmECpUyzdd1x48DQGKh6o3F6PUEM6C2wW0HE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=VPWtoOjcYDPN1cdxarH9H6OV0ANg/reMn/N70M7QJn6ReKHK7KfoIu3N0WhqkAFq3
+         wFezjjAqg2z+rYVCetNRes+U6r1y3GsyNYm/4Pp/iI9PnLOgLJQfXQZcuEloKuoVvR
+         snHbs+yPSthZKMoQG277tnF1EjotsoJ3Gz0pLPvzWc/bCfJe1R5cFubRNXNBBEX29G
+         cDW6qwMW8IENbJTek6Fp2JFEGJF0vlcOsP6ZDmwZWvuAuvfEdfQegO9VGbbfC02Qho
+         3dmx3Sy9L0FyhFeqI1B7OtdSVdjI61m9yjx5R2OlmNJirsHNYSUqWw2/TmALEiB9HU
+         8UiI8P9mYqVLg==
+Message-ID: <bc03c9acb654121f123cfff64d75c1749ff401c5.camel@kernel.org>
+Subject: Re: [PATCH] cachefiles: Fix volume coherency attribute
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Howells <dhowells@redhat.com>, rohiths.msft@gmail.com
+Cc:     Steve French <smfrench@gmail.com>, linux-cifs@vger.kernel.org,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 08 Mar 2022 20:03:55 -0500
+In-Reply-To: <164677636135.1191348.1664733858863676368.stgit@warthog.procyon.org.uk>
+References: <164677636135.1191348.1664733858863676368.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
+On Tue, 2022-03-08 at 21:52 +0000, David Howells wrote:
+> A network filesystem may set coherency data on a volume cookie, and if
+> given, cachefiles will store this in an xattr on the directory in the cache
+> corresponding to the volume.
+> 
+> The function that sets the xattr just stores the contents of the volume
+> coherency buffer directly into the xattr, with nothing added; the checking
+> function, on the other hand, has a cut'n'paste error whereby it tries to
+> interpret the xattr contents as would be the xattr on an ordinary file
+> (using the cachefiles_xattr struct).  This results in a failure to match
+> the coherency data because the buffer ends up being shifted by 18 bytes.
+> 
+> Fix this by defining a structure specifically for the volume xattr and
+> making both the setting and checking functions use it.
+> 
+> Since the volume coherency doesn't work if used, take the opportunity to
+> insert a reserved field for future use, set it to 0 and check that it is 0.
+> Log mismatch through the appropriate tracepoint.
+> 
+> Note that this only affects cifs; 9p, afs, ceph and nfs don't use the
+> volume coherency data at the moment.
+> 
+> Fixes: 32e150037dce ("fscache, cachefiles: Store the volume coherency data")
+> Reported-by: Rohith Surabattula <rohiths.msft@gmail.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: linux-cifs@vger.kernel.org
+> cc: linux-cachefs@redhat.com
+> ---
+> 
+>  fs/cachefiles/xattr.c             |   23 ++++++++++++++++++++---
+>  include/trace/events/cachefiles.h |    2 ++
+>  2 files changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/cachefiles/xattr.c b/fs/cachefiles/xattr.c
+> index 83f41bd0c3a9..35465109d9c4 100644
+> --- a/fs/cachefiles/xattr.c
+> +++ b/fs/cachefiles/xattr.c
+> @@ -28,6 +28,11 @@ struct cachefiles_xattr {
+>  static const char cachefiles_xattr_cache[] =
+>  	XATTR_USER_PREFIX "CacheFiles.cache";
+>  
+> +struct cachefiles_vol_xattr {
+> +	__be32	reserved;	/* Reserved, should be 0 */
+> +	__u8	data[];		/* netfs volume coherency data */
+> +} __packed;
+> +
+>  /*
+>   * set the state xattr on a cache file
+>   */
+> @@ -185,6 +190,7 @@ void cachefiles_prepare_to_write(struct fscache_cookie *cookie)
+>   */
+>  bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+>  {
+> +	struct cachefiles_vol_xattr *buf;
+>  	unsigned int len = volume->vcookie->coherency_len;
+>  	const void *p = volume->vcookie->coherency;
+>  	struct dentry *dentry = volume->dentry;
+> @@ -192,10 +198,17 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+>  
+>  	_enter("%x,#%d", volume->vcookie->debug_id, len);
+>  
+> +	len += sizeof(*buf);
+> +	buf = kmalloc(len, GFP_KERNEL);
+> +	if (!buf)
+> +		return false;
+> +	buf->reserved = cpu_to_be32(0);
+> +	memcpy(buf->data, p, len);
+> +
+>  	ret = cachefiles_inject_write_error();
+>  	if (ret == 0)
+>  		ret = vfs_setxattr(&init_user_ns, dentry, cachefiles_xattr_cache,
+> -				   p, len, 0);
+> +				   buf, len, 0);
+>  	if (ret < 0) {
+>  		trace_cachefiles_vfs_error(NULL, d_inode(dentry), ret,
+>  					   cachefiles_trace_setxattr_error);
+> @@ -209,6 +222,7 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+>  					       cachefiles_coherency_vol_set_ok);
+>  	}
+>  
+> +	kfree(buf);
+>  	_leave(" = %d", ret);
+>  	return ret == 0;
+>  }
+> @@ -218,7 +232,7 @@ bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume)
+>   */
+>  int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
+>  {
+> -	struct cachefiles_xattr *buf;
+> +	struct cachefiles_vol_xattr *buf;
+>  	struct dentry *dentry = volume->dentry;
+>  	unsigned int len = volume->vcookie->coherency_len;
+>  	const void *p = volume->vcookie->coherency;
+> @@ -228,6 +242,7 @@ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
+>  
+>  	_enter("");
+>  
+> +	len += sizeof(*buf);
+>  	buf = kmalloc(len, GFP_KERNEL);
+>  	if (!buf)
+>  		return -ENOMEM;
+> @@ -245,7 +260,9 @@ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
+>  					"Failed to read xattr with error %zd", xlen);
+>  		}
+>  		why = cachefiles_coherency_vol_check_xattr;
+> -	} else if (memcmp(buf->data, p, len) != 0) {
+> +	} else if (buf->reserved != cpu_to_be32(0)) {
+> +		why = cachefiles_coherency_vol_check_resv;
+> +	} else if (memcmp(buf->data, p, len - sizeof(*buf)) != 0) {
+>  		why = cachefiles_coherency_vol_check_cmp;
+>  	} else {
+>  		why = cachefiles_coherency_vol_check_ok;
+> diff --git a/include/trace/events/cachefiles.h b/include/trace/events/cachefiles.h
+> index 002d0ae4f9bc..311c14a20e70 100644
+> --- a/include/trace/events/cachefiles.h
+> +++ b/include/trace/events/cachefiles.h
+> @@ -56,6 +56,7 @@ enum cachefiles_coherency_trace {
+>  	cachefiles_coherency_set_ok,
+>  	cachefiles_coherency_vol_check_cmp,
+>  	cachefiles_coherency_vol_check_ok,
+> +	cachefiles_coherency_vol_check_resv,
+>  	cachefiles_coherency_vol_check_xattr,
+>  	cachefiles_coherency_vol_set_fail,
+>  	cachefiles_coherency_vol_set_ok,
+> @@ -139,6 +140,7 @@ enum cachefiles_error_trace {
+>  	EM(cachefiles_coherency_set_ok,		"SET ok  ")		\
+>  	EM(cachefiles_coherency_vol_check_cmp,	"VOL BAD cmp ")		\
+>  	EM(cachefiles_coherency_vol_check_ok,	"VOL OK      ")		\
+> +	EM(cachefiles_coherency_vol_check_resv,	"VOL BAD resv")	\
+>  	EM(cachefiles_coherency_vol_check_xattr,"VOL BAD xatt")		\
+>  	EM(cachefiles_coherency_vol_set_fail,	"VOL SET fail")		\
+>  	E_(cachefiles_coherency_vol_set_ok,	"VOL SET ok  ")
+> 
+> 
 
-> On 2022/3/7 10:32, Huang, Ying wrote:
->> Miaohe Lin <linmiaohe@huawei.com> writes:
->> 
->>> rcu_read_lock is required by grabbing the task refcount but it's not
->>> needed for ptrace_may_access. So we could release the rcu lock after
->>> task refcount is successfully grabbed to reduce the rcu holding time.
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>  mm/migrate.c | 3 +--
->>>  1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/mm/migrate.c b/mm/migrate.c
->>> index da5a81052468..26943bd819e8 100644
->>> --- a/mm/migrate.c
->>> +++ b/mm/migrate.c
->>> @@ -1907,17 +1907,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
->>>  		return ERR_PTR(-ESRCH);
->>>  	}
->>>  	get_task_struct(task);
->>> +	rcu_read_unlock();
->>>  
->>>  	/*
->>>  	 * Check if this process has the right to modify the specified
->>>  	 * process. Use the regular "ptrace_may_access()" checks.
->>>  	 */
->>>  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
->>> -		rcu_read_unlock();
->>>  		mm = ERR_PTR(-EPERM);
->>>  		goto out;
->>>  	}
->>> -	rcu_read_unlock();
->>>  
->>>  	mm = ERR_PTR(security_task_movememory(task));
->>>  	if (IS_ERR(mm))
->> 
->> Digged some history via `git blame`, found that the RCU read lock is
->> extended in the following commit,
->> 
->> "
->> 3268c63eded4612a3d07b56d1e02ce7731e6608e
->> Author:     Christoph Lameter <cl@linux.com>
->> AuthorDate: Wed Mar 21 16:34:06 2012 -0700
->> Commit:     Linus Torvalds <torvalds@linux-foundation.org>
->> CommitDate: Wed Mar 21 17:54:58 2012 -0700
->> 
->> mm: fix move/migrate_pages() race on task struct
->> 
->> Migration functions perform the rcu_read_unlock too early.  As a result
->> the task pointed to may change from under us.  This can result in an oops,
->> as reported by Dave Hansen in https://lkml.org/lkml/2012/2/23/302.
->> 
->> The following patch extend the period of the rcu_read_lock until after the
->> permissions checks are done.  We also take a refcount so that the task
->> reference is stable when calling security check functions and performing
->> cpuset node validation (which takes a mutex).
->> 
->> The refcount is dropped before actual page migration occurs so there is no
->> change to the refcounts held during page migration.
->> 
->> Also move the determination of the mm of the task struct to immediately
->> before the do_migrate*() calls so that it is clear that we switch from
->> handling the task during permission checks to the mm for the actual
->> migration.  Since the determination is only done once and we then no
->> longer use the task_struct we can be sure that we operate on a specific
->> address space that will not change from under us.
->> "
->> 
->> After that, the permission checking has been changed from __task_cred()
->> to ptrace_may_access().  So the situation may change somewhat.  Cced
->
-> In ptrace_may_access, __task_cred is access while holding the rcu read lock.
-> It seems this is ensured by the ptrace_may_access itself.
+Looks good.
 
-Please read the patch above.  Before extending rcu_read_lock protected
-region, __task_cred() is protected by rcu_read_lock already.  The patch
-above combines 2 regions into 1.
-
-Best Regards,
-Huang, Ying
-
->> some names found in git history to verify.
->
-> Thanks for your carefulness.
->
->> 
->> Best Regards,
->> Huang, Ying
->> .
->> 
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

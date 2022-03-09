@@ -2,91 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6DD4D2DAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9AE4D2DAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiCILLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S231928AbiCILLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiCILLh (ORCPT
+        with ESMTP id S231910AbiCILLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:11:37 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA4616FDE8;
-        Wed,  9 Mar 2022 03:10:39 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id t19so1648447plr.5;
-        Wed, 09 Mar 2022 03:10:39 -0800 (PST)
+        Wed, 9 Mar 2022 06:11:53 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42016FDDD;
+        Wed,  9 Mar 2022 03:10:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=TbLlXg902aKOx1jSLgIOuIQvaX7+aR+Xn8kO7bkqzQM=;
-        b=Ia69aUXkkvWAwS38X2tv3wkThPwHUGwhI4RELVhbjXXZ1uw85lVlxC8Au5DOwtqzIE
-         02kQuTFbS2tfoA3J7PK772M51Jssxgfn4yvDPk/bmbRPEEFCaSO4kXLwfJ9c+PJWiMMc
-         Q4s3a+2uIocFTDwWG2c5yA8/9RILQlkHqAIKh6305zb5O06rwMcbgHrZnUtBrVSopc1y
-         +i4tk+JAS15OTyWlpLzaK4kYE5xs/yGL8CZVNAblx/PW82VcqJNXSG4aQYYgrINCrQuD
-         pKYfUvnN1d/kARy+IQH4Bp9mY1n2gfjfwM9AlpjYAGgVflb/h20GFQQZcZAfyWzncAj8
-         Uf1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=TbLlXg902aKOx1jSLgIOuIQvaX7+aR+Xn8kO7bkqzQM=;
-        b=PU+WMmtw6Hdwr7rzXC9KMyhD9rPC1xcG/YRpkl5xyrDMQfTv91T4LYz8m0rJY1Vo/A
-         IMYd6ebOYFtDSmYPrha58mvq21Wz4hTAOxUkOaBGPG46fW1etznMmwLzZfFOuHjurSK+
-         eUGkk1blCv4sKLyU9vR9On1lTO918vCFX9OpJb6FsYc9mB3wVwrXKo/hEV1g6pIhleD/
-         yfV2lhuErZHuV0ASkmr8j2yQS1wG5IuF9msynQDDKtsSvRxf8XGLMGRtNkwd1JB0sBfz
-         5KVVTANaRSgfF2UciQAGbjd3NNWjE3WJdvatfgnepuU9sO3nHHoH5rQNY091pKMsORax
-         sD7Q==
-X-Gm-Message-State: AOAM531rmJp66nH6zwEA2xRQBgvWZYIE/j3Rqjt7VqELWWths68Dd6i5
-        sMHEfpx1piSqDQPZ5R0a3H4=
-X-Google-Smtp-Source: ABdhPJwtPPzPgrtv2ovP/BwBW7ussm4xufiUnig/ykzL495qNQU15iriIY3F2rAFGkvhfsE1KQX+fw==
-X-Received: by 2002:a17:90b:4b4a:b0:1bf:83d:6805 with SMTP id mi10-20020a17090b4b4a00b001bf083d6805mr10064505pjb.174.1646824238996;
-        Wed, 09 Mar 2022 03:10:38 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm2493560pff.67.2022.03.09.03.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 03:10:38 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@ti.com>, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] usb: musb: Fix missing of_node_put() in omap2430_probe
-Date:   Wed,  9 Mar 2022 11:10:33 +0000
-Message-Id: <20220309111033.24487-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646824254; x=1678360254;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dxI4nXP7eM1KVmcUxjIZ4iLcGWg/tOi5lpYWVmRNw8c=;
+  b=K4hqTKidfQ0/9iCHcB7eN19rBV6RVtmWV1+qNDaS9c+9otlBkfGzEa7R
+   BsCPDd4x6iX8gOOcDJfEGguZLfJVNYw7SKCip/z26zxWH7SfM0Z44VeOH
+   yebOrTfeaGWfb7LgHWHQ1gnP+q4TPE5OW3fWpnA0LRb7u8z2u2ERDfi1M
+   IP3qEGg62hDZUpnFwJIZ5OhrGRBrXOAb/BoDU14nG13/2yxtP1TZao/iQ
+   yolM398IFXPdpfP2QbwMLxYLQ6JSzCV099RhhKZiqd8Trqf6fXgqyhzLx
+   jj7BxJPuU1IG99Y2KTt5lYCFBSh78Ca3gxghQChWtwzfv8eruzZPTC2iO
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643670000"; 
+   d="scan'208";a="22552465"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Mar 2022 12:10:52 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 09 Mar 2022 12:10:52 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 09 Mar 2022 12:10:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646824252; x=1678360252;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dxI4nXP7eM1KVmcUxjIZ4iLcGWg/tOi5lpYWVmRNw8c=;
+  b=EGizE3/6voXt8P5WzuiMrx+1raQrzAtvbdyzvQzDkc1e+Am+qA9uvpH+
+   Du9caJqQgix6b4p6XpLVNC7OaF6/Iz6jx7k8wbC2qx5YcaQ1+3UZBp/QI
+   xChbDLvEqMbZeyuG6+gUbu6F6c+oBlfuO2MzCL/b4JnoZ8aa9yhSdje/6
+   787oyRdPNm7rLs1/B6gq2sObS8OjVnzTW6B0uh8K9vBtzBCqqxsk9PcDC
+   C0Z8bmHr3d2LbxVhGuFGQ1obHtDKhS47qaiUjmOqNamPBjXPvaqKctowo
+   va8zabHam8vbvHcwxuQl+VB9kqbJuuE77yqPkCE/TzKriji5kPv/WW2Dr
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643670000"; 
+   d="scan'208";a="22552464"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Mar 2022 12:10:52 +0100
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 6E6CD280065;
+        Wed,  9 Mar 2022 12:10:52 +0100 (CET)
+Message-ID: <5058591a3e0f0cb82b26cffe888d87b4d1bdd713.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
+ peripherals by default
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Date:   Wed, 09 Mar 2022 12:10:50 +0100
+In-Reply-To: <YihvWFdr1cT7cyk5@atomide.com>
+References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
+         <20220204143108.653qk2ihnlhsr5aa@prior> <YgDCLaBHA3DDQAUd@atomide.com>
+         <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
+         <YgEBml9HvFzSl289@atomide.com>
+         <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
+         <YgJZbdOlazrde7O/@atomide.com>
+         <1356e93cd5b101c3d896e35250c66959ed631544.camel@ew.tq-group.com>
+         <YihvWFdr1cT7cyk5@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+On Wed, 2022-03-09 at 11:11 +0200, Tony Lindgren wrote:
+> Hi,
+> 
+> * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220228
+> 10:29]:
+> > AFAICT, disabling non-operatational devices in the board DTS
+> > instead of
+> > the SoC DTSI is worse than the alternatives in every way:
+> > 
+> > - Verbose board DTS: You have to think about all the devices that
+> > exist
+> > in the SoC, not just the ones you want to use
+> > - Adding new nodes without `status = "disabled" to SoC DTSI can
+> > potentially cause issues on dependent boards
+> > - It doesn't solve the issues that not having `status = "disabled"`
+> > in
+> > the DTSI is supposed to solve
+> 
+> My preference is the least amount of tinkering in the dts files
+> naturally :) It really does not matter if the extra dts churn is to
+> enable or disable devices, it should not be needed at all.
+> 
+> To summarize, my main point really is the following:
+> 
+> There should not be any need to tag the SoC internal devices with
+> anything
+> in the dts files. The device drivers should be able to just deal with
+> the
+> situation. IMO devices should be tagged with disabled or reserved
+> when
+> they are not accessible for example because of being used by secure
+> mode
+> for example. If the the status needs to be set to anything, it really
+> is
+> a symptom of incomplete handling somewhere.
+> 
+> Regards,
+> 
+> Tony
 
-Fixes: 8934d3e4d0e7 ("usb: musb: omap2430: Don't use omap_get_control_dev()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/usb/musb/omap2430.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
-index 7d4d0713f4f0..4a963cfa385b 100644
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -363,6 +363,7 @@ static int omap2430_probe(struct platform_device *pdev)
- 	control_node = of_parse_phandle(np, "ctrl-module", 0);
- 	if (control_node) {
- 		control_pdev = of_find_device_by_node(control_node);
-+		of_node_put(control_node);
- 		if (!control_pdev) {
- 			dev_err(&pdev->dev, "Failed to get control device\n");
- 			ret = -EINVAL;
--- 
-2.17.1
+Hi Tony,
+
+while I agree that it would be great if drivers could just detect when
+hardware is not available, this is simply not how most drivers work -
+when you instantiate the driver via a non-disabled(/reserved/...) DT
+node, the driver expects a usable device.
+
+Especially for busses like I2C, there is no way for a driver to
+reliably detect whether the bus is usable or not. (There are several
+states that can't really be distinguished: Is pinmuxing missing, or
+does the device not need any muxing? Is a line low because it is not
+actually connected to anything, or is there another master currently
+using the bus, or is the bus stuck due to a faulty device?)
+
+Which is why it is the convention for SoC DTSI files disable nodes for
+devices that may be unusable. Taking UARTs as an example, a quick grep
+for "serial@" nodes in arch/arm/boot/dts/*.dtsi and
+arch/arm64/boot/dts/*/*.dtsi shows that the vast majority of these
+nodes is disabled by default.
+
+Regards,
+Matthias
+
+
 

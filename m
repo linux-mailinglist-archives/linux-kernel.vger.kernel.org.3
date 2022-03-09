@@ -2,135 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2C44D28CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988CD4D28CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 07:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiCIGOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 01:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S229922AbiCIGPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 01:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiCIGOG (ORCPT
+        with ESMTP id S229588AbiCIGPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:14:06 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0427313D0F;
-        Tue,  8 Mar 2022 22:13:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KD21W1QSHz4xnG;
-        Wed,  9 Mar 2022 17:13:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646806386;
-        bh=XqViItOn2ErCKOtc6B8WmgwCnWCFyrtsZ+W9A1X429Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CjSlRilnXoLWHZ34aLJkLA2EUOl9n7fwaFiQOyA//QNeuHkSpaTRRRXL479pK90+e
-         Iw0ZemKxJZVxVrYoOLgYOg70V8sq+WUzJY855qBrqwjYbWwvyKrmXbAjgya96xylTb
-         52tCSVBJ1DwK4LfO8kvxDpIzQUNlEW/CJUcp+nSoLCMJwA8Z91nZaKaroVFI2VC2Bo
-         f79FyU7CBMcii4Uw4EYtGe3AdvR/U1T3Q9QBEH+5yEEsTKz7a8sDl89wOIexeWYjvk
-         1eey7yB4qF2oE12HOy1L2awh6p4pQgq+MxQH+1JRcTC6/zlfLd231No6t7b+LWMLS8
-         0pshHzn14RVrg==
-Date:   Wed, 9 Mar 2022 17:13:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the vhost tree
-Message-ID: <20220309171300.0500a07e@canb.auug.org.au>
-In-Reply-To: <20220307060012-mutt-send-email-mst@kernel.org>
-References: <20220307154011.6d456f28@canb.auug.org.au>
-        <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
-        <20220307211242.59fc0f0e@canb.auug.org.au>
-        <20220307060012-mutt-send-email-mst@kernel.org>
+        Wed, 9 Mar 2022 01:15:44 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF27159E8F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 22:14:46 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 7174868AFE; Wed,  9 Mar 2022 07:14:42 +0100 (CET)
+Date:   Wed, 9 Mar 2022 07:14:42 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mingbao Sun <sunmingbao@tom.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 2/2] nvme-tcp: support specifying the
+ congestion-control
+Message-ID: <20220309061442.GA31316@lst.de>
+References: <20220308151606.2563-1-sunmingbao@tom.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/z0Z3u/r4NsQg0OpZwH2n+re";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308151606.2563-1-sunmingbao@tom.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/z0Z3u/r4NsQg0OpZwH2n+re
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 08, 2022 at 11:16:06PM +0800, Mingbao Sun wrote:
+> From: Mingbao Sun <tyler.sun@dell.com>
+> 
+> congestion-control could have a noticeable impaction on the
+> performance of TCP-based communications. This is of course true
+> to NVMe_over_TCP.
+> 
+> Different congestion-controls (e.g., cubic, dctcp) are suitable for
+> different scenarios. Proper adoption of congestion control would benefit
+> the performance. On the contrary, the performance could be destroyed.
+> 
+> Though we can specify the congestion-control of NVMe_over_TCP via
+> writing '/proc/sys/net/ipv4/tcp_congestion_control', but this also
+> changes the congestion-control of all the future TCP sockets that
+> have not been explicitly assigned the congestion-control, thus bringing
+> potential impaction on their performance.
+> 
+> So it makes sense to make NVMe_over_TCP support specifying the
+> congestion-control. And this commit addresses the host side.
+> 
+> Implementation approach:
+> a new option called 'tcp_congestion' was created in fabrics opt_tokens
+> for 'nvme connect' command to passed in the congestion-control
+> specified by the user.
+> Then later in nvme_tcp_alloc_queue, the specified congestion-control
+> would be applied to the relevant sockets of the host side.
+> 
+> Signed-off-by: Mingbao Sun <tyler.sun@dell.com>
+> ---
+>  drivers/nvme/host/fabrics.c | 12 ++++++++++++
+>  drivers/nvme/host/fabrics.h |  2 ++
+>  drivers/nvme/host/tcp.c     | 20 +++++++++++++++++++-
+>  3 files changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvme/host/fabrics.c b/drivers/nvme/host/fabrics.c
+> index ee79a6d639b4..79d5f0dbafd3 100644
+> --- a/drivers/nvme/host/fabrics.c
+> +++ b/drivers/nvme/host/fabrics.c
+> @@ -548,6 +548,7 @@ static const match_table_t opt_tokens = {
+>  	{ NVMF_OPT_TOS,			"tos=%d"		},
+>  	{ NVMF_OPT_FAIL_FAST_TMO,	"fast_io_fail_tmo=%d"	},
+>  	{ NVMF_OPT_DISCOVERY,		"discovery"		},
+> +	{ NVMF_OPT_TCP_CONGESTION,	"tcp_congestion=%s"	},
+>  	{ NVMF_OPT_ERR,			NULL			}
+>  };
+>  
+> @@ -829,6 +830,16 @@ static int nvmf_parse_options(struct nvmf_ctrl_options *opts,
+>  		case NVMF_OPT_DISCOVERY:
+>  			opts->discovery_nqn = true;
+>  			break;
+> +		case NVMF_OPT_TCP_CONGESTION:
+> +			p = match_strdup(args);
+> +			if (!p) {
+> +				ret = -ENOMEM;
+> +				goto out;
+> +			}
+> +
+> +			kfree(opts->tcp_congestion);
+> +			opts->tcp_congestion = p;
+> +			break;
+>  		default:
+>  			pr_warn("unknown parameter or missing value '%s' in ctrl creation request\n",
+>  				p);
+> @@ -947,6 +958,7 @@ void nvmf_free_options(struct nvmf_ctrl_options *opts)
+>  	kfree(opts->subsysnqn);
+>  	kfree(opts->host_traddr);
+>  	kfree(opts->host_iface);
+> +	kfree(opts->tcp_congestion);
+>  	kfree(opts);
+>  }
+>  EXPORT_SYMBOL_GPL(nvmf_free_options);
+> diff --git a/drivers/nvme/host/fabrics.h b/drivers/nvme/host/fabrics.h
+> index c3203ff1c654..25fdc169949d 100644
+> --- a/drivers/nvme/host/fabrics.h
+> +++ b/drivers/nvme/host/fabrics.h
+> @@ -68,6 +68,7 @@ enum {
+>  	NVMF_OPT_FAIL_FAST_TMO	= 1 << 20,
+>  	NVMF_OPT_HOST_IFACE	= 1 << 21,
+>  	NVMF_OPT_DISCOVERY	= 1 << 22,
+> +	NVMF_OPT_TCP_CONGESTION	= 1 << 23,
+>  };
+>  
+>  /**
+> @@ -117,6 +118,7 @@ struct nvmf_ctrl_options {
+>  	unsigned int		nr_io_queues;
+>  	unsigned int		reconnect_delay;
+>  	bool			discovery_nqn;
+> +	const char		*tcp_congestion;
+>  	bool			duplicate_connect;
+>  	unsigned int		kato;
+>  	struct nvmf_host	*host;
+> diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+> index babbc14a4b76..3415e178a78b 100644
+> --- a/drivers/nvme/host/tcp.c
+> +++ b/drivers/nvme/host/tcp.c
+> @@ -1403,6 +1403,8 @@ static int nvme_tcp_alloc_queue(struct nvme_ctrl *nctrl,
+>  {
+>  	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
+>  	struct nvme_tcp_queue *queue = &ctrl->queues[qid];
+> +	char ca_name[TCP_CA_NAME_MAX];
+> +	sockptr_t optval;
+>  	int ret, rcv_pdu_size;
+>  
+>  	mutex_init(&queue->queue_lock);
+> @@ -1447,6 +1449,21 @@ static int nvme_tcp_alloc_queue(struct nvme_ctrl *nctrl,
+>  	if (nctrl->opts->tos >= 0)
+>  		ip_sock_set_tos(queue->sock->sk, nctrl->opts->tos);
+>  
+> +	if (nctrl->opts->mask & NVMF_OPT_TCP_CONGESTION) {
+> +		strncpy(ca_name, nctrl->opts->tcp_congestion,
+> +			TCP_CA_NAME_MAX-1);
+> +		optval = KERNEL_SOCKPTR(ca_name);
+> +		ret = sock_common_setsockopt(queue->sock, IPPROTO_TCP,
+> +					     TCP_CONGESTION, optval,
+> +					     strlen(ca_name));
 
-Hi Michael,
-
-On Mon, 7 Mar 2022 06:00:27 -0500 "Michael S. Tsirkin" <mst@redhat.com> wro=
-te:
->
-> On Mon, Mar 07, 2022 at 09:12:42PM +1100, Stephen Rothwell wrote:
-> >=20
-> > On Mon, 7 Mar 2022 14:46:40 +0800 Xuan Zhuo <xuanzhuo@linux.alibaba.com=
-> wrote: =20
-> > >
-> > > Can you help me test this patch? I don't have an arm environment arou=
-nd me.
-> > >=20
-> > > Thanks
-> > >=20
-> > >=20
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index 1fa2d632a994..4d629d1ea894 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_i=
-nfo *vi,
-> > >=20
-> > >  err:
-> > >         netdev_err(vi->dev,
-> > > -                  "reset rx reset vq fail: rx queue index: %ld err: =
-%d\n",
-> > > +                  "reset rx reset vq fail: rx queue index: %td err: =
-%d\n",
-> > >                    rq - vi->rq, err);
-> > >         virtnet_napi_enable(rq->vq, &rq->napi);
-> > >         return err;
-> > > @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_i=
-nfo *vi,
-> > >=20
-> > >  err:
-> > >         netdev_err(vi->dev,
-> > > -                  "reset tx reset vq fail: tx queue index: %ld err: =
-%d\n",
-> > > +                  "reset tx reset vq fail: tx queue index: %td err: =
-%d\n",
-> > >                    sq - vi->sq, err);
-> > >         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
-> > >         return err; =20
-> >=20
-> > I had to apply that by hand, but it does work.
-> >=20
-> > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
->=20
-> OK, I squashed this into the problematic patch. Thanks a lot!
-
-The warnings have reappeared today :-( and this fixup is not applied.
-Something got lost in the rebase/rewrite?
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/z0Z3u/r4NsQg0OpZwH2n+re
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIoRWwACgkQAVBC80lX
-0GwvvAf+JiZtIPumBs9xmURkDKuL8Yxm54lmJ81HoeYHzgI+nOrfEKjz+Hs5iQ+W
-pSK+0rMq1kQeOgbsaCWIPjQJxv3ZCjg36rGjynjyfKMe7eD9SF5d9tvwPqnNF340
-6wgyAJzpwrS+HF02fNSR1/5sTrB1uBAYqsl5Ti1JvRaH/ZHWJwkmNQlzChZ7EPPn
-c04nI883inhkiVzHpFe5k1WTzKhF0HyYu1G1eyR+pQ+MGH/pktC1ZPdSS6e8Y2Il
-8XVlt8K+qpCO1qWYK2+odwz0AsG/80fu8dLflXqqrZz+lp0oCnTdSYobWzwOcLva
-Y+TaccTI2GKY1PE8mG0ewJPCKfrrJg==
-=6W6U
------END PGP SIGNATURE-----
-
---Sig_/z0Z3u/r4NsQg0OpZwH2n+re--
+This needs to use kernel_setsockopt.  I also can see absolutely no
+need for the optval local variable, and I also don't really see why
+we need ca_name either - if we need to limit the length and terminate
+it (but why?) that can be done during option parsing.

@@ -2,201 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3544D2BE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87FA4D2BA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiCIJ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S231951AbiCIJTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiCIJ2t (ORCPT
+        with ESMTP id S231233AbiCIJTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:28:49 -0500
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51EFB7F8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:27:49 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A9FEA2028D7;
-        Wed,  9 Mar 2022 10:27:47 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 468B92027BD;
-        Wed,  9 Mar 2022 10:27:47 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id C23CD183AC94;
-        Wed,  9 Mar 2022 17:27:45 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: fsl_spdif: keep all TxClk sources by txclk array
-Date:   Wed,  9 Mar 2022 17:18:43 +0800
-Message-Id: <1646817523-26800-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 04:19:52 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EAF2AC41
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:18:54 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7075B3F79C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646817533;
+        bh=8BjTP/+1yUB9Aiej+vTJ+iAQ4nFO9laQpO6aipSI9Uo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=mmaQZV1R9nHyKXKVjvd7HBHUGO8/qsu3d7DgPEIHv5zxOnqHF7I5U9dKxZ8hsynV0
+         2cBInbF4L5CcxzO3Ad+hR9zPnggQ96qdND5Y/q8rVPduw26vXOG/Oy0ba7ioHN4bJy
+         nBp9shWy3rf68VtM71rFSsFr6HR7XBVH+vTfLIJ+Adzhs5PqolY/6yDCA5sFtwFcxb
+         mDLUwvQ8np7ylp+fbXNLd1TpypMpfV1nWNZn5KGzDRoM1C0fq1EXHg/f7q7e/YQnEP
+         hlFhpphKbpet88uGBLRyNyq6i8xh//LhVZqVXuVvjM0A18jzklwD9xPBtzq/fQkfVI
+         jtKz+cFWZAFdA==
+Received: by mail-ed1-f72.google.com with SMTP id l8-20020a056402028800b0041636072ef0so938001edv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:18:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8BjTP/+1yUB9Aiej+vTJ+iAQ4nFO9laQpO6aipSI9Uo=;
+        b=VPQx02mp/vC0GGnG1g63UTI0jYSp921EeE/Gwt4zDpcj9EhPoW6CXhbEYKYLc1+RTY
+         Mkkj7Scy+fDJP/j0xr4CtN0k8BRp9QSh5T0kHx6FPk4SPfgydqHTok3twMdLG06yWLlv
+         S4bJcYDERjyOYlO9cChML4QtLsK75zPKQJRxGyjwph3krADdeSHZZiMeeKfhFEzhXG7K
+         upV15VH6MK3zYmVbDvNC7zqZCdxq9ex6ahhQ+a5sPOou/2nDQcyGMo+0U1PvrZkhGwin
+         Ibj7csQUee+ET9pptzaMTAKOzQRjINV065Q7mA8OTEqshpWz/wCDt7pismIjmUKUnCLl
+         UlYA==
+X-Gm-Message-State: AOAM530L/JjTDJN2s2Up7GEye5E1Roqkqe9eVScfDH72AB3Z9GPSHOZG
+        WDxaWiM6Nzko3511wd3vVx0wFsdzBgFr5a1eTq7QiFjeI3RSEokBQ4sC4ouzg5RoYyN1DFkNY3I
+        Ll3oeq4918RborV00OkFFvHAeq1Sl2mGv/hn7TAQLYg==
+X-Received: by 2002:a05:6402:42c6:b0:415:fe7d:4963 with SMTP id i6-20020a05640242c600b00415fe7d4963mr20366880edc.317.1646817533109;
+        Wed, 09 Mar 2022 01:18:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwKBgYsIlQkmTPZZedYYFZfkqd0y8tOMc44J8WrRfvbA7BIK5mWKSKmpE5UARw9e0KjYHAZ0w==
+X-Received: by 2002:a05:6402:42c6:b0:415:fe7d:4963 with SMTP id i6-20020a05640242c600b00415fe7d4963mr20366870edc.317.1646817532959;
+        Wed, 09 Mar 2022 01:18:52 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id m1-20020a056402430100b004167e4606a8sm541596edc.74.2022.03.09.01.18.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 01:18:52 -0800 (PST)
+Message-ID: <a177b16a-c55e-8338-f34f-c7b9edcd94c0@canonical.com>
+Date:   Wed, 9 Mar 2022 10:18:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: linux-next: manual merge of the mfd tree with the arm-soc tree
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220309132952.525b3aa4@canb.auug.org.au>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220309132952.525b3aa4@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Viorel Suman <viorel.suman@nxp.com>
 
-Use txclk array to keep all TxClk sources instead of keeping
-clocks per rate - need to do this in order to avoid multiple
-prepare_enable/disable_unprepare of the same clock during
-suspend/resume.
+On 09/03/2022 03:29, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the mfd tree got a conflict in:
+> 
+>   Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> 
+> between commit:
+> 
+>   e465ea5cc05d ("dt-bindings: soc: samsung: usi: refer to dtschema for children")
+> 
+> from the arm-soc tree and commit:
+> 
+>   0ff4827ed66f ("spi: dt-bindings: samsung: Convert to dtschema")
+> 
+> from the mfd tree.
+> 
+> I fixed it up (I just used the former version) and can carry the fix as
+> necessary. 
 
-Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- sound/soc/fsl/fsl_spdif.c | 41 +++++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 21 deletions(-)
+Hi Arnd, Lee and Olof,
 
-diff --git a/sound/soc/fsl/fsl_spdif.c b/sound/soc/fsl/fsl_spdif.c
-index 57c41b2f7d17..e0acce6b2213 100644
---- a/sound/soc/fsl/fsl_spdif.c
-+++ b/sound/soc/fsl/fsl_spdif.c
-@@ -125,7 +125,7 @@ struct fsl_spdif_priv {
- 	u16 sysclk_df[SPDIF_TXRATE_MAX];
- 	u8 txclk_src[SPDIF_TXRATE_MAX];
- 	u8 rxclk_src;
--	struct clk *txclk[SPDIF_TXRATE_MAX];
-+	struct clk *txclk[STC_TXCLK_SRC_MAX];
- 	struct clk *rxclk;
- 	struct clk *coreclk;
- 	struct clk *sysclk;
-@@ -526,7 +526,7 @@ static int spdif_set_sample_rate(struct snd_pcm_substream *substream,
- 		goto clk_set_bypass;
+This conflict will pop-up when sending to Linus. I propose to resolve it
+slightly different - just remove the conflicting lines. After merge
+window I will properly reference the other schema inside properties (not
+description). This can look like:
+################
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+
+@@ -17,13 +17,6 @@ description: |
+
+   child nodes, each representing a serial sub-node device. The mode setting
+
+   selects which particular function will be used.
+
  
- 	/* The S/PDIF block needs a clock of 64 * fs * txclk_df */
--	ret = clk_set_rate(spdif_priv->txclk[rate],
-+	ret = clk_set_rate(spdif_priv->txclk[clk],
- 			   64 * sample_rate * txclk_df);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to set tx clock rate\n");
-@@ -537,7 +537,7 @@ static int spdif_set_sample_rate(struct snd_pcm_substream *substream,
- 	dev_dbg(&pdev->dev, "expected clock rate = %d\n",
- 			(64 * sample_rate * txclk_df * sysclk_df));
- 	dev_dbg(&pdev->dev, "actual clock rate = %ld\n",
--			clk_get_rate(spdif_priv->txclk[rate]));
-+			clk_get_rate(spdif_priv->txclk[clk]));
- 
- 	/* set fs field in consumer channel status */
- 	spdif_set_cstatus(ctrl, IEC958_AES3_CON_FS, csfs);
-@@ -1376,12 +1376,10 @@ static int fsl_spdif_probe_txclk(struct fsl_spdif_priv *spdif_priv,
- 	struct device *dev = &pdev->dev;
- 	u64 savesub = 100000, ret;
- 	struct clk *clk;
--	char tmp[16];
- 	int i;
- 
- 	for (i = 0; i < STC_TXCLK_SRC_MAX; i++) {
--		sprintf(tmp, "rxtx%d", i);
--		clk = devm_clk_get(dev, tmp);
-+		clk = spdif_priv->txclk[i];
- 		if (IS_ERR(clk)) {
- 			dev_err(dev, "no rxtx%d clock in devicetree\n", i);
- 			return PTR_ERR(clk);
-@@ -1395,7 +1393,6 @@ static int fsl_spdif_probe_txclk(struct fsl_spdif_priv *spdif_priv,
- 			continue;
- 
- 		savesub = ret;
--		spdif_priv->txclk[index] = clk;
- 		spdif_priv->txclk_src[index] = i;
- 
- 		/* To quick catch a divisor, we allow a 0.1% deviation */
-@@ -1407,7 +1404,7 @@ static int fsl_spdif_probe_txclk(struct fsl_spdif_priv *spdif_priv,
- 			spdif_priv->txclk_src[index], rate[index]);
- 	dev_dbg(dev, "use txclk df %d for %dHz sample rate\n",
- 			spdif_priv->txclk_df[index], rate[index]);
--	if (clk_is_match(spdif_priv->txclk[index], spdif_priv->sysclk))
-+	if (clk_is_match(spdif_priv->txclk[spdif_priv->txclk_src[index]], spdif_priv->sysclk))
- 		dev_dbg(dev, "use sysclk df %d for %dHz sample rate\n",
- 				spdif_priv->sysclk_df[index], rate[index]);
- 	dev_dbg(dev, "the best rate for %dHz sample rate is %dHz\n",
-@@ -1423,6 +1420,7 @@ static int fsl_spdif_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	void __iomem *regs;
- 	int irq, ret, i;
-+	char tmp[16];
- 
- 	spdif_priv = devm_kzalloc(&pdev->dev, sizeof(*spdif_priv), GFP_KERNEL);
- 	if (!spdif_priv)
-@@ -1462,8 +1460,17 @@ static int fsl_spdif_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	for (i = 0; i < STC_TXCLK_SRC_MAX; i++) {
-+		sprintf(tmp, "rxtx%d", i);
-+		spdif_priv->txclk[i] = devm_clk_get(&pdev->dev, tmp);
-+		if (IS_ERR(spdif_priv->txclk[i])) {
-+			dev_err(&pdev->dev, "no rxtx%d clock in devicetree\n", i);
-+			return PTR_ERR(spdif_priv->txclk[i]);
-+		}
-+	}
-+
- 	/* Get system clock for rx clock rate calculation */
--	spdif_priv->sysclk = devm_clk_get(&pdev->dev, "rxtx5");
-+	spdif_priv->sysclk = spdif_priv->txclk[5];
- 	if (IS_ERR(spdif_priv->sysclk)) {
- 		dev_err(&pdev->dev, "no sys clock (rxtx5) in devicetree\n");
- 		return PTR_ERR(spdif_priv->sysclk);
-@@ -1481,7 +1488,7 @@ static int fsl_spdif_probe(struct platform_device *pdev)
- 		dev_warn(&pdev->dev, "no spba clock in devicetree\n");
- 
- 	/* Select clock source for rx/tx clock */
--	spdif_priv->rxclk = devm_clk_get(&pdev->dev, "rxtx1");
-+	spdif_priv->rxclk = spdif_priv->txclk[1];
- 	if (IS_ERR(spdif_priv->rxclk)) {
- 		dev_err(&pdev->dev, "no rxtx1 clock in devicetree\n");
- 		return PTR_ERR(spdif_priv->rxclk);
-@@ -1562,9 +1569,7 @@ static int fsl_spdif_runtime_suspend(struct device *dev)
- 			&spdif_priv->regcache_srpc);
- 	regcache_cache_only(spdif_priv->regmap, true);
- 
--	clk_disable_unprepare(spdif_priv->rxclk);
+
+-  Refer to next bindings documentation for information on protocol subnodes that
+
+-  can exist under USI node:
+
 -
--	for (i = 0; i < SPDIF_TXRATE_MAX; i++)
-+	for (i = 0; i < STC_TXCLK_SRC_MAX; i++)
- 		clk_disable_unprepare(spdif_priv->txclk[i]);
- 
- 	if (!IS_ERR(spdif_priv->spbaclk))
-@@ -1594,16 +1599,12 @@ static int fsl_spdif_runtime_resume(struct device *dev)
- 		}
- 	}
- 
--	for (i = 0; i < SPDIF_TXRATE_MAX; i++) {
-+	for (i = 0; i < STC_TXCLK_SRC_MAX; i++) {
- 		ret = clk_prepare_enable(spdif_priv->txclk[i]);
- 		if (ret)
- 			goto disable_tx_clk;
- 	}
- 
--	ret = clk_prepare_enable(spdif_priv->rxclk);
--	if (ret)
--		goto disable_tx_clk;
--
- 	regcache_cache_only(spdif_priv->regmap, false);
- 	regcache_mark_dirty(spdif_priv->regmap);
- 
-@@ -1613,12 +1614,10 @@ static int fsl_spdif_runtime_resume(struct device *dev)
- 
- 	ret = regcache_sync(spdif_priv->regmap);
- 	if (ret)
--		goto disable_rx_clk;
-+		goto disable_tx_clk;
- 
- 	return 0;
- 
--disable_rx_clk:
--	clk_disable_unprepare(spdif_priv->rxclk);
- disable_tx_clk:
- 	for (i--; i >= 0; i--)
- 		clk_disable_unprepare(spdif_priv->txclk[i]);
--- 
-2.17.1
 
+-  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
+
+-  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+
+-  [3] Documentation/devicetree/bindings/spi/samsung,spi.yaml
+
+-
+
+ properties:
+
+   $nodename:
+
+     pattern: "^usi@[0-9a-f]+$"
+
+################
+
+Best regards,
+Krzysztof

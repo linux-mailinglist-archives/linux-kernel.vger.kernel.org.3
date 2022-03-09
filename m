@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DAF4D3DC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054764D3DC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 00:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbiCIXz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 18:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S238375AbiCIX5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 18:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiCIXz0 (ORCPT
+        with ESMTP id S229520AbiCIX5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 18:55:26 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B1412223D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 15:54:25 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so2768810ioa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 15:54:25 -0800 (PST)
+        Wed, 9 Mar 2022 18:57:05 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5EC12223A;
+        Wed,  9 Mar 2022 15:56:02 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id im7so3327029qvb.4;
+        Wed, 09 Mar 2022 15:56:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=rizZQOUvkQDGoYcuJYhkskqNjSqvNewN+f3KTJL24GY=;
+        b=oJi5LwbgbrANiYPxcsqGVPiyP171mK+sH73jgBikJv0gT3dfhrhl18ASGhLUtI3TbV
+         vYvUzhYgPon+uKIQsH+LTjJtCmSr+Hd4CHxGuDCXLuzMkAib5ZvURHf4KP1tXVXuN5DR
+         DeGiYH94zBIlsJwZapTIEFZ6yeIVH4NlBf/BRbiOQ2AgtJrySBNkA2An52Ve7ZHTV7M2
+         WUNE20cTUiU1NCEiU1u5uAw7wt/Kg8QpPboUyShycEQySwNAhrBhKdgEOYQP8YmakMRx
+         ojHxQI6QLa142wa9s8ItRACTIfIfONsX+jmo2UzLpod9oQtzwk7eUA3E7Wi/29OUbIc/
+         MRtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=FZKkfb+B9Ye8SW4sgOk+aViFCG1Zd9t6idiFkhiqLKA=;
-        b=g0ov9lk9GvFqoOOXXZPlzI6gKo96E0p6grsJHTU6oldXRvaJFP5/6l86YdAxAXXVtm
-         UwCILfSHxQr20LjYX+Bf4XUt15aMXYrJLWBkhoTf26fEIGVnw2fRBvB4CUK0GLtsotvZ
-         fP0vjrTIRy3+lmr5+YZtVwtMY237hP4XW4S7Q4PCsbbMX874UtUNSM5OVFdog+c+qIWy
-         nnVva6PJA0qjPNwsMIaeNf3X24FPiJbcL6NGPLqWwzJZRff29/b/HmVnrTW7q31vkONA
-         aj+hor2ouL8xFH9ss/TdKIRisVoMbxRK/p8kVEDFrsxCl9jKVEMGFmdRb+jdrTlzv+hP
-         d8mg==
-X-Gm-Message-State: AOAM531JGIhVORK4rAeH465TJQS7FwmVjx5QSgQiT2E+KACypXGC4+rY
-        2Mr4RFwF7FYpn/i9oTIbbgEVmkvYC7n4F2VaJc70IAiQtvlw
-X-Google-Smtp-Source: ABdhPJyVHy/khyyLSyf05JTis72no6NvtkZogjvY6QKKugmN/bv16pOOktXDBrhtnfxHZvR7dvaajtm3yJlsPwJXk3Ttq0pln574
-MIME-Version: 1.0
-X-Received: by 2002:a92:7513:0:b0:2b9:5b61:e376 with SMTP id
- q19-20020a927513000000b002b95b61e376mr1558659ilc.193.1646870064861; Wed, 09
- Mar 2022 15:54:24 -0800 (PST)
-Date:   Wed, 09 Mar 2022 15:54:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000351b8605d9d1d1bf@google.com>
-Subject: [syzbot] memory leak in usb_get_configuration
-From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
-        rob@robgreener.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=rizZQOUvkQDGoYcuJYhkskqNjSqvNewN+f3KTJL24GY=;
+        b=iV73bAAFoG8BUzjljiIGD7Ite66if0gB8z65NwikszKzSBkg7Thtby8th+4OYPTV/b
+         lcJiNA/3sw8sXuPwNLbVr3TPYnZerqaxQIBkPzvIbtiDWcfgk3zLW6y2zbhsMItchqaG
+         57uXmkM4b1HhNmcndDbTXUlLh83YS5PCmVVyi+EHL02kgIlXuKAfrWUof8h9ISbI8Xyp
+         9EOn1MN79NRo15zG1b+DlWXx/bEJ3eqZXtru3Crgymkqx/Ay3fTQSliN3yYVurb9VBEL
+         zsrn6VayWcjFuWnoMAC0WvZdSAWCURf4H3utsME3z/p0W1ot2iMl+24LGeYdMF0U61QA
+         9VbA==
+X-Gm-Message-State: AOAM5314/mlDl5edDUiaGtIeYxUssiily3/bS706H2ev/mAi7Fj2oUck
+        kFeIcn1ERjADn/1AD/0E3QasaNRVje0xqcufOuOauQ==
+X-Google-Smtp-Source: ABdhPJxeUZ4Hz64AnOVESdO/NH+js1iCo54nPx3Srdm8mTg/V7a9o7dEAkGszH9sSgfuQZl2HEHu2w==
+X-Received: by 2002:a05:6214:2607:b0:435:49c6:5c7c with SMTP id gu7-20020a056214260700b0043549c65c7cmr1776950qvb.23.1646870160843;
+        Wed, 09 Mar 2022 15:56:00 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id i20-20020ac85c14000000b002de4b6004a7sm2112632qti.27.2022.03.09.15.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 15:56:00 -0800 (PST)
+Message-ID: <62293e90.1c69fb81.652e4.d068@mx.google.com>
+Date:   Wed, 09 Mar 2022 15:56:00 -0800 (PST)
+X-Google-Original-Date: Wed, 09 Mar 2022 23:55:58 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/43] 5.10.105-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed,  9 Mar 2022 16:59:33 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.105 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.105-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-syzbot found the following issue on:
+5.10.105-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810c0289e0 (size 32):
-  comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
-  hex dump (first 32 bytes):
-    09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
-    3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
-  backtrace:
-    [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff88810a600f40 (size 64):
-  comm "kworker/1:2", pid 139, jiffies 4294947866 (age 15.870s)
-  hex dump (first 32 bytes):
-    01 00 00 00 01 00 00 00 09 04 00 00 00 d0 bb 3a  ...............:
-    00 00 00 00 00 00 00 00 f2 89 02 0c 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff82c9871d>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c9871d>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff82c9871d>] usb_parse_configuration drivers/usb/core/config.c:772 [inline]
-    [<ffffffff82c9871d>] usb_get_configuration+0x7bd/0x1cd0 drivers/usb/core/config.c:944
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

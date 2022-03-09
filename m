@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FA84D3142
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B304D2FB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiCIOtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 09:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
+        id S232995AbiCINLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiCIOtY (ORCPT
+        with ESMTP id S231661AbiCINLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:49:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA1B4ECDF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646837304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 9 Mar 2022 08:11:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54689102154
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:10:03 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C8C2D1F381;
+        Wed,  9 Mar 2022 13:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646831401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kNOo8tfVdsLHz4CQT9H/dwfufzZQMSYbZ0RQG+jvDRA=;
-        b=LmxtdvHjuXz259xN0Lwi7/Oc/lqx2hKDSwtT5vomyd+Gx9eyj0hTyUW23BRwWI/4r1W7cN
-        eLjvHyl+qOPtqWj5L6VJczh4QPMZWvlec9m+N5xxSNMqVKcC+mpKS/Xr19QT/Ac8XurnEb
-        zBIxJ53MnFv1XGvZdG+PDpEQl8TYpa8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-Twi0WZCcN3eEsb6D9b_wiA-1; Wed, 09 Mar 2022 09:48:20 -0500
-X-MC-Unique: Twi0WZCcN3eEsb6D9b_wiA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=AF5nHoVPx+QVoqlhpPP/leSCgEv59byPDm5kXVlHWhQ=;
+        b=mz4exN5KalKA/E49edzKguWynqFlnY2k74hzjQHSy7MY2N8okqHEgXg4oP2hud2Sdi90Ln
+        6+ytQQDJDQos6pchUbd0tGqRMkFH/kiwmazj3QkMgdr37E6c0WYxotsgqsMghBuL5XxuUz
+        p9VoX/mPiip+j5tlpYGQRfR/XtnN32Q=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D27221006AA6;
-        Wed,  9 Mar 2022 14:48:19 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 485F2106D5D3;
-        Wed,  9 Mar 2022 14:48:05 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 718D7416D5DC; Wed,  9 Mar 2022 08:24:21 -0300 (-03)
-Date:   Wed, 9 Mar 2022 08:24:21 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>
-Subject: Re: [PATCH v7 1/2] KVM: LAPIC: Make lapic timer unpinned
-Message-ID: <YiiOZaQCf1K653MS@fuller.cnet>
-References: <1562376411-3533-1-git-send-email-wanpengli@tencent.com>
- <1562376411-3533-2-git-send-email-wanpengli@tencent.com>
- <ab523b0e930129a100d306d0959445665eb69457.camel@infradead.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 5C904A3B81;
+        Wed,  9 Mar 2022 13:09:56 +0000 (UTC)
+Date:   Wed, 9 Mar 2022 14:09:59 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Nico Pache <npache@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, tglx@linutronix.de,
+        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
+        andrealmeid@collabora.com, peterz@infradead.org,
+        Joel Savitz <jsavitz@redhat.com>
+Subject: Re: [PATCH v4] mm/oom_kill.c: futex: Don't OOM reap a process with a
+ futex robust list
+Message-ID: <YiinJ3A6WoTJLN8d@dhcp22.suse.cz>
+References: <20220309002550.103786-1-npache@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab523b0e930129a100d306d0959445665eb69457.camel@infradead.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <20220309002550.103786-1-npache@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,59 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 10:26:51AM +0100, David Woodhouse wrote:
-> On Sat, 2019-07-06 at 09:26 +0800, Wanpeng Li wrote:
-> > From: Wanpeng Li <wanpengli@tencent.com>
-> > 
-> > Commit 61abdbe0bcc2 ("kvm: x86: make lapic hrtimer pinned") pinned the
-> > lapic timer to avoid to wait until the next kvm exit for the guest to
-> > see KVM_REQ_PENDING_TIMER set. There is another solution to give a kick
-> > after setting the KVM_REQ_PENDING_TIMER bit, make lapic timer unpinned
-> > will be used in follow up patches.
-> > 
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: Radim Krčmář <rkrcmar@redhat.com>
-> > Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> > Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> > ---
-> >  arch/x86/kvm/lapic.c | 8 ++++----
-> >  arch/x86/kvm/x86.c   | 6 +-----
-> >  2 files changed, 5 insertions(+), 9 deletions(-)
-> 
-> ...
-> 
-> 
-> > @@ -2510,7 +2510,7 @@ void __kvm_migrate_apic_timer(struct kvm_vcpu *vcpu)
-> >  
-> >  	timer = &vcpu->arch.apic->lapic_timer.timer;
-> >  	if (hrtimer_cancel(timer))
-> > -		hrtimer_start_expires(timer, HRTIMER_MODE_ABS_PINNED);
-> > +		hrtimer_start_expires(timer, HRTIMER_MODE_ABS);
-> >  }
-> >  
-> >  /*
-> 
-> Wait, in that case why are we even bothering to cancel and restart the
-> timer? I thought the whole point of that was to pin it to the *new* CPU
-> that this vCPU is running on.
-> 
-> If not, can't we just kill __kvm_migrate_apic_timer() off completely
-> not?
+On Tue 08-03-22 17:25:50, Nico Pache wrote:
+> The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
+> be targeted by the oom reaper. This mapping is also used to store the futex
+> robust list; the kernel does not keep a copy of the robust list and instead
+> references a userspace address to maintain the robustness during a process
+> death. A race can occur between exit_mm and the oom reaper that allows
+> the oom reaper to clear the memory of the futex robust list before the
+> exit path has handled the futex death.
 
-Current code looks like this:
+The above is missing the important part of the problem description. So
+the oom_reaper frees the memory which is backing the robust list. It
+would be useful to link that to the lockup on the futex.
 
-void __kvm_migrate_apic_timer(struct kvm_vcpu *vcpu)
-{
-        struct hrtimer *timer;
+> Prevent the OOM reaper from concurrently reaping the mappings if the dying
+> process contains a robust_list. If the dying task_struct does not contain
+> a pointer in tsk->robust_list, we can assume there was either never one
+> setup for this task struct, or futex_cleanup has properly handled the
+> futex death and we can safely reap this memory.
 
-        if (!lapic_in_kernel(vcpu) ||
-                kvm_can_post_timer_interrupt(vcpu)) <----------
-                return;
-
-        timer = &vcpu->arch.apic->lapic_timer.timer;
-        if (hrtimer_cancel(timer))
-                hrtimer_start_expires(timer, HRTIMER_MODE_ABS_HARD);
-}
-
-Yeah, should be HRTIMER_MODE_ABS_PINNED AFAICS.
-
+I do agree with Waiman that this should go into a helper function. This
+would be a quick workaround but I believe that it would be much better
+to either do the futex cleanup in the oom_reaper context if that could
+be done without blocking. If that is really not feasible for some reason
+then we could skip over vmas which are backing the robust list. Have you
+considered any of those solutions?
+-- 
+Michal Hocko
+SUSE Labs

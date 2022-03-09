@@ -2,258 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EADF4D31DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 811D64D31DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbiCIPff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S233924AbiCIPgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiCIPf0 (ORCPT
+        with ESMTP id S233869AbiCIPf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:35:26 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A7D14076A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:34:25 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id l12so3638564ljh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:34:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=/f/vIuylKKylp8vtsSZdPFZggdY5dfXSPr0mYTXw5VM=;
-        b=oQNUOGia68c5tCZGNaNknD2FAFM3InFMHF9rKt1itm1BuPnGrsfRv1cS4KUJJb3syu
-         NAxbLi1nhfKVm/qDIbigK8DARbG+q1d974u6TZlBvztfBnB0XqR1o65zV4Gc6xxk6B1L
-         oJ8rVztnu1zbeGIlJysDg242GFSUUWtgu272CmCj2KHq5IwjwCA8MWQ8bQ+3yimO7U7N
-         apyjOp1NIbVgEFQGZhKQd8magZt3rd2tlGhmakdknncJlqnBhoEnv3NB9I3qP86TZjAk
-         V26Uq+OpzKUJSDQPJaSE6Ugxgx3olPBBmGPSL9lh8prjk1LEMPqf92Q2Waghc+lO64SX
-         Pwqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=/f/vIuylKKylp8vtsSZdPFZggdY5dfXSPr0mYTXw5VM=;
-        b=L8FaCoNU616c5BhYUloyXtMYGvbexw17A9rdVfT2fw73BlxM665THPX15uesH4udLX
-         Td36/qpzwMFsLbWXVt2/OY790DOLJ4APMtmv7pxx0qtDJkwQd6oH+n++OhuMm7CXXEFX
-         v6cQKiP8b8ncYbVHD3KpslQg0X1Bo5o6GCqTLwNnHPM29/XoSGYHkwtHqDPkljLAXhXA
-         lSNw0+6XZM74m2Xu0LNS1vvevyNsPEruGhOP9sfINyAffbMUDTKBfQFyNTlsT6tgm6tX
-         pzaQ8HstQ13qx3jmbu4Gor9jQHBebMh/jQxI+MSvCg+HzOm77LBCF7NV+V8/lLfkBpgD
-         QL7g==
-X-Gm-Message-State: AOAM5333xNsrkMXrfNUiQfPdlYXojgn3ZgfgE3cw29IKOD3GCNXL8Jk9
-        y/aknjGc+4K7Fb7xMt1zr9F9Tg==
-X-Google-Smtp-Source: ABdhPJyD9C2eoIlphkUn6fcuiskOvuRzAKgTWVGdwhut/p5hq+z85Ko7+atiKwoRgDPPm11ygUk6dA==
-X-Received: by 2002:a2e:b0f6:0:b0:246:e95:c4ce with SMTP id h22-20020a2eb0f6000000b002460e95c4cemr31248ljl.142.1646840060715;
-        Wed, 09 Mar 2022 07:34:20 -0800 (PST)
-Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
-        by smtp.gmail.com with ESMTPSA id w8-20020a0565120b0800b0044846f3a8d5sm447391lfu.201.2022.03.09.07.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 07:34:20 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 04/10] net: bridge: mst: Notify switchdev
- drivers of VLAN MSTI migrations
-In-Reply-To: <20220308171717.s2hqp6raoe5gcgtl@skbuf>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
- <20220301100321.951175-5-tobias@waldekranz.com>
- <20220303205921.sxb52jzw4jcdj6m7@skbuf> <87y21kna9r.fsf@waldekranz.com>
- <20220308171717.s2hqp6raoe5gcgtl@skbuf>
-Date:   Wed, 09 Mar 2022 16:34:18 +0100
-Message-ID: <87sfrrm96t.fsf@waldekranz.com>
+        Wed, 9 Mar 2022 10:35:59 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8898C159294;
+        Wed,  9 Mar 2022 07:35:00 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 77DC220B7178;
+        Wed,  9 Mar 2022 07:34:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 77DC220B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646840100;
+        bh=dB1K0ZwGrg+HvxpbL6qUnjdr8grOY0ZQJDOVuW9N3Co=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sFllom38SHSpNWowxpHJXybN92PrbdJINamo/Nix55dwRs7bnNb8PVTb7j2ROrB4H
+         xnxrjatiYQ2ZrFKMnmpgHgYQZD4oXi1i0kdJckVwPw/8WzHvbKV0eBY+lzf3+2wr15
+         19BNhxW2NJGCd37Xolwu39xCzPzY/BElmjqewE/Q=
+Message-ID: <416e0757-46fe-b290-cb8b-cd766f9cbdb6@linux.microsoft.com>
+Date:   Wed, 9 Mar 2022 09:34:58 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+ <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
+ <YiY6hecX0pVWowQ7@sirena.org.uk>
+ <c494fa10-e973-c137-b637-66bde327611c@linux.microsoft.com>
+ <YiiT2lFuxc3ob+Zq@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YiiT2lFuxc3ob+Zq@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 19:17, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Tue, Mar 08, 2022 at 09:01:04AM +0100, Tobias Waldekranz wrote:
->> On Thu, Mar 03, 2022 at 22:59, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Tue, Mar 01, 2022 at 11:03:15AM +0100, Tobias Waldekranz wrote:
->> >> Whenever a VLAN moves to a new MSTI, send a switchdev notification so
->> >> that switchdevs can...
->> >> 
->> >> ...either refuse the migration if the hardware does not support
->> >> offloading of MST...
->> >> 
->> >> ..or track a bridge's VID to MSTI mapping when offloading is
->> >> supported.
->> >> 
->> >> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
->> >> ---
->> >>  include/net/switchdev.h   | 10 +++++++
->> >>  net/bridge/br_mst.c       | 15 +++++++++++
->> >>  net/bridge/br_switchdev.c | 57 +++++++++++++++++++++++++++++++++++++++
->> >>  3 files changed, 82 insertions(+)
->> >> 
->> >> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
->> >> index 3e424d40fae3..39e57aa5005a 100644
->> >> --- a/include/net/switchdev.h
->> >> +++ b/include/net/switchdev.h
->> >> @@ -28,6 +28,7 @@ enum switchdev_attr_id {
->> >>  	SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED,
->> >>  	SWITCHDEV_ATTR_ID_BRIDGE_MROUTER,
->> >>  	SWITCHDEV_ATTR_ID_MRP_PORT_ROLE,
->> >> +	SWITCHDEV_ATTR_ID_VLAN_MSTI,
->> >>  };
->> >>  
->> >>  struct switchdev_brport_flags {
->> >> @@ -35,6 +36,14 @@ struct switchdev_brport_flags {
->> >>  	unsigned long mask;
->> >>  };
->> >>  
->> >> +struct switchdev_vlan_attr {
->> >> +	u16 vid;
->> >> +
->> >> +	union {
->> >> +		u16 msti;
->> >> +	};
->> >
->> > Do you see other VLAN attributes that would be added in the future, such
->> > as to justify making this a single-element union from the get-go?
->> 
->> I could imagine being able to control things like multicast snooping on
->> a per-VLAN basis. Being able to act as a multicast router in one VLAN
->> but not another.
->> 
->> > Anyway if that is the case, we're lacking an id for the attribute type,
->> > so we'd end up needing to change drivers when a second union element
->> > appears. Otherwise they'd all expect an u16 msti.
->> 
->> My idea was that `enum switchdev_attr_id` would hold all of that
->> information. In this example SWITCHDEV_ATTR_ID_VLAN_MSTI, denotes both
->> that `vlan_attr` is the valid member of `u` and that `msti` is the valid
->> member of `vlan_attr`. If we add SWITCHDEV_ATTR_ID_VLAN_SNOOPING, that
->> would point to both `vlan_attr` and a new `bool snooping` in the union.
->> 
->> Do you think we should just have a SWITCHDEV_ATTR_ID_VLAN_ATTR for all
->> per-VLAN attributes and then have a separate union?
->
-> It's the first nested union that I see, and a bit confusing.
->
-> I think it would be better if we had a
->
-> struct switchdev_vlan_attr_msti {
-> 	u16 vid;
-> 	u16 msti;
-> };
->
-> and different structures for other, future VLAN attributes. Basically
-> keep a 1:1 mapping between an attribute id and a union.
 
-Yeah, I like the simplicity of that. Changing.
 
->> >> +};
->> >> +
->> >>  struct switchdev_attr {
->> >>  	struct net_device *orig_dev;
->> >>  	enum switchdev_attr_id id;
->> >> @@ -50,6 +59,7 @@ struct switchdev_attr {
->> >>  		u16 vlan_protocol;			/* BRIDGE_VLAN_PROTOCOL */
->> >>  		bool mc_disabled;			/* MC_DISABLED */
->> >>  		u8 mrp_port_role;			/* MRP_PORT_ROLE */
->> >> +		struct switchdev_vlan_attr vlan_attr;	/* VLAN_* */
->> >>  	} u;
->> >>  };
->> >>  
->> >> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
->> >> index 8dea8e7257fd..aba603675165 100644
->> >> --- a/net/bridge/br_mst.c
->> >> +++ b/net/bridge/br_mst.c
->> >> @@ -7,6 +7,7 @@
->> >>   */
->> >>  
->> >>  #include <linux/kernel.h>
->> >> +#include <net/switchdev.h>
->> >>  
->> >>  #include "br_private.h"
->> >>  
->> >> @@ -65,9 +66,23 @@ static void br_mst_vlan_sync_state(struct net_bridge_vlan *pv, u16 msti)
->> >>  
->> >>  int br_mst_vlan_set_msti(struct net_bridge_vlan *mv, u16 msti)
->> >>  {
->> >> +	struct switchdev_attr attr = {
->> >> +		.id = SWITCHDEV_ATTR_ID_VLAN_MSTI,
->> >> +		.flags = SWITCHDEV_F_DEFER,
->> >
->> > Is the bridge spinlock held (atomic context), or otherwise why is
->> > SWITCHDEV_F_DEFER needed here?
->> 
->> Nope, just copypasta. In fact, it shouldn't be needed when setting the
->> state either, as you can only change the state via a netlink message. I
->> will remove it.
->> 
->> >> +		.orig_dev = mv->br->dev,
->> >> +		.u.vlan_attr = {
->> >> +			.vid = mv->vid,
->> >> +			.msti = msti,
->> >> +		},
->> >> +	};
->> >>  	struct net_bridge_vlan_group *vg;
->> >>  	struct net_bridge_vlan *pv;
->> >>  	struct net_bridge_port *p;
->> >> +	int err;
->> >> +
->> >> +	err = switchdev_port_attr_set(mv->br->dev, &attr, NULL);
->> >
->> > Treating a "VLAN attribute" as a "port attribute of the bridge" is
->> > pushing the taxonomy just a little, but I don't have a better suggestion.
->> 
->> Isn't there prior art here? I thought things like VLAN filtering already
->> worked like this?
->
-> Hmm, I can think of VLAN filtering as being an attribute of the bridge
-> device, but 'which MSTI does VLAN X belong to' is an attribute of the
-> VLAN (in itself a switchdev object, i.e. something countable).
->
-> If the prior art would apply as straightforward as you say, then we'd be
-> replaying the VLAN MSTIs together with the other port attributes - in
-> "pull" mode, in dsa_port_switchdev_sync_attrs(), rather than in "push"
-> mode with the rest of the objects - in nbp_switchdev_sync_objs().
-> But we're not doing that.
->
-> To prove that there is a difference between VLAN filtering as a port
-> property of the bridge device, and VLAN MSTIs (or other per-VLAN global
-> bridge options), consider this.
-> You create a bridge, add 10 VLANs on br0, enable VLAN filtering, then
-> delete the 10 VLANs and re-create them. The bridge is still VLAN
-> filtering.
-> So VLAN filtering is a property of the bridge.
->
-> Next you create a bridge, add 10 VLANs on br0, run your new command:
-> 'bridge vlan global set dev br0 vid <VID> msti <MSTI>'
-> then delete the 10 VLANs and create them back.
-> Their MSTI is 0, not what was set via the bridge vlan global options...
-> Because the MSTI is a property of the VLANs, not of the bridge.
->
-> A real port attribute wouldn't behave like that.
->
-> At least this is what I understand from your patch set, I haven't run it;
-> sorry if I'm mistaken about something, but I can't find a clearer way to
-> express what I find strange.
->
-> Anyway, I'll stop uselessly commenting here - I can understand the
-> practical reasons why you wouldn't want to bother expanding the taxonomy
-> to describe this for what it really is - an "object attribute" of sorts -
-> because a port attribute for the bridge device has the call path you
-> need already laid out, including replication towards all bridge ports.
+On 3/9/22 05:47, Mark Brown wrote:
+> On Tue, Mar 08, 2022 at 04:00:35PM -0600, Madhavan T. Venkataraman wrote:
+> 
+>> It is just that patch 11 that defines "select
+>> HAVE_RELIABLE_STACKTRACE" did not receive any comments from you
+>> (unless I missed a comment that came from you. That is entirely
+>> possible. If I missed it, my bad). Since you suggested that change, I
+>> just wanted to make sure that that patch looks OK to you.
+> 
+> I think that's more a question for the livepatch people to be honest -
+> it's not entirely a technical one, there's a bunch of confidence level
+> stuff going on.  For example there was some suggestion that people might
+> insist on having objtool support, though there's also substantial
+> pushback on making objtool a requirement for anything from other
+> quarters.  I was hoping that posting that patch would provoke some
+> discussion about what exactly is needed but that's not happened thus
+> far.
 
-I yield, I yield! :)
+Understood. In that case, I will remove that patch because it is not really required for my current work on the unwinder. I will bring this up later in a different patch series where it will trigger a discussion.
+
+Thanks.
+
+Madhavan

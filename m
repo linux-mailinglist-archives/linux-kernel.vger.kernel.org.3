@@ -2,75 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4764D2813
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C14B4D285E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 06:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiCIFJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 00:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S229625AbiCIF1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 00:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiCIFJ0 (ORCPT
+        with ESMTP id S229498AbiCIF1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 00:09:26 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7F26424;
-        Tue,  8 Mar 2022 21:08:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646802508; x=1678338508;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0+sd2pP56VQ690VP+LpLZGMChhV5dm2QjqdC8vtAGUs=;
-  b=aSPixVMtDh8JipF+Mp0LTOVMfde8Zejl59B6DeCA2kbdd1L2AfiNLEyD
-   KiYpOvoqSWZLHfIbgoyieoo/Rh4DTe2B869dXVwnXX7Fcepaz8q83D0mG
-   GnaAvboyjM8MbkuJHGt2LmxFXagPiJ+7oyRyHvaIYmztcnmc+ux0/gbjo
-   mioXHY3O3mIW94Lz9iQO63HtdM4sVHw9lluz2QlySQ+mnOnkdvQMAr3eZ
-   IP1k8oqe3JGpeEnJC845IrFdb9nlPY4t3yva7yC6q91Oc2xo+HMhO6XBQ
-   OEcJSNhDynbrib8kxC1lOFCR19j6zht9M40J3vQvRWDQZEyjQePccdw2j
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253718724"
-X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="253718724"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:08:27 -0800
-X-IronPort-AV: E=Sophos;i="5.90,166,1643702400"; 
-   d="scan'208";a="537858342"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 21:08:21 -0800
-Date:   Wed, 9 Mar 2022 13:21:52 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
- unconditionally
-Message-ID: <20220309052013.GA2915@gao-cwp>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
- <20220225082223.18288-7-guang.zeng@intel.com>
- <Yifg4bea6zYEz1BK@google.com>
+        Wed, 9 Mar 2022 00:27:21 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D771E15F625
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:26:23 -0800 (PST)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2293cBom001932;
+        Wed, 9 Mar 2022 05:26:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=SiQu9HjVXq2uion0tDryFU/0AiKq+VZdv0E+axsSO3A=;
+ b=GXIH+V08EZLbJ4TMeHEbstYu4GfybgF8v5F2iVMcTmscfppOrOysCNyApQPvvV6Wt0VP
+ KMupJlgrBq0+ClFdinjs0JtWPFbrnHLoZ1lw3dLvAgkcB6I6K++6b1j65rR1AwEVyYDu
+ Xlw89ob2bVq37ODQLfqda+uN6rTMN4bFisxB0JDA3VOAIE7X6fsubQE4QcThK48k0EG6
+ uSDoWlbvYgd6BgU4XXe2ge40L5HX3hDFGzopEMs8NwSDdm3sI2vFLv30on47T3zXsS6D
+ Copa42IjgpnAuxCLDjIStlBXK+9gSvhtJi9eY6KZHH5P8cMUuGUbr03Oa6KwBobZLpn+ 5w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ep0sd11ae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 05:26:03 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2295Q2XE018223;
+        Wed, 9 Mar 2022 05:26:02 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ep0sd11a5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 05:26:02 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2295MSwm006522;
+        Wed, 9 Mar 2022 05:26:00 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ekyg9157n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Mar 2022 05:26:00 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2295Pws436700490
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Mar 2022 05:25:58 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EED1FA4051;
+        Wed,  9 Mar 2022 05:25:57 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A05E1A4040;
+        Wed,  9 Mar 2022 05:25:55 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed,  9 Mar 2022 05:25:55 +0000 (GMT)
+Date:   Wed, 9 Mar 2022 10:55:54 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        mgorman@techsingularity.net, mingo@kernel.org,
+        song.bao.hua@hisilicon.com, valentin.schneider@arm.com,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH v6] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
+Message-ID: <20220309052554.GK618915@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20220308063749.6929-1-kprateek.nayak@amd.com>
+ <20220308092944.GJ618915@linux.vnet.ibm.com>
+ <7e5bdc95-a30a-58bc-fc67-98b03fe1fa22@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Yifg4bea6zYEz1BK@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <7e5bdc95-a30a-58bc-fc67-98b03fe1fa22@amd.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZLrajSdyIV3wIqmez2ASCjeHE-Oee7Ox
+X-Proofpoint-GUID: HTt8Cipj-JfNeHAHFrZBuLTFxnohCRE2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-09_01,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 phishscore=0
+ clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=848 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203090028
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,53 +97,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:04:01PM +0000, Sean Christopherson wrote:
->On Fri, Feb 25, 2022, Zeng Guang wrote:
->> From: Maxim Levitsky <mlevitsk@redhat.com>
->> 
->> No normal guest has any reason to change physical APIC IDs,
->
->I don't think we can reasonably assume this, my analysis in the link (that I just
->realized I deleted from context here) shows it's at least plausible that an existing
->guest could rely on the APIC ID being writable.  And that's just one kernel, who
->know what else is out there, especially given that people use KVM to emulate really
->old stuff, often on really old hardware.
+* K Prateek Nayak <kprateek.nayak@amd.com> [2022-03-08 17:18:16]:
 
-Making xAPIC ID readonly is not only based on your analysis, but also Intel SDM
-clearly saying writable xAPIC ID is processor model specific and ***software should
-avoid writing to xAPIC ID***.
+> Hello Srikar,
+> 
+> On 3/8/2022 2:59 PM, Srikar Dronamraju wrote:
+> > [..snip..]
 
-If writable xAPIC ID support should be retained and is tied to a module param,
-live migration would depend on KVM's module params: e.g., migrate a VM with
-modified xAPIC ID (apic_id_readonly off on this system) to one with
-xapic_id_readonly on would fail, right? Is this failure desired? if not, we need to
-have a VM-scope control. e.g., add an inhibitor of APICv (XAPIC_ID_MODIFIED) and
-disable APICv forever for this VM if its vCPUs or QEMU modifies xAPIC ID.
 
->
->Practically speaking, anyone that wants to deploy IPIv is going to have to make
->the switch at some point, but that doesn't help people running legacy crud that
->don't care about IPIv.
->
->I was thinking a module param would be trivial, and it is (see below) if the
->param is off by default.  A module param will also provide a convenient opportunity
->to resolve the loophole reported by Maxim[1][2], though it's a bit funky.
+> >> @@ -9200,10 +9201,19 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+> >>  			 * Otherwise, keep the task close to the wakeup source
+> >>  			 * and improve locality if the number of running tasks
+> >>  			 * would remain below threshold where an imbalance is
+> >> -			 * allowed. If there is a real need of migration,
+> >> -			 * periodic load balance will take care of it.
+> >> +			 * allowed while accounting for the possibility the
+> >> +			 * task is pinned to a subset of CPUs. If there is a
+> >> +			 * real need of migration, periodic load balance will
+> >> +			 * take care of it.
+> >>  			 */
+> >> -			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
+> >> +			imb = sd->imb_numa_nr;
+> >> +			if (p->nr_cpus_allowed != num_online_cpus()) {
 
-Could you share the links?
+> > Again, repeating, is the problem only happening in the pinned case?
+> Yes. We've tested stream with 8 and 16 stream threads on a Zen3 system
+> with 16 LLCs and in both cases, with unbound runs, we've seen each
+> Stream thread get a separate LLC and we didn't observe any stacking.
 
->
->Anyways, with an off-by-default module param, we can just do:
->
->	if (!enable_apicv || !cpu_has_vmx_ipiv() || !xapic_id_readonly)
->		enable_ipiv = false;
->
->Forcing userspace to take advantage of IPIv is rather annoying, but it's not the
->end of world.
->
->Having the param on by default is a mess.  Either we break userspace (above), or
->we only kinda break userspace by having it on iff IPIv is on, but then we end up
->with cyclical dependency hell.  E.g. userspace makes xAPIC ID writable and forces
->on IPIv, which one "wins"? And if it's on by default, we can't fix the loophole
->in KVM_SET_LAPIC.
+If the problem is only happening with pinned case, then it means that in the
+in unpinned case, the load balancer is able to do the load balancing
+correctly and quickly but for some reason may not be able to do the same in
+pinned case. Without the patch, even in the unpinned case, the initial CPU
+range is more less the same number of LLCs as the pinned. However its able
+to spread better.
 
-We are fine with having this param off by default.
+I believe the problem could be in can_migrate_task() checking for
+!cpumask_test_cpu(env->dst_cpu, p->cpus_ptr)
+
+i.e dst_cpu is doing a load balance on behalf of the entire LLC, however it
+only will pull tasks that can be pulled into it.
+
+> --
+> Thanks and Regards,
+> Prateek
+
+-- 
+Thanks and Regards
+Srikar Dronamraju

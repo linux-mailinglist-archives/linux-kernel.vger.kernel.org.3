@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811D64D31DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8424D31E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiCIPgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        id S233787AbiCIPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbiCIPf7 (ORCPT
+        with ESMTP id S229796AbiCIPix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:35:59 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8898C159294;
-        Wed,  9 Mar 2022 07:35:00 -0800 (PST)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 77DC220B7178;
-        Wed,  9 Mar 2022 07:34:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 77DC220B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1646840100;
-        bh=dB1K0ZwGrg+HvxpbL6qUnjdr8grOY0ZQJDOVuW9N3Co=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sFllom38SHSpNWowxpHJXybN92PrbdJINamo/Nix55dwRs7bnNb8PVTb7j2ROrB4H
-         xnxrjatiYQ2ZrFKMnmpgHgYQZD4oXi1i0kdJckVwPw/8WzHvbKV0eBY+lzf3+2wr15
-         19BNhxW2NJGCd37Xolwu39xCzPzY/BElmjqewE/Q=
-Message-ID: <416e0757-46fe-b290-cb8b-cd766f9cbdb6@linux.microsoft.com>
-Date:   Wed, 9 Mar 2022 09:34:58 -0600
+        Wed, 9 Mar 2022 10:38:53 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19D272191;
+        Wed,  9 Mar 2022 07:37:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C04111688;
+        Wed,  9 Mar 2022 07:37:51 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 644153F7F5;
+        Wed,  9 Mar 2022 07:37:51 -0800 (PST)
+Date:   Wed, 9 Mar 2022 15:37:49 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sean Kelley <skelley@nvidia.com>, yangyicong@hisilicon.com,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/3] arch_topology: obtain cpu capacity using
+ information from CPPC
+Message-ID: <YijJzekA1nFEs3nz@arm.com>
+References: <20220302180913.13229-1-ionela.voinescu@arm.com>
+ <20220302180913.13229-3-ionela.voinescu@arm.com>
+ <4283eacf-6eab-b2f5-07f2-d19fad134277@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
- args to unwind()
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-7-madvenka@linux.microsoft.com>
- <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
- <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
- <YiY6hecX0pVWowQ7@sirena.org.uk>
- <c494fa10-e973-c137-b637-66bde327611c@linux.microsoft.com>
- <YiiT2lFuxc3ob+Zq@sirena.org.uk>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YiiT2lFuxc3ob+Zq@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4283eacf-6eab-b2f5-07f2-d19fad134277@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,28 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yicong,
 
-
-On 3/9/22 05:47, Mark Brown wrote:
-> On Tue, Mar 08, 2022 at 04:00:35PM -0600, Madhavan T. Venkataraman wrote:
+On Wednesday 09 Mar 2022 at 18:21:30 (+0800), Yicong Yang wrote:
+> Hi Ionela,
 > 
->> It is just that patch 11 that defines "select
->> HAVE_RELIABLE_STACKTRACE" did not receive any comments from you
->> (unless I missed a comment that came from you. That is entirely
->> possible. If I missed it, my bad). Since you suggested that change, I
->> just wanted to make sure that that patch looks OK to you.
+> On 2022/3/3 2:09, Ionela Voinescu wrote:
+> > Define topology_init_cpu_capacity_cppc() to use highest performance
+> > values from _CPC objects to obtain and set maximum capacity information
+> > for each CPU. acpi_cppc_processor_probe() is a good point at which to
+> > trigger the initialization of CPU (u-arch) capacity values, as at this
+> > point the highest performance values can be obtained from each CPU's
+> > _CPC objects. Architectures can therefore use this functionality
+> > through arch_init_invariance_cppc().
+> > 
+> > The performance scale used by CPPC is a unified scale for all CPUs in
+> > the system. Therefore, by obtaining the raw highest performance values
+> > from the _CPC objects, and normalizing them on the [0, 1024] capacity
+> > scale, used by the task scheduler, we obtain the CPU capacity of each
+> > CPU.
+> > 
 > 
-> I think that's more a question for the livepatch people to be honest -
-> it's not entirely a technical one, there's a bunch of confidence level
-> stuff going on.  For example there was some suggestion that people might
-> insist on having objtool support, though there's also substantial
-> pushback on making objtool a requirement for anything from other
-> quarters.  I was hoping that posting that patch would provoke some
-> discussion about what exactly is needed but that's not happened thus
-> far.
+> So we're going to use highest performance rather than nominal performance,
+> and I checked the discussion in v2 [1]. Maybe we should also document this
+> in sched-capacity.rst that where scheduler get the capacity from on ACPI
+> based system? Currently we only have DT part but after this patch it's
+> also supported on ACPI based system.
+> 
 
-Understood. In that case, I will remove that patch because it is not really required for my current work on the unwinder. I will bring this up later in a different patch series where it will trigger a discussion.
+It's a very good point. I'll send a separate patch for this with added
+information in "3.1 CPU capacity" in sched-capacity.rst. I'll send this
+separate and not with the rebase that Rafael requested to avoid
+confusing things.
 
-Thanks.
+> Out of curiosity, since we have raw capacity now on ACPI system, seems we
+> are able to scale the capacity with freq_factor now? looked into
+> register_cpufreq_notifier().
+> 
 
-Madhavan
+The freq_factor is only used for DT systems where one provides
+"capacity-dmips-mhz" in DT. This entry actually represents DMIPS/MHz.
+
+So the freq_factor, set to:
+
+per_cpu(freq_factor, cpu) = policy->cpuinfo.max_freq / 1000;
+
+is used to obtain the performance at the maximum frequency, basically
+DMIPS = (Dhrystone) million instructions per second, by multiplying this
+raw value from DT with the freq_factor. After this, all these value for
+each CPU type are normalized on a scale [0, 1024], resulting in what we
+call CPU capacity.
+
+For ACPI systems freq_factor will have the default value of 1 when we
+call topology_normalize_cpu_scale(), as the performance value obtained
+from _CPC is already representative for the highest frequency of the CPU
+and not performance/Hz as we get from DT. Therefore, we are not and
+should not use a freq_factor here.
+
+Hopefully I understood your question correctly.
+
+Thanks,
+Ionela.
+
+> [1] https://lore.kernel.org/lkml/Yh5OAsYVBWWko+CH@arm.com/
+> 
+> Thanks,
+> Yicong

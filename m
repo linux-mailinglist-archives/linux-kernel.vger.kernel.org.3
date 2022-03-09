@@ -2,59 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD374D38FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C424D3907
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbiCISkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S236341AbiCISlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiCISkc (ORCPT
+        with ESMTP id S234874AbiCISlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:40:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365841704D7;
-        Wed,  9 Mar 2022 10:39:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D974CB8232E;
-        Wed,  9 Mar 2022 18:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992C8C340E8;
-        Wed,  9 Mar 2022 18:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646851170;
-        bh=A1WR8Wa0q1Tb60p8NvM8B+XJXSA09o36ZvVXUiktXhQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Prw/oGXFFzVWobc/hScuBsVUV9ti3ml5QS3Aj/hbhdQKs1BGgm8t9+zTq7BQvhrfY
-         a+wdQJPv6b6f3Es1uCUhT7W6E3JsYKkgRhQQcTlpDQsW0RcqcsUssVKo+8DQ0QASDD
-         YVL3wxDR06QnurH4hHv5EBNFzI19cgWzZGailF7NuSwZT8j4rYNuwdfv9qZnwsBEbF
-         g7g2SrZ3ar0DFFln4fJ3JG7GuFQkDE1U26bdHMR6pyFmiZBjgrsy8nB+csq48RxCfK
-         8WfzSvR4r7q5kn7285DmpTt41xukXc1SUIWcym2x8lKsv+q4Rk20XOTwjAWsQiSe+J
-         BugY1LPjdap/Q==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 9 Mar 2022 13:41:22 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419761704FE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:40:23 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id k9-20020a056830242900b005ad25f8ebfdso2390591ots.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 10:40:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kUWAaoT3ile08MI4chxnqERo8GG6w/0gzaDEsvRM250=;
+        b=OAtGSbEHa44wYcUZNP4X5WlWqTJdMp/QLLWd4Y+5Red4qDKQCfr/PvpGZyZW8Qhdn8
+         sTJN9B1fyCctJwMWdfrjgoVQ+q+4nF9C68x5ES4PHFJbmWbWC01u1aIao42ZQ9wezhfV
+         t/3Dp8s+HLk/2Q0KVeAXHD+jzDaX5XS7DHAjwnev8Mp/a+EbYPemZhQVR+uX1W/L+UOK
+         kLSqrsbOmgFEIeietZjd8MT+FJ0ylqou1ivsc+TxDi9KrWPF4OLJZy4tvQmLhMXy4JIy
+         BWCQOD6oPdaMQCKEUJtfYup4LCcoKawZSSXjL6nByruIj9fO8iDvu1OsVpVAo0kGEghM
+         VsMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kUWAaoT3ile08MI4chxnqERo8GG6w/0gzaDEsvRM250=;
+        b=qfxy0XAV/3+7lpUWYMjKoiEa5pMxxNMMHLxLjhjAS9LMmody48uJBhRTxIpuYnEKdU
+         T8AXaG0Q6ABOogUp3Pkt6ucw7+TlHLpNJhD6AfzO+QDNduVPkLieQNWn5t61E3eh2tqB
+         cdeOxCA6eOrU5CSEFBHLD/+1CNfW6otH4XTdEbeiiN2N5VeqEBKgYhHkOR4de4+lB06k
+         bnMuvoUZciYRWgQZbGpv7MJbmgQRB8bigu8SoyCOht2ykvjMJDEWwgBnd8aHKny6yQCq
+         NgehegA58agFBSwiOGKqzBdZ3Ulv6i1q2VLCdCNCqvI3CKJZlrnRSREaFn5Ln62U4Z1e
+         +hww==
+X-Gm-Message-State: AOAM533pQEqebB1+FJ0qDtyZADUwrYowuepP1RkztowIaSrc5UPhLZqV
+        9UDlkDY84fbhUes0tHOw1LkkKw==
+X-Google-Smtp-Source: ABdhPJxjObLvRuZOU7BRvitvzfk0dqdAW7F+75UgxDZLmYDD0uEn1qyhVVBAlB5Xj1t+KlzyWXbeVQ==
+X-Received: by 2002:a05:6830:314c:b0:5af:dc8a:d066 with SMTP id c12-20020a056830314c00b005afdc8ad066mr604467ots.28.1646851222563;
+        Wed, 09 Mar 2022 10:40:22 -0800 (PST)
+Received: from [192.168.17.16] ([189.219.74.147])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm1318483oth.56.2022.03.09.10.40.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 10:40:22 -0800 (PST)
+Message-ID: <2f501345-e847-668e-7ca3-23af49b69224@linaro.org>
+Date:   Wed, 9 Mar 2022 12:40:20 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220303090508.1125175-1-colin.i.king@gmail.com>
-References: <20220303090508.1125175-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] clk: imx: remove redundant re-assignment of pll->base
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Date:   Wed, 09 Mar 2022 10:39:28 -0800
-User-Agent: alot/0.10
-Message-Id: <20220309183930.992C8C340E8@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4.9 00/24] 4.9.306-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220309155856.295480966@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220309155856.295480966@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +78,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Colin Ian King (2022-03-03 01:05:08)
-> There are two identical assignments of pll->base to the same value,
-> the second assignment is redundant and can be removed.
->=20
-> Cleans up cppcheck warning:
-> drivers/clk/imx/clk-sscg-pll.c:528:12: style: Variable 'pll->base' is
-> reassigned a value before the old one has been used. [redundantAssignment]
->=20
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
+Hello!
 
-Applied to clk-next
+On 09/03/22 09:59, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.306 release.
+> There are 24 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.306-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+Regressions found.
+
+The following Arm combinations fail to build:
+- arm-gcc-8-bcm2835_defconfig
+- arm-gcc-8-imx_v6_v7_defconfig
+- arm-gcc-8-omap2plus_defconfig
+- arm-gcc-9-bcm2835_defconfig
+- arm-gcc-9-imx_v6_v7_defconfig
+- arm-gcc-9-omap2plus_defconfig
+- arm-gcc-10-bcm2835_defconfig
+- arm-gcc-10-imx_v6_v7_defconfig
+- arm-gcc-10-omap2plus_defconfig
+- arm-gcc-11-bcm2835_defconfig
+- arm-gcc-11-imx_v6_v7_defconfig
+- arm-gcc-11-omap2plus_defconfig
+
+Messages look like this:
+
+   /builds/linux/arch/arm/kernel/entry-common.S: Assembler messages:
+   /builds/linux/arch/arm/kernel/entry-common.S:155: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-common.S:164: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/kernel/entry-common.o] Error 1
+   /builds/linux/arch/arm/kernel/entry-armv.S: Assembler messages:
+   /builds/linux/arch/arm/kernel/entry-armv.S:1124: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1147: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1170: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1193: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/kernel/entry-armv.S:1232: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/kernel/entry-armv.o] Error 1
+   /builds/linux/arch/arm/mm/cache-v7.S: Assembler messages:
+   /builds/linux/arch/arm/mm/cache-v7.S:63: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/cache-v7.S:136: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/cache-v7.S:170: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/cache-v7.S:298: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/cache-v7.o] Error 1
+   /builds/linux/arch/arm/mm/tlb-v7.S: Assembler messages:
+   /builds/linux/arch/arm/mm/tlb-v7.S:88: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/tlb-v7.o] Error 1
+   /builds/linux/arch/arm/mm/proc-v7-2level.S: Assembler messages:
+   /builds/linux/arch/arm/mm/proc-v7-2level.S:58: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/proc-v7-2level.S:60: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   /builds/linux/arch/arm/mm/proc-v7.S:61: Error: co-processor register expected -- `mcr p15,0,r0,c7,r5,4'
+   make[2]: *** [/builds/linux/scripts/Makefile.build:407: arch/arm/mm/proc-v7.o] Error 1
+   make[2]: Target '__build' not remade because of errors.
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org

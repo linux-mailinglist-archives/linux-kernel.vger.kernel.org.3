@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD864D30D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEF14D30E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233417AbiCIOM6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Mar 2022 09:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S233455AbiCIOSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233492AbiCIOMy (ORCPT
+        with ESMTP id S233316AbiCIOSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:12:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6426110DA68
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:11:55 -0800 (PST)
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MmD2M-1nsB2X2Mca-00i8cC for <linux-kernel@vger.kernel.org>; Wed, 09 Mar
- 2022 15:11:53 +0100
-Received: by mail-wr1-f50.google.com with SMTP id q14so3280666wrc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 06:11:53 -0800 (PST)
-X-Gm-Message-State: AOAM533qAZRWC7eZH/dJ+qNMuVFxDsxeSwLHEud//OwCh3sYdfLaeAcK
-        GK7mZpmBBJyJKZhQqhrrKJgBq/Iyj+3H3JNVRYw=
-X-Google-Smtp-Source: ABdhPJyukbMyJP7OGfxJ5RdYzM2rqvv71QZRCKhx1dYuWqZS9QCmtKMvH1ppzhMPiQlz0OnByU2vdAfekrUUoQZiVmA=
-X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
- y1-20020adfd081000000b001ef9378b7ccmr17033731wrh.407.1646835113178; Wed, 09
- Mar 2022 06:11:53 -0800 (PST)
+        Wed, 9 Mar 2022 09:18:10 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEFBD5DEE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:17:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646835430; x=1678371430;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ip4hiPToVyVYmBzzKbqrn6/4sK/sQ+uNG9WRKRgypNY=;
+  b=XbEEJVRP6ifC6TEXYli+YL/iJGTHzCTJYzeyaze7tmYMpP5sZSjfu4O/
+   fXk2F7uHI5fKOSg9ZsH17WrpLaLQjsUvxwceGuVT7cEdPQ7dYddHgomHq
+   hRt3YjUQdkBsMoWg0V7EmYDXEsn8EuhzesulLeZQe2DwmXa0Mg3BIvI5l
+   VTUT5blda4nMmFc/5exx9Obz605s/b0hTFj//zIm+FSn/7dSmLygMGpO2
+   FPfI+t7y8anEca2C+40MpXavFloxE0mDKBca2Wrep6d8qvWlNCktRzKS+
+   X+0WiH+VgUQmsW3BHvIwrQMfbT8hFZInFkR2iv6a030NRQVP/moSU8R21
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643698800"; 
+   d="scan'208";a="148620095"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 07:17:09 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 9 Mar 2022 07:17:07 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 9 Mar 2022 07:17:05 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <p.yadav@ti.com>, <michael@walle.cc>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PATCH 0/5] mtd: spi-nor: Parse BFPT to determine the 4-Byte Address Mode
+Date:   Wed, 9 Mar 2022 16:16:57 +0200
+Message-ID: <20220309141702.173879-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220309140617.33860-1-yuehaibing@huawei.com>
-In-Reply-To: <20220309140617.33860-1-yuehaibing@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 9 Mar 2022 15:11:36 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1UBX2c0-VQtQd885U-=+RHxn_mZzD6ELk-B4cq+09afg@mail.gmail.com>
-Message-ID: <CAK8P3a1UBX2c0-VQtQd885U-=+RHxn_mZzD6ELk-B4cq+09afg@mail.gmail.com>
-Subject: Re: [PATCH -next] perf/marvell: cn10k Fix build error without CONFIG_OF
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>, bbudiredla@marvell.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:NKcwCgOWzgdESa8AjHHBRCbivUhrktjNokophbXjHQsBt+HAG6S
- /iNmq/x6Tu/v7MQsqvQL31/q7hNPDhzlwRrplGLc7O41LslzwRSZtIlEXmzpcah9XVcElVu
- ws8+sdOTfAAOuzhtVuAW9Vt2Z0lm4ycvE3iMV8hJsOz3tiuP/E7NevMg0XLfyyaV9yVxT/5
- UeLJZmgK88zFjgowuDBQw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IR5wEp4kNaQ=:NnI4UNcGTgQYMCb5beL+Zl
- 4K7nwZNcOhaY1w2vnz8kHMFpLHLnoINw0Riq/46FKHBWsumQ+ubO4oaFXF9pNx4J8dFv5gbzO
- 1dGUPWcaoaDDPO06ZdUKxIthgo7DYgnYSZlpaafl4UAMv/7lcSM7o0Irw/XjwIVUQl2RSIFVK
- 8AghSkJCUXPEQvf+DDAa7sDNj5cn9OZfmLfH8r2PPgmxrVXsDZ2wtBN/NLdVNp2dbsOYQF3oP
- /Px5W05cnm23uVn5yD6TSxjVorSOOlQzFcRkAAtH6bFYJVRqMb89OU+0HSyLm2HBIynRfDn9O
- lBeQI95HWVwp3NLVynurX4ZeHsIBYz9Gts9aLilAAEo1Jswer2zMIGji1HzmvjZ7s8lLHT5xG
- 6+8VJRjG3oWj5ms2FfdWPSBUTaDqXNPiEf+NvGpYavgG/Ef5ds2EUwCCPpMc+8eiOzjIQ/S1K
- QWXmVfc7uvrIF4T0SNqH0KIYwG4nlHZiuSJuLbuiGR/3RqWKwydvDKHrOVxEpqYr6wNtswR6x
- fMszqhRx836kah8TOtd3Cp/o+WWNUWWkxZba2A45S6ethWGibPxQO4XcJM1hpSPLJfZDQoqZg
- UUYECXTU73+98EgpPN8MGxQtE4jCjR+8VBqHuet+m0W9dKbQjx8YFktyFOYs4qBLFVECFHUoC
- sJaa0y2VHu5wviH0Tv4XXBUY95p3abZYA+KBMh821p1AtQRay7pFT8ShxXt9USl9294w=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 3:06 PM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> drivers/perf/marvell_cn10k_ddr_pmu.c:723:21: error: ‘cn10k_ddr_pmu_of_match’ undeclared here (not in a function); did you mean ‘cn10k_ddr_pmu_driver’?
->          .of_match_table = cn10k_ddr_pmu_of_match,
->                            ^~~~~~~~~~~~~~~~~~~~~~
->
-> Use of_match_ptr() to fix this.
->
-> Fixes: 7cf83e222bce ("perf/marvell: CN10k DDR performance monitor support")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Get the 4-Byte Address mode method from BFPT and favor it in the detriment
+of the "default" set_4byte_addr_mode method or the methods set by vendors.
+This may introduce some regressions if flashes have wrong BFPT data. The
+fix is to introduce post_bfpt() hooks and fix where needed. We should let
+the core/sfdp do the params initialization, and do vendor specific updates
+just where needed.
 
-It's generally better to remove the #ifdef around the match table
-definition instead,
-which improves readability, and has no downsides on the machines this actually
-runs on, because CONFIG_OF is always enabled on arm64.
+This patch set depends on:
+https://lore.kernel.org/lkml/20220304093011.198173-1-tudor.ambarus@microchip.com/
+which depends on:
+https://lore.kernel.org/lkml/20220228111712.111737-1-tudor.ambarus@microchip.com/
 
-      Arnd
+You can find a branch containing the entire chain at:
+git@github.com:ambarus/linux-0day.git spi-nor/next-bfpt-4byte-addr
+
+Tudor Ambarus (5):
+  mtd: spi-nor: Parse BFPT to determine the 4-Byte Address Mode methods
+  mtd: spi-nor: Update name and description of the set_4byte_addr_mode
+    BFPT methods
+  mtd: spi-nor: Favor the BFPT-parsed set_4byte_addr_mode method
+  mtd: spi-nor Favor the BFPT-parsed Quad Enable method
+  mtd: spi-nor: sfdp: Keep SFDP definitions private
+
+ drivers/mtd/spi-nor/core.c      |  73 ++----------
+ drivers/mtd/spi-nor/core.h      |   1 -
+ drivers/mtd/spi-nor/issi.c      |   4 +-
+ drivers/mtd/spi-nor/macronix.c  |  13 ++-
+ drivers/mtd/spi-nor/micron-st.c |  32 +----
+ drivers/mtd/spi-nor/sfdp.c      | 199 ++++++++++++++++++++++++++++++++
+ drivers/mtd/spi-nor/sfdp.h      |  57 +--------
+ drivers/mtd/spi-nor/winbond.c   |  18 +--
+ 8 files changed, 239 insertions(+), 158 deletions(-)
+
+-- 
+2.25.1
+

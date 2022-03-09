@@ -2,99 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2093C4D300F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D464D3014
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 14:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbiCINi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 08:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        id S233222AbiCINk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 08:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiCINiz (ORCPT
+        with ESMTP id S229789AbiCINkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 08:38:55 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 266C94C419
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 05:37:55 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-144-UXgOpunAMRSZMlNG3aOzdg-1; Wed, 09 Mar 2022 13:37:52 +0000
-X-MC-Unique: UXgOpunAMRSZMlNG3aOzdg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 9 Mar 2022 13:37:50 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 9 Mar 2022 13:37:50 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Josh Poimboeuf' <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
-Subject: RE: [PATCH v4 00/45] x86: Kernel IBT
-Thread-Topic: [PATCH v4 00/45] x86: Kernel IBT
-Thread-Index: AQHYM4LxCfkzaUw3o020v7uo0T//Qqy3DG6A
-Date:   Wed, 9 Mar 2022 13:37:50 +0000
-Message-ID: <bdb04de758ea4f89a8731ee6b98794fa@AcuMS.aculab.com>
-References: <20220308153011.021123062@infradead.org>
- <20220308200614.gyhp657bdq3rxapl@treble>
- <20220309065718.e4k2el2mlqn23yh2@treble>
-In-Reply-To: <20220309065718.e4k2el2mlqn23yh2@treble>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 9 Mar 2022 08:40:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B484C796;
+        Wed,  9 Mar 2022 05:39:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F282B82146;
+        Wed,  9 Mar 2022 13:39:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0ECC340E8;
+        Wed,  9 Mar 2022 13:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646833164;
+        bh=dYcfbRDY7WDaZxWGbrx8yK5r0FHThy8rThS8nWyatwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A7KzRcU8GlllCGfDlYEAXiFhIjdPzS9zvBIYiO9Oxc66Ej8/3lLJaNA8EbIROGOeW
+         r7546N2kIrKXh3VoMykAOgsI6czpzh655cZ98j7322E+/R2NUBDirZ0sUQI3neBneU
+         0l5ycVk6kIgzmzJaOAbyh4u3SQFshwZlhztVKhrs=
+Date:   Wed, 9 Mar 2022 14:39:20 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     catalin.marinas@arm.com, james.morse@arm.com,
+        rmk+kernel@armlinux.org.uk, stable-commits@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: Patch "arm64: entry.S: Add ventry overflow sanity checks" has
+ been added to the 5.4-stable tree
+Message-ID: <YiiuCMd/hLmQ7tfS@kroah.com>
+References: <164683132243254@kroah.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164683132243254@kroah.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSm9zaCBQb2ltYm9ldWYNCj4gU2VudDogMDkgTWFyY2ggMjAyMiAwNjo1Nw0KPiANCj4g
-T24gVHVlLCBNYXIgMDgsIDIwMjIgYXQgMTI6MDY6MThQTSAtMDgwMCwgSm9zaCBQb2ltYm9ldWYg
-d3JvdGU6DQo+ID4gQXMgdGFsa2VkIGFib3V0IG9uIElSQyB0aGVyZSBhcmUgc3RpbGwgYSBmZXcg
-b3V0c3RhbmRpbmcgaXNzdWVzLCB0aGF0DQo+ID4gSSdtIGZpbmUgd2l0aCBmaXhpbmcgYWZ0ZXIg
-dGhlIG1lcmdlIHdpbmRvdyBkdXJpbmcgdGhlIHVwY29taW5nIC1uZXh0DQo+ID4gY3ljbGU6DQo+
-ID4NCj4gPiAtIHhlbiBoeXBlcmNhbGwgcGFnZSBmdW5jdGlvbnMgbmVlZCAncmV0JyAtIChJIHRo
-aW5rIHlvdSBhbHJlYWR5IGZpeGVkKQ0KPiA+DQo+ID4gLSB3aHkgZG9uJ3QgdW5yZWFjaGFibGVz
-IG5lZWQgdG8gZmlsbCB1cCB0aGUgZW50aXJlIHN5bSBob2xlPw0KPiA+DQo+ID4gLSBnZXQgcmlk
-IG9mIHRoZSAnY19maWxlJyBoYWNrDQo+ID4NCj4gPiAtIGltcHJvdmUgY21kbGluZSBvcHRpb24g
-aW50dWl0aXZlLW5lc3MNCj4gPg0KPiA+IC0gcHJvcGVybHkgaW50ZWdyYXRlIHRoZSByZXRwb2xp
-bmUgImRlbW90aW9uIiB3aXRoIHRoZSBuZXcgU3BlY3RyZSBCSEkNCj4gPiAgIHJlbGF0ZWQgcGF0
-Y2hlcyAtIHByb2JhYmx5IHN0aWxsIG5lZWRzIG1vcmUgZGlzY3Vzc2lvbiAtIGZvciBleGFtcGxl
-DQo+ID4gICB3ZSBtaWdodCBpbnN0ZWFkIHdhbnQgdG8gZGlzYWJsZSBJQlQgYW5kIHdhcm4NCj4g
-DQo+IE9uZSBtb3JlOg0KPiANCj4gLSBDaGFuZ2luZyBvYmp0b29sIHNob3VsZCBmb3JjZSBhIHZt
-bGludXggcmUtbGluay4NCg0KSSdtIHdvbmRlcmluZyB3aGF0IGFjdHVhbGx5IGhhcHBlbnMgdG8g
-bG9hZGFibGUgbW9kdWxlcz8NCg0KRXNwZWNpYWxseSB0aG9zZSBidWlsdCAnb3V0IG9mIHRyZWUn
-LA0KcG90ZW50aWFsbHkgd2l0aCBhIGRpZmZlcmVudCBjb21waWxlciwNCmFuZCBtYXliZSBjb250
-YWluaW5nIGJpbmFyeSAnYmxvYnMnLg0KDQpUaGUgcmVxdWlyZW1lbnQgdG8gcnVuIHByb2dyYW1z
-IG9uIG9sZCBkaXN0cmlidXRpb25zIG1lYW5zDQp0aGF0IHRoaW5ncyBnZXQgY29tcGlsZWQgd2l0
-aCBxdWl0ZSBvbGQgdmVyc2lvbnMgb2YgZ2NjLg0KRm9yIGluc3RhbmNlIFJIRUw3IGlzIGdjYyA0
-LjguNS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
-eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
-aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Wed, Mar 09, 2022 at 02:08:42PM +0100, gregkh@linuxfoundation.org wrote:
+> 
+> This is a note to let you know that I've just added the patch titled
+> 
+>     arm64: entry.S: Add ventry overflow sanity checks
+> 
+> to the 5.4-stable tree which can be found at:
+>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> 
+> The filename of the patch is:
+>      arm64-entry.s-add-ventry-overflow-sanity-checks.patch
+> and it can be found in the queue-5.4 subdirectory.
+> 
+> If you, or anyone else, feels it should not be added to the stable tree,
+> please let <stable@vger.kernel.org> know about it.
 
+Oops, no, sorry, I've dropped this whole series from the 5.4 queue
+again.
+
+James, I've emailed you about this, let's take the followup to the
+stable list and work on this there.
+
+thanks,
+
+greg k-h

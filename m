@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA41D4D3333
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B427D4D33CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234727AbiCIQMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S234879AbiCIQPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiCIQIM (ORCPT
+        with ESMTP id S236030AbiCIQJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:08:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D4F5B89C;
-        Wed,  9 Mar 2022 08:04:38 -0800 (PST)
+        Wed, 9 Mar 2022 11:09:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BD71451F2;
+        Wed,  9 Mar 2022 08:07:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11A2BB82233;
-        Wed,  9 Mar 2022 16:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59394C340E8;
-        Wed,  9 Mar 2022 16:04:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCD5F61666;
+        Wed,  9 Mar 2022 16:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60C8C340EF;
+        Wed,  9 Mar 2022 16:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841874;
-        bh=wBLb1JgeLGCmIlJRSZ+nBqsfFArPm7x3PghLmULm8JI=;
+        s=korg; t=1646842022;
+        bh=YYTxn4Nwrg6CuOgCloYwoSlfT43YKOmCi0fRD30gcL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eBSy8HqQMzhpnmRSHQWo9pFYHF6bA8LBT3GVqMsrCWinW9QEV8+3aqHH2xNImzM7b
-         hANX0FVOO4vU0Mpe2bH9kBLROxoI7oQeTLGO7aYTwFM0pyYZArZ7dVL+jwxdccMwca
-         wCls1JZ0xTuUWqbcsh7GiMNyK2nvVXXFRSSzboC0=
+        b=PKv3pQSWKRmhLVZICa9zody1fbWpy5S32OYaSuX4vtU4hesSSwHj+O7WQ0DPI3AuA
+         PHvT8J5Jsyn85hGIsr/gqRVuTCTiHb7UEUUdZGUCZ/4MgswDemmvt+jKhFwvjCeiJ+
+         P7tmTlPdP/mYsmIEKZEI5Ef/+wrK9MZJJ96kDXOw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.4 08/18] x86/speculation: Update link to AMD speculation whitepaper
-Date:   Wed,  9 Mar 2022 16:59:57 +0100
-Message-Id: <20220309155856.799858164@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.15 14/43] ARM: include unprivileged BPF status in Spectre V2 reporting
+Date:   Wed,  9 Mar 2022 16:59:58 +0100
+Message-Id: <20220309155900.151570141@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
-References: <20220309155856.552503355@linuxfoundation.org>
+In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
+References: <20220309155859.734715884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kim Phillips <kim.phillips@amd.com>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-commit e9b6013a7ce31535b04b02ba99babefe8a8599fa upstream.
+commit 25875aa71dfefd1959f07e626c4d285b88b27ac2 upstream.
 
-Update the link to the "Software Techniques for Managing Speculation
-on AMD Processors" whitepaper.
+The mitigations for Spectre-BHB are only applied when an exception
+is taken, but when unprivileged BPF is enabled, userspace can
+load BPF programs that can be used to exploit the problem.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+When unprivileged BPF is enabled, report the vulnerable status via
+the spectre_v2 sysfs file.
+
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/hw-vuln/spectre.rst |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/kernel/spectre.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/Documentation/admin-guide/hw-vuln/spectre.rst
-+++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-@@ -60,8 +60,8 @@ privileged data touched during the specu
- Spectre variant 1 attacks take advantage of speculative execution of
- conditional branches, while Spectre variant 2 attacks use speculative
- execution of indirect branches to leak privileged memory.
--See :ref:`[1] <spec_ref1>` :ref:`[5] <spec_ref5>` :ref:`[7] <spec_ref7>`
--:ref:`[10] <spec_ref10>` :ref:`[11] <spec_ref11>`.
-+See :ref:`[1] <spec_ref1>` :ref:`[5] <spec_ref5>` :ref:`[6] <spec_ref6>`
-+:ref:`[7] <spec_ref7>` :ref:`[10] <spec_ref10>` :ref:`[11] <spec_ref11>`.
+--- a/arch/arm/kernel/spectre.c
++++ b/arch/arm/kernel/spectre.c
+@@ -1,9 +1,19 @@
+ // SPDX-License-Identifier: GPL-2.0-only
++#include <linux/bpf.h>
+ #include <linux/cpu.h>
+ #include <linux/device.h>
  
- Spectre variant 1 (Bounds Check Bypass)
- ---------------------------------------
-@@ -746,7 +746,7 @@ AMD white papers:
+ #include <asm/spectre.h>
  
- .. _spec_ref6:
++static bool _unprivileged_ebpf_enabled(void)
++{
++#ifdef CONFIG_BPF_SYSCALL
++	return !sysctl_unprivileged_bpf_disabled;
++#else
++	return false
++#endif
++}
++
+ ssize_t cpu_show_spectre_v1(struct device *dev, struct device_attribute *attr,
+ 			    char *buf)
+ {
+@@ -31,6 +41,9 @@ ssize_t cpu_show_spectre_v2(struct devic
+ 	if (spectre_v2_state != SPECTRE_MITIGATED)
+ 		return sprintf(buf, "%s\n", "Vulnerable");
  
--[6] `Software techniques for managing speculation on AMD processors <https://developer.amd.com/wp-content/resources/90343-B_SoftwareTechniquesforManagingSpeculation_WP_7-18Update_FNL.pdf>`_.
-+[6] `Software techniques for managing speculation on AMD processors <https://developer.amd.com/wp-content/resources/Managing-Speculation-on-AMD-Processors.pdf>`_.
- 
- ARM white papers:
- 
++	if (_unprivileged_ebpf_enabled())
++		return sprintf(buf, "Vulnerable: Unprivileged eBPF enabled\n");
++
+ 	switch (spectre_v2_methods) {
+ 	case SPECTRE_V2_METHOD_BPIALL:
+ 		method = "Branch predictor hardening";
 
 

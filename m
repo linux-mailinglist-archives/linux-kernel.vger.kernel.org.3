@@ -2,79 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB31B4D39F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E39E44D39F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 20:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235712AbiCITUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 14:20:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S237228AbiCITTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 14:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238392AbiCITSa (ORCPT
+        with ESMTP id S237602AbiCITT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 14:18:30 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 330E8108BF5;
-        Wed,  9 Mar 2022 11:17:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 981B71691;
-        Wed,  9 Mar 2022 11:17:24 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFD953FA27;
-        Wed,  9 Mar 2022 11:17:22 -0800 (PST)
-Date:   Wed, 9 Mar 2022 19:17:20 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>, krzk+dt@kernel.org,
-        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org,
-        Hector Yuan <hector.yuan@mediatek.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an
- example
-Message-ID: <Yij9QBWFe5z9Ze23@bogus>
-References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
- <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
+        Wed, 9 Mar 2022 14:19:29 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E3811477D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 11:18:20 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id s15so2737725qtk.10
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 11:18:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V59HgvRc61glNOVchpXeR9lrKfDnI5JVZxCRrOe4PRw=;
+        b=iI4AVJfDe2rTLVR5kFUQ47GJYK0B64dsIEiT0iiLSmBiX/DirSdJUpyJg1gkefekcd
+         7rZpVe2BLc878GhnKz7ojbP41jmTM/KchQ5Rr+DmAMxO1Tr5AJXQpbvV7Wu/9KbHXGSW
+         1cEi85cR1+tl0b3zerdE35IYi3cjOJhODO4pcmugXZhgtEHUS5Q/mppaZKrA0xq8choB
+         sqKnLqxJ5LAVyge5tVouHdQ+SY3H6pMT6vO1LnjN2WAMYUhUJzpTH6AvCDFhw39/i4Ly
+         Oo/ERGpImlyfJsA0F269mgwQIeJEqoQqqtFgevrd9EnVCJrtdIzX5C0O/ca/mjG1lql3
+         SPxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V59HgvRc61glNOVchpXeR9lrKfDnI5JVZxCRrOe4PRw=;
+        b=Q4t7kdYkBQBc7R6qryRgHBguEi7YyG1KA0iAdOxS7T+qcks498qBXztfB7xrF45TxX
+         jeTD5mqtgvGeqEbMZU5IZoeuLknx6c42vwgzetwiQy06vwNmbVljm8gH6tTfqts+LjAp
+         h7dee/0lAAolBJPpGiLFPwArkvPvXyW1NNHBZBlx57wwBYbs71QXRpC0ytiSLGAqqBCq
+         3u11ZWIChKp3n8SVZcLB/NrpUpQIMoS56ednrZRWgdx7rfa5ovgBj/9Ke5BDInrmWsxt
+         INkD130eGxBRHAYgf20Imi4uoMgMDC4v8EEaklLnZhd8GKyMw2ys0TRrlCXvEFdl0BNm
+         qDSw==
+X-Gm-Message-State: AOAM5338DVI5s17iTF8X54SJhJ2V7XUBwqclzZVrBhwYlkrWoWEEsr/A
+        SVLM3m5A2r/8iXCl3Zh38tMZdQ==
+X-Google-Smtp-Source: ABdhPJwojhJ2jO+Hc+klRruTOm98kS9CL/R0u4elp0+vS8geZsyq/412gxGCq0Y/QKSQEu64XQ2pZA==
+X-Received: by 2002:ac8:7dc6:0:b0:2de:708:3e3a with SMTP id c6-20020ac87dc6000000b002de07083e3amr1026671qte.459.1646853500165;
+        Wed, 09 Mar 2022 11:18:20 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id z6-20020ae9c106000000b0067d3b9ef387sm876005qki.28.2022.03.09.11.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 11:18:19 -0800 (PST)
+Date:   Wed, 9 Mar 2022 14:18:19 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     cgel.zte@gmail.com
+Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: remove PSI annotations from submit_bio
+Message-ID: <Yij9eygSYy5MSIA0@cmpxchg.org>
+References: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 08:45:40PM +0530, Manivannan Sadhasivam wrote:
-> Qcom CPUFREQ HW don't have the support for generic performance domains yet.
-> So use MediaTek CPUFREQ HW that has the support available in mainline.
+On Wed, Mar 09, 2022 at 09:43:24AM +0000, cgel.zte@gmail.com wrote:
+> From: Yang Yang <yang.yang29@zte.com.cn>
 > 
-> This also silences the below dtschema warnings for "cpufreq-qcom-hw.yaml":
+> psi tracks the time spent submitting the IO of refaulting pages[1].
+> But after we tracks refault stalls from swap_readpage[2][3], there
+> is no need to do so anymore. Since swap_readpage already includes
+> IO submitting time.
 > 
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: reg: [[305397760, 4096]] is too short
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clocks' is a required property
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clock-names' is a required property
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#freq-domain-cells' is a required property
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#performance-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> [1] commit b8e24a9300b0 ("block: annotate refault stalls from IO submission")
+> [2] commit 937790699be9 ("mm/page_io.c: annotate refault stalls from swap_readpage")
+> [3] commit 2b413a1a728f ("mm: page_io: fix psi memory pressure error on cold swapins")
 > 
-> Cc: Hector Yuan <hector.yuan@mediatek.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
 
-Thanks for fixing this. It seem to have slipped through the cracks. I had
-plans to push this once Mediatek driver was merged but totally forgot about
-it.
+It's still needed by file cache refaults!
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
--- 
-Regards,
-Sudeep
+NAK

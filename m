@@ -2,106 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606A24D2800
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EAF4D2805
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiCIEvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S229502AbiCIE6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 23:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiCIEvD (ORCPT
+        with ESMTP id S229445AbiCIE6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:51:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825E615C195;
-        Tue,  8 Mar 2022 20:50:05 -0800 (PST)
+        Tue, 8 Mar 2022 23:58:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052BA15D385;
+        Tue,  8 Mar 2022 20:57:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC5DC61868;
-        Wed,  9 Mar 2022 04:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 982F5C340E8;
-        Wed,  9 Mar 2022 04:50:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C96EB81EEF;
+        Wed,  9 Mar 2022 04:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CEF1C340E8;
+        Wed,  9 Mar 2022 04:57:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646801404;
-        bh=WQ/YZjIqZMFWalzvcOneuAQWvznNpPEfrFfdBo4ciiI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SVevin0TR+8xb+HZXMkZExpjDPA1CROLW9T46rfw5d77tJctCHompabjR7CT4Wm9r
-         nMayEdUiHGcHsC6KWbvaXAis64KWGc5D1FB3Olbvr/0DkOSE7gXa+TYTk16pk2VFuT
-         g3ggGtGiRn7xNuVLymWzd2t3D2UDj9pIdPynDqcUMaOiwaBh6sJMy5fQZkwwN0wx7f
-         dIHbxAYSH5H40yXCV9N3RBBTYfyhjQ6WMKZU6TcQD8qJmv/HrR3zDR2OAEFiBcQvVa
-         DwunNSA18K+fMQElB5kQ9/qyplxH5W6ds37hYEWSMlOk0S2DcGrJttxGEjmwtvzk9h
-         pgmvj3TWfjjGQ==
-Message-ID: <3f6540b8-aeab-02f8-27bc-d78c9eba588c@kernel.org>
-Date:   Tue, 8 Mar 2022 21:50:01 -0700
+        s=k20201202; t=1646801826;
+        bh=L5U8vsPaENDSyYguGNWyibqEz/g1fEThZqDRlD+omU4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pWqNKdghmGYn2ranoR14iRRFdhzL3REWYIJfUMbCtpzxEmL0R8ShO5qZ460ScxaeI
+         lTHZX3VENrcohgn2dce8zXtkMVx/HeZewkyBTT2nYEXxSgJJOaZZ1rAO9FzaRS3BcI
+         LOX8ZlMYzgOmNFXtp14w8xCHy0hbTe3mUVVGsm5P5WcqjasuE4NRjOR30jRD3RnzIh
+         g/QEu2c9QWgY1g8kunf+A26B83h4e4SaxPthZC/tjJUvvd4R42tFuBvLbj8qncFI+M
+         6p6w9hCIsy+tKtQCDaWXkNMEjoaiBdWHayHzOPDbiM+k+ygYIwfwPrtO0F/ZOvYQEz
+         /rD0NMmOvrPOA==
+Date:   Tue, 8 Mar 2022 20:57:04 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
+        martin.petersen@oracle.com
+Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
+Message-ID: <YigzoKRJ1EHFRZY9@sol.localdomain>
+References: <20220303201312.3255347-1-kbusch@kernel.org>
+ <20220303201312.3255347-7-kbusch@kernel.org>
+ <your-ad-here.call-01646770901-ext-3299@work.hours>
+ <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: This counter "ip6InNoRoutes" does not follow the RFC4293
- specification implementation
-Content-Language: en-US
-To:     "Xiao, Jiguang" <Jiguang.Xiao@windriver.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Pudak, Filip" <Filip.Pudak@windriver.com>
-References: <SJ0PR11MB51207CBDB5145A89B8A0A15393359@SJ0PR11MB5120.namprd11.prod.outlook.com>
- <SJ0PR11MB51202FA2365341740048A64593359@SJ0PR11MB5120.namprd11.prod.outlook.com>
- <SJ0PR11MB51209200786235187572EE0D93359@SJ0PR11MB5120.namprd11.prod.outlook.com>
- <SJ0PR11MB5120426D474963E08936DD2493359@SJ0PR11MB5120.namprd11.prod.outlook.com>
- <bcc98227-b99f-5b2f-1745-922c13fe6089@kernel.org>
- <SJ0PR11MB5120EBCF140B940C8FF712B9933D9@SJ0PR11MB5120.namprd11.prod.outlook.com>
- <SJ0PR11MB51209DA3F7CAAB45A609633A930A9@SJ0PR11MB5120.namprd11.prod.outlook.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <SJ0PR11MB51209DA3F7CAAB45A609633A930A9@SJ0PR11MB5120.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 7:16 PM, Xiao, Jiguang wrote:
-> Hi David
+On Tue, Mar 08, 2022 at 12:27:47PM -0800, Keith Busch wrote:
+> On Tue, Mar 08, 2022 at 09:21:41PM +0100, Vasily Gorbik wrote:
+> > On Thu, Mar 03, 2022 at 12:13:10PM -0800, Keith Busch wrote:
+> > > Hardware specific features may be able to calculate a crc64, so provide
+> > > a framework for drivers to register their implementation. If nothing is
+> > > registered, fallback to the generic table lookup implementation. The
+> > > implementation is modeled after the crct10dif equivalent.
+> > 
+> > Hi Keith,
+> > 
+> > this is failing on big-endian systems. I get the following on s390:
 > 
-> To confirm whether my test method is correct, could you please briefly describe your test procedure? 
-> 
-> 
-> 
+> Oh, I see the put_unaligned_le64() in chksum_final() was not the correct
+> action. I'll send an update, thank you for the report.
 
-no formal test. Code analysis (ip6_pkt_discard{,_out} -> ip6_pkt_drop)
-shows the counters that should be incrementing and then looking at the
-counters on a local server.
+Or you could make the digests in your test vectors have have a consistent byte
+order, probably little endian.  That's how "shash" algorithms in the crypto API
+normally work, including crc32 and crc32c; they produce bytes as output.  I see
+that crct10dif violates that convention, and I assume you copied it from there.
+I'm not sure you should do that; crct10dif might be more of a one-off quirk.
 
-FIB Lookup failures should generate a dst with one of these handlers:
-
-static void ip6_rt_init_dst_reject(struct rt6_info *rt, u8 fib6_type)
-{
-        rt->dst.error = ip6_rt_type_to_error(fib6_type);
-
-        switch (fib6_type) {
-        case RTN_BLACKHOLE:
-                rt->dst.output = dst_discard_out;
-                rt->dst.input = dst_discard;
-                break;
-        case RTN_PROHIBIT:
-                rt->dst.output = ip6_pkt_prohibit_out;
-                rt->dst.input = ip6_pkt_prohibit;
-                break;
-        case RTN_THROW:
-        case RTN_UNREACHABLE:
-        default:
-                rt->dst.output = ip6_pkt_discard_out;
-                rt->dst.input = ip6_pkt_discard;
-                break;
-        }
-}
-
-They all drop the packet with a given counter bumped.
+- Eric

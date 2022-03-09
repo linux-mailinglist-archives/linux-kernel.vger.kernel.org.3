@@ -2,55 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84BD4D2F06
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AE94D2F11
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiCIMZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S232773AbiCIMcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiCIMZy (ORCPT
+        with ESMTP id S232757AbiCIMcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:25:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B834413CA1A;
-        Wed,  9 Mar 2022 04:24:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 547EF61973;
-        Wed,  9 Mar 2022 12:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF364C340E8;
-        Wed,  9 Mar 2022 12:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646828694;
-        bh=4U9KSoGP/RtOc59UTrmURxuIAqJs03Ww/sR14qn3McE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lMwopPMwwqoJU+2rf9HLq3gT33A036hqF5JzPJ2acELq9oQmVWQkPkntO42iHi+Q9
-         QEOQtWvhORZEvz21vMU+o3MTM9Lh//WiZPNq6Tkx/UejcYF8P+v2u5ZWEbfjOFCHRo
-         68wEYSCXi7GW9zk/Im3sc2wruaqGP1U3Ru1do6H9OFcAnq2UXNQScCutFxN+SbhUES
-         /XQt1tMtJZbWEWKRKITi/I5s+50Vv/dZVagW0PQRcy/YMYKjLN6dTSIgNgG2oOrFgB
-         ccXh2Wm32YJ1xg8FNd+hQyB2zxk4+/nn3pfVGi0rw/B9Ocb96E/HmnnzFPlj8l2dwK
-         GCkMmGtZKHQLg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Mike Rapport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] docs/kernel-parameters: update description of mem=
-Date:   Wed,  9 Mar 2022 14:24:46 +0200
-Message-Id: <20220309122446.1118738-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Mar 2022 07:32:03 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F60917587B;
+        Wed,  9 Mar 2022 04:31:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1507168F;
+        Wed,  9 Mar 2022 04:31:03 -0800 (PST)
+Received: from e126387.arm.com (unknown [10.57.39.232])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C03C43FA4D;
+        Wed,  9 Mar 2022 04:31:02 -0800 (PST)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH 1/3] perf test: Shell - Limit to only run executable scripts in tests
+Date:   Wed,  9 Mar 2022 12:28:57 +0000
+Message-Id: <20220309122859.31487-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,61 +42,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-The existing description of mem= does not cover all the cases and
-differences between how architectures treat it.
+Perf test's shell runner will just run everything in the tests
+directory (as long as it's not another directory or does not begin
+with a dot), but sometimes you find files in there that are not shell
+scripts - perf.data output for example if you do some testing and then
+the next time you run perf test it tries to run these. Check the files
+are executable so they are actually intended to be test scripts and
+not just some "random junk" files there.
 
-Extend the description to match the code.
-
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
+ tools/perf/tests/builtin-test.c |  4 +++-
+ tools/perf/util/path.c          | 14 +++++++++++++-
+ tools/perf/util/path.h          |  1 +
+ 3 files changed, 17 insertions(+), 2 deletions(-)
 
-This is in a way a followup for the discussion of mem= usage on MIPS:
-
-https://lore.kernel.org/all/1646461289-31992-1-git-send-email-yangtiezhu@loongson.cn
-
- .../admin-guide/kernel-parameters.txt         | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f067db9..f3597841a031 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2834,6 +2834,15 @@
- 			2 when the kernel is not able to see the whole system memory;
- 			3 memory that lies after 'mem=' boundary is excluded from
- 			 the hypervisor, then assigned to KVM guests.
-+			4 to limit the memory available for kdump kernel.
-+
-+			[ARC,MICROBLAZE] - the limit applies only to low memory,
-+			high memory is not affected.
-+
-+			[ARM64] - only limits memory covered by the linear
-+			mapping. The NOMAP regions are not affected.
-+
-+			[HEXAGON] - must be use to set the memory size, there is
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index fac3717d9ba1..3c34cb766724 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -296,7 +296,9 @@ static const char *shell_test__description(char *description, size_t size,
  
- 			[X86] Work as limiting max address. Use together
- 			with memmap= to avoid physical address space collisions.
-@@ -2844,6 +2853,17 @@
- 			in above case 3, memory may need be hot added after boot
- 			if system memory of hypervisor is not sufficient.
+ #define for_each_shell_test(entlist, nr, base, ent)	                \
+ 	for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++)	\
+-		if (!is_directory(base, ent) && ent->d_name[0] != '.')
++		if (!is_directory(base, ent) && \
++			is_executable_file(base, ent) && \
++			ent->d_name[0] != '.')
  
-+	mem=nn[KMG]@ss[KMG]
-+			[ARM,MIPS] - override the memory layout reported by
-+			firmware.
-+			Define a memory region of size nn[KMG] starting at
-+			ss[KMG].
-+			Multiple different regions can be specified with
-+			multiple mem= parameters on the command line.
-+
-+	mem=nn[KMG]	[HEXAGON] Set the memory size.
-+			Must be specified, otherwise memory size will be 0.
-+
- 	mem=nopentium	[BUGS=X86-32] Disable usage of 4MB pages for kernel
- 			memory.
+ static const char *shell_tests__dir(char *path, size_t size)
+ {
+diff --git a/tools/perf/util/path.c b/tools/perf/util/path.c
+index caed0336429f..ce80b79be103 100644
+--- a/tools/perf/util/path.c
++++ b/tools/perf/util/path.c
+@@ -86,9 +86,21 @@ bool is_directory(const char *base_path, const struct dirent *dent)
+ 	char path[PATH_MAX];
+ 	struct stat st;
  
+-	sprintf(path, "%s/%s", base_path, dent->d_name);
++	snprintf(path, sizeof(path), "%s/%s", base_path, dent->d_name);
+ 	if (stat(path, &st))
+ 		return false;
+ 
+ 	return S_ISDIR(st.st_mode);
+ }
++
++bool is_executable_file(const char *base_path, const struct dirent *dent)
++{
++	char path[PATH_MAX];
++	struct stat st;
++
++	snprintf(path, sizeof(path), "%s/%s", base_path, dent->d_name);
++	if (stat(path, &st))
++		return false;
++
++	return !S_ISDIR(st.st_mode) && (st.st_mode & S_IXUSR);
++}
+diff --git a/tools/perf/util/path.h b/tools/perf/util/path.h
+index 083429b7efa3..d94902c22222 100644
+--- a/tools/perf/util/path.h
++++ b/tools/perf/util/path.h
+@@ -12,5 +12,6 @@ int path__join3(char *bf, size_t size, const char *path1, const char *path2, con
+ 
+ bool is_regular_file(const char *file);
+ bool is_directory(const char *base_path, const struct dirent *dent);
++bool is_executable_file(const char *base_path, const struct dirent *dent);
+ 
+ #endif /* _PERF_PATH_H */
 -- 
-2.34.1
+2.32.0
 

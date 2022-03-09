@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2434D27CF
+	by mail.lfdr.de (Postfix) with ESMTP id 102C34D27CE
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiCIEPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 23:15:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S229656AbiCIEPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 23:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiCIEPF (ORCPT
+        with ESMTP id S229612AbiCIEPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 23:15:05 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2323B2BB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 20:14:03 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id d187so1161646pfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 20:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=n2RwK9cIieKMhKrtyShZZPbFRUKXZafEsQW2DLOqgNU=;
-        b=e5J+6qO9viI9tnZKacITygw6SfzgK6KtUlMYCUZs2ZHKdPyD6A3LdHoP3/6DYCIiZp
-         6zwUcGrlaqknuI79kJuQZCIJzcmJ7A/2R0TL+RdMZeOrXehfcPC5I7pP1+ObjPfjhLb3
-         FYZK6iH+iG+HBtAsqSbWtZsfor7v/KpUu0D2isLO9fHW00W705LNvY70twq8vuhs/KYt
-         k/2AVkU3/gCcJdi4JUP3md+1kX6Jr3ujbFGzLnQUQ6jqbfQP14c3AJxYw0A08AbQO6ut
-         QQcFZuXCbxkLfJS3mPH/9XfZow/zYa7cTz8pj5egF1QYlUcCPCkc4lji2T148VaMVRhV
-         MyRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=n2RwK9cIieKMhKrtyShZZPbFRUKXZafEsQW2DLOqgNU=;
-        b=brmZ+NRMYtRfL4Kmyb3WdOPMwEREK5L9KcbKGzqDIJnlm/kPk73worRrDxyhdj4hvp
-         HOpcnzqmx+QTp6xnGnB+1mrNFubJ7XGgPhn/eQAjJX6BbNxaqXKmLGN1YoYxovZsRLF6
-         alxh6+9mGQF9OrDTk+q1U1MkYEYWTLeTJYzeWrxzRMMkQnjIAn2lPXtVQo2wJEkWnSKs
-         AgaUehKF3sI62VuVgQeULkpM3G9pirbwvGIVdkVyRQChGBW662lTSGqopJ6RtCwTiTns
-         iBCUF0/XTG0otE4yDDsiYVgFzcnPYeevfZpUCLDP82wDMzpdlZDuTEdaDlN3KyWe+qkA
-         wiCA==
-X-Gm-Message-State: AOAM533Y+h/u3IzK/NyFTKLQL73o9wtPO/qaz7U5fQ5A5jVHHtDUkhwA
-        Tsm16OCvAippT9vk8Xz/zpY=
-X-Google-Smtp-Source: ABdhPJy02nsiNTVLqWhKJuGJNm96G/p/QKGuIv9pwJyXZ/R9WGji2HU/t+PO2wO9IoMVpmqusuDWlQ==
-X-Received: by 2002:a65:4101:0:b0:372:1875:c19c with SMTP id w1-20020a654101000000b003721875c19cmr16618731pgp.435.1646799242995;
-        Tue, 08 Mar 2022 20:14:02 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id w5-20020a17090aaf8500b001bd4c825deesm4419653pjq.43.2022.03.08.20.14.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Mar 2022 20:14:02 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH] mm: reduce tlb flush range when changing vma protection
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220309025721.3051365-1-maobibo@loongson.cn>
-Date:   Tue, 8 Mar 2022 20:14:01 -0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <87861C77-F203-40A5-814D-A3541081064E@gmail.com>
-References: <20220309025721.3051365-1-maobibo@loongson.cn>
-To:     Bibo Mao <maobibo@loongson.cn>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Mar 2022 23:15:19 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E7E3B3F9;
+        Tue,  8 Mar 2022 20:14:17 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228M9Opt010816;
+        Wed, 9 Mar 2022 04:14:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=Ee8V5JTFr5ipyfP0/LnKk12lN6jSMRmDSRlUrIwmcaQ=;
+ b=SrbdUig5uK8FtXQUYYiFMdU7+OCF66U6vZL/3TtZFBpXZZJITjOl+dKhKCKxUcSkknfg
+ AM7P2hVCkBffep31MZmXUFCBBm69LBMcQB9kGxK/6zFhp9lcrYi+GUTar5FEzxRGIDEs
+ QMtKomqa4aUI1Z+axQiqYvSv/3Zxm5e4fKY6nsLVz3H+Fm3vfFWqOoJj0kBZxoLXjpYb
+ RGSbDI1mU5crqW9YVe4xQR3gz3jEXxSFuW+32DWBDV+C7YQXU8z26N+r644t/6EHMBIW
+ 26vn/ZgF93FjAZzXcWEoVAbD96AmFoov2zYg64+g8KoiclHNcjKkeyj4G8vfZiBGg3TX Xg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyrarhvd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 04:14:14 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22947CNu166749;
+        Wed, 9 Mar 2022 04:14:14 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3ekyp2qdeu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Mar 2022 04:14:14 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2294EAeN174884;
+        Wed, 9 Mar 2022 04:14:13 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by aserp3020.oracle.com with ESMTP id 3ekyp2qddd-5;
+        Wed, 09 Mar 2022 04:14:13 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     jejb@linux.ibm.com, Zheyu Ma <zheyuma97@gmail.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: wd719x: Return proper error code when dma_set_mask() fails
+Date:   Tue,  8 Mar 2022 23:14:09 -0500
+Message-Id: <164679903743.29335.13151374172045636513.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com>
+References: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 9IvUjNjLmE3ra5bt1neXgimORnAUbO6Z
+X-Proofpoint-ORIG-GUID: 9IvUjNjLmE3ra5bt1neXgimORnAUbO6Z
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 28 Feb 2022 14:54:15 +0000, Zheyu Ma wrote:
 
+> During the process of driver probing, the probe function should return < 0
+> for failure, otherwise, the kernel will treat value >= 0 as success.
+> 
+> 
 
-> On Mar 8, 2022, at 6:57 PM, Bibo Mao <maobibo@loongson.cn> wrote:
->=20
-> numa worker will periodically change vma prot with PROT_NONE, by
-> default it will scan 256M vma memory size with pmd stepping size.
-> If there are fewer pages changed with PROT_NONE, tlb flush is called
-> with pmd size. This patch will calculate flush range for those
-> pages with pte prot changed, it will reduce size for tlb flush.
->=20
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+Applied to 5.18/scsi-queue, thanks!
 
-Hi Bibo,
+[1/1] scsi: wd719x: Return proper error code when dma_set_mask() fails
+      https://git.kernel.org/mkp/scsi/c/98cdcd6c6b4a
 
-I finally managed to make v3 of a patchiest, which I think does
-something similar to what you are looking for (without introducing
-yet another TLB batching mechanism).
-
-Have a look at [1] and let me know if that would satisfy you.
-
-
-[1] =
-https://lore.kernel.org/linux-mm/20220309041043.302261-4-namit@vmware.com/=
-T/#u
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering

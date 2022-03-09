@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047924D25F9
+	by mail.lfdr.de (Postfix) with ESMTP id E51914D25FC
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiCIBPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S230307AbiCIBPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiCIBNK (ORCPT
+        with ESMTP id S231349AbiCIBNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:13:10 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94760169387;
-        Tue,  8 Mar 2022 17:02:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+/EchvKqxgDAiC0CiCuu0yIQfeE12gsf0GdAJi2W9UI=; b=jXhGdy313jO3pVD7GRnGQSmECg
-        AV6Ef3Id/uA26FvlY05gO1nlFjqt2F0MEVNhh7d83Kh/I/F2cVKZBbFVYyqyWQ2L7DGHBBBQupNOp
-        qr4dBLBId3aKMVXDn/igkF0YqS3+2J/7V9LhU97BKP5NNf5j0046VQyh7NE+6TcpuzVbJsds8A5Yd
-        cMmiFB4XGE8UoY78oVc1ZMvCWL+BCEG7KzjEmfp+wkZT40fkLhRpiZOX+B0d9aJIWhESB8Yo13f9S
-        i2Nk74TOO4+ssQJbuhBtshUOj3/fnlV2w/cBe963WPGcybKw/CN4OK6VgZL2/gFw6Jke8KeSXCv3p
-        Pv03Jqcw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRkic-00GglB-NJ; Wed, 09 Mar 2022 01:02:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5E88430037F;
-        Wed,  9 Mar 2022 02:02:20 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1ADD42BCCB298; Wed,  9 Mar 2022 02:02:20 +0100 (CET)
-Date:   Wed, 9 Mar 2022 02:02:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+        Tue, 8 Mar 2022 20:13:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51B5216BCFC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:03:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646787779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fOinsnqh7tuFe1AXLtD6a4GjowO8MZZ5tBv/OgSQsfY=;
+        b=L0X1iGSbZj+dVqE6mMtunqLvf+PGYvZICxBdLUdAOvfNOcxzPpzVu977UGKdMJI63Wmd8d
+        3FzShBvHTEacydRhARWhq+vAjqOGfYUQd+CE/0II1s4X4XRdFtlKPnLAoW+oczyt3R9eB0
+        dDVFfLvU3hH3vKf+6ycpTn0zDvQcp8M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-83-IZ2xRyylNjOyVAgujDYaRA-1; Tue, 08 Mar 2022 20:02:56 -0500
+X-MC-Unique: IZ2xRyylNjOyVAgujDYaRA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1F306180A088;
+        Wed,  9 Mar 2022 01:02:55 +0000 (UTC)
+Received: from T590 (ovpn-8-34.pek2.redhat.com [10.72.8.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B98AA60C05;
+        Wed,  9 Mar 2022 01:02:46 +0000 (UTC)
+Date:   Wed, 9 Mar 2022 09:02:42 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Maurizio Lombardi <mlombard@redhat.com>,
+        linux-nvme@lists.infradead.org, axboe@fb.com,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>, Ming Lei <minlei@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: nvme-host: disk corruptions when issuing IDENTIFY commands via
+ ioctl()
+Message-ID: <Yif8svaBscrL9WZk@T590>
+References: <CAFL455n1WaRxZuqCeQGWt1MVDnK8uUytUsAUVEUV9-LLQYv9gQ@mail.gmail.com>
+ <20220308195238.GC3501708@dhcp-10-100-145-180.wdc.com>
+ <YifyZ9MoUws/7esK@T590>
+ <20220309003904.GA3948780@dhcp-10-100-145-180.wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220309003904.GA3948780@dhcp-10-100-145-180.wdc.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:32:37PM +0100, Peter Zijlstra wrote:
-> On Tue, Mar 08, 2022 at 11:01:04PM +0100, Peter Zijlstra wrote:
-> > On Tue, Mar 08, 2022 at 12:00:52PM -0800, Alexei Starovoitov wrote:
-> > > On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
-> > > > Hopefully last posting...
-> > > > 
-> > > > Since last time:
-> > > > 
-> > > >  - updated the ftrace_location() patch (naveen, rostedt)
-> > > >  - added a few comments and clarifications (bpetkov)
-> > > >  - disable jump-tables (joao)
-> > > >  - verified clang-14-rc2 works
-> > > >  - fixed a whole bunch of objtool unreachable insn issue
-> > > >  - picked up a few more tags
-> > > > 
-> > > > Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
-> > > > 
-> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-> > > 
-> > > I've tried to test it.
+On Tue, Mar 08, 2022 at 04:39:04PM -0800, Keith Busch wrote:
+> On Wed, Mar 09, 2022 at 08:18:47AM +0800, Ming Lei wrote:
+> > Given NVMe spec states that data length of IDENTIFY command should be
+> > 4096bytes, and PRP list can't be used. 
 > > 
-> > I could cleanly do:
-> > 
-> > git checkout tip/master
-> > git merge bpf-next/master
-> > git merge queue/x86/wip.ibt
-> > 
-> > You want me to push out that result somewhere?
+> > So looks nvme driver need to validate the command before submitting to
+> > hardware, otherwise any buggy application can break FS or memory easily.
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
-> 
-> includes bpf-next/master.
+> No way. The driver does not police the user passthrough interface for
+> these kinds of things.
 
-I just managed to run bpf selftests with that kernel on a tigerlake
-platform.  Seems to still work.
+So you trust application to provide correct data always?
+
+From user viewpoint, this defect provides one easy hole to break FS or
+memory, it is one serious issue, IMO. The FS/memory corruption can
+be reproduced easily even in VM.
+
+> It couldn't ever be complete or future proof if
+> it did.
+
+But the spec states clearly the data length of IDENTIFY command is 4096
+and PRP list can't be used, so why do you think it isn't complete or
+future proof to validate data length of IDENTIFY in nvme driver?
+
+
+
+Thanks, 
+Ming
+

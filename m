@@ -2,166 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BE84D2DC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1527B4D2DC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 12:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiCILPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 06:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S232078AbiCILQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 06:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbiCILPx (ORCPT
+        with ESMTP id S232051AbiCILQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 06:15:53 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF67713CECA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:14:53 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id q19so1689237pgm.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 03:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IsQsBuB2ms4XH7MMbYKCaAltmU40a94dVvRdCh2kPG8=;
-        b=giQbAvpiNC6GgihtPUmX/gFcKXYFcGs5sk/zxjgS1mngiwkVPSv4j6HBatM0A6SLlD
-         N8pUdXxYXl2dKA+Qime4DiOB5yxnMcG6y5PEEtMWzLJPHakjdt5TNPJ9vNIZBKiqfz5q
-         FIS9Y3LvOE9bG3rek35JoAtOfqqZLFepdhsm2MbOwIMeEuLWd+7m0UBTr8YeUl9qIqwH
-         DIMBlWDd/Hq4QUgfWKKEPdUYScu/rzE4O05+0ycytJSuR+bFfjPlArO5p5A6ZTAG0AFs
-         kK1ckGlUZqDk+8DjcadQrClsK0k3ZPNAGZ5w3AzjGd8bBNPWttN+iWpfE5e3PCWow/PV
-         ynGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IsQsBuB2ms4XH7MMbYKCaAltmU40a94dVvRdCh2kPG8=;
-        b=bvFQ0hif+Qtx5Zrrl4v+IUzKrk94mR5XJn5dDH4MjgzgCgkqPeyoF4IUtigmc14i5P
-         Jnn0EV1TRciksEZqbKQYYH2Thl99tFl5LkHkufkWo5uuDXQF1GYBFmxOcrzRTxHHXbZe
-         nH+Q69o/cYtlZ5YERSIJxo2mZqXDQiHjLCyjrKbKP4gh8383yYG7aoIDRnCr5He13c9O
-         0EOcBdnDHNqsthice9MVXWTIpDG+M6PrimK1EGksfwInpcl8utD2ZEVmv8zoBBx5Jy0M
-         PSEdJ5PXUtaQCn4N198PfLyQ980ZOzLwfFMRjRf7PgIClhpH/OP0YOYGs4wna3YwiWbN
-         IqKQ==
-X-Gm-Message-State: AOAM530AfrYqAMhWjhldGIJyaQzz5NYY5fLOpUhsFY6x+dj7ujIjnGZw
-        Rc40Ox0j/8Uhf3SGQldfNJ5Gi86eYtVcdg==
-X-Google-Smtp-Source: ABdhPJwBIGZHoRknu7XKYBKDZJFavSBHX1JbW99jXbsjdCSN8eEhyiUwRrZ9tgEjVnaIgmQI9H+4+g==
-X-Received: by 2002:a63:204d:0:b0:378:c9e5:bea6 with SMTP id r13-20020a63204d000000b00378c9e5bea6mr17841111pgm.573.1646824493366;
-        Wed, 09 Mar 2022 03:14:53 -0800 (PST)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id v66-20020a622f45000000b004f129e7767fsm2459618pfv.130.2022.03.09.03.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 03:14:52 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     corbet@lwn.net, hannes@cmpxchg.org, mingo@redhat.com,
-        peterz@infradead.org, surenb@google.com, ebiggers@google.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Martin Steigerwald <Martin.Steigerwald@proact.de>
-Subject: [PATCH v2] psi: report zeroes for CPU full at the system level
-Date:   Wed,  9 Mar 2022 19:14:45 +0800
-Message-Id: <20220309111445.86484-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Mar 2022 06:16:40 -0500
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD7113CED0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 03:15:41 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V6jihDJ_1646824537;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V6jihDJ_1646824537)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 09 Mar 2022 19:15:38 +0800
+Date:   Wed, 9 Mar 2022 19:15:36 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, lkp@intel.com, linux-erofs@lists.ozlabs.org,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: fs/erofs/zmap.c:394 z_erofs_get_extent_compressedlen() warn:
+ should '1 << lclusterbits' be a 64 bit type?
+Message-ID: <YiiMWCZS7bzeAFme@B-P7TQMD6M-0146.local>
+References: <202203091002.lJVzsX6e-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202203091002.lJVzsX6e-lkp@intel.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin find it confusing when look at the /proc/pressure/cpu output,
-and found no hint about that CPU "full" line in psi Documentation.
+Hi Dan,
 
-% cat /proc/pressure/cpu
-some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
-full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
+On Wed, Mar 09, 2022 at 01:27:08PM +0300, Dan Carpenter wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   92f90cc9fe0e7a984ea3d4bf3d120e30ba8a2118
+> commit: cec6e93beadfd145758af2c0854fcc2abb8170cb erofs: support parsing big pcluster compress indexes
+> config: i386-randconfig-m021-20220307 (https://download.01.org/0day-ci/archive/20220309/202203091002.lJVzsX6e-lkp@intel.com/config)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> smatch warnings:
+> fs/erofs/zmap.c:394 z_erofs_get_extent_compressedlen() warn: should '1 << lclusterbits' be a 64 bit type?
+> fs/erofs/zmap.c:423 z_erofs_get_extent_compressedlen() warn: should 'm->compressedlcs << lclusterbits' be a 64 bit type?
+> 
+> vim +394 fs/erofs/zmap.c
+> 
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  381  static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  382  					    unsigned int initial_lcn)
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  383  {
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  384  	struct erofs_inode *const vi = EROFS_I(m->inode);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  385  	struct erofs_map_blocks *const map = m->map;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  386  	const unsigned int lclusterbits = vi->z_logical_clusterbits;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  387  	unsigned long lcn;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  388  	int err;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  389  
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  390  	DBG_BUGON(m->type != Z_EROFS_VLE_CLUSTER_TYPE_PLAIN &&
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  391  		  m->type != Z_EROFS_VLE_CLUSTER_TYPE_HEAD);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  392  	if (!(map->m_flags & EROFS_MAP_ZIPPED) ||
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  393  	    !(vi->z_advise & Z_EROFS_ADVISE_BIG_PCLUSTER_1)) {
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07 @394  		map->m_plen = 1 << lclusterbits;
+> 
+> 1ULL << lclusterbits?
 
-The PSI_CPU_FULL state is introduced by commit e7fcd7622823
-("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
-but also counted at the system level as a side effect.
+Thanks for the report!
 
-Naturally, the FULL state doesn't exist for the CPU resource at
-the system level. These "full" numbers can come from CPU idle
-schedule latency. For example, t1 is the time when task wakeup
-on an idle CPU, t2 is the time when CPU pick and switch to it.
-The delta of (t2 - t1) will be in CPU_FULL state.
+In practice, m_plen won't be larger than 1MiB due to on-disk constraint
+for compression mode, so we're always safe here. m_plen only can be
+larger than 4GiB for non-compression mode.
 
-Another case all processes can be stalled is when all cgroups
-have been throttled at the same time, which unlikely to happen.
+Yet we could update this on the static analysis side, I will submit a
+patch later.
 
-Anyway, CPU_FULL metric is meaningless and confusing at the
-system level. So this patch will report zeroes for CPU full
-at the system level, and update psi Documentation accordingly.
+> 
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  395  		return 0;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  396  	}
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  397  
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  398  	lcn = m->lcn + 1;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  399  	if (m->compressedlcs)
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  400  		goto out;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  401  	if (lcn == initial_lcn)
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  402  		goto err_bonus_cblkcnt;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  403  
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  404  	err = z_erofs_load_cluster_from_disk(m, lcn);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  405  	if (err)
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  406  		return err;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  407  
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  408  	switch (m->type) {
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  409  	case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  410  		if (m->delta[0] != 1)
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  411  			goto err_bonus_cblkcnt;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  412  		if (m->compressedlcs)
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  413  			break;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  414  		fallthrough;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  415  	default:
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  416  		erofs_err(m->inode->i_sb,
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  417  			  "cannot found CBLKCNT @ lcn %lu of nid %llu",
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  418  			  lcn, vi->nid);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  419  		DBG_BUGON(1);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  420  		return -EFSCORRUPTED;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  421  	}
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  422  out:
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07 @423  	map->m_plen = m->compressedlcs << lclusterbits;
+> 
+> Same thing here.
 
-Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
-Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
-Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
-Changes in v2:
-- update doc about the zeroes in CPU full at the system level.
----
- Documentation/accounting/psi.rst |  9 ++++-----
- kernel/sched/psi.c               | 15 +++++++++------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+Ditto.
 
-diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
-index 860fe651d645..5e40b3f437f9 100644
---- a/Documentation/accounting/psi.rst
-+++ b/Documentation/accounting/psi.rst
-@@ -37,11 +37,7 @@ Pressure interface
- Pressure information for each resource is exported through the
- respective file in /proc/pressure/ -- cpu, memory, and io.
- 
--The format for CPU is as such::
--
--	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
--
--and for memory and IO::
-+The format is as such::
- 
- 	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
- 	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
-@@ -58,6 +54,9 @@ situation from a state where some tasks are stalled but the CPU is
- still doing productive work. As such, time spent in this subset of the
- stall state is tracked separately and exported in the "full" averages.
- 
-+CPU full is undefined at the system level, but has been reported
-+since 5.13, so it is set to zero for backward compatibility.
-+
- The ratios (in %) are tracked as recent trends over ten, sixty, and
- three hundred second windows, which gives insight into short term events
- as well as medium and long term trends. The total absolute stall time
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index e14358178849..97fd85c5143c 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1062,14 +1062,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- 	mutex_unlock(&group->avgs_lock);
- 
- 	for (full = 0; full < 2; full++) {
--		unsigned long avg[3];
--		u64 total;
-+		unsigned long avg[3] = { 0, };
-+		u64 total = 0;
- 		int w;
- 
--		for (w = 0; w < 3; w++)
--			avg[w] = group->avg[res * 2 + full][w];
--		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
--				NSEC_PER_USEC);
-+		/* CPU FULL is undefined at the system level */
-+		if (!(group == &psi_system && res == PSI_CPU && full)) {
-+			for (w = 0; w < 3; w++)
-+				avg[w] = group->avg[res * 2 + full][w];
-+			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
-+					NSEC_PER_USEC);
-+		}
- 
- 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
- 			   full ? "full" : "some",
--- 
-2.20.1
+Thanks,
+Gao Xiang
 
+> 
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  424  	return 0;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  425  err_bonus_cblkcnt:
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  426  	erofs_err(m->inode->i_sb,
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  427  		  "bogus CBLKCNT @ lcn %lu of nid %llu",
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  428  		  lcn, vi->nid);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  429  	DBG_BUGON(1);
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  430  	return -EFSCORRUPTED;
+> cec6e93beadfd1 fs/erofs/zmap.c              Gao Xiang 2021-04-07  431  }
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 

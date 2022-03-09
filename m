@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F9E4D3CE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D4B4D3CE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 23:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbiCIW0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 17:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S238476AbiCIW12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 17:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237914AbiCIW0s (ORCPT
+        with ESMTP id S232558AbiCIW1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:26:48 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33C9120F60
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:25:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 53FAF1F44EA2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646864747;
-        bh=AkGj7nTWMoomWRkdJCvTLzW+5BnCOQ1RLk59S45H2G8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bYtq1SvtGMZR3ZztKfmLLKr3S6w7A/3ieWCdJW6Hvi4gb7anwVpCJV+P2kKdLrSPP
-         DtilhNyxqMiS43VK8FyDxExEbZb3GVpxppM8+ghaWBRlhywOvc+Bmtnzd+SSqCdPID
-         HvJBrhazTBG12TNiMP4+qwwC8jvK/neSj6hl9+gbC+EQMKP5fVXKVfEXLZ/p69TksO
-         6j6bgZ5CxWVGr+IKaYRnpXWTCymJeMzVPM2RES9Yp9dwFuPTVTAsW8oSQA4AIpA4AN
-         wRc733Fi0sIBKLseZ5T9clbuDF7K2wYaQiyTFT/mDAo6eCtaz6V2OAc2XnomeoJwEv
-         5Z6e+h1b42hZA==
-Message-ID: <c9b344ab-b674-d600-da13-94b329a9d46b@collabora.com>
-Date:   Thu, 10 Mar 2022 01:25:43 +0300
+        Wed, 9 Mar 2022 17:27:23 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614D8120F71
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 14:26:24 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m22so3618395pja.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 14:26:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DnX4yE0wKRLAa2OnqOmK7GeRT23OmcuMA/YZwxy1i9o=;
+        b=Smajq1CdD1HPTSBKN3ajcNxuxHraSrmHZWGlTUKbIR7BFC8ecygKqsMt4vpoIkRd3q
+         v0MiTh50GCZdBElwHeEJM1fvdzusGIkH8xwXUv1hNoRUSWwnqIm9f/QYxHNWaqGfCrFh
+         6IrjUU2PowLSge+VWLOu9vhmFMMOK0ly1zpw4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DnX4yE0wKRLAa2OnqOmK7GeRT23OmcuMA/YZwxy1i9o=;
+        b=sVhIHPCdoFWM+WCJTKuv+vNt7hbb/xilgqVF1w4yJeAM76/PSm9ktcW4uy5BS3NRk7
+         +22X7CVuOg58k+6cFVNF26oCYpLvVfGYbZK9lJd7+MAf/wfisvM3+inhruyxm791DeYt
+         Ye6cfcm8i6zFscdGs6+Iod8Zfs4PWvfepuF+fvY5EKL6otB7fSXlFJaP2EVLIyBqaU+B
+         mmeVXWgbGGxckmFHh53Vuu2jZyQuigpQTrlTJrk3e1ShS4JTrULJrVQnWvnwt/zlVNrR
+         dSUwMZbF+fURHyPl0Ox+u0wd3nfY7Q3XTH8cCzg1HPOEUrGZHg4vt1vUaTwaUvKUJDi3
+         HQ8Q==
+X-Gm-Message-State: AOAM530c1Dcy+PiZEkq7UqsE8JgPA9AiplvuiuNhMI+lZ64tujadIwDY
+        nuc9TzooQ2JuaoWrYIYs4yxDCA==
+X-Google-Smtp-Source: ABdhPJzCcyacsQwJ64Jx4lBOECbPAiTDPJg1GvRkCsR6ZSF3r6rOSjrFo1b0pt2cBK/RzUWmSMRrEA==
+X-Received: by 2002:a17:902:c14d:b0:151:dfb1:a1b4 with SMTP id 13-20020a170902c14d00b00151dfb1a1b4mr1875894plj.132.1646864783889;
+        Wed, 09 Mar 2022 14:26:23 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o66-20020a17090a0a4800b001bf388fc96esm3601627pjo.21.2022.03.09.14.26.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 14:26:23 -0800 (PST)
+Date:   Wed, 9 Mar 2022 14:26:22 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 03/13] ptrace: Create ptrace_report_syscall_{entry,exit}
+ in ptrace.h
+Message-ID: <202203091426.04DF0C97@keescook>
+References: <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+ <20220309162454.123006-3-ebiederm@xmission.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>
-Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
- <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
- <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309162454.123006-3-ebiederm@xmission.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,58 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 22:28, Thomas Zimmermann wrote:
-> Hi
+On Wed, Mar 09, 2022 at 10:24:44AM -0600, Eric W. Biederman wrote:
+> Rename tracehook_report_syscall_{entry,exit} to
+> ptrace_report_syscall_{entry,exit} and place them in ptrace.h
 > 
-> Am 09.03.22 um 12:55 schrieb Dmitry Osipenko:
->> Hello,
->>
->> On 3/9/22 11:59, Thomas Zimmermann wrote:
->>> Hi
->>>
->>> Am 08.03.22 um 14:17 schrieb Dmitry Osipenko:
->>>> Hello,
->>>>
->>>> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
->>>> During OOM, the shrinker will release BOs that are marked as "not
->>>> needed"
->>>> by userspace using the new madvise IOCTL. The userspace in this case is
->>>> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
->>>> allowing kernel driver to release memory of the cached shmem BOs on
->>>> lowmem
->>>> situations, preventing OOM kills.
->>>
->>> Virtio-gpu is build on top of GEM shmem helpers. I have a prototype
->>> patchset that adds a shrinker to these helpers. If you want to go
->>> further, you could implement something like that instead. Panfrost and
->>> lima also have their own shrinker and could certainly be converted to
->>> the gem-shmem shrinker.
->>
->> I had a thought that it could be possible to unify shrinkers into a
->> common DRM framework. Could you please give me a link to yours prototype
->> patchset?
+> There is no longer any generic tracehook infractructure so make
+> these ptrace specific functions ptrace specific.
 > 
-> I uploaded the patches to
-> 
-> 
-> https://gitlab.freedesktop.org/tzimmermann/linux/-/commits/gem-shmem-cached-mappings
-> 
-> 
-> it's incomplete and un-debugged, but it shows what needs to be done. It
-> has the infrastructure, but lacks the changes to the GEM shmem code.
-> 
-> The reason for this work is to keep GEM shmem pages mapped and allocated
-> even while the BO is neither mapped nor pinned.  As it is now, GEM SHMEM
-> creates and releases pages on each pin and unpin, and maps and unmaps
-> memory ranges on each vmap and vunmap.  It's all wasteful. Only the
-> first pin and vmap calls should establish pages and mappings and only
-> the purge and free functions should release them.
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Hm, aren't maps and pins already refcounted?
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> The patchset adds new helpers for BO purging to struct
-> drm_gem_object_funcs. With this, I think it might be possible to have
-> one global DRM shrinker and let it handle all BOs; independent of each
-> BO's memory manager.
-
-Thank you, I'll give it a try.
+-- 
+Kees Cook

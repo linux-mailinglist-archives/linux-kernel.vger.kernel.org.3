@@ -2,111 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A924D2BED
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B564D2BF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiCIJ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
+        id S232089AbiCIJaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiCIJ3J (ORCPT
+        with ESMTP id S231304AbiCIJaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:29:09 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E335614D26C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 01:28:10 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8108B3F1C5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 09:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646818089;
-        bh=W1ZmGzzIil/BY1tOmvj18fZ/kKQqmwIhZnir6U/EX5w=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jWt712BXAsHaDWILBo5BVHV2sOALVNfCgNeI70JyW4/lVqLCtvPYo27wthjw8IfCI
-         4KYd3lCERMvbJsDG9JHfH4hIkkbt4mqOOdfmnGGKC8hIONBlei6xtvdrPKb9Esv7OI
-         5jz0pxw8FIto3P3NYL5FxHirxPCHODSRlvHAsljV1zWDN1nVaWtOgt3ybhGBXrs1zx
-         lOG05uUfg36YnNynJnogsSGWadIf2lu7oIkhtNaJd1Os3N2HMlelmFckidido0t2V9
-         yAaEnGAf+6IZ7FTJOykQw8QhW6hFcCIxynP7QA3hHVYuiexD3hcoSzJ86R8CXzPOKW
-         xdjahaSe+z73g==
-Received: by mail-ed1-f71.google.com with SMTP id h17-20020a05640250d100b004133863d836so997061edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 01:28:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W1ZmGzzIil/BY1tOmvj18fZ/kKQqmwIhZnir6U/EX5w=;
-        b=XynkyMF4eBcQWZO4QAtgJQeL8O9g1EBYgVtrgCs1fj0W8V/s+sdrtlqA1g6Q4JbrTm
-         O4J973Q1dOTJ8yY+LPL0BNTJuunUqrngBLQAJJpmpXToB5q+SaaY2Vyi4G1UlNFtDrtG
-         NTGf9uEN/0m0cGVeyDEPYxauDfIRoafoT7RgDEVrNx5Wq+ZnixrzArPR1bV/0PhKSZQN
-         re9kKisPJo1anPWb22c8nPEpUxGUaV82En4thsOwngOHAn0L/yDofE3Ksdlf4FQNHeVF
-         Jv3wyWGPf6C9M2xlnMQnKI/Er+dTPyRfEv1DygvZxJVwQ1gAOXPjWpMsF63gjiDdr+R3
-         EDsw==
-X-Gm-Message-State: AOAM5331YtBLpaDlU690wp2LIwPEsTzuxDhtEvPTpDCi0HX8gqEuH98T
-        tWqS8hJeJu+BKut/GrkakeiUYF1zFWDWE7gd5u3QX6FRQa45//bqKytodcemNxzJ5RXyiRsEbPM
-        RD0fYTJ0HHDloK1FWtQqECmrAtoDFSQxxzbnqoLVcpQ==
-X-Received: by 2002:a17:907:a40a:b0:6db:462:dbe9 with SMTP id sg10-20020a170907a40a00b006db0462dbe9mr15774938ejc.59.1646818088938;
-        Wed, 09 Mar 2022 01:28:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxsMwx6ua3btbQvYyeevwGk42BscQP3xI9D8KoR2lq9SemLHw6dTp3pN5n0R1N/DkOoTtWXhw==
-X-Received: by 2002:a17:907:a40a:b0:6db:462:dbe9 with SMTP id sg10-20020a170907a40a00b006db0462dbe9mr15774923ejc.59.1646818088779;
-        Wed, 09 Mar 2022 01:28:08 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id vl11-20020a17090730cb00b006d8121d0fc4sm488489ejb.138.2022.03.09.01.28.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 01:28:08 -0800 (PST)
-Message-ID: <45c682ea-db99-e7b2-fbae-395e214962f4@canonical.com>
-Date:   Wed, 9 Mar 2022 10:28:07 +0100
+        Wed, 9 Mar 2022 04:30:23 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D09516E7F7;
+        Wed,  9 Mar 2022 01:29:25 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2297dkET010366;
+        Wed, 9 Mar 2022 03:28:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=cnOds1P2HYMESzPFz39oF0gCUJHlgInu9tI0YBb37ME=;
+ b=qEDhi0fDzrUDTtw6O9p55Ji32CEH4LBZ03lH9Jz3DuQq31Jm7rsOWLy+nkQqSnUeFRmz
+ VQgPcnQZtrPHkugyrkCpKrG+Mp5gll9U+KbxCl+qHqy2D6NoExgzNjniS8oV2UJLVz/q
+ eSMH1nTgu+9fals4bIxfEerV+sMe4jgU5MKeUyS2xO1kqt/0qk+Bv0hCxcD6SlRTVPHT
+ nSz/JAGslfCSt3i8dft2XmDUa00PrKEU84XioTFrF8bkil49UOFBxXUKkTdSVsJ+jP1y
+ 7ecQ6rg7DlT3jNOrPnn2UTxBUqfkqjqyaaF5aQKr8TxzU15q4Igulv5e5ftNPIemkN0N Ig== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3em55swdv0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 09 Mar 2022 03:28:40 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 9 Mar
+ 2022 09:28:38 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Wed, 9 Mar 2022 09:28:38 +0000
+Received: from [198.61.65.38] (unknown [198.61.65.38])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5956546C;
+        Wed,  9 Mar 2022 09:28:38 +0000 (UTC)
+Message-ID: <a5fe73dc-1126-0f46-cbc0-1ab864843ea6@opensource.cirrus.com>
+Date:   Wed, 9 Mar 2022 09:28:38 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: qcom: Add sc8280xp TLMM
- binding
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 15/16] ASoC: dt-bindings: cs35l41: Document CS35l41
+ External Boost
 Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220308221132.1423218-1-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220308221132.1423218-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Rob Herring <robh@kernel.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        David Rhodes <drhodes@opensource.cirrus.com>
+References: <20220308171730.454587-1-tanureal@opensource.cirrus.com>
+ <20220308171730.454587-16-tanureal@opensource.cirrus.com>
+ <20220309012043.GA1694603@robh.at.kernel.org>
+From:   Lucas tanure <tanureal@opensource.cirrus.com>
+In-Reply-To: <20220309012043.GA1694603@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: howsFYvVvDI4cucQBfeq_h8T-Enuu5Fn
+X-Proofpoint-GUID: howsFYvVvDI4cucQBfeq_h8T-Enuu5Fn
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 23:11, Bjorn Andersson wrote:
-> The Qualcomm SC8280XP platform contains a single block of registers
-> for the TLMM block. This provides pinconf and pinmux for 228 GPIOs, 2
-> UFS_RESET pins and one SDC interface.
+On 3/9/22 01:20, Rob Herring wrote:
+> On Tue, Mar 08, 2022 at 05:17:29PM +0000, Lucas Tanure wrote:
+>> From: David Rhodes <drhodes@opensource.cirrus.com>
+>>
+>> Document internal and external boost feature for ASoC CS35L41.
+>> For internal boost the following properties are required:
+>> - cirrus,boost-peak-milliamp
+>> - cirrus,boost-ind-nanohenry
+>> - cirrus,boost-cap-microfarad
+>>
+>> For external boost, the GPIO1 must be configured as output,
+>> so the following properties are required:
+>> - cirrus,gpio1-src-select = <1>
+>> - cirrus,gpio1-output-enable
+>>
+>> Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
+>> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+>> ---
+>>   .../bindings/sound/cirrus,cs35l41.yaml        | 44 +++++++++++++++++--
+>>   1 file changed, 41 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
+>> index 3235702ce402..09b515924c59 100644
+>> --- a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
+>> +++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
+>> @@ -75,6 +75,19 @@ properties:
+>>       maximum: 3
+>>       default: 2
+>>   
+>> +  cirrus,boost-type:
+>> +    description:
+>> +      Configures the type of Boost being used.
+>> +      Internal boost requires boost-peak-milliamp, boost-ind-nanohenry and
+>> +      boost-cap-microfarad.
+>> +      External Boost must have GPIO1 as GPIO output. GPIO1 will be set high to
+>> +      enable boost voltage.
+>> +      0 = Internal Boost
+>> +      1 = External Boost
+>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+>> +    minimum: 0
+>> +    maximum: 1
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+> What does not present mean? Might be better to make this boolean depending
+> on what you are trying to accomplish.
+Not present means Internal boost. There will be other types of boost in 
+the future, so I would like to keep it as is.
+
 > 
-> Changes since v1:
-> - Dropped $ref: pinctrl.yaml
-> - Dropped reg-names from required list
-> - Fixed spelling mistake in example
+>> +
+>>     cirrus,gpio1-polarity-invert:
+>>       description:
+>>         Boolean which specifies whether the GPIO1
+>> @@ -131,9 +144,32 @@ required:
+>>     - compatible
+>>     - reg
+>>     - "#sound-dai-cells"
+>> -  - cirrus,boost-peak-milliamp
+>> -  - cirrus,boost-ind-nanohenry
+>> -  - cirrus,boost-cap-microfarad
+>> +
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        cirrus,boost-type:
+>> +            const: 0
 > 
->  .../pinctrl/qcom,sc8280xp-pinctrl.yaml        | 151 ++++++++++++++++++
->  1 file changed, 151 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
+> Note that this will be true if cirrus,boost-type is not present. You
+> probably want to add 'required'.
+Yes, that's expected. We want to continue to support old device trees 
+without boost type, and for that case it sets to internal boost.
+
 > 
+>> +    then:
+>> +      required:
+>> +        - cirrus,boost-peak-milliamp
+>> +        - cirrus,boost-ind-nanohenry
+>> +        - cirrus,boost-cap-microfarad
+>> +    else:
+>> +      if:
+>> +        properties:
+>> +          cirrus,boost-type:
+>> +            const: 1
+>> +      then:
+>> +        required:
+>> +          - cirrus,gpio1-output-enable
+>> +          - cirrus,gpio1-src-select
+>> +        properties:
+>> +          cirrus,boost-peak-milliamp: false
+>> +          cirrus,boost-ind-nanohenry: false
+>> +          cirrus,boost-cap-microfarad: false
+>> +          cirrus,gpio1-src-select:
+>> +            enum: [1]
+>>   
+>>   additionalProperties: false
+>>   
+>> @@ -150,6 +186,8 @@ examples:
+>>             VA-supply = <&dummy_vreg>;
+>>             VP-supply = <&dummy_vreg>;
+>>             reset-gpios = <&gpio 110 0>;
+>> +
+>> +          cirrus,boost-type = <0>;
+>>             cirrus,boost-peak-milliamp = <4500>;
+>>             cirrus,boost-ind-nanohenry = <1000>;
+>>             cirrus,boost-cap-microfarad = <15>;
+>> -- 
+>> 2.35.1
+>>
+>>
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof

@@ -2,96 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D414D2D5E
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEFC4D2D60
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 11:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiCIKrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 05:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S231447AbiCIKrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 05:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiCIKrq (ORCPT
+        with ESMTP id S231167AbiCIKrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:47:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D55C6C941;
-        Wed,  9 Mar 2022 02:46:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 9 Mar 2022 05:47:45 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363176C941
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 02:46:46 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C878BB82021;
-        Wed,  9 Mar 2022 10:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3B8C340F5;
-        Wed,  9 Mar 2022 10:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646822805;
-        bh=GvTSs4P6z3GIxElft6y3pJ5+df73IMKa3LB60AFyHIo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aErSMPJJ6BLrUbfxJ4lK0iPuz5ZuRX8lqChT4uFXgldtX75U6Qr9UF9jajFgG84mp
-         9CPa16zaTn6UbfEgN9IoDS8ZYf+nMiDaDfl+QCFpc8JWV8ldt7SdBhhgO/0U9XCz9I
-         ntncqIBXDiF2WfbW2rHZIdjX6tFXtZAEvwboN27Du4f+3MU7MxFWW18CHbOWuci9hs
-         YrO7DJc2IRWpMc7W4dGPoo3rbg5mLqSHXpQgSuK5BPai26DOFtpBgDlnW5n+1QG39C
-         hVDx7ZGfsLbpbVJA45FWQjaU2VoN+02ua/ClUNlteYNfAKHbCAv8JyKR018tahxO0M
-         dt71slNyClHkA==
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2d07ae0b1c4so17630087b3.11;
-        Wed, 09 Mar 2022 02:46:45 -0800 (PST)
-X-Gm-Message-State: AOAM530fbUalr2mYeELCCLc9Fm95ALfggsmHKw4NfbuIB72XRgZxeQaH
-        EJmy6RtwU1OdOnbGZ1CXhaVY6wCZG3p6Gw6288E=
-X-Google-Smtp-Source: ABdhPJxebShjEm9UHUIQxwem6w1TszlWZWcH9CKYz0YyIgdmSyNqydFUrpONgEXdLimdVAv3xZM5ZuE9kunQrOg0sNg=
-X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
- d12-20020a81e90c000000b002dbd63e56ffmr16991596ywm.60.1646822804316; Wed, 09
- Mar 2022 02:46:44 -0800 (PST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KD85J0yKdz4xYy;
+        Wed,  9 Mar 2022 21:46:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1646822804;
+        bh=UNUfMtbu8jQxJ8Ldp1KCgA9gdyw7U6mYfXdtMhAz3JI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ksce+MO22Ocbz72HvCfAJVVGcoiTU526DWQbDfqV/6oa144msQGikKsMAeaAbrg+M
+         WIDpNdyWPJVpJU9Vor6F+HsHbxA+GRZXGonPGbI+zNoODL3ZdsTAKZ4iMBKqiCix1L
+         /f8tYlw1G/EX94rFMbYwdcdQXsNOiAHbj+2DDnFelgxJ2B7DC0SFB5FeqAKigaB6ap
+         LiIHjxR7xKTvJEPzw9Jr8lQ14lLH7g3+UvxGB8f4mJK6ul8+OBMDle5O+LN/UbywQq
+         N2PbIj1eWmzBF7C/hasBQKYLcWQnp2otkIuLvzX8EIKYcNVKl5xMvWhpDCZzOdMazg
+         d32soOd8EXfeg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "peng.hao2@zte.com.cn" <peng.hao2@zte.com.cn>,
+        "wen.yang99@zte.com.cn" <wen.yang99@zte.com.cn>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
+In-Reply-To: <87b40493-7630-f714-27f4-90ad2a5a7c12@csgroup.eu>
+References: <20220223070223.26845-1-hbh25y@gmail.com>
+ <87o82fn6yw.fsf@mpe.ellerman.id.au>
+ <87b40493-7630-f714-27f4-90ad2a5a7c12@csgroup.eu>
+Date:   Wed, 09 Mar 2022 21:46:43 +1100
+Message-ID: <87ilsnmmi4.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
- <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
-In-Reply-To: <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 9 Mar 2022 11:46:33 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
-Message-ID: <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 11:37, Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 09/03/2022 =C3=A0 04:24, Michael Ellerman a =C3=A9crit=C2=A0:
+>> Hangyu Hua <hbh25y@gmail.com> writes:
+>>> mpc8xx_pic_init() should return -ENOMEM instead of 0 when
+>>> irq_domain_add_linear() return NULL. This cause mpc8xx_pics_init to con=
+tinue
+>>> executing even if mpc8xx_pic_host is NULL.
+>>>
+>>> Fixes: cc76404feaed ("powerpc/8xx: Fix possible device node reference l=
+eak")
+>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>>> ---
+>>>   arch/powerpc/platforms/8xx/pic.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/arch/powerpc/platforms/8xx/pic.c b/arch/powerpc/platforms/=
+8xx/pic.c
+>>> index f2ba837249d6..04a6abf14c29 100644
+>>> --- a/arch/powerpc/platforms/8xx/pic.c
+>>> +++ b/arch/powerpc/platforms/8xx/pic.c
+>>> @@ -153,6 +153,7 @@ int __init mpc8xx_pic_init(void)
+>>=20
+>> Expanding the context:
+>>=20
+>> 	siu_reg =3D ioremap(res.start, resource_size(&res));
+>> 	if (siu_reg =3D=3D NULL) {
+>> 		ret =3D -EINVAL;
+>> 		goto out;
+>> 	}
+>>=20
+>> 	mpc8xx_pic_host =3D irq_domain_add_linear(np, 64, &mpc8xx_pic_host_ops,=
+ NULL);
+>>>   	if (mpc8xx_pic_host =3D=3D NULL) {
+>>>   		printk(KERN_ERR "MPC8xx PIC: failed to allocate irq host!\n");
+>>>   		ret =3D -ENOMEM;
+>>> +		goto out;
+>>>   	}
+>>>=20=20=20
+>>>   	ret =3D 0;
+>>>=20=20=20=09
+>> out:
+>> 	of_node_put(np);
+>> 	return ret;
+>> }
+>>=20
+>> Proper error cleanup should also undo the ioremap() if
+>> irq_domain_add_linear() fails.
 >
-> On Wed, Mar 09, 2022 at 03:18:12PM +0530, Naresh Kamboju wrote:
-> > While boting linux next-20220308 on BeagleBoard-X15 and qemu arm the following
-> > kernel crash reported which is CONFIG_KASAN enabled build [1] & [2].
+> Uh ...
 >
-> The unwinder is currently broken in linux-next. Please try reverting
-> 532319b9c418 ("ARM: unwind: disregard unwind info before stack frame is
-> set up")
+> If siu_reg is NULL, you get a serious problem when __do_irq() calls=20
+> mpc8xx_get_irq()
+
+Arguably it shouldn't be assigned to ppc_md.get_irq unless
+mpc8xx_pic_init() succeeds. See eg. xics_init().
+
+> unsigned int mpc8xx_get_irq(void)
+> {
+> 	int irq;
 >
+> 	/* For MPC8xx, read the SIVEC register and shift the bits down
+> 	 * to get the irq number.
+> 	 */
+> 	irq =3D in_be32(&siu_reg->sc_sivec) >> 26;
+>
+> 	if (irq =3D=3D PIC_VEC_SPURRIOUS)
+> 		return 0;
+>
+>          return irq_linear_revmap(mpc8xx_pic_host, irq);
+>
+> }
+>
+>
+> So I'll leave siu_reg as is even if irq_domain_add_linear() fails.
+>
+> Whatever, if we do something about that it should be done in another=20
+> patch I think.
 
-Yeah.
+Yeah OK, that's becoming a bit of a larger cleanup. I'll take this patch
+as-is.
 
-This is the same spot Corentin hit before, where the double
-dereference of vsp is not guarded by anything like
-get_kernel_nofault(). We should probably fix that, but that doesn't
-address the underlying issue, of course.
-
-I'm a bit puzzled, though, that this appears now, and didn't before.
-
-Naresh, I take it you did not see this occurring on earlier linux-nexts?
-
-I'll try to reproduce this, and see if I can make sense of it. In the
-mean time, please do the revert Russell suggested, and if that doesn't
-help, maybe try a bisect?
+cheers

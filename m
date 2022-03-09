@@ -2,157 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830CA4D38B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80404D38B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 19:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbiCISZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 13:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S236355AbiCISZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 13:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiCISZn (ORCPT
+        with ESMTP id S234345AbiCISZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 13:25:43 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DD69296
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 10:24:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646850268; x=1678386268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Nb2k3DJ2sjUn++CWwkUeUgChHZFdkntbRCx6xp/JsJA=;
-  b=GIew+QdmDOw5ACcKMaeMVKIvkyRix6N5QKf78qiCXUVjmeeMhaAMj0Lk
-   K8GFgDPShDVYRrtyjJEM8ZOSLLnacUw3+oB3tlL1VUWnpHAdtliVC1IDI
-   LxhzQbcj809vhLWAcduqfrKp3c/pK3KjQsHDItqWwO5V+NEBsMiY1Kq1d
-   YXj5PMrB6CX2TvbgOJQrAPecHwiLrfQWdnHQvtUh7/84AKrBDOWeOUVQi
-   +nDyybpILR1yRfDo8sLEySm6xJuWK4hUFQiBV6PfpuvpQxNfhAIVYqKqN
-   cmr+rEZZipiH+vjjqOc6oXGbHctXvWFh78qvgSZiCA8KCFE4t1MuanlBU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254790063"
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="254790063"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 10:24:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="815073576"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Mar 2022 10:24:22 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nS0z0-0003go-4i; Wed, 09 Mar 2022 18:24:22 +0000
-Date:   Thu, 10 Mar 2022 02:23:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Raghu Bankapur <quic_rbankapu@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Krishna Jha <quic_kkishorj@quicinc.com>
-Subject: Re: [PATCH V0 1/1] ASoC: msm: fix integer overflow for long duration
- offload playback
-Message-ID: <202203100248.RVGW6JZh-lkp@intel.com>
-References: <b906dbaf772d0152a3af52d639b090d15fe8c362.1646835508.git.quic_rbankapu@quicinc.com>
+        Wed, 9 Mar 2022 13:25:08 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0945BB1A;
+        Wed,  9 Mar 2022 10:24:09 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id t2so341186pfj.10;
+        Wed, 09 Mar 2022 10:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rSc2PmZWhcE4zmSNYcCPse2rUDVrpRpLjcHq7MCZReg=;
+        b=IrgulhdKzLO2MikUiCP6c1vFRk3ZGBL4uLphiYRGDnhtmP6KX0EsdhcVXAWmXCV06j
+         tXazOnOFyn2zk5TMa9dRp1sp4aNLVs3K/4PzWJm/Nvn5bDTT1iT8KevY4PwGOG3gqL2E
+         gUNQaIHGNP2XhLcWzkQ2n6vnb201tg0daclONcn+FkS7K6QADiinn+uVVxOvtlo37cpv
+         dW1w7v7uqfEEwty2OehACNanTMWHCBQzMPBbUxsjxzWdvUrbbL7uEqrkVA1Vln07GfDE
+         8FFdJEjkoDrSbnfDBC1oC5ppWd23zDHIXhb15fCWPMul4sDcunOQU9S0OSTZnKxept62
+         EbTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rSc2PmZWhcE4zmSNYcCPse2rUDVrpRpLjcHq7MCZReg=;
+        b=f6SD40mtILB2kP4KXfag6ichQUBZrLZqlxtomNmjb+aQsZFcpKO0VzZC2/6qC91/CX
+         k81r9c85AY/XOYXXsAUM8EYkqfTyTOslEp3NmZXw70OCpZVUqZ2Iza0UX7xsKdQgO7VZ
+         8qo9lAT8k5AOoaaUxYMjq4rE3+aJV1SU+jSss/E5fg2Xp0eSDV+kIpaPRoaQJlqDlUEz
+         g893nK2oN7TLIjWdHyfsMpUQRI36fdAKgt6j1sZTGW8TVyjeznvy52bud1iKLtqc1jCT
+         SmPwhJkqR+dn7zLVVTC+jPDJ+dJZLQ/1Aa0DZwlssz3tc0pVM5IPoErAswoKmrxmNq5m
+         cCaw==
+X-Gm-Message-State: AOAM532ilUU0vVRaCG207N5TM+N/+7oPq5+B2wL5lxfD3LqDEp2cqz7m
+        fJT/xndvKhqjZtpiNNvtLMg=
+X-Google-Smtp-Source: ABdhPJwI4GEboqNNCjaUvxKYP+YouJqvdWOikH3LnYpmPQ5D3T9sJFcSAgxgPqrEZ8PHpve68F+CZg==
+X-Received: by 2002:a63:e42:0:b0:374:7dae:aa98 with SMTP id 2-20020a630e42000000b003747daeaa98mr841107pgo.586.1646850248480;
+        Wed, 09 Mar 2022 10:24:08 -0800 (PST)
+Received: from localhost.localdomain ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id f21-20020a056a00239500b004f754dd3d4csm3950988pfc.3.2022.03.09.10.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 10:24:08 -0800 (PST)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Chanho Min <chanho.min@lge.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: [PATCH 0/2] Make DTs compliant with bindings
+Date:   Wed,  9 Mar 2022 23:54:01 +0530
+Message-Id: <20220309182403.12968-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b906dbaf772d0152a3af52d639b090d15fe8c362.1646835508.git.quic_rbankapu@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghu,
+These patches are an attempt to fix DTs which are not in compliant with
+pl022 binding.
+LG1312, LG1313 and amd seattle platforms require fix in clock
+properties.
+https://lore.kernel.org/linux-spi/20220309171847.5345-1-singh.kuldeep87k@gmail.com/T/#u
 
-Thank you for the patch! Perhaps something to improve:
+Based on git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git,
+master.
+Rob, could you please help in picking these patches as git tree is not
+specified in MAINTAINERS.
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on vkoul-dmaengine/next broonie-sound/for-next v5.17-rc7 next-20220309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Kuldeep Singh (2):
+  arm64: dts: lg131x: Update spi clock properties
+  arm64: dts: seattle: Update spi node properties
 
-url:    https://github.com/0day-ci/linux/commits/Raghu-Bankapur/ASoC-msm-fix-integer-overflow-for-long-duration-compress-offload-playback/20220309-222520
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220310/202203100248.RVGW6JZh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/9020c5c2e38ba210a8d822d20e32bed85a4ffcab
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Raghu-Bankapur/ASoC-msm-fix-integer-overflow-for-long-duration-compress-offload-playback/20220309-222520
-        git checkout 9020c5c2e38ba210a8d822d20e32bed85a4ffcab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/intel/atom/sst/
+ arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi | 8 ++++----
+ arch/arm64/boot/dts/lg/lg1312.dtsi           | 8 ++++----
+ arch/arm64/boot/dts/lg/lg1313.dtsi           | 8 ++++----
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+2.25.1
 
-All warnings (new ones prefixed by >>):
-
->> sound/soc/intel/atom/sst/sst_drv_interface.c:370:11: warning: format specifies type 'int' but the argument has type '__u64' (aka 'unsigned long long') [-Wformat]
-                   str_id, tstamp->copied_total, tstamp->pcm_frames);
-                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
-           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                        ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
-                              dev, fmt, ##__VA_ARGS__)
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
-           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-                                                                 ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
-                   func(&id, ##__VA_ARGS__);               \
-                               ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +370 sound/soc/intel/atom/sst/sst_drv_interface.c
-
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  343  
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  344  static int sst_cdev_tstamp(struct device *dev, unsigned int str_id,
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  345  		struct snd_compr_tstamp *tstamp)
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  346  {
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  347  	struct snd_sst_tstamp fw_tstamp = {0,};
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  348  	struct stream_info *stream;
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  349  	struct intel_sst_drv *ctx = dev_get_drvdata(dev);
-ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  350  	void __iomem *addr;
-ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  351  
-ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  352  	addr = (void __iomem *)(ctx->mailbox + ctx->tstamp) +
-ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  353  		(str_id * sizeof(fw_tstamp));
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  354  
-ce1cfe295abaa7 sound/soc/intel/atom/sst/sst_drv_interface.c Pierre-Louis Bossart 2018-07-24  355  	memcpy_fromio(&fw_tstamp, addr, sizeof(fw_tstamp));
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  356  
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  357  	stream = get_stream_info(ctx, str_id);
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  358  	if (!stream)
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  359  		return -EINVAL;
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  360  	dev_dbg(dev, "rb_counter %llu in bytes\n", fw_tstamp.ring_buffer_counter);
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  361  
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  362  	tstamp->copied_total = fw_tstamp.ring_buffer_counter;
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  363  	tstamp->pcm_frames = fw_tstamp.frames_decoded;
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  364  	tstamp->pcm_io_frames = div_u64(fw_tstamp.hardware_counter,
-75afbd052b3675 sound/soc/intel/atom/sst/sst_drv_interface.c Dan Carpenter        2015-04-09  365  			(u64)stream->num_ch * SST_GET_BYTES_PER_SAMPLE(24));
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  366  	tstamp->sampling_rate = fw_tstamp.sampling_frequency;
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  367  
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  368  	dev_dbg(dev, "PCM  = %u\n", tstamp->pcm_io_frames);
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  369  	dev_dbg(dev, "Ptr Query on strid = %d  copied_total %d, decodec %d\n",
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30 @370  		str_id, tstamp->copied_total, tstamp->pcm_frames);
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  371  	dev_dbg(dev, "rendered %d\n", tstamp->pcm_io_frames);
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  372  
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  373  	return 0;
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  374  }
-7adab122a57c5a sound/soc/intel/sst/sst_drv_interface.c      Vinod Koul           2014-10-30  375  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

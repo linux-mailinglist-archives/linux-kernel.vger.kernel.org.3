@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01E34D339C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEEF4D32F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 17:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbiCIQLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 11:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S234994AbiCIQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 11:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234801AbiCIQIH (ORCPT
+        with ESMTP id S235378AbiCIQIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:08:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB18180D0A;
-        Wed,  9 Mar 2022 08:04:27 -0800 (PST)
+        Wed, 9 Mar 2022 11:08:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDDD18E405;
+        Wed,  9 Mar 2022 08:05:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0ED8616F3;
-        Wed,  9 Mar 2022 16:03:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE08EC340E8;
-        Wed,  9 Mar 2022 16:03:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A6366179A;
+        Wed,  9 Mar 2022 16:05:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CE7C340EF;
+        Wed,  9 Mar 2022 16:05:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646841838;
-        bh=EnVmv+AiN0R1W1sI+v3RA0NxLd/Ul4yWb07HWKSxVoU=;
+        s=korg; t=1646841942;
+        bh=Z7pnDDP4PixJazKkW3aaIvDxwShxt7Bmhfqwcoma7Ow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iGdvty88ceszCdXzo5kZ7uMeYVM17cZeFjTwCyRjw7FM4xzaGE0DQqEtu2ukxBZ1U
-         g3CE/x9mO+ybUhyKWy2J91kMZDRCQzCC9e0Xh+oF/Bhb/BOAi7E1Jw8h+9cmBsWwHU
-         7UJz9M4C5yJxeBLdvsbisg3vvL3IQUku0MBj0Q18=
+        b=gFnsVT2RFc4CWmujG+PiwAo9nhTZqXZ71qV4OKmobtD+316at9lRvm5C/yji5+vJA
+         7h2XhAj2GhKw3yejTLhAi6HVWtBeJNYcfa8gCZ2VKYWTZtIBmgcA8mLudL74EpHwAg
+         0yYiRSdEqSfsZrzDsV/2BotCPycAvIgK5DqPyIiU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.4 12/18] arm/arm64: smccc/psci: add arm_smccc_1_1_get_conduit()
-Date:   Wed,  9 Mar 2022 17:00:01 +0100
-Message-Id: <20220309155856.915384655@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.10 29/43] arm64: entry: Dont assume tramp_vectors is the start of the vectors
+Date:   Wed,  9 Mar 2022 17:00:02 +0100
+Message-Id: <20220309155900.084917218@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
-References: <20220309155856.552503355@linuxfoundation.org>
+In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
+References: <20220309155859.239810747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: James Morse <james.morse@arm.com>
 
-commit 6b7fe77c334ae59fed9500140e08f4f896b36871 upstream.
+commit ed50da7764535f1e24432ded289974f2bf2b0c5a upstream.
 
-SMCCC callers are currently amassing a collection of enums for the SMCCC
-conduit, and are having to dig into the PSCI driver's internals in order
-to figure out what to do.
+The tramp_ventry macro uses tramp_vectors as the address of the vectors
+when calculating which ventry in the 'full fat' vectors to branch to.
 
-Let's clean this up, with common SMCCC_CONDUIT_* definitions, and an
-arm_smccc_1_1_get_conduit() helper that abstracts the PSCI driver's
-internal state.
+While there is one set of tramp_vectors, this will be true.
+Adding multiple sets of vectors will break this assumption.
 
-We can kill off the PSCI_CONDUIT_* definitions once we've migrated users
-over to the new interface.
+Move the generation of the vectors to a macro, and pass the start
+of the vectors as an argument to tramp_ventry.
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Acked-by: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/psci/psci.c |   15 +++++++++++++++
- include/linux/arm-smccc.h    |   16 ++++++++++++++++
- 2 files changed, 31 insertions(+)
+ arch/arm64/kernel/entry.S |   30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -57,6 +57,21 @@ struct psci_operations psci_ops = {
- 	.smccc_version = SMCCC_VERSION_1_0,
- };
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -822,7 +822,7 @@ alternative_else_nop_endif
+ 	sub	\dst, \dst, PAGE_SIZE
+ 	.endm
  
-+enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void)
-+{
-+	if (psci_ops.smccc_version < SMCCC_VERSION_1_1)
-+		return SMCCC_CONDUIT_NONE;
-+
-+	switch (psci_ops.conduit) {
-+	case PSCI_CONDUIT_SMC:
-+		return SMCCC_CONDUIT_SMC;
-+	case PSCI_CONDUIT_HVC:
-+		return SMCCC_CONDUIT_HVC;
-+	default:
-+		return SMCCC_CONDUIT_NONE;
-+	}
-+}
-+
- typedef unsigned long (psci_fn)(unsigned long, unsigned long,
- 				unsigned long, unsigned long);
- static psci_fn *invoke_psci_fn;
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -82,6 +82,22 @@
+-	.macro tramp_ventry, regsize = 64
++	.macro tramp_ventry, vector_start, regsize
+ 	.align	7
+ 1:
+ 	.if	\regsize == 64
+@@ -845,10 +845,10 @@ alternative_insn isb, nop, ARM64_WORKARO
+ 	ldr	x30, =vectors
+ #endif
+ alternative_if_not ARM64_WORKAROUND_CAVIUM_TX2_219_PRFM
+-	prfm	plil1strm, [x30, #(1b - tramp_vectors)]
++	prfm	plil1strm, [x30, #(1b - \vector_start)]
+ alternative_else_nop_endif
+ 	msr	vbar_el1, x30
+-	add	x30, x30, #(1b - tramp_vectors + 4)
++	add	x30, x30, #(1b - \vector_start + 4)
+ 	isb
+ 	ret
+ .org 1b + 128	// Did we overflow the ventry slot?
+@@ -867,19 +867,21 @@ alternative_else_nop_endif
+ 	sb
+ 	.endm
  
- #include <linux/linkage.h>
- #include <linux/types.h>
+-	.align	11
+-SYM_CODE_START_NOALIGN(tramp_vectors)
++	.macro	generate_tramp_vector
++.Lvector_start\@:
+ 	.space	0x400
+ 
+-	tramp_ventry
+-	tramp_ventry
+-	tramp_ventry
+-	tramp_ventry
+-
+-	tramp_ventry	32
+-	tramp_ventry	32
+-	tramp_ventry	32
+-	tramp_ventry	32
++	.rept	4
++	tramp_ventry	.Lvector_start\@, 64
++	.endr
++	.rept	4
++	tramp_ventry	.Lvector_start\@, 32
++	.endr
++	.endm
 +
-+enum arm_smccc_conduit {
-+	SMCCC_CONDUIT_NONE,
-+	SMCCC_CONDUIT_SMC,
-+	SMCCC_CONDUIT_HVC,
-+};
-+
-+/**
-+ * arm_smccc_1_1_get_conduit()
-+ *
-+ * Returns the conduit to be used for SMCCCv1.1 or later.
-+ *
-+ * When SMCCCv1.1 is not present, returns SMCCC_CONDUIT_NONE.
-+ */
-+enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void);
-+
- /**
-  * struct arm_smccc_res - Result from SMC/HVC call
-  * @a0-a3 result values from registers 0 to 3
++	.align	11
++SYM_CODE_START_NOALIGN(tramp_vectors)
++	generate_tramp_vector
+ SYM_CODE_END(tramp_vectors)
+ 
+ SYM_CODE_START(tramp_exit_native)
 
 

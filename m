@@ -2,50 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403664D30C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBE74D30C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 15:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiCIOEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 09:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        id S233425AbiCIOEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 09:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiCIOEc (ORCPT
+        with ESMTP id S233389AbiCIOEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 09:04:32 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB0EBA1476;
-        Wed,  9 Mar 2022 06:03:31 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 1289480C1;
-        Wed,  9 Mar 2022 14:02:07 +0000 (UTC)
-Date:   Wed, 9 Mar 2022 16:03:29 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
- peripherals by default
-Message-ID: <YiizsYnKB0X9bDY2@atomide.com>
-References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
- <20220204143108.653qk2ihnlhsr5aa@prior>
- <YgDCLaBHA3DDQAUd@atomide.com>
- <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
- <YgEBml9HvFzSl289@atomide.com>
- <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
- <YgJZbdOlazrde7O/@atomide.com>
- <1356e93cd5b101c3d896e35250c66959ed631544.camel@ew.tq-group.com>
- <YihvWFdr1cT7cyk5@atomide.com>
- <5058591a3e0f0cb82b26cffe888d87b4d1bdd713.camel@ew.tq-group.com>
+        Wed, 9 Mar 2022 09:04:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9153CC4E24
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 06:03:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646834625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wY6DJ3Ioz62fnPukSJTRdXvMi1FUgR+YwdIV4ZzZvHQ=;
+        b=IXo03VFMGR8uTsDJF+v0OahFVa3OMC+8JSUKZbk08Z8I2vn10oSqBgswbyy7Fmq5ezq7tr
+        hcG9Cqh6f9SUJBWFGUqfrGqTywBm0NW2UbTuKNCMaLlUui9zKToXrXtGKauu3/0o9nBl4i
+        XJJw+Ge5ZkdwGsLNX+xXgu/s2vrzTdw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-nZNfv5tYPUi-5xujwW1ZWw-1; Wed, 09 Mar 2022 09:03:44 -0500
+X-MC-Unique: nZNfv5tYPUi-5xujwW1ZWw-1
+Received: by mail-wr1-f70.google.com with SMTP id z1-20020adfec81000000b001f1f7e7ec99so794925wrn.17
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 06:03:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wY6DJ3Ioz62fnPukSJTRdXvMi1FUgR+YwdIV4ZzZvHQ=;
+        b=LVr6gOBKN57CXQdlRT6e0fvmVKoptill6pWD+FMX42ZYMePaOaJsqN2yhQn4BblAC5
+         IA88AKw71S/Q2IGLb3UtI8fbJyjcU10zH+jPi3dCIO0e5CwDehCkHXiP7nsdO6Qmw5cx
+         aL1OUa9Ry7NWyinJGzXTXRL56yBBT5iCoKf2gMWRD9r0Z9c8HrfnrWMOWFVPTcFlOvb+
+         VFFigC4CPTwakP1VnKygwD4sb3Gx61yQxHYjdZq2WWXM7ECuhUt5lykDMYfzhdsHVYVv
+         NvtabO49Hd7OzJDgchQfMbAoo9tyuJNHTGx5T9xvzreKjTlRhMu7nm0OmVl+ra5p+v16
+         kLng==
+X-Gm-Message-State: AOAM5303xsPZ8zossoYcfd9m0NVqQ1CmTvM+CVgBff5aD/DQz0F1s3bE
+        C510eX+4jQZsiPxXipmucQfJopHE4Kl3TXxIK2nzWAWH012OEJ6nvmK2zE2qZXfBCJU3RugAPQY
+        M3JKd6/8lMJ6QNGs0axXiCQyY
+X-Received: by 2002:adf:e5d2:0:b0:1fb:768d:7d5 with SMTP id a18-20020adfe5d2000000b001fb768d07d5mr9190943wrn.256.1646834623328;
+        Wed, 09 Mar 2022 06:03:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNBJfQGc2FmMdtt3mVPKQLbHOb+zj+vlrb2Ad8ZnI8Vtv4sYFZwCC94aOOQs1Mujr8yWTzvw==
+X-Received: by 2002:adf:e5d2:0:b0:1fb:768d:7d5 with SMTP id a18-20020adfe5d2000000b001fb768d07d5mr9190878wrn.256.1646834622656;
+        Wed, 09 Mar 2022 06:03:42 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id m128-20020a1ca386000000b003898b148bf0sm4996126wme.20.2022.03.09.06.03.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 06:03:41 -0800 (PST)
+Message-ID: <a7b27887-ce00-c173-a7e7-8ad3470154f5@redhat.com>
+Date:   Wed, 9 Mar 2022 15:03:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5058591a3e0f0cb82b26cffe888d87b4d1bdd713.camel@ew.tq-group.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@suse.de>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+ <20210811122927.900604-3-mlevitsk@redhat.com> <YTECUaPa9kySQxRX@google.com>
+ <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
+ <YifoysEvfnQgq59A@google.com>
+ <3221c2385e1148fe0ee77d4717b52726e1db9d8d.camel@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <3221c2385e1148fe0ee77d4717b52726e1db9d8d.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,31 +106,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220309 11:09]:
-> while I agree that it would be great if drivers could just detect when
-> hardware is not available, this is simply not how most drivers work -
-> when you instantiate the driver via a non-disabled(/reserved/...) DT
-> node, the driver expects a usable device.
-> 
-> Especially for busses like I2C, there is no way for a driver to
-> reliably detect whether the bus is usable or not. (There are several
-> states that can't really be distinguished: Is pinmuxing missing, or
-> does the device not need any muxing? Is a line low because it is not
-> actually connected to anything, or is there another master currently
-> using the bus, or is the bus stuck due to a faulty device?)
+On 3/9/22 13:31, Maxim Levitsky wrote:
+> Question: is it worth it? Since I am very busy with various things, this feature,
+> beeing just small debug help which I used once in a while doesn't get much time from me.
 
-Well how about set only the problem devices with status = "disabled"
-with a proper comment in the SoC dtsi file?
+I agree it's not very much worth.
 
-See for example what has been done in arch/arm64/boot/dts/apple that
-has been pretty widely reviewed and done with a good taste :)
+Paolo
 
-Not sure what can be done to idle the unused devices in the disabled
-case though, maybe some firmware call to disable all unclaimed devices
-could be done if it does not exist already. The firmware may not have
-the capability to idle devices that need firmware loaded to idle them
-for example though.
-
-Regards,
-
-Tony

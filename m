@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F4F4D3669
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0224D3771
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 18:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236933AbiCIRFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 12:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S236182AbiCIRBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 12:01:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237519AbiCIRDC (ORCPT
+        with ESMTP id S236902AbiCIRAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:03:02 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4601B2ACD;
-        Wed,  9 Mar 2022 08:51:11 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 580A91F382;
-        Wed,  9 Mar 2022 16:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646844669;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ydrdKSlhrPNxyTjqpwFz/lVnyTdgAwQsHL5yVVlnOA=;
-        b=eT82rI/QkvGXelJqBnDXZ6DSfPbxpE/9kD06Wm421Hm28d/zpE1K/K13KnElJN5d398JeQ
-        RonRRpZIKvqzB9DndgVzGEF+km1Drf8ASsp0Z5z3QYRgp3nDF+PHkgDWoDZ0xSUG1Sq9fd
-        +hLU73pHUPEXalYPJ3MNoU06ZwyMbSE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646844669;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ydrdKSlhrPNxyTjqpwFz/lVnyTdgAwQsHL5yVVlnOA=;
-        b=yLp5xgKJZ2+1DXVn2EKVVMwLVmSTPLl60bWHoe7jQGGzYDxZ+kesslNxqqwqygWh/uLI0o
-        f+LcpnR/hjl7ZWCQ==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 342BAA3BCC;
-        Wed,  9 Mar 2022 16:51:09 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 9C727DA7DE; Wed,  9 Mar 2022 17:47:13 +0100 (CET)
-Date:   Wed, 9 Mar 2022 17:47:13 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>, alexs@kernel.org,
-        arnd@arndb.de, dsterba@suse.com, elver@google.com,
-        jani.nikula@intel.com, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, mark.rutland@arm.com,
-        ndesaulniers@google.com, ojeda@kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: [PATCH 1/4] [v4] Kbuild: add -Wno-shift-negative-value where
- -Wextra is used
-Message-ID: <20220309164713.GX12643@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Arnd Bergmann <arnd@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, alexs@kernel.org,
-        arnd@arndb.de, dsterba@suse.com, elver@google.com,
-        jani.nikula@intel.com, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, mark.rutland@arm.com, ndesaulniers@google.com,
-        ojeda@kernel.org, torvalds@linux-foundation.org
-References: <20220308215615.14183-1-arnd@kernel.org>
- <20220308215615.14183-2-arnd@kernel.org>
+        Wed, 9 Mar 2022 12:00:50 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017D910242A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 08:47:50 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8CE7B3F62D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646844456;
+        bh=t5qKAKCgLHNfxioPnEDa1ge5OiEhv8KjWelueqMtl/A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=G7udQNwdlDinVLi4lSkcaXkUxmniovasE/ECkS5s8BfpVoHxOIbT57dx69hRPYPwL
+         eMgXM4coGsl5N5MnQX2Hrfct+epBo4F1GVKlpnw3fZdW/OkbE2j7Ca2q/whBpX9ckp
+         I6FkxHn/2LTjHcg9pkjliN2BCoxjVb3KFLKAdfEFHdn2SAIiLvkxfFR7jUvAC2vEWM
+         34kGfDSUYOzHngURxXmp7F/u7S9hMPa4FNwcG+FdAjz2BJyRDalTN7ee3sCv4CKWk2
+         JTsDhnXvp1GY2AEeRqLWaPTAVZIBh1qANPfAROeWmOSGDXpqL4hNXnso/gA0yxgtu9
+         rddIdiDrb1+sQ==
+Received: by mail-ed1-f69.google.com with SMTP id o20-20020aa7dd54000000b00413bc19ad08so1594399edw.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=t5qKAKCgLHNfxioPnEDa1ge5OiEhv8KjWelueqMtl/A=;
+        b=r5zGAxSGWvjIP4ksaAZNvXEFmg/ip3igxcpdXM/15leVV8Ra/UxBPrXw9hiBjaJmZE
+         Zn8P4vxeIC4MundlFQ07MAoIn8ThjkyU8SPd0nTbj9MD9gPQlr2reru/G9FDTQgS3n7E
+         Zl9skaUe5wW+gcPLgjeuDYDF7zXGmPwbfkSBRNH9p9ikdm+ZWuUKxeORgLS6v/hPj9Gt
+         f3WqeHJ+ccwPeKEIcu3mC0JjtubeubNEI2MHWtTYA5soiVWrgHe7hPN8aWN7Jf65LnY2
+         i5TUv8ZCzsbQfrrqmXZFNnSiSC3S7UUegc3Leqe21cuhDsDtr7Y7F6GscMG9hrgekkQM
+         oVLg==
+X-Gm-Message-State: AOAM532odCalhtjkypxlbGtHCke111KM6vicbXyB+Sk6bmvcq0ntUMTJ
+        Ex7W3o2R7N+XjR5uPRPbO6uZdJQ0+qq/UiaEy7QRQRwdjZsfdGxBHGhZ3C8lfihDcAF53d3h7Jx
+        dBDDB67zsRWXXh8F16BaQX4YEOY2Fu0fohCcOlPhuNA==
+X-Received: by 2002:a05:6402:486:b0:413:bd00:4f3f with SMTP id k6-20020a056402048600b00413bd004f3fmr326523edv.103.1646844456274;
+        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwsZlug/Jtbf8IyQ3h7CW4SbOa236xZgNhxscDPorwlpm36emowHe5wTeYyk+ubVgN2NAc0dw==
+X-Received: by 2002:a05:6402:486:b0:413:bd00:4f3f with SMTP id k6-20020a056402048600b00413bd004f3fmr326496edv.103.1646844456025;
+        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm1062084edj.8.2022.03.09.08.47.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 08:47:35 -0800 (PST)
+Message-ID: <ba4c44bd-81d7-afd4-3a4a-6a1c6fec6692@canonical.com>
+Date:   Wed, 9 Mar 2022 17:47:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308215615.14183-2-arnd@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to
+ YAML bindings
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        Rob Herring <robh@kernel.org>
+References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+ <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:56:12PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 09/03/2022 16:15, Manivannan Sadhasivam wrote:
+> Convert Qualcomm cpufreq devicetree binding to YAML.
 > 
-> As a preparation for moving to -std=gnu11, turn off the
-> -Wshift-negative-value option. This warning is enabled by gcc when
-> building with -Wextra for c99 or higher, but not for c89. Since
-> the kernel already relies on well-defined overflow behavior,
-> the warning is not helpful and can simply be disabled in
-> all locations that use -Wextra.
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 201 ++++++++++++++++++
+>  2 files changed, 201 insertions(+), 172 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> [v4]
->   split into a separate patch
-> ---
->  drivers/gpu/drm/i915/Makefile          | 1 +
->  drivers/staging/greybus/tools/Makefile | 3 ++-
 
-For
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
->  fs/btrfs/Makefile                      | 1 +
 
-Acked-by: David Sterba <dsterba@suse.com>
+Best regards,
+Krzysztof

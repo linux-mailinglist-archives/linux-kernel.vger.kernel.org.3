@@ -2,137 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3DB4D2C94
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5B44D2C96
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 10:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiCIJzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 04:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S232333AbiCIJza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 04:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiCIJzB (ORCPT
+        with ESMTP id S230522AbiCIJz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:55:01 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED63D0040;
-        Wed,  9 Mar 2022 01:54:02 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id e186so3171987ybc.7;
-        Wed, 09 Mar 2022 01:54:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+14GjQ8VFEaJ8dUWynMaVtyaYThCk9kMBQ49ijA4dTw=;
-        b=VKmwmgf92bzfY8cmDqUGOnt1/KSNzaBsPztW7RcsPFS5ihfrbE3LZXxkU76GStXok+
-         nEtgfYFyngw0vww/JnP9DWYPihbigEDOZbSoCsRUPPrRbhseN0n7E1oXUffK4aszigYa
-         v7TQDrqYjqQGATxbamW4uZ9U6l2jPnM/XbaLGItllOfa1ff9x8jN6uM2BJRP/860pIQp
-         cBk9vMb64VaT36V2KEOhLQmb35S4ZdklzQcZ3KSQZNjcNNmUcel+JVbc3bsS+n+4rV/D
-         aV1SpOk23uiCu/iplJ4XNdkevjYkP7mZrX4cPmw0UYyJISDCeZvji/KEM5SNL9anmot5
-         21LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+14GjQ8VFEaJ8dUWynMaVtyaYThCk9kMBQ49ijA4dTw=;
-        b=5nrNzkpah+Gs9H/YGV/7SBfBePeYzHN5PpoRju41nCEERz3YrQd3W++r+1KHfxoEKg
-         zSPp7QkzP09CAFNlorlbYTkp6uSUGSsjNuqZdfujc/sc1SAZ4a2f7VhO9PF/RCKncyaE
-         AjA4NLlSIjQwXmLL82nJO5AmVtSKVTZ44xevg+7qEHUxaEefzxBLmqTCoEDt/n2B7JEU
-         O5S1e6glQCQTtUjUY56rIsvdbE9puYqKy/twy/XNH3Vc1GY7mwrdDaXI3uehPe1Y2ZqD
-         gKW83H+yxwYd9rsczcSPj8R7EdWyUCWhtabcoNV7eT924a5oZsjj50WMHDRnprfMmfpF
-         WNyQ==
-X-Gm-Message-State: AOAM530yYYZtPmZfNZ2rsWkhKu4QqBz6NISD/qFlPQUYhzCPs79n3wKc
-        eNEee+yPxtj9W0rjyjoSXQvAyqpTICvwjAcL+WY=
-X-Google-Smtp-Source: ABdhPJxmoGUidQHzeLMAoMH3lomCve4BKJC5Mqd1btsoVspGABW7oWKXkAbRZ8Q344/XkqB1JKs/1Bukd0nOxFFcmvw=
-X-Received: by 2002:a25:7504:0:b0:629:308e:9d95 with SMTP id
- q4-20020a257504000000b00629308e9d95mr12948405ybc.106.1646819641703; Wed, 09
- Mar 2022 01:54:01 -0800 (PST)
+        Wed, 9 Mar 2022 04:55:27 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E56C10DA46;
+        Wed,  9 Mar 2022 01:54:28 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554C31650;
+        Wed,  9 Mar 2022 01:54:28 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 720D43FA4D;
+        Wed,  9 Mar 2022 01:54:26 -0800 (PST)
+Date:   Wed, 9 Mar 2022 09:54:24 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sean Kelley <skelley@nvidia.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/3] arch_topology: obtain cpu capacity using
+ information from CPPC
+Message-ID: <Yih5UCRKdYvlD4Bx@bogus>
+References: <20220302180913.13229-1-ionela.voinescu@arm.com>
+ <20220302180913.13229-3-ionela.voinescu@arm.com>
 MIME-Version: 1.0
-References: <20220307162207.188028559@linuxfoundation.org> <Yid4BNbLm3mStBi2@debian>
- <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
- <CA+G9fYv74gGWQLkEZ4idGYri+F9BFV1+9=bz5L0+aophSzDdVA@mail.gmail.com>
- <YifFMPFMp9gPnjPc@kroah.com> <CADVatmMs_+YN3YAajL95fy98iEgoeb-7qXA_ZJ7K3QsdHGG=oA@mail.gmail.com>
- <8f97b76e-fe64-ad9e-fa46-9874df61c35d@roeck-us.net>
-In-Reply-To: <8f97b76e-fe64-ad9e-fa46-9874df61c35d@roeck-us.net>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Wed, 9 Mar 2022 09:53:25 +0000
-Message-ID: <CADVatmNXDx4-vrsyZBeRs8HHYfS3j8OPpS4CGnhQc=uyijgwvQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302180913.13229-3-ionela.voinescu@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 12:53 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/8/22 14:27, Sudip Mukherjee wrote:
-> > On Tue, Mar 8, 2022 at 9:05 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Tue, Mar 08, 2022 at 11:08:10PM +0530, Naresh Kamboju wrote:
-> >>> Hi Greg,
-> >>>
-> >>> On Tue, 8 Mar 2022 at 21:40, Sudip Mukherjee <sudipm.mukherjee@gmail.com> wrote:
-> >>>>
-> >>>> On Tue, Mar 8, 2022 at 3:36 PM Sudip Mukherjee
-> >>>> <sudipm.mukherjee@gmail.com> wrote:
-> >>>>>
-> >>>>> Hi Greg,
-> >>>>>
-> >>>>> On Mon, Mar 07, 2022 at 05:28:50PM +0100, Greg Kroah-Hartman wrote:
-> >>>>>> This is the start of the stable review cycle for the 5.15.27 release.
-> >>>>>> There are 256 patches in this series, all will be posted as a response
-> >>>>>> to this one.  If anyone has any issues with these being applied, please
-> >>>>>> let me know.
-> >>>>>>
-> >>>>
-> >>>> <snip>
-> >>>>
-> >>>>>
-> >>>>> Mips failures,
-> >>>>>
-> >>>>> allmodconfig, gpr_defconfig and mtx1_defconfig fails with:
-> >>>
-> >
-> > <snip>
-> >
-> >>
-> >> Ah, I'll queue up the revert for that in the morning, thanks for finding
-> >> it.  Odd it doesn't trigger the same issue in 5.16.y.
-> >
-> > ohh.. thats odd. I don't build v5.16.y, so never thought of it.
-> > Just checked a little now, and I was expecting it to be fixed by:
-> > e5b40668e930 ("slip: fix macro redefine warning")
-> > but it still has the build error. I will check tomorrow morning what
-> > is missing in v5.15.y
-> > Please delay the revert till tomorrow afternoon.
-> >
->
-> In case you did not get my other e-mail: You also need commit
-> b81e0c2372e ("block: drop unused includes in <linux/genhd.h>").
+On Wed, Mar 02, 2022 at 06:09:12PM +0000, Ionela Voinescu wrote:
+> Define topology_init_cpu_capacity_cppc() to use highest performance
+> values from _CPC objects to obtain and set maximum capacity information
+> for each CPU. acpi_cppc_processor_probe() is a good point at which to
+> trigger the initialization of CPU (u-arch) capacity values, as at this
+> point the highest performance values can be obtained from each CPU's
+> _CPC objects. Architectures can therefore use this functionality
+> through arch_init_invariance_cppc().
+> 
+> The performance scale used by CPPC is a unified scale for all CPUs in
+> the system. Therefore, by obtaining the raw highest performance values
+> from the _CPC objects, and normalizing them on the [0, 1024] capacity
+> scale, used by the task scheduler, we obtain the CPU capacity of each
+> CPU.
+> 
+> While an ACPI Notify(0x85) could alert about a change in the highest
+> performance value, which should in turn retrigger the CPU capacity
+> computations, this notification is not currently handled by the ACPI
+> processor driver. When supported, a call to arch_init_invariance_cppc()
+> would perform the update.
+> 
+> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> Tested-by: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
 
-Thanks Guenter.
-And, I have now verified that both gpr_defconfig and mtx1_defconfig
-passes after cherry-picking these two commits.
+Looks good to me. FWIW,
 
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
--- 
-Regards
-Sudip
+--
+Regards,
+Sudeep

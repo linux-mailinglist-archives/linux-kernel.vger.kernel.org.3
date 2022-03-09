@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1C04D2AF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D994D2AF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 09:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiCIIyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 03:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S231542AbiCIIxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 03:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiCIIyF (ORCPT
+        with ESMTP id S231533AbiCIIxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:54:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F98624BC3;
-        Wed,  9 Mar 2022 00:53:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 9 Mar 2022 03:53:38 -0500
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDC913D1B;
+        Wed,  9 Mar 2022 00:52:38 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59E61B81EAB;
-        Wed,  9 Mar 2022 08:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A855C340E8;
-        Wed,  9 Mar 2022 08:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646815982;
-        bh=wpEIW3SwPpEISRwjNCu5yxdFfn1cnwyk3HFiMUGaj9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=elGmIHCl6AlCPZYydvwXmo45L0wIvPpHHIWHBojLETnoaZ9uFe5Wxh3pT8miC8a+r
-         yswjkGA+w51Dr+kUhpwu6VTRwJZacWx8V3BQGbsaNqA26SBhYe9lDp1ls32Kfd/Lp5
-         jGTWFEAu/FvuSu9hfBYGVWoNOJwRCoDnxifFeu7S73qwh1QryU8ufIaZK8OnITOa76
-         oT9pp2g4XiHlsoBisPlVI1KVm/Wnnx22aQfNfg1J7OM/6XTI8kOCOADhgdwPk0Pc7U
-         /f9TNyBjO1PvSmBgG+BQrAHQAuAPdW5RmS0bHME9yxL4t8Ms6qQS4VMAi/kehdvW00
-         nlvpVY2zdakzQ==
-Date:   Wed, 9 Mar 2022 10:52:18 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2.1 14/30] x86/sgx: Support restricting of enclave
- page permissions
-Message-ID: <YihqwiU3Dr5mvMQx@iki.fi>
-References: <20220304093524.397485-1-jarkko@kernel.org>
- <20220304093524.397485-14-jarkko@kernel.org>
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 7100A100DECB3;
+        Wed,  9 Mar 2022 09:52:36 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 4F75824ADCC; Wed,  9 Mar 2022 09:52:36 +0100 (CET)
+Date:   Wed, 9 Mar 2022 09:52:36 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Raymond Tan <raymond.tan@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
+Message-ID: <20220309085236.GA8259@wunner.de>
+References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
+ <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com>
+ <20220306184857.GA19394@wunner.de>
+ <c2607267-798b-d7a0-86f6-4a729c22911f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220304093524.397485-14-jarkko@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c2607267-798b-d7a0-86f6-4a729c22911f@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 11:35:08AM +0200, Jarkko Sakkinen wrote:
-> +#define SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS \
-> +	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_perm)
+On Mon, Mar 07, 2022 at 12:54:19PM +0200, Ilpo Järvinen wrote:
+> I don't have strong opinion on the actual names myself (every RS-485 
+> transceivers I've come across name their pins to DE and RE).
 
-What if this was replaced with just SGX_IOC_ENCLAVE_RESET_PAGES, which
-would simply do EMODPR with PROT_NONE? The main ingredient of EMODPR is to
-flush out the TLB's, and move a page to pending state, which cannot be done
-from inside the enclave.
+It's true that transceiver datasheets usually call these pins DE and RE,
+but on the UART side, by convention the RTS pin is used to drive DE.
 
-It's there because of microarchitecture constraints, and less so to work as
-a reasonable permission control mechanism (actually it does terrible job on
-that side and only confuses).
+And RTS is then either asserted/deasserted in software (by the kernel
+driver), or by the UART hardware if it's capable of it.
 
-Once you have this magic TLB reset button in place you can just do one
-EACCEPT and EMODPE inside the enclave and you're done.
+Hence the properties in Documentation/devicetree/bindings/serial/rs485.yaml
+and the members in struct serial_rs485 refer to "rts".  It's synonymous
+to DE.  I suppose Synopsys wanted to afford the integrator of the IP core
+as much freedom as possible and therefore offers separate RTS+DE pins
+as well as an RE pin.  But that degree of freedom also leads to confusion,
+particularly if firmware might mux the pins in an unexpected way
+behind the OS's back.
 
-This is also kind of atomic in the sense that EACCEPT free's a page with no
-rights so no misuse can happend before EMODPE has tuned EPCM.
+The RE pin of transceivers is usually either pulled-up (i.e. always
+asserted, full-duplex) or connected to negated RTS (half-duplex).
+A lot of transceivers have a !RE pin so RTS can be wired directly
+to DE and !RE.
 
-BR, Jarkko
+Full-duplex is primarily for RS-422.  If full-duplex is enabled with
+RS-485, you'll receive your own echo, which is often (but not always)
+undesirable (depends on the application).
+
+For simplicity and consistency, it is best if the existing properties
+defined in rs485.yaml are used, instead of defining new ones which
+have the same meaning.  For this reason I'd recommend using
+rs485-rts-active-low for the polarity of the DE pin.
+
+
+> What I think is more important though, is that RE would be by default
+> active low which matches to about every RS485 transceiver expectations.
+> Given what device_property_read_bool does when the property is missing,
+> it would make sense to have the property named as -active-high but I
+> don't know if that breaks some dt naming rule to have them opposites
+> of each other like that?
+
+That's a good point, I agree.  I don't think that would violate any
+DT naming rule.
+
+Thanks,
+
+Lukas

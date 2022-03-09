@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77614D2EEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD264D2EE8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 13:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiCIMTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 07:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S232192AbiCIMTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 07:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiCIMTo (ORCPT
+        with ESMTP id S231360AbiCIMTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:19:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275B3128666
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 04:18:46 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRvH4-0008IN-H2; Wed, 09 Mar 2022 13:18:38 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRvH1-0000g4-SU; Wed, 09 Mar 2022 13:18:35 +0100
-Date:   Wed, 9 Mar 2022 13:18:35 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        paskripkin@gmail.com
-Subject: net: asix: best way to handle orphan PHYs
-Message-ID: <20220309121835.GA15680@pengutronix.de>
+        Wed, 9 Mar 2022 07:19:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688BA12756F;
+        Wed,  9 Mar 2022 04:18:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EC2BB820BE;
+        Wed,  9 Mar 2022 12:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2115C340E8;
+        Wed,  9 Mar 2022 12:18:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646828319;
+        bh=ouY5psTnFaiLJdRe+co0eH84WKKERydwyyVSm5HVlC4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WZibjxDI4fgIuTMPdjg3ggS9j5FvUQCDhWEwYS5RJ4mntXh45Kmq/E1oj/Fx8Myud
+         6Og2USI0j/SaZQ1k6T+LDunPkhtjrPWVMBuasYmtpR7g4AqebI8xvJVi8l48Qa90ZJ
+         x11uIPuDAnlrR9jndrFnmUU1bxyzH9GfjEJ7D7ffi/oLIJWoR5+Mizt8kXZoQeuE+E
+         Ce4Dk0qq9HH3IKstS44leH3E8edQ+il/IYpCIkYvlMmvdFhpqeDUQmshICWQ8CIY6Y
+         /b8/xnsYjy+MX0cB/GpMG2EvekDDH2HOzeUgKPhjiqknb1lewS95qzQmQq0WNhSW0Z
+         ZVccZAdltG42g==
+Date:   Wed, 9 Mar 2022 12:18:35 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Huang Shijie <shijie@os.amperecomputing.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the arm64 tree
+Message-ID: <20220309121834.GC397@willie-the-truck>
+References: <20220309223411.5492e665@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:30:44 up 88 days, 16:16, 77 users,  load average: 0.22, 0.28,
- 0.24
+In-Reply-To: <20220309223411.5492e665@canb.auug.org.au>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,25 +57,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all,
+On Wed, Mar 09, 2022 at 10:34:11PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the arm64 tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/admin-guide/kdump/vmcoreinfo.rst:498: WARNING: Title underline too short.
+> 
+> MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END
+> -------------
+> 
+> Introduced by commit
+> 
+>   2369f171d5c5 ("arm64: crash_core: Export MODULES, VMALLOC, and VMEMMAP ranges")
 
-I have ASIX based USB Ethernet adapter with two PHYs: internal and
-external. The internal PHY is enabled by default and there seems to be
-no way to disable internal PHY on the MAC level without affecting the
-external PHY.
+Cheers, I'll fix this.
 
-What is the preferred method to suspend internal PHY?
-Currently I have following options:
-- suspend PHY in the probe function of the PHY driver
-- get the phydev in the MAC driver and call phy_suspend()
-- whisper magic numbers from the MAC driver directly this the MDIO bus.
-
-Are there other options?
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Will

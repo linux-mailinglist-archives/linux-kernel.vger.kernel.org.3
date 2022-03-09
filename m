@@ -2,102 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF98E4D321D
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7E44D321C
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 16:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbiCIPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 10:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S234002AbiCIPsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 10:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234001AbiCIPry (ORCPT
+        with ESMTP id S234001AbiCIPsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 10:47:54 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495F511629F;
-        Wed,  9 Mar 2022 07:46:54 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id u1so3674918wrg.11;
-        Wed, 09 Mar 2022 07:46:54 -0800 (PST)
+        Wed, 9 Mar 2022 10:48:07 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F9517EDA8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 07:47:07 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id 17so1619019lji.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 07:47:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rUxlp0PyM2gm522aFsSG3DVXlsPAiJ3a25VeEzybOso=;
-        b=Xs/DlaSp6/RycZSWX+MQMeH0V4xoWXtgw6dp6jntcLjOLJBzh6hCLiElYScSsGqAuQ
-         1FMF30zFbNOLeB9emv3r9+qIiFkPtV86EuJEpUh785jpM8896uqd6z/aGDB4mPXZzg63
-         wW5OSRNnNIsHmL4yrUsXQ/JDA629Y9dD5t6Q9PAgsuAMgqPnoF8Emu1HOiXMgnyTPUnd
-         ggkZHpinUnsZQ1woMhtepRF+q9QVyw8p7aZsoBtoTD1T+ixRFzEv8m7GdHPOdpIuTWtX
-         oI6upBdpKf4pDTMuuAoZZ4nBKdEDOigHvYE8Rrzp3vjok6f+mBD6CrVAs1JWo5xzCgst
-         3Iuw==
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=hE+S/0AbaM2pPcNCMSw4Jzqj4RQmx4E5rMxUDwkwLVU=;
+        b=laFC8gg+0MeWXFJEZV67/eLluhTcckbRqcldkSukV2V4XmAwYaFkLQjBdndAn5ZP0z
+         mhC5v9D7OHl09L7LsjRRnYjfzlC2uZYBm8r2wLkackJwepfp1ji5jUdBgGFB7Xl1Iiim
+         vDywbsAA1eY3CPdJe4gJYtx/9yVK2rSlwXTiM2lSaT+G+jyMMS9SRdR0APkgwzhYqOgi
+         CxmkzfsC9VOSf90x7xvDq6sEC0EO6XkbIcdFlQhS1VFkYH1Nip4IAGGcuai3L78Ect2V
+         eAxeu2xkRnfX7sJJUwoWU+N8mtHan/aHTMlgeCvECz6/4TZUHCC+Py1EEOx+/5csKhoU
+         Fidg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rUxlp0PyM2gm522aFsSG3DVXlsPAiJ3a25VeEzybOso=;
-        b=3uQThw7Khoqh1rfVN25rc5XzdAV3OtDC6ZOiTuAkbXqNq+JJy6Hh56fKP1ZTrVg84d
-         Z/Capf3iAUzzGhjszb3O9Vx63qYPV5EgeX7OWnPV361KpiaVGE/nM9XZe4k7/e82xVc9
-         iMloKtApkWftqqAzSwCKSaPyy0IV0vgQhZkPvX+c/zWaxJlGmRjhMXbsXmFC4py5SW/4
-         nbcRFG3TDxwz6J1YCaSo9C6U4fQmnI9kt4INAZgRyWRNENj5X+EdT+9gr3VmhEUzPKRa
-         cVKt2AL4zRbtDQ8JakL7KwfnP3n41ZnDkkb4Wsg37HjQWTStMC+nuWQEIXnaMBOtZq6I
-         OueQ==
-X-Gm-Message-State: AOAM531knjoLzQFaYRvfYmvCrKS45RC3ekfOv2siUrbzyKJoZ9fm/yLH
-        kP4CmKc6LLI+REH2/0a7pdk=
-X-Google-Smtp-Source: ABdhPJxeGdN4zPkYLuIwePnp6MzdSYNfgeNRVT49hltNOfqEuL3Wh5n3y3KgFLzKlu4JT509ECjMYg==
-X-Received: by 2002:a05:6000:2a8:b0:203:7a50:5dfe with SMTP id l8-20020a05600002a800b002037a505dfemr203939wry.260.1646840812758;
-        Wed, 09 Mar 2022 07:46:52 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id o7-20020a5d6707000000b001f067c7b47fsm3089040wru.27.2022.03.09.07.46.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 07:46:52 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <da421a98-cca2-aece-b3a2-eb83e9795801@redhat.com>
-Date:   Wed, 9 Mar 2022 16:46:50 +0100
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=hE+S/0AbaM2pPcNCMSw4Jzqj4RQmx4E5rMxUDwkwLVU=;
+        b=cn+y5RDPm371sbYpkaDj6KRXZaaotjI8DcR6Q2sev/FR5bUHv5onnyUsNAoLuPiOvJ
+         Y7kxZWQF7TngHkZzWcn4SUPqzUH1CgdSdnXGEV4HcjmJ0fARxQIRQMKB3mUjHNjSVkxi
+         FyTDyGfqAMzwKEMZVkAsXtv9KwhyV7NZHf6vXmtRi6rZt7GFiJWmq5rrxcTCOkGT8KQX
+         NyXSYf76Cqmfm4UnJpOuuGhm49Ep+euMPNno5Dk7tfYhxiCxv157XL94doY3pZCo1Swf
+         FSG6sR6zIn/H8PA+zrJZo7CJg5E7dpEpshU9relc22ASxrmsSzIlitmcmEuhMpvY6wQ0
+         ZiBg==
+X-Gm-Message-State: AOAM5309xQHGYLS6SkxjuDEqOnNoGzNrj4fZy0qGWMQilMakQgW8tDC7
+        S93YflFlZgMH5xPHJIhUunb4jQ==
+X-Google-Smtp-Source: ABdhPJyCKiyHoWMiJliNGv/4VA6yAV57wz5RNHLmQ0sm2hKI0o/my/XlW0qWYefrT775v/KuLp8rig==
+X-Received: by 2002:a2e:90ca:0:b0:246:48ce:ba0e with SMTP id o10-20020a2e90ca000000b0024648ceba0emr31858ljg.401.1646840823568;
+        Wed, 09 Mar 2022 07:47:03 -0800 (PST)
+Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
+        by smtp.gmail.com with ESMTPSA id u12-20020a056512128c00b00446499f855dsm455715lfs.78.2022.03.09.07.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 07:47:03 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 06/10] net: dsa: Pass VLAN MSTI migration
+ notifications to driver
+In-Reply-To: <20220303222942.dkz7bfuagkv7hbpp@skbuf>
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-7-tobias@waldekranz.com>
+ <20220303222942.dkz7bfuagkv7hbpp@skbuf>
+Date:   Wed, 09 Mar 2022 16:47:02 +0100
+Message-ID: <87pmmvm8ll.fsf@waldekranz.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] KVM: x86: mark synthetic SMM vmexit as SVM_EXIT_SW
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org
-References: <20220301135526.136554-1-mlevitsk@redhat.com>
- <20220301135526.136554-2-mlevitsk@redhat.com> <Yh5KTtLhRyfmx/ZF@google.com>
- <2fddbfd6b6e68f3f8e972536c27a87ffadbe1911.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <2fddbfd6b6e68f3f8e972536c27a87ffadbe1911.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 18:13, Maxim Levitsky wrote:
-> The fact that we have a stale VM exit reason in vmcb without this
-> patch which can be in theory consumed somewhere down the road.
-> 
-> This stale vm exit reason also appears in the tracs which is
-> very misleading.
+On Fri, Mar 04, 2022 at 00:29, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Tue, Mar 01, 2022 at 11:03:17AM +0100, Tobias Waldekranz wrote:
+>> Add the usual trampoline functionality from the generic DSA layer down
+>> to the drivers for VLAN MSTI migrations.
+>> 
+>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>> ---
+>>  include/net/dsa.h  |  3 +++
+>>  net/dsa/dsa_priv.h |  1 +
+>>  net/dsa/port.c     | 10 ++++++++++
+>>  net/dsa/slave.c    |  6 ++++++
+>>  4 files changed, 20 insertions(+)
+>> 
+>> diff --git a/include/net/dsa.h b/include/net/dsa.h
+>> index cfedcfb86350..cc8acb01bd9b 100644
+>> --- a/include/net/dsa.h
+>> +++ b/include/net/dsa.h
+>> @@ -962,6 +962,9 @@ struct dsa_switch_ops {
+>>  				 struct netlink_ext_ack *extack);
+>>  	int	(*port_vlan_del)(struct dsa_switch *ds, int port,
+>>  				 const struct switchdev_obj_port_vlan *vlan);
+>> +	int	(*vlan_msti_set)(struct dsa_switch *ds,
+>> +				 const struct switchdev_attr *attr);
+>
+> I would rather pass the struct switchdev_vlan_attr and the orig_dev
+> (bridge) as separate arguments here. Or even the struct dsa_bridge, for
+> consistency to the API changes for database isolation.
 
-Let's put it in the commit message:
+Fair point. I'll change.
 
-This makes it a bit easier to read the KVM trace, and avoids
-other potential problems due to a stale vmexit reason in the vmcb.  If
-SVM_EXIT_SW somehow reaches svm_invoke_exit_handler(), instead, 
-svm_check_exit_valid() will return false and a WARN will be logged.
+>> +
+>>  	/*
+>>  	 * Forwarding database
+>>  	 */
+>> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+>> index 07c0ad52395a..87ec0697e92e 100644
+>> --- a/net/dsa/dsa_priv.h
+>> +++ b/net/dsa/dsa_priv.h
+>> @@ -217,6 +217,7 @@ int dsa_port_vlan_filtering(struct dsa_port *dp, bool vlan_filtering,
+>>  			    struct netlink_ext_ack *extack);
+>>  bool dsa_port_skip_vlan_configuration(struct dsa_port *dp);
+>>  int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock);
+>> +int dsa_port_vlan_msti(struct dsa_port *dp, const struct switchdev_attr *attr);
+>>  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
+>>  			bool targeted_match);
+>>  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+>> diff --git a/net/dsa/port.c b/net/dsa/port.c
+>> index d9da425a17fb..5f45cb7d70ba 100644
+>> --- a/net/dsa/port.c
+>> +++ b/net/dsa/port.c
+>> @@ -778,6 +778,16 @@ int dsa_port_bridge_flags(struct dsa_port *dp,
+>>  	return 0;
+>>  }
+>>  
+>> +int dsa_port_vlan_msti(struct dsa_port *dp, const struct switchdev_attr *attr)
+>> +{
+>> +	struct dsa_switch *ds = dp->ds;
+>> +
+>> +	if (!ds->ops->vlan_msti_set)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	return ds->ops->vlan_msti_set(ds, attr);
+>
+> I guess this doesn't need to be a cross-chip notifier event for all
+> switches, because replication to all bridge ports is handled by
+> switchdev_handle_port_attr_set(). Ok. But isn't it called too many times
+> per switch?
 
-Paolo
+It is certainly called more times than necessary. But I'm not aware of
+any way to limit it. Just as with other bridge-global settings like
+ageing timeout, the bridge will just replicate the event to each port,
+not knowing whether some of them belong to the same underlying ASIC or
+not.
+
+We could leverage hwdoms in the bridge to figure that out, but then:
+
+- Drivers that do not implement forward offloading would miss out on
+  this optimization. Unfortunate but not a big deal.
+
+- Since DSA presents multi-chip trees as a single switchdev, the DSA
+  layer would have to replicate the event out to each device. Doable,
+  but feels like a series of its own.
+
+>> +}
+>> +
+>>  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
+>>  			bool targeted_match)
+>>  {
+>> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+>> index 089616206b11..c6ffcd782b5a 100644
+>> --- a/net/dsa/slave.c
+>> +++ b/net/dsa/slave.c
+>> @@ -314,6 +314,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
+>>  
+>>  		ret = dsa_port_bridge_flags(dp, attr->u.brport_flags, extack);
+>>  		break;
+>> +	case SWITCHDEV_ATTR_ID_VLAN_MSTI:
+>> +		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
+>> +			return -EOPNOTSUPP;
+>> +
+>> +		ret = dsa_port_vlan_msti(dp, attr);
+>> +		break;
+>>  	default:
+>>  		ret = -EOPNOTSUPP;
+>>  		break;
+>> -- 
+>> 2.25.1
+>> 

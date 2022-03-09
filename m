@@ -2,239 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0DB4D26FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE83B4D26C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiCICLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 21:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        id S231331AbiCICOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 21:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiCICK5 (ORCPT
+        with ESMTP id S231279AbiCICOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 21:10:57 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2096.outbound.protection.outlook.com [40.107.94.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7EB15A03;
-        Tue,  8 Mar 2022 18:09:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WiKDboI1IE/t2Tc6O7E/l9iQJJx9rxEelvOA+ovTDO7cYjkCJ+1xfzs0Ijg5Eu5bnjbGJ9EDBi4k+wlfEKLzI6ZNwtuqMG7UJI/ZkT4GSIk6716r1gu5Aviy1lTlYx2tkvDsaT2jXb0KAkLZ6JMRX+hzGsIH97EMHfcFRRQemz64VOb41bqjMYlkckPH/WJ3Ke2RDn4RuLwGmvQ+lwyHcSEUGbnw3Kahf4G+DhJT8TRHOQVkS8TMP4orp7aJsHybwiNRO18gHQRD4vyF/8i1pZfiiJlk0OuxlHW1MNnjfSNU4gm26o2zm++WbusrIXD1kbLbx4yKRjoilVpH7mUtPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eteWAvycmXpyij3gbw+29byEw0P5jDvzQvvQI5Z5358=;
- b=WyKvd88MX0lvmEN+7Qu1sPFCFJNANVTStYUu3DONV0nzfmAAmFo7ZgRqh5HJh+nyJDbArawH+SF6bOinTBWlBIz3pgjoLbRqbPr5zB1ibhc0cyn7093xxbS0RcJVt8AFbLBYN86IQ2xrF5k1M2nREtcjcQLOA9jzCwRYBM/riy1cM5q5DouowFo9cvrKC9rHAedqsHZHsqWxgjgasXXl7d14aVKScen8hY93QSjF7I6fPEAtKW3/VfSdQmONfH8tZPb3WHHT6m4dJNUFTDE2nb4jTpnDLaaMnmDtN0b652aLyhlIjm0yG4ws1xgP/0mnrGjw6r58iSP1q8j8+XBgyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+        Tue, 8 Mar 2022 21:14:22 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A005F50
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:13:23 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id o133-20020a25738b000000b0062872621d0eso698050ybc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 18:13:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eteWAvycmXpyij3gbw+29byEw0P5jDvzQvvQI5Z5358=;
- b=EPVAhFuW306dSJyDezojdiuFxbi7jf/NZ6dqEVcmNte1OummMjPxuKBbMZTUekIWNEVrdIfavmlDGfIMV6jMZ6hg4IcYdHmd6l18S6KPbeTwqTL+bJEynPZjvNtE6SaYAATf/L5BORtTcAqDzK7XxxIDr8iH2Ek8Z629qsFOmKg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by BN7PR04MB5362.namprd04.prod.outlook.com (2603:10b6:408:a::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Wed, 9 Mar
- 2022 02:09:57 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 02:09:57 +0000
-Date:   Wed, 9 Mar 2022 10:09:49 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v8 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/ directory
-Message-ID: <20220309020949.GA1219327@anxtwsw-Precision-3640-Tower>
-References: <20220308073431.1217890-1-xji@analogixsemi.com>
- <YicrpWig4kwdh2lg@kuha.fi.intel.com>
- <0fa1e65c-949f-f492-f769-b1f5ed3b181d@roeck-us.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0fa1e65c-949f-f492-f769-b1f5ed3b181d@roeck-us.net>
-X-ClientProxiedBy: HK2PR03CA0061.apcprd03.prod.outlook.com
- (2603:1096:202:17::31) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 46ce7a2d-b297-4522-fe82-08da0171e86d
-X-MS-TrafficTypeDiagnostic: BN7PR04MB5362:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR04MB536275D71E1DA53183E2B3D9C70A9@BN7PR04MB5362.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aZfy6o54SOFhKAQTOj/TM00z1Gh9IoXLaZGVBiW3kcRdnPl1XJvpgXjXxFWOdGZgpooU9zAN3LC7HFedjO1pE0G77Ktv9vojNUnRjVsiEROoW+uZYn8RYpgKh+DKhsTo2cAfIMz3EyJUt4ecwzEKJWj2XUjcxIyO5VP33+btQKW+0sXCQiRP/vAtxAl/7buIKT3hos6Hb68x9Frltz1Ydpbhb/kSNeFj33wV0b9zc77fvR3Jo33WFXkLZmHY3Bp0128Z9l6FF2+mn0IzpeoA8zN8c69IGdZFn/1M6ZifnEPDLN/Z2WvekpwKp2H8x0iY1Wfb/B0WYjjm2USdhVyPNlV3ALq9ucoCK2zh60TYIM1QQ3a3LeNyiOnLr5ZebsTjkjrar3/td6uApdXvu3O3g5TrUg/VYrN2pNJ/iqtyfPxR+7vgXFVbgNyVzWuyySH7mjAwxJHlqlYg3YEaPZ3A+dBaK+rPMVab7rQFdehqNqAJiO5dN4rsiTThFqcRASWNku8IYGxGulrgLpZh20xd8Utq1iFgoJQMbyc4Vi6/iXgbzhR/Ax35/hq1vY/lgEf5ZOOol9Ly4n9iCXfNo4bUlbWIr92W3ubpyyXXaq+QoAqVD9WM0+rYYpIgWq5RxFlr1BngHgxWMUjgzR/9R16PWtWpGDTOGhzoVxQO3f8mngcpoxpY/YMm4MLxCFjqnA9DxfIfahfR62W/f9fmUkw/3w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(5660300002)(4326008)(8676002)(66476007)(66556008)(38350700002)(86362001)(8936002)(33656002)(6916009)(54906003)(66946007)(316002)(33716001)(38100700002)(186003)(2906002)(6506007)(1076003)(9686003)(26005)(53546011)(6512007)(52116002)(55236004)(6486002)(6666004)(508600001)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5irJtAWe0SMSTM6Sq57Ger20Zy2hdtfi7c9+h46VLngDH/S73q3HkTcpNTV+?=
- =?us-ascii?Q?iAoq7ylHIv+mh5eOz8xQH61LBwt7xKxMRsnxtthRCSiN1nATP49jpdwlmES4?=
- =?us-ascii?Q?6QgMjdQC41B8CnB/m8dkyzwZRVl7qQm+apxfh7nWLQROzHzL1rxXmJUVkw0+?=
- =?us-ascii?Q?iGL9p6LlwR5KSfiAEMZAHAyTU5dbV84Qpcz2UBePUcTqDZA+4RRVIvxdXwQC?=
- =?us-ascii?Q?mZ7HQWbesjiVUKQcgOmp6gpNk6/SS4yteyH8kM6OZ0lDYAqSaO+NlzDbVW/2?=
- =?us-ascii?Q?DLiiFKeP1SH5CYjHJVbhzCGnmBzZpZEI4kgJfIg0BoizkI5tMSss2iCI8hN+?=
- =?us-ascii?Q?SwRAtIqPcZ4Kyc9aH9H3QiU+0m4x03FUSsSmzez67VpFIZCkoNQXiQB7fRja?=
- =?us-ascii?Q?51yfAWAhQ/mF4GqN5tLNIMnyD9TAme7gvtlRAs781dnjCHZiVSLTBjfbOZkT?=
- =?us-ascii?Q?LPeEae37b+FOAOuJ7gUzDQ40uINlNH3p1V4Pa6lrwxe1051VHTxX1emtzpC3?=
- =?us-ascii?Q?dQuzgyV2ej1jmtmfsLRPxfPM1c5loOQVQrEVPhwwLvs6O89kVtEUWlMpELXB?=
- =?us-ascii?Q?Ev0FICwUJHIj8mhb45Nbgy0SmfvkwHRD2CCd5UPKtalllzuqc4UF9KznVl1u?=
- =?us-ascii?Q?ofSLMP60Rxx1LN9Sjj0Ind39s6nYNuzBI6WoQkfd28ui3o6KvgAxxGBXnHDM?=
- =?us-ascii?Q?xBN3fIDFEpQfllbEWC7RwDb4a+WP0R7vi3i4+0R7fswa5g+a+g5zYWOMmKNe?=
- =?us-ascii?Q?yfs6edgXTvkN1h6M+f0ooOc7765gKVNeMKMGZX3oe8bUN7UCAaVeccdtaebN?=
- =?us-ascii?Q?EjVK4La7qU1aMaf/5qPQpqkhSYrSjA3Lnded5gK+FCgLfX9urcgyhgeKiTK8?=
- =?us-ascii?Q?V9XuZK2QCYLWEuoa7sQt9eBr6KoD/Skw1QxWKZZ0loLs1UrFntkg5nXkU04N?=
- =?us-ascii?Q?ZvjUCCKT+FL1BK2lrmioK2w6I+d8ezdvX5uRoRzNbrg8fe5Rkz7w2L58lZjz?=
- =?us-ascii?Q?WksQiGpgOFpOktle5QJ26XE5fMKCAWkQNLvrHq/T//p/SCNVotTuC3Z1rfF3?=
- =?us-ascii?Q?RzDcfFj+SNEtyrwSIC94q/WYjMqYP6ZdFA1hQ95/D0fK4sTAoQoLpdh1/oVO?=
- =?us-ascii?Q?ruZhr3n69l4pwdmH/iC+qoUhxhzflY8RwGY9swBqkNWzPHygEFTUqTwu54vv?=
- =?us-ascii?Q?JUV6XeAv7Jfy2HtvqRB+HKM+sOi5vtWAlQQmLawErY1PoM0JUSnKaZGSrfO3?=
- =?us-ascii?Q?psu5W/uj5nCdPGzGCW/u+nBpXi0MKXRrYtCCgjtbjJh4uE+n7P2o2+VOusQf?=
- =?us-ascii?Q?MwcL/me+HNYDXdmLQteUjqFsZPTsID4GXcyxiKvHKVyWgqG5LvuIQuAIXLof?=
- =?us-ascii?Q?MHYLKb/bRHkPTzeR/6GoQt69vVRh7s6gw9c9w/yZRygNZlRdXCZQW5h5xDT2?=
- =?us-ascii?Q?XshKLSUZuWsKuh9LfZ7vrJZIzi3o1P0Ho9AtN+bdlxzxfC4GFB7HnhavuUoA?=
- =?us-ascii?Q?Pe7ej71xy4xkIWhVKxqZ/+DwdNXJIMCv1442WoDFFmKYzXZWhG/ScMcYRajK?=
- =?us-ascii?Q?ms/3pY2Rpf+TL3XX7KMxr+0swuaCNFih72a6LD61zykO6+eUdT1X4tJvktUK?=
- =?us-ascii?Q?6iLJ44TptWjojUYoR2Eiosg=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46ce7a2d-b297-4522-fe82-08da0171e86d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 02:09:57.1456
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BRZl1fQla46JL/+hTVyVkTjqEMGtLaOYKiLz5OXuuR2w3p910eaFidp5B6jL7EgolUA19QMc6NW+inFplGqa1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR04MB5362
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=/sJ3nlCas8nsOUrtOz3SeVY7g1bkFTvApgqorDEPidk=;
+        b=akfTCcBRKAzXM/IM/nB+5OM9uc8clsaxBBZD5xVukSgyhzjaL4WXGabObbO2lr7OLP
+         8XrROUL00THYLksfwtZBGbyG0Y47zl89J20xhf7qaI9MrcOPbqvPwk0KQ/bcNX1Dnb1l
+         UgKy9yPs+fXXCNaks91JiqMD6/mi1a/SLNU9zfdDg/DVFYn4yEP94Bl8l31zI8QDRrS3
+         pSI/IrgxrWjyaI8jy0+B5yztt6CtI8r6Ps+X0SL/7dHi+Db3gul9Yjzkw7lV/0uNN8h6
+         cbZfDmxZ+gxrMunt4iRXCvSrCoc4GmT0YNEk4f3sHCII5XndzTzIBtFkMuNkVGb0UzIk
+         d1zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=/sJ3nlCas8nsOUrtOz3SeVY7g1bkFTvApgqorDEPidk=;
+        b=3WzqC/DX2mThPTe2MkqPAAjDpjVfOHjKMdUNXQGHclE2BzC4I7tn1TMwrpA+yTyOpZ
+         NtgjbSUCmkjsokwTXNVEgs6I+DTzeUQvL295Dtn1k5Qkb4pUkJm98+kV6x/7m5jW7Tiy
+         06jyFIyeVdJHIFUBOksrDPFIGIYL4oFAfb/i+qScBIKsqJrmLytlGekE80SIS1SyWyQG
+         0I46ezR/1Gz1rIkv4/8YapXDtLM/bwxFyUZBkIPCjg47T2Z34PXdSABIQrDWPa72PYZN
+         S8azscNvwNxDLBoHtE3JN5pvBqBT/+4Tx59bDAfQTUcVPNwXfloFfrrv4AXki9cSjxZ0
+         8gFA==
+X-Gm-Message-State: AOAM533wIyWH22erRQWegB5D9S4tD11VCQKQc9AE4ul2xsIMw39zsMpN
+        C4dLT7RD5gqWeaSKb2nn8ikwwxSezkM=
+X-Google-Smtp-Source: ABdhPJwHjXfX568wOeS1Idk6Y0aJBYjcdxqcFFs9/ZAMnIjvbAvn/ZwTZpZEGSAoGjwlDRT5ih1Tx0n+2UA=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:57a6:54a6:aad1:c0a8])
+ (user=yuzhao job=sendgmr) by 2002:a25:da0f:0:b0:628:81ee:39a7 with SMTP id
+ n15-20020a25da0f000000b0062881ee39a7mr14425244ybf.646.1646792002814; Tue, 08
+ Mar 2022 18:13:22 -0800 (PST)
+Date:   Tue,  8 Mar 2022 19:12:17 -0700
+Message-Id: <20220309021230.721028-1-yuzhao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v9 00/14] Multi-Gen LRU Framework
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Yu Zhao <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 06:41:27AM -0800, Guenter Roeck wrote:
-> On 3/8/22 02:10, Heikki Krogerus wrote:
-> > On Tue, Mar 08, 2022 at 03:34:28PM +0800, Xin Ji wrote:
-> > > As for convenience use TCPCI register definition, move tcpci.h to
-> > > include/linux/usb/ directory.
-> > 
-> > To be honest, I was still hoping for a better explanation here.
-> > 
-> > The reason why this header is made global is because some USB PD
-> > controllers - PD controllers consisting of a microcontroller
-> > (acting as the TCPM) and a port controller (TCPC) - may require that
-> > the driver for the PD controller accesses directly also the on-chip
-> > port controller in some cases.
-> > 
-> > I was hoping that that was explained in the commit message somehow.
-> > 
-> 
-> Same here.
-> 
-> Guenter
+What's new
+==========
+Removed CONFIG_NR_LRU_GENS and CONFIG_TIERS_PER_GEN.
 
-Hi heikki, Guenter, OK, I'll add it in the commit message.
+TLDR
+====
+The current page reclaim is too expensive in terms of CPU usage and it
+often makes poor choices about what to evict. This patchset offers an
+alternative solution that is performant, versatile and
+straightforward.
 
-Thanks,
-Xin
+Patchset overview
+=================
+The design and implementation overview is in patch 14:
+https://lore.kernel.org/lkml/20220309021230.721028-15-yuzhao@google.com/
 
-> 
-> > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > 
-> > > ---
-> > > V7 -> V8: Fix Guanter's comment, remove unnecessary explain.
-> > > ---
-> > >   drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
-> > >   drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
-> > >   drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
-> > >   drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
-> > >   {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
-> > >   5 files changed, 5 insertions(+), 7 deletions(-)
-> > >   rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
-> > > 
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > > index e07d26a3cd8e..9c907296596f 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > > @@ -13,11 +13,10 @@
-> > >   #include <linux/property.h>
-> > >   #include <linux/regmap.h>
-> > >   #include <linux/usb/pd.h>
-> > > +#include <linux/usb/tcpci.h>
-> > >   #include <linux/usb/tcpm.h>
-> > >   #include <linux/usb/typec.h>
-> > > -#include "tcpci.h"
-> > > -
-> > >   #define	PD_RETRY_COUNT_DEFAULT			3
-> > >   #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
-> > >   #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > > index df2505570f07..4b6705f3d7b7 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > > @@ -11,11 +11,10 @@
-> > >   #include <linux/module.h>
-> > >   #include <linux/regmap.h>
-> > >   #include <linux/usb/pd.h>
-> > > +#include <linux/usb/tcpci.h>
-> > >   #include <linux/usb/tcpm.h>
-> > >   #include <linux/usb/typec.h>
-> > > -#include "tcpci.h"
-> > > -
-> > >   #define PD_ACTIVITY_TIMEOUT_MS				10000
-> > >   #define TCPC_VENDOR_ALERT				0x80
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> > > index f1bd9e09bc87..9e0338bce7ef 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> > > @@ -11,10 +11,9 @@
-> > >   #include <linux/of.h>
-> > >   #include <linux/platform_device.h>
-> > >   #include <linux/regmap.h>
-> > > +#include <linux/usb/tcpci.h>
-> > >   #include <linux/usb/tcpm.h>
-> > > -#include "tcpci.h"
-> > > -
-> > >   #define MT6360_REG_VCONNCTRL1	0x8C
-> > >   #define MT6360_REG_MODECTRL2	0x8F
-> > >   #define MT6360_REG_SWRESET	0xA0
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > > index b56a0880a044..3291ca4948da 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > > @@ -10,9 +10,9 @@
-> > >   #include <linux/i2c.h>
-> > >   #include <linux/interrupt.h>
-> > >   #include <linux/gpio/consumer.h>
-> > > +#include <linux/usb/tcpci.h>
-> > >   #include <linux/usb/tcpm.h>
-> > >   #include <linux/regmap.h>
-> > > -#include "tcpci.h"
-> > >   #define RT1711H_VID		0x29CF
-> > >   #define RT1711H_PID		0x1711
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
-> > > similarity index 99%
-> > > rename from drivers/usb/typec/tcpm/tcpci.h
-> > > rename to include/linux/usb/tcpci.h
-> > > index b2edd45f13c6..20c0bedb8ec8 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci.h
-> > > +++ b/include/linux/usb/tcpci.h
-> > > @@ -9,6 +9,7 @@
-> > >   #define __LINUX_USB_TCPCI_H
-> > >   #include <linux/usb/typec.h>
-> > > +#include <linux/usb/tcpm.h>
-> > >   #define TCPC_VENDOR_ID			0x0
-> > >   #define TCPC_PRODUCT_ID			0x2
-> > > -- 
-> > > 2.25.1
-> > 
+01. mm: x86, arm64: add arch_has_hw_pte_young()
+02. mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+Take advantage of hardware features when trying to clear the accessed
+bit in many PTEs.
+
+03. mm/vmscan.c: refactor shrink_node()
+04. Revert "include/linux/mm_inline.h: fold __update_lru_size() into
+    its sole caller"
+Minor refactors to improve readability for the following patches.
+
+05. mm: multi-gen LRU: groundwork
+Adds the basic data structure and the functions that insert pages to
+and remove pages from the multi-gen LRU (MGLRU) lists.
+
+06. mm: multi-gen LRU: minimal implementation
+A minimal implementation without any optimizations.
+
+07. mm: multi-gen LRU: exploit locality in rmap
+Exploits spatial locality to improve efficiency when using the rmap.
+
+08. mm: multi-gen LRU: support page table walks
+Further exploits spatial locality by optionally scanning page tables.
+
+09. mm: multi-gen LRU: optimize multiple memcgs
+Optimizes the overall performance for multiple memcgs running mixed
+types of workloads.
+
+10. mm: multi-gen LRU: kill switch
+Adds a kill switch to enable or disable MGLRU at runtime.
+
+11. mm: multi-gen LRU: thrashing prevention
+12. mm: multi-gen LRU: debugfs interface
+Provide userspace with features like thrashing prevention, working set
+estimation and proactive reclaim.
+
+13. mm: multi-gen LRU: admin guide
+14. mm: multi-gen LRU: design doc
+Add an admin guide and a design doc.
+
+Benchmark results
+=================
+Independent lab results
+-----------------------
+Based on the popularity of searches [01] and the memory usage in
+Google's public cloud, the most popular open-source memory-hungry
+applications, in alphabetical order, are:
+      Apache Cassandra      Memcached
+      Apache Hadoop         MongoDB
+      Apache Spark          PostgreSQL
+      MariaDB (MySQL)       Redis
+
+An independent lab evaluated MGLRU with the most widely used benchmark
+suites for the above applications. They posted 960 data points along
+with kernel metrics and perf profiles collected over more than 500
+hours of total benchmark time. Their final reports show that, with 95%
+confidence intervals (CIs), the above applications all performed
+significantly better for at least part of their benchmark matrices.
+
+On 5.14:
+1. Apache Spark [02] took 95% CIs [9.28, 11.19]% and [12.20, 14.93]%
+   less wall time to sort three billion random integers, respectively,
+   under the medium- and the high-concurrency conditions, when
+   overcommitting memory. There were no statistically significant
+   changes in wall time for the rest of the benchmark matrix.
+2. MariaDB [03] achieved 95% CIs [5.24, 10.71]% and [20.22, 25.97]%
+   more transactions per minute (TPM), respectively, under the medium-
+   and the high-concurrency conditions, when overcommitting memory.
+   There were no statistically significant changes in TPM for the rest
+   of the benchmark matrix.
+3. Memcached [04] achieved 95% CIs [23.54, 32.25]%, [20.76, 41.61]%
+   and [21.59, 30.02]% more operations per second (OPS), respectively,
+   for sequential access, random access and Gaussian (distribution)
+   access, when THP=always; 95% CIs [13.85, 15.97]% and
+   [23.94, 29.92]% more OPS, respectively, for random access and
+   Gaussian access, when THP=never. There were no statistically
+   significant changes in OPS for the rest of the benchmark matrix.
+4. MongoDB [05] achieved 95% CIs [2.23, 3.44]%, [6.97, 9.73]% and
+   [2.16, 3.55]% more operations per second (OPS), respectively, for
+   exponential (distribution) access, random access and Zipfian
+   (distribution) access, when underutilizing memory; 95% CIs
+   [8.83, 10.03]%, [21.12, 23.14]% and [5.53, 6.46]% more OPS,
+   respectively, for exponential access, random access and Zipfian
+   access, when overcommitting memory.
+
+On 5.15:
+5. Apache Cassandra [06] achieved 95% CIs [1.06, 4.10]%, [1.94, 5.43]%
+   and [4.11, 7.50]% more operations per second (OPS), respectively,
+   for exponential (distribution) access, random access and Zipfian
+   (distribution) access, when swap was off; 95% CIs [0.50, 2.60]%,
+   [6.51, 8.77]% and [3.29, 6.75]% more OPS, respectively, for
+   exponential access, random access and Zipfian access, when swap was
+   on.
+6. Apache Hadoop [07] took 95% CIs [5.31, 9.69]% and [2.02, 7.86]%
+   less average wall time to finish twelve parallel TeraSort jobs,
+   respectively, under the medium- and the high-concurrency
+   conditions, when swap was on. There were no statistically
+   significant changes in average wall time for the rest of the
+   benchmark matrix.
+7. PostgreSQL [08] achieved 95% CI [1.75, 6.42]% more transactions per
+   minute (TPM) under the high-concurrency condition, when swap was
+   off; 95% CIs [12.82, 18.69]% and [22.70, 46.86]% more TPM,
+   respectively, under the medium- and the high-concurrency
+   conditions, when swap was on. There were no statistically
+   significant changes in TPM for the rest of the benchmark matrix.
+8. Redis [09] achieved 95% CIs [0.58, 5.94]%, [6.55, 14.58]% and
+   [11.47, 19.36]% more total operations per second (OPS),
+   respectively, for sequential access, random access and Gaussian
+   (distribution) access, when THP=always; 95% CIs [1.27, 3.54]%,
+   [10.11, 14.81]% and [8.75, 13.64]% more total OPS, respectively,
+   for sequential access, random access and Gaussian access, when
+   THP=never.
+
+Our lab results
+---------------
+To supplement the above results, we ran the following benchmark suites
+on 5.16-rc7 and found no regressions [10]. (These synthetic benchmarks
+are popular among MM developers, but we prefer large-scale A/B
+experiments to validate improvements.)
+      fs_fio_bench_hdd_mq      pft
+      fs_lmbench               pgsql-hammerdb
+      fs_parallelio            redis
+      fs_postmark              stream
+      hackbench                sysbenchthread
+      kernbench                tpcc_spark
+      memcached                unixbench
+      multichase               vm-scalability
+      mutilate                 will-it-scale
+      nginx
+
+[01] https://trends.google.com
+[02] https://lore.kernel.org/lkml/20211102002002.92051-1-bot@edi.works/
+[03] https://lore.kernel.org/lkml/20211009054315.47073-1-bot@edi.works/
+[04] https://lore.kernel.org/lkml/20211021194103.65648-1-bot@edi.works/
+[05] https://lore.kernel.org/lkml/20211109021346.50266-1-bot@edi.works/
+[06] https://lore.kernel.org/lkml/20211202062806.80365-1-bot@edi.works/
+[07] https://lore.kernel.org/lkml/20211209072416.33606-1-bot@edi.works/
+[08] https://lore.kernel.org/lkml/20211218071041.24077-1-bot@edi.works/
+[09] https://lore.kernel.org/lkml/20211122053248.57311-1-bot@edi.works/
+[10] https://lore.kernel.org/lkml/20220104202247.2903702-1-yuzhao@google.com/
+
+Read-world applications
+=======================
+Third-party testimonials
+------------------------
+Konstantin reported [11]:
+   I have Archlinux with 8G RAM + zswap + swap. While developing, I
+   have lots of apps opened such as multiple LSP-servers for different
+   langs, chats, two browsers, etc... Usually, my system gets quickly
+   to a point of SWAP-storms, where I have to kill LSP-servers,
+   restart browsers to free memory, etc, otherwise the system lags
+   heavily and is barely usable.
+   
+   1.5 day ago I migrated from 5.11.15 kernel to 5.12 + the LRU
+   patchset, and I started up by opening lots of apps to create memory
+   pressure, and worked for a day like this. Till now I had not a
+   single SWAP-storm, and mind you I got 3.4G in SWAP. I was never
+   getting to the point of 3G in SWAP before without a single
+   SWAP-storm.
+
+Vaibhav from IBM reported [12]:
+   In a synthetic MongoDB Benchmark, seeing an average of ~19%
+   throughput improvement on POWER10(Radix MMU + 64K Page Size) with
+   MGLRU patches on top of v5.16 kernel for MongoDB + YCSB across
+   three different request distributions, namely, Exponential, Uniform
+   and Zipfan.
+
+Shuang from U of Rochester reported [13]:
+   With the MGLRU, fio achieved 95% CIs [38.95, 40.26]%, [4.12, 6.64]%
+   and [9.26, 10.36]% higher throughput, respectively, for random
+   access, Zipfian (distribution) access and Gaussian (distribution)
+   access, when the average number of jobs per CPU is 1; 95% CIs
+   [42.32, 49.15]%, [9.44, 9.89]% and [20.99, 22.86]% higher
+   throughput, respectively, for random access, Zipfian access and
+   Gaussian access, when the average number of jobs per CPU is 2.
+
+Daniel from Michigan Tech reported [14]:
+   With Memcached allocating ~100GB of byte-addressable Optante,
+   performance improvement in terms of throughput (measured as queries
+   per second) was about 10% for a series of workloads.
+
+Large-scale deployments
+-----------------------
+The downstream kernels that have been using MGLRU include:
+1. Android ARCVM [15]
+2. Arch Linux Zen [16]
+3. Chrome OS [17]
+4. Liquorix [18]
+5. post-factum [19]
+6. XanMod [20]
+
+We've rolled out MGLRU to tens of millions of Chrome OS users and
+about a million Android users. Google's fleetwide profiling [21] shows
+an overall 40% decrease in kswapd CPU usage, in addition to
+improvements in other UX metrics, e.g., an 85% decrease in the number
+of low-memory kills at the 75th percentile and an 18% decrease in
+rendering latency at the 50th percentile.
+
+[11] https://lore.kernel.org/lkml/140226722f2032c86301fbd326d91baefe3d7d23.camel@yandex.ru/
+[12] https://lore.kernel.org/lkml/87czj3mux0.fsf@vajain21.in.ibm.com/
+[13] https://lore.kernel.org/lkml/20220105024423.26409-1-szhai2@cs.rochester.edu/
+[14] https://lore.kernel.org/linux-mm/CA+4-3vksGvKd18FgRinxhqHetBS1hQekJE2gwco8Ja-bJWKtFw@mail.gmail.com/
+[15] https://chromium.googlesource.com/chromiumos/third_party/kernel
+[16] https://archlinux.org
+[17] https://chromium.org
+[18] https://liquorix.net
+[19] https://gitlab.com/post-factum/pf-kernel
+[20] https://xanmod.org
+[21] https://research.google/pubs/pub44271/
+
+Summery
+=======
+The facts are:
+1. The independent lab results and the real-world applications
+   indicate substantial improvements; there are no known regressions.
+2. Thrashing prevention, working set estimation and proactive reclaim
+   work out of the box; there are no equivalent solutions.
+3. There is a lot of new code; no one has demonstrated smaller changes
+   with similar effects.
+
+Our options, accordingly, are:
+1. Given the amount of evidence, the reported improvements will likely
+   materialize for a wide range of workloads.
+2. Gauging the interest from the past discussions [22][23][24], the
+   new features will likely be put to use for both personal computers
+   and data centers.
+3. Based on Google's track record, the new code will likely be well
+   maintained in the long term. It'd be more difficult if not
+   impossible to achieve similar effects on top of the existing
+   design.
+
+[22] https://lore.kernel.org/lkml/20201005081313.732745-1-andrea.righi@canonical.com/
+[23] https://lore.kernel.org/lkml/20210716081449.22187-1-sj38.park@gmail.com/
+[24] https://lore.kernel.org/lkml/20211130201652.2218636d@mail.inbox.lv/
+
+Yu Zhao (14):
+  mm: x86, arm64: add arch_has_hw_pte_young()
+  mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+  mm/vmscan.c: refactor shrink_node()
+  Revert "include/linux/mm_inline.h: fold __update_lru_size() into its
+    sole caller"
+  mm: multi-gen LRU: groundwork
+  mm: multi-gen LRU: minimal implementation
+  mm: multi-gen LRU: exploit locality in rmap
+  mm: multi-gen LRU: support page table walks
+  mm: multi-gen LRU: optimize multiple memcgs
+  mm: multi-gen LRU: kill switch
+  mm: multi-gen LRU: thrashing prevention
+  mm: multi-gen LRU: debugfs interface
+  mm: multi-gen LRU: admin guide
+  mm: multi-gen LRU: design doc
+
+ Documentation/admin-guide/mm/index.rst        |    1 +
+ Documentation/admin-guide/mm/multigen_lru.rst |  146 +
+ Documentation/vm/index.rst                    |    1 +
+ Documentation/vm/multigen_lru.rst             |  156 +
+ arch/Kconfig                                  |    9 +
+ arch/arm64/include/asm/pgtable.h              |   14 +-
+ arch/x86/Kconfig                              |    1 +
+ arch/x86/include/asm/pgtable.h                |    9 +-
+ arch/x86/mm/pgtable.c                         |    5 +-
+ fs/exec.c                                     |    2 +
+ fs/fuse/dev.c                                 |    3 +-
+ include/linux/cgroup.h                        |   15 +-
+ include/linux/memcontrol.h                    |   36 +
+ include/linux/mm.h                            |    8 +
+ include/linux/mm_inline.h                     |  217 +-
+ include/linux/mm_types.h                      |   78 +
+ include/linux/mmzone.h                        |  211 ++
+ include/linux/nodemask.h                      |    1 +
+ include/linux/page-flags-layout.h             |   11 +-
+ include/linux/page-flags.h                    |    4 +-
+ include/linux/pgtable.h                       |   17 +-
+ include/linux/sched.h                         |    4 +
+ include/linux/swap.h                          |    5 +
+ kernel/bounds.c                               |    7 +
+ kernel/cgroup/cgroup-internal.h               |    1 -
+ kernel/exit.c                                 |    1 +
+ kernel/fork.c                                 |    9 +
+ kernel/sched/core.c                           |    1 +
+ mm/Kconfig                                    |   26 +
+ mm/huge_memory.c                              |    3 +-
+ mm/memcontrol.c                               |   27 +
+ mm/memory.c                                   |   39 +-
+ mm/mm_init.c                                  |    6 +-
+ mm/mmzone.c                                   |    2 +
+ mm/rmap.c                                     |    7 +
+ mm/swap.c                                     |   55 +-
+ mm/vmscan.c                                   | 2824 ++++++++++++++++-
+ mm/workingset.c                               |  119 +-
+ 38 files changed, 3934 insertions(+), 147 deletions(-)
+ create mode 100644 Documentation/admin-guide/mm/multigen_lru.rst
+ create mode 100644 Documentation/vm/multigen_lru.rst
+
+-- 
+2.35.1.616.g0bdcbb4464-goog
+

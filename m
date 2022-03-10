@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAD34D4E92
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE19D4D4ED1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243189AbiCJQTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S242177AbiCJQSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241737AbiCJQRw (ORCPT
+        with ESMTP id S242201AbiCJQSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:17:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DBDE190C16
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646929009;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m0zrrGDSu3YpWsafJE6HK4NAMWnjg+E7bcoPNDsGgLA=;
-        b=hu8P5O0Skx4PX12blbhmF6redb+3kaqVoS0YSHlvmhoqKY9HBtcDihBfyIZegXUfH5FxEw
-        dm+hLZwtM2YNs5zkx1aQcJYOYDuJEja2tNkvButg18Uu5RC/EtFjaE7U94gyQpQNhpvulj
-        mgErQkJ47N+AD/Ca6y4RGnlBgwEQ+Rk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-oBrO6CweM-uyQIPhsOA3Gw-1; Thu, 10 Mar 2022 11:16:46 -0500
-X-MC-Unique: oBrO6CweM-uyQIPhsOA3Gw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EDF78824FA7;
-        Thu, 10 Mar 2022 16:16:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B11CC86C33;
-        Thu, 10 Mar 2022 16:16:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 06/20] netfs: Adjust the netfs_rreq tracepoint slightly
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@redhat.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 10 Mar 2022 16:16:26 +0000
-Message-ID: <164692898684.2099075.12153225958137716567.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
-References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Thu, 10 Mar 2022 11:18:06 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6801B190C20
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:17:01 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id a14so4970830qtx.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o3XiKem00gLr34GESQrNS9nG0HHXcvKwNDWv//lSnUM=;
+        b=1fMvNcrI8SVPpYX5QeQXT/4iXJRVTUzJeQd1sa60b2pCKrmUm9NbtttV/Kyt8R5muB
+         bwwpBmP5tj0wbJabkvNrWbTYUMXQ1ir91xgoRqdvbXkVfhQPTYQ2Y58FwiFCM26tzVbr
+         rroGMlE+9VDqfWr13l06K8AMZkyhLkkDKU694V6IZoQSJyDXELYvYuJ4s+lSC5LUu0g/
+         0arzgD1FEFOxFyaqL4DMiESYWo/unfntY4t++86tkpIS0ezudYQGGho2nAf+HLE9zipp
+         kEEr1OwgMF4GSXwLeMJUoCjOrHkm8LUYuUshvd6q/YZLWgS2P5DB8KKNgkzJ9IqxuIbK
+         atyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o3XiKem00gLr34GESQrNS9nG0HHXcvKwNDWv//lSnUM=;
+        b=GQilf8NfBTge1x/751pvGlUY18ECb58kgSeBE5ceWFvT6CrTUBWgY8ZUnwHvJhQ5ez
+         sGb+FZdb5YFX26ZEI5laydXa51QpmMC6fKL9JzMS0DOEUcF6AtDB9rYAmv/veoFdHFnW
+         L2s2t+xLE1iKDKR2ZgKPQ6jfXWyTgXkfklfSteNxyCjY0Hj7wrPVzaqRqzacqoYdMMW6
+         Us98QsMUCl9GxWEFgaokeaAmL1vvedkQas2Q7pQXnmPnzwKUBQAb3j+Xo4cn3bw98z7b
+         8Riz60ge16aWexEH9L5OXJVdgDPVJDlxfSIauPiLZ6AIe4+lrFYy7l2PjHx0XvVv9Ruz
+         Kc3Q==
+X-Gm-Message-State: AOAM530K/f5z5yYPoVpTjpo98p+bw4xRl3p1iN0sfxv+KSRrY4xV/9iG
+        dw439231E65caBVfXY9qCQjwSA==
+X-Google-Smtp-Source: ABdhPJxHk9T5sCR1iHYOfvBRYoGqWAwMh2DfAxFoPQdXl/cWJ0bsam+OAT9uib4F75e/XrCLQt9oiw==
+X-Received: by 2002:ac8:5fd1:0:b0:2d9:4547:9ddb with SMTP id k17-20020ac85fd1000000b002d945479ddbmr4468324qta.149.1646929020380;
+        Thu, 10 Mar 2022 08:17:00 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:5de6])
+        by smtp.gmail.com with ESMTPSA id f14-20020ac8068e000000b002dd1bc00eadsm3187735qth.93.2022.03.10.08.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 08:17:00 -0800 (PST)
+Date:   Thu, 10 Mar 2022 11:16:41 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     cgel.zte@gmail.com, axboe@kernel.dk, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: remove PSI annotations from submit_bio
+Message-ID: <YiokaQLWeulWpiCx@cmpxchg.org>
+References: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
+ <Yij9eygSYy5MSIA0@cmpxchg.org>
+ <Yime3HdbEqFgRVtO@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yime3HdbEqFgRVtO@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust the netfs_rreq tracepoint to include the origin of the request and
-to increase the size of the "what trace" output strings by a character so
-that "ENCRYPT" and "DECRYPT" will fit without abbreviation.
+On Wed, Mar 09, 2022 at 10:46:52PM -0800, Christoph Hellwig wrote:
+> On Wed, Mar 09, 2022 at 02:18:19PM -0500, Johannes Weiner wrote:
+> > On Wed, Mar 09, 2022 at 09:43:24AM +0000, cgel.zte@gmail.com wrote:
+> > > From: Yang Yang <yang.yang29@zte.com.cn>
+> > > 
+> > > psi tracks the time spent submitting the IO of refaulting pages[1].
+> > > But after we tracks refault stalls from swap_readpage[2][3], there
+> > > is no need to do so anymore. Since swap_readpage already includes
+> > > IO submitting time.
+> > > 
+> > > [1] commit b8e24a9300b0 ("block: annotate refault stalls from IO submission")
+> > > [2] commit 937790699be9 ("mm/page_io.c: annotate refault stalls from swap_readpage")
+> > > [3] commit 2b413a1a728f ("mm: page_io: fix psi memory pressure error on cold swapins")
+> > > 
+> > > Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> > > Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+> > 
+> > It's still needed by file cache refaults!
+> 
+> Can we get proper annotations for those please?  These bio-level hooks are
+> horrible and a maintainance nightmware.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/164622996715.3564931.4252319907990358129.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/164678199468.1200972.17275585970238114726.stgit@warthog.procyon.org.uk/ # v2
----
+The first version did that, but it was sprawling and not well-received:
 
- fs/netfs/read_helper.c       |    2 +-
- include/trace/events/netfs.h |   18 +++++++++---------
- 2 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
-index ef23ef9889d5..181aeda32649 100644
---- a/fs/netfs/read_helper.c
-+++ b/fs/netfs/read_helper.c
-@@ -181,7 +181,7 @@ static void netfs_rreq_do_write_to_cache(struct netfs_io_request *rreq)
- 	struct iov_iter iter;
- 	int ret;
- 
--	trace_netfs_rreq(rreq, netfs_rreq_trace_write);
-+	trace_netfs_rreq(rreq, netfs_rreq_trace_copy);
- 
- 	/* We don't want terminating writes trying to wake us up whilst we're
- 	 * still going through the list.
-diff --git a/include/trace/events/netfs.h b/include/trace/events/netfs.h
-index b40809c0bd74..0c7a26c4d11c 100644
---- a/include/trace/events/netfs.h
-+++ b/include/trace/events/netfs.h
-@@ -22,13 +22,13 @@
- 	E_(netfs_read_trace_write_begin,	"WRITEBEGN")
- 
- #define netfs_rreq_traces					\
--	EM(netfs_rreq_trace_assess,		"ASSESS")	\
--	EM(netfs_rreq_trace_done,		"DONE  ")	\
--	EM(netfs_rreq_trace_free,		"FREE  ")	\
--	EM(netfs_rreq_trace_resubmit,		"RESUBM")	\
--	EM(netfs_rreq_trace_unlock,		"UNLOCK")	\
--	EM(netfs_rreq_trace_unmark,		"UNMARK")	\
--	E_(netfs_rreq_trace_write,		"WRITE ")
-+	EM(netfs_rreq_trace_assess,		"ASSESS ")	\
-+	EM(netfs_rreq_trace_copy,		"COPY   ")	\
-+	EM(netfs_rreq_trace_done,		"DONE   ")	\
-+	EM(netfs_rreq_trace_free,		"FREE   ")	\
-+	EM(netfs_rreq_trace_resubmit,		"RESUBMT")	\
-+	EM(netfs_rreq_trace_unlock,		"UNLOCK ")	\
-+	E_(netfs_rreq_trace_unmark,		"UNMARK ")
- 
- #define netfs_sreq_sources					\
- 	EM(NETFS_FILL_WITH_ZEROES,		"ZERO")		\
-@@ -134,7 +134,7 @@ TRACE_EVENT(netfs_rreq,
- 
- 	    TP_STRUCT__entry(
- 		    __field(unsigned int,		rreq		)
--		    __field(unsigned short,		flags		)
-+		    __field(unsigned int,		flags		)
- 		    __field(enum netfs_rreq_trace,	what		)
- 			     ),
- 
-@@ -182,8 +182,8 @@ TRACE_EVENT(netfs_sreq,
- 
- 	    TP_printk("R=%08x[%u] %s %s f=%02x s=%llx %zx/%zx e=%d",
- 		      __entry->rreq, __entry->index,
--		      __print_symbolic(__entry->what, netfs_sreq_traces),
- 		      __print_symbolic(__entry->source, netfs_sreq_sources),
-+		      __print_symbolic(__entry->what, netfs_sreq_traces),
- 		      __entry->flags,
- 		      __entry->start, __entry->transferred, __entry->len,
- 		      __entry->error)
-
-
+https://lkml.org/lkml/2019/7/22/1261

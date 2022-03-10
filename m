@@ -2,117 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5A44D5092
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D034D5091
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245032AbiCJRbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        id S245038AbiCJRcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236035AbiCJRbo (ORCPT
+        with ESMTP id S236035AbiCJRcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:31:44 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDBCF32B6;
-        Thu, 10 Mar 2022 09:30:43 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id v62so6796686vsv.1;
-        Thu, 10 Mar 2022 09:30:43 -0800 (PST)
+        Thu, 10 Mar 2022 12:32:31 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED54AF5402
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:31:28 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id a14so5180213qtx.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:31:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kKv9p8ykc5d2ocj7ReSJuSuri2exBdglIdzEyvs2e3Y=;
-        b=CwHCW2iavwpF6S7Yi6aHLObRzx1aWxE/oHa540V+jFaR+IFHdSvAoPtyQm6IclPdxC
-         4fUJEue4mLHmhgpJG4wRn2MkXJoC2SOs0Hd/4dZmkylkQHl+heHUWkez3pDaCKAmR/kc
-         R66WBeP4+c5Gi5JhHkOhlRBkLtpso5L6+Ce41UjJLGqcXBokvof2MZ/beLwWwkS/O8Om
-         YXdg1zEM5htXzRbm8eyImJowLMGHVtr3gFGG0MnVsQsYk3qemfTUkf8ieJcQF/tCNGAm
-         EFJJpXwBilvent1vIwOCTq00kcV0wEpPqZfsBS4dArWvUfXBmBbZtpsAlx5ARf3RBCWO
-         2N1g==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i7J8e206Bwozad+xJPF02nCEZhsFp5sZ0xZvk63VV68=;
+        b=UkGo0vpr4SaQ7VeIYfKdoCqVYOfqyZ3ua0gxQaiJfTvuIAdcEhC7UzaOYUa+8sTpBI
+         wYGfW0Oyu3FfBBXPWw6SmL7k9/Ix6fjwuGHvkSm5lrOgl0ENo1rP0RrjvEBxzxAp03Gh
+         zQ/3YctkGkQXC22sPfWYmqkvHsQeraa8bVSTnn2NJXnxYA2o5wMomQMsd54TRQk6BinA
+         66SHzCNzlLrkOoGYPJbmY/C9U3RloqxiyhcEza5IJT17waUWq6Pr7CkjrynsZ5QIxT6A
+         Ty6Wst/a7i05d2X56zLTgO7XY9bwMpKsT3BIpaI3jYkRcGuzXkvWvLMzj9Mop7ypQ0PI
+         yD4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kKv9p8ykc5d2ocj7ReSJuSuri2exBdglIdzEyvs2e3Y=;
-        b=XJ/6w46yMF4lorFdekVrNfBmCRZhp0ytsIgx0DxuuQu5zqOMYI1998vH8DcLrziR6/
-         HmD14rkA3SZKEzVmBe9tj+pVBb7N2J14IeOaQuPqbZZpqWZORlgQrEdP6yHlxyh4l1xK
-         o1tuZMaepRvXEXlkarfBhidaVmDE9KKrcvRNqpNP/fxhQXZN0EFvYUoloCucoCVOqiqC
-         HcPHhPiTfDIO3pYDH78nQUNBckOHjHVCLVo+yBsmII9/ydLNNWrYvLPFokf0Z8m4Gnpn
-         dhmTG1hQrrWbae+us7bjtk82jkZrMZzPolO2jMwyeHzBKbTKkqGpDXT+Vpl72Szg5D1t
-         7GFw==
-X-Gm-Message-State: AOAM533l0tiTufUYzQiDlVxWJbCQvW4Xln0W/EP0hYdnumcnyXBLf8pV
-        UZHqDoxfNrVGJG8+gOx78F+TSAT3NrEAGmgVBMpcY2kuxU4d3A==
-X-Google-Smtp-Source: ABdhPJyOj4XzeA0yQQrkN8F+JpFhq9HzMs/delrS0VDyUvCBjUeaqSw6SIhIJwbZwO4UUsG8c3k46wAEQv+/0hckrOk=
-X-Received: by 2002:a67:ee94:0:b0:320:c162:2bea with SMTP id
- n20-20020a67ee94000000b00320c1622beamr3487575vsp.34.1646933442525; Thu, 10
- Mar 2022 09:30:42 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i7J8e206Bwozad+xJPF02nCEZhsFp5sZ0xZvk63VV68=;
+        b=QNwL7bDHrdAE7rAMhQ15YaEz0AOef/0/17yRNDCDuhfh3XEnM6ZkAMXqPK/SDTXmbU
+         B3hDzuIBDnifrfulhU/LQXhbtqMnQ+T8QGUclfPATTv8WM47DwqiUSU3t1UZ5Z0ZL9uW
+         SCsSe4xf3AyL7qi9GHbQNd5kEoTwHOtLAqR0uc4IxevSir8FLDgi0aAg6TY4bzQ/lwvV
+         vYDVsBraSY4lCYrfkV7Q9WdP3UK1D1NhVzE35tyA2gEJtWZ+tVjdGVD+D7blF6aSUVnL
+         +YpkDrlNXL8tKihcOKzSnlFbsNIRV/muYZ/QrSbdmDjA2mAWXpWux6Ol7+WQiq+cYASF
+         Nrpw==
+X-Gm-Message-State: AOAM532BNSigBsOJX9xyu8GcrBBgXAW0mp4lG224+YaKCxatbXDhEOKk
+        zD6wtsWzJBgtsS4iwiRqDd/xpA==
+X-Google-Smtp-Source: ABdhPJwXrthz2QtCLsnFtqyDL0e1w0h1YTxxQQFSEJP3ZvHCIAN7kMeF7r6fRWtGJMhwK1gVmjpSbw==
+X-Received: by 2002:a05:622a:550:b0:2e0:7422:a1d5 with SMTP id m16-20020a05622a055000b002e07422a1d5mr5001583qtx.444.1646933488129;
+        Thu, 10 Mar 2022 09:31:28 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id bs11-20020a05620a470b00b004b2d02f8a92sm2579261qkb.126.2022.03.10.09.31.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 09:31:27 -0800 (PST)
+Date:   Thu, 10 Mar 2022 12:31:26 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     cgel.zte@gmail.com, axboe@kernel.dk, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: remove PSI annotations from submit_bio
+Message-ID: <Yio17pXawRuuVJFO@cmpxchg.org>
+References: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
+ <Yij9eygSYy5MSIA0@cmpxchg.org>
+ <Yime3HdbEqFgRVtO@infradead.org>
+ <YiokaQLWeulWpiCx@cmpxchg.org>
+ <Yiok1xi0Hqmh1fbi@infradead.org>
 MIME-Version: 1.0
-References: <20220310045535.224450-1-jeremy.linton@arm.com>
-In-Reply-To: <20220310045535.224450-1-jeremy.linton@arm.com>
-From:   Peter Robinson <pbrobinson@gmail.com>
-Date:   Thu, 10 Mar 2022 17:30:31 +0000
-Message-ID: <CALeDE9OjSAV0Mas7NPJfFQ5SW6ZJV8HgyvZyVnE_LZK2tkPOmQ@mail.gmail.com>
-Subject: Re: [PATCH] net: bcmgenet: Don't claim WOL when its not available
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     netdev@vger.kernel.org, opendmb@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, kuba@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yiok1xi0Hqmh1fbi@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 4:55 AM Jeremy Linton <jeremy.linton@arm.com> wrote:
->
-> Some of the bcmgenet platforms don't correctly support WOL, yet
-> ethtool returns:
->
-> "Supports Wake-on: gsf"
->
-> which is false.
->
-> Ideally if there isn't a wol_irq, or there is something else that
-> keeps the device from being able to wakeup it should display:
->
-> "Supports Wake-on: d"
->
-> This patch checks whether the device can wakup, before using the
-> hard-coded supported flags. This corrects the ethtool reporting, as
-> well as the WOL configuration because ethtool verifies that the mode
-> is supported before attempting it.
->
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-Tested-by: Peter Robinson <pbrobinson@gmail.com>
+On Thu, Mar 10, 2022 at 08:18:31AM -0800, Christoph Hellwig wrote:
+> On Thu, Mar 10, 2022 at 11:16:41AM -0500, Johannes Weiner wrote:
+> > The first version did that, but it was sprawling and not well-received:
+> > 
+> > https://lkml.org/lkml/2019/7/22/1261
+> 
+> Well, Dave's comments are spot on.  Except that we replaced it with
+> something even more horrible and not something sensible as he suggested.
 
-This fixes the reporting of the WOL capabilities on the Raspberry Pi 4.
-
-> ---
->  drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-> index e31a5a397f11..f55d9d9c01a8 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-> @@ -40,6 +40,13 @@
->  void bcmgenet_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
->  {
->         struct bcmgenet_priv *priv = netdev_priv(dev);
-> +       struct device *kdev = &priv->pdev->dev;
-> +
-> +       if (!device_can_wakeup(kdev)) {
-> +               wol->supported = 0;
-> +               wol->wolopts = 0;
-> +               return;
-> +       }
->
->         wol->supported = WAKE_MAGIC | WAKE_MAGICSECURE | WAKE_FILTER;
->         wol->wolopts = priv->wolopts;
-> --
-> 2.35.1
->
+Confused. I changed it the way Dave suggested, to which he replied
+"this is much cleaner and easier to maintain". Are we reading
+different threads? Care to elaborate?

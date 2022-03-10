@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E694D4F56
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8544D4F58
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243486AbiCJQdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S240065AbiCJQdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238790AbiCJQdA (ORCPT
+        with ESMTP id S236913AbiCJQdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:33:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6229E190C16;
-        Thu, 10 Mar 2022 08:31:59 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 160D821106;
-        Thu, 10 Mar 2022 16:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646929918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ckgh/54VKAw6Qnxgd+jgb5k0txhbSVaOhP9+nLif3j4=;
-        b=B3uvBSn76znSqOZimKCNoKHULtUje9t1w9TAl/MSQRejuXE1ujCmyUAb0+LeXbhBB8ZLAC
-        jQvtBHO0vrmBIncL8JER8VU/uLNHZPu/t9jVMTRHtnwTuX1LZF3GjcaIMWgO56ZDo+Xrav
-        t/e/+LHEKDA+xGlu0wgJ/eVEMF2lcJA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646929918;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ckgh/54VKAw6Qnxgd+jgb5k0txhbSVaOhP9+nLif3j4=;
-        b=V4kt/xeRGn5rhiPYx2cBdKqA7CcmeVGg3Ft6k1W5KRrfwKerbMwoXI+4ri5Jj7tf/YP1BV
-        iSdYXYNInQEdwaAw==
-Received: from suse.de (unknown [10.163.32.246])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 17676A3B83;
-        Thu, 10 Mar 2022 16:31:56 +0000 (UTC)
-Date:   Thu, 10 Mar 2022 16:31:54 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
-        mtosatti@redhat.com, linux-rt-users@vger.kernel.org,
-        vbabka@suse.cz, cl@linux.com, paulmck@kernel.org,
-        willy@infradead.org
-Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
-Message-ID: <20220310163154.GF4363@suse.de>
-References: <20220208100750.1189808-1-nsaenzju@redhat.com>
- <20220303114550.GE4363@suse.de>
- <fcdaacf58296dfd826bfdbbd5ef3a06b6e05a456.camel@redhat.com>
+        Thu, 10 Mar 2022 11:33:49 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586D9B4587;
+        Thu, 10 Mar 2022 08:32:46 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22AGEo0P026874;
+        Thu, 10 Mar 2022 17:32:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=QOUPb/MXDpAhDlvBmQeOiY48BmrgZ+iOxXTy3hwTuKk=;
+ b=ilAVPNarl8JUDS3F88iBufFFGv6LPPSul+Vi43t7WQcYIXix1rg45qJRoXE4qICCXi40
+ ZZSirC+lq0LMRs0Ec9qo+NssxoY2EzBHsAeRWpmNd+hy+51tY+M4ZekemncpPWCFlpWx
+ htvLVr4a3v8pzN6sj5knrn18NK8fJ0sDjcxWfh6eDam2lmQOvQIVZlWs9YaPM880zY5r
+ 1Up3uxzjzn/t4i9PIWvXi/afI1cgu4oxSdRn/7Pdq4bEbruTB0u9Dh1G+g13njGdRWb3
+ epRrfUKUL5+tO78xNUO5cyZpHpiLsmlYuG9tNCuHy94kLGSnV89vOWl6FRt2/qfhB761 UQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3embmh7mun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Mar 2022 17:32:34 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 98C2E100038;
+        Thu, 10 Mar 2022 17:32:33 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 91A8C232FEF;
+        Thu, 10 Mar 2022 17:32:33 +0100 (CET)
+Received: from [10.201.23.19] (10.75.127.44) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 10 Mar
+ 2022 17:32:32 +0100
+Subject: Re: [PATCH v3] media: st-delta: Fix PM disable depth imbalance in
+ delta_probe
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <2a3b4095-7b63-4da5-d0fa-43ba86715504@xs4all.nl>
+ <20220307080859.14475-1-linmq006@gmail.com>
+From:   Hugues FRUCHET - FOSS <hugues.fruchet@foss.st.com>
+Message-ID: <9d543059-2a3b-e5b2-59f2-30819d49b74b@foss.st.com>
+Date:   Thu, 10 Mar 2022 17:32:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <fcdaacf58296dfd826bfdbbd5ef3a06b6e05a456.camel@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220307080859.14475-1-linmq006@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-10_06,2022-03-09_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,73 +74,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 02:57:47PM +0100, Nicolas Saenz Julienne wrote:
-> > > Note that this is not the first attempt at fixing this per-cpu page lists:
-> > >  - The first attempt[1] tried to conditionally change the pagesets locking
-> > >    scheme based the NOHZ_FULL config. It was deemed hard to maintain as the
-> > >    NOHZ_FULL code path would be rarely tested. Also, this only solves the issue
-> > >    for NOHZ_FULL setups, which isn't ideal.
-> > >  - The second[2] unanimously switched the local_locks to per-cpu spinlocks. The
-> > >    performance degradation was too big.
-> > > 
-> > 
-> > For unrelated reasons I looked at using llist to avoid locks entirely. It
-> > turns out it's not possible and needs a lock. We know "local_locks to
-> > per-cpu spinlocks" took a large penalty so I considered alternatives on
-> > how a lock could be used.  I found it's possible to both remote drain
-> > the lists and avoid the disable/enable of IRQs entirely as long as a
-> > preempting IRQ is willing to take the zone lock instead (should be very
-> > rare). The IRQ part is a bit hairy though as softirqs are also a problem
-> > and preempt-rt needs different rules and the llist has to sort PCP
-> > refills which might be a loss in total. However, the remote draining may
-> > still be interesting. The full series is at
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git/ mm-pcpllist-v1r2
-> 
-> I'll have a proper look at it soon.
-> 
+Hi Miaoqian Lin,
 
-Thanks. I'm still delayed actually finishing the series as most of my
-time is dedicated to a separate issue. However, there is at least one
-bug in there at patch "mm/page_alloc: Remotely drain per-cpu lists"
-that causes a lockup under severe memory pressure. The fix is
+Thanks for the patch !
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c9a6f2b5548e..11b54f383d04 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3065,10 +3065,8 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
-  */
- void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
- {
--	unsigned long flags;
- 	int to_drain, batch;
- 
--	pcp_local_lock(&pagesets.lock, flags);
- 	batch = READ_ONCE(pcp->batch);
- 	to_drain = min(pcp->count, batch);
- 	if (to_drain > 0) {
-@@ -3076,7 +3074,6 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
- 		free_pcppages_bulk(zone, to_drain, pcp, 0);
- 		spin_unlock(&pcp->lock);
- 	}
--	pcp_local_unlock(&pagesets.lock, flags);
- }
- #endif
- 
-@@ -3088,16 +3085,12 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
- 	unsigned long flags;
- 	struct per_cpu_pages *pcp;
- 
--	pcp_local_lock(&pagesets.lock, flags);
--
- 	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
- 	if (pcp->count) {
- 		spin_lock(&pcp->lock);
- 		free_pcppages_bulk(zone, pcp->count, pcp, 0);
- 		spin_unlock(&pcp->lock);
- 	}
--
--	pcp_local_unlock(&pagesets.lock, flags);
- }
- 
- /*
+Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+
+BR,
+Hugues.
+
+On 3/7/22 9:08 AM, Miaoqian Lin wrote:
+> The pm_runtime_enable will decrease power disable depth.
+> If the probe fails, we should use pm_runtime_disable() to balance
+> pm_runtime_enable().
+> 
+> Fixes: f386509 ("[media] st-delta: STiH4xx multi-format video decoder v4l2 driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+> changes in v2:
+> - remove unused label.
+> changes in v3:
+> - add err_pm_disable label and update related 'goto err'.
+> - update commit message
+> ---
+>   drivers/media/platform/sti/delta/delta-v4l2.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
+> index c887a31ebb54..420ad4d8df5d 100644
+> --- a/drivers/media/platform/sti/delta/delta-v4l2.c
+> +++ b/drivers/media/platform/sti/delta/delta-v4l2.c
+> @@ -1859,7 +1859,7 @@ static int delta_probe(struct platform_device *pdev)
+>   	if (ret) {
+>   		dev_err(delta->dev, "%s failed to initialize firmware ipc channel\n",
+>   			DELTA_PREFIX);
+> -		goto err;
+> +		goto err_pm_disable;
+>   	}
+>   
+>   	/* register all available decoders */
+> @@ -1873,7 +1873,7 @@ static int delta_probe(struct platform_device *pdev)
+>   	if (ret) {
+>   		dev_err(delta->dev, "%s failed to register V4L2 device\n",
+>   			DELTA_PREFIX);
+> -		goto err;
+> +		goto err_pm_disable;
+>   	}
+>   
+>   	delta->work_queue = create_workqueue(DELTA_NAME);
+> @@ -1898,6 +1898,8 @@ static int delta_probe(struct platform_device *pdev)
+>   	destroy_workqueue(delta->work_queue);
+>   err_v4l2:
+>   	v4l2_device_unregister(&delta->v4l2_dev);
+> +err_pm_disable:
+> +	pm_runtime_disable(dev);
+>   err:
+>   	return ret;
+>   }
+> 

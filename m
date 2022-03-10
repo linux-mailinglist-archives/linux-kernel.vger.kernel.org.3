@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2624D4D5050
+	by mail.lfdr.de (Postfix) with ESMTP id 711164D5051
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244565AbiCJRWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S244771AbiCJRWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244518AbiCJRV4 (ORCPT
+        with ESMTP id S244692AbiCJRWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:21:56 -0500
+        Thu, 10 Mar 2022 12:22:22 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4202199D5E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:20:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F4D199D4D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646932852; x=1678468852;
+  t=1646932877; x=1678468877;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3NA1AOfkWvyInGYP3ZXXPe9wyH6gcZKqLJYd1GBzKOE=;
-  b=YhgKXsoXU30wU+Imqa+J1zcg7w+Ef+0rv1HoYnA5cxiCKRHFn9b3FVOP
-   t9bZQyz5I55HVu8Rmm0hX2KBs4dwmGnLVw84XSuNUziwG/vrQlPcWTNd+
-   nHGkgTLEKmZxlyD2f3NaFk0igl6xSRlxM2tWqe0nt1v90G6qWuEJd7IvM
-   RkBzcYwWvXsbWAYnTKK//J0lUN3HO26xuQo5yhqu7nrF8V/LUrKhXL0CU
-   TlWtWFbuJATkRXXo/sbvyz+71jd4LSCrvcLHiDjVrcZf1S7iEHlzuJHhp
-   xF3A068M4Yb8irAFqWVoE3XO82F/smXTLkxt7/EC5k9o4f6dMaHhFN5WN
+  bh=bpNLdvD0glY7GspXdaBYQNJVO+MYEUPR9GUQkRRXSOU=;
+  b=PSApOHzp+PBrweRcBANy51TsHElAoey0l1QBTQUDkdLPx70w5COrM0P5
+   c0yf9crFGkjufg9CcrK0ktnG/a/OJ1WQ10SNBuIIEFZbs8tgBJNzfj5aO
+   f5Sp1umGHAOgLJ41yD/W/GPEQbQ2vEhV7uugQrfEOWcsfrTkkkrwn4zKn
+   JAgVLI8XqFWrSM/nHi26OoAfY2Uv5Mch7zf9O+40xTihmNtbQB9dBOmrn
+   W35KsSk3h8IG5aQjCW2smkSghyREelUuh/GhsaiU1YqPFxYaGNeODaAPC
+   TGzA3Ev8KJZIY4J3gRxMVjzCFM4nhWubjInksfcXk9ClgXlKIA3o46tMu
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="242758931"
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="242758937"
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="242758931"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:48 -0800
+   d="scan'208";a="242758937"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:50 -0800
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="510983950"
+   d="scan'208";a="633064339"
 Received: from gdavids1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.65.108])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:47 -0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:49 -0800
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,9 +45,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V9 10/45] mm/pkeys: Provide for PKS key allocation
-Date:   Thu, 10 Mar 2022 09:19:44 -0800
-Message-Id: <20220310172019.850939-11-ira.weiny@intel.com>
+Subject: [PATCH V9 11/45] x86/pkeys: Enable PKS on cpus which support it
+Date:   Thu, 10 Mar 2022 09:19:45 -0800
+Message-Id: <20220310172019.850939-12-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310172019.850939-1-ira.weiny@intel.com>
 References: <20220310172019.850939-1-ira.weiny@intel.com>
@@ -65,182 +65,139 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Kernel consumers of PKS need a way to allocate a PKS pkey and assign the
-initial permissions for that key.  It is desirable to not allocate keys
-for consumers which are not configured.
+Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
+specific, manipulation of permission restrictions on supervisor page
+mappings.  It uses a supervisor specific MSR to assign permissions to
+the pkeys.
 
-Introduce a macro to allocate keys sequentially based on which consumers
-are configured.  In addition define a macro to set the proper permission
-bits based on the actual pkey value allocated.
+When PKS is configured and the cpu supports PKS, initialize the MSR, and
+enable the hardware.
 
-pks-keys.h is added as a new header with minimal header dependencies.
-This allows the use of PKS_INIT_VALUE within other headers where the
-additional includes from other pkey headers caused major conflicts.  The
-main conflict was using PKS_INIT_VALUE for INIT_TRHEAD in
-asm/processor.h
+Add asm/pks.h to store new internal functions and structures such as
+pks_setup().
 
-Add documentation.
-
-Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes for V9
-	Reword the commit message
-	Move this patch ahead of the enable patch so that the enable
-		patch can use PKS_INIT_VALUE
-	From Dan Williams
-		Use Dan's macro magic
-			enhanced it to account for the max number of
-			keys
-		Update documentation for the change
-	From Dave Hansen
-		use pkey
-		s/PKR_RW_KEY/PKR_RW_MASK
+	Reword commit message
+	Move this after the patch defining PKS_INIT_VALUE
 
 Changes for V8
-	Create pks-keys.h to solve header conflicts in subsequent
-		patches.
-	Remove create_initial_pkrs_value() which did not work
-		Replace it with PKS_INIT_VALUE
-		Fix up documentation to match
-	s/PKR_RW_BIT/PKR_RW_KEY()/
-	s/PKRS_INIT_VALUE/PKS_INIT_VALUE
-	Split this off of the previous patch
-	Update documentation and embed it in the code to help ensure it
-	is kept up to date.
-
-Changes for V7
-	Create a dynamic pkrs_initial_value in early init code.
-	Clean up comments
-	Add comment to macro guard
+	Move setup_pks() into this patch with a default of all access
+		for all pkeys.
+	From Thomas
+		s/setup_pks/pks_setup/
+	Update Change log to better reflect exactly what this patch does.
 ---
- Documentation/core-api/protection-keys.rst |  5 ++
- arch/x86/include/asm/pkeys_common.h        |  9 ++-
- include/linux/pks-keys.h                   | 78 ++++++++++++++++++++++
- 3 files changed, 91 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/pks-keys.h
+ arch/x86/include/asm/msr-index.h            |  1 +
+ arch/x86/include/asm/pks.h                  | 15 +++++++++++++++
+ arch/x86/include/uapi/asm/processor-flags.h |  2 ++
+ arch/x86/kernel/cpu/common.c                |  2 ++
+ arch/x86/mm/pkeys.c                         | 17 +++++++++++++++++
+ 5 files changed, 37 insertions(+)
+ create mode 100644 arch/x86/include/asm/pks.h
 
-diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-index 13eedb0119e1..d501bd27ee29 100644
---- a/Documentation/core-api/protection-keys.rst
-+++ b/Documentation/core-api/protection-keys.rst
-@@ -131,3 +131,8 @@ ARCH_HAS_SUPERVISOR_PKEYS.  It also makes it possible for multiple independent
- features to "select ARCH_ENABLE_SUPERVISOR_PKEYS".  If no features enable PKS
- by selecting ARCH_ENABLE_SUPERVISOR_PKEYS, PKS support will not be compiled
- into the kernel.
-+
-+PKS Key Allocation
-+------------------
-+.. kernel-doc:: include/linux/pks-keys.h
-+        :doc: PKS_KEY_ALLOCATION
-diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
-index 359b94cdcc0c..b28a72dea22b 100644
---- a/arch/x86/include/asm/pkeys_common.h
-+++ b/arch/x86/include/asm/pkeys_common.h
-@@ -2,10 +2,17 @@
- #ifndef _ASM_X86_PKEYS_COMMON_H
- #define _ASM_X86_PKEYS_COMMON_H
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index a4a39c3e0f19..6b0a6e0300a4 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -787,6 +787,7 @@
  
-+#define PKS_NUM_PKEYS 16
-+#define PKS_ALL_AD (0x55555555UL)
-+
- #define PKR_AD_BIT 0x1u
- #define PKR_WD_BIT 0x2u
- #define PKR_BITS_PER_PKEY 2
+ #define MSR_IA32_TSC_DEADLINE		0x000006E0
  
--#define PKR_AD_MASK(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
-+#define PKR_PKEY_SHIFT(pkey)	(pkey * PKR_BITS_PER_PKEY)
-+
-+#define PKR_RW_MASK(pkey)	(0          << PKR_PKEY_SHIFT(pkey))
-+#define PKR_AD_MASK(pkey)	(PKR_AD_BIT << PKR_PKEY_SHIFT(pkey))
-+#define PKR_WD_MASK(pkey)	(PKR_WD_BIT << PKR_PKEY_SHIFT(pkey))
++#define MSR_IA32_PKRS			0x000006E1
  
- #endif /*_ASM_X86_PKEYS_COMMON_H */
-diff --git a/include/linux/pks-keys.h b/include/linux/pks-keys.h
+ #define MSR_TSX_FORCE_ABORT		0x0000010F
+ 
+diff --git a/arch/x86/include/asm/pks.h b/arch/x86/include/asm/pks.h
 new file mode 100644
-index 000000000000..c914afecb2d3
+index 000000000000..8180fc59790b
 --- /dev/null
-+++ b/include/linux/pks-keys.h
-@@ -0,0 +1,78 @@
++++ b/arch/x86/include/asm/pks.h
+@@ -0,0 +1,15 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_PKS_KEYS_H
-+#define _LINUX_PKS_KEYS_H
-+
-+/*
-+ * The contents of this header should be limited to assigning PKS keys and
-+ * default values to avoid intricate header dependencies.
-+ */
++#ifndef _ASM_X86_PKS_H
++#define _ASM_X86_PKS_H
 +
 +#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
 +
-+#include <asm/pkeys_common.h>
++void pks_setup(void);
 +
-+#define PKS_NEW_KEY(prev, config) \
-+	(prev + __is_defined(config))
-+#define PKS_DECLARE_INIT_VALUE(pkey, value, config) \
-+	(PKR_##value##_MASK(pkey) * __is_defined(config))
++#else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
 +
-+/**
-+ * DOC: PKS_KEY_ALLOCATION
-+ *
-+ * Users reserve a key value in 5 steps.
-+ *	1) Use PKS_NEW_KEY to create a new key
-+ *	2) Ensure that the last key value is specified in the PKS_NEW_KEY macro
-+ *	3) Adjust PKS_KEY_MAX to use the newly defined key value
-+ *	4) Use PKS_DECLARE_INIT_VALUE to define an initial value
-+ *	5) Add the new PKS default value to PKS_INIT_VALUE
-+ *
-+ * The PKS_NEW_KEY and PKS_DECLARE_INIT_VALUE macros require the Kconfig
-+ * option to be specified to automatically adjust the number of keys used.
-+ *
-+ * PKS_KEY_DEFAULT must remain 0 with a default of PKS_DECLARE_INIT_VALUE(...,
-+ * RW, ...) to support non-pks protected pages.
-+ *
-+ * Example: to configure a key for 'MY_FEATURE' with a default of Write
-+ * Disabled.
-+ *
-+ * .. code-block:: c
-+ *
-+ *	#define PKS_KEY_DEFAULT		0
-+ *
-+ *	// 1) Use PKS_NEW_KEY to create a new key
-+ *	// 2) Ensure that the last key value is specified (eg PKS_KEY_DEFAULT)
-+ *	#define PKS_KEY_MY_FEATURE PKS_NEW_KEY(PKS_KEY_DEFAULT, CONFIG_MY_FEATURE)
-+ *
-+ *	// 3) Adjust PKS_KEY_MAX
-+ *	#define PKS_KEY_MAX	   PKS_NEW_KEY(PKS_KEY_MY_FEATURE, 1)
-+ *
-+ *	// 4) Define initial value
-+ *	#define PKS_KEY_MY_FEATURE_INIT PKS_DECLARE_INIT_VALUE(PKS_KEY_MY_FEATURE, \
-+ *								WD, CONFIG_MY_FEATURE)
-+ *
-+ *
-+ *	// 5) Add initial value to PKS_INIT_VALUE
-+ *	#define PKS_INIT_VALUE ((PKS_ALL_AD & PKS_ALL_AD_MASK) | \
-+ *				PKS_KEY_DEFAULT_INIT | \
-+ *				PKS_KEY_MY_FEATURE_INIT \
-+ *				)
-+ */
-+
-+/* PKS_KEY_DEFAULT must be 0 */
-+#define PKS_KEY_DEFAULT		0
-+#define PKS_KEY_MAX		PKS_NEW_KEY(PKS_KEY_DEFAULT, 1)
-+
-+/* PKS_KEY_DEFAULT_INIT must be RW */
-+#define PKS_KEY_DEFAULT_INIT	PKS_DECLARE_INIT_VALUE(PKS_KEY_DEFAULT, RW, 1)
-+
-+#define PKS_ALL_AD_MASK \
-+	GENMASK(PKS_NUM_PKEYS * PKR_BITS_PER_PKEY, \
-+		PKS_KEY_MAX * PKR_BITS_PER_PKEY)
-+
-+#define PKS_INIT_VALUE ((PKS_ALL_AD & PKS_ALL_AD_MASK) | \
-+			PKS_KEY_DEFAULT_INIT \
-+			)
++static inline void pks_setup(void) { }
 +
 +#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
 +
-+#endif /* _LINUX_PKS_KEYS_H */
++#endif /* _ASM_X86_PKS_H */
+diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
+index bcba3c643e63..191c574b2390 100644
+--- a/arch/x86/include/uapi/asm/processor-flags.h
++++ b/arch/x86/include/uapi/asm/processor-flags.h
+@@ -130,6 +130,8 @@
+ #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
+ #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
+ #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
++#define X86_CR4_PKS_BIT		24 /* enable Protection Keys for Supervisor */
++#define X86_CR4_PKS		_BITUL(X86_CR4_PKS_BIT)
+ 
+ /*
+  * x86-64 Task Priority Register, CR8
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 7b8382c11788..83c1abce7d93 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -59,6 +59,7 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/uv/uv.h>
+ #include <asm/sigframe.h>
++#include <asm/pks.h>
+ 
+ #include "cpu.h"
+ 
+@@ -1632,6 +1633,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ 
+ 	x86_init_rdrand(c);
+ 	setup_pku(c);
++	pks_setup();
+ 
+ 	/*
+ 	 * Clear/Set all flags overridden by options, need do it
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index 7c90b2188c5f..f904376570f4 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -6,6 +6,7 @@
+ #include <linux/debugfs.h>		/* debugfs_create_u32()		*/
+ #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
+ #include <linux/pkeys.h>                /* PKEY_*                       */
++#include <linux/pks-keys.h>
+ #include <uapi/asm-generic/mman-common.h>
+ 
+ #include <asm/cpufeature.h>             /* boot_cpu_has, ...            */
+@@ -209,3 +210,19 @@ u32 pkey_update_pkval(u32 pkval, u8 pkey, u32 accessbits)
+ 	pkval &= ~(PKEY_ACCESS_MASK << shift);
+ 	return pkval | accessbits << shift;
+ }
++
++#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
++
++/*
++ * PKS is independent of PKU and either or both may be supported on a CPU.
++ */
++void pks_setup(void)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_PKS))
++		return;
++
++	wrmsrl(MSR_IA32_PKRS, PKS_INIT_VALUE);
++	cr4_set_bits(X86_CR4_PKS);
++}
++
++#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
 -- 
 2.35.1
 

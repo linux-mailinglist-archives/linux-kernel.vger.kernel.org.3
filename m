@@ -2,116 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5984D5504
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437924D550D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344130AbiCJXHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 18:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S1344562AbiCJXJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 18:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344524AbiCJXG7 (ORCPT
+        with ESMTP id S232714AbiCJXJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 18:06:59 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B0051405CD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:05:57 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-95-j_DIc5ZRPHOyWYg3TK3RZg-1; Thu, 10 Mar 2022 23:05:54 +0000
-X-MC-Unique: j_DIc5ZRPHOyWYg3TK3RZg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 23:05:53 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Mar 2022 23:05:53 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David Ahern" <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
-        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>,
-        Willem de Bruijn <willemb@google.com>
-Subject: RE: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
-Thread-Topic: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
-Thread-Index: AQHYNNA9n/GFN1e7cUOoZGj2dooiCKy5O9cQ
-Date:   Thu, 10 Mar 2022 23:05:53 +0000
-Message-ID: <6871999c8e8640beae53f230681b3ce2@AcuMS.aculab.com>
-References: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
- <20220310221328.877987-1-tadeusz.struk@linaro.org>
- <20220310143011.00c21f53@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
-In-Reply-To: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 10 Mar 2022 18:09:34 -0500
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE6F8119F3E;
+        Thu, 10 Mar 2022 15:08:32 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-150-27.pa.vic.optusnet.com.au [49.186.150.27])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 73D1310E29AA;
+        Fri, 11 Mar 2022 10:08:23 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nSRtO-003xhf-9L; Fri, 11 Mar 2022 10:08:22 +1100
+Date:   Fri, 11 Mar 2022 10:08:22 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 03/13] mm/shmem: Support memfile_notifier
+Message-ID: <20220310230822.GO661808@dread.disaster.area>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-4-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140911.50924-4-chao.p.peng@linux.intel.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=622a84f0
+        a=sPqof0Mm7fxWrhYUF33ZaQ==:117 a=sPqof0Mm7fxWrhYUF33ZaQ==:17
+        a=kj9zAlcOel0A:10 a=o8Y5sQTvuykA:10 a=QyXUC8HyAAAA:8 a=7-415B0cAAAA:8
+        a=RCrhQ6IY2R1Uy-UsxHgA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogV2lsbGVtIGRlIEJydWlqbg0KPiBTZW50OiAxMCBNYXJjaCAyMDIyIDIyOjQzDQo+IA0K
-PiBPbiBUaHUsIE1hciAxMCwgMjAyMiBhdCA1OjMwIFBNIEpha3ViIEtpY2luc2tpIDxrdWJhQGtl
-cm5lbC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gT24gVGh1LCAxMCBNYXIgMjAyMiAxNDoxMzoyOCAt
-MDgwMCBUYWRldXN6IFN0cnVrIHdyb3RlOg0KPiA+ID4gZGlmZiAtLWdpdCBhL25ldC9pcHY2L2lw
-Nl9vdXRwdXQuYyBiL25ldC9pcHY2L2lwNl9vdXRwdXQuYw0KPiA+ID4gaW5kZXggNDc4OGY2YjM3
-MDUzLi42ZDQ1MTEyMzIyYTAgMTAwNjQ0DQo+ID4gPiAtLS0gYS9uZXQvaXB2Ni9pcDZfb3V0cHV0
-LmMNCj4gPiA+ICsrKyBiL25ldC9pcHY2L2lwNl9vdXRwdXQuYw0KPiA+ID4gQEAgLTE2NDksNiAr
-MTY0OSwxNiBAQCBzdGF0aWMgaW50IF9faXA2X2FwcGVuZF9kYXRhKHN0cnVjdCBzb2NrICpzaywN
-Cj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICBza2ItPnByb3RvY29sID0gaHRvbnMoRVRIX1Bf
-SVBWNik7DQo+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgc2tiLT5pcF9zdW1tZWQgPSBjc3Vt
-bW9kZTsNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICBza2ItPmNzdW0gPSAwOw0KPiA+ID4g
-Kw0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgIC8qDQo+ID4gPiArICAgICAgICAgICAgICAg
-ICAgICAgICogICAgICBDaGVjayBpZiB0aGVyZSBpcyBzdGlsbCByb29tIGZvciBwYXlsb2FkDQo+
-ID4gPiArICAgICAgICAgICAgICAgICAgICAgICovDQo+ID4NCj4gPiBUQkggSSB0aGluayB0aGUg
-Y2hlY2sgaXMgc2VsZi1leHBsYW5hdG9yeS4gTm90IHdvcnRoIGEgYmFubmVyIGNvbW1lbnQsDQo+
-ID4gZm9yIHN1cmUuDQo+ID4NCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICBpZiAoZnJhZ2hl
-YWRlcmxlbiA+PSBtdHUpIHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVy
-ciA9IC1FTVNHU0laRTsNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGtmcmVl
-X3NrYihza2IpOw0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ290byBlcnJv
-cjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICB9DQo+ID4NCj4gPiBOb3Qgc3VyZSBpZiBX
-aWxsZW0gcHJlZmVycyB0aGlzIHBsYWNlbWVudCwgYnV0IHNlZW1zIGxpa2Ugd2UgY2FuIGxpZnQN
-Cj4gPiB0aGlzIGNoZWNrIG91dCBvZiB0aGUgbG9vcCwgYXMgc29vbiBhcyBmcmFnaGVhZGVybGVu
-IGFuZCBtdHUgYXJlIGtub3duLg0KPiA+DQo+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgLyog
-cmVzZXJ2ZSBmb3IgZnJhZ21lbnRhdGlvbiBhbmQgaXBzZWMgaGVhZGVyICovDQo+ID4gPiAgICAg
-ICAgICAgICAgICAgICAgICAgc2tiX3Jlc2VydmUoc2tiLCBoaF9sZW4gKyBzaXplb2Yoc3RydWN0
-IGZyYWdfaGRyKSArDQo+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZHN0
-X2V4dGhkcmxlbik7DQo+IA0KPiBKdXN0IHVwZGF0aW5nIHRoaXMgYm91bmRhcnkgY2hlY2sgd2ls
-bCBkbz8NCj4gDQo+ICAgICAgICAgaWYgKG10dSA8IGZyYWdoZWFkZXJsZW4gfHwNCj4gICAgICAg
-ICAgICAgKChtdHUgLSBmcmFnaGVhZGVybGVuKSAmIH43KSArIGZyYWdoZWFkZXJsZW4gPA0KPiBz
-aXplb2Yoc3RydWN0IGZyYWdfaGRyKSkNCj4gICAgICAgICAgICAgICAgIGdvdG8gZW1zZ3NpemU7
-DQoNCkJvdGggdGhvc2UgPCBzaG91bGQgYmUgPD0NCg0KQnV0IEkgdGhpbmsgSSdkIGNoZWNrOg0K
-CWlmIChmcmFnaGVhZGVybGVuID49IDEyODAgLSBzaXplb2YgKHN0cnVjdCBmcmFnX2hkcikpDQoJ
-CWdvdG8gZW1zZ3NpemU7DQpmaXJzdCAob3Igb25seSEpDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
-cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
-eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Thu, Mar 10, 2022 at 10:09:01PM +0800, Chao Peng wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> It maintains a memfile_notifier list in shmem_inode_info structure and
+> implements memfile_pfn_ops callbacks defined by memfile_notifier. It
+> then exposes them to memfile_notifier via
+> shmem_get_memfile_notifier_info.
+> 
+> We use SGP_NOALLOC in shmem_get_lock_pfn since the pages should be
+> allocated by userspace for private memory. If there is no pages
+> allocated at the offset then error should be returned so KVM knows that
+> the memory is not private memory.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  include/linux/shmem_fs.h |  4 +++
+>  mm/shmem.c               | 76 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 80 insertions(+)
+> 
+> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+> index 2dde843f28ef..7bb16f2d2825 100644
+> --- a/include/linux/shmem_fs.h
+> +++ b/include/linux/shmem_fs.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/percpu_counter.h>
+>  #include <linux/xattr.h>
+>  #include <linux/fs_parser.h>
+> +#include <linux/memfile_notifier.h>
+>  
+>  /* inode in-kernel data */
+>  
+> @@ -28,6 +29,9 @@ struct shmem_inode_info {
+>  	struct simple_xattrs	xattrs;		/* list of xattrs */
+>  	atomic_t		stop_eviction;	/* hold when working on inode */
+>  	unsigned int		xflags;		/* shmem extended flags */
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +	struct memfile_notifier_list memfile_notifiers;
+> +#endif
+>  	struct inode		vfs_inode;
+>  };
+>  
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 9b31a7056009..7b43e274c9a2 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -903,6 +903,28 @@ static struct folio *shmem_get_partial_folio(struct inode *inode, pgoff_t index)
+>  	return page ? page_folio(page) : NULL;
+>  }
+>  
+> +static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+> +{
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +	struct shmem_inode_info *info = SHMEM_I(inode);
+> +
+> +	memfile_notifier_fallocate(&info->memfile_notifiers, start, end);
+> +#endif
+> +}
 
+*notify_populate(), not fallocate.  This is a notification that a
+range has been populated, not that the fallocate() syscall was run
+to populate the backing store of a file.
+
+i.e.  fallocate is the name of a userspace filesystem API that can
+be used to manipulate the backing store of a file in various ways.
+It can both populate and punch away the backing store of a file, and
+some operations that fallocate() can run will do both (e.g.
+FALLOC_FL_ZERO_RANGE) and so could generate both
+notify_invalidate() and a notify_populate() events.
+
+Hence "fallocate" as an internal mm namespace or operation does not
+belong anywhere in core MM infrastructure - it should never get used
+anywhere other than the VFS/filesystem layers that implement the
+fallocate() syscall or use it directly.
+
+Cheers,
+
+Dave.
+
+-- 
+Dave Chinner
+david@fromorbit.com

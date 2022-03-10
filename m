@@ -2,141 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95624D54DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5704D54E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344494AbiCJWvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S1344486AbiCJWxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344486AbiCJWvg (ORCPT
+        with ESMTP id S237854AbiCJWxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:51:36 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C83F744C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:50:35 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id qa43so15207781ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:50:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+6DiS3HvNB3XgupfAzrlzQDEfuL1+s8kw8SCCmZzvX8=;
-        b=fpYxgk9RH2ab6hvmVb9/ov9lQ+JgBzr5TqAaihSEmiJ3D57s0jIjbcABmlkmovhSO2
-         qD2xfiQl2FtTaWXnWEX9OwSJBDVIPAO+uVMyh1npheHkqAuxbNKTvTBjrY201Yxm2rbj
-         1kv4UGFVHi9t0OITt44ijiJTvojiEKAZeM3VcBXUEO5r4VcM7BInDliaGemJkHw7cZ6W
-         Rm0gLXSqRfegKgtJiooWXgiMrvZwEYK4ed4BWsGaTjH0Y1qRIAsXGURQYWrr/s8S/89i
-         lK40eOrGfNViYgDwMOwDOK2eICeUaaldQjmdsFmbPxyczsq8ZtSTmAkXf4NGr+z1rYdE
-         1gHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+6DiS3HvNB3XgupfAzrlzQDEfuL1+s8kw8SCCmZzvX8=;
-        b=BgxFdLyqMjZNLUdliLNnoqR9YJifSlkGOk4Plf9IoxAwWGA3sImYl6cGgUIlAsiiDw
-         37Qw1tDEjCY87QQ9KBnZ6B/8nkT9IfLXkAtux1lfkG+GaoMeiLXbj1AJ9ogy1Fgt6jkb
-         25ni0kWPr9eEzqQt9wIyBwimokLtJA8ofhmTlBa4PmpEH67BXSJoRejrs/OC85u65RXz
-         e6OjeShRd8f0N0Fc9glsUEnuSkP7L3ZpSzMQhQYa7INZXb9C3075Fola8np4S22B/joN
-         qIKImb64YttuNtnXdR+G6moJ2F2riOP9zdrwHhczkIvDmJyrAg+AnPr0VaMwyvNcv8p8
-         tRyQ==
-X-Gm-Message-State: AOAM530jyd1HkaaWoyMUpuIAIfQllcH8qFNO5pcycyKVmT4IGs9JWGRG
-        JSgqp0bkLj5XEiJL6QH3qOnG//w7nXsT9Nb9jS8lDQ==
-X-Google-Smtp-Source: ABdhPJx2BrCirzf8BNqtiYRHq46BHPKGG9uryr6deERfMsnTN2xJl+L6XkTbCnHLms5mV0NxtFt+bbp7T5cVO4F0Ax0=
-X-Received: by 2002:a17:906:2899:b0:6d6:e479:1fe2 with SMTP id
- o25-20020a170906289900b006d6e4791fe2mr6278183ejd.394.1646952633447; Thu, 10
- Mar 2022 14:50:33 -0800 (PST)
+        Thu, 10 Mar 2022 17:53:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C0CE98FD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:52:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB63CB828AE
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A94C340E8;
+        Thu, 10 Mar 2022 22:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646952739;
+        bh=4y+t3lSB6PHFNVBGZQpUfWkEuIDxOlJJ1lp91kdOm0s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=e3pDNUZCRwMG5kxhSm1qkvzzG4nwvvFjfA46JK4bb3C5V4CGvqT3C/cnmFAt0W6V0
+         P8dvS0VZu/++BGGsT855pIOOP93ImsPKrNoSAUVNuVR/2okR6NiWDOH27T0MnlG8wf
+         xGDOGySaf3Q4O4RcqvPH6DIk0C0VFj7TpTV9gve/4zkkrcCB3yQS8Pz0glDYz2CwK3
+         IXQp5B7g9r6qsrO7tg8xweo+dhnUxsbVK4BEbBNmMUorJKzkssOEhYtI1lpE9nJO9s
+         JUnb1aZcU2ryp72EFuzSrdcqbAd6oDk4tgjr51MKu8SoVDJJGxudWx+mC8sRKqGdy/
+         kXWj43Ytv1DTw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 25C3C5C038D; Thu, 10 Mar 2022 14:52:19 -0800 (PST)
+Date:   Thu, 10 Mar 2022 14:52:19 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Scenario TREE07 with CONFIG_PREEMPT_DYNAMIC=n?
+Message-ID: <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
+ <20220310224103.GA94994@lothringen>
 MIME-Version: 1.0
-References: <20220310210210.2124637-1-brendanhiggins@google.com> <CAFd5g46NmmNy5ueRjDnCkgjHy75KVUXA0xcTXtXjxLg7mgKJng@mail.gmail.com>
-In-Reply-To: <CAFd5g46NmmNy5ueRjDnCkgjHy75KVUXA0xcTXtXjxLg7mgKJng@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 10 Mar 2022 17:50:22 -0500
-Message-ID: <CAFd5g45MXXi_iBjJrTSUze-jjMXU18e4oN1Yo5Qg71wac6Uzjg@mail.gmail.com>
-Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
-To:     shuah <shuah@kernel.org>, David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Daniel Gutson <daniel.gutson@eclypsium.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310224103.GA94994@lothringen>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually add Jeremy this time. Sorry for the spam.
+On Thu, Mar 10, 2022 at 11:41:03PM +0100, Frederic Weisbecker wrote:
+> On Thu, Mar 10, 2022 at 01:56:30PM -0800, Paul E. McKenney wrote:
+> > Hello, Frederic,
+> > 
+> > I recently added CONFIG_PREEMPT_DYNAMIC=n to the TREE07 file, and since
+> > then am getting roughly one RCU CPU stall warning (or silent hang)
+> > per few tens of hours of rcutorture testing on dual-socket systems.
+> > The stall warnings feature starvation of RCU grace-period kthread.
+> > 
+> > Any advice on debugging this?
+> 
+> Oh, I'm testing that!
 
-On Thu, Mar 10, 2022 at 5:49 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> +Jeremy Kerr - Just remembered that Jeremy is doing some work here and
-> might be somewhat interested.
->
-> On Thu, Mar 10, 2022 at 4:02 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > Add support for a new kind of kunit_suite registration macro called
-> > kunit_test_init_suite(); this new registration macro allows the
-> > registration of kunit_suites that reference functions marked __init and
-> > data marked __initdata.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > ---
-> >
-> > This patch is in response to a KUnit user issue[1] in which the user was
-> > attempting to test some init functions; although this is a functional
-> > solution as long as KUnit tests only run during the init phase, we will
-> > need to do more work if we ever allow tests to run after the init phase
-> > is over; it is for this reason that this patch adds a new registration
-> > macro rather than simply modifying the existing macros.
-> >
-> > [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-> >
-> > ---
-> >  include/kunit/test.h | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index b26400731c02..1878e585f6d3 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -379,6 +379,27 @@ static inline int kunit_run_all_tests(void)
-> >
-> >  #define kunit_test_suite(suite)        kunit_test_suites(&suite)
-> >
-> > +/**
-> > + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-> > + *                           containing init functions or init data.
-> > + *
-> > + * @__suites: a statically allocated list of &struct kunit_suite.
-> > + *
-> > + * This functions identically as &kunit_test_suites() except that it suppresses
-> > + * modpost warnings for referencing functions marked __init or data marked
-> > + * __initdata; this is OK because currently KUnit only runs tests upon boot
-> > + * during the init phase or upon loading a module during the init phase.
-> > + *
-> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-> > + * tests must be excluded.
-> > + */
-> > +#define kunit_test_init_suites(__suites...)                            \
-> > +       __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
-> > +                           CONCATENATE(__UNIQUE_ID(suites), _probe),   \
-> > +                           ##__suites)
-> > +
-> > +#define kunit_test_init_suite(suite)   kunit_test_init_suites(&suite)
-> > +
-> >  #define kunit_suite_for_each_test_case(suite, test_case)               \
-> >         for (test_case = suite->test_cases; test_case->run_case; test_case++)
-> >
-> >
-> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> > --
-> > 2.35.1.723.g4982287a31-goog
-> >
+Even better, thank you!  ;-)
+
+							Thanx, Paul

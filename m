@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050CB4D4C2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CA14D4C0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243493AbiCJOZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S244118AbiCJO2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:28:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243253AbiCJOVb (ORCPT
+        with ESMTP id S243503AbiCJOZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:21:31 -0500
+        Thu, 10 Mar 2022 09:25:32 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053A1B6D3A;
-        Thu, 10 Mar 2022 06:20:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B958B7C7D;
+        Thu, 10 Mar 2022 06:22:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94F9D61CFD;
-        Thu, 10 Mar 2022 14:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945DFC36AE2;
-        Thu, 10 Mar 2022 14:20:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29E5E61CEF;
+        Thu, 10 Mar 2022 14:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5D4C340E8;
+        Thu, 10 Mar 2022 14:21:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922020;
-        bh=hgyMPXKpyrjFSr7gjjGkb1FgtZRbJo9afPZLy+xNAuM=;
+        s=korg; t=1646922109;
+        bh=cam9jz1lhBQ1bzbDOOb5/sES4ZWRJgbU5/7XX53WJgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vCKvCEYUngvrSFjzT3tQ/u9yt9b5sZRCx2DeoxiESKXAN3DjI8w36OBBeRY5MmJkC
-         aOLkZly8C4pGCH9LuO5npMNsQwUbs+3YPnyfoei3ucr38CDys/JWoNCPYW58oFL5UC
-         lTBu9DTXjy9fy7/84FqqPzbWFuQUrpUo680vUJDk=
+        b=FfGPR7nTCLN/sUtzVCxnoXyfRT1TO/26ZsnQ//J9pm/S7V2b/d1PZ+H+r7KK4FSxg
+         s4rG9fieNXJfVlJ0GGZxw1JgsjZwlzkCjyV8C/V5JEPTY2g+BKbOB/+MUBDQYSmrAE
+         jvSg33J/I6e4+OR0eWPFpWhTmdPvDruS9xuSbEhg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 4.14 12/31] arm/arm64: smccc/psci: add arm_smccc_1_1_get_conduit()
-Date:   Thu, 10 Mar 2022 15:18:25 +0100
-Message-Id: <20220310140807.892834978@linuxfoundation.org>
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Anthony Steinhauser <asteinhauser@google.com>,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: [PATCH 4.19 01/33] x86/speculation: Merge one test in spectre_v2_user_select_mitigation()
+Date:   Thu, 10 Mar 2022 15:18:28 +0100
+Message-Id: <20220310140807.793272491@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
-References: <20220310140807.524313448@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,79 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Borislav Petkov <bp@suse.de>
 
-commit 6b7fe77c334ae59fed9500140e08f4f896b36871 upstream.
+commit a5ce9f2bb665d1d2b31f139a02dbaa2dfbb62fa6 upstream.
 
-SMCCC callers are currently amassing a collection of enums for the SMCCC
-conduit, and are having to dig into the PSCI driver's internals in order
-to figure out what to do.
+Merge the test whether the CPU supports STIBP into the test which
+determines whether STIBP is required. Thus try to simplify what is
+already an insane logic.
 
-Let's clean this up, with common SMCCC_CONDUIT_* definitions, and an
-arm_smccc_1_1_get_conduit() helper that abstracts the PSCI driver's
-internal state.
+Remove a superfluous newline in a comment, while at it.
 
-We can kill off the PSCI_CONDUIT_* definitions once we've migrated users
-over to the new interface.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Acked-by: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Anthony Steinhauser <asteinhauser@google.com>
+Link: https://lkml.kernel.org/r/20200615065806.GB14668@zn.tnic
+[fllinden@amazon.com: fixed contextual conflict (comment) for 4.19]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/psci.c   |   15 +++++++++++++++
- include/linux/arm-smccc.h |   16 ++++++++++++++++
- 2 files changed, 31 insertions(+)
+ arch/x86/kernel/cpu/bugs.c |   13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
---- a/drivers/firmware/psci.c
-+++ b/drivers/firmware/psci.c
-@@ -64,6 +64,21 @@ struct psci_operations psci_ops = {
- 	.smccc_version = SMCCC_VERSION_1_0,
- };
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -756,10 +756,12 @@ spectre_v2_user_select_mitigation(enum s
+ 	}
  
-+enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void)
-+{
-+	if (psci_ops.smccc_version < SMCCC_VERSION_1_1)
-+		return SMCCC_CONDUIT_NONE;
-+
-+	switch (psci_ops.conduit) {
-+	case PSCI_CONDUIT_SMC:
-+		return SMCCC_CONDUIT_SMC;
-+	case PSCI_CONDUIT_HVC:
-+		return SMCCC_CONDUIT_HVC;
-+	default:
-+		return SMCCC_CONDUIT_NONE;
-+	}
-+}
-+
- typedef unsigned long (psci_fn)(unsigned long, unsigned long,
- 				unsigned long, unsigned long);
- static psci_fn *invoke_psci_fn;
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -89,6 +89,22 @@
+ 	/*
+-	 * If enhanced IBRS is enabled or SMT impossible, STIBP is not
++	 * If no STIBP, enhanced IBRS is enabled or SMT impossible, STIBP is not
+ 	 * required.
+ 	 */
+-	if (!smt_possible || spectre_v2_enabled == SPECTRE_V2_IBRS_ENHANCED)
++	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
++	    !smt_possible ||
++	    spectre_v2_enabled == SPECTRE_V2_IBRS_ENHANCED)
+ 		return;
  
- #include <linux/linkage.h>
- #include <linux/types.h>
-+
-+enum arm_smccc_conduit {
-+	SMCCC_CONDUIT_NONE,
-+	SMCCC_CONDUIT_SMC,
-+	SMCCC_CONDUIT_HVC,
-+};
-+
-+/**
-+ * arm_smccc_1_1_get_conduit()
-+ *
-+ * Returns the conduit to be used for SMCCCv1.1 or later.
-+ *
-+ * When SMCCCv1.1 is not present, returns SMCCC_CONDUIT_NONE.
-+ */
-+enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void);
-+
- /**
-  * struct arm_smccc_res - Result from SMC/HVC call
-  * @a0-a3 result values from registers 0 to 3
+ 	/*
+@@ -771,12 +773,6 @@ spectre_v2_user_select_mitigation(enum s
+ 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
+ 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
+ 
+-	/*
+-	 * If STIBP is not available, clear the STIBP mode.
+-	 */
+-	if (!boot_cpu_has(X86_FEATURE_STIBP))
+-		mode = SPECTRE_V2_USER_NONE;
+-
+ 	spectre_v2_user_stibp = mode;
+ 
+ set_mode:
+@@ -1255,7 +1251,6 @@ static int ib_prctl_set(struct task_stru
+ 		if (spectre_v2_user_ibpb == SPECTRE_V2_USER_NONE &&
+ 		    spectre_v2_user_stibp == SPECTRE_V2_USER_NONE)
+ 			return 0;
+-
+ 		/*
+ 		 * With strict mode for both IBPB and STIBP, the instruction
+ 		 * code paths avoid checking this task flag and instead,
 
 

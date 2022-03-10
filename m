@@ -2,133 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6264D5444
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0B74D5449
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344206AbiCJWKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
+        id S1344237AbiCJWLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343815AbiCJWKk (ORCPT
+        with ESMTP id S1344259AbiCJWLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:10:40 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29504DA87C;
-        Thu, 10 Mar 2022 14:09:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=n6DIoThXu6+2o1MnVoANgPmGbVAPFUq9XQ9ZlvmYihM=; b=svgcWFlC7tHQ4R+LvnKXqtgZtW
-        odGemenDWx2KeCUZx3WC3v3olcCJV73vy7HM9BT2Ec0cDz/8BADaQUSn+mjZIMH9WM/v8O38MMwd1
-        GvI4e+XOlhkjsqRR8qOyv/gElZDz13MW6yFbplaGOvNKMvWct2ni2gIbMmrU0f5JC6/HI75LsczPm
-        o7mvs+3WWcbtUczqBxxVOljqZi+srtZ2mIMqLdiU+IXmmymMQzn5kP9suKZyvS1LHdhOzXiOjhtS0
-        Fvt92G12OPL6it1IdiQbEdsqu8hVmvhbfXU/mumi7n3Ndjjd2zugyrSTlekVmX6alP6vA4edIreyr
-        Og6UkRJw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57780)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nSQyQ-0001jL-N3; Thu, 10 Mar 2022 22:09:31 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nSQyO-0000xj-3P; Thu, 10 Mar 2022 22:09:28 +0000
-Date:   Thu, 10 Mar 2022 22:09:28 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
- __read_once_word_nocheck
-Message-ID: <Yip3GJDbJIYNeg44@shell.armlinux.org.uk>
-References: <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
- <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
- <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
- <Yinwq3Z9l0selLLS@shell.armlinux.org.uk>
- <Yin2jQqW+pUWJZ7E@shell.armlinux.org.uk>
- <CAMj1kXGkUJ=-4oA4GvBZNK94A1MrZ7UwKDN_tJRgwq8KF06VmA@mail.gmail.com>
- <CA+G9fYvEANOMekjvtu7agdVYQ_b8OMtxQdyAV2JT_vMdBU3VRA@mail.gmail.com>
- <CAMj1kXEVVZTKX_86bbTfLpFuDriV0-uwCMgSKDP+dzcD1L4XCw@mail.gmail.com>
- <CA+G9fYuO-sy+sZnhSz=A7Xm0LdSp2AT+7jCKLB33tZzK4izj3g@mail.gmail.com>
- <CAMj1kXGb_0FNU7capJEDWTZF2OegmZyBphhH8GuNqL7+YYLjZQ@mail.gmail.com>
+        Thu, 10 Mar 2022 17:11:08 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F83E144F4F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:10:06 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id w27so11909569lfa.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:10:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tK2DffIcTcbFc6YisuU/CAQwL4qcT6NxH18APJQxTOM=;
+        b=6cuUYOWDZHQoQ6qpPp6RnzAvQBz6h92+KoZ33nIdPkqIvU2W3u6mLlvhvmWle6XFED
+         kXAiC1L8EQiqKTXQ3Ho94WG9scxPyfupoBAWL+YUJnuL5tL7P9JphrpZafP4O3YsUath
+         Vrc82QS6C8qTWn5v5SZgYPp8lGlK7QrNDqQMYk7JmsFeYzrqeEEK/09KNEGkr+Ezexw4
+         Bony9rQnL03NYGjciFb/d4QY+mkq7MMTd9tWI3LTG+m42hLELjfivY3KLgbY5I0vbsUb
+         qhHaxJNmgi4XUJermkRRSX4mhnScQW9lP6h/B1T93XlTWcHgRejZ0L5bRuA8K6Z3/m2a
+         xSag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tK2DffIcTcbFc6YisuU/CAQwL4qcT6NxH18APJQxTOM=;
+        b=3VE5cP7ZWswk+No6XPO03l1v5/4s16uifcg0/7kfxkt/b64+ljDEH9eCa60UpcsGy3
+         xhzBAykLXlXIJpHgtULnuMqQUpzbCE2RYIlVf4/IS9XJGGjJt2eQ0ir5T3lqMgJHPd1Q
+         z3KU5L+BZdATU53wDKmOkzMXBMmTHcKIqrEY2mPfoyEOrTrNA5tp1rq6FyUhFNT2M9mW
+         rFUauotlLP3DNeZvJNtEMBcEjqX65eWsbGnhH8aHRmve/OB6I9uFS2Bn4fXAIxZoVkoy
+         IQhEol8Lf+XsWbHJFGrBDJwwBnxkWCPVUJEY67MbDPWWdrqs57eDT8sMNbu8GbzI1wHQ
+         JADQ==
+X-Gm-Message-State: AOAM531ImiB4Bm3Bd20nPsZ5vEjNE1QesXd0TGEj9TrfQHWqDaEcCZD5
+        yeygkjh4o31pN86lGayh6C23hoyTZJvL/w==
+X-Google-Smtp-Source: ABdhPJz2GDfFMCRDAfn/kgAPWUdUq7NUrA3/jXOsH3Chmz4MUG5XOWiU1VjW7Up0DEynwppO5C4wjw==
+X-Received: by 2002:a05:6512:c03:b0:447:7912:7e6b with SMTP id z3-20020a0565120c0300b0044779127e6bmr4237365lfu.508.1646950204381;
+        Thu, 10 Mar 2022 14:10:04 -0800 (PST)
+Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id c23-20020a196557000000b004481befdc8bsm1201593lfj.161.2022.03.10.14.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 14:09:55 -0800 (PST)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     wsa@kernel.org, upstream@semihalf.com, jsd@semihalf.com
+Subject: [PATCH v2 -next] i2c: designware: Remove code duplication
+Date:   Thu, 10 Mar 2022 23:09:32 +0100
+Message-Id: <20220310220932.140973-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGb_0FNU7capJEDWTZF2OegmZyBphhH8GuNqL7+YYLjZQ@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:06:17PM +0100, Ard Biesheuvel wrote:
-> On Thu, 10 Mar 2022 at 22:50, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > On Fri, 11 Mar 2022 at 02:55, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > >
-> > > On Thu, 10 Mar 2022 at 22:18, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > >
-> > > > Hi Ard and Russell,
-> > > >
-> > > > The boot test pass on linux next-20220310 tag with  KASAN=y on BeagleBoard x15
-> > > > device. but LTP cve tests reproduced the reported kernel crash  [1].
-> > > > From the available historical data I can confirm that this is an
-> > > > intermittent issue on
-> > > > BeagleBoard x15 devices.
-> > > >
-> > > > OTOH, the kernel crash is always reproducible on qemu-arm with KASAN=y
-> > > > while booting which has been known to fail for a long time.
-> > > >
-> > > > From the Ardb tree I have boot tested qemu-arm with KASAN=y the reported
-> > > > kernel crash is always reproducible.
-> > > >
-> > > > The build steps [3] and extra Kconfigs.
-> > > >
-> > > > - Naresh
-> > > > [1] https://lkft.validation.linaro.org/scheduler/job/4701310
-> > > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/
-> > > > [3] https://builds.tuxbuild.com/2661dIAPUjE2DMJvye91He2gus0/tuxmake_reproducer.sh
-> > >
-> > > Thanks Naresh. I'm having trouble to make sense of this, though. The
-> > > linked output log appears to be from a build that lacks my 'ARM:
-> > > entry: fix unwinder problems caused by IRQ stacks' patch, as it
-> > > doesn't show any occurrences of call_with_stack() on any of the call
-> > > stacks.
-> > >
-> > > Do you have a link to the vmlinux and zImage files for this build?
-> >
-> > Yes.
-> >
-> > vmlinux.xz:  https://builds.tuxbuild.com/26BmIasJnAyCii0SkgbKarkF369/vmlinux.xz
-> > zImage: https://builds.tuxbuild.com/26BmIasJnAyCii0SkgbKarkF369/zImage
-> > System.map: https://builds.tuxbuild.com/26BmIasJnAyCii0SkgbKarkF369/System.map
-> > Build log: https://builds.tuxbuild.com/26BmIasJnAyCii0SkgbKarkF369/
-> >
-> 
-> This kernel does not appear to have
-> 
-> ARM: unwind: set frame.pc correctly for current-thread unwinding
-> ARM: entry: fix unwinder problems caused by IRQ stacks
-> ARM: Revert "unwind: dump exception stack from calling frame"
-> 
-> so it is expected that the same issue is still being observed.
-> 
-> Could you please try -next with those patches applied?
+Simplify code by moving common part to one function.
 
-I concur, from my inspection of the above referenced vmlinux file.
+Signed-off-by: Jan Dabros <jsd@semihalf.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v1->v2:
+* Add kudos for Andy who suggested this change
+* Get rid of extra function and move common code to psp_send_i2c_req
+* Update commit message and commit title
+  (was "i2c:designware: Add helper to remove redundancy")
+ drivers/i2c/busses/i2c-designware-amdpsp.c | 35 ++++++++++------------
+ 1 file changed, 15 insertions(+), 20 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+index c64e459afb5c..5c32255c3239 100644
+--- a/drivers/i2c/busses/i2c-designware-amdpsp.c
++++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+@@ -214,17 +214,28 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+ 				PSP_I2C_REQ_RETRY_DELAY_US,
+ 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
+ 				0, req);
+-	if (ret)
++	if (ret) {
++		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
++			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
++			"release" : "acquire");
+ 		goto cleanup;
++	}
+ 
+ 	ret = status;
+-	if (ret)
++	if (ret) {
++		dev_err(psp_i2c_dev, "PSP communication error\n");
+ 		goto cleanup;
++	}
+ 
+ 	dev_dbg(psp_i2c_dev, "Request accepted by PSP after %ums\n",
+ 		jiffies_to_msecs(jiffies - start));
+ 
+ cleanup:
++	if (ret) {
++		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
++		psp_i2c_mbox_fail = true;
++	}
++
+ 	kfree(req);
+ 	return ret;
+ }
+@@ -249,16 +260,8 @@ static int psp_acquire_i2c_bus(void)
+ 	};
+ 
+ 	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
+-	if (status) {
+-		if (status == -ETIMEDOUT)
+-			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
+-		else
+-			dev_err(psp_i2c_dev, "PSP communication error\n");
+-
+-		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+-		psp_i2c_mbox_fail = true;
++	if (status)
+ 		goto cleanup;
+-	}
+ 
+ 	psp_i2c_sem_acquired = jiffies;
+ 	psp_i2c_access_count++;
+@@ -294,16 +297,8 @@ static void psp_release_i2c_bus(void)
+ 
+ 	/* Send a release command to PSP */
+ 	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
+-	if (status) {
+-		if (status == -ETIMEDOUT)
+-			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
+-		else
+-			dev_err(psp_i2c_dev, "PSP communication error\n");
+-
+-		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+-		psp_i2c_mbox_fail = true;
++	if (status)
+ 		goto cleanup;
+-	}
+ 
+ 	dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
+ 		jiffies_to_msecs(jiffies - psp_i2c_sem_acquired));
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.31.0
+

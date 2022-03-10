@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A43A4D4AF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3126C4D4A44
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344104AbiCJOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S244341AbiCJOdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343950AbiCJObb (ORCPT
+        with ESMTP id S243970AbiCJO2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1009B82F5;
-        Thu, 10 Mar 2022 06:29:08 -0800 (PST)
+        Thu, 10 Mar 2022 09:28:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B333BB0A5E;
+        Thu, 10 Mar 2022 06:23:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55238B825A7;
-        Thu, 10 Mar 2022 14:29:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F223C340E8;
-        Thu, 10 Mar 2022 14:29:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88B50B82544;
+        Thu, 10 Mar 2022 14:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED8F8C340F4;
+        Thu, 10 Mar 2022 14:22:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922546;
-        bh=rKln5HfmJ7CAsIJqUftQHhI05Ko1JEKlKJ2HDsRvn3c=;
+        s=korg; t=1646922176;
+        bh=T/mHRVpyB/klvNBKNmoZm1usKzPz4/NT8r60/gXuNsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X6DyEcpX9RNrwgCr/grd7SetyrN/qJkv6k1DmbVa8Kg7khOQAbE7q8X7FGlX4RYvo
-         C/iyJ0BdmusBtwSEEWWqNckA9jU5ZDGTa59n76c2gUozZa2VxBk5rqaLyEjbO8kzna
-         OtHUN7DXUw0cEcOEoajAZQ1NPEtxhv5rxUbUykgE=
+        b=hqfWrY2gSVfIvgcL/cIkibR3Ua8lH8O/RZ2xSBKHZ3tsosp7SbRogIIcA323pmaRk
+         eZHxvF6cCJ2mafVh2hXbWRd9AVJ8eP1Rrw2HAtmCYGf0JEVp50M7yyvr4VUpsv1+e/
+         ytEJCXsTMrKXGECvrPCwpcf5KGpaDqxEwfFem6/Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frank van der Linden <fllinden@amazon.com>
-Subject: [PATCH 5.15 06/58] x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+        stable@vger.kernel.org,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.19 28/33] xen/gntalloc: dont use gnttab_query_foreign_access()
 Date:   Thu, 10 Mar 2022 15:18:55 +0100
-Message-Id: <20220310140813.169073156@linuxfoundation.org>
+Message-Id: <20220310140808.572960322@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-References: <20220310140812.983088611@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,150 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 44a3918c8245ab10c6c9719dd12e7a8d291980d8 upstream.
+Commit d3b6372c5881cb54925212abb62c521df8ba4809 upstream.
 
-With unprivileged eBPF enabled, eIBRS (without retpoline) is vulnerable
-to Spectre v2 BHB-based attacks.
+Using gnttab_query_foreign_access() is unsafe, as it is racy by design.
 
-When both are enabled, print a warning message and report it in the
-'spectre_v2' sysfs vulnerabilities file.
+The use case in the gntalloc driver is not needed at all. While at it
+replace the call of gnttab_end_foreign_access_ref() with a call of
+gnttab_end_foreign_access(), which is what is really wanted there. In
+case the grant wasn't used due to an allocation failure, just free the
+grant via gnttab_free_grant_reference().
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-[fllinden@amazon.com: backported to 5.15]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+This is CVE-2022-23039 / part of XSA-396.
+
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |   35 +++++++++++++++++++++++++++++------
- include/linux/bpf.h        |   12 ++++++++++++
- kernel/sysctl.c            |    7 +++++++
- 3 files changed, 48 insertions(+), 6 deletions(-)
+ drivers/xen/gntalloc.c |   25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -16,6 +16,7 @@
- #include <linux/prctl.h>
- #include <linux/sched/smt.h>
- #include <linux/pgtable.h>
-+#include <linux/bpf.h>
- 
- #include <asm/spec-ctrl.h>
- #include <asm/cmdline.h>
-@@ -650,6 +651,16 @@ static inline const char *spectre_v2_mod
- static inline const char *spectre_v2_module_string(void) { return ""; }
- #endif
- 
-+#define SPECTRE_V2_EIBRS_EBPF_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!\n"
-+
-+#ifdef CONFIG_BPF_SYSCALL
-+void unpriv_ebpf_notify(int new_state)
-+{
-+	if (spectre_v2_enabled == SPECTRE_V2_EIBRS && !new_state)
-+		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
-+}
-+#endif
-+
- static inline bool match_option(const char *arg, int arglen, const char *opt)
- {
- 	int len = strlen(opt);
-@@ -994,6 +1005,9 @@ static void __init spectre_v2_select_mit
- 		break;
+--- a/drivers/xen/gntalloc.c
++++ b/drivers/xen/gntalloc.c
+@@ -169,20 +169,14 @@ undo:
+ 		__del_gref(gref);
  	}
  
-+	if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
-+		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
-+
- 	if (spectre_v2_in_eibrs_mode(mode)) {
- 		/* Force it so VMEXIT will restore correctly */
- 		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
-@@ -1780,6 +1794,20 @@ static char *ibpb_state(void)
- 	return "";
+-	/* It's possible for the target domain to map the just-allocated grant
+-	 * references by blindly guessing their IDs; if this is done, then
+-	 * __del_gref will leave them in the queue_gref list. They need to be
+-	 * added to the global list so that we can free them when they are no
+-	 * longer referenced.
+-	 */
+-	if (unlikely(!list_empty(&queue_gref)))
+-		list_splice_tail(&queue_gref, &gref_list);
+ 	mutex_unlock(&gref_mutex);
+ 	return rc;
  }
  
-+static ssize_t spectre_v2_show_state(char *buf)
-+{
-+	if (spectre_v2_enabled == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
-+		return sprintf(buf, "Vulnerable: Unprivileged eBPF enabled\n");
-+
-+	return sprintf(buf, "%s%s%s%s%s%s\n",
-+		       spectre_v2_strings[spectre_v2_enabled],
-+		       ibpb_state(),
-+		       boot_cpu_has(X86_FEATURE_USE_IBRS_FW) ? ", IBRS_FW" : "",
-+		       stibp_state(),
-+		       boot_cpu_has(X86_FEATURE_RSB_CTXSW) ? ", RSB filling" : "",
-+		       spectre_v2_module_string());
-+}
-+
- static ssize_t srbds_show_state(char *buf)
+ static void __del_gref(struct gntalloc_gref *gref)
  {
- 	return sprintf(buf, "%s\n", srbds_strings[srbds_mitigation]);
-@@ -1805,12 +1833,7 @@ static ssize_t cpu_show_common(struct de
- 		return sprintf(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
++	unsigned long addr;
++
+ 	if (gref->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
+ 		uint8_t *tmp = kmap(gref->page);
+ 		tmp[gref->notify.pgoff] = 0;
+@@ -196,21 +190,16 @@ static void __del_gref(struct gntalloc_g
+ 	gref->notify.flags = 0;
  
- 	case X86_BUG_SPECTRE_V2:
--		return sprintf(buf, "%s%s%s%s%s%s\n", spectre_v2_strings[spectre_v2_enabled],
--			       ibpb_state(),
--			       boot_cpu_has(X86_FEATURE_USE_IBRS_FW) ? ", IBRS_FW" : "",
--			       stibp_state(),
--			       boot_cpu_has(X86_FEATURE_RSB_CTXSW) ? ", RSB filling" : "",
--			       spectre_v2_module_string());
-+		return spectre_v2_show_state(buf);
- 
- 	case X86_BUG_SPEC_STORE_BYPASS:
- 		return sprintf(buf, "%s\n", ssb_strings[ssb_mode]);
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1666,6 +1666,12 @@ bool bpf_prog_has_kfunc_call(const struc
- const struct btf_func_model *
- bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
- 			 const struct bpf_insn *insn);
-+
-+static inline bool unprivileged_ebpf_enabled(void)
-+{
-+	return !sysctl_unprivileged_bpf_disabled;
-+}
-+
- #else /* !CONFIG_BPF_SYSCALL */
- static inline struct bpf_prog *bpf_prog_get(u32 ufd)
- {
-@@ -1884,6 +1890,12 @@ bpf_jit_find_kfunc_model(const struct bp
- {
- 	return NULL;
- }
-+
-+static inline bool unprivileged_ebpf_enabled(void)
-+{
-+	return false;
-+}
-+
- #endif /* CONFIG_BPF_SYSCALL */
- 
- void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -228,6 +228,10 @@ static int bpf_stats_handler(struct ctl_
- 	return ret;
- }
- 
-+void __weak unpriv_ebpf_notify(int new_state)
-+{
-+}
-+
- static int bpf_unpriv_handler(struct ctl_table *table, int write,
- 			      void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -245,6 +249,9 @@ static int bpf_unpriv_handler(struct ctl
- 			return -EPERM;
- 		*(int *)table->data = unpriv_enable;
+ 	if (gref->gref_id) {
+-		if (gnttab_query_foreign_access(gref->gref_id))
+-			return;
+-
+-		if (!gnttab_end_foreign_access_ref(gref->gref_id, 0))
+-			return;
+-
+-		gnttab_free_grant_reference(gref->gref_id);
++		if (gref->page) {
++			addr = (unsigned long)page_to_virt(gref->page);
++			gnttab_end_foreign_access(gref->gref_id, 0, addr);
++		} else
++			gnttab_free_grant_reference(gref->gref_id);
  	}
-+
-+	unpriv_ebpf_notify(unpriv_enable);
-+
- 	return ret;
+ 
+ 	gref_size--;
+ 	list_del(&gref->next_gref);
+ 
+-	if (gref->page)
+-		__free_page(gref->page);
+-
+ 	kfree(gref);
  }
- #endif /* CONFIG_BPF_SYSCALL && CONFIG_SYSCTL */
+ 
 
 

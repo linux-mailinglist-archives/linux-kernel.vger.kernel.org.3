@@ -2,109 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8354D4824
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87D54D4836
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiCJNhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S242507AbiCJNiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238386AbiCJNhg (ORCPT
+        with ESMTP id S242467AbiCJNht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:37:36 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE9514E96E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:36:36 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso6611317pjc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:36:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RcI1OUfcDqqYEbFBrtQzgD2/BopOVHxvwvLjQ5j7Gz4=;
-        b=j4BpGdL/G3c6X9v+GkAuzLfVmSS5YCs63Tw2Y0DY3Dg4Fq2TH3/cCg19eoOrI4GYMS
-         PEUTXqSkESYNQVVuiRMaWKE1pLntDv+9XMVpUZVW4LIq5KOMd+J7S782fGwed/Tpfl7t
-         QVtRHsra/bBnloQ7bc91a2OdnpeeNR9cGeiQm+WeAPO+p0c/9hIqx3cwkmDUFYa9vIsU
-         YtL9GrUqkDtwNtHJUbF47df1WWwgXhFHkgaj5huyfmWUL5gs6vIxkLjosI7Z4iOAWJ6x
-         jLRGAzt3jwYr0+m0wUkyNZt78X1k1B2iU8JWKTUbUcuZa+4S0hnPFlz8e0/G+okkDAkM
-         cF9A==
+        Thu, 10 Mar 2022 08:37:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76CE514F282
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646919407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B8DIEevWYvuYglJFjyQWsQEqu5VB35wMbcBWRZHjc4g=;
+        b=OVzj/u0vea9Ey+kGL1pZBj4cQXxUtXa/Nr/cW2j4L6nIq4Sdab51TYsqguO1j+Ch39TPUd
+        yPa2ijlSNJcbNL/y7J1mKrNpn7U3zRdrBCq2fZ6VyBQbGTrg14LCiphbffcZvMAmTQSmyN
+        cceWrr6jeRUHBVjZm8161GLQSY1bKUQ=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-9N9800ZlOCmhow0BwbIhmg-1; Thu, 10 Mar 2022 08:36:44 -0500
+X-MC-Unique: 9N9800ZlOCmhow0BwbIhmg-1
+Received: by mail-wr1-f69.google.com with SMTP id n4-20020a5d4844000000b001f1ed76e943so1702534wrs.22
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:36:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RcI1OUfcDqqYEbFBrtQzgD2/BopOVHxvwvLjQ5j7Gz4=;
-        b=Tt95QSgDlYLDIHJ6TxxvjezfyHFUZA61HxNjDgFUzL5gTN7R0S1lRJkMjaYM4rCf4p
-         s2//Byk7ooRZVqcVXnwzIDkTRFvm14DaoaP5tlZDwXxLiuwJ1Jt8TQkCDc+9nXYW8PMe
-         uv4Nw6WMZ7lzJd14JsWpSA/tiYYTB+NR+wtpJ9NutjMRgpdc/Kz3zM5OhJe8MfggzAxk
-         9AvxjyyFwjj5C8Twed6UjxoVV7JX7O/ZYQlgizEXNVuwK0ztpzsW+4u8ck6fSz0617zb
-         XOQGaW6WDlS+MtWnM7LFwSnHR1L3ipi9WGQo8P70Sp4C8egjKJPFzEb0scNOUAsDehg8
-         rCPg==
-X-Gm-Message-State: AOAM532vlkIfoy0aqkV6vpQx7KlM9hSdAVmO4eKLK+gM23ufEAG05fCg
-        20SBwxqtYj0+vWDVio4o57c0jJFYAJOzd9EJ
-X-Google-Smtp-Source: ABdhPJyvBWEPfF8m9OnRWSSpjf0tQExCWDRH8S4xPRLG6HbVLbXtEwDaTV4Kn2O3JOGvRTdekWY/nA==
-X-Received: by 2002:a17:902:e88e:b0:151:ffdf:5692 with SMTP id w14-20020a170902e88e00b00151ffdf5692mr4915692plg.17.1646919395842;
-        Thu, 10 Mar 2022 05:36:35 -0800 (PST)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056a00231200b004f72b290994sm7115059pfh.180.2022.03.10.05.36.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 05:36:34 -0800 (PST)
-Message-ID: <47d2c632-b2c2-9736-01a6-bf1659be5299@kernel.dk>
-Date:   Thu, 10 Mar 2022 06:36:33 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=B8DIEevWYvuYglJFjyQWsQEqu5VB35wMbcBWRZHjc4g=;
+        b=TxNDfPohHADJrrdy9utZ0AVVXfz+82Usm+L7dT5k1uOFNv6HeS7GFkLlZ6swq9xkDR
+         uHBfCuUZG8PljXOFoFL3B8ZjYC71aYRzbMFGKR1N8uyxu3Y6CY65Yz0NnBsygVOoz3qD
+         gDjcVQ9aoxA9wF2oGaRBSVU50cd6E9ZCCRThvEZMRQk+UJ1izlchk3b/RpJXlMDhhoaU
+         g7Kk74vE/ZE9x9AYImguYjZ2z6Q0Xj4YJjDJWq3REkq0cjs229W2pC6Mm6cTwdfGv6F2
+         nlovo/BbUd/LzoWzmMlLIVBJC9yyGP7cQ8fBVgKQVybkd9yFiiRHEsUDFxDTqniN1f3o
+         tVGA==
+X-Gm-Message-State: AOAM530ACEbTiExGt4DqlvrY3NJzCM79J9rJCMJVtfoQJXMQKdxrX+L2
+        N7qVYGQKRWkJS5UGWuXUKjhX5c0ZHpFOAtPPy0WA77XhAjH0ItNsPl3IDHG6TDDobDCKK6gDqHE
+        RXfDgjoGUwsmAuWxW/eLhuXT+
+X-Received: by 2002:a5d:64af:0:b0:203:88d0:716e with SMTP id m15-20020a5d64af000000b0020388d0716emr2293137wrp.327.1646919403153;
+        Thu, 10 Mar 2022 05:36:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwuoJ4lMptl/9JtRj644DNUVPlOVcLNnwLXnsnQ/usq1lertQQMLVXHPv/RU79B5g3EKng7UA==
+X-Received: by 2002:a5d:64af:0:b0:203:88d0:716e with SMTP id m15-20020a5d64af000000b0020388d0716emr2293118wrp.327.1646919402923;
+        Thu, 10 Mar 2022 05:36:42 -0800 (PST)
+Received: from sgarzare-redhat (host-212-171-187-184.pool212171.interbusiness.it. [212.171.187.184])
+        by smtp.gmail.com with ESMTPSA id 9-20020a1c0209000000b003868897278asm6818979wmc.23.2022.03.10.05.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 05:36:42 -0800 (PST)
+Date:   Thu, 10 Mar 2022 14:36:38 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jiyong Park <jiyong@google.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, adelva@google.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vsock: each transport cycles only on its own sockets
+Message-ID: <20220310133638.qe7eevwsmcbku2mc@sgarzare-redhat>
+References: <20220310132830.88203-1-jiyong@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 0/2] io_uring: Add support for napi_busy_poll
-Content-Language: en-US
-To:     Olivier Langlois <olivier@trillion01.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Hao Xu <haoxu@linux.alibaba.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <cover.1646777484.git.olivier@trillion01.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cover.1646777484.git.olivier@trillion01.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220310132830.88203-1-jiyong@google.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 3:17 PM, Olivier Langlois wrote:
-> The sqpoll thread can be used for performing the napi busy poll in a
-> similar way that it does io polling for file systems supporting direct
-> access bypassing the page cache.
-> 
-> The other way that io_uring can be used for napi busy poll is by
-> calling io_uring_enter() to get events.
-> 
-> If the user specify a timeout value, it is distributed between polling
-> and sleeping by using the systemwide setting
-> /proc/sys/net/core/busy_poll.
-> 
-> The changes have been tested with this program:
-> https://github.com/lano1106/io_uring_udp_ping
-> 
-> and the result is:
-> Without sqpoll:
-> NAPI busy loop disabled:
-> rtt min/avg/max/mdev = 40.631/42.050/58.667/1.547 us
-> NAPI busy loop enabled:
-> rtt min/avg/max/mdev = 30.619/31.753/61.433/1.456 us
-> 
-> With sqpoll:
-> NAPI busy loop disabled:
-> rtt min/avg/max/mdev = 42.087/44.438/59.508/1.533 us
-> NAPI busy loop enabled:
-> rtt min/avg/max/mdev = 35.779/37.347/52.201/0.924 us
+On Thu, Mar 10, 2022 at 10:28:29PM +0900, Jiyong Park wrote:
+>When iterating over sockets using vsock_for_each_connected_socket, make
+>sure that a transport filters out sockets that don't belong to the
+>transport.
+>
+>There actually was an issue caused by this; in a nested VM
+>configuration, destroying the nested VM (which often involves the
+>closing of /dev/vhost-vsock if there was h2g connections to the nested
+>VM) kills not only the h2g connections, but also all existing g2h
+>connections to the (outmost) host which are totally unrelated.
+>
+>Tested: Executed the following steps on Cuttlefish (Android running on a
+>VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
+>connection inside the VM, (2) open and then close /dev/vhost-vsock by
+>`exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
+>session is not reset.
+>
+>[1] https://android.googlesource.com/device/google/cuttlefish/
+>
+>Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
+>Signed-off-by: Jiyong Park <jiyong@google.com>
+>---
+>Changes in v2:
+>  - Squashed into a single patch
+>
+> drivers/vhost/vsock.c            | 3 ++-
+> include/net/af_vsock.h           | 3 ++-
+> net/vmw_vsock/af_vsock.c         | 9 +++++++--
+> net/vmw_vsock/virtio_transport.c | 7 +++++--
+> net/vmw_vsock/vmci_transport.c   | 3 ++-
+> 5 files changed, 18 insertions(+), 7 deletions(-)
+>
+>diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+>index 37f0b4274113..e6c9d41db1de 100644
+>--- a/drivers/vhost/vsock.c
+>+++ b/drivers/vhost/vsock.c
+>@@ -753,7 +753,8 @@ static int vhost_vsock_dev_release(struct inode *inode, struct file *file)
+>
+> 	/* Iterating over all connections for all CIDs to find orphans is
+> 	 * inefficient.  Room for improvement here. */
+>-	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
+>+	vsock_for_each_connected_socket(&vhost_transport.transport,
+>+					vhost_vsock_reset_orphans);
+>
+> 	/* Don't check the owner, because we are in the release path, so we
+> 	 * need to stop the vsock device in any case.
+>diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+>index ab207677e0a8..f742e50207fb 100644
+>--- a/include/net/af_vsock.h
+>+++ b/include/net/af_vsock.h
+>@@ -205,7 +205,8 @@ struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr);
+> struct sock *vsock_find_connected_socket(struct sockaddr_vm *src,
+> 					 struct sockaddr_vm *dst);
+> void vsock_remove_sock(struct vsock_sock *vsk);
+>-void vsock_for_each_connected_socket(void (*fn)(struct sock *sk));
+>+void vsock_for_each_connected_socket(struct vsock_transport *transport,
+>+				     void (*fn)(struct sock *sk));
+> int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
+> bool vsock_find_cid(unsigned int cid);
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 38baeb189d4e..f04abf662ec6 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -334,7 +334,8 @@ void vsock_remove_sock(struct vsock_sock *vsk)
+> }
+> EXPORT_SYMBOL_GPL(vsock_remove_sock);
+>
+>-void vsock_for_each_connected_socket(void (*fn)(struct sock *sk))
+>+void vsock_for_each_connected_socket(struct vsock_transport *transport,
+>+				     void (*fn)(struct sock *sk))
+> {
+> 	int i;
+>
+>@@ -343,8 +344,12 @@ void vsock_for_each_connected_socket(void (*fn)(struct sock *sk))
+> 	for (i = 0; i < ARRAY_SIZE(vsock_connected_table); i++) {
+> 		struct vsock_sock *vsk;
+> 		list_for_each_entry(vsk, &vsock_connected_table[i],
+>-				    connected_table)
+>+				    connected_table) {
+>+			if (vsk->transport != transport)
+>+				continue;
+>+
+> 			fn(sk_vsock(vsk));
+>+		}
+> 	}
+>
+> 	spin_unlock_bh(&vsock_table_lock);
+>diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>index fb3302fff627..5afc194a58bb 100644
+>--- a/net/vmw_vsock/virtio_transport.c
+>+++ b/net/vmw_vsock/virtio_transport.c
+>@@ -24,6 +24,7 @@
+> static struct workqueue_struct *virtio_vsock_workqueue;
+> static struct virtio_vsock __rcu *the_virtio_vsock;
+> static DEFINE_MUTEX(the_virtio_vsock_mutex); /* protects the_virtio_vsock */
+>+static struct virtio_transport virtio_transport; /* forward declaration */
+>
+> struct virtio_vsock {
+> 	struct virtio_device *vdev;
+>@@ -384,7 +385,8 @@ static void virtio_vsock_event_handle(struct virtio_vsock *vsock,
+> 	switch (le32_to_cpu(event->id)) {
+> 	case VIRTIO_VSOCK_EVENT_TRANSPORT_RESET:
+> 		virtio_vsock_update_guest_cid(vsock);
+>-		vsock_for_each_connected_socket(virtio_vsock_reset_sock);
+>+		vsock_for_each_connected_socket(&virtio_transport.transport,
+>+						virtio_vsock_reset_sock);
+> 		break;
+> 	}
+> }
+>@@ -662,7 +664,8 @@ static void virtio_vsock_remove(struct virtio_device *vdev)
+> 	synchronize_rcu();
+>
+> 	/* Reset all connected sockets when the device disappear */
+>-	vsock_for_each_connected_socket(virtio_vsock_reset_sock);
+>+	vsock_for_each_connected_socket(&virtio_transport.transport,
+>+					virtio_vsock_reset_sock);
+>
+> 	/* Stop all work handlers to make sure no one is accessing the device,
+> 	 * so we can safely call virtio_reset_device().
+>diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+>index 7aef34e32bdf..735d5e14608a 100644
+>--- a/net/vmw_vsock/vmci_transport.c
+>+++ b/net/vmw_vsock/vmci_transport.c
+>@@ -882,7 +882,8 @@ static void vmci_transport_qp_resumed_cb(u32 sub_id,
+> 					 const struct vmci_event_data *e_data,
+> 					 void *client_data)
+> {
+>-	vsock_for_each_connected_socket(vmci_transport_handle_detach);
+>+	vsock_for_each_connected_socket(&vmci_transport,
+>+					vmci_transport_handle_detach);
+> }
+>
+> static void vmci_transport_recv_pkt_work(struct work_struct *work)
 
-Applied, thanks.
+This breaks the build of vmci-transport:
 
--- 
-Jens Axboe
+../net/vmw_vsock/vmci_transport.c: In function ‘vmci_transport_qp_resumed_cb’:
+../net/vmw_vsock/vmci_transport.c:885:42: error: ‘vmci_transport’ undeclared (first use in this function)
+   885 |         vsock_for_each_connected_socket(&vmci_transport,
+       |                                          ^~~~~~~~~~~~~~
+../net/vmw_vsock/vmci_transport.c:885:42: note: each undeclared identifier is reported only once for each function it appears in
+
+
+Stefano
 

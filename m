@@ -2,143 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330104D3FA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 696A74D3FA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239222AbiCJDZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S239232AbiCJD1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:27:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiCJDZN (ORCPT
+        with ESMTP id S232330AbiCJD1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:25:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E042BF9F99
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 19:24:12 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KDZ7x0Zxxz9sZH;
-        Thu, 10 Mar 2022 11:20:29 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 11:24:11 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 10 Mar
- 2022 11:24:10 +0800
-Subject: Re: [PATCH] genirq/msi: Shutdown managed interrupts with unsatifiable
- affinities
-To:     John Garry <john.garry@huawei.com>, Marc Zyngier <maz@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        David Decotigny <ddecotig@google.com>
-References: <20220307190625.254426-1-maz@kernel.org>
- <70b15802-b8b1-301e-00f2-39e299114b02@huawei.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <24325714-8d2b-3818-9300-d61a2870405f@huawei.com>
-Date:   Thu, 10 Mar 2022 11:24:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Wed, 9 Mar 2022 22:27:07 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B90F9F99;
+        Wed,  9 Mar 2022 19:26:07 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id kl20so3591273qvb.10;
+        Wed, 09 Mar 2022 19:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7gp3FOy+D+uN4ZbQ8x42mrqSvOmrYaHXw8rED8ji0lM=;
+        b=AmEqAChV+MdO9NJA1WGm7svgpEN1Zq+PQTRQuOO4uMld0oJ2W7HFotzrjosoTQfXSX
+         /4bvIYKoOD8Ql877NB5xmEQBk2wHotXOZpy0z6g/bGGIZN1weeEJfyqPb58hSCh2ZoAU
+         raee2CN/4eOGdviUh6HOBPN+lR91BpnZL1CXoAos8r9+xWRTZFjZmfp/AVodliMyth0v
+         eNrjMxZGN8qxPf97sbH6HADZZUA5MTH+MG7LXDwZpn9/L5NjVpm9NJTbM5+9ANYdyerS
+         X56dTe2+Mm/rMDD2lBRuOMlMSKuE2RzRzsehhNfkQO+VUXVyVDQ1vvA5A5wR1Gvqn4hI
+         F33w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7gp3FOy+D+uN4ZbQ8x42mrqSvOmrYaHXw8rED8ji0lM=;
+        b=s9riSBtX7KUgsriXiUwAbg0EIHtBwpNMrDLq9/ufbXexcRc/NXxn6Z4Ev5friXjdlc
+         k1HyFt1paA/MlJVodTLZWqsNxcu5qFYIq3TbBD/vMfeb1XeXaJWybfe5o6q4DbRNSIZU
+         RSnsQ+ZPyr8WAY4wpdJOcAQNDnLZNtrKwr3RsTOoJtE1aCBMGsA9zJrK5S0fch1zYY3N
+         rJXw4zhXoxn5Y227FBM9A9lkqdb3fxJn6fr2Cnc7wqId+doR4gWXJWyMmLF4H1PRYZcK
+         WDx1axu1R4rOv8bzabstx3e+/xJdzoLT0j0GyXdoDZQQBfXbb7ti9kbsrK/dPOgJ4IIC
+         6KUg==
+X-Gm-Message-State: AOAM533tE5nxM2P9DFkyt8rPzPJgEf/KyqlyFoS2F00Rxngu40vGYuwO
+        m8g00xd5jsq/WVGY7zEJj8o=
+X-Google-Smtp-Source: ABdhPJyhvqB5vzG2kEqIclqQ2Usy47Za8FosXhuUXkFt+Bftecp+f4DglhBq/a8s+uBDXIx6H3e7DQ==
+X-Received: by 2002:a05:6214:5007:b0:436:5f36:1819 with SMTP id jo7-20020a056214500700b004365f361819mr353165qvb.29.1646882766009;
+        Wed, 09 Mar 2022 19:26:06 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:39e5:833e:12d:a54d? ([2600:1700:2442:6db0:39e5:833e:12d:a54d])
+        by smtp.gmail.com with ESMTPSA id j11-20020a37a00b000000b0067b436faccesm1771787qke.122.2022.03.09.19.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 19:26:05 -0800 (PST)
+Message-ID: <c29f1836-5e85-2c8d-fb98-d63c3d8a654d@gmail.com>
+Date:   Wed, 9 Mar 2022 21:26:05 -0600
 MIME-Version: 1.0
-In-Reply-To: <70b15802-b8b1-301e-00f2-39e299114b02@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] Docs: ktap: add code-block type
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Rae Moar <rmoar@google.com>, David Gow <davidgow@google.com>,
+        linux-doc@vger.kernel.org
+References: <20220131003637.14274-1-rdunlap@infradead.org>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220131003637.14274-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jon,
+
+On 1/30/22 18:36, Randy Dunlap wrote:
+> Fix multiple "code-block::" warnings by adding "none" as the type of
+> code-block. Mends these warnings:
+> 
+> Documentation/dev-tools/ktap.rst:71: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:120: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:126: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:132: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:139: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:145: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:195: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:208: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> Documentation/dev-tools/ktap.rst:238: WARNING: Error in "code-block" directive:
+> 1 argument(s) required, 0 supplied.
+> 
+> Fixes: a32fa6b2e8b4 ("Documentation: dev-tools: Add KTAP specification")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Rae Moar <rmoar@google.com>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+
+Are you planning to pick up this patch?
+
+I had independently included the same fix in another patch series, but David Gow
+let me know that Randy's patch already existed, so I removed this fix from my
+patch.
+
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
 
 
-On 2022/3/9 18:20, John Garry wrote:
-> +
-> 
-> On 07/03/2022 19:06, Marc Zyngier wrote:
->> When booting with maxcpus=<small number>, interrupt controllers
->> such as the GICv3 ITS may not be able to satisfy the affinity of
->> some managed interrupts, as some of the HW resources are simply
->> not available.
->>
->> In order to deal with this, do not try to activate such interrupt
->> if there is no online CPU capable of handling it. Instead, place
->> it in shutdown state. Once a capable CPU shows up, it will be
->> activated.
->>
->> Reported-by: John Garry <john.garry@huawei.com>
->> Reported-by: David Decotigny <ddecotig@google.com>
->> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> 
-> Tested-by: John Garry <john.garry@huawei.com>
-> 
->> ---
-> 
-> JFYI, I could not recreate the same crash reported in the original thread for
-> "nohz_full=5-127 isolcpus=nohz,domain,managed_irq,5-127 maxcpus=1". Here's just
-> showing what I set via cmdline:
+-Frank
 
-I think it's the userspace online all the CPUs that cause the crash. Could you
-please try to online all the CPUs after boot.
+> ---
+>  Documentation/dev-tools/ktap.rst |   18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> --- linux-next-20220128.orig/Documentation/dev-tools/ktap.rst
+> +++ linux-next-20220128/Documentation/dev-tools/ktap.rst
+> @@ -68,7 +68,7 @@ Test case result lines
+>  Test case result lines indicate the final status of a test.
+>  They are required and must have the format:
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	<result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+>  
+> @@ -117,32 +117,32 @@ separator.
+>  
+>  Example result lines include:
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	ok 1 test_case_name
+>  
+>  The test "test_case_name" passed.
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	not ok 1 test_case_name
+>  
+>  The test "test_case_name" failed.
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	ok 1 test # SKIP necessary dependency unavailable
+>  
+>  The test "test" was SKIPPED with the diagnostic message "necessary dependency
+>  unavailable".
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	not ok 1 test # TIMEOUT 30 seconds
+>  
+>  The test "test" timed out, with diagnostic data "30 seconds".
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	ok 5 check return code # rcode=0
+>  
+> @@ -192,7 +192,7 @@ line and should end before the parent te
+>  
+>  An example of a test with two nested subtests:
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	KTAP version 1
+>  	1..1
+> @@ -205,7 +205,7 @@ An example of a test with two nested sub
+>  
+>  An example format with multiple levels of nested testing:
+>  
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	KTAP version 1
+>  	1..2
+> @@ -235,7 +235,7 @@ nested version line, uses a line of the
+>  
+>  Example KTAP output
+>  --------------------
+> -.. code-block::
+> +.. code-block:: none
+>  
+>  	KTAP version 1
+>  	1..1
 
-Thanks,
-Xiongfeng
-
-> 
-> estuary:/$ dmesg | grep -i hz
-> [    0.000000] Kernel command line: BOOT_IMAGE=/john/Image rdinit=/init
-> console=ttyS0,115200 no_console_suspend nvme.use_threaded_interrupts=0
-> iommu.strict=0 acpi=force earlycon=pl011,mmio32,0x602b0000 nohz_full=5-127
-> isolcpus=nohz,domain,managed_irq,5-127 maxcpus=1
-> [    0.000000] NO_HZ: Full dynticks CPUs: 5-127.
-> [    0.000000] arch_timer: cp15 timer(s) running at 100.00MHz (phys).
-> [    0.000000] sched_clock: 57 bits at 100MHz, resolution 10ns, wraps every
-> 4398046511100ns
-> [   15.314258] sbsa-gwdt sbsa-gwdt.0: Initialized with 10s timeout @ 100000000
-> Hz, action=0
-> 
-> And for the kernel build:
-> $ more .config | grep NO_HZ
-> CONFIG_NO_HZ_COMMON=y
-> # CONFIG_NO_HZ_IDLE is not set
-> CONFIG_NO_HZ_FULL=y
-> # CONFIG_NO_HZ is not set
-> $
-> 
-> Thanks,
-> John
->>   kernel/irq/msi.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
->> index 2bdfce5edafd..aa84ce84c2ec 100644
->> --- a/kernel/irq/msi.c
->> +++ b/kernel/irq/msi.c
->> @@ -818,6 +818,18 @@ static int msi_init_virq(struct irq_domain *domain, int
->> virq, unsigned int vflag
->>           irqd_clr_can_reserve(irqd);
->>           if (vflags & VIRQ_NOMASK_QUIRK)
->>               irqd_set_msi_nomask_quirk(irqd);
->> +
->> +        /*
->> +         * If the interrupt is managed but no CPU is available
->> +         * to service it, shut it down until better times.
->> +         */
->> +        if ((vflags & VIRQ_ACTIVATE) &&
->> +            irqd_affinity_is_managed(irqd) &&
->> +            !cpumask_intersects(irq_data_get_affinity_mask(irqd),
->> +                    cpu_online_mask)) {
->> +                irqd_set_managed_shutdown(irqd);
->> +                return 0;
->> +            }
->>       }
->>         if (!(vflags & VIRQ_ACTIVATE))
-> 
-> .

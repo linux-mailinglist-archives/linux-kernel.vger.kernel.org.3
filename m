@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5B84D4112
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DCA4D4114
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiCJGVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 01:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S239747AbiCJGXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 01:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235429AbiCJGVo (ORCPT
+        with ESMTP id S234293AbiCJGXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 01:21:44 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C04D12B754;
-        Wed,  9 Mar 2022 22:20:43 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id v13so3179703qkv.3;
-        Wed, 09 Mar 2022 22:20:43 -0800 (PST)
+        Thu, 10 Mar 2022 01:23:37 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E507ECFC;
+        Wed,  9 Mar 2022 22:22:36 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id s8so4248340pfk.12;
+        Wed, 09 Mar 2022 22:22:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P9mdgV1XcI8IYrQOmfFrftDWPLsJMx8c+0mnYSxEQCM=;
-        b=XXiqYFo82xt3V6MW1qsaBB6Oip1Rco2s9XFxnj7SyhZ0ERyLa17rMIdWOuffYM5nLE
-         u/EFK89BlbyVPBC6QUQdp1D82F96LgWbCuw+t/7iUtJhgAdtB6q0vP78WEPYPERm3/M4
-         3jn0dFN8GaqFsUPcYBb7m/eKlxCdtG0kF2/QNAVAOl3CwR7AhFcPEVFGz6V435F670Kx
-         pruYGeSL3N7sWCbKPjCJF1VUw5feTZULdckC5Ey4x9lFZokR8I8raEB35HvIb3FSvZRZ
-         TiweK6yo/q2wXzGNtZfVa25r77CWqVNKilBYrrdMyeGIsfmI25hmVTKUVt7J6kpzEWz2
-         u+xQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1QvrxHVnbuN951iuLJ5i5Z8epnWXoTEiu0JfRkCwdNc=;
+        b=pauh/m4aXdFskskvW2uqn4VO4FEdiv275dFzvGGgPZj1M+B2jiaawooUxtFCYorgLW
+         M4r9zycfjJgFk+EIEnCsxwQaz+OzY4Dp/l5BggCR0X66VWff2dcuGEj1RYb6DHCkXR10
+         mR+LPzascD4moLvPknZn9ObjSp7fJAaaV7kcM0VKIU9ncsClRYsRsLrgWE7yA7T/HgzS
+         jfYa6o/wpPwczaWqNE1NeXWRJpivcuYr/y2Tr4v2nnlOFv/7Buls2dM1/pkLzaE3PTlM
+         95LXQ8jyEg3Js6rAaeZZEjLRuy7Ku6PzsZf86eIk6IuEc1Skmn+oUtItGnTVS0sqCn3v
+         zzXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=P9mdgV1XcI8IYrQOmfFrftDWPLsJMx8c+0mnYSxEQCM=;
-        b=GC6GO2mrNXeTD1cS0typcw2iFQI5RGcA8fgUeulXDJSnHua+OpqauZB5fAjFL/L8bT
-         Q+ruvqCxUk3HjaWm2Lycrh+keYyBx/9AHgeAwLdTLpzpB7IgO1uHhi3le3DPHwpMy3Vr
-         GaXL70/Vllpyc3tjYl8npJIwW6rIa0vdGFdamMzOjdq1n5hNXhntoQ1QZZM4x0jskQMC
-         dmfpxCLqZYM0FBI2cnd9NaKD+zGzz5zGOqLqUV+RoOPxf1CNL7FoS8ixrCnANB7wblsd
-         yLIj8hpKJ2yK+sFesTLYRDG976BmL6+NbH/FF1m8Kiswm9z+Zzgcpkqy4xZk8Qm3PYtd
-         CoNw==
-X-Gm-Message-State: AOAM531zpvF+J9lGjHPiI8Yz2r1EJEB/V2V0bSuZKQ1bk4Kf2R/GI5em
-        9Bw6CAUckg6FviiF2ePg0/gFJy8R1hU=
-X-Google-Smtp-Source: ABdhPJw3m8kz4Ro/w2SSoJI+eAuokN5vD5axE9OhoEIuf7w47DkNOq0P0kxAx2uX4ou8ke80U7bznQ==
-X-Received: by 2002:a05:620a:200f:b0:67b:3fb7:8784 with SMTP id c15-20020a05620a200f00b0067b3fb78784mr2034196qka.336.1646893242661;
-        Wed, 09 Mar 2022 22:20:42 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f34-20020a05622a1a2200b002e1a35ed1desm2149227qtb.94.2022.03.09.22.20.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 22:20:41 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     sebastian.hesselbarth@gmail.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH V2] net: mv643xx_eth: use platform_get_irq() instead of platform_get_resource()
-Date:   Thu, 10 Mar 2022 06:20:35 +0000
-Message-Id: <20220310062035.2084669-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=1QvrxHVnbuN951iuLJ5i5Z8epnWXoTEiu0JfRkCwdNc=;
+        b=f+xqBPy2c2JphOSxtCpIXVfn4kXfcIf7arbx3/G3Q5uNN10PpxHvEuqWLzm9oRNjTk
+         NRTMJokHrGd0c9xivb1vo/qs1DoArKB5DNxkgMf3e5lIElqGRwWN42zPKahFSdCb7fjZ
+         PsCGBXREb4yVQvCm7/82LUI2044ZkCitM3idQsborEy4LoAt1ULUk6kq+dUzoksDvdCG
+         3GCIP93HFrmruk/NodSAST2Imo82GatmwJbdmStRNpmgTXGKRVAI5Zor6HaBExChsq4x
+         bV9kcgsyPLRDX9PUJpZWwL0cLrBp3bvmxUCd0O2db/AaFisEP/3z8UF6TbHPfBasVp7P
+         h//w==
+X-Gm-Message-State: AOAM5333vSYVrAqKAlFrX+eFXLf3GnNQblFSXgY1T+ZPxY7ctMLDubWH
+        ezw+9bUYbknkUGkip0EWNbg=
+X-Google-Smtp-Source: ABdhPJyCvUa8NQpFHlM0rAOEJiMBlBi0dQ8fZLU0+6GrXUQ3ahIwxnK2e2aNk3bpNWYnUNVmwue1Pw==
+X-Received: by 2002:a65:6201:0:b0:369:4a47:aff1 with SMTP id d1-20020a656201000000b003694a47aff1mr2838506pgv.238.1646893356508;
+        Wed, 09 Mar 2022 22:22:36 -0800 (PST)
+Received: from [192.168.43.80] (subs03-180-214-233-29.three.co.id. [180.214.233.29])
+        by smtp.gmail.com with ESMTPSA id i187-20020a626dc4000000b004f6e0f346e7sm5315733pfc.39.2022.03.09.22.22.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 22:22:35 -0800 (PST)
+Message-ID: <49ee6347-1e2f-8894-627f-f90bc8356f84@gmail.com>
+Date:   Thu, 10 Mar 2022 13:22:30 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 5.10 00/43] 5.10.105-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220309155859.239810747@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On 09/03/22 22.59, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.105 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-It is not recommened to use platform_get_resource(pdev, IORESOURCE_IRQ)
-for requesting IRQ's resources any more, as they can be not ready yet in
-case of DT-booting.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
+powerpc (ps3_defconfig, gcc 11.2.0).
 
-platform_get_irq() instead is a recommended way for getting IRQ even if
-it was not retrieved earlier.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-It also makes code simpler because we're getting "int" value right away
-and no conversion from resource to int is required.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
-v1->v2:
-  - Add a space after "net:".
-  - Use WARN_ON instead of BUG_ON
- drivers/net/ethernet/marvell/mv643xx_eth.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-index c31cbbae0eca..34fa5ab21d62 100644
---- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-+++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-@@ -3092,8 +3092,7 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
- 	struct mv643xx_eth_private *mp;
- 	struct net_device *dev;
- 	struct phy_device *phydev = NULL;
--	struct resource *res;
--	int err;
-+	int err, irq;
- 
- 	pd = dev_get_platdata(&pdev->dev);
- 	if (pd == NULL) {
-@@ -3189,9 +3188,10 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
- 	timer_setup(&mp->rx_oom, oom_timer_wrapper, 0);
- 
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	BUG_ON(!res);
--	dev->irq = res->start;
-+	irq = platform_get_irq(pdev, 0);
-+	if (WARN_ON(irq < 0))
-+		return irq;
-+	dev->irq = irq;
- 
- 	dev->netdev_ops = &mv643xx_eth_netdev_ops;
- 
 -- 
-2.25.1
-
+An old man doll... just what I always wanted! - Clara

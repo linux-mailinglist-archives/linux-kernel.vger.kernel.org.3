@@ -2,246 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6070E4D47FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE07F4D47CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242381AbiCJNZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S242290AbiCJNNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiCJNZN (ORCPT
+        with ESMTP id S235602AbiCJNNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:25:13 -0500
-X-Greylist: delayed 652 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 05:24:10 PST
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB979A4DC;
-        Thu, 10 Mar 2022 05:24:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1646917891;
-        bh=pmnm+l4Ris569uSGaDzzAWRmTE1k7P6kzMdlq+dUBJU=;
-        h=From:To:CC:Subject:Date:From;
-        b=IEYJKJPTVm6IOq4bFF/sqtLs/b1NqX7NZant+U2HkO2ybbBVF1ouTkmXAZxpFCNvO
-         uPKG7rkztrUh4a/4De4gSUHeQ3uOk+TM4pimYj6jH6EAnS7iTsKs+yyL4U3um/BRuA
-         kBccWgEp66MweKLrnhVCtjYzyFfm++5bI6XiEQqULuOkGQHXFQEUCxIN/8vXCBitcN
-         0bgcpa79nFuZi0nBvZQoEdqW2JOVGFZKzt0bEJul7KJoujxgs9nP/y5D59h0BngDAl
-         fQTcara+u9IHnCttbfu7VtyoAtDXIR8SQgQBNx6umXul3Q1FNIvVCRj/ezXKiLoKAL
-         nCKe7LW2I51NA==
-X-secureTransport-forwarded: yes
-From:   Dominik Kierner <dkierner@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     "javierm@redhat.com" <javierm@redhat.com>
-CC:     "airlied@linux.ie" <airlied@linux.ie>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "maxime@cerno.tech" <maxime@cerno.tech>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
-Thread-Topic: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED
- displays
-Thread-Index: Adg0f9qHOCAIrgXYTGq8frgJBu/0lA==
-Date:   Thu, 10 Mar 2022 13:11:27 +0000
-Message-ID: <5d817ea54144414aa7865a72694b5811@dh-electronics.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 10 Mar 2022 08:13:13 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B0614CCBD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:12:10 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id u3so10776779ybh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:12:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=viAYQWfLt8jwZlTYc2jBnWPUdfvsV3AuBv3mwnsHANc=;
+        b=rOg7CmPnbKgdQtl8rsvfvtCzZIc3kZDG1B7x3HvHfLX+o/rk7nHHf3NQMez7ZtAVRv
+         W+cp8fURE1R70uFNRlYkNI2z7+IP84mjonGW31B7Y/LxIEwXgwzdwQXRvpeoCQSObpzv
+         x25xUZSpCHnUtZOZr43ZQnpugaLaYLiLNIOIVf/aWgloMTfjD8xB5777s1fRODnDhlIo
+         G3WA14B25YlBSrEQ2SjdscFQEwLKFFQS2VvRrbLLgTjh+mjuwo+YcCnKvmkOwpLikDZj
+         iillSXkJScsl8SkEVSN/ZgYXD20pApfmy0SnAXtLT0DY7ka6EW/kpgadJhv7Cw6jaB0N
+         9+GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=viAYQWfLt8jwZlTYc2jBnWPUdfvsV3AuBv3mwnsHANc=;
+        b=bvJg0Oj+McJTBh36EiLnMEoP139RzngyaXH/n4Nrldo1Q+Fq+RRm7p/WAA1IAuDgv2
+         SufWhVeaowTttnAvgCvvo2H/3pmovHTBwAqVt8uesvDM9Cm2YTIGBtQVmuwHpKnyrhSF
+         ACFBecb5ai6WPY7TaIbTdeXg/AD0emV4Qicw91zFYh2PADRYtgNi3v1dO+AD/ej4uua2
+         9sO9fugTr+2hsGO889zpmGC292a8demK0Dh9s1xSu3ZDZiM0BmJHsMDGfd5w/ZgI1ztX
+         uAbEioSgaiKkMA5QXetxnUNlpQ/JD/uexFcSiV6oMe545sNOpmt7dLJYLM8oWApvHZw8
+         KJvQ==
+X-Gm-Message-State: AOAM533ehapaShNVIcBzjylIVZB24s/M1z1lON7EP7MgEqjTJwCdpbkM
+        3BTIW1gS/sV0H7oVplBOijjzYPlA5WarIeeKRzY6nA==
+X-Google-Smtp-Source: ABdhPJzLTSZqQ0N6Dik+Ofetn+Lan6es0hiT0HdX5o9gIuwuEt+HBhUI3tnnkFx4aOXExiO1NLOtmhI1fbhXdEazMp4=
+X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
+ h62-20020a253a41000000b0062886a20dbcmr3593888yba.633.1646917929039; Thu, 10
+ Mar 2022 05:12:09 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220310125425.4193879-1-jiyong@google.com> <20220310125425.4193879-2-jiyong@google.com>
+ <20220310075933-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220310075933-mutt-send-email-mst@kernel.org>
+From:   Jiyong Park <jiyong@google.com>
+Date:   Thu, 10 Mar 2022 22:11:32 +0900
+Message-ID: <CALeUXe4V=6WhavV5d0XN_EjtZ9=0_5rD9ZfvQ77M1W4HpYh_2Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] vsock: each transport cycles only on its own sockets
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     sgarzare@redhat.com, stefanha@redhat.com, jasowang@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, adelva@google.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Javier,
+Hi Michael,
 
-I was working on a SSD130x driver as well, although with a different
-(drm_panel) approach and hit a bit of a roadblock.
-Now that Your driver is quite a bit maturer than mine,
-I will happily provide You with the source of my draft,
-so that any useful bits can be incorporated in Your driver.
-I know that links are a bit frowned upon,
-but I'd rather avoid cluttering the thread with my draft code,
-which is unfinished and incompatible with the code in this thread.
+Thanks for looking into this.
 
-https://github.com/dh-electronics/panel-solomon-ssd130x-draft
-https://github.com/dh-electronics/panel-solomon-ssd130x-draft/tree/drm-ssd1=
-30x/drivers/gpu/drm/panel
-
-The code was designed as a rewrite from scratch, as I assumed that a new
-DRM driver that accommodates for I2C, 3- and 4-wire-SPI,
-will probably need a new DTS interface for differentiating the
-protocol-specific drivers, which would obviously break compatibility.
-
-I do have few suggestions though:
-
-# Atomic Configuration of Display Driving Regulator and the Charge Pump
-
-The regulator VBAT is the SSD1306-specific low-voltage (3.3 V to 5 V)
-regulator for the charge pump and takes the place of the voltage
-regulator VCC, that would otherwise supply the OLED driver block with
-7 V to 15 V.
-The charge pump is never enabled when a VCC with 7 V to 15 V is present.
-Configuring the charge pump based on the available regulators,
-would provide an atomic configuration for either low-voltage +
-charge pump or the regular voltage.
-
-This way, the device tree boolean for enabling the charge pump could be
-removed by probing for an optional VBAT first, which replaces VCC,
-and falling back to a mandatory VCC otherwise:
-
-```
-[...]
-struct ssd130x_panel {
-...
-	struct regulator *vdd;		/* Core logic supply */
-	union {
-		struct regulator *vcc;	/* Panel driving supply */
-		struct regulator *vbat;	/* Charge pump regulator supply */
-	};
-	struct backlight_device *backlight;
-		struct {
-		unsigned int com_scan_dir_inv : 1;
-		unsigned int com_seq_pin_cfg : 1;
-		unsigned int com_lr_remap : 1;
-		unsigned int seg_remap : 1;
-		unsigned int inverse_display : 1;
-		unsigned int use_charge_pump : 1;
-		uint8_t height;
-		uint8_t width;
-		uint8_t height_mm;
-		uint8_t width_mm;
-		uint8_t display_start_line;
-		uint8_t com_offset ;
-		uint8_t contrast;
-		uint8_t pre_charge_period_dclocks_phase1;
-		uint8_t pre_charge_period_dclocks_phase2;
-		uint8_t vcomh_deselect_level;
-		uint8_t clock_divide_ratio;
-		uint8_t oscillator_frequency;
-	} display_settings;
-	bool prepared;
-	bool enabled;
-
-[...]
-
-ssd130x->vbat =3D devm_regulator_get_optional(dev, "vbat");
-if (IS_ERR(ssd130x->vbat)) {
-	ret =3D PTR_ERR(ssd130x->vbat);
-
-	if (ret !=3D -ENODEV) {
-		if (ret !=3D -EPROBE_DEFER)
-			dev_err(dev,
-				"failed to request regulator: %d\n",
-				ret);
-		return ret;
-	}
-
-	ssd130x->vbat =3D NULL;
-}
-else {
-	ssd130x->display_settings.use_charge_pump =3D true;
-}
-
-/* Get panel driving supply */
-If (!ssd130x->vbat) {
-	ssd130x->vcc =3D devm_regulator_get(dev, "vcc");
-	if (IS_ERR(ssd130x->vcc)){
-		ret =3D PTR_ERR(ssd130x->vcc);
-		return ret;
-	}
-	else {
-		ssd130x->display_settings.use_charge_pump =3D false;
-	}
-}
-```
-
-Splitting in VCC/VBAT and VDD and enforcing their presence is
-of course compatibility breaking.
-
-https://github.com/dh-electronics/panel-solomon-ssd130x-draft/blob/drm-ssd1=
-30x/drivers/gpu/drm/panel/panel-solomon-ssd130x.h#L85
-https://github.com/dh-electronics/panel-solomon-ssd130x-draft/blob/drm-ssd1=
-30x/drivers/gpu/drm/panel/panel-solomon-ssd130x.c#L80
+Would you mind if I ask what you mean by incomplete? Is it because non-updated
+modules will still have the issue? Please elaborate.
 
 
-# Static or Dynamic Configuration for SPI-Modes 3-Wire and 4-Wire
-
-For the SPI-protocol drivers I see two possible approaches:
-* Dynamic configuration by determining the presence/absence of the
-  D/C-GPIO and assigning the functions accordingly.
-  This way a single driver file for both SPI modes could be sufficient.
-* Static configuration by using the device-tree names
-  (ssd130x-spi-3wire/-4wire) to differentiate between the SPI protocol
-  drivers.
-  This would obviously necessitate two drivers files.
-
-Which one do you think would be the best approach for this?
-
-
-# DRM Mode Configuration via Device Tree
-
-In the old fbdev driver, the display modes are hard-coded, which means
-for every new display configuration, a new patch needs to be mainlined,
-which slows down official Kernel support and
-puts burden on the maintainers.
-Additionally, with the DRM-subsystem supporting height and length
-information, for scaling, this opens up a lot of new combinations.
-The SSD1306 for example, is available in multiple resolutions like
-128x64 and 96x16 and comes in different sizes per resolution as well.
-Just to name a few:
-* 128x64 0.96" (22x11mm)
-* 128x64 1.3" (30x15mm)
-* 96x16 0.69" (18x3mm)
-
-Instead of hard-coding, I would suggest something along the lines of
-of_get_drm_display_mode().
-The displays won't need to support multiple modes at the same time,
-let alone support for switching between them,
-so the one-time invocation of this expensive function might be worth it.=20
-maybe a new and simpler function that could be named:
-of_get_drm_display_mode_simple()
-
-Providing a mode could later prove useful for a conversion to
-drm_panel, if that is feasible.
-
-But for a function like this, I have to chicken out.
-
-
-# DRM Panel
-
-The reason why I decided for the drm_panel approach in my code,
-was power management and a clean handling of the software backlight
-dependency, which requires powered display regulators to be powered.
-
-Prepare/unprepare would power on/off the display logic regulator VDD.
-
-Enable/disable would power on/off VCC/VBAT, optionally turn on/off
-the charge pump and send the DISPLAY_ON/OFF commands.
-The SSD1305's PWM part would likely be placed in enable/disable as well.
-
-What is Your opinion on using drm_panel for Your driver?
-
-
-Mit freundlichen Gr=FC=DFen / Best regards
-
-Dominik Kierner
-Student Employee
-Research & Development
-DH electronics
-
+On Thu, Mar 10, 2022 at 10:02 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Thu, Mar 10, 2022 at 09:54:24PM +0900, Jiyong Park wrote:
+> > When iterating over sockets using vsock_for_each_connected_socket, make
+> > sure that a transport filters out sockets that don't belong to the
+> > transport.
+> >
+> > There actually was an issue caused by this; in a nested VM
+> > configuration, destroying the nested VM (which often involves the
+> > closing of /dev/vhost-vsock if there was h2g connections to the nested
+> > VM) kills not only the h2g connections, but also all existing g2h
+> > connections to the (outmost) host which are totally unrelated.
+> >
+> > Tested: Executed the following steps on Cuttlefish (Android running on a
+> > VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
+> > connection inside the VM, (2) open and then close /dev/vhost-vsock by
+> > `exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
+> > session is not reset.
+> >
+> > [1] https://android.googlesource.com/device/google/cuttlefish/
+> >
+> > Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
+> > Signed-off-by: Jiyong Park <jiyong@google.com>
+> > ---
+> >  drivers/vhost/vsock.c            | 4 ++++
+> >  net/vmw_vsock/virtio_transport.c | 7 +++++++
+> >  net/vmw_vsock/vmci_transport.c   | 5 +++++
+> >  3 files changed, 16 insertions(+)
+> >
+> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > index 37f0b4274113..853ddac00d5b 100644
+> > --- a/drivers/vhost/vsock.c
+> > +++ b/drivers/vhost/vsock.c
+> > @@ -722,6 +722,10 @@ static void vhost_vsock_reset_orphans(struct sock *sk)
+> >        * executing.
+> >        */
+> >
+> > +     /* Only handle our own sockets */
+> > +     if (vsk->transport != &vhost_transport.transport)
+> > +             return;
+> > +
+> >       /* If the peer is still valid, no need to reset connection */
+> >       if (vhost_vsock_get(vsk->remote_addr.svm_cid))
+> >               return;
+>
+>
+> We know this is incomplete though. So I think it's the wrong thing to do
+> when you backport, too. If all you worry about is breaking a binary
+> module interface, how about simply exporting a new function when you
+> backport. Thus you will have downstream both:
+>
+> void vsock_for_each_connected_socket(void (*fn)(struct sock *sk));
+>
+> void vsock_for_each_connected_socket_new(struct vsock_transport *transport,
+>                                     void (*fn)(struct sock *sk));
+>
+>
+> and then upstream we can squash these two patches.
+>
+> Hmm?
+>
+>
+> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> > index fb3302fff627..61b24eb31d4b 100644
+> > --- a/net/vmw_vsock/virtio_transport.c
+> > +++ b/net/vmw_vsock/virtio_transport.c
+> > @@ -24,6 +24,7 @@
+> >  static struct workqueue_struct *virtio_vsock_workqueue;
+> >  static struct virtio_vsock __rcu *the_virtio_vsock;
+> >  static DEFINE_MUTEX(the_virtio_vsock_mutex); /* protects the_virtio_vsock */
+> > +static struct virtio_transport virtio_transport; /* forward declaration */
+> >
+> >  struct virtio_vsock {
+> >       struct virtio_device *vdev;
+> > @@ -357,11 +358,17 @@ static void virtio_vsock_event_fill(struct virtio_vsock *vsock)
+> >
+> >  static void virtio_vsock_reset_sock(struct sock *sk)
+> >  {
+> > +     struct vsock_sock *vsk = vsock_sk(sk);
+> > +
+> >       /* vmci_transport.c doesn't take sk_lock here either.  At least we're
+> >        * under vsock_table_lock so the sock cannot disappear while we're
+> >        * executing.
+> >        */
+> >
+> > +     /* Only handle our own sockets */
+> > +     if (vsk->transport != &virtio_transport.transport)
+> > +             return;
+> > +
+> >       sk->sk_state = TCP_CLOSE;
+> >       sk->sk_err = ECONNRESET;
+> >       sk_error_report(sk);
+> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+> > index 7aef34e32bdf..cd2f01513fae 100644
+> > --- a/net/vmw_vsock/vmci_transport.c
+> > +++ b/net/vmw_vsock/vmci_transport.c
+> > @@ -803,6 +803,11 @@ static void vmci_transport_handle_detach(struct sock *sk)
+> >       struct vsock_sock *vsk;
+> >
+> >       vsk = vsock_sk(sk);
+> > +
+> > +     /* Only handle our own sockets */
+> > +     if (vsk->transport != &vmci_transport)
+> > +             return;
+> > +
+> >       if (!vmci_handle_is_invalid(vmci_trans(vsk)->qp_handle)) {
+> >               sock_set_flag(sk, SOCK_DONE);
+> >
+> > --
+> > 2.35.1.723.g4982287a31-goog
+>

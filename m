@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AE34D3DF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053C84D3DF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238933AbiCJAQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S238946AbiCJAQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234684AbiCJAQL (ORCPT
+        with ESMTP id S238437AbiCJAQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:16:11 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465752BEC
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:15:11 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id a8so8600090ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:15:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v8fee9v7BiSON1oc+MzdWwD0g3F0XotKEAPqrnbe0Ac=;
-        b=e1M4QVr1W7YbVzbWzm0T3Wq6Klu5l4/VGifbMnJ0ccc/xIImegzdLT28nV2OCw8XKz
-         AUQzn9/wrTvwgO7DYiFqQ5VBDg4+Wf60TnJSU+HJFjoK2nbcb5lhn9ilwIOe6HlP9c8O
-         GqzBTS1gzJ9X3VY+qIv3lNljaPRKaNIJAGRmA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v8fee9v7BiSON1oc+MzdWwD0g3F0XotKEAPqrnbe0Ac=;
-        b=nbOk3IngkwUH4G38svTNm/q2FG/cbBi7MGLT2/pbh+Y1pjC/Q1Kn/brpwP4cyrv5k0
-         35IsGu0/MjdFyHZ1Ky0cBWpHs8aKSw6ysN8k71Ez9LyA4Ubhd57qv1uL1merIjoBv59F
-         DvS7JKtZJwY4XFJX9hqPz2OH0S6wApRjTFbNNwGQ+GLmx2x1gDFQ5DPHRq3fq6g0r8xe
-         YLzeP84RCRYilahY8XnGaidBPeTBx0AgtujiqNG5DR4qxicKyPcp+a33GCTSKdhFaVsG
-         CUiH/omMfNYkkooaF+VmuYP5ZVLJ6ZpURvq8GMYivl/iJPniqExVV49lGDY637qsJ0Xr
-         ommQ==
-X-Gm-Message-State: AOAM530+AXU7+U9bSf5okER9Pz9OE64rloZ0IvvRYJzsUaw5wnaMjLrs
-        3l/PQTuV7cLamBWtqpODcbSM0WLfPRmS3szi
-X-Google-Smtp-Source: ABdhPJyjYFBdCy4oNocLmgC9dgfvi7shhyz1LNNT6+0XSfKRoAFd23qupANRqz21bNxvssdoOriU4A==
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr1931767ejg.413.1646871309453;
-        Wed, 09 Mar 2022 16:15:09 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id e13-20020a170906748d00b006db570e6390sm1283763ejl.13.2022.03.09.16.15.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 16:15:08 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id j17so5534070wrc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:15:08 -0800 (PST)
-X-Received: by 2002:adf:e983:0:b0:1f1:f52b:8328 with SMTP id
- h3-20020adfe983000000b001f1f52b8328mr1490215wrm.513.1646871307846; Wed, 09
- Mar 2022 16:15:07 -0800 (PST)
+        Wed, 9 Mar 2022 19:16:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5810C122F44;
+        Wed,  9 Mar 2022 16:15:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D84CA60BAA;
+        Thu, 10 Mar 2022 00:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BCEC340E8;
+        Thu, 10 Mar 2022 00:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646871341;
+        bh=eCcD3HnBX/oFbLfrBWyYiQjjKNmgnOH2XtVmeNjv88Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gbIsWkSE0eX4PUjx2rjWlKRvWZgm8yOf5j3mY8DCbHtacbW8NkHpY4MP05/vMqXyh
+         ipy5jPRvf5Y8BJn/O+SHygq7IhHbXxAt1/ZN56iIYi1SZzS/fmhsqoXpuHbqXhsFIF
+         n1S5gRyAD0SbzuakLRArZCEiP/FRLJdgwWahcH5rck3RtmnoP33JzkcpUk1l5V5Y/F
+         +RMy+twBqZNlPDPx6lj/NuvtXza2Ifb6L00gPv+JAsnPcIvQRsc0rlKAi1R6o7jEqC
+         RI0hhZkRUXAy2QsTG3MSBQkRzqr9GkhfKWnwtNJlgrpiV4tkXD/pAqgcDk+inoneTs
+         iz3+e7Ehy/MHw==
+Date:   Wed, 9 Mar 2022 18:15:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-pci@vger.kernel.org, paul.walmsley@sifive.com,
+        greentime.hu@sifive.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC] PCI: fu740: Force Gen1 to fix initial device probing on
+ some boards
+Message-ID: <20220310001539.GA94315@bhelgaas>
 MIME-Version: 1.0
-References: <20220308033255.22118-1-rdunlap@infradead.org>
-In-Reply-To: <20220308033255.22118-1-rdunlap@infradead.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 9 Mar 2022 16:14:55 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VSAWNnM2-HgS4RxvXz3QgD72gx+Ti7Vpf9k=SLVHzocw@mail.gmail.com>
-Message-ID: <CAD=FV=VSAWNnM2-HgS4RxvXz3QgD72gx+Ti7Vpf9k=SLVHzocw@mail.gmail.com>
-Subject: Re: [PATCH] kgdbts: fix return value of __setup handler
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10794ea9-95ff-2cde-5851-b757a73b00ee@codethink.co.uk>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,40 +55,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Mar 08, 2022 at 09:45:36AM +0000, Ben Dooks wrote:
+> On 28/02/2022 23:22, Ben Dooks wrote:
+> > The fu740 PCIe core does not probe any devices on the SiFive Unmatched
+> > board without this fix (or having U-Boot explicitly start the PCIe via
+> > either boot-script or user command). The fix is to start the link at
+> > Gen1 speeds and once the link is up then change the speed back.
+> > 
+> > The U-Boot driver claims to set the link-speed to Gen1 to get the probe
+> > to work (and U-Boot does print link up at Gen1) in the following code:
+> > https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
+> > 
+> > Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> > --
+> > Note, this patch has had significant re-work since the previous 4
+> > sets, including trying to fix style, message, reliance on the U-Boot
+> > fix and the comments about usage of LINK_CAP and reserved fields.
+> 
+> The internal feedback is this version is passing on our CI.
+> 
+> If there are no comments on this soon, I will post this as either the
+> v5 of the original or as a new patch.
 
-On Mon, Mar 7, 2022 at 7:33 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> __setup() handlers should return 1 to indicate that the boot option
-> has been handled. A return of 0 causes the boot option/value to be
-> listed as an Unknown kernel parameter and added to init's (limited)
-> environment strings. So return 1 from kgdbts_option_setup().
->
-> Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
->   kgdboc=kbd kgdbts=", will be passed to user space.
->
->  Run /sbin/init as init process
->    with arguments:
->      /sbin/init
->    with environment:
->      HOME=/
->      TERM=linux
->      BOOT_IMAGE=/boot/bzImage-517rc7
->      kgdboc=kbd
->      kgdbts=
->
-> Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-> Cc: kgdb-bugreport@lists.sourceforge.net
-> Cc: Jason Wessel <jason.wessel@windriver.com>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/misc/kgdbts.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Seems like this isn't quite baked yet.  Lorenzo has the v4 of this on
+his pci/fu740 branch, but I'm going to drop that for now because (a)
+this one is better and (b) it'd be nice to have an ack from a FU740
+maintainer (Paul or Greentime).
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+I'm also not clear on whether this works around a general FU740 defect
+or something specific to the Unmatched board or the ASMedia ASM2824
+switch.  This patch currently limits to 2.5GT/s on *all* FU740
+devices.
+
+I'd prefer to use "2.5GT/s" instead of "Gen1" in the subject, commit
+log, and comments because it's more specific and matches the
+PCI_EXP_LNKCAP_SLS_2_5GB in the code.
+
+> > ---
+> >   drivers/pci/controller/dwc/pcie-fu740.c | 51 ++++++++++++++++++++++++-
+> >   1 file changed, 50 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+> > index 842b7202b96e..16ad52f53490 100644
+> > --- a/drivers/pci/controller/dwc/pcie-fu740.c
+> > +++ b/drivers/pci/controller/dwc/pcie-fu740.c
+> > @@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct dw_pcie *pci)
+> >   {
+> >   	struct device *dev = pci->dev;
+> >   	struct fu740_pcie *afp = dev_get_drvdata(dev);
+> > +	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> > +	int ret;
+> > +	u32 orig, tmp;
+> > +
+> > +	/*
+> > +	 * Force Gen1 when starting link, due to some devices not
+> > +	 * probing at higher speeds. This happens with the PCIe switch
+> > +	 * on the Unmatched board. The fix in U-Boot is to force Gen1
+> > +	 * and hope later resets will clear this capaility.
+
+s/capaility/capability/
+
+But the sentence still doesn't quite make sense.  Are you saying that
+if we bring the link up at 2.5GT/s, it will stay there?
+
+And that a future reset may clear Link Capabilities?  Actually, I
+guess you don't want it *cleared*, you would just want it to
+accurately reflect the real max link speed, which would not be 0000b
+in the register (since that's not even a defined encoding).
+
+And the reset would also cause link retrain that would then use the
+real max link speed?
+
+> > +	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
+> > +	dw_pcie_dbi_ro_wr_en(pci);
+> > +
+> > +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
+> > +	orig = tmp & PCI_EXP_LNKCAP_SLS;
+> > +	tmp &= ~PCI_EXP_LNKCAP_SLS;
+> > +	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
+> > +	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+> >   	/* Enable LTSSM */
+> >   	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
+> > -	return 0;
+> > +
+> > +	ret = dw_pcie_wait_for_link(pci);
+> > +	if (ret) {
+> > +		dev_err(dev, "error: link did not start\n");
+> > +		goto err;
+> > +	}
+> > +
+> > +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
+> > +	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
+> > +		dev_dbg(dev, "changing speed back to original\n");
+> > +
+> > +		tmp &= ~PCI_EXP_LNKCAP_SLS;
+> > +		tmp |= orig;
+> > +		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+> > +
+> > +		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
+> > +		tmp |= PORT_LOGIC_SPEED_CHANGE;
+> > +		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
+> > +
+> > +		ret = dw_pcie_wait_for_link(pci);
+> > +		if (ret) {
+> > +			dev_err(dev, "error: link did not start at new speed\n");
+> > +			goto err;
+> > +		}
+> > +	}
+> > +
+> > +	ret = 0;
+> > +err:
+> > +	// todo - if we do have an unliekly error, what do we do here?
+
+Wrong comment style (use /* */, not //), and s/unliekly/unlikely/
+
+> > +	dw_pcie_dbi_ro_wr_dis(pci);
+> > +	return ret;
+> >   }

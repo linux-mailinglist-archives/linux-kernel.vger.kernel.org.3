@@ -2,195 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309614D5380
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB204D5384
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343917AbiCJVPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
+        id S245560AbiCJVSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343909AbiCJVPn (ORCPT
+        with ESMTP id S1343944AbiCJVSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:15:43 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D817916AA69
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:14:40 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id 9so5987114pll.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:14:40 -0800 (PST)
+        Thu, 10 Mar 2022 16:18:02 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72A51587A2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:16:59 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id l19-20020a252513000000b00629235aacb2so5570972ybl.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:16:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tfG6NA9TljjE9JUfuXGD7jLzBJpRfBuiNXsgSuyR/Ok=;
-        b=F4KUSzFWvkikwF0SvA/qDB9X8w9nBp7jy5EUYNotdSB/O1cQAaoC2n7smN/xhKFsVq
-         lgRimNXnnzTKQgAh36ozzlolX/oy5+CPtGHsIUTg84w2InqGzLK4Aewua7oqCR5ljjSf
-         BZof0xl6VEUrIKuVpByM72uCjVnd8VV3pA00cXVhILzl0ag0zPJEoCkLV8tZtydKA34V
-         R+L2NX89mBNmGhMrs2BO6fwlAQxlBJDvHsFhqSmwHZziLvEhypYWJ9qmSeyBDNa+bJsA
-         VtYSmUdIqKB+Nn9zeXP2Go85oPJ/3satZnDkEMcgLKXfYwbxJ2IBewpYwktqTmKcv+MX
-         4oSQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=R/v6KW4/eQNCq3G1uNeftKx9yVwkfwEl1Z51lMH01Iw=;
+        b=RijW4NhWbanUW0eqBv6ZJPqUG+6PV38erP0aqfQZxAJyWErTgggoR3qtmkTJ252lcI
+         bn9WMcxJKPNPVIkG/gmUkpNfolmeA60A8AD9sV9KAHZiCD8RhY/dzwci5id0HY/OE9Uf
+         UPq2tqnwhfm/oxaGtQv+XKzbaX0I4iFeZNetUradNRP7ceYsmQ4qyVTAltcK/qhhnb69
+         HN0Rif/Eaxi6rVyMvj4WxdmIS8AScjZY9hO1Zm9HaxWvK31HLcb7J4/hR8udPVLrahh5
+         Nzi9DreDs0iokLJPLs3lb7H9Q5H1pfj35ccAJjPUHCXxaf2d605XhUNCyIP/DoufBbe3
+         ybgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tfG6NA9TljjE9JUfuXGD7jLzBJpRfBuiNXsgSuyR/Ok=;
-        b=VA0zq4Q4JjVsE4WiCYmllf8Ly2rgFogVO3iZJI47sKdwxXYUOqtgl7v9UAy4wqZYxu
-         R7CnwT3UROMGrXFl78WJcJ9UH7/tAnp+bGiYPbf0U4trnqXOUQr3/zUFwm0vQWqi/DjK
-         8Xq0knPn8VLRyLJ1GTx7Q9RSfZeqd5L/k/TH9uIrVE2wHtmFD8OFqTnrTTCDXczCrQTg
-         iPNmFJtn1qef8C19CRLJ7KFLKnbMicBrCUN9r73fxUo8HKbfUCTGDXeaWqQHB7ro2Tjk
-         rPeQkQ+8uRVO0Ik25SHwbXfMAutyOBc+WsZYxBEJALc+0X0xt9UmF2dI70wAD5tspNKb
-         7avg==
-X-Gm-Message-State: AOAM5308U4KjHWiQ9O8ZQTnyJ0o3IE3dT4JO0AbwsiD7x0mwPbKSjWaM
-        HQBK6jPSzvu5xbUW7Cxec28Ydg==
-X-Google-Smtp-Source: ABdhPJxNTQEa85dZgL83y3cDavoYSwPfMnwV9Ro4rKSYMoqy3OfHuHslGhqQqYFrXZyWOjFBLbBzEQ==
-X-Received: by 2002:a17:90b:4ac1:b0:1bf:6d51:1ad9 with SMTP id mh1-20020a17090b4ac100b001bf6d511ad9mr18019630pjb.199.1646946880235;
-        Thu, 10 Mar 2022 13:14:40 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056a00080700b004f6ff260c9dsm8453837pfk.154.2022.03.10.13.14.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 13:14:39 -0800 (PST)
-Message-ID: <d49428d1-109e-6778-6da0-3bcdb61d7dc4@linaro.org>
-Date:   Thu, 10 Mar 2022 13:14:38 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
-Content-Language: en-US
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=R/v6KW4/eQNCq3G1uNeftKx9yVwkfwEl1Z51lMH01Iw=;
+        b=W4hs65YYm5bZh0IN9oFvaHKaKRLzRuYT6XTKCGkpfYyhL7SGYxQKfdGJkJe/gKzurx
+         0aIVsV5QKSIrJDmS/JjOtq1igMUWRbb5C6Mmdjj52ddWxleQkb6+M5+7jj+ftYLxKW1F
+         RyMb44Z4M7McHMWDufRh4atnLgWna05er/4DrKxGPuIqvhLCET3sYRjsuGT+3d/oRIjU
+         ulJ48rbQRwK8yoZPhNq6/ru1rO2m1Ya4STjvqmMua5URjgAYk/98AwUeAM1/deu36Obq
+         feW4mMB/r7jGqHHs1N0OLh1wQRmKIrKQPsjDyfB552nqqm4fYNA5zdq4TP73IjpbYkuR
+         aEGA==
+X-Gm-Message-State: AOAM531MR838roZBBjdsAfiYJNDIS+5JyoLM+GN88AhDWjBCyp0SzLTD
+        MLEia3ExHMVz1Vh3I1DtTANLvucZjrs=
+X-Google-Smtp-Source: ABdhPJxiMOHXFGRWJhxq3dgpT/ouBgijWM84sxqbKmhnzIGVKdFopaH4O1YcRv4G+B4K3lhbMmERdeCA22Y=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:6cb4:9e19:c513:9337])
+ (user=haoluo job=sendgmr) by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr5396280ybe.365.1646947018999; Thu, 10
+ Mar 2022 13:16:58 -0800 (PST)
+Date:   Thu, 10 Mar 2022 13:16:55 -0800
+Message-Id: <20220310211655.3173786-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH bpf-next] compiler_types: Refactor the use of btf_type_tag attribute.
+From:   Hao Luo <haoluo@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
-        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
-References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
- <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
- <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
- <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org>
- <45522c89-a3b4-4b98-232b-9c69470124a3@linaro.org>
- <ff2e1007-5883-5178-6415-326d6ae69c34@kernel.org>
- <8fdab42f-171f-53d7-8e0e-b29161c0e3e2@linaro.org>
- <CA+FuTSeAL7TsdW4t7=G91n3JLuYehUCnDGH4_rHS=vjm1-Nv9Q@mail.gmail.com>
- <c7608cf0-fda2-1aa6-b0c1-3d4e0b5cad0e@linaro.org>
- <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Daniel Borkmann <daniel@iogearbox.net>, yhs@fb.com
+Cc:     KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 09:32, Willem de Bruijn wrote:
-> On Thu, Mar 10, 2022 at 11:06 AM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
->>
->> On 3/10/22 06:39, Willem de Bruijn wrote:
->>> On Wed, Mar 9, 2022 at 4:37 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
->>>>
->>>> On 3/8/22 21:01, David Ahern wrote:
->>>>> On 3/8/22 12:46 PM, Tadeusz Struk wrote:
->>>>>> That fails in the same way:
->>>>>>
->>>>>> skbuff: skb_over_panic: text:ffffffff83e7b48b len:65575 put:65575
->>>>>> head:ffff888101f8a000 data:ffff888101f8a088 tail:0x100af end:0x6c0
->>>>>> dev:<NULL>
->>>>>> ------------[ cut here ]------------
->>>>>> kernel BUG at net/core/skbuff.c:113!
->>>>>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
->>>>>> CPU: 0 PID: 1852 Comm: repro Not tainted
->>>>>> 5.17.0-rc7-00020-gea4424be1688-dirty #19
->>>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35
->>>>>> RIP: 0010:skb_panic+0x173/0x175
->>>>>>
->>>>>> I'm not sure how it supposed to help since it doesn't change the
->>>>>> alloclen at all.
->>>>>
->>>>> alloclen is a function of fraglen and fraglen is a function of datalen.
->>>>
->>>> Ok, but in this case it doesn't affect the alloclen and it still fails.
->>>
->>> This is some kind of non-standard packet that is being constructed. Do
->>> we understand how it is different?
->>>
->>> The .syz reproducer is generally a bit more readable than the .c
->>> equivalent. Though not as much as an strace of the binary, if you
->>> can share that.
->>>
->>> r0 = socket$inet6_icmp_raw(0xa, 0x3, 0x3a)
->>> connect$inet6(r0, &(0x7f0000000040)={0xa, 0x0, 0x0, @dev, 0x6}, 0x1c)
->>> setsockopt$inet6_IPV6_HOPOPTS(r0, 0x29, 0x36,
->>> &(0x7f0000000100)=ANY=[@ANYBLOB="52b3"], 0x5a0)
->>> sendmmsg$inet(r0, &(0x7f00000002c0)=[{{0x0, 0x0,
->>> &(0x7f0000000000)=[{&(0x7f00000000c0)="1d2d", 0xfa5f}], 0x1}}], 0x1,
->>> 0xfe80)
->>
->> Here it is:
->> https://termbin.com/krtr
->> It won't be of much help, I'm afraid, as the offending sendmmsg()
->> call isn't fully printed.
-> 
-> Thanks. It does offer some hints on the other two syscalls:
-> 
-> [pid   644] connect(3, {sa_family=AF_INET6, sin6_port=htons(0),
-> sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "fe80::", &sin6_addr),
-> sin6_scope_id=if_nametoindex("tunl0")}, 28) = 0
-> [pid   644] setsockopt(3, SOL_IPV6, IPV6_HOPOPTS,
-> "R\263\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"...,
-> 1440) = 0
-> 
-> IPV6_HOPOPTS is ns_capable CAP_NET_RAW.
-> 
-> So this adds 1440 bytes to opt_nflen, which is included in
-> fragheaderlen, causing that to be exactly mtu. This means that the
-> payload can never be sent, as each fragment header eats up the entire
-> mtu? This is without any transport headers that would only be part of
-> the first fragment (which go into opt_flen).
-> 
-> If you can maybe catch the error before the skb_put and just return
-> EINVAL, we might see whether sendmmsg is relevant or a simple send
-> would be equivalent. (not super important, that appears unrelated.)
+Previous patches have introduced the compiler attribute btf_type_tag for
+__user and __percpu. The availability of this attribute depends on
+some CONFIGs and compiler support. This patch refactors the use
+of btf_type_tag by introducing BTF_TYPE_TAG, which hides all the
+dependencies.
 
-Do you mean something like this:
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 622345af323e..6d45112322a0 100644
-@@ -1656,6 +1649,16 @@ static int __ip6_append_data(struct sock *sk,
-                         skb->protocol = htons(ETH_P_IPV6);
-                         skb->ip_summed = csummode;
-                         skb->csum = 0;
+No functional change.
+
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ include/linux/compiler_types.h | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index b9a8ae9440c7..1bc760ba400c 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -4,6 +4,13 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
++#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
++	__has_attribute(btf_type_tag)
++# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
++#else
++# define BTF_TYPE_TAG(value) /* nothing */
++#endif
 +
-+                       /*
-+                        *      Check if there is still room for the payload
-+                        */
-+                       if (fragheaderlen >= mtu) {
-+                               err = -EMSGSIZE;
-+                               kfree_skb(skb);
-+                               goto error;
-+                       }
-+
-                         /* reserve for fragmentation and ipsec header */
-                         skb_reserve(skb, hh_len + sizeof(struct frag_hdr) +
-                                     dst_exthdrlen);
-
-
-That works as well.
+ #ifdef __CHECKER__
+ /* address spaces */
+ # define __kernel	__attribute__((address_space(0)))
+@@ -31,19 +38,11 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ # define __kernel
+ # ifdef STRUCTLEAK_PLUGIN
+ #  define __user	__attribute__((user))
+-# elif defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
+-	__has_attribute(btf_type_tag)
+-#  define __user	__attribute__((btf_type_tag("user")))
+ # else
+-#  define __user
++#  define __user	BTF_TYPE_TAG(user)
+ # endif
+ # define __iomem
+-# if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
+-	__has_attribute(btf_type_tag)
+-#  define __percpu	__attribute__((btf_type_tag("percpu")))
+-# else
+-#  define __percpu
+-# endif
++# define __percpu	BTF_TYPE_TAG(percpu)
+ # define __rcu
+ # define __chk_user_ptr(x)	(void)0
+ # define __chk_io_ptr(x)	(void)0
 -- 
-Thanks,
-Tadeusz
+2.35.1.723.g4982287a31-goog
+

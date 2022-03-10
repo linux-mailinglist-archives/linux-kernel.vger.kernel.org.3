@@ -2,959 +2,587 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0600C4D4D41
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8374D4D6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbiCJPiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S239134AbiCJPiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbiCJPh7 (ORCPT
+        with ESMTP id S239127AbiCJPiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:37:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170E016AA60;
-        Thu, 10 Mar 2022 07:36:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E9AD61852;
-        Thu, 10 Mar 2022 15:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE156C340E8;
-        Thu, 10 Mar 2022 15:36:55 +0000 (UTC)
-From:   Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 5.15.27-rt35
-Date:   Thu, 10 Mar 2022 15:36:09 -0000
-Message-ID: <164692656926.3791335.3318891659236352265@puck.lan>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 10:38:13 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF7D16E7D1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:37:07 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id b15so3384128edn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o6JXg6OR646jM76JRpapUazLqGWvsRdggkpJq90pah8=;
+        b=YChSVyKLVMOalQZRDRKtxKHcwbUDmNwko7I32xXa0f1GBzTRU81/OGwiosnZoLJrKj
+         o45+zcIOCF6NnoDjrNzZwgzIVkYXf6+RqAQeM73lk09+ugRpcoVzs97rOvPzSk8qYPKd
+         rl6/imHMf7EV0pDCkFJaqeJPc+Kx96t5oiaVXIiDIiMHrx0zm+nns9zPK3KtPkoTJxV+
+         S9jqcVT1Bh+yznf3h1l3d740YPoO3QkurAHHDmJmFafBpkNlyrDk5NzIopbJUxEJPTeW
+         v+FSZSz9Cq8m0ofXOobYPke3xeZJB75ARTbnmTHVb6xbPdP5Ci9+zbIw9XOpmu1XWBUp
+         4jWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o6JXg6OR646jM76JRpapUazLqGWvsRdggkpJq90pah8=;
+        b=y2YT5UxZn9R0kniPg49/Jrw62MV2dz/Y6vFLakihW3uIy5y9hfb8gyvVIVn/Yb0noo
+         J5gz46VaIQ16gUKIB9mp0R4mw43yTI0j5PrNyXCn8uKqTf3LjG8BpCTPSf0Q1pOiQS9W
+         HI8YrYdKClsj9AvHw3QvyVdljpmVR7nX1LieRqzn0hM/krS6CU6SU4LJ5IfFCrPpUr5j
+         mBuTROAV9VmseQeSQxLNz6oFGJxhFdxvHZxafCHYnmHCFz+etqb5BcC6WZA815qg6jCm
+         RjUwByPJKJBN+cIvF+IjVSuaBlZbGCFbiG9kcXdkF5V4CqCMxuFxWQX9oQRO43i79DFY
+         lJDg==
+X-Gm-Message-State: AOAM530LMXDDSPCaUK9CMZoik8Ne1H/efvlt3aZanmCNd8aqus/cgNBb
+        FDHO2mXNpG6S23ET4b6feJCI+UdKw+GbbkFioomKag==
+X-Google-Smtp-Source: ABdhPJyFXNA9JyzqhAJWg11ooceV0nza7abfMjzctaIlNzVhFu4+t+Mmh61Vcxe1fwGHSBUpet7k2ZYKgQys2Q8a3Cs=
+X-Received: by 2002:a05:6402:34cb:b0:415:b974:ec5c with SMTP id
+ w11-20020a05640234cb00b00415b974ec5cmr4977669edc.329.1646926626280; Thu, 10
+ Mar 2022 07:37:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20220210112824.2084724-1-tanmay.shah@xilinx.com>
+ <20220210112824.2084724-7-tanmay.shah@xilinx.com> <20220218191150.GB574087@p14s>
+ <6a9dcca9-3c86-f603-d13a-acc74161f1a1@xilinx.com> <1be9d9bd-4c74-d38f-6a9b-3a17d86fe380@xilinx.com>
+In-Reply-To: <1be9d9bd-4c74-d38f-6a9b-3a17d86fe380@xilinx.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 10 Mar 2022 08:36:53 -0700
+Message-ID: <CANLsYkwthHZr42Bi87Tvj4fWE_nGJU47tsXBdhvKxvVz0GeLtA@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc driver
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        michal.simek@xilinx.com, laurent.pinchart@ideasonboard.com,
+        ben.levinsky@xilinx.com, bill.mills@linaro.org,
+        sergei.korneichuk@xilinx.com, arun.balaji.kannan@xilinx.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
-
-I'm pleased to announce the 5.15.27-rt35 stable release.
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v5.15-rt
-  Head SHA1: 0411bcbfdfb50a0e2a69aa1e99cdb27f60232149
-
-Or to build 5.15.27-rt35 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.27.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.27-rt35.patch.xz
-
-
-You can also build from 5.15.26-rt34 by applying the incremental patch:
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/incr/patch-5.15.26-rt34-rt35.patch.xz
-
-Enjoy!
-Clark
-
-Changes from v5.15.26-rt34:
----
-
-Adrian Huang (1):
-      iommu/vt-d: Fix double list_add when enabling VMD in scalable mode
-
-Agustin Gutierrez (1):
-      drm/amd/display: Update watermark values for DCN301
-
-Alex Deucher (2):
-      drm/amdgpu: filter out radeon PCI device IDs
-      drm/amdgpu: filter out radeon secondary ids as well
-
-Alex Elder (1):
-      net: ipa: add an interconnect dependency
-
-Alexander Stein (1):
-      drm: mxsfb: Fix NULL pointer dereference
-
-Alexandre Ghiti (2):
-      riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
-      riscv: Fix config KASAN && DEBUG_VIRTUAL
-
-Alyssa Ross (1):
-      firmware: arm_scmi: Remove space in MODULE_ALIAS name
-
-Amit Cohen (2):
-      selftests: mlxsw: tc_police_scale: Make test more robust
-      selftests: mlxsw: resource_scale: Fix return value
-
-Andrey Konovalov (1):
-      kasan: fix quarantine conflicting with init_on_free
-
-Andrii Nakryiko (1):
-      tools/resolve_btf_ids: Close ELF file on error
-
-Andy Shevchenko (3):
-      auxdisplay: lcd2s: Fix lcd2s_redefine_char() feature
-      auxdisplay: lcd2s: Fix memory leak in ->remove()
-      auxdisplay: lcd2s: Use proper API to free the instance of charlcd object
-
-Anthoine Bourgeois (2):
-      ARM: dts: switch timer config to common devkit8000 devicetree
-      ARM: dts: Use 32KiHz oscillator on devkit8000
-
-Antony Antony (1):
-      xfrm: fix the if_id check in changelink
-
-Arnd Bergmann (1):
-      net: of: fix stub of_net helpers for CONFIG_NET=n
-
-Basavaraj Natikar (3):
-      HID: amd_sfh: Handle amd_sfh work buffer in PM ops
-      HID: amd_sfh: Add functionality to clear interrupts
-      HID: amd_sfh: Add interrupt handler to process interrupts
-
-Beau Belgrave (1):
-      tracing: Do not let synth_events block other dyn_event systems during create
-
-Benjamin Beichler (1):
-      mac80211_hwsim: report NOACK frames in tx_status
-
-Brian Norris (1):
-      arm64: dts: rockchip: Switch RK3399-Gru DP to SPDIF output
-
-Cai Huoqing (1):
-      net: ethernet: litex: Add the dependency on HAS_IOMEM
-
-Casper Andersson (1):
-      net: sparx5: Fix add vlan when invalid operation
-
-Christophe JAILLET (3):
-      i3c/master/mipi-i3c-hci: Fix a potentially infinite loop in 'hci_dat_v1_get_index()'
-      soc: fsl: guts: Revert commit 3c0d64e867ed
-      soc: fsl: guts: Add a missing memory allocation failure check
-
-Christophe Vu-Brugier (2):
-      exfat: reuse exfat_inode_info variable instead of calling EXFAT_I()
-      exfat: fix i_blocks for files truncated over 4 GiB
-
-Chuanhong Guo (1):
-      MIPS: ralink: mt7621: do memory detection on KSEG1
-
-Chuck Lever (6):
-      NFSD: Have legacy NFSD WRITE decoders use xdr_stream_subsegment()
-      NFSD: Fix zero-length NFSv3 WRITEs
-      NFSD: Fix verifier returned in stable WRITEs
-      Revert "nfsd: skip some unnecessary stats in the v4 case"
-      SUNRPC: Fix sockaddr handling in the svc_xprt_create_error trace point
-      SUNRPC: Fix sockaddr handling in svcsock_accept_class trace points
-
-Clark Williams (2):
-      Merge tag 'v5.15.27' into v5.15-rt
-      Linux 5.15.27-rt35
-
-Colin Foster (1):
-      net: dsa: ocelot: seville: utilize of_mdiobus_register
-
-Corinna Vinschen (1):
-      igc: igc_read_phy_reg_gpy: drop premature return
-
-D. Wythe (3):
-      net/smc: fix connection leak
-      net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error generated by client
-      net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
-
-Dan Carpenter (1):
-      iavf: missing unlocks in iavf_watchdog_task()
-
-Daniel Borkmann (1):
-      mm: Consider __GFP_NOWARN flag for oversized kvmalloc() calls
-
-Daniele Palmas (1):
-      net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-
-Dario Binacchi (2):
-      Input: ti_am335x_tsc - set ADCREFM for X configuration
-      Input: ti_am335x_tsc - fix STEPCONFIG setup for Z2
-
-Dave Jiang (1):
-      ntb: intel: fix port config status offset for SPR
-
-David Gow (1):
-      Input: samsung-keypad - properly state IOMEM dependency
-
-Deren Wu (1):
-      mac80211: fix EAPoL rekey fail in 802.3 rx path
-
-Douglas Anderson (1):
-      drm/bridge: ti-sn65dsi86: Properly undo autosuspend
-
-Enric Balletbo i Serra (1):
-      drm/mediatek: mtk_dsi: Reset the dsi0 hardware
-
-Eric Anholt (1):
-      i2c: bcm2835: Avoid clock stretching timeouts
-
-Eric Dumazet (5):
-      ipv6: fix skb drops in igmp6_event_query() and igmp6_event_report()
-      bpf: Use u64_stats_t in struct bpf_prog_stats
-      netfilter: fix use-after-free in __nf_register_net_hook()
-      bpf, sockmap: Do not ignore orig_len parameter
-      netfilter: nf_tables: prefer kfree_rcu(ptr, rcu) variant
-
-Eric W. Biederman (2):
-      signal: In get_signal test for signal_group_exit every time through the loop
-      ucounts: Fix systemd LimitNPROC with private users regression
-
-Evan Quan (1):
-      drm/amd/pm: correct UMD pstate clocks for Dimgrey Cavefish and Beige Goby
-
-Fabio Estevam (1):
-      ASoC: cs4265: Fix the duplicated control name
-
-Filipe Manana (4):
-      btrfs: get rid of warning on transaction commit when using flushoncommit
-      btrfs: fix ENOSPC failure when attempting direct IO write into NOCOW range
-      btrfs: fix lost prealloc extents beyond eof after full fsync
-      btrfs: add missing run of delayed items after unlink during log replay
-
-Florian Westphal (3):
-      netfilter: nf_queue: don't assume sk is full socket
-      netfilter: nf_queue: fix possible use-after-free
-      netfilter: nf_queue: handle socket prefetch
-
-Geetha sowjanya (1):
-      octeontx2-af: cn10k: Use appropriate register for LMAC enable
-
-Greg Kroah-Hartman (1):
-      Linux 5.15.27
-
-Guchun Chen (1):
-      drm/amdgpu: use spin_lock_irqsave to avoid deadlock by local interrupt
-
-Guido Günther (1):
-      drm: mxsfb: Set fallback bus format when the bridge doesn't provide one
-
-Haimin Zhang (1):
-      block-map: add __GFP_ZERO flag for alloc_page in function bio_copy_kern
-
-Hangyu Hua (3):
-      tipc: fix a bit overflow in tipc_crypto_key_rcv()
-      usb: gadget: don't release an existing dev->buf
-      usb: gadget: clear related members when goto fail
-
-Hans de Goede (2):
-      Input: elan_i2c - move regulator_[en|dis]able() out of elan_[en|dis]able_power()
-      Input: elan_i2c - fix regulator enable count imbalance after suspend/resume
-
-Hao Xu (1):
-      io_uring: fix no lock protection for ctx->cq_extra
-
-Hariprasad Kelam (1):
-      octeontx2-af: cn10k: RPM hardware timestamp configuration
-
-Harman Kalra (1):
-      octeontx2-af: Reset PTP config in FLR handler
-
-Harshad Shirwadkar (2):
-      ext4: drop ineligible txn start stop APIs
-      ext4: simplify updating of fast commit stats
-
-He Fengqing (1):
-      bpf: Fix possible race in inc_misses_counter
-
-Heiko Carstens (1):
-      s390/extable: fix exception table sorting
-
-Hou Wenlong (1):
-      KVM: x86: Exit to userspace if emulation prepared a completion callback
-
-Huang Pei (2):
-      MIPS: fix local_{add,sub}_return on MIPS64
-      hamradio: fix macro redefine warning
-
-Hugh Dickins (1):
-      memfd: fix F_SEAL_WRITE after shmem huge page allocated
-
-Ilya Lipnitskiy (1):
-      MIPS: ralink: mt7621: use bitwise NOT instead of logical
-
-J. Bruce Fields (1):
-      nfsd: fix crash on COPY_NOTIFY with special stateid
-
-JaeMan Park (1):
-      mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
-
-Jakub Kicinski (1):
-      of: net: move of_net under net/
-
-Jamie Iles (1):
-      i3c: fix incorrect address slot lookup on 64-bit
-
-Jani Nikula (1):
-      drm/i915/display: split out dpt out of intel_display.c
-
-Jann Horn (1):
-      efivars: Respect "block" flag in efivar_entry_set_safe()
-
-Jedrzej Jagielski (1):
-      iavf: Add trace while removing device
-
-Jeremy Pallotta (1):
-      ntb_hw_switchtec: Fix pff ioread to read into mmio_part_cfg_all
-
-Jia-Ju Bai (1):
-      net: chelsio: cxgb3: check the return value of pci_find_capability()
-
-Jianjun Wang (1):
-      PCI: mediatek-gen3: Disable DVFSRC voltage request
-
-Jiasheng Jiang (3):
-      drm/amdkfd: Check for null pointer after calling kmemdup
-      soc: fsl: qe: Check of ioremap return value
-      nl80211: Handle nla_memdup failures in handle_nan_filter
-
-Jiri Bohac (2):
-      xfrm: fix MTU regression
-      Revert "xfrm: xfrm_state_mtu should return at least 1280 for ipv6"
-
-Johannes Berg (1):
-      mac80211: treat some SAE auth steps as final
-
-Josef Bacik (2):
-      btrfs: do not WARN_ON() if we have PageError set
-      btrfs: do not start relocation until in progress drops are done
-
-José Expósito (1):
-      Input: clear BTN_RIGHT/MIDDLE on buttonpads
-
-José Roberto de Souza (1):
-      drm/i915/display: Move DRRS code its own file
-
-Kai Vehmanen (2):
-      ASoC: rt5668: do not block workqueue if card is unbound
-      ASoC: rt5682: do not block workqueue if card is unbound
-
-Karen Sornek (1):
-      iavf: Add helper function to go from pci_dev to adapter
-
-Kefeng Wang (1):
-      mm: defer kmemleak object creation of module_alloc()
-
-Kiran Kumar K (3):
-      octeontx2-af: Optimize KPU1 processing for variable-length headers
-      octeontx2-af: Adjust LA pointer for cpt parse header
-      octeontx2-af: Add KPU changes to parse NGIO as separate layer
-
-Krzysztof Kozlowski (1):
-      selftests/ftrace: Do not trace do_softirq because of PREEMPT_RT
-
-Lai Jiangshan (1):
-      KVM: X86: Ensure that dirty PDPTRs are loaded
-
-Lennert Buytenhek (1):
-      iommu/amd: Recover from event log overflow
-
-Leo (Hanghong) Ma (1):
-      drm/amd/display: Reduce dmesg error to a debug print
-
-Leon Romanovsky (1):
-      xfrm: enforce validity of offload input flags
-
-Like Xu (1):
-      KVM: x86/mmu: Passing up the error state of mmu_alloc_shadow_roots()
-
-Liu Ying (1):
-      drm/atomic: Check new_crtc_state->active to determine if CRTC needs disable in self refresh mode
-
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust file entry for of_net.c after movement
-
-Maciej Fijalkowski (1):
-      ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
-
-Marc Zyngier (1):
-      KVM: arm64: vgic: Read HW interrupt pending state from the HW
-
-Marek Marczykowski-Górecki (1):
-      xen/netfront: destroy queues before real_num_tx_queues is zeroed
-
-Marek Vasut (2):
-      PCI: rcar: Check if device is runtime suspended instead of __clk_is_enabled()
-      ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
-
-Masami Hiramatsu (1):
-      arm64: Mark start_backtrace() notrace and NOKPROBE_SYMBOL
-
-Mat Martineau (1):
-      mptcp: Correctly set DATA_FIN timeout when number of retransmits is large
-
-Mateusz Palczewski (3):
-      iavf: Refactor iavf state machine tracking
-      iavf: Add __IAVF_INIT_FAILED state
-      iavf: Combine init and watchdog state machines
-
-Matthew Auld (1):
-      drm/i915: don't call free_mmap_offset when purging
-
-Miaoqian Lin (2):
-      drm/sun4i: dw-hdmi: Fix missing put_device() call in sun8i_hdmi_phy_get
-      iommu/tegra-smmu: Fix missing put_device() call in tegra_smmu_find
-
-Michael Chan (1):
-      bnxt_en: Fix occasional ethtool -t loopback test failures
-
-Michel Dänzer (1):
-      drm/amd/display: For vblank_disable_immediate, check PSR is really used
-
-Ming Lei (1):
-      block: loop:use kstatfs.f_bsize of backing file to set discard granularity
-
-Moshe Tal (1):
-      ethtool: Fix link extended state for big endian
-
-Nicholas Kazlauskas (2):
-      drm/amdgpu/display: Only set vblank_disable_immediate when PSR is not enabled
-      drm/amd/display: Fix stream->link_enc unassigned during stream removal
-
-Nicolas Cavallari (1):
-      thermal: core: Fix TZ_GET_TRIP NULL pointer dereference
-
-Nicolas Escande (1):
-      mac80211: fix forwarded mesh frames AC & queue selection
-
-Nikola Cornij (1):
-      drm/amd/display: Use adjusted DCN301 watermarks
-
-Oliver Barta (1):
-      regulator: core: fix false positive in regulator_late_cleanup()
-
-Omar Sandoval (1):
-      btrfs: fix relocation crash due to premature return from btrfs_commit_transaction()
-
-Ong Boon Leong (2):
-      net: stmmac: enhance XDP ZC driver level switching performance
-      net: stmmac: perserve TX and RX coalesce value during XDP setup
-
-Pali Rohár (11):
-      PCI: aardvark: Fix checking for MEM resource type
-      PCI: mvebu: Check for errors from pci_bridge_emul_init() call
-      PCI: mvebu: Do not modify PCI IO type bits in conf_write
-      PCI: mvebu: Fix support for bus mastering and PCI_COMMAND on emulated bridge
-      PCI: mvebu: Fix configuring secondary bus of PCIe Root Port via emulated bridge
-      PCI: mvebu: Setup PCIe controller to Root Complex mode
-      PCI: mvebu: Fix support for PCI_BRIDGE_CTL_BUS_RESET on emulated bridge
-      PCI: mvebu: Fix support for PCI_EXP_DEVCTL on emulated bridge
-      PCI: mvebu: Fix support for PCI_EXP_RTSTA on emulated bridge
-      PCI: mvebu: Fix support for DEVCAP2, DEVCTL2 and LNKCTL2 registers on emulated bridge
-      PCI: mvebu: Fix device enumeration regression
-
-Palmer Dabbelt (1):
-      riscv/mm: Add XIP_FIXUP for phys_ram_base
-
-Paolo Bonzini (1):
-      KVM: VMX: Don't unblock vCPU w/ Posted IRQ if IRQs are disabled in guest
-
-Peter Zijlstra (1):
-      sched: Fix yet more sched_fork() races
-
-Przemyslaw Patynowski (1):
-      iavf: Fix kernel BUG in free_msi_irqs
-
-Qiang Yu (2):
-      drm/amdgpu: check vm ready by amdgpu_vm->evicting flag
-      drm/amdgpu: fix suspend/resume hang regression
-
-Qingqing Zhuo (1):
-      drm/amd/display: move FPU associated DSC code to DML folder
-
-Raed Salem (2):
-      net/mlx5e: IPsec: Refactor checksum code in tx data path
-      net/mlx5e: IPsec: Fix crypto offload for non TCP/UDP encapsulated traffic
-
-Randy Dunlap (6):
-      iwlwifi: mvm: check debugfs_dir ptr before use
-      net: stmmac: fix return value of __setup handler
-      net: sxgbe: fix return value of __setup handler
-      mips: setup: fix setnocoherentio() boolean setting
-      ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
-      tracing: Fix return value of __setup handlers
-
-Robin Murphy (1):
-      arm64: dts: juno: Remove GICv2m dma-range
-
-Ronnie Sahlberg (3):
-      cifs: do not use uninitialized data in the owner/group sid
-      cifs: fix double free race when mount fails in cifs_get_root()
-      cifs: modefromsids must add an ACE for authenticated users
-
-Russell King (Oracle) (1):
-      ARM: Fix kgdb breakpoint for Thumb2
-
-Samuel Holland (1):
-      pinctrl: sunxi: Use unique lockdep classes for IRQs
-
-Sasha Neftin (3):
-      e1000e: Correct NVM checksum verification flow
-      igc: igc_write_phy_reg_gpy: drop premature return
-      e1000e: Fix possible HW unit hang after an s0ix exit
-
-Sean Christopherson (4):
-      KVM: s390: Ensure kvm_arch_no_poll() is read once when blocking vCPU
-      KVM: VMX: Read Posted Interrupt "control" exactly once per loop iteration
-      KVM: x86: Handle 32-bit wrap of EIP for EMULTYPE_SKIP with flat code seg
-      hugetlbfs: fix off-by-one error in hugetlb_vmdelete_list()
-
-Sergey Shtylyov (1):
-      ata: pata_hpt37x: fix PCI clock detection
-
-Sherry Yang (1):
-      selftests/seccomp: Fix seccomp failure by adding missing headers
-
-Shyam Prasad N (1):
-      cifs: protect session channel fields with chan_lock
-
-Sidong Yang (1):
-      btrfs: qgroup: fix deadlock between rescan worker and remove qgroup
-
-Slawomir Laba (8):
-      iavf: Fix missing check for running netdev
-      iavf: Fix deadlock in iavf_reset_task
-      iavf: Rework mutexes for better synchronisation
-      iavf: Add waiting so the port is initialized in remove
-      iavf: Fix init state closure on remove
-      iavf: Fix locking for VIRTCHNL_OP_GET_OFFLOAD_VLAN_V2_CAPS
-      iavf: Fix race in init state
-      iavf: Fix __IAVF_RESETTING state usage
-
-Stefan Assmann (1):
-      iavf: do not override the adapter state in the watchdog task (again)
-
-Steve French (1):
-      cifs: fix confusing unneeded warning message on smb2.1 and earlier
-
-Steven Rostedt (2):
-      tracing: Add test for user space strings when filtering on string pointers
-      tracing: Add ustring operation to filtering string pointers
-
-Steven Rostedt (Google) (1):
-      tracing/histogram: Fix sorting on old "cpu" value
-
-Sukadev Bhattiprolu (6):
-      ibmvnic: don't release napi in __ibmvnic_open()
-      ibmvnic: register netdev after init of adapter
-      ibmvnic: free reset-work-item when flushing
-      ibmvnic: initialize rc before completing wait
-      ibmvnic: define flush_reset_queue helper
-      ibmvnic: complete init_done on transport events
-
-Sunil V L (1):
-      riscv/efi_stub: Fix get_boot_hartid_from_fdt() return value
-
-Suravee Suthikulpanit (1):
-      iommu/amd: Fix I/O page table memory leak
-
-Sven Eckelmann (3):
-      batman-adv: Request iflink once in batadv-on-batadv check
-      batman-adv: Request iflink once in batadv_get_real_netdevice
-      batman-adv: Don't expect inter-netns unique iflink indices
-
-Tadeusz Struk (1):
-      sched/fair: Fix fault in reweight_entity
-
-Tao Liu (1):
-      gve: Recording rx queue before sending to napi
-
-Thierry Reding (1):
-      ARM: tegra: Move panels to AUX bus
-
-Tim Harvey (1):
-      PCI: dwc: Do not remap invalid res
-
-Tom Rix (1):
-      i3c: master: dw: check return of dw_i3c_master_get_free_pos()
-
-Tudor Ambarus (1):
-      mtd: spi-nor: Fix mtd size for s3an flashes
-
-Valentin Caron (1):
-      serial: stm32: prevent TDR register overwrite when sending x_char
-
-Ville Syrjälä (2):
-      drm/i915: Disable DRRS on IVB/HSW port != A
-      drm/i915: s/JSP2/ICP2/ PCH
-
-Vinay Belgaumkar (1):
-      drm/i915/guc/slpc: Correct the param count for unset param
-
-Vincent Mailhol (2):
-      can: gs_usb: change active_channels's type from atomic_t to u8
-      can: etas_es58x: change opened_channel_cnt's type from atomic_t to u8
-
-Vincent Whitchurch (1):
-      net: stmmac: only enable DMA interrupts when ready
-
-Vitaly Kuznetsov (1):
-      x86/hyperv: Properly deal with empty cpumasks in hyperv_flush_tlb_multi()
-
-Vladimir Oltean (3):
-      net: dsa: seville: register the mdiobus under devres
-      net: dcb: flush lingering app table entries for unregistered devices
-      net: dcb: disable softirqs in dcbnl_flush_dev()
-
-Waiman Long (1):
-      selftests/vm: make charge_reserved_hugetlb.sh work with existing cgroup setting
-
-Weizhao Ouyang (1):
-      dma-buf: cma_heap: Fix mutex locking section
-
-Wesley Sheng (1):
-      ntb_hw_switchtec: Fix bug with more than 32 partitions
-
-William Mahon (2):
-      HID: add mapping for KEY_DICTATE
-      HID: add mapping for KEY_ALL_APPLICATIONS
-
-Wolfram Sang (3):
-      i2c: cadence: allow COMPILE_TEST
-      i2c: imx: allow COMPILE_TEST
-      i2c: qup: allow COMPILE_TEST
-
-Xiaoke Wang (2):
-      tracing/uprobes: Check the return value of kstrdup() for tu->filename
-      tracing/probes: check the return value of kstrndup() for pbuf
-
-Xin Yin (2):
-      ext4: fast commit may not fallback for ineligible commit
-      ext4: fast commit may miss file actions
-
-Yongzhi Liu (1):
-      dmaengine: shdma: Fix runtime PM imbalance on error
-
-Yu Kuai (1):
-      blktrace: fix use after free for struct blk_trace
-
-Yun Zhou (1):
-      proc: fix documentation and description of pagemap
-
-Zhen Ni (1):
-      ALSA: intel_hdmi: Fix reference to PCM buffer address
-
-Zheyu Ma (1):
-      net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
-
-j.nixdorf@avm.de (1):
-      net: ipv6: ensure we call ipv6_mc_down() at most once
-
-lena wang (1):
-      net: fix up skbs delta_truesize in UDP GRO frag_list
----
-Documentation/admin-guide/mm/pagemap.rst           |   2 +-
- Documentation/gpu/i915.rst                         |  14 +-
- Documentation/trace/events.rst                     |  19 +
- MAINTAINERS                                        |   2 +-
- Makefile                                           |   2 +-
- arch/arm/boot/dts/omap3-devkit8000-common.dtsi     |  18 +
- arch/arm/boot/dts/omap3-devkit8000.dts             |  33 -
- arch/arm/boot/dts/tegra124-nyan-big.dts            |  15 +-
- arch/arm/boot/dts/tegra124-nyan-blaze.dts          |  15 +-
- arch/arm/boot/dts/tegra124-venice2.dts             |  14 +-
- arch/arm/kernel/kgdb.c                             |  36 +-
- arch/arm/mm/mmu.c                                  |   2 +
- arch/arm64/boot/dts/arm/juno-base.dtsi             |   3 +-
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi       |  17 +-
- arch/arm64/kernel/module.c                         |   4 +-
- arch/arm64/kernel/stacktrace.c                     |   3 +-
- arch/arm64/kvm/vgic/vgic-mmio.c                    |   2 +
- arch/mips/include/asm/local.h                      |   9 +-
- arch/mips/kernel/setup.c                           |   2 +-
- arch/mips/ralink/mt7621.c                          |  36 +-
- arch/riscv/mm/Makefile                             |   3 +
- arch/riscv/mm/init.c                               |   1 +
- arch/riscv/mm/kasan_init.c                         |   3 +-
- arch/s390/include/asm/extable.h                    |   9 +-
- arch/s390/kernel/module.c                          |   5 +-
- arch/s390/kvm/kvm-s390.c                           |   2 +-
- arch/x86/hyperv/mmu.c                              |  19 +-
- arch/x86/kernel/module.c                           |   7 +-
- arch/x86/kvm/mmu/mmu.c                             |   2 +-
- arch/x86/kvm/vmx/posted_intr.c                     |   9 +-
- arch/x86/kvm/x86.c                                 |  11 +-
- block/blk-map.c                                    |   2 +-
- drivers/ata/pata_hpt37x.c                          |   4 +-
- drivers/auxdisplay/lcd2s.c                         |  24 +-
- drivers/block/loop.c                               |   8 +-
- drivers/clocksource/timer-ti-dm-systimer.c         |   3 +-
- drivers/dma-buf/heaps/cma_heap.c                   |   6 +-
- drivers/dma/sh/shdma-base.c                        |   4 +-
- drivers/firmware/arm_scmi/driver.c                 |   2 +-
- drivers/firmware/efi/libstub/riscv-stub.c          |  17 +-
- drivers/firmware/efi/vars.c                        |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            | 719 ++++++++++++++++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c           |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c             |  10 +-
- drivers/gpu/drm/amd/amdkfd/kfd_crat.c              |   3 +
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  12 +-
- .../drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c |  16 +-
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   |   4 +-
- drivers/gpu/drm/amd/display/dc/core/dc_resource.c  |   3 -
- .../drm/amd/display/dc/dcn301/dcn301_resource.c    |  96 ++-
- drivers/gpu/drm/amd/display/dc/dml/Makefile        |   3 +
- .../drm/amd/display/dc/{ => dml}/dsc/qp_tables.h   |   0
- .../gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c   | 291 +++++++++
- .../gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.h   |  94 +++
- drivers/gpu/drm/amd/display/dc/dsc/Makefile        |  29 -
- drivers/gpu/drm/amd/display/dc/dsc/rc_calc.c       | 259 --------
- drivers/gpu/drm/amd/display/dc/dsc/rc_calc.h       |  50 +-
- drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.c   |   1 -
- drivers/gpu/drm/amd/display/include/logger_types.h |   3 +
- .../drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c    |  26 +-
- .../drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.h    |   8 +
- drivers/gpu/drm/bridge/ti-sn65dsi86.c              |   5 +-
- drivers/gpu/drm/drm_atomic_helper.c                |   2 +-
- drivers/gpu/drm/i915/Makefile                      |   2 +
- drivers/gpu/drm/i915/display/intel_ddi.c           |   1 +
- drivers/gpu/drm/i915/display/intel_display.c       | 220 +------
- .../gpu/drm/i915/display/intel_display_debugfs.c   |   1 +
- drivers/gpu/drm/i915/display/intel_dp.c            | 467 +------------
- drivers/gpu/drm/i915/display/intel_dp.h            |  11 -
- drivers/gpu/drm/i915/display/intel_dpt.c           | 229 +++++++
- drivers/gpu/drm/i915/display/intel_dpt.h           |  19 +
- drivers/gpu/drm/i915/display/intel_drrs.c          | 485 ++++++++++++++
- drivers/gpu/drm/i915/display/intel_drrs.h          |  32 +
- drivers/gpu/drm/i915/display/intel_frontbuffer.c   |   1 +
- drivers/gpu/drm/i915/gem/i915_gem_pages.c          |   1 -
- drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c        |   2 +-
- drivers/gpu/drm/i915/intel_pch.c                   |   2 +-
- drivers/gpu/drm/i915/intel_pch.h                   |   2 +-
- drivers/gpu/drm/mediatek/mtk_dsi.c                 |   5 +-
- drivers/gpu/drm/mxsfb/mxsfb_kms.c                  |  12 +-
- drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c             |   4 +-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c             |  69 +-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h             |   2 +
- drivers/hid/hid-debug.c                            |   5 +-
- drivers/hid/hid-input.c                            |   3 +
- drivers/i2c/busses/Kconfig                         |   6 +-
- drivers/i2c/busses/i2c-bcm2835.c                   |  11 +
- drivers/i3c/master.c                               |   3 +-
- drivers/i3c/master/dw-i3c-master.c                 |   4 +
- drivers/i3c/master/mipi-i3c-hci/dat_v1.c           |   4 +-
- drivers/input/input.c                              |   6 +
- drivers/input/keyboard/Kconfig                     |   2 +-
- drivers/input/mouse/elan_i2c_core.c                |  64 +-
- drivers/input/touchscreen/ti_am335x_tsc.c          |   8 +-
- drivers/iommu/amd/amd_iommu.h                      |   1 +
- drivers/iommu/amd/amd_iommu_types.h                |   1 +
- drivers/iommu/amd/init.c                           |  10 +
- drivers/iommu/amd/io_pgtable.c                     |  12 +-
- drivers/iommu/amd/iommu.c                          |  10 +-
- drivers/iommu/intel/iommu.c                        |   2 +-
- drivers/iommu/tegra-smmu.c                         |   4 +-
- drivers/mtd/spi-nor/xilinx.c                       |   3 +-
- drivers/net/arcnet/com20020-pci.c                  |   3 +
- drivers/net/can/usb/etas_es58x/es58x_core.c        |   9 +-
- drivers/net/can/usb/etas_es58x/es58x_core.h        |   8 +-
- drivers/net/can/usb/gs_usb.c                       |  10 +-
- drivers/net/dsa/ocelot/seville_vsc9953.c           |   6 +-
- drivers/net/ethernet/amd/Kconfig                   |   2 +-
- drivers/net/ethernet/arc/Kconfig                   |   4 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   7 +
- drivers/net/ethernet/broadcom/bnxt/bnxt.h          |   1 +
- drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c  |   2 +-
- drivers/net/ethernet/chelsio/cxgb3/t3_hw.c         |   2 +
- drivers/net/ethernet/ezchip/Kconfig                |   2 +-
- drivers/net/ethernet/google/gve/gve_rx.c           |   1 +
- drivers/net/ethernet/ibm/ibmvnic.c                 |  54 +-
- drivers/net/ethernet/intel/e1000e/hw.h             |   1 +
- drivers/net/ethernet/intel/e1000e/ich8lan.c        |   8 +-
- drivers/net/ethernet/intel/e1000e/ich8lan.h        |   1 +
- drivers/net/ethernet/intel/e1000e/netdev.c         |  26 +
- drivers/net/ethernet/intel/iavf/iavf.h             |  54 +-
- drivers/net/ethernet/intel/iavf/iavf_main.c        | 357 +++++-----
- drivers/net/ethernet/intel/iavf/iavf_virtchnl.c    |  16 +-
- drivers/net/ethernet/intel/igc/igc_phy.c           |   4 -
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c       |   6 +-
- drivers/net/ethernet/litex/Kconfig                 |   2 +-
- drivers/net/ethernet/marvell/octeontx2/af/cgx.c    |  12 +-
- .../ethernet/marvell/octeontx2/af/lmac_common.h    |   8 +
- drivers/net/ethernet/marvell/octeontx2/af/mbox.h   |  61 +-
- drivers/net/ethernet/marvell/octeontx2/af/npc.h    |   9 +-
- .../ethernet/marvell/octeontx2/af/npc_profile.h    | 595 +++++------------
- drivers/net/ethernet/marvell/octeontx2/af/rpm.c    |  56 ++
- drivers/net/ethernet/marvell/octeontx2/af/rpm.h    |   7 +
- drivers/net/ethernet/marvell/octeontx2/af/rvu.h    |   7 +
- .../net/ethernet/marvell/octeontx2/af/rvu_cgx.c    |  23 +-
- .../net/ethernet/marvell/octeontx2/af/rvu_nix.c    |  30 +-
- .../net/ethernet/marvell/octeontx2/af/rvu_npc.c    |  96 +++
- .../mellanox/mlx5/core/en_accel/ipsec_rxtx.h       |  29 +
- drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |  20 +-
- .../net/ethernet/microchip/sparx5/sparx5_vlan.c    |  20 +-
- drivers/net/ethernet/mscc/Kconfig                  |   2 +-
- drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c    |   6 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac.h       |   4 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  | 170 ++++-
- drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c   |   4 +-
- drivers/net/hamradio/mkiss.c                       |   2 +
- drivers/net/ipa/Kconfig                            |   1 +
- drivers/net/usb/cdc_mbim.c                         |   5 +
- drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c   |  11 +-
- drivers/net/wireless/mac80211_hwsim.c              |  13 +
- drivers/net/xen-netfront.c                         |  39 +-
- drivers/ntb/hw/intel/ntb_hw_gen4.c                 |  17 +-
- drivers/ntb/hw/intel/ntb_hw_gen4.h                 |  16 +
- drivers/ntb/hw/mscc/ntb_hw_switchtec.c             |  16 +-
- drivers/of/Kconfig                                 |   4 -
- drivers/of/Makefile                                |   1 -
- drivers/pci/controller/dwc/pcie-designware.c       |   7 +-
- drivers/pci/controller/pci-aardvark.c              |   6 +-
- drivers/pci/controller/pci-mvebu.c                 | 251 +++++--
- drivers/pci/controller/pcie-mediatek-gen3.c        |   8 +
- drivers/pci/controller/pcie-rcar-host.c            |  10 +-
- drivers/pinctrl/sunxi/pinctrl-sunxi.c              |   9 +
- drivers/regulator/core.c                           |  13 +-
- drivers/soc/fsl/guts.c                             |  14 +-
- drivers/soc/fsl/qe/qe_io.c                         |   2 +
- drivers/thermal/thermal_netlink.c                  |   5 +-
- drivers/tty/serial/stm32-usart.c                   |  12 +
- drivers/usb/gadget/legacy/inode.c                  |  10 +-
- fs/btrfs/ctree.h                                   |  10 +
- fs/btrfs/disk-io.c                                 |  10 +
- fs/btrfs/extent-tree.c                             |  10 +
- fs/btrfs/extent_io.c                               |  16 +-
- fs/btrfs/inode.c                                   | 142 ++--
- fs/btrfs/qgroup.c                                  |   9 +-
- fs/btrfs/relocation.c                              |  13 +
- fs/btrfs/root-tree.c                               |  15 +
- fs/btrfs/transaction.c                             |  77 ++-
- fs/btrfs/transaction.h                             |   1 +
- fs/btrfs/tree-log.c                                |  61 +-
- fs/cifs/cifs_debug.c                               |   2 +
- fs/cifs/cifsacl.c                                  |   9 +-
- fs/cifs/cifsfs.c                                   |   1 +
- fs/cifs/cifsglob.h                                 |   5 +
- fs/cifs/connect.c                                  |  25 +-
- fs/cifs/misc.c                                     |   1 +
- fs/cifs/sess.c                                     |  41 +-
- fs/cifs/transport.c                                |   3 +
- fs/exfat/file.c                                    |  18 +-
- fs/exfat/inode.c                                   |  13 +-
- fs/exfat/namei.c                                   |   6 +-
- fs/exfat/super.c                                   |  10 +-
- fs/ext4/ext4.h                                     |  15 +-
- fs/ext4/extents.c                                  |   6 +-
- fs/ext4/fast_commit.c                              | 218 +++----
- fs/ext4/fast_commit.h                              |  27 +-
- fs/ext4/inode.c                                    |   4 +-
- fs/ext4/ioctl.c                                    |   5 +-
- fs/ext4/namei.c                                    |   4 +-
- fs/ext4/super.c                                    |   3 +-
- fs/ext4/xattr.c                                    |   6 +-
- fs/hugetlbfs/inode.c                               |   7 +-
- fs/io_uring.c                                      |   3 +
- fs/jbd2/commit.c                                   |   2 +-
- fs/jbd2/journal.c                                  |   2 +-
- fs/nfsd/nfs3proc.c                                 |   9 +-
- fs/nfsd/nfs3xdr.c                                  |  56 +-
- fs/nfsd/nfs4proc.c                                 |   3 +-
- fs/nfsd/nfs4state.c                                |   6 +-
- fs/nfsd/nfsproc.c                                  |   8 +-
- fs/nfsd/nfsxdr.c                                   |   9 +-
- fs/nfsd/vfs.c                                      |   4 +
- fs/nfsd/xdr.h                                      |   2 +-
- fs/nfsd/xdr3.h                                     |   2 +-
- fs/proc/task_mmu.c                                 |   3 +-
- include/linux/ethtool.h                            |   2 +-
- include/linux/filter.h                             |  10 +-
- include/linux/jbd2.h                               |   2 +-
- include/linux/kasan.h                              |   4 +-
- include/linux/of_net.h                             |   2 +-
- include/linux/sched/task.h                         |   4 +-
- include/linux/sunrpc/svc.h                         |   3 +-
- include/linux/vmalloc.h                            |   7 +
- include/net/ndisc.h                                |   4 +-
- include/net/netfilter/nf_queue.h                   |   2 +-
- include/net/xfrm.h                                 |   1 -
- include/trace/events/sunrpc.h                      |  13 +-
- include/uapi/linux/input-event-codes.h             |   4 +-
- include/uapi/linux/xfrm.h                          |   6 +
- kernel/bpf/syscall.c                               |  18 +-
- kernel/bpf/trampoline.c                            |  11 +-
- kernel/fork.c                                      |  13 +-
- kernel/sched/core.c                                |  23 +-
- kernel/signal.c                                    |  20 +-
- kernel/trace/blktrace.c                            |  26 +-
- kernel/trace/trace.c                               |   4 +-
- kernel/trace/trace_events_filter.c                 | 107 ++-
- kernel/trace/trace_events_hist.c                   |   6 +-
- kernel/trace/trace_events_synth.c                  |  13 +-
- kernel/trace/trace_kprobe.c                        |   2 +-
- kernel/trace/trace_probe.c                         |   2 +
- kernel/trace/trace_uprobe.c                        |   5 +
- kernel/user_namespace.c                            |  14 +-
- localversion-rt                                    |   2 +-
- mm/kasan/quarantine.c                              |  11 +
- mm/kasan/shadow.c                                  |   9 +-
- mm/memfd.c                                         |  40 +-
- mm/util.c                                          |   4 +-
- mm/vmalloc.c                                       |   3 +-
- net/batman-adv/hard-interface.c                    |  29 +-
- net/core/Makefile                                  |   1 +
- net/core/net-sysfs.c                               |   2 +-
- {drivers/of => net/core}/of_net.c                  |   0
- net/core/skbuff.c                                  |   2 +-
- net/core/skmsg.c                                   |   2 +-
- net/dcb/dcbnl.c                                    |  44 ++
- net/ipv4/esp4.c                                    |   2 +-
- net/ipv6/addrconf.c                                |   8 +-
- net/ipv6/esp6.c                                    |   2 +-
- net/ipv6/ip6_output.c                              |  11 +-
- net/ipv6/mcast.c                                   |  32 +-
- net/mac80211/ieee80211_i.h                         |   2 +-
- net/mac80211/mlme.c                                |  16 +-
- net/mac80211/rx.c                                  |  14 +-
- net/mptcp/protocol.c                               |   7 +-
- net/netfilter/core.c                               |   5 +-
- net/netfilter/nf_queue.c                           |  36 +-
- net/netfilter/nf_tables_api.c                      |   4 +-
- net/netfilter/nfnetlink_queue.c                    |  12 +-
- net/smc/af_smc.c                                   |  10 +-
- net/smc/smc_core.c                                 |   5 +-
- net/sunrpc/svc.c                                   |  11 +-
- net/sunrpc/svc_xprt.c                              |   2 +-
- net/tipc/crypto.c                                  |   2 +-
- net/wireless/nl80211.c                             |  12 +
- net/xfrm/xfrm_device.c                             |   6 +-
- net/xfrm/xfrm_interface.c                          |   2 +-
- net/xfrm/xfrm_state.c                              |  14 +-
- sound/soc/codecs/cs4265.c                          |   3 +-
- sound/soc/codecs/rt5668.c                          |  12 +-
- sound/soc/codecs/rt5682.c                          |  12 +-
- sound/soc/soc-ops.c                                |   4 +-
- sound/x86/intel_hdmi_audio.c                       |   2 +-
- tools/bpf/resolve_btfids/main.c                    |   5 +-
- .../drivers/net/mlxsw/spectrum/resource_scale.sh   |   2 +-
- .../selftests/drivers/net/mlxsw/tc_police_scale.sh |   3 +-
- .../ftrace/test.d/ftrace/func_set_ftrace_file.tc   |   2 +-
- tools/testing/selftests/seccomp/Makefile           |   2 +-
- .../selftests/vm/charge_reserved_hugetlb.sh        |  34 +-
- .../selftests/vm/hugetlb_reparenting_test.sh       |  21 +-
- tools/testing/selftests/vm/write_hugetlb_memory.sh |   2 +-
- virt/kvm/kvm_main.c                                |   5 +-
- 291 files changed, 4978 insertions(+), 2701 deletions(-)
----
+On Wed, 9 Mar 2022 at 00:18, Tanmay Shah <tanmay.shah@xilinx.com> wrote:
+>
+>
+> On 2/21/22 6:13 PM, Tanmay Shah wrote:
+> >
+> > On 2/18/22 11:11 AM, Mathieu Poirier wrote:
+> >> On Thu, Feb 10, 2022 at 03:28:24AM -0800, Tanmay Shah wrote:
+> >>> This driver enables r5f dual core Real time Processing Unit subsystem
+> >>> available on Xilinx Zynq Ultrascale MPSoC Platform. RPU subsystem
+> >>> (cluster) can be configured in different modes e.g. split mode in which
+> >>> two r5f cores work independent of each other and lock-step mode in
+> >>> which
+> >>> both r5f cores execute same code clock-for-clock and notify if the
+> >>> result is different.
+> >>>
+> >>> The Xilinx r5 Remoteproc Driver boots the RPU cores via calls to the
+> >>> Xilinx
+> >>> Platform Management Unit that handles the R5 configuration, memory
+> >>> access
+> >>> and R5 lifecycle management. The interface to this manager is done
+> >>> in this
+> >>> driver via zynqmp_pm_* function calls.
+> >>>
+> >>> Signed-off-by: Ben Levinsky<ben.levinsky@xilinx.com>
+> >>> Signed-off-by: Tanmay Shah<tanmay.shah@xilinx.com>
+> >>> ---
+>
+> [ .... ]
+>
+>
+> >>> +
+> >>> +/*
+> >>> + * zynqmp_r5_rproc_mem_map
+> >>> + * @rproc: single R5 core's corresponding rproc instance
+> >>> + * @mem: mem entry to map
+> >>> + *
+> >>> + * Callback to map va for memory-region's carveout.
+> >>> + *
+> >>> + * return 0 on success, otherwise non-zero value on failure
+> >>> + */
+> >>> +static int zynqmp_r5_rproc_mem_map(struct rproc *rproc,
+> >>> +                   struct rproc_mem_entry *mem)
+> >>> +{
+> >>> +    void __iomem *va;
+> >>> +
+> >>> +    va = ioremap_wc(mem->dma, mem->len);
+> >>> +    if (IS_ERR_OR_NULL(va))
+> >>> +        return -ENOMEM;
+> >>> +
+> >>> +    mem->va = (void *)va;
+> >>> +
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>> +/*
+> >>> + * zynqmp_r5_rproc_mem_unmap
+> >>> + * @rproc: single R5 core's corresponding rproc instance
+> >>> + * @mem: mem entry to unmap
+> >>> + *
+> >>> + * Unmap memory-region carveout
+> >>> + *
+> >>> + * return 0 on success, otherwise non-zero value on failure
+> >>> + */
+> >>> +static int zynqmp_r5_rproc_mem_unmap(struct rproc *rproc,
+> >>> +                     struct rproc_mem_entry *mem)
+> >>> +{
+> >>> +    iounmap((void __iomem *)mem->va);
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>> +/*
+> >>> + * add_mem_regions
+> >>> + * @r5_core: single R5 core's corresponding zynqmp_r5_core type
+> >>> instance
+> >>> + * @rmem: reserved mem region parsed from dt node
+> >>> + *
+> >>> + * Construct rproc mem carveouts from carveout provided in
+> >>> + * memory-region property
+> >>> + *
+> >>> + * return 0 on success, otherwise non-zero value on failure
+> >>> + */
+> >>> +static int add_mem_regions_carveout(struct zynqmp_r5_core *r5_core,
+> >>> +                    struct reserved_mem *rmem)
+> >>> +{
+> >>> +    struct device *dev;
+> >>> +    struct rproc_mem_entry *mem;
+> >>> +    struct rproc *rproc;
+> >>> +
+> >>> +    rproc = r5_core->rproc;
+> >>> +    dev = r5_core->dev;
+> >>> +
+> >>> +    /* Register associated reserved memory regions */
+> >>> +    mem = rproc_mem_entry_init(dev, NULL,
+> >>> +                   (dma_addr_t)rmem->base,
+> >>> +                   rmem->size, rmem->base,
+> >>> +                   zynqmp_r5_rproc_mem_map,
+> >>> +                   zynqmp_r5_rproc_mem_unmap,
+> >>> +                   rmem->name);
+> >>> +    if (!mem)
+> >>> +        return -ENOMEM;
+> >>> +
+> >>> +    rproc_add_carveout(rproc, mem);
+> >>> +
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>>
+> [ ... ]
+>
+> >>> +
+> >>> +/*
+> >>> + * zynqmp_r5_parse_fw()
+> >>> + * @rproc: single R5 core's corresponding rproc instance
+> >>> + * @fw: ptr to firmware to be loaded onto r5 core
+> >>> + *
+> >>> + * When loading firmware, ensure the necessary carveouts are in
+> >>> remoteproc
+> >>> + *
+> >>> + * return 0 on success, otherwise non-zero value on failure
+> >>> + */
+> >>> +static int zynqmp_r5_parse_fw(struct rproc *rproc, const struct
+> >>> firmware *fw)
+> >>> +{
+> >>> +    int ret;
+> >>> +    struct zynqmp_r5_core *r5_core;
+> >>> +    struct device *dev;
+> >>> +
+> >>> +    r5_core = rproc->priv;
+> >>> +
+> >>> +    dev = r5_core->dev;
+> >>> +
+> >>> +    ret = add_tcm_banks(rproc);
+> >>> +    if (ret) {
+> >>> +        dev_err(dev, "failed to get TCM banks, err %d\n", ret);
+> >>> +        return ret;
+> >>> +    }
+> >>> +
+> >>> +    ret = rproc_elf_load_rsc_table(rproc, fw);
+> >>> +    if (ret == -EINVAL) {
+> >>> +        /*
+> >>> +         * resource table only required for IPC.
+> >>> +         * if not present, this is not necessarily an error;
+> >>> +         * for example, loading r5 hello world application
+> >>> +         * so simply inform user and keep going.
+> >>> +         */
+> >>> +        dev_info(&rproc->dev, "no resource table found.\n");
+> >>> +        ret = 0;
+> >>> +    }
+> >>> +    return ret;
+> >>> +}
+> >>> +
+> >>> +static struct rproc_ops zynqmp_r5_rproc_ops = {
+> >>> +    .start        = zynqmp_r5_rproc_start,
+> >>> +    .stop        = zynqmp_r5_rproc_stop,
+> >>> +    .load        = rproc_elf_load_segments,
+> >>> +    .parse_fw    = zynqmp_r5_parse_fw,
+> >>> +    .find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
+> >>> +    .sanity_check    = rproc_elf_sanity_check,
+> >>> +    .get_boot_addr    = rproc_elf_get_boot_addr,
+> >>> +};
+> >>> +
+> >>>
+> [ ... ]
+>
+>
+> >>> +
+> >>> +/**
+> >>> + * zynqmp_r5_get_mem_region_node()
+> >>> + * parse memory-region property from dt node and add
+> >>> + * memory region carveouts
+> >>> + *
+> >>> + * @r5_core: pointer to zynqmp_r5_core type object
+> >>> + *
+> >>> + * Return: 0 for success and error code for failure.
+> >>> + */
+> >>> +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core
+> >>> *r5_core)
+> >>> +{
+> >>> +    int res_mem_count, i, ret;
+> >>> +    struct device *dev;
+> >>> +    struct device_node *np, *rmem_np;
+> >>> +    struct reserved_mem *rmem;
+> >>> +
+> >>> +    dev = r5_core->dev;
+> >>> +
+> >>> +    np = r5_core->np;
+> >>> +
+> >>> +    res_mem_count = of_property_count_elems_of_size(np,
+> >>> "memory-region",
+> >>> +                            sizeof(phandle));
+> >>> +    if (res_mem_count <= 0) {
+> >>> +        dev_warn(dev, "failed to get memory-region property %d\n",
+> >>> +             res_mem_count);
+> >>> +        return -EINVAL;
+> >>> +    }
+> >>> +
+> >>> +    for (i = 0; i < res_mem_count; i++) {
+> >>> +        rmem_np = of_parse_phandle(np, "memory-region", i);
+> >>> +        if (!rmem_np)
+> >>> +            return -EINVAL;
+> >>> +
+> >>> +        rmem = of_reserved_mem_lookup(rmem_np);
+> >>> +        if (!rmem) {
+> >>> +            of_node_put(rmem_np);
+> >>> +            return -EINVAL;
+> >> What happens to previously allocated regions when there is a failure?
+> >
+> > Right, I need to unmap memory and use kfree(rmem) to de-allocate memory.
+> >
+> >>> +        }
+> >>> +
+> >>> +        ret = add_mem_regions_carveout(r5_core, rmem);
+> >>> +        if (ret)
+> >>> +            dev_warn(dev, "failed to get reserve mem regions %d\n",
+> >>> +                 ret);
+> >> Same here.
+> >
+> > Here as well. I will release reserved mem dev with
+> > of_reserved_mem_device_release API.
+> >
+> > One more thing. I moved add_mem_regions_carveout from parse_fw to
+> > zynqmp_r5_get_mem_region_node.
+> >
+> > However, I believe I should move it back to parse_fw.
+> >
+> > Following test case is failing in when add_mem_regions_carveout is not
+> > available in parse_fw:
+> >
+> > load_rpu_fw -> start rpu -> stop rpu -> start rpu again
+> >
+> > In above case, during mem regions are not added again.
+> >
+> > Is it fine, if I move this add_mem_regions_carveout back to
+> > zynqmp_r5_parse_fw ?
+>
+>
+> Hi Mathieu,
+>
+> I have addressed most of the comments from this revision.
+>
+> However, I wanted your opinion on this.
+>
+> I think mapping memory-regions during parse_fw just like tcm mapping is
+> easily
+>
+> maintainable rather than mapping during probe. Also in my case, I am not
+> able to start RPU again because memory regions are unmapped
+>
+> during RPU stop and can't be mapped again. So, is it ok if I move back
+> add_mem_regions_carveout from driver probe to parse_fw?
+
+If you intend to support attaching to the remote processor at some
+point in the future then I suggest adding the carveouts in
+ops::prepare(), otherwise ops::parse_fw() is fine.
+
+>
+> Thanks,
+>
+> Tanmay
+>
+>
+> >> I am out of time for this set.  Please address comments provided up
+> >> to here and
+> >> we will see about the rest in a future revision.
+> >>
+> >> Thanks,
+> >> Mathieu
+> >>
+> >>> +
+> >>> +        of_node_put(rmem_np);
+> >>> +    }
+> >>> +
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>> +/*
+> >>> + * zynqmp_r5_core_init()
+> >>> + * Create and initialize zynqmp_r5_core type object
+> >>> + *
+> >>> + * @cluster: pointer to zynqmp_r5_cluster type object
+> >>> + *
+> >>> + * Return: 0 for success and error code for failure.
+> >>> + */
+> >>> +static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster)
+> >>> +{
+> >>> +    int ret, i;
+> >>> +    struct zynqmp_r5_core *r5_core;
+> >>> +    struct device *dev = cluster->dev;
+> >>> +
+> >>> +    ret = zynqmp_r5_get_tcm_node(cluster);
+> >>> +    if (ret < 0) {
+> >>> +        dev_err(dev, "can't get tcm node, err %d\n", ret);
+> >>> +        return ret;
+> >>> +    }
+> >>> +
+> >>> +    for (i = 0; i < cluster->core_count; i++) {
+> >>> +        r5_core = cluster->r5_cores[i];
+> >>> +
+> >>> +        ret = zynqmp_r5_get_mem_region_node(r5_core);
+> >>> +        if (ret)
+> >>> +            dev_warn(dev, "memory-region prop failed %d\n", ret);
+> >>> +
+> >>> +        /* Initialize r5 cores with power-domains parsed from dts */
+> >>> +        ret = of_property_read_u32_index(r5_core->np, "power-domains",
+> >>> +                         1, &r5_core->pm_domain_id);
+> >>> +        if (ret) {
+> >>> +            dev_err(dev, "failed to get power-domains property\n");
+> >>> +            return ret;
+> >>> +        }
+> >>> +
+> >>> +        ret = zynqmp_r5_set_mode(r5_core, cluster->mode);
+> >>> +        if (ret) {
+> >>> +            dev_err(dev, "failed to set r5 cluster mode %d, err %d\n",
+> >>> +                cluster->mode, ret);
+> >>> +            return ret;
+> >>> +        }
+> >>> +    }
+> >>> +
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>> +/*
+> >>> + * zynqmp_r5_cluster_init()
+> >>> + * Create and initialize zynqmp_r5_cluster type object
+> >>> + *
+> >>> + * @cluster: pointer to zynqmp_r5_cluster type object
+> >>> + *
+> >>> + * Return: 0 for success and error code for failure.
+> >>> + */
+> >>> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+> >>> +{
+> >>> +    struct device *dev = cluster->dev;
+> >>> +    struct device_node *dev_node = dev_of_node(dev);
+> >>> +    struct device_node *child;
+> >>> +    struct platform_device *child_pdev;
+> >>> +    int core_count = 0, ret, i;
+> >>> +    enum zynqmp_r5_cluster_mode cluster_mode = LOCKSTEP_MODE;
+> >>> +    struct zynqmp_r5_core **r5_cores;
+> >>> +
+> >>> +    ret = of_property_read_u32(dev_node, "xlnx,cluster-mode",
+> >>> &cluster_mode);
+> >>> +
+> >>> +    /*
+> >>> +     * on success returns 0, if not defined then returns -EINVAL,
+> >>> +     * In that case, default is LOCKSTEP mode
+> >>> +     */
+> >>> +    if (ret != -EINVAL && ret != 0) {
+> >>> +        dev_err(dev, "Invalid xlnx,cluster-mode property\n");
+> >>> +        return -EINVAL;
+> >>> +    }
+> >>> +
+> >>> +    /*
+> >>> +     * For now driver only supports split mode and lockstep mode.
+> >>> +     * fail driver probe if either of that is not set in dts
+> >>> +     */
+> >>> +    if (cluster_mode == SINGLE_CPU_MODE) {
+> >>> +        dev_err(dev, "driver does not support single cpu mode\n");
+> >>> +        return -EINVAL;
+> >>> +    } else if ((cluster_mode != SPLIT_MODE &&
+> >>> +           cluster_mode != LOCKSTEP_MODE)) {
+> >>> +        dev_err(dev, "Invalid cluster mode\n");
+> >>> +        return -EINVAL;
+> >>> +    }
+> >>> +
+> >>> +    /*
+> >>> +     * Number of cores is decided by number of child nodes of
+> >>> +     * r5f subsystem node in dts. If Split mode is used in dts
+> >>> +     * 2 child nodes are expected.
+> >>> +     * In lockstep mode if two child nodes are available,
+> >>> +     * only use first child node and consider it as core0
+> >>> +     * and ignore core1 dt node.
+> >>> +     */
+> >>> +    core_count = of_get_available_child_count(dev_node);
+> >>> +    if (core_count <= 0) {
+> >>> +        dev_err(dev, "Invalid number of r5 cores %d", core_count);
+> >>> +        return -EINVAL;
+> >>> +    } else if (cluster_mode == SPLIT_MODE && core_count != 2) {
+> >>> +        dev_err(dev, "Invalid number of r5 cores for split mode\n");
+> >>> +        return -EINVAL;
+> >>> +    } else if (cluster_mode == LOCKSTEP_MODE && core_count == 2) {
+> >>> +        dev_warn(dev, "Only r5 core0 will be used\n");
+> >>> +        core_count = 1;
+> >>> +    }
+> >>> +
+> >>> +    r5_cores = devm_kcalloc(dev, core_count,
+> >>> +                sizeof(struct zynqmp_r5_core *), GFP_KERNEL);
+> >>> +    if (!r5_cores)
+> >>> +        return -ENOMEM;
+> >>> +
+> >>> +    i = 0;
+> >>> +    for_each_available_child_of_node(dev_node, child) {
+> >>> +        child_pdev = of_find_device_by_node(child);
+> >>> +        if (!child_pdev) {
+> >>> +            of_node_put(child);
+> >>> +            return -ENODEV;
+> >>> +        }
+> >>> +
+> >>> +        /* create and add remoteproc instance of type struct rproc */
+> >>> +        r5_cores[i] = zynqmp_r5_add_rproc_core(&child_pdev->dev);
+> >>> +        r5_cores[i]->dev = &child_pdev->dev;
+> >>> +        if (!r5_cores[i]->dev) {
+> >>> +            dev_err(dev, "can't get device for r5 core %d\n", i);
+> >>> +            of_node_put(child);
+> >>> +            return -ENODEV;
+> >>> +        }
+> >>> +
+> >>> +        r5_cores[i]->np = dev_of_node(r5_cores[i]->dev);
+> >>> +        if (!r5_cores[i]->np) {
+> >>> +            dev_err(dev, "can't get device node for r5 core %d\n", i);
+> >>> +            of_node_put(child);
+> >>> +            return -ENODEV;
+> >>> +        }
+> >>> +
+> >>> +        i++;
+> >>> +
+> >>> +        /*
+> >>> +         * If two child nodes are available in dts in lockstep mode,
+> >>> +         * then ignore second child node.
+> >>> +         */
+> >>> +        if (i == core_count) {
+> >>> +            of_node_put(child);
+> >>> +            break;
+> >>> +        }
+> >>> +        of_node_put(child);
+> >>> +    }
+> >>> +
+> >>> +    cluster->mode = cluster_mode;
+> >>> +    cluster->core_count = core_count;
+> >>> +    cluster->r5_cores = r5_cores;
+> >>> +
+> >>> +    ret = zynqmp_r5_core_init(cluster);
+> >>> +    if (ret < 0) {
+> >>> +        dev_err(dev, "failed to init r5 core err %d\n", ret);
+> >>> +        return ret;
+> >>> +    }
+> >>> +
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>> +static void zynqmp_r5_cluster_exit(void *data)
+> >>> +{
+> >>> +    struct platform_device *pdev = (struct platform_device *)data;
+> >>> +
+> >>> +    platform_set_drvdata(pdev, NULL);
+> >>> +
+> >>> +    pr_info("Exit r5f subsystem driver\n");
+> >>> +}
+> >>> +
+> >>> +/*
+> >>> + * zynqmp_r5_remoteproc_probe()
+> >>> + *
+> >>> + * @pdev: domain platform device for R5 cluster
+> >>> + *
+> >>> + * called when driver is probed, for each R5 core specified in DT,
+> >>> + * setup as needed to do remoteproc-related operations
+> >>> + *
+> >>> + * Return: 0 for success, negative value for failure.
+> >>> + */
+> >>> +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
+> >>> +{
+> >>> +    int ret;
+> >>> +    struct zynqmp_r5_cluster *cluster;
+> >>> +    struct device *dev = &pdev->dev;
+> >>> +
+> >>> +    cluster = devm_kzalloc(dev, sizeof(*cluster), GFP_KERNEL);
+> >>> +    if (!cluster)
+> >>> +        return -ENOMEM;
+> >>> +
+> >>> +    cluster->dev = dev;
+> >>> +
+> >>> +    ret = devm_of_platform_populate(dev);
+> >>> +    if (ret) {
+> >>> +        dev_err(dev, "failed to populate platform dev %d\n", ret);
+> >>> +        return ret;
+> >>> +    }
+> >>> +
+> >>> +    /* wire in so each core can be cleaned up at driver remove */
+> >>> +    platform_set_drvdata(pdev, cluster);
+> >>> +
+> >>> +    ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
+> >>> +    if (ret)
+> >>> +        return ret;
+> >>> +
+> >>> +    ret = zynqmp_r5_cluster_init(cluster);
+> >>> +    if (ret) {
+> >>> +        dev_err(dev, "Invalid r5f subsystem device tree\n");
+> >>> +        return ret;
+> >>> +    }
+> >>> +
+> >>> +    return 0;
+> >>> +}
+> >>> +
+> >>> +/* Match table for OF platform binding */
+> >>> +static const struct of_device_id zynqmp_r5_remoteproc_match[] = {
+> >>> +    { .compatible = "xlnx,zynqmp-r5fss", },
+> >>> +    { /* end of list */ },
+> >>> +};
+> >>> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
+> >>> +
+> >>> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
+> >>> +    .probe = zynqmp_r5_remoteproc_probe,
+> >>> +    .driver = {
+> >>> +        .name = "zynqmp_r5_remoteproc",
+> >>> +        .of_match_table = zynqmp_r5_remoteproc_match,
+> >>> +    },
+> >>> +};
+> >>> +module_platform_driver(zynqmp_r5_remoteproc_driver);
+> >>> +
+> >>> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
+> >>> +MODULE_AUTHOR("Xilinx Inc.");
+> >>> +MODULE_LICENSE("GPL v2");
+> >>> --
+> >>> 2.25.1
+> >>>

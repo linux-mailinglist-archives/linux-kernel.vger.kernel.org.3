@@ -2,152 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F6A4D5467
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7894D5464
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344350AbiCJWPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1344316AbiCJWOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344329AbiCJWPF (ORCPT
+        with ESMTP id S240292AbiCJWOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:15:05 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43763197B43
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:14:03 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q19so5866351pgm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UzG3xwxvfaLfshaLysPhOgwGVwb5K3wxbNsB2PeYW8Y=;
-        b=xIIfbSPNUV8Ow0wLvcRQdP2Qe7loeLLVXmOTwxDaXkfmDW5jCezViM98w7q1uQr1I2
-         g2Io5NWjZjlegDBMXHuSk+kWVxbfISQOzk7UR0mcoCMj/FP9XMU5QzSH338gEXdaQMm3
-         FXAYA8/XXSntazYo0o5GiyvFgBJ5bUFtmxaHVcpBwZuxVnkcFSokFlDIb88U/Nadisgb
-         0oJnJDk7Jub0KO+awAzgiGlZfGkXRooPIu/ule2CbLNwTSSxC0BqhuV/puIYC3k0Vyfy
-         RyQvzHYY0FabRV9wwYNpG983O9ytwUKxe98ekoHczUocjnhzjEjkhPo1bf/CT3OgdcV4
-         gsVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UzG3xwxvfaLfshaLysPhOgwGVwb5K3wxbNsB2PeYW8Y=;
-        b=x6k+NHZAysKhlI0a2VlZjW0NW8xclwpMVbGLMl52gYwa0KmGMmxwjp295MqpoqgbW3
-         eRMYjliLYNGHxkKb6b53lLxb/HoV0nDdntdcMFZq6BuXdNylrkk2a6eUM/uISePQt7fL
-         AodBnTc4t+CiKU+lZQvZ94oGik+Yz8BrG2CsNJcARLK5EJnb5b+EPvYLLJMZSmriuTFO
-         IqQI+DNhaMndtGr1ndmRZ4QaCLNaphJ+bRsTGCH8MhXele5DJ6y3rDGFECtUTZY6PhNC
-         N875Gof8IGM3ZJT+hnj6hP1/cXRYCla/57yYOoSfEcNuLVupDOHZLC+iyTL4BDmM/oIW
-         NTyw==
-X-Gm-Message-State: AOAM530Tf8AiMkDXRbnJLSJIW+n6C5vLtdPoRw1K4qSGnBZvIdZOtkQ9
-        i3lo2X0sPqzDzh57CMKEb99aSw==
-X-Google-Smtp-Source: ABdhPJyDPDNCNzaw9MyEiRkIMnm6aKQ+Xl8kK1W11zZDCZEXYzHIEfNaF1f5kgz+ExrcyR7MJSGhAQ==
-X-Received: by 2002:a05:6a00:843:b0:4f7:2830:6d81 with SMTP id q3-20020a056a00084300b004f728306d81mr6965380pfk.76.1646950442784;
-        Thu, 10 Mar 2022 14:14:02 -0800 (PST)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id nn15-20020a17090b38cf00b001bfceefd8cfsm3511915pjb.48.2022.03.10.14.14.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 14:14:02 -0800 (PST)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     davem@davemloft.net
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-Subject: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
-Date:   Thu, 10 Mar 2022 14:13:28 -0800
-Message-Id: <20220310221328.877987-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
-References: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
+        Thu, 10 Mar 2022 17:14:49 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4747262127;
+        Thu, 10 Mar 2022 14:13:43 -0800 (PST)
+Received: from zn.tnic (p200300ea97193878e79a34f2fb5add4f.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3878:e79a:34f2:fb5a:dd4f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 75D331EC0432;
+        Thu, 10 Mar 2022 23:13:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1646950417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4jApLr5h3MOaJR8HuPKksowRenJ+ECkFPNCumJIL5gg=;
+        b=fPcC7LKb6FEKoOPPuIoeYnIjVFnCCwhS1hvVH+uji3gXrXfxOxhPleLn+o/VOXs5Nsgqno
+        gFGwF1XE2u0OTG/Mi1kZS6wD8sGPPtdKB5i5QptvgPfh/eQiEc9CfyzjtA31zZUgWgYQNy
+        Qz/ZbBd0RgnhZlFYuWT65edUYAEjJYs=
+Date:   Thu, 10 Mar 2022 23:13:37 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, yazen.ghannam@amd.com,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bilbao@vt.edu
+Subject: Re: [PATCH] x86/mce: Cover grading of AMD machine error checks
+Message-ID: <Yip4EV69+lElCuPM@zn.tnic>
+References: <20220309174107.6113-1-carlos.bilbao@amd.com>
+ <Yijz7dA1U0AMcYPZ@zn.tnic>
+ <4a345de2-6a2c-fe26-c55c-34ce6ea431d4@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4a345de2-6a2c-fe26-c55c-34ce6ea431d4@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found a kernel bug in the ipv6 stack:
-LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
-The reproducer triggers it by sending a crafted message via sendmmsg()
-call, which triggers skb_over_panic, and crashes the kernel:
+On Thu, Mar 10, 2022 at 12:24:08PM -0600, Carlos Bilbao wrote:
+> We will cover grading of MCEs like deferred memory scrub errors, attempts 
+> to access poisonous data, etc. I could list all new covered cases in the 
+> commit message if you think that'd be positive.
 
-skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
-head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
-dev:<NULL>
+So no actual use case - you want to grade error severity for all types
+of MCEs.
 
-Add a check that prevents an invalid packet with MTU equall to the
-fregment header size to eat up all the space for payload.
+> Hope that helps clarify,
 
-The reproducer can be found here:
-LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
+Yes, it does a bit.
 
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
+It sounds to me like you want to do at least two patches:
 
-Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
-v2: Instead of updating the alloclen add a check that prevents
-    an invalid packet with MTU equall to the fregment header size
-    to eat up all the space for payload.
-    Fix suggested by Willem de Bruijn <willemdebruijn.kernel@gmail.com>
----
- net/ipv6/ip6_output.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+1. Extend the severity grading function with the new types of errors
 
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 4788f6b37053..6d45112322a0 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1649,6 +1649,16 @@ static int __ip6_append_data(struct sock *sk,
- 			skb->protocol = htons(ETH_P_IPV6);
- 			skb->ip_summed = csummode;
- 			skb->csum = 0;
-+
-+			/*
-+			 *	Check if there is still room for payload
-+			 */
-+			if (fragheaderlen >= mtu) {
-+				err = -EMSGSIZE;
-+				kfree_skb(skb);
-+				goto error;
-+			}
-+
- 			/* reserve for fragmentation and ipsec header */
- 			skb_reserve(skb, hh_len + sizeof(struct frag_hdr) +
- 				    dst_exthdrlen);
+2. Add string descriptions of the error types mce_severity_amd() looks
+at, so that mce_panic() issues them.
+
+I.e., you want to decode the fatal MCEs which panic the machine.
+
+In general, what would help is if you think about what you're trying to
+achieve and write it down first. How to achieve that we can figure out
+later.
+
+What happens now is you send me a patch and I'm trying to decipher from
+the code why you're doing what you're doing. Which is kinda backwards if
+you think about it...
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

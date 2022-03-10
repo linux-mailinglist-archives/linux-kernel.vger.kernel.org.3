@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DF74D46AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA954D46AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241929AbiCJMSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S241926AbiCJMTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241990AbiCJMSB (ORCPT
+        with ESMTP id S235871AbiCJMTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:18:01 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009C2136EE0;
-        Thu, 10 Mar 2022 04:17:00 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id eq14so4344169qvb.3;
-        Thu, 10 Mar 2022 04:17:00 -0800 (PST)
+        Thu, 10 Mar 2022 07:19:39 -0500
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900EB31206;
+        Thu, 10 Mar 2022 04:18:36 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id z66so4161453qke.10;
+        Thu, 10 Mar 2022 04:18:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xfvrxYj0IL4efWC8i+iJcHTNZuPckG62QyK4wQ8esU8=;
-        b=H+GAejYNYnbRR4VfGoNJwXQ9i637j6f2jUqWa5KaWm8FGvCbvy8H0qBMnIhLGGtHtM
-         a4hk0lk1PxKIOt1HIMYpAMLhNFHJE8cStFaaFhKZ50Limsq3jkepqIIEbiX6L8X6aKSD
-         Vpn1FgLFdUmPlJID8GtHetZvTcZ2ZIuY3lMYR89DpCjzHNm2EgqTP1GsY1KKvWencigb
-         9PujE13Nt9ZC2Q+nqOLt23msLUOgrfhCkEwpN06d01m92Ruali6wfMjJrG4nIyvgNcx5
-         eGwetsUJDUXRJM04NpzAAG/1R+EN1Ro3pNBkB7F/KzhX9N+IdVsbRSzTr7W7ZN/7O+5H
-         q9+Q==
-X-Gm-Message-State: AOAM530yIRuaFadPiedUwWhbLVOVGp9ME4IU6NG66vXB475t4kfrZluJ
-        A0arJ6+EzSIWOq54CTtEjH6pkqfePVWVJA==
-X-Google-Smtp-Source: ABdhPJwqtnMqXfh5YIg7IanvOzObmHeGJKI9VrMd4EKQojVrSQ9EBM/TOSKMdgJsov+/O0ErOD8A4A==
-X-Received: by 2002:a05:6214:23c6:b0:433:8a2:c244 with SMTP id hr6-20020a05621423c600b0043308a2c244mr3488124qvb.88.1646914619686;
-        Thu, 10 Mar 2022 04:16:59 -0800 (PST)
+        bh=UxEoIGn264sRGsg/HhT4YP64PVzy4oCfplaz7ZY6sjU=;
+        b=dXa5AU/tirvXdCQwFhdfoDiFMa4R8yfFzie20/k+jBYnhTvL1zzETtK+Y8zR2rP3ma
+         EjYjhRqCTmTFT5NAG21hpg5XSCFTPobCsYBMSBNAiJzb5lVeFWFz9f3W+/v/dLR6VPXx
+         z/QJ0gN2XXVdzVOzSh+2xxsVM2XMlY5RA4RvYnkOckqNTkIWF1tYsrH1KWDsE9KrD+T9
+         KqDXxJATmn1zpSCMeenhwIzXnNalVFXUIaU4hiAfzHr5pu8MwcVUHzUqfeiXEfZpzJwd
+         Yl1j+ExFG+iX44nkiQ7jnzXMTba0JMrznDLinVyCprXRO9tv4hiRKsEya5XQQuxWThzm
+         hAgg==
+X-Gm-Message-State: AOAM5319RVbMuJX7q7jvRMQl0cPoO/F/YETh/qcYzYwV12nwC0GoIi7D
+        9RVBvzVVNrQKXbifipX93VCz6Q2hrpclAA==
+X-Google-Smtp-Source: ABdhPJxyvXJR7lz1gqD1TOuirSzLwNgwDmCCk6wCujypzVHS+UCXc6KkeEZJXqwQSkSXvuUQPFCDSw==
+X-Received: by 2002:a37:9346:0:b0:67b:128f:4696 with SMTP id v67-20020a379346000000b0067b128f4696mr2735006qkd.442.1646914714702;
+        Thu, 10 Mar 2022 04:18:34 -0800 (PST)
 Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05622a144900b002dfedb4dccasm3099803qtx.66.2022.03.10.04.16.57
+        by smtp.gmail.com with ESMTPSA id 13-20020ac84e8d000000b002e068382bf8sm3056848qtp.63.2022.03.10.04.18.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:16:57 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dc0364d2ceso55429527b3.7;
-        Thu, 10 Mar 2022 04:16:57 -0800 (PST)
-X-Received: by 2002:a81:6dd1:0:b0:2dc:56d1:1dae with SMTP id
- i200-20020a816dd1000000b002dc56d11daemr3528698ywc.479.1646914617228; Thu, 10
- Mar 2022 04:16:57 -0800 (PST)
+        Thu, 10 Mar 2022 04:18:34 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dc0364d2ceso55474357b3.7;
+        Thu, 10 Mar 2022 04:18:33 -0800 (PST)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr3691051ywb.132.1646914713434; Thu, 10
+ Mar 2022 04:18:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20220310090048.1933020-1-laurent@vivier.eu> <20220310090048.1933020-4-laurent@vivier.eu>
-In-Reply-To: <20220310090048.1933020-4-laurent@vivier.eu>
+References: <20220310090048.1933020-1-laurent@vivier.eu> <20220310090048.1933020-6-laurent@vivier.eu>
+In-Reply-To: <20220310090048.1933020-6-laurent@vivier.eu>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Mar 2022 13:16:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWLt4Q_TtGhOreW1kMjo0uLL3H5UKjaK8SXGo5dQUO+Tw@mail.gmail.com>
-Message-ID: <CAMuHMdWLt4Q_TtGhOreW1kMjo0uLL3H5UKjaK8SXGo5dQUO+Tw@mail.gmail.com>
-Subject: Re: [PATCH v15 3/5] rtc: goldfish: use gf_ioread32()/gf_iowrite32()
+Date:   Thu, 10 Mar 2022 13:18:22 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUGa8JAB4HZ303qy6BSadV0NVy-ZvhxMtj8ENavM8sHLw@mail.gmail.com>
+Message-ID: <CAMuHMdUGa8JAB4HZ303qy6BSadV0NVy-ZvhxMtj8ENavM8sHLw@mail.gmail.com>
+Subject: Re: [PATCH v15 5/5] m68k: introduce a virtual m68k machine
 To:     Laurent Vivier <laurent@vivier.eu>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -73,14 +73,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, Mar 10, 2022 at 10:01 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> replace readl()/writel() by gf_ioread32()/gf_iowrite32()
-> as done for goldfish-tty.
+> This machine allows to have up to 3.2 GiB and 128 Virtio devices.
+>
+> It is based on android goldfish devices.
 >
 > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
 Please include tags given on previous versions:
 Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 Gr{oetje,eeting}s,
 

@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7A94D43F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF384D4407
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241141AbiCJJyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S241148AbiCJJyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241056AbiCJJyP (ORCPT
+        with ESMTP id S241032AbiCJJyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:54:15 -0500
+        Thu, 10 Mar 2022 04:54:17 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45CBE9C;
-        Thu, 10 Mar 2022 01:53:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6978FA76E9;
+        Thu, 10 Mar 2022 01:53:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646905981; x=1678441981;
+  t=1646905986; x=1678441986;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=U/CKKh3POM+OwTtOgQF4Jp8Ls8i/luVYOEHzUs8doLs=;
-  b=X7UsTWUq5/r8N1IMnIPVcDSVpCY9vsmH6SAsrnGcWYtitE2HNpGqOvGI
-   YtBfd9NS9PgKcyXe+dmk2D/Io4nOKtP5Oewks5jFM2ggkD+hy9/SmRb50
-   xjN+zzCqxla8f/BGsIDarppxc8IbSBwfnIe9SNMt6twdtb8W1g+SDERHI
-   s2y5UesZft+tzVHbs4wmJpE4+bHJbSlypS/QRcRqrHdMaxQjn83IePmy1
-   QnGPrS2b5F9HQsygh6wwI0MDDJ2/LKi01yM529RfDinNNZL4YMyiCYCYd
-   ckFl626tQDwXXVVziDE8L9IOmUrqYVJ9dBp6+unRskH/SWnzn6JGpgDW8
-   Q==;
+  bh=LPz0O/j6T/R5IOZ/0HdGMFHbVlsAXUy78/qaH+crieA=;
+  b=xYI3LK8OqTSjq4sZdc+/b8ADPWNXZe+2xYCwHMb9ExQFbM1KrnYDef25
+   PxIUbOLqz1giKUxD+bxC5LerFrgNYAjMrbFCmwrDfQ8pkBeK0WUfmAC9e
+   Z+rzmJpqmDJpC5onEi7XKFTTDpQZmOR531Aq1b+3+6DW8v0AoHTK7zqkr
+   fjpqwQ6+NZm9ktJP0Syugw40waBo9MVee5I3wavEo8ZEF/MvsXy8CA9oE
+   65F4UouxIDexLVOPSSo+M9mTAKr7FqC3L/FCbA+rXGxK1wkbyOqnsk5qo
+   XwU4OcTVVsIOpEdqfl9hYTWVS8gdDG1fIThne1SJLadXFfR6ohDEp1t9J
+   w==;
 X-IronPort-AV: E=Sophos;i="5.90,170,1643698800"; 
-   d="scan'208";a="155948572"
+   d="scan'208";a="156406287"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 02:53:00 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 02:53:03 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 10 Mar 2022 02:52:59 -0700
+ 15.1.2375.17; Thu, 10 Mar 2022 02:53:02 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 02:52:57 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 02:53:00 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
         <nicolas.ferre@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v9 10/13] dt-bindings: media: microchip,xisc: add bus-width of 14
-Date:   Thu, 10 Mar 2022 11:51:59 +0200
-Message-ID: <20220310095202.2701399-11-eugen.hristev@microchip.com>
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v9 11/13] ARM: dts: at91: sama7g5: add nodes for video capture
+Date:   Thu, 10 Mar 2022 11:52:00 +0200
+Message-ID: <20220310095202.2701399-12-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220310095202.2701399-1-eugen.hristev@microchip.com>
 References: <20220310095202.2701399-1-eugen.hristev@microchip.com>
@@ -66,28 +65,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Microchip XISC supports a bus width of 14 bits.
-Add it to the supported bus widths.
+Add node for the XISC (eXtended Image Sensor Controller) and CSI2DC
+(csi2 demux controller).
+These nodes represent the top level of the video capture hardware pipeline
+and are directly connected in hardware.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/sama7g5.dtsi | 49 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/microchip,xisc.yaml b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-index 086e1430af4f..3be8f64c3e21 100644
---- a/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-+++ b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-@@ -67,7 +67,7 @@ properties:
-           remote-endpoint: true
+diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+index eddcfbf4d223..de43f854ce47 100644
+--- a/arch/arm/boot/dts/sama7g5.dtsi
++++ b/arch/arm/boot/dts/sama7g5.dtsi
+@@ -266,6 +266,55 @@ sdmmc2: mmc@e120c000 {
+ 			status = "disabled";
+ 		};
  
-           bus-width:
--            enum: [8, 9, 10, 11, 12]
-+            enum: [8, 9, 10, 11, 12, 14]
-             default: 12
- 
-           hsync-active:
++		csi2dc: csi2dc@e1404000 {
++			compatible = "microchip,sama7g5-csi2dc";
++			reg = <0xe1404000 0x500>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 34>, <&xisc>;
++			clock-names = "pclk", "scck";
++			assigned-clocks = <&xisc>;
++			assigned-clock-rates = <266000000>;
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port@0 {
++					reg = <0>;
++					csi2dc_in: endpoint {
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++					csi2dc_out: endpoint {
++						bus-width = <14>;
++						hsync-active = <1>;
++						vsync-active = <1>;
++						remote-endpoint = <&xisc_in>;
++					};
++				};
++			};
++		};
++
++		xisc: xisc@e1408000 {
++			compatible = "microchip,sama7g5-isc";
++			reg = <0xe1408000 0x2000>;
++			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 56>;
++			clock-names = "hclock";
++			#clock-cells = <0>;
++			clock-output-names = "isc-mck";
++
++			port {
++				xisc_in: endpoint {
++					bus-type = <5>; /* Parallel */
++					bus-width = <14>;
++					hsync-active = <1>;
++					vsync-active = <1>;
++					remote-endpoint = <&csi2dc_out>;
++				};
++			};
++		};
++
+ 		pwm: pwm@e1604000 {
+ 			compatible = "microchip,sama7g5-pwm", "atmel,sama5d2-pwm";
+ 			reg = <0xe1604000 0x4000>;
 -- 
 2.25.1
 

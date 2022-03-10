@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722604D3FA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD8B4D3FA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239213AbiCJDV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S239221AbiCJDVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237642AbiCJDVY (ORCPT
+        with ESMTP id S237642AbiCJDVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:21:24 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54278120EB8;
-        Wed,  9 Mar 2022 19:20:24 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KDZ2D2Tlzz1GCLX;
-        Thu, 10 Mar 2022 11:15:32 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+        Wed, 9 Mar 2022 22:21:40 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA14711AA32;
+        Wed,  9 Mar 2022 19:20:40 -0800 (PST)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KDZ6X0RyCzdZlJ;
+        Thu, 10 Mar 2022 11:19:16 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 11:20:21 +0800
-Subject: Re: IPv4 saddr do not match with selected output device in double
- default gateways scene
-To:     David Ahern <dsahern@kernel.org>,
-        David Miller <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>, <ja@ssi.bg>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <58c15089-f1c7-675e-db4b-b6dfdad4b497@huawei.com>
- <0f97539a-439f-d584-9ba3-f4bd5a302bc0@kernel.org>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <86c61138-c82c-a403-664c-a61d651008b0@huawei.com>
-Date:   Thu, 10 Mar 2022 11:20:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ 15.1.2308.21; Thu, 10 Mar 2022 11:20:38 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Mar 2022 11:20:37 +0800
+Subject: Re: [PATCH 5.4 00/18] 5.4.184-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220309155856.552503355@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <c99eed67-ebd9-04c1-bdca-be3bc42d688c@huawei.com>
+Date:   Thu, 10 Mar 2022 11:20:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <0f97539a-439f-d584-9ba3-f4bd5a302bc0@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220309155856.552503355@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -55,36 +60,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 3/7/22 11:41 PM, Ziyang Xuan (William) wrote:
->> Create VLAN devices and add default gateways with following commands:
->>
->> # ip link add link eth2 dev eth2.71 type vlan id 71
->> # ip link add link eth2 dev eth2.72 type vlan id 72
->> # ip addr add 192.168.71.41/24 dev eth2.71
->> # ip addr add 192.168.72.41/24 dev eth2.72
->> # ip link set eth2.71 up
->> # ip link set eth2.72 up
->> # route add -net default gw 192.168.71.1 dev eth2.71
->> # route add -net default gw 192.168.72.1 dev eth2.72
->>
+
+
+On 2022/3/9 23:59, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.184 release.
+> There are 18 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> ...
+> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> Anything received after that time might be too late.
 > 
->> We can find that IPv4 saddr "192.168.72.41" do not match with selected VLAN device "eth2.71".
->>
->> I tracked the related processes, and found that user space program uses connect() firstly, then sends UDP packet.
->>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.184-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> ...
+> thanks,
 > 
->> Deep tracking, it because fa->fa_default has changed in fib_select_default() after first __ip_route_output_key() process,
->> and a new fib_nh is selected in fib_select_default() within the second __ip_route_output_key() process but not update flowi4.
->> So the phenomenon described at the beginning happens.
->>
->> Does it a kernel bug or a user problem? If it is a kernel bug, is there any good solution?
-> 
-> That is a known problem with multipath routes.
-> .
+> greg k-h
 > 
 
-Does the community have a plan to address it?
+Tested on arm64 and x86 for 5.4.184-rc1,
+
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.4.y
+Version: 5.4.184-rc1
+Commit: 706b33173b11edb712358d15ec95bb04cd033515
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9008
+passed: 9008
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9008
+passed: 9008
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

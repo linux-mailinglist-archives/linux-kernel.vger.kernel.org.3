@@ -2,354 +2,517 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14FC4D538B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C964D538D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245609AbiCJVVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S245651AbiCJVXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237947AbiCJVVw (ORCPT
+        with ESMTP id S241349AbiCJVXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:21:52 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF197340C5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:20:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646947249; x=1678483249;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GkefS9tKfG36UNYMqxOXQ4LmX3Ej+WznIlzayHQnEL8=;
-  b=eKlaaHuVp+VGjadTf+4K90mePn6LVc2PumSV23YzFEm+HJMt4ECVMPlu
-   wwLy3R/dxn9NSDLZOnnI1uJMpWBrPS0srZZUzGd1L2IqvzmQva1XfV+1T
-   jMLnqn4PWySNJXMZaOFwhm6Kw1gVRoi1AJ58+sxVNuLSiily+Mdm2aDuk
-   N/20fC7JYTi4OXr6knvLlI4yVABuLD2VbyGIdAtvM8XmVu/wUxn0hHbh3
-   VP/BOIJjR2a5oojr59lMlpUELZCPwAtLYWtpP08qfUg8HFQQxZW0dXQK/
-   Xq5DhT/rlVQFPNjIOU+zyARPrtu35D31D5CEUzxE2hTyMQfHPG1Ub2IJt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237555242"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="237555242"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:20:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="496419886"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2022 13:20:40 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 4E949107; Thu, 10 Mar 2022 23:20:59 +0200 (EET)
-Date:   Fri, 11 Mar 2022 00:20:59 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        Thu, 10 Mar 2022 16:23:22 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6121340C5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:22:20 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id e1-20020a17090a280100b001bf44b6d74bso6573636pjd.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:22:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=qRRs8zRW18fnuj2lktSzz3aYXNKWNfKl0U5tPzfpaDI=;
+        b=GS0GmZD8PEzbODWqLyVCkGoL9RbPsBlbFOfCOazfvkiKaDAE2xYXXucAPlAVNo6x7f
+         YaBAf49ZeLkNGRVdW80Db2Dlh03vydb6xGvfg5faGuQCt9Ki2Pn2zRgPxAsw6AONGIqg
+         VXyXp6kkyKPbgMoJQpFVBiP7dlgXfQ3RlwhI03Oj/P8+/PH3retUlmMvtW0ikKfZwN4e
+         ngLxXjrUBh1zO0VgIlMwt/vYZN0yu9ik9W6laQXM0+khb3WveMfisWTyyyawYkqg8mzH
+         +fdQxnvLjXaX6qLELUsLdCNuSS1Uj0fi6rmVWyw+2IRrsPVdKH4bQBrz967n3kq1vfNh
+         DUmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=qRRs8zRW18fnuj2lktSzz3aYXNKWNfKl0U5tPzfpaDI=;
+        b=1hkz3eY3Gwqg/UE0PtdGeOBsopCSLK3riobyzQZjC0QhOMmyrgA8bvlbBvMVIPEFJZ
+         rE+eb6R2EFpQ/5bWqlBMG488zFqcIKzxEPoR8dDpEt7YmtYYyy1ixlYoklzSdriz+7cw
+         CKoM+YQ6K7ZugziiRjhwMxlKAU+rE/sDh03XEb3eByCD/yFs+k6AREd2DPwBEe53zoKN
+         FbjAa4DZGtwuahVvl8rntH/9YxrjjzKWfX1g9MQ39sP1VyvmXR0FZNTpxA2l3Nk8AtR3
+         KfvfVlLfBKpHLg3OeGnMo8+Ijf8JeFX9cyzlJrDiq0MN6gjT83rFllxXKc0EoRuznnGS
+         xwtA==
+X-Gm-Message-State: AOAM533/4Aho4AcC/NQdFHtxzddIw7CzXIy4Z/D1JO8ugQcejwmfCW4b
+        vjm6VgiVnVRWkRVTT66zwfvjkZ5f2r1T/Q==
+X-Google-Smtp-Source: ABdhPJzHPq7JSF4fI/09YngjD3tvyclfPwydKynzcpftI+w12oVUmW1U9qo97t+qm3XmFxWttVJ/lxxpVfpfKQ==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a05:6a00:134a:b0:4f7:644b:97aa with SMTP
+ id k10-20020a056a00134a00b004f7644b97aamr6939037pfu.45.1646947340366; Thu, 10
+ Mar 2022 13:22:20 -0800 (PST)
+Date:   Thu, 10 Mar 2022 21:22:17 +0000
+Message-Id: <20220310212217.2258637-1-wonchung@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH v5] driver core: Add sysfs support for physical location of a device
+From:   Won Chung <wonchung@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 03/30] x86/tdx: Add __tdx_module_call() and
- __tdx_hypercall() helper functions
-Message-ID: <20220310212059.6abpmnsgodqqqnfm@black.fi.intel.com>
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-4-kirill.shutemov@linux.intel.com>
- <YioZnTYahkoy2Mxz@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YioZnTYahkoy2Mxz@zn.tnic>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Won Chung <wonchung@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 04:30:57PM +0100, Borislav Petkov wrote:
-> On Wed, Mar 02, 2022 at 05:27:39PM +0300, Kirill A. Shutemov wrote:
-> > From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> > 
-> > Guests communicate with VMMs with hypercalls. Historically, these
-> > are implemented using instructions that are known to cause VMEXITs
-> > like VMCALL, VMLAUNCH, etc. However, with TDX, VMEXITs no longer
-> > expose the guest state to the host. This prevents the old hypercall
-> > mechanisms from working. So, to communicate with VMM, TDX
-> > specification defines a new instruction called TDCALL.
-> > 
-> > In a TDX based VM, since the VMM is an untrusted entity, an intermediary
-> > layer -- TDX module -- facilitates secure communication between the host
-> > and the guest. TDX module is loaded like a firmware into a special CPU
-> > mode called SEAM. TDX guests communicate with the TDX module using the
-> > TDCALL instruction.
-> > 
-> > A guest uses TDCALL to communicate with both the TDX module and VMM.
-> > The value of the RAX register when executing the TDCALL instruction is
-> > used to determine the TDCALL type. A variant of TDCALL used to communicate
-> > with the VMM is called TDVMCALL.
-> > 
-> > Add generic interfaces to communicate with the TDX module and VMM
-> > (using the TDCALL instruction).
-> > 
-> > __tdx_hypercall()    - Used by the guest to request services from the
-> > 		       VMM (via TDVMCALL).
-> > __tdx_module_call()  - Used to communicate with the TDX module (via
-> > 		       TDCALL).
-> 
-> Ok, you need to fix this: this sounds to me like there are two insns:
-> TDCALL and TDVMCALL. But there's only TDCALL.
-> 
-> And I'm not even clear on how the differentiation is done - I guess
-> with %r11 which contains the VMCALL subfunction number in the
-> __tdx_hypercall() case but I'm not sure.
+When ACPI table includes _PLD fields for a device, create a new
+directory (physical_location) in sysfs to share _PLD fields.
 
-TDVMCALL is a leaf of TDCALL. The leaf number is encoded in RAX: RAX==0 is
-TDVMCALL.
+Currently without PLD information, when there are multiple of same
+devices, it is hard to distinguish which device corresponds to which
+physical device at which location. For example, when there are two Type
+C connectors, it is hard to find out which connector corresponds to the
+Type C port on the left panel versus the Type C port on the right panel.
+With PLD information provided, we can determine which specific device at
+which location is doing what.
 
-I'm not completely sure what has to be fixed. Make it clear that TDVMCALL
-is leaf of TDCALL? Something like this:
+_PLD output includes much more fields, but only generic fields are added
+and exposed to sysfs, so that non-ACPI devices can also support it in
+the future. The minimal generic fields needed for locating a device are
+the following.
+- panel
+- vertical_position
+- horizontal_position
+- dock
+- lid
 
-	__tdx_module_call()  - Used to communicate with the TDX module (via
-			       TDCALL instruction).
-	__tdx_hypercall()    - Used by the guest to request services from the
-			       VMM (via TDVMCALL leaf of TDCALL).
+Signed-off-by: Won Chung <wonchung@google.com>
+---
 
-?
+Changes from v4
+- Remove physical_location directory when device is deleted.
+- Correctly handle error from adding physical_location in
+  device_add_attrs().
 
-> And when explaining this, pls put it in the comment over the function so
-> that it is clear how the distinction is made.
+Changes from v3
+- Move dev_add_physical_location() and dev_attr_physical_location_group
+  to driver/base/physical_location.h.
+- Use pointer and reorder physical_location in struct device to pack its
+  bytes. (checked using pahole)
+- Unify naming to physical_location since the name location is used in
+  some places like USB port for different information.
 
-But it's already there:
+Changes from v2
+- Use sysfs_emit to create files.
+- Correct mix of spaces and tabs.
 
-/*
- * __tdx_module_call()  - Used by TDX guests to request services from
- * the TDX module (does not include VMM services).
- *
- * Transforms function call register arguments into the TDCALL
- * register ABI.  After TDCALL operation, TDX module output is saved
- * in @out (if it is provided by the user)
- *
- ...
- */
+Changes from v1
+- Correct directory names in Documentation.
+- Clarify namings in core.c
 
-and
+ .../testing/sysfs-devices-physical_location   |  42 ++++++
+ drivers/base/Makefile                         |   1 +
+ drivers/base/core.c                           |  11 ++
+ drivers/base/physical_location.c              | 137 ++++++++++++++++++
+ drivers/base/physical_location.h              |  16 ++
+ include/linux/device.h                        |  73 ++++++++++
+ 6 files changed, 280 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_locati=
+on
+ create mode 100644 drivers/base/physical_location.c
+ create mode 100644 drivers/base/physical_location.h
 
-/*
- * __tdx_hypercall() - Make hypercalls to a TDX VMM.
- *
- * Transforms values in  function call argument struct tdx_hypercall_args @args
- * into the TDCALL register ABI. After TDCALL operation, VMM output is saved
- * back in @args.
- *
- *-------------------------------------------------------------------------
- * TD VMCALL ABI:
- *-------------------------------------------------------------------------
- *
- * Input Registers:
- *
- * RAX                 - TDCALL instruction leaf number (0 - TDG.VP.VMCALL)
- .....
- */
+diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Do=
+cumentation/ABI/testing/sysfs-devices-physical_location
+new file mode 100644
+index 000000000000..202324b87083
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-devices-physical_location
+@@ -0,0 +1,42 @@
++What:		/sys/devices/.../physical_location
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		This directory contains information on physical location of
++		the device connection point with respect to the system's
++		housing.
++
++What:		/sys/devices/.../physical_location/panel
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		Describes which panel surface of the system=E2=80=99s housing the
++		device connection point resides on.
++
++What:		/sys/devices/.../physical_location/vertical_position
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		Describes vertical position of the device connection point on
++		the panel surface.
++
++What:		/sys/devices/.../physical_location/horizontal_position
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		Describes horizontal position of the device connection point on
++		the panel surface.
++
++What:		/sys/devices/.../physical_location/dock
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		"Yes" if the device connection point resides in a docking
++		station or a port replicator. "No" otherwise.
++
++What:		/sys/devices/.../physical_location/lid
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		"Yes" if the device connection point resides on the lid of
++		laptop system. "No" otherwise.
+diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+index 02f7f1358e86..83217d243c25 100644
+--- a/drivers/base/Makefile
++++ b/drivers/base/Makefile
+@@ -25,6 +25,7 @@ obj-$(CONFIG_DEV_COREDUMP) +=3D devcoredump.o
+ obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) +=3D platform-msi.o
+ obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) +=3D arch_topology.o
+ obj-$(CONFIG_GENERIC_ARCH_NUMA) +=3D arch_numa.o
++obj-$(CONFIG_ACPI) +=3D physical_location.o
+=20
+ obj-y			+=3D test/
+=20
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 7bb957b11861..9054a2d8bbb6 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -32,6 +32,7 @@
+ #include <linux/dma-map-ops.h> /* for dma_default_coherent */
+=20
+ #include "base.h"
++#include "physical_location.h"
+ #include "power/power.h"
+=20
+ #ifdef CONFIG_SYSFS_DEPRECATED
+@@ -2649,8 +2650,17 @@ static int device_add_attrs(struct device *dev)
+ 			goto err_remove_dev_waiting_for_supplier;
+ 	}
+=20
++	if (dev_add_physical_location(dev)) {
++		error =3D device_add_group(dev,
++			&dev_attr_physical_location_group);
++		if (error)
++			goto err_remove_dev_removable;
++	}
++
+ 	return 0;
+=20
++ err_remove_dev_removable:
++	device_remove_file(dev, &dev_attr_removable);
+  err_remove_dev_waiting_for_supplier:
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+  err_remove_dev_online:
+@@ -2672,6 +2682,7 @@ static void device_remove_attrs(struct device *dev)
+ 	struct class *class =3D dev->class;
+ 	const struct device_type *type =3D dev->type;
+=20
++	device_remove_group(dev, &dev_attr_physical_location_group);
+ 	device_remove_file(dev, &dev_attr_removable);
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+ 	device_remove_file(dev, &dev_attr_online);
+diff --git a/drivers/base/physical_location.c b/drivers/base/physical_locat=
+ion.c
+new file mode 100644
+index 000000000000..4c1a52ecd7f6
+--- /dev/null
++++ b/drivers/base/physical_location.c
+@@ -0,0 +1,137 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device physical location support
++ *
++ * Author: Won Chung <wonchung@google.com>
++ */
++
++#include <linux/acpi.h>
++#include <linux/sysfs.h>
++
++#include "physical_location.h"
++
++bool dev_add_physical_location(struct device *dev)
++{
++	struct acpi_pld_info *pld;
++	acpi_status status;
++
++	if (!has_acpi_companion(dev))
++		return false;
++
++	status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
++	if (ACPI_FAILURE(status))
++		return false;
++
++	dev->physical_location =3D
++		kzalloc(sizeof(*dev->physical_location), GFP_KERNEL);
++	dev->physical_location->panel =3D pld->panel;
++	dev->physical_location->vertical_position =3D pld->vertical_position;
++	dev->physical_location->horizontal_position =3D pld->horizontal_position;
++	dev->physical_location->dock =3D pld->dock;
++	dev->physical_location->lid =3D pld->lid;
++
++	return true;
++}
++
++static ssize_t panel_show(struct device *dev, struct device_attribute *att=
+r,
++	char *buf)
++{
++	const char *panel;
++
++	switch (dev->physical_location->panel) {
++	case DEVICE_PANEL_TOP:
++		panel =3D "top";
++		break;
++	case DEVICE_PANEL_BOTTOM:
++		panel =3D "bottom";
++		break;
++	case DEVICE_PANEL_LEFT:
++		panel =3D "left";
++		break;
++	case DEVICE_PANEL_RIGHT:
++		panel =3D "right";
++		break;
++	case DEVICE_PANEL_FRONT:
++		panel =3D "front";
++		break;
++	default:
++		panel =3D "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", panel);
++}
++static DEVICE_ATTR_RO(panel);
++
++static ssize_t vertical_position_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	const char *vertical_position;
++
++	switch (dev->physical_location->vertical_position) {
++	case DEVICE_VERT_POS_UPPER:
++		vertical_position =3D "upper";
++		break;
++	case DEVICE_VERT_POS_CENTER:
++		vertical_position =3D "center";
++		break;
++	case DEVICE_VERT_POS_LOWER:
++		vertical_position =3D "lower";
++		break;
++	default:
++		vertical_position =3D "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", vertical_position);
++}
++static DEVICE_ATTR_RO(vertical_position);
++
++static ssize_t horizontal_position_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	const char *horizontal_position;
++
++	switch (dev->physical_location->horizontal_position) {
++	case DEVICE_HORI_POS_LEFT:
++		horizontal_position =3D "left";
++		break;
++	case DEVICE_HORI_POS_CENTER:
++		horizontal_position =3D "center";
++		break;
++	case DEVICE_HORI_POS_RIGHT:
++		horizontal_position =3D "right";
++		break;
++	default:
++		horizontal_position =3D "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", horizontal_position);
++}
++static DEVICE_ATTR_RO(horizontal_position);
++
++static ssize_t dock_show(struct device *dev, struct device_attribute *attr=
+,
++	char *buf)
++{
++	return sysfs_emit(buf, "%s\n",
++		dev->physical_location->dock ? "yes" : "no");
++}
++static DEVICE_ATTR_RO(dock);
++
++static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
++	char *buf)
++{
++	return sysfs_emit(buf, "%s\n",
++		dev->physical_location->lid ? "yes" : "no");
++}
++static DEVICE_ATTR_RO(lid);
++
++static struct attribute *dev_attr_physical_location[] =3D {
++	&dev_attr_panel.attr,
++	&dev_attr_vertical_position.attr,
++	&dev_attr_horizontal_position.attr,
++	&dev_attr_dock.attr,
++	&dev_attr_lid.attr,
++	NULL,
++};
++
++const struct attribute_group dev_attr_physical_location_group =3D {
++	.name =3D "physical_location",
++	.attrs =3D dev_attr_physical_location,
++};
++
+diff --git a/drivers/base/physical_location.h b/drivers/base/physical_locat=
+ion.h
+new file mode 100644
+index 000000000000..82cde9f1b161
+--- /dev/null
++++ b/drivers/base/physical_location.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Device physical location support
++ *
++ * Author: Won Chung <wonchung@google.com>
++ */
++
++#include <linux/device.h>
++
++#ifdef CONFIG_ACPI
++extern bool dev_add_physical_location(struct device *dev);
++extern const struct attribute_group dev_attr_physical_location_group;
++#else
++static inline bool dev_add_physical_location(struct device *dev) { return =
+false; };
++static const struct attribute_group dev_attr_physical_location_group =3D {=
+};
++#endif
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 93459724dcde..766fbea6ca83 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -386,6 +386,75 @@ struct dev_msi_info {
+ #endif
+ };
+=20
++/**
++ * enum device_physical_location_panel - Describes which panel surface of =
+the
++ * system's housing the device connection point resides on.
++ * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
++ * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
++ * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
++ * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
++ * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
++ * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
++ * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknow=
+n.
++ */
++enum device_physical_location_panel {
++	DEVICE_PANEL_TOP,
++	DEVICE_PANEL_BOTTOM,
++	DEVICE_PANEL_LEFT,
++	DEVICE_PANEL_RIGHT,
++	DEVICE_PANEL_FRONT,
++	DEVICE_PANEL_BACK,
++	DEVICE_PANEL_UNKNOWN,
++};
++
++/**
++ * enum device_physical_location_vertical_position - Describes vertical
++ * position of the device connection point on the panel surface.
++ * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of pan=
+el.
++ * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of p=
+anel.
++ * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of pan=
+el.
++ */
++enum device_physical_location_vertical_position {
++	DEVICE_VERT_POS_UPPER,
++	DEVICE_VERT_POS_CENTER,
++	DEVICE_VERT_POS_LOWER,
++};
++
++/**
++ * enum device_physical_location_horizontal_position - Describes horizonta=
+l
++ * position of the device connection point on the panel surface.
++ * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel=
+.
++ * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of p=
+anel.
++ * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of pan=
+el.
++ */
++enum device_physical_location_horizontal_position {
++	DEVICE_HORI_POS_LEFT,
++	DEVICE_HORI_POS_CENTER,
++	DEVICE_HORI_POS_RIGHT,
++};
++
++/**
++ * struct device_physical_location - Device data related to physical locat=
+ion
++ * of the device connection point.
++ * @panel: Panel surface of the system's housing that the device connectio=
+n
++ *         point resides on.
++ * @vertical_position: Vertical position of the device connection point wi=
+thin
++ *                     the panel.
++ * @horizontal_position: Horizontal position of the device connection poin=
+t
++ *                       within the panel.
++ * @dock: Set if the device connection point resides in a docking station =
+or
++ *        port replicator.
++ * @lid: Set if this device connection point resides on the lid of laptop
++ *       system.
++ */
++struct device_physical_location {
++	enum device_physical_location_panel panel;
++	enum device_physical_location_vertical_position vertical_position;
++	enum device_physical_location_horizontal_position horizontal_position;
++	bool dock;
++	bool lid;
++};
++
+ /**
+  * struct device - The basic device structure
+  * @parent:	The device's "parent" device, the device to which it is attach=
+ed.
+@@ -453,6 +522,8 @@ struct dev_msi_info {
+  * 		device (i.e. the bus driver that discovered the device).
+  * @iommu_group: IOMMU group the device belongs to.
+  * @iommu:	Per device generic IOMMU runtime data
++ * @physical_location: Describes physical location of the device connectio=
+n
++ *		point in the system housing.
+  * @removable:  Whether the device can be removed from the system. This
+  *              should be set by the subsystem / bus driver that discovere=
+d
+  *              the device.
+@@ -567,6 +638,8 @@ struct device {
+ 	struct iommu_group	*iommu_group;
+ 	struct dev_iommu	*iommu;
+=20
++	struct device_physical_location *physical_location;
++
+ 	enum device_removable	removable;
+=20
+ 	bool			offline_disabled:1;
+--=20
+2.35.1.723.g4982287a31-goog
 
-Hm?
-
-> > Also define an additional wrapper _tdx_hypercall(), which adds error
-> > handling support for the TDCALL failure.
-> > 
-> > The __tdx_module_call() and __tdx_hypercall() helper functions are
-> > implemented in assembly in a .S file.  The TDCALL ABI requires
-> > shuffling arguments in and out of registers, which proved to be
-> > awkward with inline assembly.
-> > 
-> > Just like syscalls, not all TDVMCALL use cases need to use the same
-> > number of argument registers. The implementation here picks the current
-> > worst-case scenario for TDCALL (4 registers). For TDCALLs with fewer
-> > than 4 arguments, there will end up being a few superfluous (cheap)
-> > instructions. But, this approach maximizes code reuse.
-> > 
-> > For registers used by the TDCALL instruction, please check TDX GHCI
-> > specification, the section titled "TDCALL instruction" and "TDG.VP.VMCALL
-> > Interface".
-> > 
-> > Based on previous patch by Sean Christopherson.
-> > 
-> > Reviewed-by: Tony Luck <tony.luck@intel.com>
-> > Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  arch/x86/coco/Makefile        |   2 +-
-> >  arch/x86/coco/tdcall.S        | 188 ++++++++++++++++++++++++++++++++++
-> >  arch/x86/coco/tdx.c           |  18 ++++
-> 
-> Those should be
-> 
-> arch/x86/coco/tdx/tdcall.S
-> arch/x86/coco/tdx/tdx.c
-> 
-> like we said:
-> 
-> "- confidential computing guest stuff: arch/x86/coco/{sev,tdx}"
-
-Okay, will change. But it is not what we agreed about before:
-
-https://lore.kernel.org/all/Yg5q742GsjCRHXZL@zn.tnic
-
-> >  arch/x86/include/asm/tdx.h    |  27 +++++
-> >  arch/x86/kernel/asm-offsets.c |  10 ++
-> >  5 files changed, 244 insertions(+), 1 deletion(-)
-> >  create mode 100644 arch/x86/coco/tdcall.S
-> 
-> ...
-> 
-> > +SYM_FUNC_START(__tdx_hypercall)
-> > +	FRAME_BEGIN
-> > +
-> > +	/* Save callee-saved GPRs as mandated by the x86_64 ABI */
-> > +	push %r15
-> > +	push %r14
-> > +	push %r13
-> > +	push %r12
-> > +
-> > +	/* Mangle function call ABI into TDCALL ABI: */
-> > +	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
-> > +	xor %eax, %eax
-> > +
-> > +	/* Copy hypercall registers from arg struct: */
-> > +	movq TDX_HYPERCALL_r10(%rdi), %r10
-> > +	movq TDX_HYPERCALL_r11(%rdi), %r11
-> > +	movq TDX_HYPERCALL_r12(%rdi), %r12
-> > +	movq TDX_HYPERCALL_r13(%rdi), %r13
-> > +	movq TDX_HYPERCALL_r14(%rdi), %r14
-> > +	movq TDX_HYPERCALL_r15(%rdi), %r15
-> > +
-> > +	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
-> > +
-> > +	tdcall
-> > +
-> > +	/*
-> > +	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
-> > +	 * something has gone horribly wrong with the TDX module.
-> > +	 *
-> > +	 * The return status of the hypercall operation is in a separate
-> > +	 * register (in R10). Hypercall errors are a part of normal operation
-> > +	 * and are handled by callers.
-> > +	 */
-> > +	testq %rax, %rax
-> > +	jne .Lpanic
-> 
-> Hm, can this call a C function which does the panic so that a proper
-> error message is dumped to the user so that at least she knows where the
-> panic comes from?
-
-Sure we can. But it would look somewhat clunky.
-Wouldn't backtrace be enough for this (never to be seen) case?
-
-So far the panic would look like this:
-
-	invalid opcode: 0000 [#1] PREEMPT SMP
-	CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc5-00181-geb9d1dde679a-dirty #1883
-	RIP: 0010:__tdx_hypercall+0x6d/0x70
-	Code: 00 00 74 17 4c 89 17 4c 89 5f 08 4c 89 67 10 4c 89 6f 18 4c 89 77 20 4c 89 7f 28 45 31 d2 45 31 db 41 5c 41 5d 41 5e 41 5f c3 <0f> 0b 00 55 53 41 54 41 55 41 56 41 57 48 89 a7 98 1b 00 00 48 8b
-	RSP: 0000:ffffffff82803e80 EFLAGS: 00010002
-	RAX: 0000000000000000 RBX: 0000000000000000 RCX: 000000000000fc00
-	RDX: ff11000004c3d448 RSI: 0000000000000002 RDI: ffffffff82803ea8
-	RBP: ffffffff8283e840 R08: 0000000000000000 R09: 000000005eee98b1
-	R10: 0000000000000000 R11: 000000000000000c R12: 0000000000000000
-	R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-	FS:  0000000000000000(0000) GS:ff1100001c400000(0000) knlGS:0000000000000000
-	CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-	CR2: ff1100001c9ff000 CR3: 0000000002834001 CR4: 0000000000771ef0
-	DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-	DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
-	PKRU: 55555554
-	Call Trace:
-	 <TASK>
-	 tdx_safe_halt+0x46/0x80
-	 default_idle_call+0x4f/0x90
-	 do_idle+0xeb/0x250
-	 cpu_startup_entry+0x15/0x20
-	 start_kernel+0x372/0x3d1
-	 secondary_startup_64_no_verify+0xe5/0xeb
-	 </TASK>
-
-To me "invalid opcode" at "RIP: 0010:__tdx_hypercall+0x6d/0x70" is pretty
-clear where it comes from, no?
-
-> > +
-> > +	/* TDVMCALL leaf return code is in R10 */
-> > +	movq %r10, %rax
-> > +
-> > +	/* Copy hypercall result registers to arg struct if needed */
-> > +	testq $TDX_HCALL_HAS_OUTPUT, %rsi
-> > +	jz .Lout
-> > +
-> > +	movq %r10, TDX_HYPERCALL_r10(%rdi)
-> > +	movq %r11, TDX_HYPERCALL_r11(%rdi)
-> > +	movq %r12, TDX_HYPERCALL_r12(%rdi)
-> > +	movq %r13, TDX_HYPERCALL_r13(%rdi)
-> > +	movq %r14, TDX_HYPERCALL_r14(%rdi)
-> > +	movq %r15, TDX_HYPERCALL_r15(%rdi)
-> > +.Lout:
-> > +	/*
-> > +	 * Zero out registers exposed to the VMM to avoid speculative execution
-> > +	 * with VMM-controlled values. This needs to include all registers
-> > +	 * present in TDVMCALL_EXPOSE_REGS_MASK (except R12-R15). R12-R15
-> > +	 * context will be restored.
-> > +	 */
-> > +	xor %r10d, %r10d
-> > +	xor %r11d, %r11d
-> > +
-> > +	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
-> > +	pop %r12
-> > +	pop %r13
-> > +	pop %r14
-> > +	pop %r15
-> > +
-> > +	FRAME_END
-> > +
-> > +	retq
-> > +.Lpanic:
-> > +	ud2
-> > +SYM_FUNC_END(__tdx_hypercall)
-> 
-> ...
-> 
-> > diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-> > index 7dca52f5cfc6..0b465e7d0a2f 100644
-> > --- a/arch/x86/kernel/asm-offsets.c
-> > +++ b/arch/x86/kernel/asm-offsets.c
-> > @@ -74,6 +74,16 @@ static void __used common(void)
-> >  	OFFSET(TDX_MODULE_r10, tdx_module_output, r10);
-> >  	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
-> >  
-> > +#ifdef CONFIG_INTEL_TDX_GUEST
-> 
-> Those have ifdeffery around them - why don't the TDX_MODULE_* ones need
-> it too?
-
-I will drop the #ifdef. There's no harm in generating it for !TDX build.
-
-> > +	BLANK();
-> > +	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
-> > +	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
-> > +	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
-> > +	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
-> > +	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
-> > +	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
-> > +#endif
-> > +
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-
--- 
- Kirill A. Shutemov

@@ -2,71 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD034D53E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7F34D53E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbiCJVvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
+        id S1344028AbiCJVux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344083AbiCJVvE (ORCPT
+        with ESMTP id S232848AbiCJVuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:51:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A6AFABD6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:50:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BA5861A95
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A7AC340E8;
-        Thu, 10 Mar 2022 21:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646949001;
-        bh=CEC+fXpAIGgJovTgBZcpLqWqgTUrRG0j28afwA6P//Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GpF6e6hj/Xt2Tpgk7CR/sTdekzEY/GguaxXnfm+qWz4y//STFnNcYYk67rx+Pz2ks
-         Z29JGrBi8c9qEBcSdLxglJoQ5OEX6bTL5YwClEPgQsXpRCiRvDY7GEXmXa/ZQ2Q91c
-         aARX5jieY+GLv+WSK2mJqrXCx1d3KFkJcdpCgI7I=
-Date:   Thu, 10 Mar 2022 22:48:55 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] soundwire updates for v5.18-rc1
-Message-ID: <YipyR+xRLKabmpXa@kroah.com>
-References: <YiJJR1hYtlJfBCe4@matsya>
+        Thu, 10 Mar 2022 16:50:51 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477C01045B1;
+        Thu, 10 Mar 2022 13:49:50 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id n18so3381950plg.5;
+        Thu, 10 Mar 2022 13:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QKOxkvxNzD7rxqxwBmHmJb7NgshPzc0L9/lBDGQCjyU=;
+        b=O5d5uCrqYq7WukFMaJ8slLI7O6P4WY+YopJ/77d9opSsWI7j5XeBsvJIVqgYAZ00s9
+         W7N/rFOKRuM4rQRMn4+qZfBm6DiZFjAWHMj3cKVZw5pDMdZYqmBz3qj3aJTriEQu3vYu
+         GnTyV98e6yHCpx/iVDqrwKWMre1w5IJ7j0gfeONqqrerif+P8Wgr/SdqkWYHvpfN8JgU
+         yfa2GFFdpUFIJmG8SO2qr/BWSSVQ0bP1bxai9q/NM5ngw0Lhgkx9k0zpRk611RVLurKO
+         jPoYTk0/pcfEJwRp7pSncRO+t2AdaiiWQrQF6a/JJm+R5DdtNb7Q3qN5zcmypWF8E/Hr
+         HOSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QKOxkvxNzD7rxqxwBmHmJb7NgshPzc0L9/lBDGQCjyU=;
+        b=QXlA/qjyTQyOJD2YXHmFOjOx184q5zJJJv90FlTMRp8hKNyvLizkg2xSZrny3lWEG3
+         C7Jn3LCMGOziX3yOLSlfzhT2EXurPhtpzGCp7WfFXsNpfh3FO1asW1XEQawUJdMK9N8P
+         hW/VbeYS6sbwwQ3vxjW3Q0PCKqRYCoKQ6gFmp0/EeEMbRpa2GaU9R/ZWG+e4U2qysab8
+         WXVyS0gdo5qG1uVPB6HR0SFK5Nzn9c043VvESg38Sr75dmkFxXaTEwW7+npQt9SBsNhf
+         B1I2kc1G/h8CGD+37IGZds7n0LwQyPR/k28spe25BEbbhv5p/WppoT3eKI80IV+k3hIM
+         IPPg==
+X-Gm-Message-State: AOAM533UkAAybw4tgKZetvLypjlM52vM+A5Bn7FgWX/xWotw5pQS76X4
+        2oAdxlsc86WlsgtncXrAvRg=
+X-Google-Smtp-Source: ABdhPJzboM3rEgvQCQKv/g+HA0Z2B1g0bc1GanHYDtklV31AgS45ZvWFHZZWx/u+AYWntUOOxKSRQA==
+X-Received: by 2002:a17:90a:c504:b0:1bf:6d9f:65a6 with SMTP id k4-20020a17090ac50400b001bf6d9f65a6mr7470086pjt.204.1646948989657;
+        Thu, 10 Mar 2022 13:49:49 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id p186-20020a62d0c3000000b004f6fa49c4b9sm7483756pfg.218.2022.03.10.13.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 13:49:49 -0800 (PST)
+Subject: Re: [PATCH] tty: serial: bcm63xx: use more precise Kconfig symbol
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kevin Cernekee <cernekee@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220310072239.4489-1-zajec5@gmail.com>
+ <CAMuHMdWQNDABuT9uwAugrzdQM31wFtXX_9F8MviC-BRc-YngKw@mail.gmail.com>
+ <145c66e0-2ba5-712c-57de-82378328ec3f@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <7d7ed784-f01f-44a0-4387-cd7a76a8abe4@gmail.com>
+Date:   Thu, 10 Mar 2022 13:49:41 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiJJR1hYtlJfBCe4@matsya>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <145c66e0-2ba5-712c-57de-82378328ec3f@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 10:45:51PM +0530, Vinod Koul wrote:
-> Hello Greg,
+On 3/10/22 12:33 AM, Rafał Miłecki wrote:
+> On 10.03.2022 09:19, Geert Uytterhoeven wrote:
+>> On Thu, Mar 10, 2022 at 8:22 AM Rafał Miłecki <zajec5@gmail.com> wrote:
+>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>
+>>> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
+>>> documentation change regarding "depends" usage. Adjust Kconfig entry to
+>>> match current guidelines. Make this symbol available for relevant
+>>> architectures only.
+>>>
+>>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+>>> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
+>>> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform
+>>> dependency practises")
+>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> Thanks for your patch!
+>>
+>>> --- a/drivers/tty/serial/Kconfig
+>>> +++ b/drivers/tty/serial/Kconfig
+>>> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
+>>>   config SERIAL_BCM63XX
+>>>          tristate "Broadcom BCM63xx/BCM33xx UART support"
+>>>          select SERIAL_CORE
+>>> -       depends on COMMON_CLK
+>>> +       depends on MIPS || ARM || ARM64 || COMPILE_TEST
+>>> +       default ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC
+>>
+>> So ARCH_BCM4908 covers ARM64, and BCM63XX || BMIPS_GENERIC
+>> cover MIPS.  Is there some symbol covering ARM so we can change the
+>> depends to
+>>
+>>      depends on FOO || ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC ||
+>> COMPILE_TEST
+>>
+>> ?
 > 
-> Please pull to receive updates for soundwire subsystem for v5.18.
-> 
-> Mostly bunch of core stream refactoring by Intel folks and qcom driver
-> updates.
-> 
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-> 
->   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git tags/soundwire-5.18-rc1
-> 
+> Florian, Kevin: do you know what other platforms need that driver?
 
-Pulled and pushed out, thanks.
-
-greg k-h
+Yes that would be ARCH_BCM_63XX.
+-- 
+Florian

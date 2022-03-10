@@ -2,144 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856A54D406F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 05:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAC94D4075
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 05:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239527AbiCJEzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 23:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S239539AbiCJE4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 23:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233084AbiCJEzS (ORCPT
+        with ESMTP id S231351AbiCJE4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 23:55:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5707711C7C6;
-        Wed,  9 Mar 2022 20:54:15 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD1311691;
-        Wed,  9 Mar 2022 20:54:14 -0800 (PST)
-Received: from u200865.usa.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 709183FA27;
-        Wed,  9 Mar 2022 20:54:14 -0800 (PST)
-From:   Jeremy Linton <jeremy.linton@arm.com>
-To:     netdev@vger.kernel.org
-Cc:     opendmb@gmail.com, f.fainelli@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Peter Robinson <pbrobinson@gmail.com>
-Subject: [PATCH] net: bcmgenet: Use stronger register read/writes to assure ordering
-Date:   Wed,  9 Mar 2022 22:53:58 -0600
-Message-Id: <20220310045358.224350-1-jeremy.linton@arm.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Mar 2022 23:56:06 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6250A129BA3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 20:55:06 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id kk16so3723764qvb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 20:55:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7DpcR7BbS2KJBWXW5bKxdKwq/AyT8/ycEETpvFi3+q4=;
+        b=eHo0ZYmR1wKXLCCdmUZtW/7DX5+UeImzDfDPkasTpU+zdcCiIqOKzNtRp31z+lmomD
+         Tlxb1qCglzN1bk1clJ72tSdy6IXiWdF3x8mAez+wENMikz94fayDsUea78MfbonFMcc2
+         3jbycTJHZJ42mzjZG/7KBTkRIFrXSgF0e/jdrlW6QDPPc1d3nwQHFOW6gBXVimvpoFvr
+         C3PztTW6MxRUc3Xc/UOF6rFn7+GvDfVagbuZU6PoyKylTMHHbsJ9ckBuej9rE9X1tVKn
+         f23yeyyJJ6Jstb4Fz04+RPvDZx6FfjxpCe/TtjuuD2l6+qPtmkONHiZc+wGEdAPU9ISt
+         gOfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7DpcR7BbS2KJBWXW5bKxdKwq/AyT8/ycEETpvFi3+q4=;
+        b=SNtJFOhYg4AroFOU8celSQNIwSAzPOJNquR1ml58Fxanyx9Q4evzg3FrTsjhjm2lHR
+         wpX64hZUZbWy9upBkxXv36hYF/sLPIPibm7cHuz+jckNioNwDr+slPIXrNtiDXHi6z60
+         Hz/cSQ9cLYTFk9J8e9JslrNfM2ZpKmYsO4aRKftYMfKuRSSOKgqhTLVwYn6Hyyfb3FZ6
+         pNrYV18naVrRaFe6CaWbiMRrFmSimkSaV12oh7dmx4NnrMiZwvN7noXWK4EoMny+M219
+         ktL5b8jZOUlCTL0rvowAl9YnP5CZqM1kQmhIOHYkrB8a8ViR8Fg96iY0gzwO5e4H9iUr
+         sjpw==
+X-Gm-Message-State: AOAM533GYDHvmJWSsKp33RW/W/8+ZnONUh2aOPaR0XFLCno+et7yi7kL
+        ckEq+NFMYx9IHX9UGy30jGg=
+X-Google-Smtp-Source: ABdhPJxgmBJMeeB/xbBPvS98wubJqB33GyOxMmJTV+7zR/TCbgXuo6wBQevETyckwBSXaY01DUR/mQ==
+X-Received: by 2002:ad4:5941:0:b0:433:75f:8627 with SMTP id eo1-20020ad45941000000b00433075f8627mr2397754qvb.122.1646888105521;
+        Wed, 09 Mar 2022 20:55:05 -0800 (PST)
+Received: from vultr.guest ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id c18-20020ac87dd2000000b002dd53a5563dsm2747749qte.25.2022.03.09.20.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 20:55:05 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH] riscv: ftrace: no need to acquire text_mutex when executed in stop_machine
+Date:   Thu, 10 Mar 2022 12:54:54 +0800
+Message-Id: <20220310045454.672097-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC12 appears to be much smarter about its dependency tracking and is
-aware that the relaxed variants are just normal loads and stores and
-this is causing problems like:
+It's safe to patch text segment in stop_machine. No race is possible here.
+Besides, there is a false positive for the lock assertion in
+patch_insn_write() since the lock is not held by cpu migration thread.
 
-[  210.074549] ------------[ cut here ]------------
-[  210.079223] NETDEV WATCHDOG: enabcm6e4ei0 (bcmgenet): transmit queue 1 timed out
-[  210.086717] WARNING: CPU: 1 PID: 0 at net/sched/sch_generic.c:529 dev_watchdog+0x234/0x240
-[  210.095044] Modules linked in: genet(E) nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat]
-[  210.146561] ACPI CPPC: PCC check channel failed for ss: 0. ret=-110
-[  210.146927] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G            E     5.17.0-rc7G12+ #58
-[  210.153226] CPPC Cpufreq:cppc_scale_freq_workfn: failed to read perf counters
-[  210.161349] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 02/08/2022
-[  210.161353] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  210.161358] pc : dev_watchdog+0x234/0x240
-[  210.161364] lr : dev_watchdog+0x234/0x240
-[  210.161368] sp : ffff8000080a3a40
-[  210.161370] x29: ffff8000080a3a40 x28: ffffcd425af87000 x27: ffff8000080a3b20
-[  210.205150] x26: ffffcd425aa00000 x25: 0000000000000001 x24: ffffcd425af8ec08
-[  210.212321] x23: 0000000000000100 x22: ffffcd425af87000 x21: ffff55b142688000
-[  210.219491] x20: 0000000000000001 x19: ffff55b1426884c8 x18: ffffffffffffffff
-[  210.226661] x17: 64656d6974203120 x16: 0000000000000001 x15: 6d736e617274203a
-[  210.233831] x14: 2974656e65676d63 x13: ffffcd4259c300d8 x12: ffffcd425b07d5f0
-[  210.241001] x11: 00000000ffffffff x10: ffffcd425b07d5f0 x9 : ffffcd4258bdad9c
-[  210.248171] x8 : 00000000ffffdfff x7 : 000000000000003f x6 : 0000000000000000
-[  210.255341] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000001000
-[  210.262511] x2 : 0000000000001000 x1 : 0000000000000005 x0 : 0000000000000044
-[  210.269682] Call trace:
-[  210.272133]  dev_watchdog+0x234/0x240
-[  210.275811]  call_timer_fn+0x3c/0x15c
-[  210.279489]  __run_timers.part.0+0x288/0x310
-[  210.283777]  run_timer_softirq+0x48/0x80
-[  210.287716]  __do_softirq+0x128/0x360
-[  210.291392]  __irq_exit_rcu+0x138/0x140
-[  210.295243]  irq_exit_rcu+0x1c/0x30
-[  210.298745]  el1_interrupt+0x38/0x54
-[  210.302334]  el1h_64_irq_handler+0x18/0x24
-[  210.306445]  el1h_64_irq+0x7c/0x80
-[  210.309857]  arch_cpu_idle+0x18/0x2c
-[  210.313445]  default_idle_call+0x4c/0x140
-[  210.317470]  cpuidle_idle_call+0x14c/0x1a0
-[  210.321584]  do_idle+0xb0/0x100
-[  210.324737]  cpu_startup_entry+0x30/0x8c
-[  210.328675]  secondary_start_kernel+0xe4/0x110
-[  210.333138]  __secondary_switched+0x94/0x98
+So we actually don't need our ftrace_arch_code_modify_prepare/post(). And
+the lock assertion in patch_insn_write() should be removed to avoid
+producing lots of false positive warnings.
 
-The assumption when these were relaxed seems to be that device memory
-would be mapped non reordering, and that other constructs
-(spinlocks/etc) would provide the barriers to assure that packet data
-and in memory rings/queues were ordered with respect to device
-register reads/writes. This itself seems a bit sketchy, but the real
-problem with GCC12 is that it is moving the actual reads/writes around
-at will as though they were independent operations when in truth they
-are not, but the compiler can't know that. When looking at the
-assembly dumps for many of these routines its possible to see very
-clean, but not strictly in program order operations occurring as the
-compiler would be free to do if these weren't actually register
-reads/write operations.
-
-Its possible to suppress the timeout with a liberal bit of dma_mb()'s
-sprinkled around but the device still seems unable to reliably
-send/receive data. A better plan is to use the safer readl/writel
-everywhere.
-
-Since this partially reverts an older commit, which notes the use of
-the relaxed variants for performance reasons. I would suggest that
-any performance problems with this commit are targeted at relaxing only
-the performance critical code paths after assuring proper barriers.
-
-Fixes: 69d2ea9c79898 ("net: bcmgenet: Use correct I/O accessors")
-Reported-by: Peter Robinson <pbrobinson@gmail.com>
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/riscv/kernel/ftrace.c | 16 ++--------------
+ arch/riscv/kernel/patch.c  | 12 +++++-------
+ 2 files changed, 7 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 87f1056e29ff..e907a2df299c 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -76,7 +76,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
- 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
- 		__raw_writel(value, offset);
- 	else
--		writel_relaxed(value, offset);
-+		writel(value, offset);
- }
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 4716f4cdc038..381ecdae4ea5 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -12,18 +12,6 @@
+ #include <asm/patch.h>
  
- static inline u32 bcmgenet_readl(void __iomem *offset)
-@@ -84,7 +84,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
- 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
- 		return __raw_readl(offset);
- 	else
--		return readl_relaxed(offset);
-+		return readl(offset);
- }
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-int ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
+-{
+-	mutex_lock(&text_mutex);
+-	return 0;
+-}
+-
+-int ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
+-{
+-	mutex_unlock(&text_mutex);
+-	return 0;
+-}
+-
+ static int ftrace_check_current_call(unsigned long hook_pos,
+ 				     unsigned int *expected)
+ {
+@@ -136,9 +124,9 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ {
+ 	int out;
  
- static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
+-	ftrace_arch_code_modify_prepare();
++	mutex_lock(&text_mutex);
+ 	out = ftrace_make_nop(mod, rec, MCOUNT_ADDR);
+-	ftrace_arch_code_modify_post_process();
++	mutex_unlock(&text_mutex);
+ 
+ 	return out;
+ }
+diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+index 0b552873a577..b7c5dea70924 100644
+--- a/arch/riscv/kernel/patch.c
++++ b/arch/riscv/kernel/patch.c
+@@ -49,19 +49,17 @@ static void patch_unmap(int fixmap)
+ }
+ NOKPROBE_SYMBOL(patch_unmap);
+ 
++/*
++ * Before reaching here, unless executed by stop_machine, it was
++ * expected to lock the text_mutex already which could ensure that
++ * it was safe between each cores.
++ */
+ static int patch_insn_write(void *addr, const void *insn, size_t len)
+ {
+ 	void *waddr = addr;
+ 	bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
+ 	int ret;
+ 
+-	/*
+-	 * Before reaching here, it was expected to lock the text_mutex
+-	 * already, so we don't need to give another lock here and could
+-	 * ensure that it was safe between each cores.
+-	 */
+-	lockdep_assert_held(&text_mutex);
+-
+ 	if (across_pages)
+ 		patch_map(addr + len, FIX_TEXT_POKE1);
+ 
 -- 
-2.35.1
+2.25.1
 

@@ -2,128 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7744D4C76
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0874D4C77
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244376AbiCJO4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S245455AbiCJO4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347070AbiCJOu3 (ORCPT
+        with ESMTP id S1347158AbiCJOue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:50:29 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B9318DAB7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:45:32 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b8so5421794pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:45:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RPULJMtRKjA9XHVfCiU0lkTP5Po3/tVc3d3ybzr9pAI=;
-        b=byClIQkE7K9xa0RUPSQIo8oicPjQHvO18luT1iFudeZHAwG/hmzPYRusS3SBg/y8Yz
-         4xha71rAYfjUyIW8SiJMR5OVAf4y75iDDx2BAHwi/2H0qMNBNfdYV1e1Sr1YDxwV1gxO
-         e8aG5gKO45NmxNHTT9LGtYN22t9cPih2/dZJ66v69DdqrU8nrkmS+QFG8wVcplvrfnCP
-         P5y8vEyEpFx1YEt/RT/wRxb1YPV63wRAHyXLmVqOSnZnXAzu+tlT+0SXrUHBfH6wlDhG
-         1RCZma7jOYDiqOAQz4L2xGjDP9YEDiIcyEG3YD2Xo0haSnLqkkmY5G7vPVowX4yvrdjS
-         /ElA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RPULJMtRKjA9XHVfCiU0lkTP5Po3/tVc3d3ybzr9pAI=;
-        b=n+yY/WoL3CTxjUv/qZ6+HJ4JJBU2KRGC5c/3WPLBel8A/7zTGVAPHZysMgmMf3ElAg
-         mS0Wg7tNf4LD8tTYyNcw4aAg4rvBtRDI2cvA9LQKOJC5I03FDkS6Y0IDfPNHG2WchIxz
-         LNyS7J5lf7ZwlIdY0GkU+ahHDbFKGSIrlyY4jOTpfMinZS5CseczkxOY8x5kuwGCu2mh
-         5bpbTxwak3SgM0NyOhC0lbsn4uWiAChoBs/fBl/usAP/jpqj4xrejiXhNml/UXS6unW/
-         XpRvF2b7Tpqn4dzibYWG18hK/GzcbPp3aAGY50+NLN4HBiKxnwyGefzc2rgS0BQ2IeA7
-         dpMg==
-X-Gm-Message-State: AOAM530lnB90fS5z3b0N1MYXhZ/QOY1xhq0EF9DDOhHWm6YlroCtKDuW
-        ukbN6FzaSAT1r/CLYTN1faA=
-X-Google-Smtp-Source: ABdhPJwZUmXQFM3Uvcfr5KMlb0Cc/uEttYBjsXg12377+TEKKxHNKSo5/XbJw4PSJO/SdlQluC6YNw==
-X-Received: by 2002:a17:902:e5cc:b0:151:f626:9153 with SMTP id u12-20020a170902e5cc00b00151f6269153mr5502607plf.41.1646923531533;
-        Thu, 10 Mar 2022 06:45:31 -0800 (PST)
-Received: from odroid ([114.29.23.97])
-        by smtp.gmail.com with ESMTPSA id 1-20020a17090a1a0100b001bf3ba1508fsm6275329pjk.33.2022.03.10.06.45.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 06:45:31 -0800 (PST)
-Date:   Thu, 10 Mar 2022 14:45:24 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     sxwjean@me.com
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        longman@redhat.com, guro@fb.com, willy@infradead.org,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>
-Subject: Re: [PATCH v2 2/2] mm: slub: Delete useless parameter of
- alloc_slab_page()
-Message-ID: <20220310144524.GA1166889@odroid>
-References: <20220310140701.87908-1-sxwjean@me.com>
+        Thu, 10 Mar 2022 09:50:34 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7388918F201;
+        Thu, 10 Mar 2022 06:45:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646923547; x=1678459547;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=QaPegg1jNSdooo38T77D3oKrBjhFtC11zzudIxnPRLo=;
+  b=Lfha/SC6mGJLFFRe8FbDBC8jFAwjZe7h2OxcU7Q+vYTLN16Xg8FBTLdz
+   HTiZbCUKXfYnRKhwGFjr8V8iX3ig+Y1Ua+DU5xa1XtepvVoVtpDsTCdjv
+   bbwNAbx5NNf45cRXIbc0Kgv35IdvY86oWYaj8VySrPFwXebPhf6KM00/p
+   JiF+dhPQy4MqONAUxbjgitm322CbGm0P8qG05q/p7g56uDcmqr8F7MnC/
+   bZjAT7YgLhvSFjA4jAWyygip7LhHJQ4EEG0RdWls4BYU5koMrN0eMOiSG
+   WgvOettJwRJ5mfffihZlPCGR2WBjhanDcTenhzM69ckcm/8/1XaoZtj2P
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="252830990"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="252830990"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:45:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="644464959"
+Received: from aubrey-app.sh.intel.com (HELO [10.239.53.25]) ([10.239.53.25])
+  by orsmga004.jf.intel.com with ESMTP; 10 Mar 2022 06:45:42 -0800
+Subject: Re: [PATCH v1 0/6] Add TDX Guest Attestation support
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20220222231735.268919-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Aubrey Li <aubrey.li@linux.intel.com>
+Message-ID: <93767fe9-9edd-8e31-c3ca-155bfa807915@linux.intel.com>
+Date:   Thu, 10 Mar 2022 22:45:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310140701.87908-1-sxwjean@me.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220222231735.268919-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Xiongwei Song <sxwjean@gmail.com>
->
-> The parameter @s is useless for alloc_slab_page(). It was added in 2014
-> by commit 5dfb41750992 ("sl[au]b: charge slabs to kmemcg explicitly"). The
-> need for it was removed in 2020 by commit 1f3147b49d75 ("mm: slub: call
-> account_slab_page() after slab page initialization"). Let's delete it.
->
-> [willy@infradead.org: Added detailed history of @s]
-> Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
-> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Acked-by: David Rientjes <rientjes@google.com>
-> Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
-> mm/slub.c | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 261474092e43..5d273ee04c43 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -1788,8 +1788,8 @@ static void *setup_object(struct kmem_cache *s, struct slab *slab,
->  /*
->  * Slab allocation and freeing
->  */
-> -static inline struct slab *alloc_slab_page(struct kmem_cache *s,
-> -		gfp_t flags, int node, struct kmem_cache_order_objects oo)
-> +static inline struct slab *alloc_slab_page(gfp_t flags, int node,
-> +		struct kmem_cache_order_objects oo)
->  {
->  	struct folio *folio;
-> 	struct slab *slab;
-> @@ -1941,7 +1941,7 @@ static struct slab *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
-> 	if ((alloc_gfp & __GFP_DIRECT_RECLAIM) && oo_order(oo) > oo_order(s->min))
-> 		alloc_gfp = (alloc_gfp | __GFP_NOMEMALLOC) & ~(__GFP_RECLAIM|__GFP_NOFAIL);
+On 2022/2/23 上午7:17, Kuppuswamy Sathyanarayanan wrote:
+> Hi All,
 > 
->-	slab = alloc_slab_page(s, alloc_gfp, node, oo);
->+	slab = alloc_slab_page(alloc_gfp, node, oo);
-> 	if (unlikely(!slab)) {
-> 		oo = s->min;
-> 		alloc_gfp = flags;
->@@ -1949,7 +1949,7 @@ static struct slab *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
-> 		 * Allocation may have failed due to fragmentation.
-> 		 * Try a lower order alloc if possible
-> 		 */
->-		slab = alloc_slab_page(s, alloc_gfp, node, oo);
->+		slab = alloc_slab_page(alloc_gfp, node, oo);
-> 		if (unlikely(!slab))
-> 			goto out;
-> 		stat(s, ORDER_FALLBACK);
+> Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+> hosts and some physical attacks. VM guest with TDX support is called
+> as TD Guest.
+> 
+> In TD Guest, the attestation process is used to verify the 
+> trustworthiness of TD guest to the 3rd party servers. Such attestation
+> process is required by 3rd party servers before sending sensitive
+> information to TD guests. One usage example is to get encryption keys
+> from the key server for mounting the encrypted rootfs or secondary drive.
+>     
+> Following patches add the attestation support to TDX guest which
+> includes attestation user interface driver, user agent example, and
+> related hypercall support.
+> 
+> In this series, only following patches are in arch/x86 and are
+> intended for x86 maintainers review.
+> 
+> * x86/tdx: Add TDREPORT TDX Module call support
+> * x86/tdx: Add GetQuote TDX hypercall support
+> * x86/tdx: Add SetupEventNotifyInterrupt TDX hypercall support
+> * x86/tdx: Add TDX Guest event notify interrupt vector support
+> 
+> Patch titled "platform/x86: intel_tdx_attest: Add TDX Guest attestation
+> interface driver" adds the attestation driver support. This is supposed
+> to be reviewed by platform-x86 maintainers.
+> 
+> Also, patch titled "tools/tdx: Add a sample attestation user app" adds
+> a testing app for attestation feature which needs review from
+> bpf@vger.kernel.org.
+> 
+> Dependencies:
+> --------------
+> 
+> This feature has dependency on TDX guest core patch set series.
+> 
+> https://lore.kernel.org/all/20220218161718.67148-1-kirill.shutemov@linux.intel.com/T/
 
-Looks good, nice changelog!
+Does this feature also have dependency on QEMU tdx support?
 
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> 
+> History:
+> ----------
+> 
+> Previously this patch set was sent under title "Add TDX Guest
+> Support (Attestation support)". In the previous version, only the
+> attestation driver patch was reviewed and got acked. Rest of the
+> patches need to be reviewed freshly.
+> 
+> https://lore.kernel.org/bpf/20210806000946.2951441-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+> 
+> Changes since previous submission:
+>  * Updated commit log and error handling in TDREPORT, GetQuote and
+>    SetupEventNotifyInterrupt support patches.
+>  * Added locking support in attestation driver.
+> 
+> Kuppuswamy Sathyanarayanan (6):
+>   x86/tdx: Add tdx_mcall_tdreport() API support
+>   x86/tdx: Add tdx_hcall_get_quote() API support
+>   x86/tdx: Add SetupEventNotifyInterrupt TDX hypercall support
+>   platform/x86: intel_tdx_attest: Add TDX Guest attestation interface
+>     driver
+>   x86/tdx: Add TDX Guest event notify interrupt vector support
+>   tools/tdx: Add a sample attestation user app
+> 
+>  arch/x86/coco/tdx.c                           | 170 ++++++++++++
+>  arch/x86/include/asm/hardirq.h                |   4 +
+>  arch/x86/include/asm/idtentry.h               |   4 +
+>  arch/x86/include/asm/irq_vectors.h            |   7 +-
+>  arch/x86/include/asm/tdx.h                    |   5 +
+>  arch/x86/kernel/irq.c                         |   7 +
+>  drivers/platform/x86/intel/Kconfig            |   1 +
+>  drivers/platform/x86/intel/Makefile           |   1 +
+>  drivers/platform/x86/intel/tdx/Kconfig        |  13 +
+>  drivers/platform/x86/intel/tdx/Makefile       |   3 +
+>  .../platform/x86/intel/tdx/intel_tdx_attest.c | 241 ++++++++++++++++++
+>  include/uapi/misc/tdx.h                       |  37 +++
+>  tools/Makefile                                |  13 +-
+>  tools/tdx/Makefile                            |  19 ++
+>  tools/tdx/attest/.gitignore                   |   2 +
+>  tools/tdx/attest/Makefile                     |  24 ++
+>  tools/tdx/attest/tdx-attest-test.c            | 240 +++++++++++++++++
+>  17 files changed, 784 insertions(+), 7 deletions(-)
+>  create mode 100644 drivers/platform/x86/intel/tdx/Kconfig
+>  create mode 100644 drivers/platform/x86/intel/tdx/Makefile
+>  create mode 100644 drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+>  create mode 100644 include/uapi/misc/tdx.h
+>  create mode 100644 tools/tdx/Makefile
+>  create mode 100644 tools/tdx/attest/.gitignore
+>  create mode 100644 tools/tdx/attest/Makefile
+>  create mode 100644 tools/tdx/attest/tdx-attest-test.c
+> 
+

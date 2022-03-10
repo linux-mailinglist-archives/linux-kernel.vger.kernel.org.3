@@ -2,154 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4754D4E3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519184D4E42
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240968AbiCJQOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S241154AbiCJQOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237626AbiCJQN7 (ORCPT
+        with ESMTP id S241009AbiCJQO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:13:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7129636156
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646928777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NNeYsGy5GEH7Mbra8ROUB5xsBSJSvMr9PkuEfPzANXY=;
-        b=BGeNzsA+ZV/TSj1kaQrmJyLHF2DOc4eCxhvaHc9Qw4PKXP9SSSaeOsNiit6Rquhbjhf5d0
-        PKVcQWwXSgp/BWn8cwhXFx2UZ3gSE3uMqVkrXM1k3O5oCE3kn6g4Y8D9roS4Rargrw8+OT
-        fjYcNY7me3ND+NKVMUt+MeaoGIfArSE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-g6C_gYelMcmPVNX_UNsLNw-1; Thu, 10 Mar 2022 11:12:55 -0500
-X-MC-Unique: g6C_gYelMcmPVNX_UNsLNw-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020a056402344e00b0041593c729adso3373623edc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:12:54 -0800 (PST)
+        Thu, 10 Mar 2022 11:14:27 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29DE1B59
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:13:26 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so5654606pju.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:13:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lEOkrVgcJZdOpXrqIK9Xwy4NV75c7mrQ1k1DVuFpKnM=;
+        b=b7OhXiqUJ2oyKnp9Y21BDXMjY0kk/egOkrjh5HRAzYzuD2yJ9Y5GLXzDNdCVe+41w0
+         M+6Ml58nU8iWesUVOP+1aUQb1brA4wcb9XHv0P2ta0jLXsGzuj1YJFQ7H4c2/MZm3dmB
+         9YHuxVneWRgHyU1S6GRn4t1fFwfBHHzsUyPdk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NNeYsGy5GEH7Mbra8ROUB5xsBSJSvMr9PkuEfPzANXY=;
-        b=RWmV6ombYfTIvNEZ4ExHg4q+hoa9mvUsNK7raMUUVFINDvJFXislwI12SLgG7H2Iir
-         kGcvkTvRipA2SDiqwlM7EGokdR33mYDCkpObtB8YDYujaedFVhfP/xEUNgUkQE/Io1fU
-         0at4scp4Qzcon7uTte2mtkvlP7ZAWor+vXGnwPgxlEcZiNGkjP3QaVlI7rDtyUeDtqff
-         gTtPU4aHlUPJSplwqSeJC5TMjtUu+0+wcTM9L2EAX00gYnHh/0uyWLjW2DrXGJahT5WV
-         WpeixzZzK8oh1uSZ5rfKN8AK2PPOaOYu4nraCbxjfcF0O32d8JL852IF7sA+1kSD7KDB
-         2HRA==
-X-Gm-Message-State: AOAM532/40UOyK4PjPxZlrCPPtsOjomRACDWd3xoj5V8nfD7kjmNE5o6
-        fo0yoUacCLPuqIYJqYBVzWvakrYCcwXVSKWJM8Op6yh7NdGRW/DVDwgbh7AgmzDjHJFNKLucyWx
-        3dz5d4PeMkVQjdRnQbKJROJi1
-X-Received: by 2002:a17:906:2991:b0:6cf:6b24:e92f with SMTP id x17-20020a170906299100b006cf6b24e92fmr4854751eje.748.1646928774016;
-        Thu, 10 Mar 2022 08:12:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwEBvACUyWY3XMB+zE7GVAa/esjBxPyDo1dWf95GVSSD81s8zhmS4RJG3YwDEPH6w7bYVgt3g==
-X-Received: by 2002:a17:906:2991:b0:6cf:6b24:e92f with SMTP id x17-20020a170906299100b006cf6b24e92fmr4854735eje.748.1646928773787;
-        Thu, 10 Mar 2022 08:12:53 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1949560ejb.194.2022.03.10.08.12.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 08:12:53 -0800 (PST)
-Message-ID: <d93d7fe7-ab60-9202-9b35-e8c8371ddefd@redhat.com>
-Date:   Thu, 10 Mar 2022 17:12:52 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lEOkrVgcJZdOpXrqIK9Xwy4NV75c7mrQ1k1DVuFpKnM=;
+        b=LQysWEu1Xnh7OITPtBoyprmQI7nvaJHdbMmnd0cfKsUZCvu5il0u1nl09K7oOvLq8k
+         Nm5R/iBOkHYFcnNnBHAZDa0Y6OXSQHa0DVxPlwgHIQk+fCl7bniE6nZ641SszH1oBe06
+         LQB8P4HLa1alO/fnudmkzCbD+N8unEmeAx/DR9wYEgCXP7azGG35E1CWOQx2DzyyMNZ/
+         TK+i3VSjEqQHuHUhJQTpbZrHacdIPr85465sxg+AU0o6W6DO1udq6PLUBzi+02fCrEPb
+         jzhLZUbGYxeCH/VQH4cBl0I5WqVDwiZTKHycK0CVDwau+SrIDxsstgm9Ogbq/6Oi60mi
+         xayQ==
+X-Gm-Message-State: AOAM530eNENLjtNL9p6Pk2gvrH2oysbFB+GeqOgPFisfZagTiV88YQyM
+        si69Nh9JUlcSQHUHZuq1aoSCt4x39Qt2BQ==
+X-Google-Smtp-Source: ABdhPJwjsAQ5MxTwKYyhdw/zQa2nvOjkcVfkmmw8kVfLcawTtqNN7W73CZF8Sm++De1tWvYYY/fvPg==
+X-Received: by 2002:a17:90a:168f:b0:1b9:453a:fe79 with SMTP id o15-20020a17090a168f00b001b9453afe79mr17140950pja.107.1646928806494;
+        Thu, 10 Mar 2022 08:13:26 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001bce781ce03sm6348367pjp.18.2022.03.10.08.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 08:13:26 -0800 (PST)
+Date:   Thu, 10 Mar 2022 08:13:25 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Domenico Andreoli <domenico.andreoli@linux.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binfmt_misc: add two-steps registration (opt-in)
+Message-ID: <202203100811.F2B43DD@keescook>
+References: <Yh4fdijvNXE7K88c@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/4] x86/platform/uv: Remove Obsolete Scratch5 NMI handler
-Content-Language: en-US
-To:     Mike Travis <mike.travis@hpe.com>, Borislav Petkov <bp@alien8.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org
-Cc:     Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-References: <20220308010537.70150-1-mike.travis@hpe.com>
- <20220308010537.70150-2-mike.travis@hpe.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220308010537.70150-2-mike.travis@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh4fdijvNXE7K88c@localhost>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I just noticed this series only touches files under arch/x86,
-so reviewing + merging this really is up to the x86 maintainers,
-but I was already looking at it anyways so here is a review
-from me too.
-
-On 3/8/22 02:05, Mike Travis wrote:
-> Removes obsolete scratch5 NMI handler only used in UV1 and early UV2
-> systems.
+On Tue, Mar 01, 2022 at 02:28:22PM +0100, Domenico Andreoli wrote:
+> From: Domenico Andreoli <domenico.andreoli@linux.com>
 > 
-> Signed-off-by: Mike Travis <mike.travis@hpe.com>
-> Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-> ---
->  arch/x86/include/asm/uv/uv_hub.h | 6 ------
->  arch/x86/platform/uv/uv_nmi.c    | 5 +----
->  2 files changed, 1 insertion(+), 10 deletions(-)
+> Experimenting with new interpreter configurations can lead to annoying
+> failures, when the system is left unable to load ELF binaries power
+> cycling is the only way to get it back operational.
 > 
-> diff --git a/arch/x86/include/asm/uv/uv_hub.h b/arch/x86/include/asm/uv/uv_hub.h
-> index d3e3197917be..958c18f94146 100644
-> --- a/arch/x86/include/asm/uv/uv_hub.h
-> +++ b/arch/x86/include/asm/uv/uv_hub.h
-> @@ -729,12 +729,6 @@ extern void uv_nmi_setup_hubless(void);
->  #define UVH_TSC_SYNC_VALID	3	/* 0011 */
->  #define UVH_TSC_SYNC_UNKNOWN	0	/* 0000 */
->  
-> -/* BMC sets a bit this MMR non-zero before sending an NMI */
-> -#define UVH_NMI_MMR		UVH_BIOS_KERNEL_MMR
-> -#define UVH_NMI_MMR_CLEAR	UVH_BIOS_KERNEL_MMR_ALIAS
-> -#define UVH_NMI_MMR_SHIFT	63
-> -#define UVH_NMI_MMR_TYPE	"SCRATCH5"
-> -
->  struct uv_hub_nmi_s {
->  	raw_spinlock_t	nmi_lock;
->  	atomic_t	in_nmi;		/* flag this node in UV NMI IRQ */
-> diff --git a/arch/x86/platform/uv/uv_nmi.c b/arch/x86/platform/uv/uv_nmi.c
-> index 1e9ff28bc2e0..926a4e006e5a 100644
-> --- a/arch/x86/platform/uv/uv_nmi.c
-> +++ b/arch/x86/platform/uv/uv_nmi.c
-> @@ -280,10 +280,7 @@ static void uv_nmi_setup_mmrs(void)
->  		nmi_mmr_pending = 1UL << uvh_nmi_mmrx_shift;
->  		pr_info("UV: SMI NMI support: %s\n", uvh_nmi_mmrx_type);
->  	} else {
-> -		nmi_mmr = UVH_NMI_MMR;
-> -		nmi_mmr_clear = UVH_NMI_MMR_CLEAR;
-> -		nmi_mmr_pending = 1UL << UVH_NMI_MMR_SHIFT;
-> -		pr_info("UV: SMI NMI support: %s\n", UVH_NMI_MMR_TYPE);
-> +		pr_warn("UV: NMI handler not present or not supported\n");
->  	}
->  }
->  
+> This patch tries to mitigate such conditions by adding an opt-in
+> two-steps registration.
+> 
+> A new optional field is added to the configuration string, it's an
+> expiration interval for the newly added interpreter. If the user is
+> not able to confirm in time, possibly because the system is broken,
+> the new interpreter is automatically disabled.
 
-This seems like a bad idea, just because HPE is no longer actively maintaining
-these older UV versions does not mean that they are automatically without
-users and we usually don't go around and start dropping support for hw
-which is still in active use.
+Hi!
 
-So NACK from me on this one.
+As this both changes the userspace API and adds timers, I'd like the
+change to be really well justified. Can you explain the conditions you
+get into that can't be escaped by just disabling the bad binfmt_misc
+entry?
 
-Regards,
+-Kees
 
-Hans
-
+-- 
+Kees Cook

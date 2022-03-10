@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52984D4C0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9074D4C34
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343879AbiCJOnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S245524AbiCJOww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344054AbiCJObj (ORCPT
+        with ESMTP id S1344067AbiCJObk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEB4EC5F4;
-        Thu, 10 Mar 2022 06:29:44 -0800 (PST)
+        Thu, 10 Mar 2022 09:31:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1FA7EA3F;
+        Thu, 10 Mar 2022 06:30:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 700F6B82544;
-        Thu, 10 Mar 2022 14:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE642C340E8;
-        Thu, 10 Mar 2022 14:29:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB28061D22;
+        Thu, 10 Mar 2022 14:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8AD1C340E8;
+        Thu, 10 Mar 2022 14:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922583;
-        bh=jyBDepQzs3J3bAr8lcobZCUKcw7lYEkUHhe0ftiGO0I=;
+        s=korg; t=1646922617;
+        bh=wBLb1JgeLGCmIlJRSZ+nBqsfFArPm7x3PghLmULm8JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S3ZCoexj2KuGVncK+QPE5ujD2BRknMhaUOqwaH6Xf/nvxYrodHPjZv1rh/BxArSvb
-         7T7+jx+RDpYzfWg+no/qPy3lfmRpIuyz33i+3A4W9nc4Zr9Xbxm5P1AOFGp46v9YCL
-         JaTUf6Vu9eYloMkyW8cOwSPCX7lQ919DL3D5LqCk=
+        b=CDBWAjxq/6Sdmd8QUAPCt4vO1Qq46s+6J52YqmqvRnD5F4pRpPwZ4/kdqBwED0mbm
+         Mmdi7D5q20BKQOlqBUJztcggREeNqSebqB6xKS5YVcwjMp9ohNjnk5xDHwk2xqb2mr
+         wbRpN3l+dY4HV8+2ipBcmsUDThszx/C92fQAWap4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
         Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.15 07/58] x86/speculation: Use generic retpoline by default on AMD
-Date:   Thu, 10 Mar 2022 15:18:56 +0100
-Message-Id: <20220310140813.197314711@linuxfoundation.org>
+Subject: [PATCH 5.15 08/58] x86/speculation: Update link to AMD speculation whitepaper
+Date:   Thu, 10 Mar 2022 15:18:57 +0100
+Message-Id: <20220310140813.225526096@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
 References: <20220310140812.983088611@linuxfoundation.org>
@@ -56,40 +56,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kim Phillips <kim.phillips@amd.com>
 
-commit 244d00b5dd4755f8df892c86cab35fb2cfd4f14b upstream.
+commit e9b6013a7ce31535b04b02ba99babefe8a8599fa upstream.
 
-AMD retpoline may be susceptible to speculation. The speculation
-execution window for an incorrect indirect branch prediction using
-LFENCE/JMP sequence may potentially be large enough to allow
-exploitation using Spectre V2.
-
-By default, don't use retpoline,lfence on AMD.  Instead, use the
-generic retpoline.
+Update the link to the "Software Techniques for Managing Speculation
+on AMD Processors" whitepaper.
 
 Signed-off-by: Kim Phillips <kim.phillips@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |    9 ---------
- 1 file changed, 9 deletions(-)
+ Documentation/admin-guide/hw-vuln/spectre.rst |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -941,15 +941,6 @@ static enum spectre_v2_mitigation __init
- 		return SPECTRE_V2_NONE;
- 	}
+--- a/Documentation/admin-guide/hw-vuln/spectre.rst
++++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+@@ -60,8 +60,8 @@ privileged data touched during the specu
+ Spectre variant 1 attacks take advantage of speculative execution of
+ conditional branches, while Spectre variant 2 attacks use speculative
+ execution of indirect branches to leak privileged memory.
+-See :ref:`[1] <spec_ref1>` :ref:`[5] <spec_ref5>` :ref:`[7] <spec_ref7>`
+-:ref:`[10] <spec_ref10>` :ref:`[11] <spec_ref11>`.
++See :ref:`[1] <spec_ref1>` :ref:`[5] <spec_ref5>` :ref:`[6] <spec_ref6>`
++:ref:`[7] <spec_ref7>` :ref:`[10] <spec_ref10>` :ref:`[11] <spec_ref11>`.
  
--	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
--	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
--		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
--			pr_err("LFENCE not serializing, switching to generic retpoline\n");
--			return SPECTRE_V2_RETPOLINE;
--		}
--		return SPECTRE_V2_LFENCE;
--	}
--
- 	return SPECTRE_V2_RETPOLINE;
- }
+ Spectre variant 1 (Bounds Check Bypass)
+ ---------------------------------------
+@@ -746,7 +746,7 @@ AMD white papers:
+ 
+ .. _spec_ref6:
+ 
+-[6] `Software techniques for managing speculation on AMD processors <https://developer.amd.com/wp-content/resources/90343-B_SoftwareTechniquesforManagingSpeculation_WP_7-18Update_FNL.pdf>`_.
++[6] `Software techniques for managing speculation on AMD processors <https://developer.amd.com/wp-content/resources/Managing-Speculation-on-AMD-Processors.pdf>`_.
+ 
+ ARM white papers:
  
 
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E254D503F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7BD4D504D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244786AbiCJRZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S244765AbiCJRYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244924AbiCJRW6 (ORCPT
+        with ESMTP id S245048AbiCJRXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:22:58 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A5919CCCD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:42 -0800 (PST)
+        Thu, 10 Mar 2022 12:23:03 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FF319D619
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646932902; x=1678468902;
+  t=1646932912; x=1678468912;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tTk+9fg3xxqlLphYlniN0akUys2MoAwrAiQS3zSHa5s=;
-  b=cnGrwBY1AAh37DILFmya9+CgvTsnU3Y70mRRnMkUzbzX/2JEmijfyC4p
-   eozW2yy3ziM/iZS9yECzwlbLsjmaOrfwFgA7e1muvdHd974E/VuKnvqWD
-   lE8E/v4LU3/tyMMT253kwkyR8HU1UrUzkzq50ZDch3bBTxZEXeHEKFnMw
-   2nrfRtNVrFwUor14ZeJM8EbIaSaZURi64n1HuVr3YaDdOiRlpJQRXmD/p
-   c9fVp+BaAaQ4fPA114Qf9pDtapbg6bCVfiRV4rfo4xXIoXXOuOc1+4CYF
-   TOwcNd2zTCrX5j0LwwZUl/0YDFkdUBZTHOBscR3ZBUhKZauFghQmGQfVB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237484393"
+  bh=7tvRXjoAFFcc2ruAmi1/nDqUmMjQ6lnLDMTZxTsUwIc=;
+  b=LpQ1jAPcPMfsYIESCR9aU+zM94hd/R5w5I8zjFNf3DNRy9/heVtNLAUg
+   inlyIYZfp+8hmF66RwuK3czZZWeedq0F3aI67emjmo4fCTaAQ0rpJKQze
+   nyyU8ShCeaDKY7w8YS5x/cAOn7f2oae7zaGES0+F5pcthwckNW6wD9Ets
+   ciqiZWuOubE9U8q3seD3d4lXDzie+dAFJaCF3CNfySrOiDSHp9N6UAWbd
+   xJqKYs0PU/jRk981UjjvikH0FMAcE5Gf1IkagIkPn+z6XA/R6b8eYSL2P
+   eOpP7X6mX48J8emrbL34uDKUmcV67eM3TJLop4Insq77QEFxaFcdHpC/q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="252879520"
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="237484393"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:41 -0800
+   d="scan'208";a="252879520"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:43 -0800
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="510984375"
+   d="scan'208";a="633064588"
 Received: from gdavids1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.65.108])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:41 -0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:43 -0800
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,18 +45,18 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V9 34/45] memremap_pages: Add Kconfig for DEVMAP_ACCESS_PROTECTION
-Date:   Thu, 10 Mar 2022 09:20:08 -0800
-Message-Id: <20220310172019.850939-35-ira.weiny@intel.com>
+Subject: [PATCH V9 35/45] memremap_pages: Introduce pgmap_protection_available()
+Date:   Thu, 10 Mar 2022 09:20:09 -0800
+Message-Id: <20220310172019.850939-36-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310172019.850939-1-ira.weiny@intel.com>
 References: <20220310172019.850939-1-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,71 +65,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The persistent memory (PMEM) driver uses the memremap_pages facility to
-provide 'struct page' metadata (vmemmap) for PMEM.  Given that PMEM
-capacity may be orders of magnitude higher capacity than System RAM it
-presents a large vulnerability surface to stray writes.  Unlike stray
-writes to System RAM, which may result in a crash or other undesirable
-behavior, stray writes to PMEM additionally are more likely to result in
-permanent data loss. Reboot is not a remediation for PMEM corruption
-like it is for System RAM.
+PMEM will flag additional dev_pagemap protection through (struct
+dev_pagemap)->flags.  However, it is more efficient to know if that
+protection is available prior to requesting it and failing the mapping.
 
-Given that PMEM access from the kernel is limited to a constrained set
-of locations (PMEM driver, Filesystem-DAX, and direct-I/O to a DAX
-page), it is amenable to supervisor pkey protection.
-
-Add a Kconfig option to configure additional devmap protections using
-PKS.
-
-Only PMEM which is advertised to the memory subsystem needs this
-protection.  Therefore, the feature depends on NVDIMM_PFN.
+Define pgmap_protection_available() to check if protection is available
+prior to being requested.  The name of pgmap_protection_available() was
+specifically chosen to isolate the implementation of the protection from
+higher level users.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes for V9
-	Change this to enable arch pks consumer for mutual exclusion
-		with testing all pkeys
+	Clean up commit message
 	From Dan Williams
-		Default to no
-		Clean up commit message
+		make call stack static inline throughout this call and
+			pks_available() such that callers calls
+			cpu_feature_enabled() directly
 
 Changes for V8
-	Split this out from
-		[PATCH V7 13/18] memremap_pages: Add access protection via supervisor Protection Keys (PKS)
+	Split this out to it's own patch.
+	s/pgmap_protection_enabled/pgmap_protection_available
 ---
- mm/Kconfig | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ include/linux/mm.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 850372b6aaec..ba8a557dcf81 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -776,6 +776,24 @@ config ZONE_DEVICE
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 5744a3fc4716..9ab799403004 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -31,6 +31,7 @@
+ #include <linux/sizes.h>
+ #include <linux/sched.h>
+ #include <linux/pgtable.h>
++#include <linux/pks.h>
+ #include <linux/kasan.h>
  
- 	  If FS_DAX is enabled, then say Y.
+ struct mempolicy;
+@@ -1143,6 +1144,22 @@ static inline bool is_pci_p2pdma_page(const struct page *page)
+ 		page->pgmap->type == MEMORY_DEVICE_PCI_P2PDMA;
+ }
  
-+config DEVMAP_ACCESS_PROTECTION
-+	bool "Access protection for memremap_pages()"
-+	depends on NVDIMM_PFN
-+	depends on ARCH_HAS_SUPERVISOR_PKEYS
-+	select ARCH_ENABLE_PKS_CONSUMER
-+	default n
++#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
 +
-+	help
-+	  Enable extra protections on device memory.  This protects against
-+	  unintended access to devices such as a stray writes.  This feature is
-+	  particularly useful to protect against corruption of persistent
-+	  memory.
++static inline bool pgmap_protection_available(void)
++{
++	return pks_available();
++}
 +
-+	  This depends on architecture support of supervisor PKeys and has no
-+	  overhead if the architecture does not support them.
++#else
 +
-+	  If you have persistent memory say 'Y'.
++static inline bool pgmap_protection_available(void)
++{
++	return false;
++}
 +
- config DEV_PAGEMAP_OPS
- 	bool
- 
++#endif /* CONFIG_DEVMAP_ACCESS_PROTECTION */
++
+ /* 127: arbitrary random number, small enough to assemble well */
+ #define folio_ref_zero_or_close_to_overflow(folio) \
+ 	((unsigned int) folio_ref_count(folio) + 127u <= 127u)
 -- 
 2.35.1
 

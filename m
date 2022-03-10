@@ -2,251 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFCD4D4E27
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68934D4E20
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240393AbiCJQGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44306 "EHLO
+        id S240331AbiCJQGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239706AbiCJQGX (ORCPT
+        with ESMTP id S239706AbiCJQGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:06:23 -0500
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3B18645C;
-        Thu, 10 Mar 2022 08:05:21 -0800 (PST)
-Received: by mail-oo1-f46.google.com with SMTP id w3-20020a4ac183000000b0031d806bbd7eso7218497oop.13;
-        Thu, 10 Mar 2022 08:05:21 -0800 (PST)
+        Thu, 10 Mar 2022 11:06:42 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0C187B81
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:05:39 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id u7so8347465ljk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:05:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=a47/kfMIXmMimdkS0oL0JoxaVtTsUq4puZeDbeGUm9Y=;
+        b=04IWU311iyNWvLh+4z6efV3IVimCg+0iXV/HO6uNNlDwrOjW8ZhyHR4SuudlVDuTum
+         gqZVmZReaIp6IBpYdIONB8k97GEYu3RMgnjWcytVYtlZC+m5/D3tZZOk9RtPgWsgRTX9
+         5S0ShUCrhTY36HShqYZB/KcEFIsfQcgRXYYrDkyXF+P7qHqVkEiTgiaw/eqJcRLMaxLz
+         oYgakxqRrR/MCiS3Zt8tB2qNRm7bUSX94KJjWKWXyDSYUkgbhRDJp4aMpxmIiUWlH9n5
+         ZtSV23o6uIaELOrquC+AVpftGUgiYGUIKp4YM4X6sEZVQ/gBkfUqwR+wNuQNrKL6gYrz
+         JKVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PdFrUf+INh35GayN7dpMNmxJiWP8mD1xY7Ss28Z++S0=;
-        b=bAa6bTyDz27918Y+R6hOBrkegJHXMCsOvLzK9dbRN+/QSY7bcQpPuLzD83oGA+hLvy
-         IO/LVVcFp0TGiO4x16NUSGHN6tfmbS4bWx9w4ibLJ1t7Ha8kOL1Kgf2rz/gmm5fW1SwF
-         4Z8nIbzHUGYFBSznAH1HNUt9qTDtqjNOanMwNMYGxvVEOiCBngPxSE+6k0InmmF/1MK9
-         5ColHL6GCYLbe3vKtzfYKAuCm4j45WkJQNOQwo+1TS7dVEIfqFVcWq7Mw/Vy2rhe3lV5
-         P1wzjHUZtQXH57CtdvxYX2wjIK+vmn7YNfKoZz7OmFidgLi7vxiqiZyozd1PmPSs6zO8
-         bp4w==
-X-Gm-Message-State: AOAM5303l7CYTwY5esj/yFZXTSJ7GJB6NGzfLHSjFB/7+TooyvnGurQY
-        ZidYag4h4OhNEps6r93Nng==
-X-Google-Smtp-Source: ABdhPJyVa95VoA/cvB+GOq1Gu0MbtaRZul/cPjJTzHCdHh71P43Ms/dWlyX537UIRG2fl8E6T8mjYA==
-X-Received: by 2002:a05:6870:a2c6:b0:da:b3f:3212 with SMTP id w6-20020a056870a2c600b000da0b3f3212mr3090042oak.194.1646928320952;
-        Thu, 10 Mar 2022 08:05:20 -0800 (PST)
-Received: from xps15.. ([2607:fb90:20d2:449c:e413:94ed:2767:f2c4])
-        by smtp.googlemail.com with ESMTPSA id s21-20020a056870629500b000d9a2291d2fsm2395413oan.30.2022.03.10.08.05.19
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=a47/kfMIXmMimdkS0oL0JoxaVtTsUq4puZeDbeGUm9Y=;
+        b=XgY4rW8dNo26UOmMNL6JejbpCEEruLSzyE8ivWlyYeeYIxdTe0Bc82hVFtQzEqDXlW
+         CfcZ31ktd9PWRl80Hopg+uuSBeuWnrnnYXDfTB+xrBS3GpS//hyJRccQo6xFeC2QI6bD
+         VLuIUnVdTOojPld5of4xFa+F07WQ96woW2wTSyBwJCpyztVTI9BJkc4650LXqm+0yXEl
+         QhQzg3A9FwW8NPZpjydRYbg9oEpt+KrH6qIWvUduNSMzPJST6Sz6/UlEIcmpI9aKbpIG
+         Hle0seMrIvOsTEGyGx9KO9VGstigrQ5DdjNBtAT7FdJpmFA7njLtRYrrD/fC7hSgWKF2
+         5kew==
+X-Gm-Message-State: AOAM5325Ed9QXyKDawUpW1EBwWvYbWK3YRzV3OTf/1fTd5RVZCvlEgkD
+        Rn6abKdgNe/IjIFuBHgbPZDuVg==
+X-Google-Smtp-Source: ABdhPJzx3mtbb/gT8X71tN1JhdwgyQSxq7uztMR3ML5AdHZG7wEGIrsGIXSDxImZa1L96XG2jyoXbg==
+X-Received: by 2002:a2e:b0cc:0:b0:235:dcdf:e6e9 with SMTP id g12-20020a2eb0cc000000b00235dcdfe6e9mr3635773ljl.88.1646928337313;
+        Thu, 10 Mar 2022 08:05:37 -0800 (PST)
+Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
+        by smtp.gmail.com with ESMTPSA id bu20-20020a056512169400b0043eaf37af75sm1045976lfb.199.2022.03.10.08.05.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 08:05:20 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v2 2/2] dt-bindings: kbuild: Use DTB files for validation
-Date:   Thu, 10 Mar 2022 10:05:13 -0600
-Message-Id: <20220310160513.1708182-3-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220310160513.1708182-1-robh@kernel.org>
-References: <20220310160513.1708182-1-robh@kernel.org>
+        Thu, 10 Mar 2022 08:05:36 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 07/10] net: dsa: Pass MST state changes to
+ driver
+In-Reply-To: <20220310103509.g35syl776kyh5j2n@skbuf>
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-8-tobias@waldekranz.com>
+ <20220303222055.7a5pr4la3wmuuekc@skbuf> <87mthymblh.fsf@waldekranz.com>
+ <20220310103509.g35syl776kyh5j2n@skbuf>
+Date:   Thu, 10 Mar 2022 17:05:35 +0100
+Message-ID: <87h785n67k.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the DT validation to use DTB files directly instead of a DTS to
-YAML conversion.
+On Thu, Mar 10, 2022 at 12:35, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Thu, Mar 10, 2022 at 09:54:34AM +0100, Tobias Waldekranz wrote:
+>> >> +	if (!dsa_port_can_configure_learning(dp) || dp->learning) {
+>> >> +		switch (state->state) {
+>> >> +		case BR_STATE_DISABLED:
+>> >> +		case BR_STATE_BLOCKING:
+>> >> +		case BR_STATE_LISTENING:
+>> >> +			/* Ideally we would only fast age entries
+>> >> +			 * belonging to VLANs controlled by this
+>> >> +			 * MST.
+>> >> +			 */
+>> >> +			dsa_port_fast_age(dp);
+>> >
+>> > Does mv88e6xxx support this? If it does, you might just as well
+>> > introduce another variant of ds->ops->port_fast_age() for an msti.
+>> 
+>> You can limit ATU operations to a particular FID. So the way I see it we
+>> could either have:
+>> 
+>> int (*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 vid)
+>> 
+>> + Maybe more generic. You could imagine there being a way to trigger
+>>   this operation from userspace for example.
+>> - We would have to keep the VLAN<->MSTI mapping in the DSA layer in
+>>   order to be able to do the fan-out in dsa_port_set_mst_state.
+>> 
+>> or:
+>> 
+>> int (*port_msti_fast_age)(struct dsa_switch *ds, int port, u16 msti)
+>> 
+>> + Let's the mapping be an internal affair in the driver.
+>> - Perhaps, less generically useful.
+>> 
+>> Which one do you prefer? Or is there a hidden third option? :)
+>
+> Yes, I was thinking of "port_msti_fast_age". I don't see a cheap way of
+> keeping VLAN to MSTI associations in the DSA layer. Only if we could
+> retrieve this mapping from the bridge layer - maybe with something
+> analogous to br_vlan_get_info(), but br_mst_get_info(), and this gets
+> passed a VLAN_N_VID sized bitmap, which the bridge populates with ones
+> and zeroes.
 
-The original motivation for supporting validation on DTB files was to
-enable running validation on a running system (e.g. 'dt-validate
-/sys/firmware/fdt') or other cases where the original source DTS is not
-available.
+That can easily be done. Given that, should we go for port_vlan_fast_age
+instead? port_msti_fast_age feels like an awkward interface, since I
+don't think there is any hardware out there that can actually perform
+that operation without internally fanning it out over all affected VIDs
+(or FIDs in the case of mv88e6xxx).
 
-The YAML format was not without issues. Using DTBs with the schema type
-information solves some of those problems. The YAML format relies on the
-DTS source level information including bracketing of properties, size
-directives, and phandle tags all of which are lost in a DTB file. While
-standardizing the bracketing is a good thing, it does cause a lot of
-extra warnings and churn to fix them.
+> The reason why I asked for this is because I'm not sure of the
+> implications of flushing the entire FDB of the port for a single MSTP
+> state change. It would trigger temporary useless flooding in other MSTIs
+> at the very least. There isn't any backwards compatibility concern to
+> speak of, so we can at least try from the beginning to limit the
+> flushing to the required VLANs.
 
-Another issue has been signed types are not validated correctly as sign
-information is not propagated to YAML. Using the schema type information
-allows for proper handling of signed types. YAML also can't represent
-the full range of 64-bit integers as numbers are stored as floats by
-most/all parsers.
+Aside from the performance implications of flows being temporarily
+flooded I don't think there are any.
 
-The DTB validation works by decoding property values using the type
-information in the schemas themselves. The main corner case this does
-not work for is matrix types where neither dimension is fixed. For
-now, checking the dimensions in these cases are skipped.
+I suppose if you've disabled flooding of unknown unicast on that port,
+you would loose the flow until you see some return traffic (or when one
+side gives up and ARPs). While somewhat esoteric, it would be nice to
+handle this case if the hardware supports it.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - Dependency on processed-schema.json needs to be conditional
----
- Documentation/devicetree/bindings/Makefile    |  7 +++----
- .../devicetree/bindings/writing-schema.rst    | 12 -----------
- scripts/Makefile.lib                          | 20 +++++++------------
- scripts/dtc/Makefile                          | 13 ------------
- scripts/dtc/update-dtc-source.sh              |  2 +-
- 5 files changed, 11 insertions(+), 43 deletions(-)
+> What I didn't think about, and will be a problem, is
+> dsa_port_notify_bridge_fdb_flush() - we don't know the vid to flush.
+> The easy way out here would be to export dsa_port_notify_bridge_fdb_flush(),
+> add a "vid" argument to it, and let drivers call it. Thoughts?
 
-diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-index 2716f7b9e25e..e594e5898be0 100644
---- a/Documentation/devicetree/bindings/Makefile
-+++ b/Documentation/devicetree/bindings/Makefile
-@@ -26,8 +26,7 @@ $(obj)/%.example.dts: $(src)/%.yaml check_dtschema_version FORCE
- 	$(call if_changed,extract_ex)
- 
- find_all_cmd = find $(srctree)/$(src) \( -name '*.yaml' ! \
--		-name 'processed-schema*' ! \
--		-name '*.example.dt.yaml' \)
-+		-name 'processed-schema*' \)
- 
- find_cmd = $(find_all_cmd) | grep -F "$(DT_SCHEMA_FILES)"
- CHK_DT_DOCS := $(shell $(find_cmd))
-@@ -72,9 +71,9 @@ $(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version
- 
- always-y += processed-schema.json
- always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
--always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dt.yaml, $(CHK_DT_DOCS))
-+always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dtb, $(CHK_DT_DOCS))
- 
- # Hack: avoid 'Argument list too long' error for 'make clean'. Remove most of
- # build artifacts here before they are processed by scripts/Makefile.clean
- clean-files = $(shell find $(obj) \( -name '*.example.dts' -o \
--			-name '*.example.dt.yaml' \) -delete 2>/dev/null)
-+			-name '*.example.dtb' \) -delete 2>/dev/null)
-diff --git a/Documentation/devicetree/bindings/writing-schema.rst b/Documentation/devicetree/bindings/writing-schema.rst
-index 3b00fe981494..b4258bf81be5 100644
---- a/Documentation/devicetree/bindings/writing-schema.rst
-+++ b/Documentation/devicetree/bindings/writing-schema.rst
-@@ -123,18 +123,6 @@ project can be installed with pip::
- Several executables (dt-doc-validate, dt-mk-schema, dt-validate) will be
- installed. Ensure they are in your PATH (~/.local/bin by default).
- 
--dtc must also be built with YAML output support enabled. This requires that
--libyaml and its headers be installed on the host system. For some distributions
--that involves installing the development package, such as:
--
--Debian::
--
--  apt-get install libyaml-dev
--
--Fedora::
--
--  dnf -y install libyaml-devel
--
- Running checks
- ~~~~~~~~~~~~~~
- 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index c8c6f1745d03..9d5320a47ef8 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -87,11 +87,6 @@ base-dtb-y := $(foreach m, $(multi-dtb-y), $(firstword $(call suffix-search, $m,
- 
- always-y			+= $(dtb-y)
- 
--ifneq ($(CHECK_DTBS),)
--always-y += $(patsubst %.dtb,%.dt.yaml, $(real-dtb-y))
--always-y += $(patsubst %.dtbo,%.dt.yaml, $(real-dtb-y))
--endif
--
- # Add subdir path
- 
- extra-y		:= $(addprefix $(obj)/,$(extra-y))
-@@ -347,12 +342,6 @@ cmd_dtc = $(HOSTCC) -E $(dtc_cpp_flags) -x assembler-with-cpp -o $(dtc-tmp) $< ;
- 		-d $(depfile).dtc.tmp $(dtc-tmp) ; \
- 	cat $(depfile).pre.tmp $(depfile).dtc.tmp > $(depfile)
- 
--$(obj)/%.dtb: $(src)/%.dts $(DTC) FORCE
--	$(call if_changed_dep,dtc)
--
--$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
--	$(call if_changed_dep,dtc)
--
- quiet_cmd_fdtoverlay = DTOVL   $@
-       cmd_fdtoverlay = $(objtree)/scripts/dtc/fdtoverlay -o $@ -i $(real-prereqs)
- 
-@@ -360,22 +349,27 @@ $(multi-dtb-y): FORCE
- 	$(call if_changed,fdtoverlay)
- $(call multi_depend, $(multi-dtb-y), .dtb, -dtbs)
- 
-+ifneq ($(CHECK_DTBS)$(CHECK_DT_BINDING),)
- DT_CHECKER ?= dt-validate
- DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
- DT_BINDING_DIR := Documentation/devicetree/bindings
- DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
- 
- quiet_cmd_dtb_check =	CHECK   $@
--      cmd_dtb_check =	$(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@
-+      cmd_dtb_check =	$(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
-+endif
- 
- define rule_dtc
- 	$(call cmd_and_fixdep,dtc)
- 	$(call cmd,dtb_check)
- endef
- 
--$(obj)/%.dt.yaml: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
-+$(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
- 	$(call if_changed_rule,dtc)
- 
-+$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
-+	$(call if_changed_dep,dtc)
-+
- dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)
- 
- # Bzip2
-diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
-index 1cba78e1dce6..4d32b9497da9 100644
---- a/scripts/dtc/Makefile
-+++ b/scripts/dtc/Makefile
-@@ -17,20 +17,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
- 
- # Source files need to get at the userspace version of libfdt_env.h to compile
- HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
--
--ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
--ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
--$(error dtc needs libyaml for DT schema validation support. \
--	Install the necessary libyaml development package.)
--endif
- HOST_EXTRACFLAGS += -DNO_YAML
--else
--dtc-objs	+= yamltree.o
--# To include <yaml.h> installed in a non-default path
--HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
--# To link libyaml installed in a non-default path
--HOSTLDLIBS_dtc	:= $(shell pkg-config --libs yaml-0.1)
--endif
- 
- # Generated files need one more search path to include headers in source tree
- HOSTCFLAGS_dtc-lexer.lex.o := -I $(srctree)/$(src)
-diff --git a/scripts/dtc/update-dtc-source.sh b/scripts/dtc/update-dtc-source.sh
-index 32ff17ffd089..94627541533e 100755
---- a/scripts/dtc/update-dtc-source.sh
-+++ b/scripts/dtc/update-dtc-source.sh
-@@ -32,7 +32,7 @@ DTC_UPSTREAM_PATH=`pwd`/../dtc
- DTC_LINUX_PATH=`pwd`/scripts/dtc
- 
- DTC_SOURCE="checks.c data.c dtc.c dtc.h flattree.c fstree.c livetree.c srcpos.c \
--		srcpos.h treesource.c util.c util.h version_gen.h yamltree.c \
-+		srcpos.h treesource.c util.c util.h version_gen.h \
- 		dtc-lexer.l dtc-parser.y"
- LIBFDT_SOURCE="fdt.c fdt.h fdt_addresses.c fdt_empty_tree.c \
- 		fdt_overlay.c fdt_ro.c fdt_rw.c fdt_strerror.c fdt_sw.c \
--- 
-2.32.0
+To me, this seems to be another argument in favor of
+port_vlan_fast_age. That way you would know the VIDs being flushed at
+the DSA layer, and driver writers needn't concern themselves with having
+to remember to generate the proper notifications back to the bridge.
 
+> Alternatively, if you think that cross-flushing FDBs of multiple MSTIs
+> isn't a real problem, I suppose we could keep the "port_fast_age" method.
+
+What about falling back to it if the driver doesn't support per-VLAN
+flushing? Flushing all entries will work in most cases, at the cost of
+some temporary flooding. Seems more useful than refusing the offload
+completely.
+
+>> > And since it is new code, you could require that drivers _do_ support
+>> > configuring learning before they could support MSTP. After all, we don't
+>> > want to keep legacy mechanisms in place forever.
+>> 
+>> By "configuring learning", do you mean this new fast-age-per-vid/msti,
+>> or being able to enable/disable learning per port? If it's the latter,
+>> I'm not sure I understand how those two are related.
+>
+> The code from dsa_port_set_state() which you've copied:
+>
+> 	if (!dsa_port_can_configure_learning(dp) ||
+> 	    (do_fast_age && dp->learning)) {
+>
+> has this explanation:
+>
+> 1. DSA keeps standalone ports in the FORWARDING state.
+> 2. DSA also disables address learning on standalone ports, where this is
+>    possible (dsa_port_can_configure_learning(dp) == true).
+> 3. When a port joins a bridge, it leaves its FORWARDING state from
+>    standalone mode and inherits the bridge port's BLOCKING state
+> 4. dsa_port_set_state() treats a port transition from FORWARDING to
+>    BLOCKING as a transition requiring an FDB flush
+> 5. due to (2), the FDB flush at stage (4) is in fact not needed, because
+>    the FDB of that port should already be empty. Flushing the FDB may be
+>    a costly operation for some drivers, so it is avoided if possible.
+>
+> So this is why the "dsa_port_can_configure_learning()" check is there -
+> for compatibility with drivers that can't configure learning => they
+> keep learning enabled also in standalone mode => they need an FDB flush
+> when a standalone port joins a bridge.
+>
+> What I'm saying is: for drivers that offload MSTP, let's force them to
+> get the basics right first (have configurable learning), rather than go
+> forward forever with a backwards compatibility mode.
+
+Makes sense, I'll just move it up to the initial capability check.

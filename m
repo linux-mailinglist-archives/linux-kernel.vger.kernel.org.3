@@ -2,204 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5E44D4374
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A214D4384
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240790AbiCJJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S240817AbiCJJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240755AbiCJJ0y (ORCPT
+        with ESMTP id S240946AbiCJJ2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:26:54 -0500
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D005B13982A;
-        Thu, 10 Mar 2022 01:25:53 -0800 (PST)
-Received: by mail-lf1-f45.google.com with SMTP id g17so8366623lfh.2;
-        Thu, 10 Mar 2022 01:25:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+5V+wTeIo37PwWFwgFplTYn4oIVdAMfrFbOjnidcQjU=;
-        b=FqifI/FvBGLhqHJSeJUeTFoLnDatd9wwyGFfbIzo3luskOrxO4YKKqIktNxMV/hvVJ
-         o+VUSf/ORv8bcwarL/h0Yg6GssnyEWHhEUE4RBzEi5bvKodGqxrB8TbcSVL/D4+Vj/ED
-         7gnB8Q339TzBh2kLQYHoLu0BRFag8/Oy71xszDsiY2JuSZySpyftLKLC1wT95YGeylS3
-         PZJ/kD++ert+iHH4ta2Ic8PHAiP2NRZsLkqkTYgTKANo6WCw9/fIRZCgKYKNWPvcNWwb
-         beVwhEuJ0W0P5cYYrt3JVd9uKNrjPf+CZK1F5NPeEbfDdBs7jhkPiujFbpZpSE3Po1N7
-         0c6w==
-X-Gm-Message-State: AOAM5312T6a2EQLx6n07KnbDg+GYqJy2r6SzARe820hIvRaxjgX8m1dl
-        l1q4QjGMJYKOalis6pBMYBIk/Uv1YTb136RV00c=
-X-Google-Smtp-Source: ABdhPJwqYawyDJX/GT0RTxkOjNsc7y7aK0QiHQNoA/A3hziNoe7KKMG+ml/bRNOc8V1UDxX/8cwsA46+QjtCZIiYde8=
-X-Received: by 2002:a05:6512:ea5:b0:43b:3603:69d9 with SMTP id
- bi37-20020a0565120ea500b0043b360369d9mr2357274lfb.71.1646904351643; Thu, 10
- Mar 2022 01:25:51 -0800 (PST)
+        Thu, 10 Mar 2022 04:28:12 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7516139CDB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:27:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646904432; x=1678440432;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=72L4ehMp6FZhWswWWlpVdAywCocM3srYiCHwUoPWtCQ=;
+  b=HNGAgPcfjCTCIs9EUOCMEs5EhjhfiJsFMF8xkuIYnt0ZmPKjt8Bqiw2j
+   cR0PrgBl3Zq2Ta4J/qhfXgvB7BrpORmxw1WuSzA7o3SoYy61a8s4cwTJm
+   UZPB+4+oLAkS7iXNl0nkvmc6wYho6XtjCL8sV7twBB024m7GpMHMt8iCd
+   QlRyVY6dzY4ygUgSOlboDKfFWOBu1dZs5si8hG0+px1ENXltGe8KDa69L
+   I5cfyp3aGJwjBc9acB4aNIiJSth4+Y/brwZrJwJNDJRUueZookjx1sdiJ
+   Jyl7+OfxC+P3Yw92aD9LWiCyhBF2v+i7LFPCX2QHtSenxm9qENEtfqfqf
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254033607"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="254033607"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 01:26:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="547955817"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2022 01:26:48 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSF4J-0004jk-L9; Thu, 10 Mar 2022 09:26:47 +0000
+Date:   Thu, 10 Mar 2022 17:26:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
+ no previous prototype for function '__ashldi3'
+Message-ID: <202203101712.9ZWwXz8a-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220308135948.55336-1-zhouchengming@bytedance.com>
-In-Reply-To: <20220308135948.55336-1-zhouchengming@bytedance.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 10 Mar 2022 01:25:40 -0800
-Message-ID: <CAM9d7chsbpmVhhtzBgqD29Agb6xTMpxfwvqUdo6RKx2K1WN-DQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] perf/core: fix cpuctx cgrp warning
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        songmuchun@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Masahiro,
 
-On Tue, Mar 8, 2022 at 6:00 AM Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> There is a race problem that can trigger WARN_ON_ONCE(cpuctx->cgrp)
-> in perf_cgroup_switch().
->
-> CPU1                                    CPU2
-> (in context_switch)                     (attach running task)
-> perf_cgroup_sched_out(task, next)
->         if (cgrp1 != cgrp2) True
->                                         task->cgroups = xxx
->                                         perf_cgroup_attach()
-> perf_cgroup_sched_in(prev, task)
->         if (cgrp1 != cgrp2) False
+FYI, the error/warning still remains.
 
-But perf_cgroup_switch will be synchronized as the context switch
-disables the interrupt.  And right, it still can see the task->cgroups
-is changing in the middle.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   4 months ago
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20220310/202203101712.9ZWwXz8a-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
->
-> The commit a8d757ef076f ("perf events: Fix slow and broken cgroup
-> context switch code") would save cpuctx switch in/out when the
-> perf_cgroup of "prev" and "next" are the same.
->
-> But perf_cgroup of task can change in concurrent with context_switch.
-> If cgrp1 == cgrp2 in sched_out(), cpuctx won't do switch out, then
-> task perf_cgroup changed cause cgrp1 != cgrp2 in sched_in(), cpuctx
-> will do switch in, and trigger WARN_ON_ONCE(cpuctx->cgrp).
->
-> The perf_cgroup of "prev" and "next" can be changed at any time, so we
-> first have to combine perf_cgroup_sched_in() into perf_cgroup_sched_out(),
-> so we can get a consistent value of condition (cgrp1 == cgrp2).
->
-> And we introduce a percpu "cpu_perf_cgroups" to track the current used
-> perf_cgroup, instead of using the unstable perf_cgroup of "prev", which
-> maybe not the cpuctx->cgrp we used to schedule cgroup events on cpu.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Is this really needed?  I think the warning comes because the two
-cgroups were the same when in sched-out, but they became
-different when in sched-in.  So just combining sched-in/out should
-be ok, isn't it?
+All warnings (new ones prefixed by >>):
 
->
-> Fixes: a8d757ef076f ("perf events: Fix slow and broken cgroup context
-> switch code")
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  kernel/events/core.c | 95 +++++++++++---------------------------------
->  1 file changed, 23 insertions(+), 72 deletions(-)
->
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 6859229497b1..f3bc2841141f 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -826,6 +826,7 @@ perf_cgroup_set_timestamp(struct task_struct *task,
->         }
->  }
->
-> +static DEFINE_PER_CPU(struct perf_cgroup *, cpu_perf_cgroups);
->  static DEFINE_PER_CPU(struct list_head, cgrp_cpuctx_list);
->
->  #define PERF_CGROUP_SWOUT      0x1 /* cgroup switch out every event */
-> @@ -837,8 +838,9 @@ static DEFINE_PER_CPU(struct list_head, cgrp_cpuctx_list);
->   * mode SWOUT : schedule out everything
->   * mode SWIN : schedule in based on cgroup for next
-
-You can remove this comment now.
-
->   */
-> -static void perf_cgroup_switch(struct task_struct *task, int mode)
-> +static void perf_cgroup_switch(struct task_struct *task)
->  {
-> +       struct perf_cgroup *cgrp;
->         struct perf_cpu_context *cpuctx, *tmp;
->         struct list_head *list;
->         unsigned long flags;
-> @@ -849,6 +851,9 @@ static void perf_cgroup_switch(struct task_struct *task, int mode)
->          */
->         local_irq_save(flags);
->
-> +       cgrp = perf_cgroup_from_task(task, NULL);
-> +       __this_cpu_write(cpu_perf_cgroups, cgrp);
-> +
->         list = this_cpu_ptr(&cgrp_cpuctx_list);
->         list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
->                 WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
-> @@ -856,28 +861,15 @@ static void perf_cgroup_switch(struct task_struct *task, int mode)
->                 perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->                 perf_pmu_disable(cpuctx->ctx.pmu);
->
-> -               if (mode & PERF_CGROUP_SWOUT) {
-> -                       cpu_ctx_sched_out(cpuctx, EVENT_ALL);
-> -                       /*
-> -                        * must not be done before ctxswout due
-> -                        * to event_filter_match() in event_sched_out()
-
-Unrelated, but I don't see the event_filter_match() in
-event_sched_out() anymore.  Does it sched-out all
-non-cgroup cpu events here?
-
-> -                        */
-> -                       cpuctx->cgrp = NULL;
-> -               }
-> +               cpu_ctx_sched_out(cpuctx, EVENT_ALL);
-> +               /*
-> +                * must not be done before ctxswout due
-> +                * to event_filter_match() in event_sched_out()
-> +                */
-> +               cpuctx->cgrp = cgrp;
-
-Maybe we can check cpuctx->cgrp is the same as task's
-cgroup before accessing the pmu.  As in the commit message
-it can call perf_cgroup_switch() after the context switch so
-the cgroup events might be scheduled already.
-
-Thanks,
-Namhyung
+   In file included from arch/mips/boot/compressed/ashldi3.c:2:
+>> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for function '__ashldi3' [-Wmissing-prototypes]
+   long long notrace __ashldi3(long long u, word_type b)
+                     ^
+   arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long long notrace __ashldi3(long long u, word_type b)
+   ^
+   static 
+   1 warning generated.
 
 
-> +
-> +               cpu_ctx_sched_in(cpuctx, EVENT_ALL, task);
->
-> -               if (mode & PERF_CGROUP_SWIN) {
-> -                       WARN_ON_ONCE(cpuctx->cgrp);
-> -                       /*
-> -                        * set cgrp before ctxsw in to allow
-> -                        * event_filter_match() to not have to pass
-> -                        * task around
-> -                        * we pass the cpuctx->ctx to perf_cgroup_from_task()
-> -                        * because cgorup events are only per-cpu
-> -                        */
-> -                       cpuctx->cgrp = perf_cgroup_from_task(task,
-> -                                                            &cpuctx->ctx);
-> -                       cpu_ctx_sched_in(cpuctx, EVENT_ALL, task);
-> -               }
->                 perf_pmu_enable(cpuctx->ctx.pmu);
->                 perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
->         }
+vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
+
+b35cd9884fa5d81 Palmer Dabbelt 2017-05-23  8  
+b35cd9884fa5d81 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
+
+:::::: The code at line 9 was first introduced by commit
+:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBD14D4273
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921CD4D4277
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbiCJI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S240320AbiCJI2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240315AbiCJI0f (ORCPT
+        with ESMTP id S234487AbiCJI2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:26:35 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BFD1354B0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:25:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646900735; x=1678436735;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M1FxyZOr2miK6glLtvAtSHCGudtfTwOvAFevUu4VqpU=;
-  b=MtxYCj+QnIjhmmR9T/K5XqbBGJEIQSLofSYnuC436s4ASRlIvnyVMbbb
-   pL3ou/5jM9zPXJDNiIQmeUfggHVMUjG5dJvOapbKI07fuVJVGYA57y3Rb
-   vmHtqVdp6UPOPC6SXJAdqswG17fwLf2Jg3oW0zowkuBe9ImGgcZtTvGsK
-   I=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Mar 2022 00:25:34 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 00:25:34 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 10 Mar 2022 00:25:34 -0800
-Received: from [10.216.27.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 10 Mar
- 2022 00:25:30 -0800
-Message-ID: <8758f360-0c6f-28bb-8483-342ad808865f@quicinc.com>
-Date:   Thu, 10 Mar 2022 13:55:26 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] mm: madvise: return correct bytes advised with
- process_madvise
-Content-Language: en-US
-To:     Minchan Kim <minchan@kernel.org>
-CC:     <akpm@linux-foundation.org>, <yuehaibing@huawei.com>,
-        <sfr@canb.auug.org.au>, <rientjes@google.com>,
-        <edgararriaga@google.com>, <mhocko@suse.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1646803679-11433-1-git-send-email-quic_charante@quicinc.com>
- <YijaP7cC6Sclxc29@google.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <YijaP7cC6Sclxc29@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Thu, 10 Mar 2022 03:28:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55461E1A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:27:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A459B824C7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:27:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119F9C340E8;
+        Thu, 10 Mar 2022 08:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646900847;
+        bh=/9C4BIqgXx2c6sRMgvh7r/nxQcHFArxVvepmMcPWiqk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=klveAPUWwdziQvpok91nyvuHrJKz3bUdUEpKL1ioi5JsCz3/usIomklsX9E7vreru
+         WSbfCAN3vQWXc6eQFjwPsutt/tFWL/TcPC/Sv9kCsE+RHdH48LOEMI3zdlFRROxjFo
+         7dQUjqOa0PtM/uvWnB2kW0aQ4OYQB1BKxDzLLZpgKgBjtWXQqZoKwmHkxvd3grYiZw
+         ycDnu/Gj/q239TY9Ybp0slYLLjzqn8XAZcXBl67aoKIPs+KH9RFqF1K7+BX2gcePjA
+         BvoXTsjoFg9XhI/LgdggO0VBJDfTliDh0SuS/T/4JSM8qRcSdMg0eQj2l0Ab0e4bGE
+         l4R0JSUjOhvsg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nSE8q-00DWXz-M8; Thu, 10 Mar 2022 08:27:24 +0000
+Date:   Thu, 10 Mar 2022 08:27:24 +0000
+Message-ID: <87sfrqyzyr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/APPLE MACHINE
+        SUPPORT),
+        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
+        zhengkui_guo@outlook.com
+Subject: Re: [PATCH] irqchip/apple-aic: application of sizeof() to a pointer
+In-Reply-To: <20220310050238.4478-1-guozhengkui@vivo.com>
+References: <20220310050238.4478-1-guozhengkui@vivo.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: guozhengkui@vivo.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, zhengkui_guo@outlook.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,29 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Thanks Minchan for your comment!!
-On 3/9/2022 10:17 PM, Minchan Kim wrote:
->> @@ -1426,15 +1426,21 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
->>  
->>  	while (iov_iter_count(&iter)) {
->>  		iovec = iov_iter_iovec(&iter);
->> +		/*
->> +		 * Even when [start, end) passed to do_madvise covers
->> +		 * some unmapped addresses, it continues processing with
->> +		 * returning ENOMEM at the end. Thus consider the range
->> +		 * as processed when do_madvise() returns ENOMEM.
->> +		 * This makes process_madvise() never returns ENOMEM.
->> +		 */
-> Looks like that this patch has two things. first, returns processed
-> bytes instead of error in case of error. Second, keep working on
-> rest vmas on -ENOMEM due to unmapped hole.
+On Thu, 10 Mar 2022 05:02:38 +0000,
+Guo Zhengkui <guozhengkui@vivo.com> wrote:
 > 
-> First thing totally makes sense to me(that's exactly I wanted to
-> do but somehow missed) so it should go stable tree. However,
-> second stuff might be arguble so it would be great if you split
-> the patch.
+> `ic->fiq_aff[fiq]` is a pointer to the unnamed struct.
+> `sizeof(ic->fiq_aff[fiq])` intends to get the size of this pointer. But
+> readers may get confused. `sizeof(unsigned long)` makes more sense because
+> `unsigned long` has the same size of pointer.
 
-Sure, then will split the patch in V2.
+More sense? It really depends on who reads the code.
 
 > 
+> reference:
+> https://lore.kernel.org/all/Ya%2FeUbdN1+ABFVWf@rowland.harvard.edu/
+> https://lore.kernel.org/all/YbBGGI9wQenI4kP7@kroah.com/
+> https://lore.kernel.org/all/20211209062441.9856-1-guozhengkui@vivo.com/
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> ---
+>  drivers/irqchip/irq-apple-aic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index b40199c6625e..23098b469b1a 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -810,7 +810,7 @@ static void build_fiq_affinity(struct aic_irq_chip *ic, struct device_node *aff)
+>  	if (WARN_ON(n < 0))
+>  		return;
+>  
+> -	ic->fiq_aff[fiq] = kzalloc(sizeof(ic->fiq_aff[fiq]), GFP_KERNEL);
+> +	ic->fiq_aff[fiq] = kzalloc(sizeof(unsigned long), GFP_KERNEL);
+
+And by doing that, you are making even more difficult to spot the
+glaring bug that is in front of your eyes: we're not trying to
+allocate a pointer, but to allocate the full data structure.
+
+Nothing went wrong as a 64bit allocation is plenty when you need at
+most 10 bits, but jeez, what a howler. I'm stashing the fixlet below
+on top.
+
+Thanks,
+
+	M.
+
+diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+index b40199c6625e..3f1d2f3ccb7f 100644
+--- a/drivers/irqchip/irq-apple-aic.c
++++ b/drivers/irqchip/irq-apple-aic.c
+@@ -810,7 +810,7 @@ static void build_fiq_affinity(struct aic_irq_chip *ic, struct device_node *aff)
+ 	if (WARN_ON(n < 0))
+ 		return;
+ 
+-	ic->fiq_aff[fiq] = kzalloc(sizeof(ic->fiq_aff[fiq]), GFP_KERNEL);
++	ic->fiq_aff[fiq] = kzalloc(sizeof(*ic->fiq_aff[fiq]), GFP_KERNEL);
+ 	if (!ic->fiq_aff[fiq])
+ 		return;
+ 
+
+-- 
+Without deviation from the norm, progress is not possible.

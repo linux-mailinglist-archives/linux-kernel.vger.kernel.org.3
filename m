@@ -2,121 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD084D4641
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5304D463D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241829AbiCJLse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 06:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
+        id S241810AbiCJLro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 06:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241814AbiCJLrr (ORCPT
+        with ESMTP id S241794AbiCJLrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 06:47:47 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123B71480C4;
-        Thu, 10 Mar 2022 03:46:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646912806; x=1678448806;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jL7cdye1Ir+ZaUEJroIOEwZ3lyyxn9XxoM3wkpTy+Vo=;
-  b=ElCvh/utsCAPDMmuS2b7HsCurCDgM/EJapei4xnFBWLt1IOpEvbZHify
-   R1WprBvoTuojaceEBglv2sjWed8x49eGecr29d+XvoO6B4GsWXrSpNumg
-   vCY3ozj9AX36N0mw4LpWlzpQf8DfYx6ZY8GgXcYRl/XuAyMZw95BPPo2f
-   hDfiJW8yA7rM5EwyOLGCDzp9Hl1LfBXueJJtaDmDuppSepECg6tNBG9Q5
-   oH4CGn6ZqEOGBD0E9RZwx81Hr042yIIwx7ke0mtRDo6e0igQRsR5d+Ym7
-   Hw0BbIPLlQIa4wspAAbvljGKaBqH3Q0Sva2BtMwIDd/lC+b43q0QfChCN
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,170,1643698800"; 
-   d="scan'208";a="148756547"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 04:46:45 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+        Thu, 10 Mar 2022 06:47:37 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F73145AF9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:46:35 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KDnGH0lmszcb1m;
+        Thu, 10 Mar 2022 19:41:43 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 10 Mar 2022 04:46:44 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 04:46:41 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski@canonical.com>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH v2 3/3] dt-bindings: i2c: at91: Add SAMA7G5 compatible strings list
-Date:   Thu, 10 Mar 2022 13:45:53 +0200
-Message-ID: <20220310114553.184763-4-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220310114553.184763-1-sergiu.moga@microchip.com>
-References: <20220310114553.184763-1-sergiu.moga@microchip.com>
+ 15.1.2308.21; Thu, 10 Mar 2022 19:46:33 +0800
+Subject: Re: [PATCH 4/4] mm/memory-failure.c: fix potential VM_BUG_ON_PAGE in
+ split_huge_page_to_list
+To:     Yang Shi <shy828301@gmail.com>
+CC:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220228140245.24552-1-linmiaohe@huawei.com>
+ <20220228140245.24552-5-linmiaohe@huawei.com>
+ <20220304082804.GC3778609@hori.linux.bs1.fc.nec.co.jp>
+ <2311bee4-cc11-93fc-6992-6c327a150e3d@huawei.com>
+ <CAHbLzkrOfcJvv8Vy8jcKWc7QX=1Y9e=EW9+p78sp1xhac645-w@mail.gmail.com>
+ <e7f1977e-2f6a-cffa-a75f-9665a908ca21@huawei.com>
+ <CAHbLzkpOZTkvBECpKrOtSjV1ZVoDHnr0z33tFDka=_CZYq5JAQ@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <dc5fa8b3-4fa8-0e12-e4d2-f9b24fd2bf87@huawei.com>
+Date:   Thu, 10 Mar 2022 19:46:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <CAHbLzkpOZTkvBECpKrOtSjV1ZVoDHnr0z33tFDka=_CZYq5JAQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible strings list for SAMA7G5.
+On 2022/3/9 2:47, Yang Shi wrote:
+> On Tue, Mar 8, 2022 at 4:36 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> On 2022/3/8 3:53, Yang Shi wrote:
+>>> On Sun, Mar 6, 2022 at 11:07 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>>>
+>>>> On 2022/3/4 16:28, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>>>> On Mon, Feb 28, 2022 at 10:02:45PM +0800, Miaohe Lin wrote:
+>>>>>> The huge zero page could reach here and if we ever try to split it, the
+>>>>>> VM_BUG_ON_PAGE will be triggered in split_huge_page_to_list(). Also the
+>>>>>> non-lru compound movable pages could be taken for transhuge pages. Skip
+>>>>>> these pages by checking PageLRU because huge zero page isn't lru page as
+>>>>>> non-lru compound movable pages.
+>>>>>
+>>>>> It seems that memory_failure() also fails at get_any_page() with "hwpoison:
+>>>>> unhandlable page" message.
+>>>>>
+>>>>>   [16478.203474] page:00000000b6acdbd1 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1810b4
+>>>>>   [16478.206612] flags: 0x57ffffc0801000(reserved|hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
+>>>>>   [16478.209411] raw: 0057ffffc0801000 fffff11bc6042d08 fffff11bc6042d08 0000000000000000
+>>>>>   [16478.211921] raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+>>>>>   [16478.214473] page dumped because: hwpoison: unhandlable page
+>>>>>   [16478.216386] Memory failure: 0x1810b4: recovery action for unknown page: Ignored
+>>>>>
+>>>>> We can't handle errors on huge (or normal) zero page, so the current
+>>>>
+>>>> Sorry for confusing commit log again. I should have a coffee before I make this patch.
+>>>> Huge or normal zero page will fail at get_any_page because they're neither HWPoisonHandlable
+>>>> nor PageHuge.
+>>>>
+>>>>> behavior seems to me more suitable than "unsplit thp".
+>>>>>
+>>>>> Or if you have some producer to reach the following path with huge zero
+>>>>> page, could you share it?
+>>>>>
+>>>>
+>>>> What I mean is that non-lru movable compound page can reach here unexpected because __PageMovable(page)
+>>>> is handleable now. So get_any_page could succeed to grab the page refcnt. And since it's compound page,
+>>>> it will go through the split_huge_page_to_list because PageTransHuge checks PageHead(page) which can also
+>>>> be true for compound page. But this type of pages is unexpected for split_huge_page_to_list.
+>>>
+>>> Can we really handle non-LRU movable pages in memory failure
+>>> (uncorrectable errors)? Typically they are balloon, zsmalloc, etc.
+>>> Assuming we run into a base (4K) non-LRU movable page, we could reach
+>>> as far as identify_page_state(), it should not fall into any category
+>>> except me_unknown. So it seems we could just simply make it
+>>> unhandlable.
+>>
+>> There is the comment from memory_failure:
+>>         /*
+>>          * We ignore non-LRU pages for good reasons.
+>>          * - PG_locked is only well defined for LRU pages and a few others
+>>          * - to avoid races with __SetPageLocked()
+>>          * - to avoid races with __SetPageSlab*() (and more non-atomic ops)
+>>          * The check (unnecessarily) ignores LRU pages being isolated and
+>>          * walked by the page reclaim code, however that's not a big loss.
+>>          */
+>>
+>> So we could not handle non-LRU movable pages.
+>>
+>> What do you mean is something like below?
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 5444a8ef4867..d80dbe0f20b6 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1784,6 +1784,13 @@ int memory_failure(unsigned long pfn, int flags)
+>>                 }
+>>         }
+>>
+>> +       if (__PageMovable(hpage)) {
+>> +               put_page(p);
+>> +               action_result(pfn, MF_MSG_MOVALBE_PAGE, MF_IGNORED);
+>> +               res = -EBUSY;
+>> +               goto unlock_mutex;
+>> +       }
+>> +
+>>         if (PageTransHuge(hpage)) {
+>>                 /*
+>>                  * The flag must be set after the refcount is bumped
+>>
+>>
+>> i.e. Simply make non-LRU movable pages unhandlable ?
+> 
 
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
----
- .../bindings/i2c/atmel,at91sam-i2c.yaml       | 26 ++++++++++++-------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+I think about the below code more carefully and I found that this will make
+hwpoison_filter can't handle the non-LRU movable pages now. Because non-LRU
+movable pages return early now and thus can't reach the hwpoison_filter. This
+results in a inconsistent behavior with previous one. So I think the origin
+fixup of this patch is more suitable. What do you think?
 
-diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-index a64b7d0ce6bf..ea2303c0e143 100644
---- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-@@ -12,16 +12,21 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - atmel,at91rm9200-i2c
--      - atmel,at91sam9261-i2c
--      - atmel,at91sam9260-i2c
--      - atmel,at91sam9g20-i2c
--      - atmel,at91sam9g10-i2c
--      - atmel,at91sam9x5-i2c
--      - atmel,sama5d4-i2c
--      - atmel,sama5d2-i2c
--      - microchip,sam9x60-i2c
-+    oneOf:
-+      - items:
-+          - enum:
-+              - atmel,at91rm9200-i2c
-+              - atmel,at91sam9261-i2c
-+              - atmel,at91sam9260-i2c
-+              - atmel,at91sam9g20-i2c
-+              - atmel,at91sam9g10-i2c
-+              - atmel,at91sam9x5-i2c
-+              - atmel,sama5d4-i2c
-+              - atmel,sama5d2-i2c
-+              - microchip,sam9x60-i2c
-+      - items:
-+          - const: microchip,sama7g5-i2c
-+          - const: microchip,sam9x60-i2c
- 
-   reg:
-     maxItems: 1
-@@ -79,6 +84,7 @@ allOf:
-               - atmel,sama5d4-i2c
-               - atmel,sama5d2-i2c
-               - microchip,sam9x60-i2c
-+              - microchip,sama7g5-i2c
-     then:
-       properties:
-         i2c-sda-hold-time-ns:
--- 
-2.25.1
+Thanks.
+
+> I'd prefer this personally. Something like the below (compile test only):
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 5444a8ef4867..789e40909ade 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1176,12 +1176,18 @@ void ClearPageHWPoisonTakenOff(struct page *page)
+>   * does not return true for hugetlb or device memory pages, so it's assumed
+>   * to be called only in the context where we never have such pages.
+>   */
+> -static inline bool HWPoisonHandlable(struct page *page)
+> +static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
+>  {
+> - return PageLRU(page) || __PageMovable(page) || is_free_buddy_page(page);
+> + bool movable = false;
+> +
+> + /* Soft offline could mirgate non-LRU movable pages */
+> + if ((flags & MF_SOFT_OFFLINE) && __PageMovable(page))
+> + movable = true;
+> +
+> + return movable || PageLRU(page) || is_free_buddy_page(page);
+>  }
+> 
+> -static int __get_hwpoison_page(struct page *page)
+> +static int __get_hwpoison_page(struct page *page, unsigned long flags)
+>  {
+>   struct page *head = compound_head(page);
+>   int ret = 0;
+> @@ -1196,7 +1202,7 @@ static int __get_hwpoison_page(struct page *page)
+>   * for any unsupported type of page in order to reduce the risk of
+>   * unexpected races caused by taking a page refcount.
+>   */
+> - if (!HWPoisonHandlable(head))
+> + if (!HWPoisonHandlable(head, flags))
+>   return -EBUSY;
+> 
+>   if (get_page_unless_zero(head)) {
+> @@ -1221,7 +1227,7 @@ static int get_any_page(struct page *p, unsigned
+> long flags)
+> 
+>  try_again:
+>   if (!count_increased) {
+> - ret = __get_hwpoison_page(p);
+> + ret = __get_hwpoison_page(p, flags);
+>   if (!ret) {
+>   if (page_count(p)) {
+>   /* We raced with an allocation, retry. */
+> @@ -1249,7 +1255,7 @@ static int get_any_page(struct page *p, unsigned
+> long flags)
+>   }
+>   }
+> 
+> - if (PageHuge(p) || HWPoisonHandlable(p)) {
+> + if (PageHuge(p) || HWPoisonHandlable(p, flags)) {
+>   ret = 1;
+>   } else {
+>   /*
+> 
+>>
+>>>
+>>> But it should be handlable for soft-offline since it could be migrated.
+>>>
+>>
+>> Yes, non-LRU movable pages can be simply migrated.
+>>
+>> Many thanks.
+>>
+>>>
+>>>> Does this make sense for you? Thanks Naoya.
+>>>>
+>>>>> Thanks,
+>>>>> Naoya Horiguchi
+>>>>>
+>>>>>>
+>>>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>>>> ---
+>>>>>>  mm/memory-failure.c | 14 ++++++++++++++
+>>>>>>  1 file changed, 14 insertions(+)
+>>>>>>
+>>>>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>>>>> index 23bfd809dc8c..ac6492e36978 100644
+>>>>>> --- a/mm/memory-failure.c
+>>>>>> +++ b/mm/memory-failure.c
+>>>>>> @@ -1792,6 +1792,20 @@ int memory_failure(unsigned long pfn, int flags)
+>>>>>>      }
+>>>>>>
+>>>>>>      if (PageTransHuge(hpage)) {
+>>>>>> +            /*
+>>>>>> +             * The non-lru compound movable pages could be taken for
+>>>>>> +             * transhuge pages. Also huge zero page could reach here
+>>>>>> +             * and if we ever try to split it, the VM_BUG_ON_PAGE will
+>>>>>> +             * be triggered in split_huge_page_to_list(). Skip these
+>>>>>> +             * pages by checking PageLRU because huge zero page isn't
+>>>>>> +             * lru page as non-lru compound movable pages.
+>>>>>> +             */
+>>>>>> +            if (!PageLRU(hpage)) {
+>>>>>> +                    put_page(p);
+>>>>>> +                    action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
+>>>>>> +                    res = -EBUSY;
+>>>>>> +                    goto unlock_mutex;
+>>>>>> +            }
+>>>>>>              /*
+>>>>>>               * The flag must be set after the refcount is bumped
+>>>>>>               * otherwise it may race with THP split.
+>>>>>> --
+>>>>>> 2.23.0
+>>>>
+>>>>
+>>> .
+>>>
+>>
+> .
+> 
 

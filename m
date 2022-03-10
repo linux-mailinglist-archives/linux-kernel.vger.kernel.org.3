@@ -2,216 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8601C4D3E49
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF314D3E4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbiCJAk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S239030AbiCJAlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbiCJAk5 (ORCPT
+        with ESMTP id S233452AbiCJAlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:40:57 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075ED124C1F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646872797; x=1678408797;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=X2z+zSN/i5yI6VGeE+HYqJx2M+Kg5IqbBL0UPebJfPU=;
-  b=KCbAbYfCA+11YRaJYwuzHkU2X99b3qn+eU/6yv7q3YQom6yVWfyix0Fr
-   T5Vbh83hNXNGXzCHhBQH3eoW0Pyyf7H028L5ZtMvqJl8DIp8bhhyx1BNI
-   B+VYctEIGD9eiBRyAMru6NnWEc2IRaALF390TUpQ1/OXCUzd/bw14KYZ+
-   AKG93NVzHtiyvCdbtwcCtJzOjGTjwrYy7DohMl+maN1TrRKjkuJF5R9pr
-   UGYd+c21f4NBsG7ZCplfzZbbRm2/wRcInZZCUHPO5tcDicb8/NEotGwEH
-   7nTiHYh6lAkzegmfh0mtcga+iqvTLqZmnav2qfaF9bnvd4ETS2R1YfJl8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="341554244"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="341554244"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 16:39:57 -0800
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="513758433"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 16:39:55 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: Only re-generate demotion targets when a numa node
- changes its N_CPU state
-References: <20220309144644.4278-1-osalvador@suse.de>
-Date:   Thu, 10 Mar 2022 08:39:53 +0800
-In-Reply-To: <20220309144644.4278-1-osalvador@suse.de> (Oscar Salvador's
-        message of "Wed, 9 Mar 2022 15:46:44 +0100")
-Message-ID: <87bkyefxnq.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 9 Mar 2022 19:41:13 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCB3125509;
+        Wed,  9 Mar 2022 16:40:12 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id b14so2700090ilf.6;
+        Wed, 09 Mar 2022 16:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kOP21lVTC8PZ57e8vEaYwg6ok+9iVoEinHqtVbKE71Q=;
+        b=eHXNPriCstFRO+tZCqsJTc7Av8xH5Hb+n1LqaKavtucMwqeQqVR/hBDQQVL2CwnSXE
+         mmAthy0q5l6tGPr8kXS7uUr/CMgkUGuTQHEbv3/E84k6MEpKFhSNddmriswvU8+Jk/nb
+         uYgtLDuHmnfoEGwPrmCtwWCrPRMOfFLFAETx8tvyjwYwSW/uCAlSQXt3sGLODLoXoKcu
+         wrvAtJxWmVzR0IHM9n3PpyTKDB+XF0nB4XzCm6hgYHE6mcoJGiK1f6YlnjmUHGU/1VCP
+         TM9ULxjrMJJYI2RBzFqQkYbDio0zLoyXoEYQ/v6GElrNEs3T4tS3mL9yObn0A3v97dfX
+         ZB5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kOP21lVTC8PZ57e8vEaYwg6ok+9iVoEinHqtVbKE71Q=;
+        b=LZyJigTzKVHUq0YSwL/jJdU9tY8XqNrd9dlKMAMUyQ83sVrtOv75nrtxMhLwfvri1n
+         ym9YYdM21QsacitqrNnQ3jjhT1pcZME0JZmG4EOy0SUmwu9/6H9QkdFy5WT4pgABrAod
+         mK/RA+R2bsowB3zG0cBo/W1F6P4rfNOZwrY3/5hIzM4OtwhjLjaApFwZaXOTdb/ye5YT
+         ISBmkIv7Vza3cZ+M8p2gpNO4GonjRx2BWyMVX1B3g9f1h+bSWDdRe061zdwFuiOPDeqm
+         APdyxJJ6qw3J4KuGUMhao/LbdB4n6nFWwBCtVRu/RQgtLBHw9Aq7qn8ZPXtoHLad5yuJ
+         k+eg==
+X-Gm-Message-State: AOAM531Sm3VcYNEBwIrwDzT8ZvNWyMuUhzdx0MjLbhp0exWDXTkCiEIY
+        bYFG8A23jgftK9vt4Hzr5UjP9Chwp2gH1iB78Bg=
+X-Google-Smtp-Source: ABdhPJyTkuzFPF5nGtNxW9+QuyGtz9QKPxtgLa32GgiE4RFi7ICTj/LPmYgL2A6XJdsY01mHETu6Wcj6xqFAalb5QMQ=
+X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
+ y6-20020a926406000000b002bbf1dee13emr1592850ilb.305.1646872812029; Wed, 09
+ Mar 2022 16:40:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <164673771096.1984170.8155877393151850116.stgit@devnote2>
+ <164673784786.1984170.244480726272055433.stgit@devnote2> <20220310091745.73580bd6314803cfbf21312d@kernel.org>
+In-Reply-To: <20220310091745.73580bd6314803cfbf21312d@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 9 Mar 2022 16:40:00 -0800
+Message-ID: <CAEf4BzavZUn2Y40MjyGg_gkZqYQet_L0sWAJGOSgt_QVrtf21Q@mail.gmail.com>
+Subject: Re: [PATCH v10 12/12] fprobe: Add a selftest for fprobe
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oscar Salvador <osalvador@suse.de> writes:
-
-> Abhishek reported that after patch [1], hotplug operations are
-> taking ~double the expected time. [2]
+On Wed, Mar 9, 2022 at 4:17 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 >
-> The reason behind is that the CPU callbacks that migrate_on_reclaim_init()
-> sets always call set_migration_target_nodes() whenever a CPU is brought
-> up/down.
-> But we only care about numa nodes going from having cpus to become
-> cpuless, and vice versa, as that influences the demotion_target order.
+> Hi,
 >
-> We do already have two CPU callbacks (vmstat_cpu_online() and vmstat_cpu_dead())
-> that check exactly that, so get rid of the CPU callbacks in
-> migrate_on_reclaim_init() and only call set_migration_target_nodes() from
-> vmstat_cpu_{dead,online}() whenever a numa node change its N_CPU state.
+> On Tue,  8 Mar 2022 20:10:48 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 >
-> [1] https://lore.kernel.org/linux-mm/20210721063926.3024591-2-ying.huang@intel.com/
-> [2] https://lore.kernel.org/linux-mm/eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com/
+> > Add a KUnit based selftest for fprobe interface.
+> >
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  Changes in v9:
+> >   - Rename fprobe_target* to fprobe_selftest_target*.
+> >   - Find the correct expected ip by ftrace_location_range().
+> >   - Since the ftrace_location_range() is not exposed to module, make
+> >     this test only for embedded.
+> >   - Add entry only test.
+> >   - Reset the fprobe structure before reuse it.
+> > ---
+> >  lib/Kconfig.debug |   12 ++++
+> >  lib/Makefile      |    2 +
+> >  lib/test_fprobe.c |  174 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 188 insertions(+)
+> >  create mode 100644 lib/test_fprobe.c
+> >
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 14b89aa37c5c..ffc469a12afc 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -2100,6 +2100,18 @@ config KPROBES_SANITY_TEST
+> >
+> >         Say N if you are unsure.
+> >
+> > +config FPROBE_SANITY_TEST
+> > +     bool "Self test for fprobe"
+> > +     depends on DEBUG_KERNEL
+> > +     depends on FPROBE
+> > +     depends on KUNIT
 >
-> Reported-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
-> Signed-off-by: Oscar Salvador <osalvador@suse.de>
-> ---
-> I think there is further room for improvement like should we call in to
-> set_migration_target_nodes() when demotion is disabled via sysctl?
-> I will have a look into that, but let us go with this quick fix for now.
-> Also, I am not really strong about the Fixes tag, but it can be added
-> if you think it makes sense.
-> ---
->  include/linux/migrate.h |  5 +++++
->  mm/migrate.c            | 36 +-----------------------------------
->  mm/vmstat.c             | 10 +++++++++-
->  3 files changed, 15 insertions(+), 36 deletions(-)
+> Hmm, this caused a build error with allmodconfig because KUNIT=m but FPROBE_SANITY_TEST=y.
+> Let me fix this issue.
+
+Please base on top of bpf-next and add [PATCH v11 bpf-next] to subject.
+
 >
-> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-> index db96e10eb8da..c64fe2923fb0 100644
-> --- a/include/linux/migrate.h
-> +++ b/include/linux/migrate.h
-> @@ -48,6 +48,11 @@ int folio_migrate_mapping(struct address_space *mapping,
->  		struct folio *newfolio, struct folio *folio, int extra_count);
->  
->  extern bool numa_demotion_enabled;
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +extern void set_migration_target_nodes(void);
-> +#else
-> +static inline void set_migration_target_nodes() {}
-> +#endif
->  #else
->  
->  static inline void putback_movable_pages(struct list_head *l) {}
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index c7da064b4781..7847e4de01d7 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -3190,7 +3190,7 @@ static void __set_migration_target_nodes(void)
->  /*
->   * For callers that do not hold get_online_mems() already.
->   */
-> -static void set_migration_target_nodes(void)
-> +void set_migration_target_nodes(void)
->  {
->  	get_online_mems();
->  	__set_migration_target_nodes();
-> @@ -3254,47 +3254,13 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
->  	return notifier_from_errno(0);
->  }
->  
-> -/*
-> - * React to hotplug events that might affect the migration targets
-> - * like events that online or offline NUMA nodes.
-> - *
-> - * The ordering is also currently dependent on which nodes have
-> - * CPUs.  That means we need CPU on/offline notification too.
-> - */
-> -static int migration_online_cpu(unsigned int cpu)
-> -{
-> -	set_migration_target_nodes();
-> -	return 0;
-> -}
-> -
-> -static int migration_offline_cpu(unsigned int cpu)
-> -{
-> -	set_migration_target_nodes();
-> -	return 0;
-> -}
-> -
->  static int __init migrate_on_reclaim_init(void)
->  {
-> -	int ret;
-> -
->  	node_demotion = kmalloc_array(nr_node_ids,
->  				      sizeof(struct demotion_nodes),
->  				      GFP_KERNEL);
->  	WARN_ON(!node_demotion);
->  
-> -	ret = cpuhp_setup_state_nocalls(CPUHP_MM_DEMOTION_DEAD, "mm/demotion:offline",
-> -					NULL, migration_offline_cpu);
-> -	/*
-> -	 * In the unlikely case that this fails, the automatic
-> -	 * migration targets may become suboptimal for nodes
-> -	 * where N_CPU changes.  With such a small impact in a
-> -	 * rare case, do not bother trying to do anything special.
-> -	 */
-> -	WARN_ON(ret < 0);
-> -	ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
-> -				migration_online_cpu, NULL);
-> -	WARN_ON(ret < 0);
-> -
-
-We need to call set_migration_target_nodes() during system boot
-somewhere, either here or in init_mm_internals().
-
-Best Regards,
-Huang, Ying
-
-
->  	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
->  	return 0;
->  }
-> diff --git a/mm/vmstat.c b/mm/vmstat.c
-> index 4057372745d0..0529a83c8f89 100644
-> --- a/mm/vmstat.c
-> +++ b/mm/vmstat.c
-> @@ -28,6 +28,7 @@
->  #include <linux/mm_inline.h>
->  #include <linux/page_ext.h>
->  #include <linux/page_owner.h>
-> +#include <linux/migrate.h>
->  
->  #include "internal.h"
->  
-> @@ -2043,7 +2044,12 @@ static void __init init_cpu_node_state(void)
->  static int vmstat_cpu_online(unsigned int cpu)
->  {
->  	refresh_zone_stat_thresholds();
-> -	node_set_state(cpu_to_node(cpu), N_CPU);
-> +
-> +	if (!node_state(cpu_to_node(cpu), N_CPU)) {
-> +		node_set_state(cpu_to_node(cpu), N_CPU);
-> +		set_migration_target_nodes();
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -2066,6 +2072,8 @@ static int vmstat_cpu_dead(unsigned int cpu)
->  		return 0;
->  
->  	node_clear_state(node, N_CPU);
-> +	set_migration_target_nodes();
-> +
->  	return 0;
->  }
+> Thank you,
+>
+> > +     help
+> > +       This option will enable testing the fprobe when the system boot.
+> > +       A series of tests are made to verify that the fprobe is functioning
+> > +       properly.
+> > +
+> > +       Say N if you are unsure.
+> > +
+> >  config BACKTRACE_SELF_TEST
+> >       tristate "Self test for the backtrace code"
+> >       depends on DEBUG_KERNEL
+> > diff --git a/lib/Makefile b/lib/Makefile
+> > index 300f569c626b..154008764b16 100644
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -103,6 +103,8 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+> >  obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
+> >  obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+> >  obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
+> > +CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
+> > +obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
+> >  #
+> >  # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
+> >  # off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
+> > diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
+> > new file mode 100644
+> > index 000000000000..ed70637a2ffa
+> > --- /dev/null
+> > +++ b/lib/test_fprobe.c
+> > @@ -0,0 +1,174 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * test_fprobe.c - simple sanity test for fprobe
+> > + */
+> > +
+> > +#include <linux/kernel.h>
+> > +#include <linux/fprobe.h>
+> > +#include <linux/random.h>
+> > +#include <kunit/test.h>
+> > +
+> > +#define div_factor 3
+> > +
+> > +static struct kunit *current_test;
+> > +
+> > +static u32 rand1, entry_val, exit_val;
+> > +
+> > +/* Use indirect calls to avoid inlining the target functions */
+> > +static u32 (*target)(u32 value);
+> > +static u32 (*target2)(u32 value);
+> > +static unsigned long target_ip;
+> > +static unsigned long target2_ip;
+> > +
+> > +static noinline u32 fprobe_selftest_target(u32 value)
+> > +{
+> > +     return (value / div_factor);
+> > +}
+> > +
+> > +static noinline u32 fprobe_selftest_target2(u32 value)
+> > +{
+> > +     return (value / div_factor) + 1;
+> > +}
+> > +
+> > +static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
+> > +{
+> > +     KUNIT_EXPECT_FALSE(current_test, preemptible());
+> > +     /* This can be called on the fprobe_selftest_target and the fprobe_selftest_target2 */
+> > +     if (ip != target_ip)
+> > +             KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
+> > +     entry_val = (rand1 / div_factor);
+> > +}
+> > +
+> > +static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
+> > +{
+> > +     unsigned long ret = regs_return_value(regs);
+> > +
+> > +     KUNIT_EXPECT_FALSE(current_test, preemptible());
+> > +     if (ip != target_ip) {
+> > +             KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
+> > +             KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor) + 1);
+> > +     } else
+> > +             KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor));
+> > +     KUNIT_EXPECT_EQ(current_test, entry_val, (rand1 / div_factor));
+> > +     exit_val = entry_val + div_factor;
+> > +}
+> > +
+> > +/* Test entry only (no rethook) */
+> > +static void test_fprobe_entry(struct kunit *test)
+> > +{
+> > +     struct fprobe fp_entry = {
+> > +             .entry_handler = fp_entry_handler,
+> > +     };
+> > +
+> > +     current_test = test;
+> > +
+> > +     /* Before register, unregister should be failed. */
+> > +     KUNIT_EXPECT_NE(test, 0, unregister_fprobe(&fp_entry));
+> > +     KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp_entry, "fprobe_selftest_target*", NULL));
+> > +
+> > +     entry_val = 0;
+> > +     exit_val = 0;
+> > +     target(rand1);
+> > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > +     KUNIT_EXPECT_EQ(test, 0, exit_val);
+> > +
+> > +     entry_val = 0;
+> > +     exit_val = 0;
+> > +     target2(rand1);
+> > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > +     KUNIT_EXPECT_EQ(test, 0, exit_val);
+> > +
+> > +     KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp_entry));
+> > +}
+> > +
+> > +static void test_fprobe(struct kunit *test)
+> > +{
+> > +     struct fprobe fp = {
+> > +             .entry_handler = fp_entry_handler,
+> > +             .exit_handler = fp_exit_handler,
+> > +     };
+> > +
+> > +     current_test = test;
+> > +     KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp, "fprobe_selftest_target*", NULL));
+> > +
+> > +     entry_val = 0;
+> > +     exit_val = 0;
+> > +     target(rand1);
+> > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > +
+> > +     entry_val = 0;
+> > +     exit_val = 0;
+> > +     target2(rand1);
+> > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > +
+> > +     KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
+> > +}
+> > +
+> > +static void test_fprobe_syms(struct kunit *test)
+> > +{
+> > +     static const char *syms[] = {"fprobe_selftest_target", "fprobe_selftest_target2"};
+> > +     struct fprobe fp = {
+> > +             .entry_handler = fp_entry_handler,
+> > +             .exit_handler = fp_exit_handler,
+> > +     };
+> > +
+> > +     current_test = test;
+> > +     KUNIT_EXPECT_EQ(test, 0, register_fprobe_syms(&fp, syms, 2));
+> > +
+> > +     entry_val = 0;
+> > +     exit_val = 0;
+> > +     target(rand1);
+> > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > +
+> > +     entry_val = 0;
+> > +     exit_val = 0;
+> > +     target2(rand1);
+> > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > +
+> > +     KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
+> > +}
+> > +
+> > +static unsigned long get_ftrace_location(void *func)
+> > +{
+> > +     unsigned long size, addr = (unsigned long)func;
+> > +
+> > +     if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
+> > +             return 0;
+> > +
+> > +     return ftrace_location_range(addr, addr + size - 1);
+> > +}
+> > +
+> > +static int fprobe_test_init(struct kunit *test)
+> > +{
+> > +     do {
+> > +             rand1 = prandom_u32();
+> > +     } while (rand1 <= div_factor);
+> > +
+> > +     target = fprobe_selftest_target;
+> > +     target2 = fprobe_selftest_target2;
+> > +     target_ip = get_ftrace_location(target);
+> > +     target2_ip = get_ftrace_location(target2);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static struct kunit_case fprobe_testcases[] = {
+> > +     KUNIT_CASE(test_fprobe_entry),
+> > +     KUNIT_CASE(test_fprobe),
+> > +     KUNIT_CASE(test_fprobe_syms),
+> > +     {}
+> > +};
+> > +
+> > +static struct kunit_suite fprobe_test_suite = {
+> > +     .name = "fprobe_test",
+> > +     .init = fprobe_test_init,
+> > +     .test_cases = fprobe_testcases,
+> > +};
+> > +
+> > +kunit_test_suites(&fprobe_test_suite);
+> > +
+> > +MODULE_LICENSE("GPL");
+> >
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>

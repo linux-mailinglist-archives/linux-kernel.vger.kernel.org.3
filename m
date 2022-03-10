@@ -2,166 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8143C4D5267
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238314D5205
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244349AbiCJTDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
+        id S245728AbiCJTGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbiCJTD2 (ORCPT
+        with ESMTP id S239330AbiCJTGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:03:28 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E92BED
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:02:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AF1AF1F381;
-        Thu, 10 Mar 2022 19:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646938943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VvuxtOkRTYe6y27Po/1nErjm/dM9kXlHT4HNL9PVo00=;
-        b=h7pIh4eLaWzgkaI2p833yncJUhkX9aylvhTUlrji0Wa6KUgmBcDx5GsBivnV4CHgXyZJAJ
-        nN0QeKx4SW3t/3hxvKNXt2SEISGHrT58J29q3Glpc1uUwnduBhNW5T5JXXpocvg5bAvh1D
-        z2zfTxerc+h1Nmx+WDTF69G2lZGAebA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646938943;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VvuxtOkRTYe6y27Po/1nErjm/dM9kXlHT4HNL9PVo00=;
-        b=iuJ2YCVbYLpYcDF0VrQP3c/Ot3qB8OqqkPdpQBhTK8m1aknrovDZBmbMYf3tDQ5JbxC6QG
-        Uy+hW3T9oCDjloBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6086F13FA3;
-        Thu, 10 Mar 2022 19:02:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PbzeFT9LKmIXVAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 10 Mar 2022 19:02:23 +0000
-Message-ID: <3caec8f4-1bc8-bd52-4a36-5223b633704e@suse.de>
-Date:   Thu, 10 Mar 2022 20:02:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thu, 10 Mar 2022 14:06:04 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C915E141E3E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:05:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646939102; x=1678475102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WnFGNKbJzycKyV82fMk3LWMbBnyeS+s9105OQY/fMpc=;
+  b=jOQkeXeihZRAUZnmZfqgK1V1WJurN4yFWBixmEuw0+rTbe1LMZlp0ET1
+   P5qJNNihAAoDh5joEuiyi3Ks/Hagd/Zwtdp/rq+3En/Cv6vv2X3xSTqcH
+   ptrr73D5X/OiPeD+qtj2HDCGjkcO8+LyFLC/cjMdJilAWAtLApeYlL7Ce
+   Op2nPBAO80VezYpeBAk3hBXV2EYMUdldaFXMDzgfJ5iaG+eHh5IxQYfjK
+   fmWcvAnFRBXVTdsXXZ85lpKXPRdezRM8FR5+FY/cBCiuXDbmiNqQ3e/ur
+   rpa6eDobrcDHtDX0O8dysgH8wRusmB+sreBeSBEfuyo2opxM9UFM9Opy2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255081932"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="255081932"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 11:03:49 -0800
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="554794723"
+Received: from jdubrow-mobl.amr.corp.intel.com (HELO intel.com) ([10.255.39.9])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 11:03:46 -0800
+Date:   Thu, 10 Mar 2022 14:03:45 -0500
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Alexander Usyskin <alexander.usyskin@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>
-Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
- <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
- <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
- <c9b344ab-b674-d600-da13-94b329a9d46b@collabora.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <c9b344ab-b674-d600-da13-94b329a9d46b@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------NNe0wuk0PVOqaesrUKI5pL6A"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [Intel-gfx] [PATCH v10 4/5] mei: gsc: add runtime pm handlers
+Message-ID: <YipLkXkoZFFNuK3p@intel.com>
+References: <20220308163654.942820-1-alexander.usyskin@intel.com>
+ <20220308163654.942820-5-alexander.usyskin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308163654.942820-5-alexander.usyskin@intel.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------NNe0wuk0PVOqaesrUKI5pL6A
-Content-Type: multipart/mixed; boundary="------------jixjnh6q6q1yWxdpMDOQzT0K";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gert Wollny <gert.wollny@collabora.com>
-Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux-foundation.org,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3caec8f4-1bc8-bd52-4a36-5223b633704e@suse.de>
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
- <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
- <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
- <c9b344ab-b674-d600-da13-94b329a9d46b@collabora.com>
-In-Reply-To: <c9b344ab-b674-d600-da13-94b329a9d46b@collabora.com>
+On Tue, Mar 08, 2022 at 06:36:53PM +0200, Alexander Usyskin wrote:
+> From: Tomas Winkler <tomas.winkler@intel.com>
+> 
+> Implement runtime handlers for mei-gsc, to track
+> idle state of the device properly.
+> 
+> CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+> ---
+>  drivers/misc/mei/gsc-me.c | 67 ++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
+> index cf427f6fdec9..dac482ddab51 100644
+> --- a/drivers/misc/mei/gsc-me.c
+> +++ b/drivers/misc/mei/gsc-me.c
+> @@ -152,7 +152,72 @@ static int __maybe_unused mei_gsc_pm_resume(struct device *device)
+>  	return 0;
+>  }
+>  
+> -static SIMPLE_DEV_PM_OPS(mei_gsc_pm_ops, mei_gsc_pm_suspend, mei_gsc_pm_resume);
+> +static int __maybe_unused mei_gsc_pm_runtime_idle(struct device *device)
+> +{
+> +	struct mei_device *dev = dev_get_drvdata(device);
+> +
+> +	if (!dev)
+> +		return -ENODEV;
+> +	if (mei_write_is_idle(dev))
+> +		pm_runtime_autosuspend(device);
 
---------------jixjnh6q6q1yWxdpMDOQzT0K
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This is not needed. The _idle() callback is called right before the autosuspend.
+so you just need to return -EBUSY if not idle.
 
-SGkNCg0KQW0gMDkuMDMuMjIgdW0gMjM6MjUgc2NocmllYiBEbWl0cnkgT3NpcGVua286DQo+
-Pg0KPj4gVGhlIHJlYXNvbiBmb3IgdGhpcyB3b3JrIGlzIHRvIGtlZXAgR0VNIHNobWVtIHBh
-Z2VzIG1hcHBlZCBhbmQgYWxsb2NhdGVkDQo+PiBldmVuIHdoaWxlIHRoZSBCTyBpcyBuZWl0
-aGVyIG1hcHBlZCBub3IgcGlubmVkLsKgIEFzIGl0IGlzIG5vdywgR0VNIFNITUVNDQo+PiBj
-cmVhdGVzIGFuZCByZWxlYXNlcyBwYWdlcyBvbiBlYWNoIHBpbiBhbmQgdW5waW4sIGFuZCBt
-YXBzIGFuZCB1bm1hcHMNCj4+IG1lbW9yeSByYW5nZXMgb24gZWFjaCB2bWFwIGFuZCB2dW5t
-YXAuwqAgSXQncyBhbGwgd2FzdGVmdWwuIE9ubHkgdGhlDQo+PiBmaXJzdCBwaW4gYW5kIHZt
-YXAgY2FsbHMgc2hvdWxkIGVzdGFibGlzaCBwYWdlcyBhbmQgbWFwcGluZ3MgYW5kIG9ubHkN
-Cj4+IHRoZSBwdXJnZSBhbmQgZnJlZSBmdW5jdGlvbnMgc2hvdWxkIHJlbGVhc2UgdGhlbS4N
-Cj4gDQo+IEhtLCBhcmVuJ3QgbWFwcyBhbmQgcGlucyBhbHJlYWR5IHJlZmNvdW50ZWQ/DQoN
-ClRoZXkgYXJlLiBCdXQgZXZlbiB3aGVuIHRoZSByZWZjb3VudGVyIHJlYWNoZXMgMCBvbiBk
-ZXJlZiwgdGhlcmUncyBubyANCm5lZWQgdG8gcmVtb3ZlIHRoZSBtYXBwaW5nIG9yIGZyZWUg
-dGhlIG1lbW9yeSBwYWdlcy4gV2UgY2FuIGtlZXAgdGhlbSANCmFyb3VuZCBmb3IgdGhlIG5l
-eHQgcmVmIG9wZXJhdGlvbi4gIE9ubHkgdGhlIHNocmlua2VyJ3MgcHVyZ2Ugb3IgZnJlZWlu
-ZyANCnRoZSBvYmplY3QgaGFzIHRvIGRvIHN1Y2ggY2xlYW4tdXAgb3BlcmF0aW9ucy4gIFN1
-Y2ggYmVoYXZpb3IgaXMgDQpzdXBwb3J0ZWQgYnkgVFRNIGFuZCB3ZSBhbHJlYWR5IHVzZSBp
-dCBpbiBWUkFNIGhlbHBlcnMgYXMgd2VsbC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
-PiANCj4+IFRoZSBwYXRjaHNldCBhZGRzIG5ldyBoZWxwZXJzIGZvciBCTyBwdXJnaW5nIHRv
-IHN0cnVjdA0KPj4gZHJtX2dlbV9vYmplY3RfZnVuY3MuIFdpdGggdGhpcywgSSB0aGluayBp
-dCBtaWdodCBiZSBwb3NzaWJsZSB0byBoYXZlDQo+PiBvbmUgZ2xvYmFsIERSTSBzaHJpbmtl
-ciBhbmQgbGV0IGl0IGhhbmRsZSBhbGwgQk9zOyBpbmRlcGVuZGVudCBvZiBlYWNoDQo+PiBC
-TydzIG1lbW9yeSBtYW5hZ2VyLg0KPiANCj4gVGhhbmsgeW91LCBJJ2xsIGdpdmUgaXQgYSB0
-cnkuDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9w
-ZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4g
-NSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcp
-DQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+But also I'm missing the call to enable the autosuspend and set the delay.
 
---------------jixjnh6q6q1yWxdpMDOQzT0K--
+Is this flow really working and you are getting device suspended when not in use?
+(Maybe it is just my ignorance on other flow types here)
 
---------------NNe0wuk0PVOqaesrUKI5pL6A
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> +
+> +	return -EBUSY;
+> +}
+> +
+> +static int  __maybe_unused mei_gsc_pm_runtime_suspend(struct device *device)
+> +{
+> +	struct mei_device *dev = dev_get_drvdata(device);
+> +	struct mei_me_hw *hw;
+> +	int ret;
+> +
+> +	if (!dev)
+> +		return -ENODEV;
+> +
+> +	mutex_lock(&dev->device_lock);
+> +
+> +	if (mei_write_is_idle(dev)) {
+> +		hw = to_me_hw(dev);
+> +		hw->pg_state = MEI_PG_ON;
+> +		ret = 0;
+> +	} else {
+> +		ret = -EAGAIN;
+> +	}
 
------BEGIN PGP SIGNATURE-----
+probably not needed this here... but it would be good if you use
+the runtime_pm{get,put} to protect your write operations as well...
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIqSz4FAwAAAAAACgkQlh/E3EQov+At
-9g//Z9letBO6G3sE8aowjvZbpoZsrIyVdjoy+W6UDaqOrF3j938fYly4mcECyifSvmPTkt4gqyOf
-EBtirJ+muEGKtJhVGI384pw0yT86VYb0Avhv9y0Ev+zzoXbd+QSL4i7M12ne6P7/gbIpb/qMEtfV
-IRInAJ3VOKcYDAc/nveXusnJHRvghCqiyc6seLqWaZhtvSirTIrW4uihFd9N0Ol0Ix/WrT/EH2VO
-CP9AHptSWTGikCb/7lN9SvbeAZAbOKwLiYkldCuGzpydabmIXEE8R7dFSJPcrjZ9+bSftMZYWErs
-VYaXUZ3OcRRIAE4Y1GsvCBFyzfVtBCJH4QsajTa4Pu/U2Aa0obmKhtHlkNPIhMUAM60Uo50JtRut
-PhohOZXqLEE3Z4glpCzEgEarAY/nMm19cMU3TPyBt1PdjMWhpzn/gIwHz7JwlY4ki1QHn5WaY1Nx
-5//5GPSZtSSkSgPqKJOjTCv5gGyLOcvy+0DAGlH4AWncdhS79pjDtA+X5WEafy0YgB3aCApp+qnX
-HA4Rby5o7fOm+RdcLPvDWfwHLUHWPABbRrK+EyD0sTi0DIo/XCz2HMHeK1nJuSbbaDu0XshvM9CZ
-VcrCiaQDH8GTMhAvN0ZEiPIKBp1yRtOhVBXDwbkrHerz6KIjGLGicRn9O/APnd4K2yw8VhjH8+7b
-v7c=
-=7O5g
------END PGP SIGNATURE-----
-
---------------NNe0wuk0PVOqaesrUKI5pL6A--
+> +
+> +	mutex_unlock(&dev->device_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int __maybe_unused mei_gsc_pm_runtime_resume(struct device *device)
+> +{
+> +	struct mei_device *dev = dev_get_drvdata(device);
+> +	struct mei_me_hw *hw;
+> +	irqreturn_t irq_ret;
+> +
+> +	if (!dev)
+> +		return -ENODEV;
+> +
+> +	mutex_lock(&dev->device_lock);
+> +
+> +	hw = to_me_hw(dev);
+> +	hw->pg_state = MEI_PG_OFF;
+> +
+> +	mutex_unlock(&dev->device_lock);
+> +
+> +	irq_ret = mei_me_irq_thread_handler(1, dev);
+> +	if (irq_ret != IRQ_HANDLED)
+> +		dev_err(dev->dev, "thread handler fail %d\n", irq_ret);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops mei_gsc_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(mei_gsc_pm_suspend,
+> +				mei_gsc_pm_resume)
+> +	SET_RUNTIME_PM_OPS(mei_gsc_pm_runtime_suspend,
+> +			   mei_gsc_pm_runtime_resume,
+> +			   mei_gsc_pm_runtime_idle)
+> +};
+>  
+>  static const struct auxiliary_device_id mei_gsc_id_table[] = {
+>  	{
+> -- 
+> 2.32.0
+> 

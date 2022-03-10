@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62714D49A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C4D4D49D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343798AbiCJOkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S244153AbiCJOc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343933AbiCJOba (ORCPT
+        with ESMTP id S243799AbiCJO10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EDAEA74F;
-        Thu, 10 Mar 2022 06:28:48 -0800 (PST)
+        Thu, 10 Mar 2022 09:27:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488EFCFBB2;
+        Thu, 10 Mar 2022 06:22:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64B6B61C0A;
-        Thu, 10 Mar 2022 14:28:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC41C340E8;
-        Thu, 10 Mar 2022 14:28:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A523261CFB;
+        Thu, 10 Mar 2022 14:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C38C340EB;
+        Thu, 10 Mar 2022 14:22:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922527;
-        bh=YnxLeomZr+WCm3j3/G5Xk8FKG/OO3SIXhb//3Tp3bvQ=;
+        s=korg; t=1646922156;
+        bh=oVZchNMBYQehnyKeJxmujUSCkykKcKMWao8G0T/Rvsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G+eW0QO2bPR656P8Y+uRlJygyhH/nkTtfjA/3lLOTfWCOF0Gwyp4Cu/CseVI1vpDF
-         0DC2guGrM4llXW5/4Q+CGJTp3VCM4YP4iAA15RD5q+jdksfve4hnyzlbFBgKT1QYmp
-         Ii1U5XQrhXFyvdvDvtib0OCEFPTBnrGCU5AsBBgQ=
+        b=th9bkOcHKgeFdtuXSHa4K4ZifZiBJK2vB+hDGiuNGbUitP2zhaqxlE6TthmK82eWX
+         iUo5igi44zQOhkUTiAAU3rS0Q6rxgnT0++dqqh5sDQ6LM3Ks1BNruGlvTpjsNzE2Qe
+         iVs5LZxJWJyD2Tsw8QBXcClq0O6qZJX33fXS2iyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, lkp@intel.com,
-        Huang Pei <huangpei@loongson.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.15 01/58] slip: fix macro redefine warning
-Date:   Thu, 10 Mar 2022 15:18:50 +0100
-Message-Id: <20220310140813.027135161@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.19 24/33] xen/grant-table: add gnttab_try_end_foreign_access()
+Date:   Thu, 10 Mar 2022 15:18:51 +0100
+Message-Id: <20220310140808.454684169@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-References: <20220310140812.983088611@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,32 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huang Pei <huangpei@loongson.cn>
+From: Juergen Gross <jgross@suse.com>
 
-commit e5b40668e930979bd1e82c7ed7c9029db635f0e4 upstream.
+Commit 6b1775f26a2da2b05a6dc8ec2b5d14e9a4701a1a upstream.
 
-MIPS/IA64 define END as assembly function ending, which conflict
-with END definition in slip.h, just undef it at first
+Add a new grant table function gnttab_try_end_foreign_access(), which
+will remove and free a grant if it is not in use.
 
-Reported-by: lkp@intel.com
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Guenter Roeck <linux@roeck-us.net>
+Its main use case is to either free a grant if it is no longer in use,
+or to take some other action if it is still in use. This other action
+can be an error exit, or (e.g. in the case of blkfront persistent grant
+feature) some special handling.
+
+This is CVE-2022-23036, CVE-2022-23038 / part of XSA-396.
+
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/slip/slip.h |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/xen/grant-table.c |   14 ++++++++++++--
+ include/xen/grant_table.h |   12 ++++++++++++
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
---- a/drivers/net/slip/slip.h
-+++ b/drivers/net/slip/slip.h
-@@ -40,6 +40,8 @@
- 					   insmod -oslip_maxdev=nnn	*/
- #define SL_MTU		296		/* 296; I am used to 600- FvK	*/
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -436,11 +436,21 @@ static void gnttab_add_deferred(grant_re
+ 	       what, ref, page ? page_to_pfn(page) : -1);
+ }
  
-+/* some arch define END as assembly function ending, just undef it */
-+#undef	END
- /* SLIP protocol characters. */
- #define END             0300		/* indicates end of frame	*/
- #define ESC             0333		/* indicates byte stuffing	*/
++int gnttab_try_end_foreign_access(grant_ref_t ref)
++{
++	int ret = _gnttab_end_foreign_access_ref(ref, 0);
++
++	if (ret)
++		put_free_entry(ref);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(gnttab_try_end_foreign_access);
++
+ void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
+ 			       unsigned long page)
+ {
+-	if (gnttab_end_foreign_access_ref(ref, readonly)) {
+-		put_free_entry(ref);
++	if (gnttab_try_end_foreign_access(ref)) {
+ 		if (page != 0)
+ 			put_page(virt_to_page(page));
+ 	} else
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -97,10 +97,22 @@ int gnttab_end_foreign_access_ref(grant_
+  * access has been ended, free the given page too.  Access will be ended
+  * immediately iff the grant entry is not in use, otherwise it will happen
+  * some time later.  page may be 0, in which case no freeing will occur.
++ * Note that the granted page might still be accessed (read or write) by the
++ * other side after gnttab_end_foreign_access() returns, so even if page was
++ * specified as 0 it is not allowed to just reuse the page for other
++ * purposes immediately.
+  */
+ void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
+ 			       unsigned long page);
+ 
++/*
++ * End access through the given grant reference, iff the grant entry is
++ * no longer in use.  In case of success ending foreign access, the
++ * grant reference is deallocated.
++ * Return 1 if the grant entry was freed, 0 if it is still in use.
++ */
++int gnttab_try_end_foreign_access(grant_ref_t ref);
++
+ int gnttab_grant_foreign_transfer(domid_t domid, unsigned long pfn);
+ 
+ unsigned long gnttab_end_foreign_transfer_ref(grant_ref_t ref);
 
 

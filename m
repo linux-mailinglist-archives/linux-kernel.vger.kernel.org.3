@@ -2,142 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37124D4245
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5044D4247
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240236AbiCJINw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S240240AbiCJIPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239430AbiCJINs (ORCPT
+        with ESMTP id S235329AbiCJIPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:13:48 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2118.outbound.protection.outlook.com [40.107.255.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382923DDC0;
-        Thu, 10 Mar 2022 00:12:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gIy6MMj9Uu36UQ1dhW8ZQhSxECy6wFxR5CgZ8+esXlWmVSRysyNQIwjPEUwDKdJ+MRs3/qRrjs4iAiILGv8FdV5iZTlCWHvCGYDfCabb9BI5PMd21iSnm8VYTf5bs+pNd1Bt0PT9kGyLg1M+P7FCy5lAopShoFpTPjaWUq6RMA8P35hJ5SjHWJESY6Z7SQEpHUwLVVU3/0X3xSIpdy8jWmrk4nro/Eul9IS6dF20gJIhfkJM8N22xs4aHcG+lM0782lb0/mjFy22GLKPXjgEnzBGa9Ckok1QpJWjBXE2HB3dzWZW1BOqNBKxxMmtyaU/IzrHwTVLJh97QkxPBJGklQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Ig3ROKFsl8gYRkCLhDER0HakxcsI2xxSsPM9iiFmYk=;
- b=f6DdkNNxoUf3gCkqdBijE85Ye2jF6PfoEZiEpxrUvjaRtvd/t++JWCBysjUfxFEwQ5CjNQfgVPAqYMx5ml832NbVZlOYVEwXTMAoi7UAYTRTXFUo2xFEEw1zMlgzkrUQ4rV5jpNQ93ZEVKe1nijfaM/G4mQ0mjPjcykoInzaxkiDGNqJlVrpf2ezG1r+mgE7gBf2OpKitO5gDptZvw25ReNlY31NJBZS5TPS35sViNxhhS+cd9KR/XSHr5K37Cswf6bCUPXTuqOkX3rzSsCMN0dt4cGQbyQQ1LBvag5lTTH6EGqZ8xq273OYTmRGXuBm6XQpGlU1U2HOnKxXj7EjnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Ig3ROKFsl8gYRkCLhDER0HakxcsI2xxSsPM9iiFmYk=;
- b=itY4gpU4ZfcdRIe/cvzR832ogguhpJLDJ2ERbRt7OEOAeYu509N1AmkJpoM2PKJPwUZrx7eKdL8Lm2XwUh8XIszFR+62cNpuA6s0iKqpzzRwvDklfJYaxLdkTJ7jiBg8gJSKLvzEoJNpmMH9OdzGulcFmnJo/6UODcIhSLK7B58=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by HK0PR06MB2084.apcprd06.prod.outlook.com (2603:1096:203:44::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Thu, 10 Mar
- 2022 08:12:43 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
- 08:12:43 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Yihao Han <hanyihao@vivo.com>,
-        Michael Walle <michael@walle.cc>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-Subject: [PATCH] net: ethernet: ezchip: fix platform_get_irq.cocci warning
-Date:   Thu, 10 Mar 2022 00:12:19 -0800
-Message-Id: <20220310081230.13033-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR03CA0109.apcprd03.prod.outlook.com
- (2603:1096:203:b0::25) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        Thu, 10 Mar 2022 03:15:43 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAF23DDC0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:14:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646900082; x=1678436082;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DQpLRL+t7gIBZp5H5cqRKxXL5RtnKEURvHaY1Fda1rU=;
+  b=Z4XcZs3yYV+R1C3g3XO5pjjbNb/L4Q6VNqrOSpR0SUhVZadyzPOFBMv3
+   fD4FsbOuPIOKsmqLMBFoBc9PyBpAHSgwTktlrSYG0OndDh5MwEQhuNLW7
+   +gJIkmqjeE08IoleaME4h9MeYrKkYnhrm2V2tvaOiOYeGaHPyeqWMnWFl
+   JUGlM0l25UeL8Sz4F28SWUfutQd3VbsrQ27ouQFdddVe7/wcl2JQwJT1G
+   eMBXFLeBQrCCpFbKoHQyySnnszFxusBkHR2PYGCtq63bTYjOKrYeDOM5H
+   M4AsJZlX3+RtJgPcS0qa5QDZ0RCm6tZ6ScrpfJJMoSUCtZSzYGt0vjYvI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255377022"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="255377022"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 00:14:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="642467634"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Mar 2022 00:14:41 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSDwW-0004by-DF; Thu, 10 Mar 2022 08:14:40 +0000
+Date:   Thu, 10 Mar 2022 16:14:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     lijianzhong <lijianzhong@xiaomi.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10
+ 2257/9999] kernel/sched/fair.c:4424:6: warning: no previous prototype for
+ 'set_next_entity'
+Message-ID: <202203101619.QCheEDyN-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8cbaab6d-eb27-4a6a-3487-08da026dc088
-X-MS-TrafficTypeDiagnostic: HK0PR06MB2084:EE_
-X-Microsoft-Antispam-PRVS: <HK0PR06MB208404B9112EE15DF0013C87A20B9@HK0PR06MB2084.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ucv0KBhhz/o1Nmn9dhfnnkqTprUrdSPxE6jbAopixVfzFbeiWXV4HCUUQ8XjM3NsJQq3pC2i+c9ZwaMUO6Pv4MkAmC18Rj/yrfAPLOEnDQ40agBQgX+GoV0mLOG4ytMfLaCXHQL+cg9TlgrOExPUmqtseBBCHDFy8Hj5mToryEPykTWbX7AmSAnuW31Halp/DwymXM/MBpke/YVvvrKWUjlBAdHTr0JkAsRaxHqu/uhYJry1cyJpyVJ0nZqyJJRZo9RIC3nc6Fn6nQ1CZn6+63r/hdCMBEm5ZDcjEgB/Xi67Ovws+R2kLslnuJMRu7TEfByvsUqcmB68wSqf/gFz4zl4prQDafh4iovATM1KGVuFzJhkGUqw0CnJwsdqKKiSLf8sE7sXcAoIE7bTVQiXYpbSDFscUkNdxEBMaBvgqw53BAUoJosj4s6edAsAe6XMObzutbL6TBChh1B57rCUg96QNZqvrDVqgcKXSekbanV8tr3Tce4Jcc6c4jRXJyRWiBST/5e6SqeaYungzzqLPpI9TKj1xWVYTaEaCxBoJofnCpJk4S9gh6TQsjfAKM4QOa8hA2XWpTPL03TI6NdEvUEWQeEgZBg0bHJ1o9BWgqTgfnxhoCcLpU9HZAzR8bavxu17gS1cAYJT4mVU1vUfwf/xO3Zi8WV0/zBrCrinzvXjkDpW1U2L6Oomx9YOKRo3D/QhovpAGvZwxRWUXmKWGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(38350700002)(8936002)(316002)(86362001)(2616005)(186003)(26005)(107886003)(1076003)(2906002)(83380400001)(110136005)(36756003)(4744005)(6512007)(6506007)(6666004)(52116002)(8676002)(4326008)(66556008)(66476007)(66946007)(5660300002)(6486002)(508600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0LmklLEgfcr9GvQUuwkuI1H5ABLlaIxew3a3jrvYOzKtf7iccc6FKTaqJSDS?=
- =?us-ascii?Q?5GETLiJCIXump3ExmUkCJ728R4jqFwR0LogOuuNgqQGcxY2PJQiXQOVZft9n?=
- =?us-ascii?Q?rodOqs1pV0d9kHM6lAw0LvN9kv6XcTrJbhHAU5xY638x0x9w32MJqUaa2Skr?=
- =?us-ascii?Q?D7TUstyymY+BJVYbi9268YDWyP2RFy/JfNm3/yTns9tq22qVUYCkiO5CMNm4?=
- =?us-ascii?Q?H/09haahkEBbqdpYLF0nwcookqMEBy4goLl3XevCxbsx54pANEOZUOnRkMOX?=
- =?us-ascii?Q?e78tOloZtI++ghYBkctWFVg70kWD5VRHK6BsG+JqN2B85rQAciCO1CmoWd46?=
- =?us-ascii?Q?kW1m4qJdi3jlUvgNRZXX3cTCzeqr2F8HEKYO7liozvyGkckKEAoSN3Q1uq91?=
- =?us-ascii?Q?OU9NJL8fiPo0EDQ4VOOtpVQoPncbTJVA1phq8+zp48izSS08EARfpLM+Zi+H?=
- =?us-ascii?Q?kGMdrjCVcMVuocrMKp6V9ZmfuSR0pdouL5V9vb4p1DfkOpgKhXe1HqMcuPGN?=
- =?us-ascii?Q?2A5o90l/h9vwcAMGzDNxIMaEK1o39BKeA0u+HeJNZ74UyOS8uygb2brFRHQh?=
- =?us-ascii?Q?x51vyqgiXK9ICJGlYVTNgpbSLi89K2WZ4bpMrzTpiETr9urM9GU2k8sG1T0h?=
- =?us-ascii?Q?cx1/W9eMx41F4CuflPje0mhbXyGz5ZwqqAgpQSGwz1Rrwj341Hn2GKip3Pcw?=
- =?us-ascii?Q?WhjY3Yfz61nmVtws3zqXhD3n+4txX6CchfOu7aWmRR7HTExv1xZKi3IhNBO6?=
- =?us-ascii?Q?ogCNZFW8ectijUbSu09JWlSVte56xHZqMHuNvgiGoZ3q2LJ0EbowkxEfunNi?=
- =?us-ascii?Q?VdkQo4Lkt/sVDut0f0tQi5E2EnSPEjueWZbn7KlgqSP5+10EHio7NOR0SrB+?=
- =?us-ascii?Q?U+CJUtJMM4M0Aicr4c/pISTsM/KpederK0AtrLJRIJcf2kyaekMZTCSlguWT?=
- =?us-ascii?Q?xM6gPRRigEz9lxwSyhKnGUkGR6uzvCYtlJ8UXlDLqBLqGjHmIvNd9zO3ptAv?=
- =?us-ascii?Q?y69FBx/RBp35Iv5sJaDc9DD2qSpiToX3EJ4zDrFlzych37LzpNEMljgL/fM7?=
- =?us-ascii?Q?HyK3ma4+snPrUSqXhRPY3hyIiFL8oxg7zsWY/3UFlMTTCaNo+8jZqyeg9Wk6?=
- =?us-ascii?Q?34cDxUrhh3J6ziEwCYvIzOKVcl1R7YC0UCq1B1XV3dGwdRUbVnVCjlpbREFx?=
- =?us-ascii?Q?ScTHqild4PdETuVGbds1+taecqZ//t299Ylt8aohw7aeRV2m9rIxvUAzLTSE?=
- =?us-ascii?Q?07zjNtoG+lIAXqqm7x9BQ3RvUd5U8ZoUKQWoaxfjbrgh9SyEE0G/JIf/kXyc?=
- =?us-ascii?Q?wY4950yKs0kT4QZCTGMHGS3lFui0wYty0v5L3iiehgsY13Er8gRIkGKe5bc4?=
- =?us-ascii?Q?v7qp8qIbctDDDQr4VhGwgPkTPLPFE1oKas8Pmqqwp7aXFPcc/Mp+wTNvdDLd?=
- =?us-ascii?Q?3J2KL8vNojY6hl5J+Wk9DW3ss0q1omaBJOGl4ysWg5oIL/ayn/szexM0mo9u?=
- =?us-ascii?Q?rmSP46aOQ1cmUjNKJ28H9Nx5RvFrUndxCJJG4kIg10V/BtuUuIlWtu1MRchG?=
- =?us-ascii?Q?OHBfa9RHWLm+tkDU3sy2FvEFD5N7N6k5aPooTjMICurWLT7rC18uwEmiNwbv?=
- =?us-ascii?Q?2gfv7STe25KZ6eT3uB+iSPc=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cbaab6d-eb27-4a6a-3487-08da026dc088
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 08:12:43.2595
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Cyt4tRelXha+WPumoHyBwIR0A+emPM1Mgvcvs9H4dvTCQdKhuPUnvL6hXfvU+7aQgwdjVLcQ0k20b2WDp8qQcQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2084
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove dev_err() messages after platform_get_irq*() failures.
-platform_get_irq() already prints an error.
+Hi lijianzhong,
 
-Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+FYI, the error/warning still remains.
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10
+head:   786bcb11099e8926ac5b5270de844d01c394ab89
+commit: 54f66141a8834e27601fe594d68a97db01bb86b6 [2257/9999] ANDROID: sched: Add vendor hooks for sched.
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220310/202203101619.QCheEDyN-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/54f66141a8834e27601fe594d68a97db01bb86b6
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10
+        git checkout 54f66141a8834e27601fe594d68a97db01bb86b6
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/printk/ kernel/sched/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/sched/fair.c:4424:6: warning: no previous prototype for 'set_next_entity' [-Wmissing-prototypes]
+    4424 | void set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+         |      ^~~~~~~~~~~~~~~
+   kernel/sched/fair.c:5408:6: warning: no previous prototype for 'init_cfs_bandwidth' [-Wmissing-prototypes]
+    5408 | void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+         |      ^~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:11341:6: warning: no previous prototype for 'free_fair_sched_group' [-Wmissing-prototypes]
+   11341 | void free_fair_sched_group(struct task_group *tg) { }
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:11343:5: warning: no previous prototype for 'alloc_fair_sched_group' [-Wmissing-prototypes]
+   11343 | int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:11348:6: warning: no previous prototype for 'online_fair_sched_group' [-Wmissing-prototypes]
+   11348 | void online_fair_sched_group(struct task_group *tg) { }
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:11350:6: warning: no previous prototype for 'unregister_fair_sched_group' [-Wmissing-prototypes]
+   11350 | void unregister_fair_sched_group(struct task_group *tg) { }
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/set_next_entity +4424 kernel/sched/fair.c
+
+  4423	
+> 4424	void set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+  4425	{
+  4426		/* 'current' is not kept within the tree. */
+  4427		if (se->on_rq) {
+  4428			/*
+  4429			 * Any task has to be enqueued before it get to execute on
+  4430			 * a CPU. So account for the time it spent waiting on the
+  4431			 * runqueue.
+  4432			 */
+  4433			update_stats_wait_end(cfs_rq, se);
+  4434			__dequeue_entity(cfs_rq, se);
+  4435			update_load_avg(cfs_rq, se, UPDATE_TG);
+  4436		}
+  4437	
+  4438		update_stats_curr_start(cfs_rq, se);
+  4439		cfs_rq->curr = se;
+  4440	
+  4441		/*
+  4442		 * Track our maximum slice length, if the CPU's load is at
+  4443		 * least twice that of our own weight (i.e. dont track it
+  4444		 * when there are only lesser-weight tasks around):
+  4445		 */
+  4446		if (schedstat_enabled() &&
+  4447		    rq_of(cfs_rq)->cfs.load.weight >= 2*se->load.weight) {
+  4448			schedstat_set(se->statistics.slice_max,
+  4449				max((u64)schedstat_val(se->statistics.slice_max),
+  4450				    se->sum_exec_runtime - se->prev_sum_exec_runtime));
+  4451		}
+  4452	
+  4453		se->prev_sum_exec_runtime = se->sum_exec_runtime;
+  4454	}
+  4455	EXPORT_SYMBOL_GPL(set_next_entity);
+  4456	
+  4457	
+
 ---
- drivers/net/ethernet/ezchip/nps_enet.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/ezchip/nps_enet.c b/drivers/net/ethernet/ezchip/nps_enet.c
-index 323340826dab..69dbf950d451 100644
---- a/drivers/net/ethernet/ezchip/nps_enet.c
-+++ b/drivers/net/ethernet/ezchip/nps_enet.c
-@@ -608,7 +608,6 @@ static s32 nps_enet_probe(struct platform_device *pdev)
- 	/* Get IRQ number */
- 	priv->irq = platform_get_irq(pdev, 0);
- 	if (priv->irq < 0) {
--		dev_err(dev, "failed to retrieve <irq Rx-Tx> value from device tree\n");
- 		err = -ENODEV;
- 		goto out_netdev;
- 	}
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

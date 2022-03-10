@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9724E4D4A92
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6678D4D4B50
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243759AbiCJO1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S238595AbiCJOhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243726AbiCJOXM (ORCPT
+        with ESMTP id S245495AbiCJOad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:23:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8FB15696D;
-        Thu, 10 Mar 2022 06:21:11 -0800 (PST)
+        Thu, 10 Mar 2022 09:30:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A0C180D2B;
+        Thu, 10 Mar 2022 06:26:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D42F861CEE;
-        Thu, 10 Mar 2022 14:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2745C340E8;
-        Thu, 10 Mar 2022 14:21:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82CDA61CFB;
+        Thu, 10 Mar 2022 14:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859FAC340EB;
+        Thu, 10 Mar 2022 14:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922064;
-        bh=mFLGwyxL60zb3gvRg16qJDVO+v5CSOIO6jNpfVxbb6s=;
+        s=korg; t=1646922379;
+        bh=UcH8Zzvo0iQZ5Rax9GLIymn0QqKccpjDo791IEfgOr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PJAKjfVkjsZfZZiVuAOg3K3VrBA1x2fb3tN1yyeKlBuMI8sApwgYFyQbvDpVE33h1
-         CNf+iI/LnpD5AHQHwW3oYT1CFboOf3BpVZBmthFzv586zcb/mi7zdHEYzFDeYLa6c8
-         Op/9DolmISjWO0AckpvsytDb9PXN+Jg3Vb6cQYRs=
+        b=hSRFbNo+Vfezvzmok8C4n9rbcFIQ0qnX2K1sRmc9GEbAb0Pr7+33ZMKJgLiSfYVJM
+         1KwaPlXLT045XTcLTKGl2e3/aUj6JqE6rspjEuMvM9m0xajtO3Qz2dfL/JSbCCqUfn
+         NcD0AnO9YBydhl8S6GCaBuJXxfJTNOP3DnJnPGUs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.14 25/31] xen/netfront: dont use gnttab_query_foreign_access() for mapped status
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: [PATCH 5.10 18/58] arm64: Add Cortex-A510 CPU part definition
 Date:   Thu, 10 Mar 2022 15:18:38 +0100
-Message-Id: <20220310140808.274494842@linuxfoundation.org>
+Message-Id: <20220310140813.393834618@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
-References: <20220310140807.524313448@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Commit 31185df7e2b1d2fa1de4900247a12d7b9c7087eb upstream.
+commit 53960faf2b731dd2f9ed6e1334634b8ba6286850 upstream.
 
-It isn't enough to check whether a grant is still being in use by
-calling gnttab_query_foreign_access(), as a mapping could be realized
-by the other side just after having called that function.
+Add the CPU Partnumbers for the new Arm designs.
 
-In case the call was done in preparation of revoking a grant it is
-better to do so via gnttab_end_foreign_access_ref() and check the
-success of that operation instead.
-
-This is CVE-2022-23037 / part of XSA-396.
-
-Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Link: https://lore.kernel.org/r/1643120437-14352-2-git-send-email-anshuman.khandual@arm.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netfront.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/arm64/include/asm/cputype.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -414,14 +414,12 @@ static bool xennet_tx_buf_gc(struct netf
- 			queue->tx_link[id] = TX_LINK_NONE;
- 			skb = queue->tx_skbs[id];
- 			queue->tx_skbs[id] = NULL;
--			if (unlikely(gnttab_query_foreign_access(
--				queue->grant_tx_ref[id]) != 0)) {
-+			if (unlikely(!gnttab_end_foreign_access_ref(
-+				queue->grant_tx_ref[id], GNTMAP_readonly))) {
- 				dev_alert(dev,
- 					  "Grant still in use by backend domain\n");
- 				goto err;
- 			}
--			gnttab_end_foreign_access_ref(
--				queue->grant_tx_ref[id], GNTMAP_readonly);
- 			gnttab_release_grant_reference(
- 				&queue->gref_tx_head, queue->grant_tx_ref[id]);
- 			queue->grant_tx_ref[id] = GRANT_INVALID_REF;
+--- a/arch/arm64/include/asm/cputype.h
++++ b/arch/arm64/include/asm/cputype.h
+@@ -73,6 +73,7 @@
+ #define ARM_CPU_PART_CORTEX_A76		0xD0B
+ #define ARM_CPU_PART_NEOVERSE_N1	0xD0C
+ #define ARM_CPU_PART_CORTEX_A77		0xD0D
++#define ARM_CPU_PART_CORTEX_A510	0xD46
+ #define ARM_CPU_PART_CORTEX_A710	0xD47
+ #define ARM_CPU_PART_CORTEX_X2		0xD48
+ #define ARM_CPU_PART_NEOVERSE_N2	0xD49
+@@ -116,6 +117,7 @@
+ #define MIDR_CORTEX_A76	MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A76)
+ #define MIDR_NEOVERSE_N1 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_NEOVERSE_N1)
+ #define MIDR_CORTEX_A77	MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A77)
++#define MIDR_CORTEX_A510 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A510)
+ #define MIDR_CORTEX_A710 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A710)
+ #define MIDR_CORTEX_X2 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_X2)
+ #define MIDR_NEOVERSE_N2 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_NEOVERSE_N2)
 
 

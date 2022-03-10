@@ -2,550 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127164D5282
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CF74D5285
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240772AbiCJTri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S241800AbiCJTsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbiCJTrg (ORCPT
+        with ESMTP id S233157AbiCJTsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:47:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11B194AA9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:46:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80537B826EE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F61C340E9;
-        Thu, 10 Mar 2022 19:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646941591;
-        bh=2s5QZZ0URnoNPjXrjpRvFydP8QHY5Y5WWKuZfRwYKW4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=rMzW6exEz5iCT4eJklgFLz4kHh3xekc4fb6PHx2wOFh8gpaYcUk6xDir94kjMGTyh
-         EXk8XGVhpEPCP1d7I05gxuIAqgRDL2ccJ0+o+RAti/Oe95kte9sCDFWk8QUvG0JMnx
-         7Z1A/pIwrrBxdOHyTkoT6NxBxvn3cT3Q44jlFjYEuhRWkCfdISDDni317mJlTScjNU
-         HW+dm9NEzMg5JikyHhSRqgrK1VCPHIWDH42MO6rRMAnbfAAai6cT1EkSuchq4FYDAd
-         96BEkJo2mAALUo5jhCwgiqOq7ozIMwfS0m6fXMRixlJS/P/H87O/7UwdU330MP70JK
-         VB8LibnT76TYA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B59A65C0387; Thu, 10 Mar 2022 11:46:30 -0800 (PST)
-Date:   Thu, 10 Mar 2022 11:46:30 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 07/19] context_tracking: Take IRQ eqs entrypoints over RCU
-Message-ID: <20220310194630.GU4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220302154810.42308-1-frederic@kernel.org>
- <20220302154810.42308-8-frederic@kernel.org>
+        Thu, 10 Mar 2022 14:48:08 -0500
+Received: from esa5.hc3370-68.iphmx.com (esa5.hc3370-68.iphmx.com [216.71.155.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25E6199D41
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1646941624;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=BgDltcew9AwMG1cAjOXyfwAgzirV47kEqjBEVQbIx/E=;
+  b=fZmHnv6cR5vJkgXUzGb9yLtt05Rq1gzIr1q1fCSwa0yFtZ4wRZDSGTi6
+   IWPDEVSG+VUj2zvhddDOAt3MpuP8xuUYpIwWnvDoneR3QSYx9RrPB84Te
+   ytREwhA5WxodgC+WM+JoLOi8xQPuG5A50A3cBg/pcUMGDf/vcbGLHB+tq
+   8=;
+Authentication-Results: esa5.hc3370-68.iphmx.com; dkim=pass (signature verified) header.i=@citrix.onmicrosoft.com
+X-SBRS: 5.1
+X-MesageID: 65427452
+X-Ironport-Server: esa5.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:TAi1pauXVYZf940y6jzJwEXBJefnVFBZMUV32f8akzHdYApBsoF/q
+ tZmKWiFPquIZmfwct4gOom/p08BsZTdn4BqSgE6rX1jHioV+JbJXdiXEBz9bniYRiHhoOOLz
+ Cm8hv3odp1coqr0/0/1WlTZhSAgk/nOHNIQMcacUsxLbVYMpBwJ1FQyw4bVvqYy2YLjW1jU4
+ YuoyyHiEATNNwBcYzp8B52r8HuDjNyq0N/PlgVjDRzjlAa2e0g9VPrzF4noR5fLatA88tqBb
+ /TC1NmEElbxpH/BPD8HfoHTKSXmSpaKVeSHZ+E/t6KK2nCurQRquko32WZ1he66RFxlkvgoo
+ Oihu6BcRi9qPK6X29oYTiBgPGJAN4hc5bL8I2ig5Jn7I03uKxMAwt1rBUAye4YZ5vx2ESdF8
+ vlwxDIlN07ZwbjsmfTiF7cq1p9LwMrDZevzvllJyz3DAOlgapfEW6jQvvdT3Ssqh9AIFvHbD
+ yYcQWQyME6fP0AVUrsRILwTs82wvT72Tyd3qnK4/oV0+i/5xiUkhdABN/KKI4fXFK25hH2wr
+ Wva9mD4BFcfPcaezzOe2nu2g6nEmiaTcI4bCrD+9vdsm1CV7mgSDgAGE1q9vfS9zEW5Xrp3I
+ VQ88y4voK5iskCmJvHiXhm8iH2JpBgRX5xXCeJSwAiLw6zI40CfD3INXzdHQNUjuIk9QjlC/
+ liNktzBHzFjsLSJD3ma89+8tjOvMCg9LmIYYyIACwwf7LHLpIA1kwKKS9NLE7C8hd6zHiv/q
+ xiOrS4jl/AQgNQN2qGT41/KmXSvq4LPQwpz4R/YNkqv7gpjbZKsT4Wt5R7Q6vMoBJbJEHGCs
+ WIClszY6/oBZbmIlSqCR80XEb2p7urDOzrZ6XZzEJ0x3zCs/WO/Z4dW4SE4KEoBGsUFYz7tZ
+ AnIuR5N6ZpUIlOubKlqc8SwDdgnye7rEtGNaxzPRoMQON4rLlbBpXwwIx7Lt4zwrKQyueI9O
+ szYT8OxNE41Sppt6SCrStwfwaB+k0jS2ljvbZz8yh2m15+Xa3iUVaoJPTOyUwwp0E+XiF6Lq
+ ogCbqNm3z0aCbSjOXePreb/OHhXdSBTOHzglyBAmgdvyCJCEXppNfLeyKhJl2dNz/UMzbegE
+ p1QtyZlJLvDaZ/vdF3ihpNLMuqHsXNDQZQTZ3JE0bGAgSRLXGpXxP1DH6bbhJF+nACZ8dZ6T
+ uMeZ+KLCelVRzLM9lw1NMeh8tw/LU/w3VzeYUJJhQTTmbY6F2QlHfe+ImPSGNQmVHLr5aPSX
+ ZX8vu8kfXbzb1s7V5uHAB5e51iwoWIciIpPs7jgebFulLHX2NEycUTZ16ZvS+lVcEmr7mbKh
+ m6+XEZDzcGQ8tBdzTU8rf3dx2tfO7AlRRQy8qiyxeveCBQ2CUL4mN4eCrnUJW6BPI42kY37D
+ dhoIzjHGKRvtH5BspZmEqYtyqQ75tD1oKRdwBgiF3LOB2lHwJs6SpVa9aGjbpFw+4I=
+IronPort-HdrOrdr: A9a23:6yZLU63tFnd1BDs3H4k0kQqjBRJyeYIsimQD101hICG9Lfb3qy
+ n+ppsmPEHP5Ar5AEtQ5expOMG7MBfhHQYc2/heAV7QZniYhILOFvAi0WKC+UyuJ8SazI9gPM
+ hbAtBD4bHLfDpHZIPBkXSF+rUbsZm6GcKT9JzjJh5WJGkAAcwBnmRE40SgYzdLrWF9dMAE/f
+ Gnl616Tk+bCA0qh7OAdx84tob41rj2vaOjRSRDKw8s6QGIgz/twqX9CQKk0hAXVC4K6as+8E
+ De+jaJpZmLgrWe8FvxxmXT55NZlJ/K0d1YHvGBjcATN3HFlhuoXoJ8QLeP1QpF4t1HqWxa1e
+ UkkS1QePib2EmhOF1dZiGdgjUI5Qxer0MKD2Xo2UcL7/aJHw7SQPAx+76xOiGpmnbI+usMjZ
+ 6jlljpxKa+R3n77VTAzsmNWBdwmkWup30+1eYVknxESIMbLKRctIoF4SpuYd099Q/Bmcga+d
+ NVfYrhDTdtACSnRmGcunMqzM2nX3w1EBvDSk8eutaN2zwTmHxi1UMXyMEWg39FrfsGOtV5zv
+ WBNr4tmKBFT8cQY644DOAdQdGvAmiIRR7XKmqdLVnuCalCMXPQrJz85qkz+YiRCdE15Yp3nI
+ 6EXEJTtGY0dU6rAcqS3IdT+hSIW2m5VSSF8LAW23G4gMyLeFPGC1z3dLl1qbrTnxw2OLyuZ8
+ qO
+X-IronPort-AV: E=Sophos;i="5.90,171,1643691600"; 
+   d="scan'208";a="65427452"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tx24JAF0pVw1/oKzqWcz0iYN7pdivDMsA8jMHBbiEJY+tf07f6pH+lI5aqOVgv3iCFGjiTIe3bOJxxFltP5AMJqDuY1IMPQ7oopsgDGq3xP/JCoxcTP4U9DVJ0/AuouUqFIbjbzuRn4knyZqbNRmQT37WX4fiJhyzAPmJrvZNcVn9MRvPoi4wM6uGc2HxSIjIJxIHMdD64uR1hx7syM5KYo+qEMrnCrw3afBb/+Y/Q/lzDrGRpIJ2kcbxyGXJAB9RxiQB/GDTxICqglDZn4E6cm3B8WOyvDXfoqvM1RJxLvpdv9sMhcY2eQerW13XRoGH7U6V1XlqYnHnQwmEUzHFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BgDltcew9AwMG1cAjOXyfwAgzirV47kEqjBEVQbIx/E=;
+ b=gD9OKVw46QRByFOStAI1qFCyki0bH+FyWzvsWqV13a7+u3p3tytYtZZrCliD1QXQBmnSZSjcnYXfcoUvLDGC6LFeZZpGXWkEy5qOGcROPYQKP2Rg9oKhEiuWjlrM6IEY82lcxpPZCBy31LauVYPikUmOFps1xrvQD7YtfsPik1yU8v8jSCyOrocrChnc6R+Ra6fI9FFBRryumCKur20w4N2Sv8HgMGbtr2P4kLiD1kCkOuHPlaMzsxf5uaKV1lec7hdqTns/4IddXDYgl+qTOPWPCLJVU2IwCExwwssFKDIJCpM1f+9wukLFMJwBYoq+EMkVrs9Ioz9zypjSt9GMxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BgDltcew9AwMG1cAjOXyfwAgzirV47kEqjBEVQbIx/E=;
+ b=iVIw75amVzhrCPqBoAQcodhRt/sOIneHYIzmC/pbYzAe02S7cQ7Gmsck2jPKRROAdr/PsGhNurKOJ/jNfCjJtJv4IipsXY/AU4WKLoN8deLWmwgpAhV2m3iHiaxK9nHNp4bkg6dbhQxJ2pMkQh3DvKY9XFQyYJWqalWObCfBQ5k=
+From:   Andrew Cooper <Andrew.Cooper3@citrix.com>
+To:     Bharata B Rao <bharata@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
+        "Andrew Cooper" <Andrew.Cooper3@citrix.com>
+Subject: Re: [RFC PATCH v0 3/6] x86: Enable Upper Address Ignore(UAI) feature
+Thread-Topic: [RFC PATCH v0 3/6] x86: Enable Upper Address Ignore(UAI) feature
+Thread-Index: AQHYNLebTUcnJFmJckKqzLkQmpfxIw==
+Date:   Thu, 10 Mar 2022 19:46:59 +0000
+Message-ID: <7fccb7f2-fc88-993e-e1b2-919448844112@citrix.com>
+References: <20220310111545.10852-1-bharata@amd.com>
+ <20220310111545.10852-4-bharata@amd.com>
+In-Reply-To: <20220310111545.10852-4-bharata@amd.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ea32d557-5e9a-4deb-a002-08da02cebdca
+x-ms-traffictypediagnostic: SN6PR03MB4415:EE_
+x-microsoft-antispam-prvs: <SN6PR03MB44151D31D10AD4E1E4B02FD7BA0B9@SN6PR03MB4415.namprd03.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gzPc0W9gTKgYudr91xyufv/Q/60c9EVXzvd34B5saVOpoBOaedcAlcCMMldwSnECHwHVpMMB1triIlQdrfUonXmlt+jkpYmyH9gDDGGK2J5AzIP9e6m+xDy+sO3yenyX6E8bHrxBzopGgeCBt6HzkYueVIrCmmH6gVNg5lBEGuGUhwXM6Wl9m4rbVYP8feKYgTQlQYcJtnTv0vYDGn0muasxixtL2BaW1KhjI/ne68DswCMItQUXWPP3fYGPLwz48cBsJm7pE/8aTOBIdh05p6YHDyUqvHwZ8nppRnWJzjMAgG9wjXepkCXZcN2/bcG5QlKjS7eAeycbmYEJA51jPPMCV7u6fR2/ITQegd3N21oX6IWtevEIZrGMsB4ncfK/Gp1pSi2f6vrDvDdW1jsN5CR/HeMHvR/LS4rSR/aDSjRRe+ZBK7RZNUpPJdmsfJm748IQyqnOv9DwGi2vDOfm3kzGFo2lVunCHk0qrSY0BfgJM8dkit/0k3cNHLxdjl7mkjpkkuDL1rZ3lBbHuYKwT0hNOJu/azvuqXjC1TNPn3q5GEdTtxjCLx28S+yqAmACmmt77+pJYLFI/YqssdqxqyQahN9ue3Jz1wtAtY0yN5JdaH6AfosBEUTGn9CaHmMCgxNgsSQgqnDsJp/6Dwk/dfP7SeumlyAmjLSaqCfqlNURmOISY5CSKtBXhQbU1AKN7xDph6/Uu7ZK8u3QVmNRIj3+h2EuhWjJDazNZggGBCsjpI+tqnfO14u34s2j3Csnan5tWC7TLlq3LN5c6MLKDA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(110136005)(6512007)(66946007)(6506007)(316002)(76116006)(82960400001)(26005)(53546011)(91956017)(38100700002)(186003)(71200400001)(2906002)(107886003)(7416002)(4326008)(5660300002)(8676002)(122000001)(508600001)(66476007)(66446008)(64756008)(66556008)(6486002)(83380400001)(31686004)(36756003)(8936002)(86362001)(31696002)(2616005)(38070700005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z24yc0tXeXhzcnJVSURoY1BSTGZGTW9UUXRCNkpnQWcrQzFIVnBIUm5INmIr?=
+ =?utf-8?B?eFU0MXJKS1BvVXdYcURpYTN5WWhiODMvQzF2VTViWjhLTWtHQlVGTXU3NXBa?=
+ =?utf-8?B?RWorOGx6VW4rYkYwYys1OWF1ZTA3VGZhQU01YUVrakxENXhPZHBDYzNja3g0?=
+ =?utf-8?B?WVZjU0EwZ0ExeVZjNkJoeWNrK1JtUEtRc29OK3ZrLzMwdVFSRHNOWlNYcWJn?=
+ =?utf-8?B?SGlGYVVPWDZ2RHkwVWRZV0pYK1l4OEVNY2lJekt5QWtwMXFNZ3ZNT3BQcXFs?=
+ =?utf-8?B?RHpmSDBhUXNZTDlNckRWaTU1ZVdJV1ROZ29GSURUSU1tS2tObmhGSW5naTVC?=
+ =?utf-8?B?b1l2cjM2Yml6RDY5TEhpelA4bmRIUDNqSnBGVktnbUZvK1hXYXFTN2o2cnNG?=
+ =?utf-8?B?Q3JRS1lWTFRvdTk2SXdUTkxIck1ZNUd5NTFEWnlDWEVPNmgzaFRHZFZGMys1?=
+ =?utf-8?B?TSt0b1N2c004dTFRenJTK2lBY2gra2w1WU5ZR3puSFpQTTdRdk5BM0F5TUll?=
+ =?utf-8?B?MU9iU04wMnZUYWNhaHFRSEF1N2phalc3Y3IyV2VuQU16RTRXbzI4aDJGOVNQ?=
+ =?utf-8?B?QWx3ajNpNnk1aGpIL1BBTDIrQTZXSTYvZ0FscFN1RzB6S20xQkswY2JyV0x4?=
+ =?utf-8?B?aWpwYmNCbEpJcHFHSS9HUGV2Q1Y5d2xxTkV2ZFhPRCtsV2Nsa3NaT25MRW4z?=
+ =?utf-8?B?dHpoZitTU05OWVIzMUNGeGhNWE5TQzdkSy9YTDk3M0lZVUxGTkJSc2hmNWhw?=
+ =?utf-8?B?OFB1VmlTbTF4UjFhSXl1NmoxWHA3bHRmL0xnazFKUEJZZ2d4bDU2OFplSlRu?=
+ =?utf-8?B?eEJaSlBnWi9sdFNacGdYVk5qV3kzRC8vUzdNWEkzY1BiV0xJcUdVQlB1bEpY?=
+ =?utf-8?B?NEhVdWVhWXIvb21CSkVaYW8yUXRwQitnb3MwcTEwR3lBQ3NuQ3ozNjdPbmlx?=
+ =?utf-8?B?ZWNoSlJHQ09vRVlpSndzV1dYRk56bTF2cmNWK0lXOGx3RlBiVGEwOTBPV2lU?=
+ =?utf-8?B?UTk2b05ESjBlRXQ4Szd1cllNcDFnZlI0WWh6OWVWTVJzakRDVG9Ia3hSek1Z?=
+ =?utf-8?B?eXJReGlhcXo3akxXa3YwaUhKOHhIRFF0b0FSOUFLOW9LS2ZPR3NEZmtmWk92?=
+ =?utf-8?B?YVVhM003VmdlRFg2YTdGd0tmNXdqVkhNbGtRNVhtRktXUU9kSWp4ZEJLRWk5?=
+ =?utf-8?B?YkllU3FMcFRkVWxoSUV6Z1EwOTVETytURjUyVEVnM1BlYjMyNXJ0Z3lQcktJ?=
+ =?utf-8?B?dVFIeEtieTdRS05LZ09rdWw1bml0dVEzdTAvUmthTGVJQkhFVzBLSWhweFlI?=
+ =?utf-8?B?ZlhxNENNOXZ3M2NNUThRMlA0SWJSWFVxdjlrL1hhdm1VRk9rMjNwSmRUZGx5?=
+ =?utf-8?B?UEcxSTRXcWlKTHkrVnZ4UGVtbExkR3U4RkYvZU1HOFkxL2R2blBEZ1NDWTRU?=
+ =?utf-8?B?dXA5OHpRa2xINllhU0NnOSs3eUJzeFRSTzJqdTZDQXovSXJRV1RZWXc0ek8z?=
+ =?utf-8?B?RXlEYmVHVFlXZHBRV25wdVY4Z0hNNGlTZS93SzBqZ2RabzBoVnhjYXhBSjlF?=
+ =?utf-8?B?aE9NeXo0ZlJOdjIwSE5GWkFmUnh2NnZiRTdsaDRZSmkwZWlDTXorZEl2WlVv?=
+ =?utf-8?B?amdJM2hZNHAzV1d5Sldoa0t3OVIvUUhNTHlUSG1GSENJdW9ySW1YblNvZ2FY?=
+ =?utf-8?B?dU43UzJjK2tKSmxjd21HSzhoa0U5cHQxWi9sRzJPM3JSYy8zamhEc1N2aklr?=
+ =?utf-8?B?MFphcnNscG5mQmZSYmIzZWM1S1V5aDNBem1rVkk5M1RUWjJZYzBTdmRJZ3pB?=
+ =?utf-8?B?TVcraWtZTDFmRHozcUtTMy83ZTBMa3N2SXhWZXZNc3N2ZWVsOHphRHp4Rkta?=
+ =?utf-8?B?L1NnSHg2blcyMWlwWmlic04xWURMTTk1aGZ0UU8xK0pFaDRhMnVoTmxOZTdF?=
+ =?utf-8?Q?89gn/2vD0trdPMY5mtYJfe1VnnCSmwZM?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DEDE6834CBAB5D4EA42EF9DED8128065@namprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302154810.42308-8-frederic@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea32d557-5e9a-4deb-a002-08da02cebdca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2022 19:46:59.6256
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZoeZ/+1W/cnqOtUSiIGjOEWpfG4rySmdD5/WlMV2doz1/UeK1dKg/x2YeF87acei7rwDr4LK6ga9VBojkrKqy5JYL30oaGXaM2u2gu2qZ0A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR03MB4415
+X-OriginatorOrg: citrix.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:47:58PM +0100, Frederic Weisbecker wrote:
-> The RCU dynticks counter is going to be merged into the context tracking
-> subsystem. Prepare with moving the IRQ extended quiescent states
-> entrypoints to context tracking. For now those are dumb redirection to
-> existing RCU calls.
-> 
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> Cc: Yu Liao<liaoyu15@huawei.com>
-> Cc: Phil Auld <pauld@redhat.com>
-> Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
-> Cc: Alex Belits <abelits@marvell.com>
-> ---
->  .../RCU/Design/Requirements/Requirements.rst  | 10 ++++----
->  Documentation/RCU/stallwarn.rst               |  4 ++--
->  arch/Kconfig                                  |  2 +-
->  arch/arm64/kernel/entry-common.c              |  6 ++---
->  arch/x86/mm/fault.c                           |  2 +-
->  drivers/cpuidle/cpuidle-psci.c                |  8 +++----
->  include/linux/context_tracking_irq.h          | 17 +++++++++++++
->  include/linux/context_tracking_state.h        |  1 +
->  include/linux/entry-common.h                  | 10 ++++----
->  include/linux/rcupdate.h                      |  5 ++--
->  include/linux/tracepoint.h                    |  4 ++--
->  kernel/context_tracking.c                     | 24 +++++++++++++++++--
->  kernel/cpu_pm.c                               |  8 +++----
->  kernel/entry/common.c                         | 12 +++++-----
->  kernel/softirq.c                              |  4 ++--
->  kernel/trace/trace.c                          |  6 ++---
->  16 files changed, 81 insertions(+), 42 deletions(-)
->  create mode 100644 include/linux/context_tracking_irq.h
-> 
-> diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
-> index ff2be1ac54c4..e3dd5d71c798 100644
-> --- a/Documentation/RCU/Design/Requirements/Requirements.rst
-> +++ b/Documentation/RCU/Design/Requirements/Requirements.rst
-> @@ -1844,10 +1844,10 @@ that meets this requirement.
->  
->  Furthermore, NMI handlers can be interrupted by what appear to RCU to be
->  normal interrupts. One way that this can happen is for code that
-> -directly invokes rcu_irq_enter() and rcu_irq_exit() to be called
-> +directly invokes ct_irq_enter() and ct_irq_exit() to be called
->  from an NMI handler. This astonishing fact of life prompted the current
-> -code structure, which has rcu_irq_enter() invoking
-> -rcu_nmi_enter() and rcu_irq_exit() invoking rcu_nmi_exit().
-> +code structure, which has ct_irq_enter() invoking
-> +rcu_nmi_enter() and ct_irq_exit() invoking rcu_nmi_exit().
->  And yes, I also learned of this requirement the hard way.
->  
->  Loadable Modules
-> @@ -2195,7 +2195,7 @@ scheduling-clock interrupt be enabled when RCU needs it to be:
->     sections, and RCU believes this CPU to be idle, no problem. This
->     sort of thing is used by some architectures for light-weight
->     exception handlers, which can then avoid the overhead of
-> -   rcu_irq_enter() and rcu_irq_exit() at exception entry and
-> +   ct_irq_enter() and ct_irq_exit() at exception entry and
->     exit, respectively. Some go further and avoid the entireties of
->     irq_enter() and irq_exit().
->     Just make very sure you are running some of your tests with
-> @@ -2226,7 +2226,7 @@ scheduling-clock interrupt be enabled when RCU needs it to be:
->  +-----------------------------------------------------------------------+
->  | **Answer**:                                                           |
->  +-----------------------------------------------------------------------+
-> -| One approach is to do ``rcu_irq_exit();rcu_irq_enter();`` every so    |
-> +| One approach is to do ``ct_irq_exit();ct_irq_enter();`` every so    |
->  | often. But given that long-running interrupt handlers can cause other |
->  | problems, not least for response time, shouldn't you work to keep     |
->  | your interrupt handler's runtime within reasonable bounds?            |
-> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-> index bdd52b40f307..7858c3afa1f4 100644
-> --- a/Documentation/RCU/stallwarn.rst
-> +++ b/Documentation/RCU/stallwarn.rst
-> @@ -98,11 +98,11 @@ warnings:
->  
->  -	A low-level kernel issue that either fails to invoke one of the
->  	variants of rcu_user_enter(), rcu_user_exit(), ct_idle_enter(),
-> -	ct_idle_exit(), rcu_irq_enter(), or rcu_irq_exit() on the one
-> +	ct_idle_exit(), ct_irq_enter(), or ct_irq_exit() on the one
->  	hand, or that invokes one of them too many times on the other.
->  	Historically, the most frequent issue has been an omission
->  	of either irq_enter() or irq_exit(), which in turn invoke
-> -	rcu_irq_enter() or rcu_irq_exit(), respectively.  Building your
-> +	ct_irq_enter() or ct_irq_exit(), respectively.  Building your
->  	kernel with CONFIG_RCU_EQS_DEBUG=y can help track down these types
->  	of issues, which sometimes arise in architecture-specific code.
->  
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 1a3b79cfc9e3..66b2b6d4717b 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -770,7 +770,7 @@ config HAVE_CONTEXT_TRACKING_USER
->  	  Syscalls need to be wrapped inside user_exit()-user_enter(), either
->  	  optimized behind static key or through the slow path using TIF_NOHZ
->  	  flag. Exceptions handlers must be wrapped as well. Irqs are already
-> -	  protected inside rcu_irq_enter/rcu_irq_exit() but preemption or signal
-> +	  protected inside ct_irq_enter/ct_irq_exit() but preemption or signal
->  	  handling on irq exit still need to be protected.
->  
->  config HAVE_CONTEXT_TRACKING_USER_OFFSTACK
-> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-> index ef7fcefb96bd..43ca8cf4e1dd 100644
-> --- a/arch/arm64/kernel/entry-common.c
-> +++ b/arch/arm64/kernel/entry-common.c
-> @@ -40,7 +40,7 @@ static __always_inline void __enter_from_kernel_mode(struct pt_regs *regs)
->  
->  	if (!IS_ENABLED(CONFIG_TINY_RCU) && is_idle_task(current)) {
->  		lockdep_hardirqs_off(CALLER_ADDR0);
-> -		rcu_irq_enter();
-> +		ct_irq_enter();
->  		trace_hardirqs_off_finish();
->  
->  		regs->exit_rcu = true;
-> @@ -74,7 +74,7 @@ static __always_inline void __exit_to_kernel_mode(struct pt_regs *regs)
->  		if (regs->exit_rcu) {
->  			trace_hardirqs_on_prepare();
->  			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-> -			rcu_irq_exit();
-> +			ct_irq_exit();
->  			lockdep_hardirqs_on(CALLER_ADDR0);
->  			return;
->  		}
-> @@ -82,7 +82,7 @@ static __always_inline void __exit_to_kernel_mode(struct pt_regs *regs)
->  		trace_hardirqs_on();
->  	} else {
->  		if (regs->exit_rcu)
-> -			rcu_irq_exit();
-> +			ct_irq_exit();
->  	}
->  }
->  
-> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-> index d0074c6ed31a..b781785b1ff3 100644
-> --- a/arch/x86/mm/fault.c
-> +++ b/arch/x86/mm/fault.c
-> @@ -1526,7 +1526,7 @@ DEFINE_IDTENTRY_RAW_ERRORCODE(exc_page_fault)
->  
->  	/*
->  	 * Entry handling for valid #PF from kernel mode is slightly
-> -	 * different: RCU is already watching and rcu_irq_enter() must not
-> +	 * different: RCU is already watching and ct_irq_enter() must not
->  	 * be invoked because a kernel fault on a user space address might
->  	 * sleep.
->  	 *
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index b51b5df08450..fe31b2d522b3 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -68,12 +68,12 @@ static int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
->  		return -1;
->  
->  	/* Do runtime PM to manage a hierarchical CPU toplogy. */
-> -	rcu_irq_enter_irqson();
-> +	ct_irq_enter_irqson();
->  	if (s2idle)
->  		dev_pm_genpd_suspend(pd_dev);
->  	else
->  		pm_runtime_put_sync_suspend(pd_dev);
-> -	rcu_irq_exit_irqson();
-> +	ct_irq_exit_irqson();
->  
->  	state = psci_get_domain_state();
->  	if (!state)
-> @@ -81,12 +81,12 @@ static int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
->  
->  	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
->  
-> -	rcu_irq_enter_irqson();
-> +	ct_irq_enter_irqson();
->  	if (s2idle)
->  		dev_pm_genpd_resume(pd_dev);
->  	else
->  		pm_runtime_get_sync(pd_dev);
-> -	rcu_irq_exit_irqson();
-> +	ct_irq_exit_irqson();
->  
->  	cpu_pm_exit();
->  
-> diff --git a/include/linux/context_tracking_irq.h b/include/linux/context_tracking_irq.h
-> new file mode 100644
-> index 000000000000..60e3ed15a04e
-> --- /dev/null
-> +++ b/include/linux/context_tracking_irq.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_CONTEXT_TRACKING_IRQ_H
-> +#define _LINUX_CONTEXT_TRACKING_IRQ_H
-> +
-> +#ifdef CONFIG_CONTEXT_TRACKING
-> +void ct_irq_enter(void);
-> +void ct_irq_exit(void);
-> +void ct_irq_enter_irqson(void);
-> +void ct_irq_exit_irqson(void);
-> +#else
-> +static inline void ct_irq_enter(void) { }
-> +static inline void ct_irq_exit(void) { }
-> +static inline void ct_irq_enter_irqson(void) { }
-> +static inline void ct_irq_exit_irqson(void) { }
-> +#endif
-> +
-> +#endif
-> diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-> index 64dbbb880378..cdc692caa01d 100644
-> --- a/include/linux/context_tracking_state.h
-> +++ b/include/linux/context_tracking_state.h
-> @@ -4,6 +4,7 @@
->  
->  #include <linux/percpu.h>
->  #include <linux/static_key.h>
-> +#include <linux/context_tracking_irq.h>
->  
->  struct context_tracking {
->  	/*
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index 2e2b8d6140ed..7c6b1d864448 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -396,7 +396,7 @@ void irqentry_exit_to_user_mode(struct pt_regs *regs);
->  /**
->   * struct irqentry_state - Opaque object for exception state storage
->   * @exit_rcu: Used exclusively in the irqentry_*() calls; signals whether the
-> - *            exit path has to invoke rcu_irq_exit().
-> + *            exit path has to invoke ct_irq_exit().
->   * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures that
->   *           lockdep state is restored correctly on exit from nmi.
->   *
-> @@ -434,12 +434,12 @@ typedef struct irqentry_state {
->   *
->   * For kernel mode entries RCU handling is done conditional. If RCU is
->   * watching then the only RCU requirement is to check whether the tick has
-> - * to be restarted. If RCU is not watching then rcu_irq_enter() has to be
-> - * invoked on entry and rcu_irq_exit() on exit.
-> + * to be restarted. If RCU is not watching then ct_irq_enter() has to be
-> + * invoked on entry and ct_irq_exit() on exit.
->   *
-> - * Avoiding the rcu_irq_enter/exit() calls is an optimization but also
-> + * Avoiding the ct_irq_enter/exit() calls is an optimization but also
->   * solves the problem of kernel mode pagefaults which can schedule, which
-> - * is not possible after invoking rcu_irq_enter() without undoing it.
-> + * is not possible after invoking ct_irq_enter() without undoing it.
->   *
->   * For user mode entries irqentry_enter_from_user_mode() is invoked to
->   * establish the proper context for NOHZ_FULL. Otherwise scheduling on exit
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 38258542a6c3..5efba2bfa689 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -29,6 +29,7 @@
->  #include <linux/lockdep.h>
->  #include <asm/processor.h>
->  #include <linux/cpumask.h>
-> +#include <linux/context_tracking_irq.h>
->  
->  #define ULONG_CMP_GE(a, b)	(ULONG_MAX / 2 >= (a) - (b))
->  #define ULONG_CMP_LT(a, b)	(ULONG_MAX / 2 < (a) - (b))
-> @@ -143,9 +144,9 @@ static inline void rcu_nocb_flush_deferred_wakeup(void) { }
->   */
->  #define RCU_NONIDLE(a) \
->  	do { \
-> -		rcu_irq_enter_irqson(); \
-> +		ct_irq_enter_irqson(); \
->  		do { a; } while (0); \
-> -		rcu_irq_exit_irqson(); \
-> +		ct_irq_exit_irqson(); \
->  	} while (0)
->  
->  /*
-> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-> index 28031b15f878..55717a2eda08 100644
-> --- a/include/linux/tracepoint.h
-> +++ b/include/linux/tracepoint.h
-> @@ -200,13 +200,13 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  		 */							\
->  		if (rcuidle) {						\
->  			__idx = srcu_read_lock_notrace(&tracepoint_srcu);\
-> -			rcu_irq_enter_irqson();				\
-> +			ct_irq_enter_irqson();				\
->  		}							\
->  									\
->  		__DO_TRACE_CALL(name, TP_ARGS(args));			\
->  									\
->  		if (rcuidle) {						\
-> -			rcu_irq_exit_irqson();				\
-> +			ct_irq_exit_irqson();				\
->  			srcu_read_unlock_notrace(&tracepoint_srcu, __idx);\
->  		}							\
->  									\
-> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-> index 3d479f363275..b63ff851472e 100644
-> --- a/kernel/context_tracking.c
-> +++ b/kernel/context_tracking.c
-> @@ -75,7 +75,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
->  			 * At this stage, only low level arch entry code remains and
->  			 * then we'll run in userspace. We can assume there won't be
->  			 * any RCU read-side critical section until the next call to
-> -			 * user_exit() or rcu_irq_enter(). Let's remove RCU's dependency
-> +			 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
->  			 * on the tick.
->  			 */
->  			if (state == CONTEXT_USER) {
-> @@ -112,7 +112,7 @@ void ct_user_enter(enum ctx_state state)
->  	/*
->  	 * Some contexts may involve an exception occuring in an irq,
->  	 * leading to that nesting:
-> -	 * rcu_irq_enter() rcu_user_exit() rcu_user_exit() rcu_irq_exit()
-> +	 * ct_irq_enter() rcu_user_exit() rcu_user_exit() ct_irq_exit()
->  	 * This would mess up the dyntick_nesting count though. And rcu_irq_*()
->  	 * helpers are enough to protect RCU uses inside the exception. So
->  	 * just return immediately if we detect we are in an IRQ.
-> @@ -247,3 +247,23 @@ void ct_idle_exit(void)
->  	rcu_idle_exit();
->  }
->  EXPORT_SYMBOL_GPL(ct_idle_exit);
-> +
-> +noinstr void ct_irq_enter(void)
-> +{
-> +	rcu_irq_enter();
-> +}
-> +
-> +noinstr void ct_irq_exit(void)
-> +{
-> +	rcu_irq_exit();
-> +}
-> +
-> +void ct_irq_enter_irqson(void)
-> +{
-> +	rcu_irq_enter_irqson();
-> +}
-> +
-> +void ct_irq_exit_irqson(void)
-> +{
-> +	rcu_irq_exit_irqson();
-> +}
-> diff --git a/kernel/cpu_pm.c b/kernel/cpu_pm.c
-> index 246efc74e3f3..ba4ba71facf9 100644
-> --- a/kernel/cpu_pm.c
-> +++ b/kernel/cpu_pm.c
-> @@ -35,11 +35,11 @@ static int cpu_pm_notify(enum cpu_pm_event event)
->  	 * disfunctional in cpu idle. Copy RCU_NONIDLE code to let RCU know
->  	 * this.
->  	 */
-> -	rcu_irq_enter_irqson();
-> +	ct_irq_enter_irqson();
->  	rcu_read_lock();
->  	ret = raw_notifier_call_chain(&cpu_pm_notifier.chain, event, NULL);
->  	rcu_read_unlock();
-> -	rcu_irq_exit_irqson();
-> +	ct_irq_exit_irqson();
->  
->  	return notifier_to_errno(ret);
->  }
-> @@ -49,11 +49,11 @@ static int cpu_pm_notify_robust(enum cpu_pm_event event_up, enum cpu_pm_event ev
->  	unsigned long flags;
->  	int ret;
->  
-> -	rcu_irq_enter_irqson();
-> +	ct_irq_enter_irqson();
->  	raw_spin_lock_irqsave(&cpu_pm_notifier.lock, flags);
->  	ret = raw_notifier_call_chain_robust(&cpu_pm_notifier.chain, event_up, event_down, NULL);
->  	raw_spin_unlock_irqrestore(&cpu_pm_notifier.lock, flags);
-> -	rcu_irq_exit_irqson();
-> +	ct_irq_exit_irqson();
->  
->  	return notifier_to_errno(ret);
->  }
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index bad713684c2e..cebc98b8adc6 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -327,7 +327,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
->  	}
->  
->  	/*
-> -	 * If this entry hit the idle task invoke rcu_irq_enter() whether
-> +	 * If this entry hit the idle task invoke ct_irq_enter() whether
->  	 * RCU is watching or not.
->  	 *
->  	 * Interrupts can nest when the first interrupt invokes softirq
-> @@ -338,12 +338,12 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
->  	 * not nested into another interrupt.
->  	 *
->  	 * Checking for rcu_is_watching() here would prevent the nesting
-> -	 * interrupt to invoke rcu_irq_enter(). If that nested interrupt is
-> +	 * interrupt to invoke ct_irq_enter(). If that nested interrupt is
->  	 * the tick then rcu_flavor_sched_clock_irq() would wrongfully
->  	 * assume that it is the first interrupt and eventually claim
->  	 * quiescent state and end grace periods prematurely.
->  	 *
-> -	 * Unconditionally invoke rcu_irq_enter() so RCU state stays
-> +	 * Unconditionally invoke ct_irq_enter() so RCU state stays
->  	 * consistent.
->  	 *
->  	 * TINY_RCU does not support EQS, so let the compiler eliminate
-> @@ -356,7 +356,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
->  		 * as in irqentry_enter_from_user_mode().
->  		 */
->  		lockdep_hardirqs_off(CALLER_ADDR0);
-> -		rcu_irq_enter();
-> +		ct_irq_enter();
->  		instrumentation_begin();
->  		trace_hardirqs_off_finish();
->  		instrumentation_end();
-> @@ -414,7 +414,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
->  			trace_hardirqs_on_prepare();
->  			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
->  			instrumentation_end();
-> -			rcu_irq_exit();
-> +			ct_irq_exit();
->  			lockdep_hardirqs_on(CALLER_ADDR0);
->  			return;
->  		}
-> @@ -436,7 +436,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
->  		 * was not watching on entry.
->  		 */
->  		if (state.exit_rcu)
-> -			rcu_irq_exit();
-> +			ct_irq_exit();
->  	}
->  }
->  
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 41f470929e99..7b6761c1a0f3 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -607,7 +607,7 @@ void irq_enter_rcu(void)
->   */
->  void irq_enter(void)
->  {
-> -	rcu_irq_enter();
-> +	ct_irq_enter();
->  	irq_enter_rcu();
->  }
->  
-> @@ -659,7 +659,7 @@ void irq_exit_rcu(void)
->  void irq_exit(void)
->  {
->  	__irq_exit_rcu();
-> -	rcu_irq_exit();
-> +	ct_irq_exit();
->  	 /* must be last! */
->  	lockdep_hardirq_exit();
->  }
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index a569a0cb81ee..7c500c708180 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -3088,15 +3088,15 @@ void __trace_stack(struct trace_array *tr, unsigned int trace_ctx,
->  	/*
->  	 * When an NMI triggers, RCU is enabled via rcu_nmi_enter(),
->  	 * but if the above rcu_is_watching() failed, then the NMI
-> -	 * triggered someplace critical, and rcu_irq_enter() should
-> +	 * triggered someplace critical, and ct_irq_enter() should
->  	 * not be called from NMI.
->  	 */
->  	if (unlikely(in_nmi()))
->  		return;
->  
-> -	rcu_irq_enter_irqson();
-> +	ct_irq_enter_irqson();
->  	__ftrace_trace_stack(buffer, trace_ctx, skip, NULL);
-> -	rcu_irq_exit_irqson();
-> +	ct_irq_exit_irqson();
->  }
->  
->  /**
-> -- 
-> 2.25.1
-> 
+T24gMTAvMDMvMjAyMiAxMToxNSwgQmhhcmF0YSBCIFJhbyB3cm90ZToNCj4gZGlmZiAtLWdpdCBh
+L2FyY2gveDg2L2tlcm5lbC9zZXR1cC5jIGIvYXJjaC94ODYva2VybmVsL3NldHVwLmMNCj4gaW5k
+ZXggZjdhMTMyZWI3OTRkLi4xMjYxNWIxYjRhZjUgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2L2tl
+cm5lbC9zZXR1cC5jDQo+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9zZXR1cC5jDQo+IEBAIC03NDAs
+NiArNzQwLDEyIEBAIGR1bXBfa2VybmVsX29mZnNldChzdHJ1Y3Qgbm90aWZpZXJfYmxvY2sgKnNl
+bGYsIHVuc2lnbmVkIGxvbmcgdiwgdm9pZCAqcCkNCj4gIAlyZXR1cm4gMDsNCj4gIH0NCj4gIA0K
+PiArc3RhdGljIGlubGluZSB2b2lkIF9faW5pdCB1YWlfZW5hYmxlKHZvaWQpDQo+ICt7DQo+ICsJ
+aWYgKGJvb3RfY3B1X2hhcyhYODZfRkVBVFVSRV9VQUkpKQ0KPiArCQltc3Jfc2V0X2JpdChNU1Jf
+RUZFUiwgX0VGRVJfVUFJKTsNCj4gK30NCj4gKw0KPiAgLyoNCj4gICAqIERldGVybWluZSBpZiB3
+ZSB3ZXJlIGxvYWRlZCBieSBhbiBFRkkgbG9hZGVyLiAgSWYgc28sIHRoZW4gd2UgaGF2ZSBhbHNv
+IGJlZW4NCj4gICAqIHBhc3NlZCB0aGUgZWZpIG1lbW1hcCwgc3lzdGFiLCBldGMuLCBzbyB3ZSBz
+aG91bGQgdXNlIHRoZXNlIGRhdGEgc3RydWN0dXJlcw0KPiBAQCAtMTE0Niw2ICsxMTUyLDggQEAg
+dm9pZCBfX2luaXQgc2V0dXBfYXJjaChjaGFyICoqY21kbGluZV9wKQ0KPiAgDQo+ICAJeDg2X2lu
+aXQucGFnaW5nLnBhZ2V0YWJsZV9pbml0KCk7DQo+ICANCj4gKwl1YWlfZW5hYmxlKCk7DQoNCkkg
+d291bGQgdGhpbmsgaW5jcmVkaWJseSBjYXJlZnVsbHkgYmVmb3JlIGVuYWJsaW5nIFVBSSBieSBk
+ZWZhdWx0Lg0KDQpTdWZmaWNlIGl0IHRvIHNheSB0aGF0IEludGVsIHdlcmUgdGFsa2VkIGRvd24g
+ZnJvbSA3IGJpdHMgdG8gNiwgYW5kDQphcHBhcmVudGx5IEFNRCBkaWRuJ3QgZ2V0IHRoZSBzYW1l
+IG1lbW8gZnJvbSB0aGUgb3JpZ2luYWwgcmVxdWVzdGVycy4NCg0KVGhlIHByb2JsZW0gaXMgdGhh
+dCBVQUkgKyBMQTU3IG1lYW5zIHRoYXQgYWxsIHRoZSBwb2lzb24gcG9pbnRlcnMgY2Vhc2UNCmZ1
+bmN0aW9uaW5nIGFzIGEgZGVmZW5jZS1pbi1kZXB0aCBtZWNoYW5pc20sIGFuZCBiZWNvbWUgbGVn
+YWwgcG9pbnRlcnMNCnBvaW50aW5nIGF0IHJhbmRvbSBwb3NpdGlvbnMgaW4gdXNlciBvciBrZXJu
+ZWwgc3BhY2UuDQoNCn5BbmRyZXcNCg==

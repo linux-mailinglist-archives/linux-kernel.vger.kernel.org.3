@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6044D4B8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4866B4D4A24
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244915AbiCJOif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
+        id S244648AbiCJOiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343624AbiCJObG (ORCPT
+        with ESMTP id S245576AbiCJOak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3509D06B;
-        Thu, 10 Mar 2022 06:27:09 -0800 (PST)
+        Thu, 10 Mar 2022 09:30:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F96182BF0;
+        Thu, 10 Mar 2022 06:26:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51CE461B63;
-        Thu, 10 Mar 2022 14:26:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F30C340E8;
-        Thu, 10 Mar 2022 14:26:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2A6561D22;
+        Thu, 10 Mar 2022 14:25:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC134C340EB;
+        Thu, 10 Mar 2022 14:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922411;
-        bh=T+N54UkHcq4XQeMGrUYj4BrPRFn4vEMXHGGu2ZpC7iw=;
+        s=korg; t=1646922358;
+        bh=a//jtcByFiHXOCJ+/M4jiKQWdvoAGv/83F2/7HhgSnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kize23I/XPuOqoYcu+fV4DWj4vv4A49kbAhUaOX/6ELomQ9PpC24xRjrc3fnX/WIQ
-         16QLndZvqbFE42GafOV4cKnTS3Ffnj+MSpaSoba7gzMBTuS+tE55kRFFWnei17/HGU
-         Pks9Ijauyg7RX0v43qm0vOOkwdP119QiH2tdRZ60=
+        b=yGVT5G0iETcXpobsHXZ2VGnOf6Jg28YuPLKP/oC4lCLPo6SoAyJYYNzosD7N6xXk4
+         OInQZ9vxxWIo35/NeC0u/4gJ2ECMBbnrNN5Umxu9SV7HGS9ZHVtZ28XcredMbreUBv
+         Hg/cJkDQf5IDjZkbyigFitBozh58+qAjvOsgiMIE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.4 10/33] x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 5.10 51/58] xen/scsifront: dont use gnttab_query_foreign_access() for mapped status
 Date:   Thu, 10 Mar 2022 15:19:11 +0100
-Message-Id: <20220310140809.050264933@linuxfoundation.org>
+Message-Id: <20220310140814.320833025@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
-References: <20220310140808.741682643@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,93 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 0de05d056afdb00eca8c7bbb0c79a3438daf700c upstream.
+Commit 33172ab50a53578a95691310f49567c9266968b0 upstream.
 
-The commit
+It isn't enough to check whether a grant is still being in use by
+calling gnttab_query_foreign_access(), as a mapping could be realized
+by the other side just after having called that function.
 
-   44a3918c8245 ("x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting")
+In case the call was done in preparation of revoking a grant it is
+better to do so via gnttab_try_end_foreign_access() and check the
+success of that operation instead.
 
-added a warning for the "eIBRS + unprivileged eBPF" combination, which
-has been shown to be vulnerable against Spectre v2 BHB-based attacks.
+This is CVE-2022-23038 / part of XSA-396.
 
-However, there's no warning about the "eIBRS + LFENCE retpoline +
-unprivileged eBPF" combo. The LFENCE adds more protection by shortening
-the speculation window after a mispredicted branch. That makes an attack
-significantly more difficult, even with unprivileged eBPF. So at least
-for now the logic doesn't warn about that combination.
-
-But if you then add SMT into the mix, the SMT attack angle weakens the
-effectiveness of the LFENCE considerably.
-
-So extend the "eIBRS + unprivileged eBPF" warning to also include the
-"eIBRS + LFENCE + unprivileged eBPF + SMT" case.
-
-  [ bp: Massage commit message. ]
-
-Suggested-by: Alyssa Milburn <alyssa.milburn@linux.intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |   27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ drivers/scsi/xen-scsifront.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -610,12 +610,27 @@ static inline const char *spectre_v2_mod
+--- a/drivers/scsi/xen-scsifront.c
++++ b/drivers/scsi/xen-scsifront.c
+@@ -233,12 +233,11 @@ static void scsifront_gnttab_done(struct
+ 		return;
  
- #define SPECTRE_V2_LFENCE_MSG "WARNING: LFENCE mitigation is not recommended for this CPU, data leaks possible!\n"
- #define SPECTRE_V2_EIBRS_EBPF_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!\n"
-+#define SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS+LFENCE mitigation and SMT, data leaks possible via Spectre v2 BHB attacks!\n"
+ 	for (i = 0; i < shadow->nr_grants; i++) {
+-		if (unlikely(gnttab_query_foreign_access(shadow->gref[i]))) {
++		if (unlikely(!gnttab_try_end_foreign_access(shadow->gref[i]))) {
+ 			shost_printk(KERN_ALERT, info->host, KBUILD_MODNAME
+ 				     "grant still in use by backend\n");
+ 			BUG();
+ 		}
+-		gnttab_end_foreign_access(shadow->gref[i], 0, 0UL);
+ 	}
  
- #ifdef CONFIG_BPF_SYSCALL
- void unpriv_ebpf_notify(int new_state)
- {
--	if (spectre_v2_enabled == SPECTRE_V2_EIBRS && !new_state)
-+	if (new_state)
-+		return;
-+
-+	/* Unprivileged eBPF is enabled */
-+
-+	switch (spectre_v2_enabled) {
-+	case SPECTRE_V2_EIBRS:
- 		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
-+		break;
-+	case SPECTRE_V2_EIBRS_LFENCE:
-+		if (sched_smt_active())
-+			pr_err(SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG);
-+		break;
-+	default:
-+		break;
-+	}
- }
- #endif
- 
-@@ -1075,6 +1090,10 @@ void cpu_bugs_smt_update(void)
- {
- 	mutex_lock(&spec_ctrl_mutex);
- 
-+	if (sched_smt_active() && unprivileged_ebpf_enabled() &&
-+	    spectre_v2_enabled == SPECTRE_V2_EIBRS_LFENCE)
-+		pr_warn_once(SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG);
-+
- 	switch (spectre_v2_user_stibp) {
- 	case SPECTRE_V2_USER_NONE:
- 		break;
-@@ -1711,7 +1730,11 @@ static ssize_t spectre_v2_show_state(cha
- 		return sprintf(buf, "Vulnerable: LFENCE\n");
- 
- 	if (spectre_v2_enabled == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
--		return sprintf(buf, "Vulnerable: Unprivileged eBPF enabled\n");
-+		return sprintf(buf, "Vulnerable: eIBRS with unprivileged eBPF\n");
-+
-+	if (sched_smt_active() && unprivileged_ebpf_enabled() &&
-+	    spectre_v2_enabled == SPECTRE_V2_EIBRS_LFENCE)
-+		return sprintf(buf, "Vulnerable: eIBRS+LFENCE with unprivileged eBPF and SMT\n");
- 
- 	return sprintf(buf, "%s%s%s%s%s%s\n",
- 		       spectre_v2_strings[spectre_v2_enabled],
+ 	kfree(shadow->sg);
 
 

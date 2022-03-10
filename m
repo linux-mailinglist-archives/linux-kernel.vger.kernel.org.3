@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A574D5458
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC16D4D545A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240265AbiCJWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S1344288AbiCJWNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344206AbiCJWNM (ORCPT
+        with ESMTP id S1343995AbiCJWNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:13:12 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7ED1965D5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646950329; x=1678486329;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UewVuhQaCjCdHTVDQx3SfR/44XuKb97nfoSzDsCJ17c=;
-  b=LvG9acZIMYT2ZM1wY5hx0Y1BR5Slf7N5+ZL+C2CnwokP2/ZJ0Wt9s/2w
-   mDhIzjubsd2dATDNJCnWs04VrTSo/gWvifF+2VF6FpUlqs47Htho0m00+
-   /GVyl9HpuHmJZOa2gFSNwp8+xPutOibZGoW1WKfrgCJ3s/3hqmi+ZtzS5
-   40H1LK0VMEOqLAf3IZMjppmwVSv4McRgBazN+8JEXQdCxStnimMQsEVG2
-   fVesIhjSx3Qzf7lspSHA99Xok4PFkwVW6y+VhVkQJQ29KOB8flLQHcp8d
-   YJcQkCW4ySch91RAtuN55p8QNbESJkKDhw3fnjR85lxc2Dx/iQSu1mXav
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="235345636"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="235345636"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:12:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="578978445"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2022 14:12:04 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSR0t-0005Ss-QX; Thu, 10 Mar 2022 22:12:03 +0000
-Date:   Fri, 11 Mar 2022 06:11:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom <support@vamrs.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 29/64]
- drivers/soc/sifive/sifive_l2_cache.c:152:17: error: implicit declaration of
- function 'writeq'; did you mean 'writeb'?
-Message-ID: <202203110634.lyi263Cj-lkp@intel.com>
+        Thu, 10 Mar 2022 17:13:38 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5962DFB;
+        Thu, 10 Mar 2022 14:12:33 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id o83so2441oif.0;
+        Thu, 10 Mar 2022 14:12:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=omjoz0M9biHPr5EKrbgbc5QfautyWsC0HyZJaIjRDEg=;
+        b=X7GYqySPrMybM2edaDOQg6w5BlZ4iKFQyUoYrAIU7nNp3ipMAYq/4b6Ot1e6yuwZtd
+         VtAxqOyUY0Wm4aAD/KXfcCDpovUcnuHT7trlywzq3VgJqJAfGn9RhwQJPxg4GAh74Yby
+         NvRxRqvoQ9e0F1zy8p2najFsNLLlrHvALF1OQbPAHyjOXW8jkWlEwq3LjtaOlu9lnk5Z
+         0a6ptiOz5wifrk3+btkK6aHYIjJUwTMdBoP3rFS7IvDN546n5TYOJaZ8OaIlHfnB1l+Z
+         FUngKREGoBFnZWZ1bJKj9t9FRgDAklU/1bnfAaxHTrNuhUS3J00Hx9uE9BSTj50HsY7I
+         StVQ==
+X-Gm-Message-State: AOAM533KrarHS3fgEtxRslyDTPHwXJgbzQEbVe/hVb2xrnj07P8D/uFD
+        gcuPUMJ8//kh+xE0uBLcIw==
+X-Google-Smtp-Source: ABdhPJxHna6A8giuUalT7X77knNuIyLF0eFu5RYM8FUTp80V2T9F0GnnEXgbqAyoeBJg75biyF6+tw==
+X-Received: by 2002:a05:6808:1528:b0:2da:7f1d:f847 with SMTP id u40-20020a056808152800b002da7f1df847mr1796358oiw.85.1646950353167;
+        Thu, 10 Mar 2022 14:12:33 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c14-20020a056870b28e00b000d7d5962242sm2821551oao.35.2022.03.10.14.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 14:12:32 -0800 (PST)
+Received: (nullmailer pid 2175473 invoked by uid 1000);
+        Thu, 10 Mar 2022 22:12:31 -0000
+Date:   Thu, 10 Mar 2022 16:12:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Trevor Wu <trevor.wu@mediatek.com>
+Cc:     broonie@kernel.org, tiwai@suse.com, matthias.bgg@gmail.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aaronyu@google.com,
+        yc.hung@mediatek.com
+Subject: Re: [PATCH 2/5] dt-bindings: mediatek: mt8195: add reset property
+Message-ID: <Yip3z3XoarN8TeMn@robh.at.kernel.org>
+References: <20220308072435.22460-1-trevor.wu@mediatek.com>
+ <20220308072435.22460-3-trevor.wu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220308072435.22460-3-trevor.wu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,74 +66,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   996f88ea65b2f557926d7fe73d69fdc2da92430a
-commit: def7ba448ac4b53b788d238985ef97702dc802a1 [29/64] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-config: riscv-randconfig-r033-20220310 (https://download.01.org/0day-ci/archive/20220311/202203110634.lyi263Cj-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/def7ba448ac4b53b788d238985ef97702dc802a1
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout def7ba448ac4b53b788d238985ef97702dc802a1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+On Tue, Mar 08, 2022 at 03:24:32PM +0800, Trevor Wu wrote:
+> Add required properties "resets" and "reset_names", which are used to
+> specify audiosys hw reset for mt8195 afe driver.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The subject needs to be more specific and indicate this applies to ASoC 
+and mt8195-afe-pcm. Try to write subjects that could only ever appear 
+once as you can never make the same change twice.
 
-All errors (new ones prefixed by >>):
-
-   drivers/soc/sifive/sifive_l2_cache.c: In function 'sifive_l2_flush64_range':
->> drivers/soc/sifive/sifive_l2_cache.c:152:17: error: implicit declaration of function 'writeq'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
-     152 |                 writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-         |                 ^~~~~~
-         |                 writeb
-   cc1: some warnings being treated as errors
-
-
-vim +152 drivers/soc/sifive/sifive_l2_cache.c
-
-   123	
-   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
-   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-   126	{
-   127		unsigned long line;
-   128	
-   129		if(!l2_base) {
-   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-   131			return;
-   132		}
-   133	
-   134		/* TODO: if (len == 0), skipping flush or going on? */
-   135		if(!len) {
-   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-   137			return;
-   138		}
-   139	
-   140		/* make sure the address is in the range */
-   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-   142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-   145				start, len);
-   146			return;
-   147		}
-   148	
-   149		mb();	/* sync */
-   150		for (line = start; line < start + len;
-   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
- > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-   153			mb();
-   154		}
-   155	}
-   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-   157	#endif
-   158	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Rob

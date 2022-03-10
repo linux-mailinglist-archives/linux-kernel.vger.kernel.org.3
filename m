@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1162A4D4F52
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E694D4F56
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240442AbiCJQbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S243486AbiCJQdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:33:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241402AbiCJQbk (ORCPT
+        with ESMTP id S238790AbiCJQdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:31:40 -0500
+        Thu, 10 Mar 2022 11:33:00 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E7190C28;
-        Thu, 10 Mar 2022 08:30:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6229E190C16;
+        Thu, 10 Mar 2022 08:31:59 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 993FC21106;
-        Thu, 10 Mar 2022 16:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646929837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTP id 160D821106;
+        Thu, 10 Mar 2022 16:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646929918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rtb1rpQqcRQCkvtCGrkuFprYkSi8v2+4VhQD8sTU1iQ=;
-        b=fTC/GF69dbM0prQum/0nJ3Pn9C7bea80Rr6+qNB0x1hp7/ZlBD9X2pvwglJpCvcc/+Ykbt
-        S5b2oKS292hYBN3q4ALs27OSkeVf/8ebPH4HUpnJzGeWErc3AKlXwY35yrreGb0k+9qP+k
-        YmhzroE5OASmlta5LQd2va+kFWy6joY=
-Received: from suse.cz (unknown [10.100.224.162])
+        bh=ckgh/54VKAw6Qnxgd+jgb5k0txhbSVaOhP9+nLif3j4=;
+        b=B3uvBSn76znSqOZimKCNoKHULtUje9t1w9TAl/MSQRejuXE1ujCmyUAb0+LeXbhBB8ZLAC
+        jQvtBHO0vrmBIncL8JER8VU/uLNHZPu/t9jVMTRHtnwTuX1LZF3GjcaIMWgO56ZDo+Xrav
+        t/e/+LHEKDA+xGlu0wgJ/eVEMF2lcJA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646929918;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ckgh/54VKAw6Qnxgd+jgb5k0txhbSVaOhP9+nLif3j4=;
+        b=V4kt/xeRGn5rhiPYx2cBdKqA7CcmeVGg3Ft6k1W5KRrfwKerbMwoXI+4ri5Jj7tf/YP1BV
+        iSdYXYNInQEdwaAw==
+Received: from suse.de (unknown [10.163.32.246])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7C0AAA3B83;
-        Thu, 10 Mar 2022 16:30:37 +0000 (UTC)
-Date:   Thu, 10 Mar 2022 17:30:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, jpoimboe@redhat.com,
-        jikos@kernel.org, joe.lawrence@redhat.com,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2] livepatch: Don't block removal of
- patches that are safe to unload
-Message-ID: <Yionqn3d9OQF4UiT@alley>
-References: <20220303105446.7152-1-zhouchengming@bytedance.com>
- <YicnIIatfgLc2NN2@alley>
- <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
- <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 17676A3B83;
+        Thu, 10 Mar 2022 16:31:56 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 16:31:54 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
+        mtosatti@redhat.com, linux-rt-users@vger.kernel.org,
+        vbabka@suse.cz, cl@linux.com, paulmck@kernel.org,
+        willy@infradead.org
+Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
+Message-ID: <20220310163154.GF4363@suse.de>
+References: <20220208100750.1189808-1-nsaenzju@redhat.com>
+ <20220303114550.GE4363@suse.de>
+ <fcdaacf58296dfd826bfdbbd5ef3a06b6e05a456.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com>
+In-Reply-To: <fcdaacf58296dfd826bfdbbd5ef3a06b6e05a456.camel@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -60,134 +67,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-03-10 20:57:54, Chengming Zhou wrote:
-> Hi,
+On Mon, Mar 07, 2022 at 02:57:47PM +0100, Nicolas Saenz Julienne wrote:
+> > > Note that this is not the first attempt at fixing this per-cpu page lists:
+> > >  - The first attempt[1] tried to conditionally change the pagesets locking
+> > >    scheme based the NOHZ_FULL config. It was deemed hard to maintain as the
+> > >    NOHZ_FULL code path would be rarely tested. Also, this only solves the issue
+> > >    for NOHZ_FULL setups, which isn't ideal.
+> > >  - The second[2] unanimously switched the local_locks to per-cpu spinlocks. The
+> > >    performance degradation was too big.
+> > > 
+> > 
+> > For unrelated reasons I looked at using llist to avoid locks entirely. It
+> > turns out it's not possible and needs a lock. We know "local_locks to
+> > per-cpu spinlocks" took a large penalty so I considered alternatives on
+> > how a lock could be used.  I found it's possible to both remote drain
+> > the lists and avoid the disable/enable of IRQs entirely as long as a
+> > preempting IRQ is willing to take the zone lock instead (should be very
+> > rare). The IRQ part is a bit hairy though as softirqs are also a problem
+> > and preempt-rt needs different rules and the llist has to sort PCP
+> > refills which might be a loss in total. However, the remote draining may
+> > still be interesting. The full series is at
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git/ mm-pcpllist-v1r2
 > 
-> On 2022/3/9 1:49 上午, Miroslav Benes wrote:
-> > On Tue, 8 Mar 2022, Petr Mladek wrote:
-> > 
-> >> On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
-> >>> module_put() is currently never called for a patch with forced flag, to block
-> >>> the removal of that patch module that might still be in use after a forced
-> >>> transition.
-> >>>
-> >>> But klp_force_transition() will set all patches on the list to be forced, since
-> >>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
-> >>> has removed stack ordering of the livepatches, it will cause all other patches can't
-> >>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
-> >>>
-> >>> In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
-> >>> transition. It can still be unloaded safely as long as it has passed through
-> >>> the consistency model in KLP_UNPATCHED transition.
-> >>
-> >> It really looks safe. klp_check_stack_func() makes sure that @new_func
-> >> is not on the stack when klp_target_state == KLP_UNPATCHED. As a
-> >> result, the system should not be using code from the livepatch module
-> >> when KLP_UNPATCHED transition cleanly finished.
-> >>
-> >>
-> >>> But the exception is when force transition of an atomic replace patch, we
-> >>> have to set all previous patches to forced, or they will be removed at
-> >>> the end of klp_try_complete_transition().
-> >>>
-> >>> This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
-> >>> case, and keep the old behavior when in atomic replace case.
-> >>>
-> >>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> >>> ---
-> >>> v2: interact nicely with the atomic replace feature noted by Miroslav.
-> >>> ---
-> >>>  kernel/livepatch/transition.c | 8 ++++++--
-> >>>  1 file changed, 6 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> >>> index 5683ac0d2566..34ffb8c014ed 100644
-> >>> --- a/kernel/livepatch/transition.c
-> >>> +++ b/kernel/livepatch/transition.c
-> >>> @@ -641,6 +641,10 @@ void klp_force_transition(void)
-> >>>  	for_each_possible_cpu(cpu)
-> >>>  		klp_update_patch_state(idle_task(cpu));
-> >>>  
-> >>> -	klp_for_each_patch(patch)
-> >>> -		patch->forced = true;
-> >>> +	if (klp_target_state == KLP_UNPATCHED)
-> >>> +		klp_transition_patch->forced = true;
-> >>> +	else if (klp_transition_patch->replace) {
-> >>> +		klp_for_each_patch(patch)
-> >>> +			patch->forced = true;
-> >>
-> >> This works only because there is should be only one patch when
-> >> klp_target_state == KLP_UNPATCHED and
-> >> klp_transition_patch->forced == true.
-> > 
-> > I probably misunderstand, but the above is not generally true, is it? I 
-> > mean, if the transition patch is forced during its disablement, it does 
-> > not say anything about the amount of enabled patches.
-> > 
-> >> But it is a bit tricky. I would do it the other way:
-> >>
-> >> 	if (klp_transition_patch->replace) {
-> >> 		klp_for_each_patch(patch)
-> >> 			patch->forced = true;
-> >> 	} else if (klp_target_state == KLP_UNPATCHED) {
-> >> 		klp_transition_patch->forced = true;
-> >> 	}
-> >>
-> >> It looks more sane. And it makes it more clear
-> >> that the special handling of KLP_UNPATCHED transition
-> >> is done only when the atomic replace is not used.
-> > 
-> > But it is not the same. ->replace being true only comes into play when a 
-> > patch is enabled. If it is disabled, then it behaves like any other patch.
-> > 
-> > So, if there is ->replace patch enabled (and it is the only patch present) 
-> > and then more !->replace patches are loaded and then if ->replace patch is 
-> > disabled and forced, your proposal would give a different result than what 
-> > Chengming submitted, because in your case all the other patches will get 
-> > ->forced set to true, while it is not the case in the original. It would 
-> > be an unnecessary restriction if I am not missing something.
+> I'll have a proper look at it soon.
 > 
-> At first glance, I thought both way is right. But after looking at the case
-> you mentioned above, they are not the same indeed. The original patch
-> treat ->replace and not ->replace patches the same in KLP_UNPATCHED transition,
-> and only set all patches to forced in the atomic replace transition.
 
-I see. OK, Chengming's code makes sense. But we should make the commit
-message more clear. Something like:
+Thanks. I'm still delayed actually finishing the series as most of my
+time is dedicated to a separate issue. However, there is at least one
+bug in there at patch "mm/page_alloc: Remotely drain per-cpu lists"
+that causes a lockup under severe memory pressure. The fix is
 
-<draft>
-module_put() is not called for a patch with "forced" flag. It should
-block the removal of the livepatch module when the code might still
-be in use after forced transition.
-
-klp_force_transition() currently sets "force" flag for all patches on
-the list.
-
-In fact, any patch can be safely unloaded when it passed through
-the consistency model in KLP_UNPATCHED transition.
-
-By other words, the "forced" flag must be set only for livepatches
-that are being removed. In particular, set the "forced" flag:
-
-  + only for klp_transition_patch when the transition to KLP_UNPATCHED
-    state was forced.
-
-  + all replaced patches when the transition to KLP_PATCHED state was
-    forced and the patch was replacing the existing patches.
-</draft>
-
-It means that we should could actually do:
-
-	if (klp_target_state == KLP_UNPATCHED) {
-		klp_transition_patch->forced = true;
-	} else if (klp_transition_patch->replace) {
-		klp_for_each_patch(patch) {
-			if (patch != klp_transition_patch)
-				patch->forced = true;
-		}
-	}
-
-Huh, that is tricky ;-)
-
-Best Regards,
-Petr
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index c9a6f2b5548e..11b54f383d04 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3065,10 +3065,8 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+  */
+ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+ {
+-	unsigned long flags;
+ 	int to_drain, batch;
+ 
+-	pcp_local_lock(&pagesets.lock, flags);
+ 	batch = READ_ONCE(pcp->batch);
+ 	to_drain = min(pcp->count, batch);
+ 	if (to_drain > 0) {
+@@ -3076,7 +3074,6 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+ 		free_pcppages_bulk(zone, to_drain, pcp, 0);
+ 		spin_unlock(&pcp->lock);
+ 	}
+-	pcp_local_unlock(&pagesets.lock, flags);
+ }
+ #endif
+ 
+@@ -3088,16 +3085,12 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+ 	unsigned long flags;
+ 	struct per_cpu_pages *pcp;
+ 
+-	pcp_local_lock(&pagesets.lock, flags);
+-
+ 	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+ 	if (pcp->count) {
+ 		spin_lock(&pcp->lock);
+ 		free_pcppages_bulk(zone, pcp->count, pcp, 0);
+ 		spin_unlock(&pcp->lock);
+ 	}
+-
+-	pcp_local_unlock(&pagesets.lock, flags);
+ }
+ 
+ /*

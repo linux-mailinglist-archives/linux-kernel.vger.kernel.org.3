@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA954D46AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78D34D46BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241926AbiCJMTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S241958AbiCJMWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235871AbiCJMTj (ORCPT
+        with ESMTP id S233962AbiCJMWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:19:39 -0500
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900EB31206;
-        Thu, 10 Mar 2022 04:18:36 -0800 (PST)
-Received: by mail-qk1-f176.google.com with SMTP id z66so4161453qke.10;
-        Thu, 10 Mar 2022 04:18:36 -0800 (PST)
+        Thu, 10 Mar 2022 07:22:41 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3103B13D559;
+        Thu, 10 Mar 2022 04:21:41 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id h196so4158665qke.12;
+        Thu, 10 Mar 2022 04:21:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UxEoIGn264sRGsg/HhT4YP64PVzy4oCfplaz7ZY6sjU=;
-        b=dXa5AU/tirvXdCQwFhdfoDiFMa4R8yfFzie20/k+jBYnhTvL1zzETtK+Y8zR2rP3ma
-         EjYjhRqCTmTFT5NAG21hpg5XSCFTPobCsYBMSBNAiJzb5lVeFWFz9f3W+/v/dLR6VPXx
-         z/QJ0gN2XXVdzVOzSh+2xxsVM2XMlY5RA4RvYnkOckqNTkIWF1tYsrH1KWDsE9KrD+T9
-         KqDXxJATmn1zpSCMeenhwIzXnNalVFXUIaU4hiAfzHr5pu8MwcVUHzUqfeiXEfZpzJwd
-         Yl1j+ExFG+iX44nkiQ7jnzXMTba0JMrznDLinVyCprXRO9tv4hiRKsEya5XQQuxWThzm
-         hAgg==
-X-Gm-Message-State: AOAM5319RVbMuJX7q7jvRMQl0cPoO/F/YETh/qcYzYwV12nwC0GoIi7D
-        9RVBvzVVNrQKXbifipX93VCz6Q2hrpclAA==
-X-Google-Smtp-Source: ABdhPJxyvXJR7lz1gqD1TOuirSzLwNgwDmCCk6wCujypzVHS+UCXc6KkeEZJXqwQSkSXvuUQPFCDSw==
-X-Received: by 2002:a37:9346:0:b0:67b:128f:4696 with SMTP id v67-20020a379346000000b0067b128f4696mr2735006qkd.442.1646914714702;
-        Thu, 10 Mar 2022 04:18:34 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id 13-20020ac84e8d000000b002e068382bf8sm3056848qtp.63.2022.03.10.04.18.33
+        bh=Qpr3RDAC4KKd5tO3nXUWw1dDTj6+AwHTeZrBPzvyIHA=;
+        b=ryHjI+/DOSDVNHuhyNbZFyUsS1Je/AcQXQc0UyxyVErLiZOxj2jk3OzLN1fACqV14b
+         vjVXq1cAlRqXK0l/yq406DOIOl9G/DXXH391oulnk8Q70srEFwaTPQTyrz1PA48t7H+r
+         OyW0HqEk57LK6g2FwjMsjRkbPshcwAI5DnqfMjaTUtOWY3m+X10QqFP0em96OQjUa5lb
+         vcKrYqzCkHg/a2I93flM+ySiAyatRjBNruasKkB6im7BvYadUMHAo53kDvntWS9bW7Be
+         PK0fHPdCeWezL3WCVvJXwrz4C3qNQ92grGdgKbKR2vVWN1swsKfOv9ll0aWhLaiRC3Yn
+         kBKw==
+X-Gm-Message-State: AOAM531qVQcW8C2Uo7qXBt1MT4XUm3o1Lpc5GHbESn1g93I4H+Sc+fVP
+        5tYeXXmG6xpaQjEjTr3307AvaOdjJw/Kag==
+X-Google-Smtp-Source: ABdhPJyigrQSiKQnf1kFfnoMz1H8PG0+r/G1aXaxNLC+zl8Re6eKw3fUAfkOFQ74kP8Wiot8JbxNFg==
+X-Received: by 2002:a05:620a:4493:b0:67b:1ead:13b8 with SMTP id x19-20020a05620a449300b0067b1ead13b8mr2742334qkp.716.1646914899758;
+        Thu, 10 Mar 2022 04:21:39 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id u21-20020ae9c015000000b0067d4b2e1050sm1230287qkk.55.2022.03.10.04.21.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:18:34 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dc0364d2ceso55474357b3.7;
-        Thu, 10 Mar 2022 04:18:33 -0800 (PST)
-X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
- v133-20020a81618b000000b002dbd9528a39mr3691051ywb.132.1646914713434; Thu, 10
- Mar 2022 04:18:33 -0800 (PST)
+        Thu, 10 Mar 2022 04:21:39 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2dbd8777564so56272317b3.0;
+        Thu, 10 Mar 2022 04:21:38 -0800 (PST)
+X-Received: by 2002:a81:5a08:0:b0:2db:d8c6:7e4f with SMTP id
+ o8-20020a815a08000000b002dbd8c67e4fmr3674889ywb.256.1646914898324; Thu, 10
+ Mar 2022 04:21:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220310090048.1933020-1-laurent@vivier.eu> <20220310090048.1933020-6-laurent@vivier.eu>
-In-Reply-To: <20220310090048.1933020-6-laurent@vivier.eu>
+References: <20220310090048.1933020-1-laurent@vivier.eu> <20220310090048.1933020-3-laurent@vivier.eu>
+In-Reply-To: <20220310090048.1933020-3-laurent@vivier.eu>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Mar 2022 13:18:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUGa8JAB4HZ303qy6BSadV0NVy-ZvhxMtj8ENavM8sHLw@mail.gmail.com>
-Message-ID: <CAMuHMdUGa8JAB4HZ303qy6BSadV0NVy-ZvhxMtj8ENavM8sHLw@mail.gmail.com>
-Subject: Re: [PATCH v15 5/5] m68k: introduce a virtual m68k machine
+Date:   Thu, 10 Mar 2022 13:21:26 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXS9kcLapc+AY=F78G1Jv8ANjQcTosU1En=F273E+cFbA@mail.gmail.com>
+Message-ID: <CAMuHMdXS9kcLapc+AY=F78G1Jv8ANjQcTosU1En=F273E+cFbA@mail.gmail.com>
+Subject: Re: [PATCH v15 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
 To:     Laurent Vivier <laurent@vivier.eu>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -60,7 +60,9 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <john.stultz@linaro.org>
+        John Stultz <john.stultz@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -72,15 +74,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CC tty
+dropped stable
+
+Note that this is a dependency for later patches in this series,
+so I think everything should go in together (through the m68k tree?).
+
 On Thu, Mar 10, 2022 at 10:01 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> This machine allows to have up to 3.2 GiB and 128 Virtio devices.
 >
-> It is based on android goldfish devices.
+> Revert
+> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
 >
+> and define gf_ioread32()/gf_iowrite32() to be able to use accessors
+> defined by the architecture.
+>
+> Cc: stable@vger.kernel.org # v5.11+
+> Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
 > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-Please include tags given on previous versions:
 Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+(given on v14)
+
+> ---
+>  drivers/tty/goldfish.c   | 20 ++++++++++----------
+>  include/linux/goldfish.h | 15 +++++++++++----
+>  2 files changed, 21 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+> index 5ed19a9857ad..10c13b93ed52 100644
+> --- a/drivers/tty/goldfish.c
+> +++ b/drivers/tty/goldfish.c
+> @@ -61,13 +61,13 @@ static void do_rw_io(struct goldfish_tty *qtty,
+>         spin_lock_irqsave(&qtty->lock, irq_flags);
+>         gf_write_ptr((void *)address, base + GOLDFISH_TTY_REG_DATA_PTR,
+>                      base + GOLDFISH_TTY_REG_DATA_PTR_HIGH);
+> -       __raw_writel(count, base + GOLDFISH_TTY_REG_DATA_LEN);
+> +       gf_iowrite32(count, base + GOLDFISH_TTY_REG_DATA_LEN);
+>
+>         if (is_write)
+> -               __raw_writel(GOLDFISH_TTY_CMD_WRITE_BUFFER,
+> +               gf_iowrite32(GOLDFISH_TTY_CMD_WRITE_BUFFER,
+>                        base + GOLDFISH_TTY_REG_CMD);
+>         else
+> -               __raw_writel(GOLDFISH_TTY_CMD_READ_BUFFER,
+> +               gf_iowrite32(GOLDFISH_TTY_CMD_READ_BUFFER,
+>                        base + GOLDFISH_TTY_REG_CMD);
+>
+>         spin_unlock_irqrestore(&qtty->lock, irq_flags);
+> @@ -142,7 +142,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
+>         unsigned char *buf;
+>         u32 count;
+>
+> -       count = __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
+> +       count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
+>         if (count == 0)
+>                 return IRQ_NONE;
+>
+> @@ -159,7 +159,7 @@ static int goldfish_tty_activate(struct tty_port *port, struct tty_struct *tty)
+>  {
+>         struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
+>                                                                         port);
+> -       __raw_writel(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
+> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
+>         return 0;
+>  }
+>
+> @@ -167,7 +167,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
+>  {
+>         struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
+>                                                                         port);
+> -       __raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
+> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
+>  }
+>
+>  static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
+> @@ -202,7 +202,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
+>  {
+>         struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
+>         void __iomem *base = qtty->base;
+> -       return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
+> +       return gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
+>  }
+>
+>  static void goldfish_tty_console_write(struct console *co, const char *b,
+> @@ -355,7 +355,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+>          * on Ranchu emulator (qemu2) returns 1 here and
+>          * driver will use physical addresses.
+>          */
+> -       qtty->version = __raw_readl(base + GOLDFISH_TTY_REG_VERSION);
+> +       qtty->version = gf_ioread32(base + GOLDFISH_TTY_REG_VERSION);
+>
+>         /*
+>          * Goldfish TTY device on Ranchu emulator (qemu2)
+> @@ -374,7 +374,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> -       __raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
+> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
+>
+>         ret = request_irq(irq, goldfish_tty_interrupt, IRQF_SHARED,
+>                           "goldfish_tty", qtty);
+> @@ -436,7 +436,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
+>  #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
+>  static void gf_early_console_putchar(struct uart_port *port, int ch)
+>  {
+> -       __raw_writel(ch, port->membase);
+> +       gf_iowrite32(ch, port->membase);
+>  }
+>
+>  static void gf_early_write(struct console *con, const char *s, unsigned int n)
+> diff --git a/include/linux/goldfish.h b/include/linux/goldfish.h
+> index 12be1601fd84..bcc17f95b906 100644
+> --- a/include/linux/goldfish.h
+> +++ b/include/linux/goldfish.h
+> @@ -8,14 +8,21 @@
+>
+>  /* Helpers for Goldfish virtual platform */
+>
+> +#ifndef gf_ioread32
+> +#define gf_ioread32 ioread32
+> +#endif
+> +#ifndef gf_iowrite32
+> +#define gf_iowrite32 iowrite32
+> +#endif
+> +
+>  static inline void gf_write_ptr(const void *ptr, void __iomem *portl,
+>                                 void __iomem *porth)
+>  {
+>         const unsigned long addr = (unsigned long)ptr;
+>
+> -       __raw_writel(lower_32_bits(addr), portl);
+> +       gf_iowrite32(lower_32_bits(addr), portl);
+>  #ifdef CONFIG_64BIT
+> -       __raw_writel(upper_32_bits(addr), porth);
+> +       gf_iowrite32(upper_32_bits(addr), porth);
+>  #endif
+>  }
+>
+> @@ -23,9 +30,9 @@ static inline void gf_write_dma_addr(const dma_addr_t addr,
+>                                      void __iomem *portl,
+>                                      void __iomem *porth)
+>  {
+> -       __raw_writel(lower_32_bits(addr), portl);
+> +       gf_iowrite32(lower_32_bits(addr), portl);
+>  #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> -       __raw_writel(upper_32_bits(addr), porth);
+> +       gf_iowrite32(upper_32_bits(addr), porth);
+>  #endif
+>  }
 
 Gr{oetje,eeting}s,
 

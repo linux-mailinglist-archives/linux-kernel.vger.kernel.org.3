@@ -2,189 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07BD4D4797
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068BF4D479B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242244AbiCJNDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
+        id S242260AbiCJNEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiCJNDC (ORCPT
+        with ESMTP id S232078AbiCJNE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:03:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C29014AC9B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646917320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RWMS1CuuTjg/dxyi6dNPKqfhAnq0QfD6tRtdo/5dGxE=;
-        b=M8vdPttm3qoDioC6t6zAahc/jPD7xmN4zOYjG72kxvkZJVhNgSgHJ3ZtDQrlNOZKHPknpW
-        TGvu98CmtS7JXR2RI9QbErd7jljKUPvrfhsvznR6x97nshfRzr6qhcwcZKtgn/R5HuMw9J
-        qYUdO5eqNS2PG+g9esWMs64IJ8L7SAQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-SRaUPU3lMrifyawy4VVcgQ-1; Thu, 10 Mar 2022 08:01:59 -0500
-X-MC-Unique: SRaUPU3lMrifyawy4VVcgQ-1
-Received: by mail-wr1-f69.google.com with SMTP id a5-20020adfdd05000000b001f023fe32ffso1663000wrm.18
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:01:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RWMS1CuuTjg/dxyi6dNPKqfhAnq0QfD6tRtdo/5dGxE=;
-        b=NQpWTpFpXEp6qNdHcMRVrjw/wRffInW1Fqn4uj+0xCBA7A1CqzC/h00Rqwe4IQKd07
-         MrMEDsqzGOMV0q8rxbKuhDImMR9wDVvDSKN2TI8cKI0IS1L7N5KU0wdi3z/n7ScB09yW
-         gvqmccx7NT2ZpcfIjGxaG1fZmidvlqtNkTChq4F3kLkOqnXgyW6khFZ4I8aXDjSHZnm9
-         c/0ocdsm85yTEZRCDVMrEhxqzNpYcvP/ao1fyJLdmi7pfQwpoa1O11qhvBk/ixyPzNFQ
-         HlwijkqJt5R5KB55Zi94tEtIFhLeUwzv+5T7hj0Rf8rXKm2JFlw1ce4OvaKVxJQfhoOT
-         2jsg==
-X-Gm-Message-State: AOAM532wYpaUU6zle+AKyMxpPf1rlWrTPTIc6sCpc6XC09ZyzF1ctnkB
-        3HAcaPUVtYy7uD4nZzdoX5HQvZf6PpL9f+dfkgK9iza2dk5hgA2GoUS7aOX9/pCGir5kcB+FGtj
-        laf7qPxwJ/M/HAhsdgwtibGj8
-X-Received: by 2002:a5d:6d41:0:b0:1ef:f32c:18ee with SMTP id k1-20020a5d6d41000000b001eff32c18eemr3489820wri.532.1646917318225;
-        Thu, 10 Mar 2022 05:01:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzG8zUynya3aZ1k62/HZYUuzx+jvS8PFleAyItoEwxyNae7kQtcQuOPFd+KwfonhP3HTCC0Bw==
-X-Received: by 2002:a5d:6d41:0:b0:1ef:f32c:18ee with SMTP id k1-20020a5d6d41000000b001eff32c18eemr3489798wri.532.1646917317914;
-        Thu, 10 Mar 2022 05:01:57 -0800 (PST)
-Received: from redhat.com ([2.53.27.107])
-        by smtp.gmail.com with ESMTPSA id r186-20020a1c2bc3000000b0037bdd94a4e5sm4477363wmr.39.2022.03.10.05.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 05:01:57 -0800 (PST)
-Date:   Thu, 10 Mar 2022 08:01:53 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jiyong Park <jiyong@google.com>
-Cc:     sgarzare@redhat.com, stefanha@redhat.com, jasowang@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, adelva@google.com,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] vsock: each transport cycles only on its own sockets
-Message-ID: <20220310075933-mutt-send-email-mst@kernel.org>
-References: <20220310125425.4193879-1-jiyong@google.com>
- <20220310125425.4193879-2-jiyong@google.com>
+        Thu, 10 Mar 2022 08:04:27 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279E0C791D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:03:23 -0800 (PST)
+X-QQ-mid: bizesmtp78t1646917384tdsqalkf
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 10 Mar 2022 21:03:03 +0800 (CST)
+X-QQ-SSF: 01400000002000B0C000B00A0000000
+X-QQ-FEAT: hAQ2xUxVESwZEQadtxikZbscZLrGOFgmNn+CeTtX4AR5qtfkmOVoFOHtsHJad
+        G3G4uvIAGBdITa72ZM2D/poSJOHwAy34zaXbnYquS5owIxyXuhOkenVy/NNKnVOQY9LEHdr
+        A47rhkY13bprr5ZopJn/Qs0h/sW6tGH8FhY6jYIRavc+YVEWqCn3M23PDLTqE6YoI4HlR6D
+        p3XoavG5oiFwI6BMHp0fcG9T2kEXatWgBOrisD/1sfUz5NSO2tU6561qBlixpsY087HuOEI
+        q/uLWO1zBM0js8+I2mDODwA9C+H6Z6VRoxwRRoYjGF68Yq14+lMOJG+LbQIJPTA8Xa204AG
+        sxaWAL0
+X-QQ-GoodBg: 2
+From:   huangwenhui <huangwenhuia@uniontech.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     jeremy.szu@canonical.com, hui.wang@canonical.com,
+        wse@tuxedocomputers.com, cam@neo-zeon.de, kailang@realtek.com,
+        tanureal@opensource.cirrus.com, sami@loone.fi,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        huangwenhui <huangwenhuia@uniontech.com>
+Subject: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+Date:   Thu, 10 Mar 2022 21:03:01 +0800
+Message-Id: <20220310130301.22827-1-huangwenhuia@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310125425.4193879-2-jiyong@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 09:54:24PM +0900, Jiyong Park wrote:
-> When iterating over sockets using vsock_for_each_connected_socket, make
-> sure that a transport filters out sockets that don't belong to the
-> transport.
-> 
-> There actually was an issue caused by this; in a nested VM
-> configuration, destroying the nested VM (which often involves the
-> closing of /dev/vhost-vsock if there was h2g connections to the nested
-> VM) kills not only the h2g connections, but also all existing g2h
-> connections to the (outmost) host which are totally unrelated.
-> 
-> Tested: Executed the following steps on Cuttlefish (Android running on a
-> VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
-> connection inside the VM, (2) open and then close /dev/vhost-vsock by
-> `exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
-> session is not reset.
-> 
-> [1] https://android.googlesource.com/device/google/cuttlefish/
-> 
-> Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
-> Signed-off-by: Jiyong Park <jiyong@google.com>
-> ---
->  drivers/vhost/vsock.c            | 4 ++++
->  net/vmw_vsock/virtio_transport.c | 7 +++++++
->  net/vmw_vsock/vmci_transport.c   | 5 +++++
->  3 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> index 37f0b4274113..853ddac00d5b 100644
-> --- a/drivers/vhost/vsock.c
-> +++ b/drivers/vhost/vsock.c
-> @@ -722,6 +722,10 @@ static void vhost_vsock_reset_orphans(struct sock *sk)
->  	 * executing.
->  	 */
->  
-> +	/* Only handle our own sockets */
-> +	if (vsk->transport != &vhost_transport.transport)
-> +		return;
-> +
->  	/* If the peer is still valid, no need to reset connection */
->  	if (vhost_vsock_get(vsk->remote_addr.svm_cid))
->  		return;
+On a HP 288 Pro G8, the front Mic could not be detected.
+
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+---
+ sound/pci/hda/patch_realtek.c | 37 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 3a42457984e9..bcd56cdc07af 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -10519,6 +10519,37 @@ static void alc671_fixup_hp_headset_mic2(struct hda_codec *codec,
+ 	}
+ }
+ 
++static void alc671_fixup_hp288_headset_mic2(struct hda_codec *codec,
++					     const struct hda_fixup *fix, int action)
++{
++	struct alc_spec *spec = codec->spec;
++	hda_nid_t hp_pin = alc_get_hp_pin(spec);
++
++	static const struct hda_pintbl pincfgs[] = {
++		{ 0x19, 0x02a11040 }, /* use as headset mic, with its own jack detect */
++		{ 0x1b, 0x0181304f },
++		{ }
++	};
++
++	if (!hp_pin)
++		hp_pin = 0x21;
++
++	switch (action) {
++	case HDA_FIXUP_ACT_PRE_PROBE:
++		spec->gen.mixer_nid = 0;
++		spec->parse_flags |= HDA_PINCFG_HEADSET_MIC;
++		snd_hda_apply_pincfgs(codec, pincfgs);
++		break;
++	case HDA_FIXUP_ACT_INIT:
++		alc_write_coef_idx(codec, 0x19, 0xa054);
++		msleep(80);
++		snd_hda_codec_write(codec, hp_pin, 0,
++			    AC_VERB_SET_AMP_GAIN_MUTE, AMP_OUT_UNMUTE);
++		msleep(100);
++		break;
++	}
++}
++
+ static void alc897_hp_automute_hook(struct hda_codec *codec,
+ 					 struct hda_jack_callback *jack)
+ {
+@@ -10615,6 +10646,7 @@ enum {
+ 	ALC669_FIXUP_ACER_ASPIRE_ETHOS,
+ 	ALC669_FIXUP_ACER_ASPIRE_ETHOS_HEADSET,
+ 	ALC671_FIXUP_HP_HEADSET_MIC2,
++	ALC671_FIXUP_HP288_HEADSET_MIC2,
+ 	ALC662_FIXUP_ACER_X2660G_HEADSET_MODE,
+ 	ALC662_FIXUP_ACER_NITRO_HEADSET_MODE,
+ 	ALC668_FIXUP_ASUS_NO_HEADSET_MIC,
+@@ -10986,6 +11018,10 @@ static const struct hda_fixup alc662_fixups[] = {
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc671_fixup_hp_headset_mic2,
+ 	},
++	[ALC671_FIXUP_HP288_HEADSET_MIC2] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc671_fixup_hp288_headset_mic2,
++	},
+ 	[ALC662_FIXUP_ACER_X2660G_HEADSET_MODE] = {
+ 		.type = HDA_FIXUP_PINS,
+ 		.v.pins = (const struct hda_pintbl[]) {
+@@ -11067,6 +11103,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1028, 0x069f, "Dell", ALC668_FIXUP_DELL_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x103c, 0x1632, "HP RP5800", ALC662_FIXUP_HP_RP5800),
+ 	SND_PCI_QUIRK(0x103c, 0x873e, "HP", ALC671_FIXUP_HP_HEADSET_MIC2),
++	SND_PCI_QUIRK(0x103c, 0x885f, "HP 288 Pro G8", ALC671_FIXUP_HP288_HEADSET_MIC2),
+ 	SND_PCI_QUIRK(0x1043, 0x1080, "Asus UX501VW", ALC668_FIXUP_HEADSET_MODE),
+ 	SND_PCI_QUIRK(0x1043, 0x11cd, "Asus N550", ALC662_FIXUP_ASUS_Nx50),
+ 	SND_PCI_QUIRK(0x1043, 0x129d, "Asus N750", ALC662_FIXUP_ASUS_Nx50),
+-- 
+2.20.1
 
 
-We know this is incomplete though. So I think it's the wrong thing to do
-when you backport, too. If all you worry about is breaking a binary
-module interface, how about simply exporting a new function when you
-backport. Thus you will have downstream both:
-
-void vsock_for_each_connected_socket(void (*fn)(struct sock *sk));
-
-void vsock_for_each_connected_socket_new(struct vsock_transport *transport,
-                                    void (*fn)(struct sock *sk));
-
-
-and then upstream we can squash these two patches.
-
-Hmm?
-
-
-> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> index fb3302fff627..61b24eb31d4b 100644
-> --- a/net/vmw_vsock/virtio_transport.c
-> +++ b/net/vmw_vsock/virtio_transport.c
-> @@ -24,6 +24,7 @@
->  static struct workqueue_struct *virtio_vsock_workqueue;
->  static struct virtio_vsock __rcu *the_virtio_vsock;
->  static DEFINE_MUTEX(the_virtio_vsock_mutex); /* protects the_virtio_vsock */
-> +static struct virtio_transport virtio_transport; /* forward declaration */
->  
->  struct virtio_vsock {
->  	struct virtio_device *vdev;
-> @@ -357,11 +358,17 @@ static void virtio_vsock_event_fill(struct virtio_vsock *vsock)
->  
->  static void virtio_vsock_reset_sock(struct sock *sk)
->  {
-> +	struct vsock_sock *vsk = vsock_sk(sk);
-> +
->  	/* vmci_transport.c doesn't take sk_lock here either.  At least we're
->  	 * under vsock_table_lock so the sock cannot disappear while we're
->  	 * executing.
->  	 */
->  
-> +	/* Only handle our own sockets */
-> +	if (vsk->transport != &virtio_transport.transport)
-> +		return;
-> +
->  	sk->sk_state = TCP_CLOSE;
->  	sk->sk_err = ECONNRESET;
->  	sk_error_report(sk);
-> diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-> index 7aef34e32bdf..cd2f01513fae 100644
-> --- a/net/vmw_vsock/vmci_transport.c
-> +++ b/net/vmw_vsock/vmci_transport.c
-> @@ -803,6 +803,11 @@ static void vmci_transport_handle_detach(struct sock *sk)
->  	struct vsock_sock *vsk;
->  
->  	vsk = vsock_sk(sk);
-> +
-> +	/* Only handle our own sockets */
-> +	if (vsk->transport != &vmci_transport)
-> +		return;
-> +
->  	if (!vmci_handle_is_invalid(vmci_trans(vsk)->qp_handle)) {
->  		sock_set_flag(sk, SOCK_DONE);
->  
-> -- 
-> 2.35.1.723.g4982287a31-goog
 

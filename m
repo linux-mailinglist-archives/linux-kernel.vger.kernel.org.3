@@ -2,407 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD6C4D4DD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8794D4E03
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239149AbiCJP6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S240236AbiCJQBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239339AbiCJP6w (ORCPT
+        with ESMTP id S239805AbiCJQAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:58:52 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA2726AF2;
-        Thu, 10 Mar 2022 07:57:45 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bu29so10311735lfb.0;
-        Thu, 10 Mar 2022 07:57:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Yte1PcxR3IB6p9pVv52DRShh5fK9LuowQ3Jlc6YjsCQ=;
-        b=C6UQuceqS2AHZkY0KgGYZYiFSR8FhqrNmAC6ZLrGbpHMkKZwGr6+HU6v9iU9Sx8Yjr
-         uFRhNmkb8Km9Z9jQkm/yQtC+6GmGyH8/DNNJrdZ3ibcRtdD8ENH34nJLoJzHN+zPLBWd
-         1ExDOccl8+li7AevW4GKXz3fr1GnsR6fQCdTXGKOCLDMlqBnrjdAIPhWWX6l+aMJA4Io
-         HLlzrcEzY/kerIckHY6vhX6rU4CaqHleo7Aj8UA7U/mJRKgiDK+aXlvj0jKTwqTJedxB
-         rBqBe2Ev9z9/0FnRscxQCbYpIbWNaQNaBaSKf1IfXOL7OWynumrH/UsAc9ueq5X/l79U
-         91yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Yte1PcxR3IB6p9pVv52DRShh5fK9LuowQ3Jlc6YjsCQ=;
-        b=tK0yvyVeqUDc4G8vcE0R1grmbkAxMuvoVW7D0+JGoc0YVQqQRLKBua2rmkXFDs4eOt
-         fUHfhYWRUqUZb0O+BHTiDzAHKWXooD4UEGnVJXcQtlnfyiksKyYEoffFgQyHuMmkAo0h
-         6+TgEG2Rjp2Z1uBG/mcAi3NPIzrbUoJrrB/TJYVhsSBapUu9GOSe7GbCy8L1KFwK7CnI
-         hOEyGFrEY6B013sLnpx0lEPFd9xQccF59ygJwc2r08hIEe2tVTz4Gts3QxMlvS553iw4
-         7kcSjxp5DWiqdiweCHPMq4Wv7ikEPv3wBkuaQDry5LQeFHRwBg5fqWF3g2XTle7n3XGv
-         LpTA==
-X-Gm-Message-State: AOAM532aSGnoS6EoR7BpVKDhRQtt3NwBjge8fAfM4MJGdyG2Qc2OvRlg
-        28VyHO/R4QwOiJsEgWmJ0Ak=
-X-Google-Smtp-Source: ABdhPJy1Wc5ApBeGGCymY6YFIeIOamnWYFh6LbYUKH+RUuVrwwTx8p/q+PP2IBIHEL/LYOFrNK4qSA==
-X-Received: by 2002:a05:6512:108a:b0:448:6519:3bc1 with SMTP id j10-20020a056512108a00b0044865193bc1mr1926583lfg.679.1646927863931;
-        Thu, 10 Mar 2022 07:57:43 -0800 (PST)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id o17-20020ac24351000000b004437b082fc6sm1043273lfl.229.2022.03.10.07.57.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 07:57:43 -0800 (PST)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20220310142836.m5onuelv4jej5gvs@skbuf>
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
- <20220310142320.611738-4-schultz.hans+netdev@gmail.com>
- <20220310142836.m5onuelv4jej5gvs@skbuf>
-Date:   Thu, 10 Mar 2022 16:57:41 +0100
-Message-ID: <86pmmter62.fsf@gmail.com>
+        Thu, 10 Mar 2022 11:00:54 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0CE184636;
+        Thu, 10 Mar 2022 07:59:52 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22AFeApK021863;
+        Thu, 10 Mar 2022 15:59:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=CP0U+j6h4uZqGjLy0jQWcXoqaVQquNBOxqL4TXvRt9g=;
+ b=CG//XyovQ5WlIuNJx+0PTPQ4u7oJJdFBoa4+DvpVR9/jVJDbvTDQsxFDPW7S++nxswGj
+ I449EjNKuhIAndZJwkrtCefxKsslWK+BGzKH7HJ09nF/9k9Lo/xvE7ulvcEpS6EwQzkK
+ k4FU4w1iGp2lOWTR3I5hiWa8AAn78CixsV/Ul2nbp7r3YNydD3oJba9kA/HwS8vo1JFp
+ hVGRcrhZzNwJBPscQa76fdEPwJKfOGSW3DmnbUIcItlks/agaFdNU8N9l9zYVLfp9VTp
+ 1bLTnXCyK+AudR9RFcQ64H1F6tfwbVFGPng+vZp8X1QJtIhUtegm6MFx5zzA8cY/i78C CA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqg9rxp4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Mar 2022 15:59:31 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22ADTwhn013695;
+        Thu, 10 Mar 2022 15:59:31 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqg9rxp4f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Mar 2022 15:59:31 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22AFvLpA022398;
+        Thu, 10 Mar 2022 15:59:29 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3eky4j55m2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Mar 2022 15:59:29 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22AFxR8A13763068
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Mar 2022 15:59:27 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B78EA406F;
+        Thu, 10 Mar 2022 15:59:27 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB1C8A4054;
+        Thu, 10 Mar 2022 15:59:26 +0000 (GMT)
+Received: from localhost (unknown [9.43.36.239])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Mar 2022 15:59:26 +0000 (GMT)
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     linux-ext4@vger.kernel.org
+Cc:     Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCHv2 00/10] ext4: Improve FC trace events
+Date:   Thu, 10 Mar 2022 21:28:54 +0530
+Message-Id: <cover.1646922487.git.riteshh@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8SAM30P4rlt-HXmkFXrCoeUBzub8hXjX
+X-Proofpoint-ORIG-GUID: C5Y7M0ic7wovz2_omucnyhbpSEUsiV-V
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,THIS_AD,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-10_06,2022-03-09_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxlogscore=837 bulkscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 mlxscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203100084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On tor, mar 10, 2022 at 16:28, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Thu, Mar 10, 2022 at 03:23:20PM +0100, Hans Schultz wrote:
->> This implementation for the Marvell mv88e6xxx chip series, is
->> based on handling ATU miss violations occurring when packets
->> ingress on a port that is locked. The mac address triggering
->> the ATU miss violation is communicated through switchdev to
->> the bridge module, which adds a fdb entry with the fdb locked
->> flag set.
->> Note: The locked port must have learning enabled for the ATU
->> miss violation to occur.
->> 
->> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
->> ---
->>  drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
->>  drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
->>  drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
->>  drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
->>  drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
->>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
->>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
->>  drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
->>  drivers/net/dsa/mv88e6xxx/port.h              |  1 +
->>  9 files changed, 138 insertions(+), 7 deletions(-)
->>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
->>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
->> 
->> diff --git a/drivers/net/dsa/mv88e6xxx/Makefile b/drivers/net/dsa/mv88e6xxx/Makefile
->> index c8eca2b6f959..3ca57709730d 100644
->> --- a/drivers/net/dsa/mv88e6xxx/Makefile
->> +++ b/drivers/net/dsa/mv88e6xxx/Makefile
->> @@ -15,3 +15,4 @@ mv88e6xxx-objs += port_hidden.o
->>  mv88e6xxx-$(CONFIG_NET_DSA_MV88E6XXX_PTP) += ptp.o
->>  mv88e6xxx-objs += serdes.o
->>  mv88e6xxx-objs += smi.o
->> +mv88e6xxx-objs += mv88e6xxx_switchdev.o
->> \ No newline at end of file
->> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
->> index 84b90fc36c58..e1b6bd738085 100644
->> --- a/drivers/net/dsa/mv88e6xxx/chip.c
->> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
->> @@ -1714,11 +1714,11 @@ static int mv88e6xxx_vtu_get(struct mv88e6xxx_chip *chip, u16 vid,
->>  	return err;
->>  }
->>  
->> -static int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
->> -			      int (*cb)(struct mv88e6xxx_chip *chip,
->> -					const struct mv88e6xxx_vtu_entry *entry,
->> -					void *priv),
->> -			      void *priv)
->> +int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
->> +		       int (*cb)(struct mv88e6xxx_chip *chip,
->> +				 const struct mv88e6xxx_vtu_entry *entry,
->> +				 void *priv),
->> +		       void *priv)
->>  {
->>  	struct mv88e6xxx_vtu_entry entry = {
->>  		.vid = mv88e6xxx_max_vid(chip),
->> diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
->> index 30b92a265613..64e8fc470fdf 100644
->> --- a/drivers/net/dsa/mv88e6xxx/chip.h
->> +++ b/drivers/net/dsa/mv88e6xxx/chip.h
->> @@ -763,6 +763,11 @@ static inline void mv88e6xxx_reg_unlock(struct mv88e6xxx_chip *chip)
->>  	mutex_unlock(&chip->reg_lock);
->>  }
->>  
->> +int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
->> +		       int (*cb)(struct mv88e6xxx_chip *chip,
->> +				 const struct mv88e6xxx_vtu_entry *entry,
->> +				 void *priv),
->> +		       void *priv);
->>  int mv88e6xxx_fid_map(struct mv88e6xxx_chip *chip, unsigned long *bitmap);
->>  
->>  #endif /* _MV88E6XXX_CHIP_H */
->> diff --git a/drivers/net/dsa/mv88e6xxx/global1.h b/drivers/net/dsa/mv88e6xxx/global1.h
->> index 2c1607c858a1..729cc0610d9a 100644
->> --- a/drivers/net/dsa/mv88e6xxx/global1.h
->> +++ b/drivers/net/dsa/mv88e6xxx/global1.h
->> @@ -136,6 +136,7 @@
->>  #define MV88E6XXX_G1_ATU_DATA_TRUNK				0x8000
->>  #define MV88E6XXX_G1_ATU_DATA_TRUNK_ID_MASK			0x00f0
->>  #define MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_MASK			0x3ff0
->> +#define MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS		0x0000
->>  #define MV88E6XXX_G1_ATU_DATA_STATE_MASK			0x000f
->>  #define MV88E6XXX_G1_ATU_DATA_STATE_UC_UNUSED			0x0000
->>  #define MV88E6XXX_G1_ATU_DATA_STATE_UC_AGE_1_OLDEST		0x0001
->> diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> index 40bd67a5c8e9..afa54fe8667e 100644
->> --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> @@ -12,6 +12,8 @@
->>  
->>  #include "chip.h"
->>  #include "global1.h"
->> +#include "port.h"
->> +#include "mv88e6xxx_switchdev.h"
->>  
->>  /* Offset 0x01: ATU FID Register */
->>  
->> @@ -114,6 +116,18 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
->>  	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
->>  }
->>  
->> +static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
->> +{
->> +	int err;
->> +
->> +	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
->> +				 MV88E6XXX_G1_ATU_OP_BUSY | MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
->> +	if (err)
->> +		return err;
->> +
->> +	return mv88e6xxx_g1_atu_op_wait(chip);
->> +}
->> +
->>  static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
->>  {
->>  	u16 val;
->> @@ -356,11 +370,11 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->>  	int spid;
->>  	int err;
->>  	u16 val;
->> +	u16 fid;
->>  
->>  	mv88e6xxx_reg_lock(chip);
->>  
->> -	err = mv88e6xxx_g1_atu_op(chip, 0,
->> -				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
->> +	err = mv88e6xxx_g1_read_atu_violation(chip);
->>  	if (err)
->>  		goto out;
->>  
->> @@ -368,6 +382,10 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->>  	if (err)
->>  		goto out;
->>  
->> +	err = mv88e6xxx_g1_read(chip, MV88E6352_G1_ATU_FID, &fid);
->> +	if (err)
->> +		goto out;
->> +
->>  	err = mv88e6xxx_g1_atu_data_read(chip, &entry);
->>  	if (err)
->>  		goto out;
->> @@ -396,6 +414,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->>  				    "ATU miss violation for %pM portvec %x spid %d\n",
->>  				    entry.mac, entry.portvec, spid);
->>  		chip->ports[spid].atu_miss_violation++;
->> +		if (mv88e6xxx_port_is_locked(chip, chip->ports[spid].port))
->> +			err = mv88e6xxx_switchdev_handle_atu_miss_violation(chip,
->> +									    chip->ports[spid].port,
->> +									    &entry,
->> +									    fid);
->
-> Do we want to suppress the ATU miss violation warnings if we're going to
-> notify the bridge, or is it better to keep them for some reason?
-> My logic is that they're part of normal operation, so suppressing makes
-> sense.
->
+Hello,
 
-Only one issue is that the ATU miss violations would not be reported on
-ports that are not locked, while the bridge will not be notified either.
+Please find the v2 of this patch series.
 
->> +		if (err)
->> +			goto out;
->>  	}
->>  
->>  	if (val & MV88E6XXX_G1_ATU_OP_FULL_VIOLATION) {
->> diff --git a/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
->> new file mode 100644
->> index 000000000000..e0ca452b6f86
->> --- /dev/null
->> +++ b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
->> @@ -0,0 +1,67 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * mv88e6xxx_switchdev.c
->> + *
->> + *	Authors:
->> + *	Hans J. Schultz		<hans.schultz@westermo.com>
->> + *
->> + */
->> +
->> +#include <net/switchdev.h>
->> +#include "chip.h"
->> +#include "global1.h"
->> +
->> +struct mv88e6xxx_fid_search_ctx {
->> +	u16 fid_search;
->> +	u16 vid_found;
->> +};
->> +
->> +static int mv88e6xxx_find_vid_on_matching_fid(struct mv88e6xxx_chip *chip,
->> +					      const struct mv88e6xxx_vtu_entry *entry,
->> +					      void *priv)
->> +{
->> +	struct mv88e6xxx_fid_search_ctx *ctx = priv;
->> +
->> +	if (ctx->fid_search == entry->fid) {
->> +		ctx->vid_found = entry->vid;
->> +		return 1;
->> +	}
->> +	return 0;
->> +}
->> +
->> +int mv88e6xxx_switchdev_handle_atu_miss_violation(struct mv88e6xxx_chip *chip,
->> +						  int port,
->> +						  struct mv88e6xxx_atu_entry *entry,
->> +						  u16 fid)
->> +{
->> +	struct switchdev_notifier_fdb_info info = {
->> +		.addr = entry->mac,
->> +		.vid = 0,
->> +		.added_by_user = false,
->> +		.is_local = false,
->> +		.offloaded = true,
->> +		.locked = true,
->> +	};
->> +	struct mv88e6xxx_fid_search_ctx ctx;
->> +	struct netlink_ext_ack *extack;
->> +	struct net_device *brport;
->> +	struct dsa_port *dp;
->> +	int err;
->> +
->> +	ctx.fid_search = fid;
->> +	err = mv88e6xxx_vtu_walk(chip, mv88e6xxx_find_vid_on_matching_fid, &ctx);
->> +	if (err < 0)
->> +		return err;
->> +	if (err == 1)
->> +		info.vid = ctx.vid_found;
->> +	else
->> +		return -ENODATA;
->> +
->> +	dp = dsa_to_port(chip->ds, port);
->> +	brport = dsa_port_to_bridge_port(dp);
->
-> Since this is threaded interrupt context, I suppose it could race with
-> dsa_port_bridge_leave(). So it is best to check whether "brport" is NULL
-> or not.
->
-> Speaking of races with dsa_port_bridge_leave().. does SWITCHDEV_FDB_ADD_TO_BRIDGE
-> not require rtnl_lock?
->
->> +	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE, brport, &info.info, extack);
->
-> It is buggy to pass an uninitialized on-stack extack, just pass NULL if
-> there's no one to consume it.
->
-> Alternatively, if the bridge produces a valid extack message for errors
-> in this case (I haven't checked), it may be more useful to manually
-> print the extack._msg to the kernel log - see dsa_switch_sync_vlan_filtering()
-> for an example.
->
-> I am a bit uncomfortable having every driver implement this ad-hoc and
-> potentially have a gazillion subtle bugs like these, could we have a
-> common function exported by DSA that deals with SWITCHDEV_FDB_ADD_TO_BRIDGE?
->
->> +	if (err)
->> +		return err;
->> +	entry->portvec = MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS;
->> +	return mv88e6xxx_g1_atu_loadpurge(chip, fid, entry);
->> +}
->> diff --git a/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
->> new file mode 100644
->> index 000000000000..127f3098f745
->> --- /dev/null
->> +++ b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
->> @@ -0,0 +1,20 @@
->> +/* SPDX-License-Identifier: GPL-2.0-or-later
->> + *
->> + * mv88e6xxx_switchdev.h
->> + *
->> + *	Authors:
->> + *	Hans J. Schultz		<hans.schultz@westermo.com>
->> + *
->> + */
->> +
->> +#ifndef DRIVERS_NET_DSA_MV88E6XXX_MV88E6XXX_SWITCHDEV_H_
->> +#define DRIVERS_NET_DSA_MV88E6XXX_MV88E6XXX_SWITCHDEV_H_
->> +
->> +#include <net/switchdev.h>
->> +
->> +int mv88e6xxx_switchdev_handle_atu_miss_violation(struct mv88e6xxx_chip *chip,
->> +						  int port,
->> +						  struct mv88e6xxx_atu_entry *entry,
->> +						  u16 fid);
->> +
->> +#endif /* DRIVERS_NET_DSA_MV88E6XXX_MV88E6XXX_SWITCHDEV_H_ */
->> diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
->> index 795b3128768f..6b375b0caa2c 100644
->> --- a/drivers/net/dsa/mv88e6xxx/port.c
->> +++ b/drivers/net/dsa/mv88e6xxx/port.c
->> @@ -1239,6 +1239,17 @@ int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
->>  	return err;
->>  }
->>  
->> +bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port)
->> +{
->> +	u16 reg;
->> +
->> +	if (mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg))
->> +		return false;
->> +	if (!(reg & MV88E6XXX_PORT_CTL0_SA_FILT_DROP_ON_LOCK))
->> +		return false;
->> +	return true;
->> +}
->> +
->>  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
->>  			    bool locked)
->>  {
->> diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
->> index e0a705d82019..09ea8f1615bb 100644
->> --- a/drivers/net/dsa/mv88e6xxx/port.h
->> +++ b/drivers/net/dsa/mv88e6xxx/port.h
->> @@ -374,6 +374,7 @@ int mv88e6xxx_port_set_fid(struct mv88e6xxx_chip *chip, int port, u16 fid);
->>  int mv88e6xxx_port_get_pvid(struct mv88e6xxx_chip *chip, int port, u16 *pvid);
->>  int mv88e6xxx_port_set_pvid(struct mv88e6xxx_chip *chip, int port, u16 pvid);
->>  
->> +bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port);
->>  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
->>  			    bool locked);
->>  
->> -- 
->> 2.30.2
->> 
+Note:- I still couldn't figure out how to expose EXT4_FC_REASON_MAX in patch-2
+which (I think) might be (only) needed by trace-cmd or perf record for trace_ext4_fc_stats.
+But it seems "cat /sys/kernel/debug/tracing/trace_pipe" gives the right output
+for ext4_fc_stats trace event (as shown below).
+
+So with above reasoning, do you think we should take these patches in?
+And we can later see how to provide EXT4_FC_REASON_MAX definition available to
+libtraceevent?
+
+Either ways, please let me know your opinion around this.
+
+<output of cat /sys/kernel/debug/tracing/trace_pipe> (shows FALLOC_RANGE:5)
+=====================================================
+jbd2/loop2-8-2219    [000] .....  1883.771539: ext4_fc_stats: dev 7,2 fc ineligible reasons:
+XATTR:0, CROSS_RENAME:0, JOURNAL_FLAG_CHANGE:0, NO_MEM:0, SWAP_BOOT:0, RESIZE:0, RENAME_DIR:0, FALLOC_RANGE:5, INODE_JOURNAL_DATA:0 num_commits:22, ineligible: 4, numblks: 22
+
+
+Changes since RFC
+================
+RFC -> v2
+1. Added new patch-5 ("ext4: Return early for non-eligible fast_commit track events")
+2. Removed a trace event in ext4_fc_track_template() (which was added in RFC)
+   from patch-6 and added patch-7 to add the tid info in callers of
+   ext4_fc_track_template(). (As per review comments from Jan)
+
+Tested this with xfstests -g "quick"
+
+
+[RFC]: https://lore.kernel.org/linux-ext4/cover.1645558375.git.riteshh@linux.ibm.com/
+
+Ritesh Harjani (10):
+  ext4: Remove unused enum EXT4_FC_COMMIT_FAILED
+  ext4: Fix ext4_fc_stats trace point
+  ext4: Convert ext4_fc_track_dentry type events to use event class
+  ext4: Do not call FC trace event in ext4_fc_commit() if FS does not support FC
+  ext4: Return early for non-eligible fast_commit track events
+  ext4: Add new trace event in ext4_fc_cleanup
+  ext4: Add transaction tid info in fc_track events
+  ext4: Add commit_tid info in jbd debug log
+  ext4: Add commit tid info in ext4_fc_commit_start/stop trace events
+  ext4: Fix remaining two trace events to use same printk convention
+
+ fs/ext4/fast_commit.c       |  95 ++++++++----
+ fs/ext4/fast_commit.h       |   1 -
+ include/trace/events/ext4.h | 297 +++++++++++++++++++++++-------------
+ 3 files changed, 257 insertions(+), 136 deletions(-)
+
+Cc: Steven Rostedt <rostedt@goodmis.org>
+
+--
+2.31.1
+

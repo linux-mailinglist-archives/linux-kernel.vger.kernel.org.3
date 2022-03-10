@@ -2,84 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0904D5097
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5A44D5092
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245006AbiCJRbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S245032AbiCJRbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233084AbiCJRb2 (ORCPT
+        with ESMTP id S236035AbiCJRbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:31:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA9EF11A1;
-        Thu, 10 Mar 2022 09:30:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA225B8270A;
-        Thu, 10 Mar 2022 17:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204F6C340E8;
-        Thu, 10 Mar 2022 17:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646933424;
-        bh=Xm6HxslQ4JAAUO3tzolqj+8HYytM0C3tyab+DDDGYzg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=TGzEeayaGIUwsWouUcKF4SWChC2LR5w0YVUpr8d3xaYNHng/Bd0l08mgnGB2R822O
-         Jmc4gUuF7I9hroi9OZThClOmK9qmySYqdokWAue55JV3dhBP5mrMadkx6u6gkfyN9v
-         nD1YroODIFl1Ojivnta16dWkGrqJ89I/pvhDd1aRe3TnWKAbZJL+B06a6QgNm/U6/F
-         wDdgs5h+RG+73MHHGPTpW2WGcIBj5CQOmlCD9EfEVJG3N0DSstQwwkFpQ7vrkr+c/3
-         LWiGseBi/6ieqQtFZwur+ikH10P49H5YjdTeylxCWCsLnJJRpHcKSG5TGQDRPHrwHo
-         4jG6yh2V2fvxg==
-Date:   Thu, 10 Mar 2022 11:30:22 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     bhelgaas@google.com, arnd@arndb.de, hch@infradead.org,
-        akpm@linux-foundation.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] PCI: Remove the deprecated "pci-dma-compat.h" API
-Message-ID: <20220310173022.GA166412@bhelgaas>
+        Thu, 10 Mar 2022 12:31:44 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDBCF32B6;
+        Thu, 10 Mar 2022 09:30:43 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id v62so6796686vsv.1;
+        Thu, 10 Mar 2022 09:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kKv9p8ykc5d2ocj7ReSJuSuri2exBdglIdzEyvs2e3Y=;
+        b=CwHCW2iavwpF6S7Yi6aHLObRzx1aWxE/oHa540V+jFaR+IFHdSvAoPtyQm6IclPdxC
+         4fUJEue4mLHmhgpJG4wRn2MkXJoC2SOs0Hd/4dZmkylkQHl+heHUWkez3pDaCKAmR/kc
+         R66WBeP4+c5Gi5JhHkOhlRBkLtpso5L6+Ce41UjJLGqcXBokvof2MZ/beLwWwkS/O8Om
+         YXdg1zEM5htXzRbm8eyImJowLMGHVtr3gFGG0MnVsQsYk3qemfTUkf8ieJcQF/tCNGAm
+         EFJJpXwBilvent1vIwOCTq00kcV0wEpPqZfsBS4dArWvUfXBmBbZtpsAlx5ARf3RBCWO
+         2N1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kKv9p8ykc5d2ocj7ReSJuSuri2exBdglIdzEyvs2e3Y=;
+        b=XJ/6w46yMF4lorFdekVrNfBmCRZhp0ytsIgx0DxuuQu5zqOMYI1998vH8DcLrziR6/
+         HmD14rkA3SZKEzVmBe9tj+pVBb7N2J14IeOaQuPqbZZpqWZORlgQrEdP6yHlxyh4l1xK
+         o1tuZMaepRvXEXlkarfBhidaVmDE9KKrcvRNqpNP/fxhQXZN0EFvYUoloCucoCVOqiqC
+         HcPHhPiTfDIO3pYDH78nQUNBckOHjHVCLVo+yBsmII9/ydLNNWrYvLPFokf0Z8m4Gnpn
+         dhmTG1hQrrWbae+us7bjtk82jkZrMZzPolO2jMwyeHzBKbTKkqGpDXT+Vpl72Szg5D1t
+         7GFw==
+X-Gm-Message-State: AOAM533l0tiTufUYzQiDlVxWJbCQvW4Xln0W/EP0hYdnumcnyXBLf8pV
+        UZHqDoxfNrVGJG8+gOx78F+TSAT3NrEAGmgVBMpcY2kuxU4d3A==
+X-Google-Smtp-Source: ABdhPJyOj4XzeA0yQQrkN8F+JpFhq9HzMs/delrS0VDyUvCBjUeaqSw6SIhIJwbZwO4UUsG8c3k46wAEQv+/0hckrOk=
+X-Received: by 2002:a67:ee94:0:b0:320:c162:2bea with SMTP id
+ n20-20020a67ee94000000b00320c1622beamr3487575vsp.34.1646933442525; Thu, 10
+ Mar 2022 09:30:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310170445.GA163749@bhelgaas>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310045535.224450-1-jeremy.linton@arm.com>
+In-Reply-To: <20220310045535.224450-1-jeremy.linton@arm.com>
+From:   Peter Robinson <pbrobinson@gmail.com>
+Date:   Thu, 10 Mar 2022 17:30:31 +0000
+Message-ID: <CALeDE9OjSAV0Mas7NPJfFQ5SW6ZJV8HgyvZyVnE_LZK2tkPOmQ@mail.gmail.com>
+Subject: Re: [PATCH] net: bcmgenet: Don't claim WOL when its not available
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     netdev@vger.kernel.org, opendmb@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:04:45AM -0600, Bjorn Helgaas wrote:
-> On Wed, Mar 09, 2022 at 08:50:39PM +0100, Christophe JAILLET wrote:
-> > Now that all usages of the functions defined in "pci-dma-compat.h" have
-> > been removed, it is time to remove this file as well.
-> 
-> As of 1db333d9a51f ("Merge tag 'spi-fix-v5.17-rc7' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi"), all the
-> following still appear to be used:
-> 
->   git grep -E "\<PCI_DMA_(BIDIRECTIONAL|TODEVICE|FROMDEVICE|NONE)"
->   git grep -E "pci_(alloc|zalloc|free)_consistent"
->   git grep -E "pci_(map|unmap)_single"
->   git grep -E "\<pci_(map|unmap)_page"
->   git grep -E "pci_(map|unmap)_sg"
->   git grep -E "pci_dma_sync_"
->   git grep pci_dma_mapping_error
->   git grep -E "pci_set_.*dma_mask"
+On Thu, Mar 10, 2022 at 4:55 AM Jeremy Linton <jeremy.linton@arm.com> wrote:
+>
+> Some of the bcmgenet platforms don't correctly support WOL, yet
+> ethtool returns:
+>
+> "Supports Wake-on: gsf"
+>
+> which is false.
+>
+> Ideally if there isn't a wol_irq, or there is something else that
+> keeps the device from being able to wakeup it should display:
+>
+> "Supports Wake-on: d"
+>
+> This patch checks whether the device can wakup, before using the
+> hard-coded supported flags. This corrects the ethtool reporting, as
+> well as the WOL configuration because ethtool verifies that the mode
+> is supported before attempting it.
+>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Tested-by: Peter Robinson <pbrobinson@gmail.com>
 
-Christoph mentioned several other trees that this depends on, and
-those would likely be in linux-next, but not yet in Linus' tree.  The
-above poking around is from the tip of Linus' tree, which was the
-wrong place for me to look.
+This fixes the reporting of the WOL capabilities on the Raspberry Pi 4.
 
-But I did the same in current linux-next, 71941773e143 ("Add
-linux-next specific files for 20220310"), and still found quite a few
-uses.  Some are in comments, printks, coccinelle scripts, etc.  I
-would assume we'd want to remove them all?
-
-Bjorn
+> ---
+>  drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
+> index e31a5a397f11..f55d9d9c01a8 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
+> @@ -40,6 +40,13 @@
+>  void bcmgenet_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+>  {
+>         struct bcmgenet_priv *priv = netdev_priv(dev);
+> +       struct device *kdev = &priv->pdev->dev;
+> +
+> +       if (!device_can_wakeup(kdev)) {
+> +               wol->supported = 0;
+> +               wol->wolopts = 0;
+> +               return;
+> +       }
+>
+>         wol->supported = WAKE_MAGIC | WAKE_MAGICSECURE | WAKE_FILTER;
+>         wol->wolopts = priv->wolopts;
+> --
+> 2.35.1
+>

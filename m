@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CDC4D3FC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DC34D3FC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239312AbiCJDiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S239248AbiCJDnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239306AbiCJDiS (ORCPT
+        with ESMTP id S231249AbiCJDnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:38:18 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3612112B749
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 19:37:18 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2d07ae0b1c0so44937817b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 19:37:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8yQTKhKZiy0dUPmGqJVBdGvAVphmdM4bBbUG0dfDJxA=;
-        b=l8ZoaPWHxwzbVpBhjmxinUTGj1j+Ig58rGZSi3+BJqEfohJetEebkCtGVXGmOi88as
-         RgOeKfLY2ZX5wH72NwrACWu7i3CfsGj5AHezzZzN6Xn3IYWVfFZwtjSwCFCfnCmZCqBg
-         2URYSWoyX1aaT67mpJbQp4uHKr91W+6dsxTzE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8yQTKhKZiy0dUPmGqJVBdGvAVphmdM4bBbUG0dfDJxA=;
-        b=Kcy+u/QOxtwVwiY8D6Fzuw1E+0IoI3uOYvl2FXTFCl8kEC2RxqUC9WbTrfhz64vf6i
-         QLABOtn28l6y+DvCK5YY9M07z1mGC+OJOPfUT2w1jfjTJ90lMYXRns3JXorF+odirjoe
-         37MTeF1Vy/5QDlf9e6aGT2C8naetqxp3kT869QXGFIJWzEVBAhV5sea76sUgQJ5+Is8Y
-         TyN8oSSp5MvZUd/OpxTZlQLr+Ql0my/tA5CWwJPmB1IokKkzyvlNNxqcJ3/O3RFvPTvf
-         YJvKzL1OAFb5nEzE7tJtwWygPyIOpVRcSCooxf9EOq4OJqTIB48wiSL37JCXUg1Qhy9T
-         PZ6g==
-X-Gm-Message-State: AOAM5308++0ncsHtYT9cJVLhkZ6LMkvun07PL2hpPo8Bqkxvqz+tYBjy
-        3VgwYL2Nt8XAOhW1PBH80kyFXl77H4tzrt46zBNFsA==
-X-Google-Smtp-Source: ABdhPJzD4At+0kNDeSdaPownG05HBBbm9XR+dPHBAUs2dzK5t7RTrvr+pZUyJbh1iI5EfuV1fzcc2FvG6pci0IJKTDk=
-X-Received: by 2002:a81:5791:0:b0:2dc:4a64:56f4 with SMTP id
- l139-20020a815791000000b002dc4a6456f4mr2475820ywb.286.1646883437469; Wed, 09
- Mar 2022 19:37:17 -0800 (PST)
+        Wed, 9 Mar 2022 22:43:41 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69485CC50D;
+        Wed,  9 Mar 2022 19:42:40 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KDZYD3SlWz9sVT;
+        Thu, 10 Mar 2022 11:38:56 +0800 (CST)
+Received: from dggpemm500003.china.huawei.com (7.185.36.56) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Mar 2022 11:42:38 +0800
+Received: from [10.174.185.129] (10.174.185.129) by
+ dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Mar 2022 11:42:37 +0800
+Message-ID: <b4c9648c-1f46-6dc2-3bec-6354db7f2c76@huawei.com>
+Date:   Thu, 10 Mar 2022 11:42:37 +0800
 MIME-Version: 1.0
-References: <20220308100956.2750295-1-wenst@chromium.org> <20220308100956.2750295-6-wenst@chromium.org>
- <400cf2fc8cbc3887a90f50709f40adc0662ec0f4.camel@perches.com>
-In-Reply-To: <400cf2fc8cbc3887a90f50709f40adc0662ec0f4.camel@perches.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 10 Mar 2022 11:37:06 +0800
-Message-ID: <CAGXv+5F7pQt28m7wjS22io-MF=ms-HAWOSGC2iMz8cX=zhd1wg@mail.gmail.com>
-Subject: Re: [PATCH v2 05/11] pinctrl: mediatek: paris: Drop extra newline in mtk_pctrl_show_one_pin()
-To:     Joe Perches <joe@perches.com>
-Cc:     Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH] KVM: x86/mmu: make apf token non-zero to fix bug
+Content-Language: en-US
+To:     Xinlong Lin <linxl3@wangsu.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>
+CC:     <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangzhigang17@huawei.com>
+References: <20220222031239.1076682-1-zhangliang5@huawei.com>
+ <69d9a292-c140-ac6c-6afb-df4e383e2847@wangsu.com>
+From:   "zhangliang (AG)" <zhangliang5@huawei.com>
+In-Reply-To: <69d9a292-c140-ac6c-6afb-df4e383e2847@wangsu.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.185.129]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500003.china.huawei.com (7.185.36.56)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 4:01 AM Joe Perches <joe@perches.com> wrote:
->
-> On Tue, 2022-03-08 at 18:09 +0800, Chen-Yu Tsai wrote:
-> > The caller of mtk_pctrl_show_one_pin() is responsible for printing the
-> > full line. mtk_pctrl_show_one_pin(), called through mtk_pctrl_dbg_show(),
-> > should only produce a string containing the extra information the driver
-> > wants included.
->
-> Does this function have another caller?
->
-> It looks as if this function doesn't need to be EXPORT_SYMBOL_GPL
-> and could just be declared static in the file instead.
+No. Because '(++vcpu->arch.apf.id << 12)' may also produce zero value.
 
-Judging from the commit history, I suspect there might have been plans
-for using this in another module?
+On 2022/3/10 11:34, Xinlong Lin wrote:
+> 
+> 
+> On 2022/2/22 11:12, Liang Zhang wrote:
+>> In current async pagefault logic, when a page is ready, KVM relies on
+>> kvm_arch_can_dequeue_async_page_present() to determine whether to deliver
+>> a READY event to the Guest. This function test token value of struct
+>> kvm_vcpu_pv_apf_data, which must be reset to zero by Guest kernel when a
+>> READY event is finished by Guest. If value is zero meaning that a READY
+>> event is done, so the KVM can deliver another.
+>> But the kvm_arch_setup_async_pf() may produce a valid token with zero
+>> value, which is confused with previous mention and may lead the loss of
+>> this READY event.
+>>
+>> This bug may cause task blocked forever in Guest:
+>>   INFO: task stress:7532 blocked for more than 1254 seconds.
+>>         Not tainted 5.10.0 #16
+>>   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>>   task:stress          state:D stack:    0 pid: 7532 ppid:  1409
+>>   flags:0x00000080
+>>   Call Trace:
+>>    __schedule+0x1e7/0x650
+>>    schedule+0x46/0xb0
+>>    kvm_async_pf_task_wait_schedule+0xad/0xe0
+>>    ? exit_to_user_mode_prepare+0x60/0x70
+>>    __kvm_handle_async_pf+0x4f/0xb0
+>>    ? asm_exc_page_fault+0x8/0x30
+>>    exc_page_fault+0x6f/0x110
+>>    ? asm_exc_page_fault+0x8/0x30
+>>    asm_exc_page_fault+0x1e/0x30
+>>   RIP: 0033:0x402d00
+>>   RSP: 002b:00007ffd31912500 EFLAGS: 00010206
+>>   RAX: 0000000000071000 RBX: ffffffffffffffff RCX: 00000000021a32b0
+>>   RDX: 000000000007d011 RSI: 000000000007d000 RDI: 00000000021262b0
+>>   RBP: 00000000021262b0 R08: 0000000000000003 R09: 0000000000000086
+>>   R10: 00000000000000eb R11: 00007fefbdf2baa0 R12: 0000000000000000
+>>   R13: 0000000000000002 R14: 000000000007d000 R15: 0000000000001000
+>>
+>> Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
+>> ---
+>>   arch/x86/kvm/mmu/mmu.c | 13 ++++++++++++-
+>>   1 file changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+>> index 593093b52395..8e24f73bf60b 100644
+>> --- a/arch/x86/kvm/mmu/mmu.c
+>> +++ b/arch/x86/kvm/mmu/mmu.c
+>> @@ -3889,12 +3889,23 @@ static void shadow_page_table_clear_flood(struct kvm_vcpu *vcpu, gva_t addr)
+>>       walk_shadow_page_lockless_end(vcpu);
+>>   }
+>>   +static u32 alloc_apf_token(struct kvm_vcpu *vcpu)
+>> +{
+>> +    /* make sure the token value is not 0 */
+>> +    u32 id = vcpu->arch.apf.id;
+>> +
+>> +    if (id << 12 == 0)
+>> +        vcpu->arch.apf.id = 1;
+>> +
+>> +    return (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
+>> +}
+>> +
+>>   static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>>                       gfn_t gfn)
+>>   {
+>>       struct kvm_arch_async_pf arch;
+>>   -    arch.token = (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
+> This patch is completely OK. But I have a question, can we simplify it to
+> arch.token = (++vcpu->arch.apf.id << 12) | vcpu->vcpu_id;
+>> +    arch.token = alloc_apf_token(vcpu);
+>>       arch.gfn = gfn;
+>>       arch.direct_map = vcpu->arch.mmu->direct_map;
+>>       arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
+> 
+> .
 
-I can do a patch to make it static until that ever happens.
-
-> btw: using %1d is mostly senseless as a control, but has some
->      documentary use as a value < 0 or >= 10 will be always be
->      fully emitted anyway.
-
-Ack. But we could just leave it be.
-
-
-Regards
-ChenYu
-
-> > diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> []
-> > @@ -634,14 +634,10 @@ ssize_t mtk_pctrl_show_one_pin(struct mtk_pinctrl *hw,
-> >                       pullen,
-> >                       pullup);
-> >
-> > -     if (r1 != -1) {
-> > -             len += scnprintf(buf + len, buf_len - len, " (%1d %1d)\n",
-> > -                     r1, r0);
-> > -     } else if (rsel != -1) {
-> > -             len += scnprintf(buf + len, buf_len - len, " (%1d)\n", rsel);
-> > -     } else {
-> > -             len += scnprintf(buf + len, buf_len - len, "\n");
-> > -     }
-> > +     if (r1 != -1)
-> > +             len += scnprintf(buf + len, buf_len - len, " (%1d %1d)", r1, r0);
-> > +     else if (rsel != -1)
-> > +             len += scnprintf(buf + len, buf_len - len, " (%1d)", rsel);
-> >
-> >       return len;
-> >  }
->
->
+-- 
+Best Regards,
+Liang Zhang

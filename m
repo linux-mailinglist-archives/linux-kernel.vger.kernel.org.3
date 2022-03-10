@@ -2,204 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCC24D430B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBA74D430D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240578AbiCJJGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S240607AbiCJJGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiCJJGN (ORCPT
+        with ESMTP id S233760AbiCJJGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:06:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A6111375BA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646903111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sAYCq9czLIZzoXPdYqqCAowC2htPopAKPdrkAbY8Cbo=;
-        b=JwXMsmw+FLdmqNGqQ0Lh7EMQmBiHI9JmeojpSGdQ8EoJgZk17qz0YM+aEtnWhNGjQAfidq
-        NY0Z61oBGDVtkG0ff47pFNfgVdWbTV7SqCytgyvrJRCFkOG9NsNkNFrF7hQlb9JfoSVpzc
-        clgBhwpsXw01qMills+CIESXyGlW/5A=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-462-_ju_elblO9-AfG_HY91MiA-1; Thu, 10 Mar 2022 04:05:08 -0500
-X-MC-Unique: _ju_elblO9-AfG_HY91MiA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F06D91006AA5;
-        Thu, 10 Mar 2022 09:05:06 +0000 (UTC)
-Received: from lacos-laptop-7.usersys.redhat.com (unknown [10.39.194.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B0C741059157;
-        Thu, 10 Mar 2022 09:05:05 +0000 (UTC)
-Subject: Re: [PATCH] dt-bindings: arm: Convert QEMU fw-cfg to DT schema
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220310013552.549590-1-robh@kernel.org>
-From:   Laszlo Ersek <lersek@redhat.com>
-Message-ID: <9651bc36-3da0-4e2b-1d29-bb4b3ce1389d@redhat.com>
+        Thu, 10 Mar 2022 04:06:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F069137768;
+        Thu, 10 Mar 2022 01:05:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=asZaKof/Ycf9Yl/IenjXZLrN7xJYPH+zuWKph/YnaGE=; b=mPNMJ1Y4nU566VAWE+/NYgv08b
+        fnoUNB++Yh/YKvbCQYGfC8U772Xr6Xf6cRnvIb/1RPGfBQ+7ctL/m6ntNGPUbgCz+7y8MEzVM8vTX
+        AadX+R+AmeKWwfoeS+z2TK2R7SJ7VcVvWpIuf42dJ69D2Ws1aeq3t4asGj4pZv0Aj3/YjpMFFSPD3
+        i/rW8D4rdjYC9pHvANvFG0HJJTAzLZR6cb8sOdvF+OJPZh/OoMwUu8tYjcPF5WT6Ys/vHywQDhZKc
+        5tFCASSZpCD/LLA1tyKH5+S7oUWSmBwbGmLjiu5EPiCx2HFyXRO/vnxoFuEAe7SHVJioEAx4hxOgs
+        bFD5LLxw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSEjK-000Mm2-EX; Thu, 10 Mar 2022 09:05:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1367430041D;
+        Thu, 10 Mar 2022 10:05:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E86EC264E62B6; Thu, 10 Mar 2022 10:05:04 +0100 (CET)
 Date:   Thu, 10 Mar 2022 10:05:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
+        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220310013552.549590-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/10/22 02:35, Rob Herring wrote:
-> Convert the QEMU fw-cfg binding to DT schema format. As this binding is
-> also used on Risc-V now, drop any architecture references and move to a
-> common location. The fw-cfg interface has also gained some DMA support
-> which is coherent, so add the missing 'dma-coherent'.
+On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+
+> I observed the following error when building with
+> CONFIG_LTO_CLANG_FULL=y enabled:
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/arm/fw-cfg.txt        | 38 -------------
->  .../bindings/firmware/qemu,fw-cfg-mmio.yaml   | 54 +++++++++++++++++++
->  2 files changed, 54 insertions(+), 38 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/fw-cfg.txt
->  create mode 100644 Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml
+> ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> already defined
+>         ibt_selftest_ip:
+>         ^
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/fw-cfg.txt b/Documentation/devicetree/bindings/arm/fw-cfg.txt
-> deleted file mode 100644
-> index fd54e1db2156..000000000000
-> --- a/Documentation/devicetree/bindings/arm/fw-cfg.txt
-> +++ /dev/null
-> @@ -1,38 +0,0 @@
-> -* QEMU Firmware Configuration bindings for ARM
-> -
-> -QEMU's arm-softmmu and aarch64-softmmu emulation / virtualization targets
-> -provide the following Firmware Configuration interface on the "virt" machine
-> -type:
-> -
-> -- A write-only, 16-bit wide selector (or control) register,
-> -- a read-write, 64-bit wide data register.
-> -
-> -QEMU exposes the control and data register to ARM guests as memory mapped
-> -registers; their location is communicated to the guest's UEFI firmware in the
-> -DTB that QEMU places at the bottom of the guest's DRAM.
-> -
-> -The authoritative guest-side hardware interface documentation to the fw_cfg
-> -device can be found in "docs/specs/fw_cfg.txt" in the QEMU source tree.
-> -
-> -
-> -Required properties:
-> -
-> -- compatible: "qemu,fw-cfg-mmio".
-> -
-> -- reg: the MMIO region used by the device.
-> -  * Bytes 0x0 to 0x7 cover the data register.
-> -  * Bytes 0x8 to 0x9 cover the selector register.
-> -  * Further registers may be appended to the region in case of future interface
-> -    revisions / feature bits.
-> -
-> -Example:
-> -
-> -/ {
-> -	#size-cells = <0x2>;
-> -	#address-cells = <0x2>;
-> -
-> -	fw-cfg@9020000 {
-> -		compatible = "qemu,fw-cfg-mmio";
-> -		reg = <0x0 0x9020000 0x0 0xa>;
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml b/Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml
-> new file mode 100644
-> index 000000000000..3aac9448e7f1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/firmware/qemu,fw-cfg-mmio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: QEMU Firmware Configuration bindings
-> +
-> +maintainers:
-> +  - Laszlo Ersek <lersek@redhat.com>
-
-Ugh :) I guess this is based on my authorship of historical commit
-53275a61bc7a ("devicetree: document ARM bindings for QEMU's Firmware
-Config interface", 2015-01-13), and prehaps my R-b on commit
-92aed5d6ba90 ("devicetree: update documentation for fw_cfg ARM
-bindings", 2016-02-09).
-
-However -- I totally can't maintain this file. (I mean I've probably not
-done anything related to it in the past seven years, so I guess it's
-time to admit that fact!)
-
-Rob, would you please consider taking it over?
-
-With my name+email replaced with yours:
-
-Acked-by: Laszlo Ersek <lersek@redhat.com>
-
-Thank you!
-Laszlo
-
-
-> +
-> +description: |
-> +  Various QEMU emulation / virtualization targets provide the following
-> +  Firmware Configuration interface on the "virt" machine type:
-> +
-> +  - A write-only, 16-bit wide selector (or control) register,
-> +  - a read-write, 64-bit wide data register.
-> +
-> +  QEMU exposes the control and data register to guests as memory mapped
-> +  registers; their location is communicated to the guest's UEFI firmware in the
-> +  DTB that QEMU places at the bottom of the guest's DRAM.
-> +
-> +  The authoritative guest-side hardware interface documentation to the fw_cfg
-> +  device can be found in "docs/specs/fw_cfg.txt" in the QEMU source tree.
-> +
-> +
-> +properties:
-> +  compatible:
-> +    const: qemu,fw-cfg-mmio
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: |
-> +      * Bytes 0x0 to 0x7 cover the data register.
-> +      * Bytes 0x8 to 0x9 cover the selector register.
-> +      * Further registers may be appended to the region in case of future interface
-> +        revisions / feature bits.
-> +
-> +  dma-coherent: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    fw-cfg@9020000 {
-> +        compatible = "qemu,fw-cfg-mmio";
-> +        reg = <0x9020000 0xa>;
-> +    };
-> +...
+> Seems to come from
+> commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
 > 
+> Commenting out the label in the inline asm, I then observed:
+> vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> callable instruction with modified stack frame
+> vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> mismatch: cfa1=4+64 cfa2=4+8
+> These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+> disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> the ibt_selftest_ip label).
 
+Urgh.. I'm thikning this is a clang bug :/
+
+The code in question is:
+
+
+void ibt_selftest_ip(void); /* code label defined in asm below */
+
+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+{
+	/* ... */
+
+	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
+		regs->ax = 0;
+		return;
+	}
+
+	/* ... */
+}
+
+bool ibt_selftest(void)
+{
+	unsigned long ret;
+
+	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
+	     ANNOTATE_RETPOLINE_SAFE
+	     "	jmp *%%rax\n\t"
+	     "ibt_selftest_ip:\n\t"
+	     UNWIND_HINT_FUNC
+	     ANNOTATE_NOENDBR
+	     "	nop\n\t"
+
+	     : "=a" (ret) : : "memory");
+
+	return !ret;
+}
+
+There is only a single definition of that symbol, the one in the asm.
+The other is a declaration, which is used in the exception handler to
+compare against regs->ip.
+
+So what this code does is trigger an explicit #CP and special case that
+in the handler. For that the handler needs to know the special IP that
+will trigger the failure, this is cummunicated with that symbol.
+
+> Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
+> in a vm WITHOUT IBT support.
+> 
+> Any idea what's the status of IBT emulation in QEMU, and if it exists,
+> what's the necessary `-cpu` flag to enable it?
+
+I have a very ugly kvm patch that goes with a very ugly qemu patch to
+make it work. I would very much not recommend those getting merged.
+
+Someone with some actual kvm/qemu foo should do one. The complicating
+factor is that IA32_S_CET also contains SHSTK enable bits, so a straight
+passthrough like I use relies on the guest never setting those bits or
+keeping the pieces. It either needs to filter the MSR or implement the
+full CET mess.

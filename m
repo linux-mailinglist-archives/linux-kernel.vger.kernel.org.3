@@ -2,134 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C424D4C49
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285AE4D4C3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244714AbiCJOyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:54:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
+        id S240292AbiCJOyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346152AbiCJOmi (ORCPT
+        with ESMTP id S1346147AbiCJOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Mar 2022 09:42:38 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA74107A97
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:40:28 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c4so4752882qtx.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:40:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ts+dK3ttiY6R8zZea2yK4md86bxaZKIr+AquYrk3oLk=;
-        b=T4jwBlYZ27/C0gS7bBdNRi5VTaFy92J44Ybzk0KAMHe8N76j3PisechWpbiJ+ucg1U
-         YKnlg9x+UG2ZZ1dLdlUW8DhpFGxJTwkOhTrQEzV8y3cPTMPnKFllQnH1dIzJ6Rc6WEU6
-         +VabZFESxEvq3xiZZpCMMGdMqB2PsRZGzLJVuT4PH7rZCIVHuZx91YGI2dP2KpctJrqR
-         TmtwU30hLrjjDkk53sxc6uSi1Zr9furEM4pVB0ypgU3xIrBI98XltJE3fua6VaLNSA3U
-         PQ9cU4e1bhn9uWp7HGulZ43Pq9QYuaMPEiwP2OJVBjeGfnJKqLE9FjcWXNhWDpFB3oDU
-         EVog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ts+dK3ttiY6R8zZea2yK4md86bxaZKIr+AquYrk3oLk=;
-        b=4S2VPnJp5RBOXYknkIY4n8xNPoQ11phVHO3nHLcfopEz7CIK4n53SCnUCfG3ptEcOv
-         UeVfzhKb/bSWZU/eDmmSxQ5qmnyo1od4fPXgjGTCqGoMJ486mdx4KAyOQ0HNB1OTu/1U
-         fVC4IPDMSqG08lL/NJQPiSMr3WIYZL4PRGTKYEf3gDrWXm+GwuAxhVcRMF08dlQVaLl6
-         +WXj1J45dZDPPf1HIs3pmHnOeQRMBt5+fCreeFU3VrPxAvwsBspmw6wEE4MfP2uHfuMD
-         8Wq1SxynwG1K3vLmT0vWBVdC6Ep0gJK5OvaKjzgtlNpSTmKjVLkp+r8/NeFw7eACT0fk
-         17Tg==
-X-Gm-Message-State: AOAM532tujs6wxX9cmyudRQKcCH13yCqCgwADHzZWeSoWE/v/42o1pgH
-        9ifXaz03il76MVRnreyc5zhNWlkyHi8=
-X-Google-Smtp-Source: ABdhPJxr0dEK7G1srJM7yBK7rFpcwb3YIYiQ87ELaD2MrsmwW6Ms8ZDJ4rwM21+XVzEJfmkUd1nKlw==
-X-Received: by 2002:ac8:7c51:0:b0:2e1:a3b3:a6b7 with SMTP id o17-20020ac87c51000000b002e1a3b3a6b7mr4104620qtv.405.1646923227713;
-        Thu, 10 Mar 2022 06:40:27 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id p2-20020a05620a15e200b0067d2c0455bcsm2317044qkm.36.2022.03.10.06.40.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 06:40:26 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2dbd97f9bfcso59965537b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:40:26 -0800 (PST)
-X-Received: by 2002:a81:594:0:b0:2dc:8978:1d64 with SMTP id
- 142-20020a810594000000b002dc89781d64mr4126054ywf.348.1646923225818; Thu, 10
- Mar 2022 06:40:25 -0800 (PST)
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3512110EC71;
+        Thu, 10 Mar 2022 06:40:42 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 42B881F4592C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646923240;
+        bh=twmvPMBXpCtjQaOxFlhSQ0t2WCEZ9mk4gP1Gmfjc8cY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bu6K6V2iDa++LupO2x7yaRGExEZNhxm11yrUSf02TZ9Kxyrz7sb9akpciPqa7AZ1H
+         /lGsHPgeVloLRWcIFAb3182BKNwYEyU5OktHpyzzRENe8KOYfeY+0eljBkpJui6AAU
+         Z535DZMSTrDqmXmw6DoVWIxVeZFvkXtJyfRbazGi5XS7KHwGzOFlwDHRzZt9i43rAZ
+         KEWauRFPe8gk8QJRmjPCAX5xO+/rvRSjZkCVNuinwhy4Egew/utvEcPNJy9uuhfRLa
+         HTp9gAPz2rhoqAhCnKwpX0wDXclIsmca4LRGlheB1nVPfbPB9R4UieXX2Y/9opXp3h
+         MlLZxpKubHQFg==
+Message-ID: <4974d21c-953c-30c1-8dbf-5826dbb20d8e@collabora.com>
+Date:   Thu, 10 Mar 2022 15:40:37 +0100
 MIME-Version: 1.0
-References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
- <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com> <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
- <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org> <45522c89-a3b4-4b98-232b-9c69470124a3@linaro.org>
- <ff2e1007-5883-5178-6415-326d6ae69c34@kernel.org> <8fdab42f-171f-53d7-8e0e-b29161c0e3e2@linaro.org>
-In-Reply-To: <8fdab42f-171f-53d7-8e0e-b29161c0e3e2@linaro.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 10 Mar 2022 09:39:48 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSeAL7TsdW4t7=G91n3JLuYehUCnDGH4_rHS=vjm1-Nv9Q@mail.gmail.com>
-Message-ID: <CA+FuTSeAL7TsdW4t7=G91n3JLuYehUCnDGH4_rHS=vjm1-Nv9Q@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     David Ahern <dsahern@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
-        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] remoteproc: mediatek: fix side effect of mt8195 sram
+ power on
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220309114713.8156-1-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220309114713.8156-1-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 4:37 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
->
-> On 3/8/22 21:01, David Ahern wrote:
-> > On 3/8/22 12:46 PM, Tadeusz Struk wrote:
-> >> That fails in the same way:
-> >>
-> >> skbuff: skb_over_panic: text:ffffffff83e7b48b len:65575 put:65575
-> >> head:ffff888101f8a000 data:ffff888101f8a088 tail:0x100af end:0x6c0
-> >> dev:<NULL>
-> >> ------------[ cut here ]------------
-> >> kernel BUG at net/core/skbuff.c:113!
-> >> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> >> CPU: 0 PID: 1852 Comm: repro Not tainted
-> >> 5.17.0-rc7-00020-gea4424be1688-dirty #19
-> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35
-> >> RIP: 0010:skb_panic+0x173/0x175
-> >>
-> >> I'm not sure how it supposed to help since it doesn't change the
-> >> alloclen at all.
-> >
-> > alloclen is a function of fraglen and fraglen is a function of datalen.
->
-> Ok, but in this case it doesn't affect the alloclen and it still fails.
+Il 09/03/22 12:47, Tinghan Shen ha scritto:
+> The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
+> 
+> L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
+> 
+> L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
+> These bits have to be powered on to allow EMI access for SCP.
+> 
+> Bits[7:4] also affect audio DSP because audio DSP and SCP are
+> placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
+> blocked too.
+> 
+> L1TCM_SRAM_PDN bits[31:8] are not used.
+> 
+> This fix removes modification of bits[7:4] when power on/off mt8195 SCP
+> L1TCM. It's because the modification introduces a short period of time
+> blocking audio DSP to access EMI. This was not a problem until we have
+> to load both SCP module and audio DSP module. audio DSP needs to access
+> EMI because it has source/data on DRAM. Audio DSP will have unexpected
+> behavior when it accesses EMI and the SCP driver blocks the EMI path at
+> the same time.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>   drivers/remoteproc/mtk_common.h |  4 +++
+>   drivers/remoteproc/mtk_scp.c    | 57 +++++++++++++++++++++++++++++----
+>   2 files changed, 55 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
+> index 5ff3867c72f3..27e7172c926d 100644
+> --- a/drivers/remoteproc/mtk_common.h
+> +++ b/drivers/remoteproc/mtk_common.h
+> @@ -51,6 +51,10 @@
+>   #define MT8192_CORE0_WDT_IRQ		0x10030
+>   #define MT8192_CORE0_WDT_CFG		0x10034
+>   
+> +#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		0xF0
 
-This is some kind of non-standard packet that is being constructed. Do
-we understand how it is different?
+This is GENMASK(7, 4)..
 
-The .syz reproducer is generally a bit more readable than the .c
-equivalent. Though not as much as an strace of the binary, if you
-can share that.
+> +#define MT8195_L1TCM_SRAM_PDN_RESERVED_BITS \
+> +	MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS
+> +
 
-r0 = socket$inet6_icmp_raw(0xa, 0x3, 0x3a)
-connect$inet6(r0, &(0x7f0000000040)={0xa, 0x0, 0x0, @dev, 0x6}, 0x1c)
-setsockopt$inet6_IPV6_HOPOPTS(r0, 0x29, 0x36,
-&(0x7f0000000100)=ANY=[@ANYBLOB="52b3"], 0x5a0)
-sendmmsg$inet(r0, &(0x7f00000002c0)=[{{0x0, 0x0,
-&(0x7f0000000000)=[{&(0x7f00000000c0)="1d2d", 0xfa5f}], 0x1}}], 0x1,
-0xfe80)
+Why are you defining the same thing twice?
+Please drop this.
+
+>   #define SCP_FW_VER_LEN			32
+>   #define SCP_SHARE_BUFFER_SIZE		288
+>   
+> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> index dcddb33e9997..4d75af856fd1 100644
+> --- a/drivers/remoteproc/mtk_scp.c
+> +++ b/drivers/remoteproc/mtk_scp.c
+> @@ -365,22 +365,32 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
+>   	return 0;
+>   }
+>   
+> -static void mt8192_power_on_sram(void __iomem *addr)
+> +static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
+>   {
+>   	int i;
+>   
+>   	for (i = 31; i >= 0; i--)
+> -		writel(GENMASK(i, 0), addr);
+> +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
+>   	writel(0, addr);
+>   }
+>   
+> -static void mt8192_power_off_sram(void __iomem *addr)
+> +static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
+>   {
+>   	int i;
+>   
+>   	writel(0, addr);
+>   	for (i = 0; i < 32; i++)
+> -		writel(GENMASK(i, 0), addr);
+> +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
+> +}
+> +
+> +static void mt8192_power_on_sram(void __iomem *addr)
+> +{
+> +	scp_sram_power_on(addr, 0);
+> +}
+> +
+> +static void mt8192_power_off_sram(void __iomem *addr)
+> +{
+> +	scp_sram_power_off(addr, 0);
+>   }
+>   
+>   static int mt8192_scp_before_load(struct mtk_scp *scp)
+> @@ -403,6 +413,27 @@ static int mt8192_scp_before_load(struct mtk_scp *scp)
+>   	return 0;
+>   }
+>   
+> +static int mt8195_scp_before_load(struct mtk_scp *scp)
+> +{
+> +	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
+> +	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
+> +
+> +	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
+> +
+> +	/* enable SRAM clock */
+> +	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
+
+At this point, you can simply use scp_sram_power_{on, off} instead of defining
+a new function for just one call... I get that your intent here is to enhance
+human readability, but I don't think that this is really happening with that and,
+if it is, it's just about a little ignorable difference.
+
+Please use scp_sram_power_on() and scp_sram_power_off() directly.
+
+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
+	... etc :)
+
+> +	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
+> +	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
+> +	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
+> +			  MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
+> +	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
+> +
+> +	/* enable MPU for all memory regions */
+> +	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
+> +
+> +	return 0;
+> +}
+> +
+
+Please remember to add me to the Cc's for the next version, so that I will be
+able to timely give you my R-b tag for this one.
+
+Regards,
+Angelo
+
+

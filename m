@@ -2,174 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8674D4778
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88514D4777
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbiCJM7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S242201AbiCJM7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiCJM7C (ORCPT
+        with ESMTP id S238716AbiCJM7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:59:02 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F07F45AFA
+        Thu, 10 Mar 2022 07:59:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0991846B13
         for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:58:01 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id n15so4809336plh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:58:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ABjynNr7IG/7j/ecN/fk2K7CRcq07YcIgadt1mDYptM=;
-        b=a/KArTwnTnLXssaJb+Fr0NDiwFJ1KPxV0OfxyDEt7Xc6jhfmBs6aDXDs1PwRCvhrm7
-         cCXSPqYho5kVuwb8A4y5Z7hu3ywF11gOP53H54M89PHEMpc1an3v5rvoAK3iUXTVfnkd
-         v+yZT/3X14BvTK7t8QRw0BWrhsq1W4W8Dj+78hYvuACrq5+G2+MnbsDNXbcMEz58bQ1S
-         dhizSBCXTav20XHYPnRdnnPKqNzurywXEM2Tc141kXrWaon5Z2YCmWoW3eEKOYePL5DQ
-         j8fbTYQMrK8P15vGJWD7Q+5MzhewHUE2Tk+XT/dYdCQe0kqP9vITmU2Ha9lX/jLyRZE2
-         KmXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646917081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQET2MPPoFWIolLulpf9vgE2ol9UeRG3d/CiXthk1lc=;
+        b=SJ2Wmd88gO6+pKr9vLfPbaeaavTZzgnrNRBi4P7bjptKaY96JzAkFAkZRLXg92ZUe8urX1
+        RvRI0w7bWDt5v3NYR3VxbINoVad7RNPsV17p5FUqnNV93si0ufaWGkW5sMc7DUGVDQjKJE
+        2Ip7EZ8iL3vq6+VUUsOsv6aRAnbBbjI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-628-fj8KK_IHOp25wO27G5DQAA-1; Thu, 10 Mar 2022 07:58:00 -0500
+X-MC-Unique: fj8KK_IHOp25wO27G5DQAA-1
+Received: by mail-wr1-f71.google.com with SMTP id p18-20020adfba92000000b001e8f7697cc7so1660240wrg.20
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:57:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ABjynNr7IG/7j/ecN/fk2K7CRcq07YcIgadt1mDYptM=;
-        b=V6fPzpx96DAD4wwZj5hv5esLMPHVBeeJChvPL983y8oJWbqkUZ+/FnK0DxlFzVNHPk
-         lxiWfuELH33bbRw5JUYt2T3uNeXiTcatYyx0t+3JV294kx2Evq3/kunGM7aSQsE1H/vg
-         0FimdU/1pLtTAPAnwd0/ue/x+T1ExMHcL/AQCWFjfNPk3LopZ+aLFt9/aIwxN6gWvLOV
-         ilOKBcVCsclD6I9bySCglgOO+GEcbLoAyFtjSKfaMR/n2lLiwvRGf2B2G84I5TcqrGQf
-         Wvn4v8OuzpqmveQH12TVLmmGfSMCqZAMvUujYHjdZLPZZQTcwDNyg6qxkEcAcDP2Bl8G
-         OINA==
-X-Gm-Message-State: AOAM5315cRa6rF9R9qb00vLJ3iyKX1u1wWee67RRK/OgCvQ3P3ukIEGp
-        g4QK2h7FKZ3OOFbBMqy5pXysig==
-X-Google-Smtp-Source: ABdhPJwWaI7OUB0xjsFNNyCmPiMUPkP0Z4Tg2y4MrQG2iaD6ziPzB0J+SkTkzZCndXW4irOZKsNGgA==
-X-Received: by 2002:a17:903:192:b0:151:8df9:6cdb with SMTP id z18-20020a170903019200b001518df96cdbmr5029952plg.20.1646917080490;
-        Thu, 10 Mar 2022 04:58:00 -0800 (PST)
-Received: from [10.4.175.235] ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm7701478pfl.135.2022.03.10.04.57.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:58:00 -0800 (PST)
-Message-ID: <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com>
-Date:   Thu, 10 Mar 2022 20:57:54 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pQET2MPPoFWIolLulpf9vgE2ol9UeRG3d/CiXthk1lc=;
+        b=BilXUvCX/7eCucSfeKlZ7fEni8ubfUBb4N8zLDV2lO4AJ2VPsl2ajBLaHtEBMaIERo
+         YoJHuqb4mOpWQOV2DwhxOjRwOljBiK6+qHbE8EMY5HdXv/QHZwEsY1U8qi8Ak/kqUylE
+         NNwBTKHv58UI19cTJDRxg3s8l28e8cKu/srhE6zTxu0r5ZzKCkFQ3RmVk4F8o/NllCr9
+         /bUMEA632KZTktH9eOQCidSEVxUpqN7VIdijU9sJM4P4MdTmM1ogFWQtb3f296YjBBXb
+         tWbzt7lkl4hQJTjJ/O3LeDqMDxnc+TUtj0vNRXpsaJZaG2dUXVl0FEnnGqay53Sz0QNY
+         8i0A==
+X-Gm-Message-State: AOAM532TW4mTzxFiNn2sHdAS+GWyHdps3meUYKf/yCe2BSGo2g8A9Xc6
+        ry15fWCSjQhAgRi3g7H63UBKxfm9k5Nbi87Sbzd19xoOnmysds9nnAjtG5tzt0ktzd0oPGCbJqj
+        KbaeOiKuXBqYYX4RQnTOgc9r9
+X-Received: by 2002:a5d:5846:0:b0:203:6b34:37af with SMTP id i6-20020a5d5846000000b002036b3437afmr3679523wrf.58.1646917078730;
+        Thu, 10 Mar 2022 04:57:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNy/izqOOZPKvRpP+GlT6cO3sQtQvas8NEWLfQ+g6cahHLf6mWcq6HAOBus4EAcYOUh56YBg==
+X-Received: by 2002:a5d:5846:0:b0:203:6b34:37af with SMTP id i6-20020a5d5846000000b002036b3437afmr3679501wrf.58.1646917078395;
+        Thu, 10 Mar 2022 04:57:58 -0800 (PST)
+Received: from redhat.com ([2.53.27.107])
+        by smtp.gmail.com with ESMTPSA id u4-20020adfed44000000b0020373d356f8sm4119668wro.84.2022.03.10.04.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 04:57:57 -0800 (PST)
+Date:   Thu, 10 Mar 2022 07:57:54 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jiyong Park <jiyong@google.com>
+Cc:     sgarzare@redhat.com, stefanha@redhat.com, jasowang@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, adelva@google.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] vsock: cycle only on its own socket
+Message-ID: <20220310075554-mutt-send-email-mst@kernel.org>
+References: <20220310125425.4193879-1-jiyong@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [External] Re: [PATCH v2] livepatch: Don't block removal of
- patches that are safe to unload
-Content-Language: en-US
-To:     Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, joe.lawrence@redhat.com,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220303105446.7152-1-zhouchengming@bytedance.com>
- <YicnIIatfgLc2NN2@alley> <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310125425.4193879-1-jiyong@google.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 10, 2022 at 09:54:23PM +0900, Jiyong Park wrote:
+> Hi Stefano,
+> 
+> As suggested [1], I've made two patches for easier backporting without
+> breaking KMI.
+> 
+> PATCH 1 fixes the very issue of cycling all vsocks regardless of the
+> transport and shall be backported.
+> 
+> PATCH 2 is a refactor of PATCH 1 that forces the filtering to all
+> (including future) uses of vsock_for_each_connected_socket.
+> 
+> Thanks,
+> 
+> [1] https://lore.kernel.org/lkml/20220310110036.fgy323c4hvk3mziq@sgarzare-redhat/
 
-On 2022/3/9 1:49 上午, Miroslav Benes wrote:
-> On Tue, 8 Mar 2022, Petr Mladek wrote:
-> 
->> On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
->>> module_put() is currently never called for a patch with forced flag, to block
->>> the removal of that patch module that might still be in use after a forced
->>> transition.
->>>
->>> But klp_force_transition() will set all patches on the list to be forced, since
->>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
->>> has removed stack ordering of the livepatches, it will cause all other patches can't
->>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
->>>
->>> In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
->>> transition. It can still be unloaded safely as long as it has passed through
->>> the consistency model in KLP_UNPATCHED transition.
->>
->> It really looks safe. klp_check_stack_func() makes sure that @new_func
->> is not on the stack when klp_target_state == KLP_UNPATCHED. As a
->> result, the system should not be using code from the livepatch module
->> when KLP_UNPATCHED transition cleanly finished.
->>
->>
->>> But the exception is when force transition of an atomic replace patch, we
->>> have to set all previous patches to forced, or they will be removed at
->>> the end of klp_try_complete_transition().
->>>
->>> This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
->>> case, and keep the old behavior when in atomic replace case.
->>>
->>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->>> ---
->>> v2: interact nicely with the atomic replace feature noted by Miroslav.
->>> ---
->>>  kernel/livepatch/transition.c | 8 ++++++--
->>>  1 file changed, 6 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
->>> index 5683ac0d2566..34ffb8c014ed 100644
->>> --- a/kernel/livepatch/transition.c
->>> +++ b/kernel/livepatch/transition.c
->>> @@ -641,6 +641,10 @@ void klp_force_transition(void)
->>>  	for_each_possible_cpu(cpu)
->>>  		klp_update_patch_state(idle_task(cpu));
->>>  
->>> -	klp_for_each_patch(patch)
->>> -		patch->forced = true;
->>> +	if (klp_target_state == KLP_UNPATCHED)
->>> +		klp_transition_patch->forced = true;
->>> +	else if (klp_transition_patch->replace) {
->>> +		klp_for_each_patch(patch)
->>> +			patch->forced = true;
->>
->> This works only because there is should be only one patch when
->> klp_target_state == KLP_UNPATCHED and
->> klp_transition_patch->forced == true.
-> 
-> I probably misunderstand, but the above is not generally true, is it? I 
-> mean, if the transition patch is forced during its disablement, it does 
-> not say anything about the amount of enabled patches.
-> 
->> But it is a bit tricky. I would do it the other way:
->>
->> 	if (klp_transition_patch->replace) {
->> 		klp_for_each_patch(patch)
->> 			patch->forced = true;
->> 	} else if (klp_target_state == KLP_UNPATCHED) {
->> 		klp_transition_patch->forced = true;
->> 	}
->>
->> It looks more sane. And it makes it more clear
->> that the special handling of KLP_UNPATCHED transition
->> is done only when the atomic replace is not used.
-> 
-> But it is not the same. ->replace being true only comes into play when a 
-> patch is enabled. If it is disabled, then it behaves like any other patch.
-> 
-> So, if there is ->replace patch enabled (and it is the only patch present) 
-> and then more !->replace patches are loaded and then if ->replace patch is 
-> disabled and forced, your proposal would give a different result than what 
-> Chengming submitted, because in your case all the other patches will get 
-> ->forced set to true, while it is not the case in the original. It would 
-> be an unnecessary restriction if I am not missing something.
 
-At first glance, I thought both way is right. But after looking at the case
-you mentioned above, they are not the same indeed. The original patch
-treat ->replace and not ->replace patches the same in KLP_UNPATCHED transition,
-and only set all patches to forced in the atomic replace transition.
+OK that's better. Pls do include changelog in the future.
 
-Thanks.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
+
+
+> Jiyong Park (2):
+>   vsock: each transport cycles only on its own sockets
+>   vsock: refactor vsock_for_each_connected_socket
 > 
-> However, I may got lost somewhere along the way.
+>  drivers/vhost/vsock.c            | 3 ++-
+>  include/net/af_vsock.h           | 3 ++-
+>  net/vmw_vsock/af_vsock.c         | 9 +++++++--
+>  net/vmw_vsock/virtio_transport.c | 7 +++++--
+>  net/vmw_vsock/vmci_transport.c   | 3 ++-
+>  5 files changed, 18 insertions(+), 7 deletions(-)
 > 
-> Regards
-> Miroslav
+> 
+> base-commit: 3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
+> -- 
+> 2.35.1.723.g4982287a31-goog
+

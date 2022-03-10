@@ -2,148 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E084D4127
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277934D412C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239816AbiCJGeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 01:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S238572AbiCJGen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 01:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbiCJGeH (ORCPT
+        with ESMTP id S232658AbiCJGej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 01:34:07 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F4F381A5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 22:33:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646893987; x=1678429987;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kf8BXuaXDVika6/ZALSU+NzaqKsW5XcznOhPEQh5sX8=;
-  b=Sv4M1GlqK2W4jjYh4GJjI+K6WcYI8ZYyhCA88lpK1H5bJ2krAHECRV+I
-   0gknOuxoRah0COYietPH9Vo4Pc+lSbLz+bwugXq2OQT/3NsDs/wo6Ctvr
-   3T4WFJLaO9bSsBqDBrpaPKDZ/5+kkNSpITwSAGv8NhFHfVdJL/aSP1NVZ
-   diAO5KGxhQmQFhEitZ5NexNuQUJyUxaLwOiflOMdK5CHKHBghePvH5iQo
-   60ArkOeuHNIGoF8d1GuEt04xZd/ae8s43aVSslnlLeFiICK++VsPHhSyB
-   OYge9Ye97B+iz5U71a5WHXPxFPtHYA8y1ziOlZRC+Lidly2XgbEBVF8Oa
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255117557"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="255117557"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 22:32:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="688562381"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2022 22:32:33 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSCLg-0004Sz-UJ; Thu, 10 Mar 2022 06:32:32 +0000
-Date:   Thu, 10 Mar 2022 14:31:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2021-12
- 1300/9999] drivers/base/core.c:1542:5: warning: no previous prototype for
- 'fw_devlink_relax_cycle'
-Message-ID: <202203101407.4WP0DiPE-lkp@intel.com>
+        Thu, 10 Mar 2022 01:34:39 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1CD638199
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 22:33:38 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAAHDtq5myligd_CAg--.6137S2;
+        Thu, 10 Mar 2022 14:33:31 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hminas@synopsys.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: dwc2: Add missing check for dwc2_vbus_supply_init
+Date:   Thu, 10 Mar 2022 14:33:28 +0800
+Message-Id: <20220310063328.1581166-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAAHDtq5myligd_CAg--.6137S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr45ArWrXry3Zr17tr15CFg_yoW8XF47p3
+        43WF1UAF1Utwsagwn0yasrX3W5GwsrJ34UGry7Gwn7Zw1F9395KF1rGFyFkFZ8XrWUJ3W3
+        AF4Iyw4rAF15G37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+As the potential failure of the dwc2_vbus_supply_init(),
+it should be better to handle the return value and check
+it.
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2021-12
-head:   66c74c58ab38fb1f5edb12b8bace4cf5bbad2cfd
-commit: 1df699c140a778ed678d7d4b2fa8ffb2c62573e1 [1300/9999] UPSTREAM: driver core: Handle cycles in device links created by fw_devlink
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220310/202203101407.4WP0DiPE-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/1df699c140a778ed678d7d4b2fa8ffb2c62573e1
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2021-12
-        git checkout 1df699c140a778ed678d7d4b2fa8ffb2c62573e1
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/base/ kernel/printk/ kernel/sched/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/base/core.c:1542:5: warning: no previous prototype for 'fw_devlink_relax_cycle' [-Wmissing-prototypes]
-    1542 | int fw_devlink_relax_cycle(struct device *con, void *sup)
-         |     ^~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/fw_devlink_relax_cycle +1542 drivers/base/core.c
-
-  1527	
-  1528	/**
-  1529	 * fw_devlink_relax_cycle - Convert cyclic links to SYNC_STATE_ONLY links
-  1530	 * @con: Device to check dependencies for.
-  1531	 * @sup: Device to check against.
-  1532	 *
-  1533	 * Check if @sup depends on @con or any device dependent on it (its child or
-  1534	 * its consumer etc).  When such a cyclic dependency is found, convert all
-  1535	 * device links created solely by fw_devlink into SYNC_STATE_ONLY device links.
-  1536	 * This is the equivalent of doing fw_devlink=permissive just between the
-  1537	 * devices in the cycle. We need to do this because, at this point, fw_devlink
-  1538	 * can't tell which of these dependencies is not a real dependency.
-  1539	 *
-  1540	 * Return 1 if a cycle is found. Otherwise, return 0.
-  1541	 */
-> 1542	int fw_devlink_relax_cycle(struct device *con, void *sup)
-  1543	{
-  1544		struct device_link *link;
-  1545		int ret;
-  1546	
-  1547		if (con == sup)
-  1548			return 1;
-  1549	
-  1550		ret = device_for_each_child(con, sup, fw_devlink_relax_cycle);
-  1551		if (ret)
-  1552			return ret;
-  1553	
-  1554		list_for_each_entry(link, &con->links.consumers, s_node) {
-  1555			if ((link->flags & ~DL_FLAG_INFERRED) ==
-  1556			    (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
-  1557				continue;
-  1558	
-  1559			if (!fw_devlink_relax_cycle(link->consumer, sup))
-  1560				continue;
-  1561	
-  1562			ret = 1;
-  1563	
-  1564			if (!(link->flags & DL_FLAG_INFERRED))
-  1565				continue;
-  1566	
-  1567			pm_runtime_drop_link(link);
-  1568			link->flags = DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE;
-  1569			dev_dbg(link->consumer, "Relaxing link with %s\n",
-  1570				dev_name(link->supplier));
-  1571		}
-  1572		return ret;
-  1573	}
-  1574	
-
+Fixes: cd7cd0e6cedf ("usb: dwc2: fix unbalanced use of external vbus-supply")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/dwc2/hcd.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index f63a27d11fac..c8786d223dcd 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -3672,7 +3672,7 @@ static int dwc2_hcd_hub_control(struct dwc2_hsotg *hsotg, u16 typereq,
+ 			hprt0 |= HPRT0_PWR;
+ 			dwc2_writel(hsotg, hprt0, HPRT0);
+ 			if (!pwr)
+-				dwc2_vbus_supply_init(hsotg);
++				retval = dwc2_vbus_supply_init(hsotg);
+ 			break;
+ 
+ 		case USB_PORT_FEAT_RESET:
+@@ -3722,7 +3722,7 @@ static int dwc2_hcd_hub_control(struct dwc2_hsotg *hsotg, u16 typereq,
+ 					"In host mode, hprt0=%08x\n", hprt0);
+ 				dwc2_writel(hsotg, hprt0, HPRT0);
+ 				if (!pwr)
+-					dwc2_vbus_supply_init(hsotg);
++					retval = dwc2_vbus_supply_init(hsotg);
+ 			}
+ 
+ 			/* Clear reset bit in 10ms (FS/LS) or 50ms (HS) */
+@@ -4523,7 +4523,9 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+ 
+ 	/* Enable external vbus supply after resuming the port. */
+ 	spin_unlock_irqrestore(&hsotg->lock, flags);
+-	dwc2_vbus_supply_init(hsotg);
++	ret = dwc2_vbus_supply_init(hsotg);
++	if (ret)
++		return ret;
+ 
+ 	/* Wait for controller to correctly update D+/D- level */
+ 	usleep_range(3000, 5000);
+-- 
+2.25.1
+

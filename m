@@ -2,158 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03884D3EF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEC94D3EFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238545AbiCJByS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 20:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S238922AbiCJByp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 20:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiCJByQ (ORCPT
+        with ESMTP id S230445AbiCJByn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 20:54:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521ED127D69
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:53:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF89A615C6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54853C340E8;
-        Thu, 10 Mar 2022 01:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646877196;
-        bh=FSwwg7VIAWVfVNVd3TkpDiWBggJe4J2RS2eGz3KYKkI=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=o9hlq/3/YlHMZWtZcKPQhziCXhpUiLVNj5h5GtH6a+juwKjsJim/ii6fHMXGhr0Q+
-         t+/fw5hBgFSPZnUOYoa2+VWf3WS4oJIfKR2VWgTSj68phjGhVS/nkmkF+2EjLTEB9+
-         DAqCcABDWULl8RVK+I1YXDpoRd8Y+C/VqEAmGkyE4ph/83UGgKdYi0MnvD732UKHqE
-         jTXB4qHiVPC3FgKfo/hI7tGwiRC/LOPEQ2RCSjAFITSSAwWX5lcGJzcGOnh/jlKZ3f
-         QuEk8FFaBjkM5zxlKzqKPvpUAKPe8PHhddbn+dluvj++oXv8EMLZbC7ILHEXtfbHXx
-         Kijrv6rn35aRQ==
-Message-ID: <2a5564bb-463e-d163-0042-34fad42e2e46@kernel.org>
-Date:   Thu, 10 Mar 2022 09:53:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: evict inode cache for frozen fs
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220309214834.3408741-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220309214834.3408741-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 20:54:43 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45629127D71;
+        Wed,  9 Mar 2022 17:53:43 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id z16so3839648pfh.3;
+        Wed, 09 Mar 2022 17:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=dLb2n0RcDsJQsrbzpWVQ2xqxk5FmoVIUuzbwO80ccoo=;
+        b=maI1PORr7yUNN7F+N6qrHT/tZYOhkPl4ZDm+KQKIQZFYcNzAW95ZVwxKv//10DGIl7
+         g3o7u+xjnH+lf4EIBJtZ6LZ+4xMBlO5hVj5rSYsl+a/YmxBPhnkhnN6nvNRq6TQR6dib
+         mIFWdzquoNNUR4wyy5caPEc3GQp9NjkSGNRhoX6eEwqvwcvdBBUfuC8lGGSuKVg+Jh+n
+         R8hyx7WTrHZZZ6HPeWBWYyeXFmQwLZnfLN8T2B3I1Subn4XWYslpqknKhTKTg4m2c8so
+         nPtQhQUXjXAY7jye+Sj7yN54pHfdL/5ICrbUzXK781lz8qFvzxIGzcdq+x0oyzZzZNV1
+         gZ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=dLb2n0RcDsJQsrbzpWVQ2xqxk5FmoVIUuzbwO80ccoo=;
+        b=mssy/48u5MRx5k4N5kaKPZHW1Jg2x1iUcER/NyxdvRQmZGXVPbL4DR9LpUvlzIeCwA
+         OD2uCb8ks/CD1w6wFHG+JjWdpP+1KIXP7QJtOMmj60gzHz4cisiBEVrtFSr57hBrs1RX
+         W5zSNT4WOw4otCV9xcLclvHXRmJdRc2pEbuPfLW9ON3e+VpH2xaPix2fbIDkfcFlqW9w
+         RaXDuJPK3SuCYtVGkIEk0UrkYCXtjkU+I5yAxv4p1kzBFwq1Dzvu0NFZigZY/aigMOZB
+         n89giypcE19tE1YqPoR3u48tlNQn1nhotUY9C14CAykc9tN88HnWuYzvG73EFUKeqPdX
+         ZU2Q==
+X-Gm-Message-State: AOAM531Jr94IKiQm2bUMwyA5Sf3taI4utyunsgTQ0zv1KT7W1heJwNkh
+        hqBU35pMSuiAzQo4ofiNK8Q=
+X-Google-Smtp-Source: ABdhPJyumqgNWoQ7hfqeItdHDUxdMX3gau9P7t5NL5NiPUXNs7T98fAdH1ZRgLljOFNhXsVGgyjAvA==
+X-Received: by 2002:a63:8049:0:b0:380:b83e:9550 with SMTP id j70-20020a638049000000b00380b83e9550mr2113464pgd.97.1646877222798;
+        Wed, 09 Mar 2022 17:53:42 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id w23-20020a627b17000000b004f6cf170070sm4292637pfc.186.2022.03.09.17.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 17:53:42 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH net v2] gianfar: ethtool: Fix refcount leak in gfar_get_ts_info
+Date:   Thu, 10 Mar 2022 01:53:13 +0000
+Message-Id: <20220310015313.14938-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <e68aa1f1-233f-6e5b-21a6-0443d565ca65@intel.com>
+References: <e68aa1f1-233f-6e5b-21a6-0443d565ca65@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/10 5:48, Jaegeuk Kim wrote:
-> Let's purge inode cache in order to avoid the below deadlock.
-> 
-> [freeze test]                         shrinkder
-> freeze_super
->   - pwercpu_down_write(SB_FREEZE_FS)
->                                         - super_cache_scan
->                                           - down_read(&sb->s_umount)
->                                             - prune_icache_sb
->                                              - dispose_list
->                                               - evict
->                                                - f2fs_evict_inode
-> thaw_super
->   - down_write(&sb->s_umount);
->                                                - __percpu_down_read(SB_FREEZE_FS)
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-Ah, finally we catch this. :)
+Fixes: 7349a74ea75c ("net: ethernet: gianfar_ethtool: get phc index through drvdata")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+---
+changes in v2:
+- Fix the subject
+---
+ drivers/net/ethernet/freescale/gianfar_ethtool.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
->   fs/f2fs/debug.c | 1 +
->   fs/f2fs/f2fs.h  | 1 +
->   fs/f2fs/inode.c | 6 ++++--
->   fs/f2fs/super.c | 4 ++++
->   4 files changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
-> index 9a13902c7702..cba5eab24595 100644
-> --- a/fs/f2fs/debug.c
-> +++ b/fs/f2fs/debug.c
-> @@ -338,6 +338,7 @@ static char *s_flag[] = {
->   	[SBI_QUOTA_SKIP_FLUSH]	= " quota_skip_flush",
->   	[SBI_QUOTA_NEED_REPAIR]	= " quota_need_repair",
->   	[SBI_IS_RESIZEFS]	= " resizefs",
-> +	[SBI_IS_FREEZING]	= " freezefs",
+diff --git a/drivers/net/ethernet/freescale/gianfar_ethtool.c b/drivers/net/ethernet/freescale/gianfar_ethtool.c
+index ff756265d58f..9a2c16d69e2c 100644
+--- a/drivers/net/ethernet/freescale/gianfar_ethtool.c
++++ b/drivers/net/ethernet/freescale/gianfar_ethtool.c
+@@ -1464,6 +1464,7 @@ static int gfar_get_ts_info(struct net_device *dev,
+ 	ptp_node = of_find_compatible_node(NULL, NULL, "fsl,etsec-ptp");
+ 	if (ptp_node) {
+ 		ptp_dev = of_find_device_by_node(ptp_node);
++		of_node_put(ptp_node);
+ 		if (ptp_dev)
+ 			ptp = platform_get_drvdata(ptp_dev);
+ 	}
+-- 
+2.17.1
 
-Could you please update description of "sb_status" entry in
-Documentation/ABI/testing/sysfs-fs-f2fs as well?
-
-Thanks,
-
->   };
->   
->   static int stat_show(struct seq_file *s, void *v)
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 68d791ec8b27..da729f53daa8 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -1293,6 +1293,7 @@ enum {
->   	SBI_QUOTA_SKIP_FLUSH,			/* skip flushing quota in current CP */
->   	SBI_QUOTA_NEED_REPAIR,			/* quota file may be corrupted */
->   	SBI_IS_RESIZEFS,			/* resizefs is in process */
-> +	SBI_IS_FREEZING,			/* freezefs is in process */
->   };
->   
->   enum {
-> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> index ab8e0c06c78c..71f232dcf3c2 100644
-> --- a/fs/f2fs/inode.c
-> +++ b/fs/f2fs/inode.c
-> @@ -778,7 +778,8 @@ void f2fs_evict_inode(struct inode *inode)
->   	f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
->   	f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
->   
-> -	sb_start_intwrite(inode->i_sb);
-> +	if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING))
-> +		sb_start_intwrite(inode->i_sb);
->   	set_inode_flag(inode, FI_NO_ALLOC);
->   	i_size_write(inode, 0);
->   retry:
-> @@ -809,7 +810,8 @@ void f2fs_evict_inode(struct inode *inode)
->   		if (dquot_initialize_needed(inode))
->   			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
->   	}
-> -	sb_end_intwrite(inode->i_sb);
-> +	if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING))
-> +		sb_end_intwrite(inode->i_sb);
->   no_delete:
->   	dquot_drop(inode);
->   
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 8e3840973077..4b570b5c2674 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -1663,11 +1663,15 @@ static int f2fs_freeze(struct super_block *sb)
->   	/* ensure no checkpoint required */
->   	if (!llist_empty(&F2FS_SB(sb)->cprc_info.issue_list))
->   		return -EINVAL;
-> +
-> +	/* to avoid deadlock on f2fs_evict_inode->SB_FREEZE_FS */
-> +	set_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
->   	return 0;
->   }
->   
->   static int f2fs_unfreeze(struct super_block *sb)
->   {
-> +	clear_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
->   	return 0;
->   }
->   

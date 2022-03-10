@@ -2,110 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE2D4D4C9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A164D4C84
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245474AbiCJPB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S244597AbiCJPBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344255AbiCJO7v (ORCPT
+        with ESMTP id S1345658AbiCJPBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:59:51 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA0218A7A5;
-        Thu, 10 Mar 2022 06:52:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646923976; x=1678459976;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2obXWm16zHjxkmZ9vE0erL/w5gsiL/wNUz/RM0HIzeE=;
-  b=btRRfKTx629TvbXkbDiAAD/Umjl2Ia1oQ8FpVTG+dqnuHbB7Cj++k0IJ
-   wewQ+sGFqzozxxrMvkBRvdQsOySTrjWm/zJAyIZw4AfeKG+LusIa8UAWF
-   K4EyKcJSARg49mZ9Yv+8a1Lba4221i1DY5Ks2UoSvEHGsPdbo3GVESvRH
-   pAm/Dwu3smGmGM8sdkVwDE+w1buGVq28DGKhqSZWKKeG5QB3HyqqVjblF
-   QGUyWWuOx8GgQa0Pi4n5ZoRXVlCd/3+dO2LpVY6miQXX+UPB+Z7VnSrvU
-   Z6mZDs5HuTkEmaLU7KKFP9GT7EI6KVC/ge/1iwxWbJaEb0t8pjOmk8IX5
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255002978"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="255002978"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:52:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="596683170"
-Received: from mylly.fi.intel.com (HELO [10.237.72.156]) ([10.237.72.156])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Mar 2022 06:52:10 -0800
-Message-ID: <5612fbbe-a42b-997e-2375-6d5f0c53bdea@linux.intel.com>
-Date:   Thu, 10 Mar 2022 16:52:09 +0200
+        Thu, 10 Mar 2022 10:01:09 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925F6195300
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:54:29 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 822B2320152C;
+        Thu, 10 Mar 2022 09:54:26 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 10 Mar 2022 09:54:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=XU39pyNSH2eq0dpZIXSxiHRUSiX+T3Vk8Q3C8r
+        t+Bns=; b=CdIft1aMeCbNbv0TO9CvaUp7I/vx6dR/lleAnxB64oXWo9lTwWoDm6
+        9kITFan62pf5xs28GR3xKlM70GR1LzW7TZh54EtZGw2oWTJnpbBnG2fwtGGsGvA8
+        xJs4QEFUtr8uGIRWjhdkN2qHg5syw7WeOGvOjUGT+oF8TBvxY2d4vQNGl28R7mfb
+        Dj4v+m9dx0sYjPCHK3ATIouVWr3mDUYL4X8eLQDEJStXqfHOSTSsHp8Xa+77VyLc
+        VntM05EyJv9Swq95xCMsd76uwhGnyr2nKPE2x/HNhdEN2gntgqQlK5M0gi/XKEOp
+        QtNXkMAhCIFv24nkHE3ar00otwBJEtkg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=XU39pyNSH2eq0dpZI
+        XSxiHRUSiX+T3Vk8Q3C8rt+Bns=; b=Z3Uw/cWIDpaTLYnYF3mDsBTqDh9zytv6V
+        8TQVAtCYvRn9+HjBWI4hdeu64risYhJoPL2Pl9sQ1qRHl1erXO7YHbH/8rX8stl5
+        j618SgsPnkGslSchsAf5PESDsmFtSz79k2y1ktIjroVEaU9/g4awyKaQVzQRtg+I
+        7qk38DWtYw/soWgnWZJvYFxys96oel1gL7mGjl7hTEj0mZ5rLz46klHAGgDF5sEZ
+        hblc17lnZbTiZ/ffLLpe0sEwHBm9ST5s9mbmQkniZh/M4DcgAI9crz4t11G4jlXv
+        DBX4S3Da75b76tulpk+Ty0DFh8RpmM2i3QN8SPJXEDpvMJ5Gc9m3g==
+X-ME-Sender: <xms:IREqYlLII4_wXUYdQVRP-i6fHZ3O7FJV43mek-MS4KlgX-gHkvZ74Q>
+    <xme:IREqYhITxCfNZxRZ3vVao_3Tce5QF-9F3v6uxIZooBk-54ZYLN43eUD-XGPW3ecmM
+    ndPpCEYQ7g9VrtKKAg>
+X-ME-Received: <xmr:IREqYtuilj9KfTCQizpd4BjsMdVJsLO4QjRgk8A162uYN0gdTbBpZaP16WH1EzQXfDG-G7B3qk_32vdrKZc3KaqkxDCY_H04NngEwZI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvtddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucdnkfhovfculdeitddmnecujfgurhepfffhvffukf
+    hfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceo
+    mhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvghrnhepleekgeehhf
+    dutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieehgedunecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnh
+    hordhtvggthh
+X-ME-Proxy: <xmx:IREqYmaFO7qZzP3Pn4nnriSVUKEZ6b1cVrHusG10Wp2uGHpQG8aHPA>
+    <xmx:IREqYsY0fW-0oqfQ2w9NAwVG5FxXl7d_OlhlV6hHfQPhfRAqFnu3AQ>
+    <xmx:IREqYqD4J9E-rTiPC5PJ3sVgqD-VfM4014WEZN5WIbtSP36zLmEGKge9ng>
+    <xmx:IhEqYs6FgPet8aiL5pB1xWaWfJG2pv5uRZQ147eSex_wx73B39peYg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Mar 2022 09:54:25 -0500 (EST)
+Date:   Thu, 10 Mar 2022 15:54:23 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: Re: [PATCH] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <20220310145423.but7r7ul4j7h3wxw@houat>
+References: <20220309143200.111292-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [PATCH -next] i2c: designware: Add helper to remove redundancy
-Content-Language: en-US
-To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, andriy.shevchenko@linux.intel.com
-Cc:     wsa@kernel.org, upstream@semihalf.com
-References: <20220310142236.192811-1-jsd@semihalf.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220310142236.192811-1-jsd@semihalf.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lgbhzcypjjo7srta"
+Content-Disposition: inline
+In-Reply-To: <20220309143200.111292-1-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 16:22, Jan Dabros wrote:
-> Simplify code by adding an extra static function for sending I2C
-> requests and verifying results.
-> 
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+
+--lgbhzcypjjo7srta
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Paul,
+
+On Wed, Mar 09, 2022 at 03:32:00PM +0100, Paul Kocialkowski wrote:
+> While bridge/panel detection was initially relying on the usual
+> port/ports-based of graph detection, it was recently changed to
+> perform the lookup on any child node that is not port/ports
+> instead when such a node is available, with no fallback on the
+> usual way.
+>=20
+> This results in breaking detection when a child node is present
+> but does not contain any panel or bridge node, even when the
+> usual port/ports-based of graph is there.
+>=20
+> In order to support both situations properly, this commit reworks
+> the logic to try both options and not just one of the two: it will
+> only return -EPROBE_DEFER when both have failed.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Fixes: 80253168dbfd ("drm: of: Lookup if child node has panel or bridge")
+
+Thanks, it's in pretty good shape now, but I have a few bike sheds to paint=
+ :)
+
 > ---
->   drivers/i2c/busses/i2c-designware-amdpsp.c | 44 ++++++++++++----------
->   1 file changed, 24 insertions(+), 20 deletions(-)
-> 
-Do I remember correctly was this suggested by Andy? I.e. to give kudos 
-to him if that was the case:
+>  drivers/gpu/drm/drm_of.c | 93 +++++++++++++++++++++-------------------
+>  1 file changed, 49 insertions(+), 44 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> index 9d90cd75c457..67f1b7dfc892 100644
+> --- a/drivers/gpu/drm/drm_of.c
+> +++ b/drivers/gpu/drm/drm_of.c
+> @@ -219,6 +219,35 @@ int drm_of_encoder_active_endpoint(struct device_nod=
+e *node,
+>  }
+>  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+> =20
+> +static int drm_of_find_remote_panel_or_bridge(struct device_node *remote,
+> +					      struct drm_panel **panel,
+> +					      struct drm_bridge **bridge)
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+This function performs its look up directly on the struct device_node
+passed as argument, so I don't think the "remote" in the name is great.
+Since it's static, we can just call it find_panel_or_bridge, what do you
+think?
 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index c64e459afb5c..cc758792f150 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -229,6 +229,26 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
->   	return ret;
->   }
->   
-> +static int psp_send_i2c_req_check_err(enum psp_i2c_req_type request)
 > +{
-> +	int status;
+> +	int ret =3D -EPROBE_DEFER;
 > +
-> +	status = psp_send_i2c_req(request);
-> +	if (status) {
-> +		if (status == -ETIMEDOUT)
-> +			dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
-> +				(request == PSP_I2C_REQ_ACQUIRE) ?
-> +				"release" : "acquire");
+> +	if (panel) {
+> +		*panel =3D of_drm_find_panel(remote);
+> +		if (!IS_ERR(*panel))
+> +			ret =3D 0;
+
+return 0?
+
 > +		else
-> +			dev_err(psp_i2c_dev, "PSP communication error\n");
+> +			*panel =3D NULL;
 > +
-> +		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
-> +		psp_i2c_mbox_fail = true;
 > +	}
 > +
+> +	/* No panel found yet, check for a bridge next. */
+> +	if (bridge) {
+> +		if (ret) {
 
-Does it make sense to have these inside the psp_send_i2c_req() and get 
-rid of this new middle function? I mean psp_send_i2c_req() is called now 
-only from here so can it do these common error prints and set 
-"psp_i2c_mbox_fail = true"?
+And the return above allows to remove that test
 
-Jarkko
+> +			*bridge =3D of_drm_find_bridge(remote);
+> +			if (*bridge)
+> +				ret =3D 0;
+
+return 0?
+
+> +		} else {
+> +			*bridge =3D NULL;
+> +		}
+> +
+> +	}
+> +
+> +	return ret;
+
+And here we can just return -EPROBE_DEFER
+
+> +}
+> +
+
+>  /**
+>   * drm_of_find_panel_or_bridge - return connected panel or bridge device
+>   * @np: device tree node containing encoder output ports
+> @@ -249,57 +278,33 @@ int drm_of_find_panel_or_bridge(const struct device=
+_node *np,
+>  	if (panel)
+>  		*panel =3D NULL;
+> =20
+> -	/**
+> -	 * Devices can also be child nodes when we also control that device
+> -	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+> -	 *
+> -	 * Lookup for a child node of the given parent that isn't either port
+> -	 * or ports.
+> -	 */
+> -	for_each_available_child_of_node(np, remote) {
+> -		if (of_node_name_eq(remote, "port") ||
+> -		    of_node_name_eq(remote, "ports"))
+> -			continue;
+> -
+> -		goto of_find_panel_or_bridge;
+> +	/* Check for a graph on the device node first. */
+> +	if (of_graph_is_present(np)) {
+> +		remote =3D of_graph_get_remote_node(np, port, endpoint);
+> +		if (remote) {
+> +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
+> +								 bridge);
+> +			of_node_put(remote);
+> +		}
+>  	}
+> =20
+> -	/*
+> -	 * of_graph_get_remote_node() produces a noisy error message if port
+> -	 * node isn't found and the absence of the port is a legit case here,
+> -	 * so at first we silently check whether graph presents in the
+> -	 * device-tree node.
+> -	 */
+> -	if (!of_graph_is_present(np))
+> -		return -ENODEV;
+> -
+> -	remote =3D of_graph_get_remote_node(np, port, endpoint);
+> -
+> -of_find_panel_or_bridge:
+> -	if (!remote)
+> -		return -ENODEV;
+> +	/* Otherwise check for any child node other than port/ports. */
+> +	if (ret) {
+> +		for_each_available_child_of_node(np, remote) {
+> +			if (of_node_name_eq(remote, "port") ||
+> +			    of_node_name_eq(remote, "ports"))
+> +				continue;
+> =20
+> -	if (panel) {
+> -		*panel =3D of_drm_find_panel(remote);
+> -		if (!IS_ERR(*panel))
+> -			ret =3D 0;
+> -		else
+> -			*panel =3D NULL;
+> -	}
+> +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
+> +								 bridge);
+> +			of_node_put(remote);
+> =20
+> -	/* No panel found yet, check for a bridge next. */
+> -	if (bridge) {
+> -		if (ret) {
+> -			*bridge =3D of_drm_find_bridge(remote);
+> -			if (*bridge)
+> -				ret =3D 0;
+> -		} else {
+> -			*bridge =3D NULL;
+> +			/* Stop at the first found occurrence. */
+> +			if (!ret)
+> +				break;
+>  		}
+> -
+>  	}
+> =20
+> -	of_node_put(remote);
+>  	return ret;
+>  }
+
+So the diff is fairly hard to read, but it ends up as:
+
+>        int ret =3D -EPROBE_DEFER;
+>        struct device_node *remote;
+>
+>        if (!panel && !bridge)
+>                return -EINVAL;
+>        if (panel)
+>                *panel =3D NULL;
+>
+>        /* Check for a graph on the device node first. */
+>       if (of_graph_is_present(np)) {
+>                remote =3D of_graph_get_remote_node(np, port, endpoint);
+>                if (remote) {
+>                        ret =3D drm_of_find_remote_panel_or_bridge(remote,=
+ panel,
+>                                                                 bridge);
+>                        of_node_put(remote);
+
+I think we can simplify this by doing
+
+                        if (!ret)
+			        return ret;
+
+>                }
+>        }
+>
+>        /* Otherwise check for any child node other than port/ports. */
+>        if (ret) {
+
+And thus we won't have to check for ret here
+
+>                for_each_available_child_of_node(np, remote) {
+
+I'm a bit reluctant with variables that we reuse from one loop to
+another, especially since it's a bit misleading here. What about using a
+(loop local) remote variable in the of_graph path, and a loop-local
+variable node or child here?
+
+>                        if (of_node_name_eq(remote, "port") ||
+>                            of_node_name_eq(remote, "ports"))
+>                                continue;
+>
+>                        ret =3D drm_of_find_remote_panel_or_bridge(remote,=
+ panel,
+>                                                                 bridge);
+>                        of_node_put(remote);
+>
+>                        /* Stop at the first found occurrence. */
+>                        if (!ret)
+>                                break;
+
+Ditto, let's just return here
+
+>                }
+>       }
+>
+>        return ret;
+
+And then we can just return EPROBE_DEFER here (and get rid of ret entirely)
+
+Maxime
+
+--lgbhzcypjjo7srta
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYioRHwAKCRDj7w1vZxhR
+xRlZAP98YkMuA9DQnqs5EI61id1YvE2ZQ+/gLGD36nrQVxFZwgD/aq9ge2+PLPGL
+TJgiShNyXnzB5UY6045THZf+j0+wqgE=
+=IMzz
+-----END PGP SIGNATURE-----
+
+--lgbhzcypjjo7srta--

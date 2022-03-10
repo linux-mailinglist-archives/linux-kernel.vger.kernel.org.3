@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AD14D49DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E7D4D4A2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241086AbiCJOgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S235896AbiCJO0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244952AbiCJO3l (ORCPT
+        with ESMTP id S243569AbiCJOXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:29:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9826156963;
-        Thu, 10 Mar 2022 06:25:08 -0800 (PST)
+        Thu, 10 Mar 2022 09:23:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39AB154719;
+        Thu, 10 Mar 2022 06:20:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B64BB8267B;
-        Thu, 10 Mar 2022 14:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1461C340E8;
-        Thu, 10 Mar 2022 14:24:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77869B8267A;
+        Thu, 10 Mar 2022 14:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D41C340E8;
+        Thu, 10 Mar 2022 14:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922296;
-        bh=BjhNuDswWhutw0Va1gA9M+7Vl6Iaj6ZmKGq889IWLoA=;
+        s=korg; t=1646922055;
+        bh=vzSF9NLTj2CC/EtyDWRBsEmCrp/t8LoHmGjSgMq5smc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ma3yPSCd2gHee7LBAY3vHmWZ38u4+yYbQsbD8Xz5En6PlAfpGWCRIVa44xzyAWuGY
-         e6uIurMcZlzYh66dGILTw/Rs0mbYJD8oTiYwttKlZ1oo/H/Q7F1Y4Xnv8E5lORkRZn
-         WGrdZRvdZQzz2Kvo0rm8J87K1Y9xCKr0IUkFDiNE=
+        b=ZvEFQsLis5YjMNjKeX1shlXk+0fhDGbiqpiqPfyarkJOkOvJuT9mL8FVySm+M/ROd
+         Xcu6eVLHo6QXUK5dzfzxjvEx/spQb1i0II9xDqsVl6Qxmr8uRz5wS+1IMjvoc+j0E5
+         erQLvOUHdbk5htCBKelphdxvApXDvxT9LBNcNTdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>
-Subject: [PATCH 5.10 15/58] arm64: cputype: Add CPU implementor & types for the Apple M1 cores
+        stable@vger.kernel.org,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 22/31] xen/xenbus: dont let xenbus_grant_ring() remove grants in error case
 Date:   Thu, 10 Mar 2022 15:18:35 +0100
-Message-Id: <20220310140813.310046847@linuxfoundation.org>
+Message-Id: <20220310140808.186042536@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
+References: <20220310140807.524313448@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Juergen Gross <jgross@suse.com>
 
-commit 11ecdad722daafcac09c4859dddf31b3d46449bc upstream.
+Commit 3777ea7bac3113005b7180e6b9dadf16d19a5827 upstream.
 
-The implementor will be used to condition the FIQ support quirk.
+Letting xenbus_grant_ring() tear down grants in the error case is
+problematic, as the other side could already have used these grants.
+Calling gnttab_end_foreign_access_ref() without checking success is
+resulting in an unclear situation for any caller of xenbus_grant_ring()
+as in the error case the memory pages of the ring page might be
+partially mapped. Freeing them would risk unwanted foreign access to
+them, while not freeing them would leak memory.
 
-The specific CPU types are not used at the moment, but let's add them
-for documentation purposes.
+In order to remove the need to undo any gnttab_grant_foreign_access()
+calls, use gnttab_alloc_grant_references() to make sure no further
+error can occur in the loop granting access to the ring pages.
 
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Hector Martin <marcan@marcan.st>
+It should be noted that this way of handling removes leaking of
+grant entries in the error case, too.
+
+This is CVE-2022-23040 / part of XSA-396.
+
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/cputype.h |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/xen/xenbus/xenbus_client.c |   24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
---- a/arch/arm64/include/asm/cputype.h
-+++ b/arch/arm64/include/asm/cputype.h
-@@ -59,6 +59,7 @@
- #define ARM_CPU_IMP_NVIDIA		0x4E
- #define ARM_CPU_IMP_FUJITSU		0x46
- #define ARM_CPU_IMP_HISI		0x48
-+#define ARM_CPU_IMP_APPLE		0x61
- 
- #define ARM_CPU_PART_AEM_V8		0xD0F
- #define ARM_CPU_PART_FOUNDATION		0xD00
-@@ -99,6 +100,9 @@
- 
- #define HISI_CPU_PART_TSV110		0xD01
- 
-+#define APPLE_CPU_PART_M1_ICESTORM	0x022
-+#define APPLE_CPU_PART_M1_FIRESTORM	0x023
+--- a/drivers/xen/xenbus/xenbus_client.c
++++ b/drivers/xen/xenbus/xenbus_client.c
+@@ -368,7 +368,14 @@ int xenbus_grant_ring(struct xenbus_devi
+ 		      unsigned int nr_pages, grant_ref_t *grefs)
+ {
+ 	int err;
+-	int i, j;
++	unsigned int i;
++	grant_ref_t gref_head;
 +
- #define MIDR_CORTEX_A53 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A53)
- #define MIDR_CORTEX_A57 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A57)
- #define MIDR_CORTEX_A72 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A72)
-@@ -127,6 +131,8 @@
- #define MIDR_NVIDIA_CARMEL MIDR_CPU_MODEL(ARM_CPU_IMP_NVIDIA, NVIDIA_CPU_PART_CARMEL)
- #define MIDR_FUJITSU_A64FX MIDR_CPU_MODEL(ARM_CPU_IMP_FUJITSU, FUJITSU_CPU_PART_A64FX)
- #define MIDR_HISI_TSV110 MIDR_CPU_MODEL(ARM_CPU_IMP_HISI, HISI_CPU_PART_TSV110)
-+#define MIDR_APPLE_M1_ICESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM)
-+#define MIDR_APPLE_M1_FIRESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM)
++	err = gnttab_alloc_grant_references(nr_pages, &gref_head);
++	if (err) {
++		xenbus_dev_fatal(dev, err, "granting access to ring page");
++		return err;
++	}
  
- /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
- #define MIDR_FUJITSU_ERRATUM_010001		MIDR_FUJITSU_A64FX
+ 	for (i = 0; i < nr_pages; i++) {
+ 		unsigned long gfn;
+@@ -378,23 +385,14 @@ int xenbus_grant_ring(struct xenbus_devi
+ 		else
+ 			gfn = virt_to_gfn(vaddr);
+ 
+-		err = gnttab_grant_foreign_access(dev->otherend_id, gfn, 0);
+-		if (err < 0) {
+-			xenbus_dev_fatal(dev, err,
+-					 "granting access to ring page");
+-			goto fail;
+-		}
+-		grefs[i] = err;
++		grefs[i] = gnttab_claim_grant_reference(&gref_head);
++		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
++						gfn, 0);
+ 
+ 		vaddr = vaddr + XEN_PAGE_SIZE;
+ 	}
+ 
+ 	return 0;
+-
+-fail:
+-	for (j = 0; j < i; j++)
+-		gnttab_end_foreign_access_ref(grefs[j], 0);
+-	return err;
+ }
+ EXPORT_SYMBOL_GPL(xenbus_grant_ring);
+ 
 
 

@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BD34D51DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD524D51F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343677AbiCJTgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S1343692AbiCJTgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiCJTgE (ORCPT
+        with ESMTP id S1343679AbiCJTgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:36:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5F8155C00;
-        Thu, 10 Mar 2022 11:35:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EFB3611B9;
-        Thu, 10 Mar 2022 19:35:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28613C340E8;
-        Thu, 10 Mar 2022 19:35:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646940902;
-        bh=RL5pztp2gZRHUHbTqmyhvO+U8YHRPoTBR9IFLcYrtXk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uN0K75A8Ja2VXwbtF5rG0Dle9yTeH3e3vO0oQyZm4SGluKtUUaGMqenMCmCCEtzdH
-         MZ2etMieW1A5TDtEWuYZghJepB9u7himDtCzQ/ouUeS/cyJ9AtesQoTMet99LuxIiR
-         2xjcek279pVMOH0mB5QIwihQDHDOO0W73+50utARWtHl7VVyMJUiO548IsQjdaokYR
-         fMgPr8zeNtsvl9SQD1o0Aot+wQOKoxFDUDqs0/h8D8vRU9eSqoD3IPu8EUI/BZbvtp
-         N97pyRJNPPMAIrOkkd+UKYZdZEaBkoA3wvfbln4BAeppUjL/tPHtKPRzZBgHCUfxpI
-         QPirlhCjNJ2Fg==
-Date:   Thu, 10 Mar 2022 13:34:58 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        robh@kernel.org, yilun.xu@intel.com, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, trix@redhat.com, mdf@kernel.org,
-        dwmw2@infradead.org, linux-kernel@vger.kernel.org,
-        Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V1 RESEND 1/4] pci: add interface to create pci-ep device
- tree node
-Message-ID: <20220310193458.GA167650@bhelgaas>
+        Thu, 10 Mar 2022 14:36:08 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD10156C4A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:35:06 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id d62so7652959iog.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:35:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=laExCu15MSDIwht4Fb7sSTYAywV43I/hN2LqXzvWbPY=;
+        b=Equa8ke+JtOLoQL5wwEbL7jrXELLzQxgv3BulI7mQI++7z90IJtYRASum/hpfbkzjL
+         bcPw1sTaSzR+0lUS7j48gRqp+Kw2pkzn/l/qFVteuFCOKYg/uXthldh4QXaOqdkMgheC
+         aLsamfGe6yoSJCLtB63iNhlwKiuyuWlH3nBUA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=laExCu15MSDIwht4Fb7sSTYAywV43I/hN2LqXzvWbPY=;
+        b=uPidIsybgw+teKaHCJalewJ+/JUF4dZ+WchLjszYSwZB7V9ba5MsxdYGLe6xu00Czi
+         9+WJqGVmrrdNzYNpYShZCiLx3EpJOlhNSzG4W1lritaBgs9SlDkMeiMuGelshvb7A9zs
+         0GzWckHI8axAMEwAdsc9JaxNHdqA3IUa0oL639E5dImTjhSCMZSGw5NkDIiPAs8G0XPg
+         Ax70ipY8aijCUPLzOVUjSIa6ZWF+dW8e79TwJhYd9YhXqKlgq7462xJ7grASlamBmekR
+         A5lxOqy8KHgpSbvYgmJHU9Z8M3VEpoQU6t/xFZuXnwTMWbrznoHqhjkK1e2RcW4NNRDl
+         YCCQ==
+X-Gm-Message-State: AOAM530bMagX2Fz1WNmDaWVEfhVfCQ7Kfs7X+YyS1HOzdlU25Mi3wZj2
+        o5pqkhItleZz5TLX9VklvTwmtQ==
+X-Google-Smtp-Source: ABdhPJwliYNpoVw89f+qFDqkS2SKG0YAFpFXgZ9PU2wHAi0T8h5Mggu/uQxw32yNfbMrTT7xEBIU1g==
+X-Received: by 2002:a05:6602:27c5:b0:631:a30f:143a with SMTP id l5-20020a05660227c500b00631a30f143amr5078294ios.40.1646940906231;
+        Thu, 10 Mar 2022 11:35:06 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056e02158700b002c61541edd7sm3488148ilu.3.2022.03.10.11.35.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 11:35:05 -0800 (PST)
+Subject: Re: [PATCH 4.9 00/38] 4.9.306-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220310140808.136149678@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7253e28c-766c-e2bd-f9d7-80809d81cd2a@linuxfoundation.org>
+Date:   Thu, 10 Mar 2022 12:35:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220305052304.726050-2-lizhi.hou@xilinx.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220310140808.136149678@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Run "git log --oneline drivers/pci/of.c" and follow the convention,
-e.g., something like:
-
-  PCI: Add DT Endpoint description interfaces
-
-On Fri, Mar 04, 2022 at 09:23:01PM -0800, Lizhi Hou wrote:
-> This patch enables PCIe device to uses flattened device tree to describe
-> apertures in its PCIe BARs. The aperture address consists of PCIe BAR index
-> and offset.
+On 3/10/22 7:13 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.306 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> For this kind of device, the driver probe routine calls the new added
-> interface to create a device tree node. This device tree node is attached
-> under system device tree root. Then the driver may load the flatten device
-> tree overlay and attach it under this node. And the node also contains
-> 'ranges' property which is used to translate aperture address(BAR index
-> and offset) to CPU address.
-
-In the commit log, please say *what* this patch does and why we need
-it.  The current text talks about how some interface might be used,
-but doesn't specifically say what interface that is or that this patch
-adds it.
-
-It should also have a specific pointer to the relevant DT binding.
-
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> ---
->  drivers/pci/of.c       | 180 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/of_pci.h |  15 ++++
->  2 files changed, 195 insertions(+)
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> index cb2e8351c2cc..198f08351070 100644
-> --- a/drivers/pci/of.c
-> +++ b/drivers/pci/of.c
-> @@ -605,6 +605,186 @@ int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge)
->  	return pci_parse_request_of_pci_ranges(dev, bridge);
->  }
->  
-> +#if IS_ENABLED(CONFIG_OF_DYNAMIC)
-> +
-> +static void devm_of_pci_destroy_bus_endpoint(struct device *dev, void *res)
-> +{
-> +	struct device_node *node = res;
-> +
-> +	of_detach_node(node);
-> +}
-> +
-> +static int of_ep_add_property(struct device *dev, struct property **proplist, const char *name,
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.306-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Please rewrap code and comments to fit in 80 columns like the rest of
-the file.  There's a lot more below that I snipped out.
+Compiled and booted on my test system. No dmesg regressions.
 
-Bjorn
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298C24D486A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5363F4D4873
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242179AbiCJNxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S242586AbiCJN47 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 08:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242611AbiCJNw4 (ORCPT
+        with ESMTP id S232346AbiCJN45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:52:56 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB1A14FBD4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:51:54 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AC287240008;
-        Thu, 10 Mar 2022 13:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646920313;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+Pwuvr+KT1sPXpC8mj8b2XwOM5OlpDST+eXmtdbpQuY=;
-        b=W3AdK7m0xBr3JaJGiutph+HpGKohghqhEfZgD9aBQ2RM8YJfOYgFdhbRtKIy72cMU/WY9f
-        p7XdB4TpoEucMZGcQjn0Lfhul9zYySMYh2wJrO6HbXlOFNU+ZfLWPxNT213cX8sSVvesZU
-        NmtqNrpn0TCKy3YKkZ9NVsWOMOhTAicGKtdj9nG+JfNvrLn+1OXkXw3DLJI2DEoQWg2Ic3
-        A3YMIpBVGXKoBBl7Q3HuiVr4YsPjI85j4MGXPRMuY03G206UeT+cR1dbOSKvO6uJ3U7QUD
-        Wbr5I7nPjH5ZAxCvxtLHfrhjNtq0wXX/OcMg56/l0kaOAw7SeYCeecGDRDqUzw==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] arm64: dts: marvell: armada-37xx: Remap IO space to
- bus address 0x0
-In-Reply-To: <20220310103923.24847-1-pali@kernel.org>
-References: <20220218212526.16021-1-pali@kernel.org>
- <20220310103923.24847-1-pali@kernel.org>
-Date:   Thu, 10 Mar 2022 14:51:47 +0100
-Message-ID: <87ee39j4p8.fsf@BL-laptop>
+        Thu, 10 Mar 2022 08:56:57 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E914141FF4;
+        Thu, 10 Mar 2022 05:55:52 -0800 (PST)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KDrDQ5q6Tz67vZB;
+        Thu, 10 Mar 2022 21:55:18 +0800 (CST)
+Received: from lhreml717-chm.china.huawei.com (10.201.108.68) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Mar 2022 14:55:49 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml717-chm.china.huawei.com (10.201.108.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Mar 2022 13:55:48 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Thu, 10 Mar 2022 13:55:48 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
+ header
+Thread-Topic: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
+ header
+Thread-Index: AQHYL1K65T0xdQtNbkGb+oampkIrK6y0Oe0AgARyolA=
+Date:   Thu, 10 Mar 2022 13:55:48 +0000
+Message-ID: <ec2b1e7168714144afcd4bfe5cd39058@huawei.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+        <20220303230131.2103-4-shameerali.kolothum.thodi@huawei.com>
+ <20220307105344.171b4621.alex.williamson@redhat.com>
+In-Reply-To: <20220307105344.171b4621.alex.williamson@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.85.233]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,132 +75,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Pali,
+Hi Bjorn,
 
-> Legacy and old PCI I/O based cards do not support 32-bit I/O addressing.
->
-> Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
-> 'ranges' DT property") kernel can set different PCIe address on CPU and
-> different on the bus for the one A37xx address mapping without any firmwa=
-re
-> support in case the bus address does not conflict with other A37xx mappin=
-g.
->
-> So remap I/O space to the bus address 0x0 to enable support for old legacy
-> I/O port based cards which have hardcoded I/O ports in low address space.
->
-> Note that DDR on A37xx is mapped to bus address 0x0. And mapping of I/O
-> space can be set to address 0x0 too because MEM space and I/O space are
-> separate and so do not conflict.
->
-> Remapping IO space on Turris Mox to different address is not possible to
-> due bootloader bug.
->
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Fixes: 76f6386b25cc ("arm64: dts: marvell: Add Aardvark PCIe support for =
-Armada 3700")
-> Cc: stable@vger.kernel.org # 64f160e19e92 ("PCI: aardvark: Configure PCIe=
- resources from 'ranges' DT property")
-> Cc: stable@vger.kernel.org # 514ef1e62d65 ("arm64: dts: marvell: armada-3=
-7xx: Extend PCIe MEM space")
->
-> ---
-> Changes in v3:
-> * Rebase on v5.17-rc1
->
-> Changes in v2:
-> * Do not remap IO space on Turris Mox
+> -----Original Message-----
+> From: Alex Williamson [mailto:alex.williamson@redhat.com]
+> Sent: 07 March 2022 17:54
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
+> Bjorn Helgaas <bhelgaas@google.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; jgg@nvidia.com;
+> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
+> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
+> <prime.zeng@hisilicon.com>; Jonathan Cameron
+> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
+> Subject: Re: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
+> header
+> 
+> Hi Bjorn,
+> 
+> Here's the respin of this patch that adds only the VF device IDs to
+> pci_ids.h.  The next patch in the series[1] adds a consumer of these
+> IDs as a vfio-pci vendor driver.  Thanks,
 
-Now it's OK !
+Just a gentle ping on this. Also the latest respin is now at v9 and can be
+found here.
 
-Applied on mvebu/fixes
+https://lore.kernel.org/kvm/20220308184902.2242-4-shameerali.kolothum.thodi@huawei.com/
 
 Thanks,
+Shameer
 
-Gregory
+> Alex
+> 
+> [1]https://lore.kernel.org/all/20220303230131.2103-5-shameerali.kolothum.t
+> hodi@huawei.com/
+> 
+> On Thu, 3 Mar 2022 23:01:25 +0000
+> Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
+> 
+> > Move the PCI Device IDs of HiSilicon ACC VF devices to a common header
+> > and also use a uniform naming convention.
+> >
+> > This will be useful when we introduce the vfio PCI HiSilicon ACC live
+> > migration driver in subsequent patches.
+> >
+> > Signed-off-by: Shameer Kolothum
+> <shameerali.kolothum.thodi@huawei.com>
+> > ---
+> >  drivers/crypto/hisilicon/hpre/hpre_main.c | 13 ++++++-------
+> >  drivers/crypto/hisilicon/sec2/sec_main.c  | 15 +++++++--------
+> >  drivers/crypto/hisilicon/zip/zip_main.c   | 11 +++++------
+> >  include/linux/pci_ids.h                   |  3 +++
+> >  4 files changed, 21 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c
+> b/drivers/crypto/hisilicon/hpre/hpre_main.c
+> > index ebfab3e14499..3589d8879b5e 100644
+> > --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
+> > +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
+> > @@ -68,8 +68,7 @@
+> >  #define HPRE_REG_RD_INTVRL_US		10
+> >  #define HPRE_REG_RD_TMOUT_US		1000
+> >  #define HPRE_DBGFS_VAL_MAX_LEN		20
+> > -#define HPRE_PCI_DEVICE_ID		0xa258
+> > -#define HPRE_PCI_VF_DEVICE_ID		0xa259
+> > +#define PCI_DEVICE_ID_HUAWEI_HPRE_PF	0xa258
+> >  #define HPRE_QM_USR_CFG_MASK		GENMASK(31, 1)
+> >  #define HPRE_QM_AXI_CFG_MASK		GENMASK(15, 0)
+> >  #define HPRE_QM_VFG_AX_MASK		GENMASK(7, 0)
+> > @@ -111,8 +110,8 @@
+> >  static const char hpre_name[] = "hisi_hpre";
+> >  static struct dentry *hpre_debugfs_root;
+> >  static const struct pci_device_id hpre_dev_ids[] = {
+> > -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, HPRE_PCI_DEVICE_ID) },
+> > -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, HPRE_PCI_VF_DEVICE_ID) },
+> > +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI,
+> PCI_DEVICE_ID_HUAWEI_HPRE_PF) },
+> > +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI,
+> PCI_DEVICE_ID_HUAWEI_HPRE_VF) },
+> >  	{ 0, }
+> >  };
+> >
+> > @@ -242,7 +241,7 @@ MODULE_PARM_DESC(uacce_mode,
+> UACCE_MODE_DESC);
+> >
+> >  static int pf_q_num_set(const char *val, const struct kernel_param *kp)
+> >  {
+> > -	return q_num_set(val, kp, HPRE_PCI_DEVICE_ID);
+> > +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_HPRE_PF);
+> >  }
+> >
+> >  static const struct kernel_param_ops hpre_pf_q_num_ops = {
+> > @@ -921,7 +920,7 @@ static int hpre_debugfs_init(struct hisi_qm *qm)
+> >  	qm->debug.sqe_mask_len = HPRE_SQE_MASK_LEN;
+> >  	hisi_qm_debug_init(qm);
+> >
+> > -	if (qm->pdev->device == HPRE_PCI_DEVICE_ID) {
+> > +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_PF) {
+> >  		ret = hpre_ctrl_debug_init(qm);
+> >  		if (ret)
+> >  			goto failed_to_create;
+> > @@ -958,7 +957,7 @@ static int hpre_qm_init(struct hisi_qm *qm, struct
+> pci_dev *pdev)
+> >  	qm->sqe_size = HPRE_SQE_SIZE;
+> >  	qm->dev_name = hpre_name;
+> >
+> > -	qm->fun_type = (pdev->device == HPRE_PCI_DEVICE_ID) ?
+> > +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_PF) ?
+> >  			QM_HW_PF : QM_HW_VF;
+> >  	if (qm->fun_type == QM_HW_PF) {
+> >  		qm->qp_base = HPRE_PF_DEF_Q_BASE;
+> > diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c
+> b/drivers/crypto/hisilicon/sec2/sec_main.c
+> > index 26d3ab1d308b..311a8747b5bf 100644
+> > --- a/drivers/crypto/hisilicon/sec2/sec_main.c
+> > +++ b/drivers/crypto/hisilicon/sec2/sec_main.c
+> > @@ -20,8 +20,7 @@
+> >
+> >  #define SEC_VF_NUM			63
+> >  #define SEC_QUEUE_NUM_V1		4096
+> > -#define SEC_PF_PCI_DEVICE_ID		0xa255
+> > -#define SEC_VF_PCI_DEVICE_ID		0xa256
+> > +#define PCI_DEVICE_ID_HUAWEI_SEC_PF	0xa255
+> >
+> >  #define SEC_BD_ERR_CHK_EN0		0xEFFFFFFF
+> >  #define SEC_BD_ERR_CHK_EN1		0x7ffff7fd
+> > @@ -225,7 +224,7 @@ static const struct debugfs_reg32 sec_dfx_regs[] = {
+> >
+> >  static int sec_pf_q_num_set(const char *val, const struct kernel_param
+> *kp)
+> >  {
+> > -	return q_num_set(val, kp, SEC_PF_PCI_DEVICE_ID);
+> > +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_SEC_PF);
+> >  }
+> >
+> >  static const struct kernel_param_ops sec_pf_q_num_ops = {
+> > @@ -313,8 +312,8 @@ module_param_cb(uacce_mode,
+> &sec_uacce_mode_ops, &uacce_mode, 0444);
+> >  MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
+> >
+> >  static const struct pci_device_id sec_dev_ids[] = {
+> > -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, SEC_PF_PCI_DEVICE_ID) },
+> > -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, SEC_VF_PCI_DEVICE_ID) },
+> > +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI,
+> PCI_DEVICE_ID_HUAWEI_SEC_PF) },
+> > +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI,
+> PCI_DEVICE_ID_HUAWEI_SEC_VF) },
+> >  	{ 0, }
+> >  };
+> >  MODULE_DEVICE_TABLE(pci, sec_dev_ids);
+> > @@ -717,7 +716,7 @@ static int sec_core_debug_init(struct hisi_qm *qm)
+> >  	regset->base = qm->io_base;
+> >  	regset->dev = dev;
+> >
+> > -	if (qm->pdev->device == SEC_PF_PCI_DEVICE_ID)
+> > +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF)
+> >  		debugfs_create_file("regs", 0444, tmp_d, regset, &sec_regs_fops);
+> >
+> >  	for (i = 0; i < ARRAY_SIZE(sec_dfx_labels); i++) {
+> > @@ -735,7 +734,7 @@ static int sec_debug_init(struct hisi_qm *qm)
+> >  	struct sec_dev *sec = container_of(qm, struct sec_dev, qm);
+> >  	int i;
+> >
+> > -	if (qm->pdev->device == SEC_PF_PCI_DEVICE_ID) {
+> > +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF) {
+> >  		for (i = SEC_CLEAR_ENABLE; i < SEC_DEBUG_FILE_NUM; i++) {
+> >  			spin_lock_init(&sec->debug.files[i].lock);
+> >  			sec->debug.files[i].index = i;
+> > @@ -877,7 +876,7 @@ static int sec_qm_init(struct hisi_qm *qm, struct
+> pci_dev *pdev)
+> >  	qm->sqe_size = SEC_SQE_SIZE;
+> >  	qm->dev_name = sec_name;
+> >
+> > -	qm->fun_type = (pdev->device == SEC_PF_PCI_DEVICE_ID) ?
+> > +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF) ?
+> >  			QM_HW_PF : QM_HW_VF;
+> >  	if (qm->fun_type == QM_HW_PF) {
+> >  		qm->qp_base = SEC_PF_DEF_Q_BASE;
+> > diff --git a/drivers/crypto/hisilicon/zip/zip_main.c
+> b/drivers/crypto/hisilicon/zip/zip_main.c
+> > index 678f8b58ec42..66decfe07282 100644
+> > --- a/drivers/crypto/hisilicon/zip/zip_main.c
+> > +++ b/drivers/crypto/hisilicon/zip/zip_main.c
+> > @@ -15,8 +15,7 @@
+> >  #include <linux/uacce.h>
+> >  #include "zip.h"
+> >
+> > -#define PCI_DEVICE_ID_ZIP_PF		0xa250
+> > -#define PCI_DEVICE_ID_ZIP_VF		0xa251
+> > +#define PCI_DEVICE_ID_HUAWEI_ZIP_PF	0xa250
+> >
+> >  #define HZIP_QUEUE_NUM_V1		4096
+> >
+> > @@ -246,7 +245,7 @@ MODULE_PARM_DESC(uacce_mode,
+> UACCE_MODE_DESC);
+> >
+> >  static int pf_q_num_set(const char *val, const struct kernel_param *kp)
+> >  {
+> > -	return q_num_set(val, kp, PCI_DEVICE_ID_ZIP_PF);
+> > +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_ZIP_PF);
+> >  }
+> >
+> >  static const struct kernel_param_ops pf_q_num_ops = {
+> > @@ -268,8 +267,8 @@ module_param_cb(vfs_num, &vfs_num_ops,
+> &vfs_num, 0444);
+> >  MODULE_PARM_DESC(vfs_num, "Number of VFs to enable(1-63),
+> 0(default)");
+> >
+> >  static const struct pci_device_id hisi_zip_dev_ids[] = {
+> > -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_ZIP_PF) },
+> > -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_ZIP_VF) },
+> > +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI,
+> PCI_DEVICE_ID_HUAWEI_ZIP_PF) },
+> > +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI,
+> PCI_DEVICE_ID_HUAWEI_ZIP_VF) },
+> >  	{ 0, }
+> >  };
+> >  MODULE_DEVICE_TABLE(pci, hisi_zip_dev_ids);
+> > @@ -838,7 +837,7 @@ static int hisi_zip_qm_init(struct hisi_qm *qm, struct
+> pci_dev *pdev)
+> >  	qm->sqe_size = HZIP_SQE_SIZE;
+> >  	qm->dev_name = hisi_zip_name;
+> >
+> > -	qm->fun_type = (pdev->device == PCI_DEVICE_ID_ZIP_PF) ?
+> > +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_ZIP_PF) ?
+> >  			QM_HW_PF : QM_HW_VF;
+> >  	if (qm->fun_type == QM_HW_PF) {
+> >  		qm->qp_base = HZIP_PF_DEF_Q_BASE;
+> > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> > index aad54c666407..31dee2b65a62 100644
+> > --- a/include/linux/pci_ids.h
+> > +++ b/include/linux/pci_ids.h
+> > @@ -2529,6 +2529,9 @@
+> >  #define PCI_DEVICE_ID_KORENIX_JETCARDF3	0x17ff
+> >
+> >  #define PCI_VENDOR_ID_HUAWEI		0x19e5
+> > +#define PCI_DEVICE_ID_HUAWEI_ZIP_VF	0xa251
+> > +#define PCI_DEVICE_ID_HUAWEI_SEC_VF	0xa256
+> > +#define PCI_DEVICE_ID_HUAWEI_HPRE_VF	0xa259
+> >
+> >  #define PCI_VENDOR_ID_NETRONOME		0x19ee
+> >  #define PCI_DEVICE_ID_NETRONOME_NFP4000	0x4000
 
-
-> ---
->  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 7 ++++++-
->  arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 2 +-
->  2 files changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arc=
-h/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> index 04da07ae4420..4b377fe807e0 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> @@ -136,19 +136,24 @@
->  	status =3D "okay";
->  	reset-gpios =3D <&gpiosb 3 GPIO_ACTIVE_LOW>;
->  	/*
->  	 * U-Boot port for Turris Mox has a bug which always expects that "rang=
-es" DT property
->  	 * contains exactly 2 ranges with 3 (child) address cells, 2 (parent) a=
-ddress cells and
-> -	 * 2 size cells and also expects that the second range starts at 16 MB =
-offset. If these
-> +	 * 2 size cells and also expects that the second range starts at 16 MB =
-offset. Also it
-> +	 * expects that first range uses same address for PCI (child) and CPU (=
-parent) cells (so
-> +	 * no remapping) and that this address is the lowest from all specified=
- ranges. If these
->  	 * conditions are not met then U-Boot crashes during loading kernel DTB=
- file. PCIe address
->  	 * space is 128 MB long, so the best split between MEM and IO is to use=
- fixed 16 MB window
->  	 * for IO and the rest 112 MB (64+32+16) for MEM, despite that maximal =
-IO size is just 64 kB.
->  	 * This bug is not present in U-Boot ports for other Armada 3700 device=
-s and is fixed in
->  	 * U-Boot version 2021.07. See relevant U-Boot commits (the last one co=
-ntains fix):
->  	 * https://source.denx.de/u-boot/u-boot/-/commit/cb2ddb291ee6fcbddd6d8f=
-4ff49089dfe580f5d7
->  	 * https://source.denx.de/u-boot/u-boot/-/commit/c64ac3b3185aeb3846297a=
-d7391fc6df8ecd73bf
->  	 * https://source.denx.de/u-boot/u-boot/-/commit/4a82fca8e330157081fc13=
-2a591ebd99ba02ee33
-> +	 * Bug related to requirement of same child and parent addresses for fi=
-rst range is fixed
-> +	 * in U-Boot version 2022.04 by following commit:
-> +	 * https://source.denx.de/u-boot/u-boot/-/commit/1fd54253bca7d43d046bba=
-4853fe5fafd034bc17
->  	 */
->  	#address-cells =3D <3>;
->  	#size-cells =3D <2>;
->  	ranges =3D <0x81000000 0 0xe8000000   0 0xe8000000   0 0x01000000   /* =
-Port 0 IO */
->  		  0x82000000 0 0xe9000000   0 0xe9000000   0 0x07000000>; /* Port 0 ME=
-M */
-> diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/bo=
-ot/dts/marvell/armada-37xx.dtsi
-> index 673f4906eef9..fb78ef613b29 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> @@ -497,11 +497,11 @@
->  			 * with size a power of two. Use one 64 KiB window for
->  			 * IO at the end and the remaining seven windows
->  			 * (totaling 127 MiB) for MEM.
->  			 */
->  			ranges =3D <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /=
-* Port 0 MEM */
-> -				  0x81000000 0 0xefff0000   0 0xefff0000   0 0x00010000>; /* Port 0 =
-IO */
-> +				  0x81000000 0 0x00000000   0 0xefff0000   0 0x00010000>; /* Port 0 =
-IO */
->  			interrupt-map-mask =3D <0 0 0 7>;
->  			interrupt-map =3D <0 0 0 1 &pcie_intc 0>,
->  					<0 0 0 2 &pcie_intc 1>,
->  					<0 0 0 3 &pcie_intc 2>,
->  					<0 0 0 4 &pcie_intc 3>;
-> --=20
-> 2.20.1
->
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com

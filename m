@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F644D4ABF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AAC4D49D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiCJO1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        id S245041AbiCJOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243712AbiCJOZC (ORCPT
+        with ESMTP id S1344027AbiCJObh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:25:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537B015F373;
-        Thu, 10 Mar 2022 06:21:38 -0800 (PST)
+        Thu, 10 Mar 2022 09:31:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4310BECFA;
+        Thu, 10 Mar 2022 06:29:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 931D6B82678;
-        Thu, 10 Mar 2022 14:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72F1C340EB;
-        Thu, 10 Mar 2022 14:21:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41ED5B81E9E;
+        Thu, 10 Mar 2022 14:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85ACEC340EB;
+        Thu, 10 Mar 2022 14:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922082;
-        bh=WMBsDGoFwKsBC3UgmdydLX9aTvQjG9Z/G7T0quQ9LAM=;
+        s=korg; t=1646922264;
+        bh=KehoIr6yz70C9INH4cXgl326hlvCsnsKZSidzApz9l8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zb7Ot0ZLD3/IpdTGiL2I+T+bKCl54QkryaeFAiyaihphbFHL8BsHpmCe+amaPMRlx
-         RBMCQSmEJFZKiuR9xeIxdH3KtgsHnPU4KEXBF+lpAx72u3pwGSbQ5DleqgtQxEv4pG
-         vz8LAFF/ZckAtWtQgmKVKm33XycdbABeWz765yAo=
+        b=tFF2dmvw/ENX1mwHPBQLDyInG/X7UwAhB0dYvNzvZFaNHuIap/+5luek9lVQrBvIs
+         CC95FiDUugcJLWaDt+z1bWV1yIYcogsNz/Co7qJGJvaFPscJi0XAx4mOSxAVFri5/Q
+         eyv+5Y7F8mzBU/4dYPTjvJulvmYirK95+pEapDW8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Simon Gaiser <simon@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.14 30/31] xen/gnttab: fix gnttab_end_foreign_access() without page specified
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.10 23/58] arm64: entry.S: Add ventry overflow sanity checks
 Date:   Thu, 10 Mar 2022 15:18:43 +0100
-Message-Id: <20220310140808.419605112@linuxfoundation.org>
+Message-Id: <20220310140813.536582570@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
-References: <20220310140807.524313448@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,122 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: James Morse <james.morse@arm.com>
 
-Commit 42baefac638f06314298087394b982ead9ec444b upstream.
+commit 4330e2c5c04c27bebf89d34e0bc14e6943413067 upstream.
 
-gnttab_end_foreign_access() is used to free a grant reference and
-optionally to free the associated page. In case the grant is still in
-use by the other side processing is being deferred. This leads to a
-problem in case no page to be freed is specified by the caller: the
-caller doesn't know that the page is still mapped by the other side
-and thus should not be used for other purposes.
+Subsequent patches add even more code to the ventry slots.
+Ensure kernels that overflow a ventry slot don't get built.
 
-The correct way to handle this situation is to take an additional
-reference to the granted page in case handling is being deferred and
-to drop that reference when the grant reference could be freed
-finally.
-
-This requires that there are no users of gnttab_end_foreign_access()
-left directly repurposing the granted page after the call, as this
-might result in clobbered data or information leaks via the not yet
-freed grant reference.
-
-This is part of CVE-2022-23041 / XSA-396.
-
-Reported-by: Simon Gaiser <simon@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/grant-table.c |   30 +++++++++++++++++++++++-------
- include/xen/grant_table.h |    7 ++++++-
- 2 files changed, 29 insertions(+), 8 deletions(-)
+ arch/arm64/kernel/entry.S |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/xen/grant-table.c
-+++ b/drivers/xen/grant-table.c
-@@ -114,6 +114,10 @@ struct gnttab_ops {
- 	 * return the frame.
- 	 */
- 	unsigned long (*end_foreign_transfer_ref)(grant_ref_t ref);
-+	/*
-+	 * Read the frame number related to a given grant reference.
-+	 */
-+	unsigned long (*read_frame)(grant_ref_t ref);
- };
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -62,6 +62,7 @@
  
- struct unmap_refs_callback_data {
-@@ -278,6 +282,11 @@ int gnttab_end_foreign_access_ref(grant_
- }
- EXPORT_SYMBOL_GPL(gnttab_end_foreign_access_ref);
+ 	.macro kernel_ventry, el, label, regsize = 64
+ 	.align 7
++.Lventry_start\@:
+ #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+ 	.if	\el == 0
+ alternative_if ARM64_UNMAP_KERNEL_AT_EL0
+@@ -120,6 +121,7 @@ alternative_else_nop_endif
+ 	mrs	x0, tpidrro_el0
+ #endif
+ 	b	el\()\el\()_\label
++.org .Lventry_start\@ + 128	// Did we overflow the ventry slot?
+ 	.endm
  
-+static unsigned long gnttab_read_frame_v1(grant_ref_t ref)
-+{
-+	return gnttab_shared.v1[ref].frame;
-+}
-+
- struct deferred_entry {
- 	struct list_head list;
- 	grant_ref_t ref;
-@@ -307,12 +316,9 @@ static void gnttab_handle_deferred(unsig
- 		spin_unlock_irqrestore(&gnttab_list_lock, flags);
- 		if (_gnttab_end_foreign_access_ref(entry->ref, entry->ro)) {
- 			put_free_entry(entry->ref);
--			if (entry->page) {
--				pr_debug("freeing g.e. %#x (pfn %#lx)\n",
--					 entry->ref, page_to_pfn(entry->page));
--				put_page(entry->page);
--			} else
--				pr_info("freeing g.e. %#x\n", entry->ref);
-+			pr_debug("freeing g.e. %#x (pfn %#lx)\n",
-+				 entry->ref, page_to_pfn(entry->page));
-+			put_page(entry->page);
- 			kfree(entry);
- 			entry = NULL;
- 		} else {
-@@ -337,9 +343,18 @@ static void gnttab_handle_deferred(unsig
- static void gnttab_add_deferred(grant_ref_t ref, bool readonly,
- 				struct page *page)
- {
--	struct deferred_entry *entry = kmalloc(sizeof(*entry), GFP_ATOMIC);
-+	struct deferred_entry *entry;
-+	gfp_t gfp = (in_atomic() || irqs_disabled()) ? GFP_ATOMIC : GFP_KERNEL;
- 	const char *what = KERN_WARNING "leaking";
+ 	.macro tramp_alias, dst, sym
+@@ -832,6 +834,7 @@ alternative_else_nop_endif
+ 	add	x30, x30, #(1b - tramp_vectors)
+ 	isb
+ 	ret
++.org 1b + 128	// Did we overflow the ventry slot?
+ 	.endm
  
-+	entry = kmalloc(sizeof(*entry), gfp);
-+	if (!page) {
-+		unsigned long gfn = gnttab_interface->read_frame(ref);
-+
-+		page = pfn_to_page(gfn_to_pfn(gfn));
-+		get_page(page);
-+	}
-+
- 	if (entry) {
- 		unsigned long flags;
- 
-@@ -1011,6 +1026,7 @@ static const struct gnttab_ops gnttab_v1
- 	.update_entry			= gnttab_update_entry_v1,
- 	.end_foreign_access_ref		= gnttab_end_foreign_access_ref_v1,
- 	.end_foreign_transfer_ref	= gnttab_end_foreign_transfer_ref_v1,
-+	.read_frame			= gnttab_read_frame_v1,
- };
- 
- static void gnttab_request_version(void)
---- a/include/xen/grant_table.h
-+++ b/include/xen/grant_table.h
-@@ -100,7 +100,12 @@ int gnttab_end_foreign_access_ref(grant_
-  * Note that the granted page might still be accessed (read or write) by the
-  * other side after gnttab_end_foreign_access() returns, so even if page was
-  * specified as 0 it is not allowed to just reuse the page for other
-- * purposes immediately.
-+ * purposes immediately. gnttab_end_foreign_access() will take an additional
-+ * reference to the granted page in this case, which is dropped only after
-+ * the grant is no longer in use.
-+ * This requires that multi page allocations for areas subject to
-+ * gnttab_end_foreign_access() are done via alloc_pages_exact() (and freeing
-+ * via free_pages_exact()) in order to avoid high order pages.
-  */
- void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
- 			       unsigned long page);
+ 	.macro tramp_exit, regsize = 64
 
 

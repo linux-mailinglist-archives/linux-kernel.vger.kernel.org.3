@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38E34D556C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BB64D556D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344725AbiCJXcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 18:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S1344738AbiCJXdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 18:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbiCJXcS (ORCPT
+        with ESMTP id S233647AbiCJXdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 18:32:18 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B49F19CCC3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:31:16 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2dbc48104beso76490687b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ECjPK11wsuEVryWmqpR3k3ZiIuxweVEaECaw5mE+94=;
-        b=GmLy3PEJ+iGbMTqEd3nft0r2e1Htire9ySKkYTK3SJdj26W8x5OK9maG0s0nrk5qai
-         YYTDjp0Xk4HaMlr2adQ04baCGdz27GQ2lHKwd67QfpLyvfN68DHPad2jsJtfaR/H7b+P
-         BDOCgNgNszHnF8lQ/A1NwyQ5neBC+IXQbumfcBpywcLx8UgLsdF2a6888Y6A/KYGwVTE
-         IjN/F2xJ0EWsDl+V5JL6i36r35mL7cuZNK0VA5oc3yv8i9O22WIF6/2SoDisAz8KuYBM
-         zLhBH00ueSytiX/8m35w65JCauLCxlI3lEObx186Q5peIpy/OkrJyaSVP6MblDcG+PlO
-         9Hjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ECjPK11wsuEVryWmqpR3k3ZiIuxweVEaECaw5mE+94=;
-        b=uLlZsz8aumsr/r19nhTbNkNG7eqV7hbGAbOQ7m7UYRy0sZhfM4I1fKxLkHoqGT+/Jd
-         b4gLFQ6V4fU+Sx65A/86bUSNdAv/vGloBe+AYkjNAiBZ1i9EY9SK3NOc/DI2+ZiNJbj8
-         A4npbzymsLuvAbt6PvFjp/v2AbYLps+w9QabeRE8lMNd3JTcfGRgYZUEfP9gV9I1KUOW
-         fbwFxtRhl9WeYtrW/TrD1FnapqW2iqENJpSu7iG8m/5NPA3ZPREjiF291TYOT0yWRi08
-         UNtRGnP1vCz6jsj4fS+PkPQsVFEREwEkBxt/fe0cbrMUR5AVqqEc3QGss1cpWF3N5/+9
-         U29g==
-X-Gm-Message-State: AOAM530R1WH70a9KSfKlRCGdisvdssTT9ZYR+V/7uLeinqbTQjNo+qLt
-        5i8bLQimSxnhM4tC8YDr7yXndbpyVGU082ttIUrIxA==
-X-Google-Smtp-Source: ABdhPJz7BxmSJCbeCL22yKsXMI9ADDC7i5QDGRPLPozbu4jocqeJRgEtOOnO2/+RU2i2pfuuSrPHsi7OTj5OCoKwwJc=
-X-Received: by 2002:a0d:c847:0:b0:2d6:9010:5721 with SMTP id
- k68-20020a0dc847000000b002d690105721mr6251548ywd.380.1646955075261; Thu, 10
- Mar 2022 15:31:15 -0800 (PST)
+        Thu, 10 Mar 2022 18:33:43 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2093.outbound.protection.outlook.com [40.107.114.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DDC9E54C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:32:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T7Y1NQvjAIvOHtxDUikTtIoDb33aolU8ghL6jtZLoNl61ewZ3JVpxyGKugvJ311oeS1v+ZeIaLh5xZEgHIcRN+oruuDLnuHJvOXaGIwhXT/cJ+/eayo44UDESnYCLuJ0vSELok5+gWdxPmYlv13A2/u0Xttf6seQSQV4Im8EFOyxjfwS/NG861gSIlpCM4ATiZxIRk/O7sVborjnQ6ryTl4EsUl5a8nstPxirw0hADlDcXUlWbecMpFbhusReGZAm2VBodsqs/kuKvKqpEGhwO8uFMbSo9RCAdPJxugTegXVO9tYdaJBl6PFaG+KsEc6QDXadvmfph/jPeMzhX4zjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kzb9iSVH2jPqjsZjpyZkDZ0nRSeebFAjZeacg0KZY4o=;
+ b=cELtIJSEdItq1+7MLpCd2hsHzWJnR0luYOi5/DANlHsocafTwt3yWkKHKTWagQwDfEZ6Mjk+DyN8OZVlJe2Hn44Qq3lWoiHCA/+Dwu7iI53MZWgbkjwhPOZGrRNv/3N4/SGo/K2RbJYTjmFYmQcX5FE3ycWVmeiSl/EKZwMJ08IcNz39fUnzzJyQS4lzje4Z2jYuXfWAo9tVgN4vB43vXkxhquh6dmrHukLAS0co4voE3fsvnFW9bnEPta1J5SOSk8Hxbkw8bYDUlsckwqpzYC695SaUTs5cGW7DSJbFPeqf0/aRCCom32vHYzYmrtfWxFbDYo6AZms7exXyKuFMNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kzb9iSVH2jPqjsZjpyZkDZ0nRSeebFAjZeacg0KZY4o=;
+ b=fFWOMpcsChEluh9M6bdddzxjNV7/zYGMo6zhZjFNtHrfspAg8BEJbzSQJWr4z3SdpTbWLVGtRP1VoztikCKpe4KOsKDh7IipxO53pJkciLMzJV2/N12rhUem6kKUtk1ftdYQtxc5B0qqFlnCxKTHCPR8MrvsQTg5csZEeWoLIrk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
+ by OSAPR01MB3475.jpnprd01.prod.outlook.com (2603:1096:604:58::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.21; Thu, 10 Mar
+ 2022 23:32:37 +0000
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::7c4e:286f:81:97ac]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::7c4e:286f:81:97ac%3]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
+ 23:32:37 +0000
+Message-ID: <87a6dxqt80.wl-kuninori.morimoto.gx@renesas.com>
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To:     Sameer Pujar <spujar@nvidia.com>
+Cc:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <robert.hancock@calian.com>,
+        <stephan@gerhold.net>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: simple-card-utils: Don't reset clock of active DAI
+In-Reply-To: <1646910999-2501-1-git-send-email-spujar@nvidia.com>
+References: <1646910999-2501-1-git-send-email-spujar@nvidia.com>
+User-Agent: Wanderlust/2.15.9 Emacs/26.3 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date:   Thu, 10 Mar 2022 23:32:37 +0000
+X-ClientProxiedBy: TYWPR01CA0035.jpnprd01.prod.outlook.com
+ (2603:1096:400:aa::22) To OS3PR01MB8426.jpnprd01.prod.outlook.com
+ (2603:1096:604:194::10)
 MIME-Version: 1.0
-References: <20220215201922.1908156-1-surenb@google.com> <20220224201859.a38299b6c9d52cb51e6738ea@linux-foundation.org>
- <YhhZsv+czqQPKvvN@casper.infradead.org> <CAJuCfpEUro2jxmx-AB2A-mVcNxz6s3oAyow1sEXY5RyPP+83dA@mail.gmail.com>
- <20220310155454.g6lt54yxel3ixnp3@revolver> <CAJuCfpHk+1snrPx-_qvj=kjSOS+o=L90evAQ1gD5hj6XxB=a3g@mail.gmail.com>
- <20220310222206.dttvvlgfqysrcl2s@revolver>
-In-Reply-To: <20220310222206.dttvvlgfqysrcl2s@revolver>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 10 Mar 2022 15:31:04 -0800
-Message-ID: <CAJuCfpHoMtJdJgXCs45Oi=BUFWVcw76J5Kk-6_1ZuXVvZM_vpA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: fix use-after-free bug when mm->mmap is reused
- after being freed
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "mhocko@suse.com" <mhocko@suse.com>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "guro@fb.com" <guro@fb.com>, "riel@surriel.com" <riel@surriel.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "christian@brauner.io" <christian@brauner.io>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "jengelh@inai.de" <jengelh@inai.de>,
-        "timmurray@google.com" <timmurray@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com" 
-        <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88992932-2efe-4646-3564-08da02ee4303
+X-MS-TrafficTypeDiagnostic: OSAPR01MB3475:EE_
+X-Microsoft-Antispam-PRVS: <OSAPR01MB34757EA7CBB04A904E4173BBD40B9@OSAPR01MB3475.jpnprd01.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: akomeCom4X1rjoGLKeTaikBnjmZs+7Ew3UgxOmDlXzS5XFJAMYiMNx0SrCGs1mRH8w/RMHuA2Hv2I6zavB2i7KqzYqrDZpgxVRtWiS3Zk5efPT4dWHptGVywSbkooybcfUUThTaqK69+DkrrPvu1K71DYv5sCZEqVhqGaPlbEQfQT7bd1Z0i17vc0ScqsIWUVePFOODR65E3R4H2Ry/r3TJSxtcruMtCiDL+UCUOmSc5OcYyAopk7qpxTwoFSSrJjvE594mTX6PyQGACStlqHV1wHCs67dpV4GspXevxROMm1Q1J/HZ7uWYYUndwlHjhauQRbbv3LrFGVCiaNdGha8+yxFZgrv68aPT6mHRMzVJkk/Q6lKzkvcm9rWGF1Yn+jmPylVFNcfdzdXA9rSA8zbkqywEltBriVxoPn34Ef/Qc/1X5/RgVG1J4Tfek69ME12D3gUpn/F09ThLBb34JALHxQ9J3xO+UA3yRf1nrZ+HmyzU5gE9MzrxpbVXkpH2Zgi+T7NOcR2yoAdWN+L7SxAxeOrH9UgygI/2huwzFjeBXw8ThS3nBOmawkG4J7Wiy7GaJ4ITL5gzngsi5Dw9tTKPTAuJzoYpyUicJGWsL/AWNru3ZZUfLQp8E33j6L76wsaIsAVnZNZ+9nGwf4+2sDFEiayOQ3K8wQl29bgcP5KpPrBw9I6wOfkLL43I6AHhJU/nOKE87cWwufpIogHnAVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(54906003)(5660300002)(2616005)(83380400001)(38100700002)(38350700002)(36756003)(6916009)(52116002)(66946007)(8676002)(26005)(8936002)(316002)(508600001)(86362001)(6506007)(66476007)(186003)(66556008)(4326008)(2906002)(6512007)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HZq/IJgP7SVa9lCEqJU7cRxT7UVJK94ba5gExZBZauO03gBkfhLb7Ezn6m0U?=
+ =?us-ascii?Q?Wfm7LhG4HeO3R2kT4XptZ+IC8l0Q8IkYvT2+8kkj1ogctQiZULYtU6taMco/?=
+ =?us-ascii?Q?cSBIfnU/xlxOxR7qomDIiGJcq9auLgH4u1i4u+swzJ3xsHsFUIcCYjo+Ej1x?=
+ =?us-ascii?Q?PToiB5b6CGUjkGvx4VDCJThnyU/6JYBGNe3Sjr9NbIgOORTxPCx1Wrh0/w2c?=
+ =?us-ascii?Q?Hw7DwVnIAR781hQioPTuKDNfoaTbim8ct/b9Y7K2N3Q+47nK5UvZK2Rr8ol7?=
+ =?us-ascii?Q?VqKCmw0yHQxtnFciHVLnTZqCvlQ/VknZGGEk63FYhMkrxJPLm2N8wXDhZCj6?=
+ =?us-ascii?Q?wDgnIqps0lVw4BgqHvviVdbNKs1aJ5jLHpkdQ/d7SCHEo0cOifCHrXQEWuCQ?=
+ =?us-ascii?Q?PkHzrv4Sgi8TMmzx9K3nP0z3BPLaD9CHZkxOPzu1OCzIqcokvbxjKEzYj10K?=
+ =?us-ascii?Q?zBcuo7SisKltWO2nDjSXaSvk1IVbVsxv77umFmcKzT0he62bm8YVDkmLtZHB?=
+ =?us-ascii?Q?3nHuessM9NSXmb9+/b0jUrifzkQP1cp/8WgYJIvBSWxeTq7C8SCK116ILsCe?=
+ =?us-ascii?Q?oK+NpSN7GZwZCgnSPMZ/HAfPB6pvo4KI1D7P1SQ+LxaulQR16tneAqV6bqhh?=
+ =?us-ascii?Q?+fL1lr0uVrViuJTLv3Z9Y1T+HlYdzBJ/L2wawzsRk+WXRGRUIqjV9YoBGb7x?=
+ =?us-ascii?Q?W6y+yHHtXV+SC3psSdDD3vMQQ896DMtE7Ug3LCeL2i/+q+TL61ZShvVWrZDb?=
+ =?us-ascii?Q?KaWUr73r4VPXnNm0r8byx/9e7JbMxfdNvpt5CPugh6S6VcyCMf8bnRCEWTbC?=
+ =?us-ascii?Q?ip+S4/ozDcbCY5vjf1qlYNhPBUt8pT9CdUtXkghnF0sMEAPT00N5MuSSthUA?=
+ =?us-ascii?Q?qrRYIEmIsS1cDGC4ZqM6NFP6nZL1kJbsq+GhcnfIP9O1KpFKGO4Lk0lIffD7?=
+ =?us-ascii?Q?o/Ltz05Xkf+atpRxo0/8xPwp+qDHxva8lKTDhbzNgnx/vow2FYGARc2JbvSv?=
+ =?us-ascii?Q?8WTFHzGd05H+mv8fPFwo9iRy2s5nank7ACvmckaZ0K+vi55hzIx6WbjGh0Zs?=
+ =?us-ascii?Q?kDgeq6jpcAEDo39zmhkEzbEv9XTfnZB0bnRn8y3CkP+FRUYc+KJykhdnSsqM?=
+ =?us-ascii?Q?MdASQ++gBK/deLSDKnD2WKpoG8qbbIAYj7iUJjOWxNzGcOB2dor8RewI/QfZ?=
+ =?us-ascii?Q?I0LYmcMY0tyzWgSiEDnb1H7XLHFkD1xpxqi4ducAXq5veXiOU8bxCn6k+g2D?=
+ =?us-ascii?Q?YDBLWgGN8yi54pUSv8JVuDqTCwhEPBcFhsbnv3j7eR9woQpgyCpd9eefbPp2?=
+ =?us-ascii?Q?80wwiWIuvkZ3b5gGNcqCPSZOBpD3dZcJ+7s3qIt7kconlmix9egt8jWRwS6R?=
+ =?us-ascii?Q?VUdmPsMQzX1H0IF20+hhP/Nn3nQ93LpGt1e1EqUgzzmLKIJCSuA/P8vgCIPE?=
+ =?us-ascii?Q?RYDWE/YBpGm3OGi+COwxw+pbW6V/LpYcB5R6LOEJDWecRoG0f0ffIw/FVrKi?=
+ =?us-ascii?Q?S1+Cwd4vu6FVMLs=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88992932-2efe-4646-3564-08da02ee4303
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 23:32:37.7821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jF0PFOZJrw3InysuhbXKIlL5Fw12meTDxo1AVZov6Oh3/L2HXjvMTBQOMRQioghnQGvnVaiHcVT7kK1blfLG+z85QlbQlKO4eqbG2I846jZgdKSuaPbVzpDuG96i3P0v
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3475
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,122 +115,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 2:22 PM Liam Howlett <liam.howlett@oracle.com> wrote:
->
-> * Suren Baghdasaryan <surenb@google.com> [220310 11:28]:
-> > On Thu, Mar 10, 2022 at 7:55 AM Liam Howlett <liam.howlett@oracle.com> wrote:
-> > >
-> > > * Suren Baghdasaryan <surenb@google.com> [220225 00:51]:
-> > > > On Thu, Feb 24, 2022 at 8:23 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > >
-> > > > > On Thu, Feb 24, 2022 at 08:18:59PM -0800, Andrew Morton wrote:
-> > > > > > On Tue, 15 Feb 2022 12:19:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > >
-> > > > > > > After exit_mmap frees all vmas in the mm, mm->mmap needs to be reset,
-> > > > > > > otherwise it points to a vma that was freed and when reused leads to
-> > > > > > > a use-after-free bug.
-> > > > > > >
-> > > > > > > ...
-> > > > > > >
-> > > > > > > --- a/mm/mmap.c
-> > > > > > > +++ b/mm/mmap.c
-> > > > > > > @@ -3186,6 +3186,7 @@ void exit_mmap(struct mm_struct *mm)
-> > > > > > >             vma = remove_vma(vma);
-> > > > > > >             cond_resched();
-> > > > > > >     }
-> > > > > > > +   mm->mmap = NULL;
-> > > > > > >     mmap_write_unlock(mm);
-> > > > > > >     vm_unacct_memory(nr_accounted);
-> > > > > > >  }
-> > > > > >
-> > > > > > After the Maple tree patches, mm_struct.mmap doesn't exist.  So I'll
-> > > > > > revert this fix as part of merging the maple-tree parts of linux-next.
-> > > > > > I'll be sending this fix to Linus this week.
-> > > > > >
-> > > > > > All of which means that the thusly-resolved Maple tree patches might
-> > > > > > reintroduce this use-after-free bug.
-> > > > >
-> > > > > I don't think so?  The problem is that VMAs are (currently) part of
-> > > > > two data structures -- the rbtree and the linked list.  remove_vma()
-> > > > > only removes VMAs from the rbtree; it doesn't set mm->mmap to NULL.
-> > > > >
-> > > > > With maple tree, the linked list goes away.  remove_vma() removes VMAs
-> > > > > from the maple tree.  So anyone looking to iterate over all VMAs has to
-> > > > > go and look in the maple tree for them ... and there's nothing there.
-> > > >
-> > > > Yes, I think you are right. With maple trees we don't need this fix.
-> > >
-> > >
-> > > Yes, this is correct.  The maple tree removes the entire linked list...
-> > > but since the mm is unstable in the exit_mmap(), I had added the
-> > > destruction of the maple tree there.  Maybe this is the wrong place to
-> > > be destroying the tree tracking the VMAs (althought this patch partially
-> > > destroys the VMA tracking linked list), but it brought my attention to
-> > > the race that this patch solves and the process_mrelease() function.
-> > > Couldn't this be avoided by using mmget_not_zero() instead of mmgrab()
-> > > in process_mrelease()?
-> >
-> > That's what we were doing before [1]. That unfortunately has a problem
-> > of process_mrelease possibly calling the last mmput and being blocked
-> > on IO completion in exit_aio.
->
-> Oh, I see. Thanks.
->
->
-> > The race between exit_mmap and
-> > process_mrelease is solved by using mmap_lock.
->
-> I think an important part of the race fix isn't just the lock holding
-> but the setting of the start of the linked list to NULL above.  That
-> means the code in __oom_reap_task_mm() via process_mrelease() will
-> continue to execute but iterate for zero VMAs.
->
-> > I think by destroying the maple tree in exit_mmap before the
-> > mmap_write_unlock call, you keep things working and functionality
-> > intact. Is there any reason this can't be done?
->
-> Yes, unfortunately.  If MMF_OOM_SKIP is not set, then process_mrelease()
-> will call __oom_reap_task_mm() which will get a null pointer dereference
-> or a use after free in the vma iterator as it tries to iterate the maple
-> tree.  I think the best plan is to set MMF_OOM_SKIP unconditionally
-> when the mmap_write_lock() is acquired.  Doing so will ensure nothing
-> will try to gain memory by reaping a task that no longer has memory to
-> yield - or at least won't shortly.  If we do use MMF_OOM_SKIP in such a
-> way, then I think it is safe to quickly drop the lock?
 
-That technically would work but it changes the semantics of
-MMF_OOM_SKIP flag from "mm is of no interest for the OOM killer" to
-something like "mm is empty" akin to mm->mmap == NULL.
-So, there is no way for maple tree to indicate that it is empty?
+Hi
 
->
-> Also, should process_mrelease() be setting MMF_OOM_VICTIM on this mm?
-> It would enable the fast path on a race with exit_mmap() - thought that
-> may not be desirable?
+> Playback or capture errors are seen when clock is reset during an active
+> stage of DAI. Presently this scenario happens when DAI has both playback
+> and capture sessions running and one of these finishes first which will
+> be followed by clock rate reset. The remaining active session will be
+> affected in such case.
+> 
+> Address this problem by allowing clock rate reset to happen only when
+> the DAI is no more active.
+> 
+> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> ---
 
-Michal does not like that approach because again, process_mrelease is
-not oom-killer to set MMF_OOM_VICTIM flag. Besides, we want to get rid
-of that special mm_is_oom_victim(mm) branch inside exit_mmap. Which
-reminds me to look into it again.
+Reviewed-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
->
-> >
-> > [1] ba535c1caf3ee78a ("mm/oom_kill: allow process_mrelease to run
-> > under mmap_lock protection")
-> >
-> > > That would ensure we aren't stepping on an
-> > > exit_mmap() and potentially the locking change in exit_mmap() wouldn't
-> > > be needed either?  Logically, I view this as process_mrelease() having
-> > > issue with the fact that the mmaps are no longer stable in tear down
-> > > regardless of the data structure that is used.
-> > >
-> > > Thanks,
-> > > Liam
-> > >
-> > > --
-> > > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> > >
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+Thank you for your help !!
+
+Best regards
+---
+Kuninori Morimoto

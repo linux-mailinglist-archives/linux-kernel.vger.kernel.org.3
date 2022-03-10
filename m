@@ -2,84 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFED4D4D59
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E654D4D64
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239636AbiCJPK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
+        id S1344149AbiCJPLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243349AbiCJPKR (ORCPT
+        with ESMTP id S230047AbiCJPKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:10:17 -0500
-Received: from smtp.tom.com (smtprz02.163.net [106.3.154.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 860BA434B4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:03:09 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by vip-app02.163.net (Postfix) with ESMTP id D166C440111
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:03:07 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1646924587; bh=UtpGvcZGJBtk6DfGPnrxi5oxMsyVQFjcoHXJFprouo8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HiZoPcim0Y+9L13FJgW5rJDO/w3+b0LmluUBczB7TOziCK8UH4hJlBrHtS8ys5L50
-         EPDBobuSyf4vWYyZL4RmGrWsG0FVVQEcA8PEKmnkoPF8HN7itRjY7noDiYVO/ffGWN
-         w6T06jbvIsIfXInXX0bR02mtugLY/ykR64DtKvUc=
-Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
-          by localhost (TOM SMTP Server) with SMTP ID 325847902
-          for <linux-kernel@vger.kernel.org>;
-          Thu, 10 Mar 2022 23:03:07 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1646924587; bh=UtpGvcZGJBtk6DfGPnrxi5oxMsyVQFjcoHXJFprouo8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HiZoPcim0Y+9L13FJgW5rJDO/w3+b0LmluUBczB7TOziCK8UH4hJlBrHtS8ys5L50
-         EPDBobuSyf4vWYyZL4RmGrWsG0FVVQEcA8PEKmnkoPF8HN7itRjY7noDiYVO/ffGWN
-         w6T06jbvIsIfXInXX0bR02mtugLY/ykR64DtKvUc=
-Received: from localhost (unknown [101.93.196.13])
-        by antispamvip.163.net (Postfix) with ESMTPA id B4C3415414BB;
-        Thu, 10 Mar 2022 23:03:01 +0800 (CST)
-Date:   Thu, 10 Mar 2022 23:03:00 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tyler.sun@dell.com,
-        ping.gan@dell.com, yanxiu.cai@dell.com, libin.zhang@dell.com,
-        ao.sun@dell.com
-Subject: Re: [PATCH] tcp: export symbol tcp_set_congestion_control
-Message-ID: <20220310230300.00004612@tom.com>
-In-Reply-To: <20220310141135.GA750@lst.de>
-References: <20220310134830.130818-1-sunmingbao@tom.com>
-        <20220310141135.GA750@lst.de>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 10:10:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD990195300
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:04:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37D8561670
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CA2C340E8;
+        Thu, 10 Mar 2022 15:04:50 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.95)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1nSKLR-001DYf-E8;
+        Thu, 10 Mar 2022 10:04:49 -0500
+Message-ID: <20220310150431.248810778@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Thu, 10 Mar 2022 10:04:31 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [for-linus][PATCH 0/3] tracing: Three fixes
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 15:11:35 +0100
-Christoph Hellwig <hch@lst.de> wrote:
 
-> Please submit this together with the actual user(s) in a series.
-> Patches to just export random symbols are a no-go.
+Minor tracing fixes:
 
-Got it.
-many thanks for informing.
+ - Fix unregistering the same event twice a the user could disable
+   the event osnoise will disable on unregistering.
 
-BTW:
-could you give me the answer to the following questions?
-1. Against which repo should I prepare and test this series of patches?
-   netdev or nvme?
+ - Inform RCU of a quiescent state in the osnoise testing thread.
 
-2. what's the recipients for this series of patches?
-   netdev or nvme or both?
+ - Fix some kerneldoc comments.
+
+Daniel Bristot de Oliveira (1):
+      tracing/osnoise: Do not unregister events twice
+
+Jiapeng Chong (1):
+      ftrace: Fix some W=1 warnings in kernel doc comments
+
+Nicolas Saenz Julienne (1):
+      tracing/osnoise: Force quiescent states while tracing
+
+----
+ kernel/trace/ftrace.c        |  4 ++--
+ kernel/trace/trace_osnoise.c | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 2 deletions(-)

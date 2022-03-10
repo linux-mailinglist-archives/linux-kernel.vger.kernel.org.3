@@ -2,184 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96514D517C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC254D5237
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242934AbiCJSQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 13:16:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S245280AbiCJSQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 13:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiCJSQE (ORCPT
+        with ESMTP id S231704AbiCJSQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 13:16:04 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7486613858A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:15:01 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:51786)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nSNJS-00F8a5-Qx; Thu, 10 Mar 2022 11:14:58 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34804 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nSNJQ-004pU3-Go; Thu, 10 Mar 2022 11:14:58 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20220310093455.15176-1-pmladek@suse.com>
-Date:   Thu, 10 Mar 2022 12:14:28 -0600
-In-Reply-To: <20220310093455.15176-1-pmladek@suse.com> (Petr Mladek's message
-        of "Thu, 10 Mar 2022 10:34:55 +0100")
-Message-ID: <871qz9brp7.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Mar 2022 13:16:40 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9390B13C38E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:15:38 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nSNK2-0006Hm-UL; Thu, 10 Mar 2022 19:15:34 +0100
+Message-ID: <892bdc62-703a-2cac-27f7-5dd1ae14d7ea@leemhuis.info>
+Date:   Thu, 10 Mar 2022 19:15:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nSNJQ-004pU3-Go;;;mid=<871qz9brp7.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19tyasZu15blocjvhMTlyqAb97udrw89cE=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Bug 215658 - arch/powerpc/mm/mmu_context.o Assembler messages:
+ Error: unrecognized opcode: `dssall' (PowerMac G4)
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <831731e2-6769-3d36-0cdf-721437452fcc@leemhuis.info>
+ <1367d2de-bc44-fb96-c1ef-fd4cf0fb82f4@csgroup.eu>
+ <09086ab6-10ff-6334-6148-2fab9df64f9a@leemhuis.info>
+In-Reply-To: <09086ab6-10ff-6334-6148-2fab9df64f9a@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646936138;70b469a5;
+X-HE-SMSGID: 1nSNK2-0006Hm-UL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Petr Mladek <pmladek@suse.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1704 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (0.6%), b_tie_ro: 9 (0.5%), parse: 1.52 (0.1%),
-         extract_message_metadata: 17 (1.0%), get_uri_detail_list: 2.6 (0.2%),
-        tests_pri_-1000: 23 (1.4%), tests_pri_-950: 1.26 (0.1%),
-        tests_pri_-900: 1.00 (0.1%), tests_pri_-90: 166 (9.7%), check_bayes:
-        157 (9.2%), b_tokenize: 11 (0.6%), b_tok_get_all: 9 (0.5%),
-        b_comp_prob: 2.6 (0.2%), b_tok_touch_all: 131 (7.7%), b_finish: 1.00
-        (0.1%), tests_pri_0: 1457 (85.5%), check_dkim_signature: 0.82 (0.0%),
-        check_dkim_adsp: 3.0 (0.2%), poll_dns_idle: 0.67 (0.0%), tests_pri_10:
-        4.1 (0.2%), tests_pri_500: 18 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] kthread: Make it clear that create_kthread() might be
- terminated by any fatal signal
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek <pmladek@suse.com> writes:
+On 10.03.22 13:22, Thorsten Leemhuis wrote:
+> On 10.03.22 12:22, Christophe Leroy wrote:
+>> Le 10/03/2022 à 11:39, Thorsten Leemhuis a écrit :
+>>> Hi, this is your Linux kernel regression tracker.
+>>>
+>>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+>>> acted upon since it was reported about a week ago, that's why I decided
+>>> to forward it to the lists and a few relevant people to the CC. To quote
+>>> from the ticket:
+>> I already looked at it when the ticket was opened and that's a bit puzzling.
+> Yeah, same here, but I decided I to pick it up, as that's what I'm here for.
 
-> The comments in kernel/kthread.c create a feeling that only SIGKILL
-> is able to break create_kthread().
-                   ^^^^^^^^^^^^^^^^ __kthread_create_on_node
+TWIMC, the reported stated in bugzilla:
 
-Signals can't affect create_kthread in any was as it is only called by
-kthreadd.  It is __kthread_create_on_node which gets interrupted by
-fatal signals.
+```
+> This was Gentoo Sources v5.16.12 not upstream sources. But now I am
+> not able to reproduce it which is even more strange... Also Gentoos'
+> v5.16.13 builds ok.
+> 
+> What I did in the meantime was downgrading to binutils 2.37 (had 2.38
+> before) and rebuilding the toolchain afterwards.
+> 
+> So this probably was never a bug but an issue with my setup. ;)
+> Closing here```
 
->
-> In reality, wait_for_completion_killable() might be killed by any
-> fatal signal that does not have a custom handler:
->
-> 	(!siginmask(signr, SIG_KERNEL_IGNORE_MASK|SIG_KERNEL_STOP_MASK) && \
-> 	 (t)->sighand->action[(signr)-1].sa.sa_handler == SIG_DFL)
->
-> static inline void signal_wake_up(struct task_struct *t, bool resume)
-> {
-> 	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-> }
->
-> static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
-> {
-> [...]
-> 	/*
-> 	 * Found a killable thread.  If the signal will be fatal,
-> 	 * then start taking the whole group down immediately.
-> 	 */
-> 	if (sig_fatal(p, sig) ...) {
-> 		if (!sig_kernel_coredump(sig)) {
-> 		[...]
-> 			do {
-> 				task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
-> 				sigaddset(&t->pending.signal, SIGKILL);
-> 				signal_wake_up(t, 1);
-> 			} while_each_thread(p, t);
-> 			return;
-> 		}
-> 	}
-> }
->
-> Update the comments in kernel/kthread.c to make this more obvious.
->
-> The motivation for this change was debugging why a module initialization
-> failed. The module was being loaded from initrd. It "magically" failed
-> when systemd was switching to the real root. The clean up operations
-> sent SIGTERM to various pending processed that were started from initrd.
+Thus removing it from the regression tracking as well:
 
-Except for the minor nit in the change description.
-Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
+#regzbot invalid: reporter can't reproduce anymore and the report was  a
+bit puzzling anyway
 
+Ciao, Thorsten
 
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> ---
->  kernel/kthread.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/kthread.c b/kernel/kthread.c
-> index 38c6dd822da8..6f994c354adb 100644
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -341,7 +341,7 @@ static int kthread(void *_create)
->  
->  	self = to_kthread(current);
->  
-> -	/* If user was SIGKILLed, I release the structure. */
-> +	/* Release the structure when caller killed by a fatal signal. */
->  	done = xchg(&create->done, NULL);
->  	if (!done) {
->  		kfree(create);
-> @@ -399,7 +399,7 @@ static void create_kthread(struct kthread_create_info *create)
->  	/* We want our own signal handler (we take no signals by default). */
->  	pid = kernel_thread(kthread, create, CLONE_FS | CLONE_FILES | SIGCHLD);
->  	if (pid < 0) {
-> -		/* If user was SIGKILLed, I release the structure. */
-> +		/* Release the structure when caller killed by a fatal signal. */
->  		struct completion *done = xchg(&create->done, NULL);
->  
->  		if (!done) {
-> @@ -441,9 +441,9 @@ struct task_struct *__kthread_create_on_node(int (*threadfn)(void *data),
->  	 */
->  	if (unlikely(wait_for_completion_killable(&done))) {
->  		/*
-> -		 * If I was SIGKILLed before kthreadd (or new kernel thread)
-> -		 * calls complete(), leave the cleanup of this structure to
-> -		 * that thread.
-> +		 * If I was killed by a fatal signal before kthreadd (or new
-> +		 * kernel thread) calls complete(), leave the cleanup of this
-> +		 * structure to that thread.
->  		 */
->  		if (xchg(&create->done, NULL))
->  			return ERR_PTR(-EINTR);
-> @@ -877,7 +877,7 @@ __kthread_create_worker(int cpu, unsigned int flags,
->   *
->   * Returns a pointer to the allocated worker on success, ERR_PTR(-ENOMEM)
->   * when the needed structures could not get allocated, and ERR_PTR(-EINTR)
-> - * when the worker was SIGKILLed.
-> + * when the caller was killed by a fatal signal.
->   */
->  struct kthread_worker *
->  kthread_create_worker(unsigned int flags, const char namefmt[], ...)
-> @@ -926,7 +926,7 @@ EXPORT_SYMBOL(kthread_create_worker);
->   * Return:
->   * The pointer to the allocated worker on success, ERR_PTR(-ENOMEM)
->   * when the needed structures could not get allocated, and ERR_PTR(-EINTR)
-> - * when the worker was SIGKILLed.
-> + * when the caller was killed by a fatal signal.
->   */
->  struct kthread_worker *
->  kthread_create_worker_on_cpu(int cpu, unsigned int flags,
+>> With v5.16.12 and the config file in the bug report I have no such problem:
+>>
+>>    CC      arch/powerpc/mm/fault.o
+>>    CC      arch/powerpc/mm/mem.o
+>> [...]
+> 
+> Maybe it's one of those bugs related to the version of binutils?
+> 
+>> The bug is puzzling because it says the problem is introduced by commit 
+>> d51f86cfd8e3 ("powerpc/mm: Switch obsolete dssall to .long") whereas the 
+>> purpose of that commit is exactly to fix the issue you are reporting.
+>>
+>> And as far as I can see that commit is not in v5.16.12, so my feeling is 
+>> that somethings wrong with the bug report.
+>>
+>> By the way I think that cherry-picking that commit into v5.16.12 should 
+>> fix it.
+> 
+> Maybe that's what he had meant to be writing? Maybe your comment in the
+> ticket will lead to some enlightenment.
+> 
+> Thx for looking into this.
+> 
+> Ciao, Thorsten
+> 
+>>>> 5.16.12 kernel build for my G4 DP on my Talos II fails with:
+>>>>
+>>>> [...]
+>>>>    CC      arch/powerpc/mm/init_32.o
+>>>>    CC      arch/powerpc/mm/pgtable_32.o
+>>>>    CC      arch/powerpc/mm/pgtable-frag.o
+>>>>    CC      arch/powerpc/mm/ioremap.o
+>>>>    CC      arch/powerpc/mm/ioremap_32.o
+>>>>    CC      arch/powerpc/mm/init-common.o
+>>>>    CC      arch/powerpc/mm/mmu_context.o
+>>>> {standard input}: Assembler messages:
+>>>> {standard input}:30: Error: unrecognized opcode: `dssall'
+>>>> make[2]: *** [scripts/Makefile.build:287: arch/powerpc/mm/mmu_context.o] Fehler 1
+>>>> make[1]: *** [scripts/Makefile.build:549: arch/powerpc/mm] Fehler 2
+>>>> make: *** [Makefile:1846: arch/powerpc] Error 2
+>>>>
+>>>> This seems to have been introduced by commit d51f86cfd8e378d4907958db77da3074f6dce3ba "powerpc/mm: Switch obsolete dssall to .long"
+>>>>
+>>>> Reverting this commit fixes the build for my G4.
+>>>
+>>> Could somebody take a look into this? Or was this discussed somewhere
+>>> else already? Or even fixed?
+>>>
+>>> Anyway, to get this tracked:
+>>>
+>>> #regzbot introduced: d51f86cfd8e378d4907958db77da3074f6dce3ba
+>>> #regzbot from: Erhard F <erhard_f@mailbox.org>
+>>> #regzbot title:  arch/powerpc/mm/mmu_context.o Assembler messages:
+>>> Error: unrecognized opcode: `dssall' (PowerMac G4)
+>>> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215658
+>>>
+>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>
+>>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+>>> reports on my table. I can only look briefly into most of them and lack
+>>> knowledge about most of the areas they concern. I thus unfortunately
+>>> will sometimes get things wrong or miss something important. I hope
+>>> that's not the case here; if you think it is, don't hesitate to tell me
+>>> in a public reply, it's in everyone's interest to set the public record
+>>> straight.

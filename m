@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C824C4D4FAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35E04D4FB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243932AbiCJQsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S244031AbiCJQsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243832AbiCJQr0 (ORCPT
+        with ESMTP id S244055AbiCJQr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:47:26 -0500
-Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0381959DD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:09 -0800 (PST)
-Received: by mail-oi1-x249.google.com with SMTP id w19-20020a0568080d5300b002d54499cc1eso3960457oik.19
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:09 -0800 (PST)
+        Thu, 10 Mar 2022 11:47:28 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD028197B66
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:11 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id b5-20020a17090a7ac500b001bfc1f48421so2067551pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=2SsVLXVD0edRV3f8AavPnanFB3lHcUM5wj5R9N73Z6I=;
-        b=X9PzltWeS/MgIUKPhKte0phhcvDP5rVVdeax0erbewyCCfBdsOHibEi8fYzoBxOm3n
-         lquV3ZPS/bVpo7VWqKOcfwc13uwlPzt91z3H1Kj49soWFdKlSNwsoMSvnYuOz2apZ7Gg
-         EC2Ic2idfwqNUZ54mzCbgskTaxB3j+bRdfIVKl2A7MUBqExVDssZmRBk8ES7vUP0QFbY
-         5/jzj6vTwQdu8djATC+kxeNOVmHbjZHAA2KqsOOaPh8sABbO2NZDS7dRsTjf7wfNuHhX
-         t2C8/xukDUdkokU00lehIxNdhwNgxpp8GDxwFe/LdvzyIdEbRN5uU8V87SHo8zWzaqYR
-         8Gog==
+        bh=QUlArJveCRgrV8yQIechzTfu/4iHpeBxIkK2uo+sZuA=;
+        b=LnOeHbKi0cb+Q3VGsrUfjLvwZt9hNNVe3BYX7LnL3PXDAKopUVn2ntP7bztEjzlvMN
+         /DqhECIU4G/aJ0fkpTz1aVwF4oNbO47Q2i02K+o3m9n0N+/xc8rkYV7yqYZFaSr1XGw5
+         H8ZFMdchzFyir7AyO0/5ybRuZyV+nE4C0IY1rX4dRfbXfRO0fvH2YwwGHLYYYw3WVDzg
+         GsA2pMe4pGD9lTskpj9HhFFvUsQCaLnTobWShglV+Qie0wjwgiEpXCpwkqdYSuPH+eFL
+         2RfM3sXE17QNFEhKdLyZ8+7A2xFH+BD/hoxGIifu0BWy/OiKnUEnEz8b6qTb1B94tuFm
+         pgzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=2SsVLXVD0edRV3f8AavPnanFB3lHcUM5wj5R9N73Z6I=;
-        b=QaZbyv235aY409zco1SwBNZrL3LHrqi+VIO6hWoNwr8asjDDSusxDq95u1MDlR3xXQ
-         mlcs6LkleZhFySp32wrA2BKzy0IGd39au6pzCVNiWme4mqu3LfEqJDomdluGNNfUYpj7
-         sgjlXRQoClmfsCFg+r53/992ACMXmypx8AzQBjM1yc1unDf66fFs7VapNzGMxCCFaXkB
-         msXhAcGNCT4MfnZFeERWIMScg8GJiAhGlLcMtDtFNHFPTV7r3FOuX/q0MFAwNXN68/Fs
-         S0yjp/lr7ZsZtCaSMJsGDb8GkpOGy1CjFltZjXRFOrUO9tG9rKkBWQrZgfrkpo1GDFHg
-         bd0g==
-X-Gm-Message-State: AOAM530nPo9MG7tx5qb5nyUu2KN3JqFp1y7oiHqLthoI8UqziUniVh4f
-        sY/ju4G4paxGrB98mRePjp98xFIbXjrW+QfaGnaytwcAJiFBzDosZbnyyEYW6P+mkRINfPB8RpJ
-        NzgOH0N5aL0U1X97YcYdrvzN/ToZYjgkDlPl0Jq8y1VSb4udZwJu7W4tyVKRW7fvGoS31GWSx
-X-Google-Smtp-Source: ABdhPJyQ3c/S0YI4mDS1HFjedf5Jv4X8SXDIvM1RCZxBxsVwayoIztg/KISrQ29u14LwkKCgTMjC0AJOgmN3
+        bh=QUlArJveCRgrV8yQIechzTfu/4iHpeBxIkK2uo+sZuA=;
+        b=zfLHObkb2d9Oqs8FyH6hMyYaJOi4i8UMUkpBBgnRIGCMON/zOdviNgSXCrAH7bPzCF
+         5Wfpj5zPeaY17GjVwuy1zDzvjcwtsuiHWjiCN8GkLlkURkLOIKqccm0zgGPTNhD8K9Cy
+         xspGAQJvnT9CYM279dl/jknzi9powwIMSVTUqwM7G0y9w0bk6dtnSxsZQat9Od/2Jje/
+         xYNYJKXRASXkkWdsk8v9CsMzG+f3njFd5Q3r06mA1EF+Qih/74gC+T45oHuMiJ1sqEGx
+         LEKWwPoye+6lxWliX6XxMQMsYFbwB4eqtnQ71yexnNiUUBfA81ounlBdzIJGTDNBMFm0
+         F/EQ==
+X-Gm-Message-State: AOAM5333NO98ScOtJ8KQ99TMUZgYYjMCtF2gZQoPfZQIHQFnvoVCOJYA
+        /ORK3R/rJELYG/6tPPthdQlInXG1nune58MzWRl2np3YQJUbS3PkwhaP7x9k04j6n077R1Usy6v
+        E5+TTrvyY173wd9CydEJaOvSpUsvREvSx7vi5rMVBBOIljafW8eFm3yjqHym3Ol5syf9/v5Vc
+X-Google-Smtp-Source: ABdhPJya/MbhjU7kkc4U4AzUZqb+wY7M98VWg+zaBj67qP3YcZqCOUfiRO7bFu/IGapzwCP0yufBJPO6cmsF
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:2d58:733f:1853:8e86])
- (user=bgardon job=sendgmr) by 2002:a05:6870:4149:b0:da:5e34:9448 with SMTP id
- r9-20020a056870414900b000da5e349448mr9042633oad.112.1646930768289; Thu, 10
- Mar 2022 08:46:08 -0800 (PST)
-Date:   Thu, 10 Mar 2022 08:45:27 -0800
+ (user=bgardon job=sendgmr) by 2002:a17:903:1d1:b0:151:9e73:61b1 with SMTP id
+ e17-20020a17090301d100b001519e7361b1mr5839088plh.84.1646930771200; Thu, 10
+ Mar 2022 08:46:11 -0800 (PST)
+Date:   Thu, 10 Mar 2022 08:45:28 -0800
 In-Reply-To: <20220310164532.1821490-1-bgardon@google.com>
-Message-Id: <20220310164532.1821490-9-bgardon@google.com>
+Message-Id: <20220310164532.1821490-10-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220310164532.1821490-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH 08/13] KVM: x86/MMU: Factor out updating NX hugepages state
- for a VM
+Subject: [PATCH 09/13] KVM: x86/MMU: Track NX hugepages on a per-VM basis
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -76,53 +75,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Factor out the code to update the NX hugepages state for an individual
-VM. This will be expanded in future commits to allow per-VM control of
-Nx hugepages.
+Track whether NX hugepages are enabled on a per-VM basis instead of as a
+host-wide setting. With this commit, the per-VM state will always be the
+same as the host-wide setting, but in future commits, it will be allowed
+to differ.
 
 No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ arch/x86/include/asm/kvm_host.h | 2 ++
+ arch/x86/kvm/mmu.h              | 8 ++++----
+ arch/x86/kvm/mmu/mmu.c          | 7 +++++--
+ arch/x86/kvm/mmu/spte.c         | 7 ++++---
+ arch/x86/kvm/mmu/spte.h         | 3 ++-
+ arch/x86/kvm/mmu/tdp_mmu.c      | 3 ++-
+ 6 files changed, 19 insertions(+), 11 deletions(-)
 
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index f72e80178ffc..0a0c54639dd8 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1240,6 +1240,8 @@ struct kvm_arch {
+ 	hpa_t	hv_root_tdp;
+ 	spinlock_t hv_root_tdp_lock;
+ #endif
++
++	bool nx_huge_pages;
+ };
+ 
+ struct kvm_vm_stat {
+diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+index bf8dbc4bb12a..dd28fe8d13ae 100644
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -173,9 +173,9 @@ struct kvm_page_fault {
+ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
+ 
+ extern int nx_huge_pages;
+-static inline bool is_nx_huge_page_enabled(void)
++static inline bool is_nx_huge_page_enabled(struct kvm *kvm)
+ {
+-	return READ_ONCE(nx_huge_pages);
++	return READ_ONCE(kvm->arch.nx_huge_pages);
+ }
+ 
+ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+@@ -191,8 +191,8 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 		.user = err & PFERR_USER_MASK,
+ 		.prefetch = prefetch,
+ 		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
+-		.nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(),
+-
++		.nx_huge_page_workaround_enabled =
++			is_nx_huge_page_enabled(vcpu->kvm),
+ 		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
+ 		.req_level = PG_LEVEL_4K,
+ 		.goal_level = PG_LEVEL_4K,
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 3b8da8b0745e..1b59b56642f1 100644
+index 1b59b56642f1..dc9672f70468 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6195,6 +6195,15 @@ static void __set_nx_huge_pages(bool val)
+@@ -6195,8 +6195,10 @@ static void __set_nx_huge_pages(bool val)
  	nx_huge_pages = itlb_multihit_kvm_mitigation = val;
  }
  
-+static int kvm_update_nx_huge_pages(struct kvm *kvm)
-+{
-+	mutex_lock(&kvm->slots_lock);
-+	kvm_mmu_zap_all_fast(kvm);
-+	mutex_unlock(&kvm->slots_lock);
-+
-+	wake_up_process(kvm->arch.nx_lpage_recovery_thread);
-+}
-+
- static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+-static int kvm_update_nx_huge_pages(struct kvm *kvm)
++static void kvm_update_nx_huge_pages(struct kvm *kvm)
  {
- 	bool old_val = nx_huge_pages;
-@@ -6217,13 +6226,8 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
- 
++	kvm->arch.nx_huge_pages = nx_huge_pages;
++
+ 	mutex_lock(&kvm->slots_lock);
+ 	kvm_mmu_zap_all_fast(kvm);
+ 	mutex_unlock(&kvm->slots_lock);
+@@ -6227,7 +6229,7 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
  		mutex_lock(&kvm_lock);
  
--		list_for_each_entry(kvm, &vm_list, vm_list) {
--			mutex_lock(&kvm->slots_lock);
--			kvm_mmu_zap_all_fast(kvm);
--			mutex_unlock(&kvm->slots_lock);
--
--			wake_up_process(kvm->arch.nx_lpage_recovery_thread);
--		}
-+		list_for_each_entry(kvm, &vm_list, vm_list)
-+			kvm_set_nx_huge_pages(kvm);
+ 		list_for_each_entry(kvm, &vm_list, vm_list)
+-			kvm_set_nx_huge_pages(kvm);
++			kvm_update_nx_huge_pages(kvm);
  		mutex_unlock(&kvm_lock);
  	}
  
+@@ -6448,6 +6450,7 @@ int kvm_mmu_post_init_vm(struct kvm *kvm)
+ {
+ 	int err;
+ 
++	kvm->arch.nx_huge_pages = READ_ONCE(nx_huge_pages);
+ 	err = kvm_vm_create_worker_thread(kvm, kvm_nx_lpage_recovery_worker, 0,
+ 					  "kvm-nx-lpage-recovery",
+ 					  &kvm->arch.nx_lpage_recovery_thread);
+diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+index 4739b53c9734..877ad30bc7ad 100644
+--- a/arch/x86/kvm/mmu/spte.c
++++ b/arch/x86/kvm/mmu/spte.c
+@@ -116,7 +116,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 		spte |= spte_shadow_accessed_mask(spte);
+ 
+ 	if (level > PG_LEVEL_4K && (pte_access & ACC_EXEC_MASK) &&
+-	    is_nx_huge_page_enabled()) {
++	    is_nx_huge_page_enabled(vcpu->kvm)) {
+ 		pte_access &= ~ACC_EXEC_MASK;
+ 	}
+ 
+@@ -215,7 +215,8 @@ static u64 make_spte_executable(u64 spte)
+  * This is used during huge page splitting to build the SPTEs that make up the
+  * new page table.
+  */
+-u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
++u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte, int huge_level,
++			      int index)
+ {
+ 	u64 child_spte;
+ 	int child_level;
+@@ -243,7 +244,7 @@ u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
+ 		 * When splitting to a 4K page, mark the page executable as the
+ 		 * NX hugepage mitigation no longer applies.
+ 		 */
+-		if (is_nx_huge_page_enabled())
++		if (is_nx_huge_page_enabled(kvm))
+ 			child_spte = make_spte_executable(child_spte);
+ 	}
+ 
+diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+index 73f12615416f..e4142caff4b1 100644
+--- a/arch/x86/kvm/mmu/spte.h
++++ b/arch/x86/kvm/mmu/spte.h
+@@ -415,7 +415,8 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
+ 	       u64 old_spte, bool prefetch, bool can_unsync,
+ 	       bool host_writable, u64 *new_spte);
+-u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index);
++u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte, int huge_level,
++			      int index);
+ u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
+ u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
+ u64 mark_spte_for_access_track(u64 spte);
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index af60922906ef..98a45a87f0b2 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1466,7 +1466,8 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
+ 	 * not been linked in yet and thus is not reachable from any other CPU.
+ 	 */
+ 	for (i = 0; i < PT64_ENT_PER_PAGE; i++)
+-		sp->spt[i] = make_huge_page_split_spte(huge_spte, level, i);
++		sp->spt[i] = make_huge_page_split_spte(kvm, huge_spte,
++						       level, i);
+ 
+ 	/*
+ 	 * Replace the huge spte with a pointer to the populated lower level
 -- 
 2.35.1.616.g0bdcbb4464-goog
 

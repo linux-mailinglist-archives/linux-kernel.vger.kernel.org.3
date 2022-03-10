@@ -2,80 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264F84D52ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA244D52F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244630AbiCJUMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S244687AbiCJUP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbiCJUL6 (ORCPT
+        with ESMTP id S244559AbiCJUPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:11:58 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3747E9BBAA;
-        Thu, 10 Mar 2022 12:10:57 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id t8-20020a0568301e2800b005b235a56f2dso4818551otr.9;
-        Thu, 10 Mar 2022 12:10:57 -0800 (PST)
+        Thu, 10 Mar 2022 15:15:23 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C857EAC8A;
+        Thu, 10 Mar 2022 12:14:21 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id m22so6301484pja.0;
+        Thu, 10 Mar 2022 12:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZXqShG6xq/RA6sHyYooe5EJG7PRsERkEwkvzvU/W3+U=;
+        b=Crm9iZNRQgsjsSwUom0YtoxjeFhJmTQAeR/NQokWJwj/+N+7OyKxVZ8ukD1jYV+zca
+         aR2P6RHau/wXts13jPexcZ5Th9KFIQPO54N4V5av6mk+XFp7nte/yDGE76duo1nDyvvp
+         0g1hNcIQuwaG0IHV4AbTNpTeKfouAmI/jS1KIqXIP5RvUuaTaBfyZqcdjspao2eTViMP
+         WsUHKHavR475SEdQsdR1Yv9ZTs8wVidPvyPyFj47HsvHS1EV3Tk6bRrtUYz/iPJKabuG
+         /0cS/u5VtBIcAH4d5EB+hFLf06mBtNuHyaEHg2uVjKbKh3C9+v82rTiD+f0cUSS4pj3V
+         QwQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6UR/WFOFq3EqUbPef1y1xYnsL6gNNVdISGkg2vViX9w=;
-        b=jSOjD66O9efOSNd39a/Mwrnin8brCNeIHaiB3s6dDJ+C78WDD+zhH5jol0lg7ficLK
-         4a+v7sGAlIq5RpzIuLUDQXBFd85PETFKapRsTGz7wzIEFQGaQXYv9GR0TIWo4fxIBVOk
-         FoVnxmgVB0A2OyGN+NDT1TwGTfUQ2GouHTICHtA63o1aOBSFDLovfTgrqkMPfn0Dywae
-         i65PQ9KjmjMu83j3y7kHBzUvikq8Yf+LZsa/AN/G81wuDtvpYMc9qF9RxEa1cCTLqarX
-         25BS5CH8vVPkvkgLSWr8p8PPjjYnyfzOc39YkHAkm96mgrXQgTxwZXnykWzrCmIDp7Qx
-         pVrw==
-X-Gm-Message-State: AOAM532SiSZJ/7TtU+suHAp6/GopoEZW1Hrn6UzRE7Wnrew1vtKCUWw0
-        lASZLvBYOUEP47f4o1GL4w==
-X-Google-Smtp-Source: ABdhPJxL7g6Qf3ansWpLK6G9FxO6gNGunWkYCEA8ijqWIMaeMWYNdpuYZ1hvk+PT1yUf71ucL/d07Q==
-X-Received: by 2002:a05:6830:31ad:b0:599:7af5:d470 with SMTP id q13-20020a05683031ad00b005997af5d470mr3373087ots.50.1646943056529;
-        Thu, 10 Mar 2022 12:10:56 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a14-20020a544e0e000000b002d97bda3874sm2705452oiy.57.2022.03.10.12.10.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 12:10:55 -0800 (PST)
-Received: (nullmailer pid 1982443 invoked by uid 1000);
-        Thu, 10 Mar 2022 20:10:54 -0000
-Date:   Thu, 10 Mar 2022 14:10:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     linux-phy@lists.infradead.org, alexander.stein@ew.tq-group.com,
-        shawnguo@kernel.org, l.stach@pengutronix.de, linux-imx@nxp.com,
-        p.zabel@pengutronix.de, vkoul@kernel.org,
-        devicetree@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bhelgaas@google.com
-Subject: Re: [PATCH v2 4/7] dt-bindings: imx6q-pcie: Add iMX8MP PCIe
- compatible string
-Message-ID: <YipbTpT1B6dHSpt2@robh.at.kernel.org>
-References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
- <1646644054-24421-5-git-send-email-hongxing.zhu@nxp.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZXqShG6xq/RA6sHyYooe5EJG7PRsERkEwkvzvU/W3+U=;
+        b=yZxLuZ3VyZnAmgLnrEZoJb8olVHRdYwZStAbMwLBZ27x2bOzgWwBxlWnw4yiOEpoY6
+         4/F04BMnjUeceyHRN7bHTTMLLe/RI1jaBI9SfMwgTT3qcc2z1HStXM6QHyFOFH/cKnVz
+         5Onr2bBmm5pLoptGiehL0opWAcA/KJ+/jEChyCftJqL6K90FmF+F8ECEqrIiOSaONYsn
+         8gxlhUT03ehQ0HX/zV4MhG/RICiiMdL0eKWkrg1AdACeZd8uprEKxBipDGnF5Oi/LT5W
+         juojRVLNZRBwlhkRjhs+uDYjUT3rRl71Xts7YNywdvl77UT+uVuAyyDewxvhywIbtlt+
+         LC/w==
+X-Gm-Message-State: AOAM5306VyZ3RKon7gD6JP20C8EuGNJvtRaws0DggZKfyLiVn9BNJpZP
+        22Hp9Z66gLKBV99m57gSbSY=
+X-Google-Smtp-Source: ABdhPJxap/TGIsIrwGMN64fsLt+GoUq3Z5PBNXBwnvboLYKV4vkILre1uF4WhOcyNwz3FYNAMx8/ng==
+X-Received: by 2002:a17:90a:1f08:b0:1bc:1b9f:9368 with SMTP id u8-20020a17090a1f0800b001bc1b9f9368mr6990796pja.63.1646943260518;
+        Thu, 10 Mar 2022 12:14:20 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id pj13-20020a17090b4f4d00b001bf2ff56430sm11505590pjb.30.2022.03.10.12.14.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 12:14:19 -0800 (PST)
+Subject: Re: [PATCH 4.9 00/38] 4.9.306-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220310140808.136149678@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <780a1c8d-e072-e083-2ca6-88eacff92ac7@gmail.com>
+Date:   Thu, 10 Mar 2022 12:14:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646644054-24421-5-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220310140808.136149678@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Mar 2022 17:07:31 +0800, Richard Zhu wrote:
-> Add i.MX8MP PCIe compatible string.
+On 3/10/22 6:13 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.306 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.306-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Applied, thanks!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

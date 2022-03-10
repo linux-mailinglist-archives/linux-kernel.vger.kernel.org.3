@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFADE4D4E35
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56F44D4E30
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240738AbiCJQKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:10:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S240849AbiCJQLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240672AbiCJQKP (ORCPT
+        with ESMTP id S240760AbiCJQLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:10:15 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B18618DAB4;
-        Thu, 10 Mar 2022 08:09:14 -0800 (PST)
-Received: from zn.tnic (p200300ea971938780dcf83143dcfc403.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3878:dcf:8314:3dcf:c403])
+        Thu, 10 Mar 2022 11:11:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5918E43C;
+        Thu, 10 Mar 2022 08:10:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AAF941EC0295;
-        Thu, 10 Mar 2022 17:09:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646928548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yx08IRwrdan+Mo3WyLuiUJbzxkiwNi4eKWLpFxN4RSU=;
-        b=CcSDpu8hbeYpCKhe3NkIY/bbWNHEpXJ49JcfamVD6NCRsPvchLtjJeSRTJ9tWL25eBqtHZ
-        X2pByUwFsL1bFdQaVr4hGXzcnLj5arAzNDDnTXRJ39HU4RLGBAcoA/EIvHmDSkoMLJ4cEW
-        NfE8ib++jzBXrIgUCm5MSnZxLU3BHnA=
-Date:   Thu, 10 Mar 2022 17:09:19 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v4 10/24] EDAC/amd64: Define function to get Interleave
- Address Bit
-Message-ID: <Yioir2htNGGz/QG7@zn.tnic>
-References: <20220127204115.384161-1-yazen.ghannam@amd.com>
- <20220127204115.384161-11-yazen.ghannam@amd.com>
- <YgpGyceWKsIVYuGv@zn.tnic>
- <YikmMHYpdehehD9F@yaz-ubuntu>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9E11B82644;
+        Thu, 10 Mar 2022 16:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8712C340E8;
+        Thu, 10 Mar 2022 16:09:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646928598;
+        bh=lgG2OUw7ssQ9BqwAhNW1q08hlDaAZoIOoBddSpD4ors=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=RzXiOBEhG6OMxgTRkISWSeM1WiCWm1rhruZbQOtHrclXMXOxj6vY/iuFY95j4BPfO
+         E4UHzivmao0gGhfi6OgWClhi0ChU3/ZNBlLm8KRk5CzDuV1+FUvWOsW4Mobkl+HK5u
+         xUXQwVPRlQmNssx0Po81do06LbFrsptAFLly21nrXmIKM7MSXHce8EEVQnrRiFxVEV
+         8W4pctKhiJMvT5WjiKHRiLpiqcA8eNveZ1APYnb7rzG9nmHZN4BPFtQUVfY1xjfJGn
+         BhGf+KARDyF//ZczyLpWHi6i5ScIxb5beimDTdfzUSU3xFqFFiUhJ8QGzwYtRhGoOx
+         oVyajF9xpGVbg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YikmMHYpdehehD9F@yaz-ubuntu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] brcmfmac: check the return value of devm_kzalloc() in
+ brcmf_of_probe()
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220225132138.27722-1-baijiaju1990@gmail.com>
+References: <20220225132138.27722-1-baijiaju1990@gmail.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, chi-hsien.lin@infineon.com,
+        wright.feng@infineon.com, chung-hsien.hsu@infineon.com,
+        davem@davemloft.net, kuba@kernel.org, shawn.guo@linaro.org,
+        gustavoars@kernel.org, len.baker@gmx.com,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164692859274.6056.13961655347011053680.kvalo@kernel.org>
+Date:   Thu, 10 Mar 2022 16:09:54 +0000 (UTC)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 10:12:00PM +0000, Yazen Ghannam wrote:
-> Similar goal as in other places. When the function seems sufficiently long
-> (subjective I know), break it up into helper functions.
-> 
-> I've been trying to decide based on logical steps. Do you have any general
-> recommendations or rule-of-thumb?
+Jia-Ju Bai <baijiaju1990@gmail.com> wrote:
 
-Documentation/process/coding-style.rst, 6) Functions has some good ideas
-about it. To me, a function should do one thing and one thing only but
-yes, the decision is subjective.
+> The function devm_kzalloc() in brcmf_of_probe() can fail, so its return
+> value should be checked.
+> 
+> Fixes: 29e354ebeeec ("brcmfmac: Transform compatible string for FW loading")
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+
+You are not calling of_node_put() in the error path. And I don't think
+this even applies.
+
+Patch set to Changes Requested.
 
 -- 
-Regards/Gruss,
-    Boris.
+https://patchwork.kernel.org/project/linux-wireless/patch/20220225132138.27722-1-baijiaju1990@gmail.com/
 
-https://people.kernel.org/tglx/notes-about-netiquette
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

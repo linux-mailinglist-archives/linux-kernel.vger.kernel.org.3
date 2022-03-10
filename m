@@ -2,94 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448514D4767
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C314D4770
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242177AbiCJM4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S242200AbiCJM4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242165AbiCJM4G (ORCPT
+        with ESMTP id S242182AbiCJM4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:56:06 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F4314A058;
-        Thu, 10 Mar 2022 04:55:04 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id r12so4785110pla.1;
-        Thu, 10 Mar 2022 04:55:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LqKvOOJIsEkJ2EYAXsGvj44/+JSM7E7TqxfIavhRMMk=;
-        b=IJoeHYMcb2qPcw4UZGlhhBR63cLCN0i3980ZRc0ENhA6FbnlNkiwbk1XXzoiEbgpAT
-         F3WInVz46eJE7IPPL6e/YAdavRBhsA0rOBT6yhJmZ4e+ZrS+VV+zBa+saY58ODM8+SES
-         c5Q4lP9pSGdsXyvQWBTuETNSNF748HTQDniKtQXhu2Mxq5cwJOB8bJr/pCl4QjHU7mDB
-         j0zcDyIajMbNhj6AVnYMdnWjUgPaH/Na4A3130hy8RTCcIrBcFEkLOEV08tZezfQqbkU
-         ti8R1EFNFTgM3k94lG9jhfCJrtPNJhDzXH0+o/Ksgl6684+OTvq6PuzE2RcJMDbIos+C
-         fcRQ==
+        Thu, 10 Mar 2022 07:56:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A4D014AC9D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:55:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646916901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o3uuvO9y1xNAcrDjYnTtQsNYybnuLDe1nLYUIuWqefY=;
+        b=giRJgdnZqIrOqDyol01UxaRzuHjzUCatyT3fvGYgnpT88HZbz9T2utfIblqUKGJuOeUdTs
+        cvA4D4i5qtSMBmZQqF589IW+r7QR1sNqyXLDAI0MLcdKCeD3QnvSJlbYFIb18btVXNyOuZ
+        Mlc7E9qsQ82Ra71feU+TNdXLw6qqfN4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-413-8PsP2LSbPVun033vlDB_wQ-1; Thu, 10 Mar 2022 07:55:00 -0500
+X-MC-Unique: 8PsP2LSbPVun033vlDB_wQ-1
+Received: by mail-wm1-f69.google.com with SMTP id x5-20020a1c7c05000000b00389bcc8df46so2279256wmc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:54:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LqKvOOJIsEkJ2EYAXsGvj44/+JSM7E7TqxfIavhRMMk=;
-        b=nE0wee2qnjADfEPbG8zQvOyj83zB9H7EK+FlaJqqEoxTSRnyeqGqrRdpEAczcEuFHE
-         9V8WnsFF3roP7+5uFP7Pd6Ty1N3f1kLDVTi0hh3/3x8Fqc0t557/rMh+IPpuoMPxwnU1
-         Q4niORJyVJyqnbhfsLU9BoXl6gXrPnVGNvJw70BUd0SB3go9wp1l/cHRz8dyAkPBjotB
-         8blvlH9oQ99F2vLMgC4CNV0w+H5xC+/MLYpdYV0umoUEPSmfZZXk1mGz3W/1QvZtDF7k
-         I8E6GXWsscm+G84vzeY6LJf3BAA+HQAt04N4QsQdne3Mr0HHdnZI5sIAlTohmSwQd0ZW
-         IkSA==
-X-Gm-Message-State: AOAM530jWfphAgE3Dk38TvUZaeDKk5hdBYlfjRnWnmx1r4eezhLEFGkr
-        U8rG2ydE+x2CXc0W4t+22kYeKVyc2R/O0Tq2dn0=
-X-Google-Smtp-Source: ABdhPJyZZCuUrQ4jvZncbPFQwRSOLywswNTEIfEXGZie0hGvBEhX7D+iEbgpPfWl9k5kD287FDNsPQ==
-X-Received: by 2002:a17:90a:7027:b0:1bf:6ae4:f19e with SMTP id f36-20020a17090a702700b001bf6ae4f19emr4861172pjk.39.1646916903575;
-        Thu, 10 Mar 2022 04:55:03 -0800 (PST)
-Received: from localhost.localdomain (hwsrv-462136.hostwindsdns.com. [2607:5501:3000:c81::2])
-        by smtp.gmail.com with ESMTPSA id c14-20020a056a00248e00b004f77e0fbfc0sm2203946pfv.185.2022.03.10.04.55.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o3uuvO9y1xNAcrDjYnTtQsNYybnuLDe1nLYUIuWqefY=;
+        b=54yNSchckt+DA6OHWAIz2dtXqHNlWEnLG1HZtKXNqJMtqg72mdX+ePJewzngCuJsB+
+         i362FMPAaluKiTA6WhbyHAjYUx5FNNhlZgijjvW+0az16IdPX9GahCrD/CkTWgDdSQTX
+         ga91f7u9iH9ymUVRTgFhIrhLTxBbtMUghTA+IBr51vIEztsbGM56Z7PyJSmz0rNmqLBp
+         dpy/jojptqdxUKUURCAQmINguMpov6ha6KRXolagWVzZhWm/TWTBRFuaFv8FVV4YRI7J
+         8lZMt+3WBSsgQqg9mxQT5B29YRsVrFSMtOemSmIDJZmnwv5daymIBgbrZoSZe6fDWUm4
+         iQ8g==
+X-Gm-Message-State: AOAM530ABsRdFzgoGsYj8fxDMInqbqX/ePCt74vz8mu7BO4rnw4ayhj+
+        ocABxKkMMod8Kyibczl8a+HJB/eK6vmbqfkGvv6QLSh5+wguM/xeN2RTn/NY/sc5mOjMBMCSzf9
+        khmk1bgkKtScEFbB6l8gjkQ1O
+X-Received: by 2002:a05:600c:4307:b0:389:4f8f:f189 with SMTP id p7-20020a05600c430700b003894f8ff189mr3482149wme.29.1646916898733;
+        Thu, 10 Mar 2022 04:54:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx4WtRMs4j8svdlHofO6NAwGUbSGfyjsdL481HZnIQ0bv2WpthcFijpLxcYQbLbVdijnTUBRA==
+X-Received: by 2002:a05:600c:4307:b0:389:4f8f:f189 with SMTP id p7-20020a05600c430700b003894f8ff189mr3482124wme.29.1646916898425;
+        Thu, 10 Mar 2022 04:54:58 -0800 (PST)
+Received: from redhat.com ([2.53.27.107])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05600c2c4c00b003816932de9csm7606078wmg.24.2022.03.10.04.54.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 04:55:03 -0800 (PST)
-From:   Zizhuang Deng <sunsetdzz@gmail.com>
-To:     Jonathan.Cameron@huawei.com
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Zizhuang Deng <sunsetdzz@gmail.com>
-Subject: [PATCH] iio: dac: ad5592r: Fix the missing return value.
-Date:   Thu, 10 Mar 2022 20:54:50 +0800
-Message-Id: <20220310125450.4164164-1-sunsetdzz@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Mar 2022 04:54:58 -0800 (PST)
+Date:   Thu, 10 Mar 2022 07:54:54 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jiyong Park <jiyong@google.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, adelva@google.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] vsock: each transport cycles only on its own sockets
+Message-ID: <20220310075421-mutt-send-email-mst@kernel.org>
+References: <20220310124936.4179591-1-jiyong@google.com>
+ <20220310124936.4179591-2-jiyong@google.com>
+ <20220310075217-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310075217-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The third call to `fwnode_property_read_u32` did not record
-the return value, resulting in `channel_offstate` possibly
-being assigned the wrong value.
+On Thu, Mar 10, 2022 at 07:53:25AM -0500, Michael S. Tsirkin wrote:
+> This message had 
+> In-Reply-To: <20220310124936.4179591-1-jiyong@google.com>
+> in its header but 20220310124936.4179591-2-jiyong@google.com was
+> not sent to the list.
+> Please don't do that. Instead, please write and send a proper
+> cover letter. Thanks!
+> 
 
-Signed-off-by: Zizhuang Deng <sunsetdzz@gmail.com>
----
- drivers/iio/dac/ad5592r-base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/dac/ad5592r-base.c b/drivers/iio/dac/ad5592r-base.c
-index a424b7220b61..4434c1b2a322 100644
---- a/drivers/iio/dac/ad5592r-base.c
-+++ b/drivers/iio/dac/ad5592r-base.c
-@@ -522,7 +522,7 @@ static int ad5592r_alloc_channels(struct iio_dev *iio_dev)
- 		if (!ret)
- 			st->channel_modes[reg] = tmp;
- 
--		fwnode_property_read_u32(child, "adi,off-state", &tmp);
-+		ret = fwnode_property_read_u32(child, "adi,off-state", &tmp);
- 		if (!ret)
- 			st->channel_offstate[reg] = tmp;
- 	}
--- 
-2.25.1
+Also, pls version in subject e.g. PATCH v2, and include
+full changelog in the cover letter. Thanks!
+
+> On Thu, Mar 10, 2022 at 09:49:35PM +0900, Jiyong Park wrote:
+> > When iterating over sockets using vsock_for_each_connected_socket, make
+> > sure that a transport filters out sockets that don't belong to the
+> > transport.
+> > 
+> > There actually was an issue caused by this; in a nested VM
+> > configuration, destroying the nested VM (which often involves the
+> > closing of /dev/vhost-vsock if there was h2g connections to the nested
+> > VM) kills not only the h2g connections, but also all existing g2h
+> > connections to the (outmost) host which are totally unrelated.
+> > 
+> > Tested: Executed the following steps on Cuttlefish (Android running on a
+> > VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
+> > connection inside the VM, (2) open and then close /dev/vhost-vsock by
+> > `exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
+> > session is not reset.
+> > 
+> > [1] https://android.googlesource.com/device/google/cuttlefish/
+> > 
+> > Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
+> > Signed-off-by: Jiyong Park <jiyong@google.com>
+> > ---
+> >  drivers/vhost/vsock.c            | 4 ++++
+> >  net/vmw_vsock/virtio_transport.c | 7 +++++++
+> >  net/vmw_vsock/vmci_transport.c   | 5 +++++
+> >  3 files changed, 16 insertions(+)
+> > 
+> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > index 37f0b4274113..853ddac00d5b 100644
+> > --- a/drivers/vhost/vsock.c
+> > +++ b/drivers/vhost/vsock.c
+> > @@ -722,6 +722,10 @@ static void vhost_vsock_reset_orphans(struct sock *sk)
+> >  	 * executing.
+> >  	 */
+> >  
+> > +	/* Only handle our own sockets */
+> > +	if (vsk->transport != &vhost_transport.transport)
+> > +		return;
+> > +
+> >  	/* If the peer is still valid, no need to reset connection */
+> >  	if (vhost_vsock_get(vsk->remote_addr.svm_cid))
+> >  		return;
+> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> > index fb3302fff627..61b24eb31d4b 100644
+> > --- a/net/vmw_vsock/virtio_transport.c
+> > +++ b/net/vmw_vsock/virtio_transport.c
+> > @@ -24,6 +24,7 @@
+> >  static struct workqueue_struct *virtio_vsock_workqueue;
+> >  static struct virtio_vsock __rcu *the_virtio_vsock;
+> >  static DEFINE_MUTEX(the_virtio_vsock_mutex); /* protects the_virtio_vsock */
+> > +static struct virtio_transport virtio_transport; /* forward declaration */
+> >  
+> >  struct virtio_vsock {
+> >  	struct virtio_device *vdev;
+> > @@ -357,11 +358,17 @@ static void virtio_vsock_event_fill(struct virtio_vsock *vsock)
+> >  
+> >  static void virtio_vsock_reset_sock(struct sock *sk)
+> >  {
+> > +	struct vsock_sock *vsk = vsock_sk(sk);
+> > +
+> >  	/* vmci_transport.c doesn't take sk_lock here either.  At least we're
+> >  	 * under vsock_table_lock so the sock cannot disappear while we're
+> >  	 * executing.
+> >  	 */
+> >  
+> > +	/* Only handle our own sockets */
+> > +	if (vsk->transport != &virtio_transport.transport)
+> > +		return;
+> > +
+> >  	sk->sk_state = TCP_CLOSE;
+> >  	sk->sk_err = ECONNRESET;
+> >  	sk_error_report(sk);
+> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+> > index 7aef34e32bdf..cd2f01513fae 100644
+> > --- a/net/vmw_vsock/vmci_transport.c
+> > +++ b/net/vmw_vsock/vmci_transport.c
+> > @@ -803,6 +803,11 @@ static void vmci_transport_handle_detach(struct sock *sk)
+> >  	struct vsock_sock *vsk;
+> >  
+> >  	vsk = vsock_sk(sk);
+> > +
+> > +	/* Only handle our own sockets */
+> > +	if (vsk->transport != &vmci_transport)
+> > +		return;
+> > +
+> >  	if (!vmci_handle_is_invalid(vmci_trans(vsk)->qp_handle)) {
+> >  		sock_set_flag(sk, SOCK_DONE);
+> >  
+> > -- 
+> > 2.35.1.723.g4982287a31-goog
 

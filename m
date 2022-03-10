@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B004D4557
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63AB4D455E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241279AbiCJLIp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 06:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S241452AbiCJLLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 06:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233499AbiCJLIn (ORCPT
+        with ESMTP id S241147AbiCJLLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 06:08:43 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F011C12F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:07:41 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id x6-20020a923006000000b002bea39c3974so2989872ile.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:07:41 -0800 (PST)
+        Thu, 10 Mar 2022 06:11:48 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14C513C9D4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:10:46 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id p15so11241579ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:10:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dneg.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fwkGoCkG0C71fo1AtJVK+o7q5+K5z7/hkRewmRR47Cw=;
+        b=Wr9uUhDQ8g9dqgW2R7cnvs7E3r2b56tEpqnTojPp1y9LUuscjmau1axLzyJNgrtKf2
+         /RYXmgzw04/K93BtJbHCviyVP1Kms36mgdG3Q7dMPQZTMjP7jUDwDrWv0v4a/k7Swcdl
+         g/ysQFNn1e3LIVecVSkWotubKzFFn+68CNDbsItvHBTCXjHYxLp3aSaNlb1H55LKuCuy
+         dNy/JqZweDy4ZCyW3mBuYKb1DtSnDpDg88q3qQb2uzi96v/mJx+8yrGsZNAShi8UKSUZ
+         WH7p4vqQN4jsViEg2sPeFjYJavM8Al8KE1PlAWqcIFU4NPXSelOpqhkq4oAWftJ7mkZH
+         H8ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc:content-transfer-encoding;
-        bh=ley6AiQa9kytHCGEuHlxzUEN+VCZUDMbILTNBl2UYjA=;
-        b=d914PvssUFY0qgxCwVU2pHPq9K9FFmlBc8YOCCdpvtVpvNp9anuE2gKpPdUukPI+JK
-         PGqt+WurCK5EM1+gJl02DQFSU2wzedbnwO/KmVI52ScRBvgTMKohIlm1DL+lksdc1st3
-         9WG2KFyu60XCGGQugenempOtXc79xCxJyWPUDlZcLXVoxaIzZ67csy2NPngsHyrEYV61
-         Qw9r9a+cOm8BTFKXIX94i6lfn4HeRQJRLGUjGt9qOt5j6xRvU8/MF/J+mnlHHUQSrJ2D
-         OHgjD+TH556uPjkB2Tbcbyg3f7SmGdnQ5im0C8l8LdGz/q7UtruxhwyyuF5Lrtp0MEma
-         CkSw==
-X-Gm-Message-State: AOAM533u1ZMsGNcdEQBpDmEZBPXzV9Utq8cD8+g/sykndDwFgmEg3axd
-        yY26LGCZ9fYc2PzYcfghuSmhQdtTMA/8GcLxPcGL8nlcGp7y
-X-Google-Smtp-Source: ABdhPJz5Q0JnQINs+ynbn7+RQ1iAfUnfgwPcmZ5Yr6MhThm7O+7lT440FWhDffjLyz2TzWOHxYWmMjDIRBBHrkS0LRiJ1okR764a
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fwkGoCkG0C71fo1AtJVK+o7q5+K5z7/hkRewmRR47Cw=;
+        b=ah9MszTN0zlJNoaLIwykpJFB8ctiTVv4lHcJ8qiOL2bPh3jsABeFJB5RVVZ2W3/JU1
+         F6R+MHCdZnmUxWU3lGSZoHs77QxWaNwZ0uTLTeuJeBNg/EC+0DmIwcKo/4pY/6aD/PzR
+         3fX1XYuxBFaXFmQltbb1x3eV1oSKLKTu6IjOL0DjkuhNIn3CQdgCzbLL2KzBcikyEvqN
+         l5XS5WiBC55U0vppD/UdxOPowWNB8ET6BbFYzZV3Wg61wKjKr9mPdugRdK7eRWjGeh3L
+         gm9yEYKTFJqGAUd3mGT6Hl+FWdzU6vV4eIQ8CXJHkuzjr7nEDhA3X5KdpjrqGSpFPiSV
+         Jy7A==
+X-Gm-Message-State: AOAM530uJon/jA+8kUh0rD1j3tPVkBoFTDRQIs8WUIPSeLrc4EI0a4vy
+        +pe9joHeS1/rFCdtBaMn8M++4H5IIawuUaaCog42hQ==
+X-Google-Smtp-Source: ABdhPJyi4TFDbEcyXKH3iv9ZTrdqHN6gWkpXJe/mwRqm2YfFViKRQ5jOBKIIcEEcuK33ApxfzVaxv3IE+us0Da169vo=
+X-Received: by 2002:a17:907:1c95:b0:6db:6b05:549c with SMTP id
+ nb21-20020a1709071c9500b006db6b05549cmr3582753ejc.651.1646910645213; Thu, 10
+ Mar 2022 03:10:45 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:c6c9:0:b0:308:3586:f407 with SMTP id
- r9-20020a02c6c9000000b003083586f407mr3596147jan.173.1646910460611; Thu, 10
- Mar 2022 03:07:40 -0800 (PST)
-Date:   Thu, 10 Mar 2022 03:07:40 -0800
-In-Reply-To: <602855d8-9c9c-ad0e-3aab-06befb0c343c@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb524d05d9db389a@google.com>
-Subject: Re: [syzbot] memory leak in usb_get_configuration
-From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        pavel.hofman@ivitera.com, rob@robgreener.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+References: <164568221518.25116.18139840533197037520@noble.neil.brown.name>
+ <893053D7-E5DD-43DB-941A-05C10FF5F396@dilger.ca> <20220224233848.GC8269@magnolia>
+ <164600974741.15631.8678502963654197325@noble.neil.brown.name>
+In-Reply-To: <164600974741.15631.8678502963654197325@noble.neil.brown.name>
+From:   Daire Byrne <daire@dneg.com>
+Date:   Thu, 10 Mar 2022 11:10:08 +0000
+Message-ID: <CAPt2mGNkQFu=czuM+XO7aVF3AmbPoiq_SU72-Bgfax59JyMkdg@mail.gmail.com>
+Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
+To:     NeilBrown <neilb@suse.de>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Andreas Dilger <adilger@dilger.ca>,
+        Dave Chinner <david@fromorbit.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> On 10.03.22 00:54, syzbot wrote:
->
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
->> dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
->>
-> #syz test: upstream 0014404f9c18
+Just to add that I have also been testing this patch with heavy
+production workloads over high latency NFS clients (200ms) and have
+not seen any issues so far.
 
-"upstream" does not look like a valid git repo address.
+As the latency increases, parallel operations for multiple client
+processes becomes ever more important for maintaining good aggregate
+throughputs, be it reads, writes or metadata.
 
+With 1000 client processes/threads we see the file creates per single
+directory increase from 3 per second to 1200 per second with this
+patch.
+
+It solves a real world application for us (high latency NFS clients)
+without having to redesign our workflows around deeper (hashed)
+directory structures.
+
+Much appreciated Neil.
+
+Daire
+
+
+On Mon, 28 Feb 2022 at 00:56, NeilBrown <neilb@suse.de> wrote:
 >
->  
+> On Fri, 25 Feb 2022, Darrick J. Wong wrote:
+> > On Thu, Feb 24, 2022 at 09:31:28AM -0700, Andreas Dilger wrote:
+> > > On Feb 23, 2022, at 22:57, NeilBrown <neilb@suse.de> wrote:
+> > > >
+> > > > for i in {1..70}; do ( for j in {1000..8000}; do touch $j; rm -f $j ; done ) & done
+> >
+> > I think you want something faster here, like ln to hardlink an existing
+> > file into the directory.
+> >
+>
+> And probably written in C too..
+>
+>
+> > (I am also not a fan of "PAR_UPDATE", since 'par' is already an English
+> > word that doesn't mean 'parallel'.)
+>
+> :-)
+> We already have DCACHE_PAR_LOOKUP for parallel lookups in a directory
+> (though it is really a lock bit and I think should be named as soch).
+> So it made sense to use DCACHE_PAR_UPDATE for parallel updates.
+> And then S_PAR_UPDATE for the inode flag to enable this seemed logical.
+>
+> But I agree that these names are sub-par :-)
+>
+> NeilBrown

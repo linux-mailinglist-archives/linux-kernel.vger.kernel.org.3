@@ -2,327 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF4C4D491A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FFC4D48D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242743AbiCJOLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
+        id S233562AbiCJONN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242747AbiCJOLV (ORCPT
+        with ESMTP id S242937AbiCJOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:11:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963B69A4F5;
-        Thu, 10 Mar 2022 06:10:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C5AAB824C7;
-        Thu, 10 Mar 2022 14:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DA5C340EB;
-        Thu, 10 Mar 2022 14:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646921410;
-        bh=WRO3Pdzs1AFeGQSOgBMhxsKfVPh+xNG6g0tpwmNqJkY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzJpfynWOdiMyDxPm25RwZU8/9VF0sxKYu2FS5gp9/XGdLIGgWUIitslYMjIeqSSg
-         kEqqY8d9upsPHOEHZyI9LdBlLSp3iDWlRGJM6rl9bTzjFr2mKIW0A+AbWjDGOkJ6Sv
-         uGVNz4zKF9AhTx2KvZapX33achTMahwjTnoqQSZQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Patrick Colp <patrick.colp@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.16 02/53] x86/speculation: Add eIBRS + Retpoline options
-Date:   Thu, 10 Mar 2022 15:09:07 +0100
-Message-Id: <20220310140811.906578472@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140811.832630727@linuxfoundation.org>
-References: <20220310140811.832630727@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 09:12:36 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA6414A6D8;
+        Thu, 10 Mar 2022 06:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646921449; x=1678457449;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=uGzkzAL8Dy+iBgRDUMsNImudpdJ03OH3v6JTl1qmo+Y=;
+  b=edGhZH26HZ23srmHhGqL9ZTiw9+LcvTQlWQDYLS0sYqi4kK/fczuekCy
+   VtzOhzbvcMglkLZLnH69Xz0tb/6SmZmWXjxi2MKs/B78RsML1KhKOA6Pf
+   Tz5U70ZWNb07Cbuec56y2WdTTMq9ncB5yqRzMgadqrlnNHX/V+o3hrtos
+   y0L266Vo1jD+u/xhLADMRklV+Qqo0kYJl35lmkaW1aaHoGBoMR6gTZKSQ
+   Ik2CJxwGB2ELVKWpNbGHAsvVkhgqo8lf1nqmTC24G+x2NzdRac/jI68jd
+   1OXa7aW/Jwou7HhyWB1W7NgAzFr+chiv6E80TK85IJIAHUTwwzxHUzml0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254085038"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="254085038"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:10:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="554655113"
+Received: from chaop.bj.intel.com ([10.240.192.101])
+  by orsmga008.jf.intel.com with ESMTP; 10 Mar 2022 06:10:41 -0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: [PATCH v5 09/13] KVM: Handle page fault for private memory
+Date:   Thu, 10 Mar 2022 22:09:07 +0800
+Message-Id: <20220310140911.50924-10-chao.p.peng@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+When page fault happens for a memslot with KVM_MEM_PRIVATE, we use
+kvm_memfile_get_pfn() which further calls into memfile_pfn_ops callbacks
+defined for each memslot to request the pfn from the memory backing store.
 
-commit 1e19da8522c81bf46b335f84137165741e0d82b7 upstream.
+One assumption is that private pages are persistent and pre-allocated in
+the private memory fd (backing store) so KVM uses this information as an
+indicator for a page is private or shared (i.e. the private fd is the
+final source of truth as to whether or not a GPA is private).
 
-Thanks to the chaps at VUsec it is now clear that eIBRS is not
-sufficient, therefore allow enabling of retpolines along with eIBRS.
+Depending on the access is private or shared, we go different paths:
+  - For private access, KVM checks if the page is already allocated in
+    the memory backing store, if yes KVM establishes the mapping,
+    otherwise exits to userspace to convert a shared page to private one.
 
-Add spectre_v2=eibrs, spectre_v2=eibrs,lfence and
-spectre_v2=eibrs,retpoline options to explicitly pick your preferred
-means of mitigation.
+  - For shared access, KVM also checks if the page is already allocated
+    in the memory backing store, if yes then exit to userspace to
+    convert a private page to shared one, otherwise it's treated as a
+    traditional hva-based shared memory, KVM lets existing code to obtain
+    a pfn with get_user_pages() and establish the mapping.
 
-Since there's new mitigations there's also user visible changes in
-/sys/devices/system/cpu/vulnerabilities/spectre_v2 to reflect these
-new mitigations.
-
-  [ bp: Massage commit message, trim error messages,
-    do more precise eIBRS mode checking. ]
-
-Co-developed-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Patrick Colp <patrick.colp@oracle.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
 ---
- arch/x86/include/asm/nospec-branch.h |    4 -
- arch/x86/kernel/cpu/bugs.c           |  133 +++++++++++++++++++++++++----------
- 2 files changed, 99 insertions(+), 38 deletions(-)
+ arch/x86/kvm/mmu/mmu.c         | 73 ++++++++++++++++++++++++++++++++--
+ arch/x86/kvm/mmu/paging_tmpl.h | 11 +++--
+ 2 files changed, 77 insertions(+), 7 deletions(-)
 
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -190,7 +190,9 @@ enum spectre_v2_mitigation {
- 	SPECTRE_V2_NONE,
- 	SPECTRE_V2_RETPOLINE,
- 	SPECTRE_V2_LFENCE,
--	SPECTRE_V2_IBRS_ENHANCED,
-+	SPECTRE_V2_EIBRS,
-+	SPECTRE_V2_EIBRS_RETPOLINE,
-+	SPECTRE_V2_EIBRS_LFENCE,
- };
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 3b8da8b0745e..f04c823ea09a 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2844,6 +2844,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
+ 	if (max_level == PG_LEVEL_4K)
+ 		return PG_LEVEL_4K;
  
- /* The indirect branch speculation control variants */
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -665,6 +665,9 @@ enum spectre_v2_mitigation_cmd {
- 	SPECTRE_V2_CMD_RETPOLINE,
- 	SPECTRE_V2_CMD_RETPOLINE_GENERIC,
- 	SPECTRE_V2_CMD_RETPOLINE_LFENCE,
-+	SPECTRE_V2_CMD_EIBRS,
-+	SPECTRE_V2_CMD_EIBRS_RETPOLINE,
-+	SPECTRE_V2_CMD_EIBRS_LFENCE,
- };
- 
- enum spectre_v2_user_cmd {
-@@ -737,6 +740,13 @@ spectre_v2_parse_user_cmdline(enum spect
- 	return SPECTRE_V2_USER_CMD_AUTO;
++	if (kvm_slot_is_private(slot))
++		return max_level;
++
+ 	host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
+ 	return min(host_level, max_level);
+ }
+@@ -3890,7 +3893,59 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
  }
  
-+static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
+-static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
++static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
 +{
-+	return (mode == SPECTRE_V2_EIBRS ||
-+		mode == SPECTRE_V2_EIBRS_RETPOLINE ||
-+		mode == SPECTRE_V2_EIBRS_LFENCE);
++	/*
++	 * At this time private gfn has not been supported yet. Other patch
++	 * that enables it should change this.
++	 */
++	return false;
 +}
 +
- static void __init
- spectre_v2_user_select_mitigation(enum spectre_v2_mitigation_cmd v2_cmd)
- {
-@@ -804,7 +814,7 @@ spectre_v2_user_select_mitigation(enum s
- 	 */
- 	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
- 	    !smt_possible ||
--	    spectre_v2_enabled == SPECTRE_V2_IBRS_ENHANCED)
-+	    spectre_v2_in_eibrs_mode(spectre_v2_enabled))
- 		return;
- 
- 	/*
-@@ -826,7 +836,9 @@ static const char * const spectre_v2_str
- 	[SPECTRE_V2_NONE]			= "Vulnerable",
- 	[SPECTRE_V2_RETPOLINE]			= "Mitigation: Retpolines",
- 	[SPECTRE_V2_LFENCE]			= "Mitigation: LFENCE",
--	[SPECTRE_V2_IBRS_ENHANCED]		= "Mitigation: Enhanced IBRS",
-+	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
-+	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
-+	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
- };
- 
- static const struct {
-@@ -840,6 +852,9 @@ static const struct {
- 	{ "retpoline,amd",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
- 	{ "retpoline,lfence",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
- 	{ "retpoline,generic",	SPECTRE_V2_CMD_RETPOLINE_GENERIC, false },
-+	{ "eibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
-+	{ "eibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
-+	{ "eibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
- 	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
- };
- 
-@@ -877,15 +892,29 @@ static enum spectre_v2_mitigation_cmd __
- 
- 	if ((cmd == SPECTRE_V2_CMD_RETPOLINE ||
- 	     cmd == SPECTRE_V2_CMD_RETPOLINE_LFENCE ||
--	     cmd == SPECTRE_V2_CMD_RETPOLINE_GENERIC) &&
-+	     cmd == SPECTRE_V2_CMD_RETPOLINE_GENERIC ||
-+	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
-+	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
- 	    !IS_ENABLED(CONFIG_RETPOLINE)) {
--		pr_err("%s selected but not compiled in. Switching to AUTO select\n", mitigation_options[i].option);
-+		pr_err("%s selected but not compiled in. Switching to AUTO select\n",
-+		       mitigation_options[i].option);
-+		return SPECTRE_V2_CMD_AUTO;
-+	}
-+
-+	if ((cmd == SPECTRE_V2_CMD_EIBRS ||
-+	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
-+	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
-+	    !boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
-+		pr_err("%s selected but CPU doesn't have eIBRS. Switching to AUTO select\n",
-+		       mitigation_options[i].option);
- 		return SPECTRE_V2_CMD_AUTO;
- 	}
- 
--	if ((cmd == SPECTRE_V2_CMD_RETPOLINE_LFENCE) &&
-+	if ((cmd == SPECTRE_V2_CMD_RETPOLINE_LFENCE ||
-+	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE) &&
- 	    !boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
--		pr_err("%s selected, but CPU doesn't have a serializing LFENCE. Switching to AUTO select\n", mitigation_options[i].option);
-+		pr_err("%s selected, but CPU doesn't have a serializing LFENCE. Switching to AUTO select\n",
-+		       mitigation_options[i].option);
- 		return SPECTRE_V2_CMD_AUTO;
- 	}
- 
-@@ -894,6 +923,25 @@ static enum spectre_v2_mitigation_cmd __
- 	return cmd;
- }
- 
-+static enum spectre_v2_mitigation __init spectre_v2_select_retpoline(void)
++static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
++				    struct kvm_page_fault *fault,
++				    bool *is_private_pfn, int *r)
 +{
-+	if (!IS_ENABLED(CONFIG_RETPOLINE)) {
-+		pr_err("Kernel not compiled with retpoline; no mitigation available!");
-+		return SPECTRE_V2_NONE;
-+	}
++	int order;
++	unsigned int flags = 0;
++	struct kvm_memory_slot *slot = fault->slot;
++	long pfn = kvm_memfile_get_pfn(slot, fault->gfn, &order);
 +
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-+	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
-+		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
-+			pr_err("LFENCE not serializing, switching to generic retpoline\n");
-+			return SPECTRE_V2_RETPOLINE;
++	if (kvm_vcpu_is_private_gfn(vcpu, fault->addr >> PAGE_SHIFT)) {
++		if (pfn < 0)
++			flags |= KVM_MEMORY_EXIT_FLAG_PRIVATE;
++		else {
++			fault->pfn = pfn;
++			if (slot->flags & KVM_MEM_READONLY)
++				fault->map_writable = false;
++			else
++				fault->map_writable = true;
++
++			if (order == 0)
++				fault->max_level = PG_LEVEL_4K;
++			*is_private_pfn = true;
++			*r = RET_PF_FIXED;
++			return true;
 +		}
-+		return SPECTRE_V2_LFENCE;
++	} else {
++		if (pfn < 0)
++			return false;
++
++		kvm_memfile_put_pfn(slot, pfn);
 +	}
 +
-+	return SPECTRE_V2_RETPOLINE;
++	vcpu->run->exit_reason = KVM_EXIT_MEMORY_ERROR;
++	vcpu->run->memory.flags = flags;
++	vcpu->run->memory.padding = 0;
++	vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
++	vcpu->run->memory.size = PAGE_SIZE;
++	fault->pfn = -1;
++	*r = -1;
++	return true;
 +}
 +
- static void __init spectre_v2_select_mitigation(void)
++static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
++			    bool *is_private_pfn, int *r)
  {
- 	enum spectre_v2_mitigation_cmd cmd = spectre_v2_parse_cmdline();
-@@ -914,49 +962,60 @@ static void __init spectre_v2_select_mit
- 	case SPECTRE_V2_CMD_FORCE:
- 	case SPECTRE_V2_CMD_AUTO:
- 		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
--			mode = SPECTRE_V2_IBRS_ENHANCED;
--			/* Force it so VMEXIT will restore correctly */
--			x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
--			wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
--			goto specv2_set_mode;
-+			mode = SPECTRE_V2_EIBRS;
-+			break;
+ 	struct kvm_memory_slot *slot = fault->slot;
+ 	bool async;
+@@ -3924,6 +3979,10 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
  		}
--		if (IS_ENABLED(CONFIG_RETPOLINE))
--			goto retpoline_auto;
-+
-+		mode = spectre_v2_select_retpoline();
- 		break;
-+
- 	case SPECTRE_V2_CMD_RETPOLINE_LFENCE:
--		if (IS_ENABLED(CONFIG_RETPOLINE))
--			goto retpoline_lfence;
-+		mode = SPECTRE_V2_LFENCE;
- 		break;
-+
- 	case SPECTRE_V2_CMD_RETPOLINE_GENERIC:
--		if (IS_ENABLED(CONFIG_RETPOLINE))
--			goto retpoline_generic;
-+		mode = SPECTRE_V2_RETPOLINE;
- 		break;
-+
- 	case SPECTRE_V2_CMD_RETPOLINE:
--		if (IS_ENABLED(CONFIG_RETPOLINE))
--			goto retpoline_auto;
-+		mode = spectre_v2_select_retpoline();
-+		break;
-+
-+	case SPECTRE_V2_CMD_EIBRS:
-+		mode = SPECTRE_V2_EIBRS;
-+		break;
-+
-+	case SPECTRE_V2_CMD_EIBRS_LFENCE:
-+		mode = SPECTRE_V2_EIBRS_LFENCE;
-+		break;
-+
-+	case SPECTRE_V2_CMD_EIBRS_RETPOLINE:
-+		mode = SPECTRE_V2_EIBRS_RETPOLINE;
- 		break;
- 	}
--	pr_err("Spectre mitigation: kernel not compiled with retpoline; no mitigation available!");
--	return;
- 
--retpoline_auto:
--	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
--	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
--	retpoline_lfence:
--		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
--			pr_err("Spectre mitigation: LFENCE not serializing, switching to generic retpoline\n");
--			goto retpoline_generic;
--		}
--		mode = SPECTRE_V2_LFENCE;
-+	if (spectre_v2_in_eibrs_mode(mode)) {
-+		/* Force it so VMEXIT will restore correctly */
-+		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
-+		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+	}
-+
-+	switch (mode) {
-+	case SPECTRE_V2_NONE:
-+	case SPECTRE_V2_EIBRS:
-+		break;
-+
-+	case SPECTRE_V2_LFENCE:
-+	case SPECTRE_V2_EIBRS_LFENCE:
- 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE_LFENCE);
-+		fallthrough;
-+
-+	case SPECTRE_V2_RETPOLINE:
-+	case SPECTRE_V2_EIBRS_RETPOLINE:
- 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
--	} else {
--	retpoline_generic:
--		mode = SPECTRE_V2_RETPOLINE;
--		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
-+		break;
  	}
  
--specv2_set_mode:
- 	spectre_v2_enabled = mode;
- 	pr_info("%s\n", spectre_v2_strings[mode]);
++	if (kvm_slot_is_private(slot) &&
++	    kvm_faultin_pfn_private(vcpu, fault, is_private_pfn, r))
++		return *r == RET_PF_FIXED ? false : true;
++
+ 	async = false;
+ 	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
+ 					  fault->write, &fault->map_writable,
+@@ -3984,6 +4043,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	bool is_tdp_mmu_fault = is_tdp_mmu(vcpu->arch.mmu);
  
-@@ -982,7 +1041,7 @@ specv2_set_mode:
- 	 * the CPU supports Enhanced IBRS, kernel might un-intentionally not
- 	 * enable IBRS around firmware calls.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_IBRS) && mode != SPECTRE_V2_IBRS_ENHANCED) {
-+	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_eibrs_mode(mode)) {
- 		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
- 		pr_info("Enabling Restricted Speculation for firmware calls\n");
- 	}
-@@ -1691,7 +1750,7 @@ static ssize_t tsx_async_abort_show_stat
+ 	unsigned long mmu_seq;
++	bool is_private_pfn = false;
+ 	int r;
  
- static char *stibp_state(void)
- {
--	if (spectre_v2_enabled == SPECTRE_V2_IBRS_ENHANCED)
-+	if (spectre_v2_in_eibrs_mode(spectre_v2_enabled))
- 		return "";
+ 	fault->gfn = fault->addr >> PAGE_SHIFT;
+@@ -4003,7 +4063,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+ 	smp_rmb();
  
- 	switch (spectre_v2_user_stibp) {
-
+-	if (kvm_faultin_pfn(vcpu, fault, &r))
++	if (kvm_faultin_pfn(vcpu, fault, &is_private_pfn, &r))
+ 		return r;
+ 
+ 	if (handle_abnormal_pfn(vcpu, fault, ACC_ALL, &r))
+@@ -4016,7 +4076,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	else
+ 		write_lock(&vcpu->kvm->mmu_lock);
+ 
+-	if (is_page_fault_stale(vcpu, fault, mmu_seq))
++	if (!is_private_pfn && is_page_fault_stale(vcpu, fault, mmu_seq))
+ 		goto out_unlock;
+ 
+ 	r = make_mmu_pages_available(vcpu);
+@@ -4033,7 +4093,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 		read_unlock(&vcpu->kvm->mmu_lock);
+ 	else
+ 		write_unlock(&vcpu->kvm->mmu_lock);
+-	kvm_release_pfn_clean(fault->pfn);
++
++	if (is_private_pfn)
++		kvm_memfile_put_pfn(fault->slot, fault->pfn);
++	else
++		kvm_release_pfn_clean(fault->pfn);
++
+ 	return r;
+ }
+ 
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 252c77805eb9..6a5736699c0a 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -825,6 +825,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	int r;
+ 	unsigned long mmu_seq;
+ 	bool is_self_change_mapping;
++	bool is_private_pfn = false;
++
+ 
+ 	pgprintk("%s: addr %lx err %x\n", __func__, fault->addr, fault->error_code);
+ 	WARN_ON_ONCE(fault->is_tdp);
+@@ -873,7 +875,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+ 	smp_rmb();
+ 
+-	if (kvm_faultin_pfn(vcpu, fault, &r))
++	if (kvm_faultin_pfn(vcpu, fault, &is_private_pfn, &r))
+ 		return r;
+ 
+ 	if (handle_abnormal_pfn(vcpu, fault, walker.pte_access, &r))
+@@ -901,7 +903,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	r = RET_PF_RETRY;
+ 	write_lock(&vcpu->kvm->mmu_lock);
+ 
+-	if (is_page_fault_stale(vcpu, fault, mmu_seq))
++	if (!is_private_pfn && is_page_fault_stale(vcpu, fault, mmu_seq))
+ 		goto out_unlock;
+ 
+ 	r = make_mmu_pages_available(vcpu);
+@@ -911,7 +913,10 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 
+ out_unlock:
+ 	write_unlock(&vcpu->kvm->mmu_lock);
+-	kvm_release_pfn_clean(fault->pfn);
++	if (is_private_pfn)
++		kvm_memfile_put_pfn(fault->slot, fault->pfn);
++	else
++		kvm_release_pfn_clean(fault->pfn);
+ 	return r;
+ }
+ 
+-- 
+2.17.1
 

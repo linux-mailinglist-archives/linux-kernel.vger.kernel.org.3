@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BD74D4C7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEA74D4C2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245499AbiCJO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S243919AbiCJOfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245436AbiCJOwk (ORCPT
+        with ESMTP id S244536AbiCJO3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:52:40 -0500
-X-Greylist: delayed 2014 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 06:51:08 PST
-Received: from www.kot-begemot.co.uk (ivanoab7.miniserver.com [37.128.132.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9711C6818;
-        Thu, 10 Mar 2022 06:51:08 -0800 (PST)
-Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1nSJbW-0006Ue-Os; Thu, 10 Mar 2022 14:17:26 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1nSJbT-004kxK-Pc; Thu, 10 Mar 2022 14:17:21 +0000
-Subject: Re: [PATCH] docs: UML: Mention telnetd for port channel
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kernel@axis.com, linux-um@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220310124230.3069354-1-vincent.whitchurch@axis.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <e1709d07-6217-90b9-273a-50b32798da55@cambridgegreys.com>
-Date:   Thu, 10 Mar 2022 14:17:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 10 Mar 2022 09:29:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422A3D3AC7;
+        Thu, 10 Mar 2022 06:24:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA6061CEE;
+        Thu, 10 Mar 2022 14:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE80BC340F3;
+        Thu, 10 Mar 2022 14:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646922233;
+        bh=sHBaHcUjLV8fVZHhrO9dbiOsJRcm/xEqOES3gSji6w8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hzut2IRJ81b5A2iLHpWEM1Opfz2bu9Wy+R8WiKVJncDl4lDB5W+i1/LRHaQH+ez14
+         zjqWCvMdwileBEF9/zJuIN9MZbNBmq+EKw2JGLCW81bBphXXKqHMJFr3dle3OVeCCS
+         l5s2k1WoLuU7rWGYzST0DnJyHt2nr3AbI+t8pzlA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: [PATCH 5.10 02/58] x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
+Date:   Thu, 10 Mar 2022 15:18:22 +0100
+Message-Id: <20220310140812.941915745@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <20220310124230.3069354-1-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,41 +57,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+
+commit d45476d9832409371537013ebdd8dc1a7781f97a upstream.
+
+The RETPOLINE_AMD name is unfortunate since it isn't necessarily
+AMD only, in fact Hygon also uses it. Furthermore it will likely be
+sufficient for some Intel processors. Therefore rename the thing to
+RETPOLINE_LFENCE to better describe what it is.
+
+Add the spectre_v2=retpoline,lfence option as an alias to
+spectre_v2=retpoline,amd to preserve existing setups. However, the output
+of /sys/devices/system/cpu/vulnerabilities/spectre_v2 will be changed.
+
+  [ bp: Fix typos, massage. ]
+
+Co-developed-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+[fllinden@amazon.com: backported to 5.10]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/x86/include/asm/cpufeatures.h       |    2 +-
+ arch/x86/include/asm/nospec-branch.h     |   12 ++++++------
+ arch/x86/kernel/cpu/bugs.c               |   29 ++++++++++++++++++-----------
+ tools/arch/x86/include/asm/cpufeatures.h |    2 +-
+ 4 files changed, 26 insertions(+), 19 deletions(-)
+
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -204,7 +204,7 @@
+ #define X86_FEATURE_SME			( 7*32+10) /* AMD Secure Memory Encryption */
+ #define X86_FEATURE_PTI			( 7*32+11) /* Kernel Page Table Isolation enabled */
+ #define X86_FEATURE_RETPOLINE		( 7*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
+-#define X86_FEATURE_RETPOLINE_AMD	( 7*32+13) /* "" AMD Retpoline mitigation for Spectre variant 2 */
++#define X86_FEATURE_RETPOLINE_LFENCE	( 7*32+13) /* "" Use LFENCE for Spectre variant 2 */
+ #define X86_FEATURE_INTEL_PPIN		( 7*32+14) /* Intel Processor Inventory Number */
+ #define X86_FEATURE_CDP_L2		( 7*32+15) /* Code and Data Prioritization L2 */
+ #define X86_FEATURE_MSR_SPEC_CTRL	( 7*32+16) /* "" MSR SPEC_CTRL is implemented */
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -82,7 +82,7 @@
+ #ifdef CONFIG_RETPOLINE
+ 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+ 		      __stringify(jmp __x86_retpoline_\reg), X86_FEATURE_RETPOLINE, \
+-		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_AMD
++		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
+ #else
+ 	jmp	*%\reg
+ #endif
+@@ -92,7 +92,7 @@
+ #ifdef CONFIG_RETPOLINE
+ 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; call *%\reg), \
+ 		      __stringify(call __x86_retpoline_\reg), X86_FEATURE_RETPOLINE, \
+-		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; call *%\reg), X86_FEATURE_RETPOLINE_AMD
++		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; call *%\reg), X86_FEATURE_RETPOLINE_LFENCE
+ #else
+ 	call	*%\reg
+ #endif
+@@ -134,7 +134,7 @@
+ 	"lfence;\n"						\
+ 	ANNOTATE_RETPOLINE_SAFE					\
+ 	"call *%[thunk_target]\n",				\
+-	X86_FEATURE_RETPOLINE_AMD)
++	X86_FEATURE_RETPOLINE_LFENCE)
+ 
+ # define THUNK_TARGET(addr) [thunk_target] "r" (addr)
+ 
+@@ -164,7 +164,7 @@
+ 	"lfence;\n"						\
+ 	ANNOTATE_RETPOLINE_SAFE					\
+ 	"call *%[thunk_target]\n",				\
+-	X86_FEATURE_RETPOLINE_AMD)
++	X86_FEATURE_RETPOLINE_LFENCE)
+ 
+ # define THUNK_TARGET(addr) [thunk_target] "rm" (addr)
+ #endif
+@@ -176,8 +176,8 @@
+ /* The Spectre V2 mitigation variants */
+ enum spectre_v2_mitigation {
+ 	SPECTRE_V2_NONE,
+-	SPECTRE_V2_RETPOLINE_GENERIC,
+-	SPECTRE_V2_RETPOLINE_AMD,
++	SPECTRE_V2_RETPOLINE,
++	SPECTRE_V2_LFENCE,
+ 	SPECTRE_V2_IBRS_ENHANCED,
+ };
+ 
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -627,7 +627,7 @@ enum spectre_v2_mitigation_cmd {
+ 	SPECTRE_V2_CMD_FORCE,
+ 	SPECTRE_V2_CMD_RETPOLINE,
+ 	SPECTRE_V2_CMD_RETPOLINE_GENERIC,
+-	SPECTRE_V2_CMD_RETPOLINE_AMD,
++	SPECTRE_V2_CMD_RETPOLINE_LFENCE,
+ };
+ 
+ enum spectre_v2_user_cmd {
+@@ -787,8 +787,8 @@ set_mode:
+ 
+ static const char * const spectre_v2_strings[] = {
+ 	[SPECTRE_V2_NONE]			= "Vulnerable",
+-	[SPECTRE_V2_RETPOLINE_GENERIC]		= "Mitigation: Full generic retpoline",
+-	[SPECTRE_V2_RETPOLINE_AMD]		= "Mitigation: Full AMD retpoline",
++	[SPECTRE_V2_RETPOLINE]			= "Mitigation: Retpolines",
++	[SPECTRE_V2_LFENCE]			= "Mitigation: LFENCE",
+ 	[SPECTRE_V2_IBRS_ENHANCED]		= "Mitigation: Enhanced IBRS",
+ };
+ 
+@@ -800,7 +800,8 @@ static const struct {
+ 	{ "off",		SPECTRE_V2_CMD_NONE,		  false },
+ 	{ "on",			SPECTRE_V2_CMD_FORCE,		  true  },
+ 	{ "retpoline",		SPECTRE_V2_CMD_RETPOLINE,	  false },
+-	{ "retpoline,amd",	SPECTRE_V2_CMD_RETPOLINE_AMD,	  false },
++	{ "retpoline,amd",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
++	{ "retpoline,lfence",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
+ 	{ "retpoline,generic",	SPECTRE_V2_CMD_RETPOLINE_GENERIC, false },
+ 	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
+ };
+@@ -838,13 +839,19 @@ static enum spectre_v2_mitigation_cmd __
+ 	}
+ 
+ 	if ((cmd == SPECTRE_V2_CMD_RETPOLINE ||
+-	     cmd == SPECTRE_V2_CMD_RETPOLINE_AMD ||
++	     cmd == SPECTRE_V2_CMD_RETPOLINE_LFENCE ||
+ 	     cmd == SPECTRE_V2_CMD_RETPOLINE_GENERIC) &&
+ 	    !IS_ENABLED(CONFIG_RETPOLINE)) {
+ 		pr_err("%s selected but not compiled in. Switching to AUTO select\n", mitigation_options[i].option);
+ 		return SPECTRE_V2_CMD_AUTO;
+ 	}
+ 
++	if ((cmd == SPECTRE_V2_CMD_RETPOLINE_LFENCE) &&
++	    !boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
++		pr_err("%s selected, but CPU doesn't have a serializing LFENCE. Switching to AUTO select\n", mitigation_options[i].option);
++		return SPECTRE_V2_CMD_AUTO;
++	}
++
+ 	spec_v2_print_cond(mitigation_options[i].option,
+ 			   mitigation_options[i].secure);
+ 	return cmd;
+@@ -879,9 +886,9 @@ static void __init spectre_v2_select_mit
+ 		if (IS_ENABLED(CONFIG_RETPOLINE))
+ 			goto retpoline_auto;
+ 		break;
+-	case SPECTRE_V2_CMD_RETPOLINE_AMD:
++	case SPECTRE_V2_CMD_RETPOLINE_LFENCE:
+ 		if (IS_ENABLED(CONFIG_RETPOLINE))
+-			goto retpoline_amd;
++			goto retpoline_lfence;
+ 		break;
+ 	case SPECTRE_V2_CMD_RETPOLINE_GENERIC:
+ 		if (IS_ENABLED(CONFIG_RETPOLINE))
+@@ -898,17 +905,17 @@ static void __init spectre_v2_select_mit
+ retpoline_auto:
+ 	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+ 	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
+-	retpoline_amd:
++	retpoline_lfence:
+ 		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
+ 			pr_err("Spectre mitigation: LFENCE not serializing, switching to generic retpoline\n");
+ 			goto retpoline_generic;
+ 		}
+-		mode = SPECTRE_V2_RETPOLINE_AMD;
+-		setup_force_cpu_cap(X86_FEATURE_RETPOLINE_AMD);
++		mode = SPECTRE_V2_LFENCE;
++		setup_force_cpu_cap(X86_FEATURE_RETPOLINE_LFENCE);
+ 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
+ 	} else {
+ 	retpoline_generic:
+-		mode = SPECTRE_V2_RETPOLINE_GENERIC;
++		mode = SPECTRE_V2_RETPOLINE;
+ 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
+ 	}
+ 
+--- a/tools/arch/x86/include/asm/cpufeatures.h
++++ b/tools/arch/x86/include/asm/cpufeatures.h
+@@ -204,7 +204,7 @@
+ #define X86_FEATURE_SME			( 7*32+10) /* AMD Secure Memory Encryption */
+ #define X86_FEATURE_PTI			( 7*32+11) /* Kernel Page Table Isolation enabled */
+ #define X86_FEATURE_RETPOLINE		( 7*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
+-#define X86_FEATURE_RETPOLINE_AMD	( 7*32+13) /* "" AMD Retpoline mitigation for Spectre variant 2 */
++#define X86_FEATURE_RETPOLINE_LFENCE	( 7*32+13) /* "" Use LFENCEs for Spectre variant 2 */
+ #define X86_FEATURE_INTEL_PPIN		( 7*32+14) /* Intel Processor Inventory Number */
+ #define X86_FEATURE_CDP_L2		( 7*32+15) /* Code and Data Prioritization L2 */
+ #define X86_FEATURE_MSR_SPEC_CTRL	( 7*32+16) /* "" MSR SPEC_CTRL is implemented */
 
 
-On 10/03/2022 12:42, Vincent Whitchurch wrote:
-> It is not obvious from the documentation that using the "port" channel
-> for the console requires telnetd to be installed (see port_connection()
-> in arch/um/drivers/port_user.c).  Mention this, and the fact that UML
-> will not boot until a client connects.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->   Documentation/virt/uml/user_mode_linux_howto_v2.rst | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/virt/uml/user_mode_linux_howto_v2.rst b/Documentation/virt/uml/user_mode_linux_howto_v2.rst
-> index 2cafd3c3c6cb..d5ad96c795f6 100644
-> --- a/Documentation/virt/uml/user_mode_linux_howto_v2.rst
-> +++ b/Documentation/virt/uml/user_mode_linux_howto_v2.rst
-> @@ -664,7 +664,11 @@ one is input, the second one output.
->   * The fd channel - use file descriptor numbers for input/output. Example:
->     ``con1=fd:0,fd:1.``
->   
-> -* The port channel - listen on TCP port number. Example: ``con1=port:4321``
-> +* The port channel - start a telnet server on TCP port number. Example:
-> +  ``con1=port:4321``.  The host must have /usr/sbin/in.telnetd (usually part of
-> +  a telnetd package) and the port-helper from the UML utilities (see the
-> +  information for the xterm channel below).  UML will not boot until a client
-> +  connects.
->   
->   * The pty and pts channels - use system pty/pts.
->   
-> 
-
-Acked-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/

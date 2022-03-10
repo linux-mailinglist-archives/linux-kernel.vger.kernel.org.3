@@ -2,125 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB204D5384
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3054D5385
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245560AbiCJVSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S1343935AbiCJVTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343944AbiCJVSC (ORCPT
+        with ESMTP id S1343927AbiCJVTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:18:02 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72A51587A2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:16:59 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l19-20020a252513000000b00629235aacb2so5570972ybl.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:16:59 -0800 (PST)
+        Thu, 10 Mar 2022 16:19:08 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865AD1E3C9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:18:06 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id u61so13382116ybi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:18:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=R/v6KW4/eQNCq3G1uNeftKx9yVwkfwEl1Z51lMH01Iw=;
-        b=RijW4NhWbanUW0eqBv6ZJPqUG+6PV38erP0aqfQZxAJyWErTgggoR3qtmkTJ252lcI
-         bn9WMcxJKPNPVIkG/gmUkpNfolmeA60A8AD9sV9KAHZiCD8RhY/dzwci5id0HY/OE9Uf
-         UPq2tqnwhfm/oxaGtQv+XKzbaX0I4iFeZNetUradNRP7ceYsmQ4qyVTAltcK/qhhnb69
-         HN0Rif/Eaxi6rVyMvj4WxdmIS8AScjZY9hO1Zm9HaxWvK31HLcb7J4/hR8udPVLrahh5
-         Nzi9DreDs0iokLJPLs3lb7H9Q5H1pfj35ccAJjPUHCXxaf2d605XhUNCyIP/DoufBbe3
-         ybgg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nhFqQpiOYKlNA1YRE7vtTmb4P6NrEAao+scW0km1bcY=;
+        b=nz+lWrRZ3gqsCC+znwQmxF4OHYZN722DRhu9/qVle2QU4r+oNMwHR2zp6IfA67joF8
+         IFobFmwPtJKV1WtnIneJIGCsUSlyd5mKf1lX1M/Rx3qmEQqNsWNAwpwSESetnMijJ0C9
+         BGc28eVvX9EGRFNdxGPkkDGuaVAF1AahP9kAU4g/6FTBQOoB9RRv8TElwsESKrBR4L2h
+         Maex41H/UGCk8OZMp/Go4ykhRXQQwKh512P5LBIv/1K7o05OnIPtUi9mmIWlNvasSmhx
+         K0O9vxnt9pPA2nIkDeOzo3fkxv1eq1XoW11yk8y1FkdH91YLnY17QauJbF+bOECLdMLS
+         D+kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=R/v6KW4/eQNCq3G1uNeftKx9yVwkfwEl1Z51lMH01Iw=;
-        b=W4hs65YYm5bZh0IN9oFvaHKaKRLzRuYT6XTKCGkpfYyhL7SGYxQKfdGJkJe/gKzurx
-         0aIVsV5QKSIrJDmS/JjOtq1igMUWRbb5C6Mmdjj52ddWxleQkb6+M5+7jj+ftYLxKW1F
-         RyMb44Z4M7McHMWDufRh4atnLgWna05er/4DrKxGPuIqvhLCET3sYRjsuGT+3d/oRIjU
-         ulJ48rbQRwK8yoZPhNq6/ru1rO2m1Ya4STjvqmMua5URjgAYk/98AwUeAM1/deu36Obq
-         feW4mMB/r7jGqHHs1N0OLh1wQRmKIrKQPsjDyfB552nqqm4fYNA5zdq4TP73IjpbYkuR
-         aEGA==
-X-Gm-Message-State: AOAM531MR838roZBBjdsAfiYJNDIS+5JyoLM+GN88AhDWjBCyp0SzLTD
-        MLEia3ExHMVz1Vh3I1DtTANLvucZjrs=
-X-Google-Smtp-Source: ABdhPJxiMOHXFGRWJhxq3dgpT/ouBgijWM84sxqbKmhnzIGVKdFopaH4O1YcRv4G+B4K3lhbMmERdeCA22Y=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:6cb4:9e19:c513:9337])
- (user=haoluo job=sendgmr) by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr5396280ybe.365.1646947018999; Thu, 10
- Mar 2022 13:16:58 -0800 (PST)
-Date:   Thu, 10 Mar 2022 13:16:55 -0800
-Message-Id: <20220310211655.3173786-1-haoluo@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH bpf-next] compiler_types: Refactor the use of btf_type_tag attribute.
-From:   Hao Luo <haoluo@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, yhs@fb.com
-Cc:     KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nhFqQpiOYKlNA1YRE7vtTmb4P6NrEAao+scW0km1bcY=;
+        b=GIesclsq+zEfoEThJ7XuE0gBEG6ssaXR/gAquc8YJ+rXoGLKOHVDK1bQ1BJWsBC3QA
+         nYS5sTYl86AG5VrkD17+ulq4pvrxSYMIWXltGHb3jUpPhyl0KhUoMyXS/1StjFBpTv+T
+         cvE2DRxYAG0pZ68q2F3MlyJP4+BEAGOxGISly2bEuJru766QUEef2XvMXsR8lkWX9WGu
+         GZaHB2uU0KyFmZB08ETCAF4EOSYveyVXG40eLsBuX/denSDDnbhIDMD/OsDq+oif02NS
+         ar1FX+uZ96IoiIbeokJrz9g/ljREUWCVuR9atJHtna7cp4QyDS8tlbePI9E1zSMgT4H4
+         vsww==
+X-Gm-Message-State: AOAM533z7bQVSJ5ax+pGFeoiPqw5Ra3fqDKHEfsY34FYGhZBBLmvpFWP
+        7v0JnFP4k2iyS+CjXzdTu4qblxWTvYaUBiIxFZriSYqIj+tWwsr8
+X-Google-Smtp-Source: ABdhPJwgbGyUzfjOiOmtVmNTLPhs8snB2MxBi9sXZLrsrnzoFYAKFWvdJWmcUNlV1xSdH2I0UZhfI42B76Nu1AyuIxM=
+X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
+ k6-20020a259846000000b0061a3deb4d39mr5710562ybo.537.1646947085641; Thu, 10
+ Mar 2022 13:18:05 -0800 (PST)
+MIME-Version: 1.0
+References: <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk> <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+ <YijfzAhWAgfGGqCO@shell.armlinux.org.uk> <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+ <Yij2cZVKwPexGsTf@shell.armlinux.org.uk> <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
+ <YikByJteDEtKi4Xv@shell.armlinux.org.uk> <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+ <Yinwq3Z9l0selLLS@shell.armlinux.org.uk> <Yin2jQqW+pUWJZ7E@shell.armlinux.org.uk>
+ <CAMj1kXGkUJ=-4oA4GvBZNK94A1MrZ7UwKDN_tJRgwq8KF06VmA@mail.gmail.com>
+In-Reply-To: <CAMj1kXGkUJ=-4oA4GvBZNK94A1MrZ7UwKDN_tJRgwq8KF06VmA@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 11 Mar 2022 02:47:54 +0530
+Message-ID: <CA+G9fYvEANOMekjvtu7agdVYQ_b8OMtxQdyAV2JT_vMdBU3VRA@mail.gmail.com>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previous patches have introduced the compiler attribute btf_type_tag for
-__user and __percpu. The availability of this attribute depends on
-some CONFIGs and compiler support. This patch refactors the use
-of btf_type_tag by introducing BTF_TYPE_TAG, which hides all the
-dependencies.
+Hi Ard and Russell,
 
-No functional change.
+The boot test pass on linux next-20220310 tag with  KASAN=y on BeagleBoard x15
+device. but LTP cve tests reproduced the reported kernel crash  [1].
+From the available historical data I can confirm that this is an
+intermittent issue on
+BeagleBoard x15 devices.
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- include/linux/compiler_types.h | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+OTOH, the kernel crash is always reproducible on qemu-arm with KASAN=y
+while booting which has been known to fail for a long time.
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index b9a8ae9440c7..1bc760ba400c 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -4,6 +4,13 @@
- 
- #ifndef __ASSEMBLY__
- 
-+#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
-+	__has_attribute(btf_type_tag)
-+# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
-+#else
-+# define BTF_TYPE_TAG(value) /* nothing */
-+#endif
-+
- #ifdef __CHECKER__
- /* address spaces */
- # define __kernel	__attribute__((address_space(0)))
-@@ -31,19 +38,11 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
- # define __kernel
- # ifdef STRUCTLEAK_PLUGIN
- #  define __user	__attribute__((user))
--# elif defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
--	__has_attribute(btf_type_tag)
--#  define __user	__attribute__((btf_type_tag("user")))
- # else
--#  define __user
-+#  define __user	BTF_TYPE_TAG(user)
- # endif
- # define __iomem
--# if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
--	__has_attribute(btf_type_tag)
--#  define __percpu	__attribute__((btf_type_tag("percpu")))
--# else
--#  define __percpu
--# endif
-+# define __percpu	BTF_TYPE_TAG(percpu)
- # define __rcu
- # define __chk_user_ptr(x)	(void)0
- # define __chk_io_ptr(x)	(void)0
--- 
-2.35.1.723.g4982287a31-goog
+From the Ardb tree I have boot tested qemu-arm with KASAN=y the reported
+kernel crash is always reproducible.
 
+The build steps [3] and extra Kconfigs.
+
+- Naresh
+[1] https://lkft.validation.linaro.org/scheduler/job/4701310
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/
+[3] https://builds.tuxbuild.com/2661dIAPUjE2DMJvye91He2gus0/tuxmake_reproducer.sh

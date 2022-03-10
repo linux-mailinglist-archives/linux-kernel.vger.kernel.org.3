@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A326D4D5247
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EFA4D5230
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245720AbiCJTGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S241431AbiCJTHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245746AbiCJTGP (ORCPT
+        with ESMTP id S231898AbiCJTHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:06:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65117155C07;
-        Thu, 10 Mar 2022 11:05:11 -0800 (PST)
+        Thu, 10 Mar 2022 14:07:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C0B15AF17;
+        Thu, 10 Mar 2022 11:06:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07794B826EE;
-        Thu, 10 Mar 2022 19:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D634C340E8;
-        Thu, 10 Mar 2022 19:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646939108;
-        bh=31CsDxuXQkxZdivfzKTGWRUE6cmFgAKs1nPr9jAdUds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AswlffeEqkh7WnZl+Wrpa1vhu0pjNI05OnI4T8c41qjJWMBKYXQzbW92SI0dL9SNw
-         J5KSCQlMm1LHkkqhhFrW+WNIOLe+jXKaQLErkzFksjqf28T1Rcj/Kw5PyY8drlwK9C
-         BHFr6e25P4r6wfAOWAsy71tR3rNCsYusP/wE6a+k=
-Date:   Thu, 10 Mar 2022 20:05:04 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, stable@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Subject: Re: [BUG] new MIPS compile error on v5.15.27
-Message-ID: <YipL4KYG0hXa0g2s@kroah.com>
-References: <D148EFBD-55E0-449A-AD2A-12C80ABD4FC4@goldelico.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69CA060F59;
+        Thu, 10 Mar 2022 19:06:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1815C36AE3;
+        Thu, 10 Mar 2022 19:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646939188;
+        bh=DZWH3bwZ375xFmQ0OwIjh3CQzxRg1q4WJtf3n5K59+o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XUYS3GRPZyu3YowNax3qy3tUrF9gl1hqNJyL6hiyYGHyX+y9YxccY63b3wW94iUte
+         6c4yXuAmbX9BIRaws+z+pElTpfVPlHH/bU1n6AgT4xSVnkGnEdGf8Uk4RYw2GyqJ4z
+         rrZDvnQbgbnemz23jS2gTRcK67mheTwcWZCEZSQ0c9iVgplw44RIuKJ97GOhV6tIR3
+         JP7j06V0TFYS2Qd6vn79s08YRKpHIfU64mPcPLvdnuCejO1X3pMZJtNJlOxI5WXK8t
+         q/pqqkNkS8u6o9J/ps142V1BJV6savWZml0At9sjxeod2dXixw13pUM2mhxdG6wuBF
+         h8LoZZf5DSJsQ==
+Received: by mail-ed1-f52.google.com with SMTP id w4so8218355edc.7;
+        Thu, 10 Mar 2022 11:06:28 -0800 (PST)
+X-Gm-Message-State: AOAM5338YelDBcI44oHlVWttmdQk15sumpfywXr5R+gYllnTZ/z1R1oY
+        OLRm8n2kBd9+PDLv2qZPue4awtZMpYSztBCoIA==
+X-Google-Smtp-Source: ABdhPJxGVHRPqEZhL7PMUHhMt2Tffj/wF8PrGVgg0dXSJH+g2KbYq3NU8HU6vY44+Nqq0g+blMf+tpB8rKnB/lUjh1k=
+X-Received: by 2002:a05:6402:5256:b0:416:97d1:a6a2 with SMTP id
+ t22-20020a056402525600b0041697d1a6a2mr5777352edd.280.1646939187055; Thu, 10
+ Mar 2022 11:06:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D148EFBD-55E0-449A-AD2A-12C80ABD4FC4@goldelico.com>
+References: <20220308022929.30002-1-linmq006@gmail.com>
+In-Reply-To: <20220308022929.30002-1-linmq006@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 10 Mar 2022 13:06:15 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKpr9ksR2gse4fHPHbNfv9+TtSu99+Ofz1mZ16WNjswYA@mail.gmail.com>
+Message-ID: <CAL_JsqKpr9ksR2gse4fHPHbNfv9+TtSu99+Ofz1mZ16WNjswYA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: imx6: Add missing of_node_put() in imx6_pcie_probe
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Trent Piepho <tpiepho@impinj.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,59 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 05:25:07PM +0100, H. Nikolaus Schaller wrote:
-> upstream commit 277c8cb3e8ac ("MIPS: fix local_{add,sub}_return on MIPS64")
-> 
-> was backported to v5.15.27 as
-> 
-> commit f98371d2ac83 ("MIPS: fix local_{add,sub}_return on MIPS64")
-> 
-> but breaks MIPS build:
-> 
-> In file included from ./arch/mips/include/asm/local.h:8:0,
->                  from ./include/linux/genhd.h:20,
->                  from ./include/linux/blkdev.h:8,
->                  from ./include/linux/blk-cgroup.h:23,
->                  from ./include/linux/writeback.h:14,
->                  from ./include/linux/memcontrol.h:22,
->                  from ./include/net/sock.h:53,
->                  from ./include/linux/tcp.h:19,
->                  from drivers/net/slip/slip.c:91:
-> ./arch/mips/include/asm/asm.h:68:0: warning: "END" redefined
->  #define END(function)     \
->  
-> In file included from drivers/net/slip/slip.c:88:0:
-> drivers/net/slip/slip.h:44:0: note: this is the location of the previous definition
->  #define END             0300  /* indicates end of frame */
-> 
-> Analyses reveals that with the backported MIPS fix there is a new
-> #include <asm/asm.h> introduced by ./arch/mips/include/asm/local.h
-> which already defines some END macro.
-> 
-> But why does v5.16.x compile fine where
-> 
-> commit a0ecfd10d669c ("MIPS: fix local_{add,sub}_return on MIPS64")
-> 
-> is also present since v5.16.3?
-> 
-> Deeper analyses shows that there is another patch introduced
-> in v5.16-rc1 which removed one #include in the above chain and
-> therefore does not define END by asm/asm.h:
-> 
-> commit 348332e000697 ("mm: don't include <linux/blk-cgroup.h> in <linux/writeback.h>")
-> 
-> Hence, the MIPS fix should only be applied to branches where
-> the mm fix is already present. Or the mm fix should be backported
-> as well (if it has no side-effects).
-> 
-> Note: the MIPS fix was apparently not (yet?) applied to v5.10.y or earlier
-> even tough the Fixes: 7232311ef14c ("local_t: mips extension")
-> would be true.
+On Mon, Mar 7, 2022 at 8:29 PM Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> The device_node pointer is returned by of_parse_phandle()  with refcount
+> incremented. We should use of_node_put() on it when done.
+>
+> Fixes: 1df82ec46600 ("PCI: imx: Add workaround for e10728, IMX7d PCIe PLL failure")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 6974bd5aa116..bcc338ab6c11 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -1050,6 +1050,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+>                 struct resource res;
+>
+>                 ret = of_address_to_resource(np, 0, &res);
+> +               of_node_put(np);
 
-Thanks for the report.  I'll work on resolving this for the next round
-of stable releases _after_ the ones that are currently out for review
-are released.
+So now you are using the phy within the driver, but not holding a
+reference to its node? That is wrong. Though if a struct device was
+created for the phy's node, it would hold a reference. There are a
+bunch of error paths where the reference should be dropped. But
+really, this driver is a big mess with the phy binding and framework
+not used and your nodes probably aren't going to be disappearing on
+you anyways.
 
-thanks,
-
-greg k-h
+Rob

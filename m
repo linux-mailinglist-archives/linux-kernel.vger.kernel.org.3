@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF58C4D53C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8427B4D53C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344038AbiCJVpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S1344046AbiCJVpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241488AbiCJVpT (ORCPT
+        with ESMTP id S1343994AbiCJVp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:45:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9094D141E3E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:44:17 -0800 (PST)
+        Thu, 10 Mar 2022 16:45:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61028158E81;
+        Thu, 10 Mar 2022 13:44:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F1F37CE2532
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEFFC340E8;
-        Thu, 10 Mar 2022 21:44:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646948654;
-        bh=kpKY8cciXNYimz6VGZ+XcsAyRK4WuV83/ktm+3A9FbQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ov8bG98Kf+j0TkMWz028+pgyCyEAvqzTWyGFQaFtD/sQ0KBq2RzTG0QiAWyCe8hw9
-         6n/LrQ6DSrkh6wlOCeviORnY73c7EEMFNR/3KVIK90DwF0ypqRJ6QciJVKd4bPxY0j
-         2e9JQTL+i8f0ZPuxzuj44oJEkv2rN4LYJkXxGnsQ=
-Date:   Thu, 10 Mar 2022 22:44:11 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] coresight changes for v5.18
-Message-ID: <YipxKx+P7Dyc70vS@kroah.com>
-References: <20220303230301.255049-1-suzuki.poulose@arm.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E75D161A39;
+        Thu, 10 Mar 2022 21:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9424CC340E8;
+        Thu, 10 Mar 2022 21:44:23 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 16:44:22 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Yordan Karadzhov <y.karadz@gmail.com>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Patrick McLean <chutzpah@gentoo.org>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        Clark Williams <williams@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        John Kacur <jkacur@redhat.com>, Tony Jones <tonyj@suse.de>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Wagner <wagi@monom.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Josef Bacik <jbacik@fb.com>, troyengel@gmail.com,
+        Behan Webster <behanw@converseincode.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [ANNOUNCE] trace-cmd 3.0
+Message-ID: <20220310164422.41c57c7c@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303230301.255049-1-suzuki.poulose@arm.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 11:03:01PM +0000, Suzuki K Poulose wrote:
-> Hi Greg
-> 
-> Please find the pull request for coresight subsystem for v5.18.
-> 
-> Suzuki
-> 
-> The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
-> 
->   Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v5.18
-> 
-> for you to fetch changes up to b54f53bc11a584713f79a704c70c488489f524b8:
-> 
->   coresight: Drop unused 'none' enum value for each component (2022-02-28 09:51:40 -0700)
+[ Resending without corrupted email headers ]
 
-I have the following errors when pulling this tree and having the
-scripts check the commits:
+I'm happy to announce that after over a year, we finally are able to
+release trace-cmd version 3.0!
 
-Commit 5340bf5df9d2 ("coresight: syscfg: Fix memleak on registration failure in cscfg_create_device")
-	committer Signed-off-by missing
-	author email:    linmq006@gmail.com
-	committer email: suzuki.poulose@arm.com
-	Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-	Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+The two biggest changes:
 
-Commit 91a2f2941df2 ("coresight: Fix TRCCONFIGR.QE sysfs interface")
-	committer Signed-off-by missing
-	author email:    james.clark@arm.com
-	committer email: suzuki.poulose@arm.com
-	Signed-off-by: James Clark <james.clark@arm.com>
-	Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+1) Updated trace.dat to version 7 (not compatible with older versions of
+   trace-cmd). But now supports compression.
 
-Commit 7f4cd3375906 ("coresight: trbe: Work around the trace data corruption")
-	committer Signed-off-by missing
-	author email:    anshuman.khandual@arm.com
-	committer email: suzuki.poulose@arm.com
-	Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-	Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-Commit 0ecf2c747437 ("coresight: trbe: Work around the invalid prohibited states")
-	committer Signed-off-by missing
-	author email:    anshuman.khandual@arm.com
-	committer email: suzuki.poulose@arm.com
-	Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-	Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-Commit 8b6927d0adad ("coresight: trbe: Work around the ignored system register writes")
-	committer Signed-off-by missing
-	author email:    anshuman.khandual@arm.com
-	committer email: suzuki.poulose@arm.com
-	Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-	Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+2) Better synchronization between host and guest kernel tracing.
 
 
-What went wrong???
+Features and user visible updates since 2.9:
 
-linux-next didn't complain about this already?
+- Relies on upstream repos for libtraceevent and libtracefs:
+    * Removed libtraceevent code (Upstream minimum version 1.5)
+    * Removed libtracefs code (Upstream minimum version 1.3)
 
-greg k-h
+- KernelShark is no longer installed in the trace-cmd repo.
+
+- Some perf support
+
+- trace-cmd dump updates:
+   * Display the clock used in the file
+
+- New trace-cmd clock: tsc2nsec to use the tsc clock in the ring buffer but
+  to display it as nanoseconds. Requires architecture support, but trace-cmd
+  list -C will show if it supported or not.
+
+- New option --raw-ts for trace-cmd report to show raw timestamps without any
+  modifications.
+
+- New timestamp synchronization between host and guests.
+   * P2P : timing back and forth of host and guest
+   * KVM : queries the kernel for the multiplier, offset and shift for exact
+           synchronization of host and guest timestamps.
+
+- tracecmd_warning() API for writing error messages in libtracecmd library.
+
+- Better bash tab completion.
+
+- Plugins now go into /usr/[local/]lib/trace-cmd instead of traceevent
+  directory.
+
+- New option --full for trace-cmd list to show "print fmt" of event formats
+  specified by -e <event> -F
+
+- trace-cmd list now shows ftrace events as well as events that can be
+  enabled.
+
+- Supports non qemu VM host/guest tracing.
+
+- New option --align-ts for trace-cmd report that will make the timestamps of
+  all events a delta from the first event. (0.000003 instead of 16292.633984)
+
+- New option -V for trace-cmd report to change verbosity.
+
+- New option --verbose for a bunch of commands to trace-cmd.
+
+- New option --poll for trace-cmd record to poll which makes trace-cmd check
+  the buffers with O_NONBLOCK instead of relying on IPIs to wake it up. This
+  reduces latency on recording tasks that trace-cmd is not running on.
+
+- trace.dat output has been updated to Version 7 (incompatible with older
+  trace-cmd, but trace-cmd convert can convert back to version 6, with
+  possible lost of features).
+   * The file is broken up into sections (defined as options) just like an ELF
+     file.
+   * Allows for sections to be compressed.
+      .  Supports zlib compression
+      .  Supports ZSTD compression
+   * Will allow for new types of data to be added
+      . Target for perf data to be included (still in development)
+
+- New command: trace-cmd convert, to convert between trace-cmd 7 and 6 files.

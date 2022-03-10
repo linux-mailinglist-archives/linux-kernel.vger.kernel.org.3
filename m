@@ -2,199 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638F94D4A12
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BFB4D4B88
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345641AbiCJOmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
+        id S1345569AbiCJOmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245759AbiCJOax (ORCPT
+        with ESMTP id S245709AbiCJOau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:30:53 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A20A186BB6;
-        Thu, 10 Mar 2022 06:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=X+z54Gq/Kh0PoKxHLLeQbmlP658ai3SMxXoXeIbzp88=; b=UF7VNzrBw+MgOPrTTrt86DqHf9
-        yfuXVm0+wA5PHjD/wcSGjxcR/eLBRatyK9mipxXSRFmEikACiHeyoj6ZnfJRbSDZm8yhvnVE5eNWt
-        ocCLxQgk9LabkFtUDr+X4Ltk/Xz7aduFICybsHliO23Sgp6lwI6WXjwzka9HowCWcieA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nSJk2-00A8zy-Kx; Thu, 10 Mar 2022 15:26:10 +0100
-Date:   Thu, 10 Mar 2022 15:26:10 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 3/4] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Message-ID: <YioKgjhEnqylB24M@lunn.ch>
-References: <20220310030039.2833808-1-chris.packham@alliedtelesis.co.nz>
- <20220310030039.2833808-4-chris.packham@alliedtelesis.co.nz>
+        Thu, 10 Mar 2022 09:30:50 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A032186424;
+        Thu, 10 Mar 2022 06:26:44 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id w12so9704546lfr.9;
+        Thu, 10 Mar 2022 06:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=aOR4hwC/LyUI0jjOxT3n02PFkMoRNv160vr8ERq5R5M=;
+        b=TLmdcYdLOXvPkXN9lzSvK+qd50RETYsuhCjwfouchXQvEMmBtGFGKFXlQFT4XjefXR
+         IQpovEbCoHIfttXXAA94M4q+vbatxV4BvpyFSYobDNDTViPh9MJjXheBb8evLNaGNm1N
+         Qt7uCkdRljkUOSX6YC2pU8n8/BAYdqs7DYr+zsNr9lpo3xRnPLrgyog6EaFrsar6ZIQH
+         n5kCTBiudP3pCaM9NEIejnj+QRgKJ+A0lu1kRzusD+MnB/Mgagj3RBbpz+XxMO4ZIv+M
+         m5Zgv+01Urk72PAF+/yLNKdKG/tzpq8FKZzguQVsG6ppY0IDGKafSCGU7k5wsZLvNrUm
+         SYQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=aOR4hwC/LyUI0jjOxT3n02PFkMoRNv160vr8ERq5R5M=;
+        b=jK6euDb5RPMd94Ctr8s1DfQHnUfxfXDM5PiqQSZjnDwuRAvJpOmAYEeqglc8lQDzZ4
+         I5yAQxe324xn4X8AlmNib/2FzbDVRIVGjn863tBXM4TxUMEppV+CNn43244t+9zmhT2X
+         zQD2zcN92pXx3QwLHld/Bj1P95zqfaebxJqBrofxKTRFXJD6uO5m+FSpy8YgD5Bj960v
+         phMN4nfGJsoGxKIfHwXHeFA4MU3VnXQBEKiHz3iQi8CpoOLhV7fq3ozaOl8ldvcmiO9c
+         dv7U65L8S2BeCg8uU4O2vlXaTj5QkwkYm/Fgd91MZOhWhpsqpU7JbCA9A4+stH0cMiIC
+         HtCw==
+X-Gm-Message-State: AOAM532xfK5afSvdwDgyNbZagrIhe/uBNFEFGcpgstXpByvAwaqChlQq
+        0U7hbSF/LKR3ZN1S/C0MsYA=
+X-Google-Smtp-Source: ABdhPJxdb48xfM1I6A57NBB+0VE33vTP/hLoecV0tRu2EiQR4i3oGYbQDIazvv4DmJhtp+HspEJ/lQ==
+X-Received: by 2002:a05:6512:3ba6:b0:448:23de:ca79 with SMTP id g38-20020a0565123ba600b0044823deca79mr3227383lfv.400.1646922400073;
+        Thu, 10 Mar 2022 06:26:40 -0800 (PST)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id r22-20020a2e9956000000b00247f5d1c457sm1090247ljj.126.2022.03.10.06.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 06:26:39 -0800 (PST)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Nikolay Aleksandrov <razor@blackwall.org>,
+        Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH iproute2-next 0/3] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+In-Reply-To: <7ed798dd-49c1-171b-4b72-4e2b2c9c660d@blackwall.org>
+References: <20220310133617.575673-1-schultz.hans+netdev@gmail.com>
+ <7ed798dd-49c1-171b-4b72-4e2b2c9c660d@blackwall.org>
+Date:   Thu, 10 Mar 2022 15:26:36 +0100
+Message-ID: <86y21hc28z.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310030039.2833808-4-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 04:00:38PM +1300, Chris Packham wrote:
-> The 98DX2530 SoC is the Control and Management CPU integrated into
-> the Marvell 98DX25xx and 98DX35xx series of switch chip (internally
-> referred to as AlleyCat5 and AlleyCat5X).
-> 
-> These files have been taken from the Marvell SDK and lightly cleaned
-> up with the License and copyright retained.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     This has a number of undocumented compatible strings. I've got the SDK
->     source so I'll either bring through whatever drivers are needed or look
->     at for an in-tree alternative (e.g. there is SDK code for a ac5-gpio but
->     the existing marvell,orion-gpio seems to cover what is needed if you use
->     an appropriate binding).
+On tor, mar 10, 2022 at 16:18, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> On 10/03/2022 15:36, Hans Schultz wrote:
+>> This patch set extends the locked port feature for devices
+>> that are behind a locked port, but do not have the ability to
+>> authorize themselves as a supplicant using IEEE 802.1X.
+>> Such devices can be printers, meters or anything related to
+>> fixed installations. Instead of 802.1X authorization, devices
+>> can get access based on their MAC addresses being whitelisted.
+>> 
+>> For an authorization daemon to detect that a device is trying
+>> to get access through a locked port, the bridge will add the
+>> MAC address of the device to the FDB with a locked flag to it.
+>> Thus the authorization daemon can catch the FDB add event and
+>> check if the MAC address is in the whitelist and if so replace
+>> the FDB entry without the locked flag enabled, and thus open
+>> the port for the device.
+>> 
+>> This feature is known as MAC-Auth or MAC Authentication Bypass
+>> (MAB) in Cisco terminology, where the full MAB concept involves
+>> additional Cisco infrastructure for authorization. There is no
+>> real authentication process, as the MAC address of the device
+>> is the only input the authorization daemon, in the general
+>> case, has to base the decision if to unlock the port or not.
+>> 
+>> With this patch set, an implementation of the offloaded case is
+>> supplied for the mv88e6xxx driver. When a packet ingresses on
+>> a locked port, an ATU miss violation event will occur. When
+>> handling such ATU miss violation interrupts, the MAC address of
+>> the device is added to the FDB with a zero destination port
+>> vector (DPV) and the MAC address is communicated through the
+>> switchdev layer to the bridge, so that a FDB entry with the
+>> locked flag enabled can be added.
+>> 
+>> Hans Schultz (3):
+>>    net: bridge: add fdb flag to extent locked port feature
+>>    net: switchdev: add support for offloading of fdb locked flag
+>>    net: dsa: mv88e6xxx: mac-auth/MAB implementation
+>> 
+>>   drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
+>>   drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
+>>   drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
+>>   drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
+>>   drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
+>>   .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
+>>   .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
+>>   drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
+>>   drivers/net/dsa/mv88e6xxx/port.h              |  1 +
+>>   include/net/switchdev.h                       |  3 +-
+>>   include/uapi/linux/neighbour.h                |  1 +
+>>   net/bridge/br.c                               |  3 +-
+>>   net/bridge/br_fdb.c                           | 13 +++-
+>>   net/bridge/br_input.c                         | 11 ++-
+>>   net/bridge/br_private.h                       |  5 +-
+>>   15 files changed, 167 insertions(+), 14 deletions(-)
+>>   create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+>>   create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+>> 
+>
+> This doesn't look like an iproute2 patch-set. I think you've messed the target
+> in the subject.
 
-Hi Chris
-
-My understand is, you don't add nodes for which there is no
-driver. The driver and its binding needs to be reviewed and accepted
-before users of it are added.
-
-> +	mvDma {
-> +		compatible = "marvell,mv_dma";
-> +		memory-region = <&prestera_rsvd>;
-> +		status = "okay";
-> +	};
-
-Is this different to the existing Marvell XOR engine?
-
-> +			mdio: mdio@20000 {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				compatible = "marvell,orion-mdio";
-> +				reg = <0x22004 0x4>;
-> +				clocks = <&core_clock>;
-> +				phy0: ethernet-phy@0 {
-> +					reg = < 0 0 >;
-> +				};
-
-This embedded PHY looks wrong. reg should be a single value.
-
-Is the PHY internal? Generally, the PHY is put in the .dts file, but
-if it is internal, that the .dtsi would be correct.
-
-> +				sdhci0: sdhci@805c0000 {
-> +					compatible = "marvell,ac5-sdhci", "marvell,armada-ap806-sdhci";
-
-This additional compatible should be added to the existing binding
-document.
-
-> +			eth0: ethernet@20000 {
-> +				compatible = "marvell,armada-ac5-neta";
-
-So it is not compatible with plain nata?
-
-> +				reg = <0x0 0x20000 0x0 0x4000>;
-> +				interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
-> +				clocks = <&core_clock>;
-> +				status = "disabled";
-> +				phy-mode = "sgmii";
-> +			};
-> +
-> +			eth1: ethernet@24000 {
-> +				compatible = "marvell,armada-ac5-neta";
-> +				reg = <0x0 0x24000 0x0 0x4000>;
-> +				interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
-> +				clocks = <&core_clock>;
-> +				status = "disabled";
-> +				phy-mode = "sgmii";
-> +				fixed-link {
-> +					speed = <100>;
-> +					full-duplex;
-> +				};
-
-Fast Ethernet? Yet SGMII?
-
-> +			/* USB0 is a host USB */
-> +			usb0: usb@80000 {
-> +				compatible = "marvell,ac5-ehci", "marvell,orion-ehci";
-
-Please add this compatible to the binding.
-
-> +		pcie0: pcie@800a0000 {
-> +			compatible = "marvell,ac5-pcie", "snps,dw-pcie";
-
-Please add this ...
-
-> +			spiflash0: spi-flash@0 {
-> +				compatible = "spi-nor";
-> +				spi-max-frequency = <50000000>;
-> +				spi-tx-bus-width = <1>; /* 1-single, 2-dual, 4-quad */
-> +				spi-rx-bus-width = <1>; /* 1-single, 2-dual, 4-quad */
-> +				reg = <0>;
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <1>;
-> +
-> +				partition@0 {
-> +					label = "spi_flash_part0";
-> +					reg = <0x0 0x800000>;
-> +				};
-> +
-> +				parition@1 {
-> +					label = "spi_flash_part1";
-> +					reg = <0x800000 0x700000>;
-> +				};
-> +
-> +				parition@2 {
-> +					label = "spi_flash_part2";
-> +					reg = <0xF00000 0x100000>;
-> +				};
-
-The partitioning of the flash i would expect to be board specific, so
-belongs on the .dts file.
-
-> +		nand: nand@805b0000 {
-> +			compatible = "marvell,ac5-nand-controller";
-
-The current NAND driver does not work?
-
-> +		prestera {
-> +			compatible = "marvell,armada-ac5-switch";
-> +			interrupts = <GIC_SPI 0x23 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "okay";
-> +		};
-
-Here we have to be careful with naming. I assume Marvell in kernel
-Pretera driver does not actually work on the prestera hardware? That
-driver assumes you are running Marvell firmware on this SoC, and have
-a host running that driver which talks to the SoC firmware?
-
-The name perstera seems O.K, and the compatible
-marvell,armada-ac5-switch makes it clear the prestera driver cannot be
-used. However, until we do actually have a driver, i don't think this
-node should be added.
-
-> +		watchdog@80216000 {
-> +			compatible = "marvell,ac5-wd";
-
-Not compatible with the existing watchdog driver?
-
-    Andrew
+Sorry, complete bummer!
+I have resent it with the correct header.

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE194D52D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597614D52D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244556AbiCJUIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S244141AbiCJUIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238154AbiCJUIF (ORCPT
+        with ESMTP id S244467AbiCJUIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:08:05 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B658199E1D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:04 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id e2so5838789pls.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:04 -0800 (PST)
+        Thu, 10 Mar 2022 15:08:07 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6370199D43
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:05 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id a5so6065648pfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=Ppb+nGqWIW/h/QwBcLw4pfKIt8cQodBBM6cAdLT5fmg=;
-        b=YBCZBfTIz23WWu52f/w33APGnaMo4Ft4vbVYLvHDN5C8XSlriqdDpZ2Eohqo/r8lOM
-         GbJ393d6CB40bzKpuc7X+GXaJ93iAZHIZCnVQsc8VjEtG3zEaldDyQffxuWaZmbaxUhg
-         nomlAeOcgZixR3aA5pCDXs3fcAz4LForgtfbNVXWUQ1SkBqCNH1a/6TZFAGl25xBXKDT
-         ZPLlVFfx2w5RC1Q2gbS9fwGkNeCMwKcHUiMGPU0ZI2Vi7xCO+xRkwPsBQYho/397MX0+
-         O88MiL4bFACHTX0DbUkIq+05yugAALYXQVQMLvD6dkxqaXz2TdeOEa2z5Qk7YmBWJhNv
-         fTQQ==
+        bh=PYweMQPrL7uEAHG8rV7QHiZlJFz7RCkoOfajbH3ejo4=;
+        b=EaJ5VTOfsIEU87Iy0ZVt55RTUVB0cMXSbNW6P0EtF5ra8YSURsBXkLmPsG63tKssyj
+         xozJKYjE+mukDiYG42m+pn1tTdBbIMZRl4+he0S4Ryamh2gMJOrs/WLWRpk0ZTALQOuJ
+         Ge81sf7oZJvRo3UzpXsF7kBKcn172plFfqSoNYEHJX5y0hSgP/ueF66Uy4P9hpgAEijQ
+         bHJIwzORRCVSInnMBjGuI7hrQJj/CTSDwF9MxeUUyAKz4VGIPAtcajHZ/WEPLUD03BMR
+         uFVLEEEimap9cpJlWuolvMqnP1sV0Y0PlekhBvk6XE1nersNmub0pp9UXrt5DgnZ7GsO
+         bFHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=Ppb+nGqWIW/h/QwBcLw4pfKIt8cQodBBM6cAdLT5fmg=;
-        b=zfSwmQO1ZAu60mZoI4JwMfMG1H7pzQ4I3+BezLOedOPv51EqYfa2bshax3EnObf0ys
-         Zit6NP7B81ZmRa4gagsDlZU5BIaFV5kvcy6TZLQdJSIHOH99+Z1yKY2G/LxJILdoUi0h
-         lnOK5R3RZhLsA8gdZrRuus3j/4NX5za4H5whiMRObZOgBfzfMoLihckT9eaKYi2YwiNs
-         AJzXfrsJskGuNPOgiR8//Cvf5Emq70M887PCYm5fO5jjM/i3o42hznwrr4nnpemyn21X
-         JxnRzX7Szv+SbIEIqbwuQnbno130Cg7ssZwrdcJpgFfyLJ7DnRJdsA9NuhhYC210iGNp
-         WDnA==
-X-Gm-Message-State: AOAM531ClQ2g4E7IOcqaSBE2bt42ExUYbDYZFng4XAxwQk6FdZKTnvUo
-        PVA/uc9M9H6LA0272eak8NKz6A==
-X-Google-Smtp-Source: ABdhPJx4NYlzgFs+WmYMXzXTZ4RuxK05hR+/Tjnk6lJFxCjljwre381MVmPlu9JE10S/2ylACzy2bQ==
-X-Received: by 2002:a17:90b:1e01:b0:1bf:5f6e:cbef with SMTP id pg1-20020a17090b1e0100b001bf5f6ecbefmr6853622pjb.130.1646942823454;
-        Thu, 10 Mar 2022 12:07:03 -0800 (PST)
+        bh=PYweMQPrL7uEAHG8rV7QHiZlJFz7RCkoOfajbH3ejo4=;
+        b=3mJ1hnIMFqyISpE9IOYS7/7+ou6aMun53we/YVUFVsc2QC0oxmPM+x3i4GPI27I3wm
+         eKH0EDqLVsEP1/5iqDW0xGkkeQiLucSWmCQTLbR2wA/2CwvJrZvE3Y0sVBJseoK72iH8
+         XvqXk3DJF2OnfbzmPdYkmqETZqmuTDeQ6bdYajraw2yGYVpiCwl9GMvf24jsZJdB4ISO
+         GOHB3AWPZR4X2JR0+OyTgnT+6Sl5+qE48E2GyeB/sG19UhFdDdCrli+rGSKq3vXqLGMl
+         uvyFf0NI+A98O4l2d2hTqYml79rFZV3xm1QWlEbRre5f0ADGzDGifdQmdvzftulk51GY
+         V8+w==
+X-Gm-Message-State: AOAM532HWw3c+Ja22eh3b3kfGfZXNIharBD+TGzp28i8YmnDN7nU57rG
+        tzgaQNbBcaVJglTfwhemGsn40Z4WJGr8wA==
+X-Google-Smtp-Source: ABdhPJzhOXoW6OwvM2FHUtGIvUxdf+sz2sxEB7RpLjE2gpOfme94+fw0tQUiz26yM3o/MnPHDrqAZw==
+X-Received: by 2002:a63:2d8:0:b0:37c:4e75:302c with SMTP id 207-20020a6302d8000000b0037c4e75302cmr5642507pgc.580.1646942824907;
+        Thu, 10 Mar 2022 12:07:04 -0800 (PST)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id a32-20020a631a20000000b003756899829csm6258878pga.58.2022.03.10.12.07.02
+        by smtp.gmail.com with ESMTPSA id f2-20020a056a0022c200b004f7649f78dbsm5654302pfj.139.2022.03.10.12.07.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 12:07:02 -0800 (PST)
-Date:   Thu, 10 Mar 2022 12:07:02 -0800 (PST)
-X-Google-Original-Date: Thu, 10 Mar 2022 12:06:07 PST (-0800)
-Subject:     Re: [PATCH] riscv: alternative only works on !XIP_KERNEL
-In-Reply-To: <20220210164943.2646-1-jszhang@kernel.org>
+        Thu, 10 Mar 2022 12:07:04 -0800 (PST)
+Date:   Thu, 10 Mar 2022 12:07:04 -0800 (PST)
+X-Google-Original-Date: Thu, 10 Mar 2022 12:06:08 PST (-0800)
+Subject:     Re: [PATCH v6] riscv: Fixed misaligned memory access.  Fixed pointer comparison.
+In-Reply-To: <20220308010321.6123-1-michael@michaelkloos.com>
 CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        heiko@sntech.de
+        michael@michaelkloos.com
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jszhang@kernel.org
-Message-ID: <mhng-3d749a55-0e5d-49fd-8682-06e8a058dfe0@palmer-ri-x1c9>
+To:     michael@michaelkloos.com
+Message-ID: <mhng-30aeea98-312c-4e7c-b135-6ae7a77f0f8b@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -70,43 +70,464 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 08:49:43 PST (-0800), jszhang@kernel.org wrote:
-> The alternative mechanism needs runtime code patching, it can't work
-> on XIP_KERNEL. And the errata workarounds are implemented via the
-> alternative mechanism. So add !XIP_KERNEL dependency for alternative
-> and erratas.
+On Mon, 07 Mar 2022 17:03:21 PST (-0800), michael@michaelkloos.com wrote:
+> Rewrote the RISC-V memmove() assembly implementation.  The
+> previous implementation did not check memory alignment and it
+> compared 2 pointers with a signed comparison.  The misaligned
+> memory access would cause the kernel to crash on systems that
+> did not emulate it in firmware and did not support it in hardware.
+> Firmware emulation is slow and may not exist.  The RISC-V spec
+> does not guarantee that support for misaligned memory accesses
+> will exist.  It should not be depended on.
 >
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/Kconfig.erratas | 1 +
->  arch/riscv/Kconfig.socs    | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
+> This patch now checks for XLEN granularity of co-alignment between
+> the pointers.  Failing that, copying is done by loading from the 2
+> contiguous and naturally aligned XLEN memory locations containing
+> the overlapping XLEN sized data to be copied.  The data is shifted
+> into the correct place and binary or'ed together on each
+> iteration.  The result is then stored into the corresponding
+> naturally aligned XLEN sized location in the destination.  For
+> unaligned data at the terminations of the regions to be copied
+> or for copies less than (2 * XLEN) in size, byte copy is used.
 >
-> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-> index b44d6ecdb46e..0aacd7052585 100644
-> --- a/arch/riscv/Kconfig.erratas
-> +++ b/arch/riscv/Kconfig.erratas
-> @@ -2,6 +2,7 @@ menu "CPU errata selection"
+> This patch also now uses unsigned comparison for the pointers and
+> migrates to the newer assembler annotations from the now deprecated
+> ones.
 >
->  config RISCV_ERRATA_ALTERNATIVE
->  	bool "RISC-V alternative scheme"
-> +	depends on !XIP_KERNEL
->  	default y
->  	help
->  	  This Kconfig allows the kernel to automatically patch the
-> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> index 6ec44a22278a..c112ab2a9052 100644
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -14,8 +14,8 @@ config SOC_SIFIVE
->  	select CLK_SIFIVE
->  	select CLK_SIFIVE_PRCI
->  	select SIFIVE_PLIC
-> -	select RISCV_ERRATA_ALTERNATIVE
-> -	select ERRATA_SIFIVE
-> +	select RISCV_ERRATA_ALTERNATIVE if !XIP_KERNEL
-> +	select ERRATA_SIFIVE if !XIP_KERNEL
->  	help
->  	  This enables support for SiFive SoC platform hardware.
+> [v3]
+>
+> Fixed the build issue reported by the test robot.  Changed the
+> copy implementation based on the suggestion by David Laight.
+>
+> One change that could potentially still be made is to roll one
+> of the values loaded in the copy loop into the next iteration
+> of the fixup loop, rather than reloading both values from memory
+> on each iteration.  It would require some more logic and I'm
+> really not sure that it is worth it.  It could be added in a
+> later patch.  For now, this fixes the issues I set out to fix.
+>
+> [v4]
+>
+> I could not resist implementing the optimization I mentioned in
+> my v3 notes.  I have implemented the roll over of data by cpu
+> register in the misaligned fixup copy loops.  Now, only one load
+> from memory is required per iteration of the loop.
+>
+> [v5]
+>
+> Optimized copy loops by replacing the unconditional jumps to
+> conditional branches with conditional branches themselves,
+> spaced loads and the use of the loaded data to minimize pipeline
+> stalling on in-order CPUs, and unrolled the misaligned copy loop
+> by one iteration.
+>
+> [v6]
+>
+> I have reverted to alphanumeric labels for easier reading per
+> the request of Palmer Dabbelt.  My idea in using numbers was to
+> minimize polution of the symbol tables in the kernel elf file.
+> But that really doesn't matter much and this makes debugging and
+> code reading easier when viewing an objdump of the kernel elf.
+>
+> I have also made one additial minor optimization.  I changed the
+> forward src index counter from register a3 to register a1.  This
+> means that we don't have to copy the value from a1 to a3 in the
+> start of this implementation.  I put it off until the end because
+> it only removed 1 one-time-use instruction at the cost of
+> decreased readability.
 
-Thanks, this is on fixes.
+I think I said I put the v5 on for-next, but it looks like I dropped the 
+ball and had only put it on my staging branch.  I usually like to avoid 
+rebasing for-next when possible, but given that one never actually 
+landed I'm going to just take this one instead.
+
+This time in's really actually or for-next, though, so please send 
+anything else as a follow-on.
+
+Thanks!
+
+>
+> Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
+> ---
+>  arch/riscv/lib/memmove.S | 368 +++++++++++++++++++++++++++++++++------
+>  1 file changed, 310 insertions(+), 58 deletions(-)
+>
+> diff --git a/arch/riscv/lib/memmove.S b/arch/riscv/lib/memmove.S
+> index 07d1d2152ba5..e0609e1f0864 100644
+> --- a/arch/riscv/lib/memmove.S
+> +++ b/arch/riscv/lib/memmove.S
+> @@ -1,64 +1,316 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2022 Michael T. Kloos <michael@michaelkloos.com>
+> + */
+>
+>  #include <linux/linkage.h>
+>  #include <asm/asm.h>
+>
+> -ENTRY(__memmove)
+> -WEAK(memmove)
+> -        move    t0, a0
+> -        move    t1, a1
+> -
+> -        beq     a0, a1, exit_memcpy
+> -        beqz    a2, exit_memcpy
+> -        srli    t2, a2, 0x2
+> -
+> -        slt     t3, a0, a1
+> -        beqz    t3, do_reverse
+> -
+> -        andi    a2, a2, 0x3
+> -        li      t4, 1
+> -        beqz    t2, byte_copy
+> -
+> -word_copy:
+> -        lw      t3, 0(a1)
+> -        addi    t2, t2, -1
+> -        addi    a1, a1, 4
+> -        sw      t3, 0(a0)
+> -        addi    a0, a0, 4
+> -        bnez    t2, word_copy
+> -        beqz    a2, exit_memcpy
+> -        j       byte_copy
+> -
+> -do_reverse:
+> -        add     a0, a0, a2
+> -        add     a1, a1, a2
+> -        andi    a2, a2, 0x3
+> -        li      t4, -1
+> -        beqz    t2, reverse_byte_copy
+> -
+> -reverse_word_copy:
+> -        addi    a1, a1, -4
+> -        addi    t2, t2, -1
+> -        lw      t3, 0(a1)
+> -        addi    a0, a0, -4
+> -        sw      t3, 0(a0)
+> -        bnez    t2, reverse_word_copy
+> -        beqz    a2, exit_memcpy
+> -
+> -reverse_byte_copy:
+> -        addi    a0, a0, -1
+> -        addi    a1, a1, -1
+> +SYM_FUNC_START(__memmove)
+> +SYM_FUNC_START_WEAK(memmove)
+> +	/*
+> +	 * Returns
+> +	 *   a0 - dest
+> +	 *
+> +	 * Parameters
+> +	 *   a0 - Inclusive first byte of dest
+> +	 *   a1 - Inclusive first byte of src
+> +	 *   a2 - Length of copy n
+> +	 *
+> +	 * Because the return matches the parameter register a0,
+> +	 * we will not clobber or modify that register.
+> +	 *
+> +	 * Note: This currently only works on little-endian.
+> +	 * To port to big-endian, reverse the direction of shifts
+> +	 * in the 2 misaligned fixup copy loops.
+> +	 */
+>
+> +	/* Return if nothing to do */
+> +	beq a0, a1, return_from_memmove
+> +	beqz a2, return_from_memmove
+> +
+> +	/*
+> +	 * Register Uses
+> +	 *      Forward Copy: a1 - Index counter of src
+> +	 *      Reverse Copy: a4 - Index counter of src
+> +	 *      Forward Copy: t3 - Index counter of dest
+> +	 *      Reverse Copy: t4 - Index counter of dest
+> +	 *   Both Copy Modes: t5 - Inclusive first multibyte/aligned of dest
+> +	 *   Both Copy Modes: t6 - Non-Inclusive last multibyte/aligned of dest
+> +	 *   Both Copy Modes: t0 - Link / Temporary for load-store
+> +	 *   Both Copy Modes: t1 - Temporary for load-store
+> +	 *   Both Copy Modes: t2 - Temporary for load-store
+> +	 *   Both Copy Modes: a5 - dest to src alignment offset
+> +	 *   Both Copy Modes: a6 - Shift ammount
+> +	 *   Both Copy Modes: a7 - Inverse Shift ammount
+> +	 *   Both Copy Modes: a2 - Alternate breakpoint for unrolled loops
+> +	 */
+> +
+> +	/*
+> +	 * Solve for some register values now.
+> +	 * Byte copy does not need t5 or t6.
+> +	 */
+> +	mv   t3, a0
+> +	add  t4, a0, a2
+> +	add  a4, a1, a2
+> +
+> +	/*
+> +	 * Byte copy if copying less than (2 * SZREG) bytes. This can
+> +	 * cause problems with the bulk copy implementation and is
+> +	 * small enough not to bother.
+> +	 */
+> +	andi t0, a2, -(2 * SZREG)
+> +	beqz t0, byte_copy
+> +
+> +	/*
+> +	 * Now solve for t5 and t6.
+> +	 */
+> +	andi t5, t3, -SZREG
+> +	andi t6, t4, -SZREG
+> +	/*
+> +	 * If dest(Register t3) rounded down to the nearest naturally
+> +	 * aligned SZREG address, does not equal dest, then add SZREG
+> +	 * to find the low-bound of SZREG alignment in the dest memory
+> +	 * region.  Note that this could overshoot the dest memory
+> +	 * region if n is less than SZREG.  This is one reason why
+> +	 * we always byte copy if n is less than SZREG.
+> +	 * Otherwise, dest is already naturally aligned to SZREG.
+> +	 */
+> +	beq  t5, t3, 1f
+> +		addi t5, t5, SZREG
+> +	1:
+> +
+> +	/*
+> +	 * If the dest and src are co-aligned to SZREG, then there is
+> +	 * no need for the full rigmarole of a full misaligned fixup copy.
+> +	 * Instead, do a simpler co-aligned copy.
+> +	 */
+> +	xor  t0, a0, a1
+> +	andi t1, t0, (SZREG - 1)
+> +	beqz t1, coaligned_copy
+> +	/* Fall through to misaligned fixup copy */
+> +
+> +misaligned_fixup_copy:
+> +	bltu a1, a0, misaligned_fixup_copy_reverse
+> +
+> +misaligned_fixup_copy_forward:
+> +	jal  t0, byte_copy_until_aligned_forward
+> +
+> +	andi a5, a1, (SZREG - 1) /* Find the alignment offset of src (a1) */
+> +	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
+> +	sub  a5, a1, t3 /* Find the difference between src and dest */
+> +	andi a1, a1, -SZREG /* Align the src pointer */
+> +	addi a2, t6, SZREG /* The other breakpoint for the unrolled loop*/
+> +
+> +	/*
+> +	 * Compute The Inverse Shift
+> +	 * a7 = XLEN - a6 = XLEN + -a6
+> +	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
+> +	 * Add that to XLEN.  XLEN = SZREG * 8.
+> +	 */
+> +	not  a7, a6
+> +	addi a7, a7, (SZREG * 8 + 1)
+> +
+> +	/*
+> +	 * Fix Misalignment Copy Loop - Forward
+> +	 * load_val0 = load_ptr[0];
+> +	 * do {
+> +	 * 	load_val1 = load_ptr[1];
+> +	 * 	store_ptr += 2;
+> +	 * 	store_ptr[0 - 2] = (load_val0 >> {a6}) | (load_val1 << {a7});
+> +	 *
+> +	 * 	if (store_ptr == {a2})
+> +	 * 		break;
+> +	 *
+> +	 * 	load_val0 = load_ptr[2];
+> +	 * 	load_ptr += 2;
+> +	 * 	store_ptr[1 - 2] = (load_val1 >> {a6}) | (load_val0 << {a7});
+> +	 *
+> +	 * } while (store_ptr != store_ptr_end);
+> +	 * store_ptr = store_ptr_end;
+> +	 */
+> +
+> +	REG_L t0, (0 * SZREG)(a1)
+> +	1:
+> +	REG_L t1, (1 * SZREG)(a1)
+> +	addi  t3, t3, (2 * SZREG)
+> +	srl   t0, t0, a6
+> +	sll   t2, t1, a7
+> +	or    t2, t0, t2
+> +	REG_S t2, ((0 * SZREG) - (2 * SZREG))(t3)
+> +
+> +	beq   t3, a2, 2f
+> +
+> +	REG_L t0, (2 * SZREG)(a1)
+> +	addi  a1, a1, (2 * SZREG)
+> +	srl   t1, t1, a6
+> +	sll   t2, t0, a7
+> +	or    t2, t1, t2
+> +	REG_S t2, ((1 * SZREG) - (2 * SZREG))(t3)
+> +
+> +	bne   t3, t6, 1b
+> +	2:
+> +	mv    t3, t6 /* Fix the dest pointer in case the loop was broken */
+> +
+> +	add  a1, t3, a5 /* Restore the src pointer */
+> +	j byte_copy_forward /* Copy any remaining bytes */
+> +
+> +misaligned_fixup_copy_reverse:
+> +	jal  t0, byte_copy_until_aligned_reverse
+> +
+> +	andi a5, a4, (SZREG - 1) /* Find the alignment offset of src (a4) */
+> +	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
+> +	sub  a5, a4, t4 /* Find the difference between src and dest */
+> +	andi a4, a4, -SZREG /* Align the src pointer */
+> +	addi a2, t5, -SZREG /* The other breakpoint for the unrolled loop*/
+> +
+> +	/*
+> +	 * Compute The Inverse Shift
+> +	 * a7 = XLEN - a6 = XLEN + -a6
+> +	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
+> +	 * Add that to XLEN.  XLEN = SZREG * 8.
+> +	 */
+> +	not  a7, a6
+> +	addi a7, a7, (SZREG * 8 + 1)
+> +
+> +	/*
+> +	 * Fix Misalignment Copy Loop - Reverse
+> +	 * load_val1 = load_ptr[0];
+> +	 * do {
+> +	 * 	load_val0 = load_ptr[-1];
+> +	 * 	store_ptr -= 2;
+> +	 * 	store_ptr[1] = (load_val0 >> {a6}) | (load_val1 << {a7});
+> +	 *
+> +	 * 	if (store_ptr == {a2})
+> +	 * 		break;
+> +	 *
+> +	 * 	load_val1 = load_ptr[-2];
+> +	 * 	load_ptr -= 2;
+> +	 * 	store_ptr[0] = (load_val1 >> {a6}) | (load_val0 << {a7});
+> +	 *
+> +	 * } while (store_ptr != store_ptr_end);
+> +	 * store_ptr = store_ptr_end;
+> +	 */
+> +
+> +	REG_L t1, ( 0 * SZREG)(a4)
+> +	1:
+> +	REG_L t0, (-1 * SZREG)(a4)
+> +	addi  t4, t4, (-2 * SZREG)
+> +	sll   t1, t1, a7
+> +	srl   t2, t0, a6
+> +	or    t2, t1, t2
+> +	REG_S t2, ( 1 * SZREG)(t4)
+> +
+> +	beq   t4, a2, 2f
+> +
+> +	REG_L t1, (-2 * SZREG)(a4)
+> +	addi  a4, a4, (-2 * SZREG)
+> +	sll   t0, t0, a7
+> +	srl   t2, t1, a6
+> +	or    t2, t0, t2
+> +	REG_S t2, ( 0 * SZREG)(t4)
+> +
+> +	bne   t4, t5, 1b
+> +	2:
+> +	mv    t4, t5 /* Fix the dest pointer in case the loop was broken */
+> +
+> +	add  a4, t4, a5 /* Restore the src pointer */
+> +	j byte_copy_reverse /* Copy any remaining bytes */
+> +
+> +/*
+> + * Simple copy loops for SZREG co-aligned memory locations.
+> + * These also make calls to do byte copies for any unaligned
+> + * data at their terminations.
+> + */
+> +coaligned_copy:
+> +	bltu a1, a0, coaligned_copy_reverse
+> +
+> +coaligned_copy_forward:
+> +	jal t0, byte_copy_until_aligned_forward
+> +
+> +	1:
+> +	REG_L t1, ( 0 * SZREG)(a1)
+> +	addi  a1, a1, SZREG
+> +	addi  t3, t3, SZREG
+> +	REG_S t1, (-1 * SZREG)(t3)
+> +	bne   t3, t6, 1b
+> +
+> +	j byte_copy_forward /* Copy any remaining bytes */
+> +
+> +coaligned_copy_reverse:
+> +	jal t0, byte_copy_until_aligned_reverse
+> +
+> +	1:
+> +	REG_L t1, (-1 * SZREG)(a4)
+> +	addi  a4, a4, -SZREG
+> +	addi  t4, t4, -SZREG
+> +	REG_S t1, ( 0 * SZREG)(t4)
+> +	bne   t4, t5, 1b
+> +
+> +	j byte_copy_reverse /* Copy any remaining bytes */
+> +
+> +/*
+> + * These are basically sub-functions within the function.  They
+> + * are used to byte copy until the dest pointer is in alignment.
+> + * At which point, a bulk copy method can be used by the
+> + * calling code.  These work on the same registers as the bulk
+> + * copy loops.  Therefore, the register values can be picked
+> + * up from where they were left and we avoid code duplication
+> + * without any overhead except the call in and return jumps.
+> + */
+> +byte_copy_until_aligned_forward:
+> +	beq  t3, t5, 2f
+> +	1:
+> +	lb   t1,  0(a1)
+> +	addi a1, a1, 1
+> +	addi t3, t3, 1
+> +	sb   t1, -1(t3)
+> +	bne  t3, t5, 1b
+> +	2:
+> +	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
+> +
+> +byte_copy_until_aligned_reverse:
+> +	beq  t4, t6, 2f
+> +	1:
+> +	lb   t1, -1(a4)
+> +	addi a4, a4, -1
+> +	addi t4, t4, -1
+> +	sb   t1,  0(t4)
+> +	bne  t4, t6, 1b
+> +	2:
+> +	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
+> +
+> +/*
+> + * Simple byte copy loops.
+> + * These will byte copy until they reach the end of data to copy.
+> + * At that point, they will call to return from memmove.
+> + */
+>  byte_copy:
+> -        lb      t3, 0(a1)
+> -        addi    a2, a2, -1
+> -        sb      t3, 0(a0)
+> -        add     a1, a1, t4
+> -        add     a0, a0, t4
+> -        bnez    a2, byte_copy
+> -
+> -exit_memcpy:
+> -        move a0, t0
+> -        move a1, t1
+> -        ret
+> -END(__memmove)
+> +	bltu a1, a0, byte_copy_reverse
+> +
+> +byte_copy_forward:
+> +	beq  t3, t4, 2f
+> +	1:
+> +	lb   t1,  0(a1)
+> +	addi a1, a1, 1
+> +	addi t3, t3, 1
+> +	sb   t1, -1(t3)
+> +	bne  t3, t4, 1b
+> +	2:
+> +	ret
+> +
+> +byte_copy_reverse:
+> +	beq  t4, t3, 2f
+> +	1:
+> +	lb   t1, -1(a4)
+> +	addi a4, a4, -1
+> +	addi t4, t4, -1
+> +	sb   t1,  0(t4)
+> +	bne  t4, t3, 1b
+> +	2:
+> +
+> +return_from_memmove:
+> +	ret
+> +
+> +SYM_FUNC_END(memmove)
+> +SYM_FUNC_END(__memmove)

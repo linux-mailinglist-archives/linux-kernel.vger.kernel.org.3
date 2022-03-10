@@ -2,124 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E2B4D4FC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A1C4D4FCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244319AbiCJQxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S242956AbiCJQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244227AbiCJQxK (ORCPT
+        with ESMTP id S242867AbiCJQ4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:53:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E38D198ECC;
-        Thu, 10 Mar 2022 08:52:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 10 Mar 2022 11:56:05 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94438E02C2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:55:03 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0D4D61D00;
-        Thu, 10 Mar 2022 16:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6280C340F4;
-        Thu, 10 Mar 2022 16:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646931128;
-        bh=ElymF9bFBBy1n24Im00MyTY3vz1EhoElO8yoHTyT2Zg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Z70GlNfyR7y91BnSVAjrftfXRydpAHUstcfbT9kmLqCpC8Xi5BIJ4bUql++NwerUQ
-         mv+2o9v/HbYoXIxSh/yPNi9dU0ijzdfXyE4I1+2olecaFEXzFkvoUqSQOFMqOTrMcZ
-         s5KuQfMnUoU+6nTRDN0DPraDx6M6Jtky3H4lP056kVAwQv036ELq4uZZPUKxpRRZjt
-         /AihjRI1VnAnB4w/jYrsxXj3occUe+v/MobUfDePfOfl6aJYwPpH9FDEK5yy8Jxjja
-         p47PJ0RyxTVJeehnyCe1dUX8/XjqL8KcBGb1bUd2fD/wWT89BjadXIe+v6QCynrBiv
-         /Fl6gs1yoqCgA==
-Date:   Thu, 10 Mar 2022 10:52:06 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, alex@ghiti.fr,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Toan Le <toan@os.amperecomputing.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v8 01/14] sizes.h: Add SZ_1T macro
-Message-ID: <20220310165206.GA163581@bhelgaas>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6AAA63F312
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:55:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646931302;
+        bh=QcVJE48kyfYYnn5CBUnoW5WSJWpsZDFf7PteXVRFUGE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=l5KES+Vawl3Gkm3yyQXpdKvk0BFdlyyPtursOmtMjNhUA5JBm9chB9uBJ6cgtpUzQ
+         l/OWb9x5Fn1AVkCLsjocL/wqiTwcjgE3OJJwA5joQl/nfEs0Q4T76XZERTQ0kdFHHA
+         31U1EkGQevSFJgFsi+Sj7XxDHb0KIZfaDnSsN86JB10SF0wHa89IjJW9sDVwohZPhp
+         7aSXRgYibutAAcyGDuijPpHuNi+rN0/gowN0z6xfnLLbulFqzaoUlHnhXesw4q8PMp
+         rWdt40N4lUbWup+Cr2P3qwaHU5WminbO+TgabHWcDEqt8MJK/TEflU/FLJtl0aOFMJ
+         4hFL5KlCyGuFQ==
+Received: by mail-ej1-f69.google.com with SMTP id i14-20020a17090639ce00b006dabe6a112fso3401944eje.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:55:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QcVJE48kyfYYnn5CBUnoW5WSJWpsZDFf7PteXVRFUGE=;
+        b=GxykBusUCghv4EVUuBJC6N62Tj19NxQlQW2j4oUeckJsNyLxPTo5xVUC/eklzrHMsN
+         OAf/4BT6EinwMMQEloNxbYRz28v7xCwaTC/UbvzMSkrBPok5333/jFRVmhlU+iNqHUzN
+         2YV+OmjfPtnUaYrjnMQ4pu5H5H76SxOsovyvKhNiZYJvUnwQaAVljnqjHk27nu5EjJCU
+         BJJxjG2epbzrVfz+VaDjUEN1InD7pBupAuFksVoRmM0WJ7QHcrYTIgQA99Bs8e+iyq0R
+         zDABUKgKMavwG/HvkEdFnU4rVkj5/hNIkDHXepmNT2pQMnmLWrlNGb/zPa2zIp4fS4VI
+         IhMA==
+X-Gm-Message-State: AOAM532WzzBPuoPlkVZVMEC84CgbKIuZL32EIwv1q8UecdiQhQc268K6
+        Zeuka9VewTDFofUPaV7aThf9B5ThNXxa8hih5qaaLshkNcx7yf91rNnE4NEED2M6+9yQcp064az
+        nygOs5+81ZhR7wnIj+Ppjoans6h8UxNVi/a3FYIX7Vg==
+X-Received: by 2002:aa7:d1cc:0:b0:416:60c6:9225 with SMTP id g12-20020aa7d1cc000000b0041660c69225mr5264421edp.71.1646931302029;
+        Thu, 10 Mar 2022 08:55:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwtlnrEBO/0kPGLY5xtCd+TgH6kN7BHyUjyhCkxDJiwbHTSElFKzyHh3dJJfSvanmZtZ3PCaA==
+X-Received: by 2002:aa7:d1cc:0:b0:416:60c6:9225 with SMTP id g12-20020aa7d1cc000000b0041660c69225mr5264397edp.71.1646931301780;
+        Thu, 10 Mar 2022 08:55:01 -0800 (PST)
+Received: from [192.168.0.147] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id bn14-20020a170906c0ce00b006c5ef0494besm1948155ejb.86.2022.03.10.08.55.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 08:55:01 -0800 (PST)
+Message-ID: <78c7b777-1527-759f-41f7-bd8422cb4eb0@canonical.com>
+Date:   Thu, 10 Mar 2022 17:55:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b020d8dcedb2753a894722147a0b5de25b2ae29b.1646847561.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] dt-bindings: can: xilinx_can: Convert Xilinx CAN
+ binding to YAML
+Content-Language: en-US
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        wg@grandegger.com, mkl@pengutronix.de, kuba@kernel.org,
+        robh+dt@kernel.org, appana.durga.rao@xilinx.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
+        git@xilinx.com, akumarma@xilinx.com
+References: <20220310153909.30933-1-amit.kumar-mahapatra@xilinx.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220310153909.30933-1-amit.kumar-mahapatra@xilinx.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 06:44:35PM +0100, Christophe Leroy wrote:
-> Today drivers/pci/controller/pci-xgene.c defines SZ_1T
+On 10/03/2022 16:39, Amit Kumar Mahapatra wrote:
+> Convert Xilinx CAN binding documentation to YAML.
 > 
-> Move it into linux/sizes.h so that it can be re-used elsewhere.
-> 
-> Link: https://lore.kernel.org/r/575cb7164cf124c75df7cb9242ea7374733942bf.1642752946.git.christophe.leroy@csgroup.eu
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Toan Le <toan@os.amperecomputing.com>
-> Cc: linux-pci@vger.kernel.org
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 > ---
->  This patch is already in linux-next but not in Linus' tree yet
-
-What would you like me to do about this?  It's in linux-next, which
-means it will go to Linus' tree during the next merge window.
-
-But this is 01/14; are there other patches that I should be looking
-at?  Do I need to coordinate this with other patches that depend on
-it?
-
->  drivers/pci/controller/pci-xgene.c | 1 -
->  include/linux/sizes.h              | 2 ++
->  2 files changed, 2 insertions(+), 1 deletion(-)
+> BRANCH: yaml
 > 
-> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-> index 0d5acbfc7143..77c1fe7e11f9 100644
-> --- a/drivers/pci/controller/pci-xgene.c
-> +++ b/drivers/pci/controller/pci-xgene.c
-> @@ -49,7 +49,6 @@
->  #define EN_REG				0x00000001
->  #define OB_LO_IO			0x00000002
->  #define XGENE_PCIE_DEVICEID		0xE004
-> -#define SZ_1T				(SZ_1G*1024ULL)
->  #define PIPE_PHY_RATE_RD(src)		((0xc000 & (u32)(src)) >> 0xe)
->  
->  #define XGENE_V1_PCI_EXP_CAP		0x40
-> diff --git a/include/linux/sizes.h b/include/linux/sizes.h
-> index 1ac79bcee2bb..84aa448d8bb3 100644
-> --- a/include/linux/sizes.h
-> +++ b/include/linux/sizes.h
-> @@ -47,6 +47,8 @@
->  #define SZ_8G				_AC(0x200000000, ULL)
->  #define SZ_16G				_AC(0x400000000, ULL)
->  #define SZ_32G				_AC(0x800000000, ULL)
+> Changes in v2:
+>  - Added reference to can-controller.yaml
+>  - Added example node for canfd-2.0
+> 
+> Changes in v3:
+>  - Changed yaml file name from xilinx_can.yaml to xilinx,can.yaml
+>  - Added "power-domains" to fix dts_check warnings
+>  - Grouped "clock-names" and "clocks" together
+>  - Added type $ref for all non-standard fields
+>  - Defined compatible strings as enum
+>  - Used defines,instead of hard-coded values, for GIC interrupts
+>  - Droped unused labels in examples
+>  - Droped description for standard feilds
+> ---
+>  .../bindings/net/can/xilinx,can.yaml          | 161 ++++++++++++++++++
+>  .../bindings/net/can/xilinx_can.txt           |  61 -------
+>  2 files changed, 161 insertions(+), 61 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> new file mode 100644
+> index 000000000000..78398826677d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> @@ -0,0 +1,161 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/xilinx,can.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#define SZ_1T				_AC(0x10000000000, ULL)
->  #define SZ_64T				_AC(0x400000000000, ULL)
->  
->  #endif /* __LINUX_SIZES_H__ */
-> -- 
-> 2.34.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> +title:
+> +  Xilinx Axi CAN/Zynq CANPS controller
+> +
+> +maintainers:
+> +  - Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,zynq-can-1.0
+> +      - xlnx,axi-can-1.00.a
+> +      - xlnx,canfd-1.0
+> +      - xlnx,canfd-2.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    maxItems: 2
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  tx-fifo-depth:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description: CAN Tx fifo depth (Zynq, Axi CAN).
+> +
+> +  rx-fifo-depth:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description: CAN Rx fifo depth (Zynq, Axi CAN, CAN FD in sequential Rx mode)
+> +
+> +  tx-mailbox-count:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description: CAN Tx mailbox buffer count (CAN FD)
+
+I asked about vendor prefix and I think I did not get an answer from you
+about skipping it. Do you think it is not needed?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+
+This should be rather unevaluatedProperties:false, so you could use
+can-controller properties.
+
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - xlnx,zynq-can-1.0
+> +
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: can_clk
+> +            - const: pclk
+> +      required:
+> +        - tx-fifo-depth
+> +        - rx-fifo-depth
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - xlnx,axi-can-1.00.a
+> +
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: can_clk
+> +            - const: s_axi_aclk
+> +      required:
+> +        - tx-fifo-depth
+> +        - rx-fifo-depth
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - xlnx,canfd-1.0
+> +              - xlnx,canfd-2.0
+> +
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: can_clk
+> +            - const: s_axi_aclk
+> +      required:
+> +        - tx-mailbox-count
+> +        - rx-fifo-depth
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    can@e0008000 {
+> +        compatible = "xlnx,zynq-can-1.0";
+> +        clocks = <&clkc 19>, <&clkc 36>;
+> +        clock-names = "can_clk", "pclk";
+> +        reg = <0xe0008000 0x1000>;
+
+Put reg just after compatible in all DTS examples.
+
+> +        interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-parent = <&intc>;
+> +        tx-fifo-depth = <0x40>;
+> +        rx-fifo-depth = <0x40>;
+> +    };
+> +
+> +  - |
+> +    can@40000000 {
+> +        compatible = "xlnx,axi-can-1.00.a";
+> +        clocks = <&clkc 0>, <&clkc 1>;
+> +        clock-names = "can_clk","s_axi_aclk" ;
+
+Missing space after ','.
+
+> +        reg = <0x40000000 0x10000>;
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <GIC_SPI 59 IRQ_TYPE_EDGE_RISING>;
+> +        tx-fifo-depth = <0x40>;
+> +        rx-fifo-depth = <0x40>;
+> +    };
+
+Best regards,
+Krzysztof

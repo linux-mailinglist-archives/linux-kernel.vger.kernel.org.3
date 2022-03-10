@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DCD4D428B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C16814D4295
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240357AbiCJIcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S240380AbiCJIeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbiCJIcp (ORCPT
+        with ESMTP id S240370AbiCJIeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:32:45 -0500
-Received: from smtp.tom.com (smtprz01.163.net [106.3.154.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2A52135701
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:31:44 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by vip-app02.163.net (Postfix) with ESMTP id 3C61A4400DA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:31:43 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1646901103; bh=tz98sccFxvbjWDJciH1zpeayD1ruRNaTozLwXtiPZlo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZDtPl7nlDBXpDKK7Tmv9S9bKH1hi6fJLWTYukCvzA+E9ohByiESJX3cA5wQ/aZ1WR
-         KMjrovnVmKbPjxqzTSNX4mgzQL9MTvWR25Pf5chYaQTj5WT75u89Z/Mh2IB9V5TrkZ
-         NUwJLqOVg7bze2NIZ6i6xUmvDKpqzQQBcyjorXzM=
-Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
-          by localhost (TOM SMTP Server) with SMTP ID 1269508722
-          for <linux-kernel@vger.kernel.org>;
-          Thu, 10 Mar 2022 16:31:43 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1646901103; bh=tz98sccFxvbjWDJciH1zpeayD1ruRNaTozLwXtiPZlo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZDtPl7nlDBXpDKK7Tmv9S9bKH1hi6fJLWTYukCvzA+E9ohByiESJX3cA5wQ/aZ1WR
-         KMjrovnVmKbPjxqzTSNX4mgzQL9MTvWR25Pf5chYaQTj5WT75u89Z/Mh2IB9V5TrkZ
-         NUwJLqOVg7bze2NIZ6i6xUmvDKpqzQQBcyjorXzM=
-Received: from localhost (unknown [101.93.196.13])
-        by antispamvip.163.net (Postfix) with ESMTPA id 3BC62154153A;
-        Thu, 10 Mar 2022 16:31:40 +0800 (CST)
-Date:   Thu, 10 Mar 2022 16:31:39 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH v2 2/2] nvme-tcp: support specifying the
- congestion-control
-Message-ID: <20220310163139.00003d87@tom.com>
-In-Reply-To: <20220310081908.GA26477@lst.de>
-References: <20220308151606.2563-1-sunmingbao@tom.com>
-        <20220309061442.GA31316@lst.de>
-        <20220309153136.000048e1@tom.com>
-        <20220309212852.00007828@tom.com>
-        <20220310081908.GA26477@lst.de>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Thu, 10 Mar 2022 03:34:15 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CEF5D5F7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:33:13 -0800 (PST)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KDj0T2C8mz9sYG;
+        Thu, 10 Mar 2022 16:29:29 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Mar 2022 16:33:11 +0800
+Subject: Re: [PATCH -next] ubifs: rename_whiteout: correct old_dir size
+ computing
+To:     <richard@nod.at>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yukuai3@huawei.com>, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20220215040736.2839939-1-libaokun1@huawei.com>
+From:   "libaokun (A)" <libaokun1@huawei.com>
+Message-ID: <dc55e8b3-7d22-6024-374d-4ed126e18c42@huawei.com>
+Date:   Thu, 10 Mar 2022 16:32:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220215040736.2839939-1-libaokun1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 09:19:08 +0100
-Christoph Hellwig <hch@lst.de> wrote:
+A gentle ping, sorry for the noise.
 
-> On Wed, Mar 09, 2022 at 09:41:59PM +0800, Mingbao Sun wrote:
-> > So I tried with 'tcp_set_congestion_control'.
-> > But then I found this symbol is not exported yet.
-> > Then I applied =E2=80=98EXPORT_SYMBOL_GPL(tcp_set_congestion_control);=
-=E2=80=99
-> > in my local source, and it works well in the testing.
-> >=20
-> > Then what should I do with this? =20
->=20
-> Add the export in a separate, clearly documented, patch, and Cc the
-> netdev list and maintainers to get their opinion on all list.
 
-Got it.
-Will do that soon.
+在 2022/2/15 12:07, Baokun Li 写道:
+> When renaming the whiteout file, the old whiteout file is not deleted.
+> Therefore, we add the old dentry size to the old dir like XFS.
+> Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
+> in check_indes.
+>
+> Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+> Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>   fs/ubifs/dir.c | 3 +++
+>   1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
+> index ae082a0be2a3..86151889548e 100644
+> --- a/fs/ubifs/dir.c
+> +++ b/fs/ubifs/dir.c
+> @@ -1402,6 +1402,9 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
+>   			iput(whiteout);
+>   			goto out_release;
+>   		}
+> +
+> +		/* Add the old_dentry size to the old_dir size. */
+> +		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
+>   	}
+>   
+>   	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
+
+-- 
+With Best Regards,
+Baokun Li
+

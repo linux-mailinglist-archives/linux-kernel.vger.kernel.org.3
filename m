@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA1A4D5248
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C52D4D51DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245529AbiCJSoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 13:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S245549AbiCJSp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 13:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237296AbiCJSoW (ORCPT
+        with ESMTP id S236161AbiCJSpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 13:44:22 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27FEF9FB8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:43:19 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso9023318pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tcpBRCafFc96YxnPZZLvkEaHne7CilEHy5P37o4x8ck=;
-        b=drKB5SD+IaQ/lbOpJMWzuxBZpu4qNINYeoR9Dfa1/e7QULpShvQXkKLpwkaJsb6VMU
-         h7zU3G6FIY+7Sle0SJkKVAHNPiMFZ6bVlATjydENqws5D712HHusL/XiAeDqNOceKXNm
-         Rm6fSH1IIcLFr1IM5qO1CJkjOs7r+DfqnjffcTWhx5TJRtjQAMeQqhuwbRGTV5TnMOdn
-         4V2l78p5pt6ClktPzOdsl4b7mvQWvLQH9l3Lw62pJTiZ2+jrUXm14SKaZesZpAzFy/oh
-         dEIOvI7ua2moWSWIIzIqil/kSW7dYuncbDWtBOobJcTIQVAPUqDyaTM5p6zQdm8Yhkys
-         jTMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=tcpBRCafFc96YxnPZZLvkEaHne7CilEHy5P37o4x8ck=;
-        b=cWY8gqW9xGxXf3t0s3N8zxUgvMBWJ3NggAH44DLzkz35901y3K5CCuh+D8vXAH8rEG
-         Uvzdqww39WKYtQ4Y3vTiUPZH+pydPEpORnVCVXwBofBzdX/cC0SLiBqXf54bIlevz6Q5
-         UMyjuX3wGVfsUiwrmovun/YCrwo2uX3OZezsGMxPuycs76k0BNgfXyrzHQdpqaJVhJ2T
-         /bchXJrnQ8XbPdPE3bgglhMGwjxX1akO77QRgvFLHakB6MzxyLzP0G3iNiyPixssdEJ/
-         IdaUlT/OLXm+2ThucMU858keW7ZpJF6W1x8JEBCoE/n5YVrh8Djo3XsnDTBq72JYKJ3g
-         vIag==
-X-Gm-Message-State: AOAM530BRQCdSi3php4SqS7M61kWqT0DMfXF3aytQO4Bse3ZwNciPO/L
-        qGmk9BGNhJKtmwgAB7czZ8TddA==
-X-Google-Smtp-Source: ABdhPJy7mK7tcW9bJZHWeSSSFfJysyM03XwzSfo27k2AdDj7qjT5wZlQfOtMqBxnANvtn5ZXO39LUQ==
-X-Received: by 2002:a17:903:1108:b0:151:9c42:7d1 with SMTP id n8-20020a170903110800b001519c4207d1mr6587067plh.54.1646937799272;
-        Thu, 10 Mar 2022 10:43:19 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b001b936b8abe0sm10434790pjs.7.2022.03.10.10.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 10:43:18 -0800 (PST)
-Date:   Thu, 10 Mar 2022 10:43:18 -0800 (PST)
-X-Google-Original-Date: Thu, 10 Mar 2022 09:32:08 PST (-0800)
-Subject:     Re: [PATCH v11 1/8] RISC-V: Enable CPU_IDLE drivers
-In-Reply-To: <CAK9=C2VzzT=GDyuptuxQj0y++Rb0SaZXCuoL1+ncpGWcYHqr1g@mail.gmail.com>
-CC:     pavel@ucw.cz, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, daniel.lezcano@linaro.org,
-        ulf.hansson@linaro.org, rjw@rjwysocki.net, robh+dt@kernel.org,
-        milun.tripathy@gmail.com, atishp@atishpatra.org,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        liush@allwinnertech.com, anup@brainfault.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        kvm-riscv@lists.infradead.org, guoren@kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     pavel@ucw.cz, apatel@ventanamicro.com
-Message-ID: <mhng-203b51aa-0594-403c-9b79-2eb763fabfd3@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Thu, 10 Mar 2022 13:45:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DEC410BBE4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:44:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646937862;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C26Xd5SFA51JD8n7O4vVJ7Y+klB3lT6XQZ97SKJ4BDw=;
+        b=T96twDB1RFOdqJ/zsVsRWlp9kly05C160klIxtMr2eXTzE6NCCmQ8gGZvkmK8EWVHgXNnQ
+        pS/S5VNmEbQSj+dWRiYrCjKXjEACvEYElHwZGC4pnUvgz4sARbnDjCMBbt3+n1DuE3WagG
+        HeYFtyOqAT/bYsQq3OeBYGL2Geck020=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-252-unP1m22ZMr6noMVdO7thwA-1; Thu, 10 Mar 2022 13:44:16 -0500
+X-MC-Unique: unP1m22ZMr6noMVdO7thwA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E85F31854E21;
+        Thu, 10 Mar 2022 18:44:14 +0000 (UTC)
+Received: from RHTPC1VM0NT (unknown [10.22.17.112])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3C930841CF;
+        Thu, 10 Mar 2022 18:44:12 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Roi Dayan <roid@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: [PATCH net-next v2] net: openvswitch: fix uAPI incompatibility
+ with existing user space
+References: <20220309222033.3018976-1-i.maximets@ovn.org>
+Date:   Thu, 10 Mar 2022 13:44:12 -0500
+In-Reply-To: <20220309222033.3018976-1-i.maximets@ovn.org> (Ilya Maximets's
+        message of "Wed, 9 Mar 2022 23:20:33 +0100")
+Message-ID: <f7ty21hir5v.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,34 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Feb 2022 04:49:46 PST (-0800), apatel@ventanamicro.com wrote:
-> On Sat, Feb 12, 2022 at 5:13 PM Pavel Machek <pavel@ucw.cz> wrote:
->>
->> Hi!
->>
->> > From: Anup Patel <anup.patel@wdc.com>
->> >
->> > We force select CPU_PM and provide asm/cpuidle.h so that we can
->> > use CPU IDLE drivers for Linux RISC-V kernel.
->> >
->> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
->> > Signed-off-by: Anup Patel <apatel@vetanamicro.com>
->>
->> This is quite... interesting. Normally we have one signoff per
->> person...
->
-> I was working for Western Digital (WDC) when I first submitted this
-> series and recently I joined Ventana Micro Systems.
+Ilya Maximets <i.maximets@ovn.org> writes:
 
-IIUC that's the correct way to go about this, it's certainly what I'd 
-do.
+> Few years ago OVS user space made a strange choice in the commit [1]
+> to define types only valid for the user space inside the copy of a
+> kernel uAPI header.  '#ifndef __KERNEL__' and another attribute was
+> added later.
+>
+> This leads to the inevitable clash between user space and kernel types
+> when the kernel uAPI is extended.  The issue was unveiled with the
+> addition of a new type for IPv6 extension header in kernel uAPI.
+>
+> When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to the
+> older user space application, application tries to parse it as
+> OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message as
+> malformed.  Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied along with
+> every IPv6 packet that goes to the user space, IPv6 support is fully
+> broken.
+>
+> Fixing that by bringing these user space attributes to the kernel
+> uAPI to avoid the clash.  Strictly speaking this is not the problem
+> of the kernel uAPI, but changing it is the only way to avoid breakage
+> of the older user space applications at this point.
+>
+> These 2 types are explicitly rejected now since they should not be
+> passed to the kernel.  Additionally, OVS_KEY_ATTR_TUNNEL_INFO moved
+> out from the '#ifdef __KERNEL__' as there is no good reason to hide
+> it from the userspace.  And it's also explicitly rejected now, because
+> it's for in-kernel use only.
+>
+> Comments with warnings were added to avoid the problem coming back.
+>
+> (1 << type) converted to (1ULL << type) to avoid integer overflow on
+> OVS_KEY_ATTR_IPV6_EXTHDRS, since it equals 32 now.
+>
+>  [1] beb75a40fdc2 ("userspace: Switching of L3 packets in L2 pipeline")
+>
+> Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extension header support")
+> Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com
+> Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295bfd6521b0068b4cd12f6de507c
+> Reported-by: Roi Dayan <roid@nvidia.com>
+> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+> ---
 
->
-> Regards,
-> Anup
->
->>
->> Best regards,
->>                                                         Pavel
->> --
->> http://www.livejournal.com/~pavelmachek
+Acked-by: Aaron Conole <aconole@redhat.com>
+

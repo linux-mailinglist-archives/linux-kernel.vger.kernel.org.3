@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5EF4D3EAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77904D3EAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbiCJBTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 20:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S239131AbiCJBUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 20:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237559AbiCJBTr (ORCPT
+        with ESMTP id S232099AbiCJBUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 20:19:47 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBAB4AE20
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:18:48 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id e3so3719289pjm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 17:18:48 -0800 (PST)
+        Wed, 9 Mar 2022 20:20:15 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D686364BC4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:19:15 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id n2so3504738plf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 17:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f3b2mjjq1mHcjmOgIT8uYofnDUrYP6rBEFBC8nbAEVo=;
-        b=e/w5dQf3sCiBt2/uT4NupMc7nhScIOA1t7tI7nc+VMK+agjcXmz2nb62a8/EvbhIFh
-         RWavHFDvn8WwY33us47MxG5HLusoAJHKGDhLJEKQKzrKSdF7aCPVhnd4xI5fn4acZNAH
-         YA0O9CL5ytnYfCzTLFg11EqTQS1GG9HnIfBaeYIECcGYzFNw5Qg/dr7jwoTQIc8HqYcU
-         31es6Fog5L2tr7jl9ohuvHs9GyDXke3XNqu0/M0ypMT0zy5KiMWTVuVcA5lgREyI2Z61
-         JQHwZ2IJwoiv+ZTwnFZQLTzWzNGRnAbxhS/s30rn8ERv8ppSPYS16KX5C0RVJNnwoDea
-         CsXQ==
+        bh=n+UZjpsoxN6IYCQw8x6bxVwfEl6GkVr8xzwzIYJYyGw=;
+        b=BPGGCkWbzIcKLTDl+gRoyAuhvVHWYWsLqhI02EDVZPViCTYfhp/FBFAbEKf8UgVMYF
+         KA3iT2+CkOydgm8JDds2x5PiDaHFI/K7N+sTrtGNV6WboKDBMS1RDeyVbwKoWU/90NiY
+         xTeFf7Gh7qkZEfbjmC+AAGEGN3/xEXaSnGMhxaUwGlh/2V3lVVAUX4z2phxLkKJve9kF
+         iGpFcOcMj3hfEYtcyDSkUExTuyJClUa0DCZXqW5+0LHXb4bOxzwF0r/2kJn1qIpHDYfh
+         2TStDdSMaLfpVOXbUlebkY3kMPT1d7VdnY50j11tCDkkYlHHTVZ5kuBFgnSeXjUxEAp5
+         h86Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f3b2mjjq1mHcjmOgIT8uYofnDUrYP6rBEFBC8nbAEVo=;
-        b=H3NniBkUR1YCrln182V3j7giAMO6JrUBe+hpC4BCFiolayz1xxPo8VMJPSVHFRP+tm
-         6C6Xe1mw/Ge9qNEuG+Dy25F6cNsrWUjCIu4kUmlQQdXeW63NGlXYU+8bPK3FaBBV4kQH
-         1cHZmZUPppYLnYRiKX4y3IxeoApU5aXceUt2JxUteiVlRHdQhSEiSFzjk4k/efiQTMSj
-         RPALmfn4A7H8UfvKOxg3R5G7ZLbPdfuJeIQlWKKVoVCh42DSE47i6JK2PpI7zKwD2hya
-         YE9XNCgAi7leBH6awRC+Aghzk7l6yoPIDiKM1y8uhhLFyYBkoJXOf2e3nSm3RjF9CIS1
-         O+UA==
-X-Gm-Message-State: AOAM531LQOzRL10h6tukgVnvaA5/URps0psMHbSTXL19kGzRaE7NgVho
-        gk5PsaufUaAajaX9KKg2DDzONqYqKVL8mTd91jw=
-X-Google-Smtp-Source: ABdhPJz4iTGal0kDNh/jp1SKXcjW6M3pQjsU6lksmYnVKrpJfbMk6adEP9gHkfkQm55robBYlwj+Hz/O4lxDQXWulho=
-X-Received: by 2002:a17:903:1d1:b0:151:9e73:61b1 with SMTP id
- e17-20020a17090301d100b001519e7361b1mr2378719plh.84.1646875127921; Wed, 09
- Mar 2022 17:18:47 -0800 (PST)
+        bh=n+UZjpsoxN6IYCQw8x6bxVwfEl6GkVr8xzwzIYJYyGw=;
+        b=VCNlKc3FzkJzjfgn9eMoHV29rBTsiaOG49MP9dZMahuDpzQlQhCpMC27KdZHHz9p9D
+         8OqN2LKG+kZ6mEs1VN9m8CQhQdcQ5FLmeytL09ji1ngPZglGtvbYZZcF9xl6q7xa9TaV
+         LH13hs1AJ85J4NALbsQE5CGEYXmFofRmtqGrwyaRBqhOIrCYzwo45M1AjOiNi/xp5SsN
+         Ww9FG9ujI2NwQNestkrDUMngxq6McDjFy7zT4NdruXw3OPab2Mbet36bThoQQOMy+G/+
+         xVtvfkKPqn36KkDOrqnCLx98B1F5k4JJkezTM/N0yHNeQRBegRj2Udw36ZjLGUDmjdBl
+         DnSQ==
+X-Gm-Message-State: AOAM5317Gi14ESh+7WzGE8aQ/p7KIx+bNVE/tM1UBxzEEJ25O+h7/Ytu
+        qUrxvHct7CAkwfqcjQieID1IPkPYgD7G8nz6yww=
+X-Google-Smtp-Source: ABdhPJwoQxnFaBLEmUeYVQygU3HFf1EidW8oPfr/0UgAGgLQr/jySJheNd/cTw1dTFR8IqrM/SoPk6NySnSIPCk4pgw=
+X-Received: by 2002:a17:903:11c4:b0:151:9bf6:f481 with SMTP id
+ q4-20020a17090311c400b001519bf6f481mr2588996plh.50.1646875155466; Wed, 09 Mar
+ 2022 17:19:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220309145052.219138-1-sxwjean@me.com> <20220309145052.219138-3-sxwjean@me.com>
- <YijHr+kkp2bPE1dA@casper.infradead.org> <7c116655-a4ce-5f61-2d98-e85c31e11184@google.com>
-In-Reply-To: <7c116655-a4ce-5f61-2d98-e85c31e11184@google.com>
+References: <20220309145052.219138-1-sxwjean@me.com> <20220309145052.219138-2-sxwjean@me.com>
+ <6b5858d7-2d19-a57e-b840-9616e3f5d892@google.com>
+In-Reply-To: <6b5858d7-2d19-a57e-b840-9616e3f5d892@google.com>
 From:   Xiongwei Song <sxwjean@gmail.com>
-Date:   Thu, 10 Mar 2022 09:18:21 +0800
-Message-ID: <CAEVVKH-YbqE_dicLvFG8py0W6tFVEiFwsx_OUcnbv=u4ASkEUQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm: slub: Delete useless parameter of alloc_slab_page()
+Date:   Thu, 10 Mar 2022 09:18:49 +0800
+Message-ID: <CAEVVKH_m7HzaFAQ-ape3i2W2Ji1rCjiSqUjoXrQvYCTHkn1JXA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: slab: Delete unused SLAB_DEACTIVATED flag
 To:     David Rientjes <rientjes@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <sxwjean@me.com>,
-        Christoph Lameter <cl@linux.com>,
+Cc:     Xiongwei Song <sxwjean@me.com>, Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -74,23 +72,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 1:15 AM David Rientjes <rientjes@google.com> wrote:
+On Thu, Mar 10, 2022 at 1:14 AM David Rientjes <rientjes@google.com> wrote:
 >
-> On Wed, 9 Mar 2022, Matthew Wilcox wrote:
+> On Wed, 9 Mar 2022, sxwjean@me.com wrote:
 >
-> > On Wed, Mar 09, 2022 at 10:50:52PM +0800, sxwjean@me.com wrote:
-> > > From: Xiongwei Song <sxwjean@gmail.com>
-> > >
-> > > The parameter @s is useless for alloc_slab_page(), let's delete it.
+> > From: Xiongwei Song <sxwjean@gmail.com>
 > >
-> > Perhaps we could add a little more information here.
+> > Since commit 9855609bde03 ("mm: memcg/slab: use a single set of
+> > kmem_caches for all accounted allocations") deletes all SLAB_DEACTIVATED
+> > users, therefore this flag is not needed any more, let's delete it.
 > >
-> > It was added in 2014 by 5dfb41750992 ("sl[au]b: charge slabs to kmemcg
-> > explicitly").  The need for it was removed in 2020 by 1f3147b49d75
-> > ("mm: slub: call account_slab_page() after slab page initialization").
-> >
-> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> >
+> > Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
 >
 > Acked-by: David Rientjes <rientjes@google.com>
 

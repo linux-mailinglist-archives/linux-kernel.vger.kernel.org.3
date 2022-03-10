@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B864D4A07
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF174D4ABB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243832AbiCJOg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S244206AbiCJOdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244973AbiCJO3m (ORCPT
+        with ESMTP id S243910AbiCJO16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:29:42 -0500
+        Thu, 10 Mar 2022 09:27:58 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB5158794;
-        Thu, 10 Mar 2022 06:25:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD1A774F;
+        Thu, 10 Mar 2022 06:22:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4A7F61D7D;
-        Thu, 10 Mar 2022 14:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4D4FC340E8;
-        Thu, 10 Mar 2022 14:24:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9BD361CEE;
+        Thu, 10 Mar 2022 14:22:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA678C340EB;
+        Thu, 10 Mar 2022 14:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922299;
-        bh=rxrVtqzt8KzhHd7aJFQSaUe6TCVXuDiXrwAXtG1xse4=;
+        s=korg; t=1646922173;
+        bh=a//jtcByFiHXOCJ+/M4jiKQWdvoAGv/83F2/7HhgSnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iw/L+d4qL9xwlXYgqxofvJkticlbl0p76vrqLO4GoNnoDjOZfLHSEXKYp2B+TzBlC
-         v/YmsDFmUTYp3s4wrgJW0fsBlzYRVGcE9F3W1DebuxbK8EMZ7j5NtPtvzBnZP8Lffo
-         qgusHYZgd/fAuFy4tYefORNgqIMxOmgtUgPc1Zy8=
+        b=MsuKbDeuXf8e2Z4W9gdTtIB0gM05nKIZHPkvxvSUaGtatOgH0bVhXNLaBqhdsXFMl
+         rWZUwQFYuxQf0MspR2x/D3EKsHUNMAItFktH25v82HAoWvASV4fMqRHxdKDRWzZpvz
+         Mmhw7zKSSDMintUUqmU0XzZA7qHhD9jzi6CCghHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 5.10 33/58] arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
-Date:   Thu, 10 Mar 2022 15:18:53 +0100
-Message-Id: <20220310140813.817865923@linuxfoundation.org>
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.19 27/33] xen/scsifront: dont use gnttab_query_foreign_access() for mapped status
+Date:   Thu, 10 Mar 2022 15:18:54 +0100
+Message-Id: <20220310140808.543088496@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit aff65393fa1401e034656e349abd655cfe272de0 upstream.
+Commit 33172ab50a53578a95691310f49567c9266968b0 upstream.
 
-kpti is an optional feature, for systems not using kpti a set of
-vectors for the spectre-bhb mitigations is needed.
+It isn't enough to check whether a grant is still being in use by
+calling gnttab_query_foreign_access(), as a mapping could be realized
+by the other side just after having called that function.
 
-Add another set of vectors, __bp_harden_el1_vectors, that will be
-used if a mitigation is needed and kpti is not in use.
+In case the call was done in preparation of revoking a grant it is
+better to do so via gnttab_try_end_foreign_access() and check the
+success of that operation instead.
 
-The EL1 ventries are repeated verbatim as there is no additional
-work needed for entry from EL1.
+This is CVE-2022-23038 / part of XSA-396.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/entry.S |   35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ drivers/scsi/xen-scsifront.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -819,10 +819,11 @@ alternative_else_nop_endif
- 	.macro tramp_ventry, vector_start, regsize, kpti
- 	.align	7
- 1:
--	.if	\kpti == 1
- 	.if	\regsize == 64
- 	msr	tpidrro_el0, x30	// Restored in kernel_ventry
- 	.endif
-+
-+	.if	\kpti == 1
- 	/*
- 	 * Defend against branch aliasing attacks by pushing a dummy
- 	 * entry onto the return stack and using a RET instruction to
-@@ -910,6 +911,38 @@ SYM_DATA_END(__entry_tramp_data_start)
- #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
+--- a/drivers/scsi/xen-scsifront.c
++++ b/drivers/scsi/xen-scsifront.c
+@@ -233,12 +233,11 @@ static void scsifront_gnttab_done(struct
+ 		return;
  
- /*
-+ * Exception vectors for spectre mitigations on entry from EL1 when
-+ * kpti is not in use.
-+ */
-+	.macro generate_el1_vector
-+.Lvector_start\@:
-+	kernel_ventry	1, sync_invalid			// Synchronous EL1t
-+	kernel_ventry	1, irq_invalid			// IRQ EL1t
-+	kernel_ventry	1, fiq_invalid			// FIQ EL1t
-+	kernel_ventry	1, error_invalid		// Error EL1t
-+
-+	kernel_ventry	1, sync				// Synchronous EL1h
-+	kernel_ventry	1, irq				// IRQ EL1h
-+	kernel_ventry	1, fiq_invalid			// FIQ EL1h
-+	kernel_ventry	1, error			// Error EL1h
-+
-+	.rept	4
-+	tramp_ventry	.Lvector_start\@, 64, kpti=0
-+	.endr
-+	.rept 4
-+	tramp_ventry	.Lvector_start\@, 32, kpti=0
-+	.endr
-+	.endm
-+
-+	.pushsection ".entry.text", "ax"
-+	.align	11
-+SYM_CODE_START(__bp_harden_el1_vectors)
-+	generate_el1_vector
-+SYM_CODE_END(__bp_harden_el1_vectors)
-+	.popsection
-+
-+
-+/*
-  * Register switch for AArch64. The callee-saved registers need to be saved
-  * and restored. On entry:
-  *   x0 = previous task_struct (must be preserved across the switch)
+ 	for (i = 0; i < shadow->nr_grants; i++) {
+-		if (unlikely(gnttab_query_foreign_access(shadow->gref[i]))) {
++		if (unlikely(!gnttab_try_end_foreign_access(shadow->gref[i]))) {
+ 			shost_printk(KERN_ALERT, info->host, KBUILD_MODNAME
+ 				     "grant still in use by backend\n");
+ 			BUG();
+ 		}
+-		gnttab_end_foreign_access(shadow->gref[i], 0, 0UL);
+ 	}
+ 
+ 	kfree(shadow->sg);
 
 

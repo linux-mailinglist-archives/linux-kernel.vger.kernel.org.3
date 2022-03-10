@@ -2,83 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E024D4463
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CAE4D4466
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241155AbiCJKUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S241161AbiCJKWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiCJKUU (ORCPT
+        with ESMTP id S232377AbiCJKWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:20:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF313DE15;
-        Thu, 10 Mar 2022 02:19:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47ABDB8258F;
-        Thu, 10 Mar 2022 10:19:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED27BC340E9;
-        Thu, 10 Mar 2022 10:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646907557;
-        bh=XXD0vSzBZmcBzykyhLzyEkrCVoo5VlLApcFK+XQCz0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ov9/3jj+BPcOqyX7jjds+3n0MSCIhhVirM2wghviUZjV7idmrTevy0ryHo3EgVbVd
-         arqbIfW1REUQvsv6HJEL6QuVe4rBVVBx6AAUr0SOnsg5hRMsyYGmRm+FeXju3Qa5Yj
-         kwAGIoJWyqn6H70qu/RYuGG6gRvVSwijkYw+RRNP1lwPhyjnKckrc/rjncJbPTgYoO
-         1ry6IRpRHhS1vyi0zsF8fF69lbF9GEuK6woMCRPrFsOLoqpW85YVz9u8L6m3U46P5M
-         nO4wXWOnr4pG+2tpzF1BAZ+dEysdLVZ9xOgEu1gBm1WY1twbEZOh5zB+qtWhe9CDXu
-         NBvAiZCwvefAQ==
-Date:   Thu, 10 Mar 2022 12:19:09 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the memblock tree
-Message-ID: <YinQncz54HIjp5HR@kernel.org>
-References: <20220310211315.595cca09@canb.auug.org.au>
+        Thu, 10 Mar 2022 05:22:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F3A013DE15;
+        Thu, 10 Mar 2022 02:21:08 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3ABEB1650;
+        Thu, 10 Mar 2022 02:21:08 -0800 (PST)
+Received: from [10.57.41.41] (unknown [10.57.41.41])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2620A3FA27;
+        Thu, 10 Mar 2022 02:21:04 -0800 (PST)
+Message-ID: <6dc9a4e5-8f74-dfb5-d9f6-60e9d6b65146@arm.com>
+Date:   Thu, 10 Mar 2022 10:21:03 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310211315.595cca09@canb.auug.org.au>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2 4/8] perf: Capture branch privilege information
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, acme@kernel.org
+Cc:     suzuki.poulose@arm.com, Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220309033642.144769-1-anshuman.khandual@arm.com>
+ <20220309033642.144769-5-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220309033642.144769-5-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 09:13:15PM +1100, Stephen Rothwell wrote:
-> Hi all,
+
+
+On 09/03/2022 03:36, Anshuman Khandual wrote:
+> Platforms like arm64 could capture privilege level information for all the
+> branch records. Hence this adds a new element in the struct branch_entry to
+> record the privilege level information, which could be requested through a
+> new event.attr.branch_sample_type based flag PERF_SAMPLE_BRANCH_PRIV_SAVE.
+> This flag helps user choose whether privilege information is captured.
 > 
-> After merging the memblock tree, today's linux-next build (KCONFIG_NAME)
-> produced this warning:
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  include/uapi/linux/perf_event.h | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
-> Documentation/vm/index.rst:12: WARNING: toctree contains reference to nonexisting document 'vm/memblock-sim'
-> 
-> Introduced by commit
-> 
->   cc5a1e382509 ("memblock tests: Add TODO and README files")
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index d29280adc3c4..0e96e2017f68 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -204,6 +204,8 @@ enum perf_branch_sample_type_shift {
+>  
+>  	PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT	= 17, /* save low level index of raw branch records */
+>  
+> +	PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT	= 18, /* save privillege mode */
+> +
+>  	PERF_SAMPLE_BRANCH_MAX_SHIFT		/* non-ABI */
+>  };
+>  
+> @@ -233,6 +235,8 @@ enum perf_branch_sample_type {
+>  
+>  	PERF_SAMPLE_BRANCH_HW_INDEX	= 1U << PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT,
+>  
+> +	PERF_SAMPLE_BRANCH_PRIV_SAVE	= 1U << PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT,
+> +
+>  	PERF_SAMPLE_BRANCH_MAX		= 1U << PERF_SAMPLE_BRANCH_MAX_SHIFT,
+>  };
+>  
+> @@ -271,6 +275,12 @@ enum {
+>  	PERF_BR_NEW_MAX,
+>  };
+>  
+> +enum {
+> +	PERF_BR_USER	= 0,
+> +	PERF_BR_KERNEL	= 1,
+> +	PERF_BR_HV	= 2,
+> +};
 
-Huh, wrong git add, fixed now.
+0 should be "PERF_BR_PRIV_UNKNOWN" so userspace knows if it was not enabled
+otherwise it will look like all samples are PERF_BR_USER when actually
+priv type recording was just disabled.
 
-Thanks Stephen!
+I think it's not even always possible to go backwards from a sample to
+work out what the event attributes were so this can be interpreted (taking
+all of perf script and every corner case into account).
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Starting at 0=UNKNOWN is consistent with the other fields and makes parsing
+it a whole lot easier.
 
+James
 
-
--- 
-Sincerely yours,
-Mike.
+> +
+>  #define PERF_SAMPLE_BRANCH_PLM_ALL \
+>  	(PERF_SAMPLE_BRANCH_USER|\
+>  	 PERF_SAMPLE_BRANCH_KERNEL|\
+> @@ -1386,7 +1396,8 @@ struct perf_branch_entry {
+>  		cycles:16,  /* cycle count to last branch */
+>  		type:4,     /* branch type */
+>  		new_type:4, /* additional branch type */
+> -		reserved:36;
+> +		priv:2,     /* privilege level */
+> +		reserved:34;
+>  };
+>  
+>  union perf_sample_weight {

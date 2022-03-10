@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A896C4D5057
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5CE4D5056
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236506AbiCJRYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S231971AbiCJRZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244892AbiCJRW5 (ORCPT
+        with ESMTP id S244789AbiCJRW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:22:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C773019BE5A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:38 -0800 (PST)
+        Thu, 10 Mar 2022 12:22:56 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033F5199E21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646932898; x=1678468898;
+  t=1646932891; x=1678468891;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0slWJ+5xiaJpaEwCrss1KFKuknXVe7imrmVwQKVj/tA=;
-  b=HswqgHrCcRO16y5b+vHu6upC5VKOm2NIMTMKJmOQ66XyQ+HreB/pQXdO
-   d39V0ISxgPM791EUPXsoZpHEqJtqDzpC2k264+/0Bo2WpJIpJJvDyfVus
-   hz1yw50LqXTuykt/CDW3Lm9SP+BL085r2FQF5vk/jmJ5ZxOD8h7fd64ld
-   DhM9BDdrwGOnjQyWOjiBGv0IRFR/Ilfx8OGhM/UC8frAliNVn+JFXI3oM
-   bsMz8G7Uf+bDGiNTwnwrbW/JcxeEG3kZeGckr2elUsoMpROM7+2MGTI8L
-   Q+0oFIxZt2bJhH8h63gY+N+W+tSbxHD7PI2T7d9F3GzqkW9mr+VceH528
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="235918685"
+  bh=sxA46BcVirqmfOK8QmwuzEVcZLHtRho8MTqAwgpi8j8=;
+  b=dYNTvJwooyGVXypK1k1+6+khw210CIaht26uScoLkn8x+EGenSMgHR7e
+   5cJ5wwcBWjTaGTjI08TtV7iYhCHPzqsjYjT2SglfVk/XgDDr6d93EA4QW
+   Xf3F2JWnlaRAu7OuA/+2+JomERraOWHGvdZNjp4WmCYVKUcBcOwwliRK1
+   i+ueyUs1AtR7DnP0IdfvCEjiVCT/0XFuxSPMekeVbi47EnxqgID0iyO9h
+   hlTkMyPSqEjOAQN1GYe1drkqA72xzHGHGh/RB7ci114owkg/eIYkda0nZ
+   Lt3AJRCuJJ+N9nxCs8uP8Tt2RBdj+Vq1eFd00mESIM8UKyeMy0ofopDfo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237484375"
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="235918685"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:28 -0800
+   d="scan'208";a="237484375"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:30 -0800
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="578874653"
+   d="scan'208";a="554738084"
 Received: from gdavids1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.65.108])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:27 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:30 -0800
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,18 +45,18 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V9 28/45] x86/fault: Print PKS MSR on fault
-Date:   Thu, 10 Mar 2022 09:20:02 -0800
-Message-Id: <20220310172019.850939-29-ira.weiny@intel.com>
+Subject: [PATCH V9 29/45] mm/pkeys: PKS testing, Add exception test
+Date:   Thu, 10 Mar 2022 09:20:03 -0800
+Message-Id: <20220310172019.850939-30-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310172019.850939-1-ira.weiny@intel.com>
 References: <20220310172019.850939-1-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,150 +65,293 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-If a PKS fault occurs it will be easier to debug if the PKS MSR value at
-the time of the fault is known.
+During an exception the interrupted threads PKRS value is preserved
+and the exception receives the default value for that pkey.  Upon
+return from exception the threads PKRS value is restored.
 
-Add pks_show_regs() to __show_regs() to show the PKRS MSR on fault if
-enabled.
+Add a PKS test which forces a fault to check that this works as
+intended.  Check that both the thread as well as the exception PKRS
+state is correct at the beginning, during, and after the exception.
 
-An 'executive summary' of the pt_regs are saved in __die_header() which
-ensures that the first registers are saved in the event of multiple
-faults.  Teach this code about the extended pt_registers such that the
-PKS code can get to the original pkrs value as well.
+Add the test to the test_pks app.
 
-Suggested-by: Andy Lutomirski <luto@kernel.org>
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
-Changes for V9
+Change for V9
+	Add test to test_pks
+	Clean up the globals shared with the fault handler
+	Use the PKS Test specific fault callback
+	s/pks_mk*/pks_set*/
+	Change pkey type to u8
 	From Dave Hansen
-		Move this output to __show_regs() next to the PKRU
-			register dump
+		use pkey
 
-Changes for V8
-	Split this into it's own patch.
+Change for V8
+	Split this test off from the testing patch and place it after
+	the exception saving code.
 ---
- arch/x86/include/asm/pks.h   |  3 +++
- arch/x86/kernel/dumpstack.c  | 32 ++++++++++++++++++++++++++++++--
- arch/x86/kernel/process_64.c |  1 +
- arch/x86/mm/pkeys.c          | 11 +++++++++++
- 4 files changed, 45 insertions(+), 2 deletions(-)
+ arch/x86/mm/pkeys.c                    |   2 +-
+ include/linux/pks.h                    |   6 ++
+ lib/pks/pks_test.c                     | 133 +++++++++++++++++++++++++
+ tools/testing/selftests/x86/test_pks.c |   5 +-
+ 4 files changed, 144 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/pks.h b/arch/x86/include/asm/pks.h
-index b69e03a141fe..de67d5b5a2af 100644
---- a/arch/x86/include/asm/pks.h
-+++ b/arch/x86/include/asm/pks.h
-@@ -8,6 +8,7 @@ void pks_setup(void);
- void x86_pkrs_load(struct thread_struct *thread);
- void pks_save_pt_regs(struct pt_regs *regs);
- void pks_restore_pt_regs(struct pt_regs *regs);
-+void pks_show_regs(struct pt_regs *regs, const char *log_lvl);
- 
- bool pks_handle_key_fault(struct pt_regs *regs, unsigned long hw_error_code,
- 			  unsigned long address);
-@@ -18,6 +19,8 @@ static inline void pks_setup(void) { }
- static inline void x86_pkrs_load(struct thread_struct *thread) { }
- static inline void pks_save_pt_regs(struct pt_regs *regs) { }
- static inline void pks_restore_pt_regs(struct pt_regs *regs) { }
-+static inline void pks_show_regs(struct pt_regs *regs,
-+				 const char *log_lvl) { }
- 
- static inline bool pks_handle_key_fault(struct pt_regs *regs,
- 					unsigned long hw_error_code,
-diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
-index 53de044e5654..38be69d15431 100644
---- a/arch/x86/kernel/dumpstack.c
-+++ b/arch/x86/kernel/dumpstack.c
-@@ -27,8 +27,36 @@ int panic_on_unrecovered_nmi;
- int panic_on_io_nmi;
- static int die_counter;
- 
-+#ifdef CONFIG_ARCH_HAS_PTREGS_AUXILIARY
-+
-+static struct pt_regs_extended exec_summary_regs;
-+
-+static void save_exec_summary(struct pt_regs *regs)
-+{
-+	exec_summary_regs = *(to_extended_pt_regs(regs));
-+}
-+
-+static struct pt_regs *retrieve_exec_summary(void)
-+{
-+	return &exec_summary_regs.pt_regs;
-+}
-+
-+#else /* !CONFIG_ARCH_HAS_PTREGS_AUXILIARY */
-+
- static struct pt_regs exec_summary_regs;
- 
-+static void save_exec_summary(struct pt_regs *regs)
-+{
-+	exec_summary_regs = *regs;
-+}
-+
-+static struct pt_regs *retrieve_exec_summary(void)
-+{
-+	return &exec_summary_regs;
-+}
-+
-+#endif /* CONFIG_ARCH_HAS_PTREGS_AUXILIARY */
-+
- bool noinstr in_task_stack(unsigned long *stack, struct task_struct *task,
- 			   struct stack_info *info)
- {
-@@ -369,7 +397,7 @@ void oops_end(unsigned long flags, struct pt_regs *regs, int signr)
- 	oops_exit();
- 
- 	/* Executive summary in case the oops scrolled away */
--	__show_regs(&exec_summary_regs, SHOW_REGS_ALL, KERN_DEFAULT);
-+	__show_regs(retrieve_exec_summary(), SHOW_REGS_ALL, KERN_DEFAULT);
- 
- 	if (!signr)
- 		return;
-@@ -396,7 +424,7 @@ static void __die_header(const char *str, struct pt_regs *regs, long err)
- 
- 	/* Save the regs of the first oops for the executive summary later. */
- 	if (!die_counter)
--		exec_summary_regs = *regs;
-+		save_exec_summary(regs);
- 
- 	if (IS_ENABLED(CONFIG_PREEMPTION))
- 		pr = IS_ENABLED(CONFIG_PREEMPT_RT) ? " PREEMPT_RT" : " PREEMPT";
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index e703cc451128..68d998ea3571 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -140,6 +140,7 @@ void __show_regs(struct pt_regs *regs, enum show_regs_mode mode,
- 
- 	if (cpu_feature_enabled(X86_FEATURE_OSPKE))
- 		printk("%sPKRU: %08x\n", log_lvl, read_pkru());
-+	pks_show_regs(regs, log_lvl);
- }
- 
- void release_thread(struct task_struct *dead_task)
 diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index 29885dfb0980..7c8e4ea9f022 100644
+index 7c8e4ea9f022..6327e32d7237 100644
 --- a/arch/x86/mm/pkeys.c
 +++ b/arch/x86/mm/pkeys.c
-@@ -378,6 +378,17 @@ void pks_restore_pt_regs(struct pt_regs *regs)
- 	pks_write_pkrs(current->thread.pkrs);
- }
+@@ -215,7 +215,7 @@ u32 pkey_update_pkval(u32 pkval, u8 pkey, u32 accessbits)
  
-+void pks_show_regs(struct pt_regs *regs, const char *log_lvl)
+ #ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
+ 
+-static DEFINE_PER_CPU(u32, pkrs_cache);
++__static_or_pks_test DEFINE_PER_CPU(u32, pkrs_cache);
+ 
+ /**
+  * DOC: DEFINE_PKS_FAULT_CALLBACK
+diff --git a/include/linux/pks.h b/include/linux/pks.h
+index 208f88fcb48c..224fc3bbd072 100644
+--- a/include/linux/pks.h
++++ b/include/linux/pks.h
+@@ -46,9 +46,15 @@ static inline void pks_set_readwrite(u8 pkey) {}
+ 
+ #ifdef CONFIG_PKS_TEST
+ 
++#define __static_or_pks_test
++
+ bool pks_test_fault_callback(struct pt_regs *regs, unsigned long address,
+ 			     bool write);
+ 
++#else /* !CONFIG_PKS_TEST */
++
++#define __static_or_pks_test static
++
+ #endif /* CONFIG_PKS_TEST */
+ 
+ #endif /* _LINUX_PKS_H */
+diff --git a/lib/pks/pks_test.c b/lib/pks/pks_test.c
+index 86af2f61393d..762f4a19cb7d 100644
+--- a/lib/pks/pks_test.c
++++ b/lib/pks/pks_test.c
+@@ -48,19 +48,30 @@
+ #define RUN_SINGLE		1
+ #define ARM_CTX_SWITCH		2
+ #define CHECK_CTX_SWITCH	3
++#define RUN_EXCEPTION		4
+ #define RUN_CRASH_TEST		9
+ 
++DECLARE_PER_CPU(u32, pkrs_cache);
++
+ static struct dentry *pks_test_dentry;
+ 
+ DEFINE_MUTEX(test_run_lock);
+ 
+ struct pks_test_ctx {
+ 	u8 pkey;
++	bool pass;
+ 	char data[64];
+ 	void *test_page;
+ 	bool fault_seen;
++	bool validate_exp_handling;
+ };
+ 
++static bool check_pkey_val(u32 pk_reg, u8 pkey, u32 expected)
 +{
-+	struct pt_regs_auxiliary *aux_pt_regs;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-+		return;
-+
-+	aux_pt_regs = &to_extended_pt_regs(regs)->aux;
-+	printk("%sPKRS: 0x%x\n", log_lvl, aux_pt_regs->pkrs);
++	pk_reg = (pk_reg >> PKR_PKEY_SHIFT(pkey)) & PKEY_ACCESS_MASK;
++	return (pk_reg == expected);
 +}
 +
- /*
-  * PKS is independent of PKU and either or both may be supported on a CPU.
-  *
+ static void debug_context(const char *label, struct pks_test_ctx *ctx)
+ {
+ 	pr_debug("%s [%d] %s <-> %p\n",
+@@ -96,6 +107,63 @@ static void debug_result(const char *label, int test_num,
+ 		     sd->last_test_pass ? "PASS" : "FAIL");
+ }
+ 
++/*
++ * Check if the register @pkey value matches @expected value
++ *
++ * Both the cached and actual MSR must match.
++ */
++static bool check_pkrs(u8 pkey, u8 expected)
++{
++	bool ret = true;
++	u64 pkrs;
++	u32 *tmp_cache;
++
++	tmp_cache = get_cpu_ptr(&pkrs_cache);
++	if (!check_pkey_val(*tmp_cache, pkey, expected))
++		ret = false;
++	put_cpu_ptr(tmp_cache);
++
++	rdmsrl(MSR_IA32_PKRS, pkrs);
++	if (!check_pkey_val(pkrs, pkey, expected))
++		ret = false;
++
++	return ret;
++}
++
++static void validate_exception(struct pks_test_ctx *ctx, u32 thread_pkrs)
++{
++	u8 pkey = ctx->pkey;
++
++	/* Check that the thread state was saved */
++	if (!check_pkey_val(thread_pkrs, pkey, PKEY_DISABLE_WRITE)) {
++		pr_err("     FAIL: checking aux_pt_regs->thread_pkrs\n");
++		ctx->pass = false;
++	}
++
++	/* Check that the exception received the default of disabled access */
++	if (!check_pkrs(pkey, PKEY_DISABLE_ACCESS)) {
++		pr_err("     FAIL: PKRS cache and MSR\n");
++		ctx->pass = false;
++	}
++
++	/*
++	 * Ensure an update can occur during exception without affecting the
++	 * interrupted thread.  The interrupted thread is verified after the
++	 * exception returns.
++	 */
++	pks_set_readwrite(pkey);
++	if (!check_pkrs(pkey, 0)) {
++		pr_err("     FAIL: exception did not change register to 0\n");
++		ctx->pass = false;
++	}
++	pks_set_noaccess(pkey);
++	if (!check_pkrs(pkey, PKEY_DISABLE_ACCESS)) {
++		pr_err("     FAIL: exception did not change register to 0x%x\n",
++			PKEY_DISABLE_ACCESS);
++		ctx->pass = false;
++	}
++}
++
+ /* Global data protected by test_run_lock */
+ struct pks_test_ctx *g_ctx_under_test;
+ 
+@@ -122,6 +190,16 @@ bool pks_test_fault_callback(struct pt_regs *regs, unsigned long address,
+ 	if (!g_ctx_under_test)
+ 		return false;
+ 
++	if (g_ctx_under_test->validate_exp_handling) {
++		validate_exception(g_ctx_under_test, pkrs);
++		/*
++		 * Stop this check directly within the exception because the
++		 * fault handler clean up code will call again while checking
++		 * the PMD entry and there is no need to check this again.
++		 */
++		g_ctx_under_test->validate_exp_handling = false;
++	}
++
+ 	aux_pt_regs->pkrs = pkey_update_pkval(pkrs, g_ctx_under_test->pkey, 0);
+ 	g_ctx_under_test->fault_seen = true;
+ 	return true;
+@@ -255,6 +333,7 @@ static struct pks_test_ctx *alloc_ctx(u8 pkey)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	ctx->pkey = pkey;
++	ctx->pass = true;
+ 	sprintf(ctx->data, "%s", "DEADBEEF");
+ 
+ 	ctx->test_page = alloc_test_page(ctx->pkey);
+@@ -295,6 +374,56 @@ static bool run_single(struct pks_session_data *sd)
+ 	return rc;
+ }
+ 
++static bool run_exception_test(struct pks_session_data *sd)
++{
++	bool pass = true;
++	struct pks_test_ctx *ctx;
++
++	ctx = alloc_ctx(PKS_KEY_TEST);
++	if (IS_ERR(ctx)) {
++		pr_debug("     FAIL: no context\n");
++		return false;
++	}
++
++	set_ctx_data(sd, ctx);
++
++	/*
++	 * Set the thread pkey value to something other than the default of
++	 * access disable but something which still causes a fault, disable
++	 * writes.
++	 */
++	pks_update_protection(ctx->pkey, PKEY_DISABLE_WRITE);
++
++	ctx->validate_exp_handling = true;
++	set_context_for_fault(ctx);
++
++	memcpy(ctx->test_page, ctx->data, 8);
++
++	if (!ctx->fault_seen) {
++		pr_err("     FAIL: did not get an exception\n");
++		pass = false;
++	}
++
++	/*
++	 * The exception code has to enable access to keep the fault from
++	 * looping forever.  Therefore full access is seen here rather than
++	 * write disabled.
++	 *
++	 * However, this does verify that the exception state was independent
++	 * of the interrupted threads state because validate_exception()
++	 * disabled access during the exception.
++	 */
++	if (!check_pkrs(ctx->pkey, 0)) {
++		pr_err("     FAIL: PKRS not restored\n");
++		pass = false;
++	}
++
++	if (!ctx->pass)
++		pass = false;
++
++	return pass;
++}
++
+ static void crash_it(struct pks_session_data *sd)
+ {
+ 	struct pks_test_ctx *ctx;
+@@ -451,6 +580,10 @@ static ssize_t pks_write_file(struct file *file, const char __user *user_buf,
+ 		pr_debug("Checking Context switch test\n");
+ 		check_ctx_switch(file->private_data);
+ 		break;
++	case RUN_EXCEPTION:
++		pr_debug("Exception checking\n");
++		sd->last_test_pass = run_exception_test(file->private_data);
++		break;
+ 	default:
+ 		pr_debug("Unknown test\n");
+ 		sd->last_test_pass = false;
+diff --git a/tools/testing/selftests/x86/test_pks.c b/tools/testing/selftests/x86/test_pks.c
+index 5a32645a6e6d..817df7a14923 100644
+--- a/tools/testing/selftests/x86/test_pks.c
++++ b/tools/testing/selftests/x86/test_pks.c
+@@ -35,6 +35,7 @@
+ #define RUN_SINGLE		"1"
+ #define ARM_CTX_SWITCH		"2"
+ #define CHECK_CTX_SWITCH	"3"
++#define RUN_EXCEPTION		"4"
+ #define RUN_CRASH_TEST		"9"
+ 
+ time_t g_start_time;
+@@ -61,6 +62,7 @@ enum {
+ 	TEST_DEFAULTS = 0,
+ 	TEST_SINGLE,
+ 	TEST_CTX_SWITCH,
++	TEST_EXCEPTION,
+ 	MAX_TESTS,
+ } tests;
+ 
+@@ -74,7 +76,8 @@ struct test_item {
+ } test_list[] = {
+ 	{ "check_defaults", CHECK_DEFAULTS, do_simple_test },
+ 	{ "single", RUN_SINGLE, do_simple_test },
+-	{ "context_switch", ARM_CTX_SWITCH, do_context_switch }
++	{ "context_switch", ARM_CTX_SWITCH, do_context_switch },
++	{ "exception", RUN_EXCEPTION, do_simple_test }
+ };
+ 
+ static char *get_test_name(int test_num)
 -- 
 2.35.1
 

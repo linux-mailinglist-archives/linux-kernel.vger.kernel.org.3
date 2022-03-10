@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B14E4D400C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2A54D400F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239408AbiCJD5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S239381AbiCJD6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbiCJD5K (ORCPT
+        with ESMTP id S239388AbiCJD54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:57:10 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B0612BF65;
-        Wed,  9 Mar 2022 19:56:10 -0800 (PST)
-Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KDZqV31T3z1GCCb;
-        Thu, 10 Mar 2022 11:51:18 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 11:56:08 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 11:56:07 +0800
-Subject: Re: [PATCH 5.10 00/43] 5.10.105-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220309155859.239810747@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <fc32822b-73f6-cba1-ac3a-09cf222b5938@huawei.com>
-Date:   Thu, 10 Mar 2022 11:56:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 9 Mar 2022 22:57:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED6C12BF7E;
+        Wed,  9 Mar 2022 19:56:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48330617DE;
+        Thu, 10 Mar 2022 03:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E07C340F5;
+        Thu, 10 Mar 2022 03:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646884614;
+        bh=3D9GFKu/12WfNEWrnM7P1nIyYXEWetjbz1hTsDrhOxQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eHbKHbvFjjOj2NQYsh+Oi/bCh5BnxYQcjfM05iebPBWOEpRN8ceronXerxJxkkXRz
+         xywC4usOhEI4jo1X6/DILpxFggxIE7Vd0fgxXdyuceb7YVz8fGvvam7j8Vp29WhGKs
+         yQW/czWqFKS8/pGojUxVKevpD38J0eC7fqDOoaDuBBfj4JRhpIO5SlfGAigFOfN0+g
+         0B4TTwUs8W9wyTC24Z+nfBMLecHojw+Sy0xciHafH2mPJU6rqW8RZ6ldrOY1Xgcmff
+         W2L+dW7fW/93tvyNirVFkzi8xpCPc2zP7PtKq/6sm9E57aFN6D3wgo1PhE+bmxMa9N
+         255v4ycxwA3vQ==
+Received: by mail-ua1-f41.google.com with SMTP id a28so1865517uaf.7;
+        Wed, 09 Mar 2022 19:56:54 -0800 (PST)
+X-Gm-Message-State: AOAM5337DYBkFbJzoESbqFQ5glx0brYsbsebihUpY1ig2FP6jx8HClCQ
+        j5Z2VtyzBkH//G+AQcCu0wC0VLT1utRwiB60ABA=
+X-Google-Smtp-Source: ABdhPJyMxeleMLVmKri+SIOuq/8cFeORS6+8EgVk1BOoEV8tNUiDlOWyeCIGXoRiRafL3MxxUHhenT3THg5AF8M4uqs=
+X-Received: by 2002:ab0:2809:0:b0:341:f4aa:829d with SMTP id
+ w9-20020ab02809000000b00341f4aa829dmr1433191uap.42.1646884613619; Wed, 09 Mar
+ 2022 19:56:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220309155859.239810747@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220225221523.GA385757@bhelgaas> <20220309162950.GA55262@bhelgaas>
+In-Reply-To: <20220309162950.GA55262@bhelgaas>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 10 Mar 2022 11:56:42 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6thUdynSoyt+mm4Q-DCdKKFu_KKv8duKo9T9sdSTMycg@mail.gmail.com>
+Message-ID: <CAAhV-H6thUdynSoyt+mm4Q-DCdKKFu_KKv8duKo9T9sdSTMycg@mail.gmail.com>
+Subject: Re: [PATCH v9 00/11] vgaarb: Rework default VGA device selection
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I have no objection :)
 
+Huacai
 
-On 2022/3/9 23:59, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.105 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.105-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Tested on arm64 and x86 for 5.10.105-rc1,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.10.y
-Version: 5.10.105-rc1
-Commit: e5e4a8f0fb6eb54f3804492468a31ffd8bb4f81e
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9013
-passed: 9013
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9013
-passed: 9013
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+On Thu, Mar 10, 2022 at 12:29 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Fri, Feb 25, 2022 at 04:15:23PM -0600, Bjorn Helgaas wrote:
+> > On Thu, Feb 24, 2022 at 04:47:42PM -0600, Bjorn Helgaas wrote:
+> > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > >
+> > > Current default VGA device selection fails in some cases because part of it
+> > > is done in the vga_arb_device_init() subsys_initcall, and some arches
+> > > enumerate PCI devices in pcibios_init(), which runs *after* that.
+> > >
+> > > The big change from the v8 posting is that this moves vgaarb.c from
+> > > drivers/gpu/vga to drivers/pci because it really has nothing to do with
+> > > GPUs or DRM.
+> >
+> > I provisionally applied this to pci/vga and put it into -next just
+> > to get a little runtime on it.
+> >
+> > But I'd prefer not to unilaterally yank this out of drivers/gpu
+> > without a consensus from the GPU folks that this is the right thing to
+> > do.
+> >
+> > Any thoughts?  If it seems OK to you, I think patch 1/11 (the move
+> > itself) is all you would need to look at, although of course I would
+> > still be grateful for any review and feedback on the rest.
+> >
+> > After it's in drivers/pci, all the blame for any issues would come my
+> > way.
+>
+> Ping?  This has been in -next since the Feb 28 tree, and I plan to
+> ask Linus to include it during the v5.18 merge window (which will
+> probably open Mar 13) unless somebody objects.
+>
+> Bjorn

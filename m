@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C734D4C12
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BD74D4C7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbiCJOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S245499AbiCJO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244420AbiCJOTT (ORCPT
+        with ESMTP id S245436AbiCJOwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:19:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3A6BE1F9;
-        Thu, 10 Mar 2022 06:16:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA757B82678;
-        Thu, 10 Mar 2022 14:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D73FC340EB;
-        Thu, 10 Mar 2022 14:15:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646921733;
-        bh=dq19W6oxUYyrbAuGknlft7AXPns9xdQ4oMNvwdExZjM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HbJiD64lEXkV8NkRIbgIPh4C0vzGTM1iIypzsqgpkC04S+s948Q52vOcQbEtOEFm5
-         RrxGjblFtsP9/YuwynB/h6u6yLCuZKrP4inenon33gM+J6iCVqDvUK2xZROjUNTcbH
-         NAXvHv9eV2bql9YjRKb0s0bT09DO7ELH2R/8eFwQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.9 36/38] xen: remove gnttab_query_foreign_access()
-Date:   Thu, 10 Mar 2022 15:13:49 +0100
-Message-Id: <20220310140809.185890974@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140808.136149678@linuxfoundation.org>
-References: <20220310140808.136149678@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 10 Mar 2022 09:52:40 -0500
+X-Greylist: delayed 2014 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 06:51:08 PST
+Received: from www.kot-begemot.co.uk (ivanoab7.miniserver.com [37.128.132.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9711C6818;
+        Thu, 10 Mar 2022 06:51:08 -0800 (PST)
+Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1nSJbW-0006Ue-Os; Thu, 10 Mar 2022 14:17:26 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1nSJbT-004kxK-Pc; Thu, 10 Mar 2022 14:17:21 +0000
+Subject: Re: [PATCH] docs: UML: Mention telnetd for port channel
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     kernel@axis.com, linux-um@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220310124230.3069354-1-vincent.whitchurch@axis.com>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Message-ID: <e1709d07-6217-90b9-273a-50b32798da55@cambridgegreys.com>
+Date:   Thu, 10 Mar 2022 14:17:19 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220310124230.3069354-1-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.0
+X-Spam-Score: -1.0
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,78 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
-
-Commit 1dbd11ca75fe664d3e54607547771d021f531f59 upstream.
-
-Remove gnttab_query_foreign_access(), as it is unused and unsafe to
-use.
-
-All previous use cases assumed a grant would not be in use after
-gnttab_query_foreign_access() returned 0. This information is useless
-in best case, as it only refers to a situation in the past, which could
-have changed already.
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/xen/grant-table.c |   19 -------------------
- include/xen/grant_table.h |    2 --
- 2 files changed, 21 deletions(-)
-
---- a/drivers/xen/grant-table.c
-+++ b/drivers/xen/grant-table.c
-@@ -113,13 +113,6 @@ struct gnttab_ops {
- 	 * return the frame.
- 	 */
- 	unsigned long (*end_foreign_transfer_ref)(grant_ref_t ref);
--	/*
--	 * Query the status of a grant entry. Ref parameter is reference of
--	 * queried grant entry, return value is the status of queried entry.
--	 * Detailed status(writing/reading) can be gotten from the return value
--	 * by bit operations.
--	 */
--	int (*query_foreign_access)(grant_ref_t ref);
- };
- 
- struct unmap_refs_callback_data {
-@@ -254,17 +247,6 @@ int gnttab_grant_foreign_access(domid_t
- }
- EXPORT_SYMBOL_GPL(gnttab_grant_foreign_access);
- 
--static int gnttab_query_foreign_access_v1(grant_ref_t ref)
--{
--	return gnttab_shared.v1[ref].flags & (GTF_reading|GTF_writing);
--}
--
--int gnttab_query_foreign_access(grant_ref_t ref)
--{
--	return gnttab_interface->query_foreign_access(ref);
--}
--EXPORT_SYMBOL_GPL(gnttab_query_foreign_access);
--
- static int gnttab_end_foreign_access_ref_v1(grant_ref_t ref, int readonly)
- {
- 	u16 flags, nflags;
-@@ -1028,7 +1010,6 @@ static const struct gnttab_ops gnttab_v1
- 	.update_entry			= gnttab_update_entry_v1,
- 	.end_foreign_access_ref		= gnttab_end_foreign_access_ref_v1,
- 	.end_foreign_transfer_ref	= gnttab_end_foreign_transfer_ref_v1,
--	.query_foreign_access		= gnttab_query_foreign_access_v1,
- };
- 
- static void gnttab_request_version(void)
---- a/include/xen/grant_table.h
-+++ b/include/xen/grant_table.h
-@@ -118,8 +118,6 @@ int gnttab_grant_foreign_transfer(domid_
- unsigned long gnttab_end_foreign_transfer_ref(grant_ref_t ref);
- unsigned long gnttab_end_foreign_transfer(grant_ref_t ref);
- 
--int gnttab_query_foreign_access(grant_ref_t ref);
--
- /*
-  * operations on reserved batches of grant references
-  */
 
 
+On 10/03/2022 12:42, Vincent Whitchurch wrote:
+> It is not obvious from the documentation that using the "port" channel
+> for the console requires telnetd to be installed (see port_connection()
+> in arch/um/drivers/port_user.c).  Mention this, and the fact that UML
+> will not boot until a client connects.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+>   Documentation/virt/uml/user_mode_linux_howto_v2.rst | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/virt/uml/user_mode_linux_howto_v2.rst b/Documentation/virt/uml/user_mode_linux_howto_v2.rst
+> index 2cafd3c3c6cb..d5ad96c795f6 100644
+> --- a/Documentation/virt/uml/user_mode_linux_howto_v2.rst
+> +++ b/Documentation/virt/uml/user_mode_linux_howto_v2.rst
+> @@ -664,7 +664,11 @@ one is input, the second one output.
+>   * The fd channel - use file descriptor numbers for input/output. Example:
+>     ``con1=fd:0,fd:1.``
+>   
+> -* The port channel - listen on TCP port number. Example: ``con1=port:4321``
+> +* The port channel - start a telnet server on TCP port number. Example:
+> +  ``con1=port:4321``.  The host must have /usr/sbin/in.telnetd (usually part of
+> +  a telnetd package) and the port-helper from the UML utilities (see the
+> +  information for the xterm channel below).  UML will not boot until a client
+> +  connects.
+>   
+>   * The pty and pts channels - use system pty/pts.
+>   
+> 
+
+Acked-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+
+-- 
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/

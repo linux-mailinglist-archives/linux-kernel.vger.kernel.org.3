@@ -2,216 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C8A4D50F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3708E4D5106
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245202AbiCJRyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S243166AbiCJR4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238323AbiCJRyM (ORCPT
+        with ESMTP id S233252AbiCJR4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:54:12 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23F0DFA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646934790; x=1678470790;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=q+I63CMumq1kuvNXZtDwkWWhDmI0tqQDvrLdv4Ex6AQ=;
-  b=j049exgZsGU1vXOa/tdnXsasFEUVFS4L0LeIeTMpX1ouEJVCb5xDrlYF
-   AisEDEoMjx0JALb7yLu511Lb/HeX8hIJ+Uc0vRX+z3HC/mVcCB99siuQl
-   n6COIPuZUWQ2OSg9HxjEPVu+arOp7I2zck8hBokEb39vNWUddJ2LTRAWS
-   cXbtG/Vc6prjo9S9YpOoG6vGR3DwmL8RM/suPxbeVE2IKHEfYxTvap21U
-   MxRUAWmJh6vK9SzKHqN7X7WH7J5WEWm3jUPux9bf9KNaE6igA2X9PVeze
-   DIb/tntDAGefm0MQuiT+CikXYVOMK1rOYgNKLyUF63g4nRPy29mEVCbVM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255057481"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="255057481"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:53:10 -0800
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="688744651"
-Received: from efrantz-mobl1.amr.corp.intel.com (HELO [10.212.252.101]) ([10.212.252.101])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:53:08 -0800
-Message-ID: <9b2836ce-5267-8342-65eb-1084ba7e0cdf@intel.com>
-Date:   Thu, 10 Mar 2022 09:53:01 -0800
+        Thu, 10 Mar 2022 12:56:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384A915DB17;
+        Thu, 10 Mar 2022 09:55:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9A2BB82794;
+        Thu, 10 Mar 2022 17:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276EFC340E8;
+        Thu, 10 Mar 2022 17:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646934947;
+        bh=8SokjuteknyPbDBElq0ySc4jhTHmTXxe/n+HWRjmBwI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=TGC/PkBY+FjkX5N95DtfOHkkJzsvQ6RMc6hOqr1z8tvukharUP+1rAZR/ZggQLqc3
+         N311M6elMSdFX5NADEPONwbt75bxhup2j9x60tG8G6V0KYFH/6xiryBca8lJEtVzn2
+         1ywT8GT1zqNvbfMQPMiPmCkhSkxisxLoRg3gj5N6pYuQ0ypLPsviIT2iE1DzGpIrKx
+         pWep7J4u53tUNMQp6c14DqgQMqB3Wi/UnYirc8Ij3VNlr0OOYBohToxaR13G0hs2kz
+         T+XmBsA3DUPA+DuO6mlQMMAUD+nN8buPap9+TMqHD+SCxH1QvtEYSd7k+DmcvloIwN
+         lEwhuk9FrI3gw==
+Message-ID: <53541fbe950ac4a767e25177ba686b8fbbf371d4.camel@kernel.org>
+Subject: Re: [PATCH v3 14/20] netfs: Add a function to consolidate beginning
+ a read
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
+Cc:     Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 10 Mar 2022 12:55:44 -0500
+In-Reply-To: <164692911113.2099075.1060868473229451371.stgit@warthog.procyon.org.uk>
+References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
+         <164692911113.2099075.1060868473229451371.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-12-kirill.shutemov@linux.intel.com>
- <81a7ad6d-6bd9-7674-3229-67a5cd2e485a@intel.com>
- <20220310005145.hzv2lzxgs7uxblfr@black.fi.intel.com>
- <da0056e8-58cf-2c95-fe66-4dad1ae9c4da@intel.com>
- <20220310164839.erpjijvxwuzjql5x@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv5 11/30] x86/tdx: Handle in-kernel MMIO
-In-Reply-To: <20220310164839.erpjijvxwuzjql5x@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 08:48, Kirill A. Shutemov wrote:
-> On Wed, Mar 09, 2022 at 05:06:11PM -0800, Dave Hansen wrote:
->> On 3/9/22 16:51, Kirill A. Shutemov wrote:
->>> On Tue, Mar 08, 2022 at 01:26:28PM -0800, Dave Hansen wrote:
->>>> Memory encryption has zero to do with this.  The TDX isolation
->>>> mechanisms are totally discrete from memory encryption, although they
->>>> are "neighbors" of sorts.
->>>
->>> Hm. I don't see why you say encryption is not relevant. VMM (host kernel)
->>> has ultimate access to guest memory cypher text. It can read it as
->>> cypher text without any issue (using KeyID-0).
->>>
->>> Could you elaborate on the point?
->>
->> I think you're just confusing what TDX has with MKTME.  The whitepaper says:
->>
->>> The TD-bit associated with the line in memory seeks to
->>> detect software or devices attempting to read memory
->>> encrypted with private KeyID, using a shared KeyID, to reveal
->>> the ciphertext. On such accesses, the MKTME returns a fixed
->>> pattern to prevent ciphertext analysis.
->>
->> I think several firstborn were sacrificed to get that bit.  Let's not
->> forget why we have it. :)
+On Thu, 2022-03-10 at 16:18 +0000, David Howells wrote:
+> Add a function to do the steps needed to begin a read request, allowing
+> this code to be removed from several other functions and consolidated.
 > 
-> Okay, I missed the memo. I will drop reference to encryption:
+> Changes
+> =======
+> ver #2)
+>  - Move before the unstaticking patch so that some functions can be left
+>    static.
+>  - Set uninitialised return code in netfs_begin_read()[1][2].
+>  - Fixed a refleak caused by non-removal of a get from netfs_write_begin()
+>    when the request submission code got moved to netfs_begin_read().
+>  - Use INIT_WORK() to (re-)init the request work_struct[3].
 > 
->   - The CPU disallows software other than the TDX module and TDs from
->     making memory accesses using the private key. Without the correct
->     key VMM has no way to access TD-private memory.
-
-I think this is good enough:
-
-   - All guest code is expected to be in TD-private memory.  Being
-     private to the TD, VMMs have no way to access TD-private memory and
-     no way to read the instruction to decode and emulate it.
-
-We don't have to rehash what private memory is or how it is implemented.
-
->> This problem was laid out as having three cases:
->> 1. virtio
->> 2. x86-specific drivers
->> 3. random drivers (everything else)
->>
->> #1 could be done with paravirt
->> #2 is unspecified and unknown
->> #3 use doesn't as far as I know exist in TDX guests today
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: linux-cachefs@redhat.com
+> Link: https://lore.kernel.org/r/20220303163826.1120936-1-nathan@kernel.org/ [1]
+> Link: https://lore.kernel.org/r/20220303235647.1297171-1-colin.i.king@gmail.com/ [2]
+> Link: https://lore.kernel.org/r/9d69be49081bccff44260e4c6e0049c63d6d04a1.camel@redhat.com/ [3]
+> Link: https://lore.kernel.org/r/164623004355.3564931.7275693529042495641.stgit@warthog.procyon.org.uk/ # v1
+> Link: https://lore.kernel.org/r/164678214287.1200972.16734134007649832160.stgit@warthog.procyon.org.uk/ # v2
+> ---
 > 
-> #2 doesn't matter from performance point of view and there is no
-> convenient place where they can be intercepted as they are scattered
-> across the tree. Patching them doesn't bring any benefit, only pain.
-
-I'd feel a lot better if this was slightly better specified.  Even
-booting with a:
-
-	printf("rip: %lx\n", regs->rip);
-
-in the #VE handler would give some hard data about these.  This still
-feels to me like something that Sean got booting two years ago and
-nobody has really reconsidered.
-
-> #3 some customers already declared that they will use device passthough
-> (yes, it is not safe). CSP may want to emulate random device, depending on
-> setup. Like, a power button or something.
-
-I'm not sure I'm totally on board with that.
-
-But, let's try to make a coherent changelog out of that mess.
-
-	This approach is bad for performance.  But, it has (virtually)
-	no impact on the size of the kernel image and will work for a
-	wide variety of drivers.  This allows TDX deployments to use
-	arbitrary devices and device drivers, including virtio.  TDX
-	customers have asked for the capability to use random devices in
-	their deployments.
-
-	In other words, even if all of the work was done to
-	paravirtualize all x86 MMIO users and virtio, this approach
-	would still be needed.  There is essentially no way to get rid
-	of this code.
-
-	This approach is functional for all in-kernel MMIO users current
-	and future and does so with a minimal amount of code and kernel
-	image bloat.
-
-Does that summarize it?
-
->>> BUG() here makes it clear that the handler itself is buggy. Returning
->>> false and kicking in #GP-like logic indicates that something wrong with
->>> the code that triggered #VE. I think it is an important distinction.
->>
->> OK, then how about a WARN_ON() which is followed by the #GP?
+>  fs/netfs/internal.h          |    2 -
+>  fs/netfs/objects.c           |    1 
+>  fs/netfs/read_helper.c       |  144 +++++++++++++++++++++---------------------
+>  include/trace/events/netfs.h |    5 +
+>  4 files changed, 76 insertions(+), 76 deletions(-)
 > 
-> You folks give mixed messages. Thomas was very unhappy when I tried to add
-> code that recovers from WBINVD:
+> diff --git a/fs/netfs/internal.h b/fs/netfs/internal.h
+> index 5f9719409f21..937c2465943f 100644
+> --- a/fs/netfs/internal.h
+> +++ b/fs/netfs/internal.h
+> @@ -39,7 +39,7 @@ static inline void netfs_see_request(struct netfs_io_request *rreq,
+>   */
+>  extern unsigned int netfs_debug;
+>  
+> -void netfs_rreq_work(struct work_struct *work);
+> +int netfs_begin_read(struct netfs_io_request *rreq, bool sync);
+>  
+>  /*
+>   * stats.c
+> diff --git a/fs/netfs/objects.c b/fs/netfs/objects.c
+> index 657b19e60118..e86107b30ba4 100644
+> --- a/fs/netfs/objects.c
+> +++ b/fs/netfs/objects.c
+> @@ -35,7 +35,6 @@ struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
+>  	rreq->i_size	= i_size_read(inode);
+>  	rreq->debug_id	= atomic_inc_return(&debug_ids);
+>  	INIT_LIST_HEAD(&rreq->subrequests);
+> -	INIT_WORK(&rreq->work, netfs_rreq_work);
+>  	refcount_set(&rreq->ref, 1);
+>  	__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
+>  	if (rreq->netfs_ops->init_request) {
+> diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
+> index 73be06c409bb..6864716cfcac 100644
+> --- a/fs/netfs/read_helper.c
+> +++ b/fs/netfs/read_helper.c
+> @@ -443,7 +443,7 @@ static void netfs_rreq_assess(struct netfs_io_request *rreq, bool was_async)
+>  	netfs_rreq_completed(rreq, was_async);
+>  }
+>  
+> -void netfs_rreq_work(struct work_struct *work)
+> +static void netfs_rreq_work(struct work_struct *work)
+>  {
+>  	struct netfs_io_request *rreq =
+>  		container_of(work, struct netfs_io_request, work);
+> @@ -688,6 +688,69 @@ static bool netfs_rreq_submit_slice(struct netfs_io_request *rreq,
+>  	return false;
+>  }
+>  
+> +/*
+> + * Begin the process of reading in a chunk of data, where that data may be
+> + * stitched together from multiple sources, including multiple servers and the
+> + * local cache.
+> + */
+> +int netfs_begin_read(struct netfs_io_request *rreq, bool sync)
+> +{
+> +	unsigned int debug_index = 0;
+> +	int ret;
+> +
+> +	_enter("R=%x %llx-%llx",
+> +	       rreq->debug_id, rreq->start, rreq->start + rreq->len - 1);
+> +
+> +	if (rreq->len == 0) {
+> +		pr_err("Zero-sized read [R=%x]\n", rreq->debug_id);
+> +		netfs_put_request(rreq, false, netfs_rreq_trace_put_zero_len);
+> +		return -EIO;
+> +	}
+> +
+> +	INIT_WORK(&rreq->work, netfs_rreq_work);
+> +
+> +	if (sync)
+> +		netfs_get_request(rreq, netfs_rreq_trace_get_hold);
+> +
+> +	/* Chop the read into slices according to what the cache and the netfs
+> +	 * want and submit each one.
+> +	 */
+> +	atomic_set(&rreq->nr_outstanding, 1);
+> +	do {
+> +		if (!netfs_rreq_submit_slice(rreq, &debug_index))
+> +			break;
+> +
+> +	} while (rreq->submitted < rreq->len);
+> +
+> +	if (sync) {
+> +		/* Keep nr_outstanding incremented so that the ref always belongs to
+> +		 * us, and the service code isn't punted off to a random thread pool to
+> +		 * process.
+> +		 */
+> +		for (;;) {
+> +			wait_var_event(&rreq->nr_outstanding,
+> +				       atomic_read(&rreq->nr_outstanding) == 1);
+> +			netfs_rreq_assess(rreq, false);
+> +			if (!test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags))
+> +				break;
+> +			cond_resched();
+> +		}
+> +
+> +		ret = rreq->error;
+> +		if (ret == 0 && rreq->submitted < rreq->len) {
+> +			trace_netfs_failure(rreq, NULL, ret, netfs_fail_short_read);
+> +			ret = -EIO;
+> +		}
+> +		netfs_put_request(rreq, false, netfs_rreq_trace_put_hold);
+> +	} else {
+> +		/* If we decrement nr_outstanding to 0, the ref belongs to us. */
+> +		if (atomic_dec_and_test(&rreq->nr_outstanding))
+> +			netfs_rreq_assess(rreq, false);
+> +		ret = 0;
+> +	}
+> +	return ret;
+> +}
+> +
+>  static void netfs_cache_expand_readahead(struct netfs_io_request *rreq,
+>  					 loff_t *_start, size_t *_len, loff_t i_size)
+>  {
+> @@ -750,7 +813,6 @@ void netfs_readahead(struct readahead_control *ractl)
+>  {
+>  	struct netfs_io_request *rreq;
+>  	struct netfs_i_context *ctx = netfs_i_context(ractl->mapping->host);
+> -	unsigned int debug_index = 0;
+>  	int ret;
+>  
+>  	_enter("%lx,%x", readahead_index(ractl), readahead_count(ractl));
+> @@ -777,22 +839,13 @@ void netfs_readahead(struct readahead_control *ractl)
+>  
+>  	netfs_rreq_expand(rreq, ractl);
+>  
+> -	atomic_set(&rreq->nr_outstanding, 1);
+> -	do {
+> -		if (!netfs_rreq_submit_slice(rreq, &debug_index))
+> -			break;
+> -
+> -	} while (rreq->submitted < rreq->len);
+> -
+>  	/* Drop the refs on the folios here rather than in the cache or
+>  	 * filesystem.  The locks will be dropped in netfs_rreq_unlock().
+>  	 */
+>  	while (readahead_folio(ractl))
+>  		;
+>  
+> -	/* If we decrement nr_outstanding to 0, the ref belongs to us. */
+> -	if (atomic_dec_and_test(&rreq->nr_outstanding))
+> -		netfs_rreq_assess(rreq, false);
+> +	netfs_begin_read(rreq, false);
+>  	return;
+>  
+>  cleanup_free:
+> @@ -821,7 +874,6 @@ int netfs_readpage(struct file *file, struct page *subpage)
+>  	struct address_space *mapping = folio->mapping;
+>  	struct netfs_io_request *rreq;
+>  	struct netfs_i_context *ctx = netfs_i_context(mapping->host);
+> -	unsigned int debug_index = 0;
+>  	int ret;
+>  
+>  	_enter("%lx", folio_index(folio));
+> @@ -836,42 +888,16 @@ int netfs_readpage(struct file *file, struct page *subpage)
+>  
+>  	if (ctx->ops->begin_cache_operation) {
+>  		ret = ctx->ops->begin_cache_operation(rreq);
+> -		if (ret == -ENOMEM || ret == -EINTR || ret == -ERESTARTSYS) {
+> -			folio_unlock(folio);
+> -			goto out;
+> -		}
+> +		if (ret == -ENOMEM || ret == -EINTR || ret == -ERESTARTSYS)
+> +			goto discard;
+>  	}
+>  
+>  	netfs_stat(&netfs_n_rh_readpage);
+>  	trace_netfs_read(rreq, rreq->start, rreq->len, netfs_read_trace_readpage);
+> +	return netfs_begin_read(rreq, true);
+>  
+> -	netfs_get_request(rreq, netfs_rreq_trace_get_hold);
+> -
+> -	atomic_set(&rreq->nr_outstanding, 1);
+> -	do {
+> -		if (!netfs_rreq_submit_slice(rreq, &debug_index))
+> -			break;
+> -
+> -	} while (rreq->submitted < rreq->len);
+> -
+> -	/* Keep nr_outstanding incremented so that the ref always belongs to us, and
+> -	 * the service code isn't punted off to a random thread pool to
+> -	 * process.
+> -	 */
+> -	do {
+> -		wait_var_event(&rreq->nr_outstanding,
+> -			       atomic_read(&rreq->nr_outstanding) == 1);
+> -		netfs_rreq_assess(rreq, false);
+> -	} while (test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags));
+> -
+> -	ret = rreq->error;
+> -	if (ret == 0 && rreq->submitted < rreq->len) {
+> -		trace_netfs_failure(rreq, NULL, ret, netfs_fail_short_readpage);
+> -		ret = -EIO;
+> -	}
+> -out:
+> -	netfs_put_request(rreq, false, netfs_rreq_trace_put_hold);
+> -	return ret;
+> +discard:
+> +	netfs_put_request(rreq, false, netfs_rreq_trace_put_discard);
+>  alloc_error:
+>  	folio_unlock(folio);
+>  	return ret;
+> @@ -966,7 +992,7 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  	struct netfs_io_request *rreq;
+>  	struct netfs_i_context *ctx = netfs_i_context(file_inode(file ));
+>  	struct folio *folio;
+> -	unsigned int debug_index = 0, fgp_flags;
+> +	unsigned int fgp_flags;
+>  	pgoff_t index = pos >> PAGE_SHIFT;
+>  	int ret;
+>  
+> @@ -1029,39 +1055,13 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
+>  	 */
+>  	ractl._nr_pages = folio_nr_pages(folio);
+>  	netfs_rreq_expand(rreq, &ractl);
+> -	netfs_get_request(rreq, netfs_rreq_trace_get_hold);
+>  
+>  	/* We hold the folio locks, so we can drop the references */
+>  	folio_get(folio);
+>  	while (readahead_folio(&ractl))
+>  		;
+>  
+> -	atomic_set(&rreq->nr_outstanding, 1);
+> -	do {
+> -		if (!netfs_rreq_submit_slice(rreq, &debug_index))
+> -			break;
+> -
+> -	} while (rreq->submitted < rreq->len);
+> -
+> -	/* Keep nr_outstanding incremented so that the ref always belongs to
+> -	 * us, and the service code isn't punted off to a random thread pool to
+> -	 * process.
+> -	 */
+> -	for (;;) {
+> -		wait_var_event(&rreq->nr_outstanding,
+> -			       atomic_read(&rreq->nr_outstanding) == 1);
+> -		netfs_rreq_assess(rreq, false);
+> -		if (!test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags))
+> -			break;
+> -		cond_resched();
+> -	}
+> -
+> -	ret = rreq->error;
+> -	if (ret == 0 && rreq->submitted < rreq->len) {
+> -		trace_netfs_failure(rreq, NULL, ret, netfs_fail_short_write_begin);
+> -		ret = -EIO;
+> -	}
+> -	netfs_put_request(rreq, false, netfs_rreq_trace_put_hold);
+> +	ret = netfs_begin_read(rreq, true);
+>  	if (ret < 0)
+>  		goto error;
+>  
+> diff --git a/include/trace/events/netfs.h b/include/trace/events/netfs.h
+> index f00e3e1821c8..beec534cbaab 100644
+> --- a/include/trace/events/netfs.h
+> +++ b/include/trace/events/netfs.h
+> @@ -56,17 +56,18 @@
+>  	EM(netfs_fail_check_write_begin,	"check-write-begin")	\
+>  	EM(netfs_fail_copy_to_cache,		"copy-to-cache")	\
+>  	EM(netfs_fail_read,			"read")			\
+> -	EM(netfs_fail_short_readpage,		"short-readpage")	\
+> -	EM(netfs_fail_short_write_begin,	"short-write-begin")	\
+> +	EM(netfs_fail_short_read,		"short-read")		\
+>  	E_(netfs_fail_prepare_write,		"prep-write")
+>  
+>  #define netfs_rreq_ref_traces					\
+>  	EM(netfs_rreq_trace_get_hold,		"GET HOLD   ")	\
+>  	EM(netfs_rreq_trace_get_subreq,		"GET SUBREQ ")	\
+>  	EM(netfs_rreq_trace_put_complete,	"PUT COMPLT ")	\
+> +	EM(netfs_rreq_trace_put_discard,	"PUT DISCARD")	\
+>  	EM(netfs_rreq_trace_put_failed,		"PUT FAILED ")	\
+>  	EM(netfs_rreq_trace_put_hold,		"PUT HOLD   ")	\
+>  	EM(netfs_rreq_trace_put_subreq,		"PUT SUBREQ ")	\
+> +	EM(netfs_rreq_trace_put_zero_len,	"PUT ZEROLEN")	\
+>  	E_(netfs_rreq_trace_new,		"NEW        ")
+>  
+>  #define netfs_sreq_ref_traces					\
 > 
-> https://lore.kernel.org/all/87y22uujkm.ffs@tglx
 > 
-> It is exactly the same scenario: kernel code is buggy and has to be fixed.
-> 
-> So, what the policy?
 
-Lately, I've tried to subscribe to the "there is NO F*CKING EXCUSE to
-knowingly kill the kernel" policy[1].
-
-You don't add a BUG_ON() unless the kernel has no meaningful way to
-continue.  It's not for a "hey, that's weird..." kind of thing.  Like,
-"hey, the instruction decoder looks confused, that's weird."
-
->> Let's say insn_decode_mmio() does something insane like:
->>
->> 	return -EINVAL;
->>
->> Should we really be killing the kernel for that?
-> 
-> Note that #GP is most likely kill kernel as well. We handle in-kernel
-> MMIO. There are no many chances for recover.
-> 
-> Is it really the big deal?
-
-No, not really.
-
-But, I'd like to see one of two things:
-1. Change the BUG()s to WARN()s.
-2. Make it utterly clear that handle_mmio() is for handling kernel MMIO
-   only.  Definitely change the naming, possibly add a check for
-   user_mode().  In other words, make it even _less_ generic.
-
-None of that should be hard.
-
-BTW, the BUG()s made me think about how the gp_try_fixup_and_notify()
-code would work for MMIO.  For instance, are there any places where
-fixup might be done for MMIO?  If so, an earlier BUG() wouldn't allow
-the fixup to occur.
-
-Do we *WANT* #VE's to be exposed to the #GP fixup machinery?
-
-1.
-https://lore.kernel.org/all/CA+55aFwyNTLuZgOWMTRuabWobF27ygskuxvFd-P0n-3UNT=0Og@mail.gmail.com/
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

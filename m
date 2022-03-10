@@ -2,75 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133554D4C91
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE2D4D4C9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242341AbiCJPBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S245474AbiCJPB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343499AbiCJO6U (ORCPT
+        with ESMTP id S1344255AbiCJO7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:58:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4DC188854
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:52:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t73Bn5PoTBPP0h6uAMsqu927EETHhd4aAadtdVAgAbI=; b=GtrxBXAPcQ6W9QFb4AnsRDaHP/
-        kiSQAqB0AS19/oFYHmdKvwDO9nCZOBWN+iU9DWJKEjVu1wtnxR4xlOv50QPKef4JQNoJAtQ8q8i6F
-        NfR0hD8PF29RiTIFK1TJiAGqOkJnr5YpeSPnLr+rCR4ommax42/RENOPa5qi413UKaDIC7aAkuAvQ
-        rqfx4QbnNO46yN5K/29ItPfhuunkjA+iqyTcy8AbeR0GEXk7KpM4gArnxD4xE8qrNmVJbesTSsNRT
-        8xcM5Ok6SSyr0AprRM+Pih8y8h6rUlYFsGd0z/kiZzkUpS9F+4kEu7mdn0TqfEhHPr5R++7oB93Hf
-        1D1uiTyQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSK8a-00DDWC-JW; Thu, 10 Mar 2022 14:51:32 +0000
-Date:   Thu, 10 Mar 2022 06:51:32 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        brijesh.singh@amd.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 27/30] x86/kvm: Use bounce buffers for TD guest
-Message-ID: <YioQdNNiGZlAIuJG@infradead.org>
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-28-kirill.shutemov@linux.intel.com>
- <f368d524-f676-d112-5bd0-0eeba6b77ff5@intel.com>
- <65577d45-8b15-08b6-2de4-3ca820e4d7a3@amd.com>
+        Thu, 10 Mar 2022 09:59:51 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA0218A7A5;
+        Thu, 10 Mar 2022 06:52:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646923976; x=1678459976;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2obXWm16zHjxkmZ9vE0erL/w5gsiL/wNUz/RM0HIzeE=;
+  b=btRRfKTx629TvbXkbDiAAD/Umjl2Ia1oQ8FpVTG+dqnuHbB7Cj++k0IJ
+   wewQ+sGFqzozxxrMvkBRvdQsOySTrjWm/zJAyIZw4AfeKG+LusIa8UAWF
+   K4EyKcJSARg49mZ9Yv+8a1Lba4221i1DY5Ks2UoSvEHGsPdbo3GVESvRH
+   pAm/Dwu3smGmGM8sdkVwDE+w1buGVq28DGKhqSZWKKeG5QB3HyqqVjblF
+   QGUyWWuOx8GgQa0Pi4n5ZoRXVlCd/3+dO2LpVY6miQXX+UPB+Z7VnSrvU
+   Z6mZDs5HuTkEmaLU7KKFP9GT7EI6KVC/ge/1iwxWbJaEb0t8pjOmk8IX5
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255002978"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="255002978"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:52:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="596683170"
+Received: from mylly.fi.intel.com (HELO [10.237.72.156]) ([10.237.72.156])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Mar 2022 06:52:10 -0800
+Message-ID: <5612fbbe-a42b-997e-2375-6d5f0c53bdea@linux.intel.com>
+Date:   Thu, 10 Mar 2022 16:52:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65577d45-8b15-08b6-2de4-3ca820e4d7a3@amd.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [PATCH -next] i2c: designware: Add helper to remove redundancy
+Content-Language: en-US
+To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, andriy.shevchenko@linux.intel.com
+Cc:     wsa@kernel.org, upstream@semihalf.com
+References: <20220310142236.192811-1-jsd@semihalf.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20220310142236.192811-1-jsd@semihalf.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 08:29:01AM -0600, Tom Lendacky wrote:
-> > void __init mem_encrypt_init(void)
-> > {
-> >          if (!cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+On 3/10/22 16:22, Jan Dabros wrote:
+> Simplify code by adding an extra static function for sending I2C
+> requests and verifying results.
 > 
-> If you make this cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT), then it should
-> work for both, I would think. If you use CC_ATTR_MEM_ENCRYPT, you'll force
-> bare-metal SME to always use bounce buffers when doing I/O. But SME can do
-> I/O to encrypted memory if the device supports 64-bit DMA or if the IOMMU is
-> being used, so we don't want to force SWIOTLB in this case.
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-amdpsp.c | 44 ++++++++++++----------
+>   1 file changed, 24 insertions(+), 20 deletions(-)
+> 
+Do I remember correctly was this suggested by Andy? I.e. to give kudos 
+to him if that was the case:
 
-http://git.infradead.org/users/hch/misc.git/commitdiff/18b0547fe0467cb48e64ee403f50f2587fe04e3a
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index c64e459afb5c..cc758792f150 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -229,6 +229,26 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+>   	return ret;
+>   }
+>   
+> +static int psp_send_i2c_req_check_err(enum psp_i2c_req_type request)
+> +{
+> +	int status;
+> +
+> +	status = psp_send_i2c_req(request);
+> +	if (status) {
+> +		if (status == -ETIMEDOUT)
+> +			dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
+> +				(request == PSP_I2C_REQ_ACQUIRE) ?
+> +				"release" : "acquire");
+> +		else
+> +			dev_err(psp_i2c_dev, "PSP communication error\n");
+> +
+> +		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+> +		psp_i2c_mbox_fail = true;
+> +	}
+> +
+
+Does it make sense to have these inside the psp_send_i2c_req() and get 
+rid of this new middle function? I mean psp_send_i2c_req() is called now 
+only from here so can it do these common error prints and set 
+"psp_i2c_mbox_fail = true"?
+
+Jarkko

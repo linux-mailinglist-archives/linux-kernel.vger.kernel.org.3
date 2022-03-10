@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68FA4D49CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45434D4BB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243315AbiCJOYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S243490AbiCJOWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244160AbiCJOS7 (ORCPT
+        with ESMTP id S244153AbiCJOS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:18:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A671B251A;
-        Thu, 10 Mar 2022 06:15:39 -0800 (PST)
+        Thu, 10 Mar 2022 09:18:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3815EB18BF;
+        Thu, 10 Mar 2022 06:15:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BA2261C67;
-        Thu, 10 Mar 2022 14:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EFDDC340EB;
-        Thu, 10 Mar 2022 14:15:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A94D8B81E9E;
+        Thu, 10 Mar 2022 14:15:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A76C340E8;
+        Thu, 10 Mar 2022 14:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646921730;
-        bh=0SlhBY9FVbky4lNAtCvq+QSM2Rt7IiNUXbD6lBysKLc=;
+        s=korg; t=1646921736;
+        bh=xhBRfrNy/7380JiHEmW+Fca0kX0t6YqpNMJ42Bk03qA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UFdYgh6FsYyGQ7q7XfxNsSGATpZUv/rCFqabsEK7FGXO2merKw+w/O3ZXHFDFAEDZ
-         aHhTa3QxPMH93gLRz/8YzcqWyEZjqjIeb7KpeZDfgl8cW4xiaDSOXt+dYfWW65lupV
-         Alb7/h4JzYqaKX/+3p1XR6YxyG4H4+Ea+f+/qLbo=
+        b=EoB4uIRU2ow9uMc87PDgQAyzyYwKkDdGa7M+k+7SYxYBTi5pqIgrO9llv9+Im5P2J
+         2N3SnRPBXf9wfOWYlv4hMJUAZofyhTjZXv0N6YEHKy/mxbEuFEdH5IHmiMUlUgOO+8
+         Gz+xEz2ojq9hZrvVcS+HlMBx6HBlciscxQQl0OUA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Simon Gaiser <simon@invisiblethingslab.com>,
         Juergen Gross <jgross@suse.com>,
         Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.9 35/38] xen/gntalloc: dont use gnttab_query_foreign_access()
-Date:   Thu, 10 Mar 2022 15:13:48 +0100
-Message-Id: <20220310140809.157981695@linuxfoundation.org>
+Subject: [PATCH 4.9 37/38] xen/gnttab: fix gnttab_end_foreign_access() without page specified
+Date:   Thu, 10 Mar 2022 15:13:50 +0100
+Message-Id: <20220310140809.214707478@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310140808.136149678@linuxfoundation.org>
 References: <20220310140808.136149678@linuxfoundation.org>
@@ -58,77 +58,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Juergen Gross <jgross@suse.com>
 
-Commit d3b6372c5881cb54925212abb62c521df8ba4809 upstream.
+Commit 42baefac638f06314298087394b982ead9ec444b upstream.
 
-Using gnttab_query_foreign_access() is unsafe, as it is racy by design.
+gnttab_end_foreign_access() is used to free a grant reference and
+optionally to free the associated page. In case the grant is still in
+use by the other side processing is being deferred. This leads to a
+problem in case no page to be freed is specified by the caller: the
+caller doesn't know that the page is still mapped by the other side
+and thus should not be used for other purposes.
 
-The use case in the gntalloc driver is not needed at all. While at it
-replace the call of gnttab_end_foreign_access_ref() with a call of
-gnttab_end_foreign_access(), which is what is really wanted there. In
-case the grant wasn't used due to an allocation failure, just free the
-grant via gnttab_free_grant_reference().
+The correct way to handle this situation is to take an additional
+reference to the granted page in case handling is being deferred and
+to drop that reference when the grant reference could be freed
+finally.
 
-This is CVE-2022-23039 / part of XSA-396.
+This requires that there are no users of gnttab_end_foreign_access()
+left directly repurposing the granted page after the call, as this
+might result in clobbered data or information leaks via the not yet
+freed grant reference.
 
-Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+This is part of CVE-2022-23041 / XSA-396.
+
+Reported-by: Simon Gaiser <simon@invisiblethingslab.com>
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/gntalloc.c |   25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ drivers/xen/grant-table.c |   30 +++++++++++++++++++++++-------
+ include/xen/grant_table.h |    7 ++++++-
+ 2 files changed, 29 insertions(+), 8 deletions(-)
 
---- a/drivers/xen/gntalloc.c
-+++ b/drivers/xen/gntalloc.c
-@@ -166,20 +166,14 @@ undo:
- 		__del_gref(gref);
- 	}
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -113,6 +113,10 @@ struct gnttab_ops {
+ 	 * return the frame.
+ 	 */
+ 	unsigned long (*end_foreign_transfer_ref)(grant_ref_t ref);
++	/*
++	 * Read the frame number related to a given grant reference.
++	 */
++	unsigned long (*read_frame)(grant_ref_t ref);
+ };
  
--	/* It's possible for the target domain to map the just-allocated grant
--	 * references by blindly guessing their IDs; if this is done, then
--	 * __del_gref will leave them in the queue_gref list. They need to be
--	 * added to the global list so that we can free them when they are no
--	 * longer referenced.
--	 */
--	if (unlikely(!list_empty(&queue_gref)))
--		list_splice_tail(&queue_gref, &gref_list);
- 	mutex_unlock(&gref_mutex);
- 	return rc;
+ struct unmap_refs_callback_data {
+@@ -277,6 +281,11 @@ int gnttab_end_foreign_access_ref(grant_
  }
+ EXPORT_SYMBOL_GPL(gnttab_end_foreign_access_ref);
  
- static void __del_gref(struct gntalloc_gref *gref)
- {
-+	unsigned long addr;
++static unsigned long gnttab_read_frame_v1(grant_ref_t ref)
++{
++	return gnttab_shared.v1[ref].frame;
++}
 +
- 	if (gref->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
- 		uint8_t *tmp = kmap(gref->page);
- 		tmp[gref->notify.pgoff] = 0;
-@@ -193,21 +187,16 @@ static void __del_gref(struct gntalloc_g
- 	gref->notify.flags = 0;
+ struct deferred_entry {
+ 	struct list_head list;
+ 	grant_ref_t ref;
+@@ -306,12 +315,9 @@ static void gnttab_handle_deferred(unsig
+ 		spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ 		if (_gnttab_end_foreign_access_ref(entry->ref, entry->ro)) {
+ 			put_free_entry(entry->ref);
+-			if (entry->page) {
+-				pr_debug("freeing g.e. %#x (pfn %#lx)\n",
+-					 entry->ref, page_to_pfn(entry->page));
+-				put_page(entry->page);
+-			} else
+-				pr_info("freeing g.e. %#x\n", entry->ref);
++			pr_debug("freeing g.e. %#x (pfn %#lx)\n",
++				 entry->ref, page_to_pfn(entry->page));
++			put_page(entry->page);
+ 			kfree(entry);
+ 			entry = NULL;
+ 		} else {
+@@ -336,9 +342,18 @@ static void gnttab_handle_deferred(unsig
+ static void gnttab_add_deferred(grant_ref_t ref, bool readonly,
+ 				struct page *page)
+ {
+-	struct deferred_entry *entry = kmalloc(sizeof(*entry), GFP_ATOMIC);
++	struct deferred_entry *entry;
++	gfp_t gfp = (in_atomic() || irqs_disabled()) ? GFP_ATOMIC : GFP_KERNEL;
+ 	const char *what = KERN_WARNING "leaking";
  
- 	if (gref->gref_id) {
--		if (gnttab_query_foreign_access(gref->gref_id))
--			return;
--
--		if (!gnttab_end_foreign_access_ref(gref->gref_id, 0))
--			return;
--
--		gnttab_free_grant_reference(gref->gref_id);
-+		if (gref->page) {
-+			addr = (unsigned long)page_to_virt(gref->page);
-+			gnttab_end_foreign_access(gref->gref_id, 0, addr);
-+		} else
-+			gnttab_free_grant_reference(gref->gref_id);
- 	}
++	entry = kmalloc(sizeof(*entry), gfp);
++	if (!page) {
++		unsigned long gfn = gnttab_interface->read_frame(ref);
++
++		page = pfn_to_page(gfn_to_pfn(gfn));
++		get_page(page);
++	}
++
+ 	if (entry) {
+ 		unsigned long flags;
  
- 	gref_size--;
- 	list_del(&gref->next_gref);
+@@ -1010,6 +1025,7 @@ static const struct gnttab_ops gnttab_v1
+ 	.update_entry			= gnttab_update_entry_v1,
+ 	.end_foreign_access_ref		= gnttab_end_foreign_access_ref_v1,
+ 	.end_foreign_transfer_ref	= gnttab_end_foreign_transfer_ref_v1,
++	.read_frame			= gnttab_read_frame_v1,
+ };
  
--	if (gref->page)
--		__free_page(gref->page);
--
- 	kfree(gref);
- }
- 
+ static void gnttab_request_version(void)
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -100,7 +100,12 @@ int gnttab_end_foreign_access_ref(grant_
+  * Note that the granted page might still be accessed (read or write) by the
+  * other side after gnttab_end_foreign_access() returns, so even if page was
+  * specified as 0 it is not allowed to just reuse the page for other
+- * purposes immediately.
++ * purposes immediately. gnttab_end_foreign_access() will take an additional
++ * reference to the granted page in this case, which is dropped only after
++ * the grant is no longer in use.
++ * This requires that multi page allocations for areas subject to
++ * gnttab_end_foreign_access() are done via alloc_pages_exact() (and freeing
++ * via free_pages_exact()) in order to avoid high order pages.
+  */
+ void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
+ 			       unsigned long page);
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198A14D4B62
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A149F4D4B45
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242488AbiCJOof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S244974AbiCJOim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344050AbiCJObj (ORCPT
+        with ESMTP id S1343615AbiCJObF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:39 -0500
+        Thu, 10 Mar 2022 09:31:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95A3DD5;
-        Thu, 10 Mar 2022 06:29:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162929BACF;
+        Thu, 10 Mar 2022 06:27:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFF5B82544;
-        Thu, 10 Mar 2022 14:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEA6C340E8;
-        Thu, 10 Mar 2022 14:29:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A681B82544;
+        Thu, 10 Mar 2022 14:27:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02E4C340EB;
+        Thu, 10 Mar 2022 14:27:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922586;
-        bh=Mml45n5zWOY5XUlvrM0ABUbDBgc/vQ9ckQ54OR4R62A=;
+        s=korg; t=1646922425;
+        bh=UnvhIlQm44RU2lBhhosbmErjf2hqypuKRtKkNXHH5p4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pq1wHvuQoc8vVDopslzBiTx8vBbt0umuK4kPCn1qr7DnctYh25nC96jN0G0lbJfXt
-         IGOUK16PuTYKKo4iFzU3cwl6jkalkgbvY65MUMQRHebQgZFgIoUi/Gc/55uKKrUkEu
-         eypYl3Kx/JkDBhyAThy6xhlRquE9EW4l6jahkkMo=
+        b=siZiiGiph+NxmvSobdHyDHMBrcUyBv6jtDRSyBwD1ur1xRvSshIzKWglDuA+2kQ41
+         WJl4AGQi5XsSmUi3JDtcch9n1fzeku8ovkykhPXPzFQMjEVRvZlITQA3GMyR+dLTR7
+         sIBSQqtLqf8ocxjWeDixVfMGAhiHdbIsOsqC69Io=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 5.15 25/58] arm64: entry: Make the trampoline cleanup optional
-Date:   Thu, 10 Mar 2022 15:19:14 +0100
-Message-Id: <20220310140813.707556926@linuxfoundation.org>
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.4 14/33] ARM: early traps initialisation
+Date:   Thu, 10 Mar 2022 15:19:15 +0100
+Message-Id: <20220310140809.163515443@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-References: <20220310140812.983088611@linuxfoundation.org>
+In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
+References: <20220310140808.741682643@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-commit d739da1694a0eaef0358a42b76904b611539b77b upstream.
+commit 04e91b7324760a377a725e218b5ee783826d30f5 upstream.
 
-Subsequent patches will add additional sets of vectors that use
-the same tricks as the kpti vectors to reach the full-fat vectors.
-The full-fat vectors contain some cleanup for kpti that is patched
-in by alternatives when kpti is in use. Once there are additional
-vectors, the cleanup will be needed in more cases.
+Provide a couple of helpers to copy the vectors and stubs, and also
+to flush the copied vectors and stubs.
 
-But on big/little systems, the cleanup would be harmful if no
-trampoline vector were in use. Instead of forcing CPUs that don't
-need a trampoline vector to use one, make the trampoline cleanup
-optional.
-
-Entry at the top of the vectors will skip the cleanup. The trampoline
-vectors can then skip the first instruction, triggering the cleanup
-to run.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/entry.S |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ arch/arm/kernel/traps.c |   27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -40,14 +40,18 @@
- .Lventry_start\@:
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- 	.if	\el == 0
--alternative_if ARM64_UNMAP_KERNEL_AT_EL0
-+	/*
-+	 * This must be the first instruction of the EL0 vector entries. It is
-+	 * skipped by the trampoline vectors, to trigger the cleanup.
-+	 */
-+	b	.Lskip_tramp_vectors_cleanup\@
- 	.if	\regsize == 64
- 	mrs	x30, tpidrro_el0
- 	msr	tpidrro_el0, xzr
- 	.else
- 	mov	x30, xzr
- 	.endif
--alternative_else_nop_endif
-+.Lskip_tramp_vectors_cleanup\@:
- 	.endif
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -799,10 +799,22 @@ static inline void __init kuser_init(voi
+ }
  #endif
  
-@@ -661,7 +665,7 @@ alternative_if_not ARM64_WORKAROUND_CAVI
- 	prfm	plil1strm, [x30, #(1b - tramp_vectors)]
- alternative_else_nop_endif
- 	msr	vbar_el1, x30
--	add	x30, x30, #(1b - tramp_vectors)
-+	add	x30, x30, #(1b - tramp_vectors + 4)
- 	isb
- 	ret
- .org 1b + 128	// Did we overflow the ventry slot?
++#ifndef CONFIG_CPU_V7M
++static void copy_from_lma(void *vma, void *lma_start, void *lma_end)
++{
++	memcpy(vma, lma_start, lma_end - lma_start);
++}
++
++static void flush_vectors(void *vma, size_t offset, size_t size)
++{
++	unsigned long start = (unsigned long)vma + offset;
++	unsigned long end = start + size;
++
++	flush_icache_range(start, end);
++}
++
+ void __init early_trap_init(void *vectors_base)
+ {
+-#ifndef CONFIG_CPU_V7M
+-	unsigned long vectors = (unsigned long)vectors_base;
+ 	extern char __stubs_start[], __stubs_end[];
+ 	extern char __vectors_start[], __vectors_end[];
+ 	unsigned i;
+@@ -823,17 +835,20 @@ void __init early_trap_init(void *vector
+ 	 * into the vector page, mapped at 0xffff0000, and ensure these
+ 	 * are visible to the instruction stream.
+ 	 */
+-	memcpy((void *)vectors, __vectors_start, __vectors_end - __vectors_start);
+-	memcpy((void *)vectors + 0x1000, __stubs_start, __stubs_end - __stubs_start);
++	copy_from_lma(vectors_base, __vectors_start, __vectors_end);
++	copy_from_lma(vectors_base + 0x1000, __stubs_start, __stubs_end);
+ 
+ 	kuser_init(vectors_base);
+ 
+-	flush_icache_range(vectors, vectors + PAGE_SIZE * 2);
++	flush_vectors(vectors_base, 0, PAGE_SIZE * 2);
++}
+ #else /* ifndef CONFIG_CPU_V7M */
++void __init early_trap_init(void *vectors_base)
++{
+ 	/*
+ 	 * on V7-M there is no need to copy the vector table to a dedicated
+ 	 * memory area. The address is configurable and so a table in the kernel
+ 	 * image can be used.
+ 	 */
+-#endif
+ }
++#endif
 
 

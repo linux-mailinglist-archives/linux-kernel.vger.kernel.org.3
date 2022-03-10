@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCF64D4BEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F224D4BAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239365AbiCJOhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S1345714AbiCJOmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245549AbiCJOag (ORCPT
+        with ESMTP id S1343827AbiCJObX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:30:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E5182BDE;
-        Thu, 10 Mar 2022 06:26:25 -0800 (PST)
+        Thu, 10 Mar 2022 09:31:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8626DEA29;
+        Thu, 10 Mar 2022 06:27:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE3761D38;
-        Thu, 10 Mar 2022 14:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0138C340E8;
-        Thu, 10 Mar 2022 14:25:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75109B825F3;
+        Thu, 10 Mar 2022 14:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81C6C340E8;
+        Thu, 10 Mar 2022 14:27:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922346;
-        bh=Fx9vrl9Digl1jmM6i7NHjvlnbGVHe2w4pnEADaxx72U=;
+        s=korg; t=1646922449;
+        bh=Dpe0tk9GNdSgB2qTr+VBTPTKFcv/dNvPbCSODMJpdas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d5fw9ezFnnZhgREtZOUHRamXGk/vVzOvjbXfRSFQ+/H+AD5ClxDNuhRtE5VLFbgnf
-         Fj7/vw+I2wgZCd83YzUg0bRLSQPL8jFJajx7A2/vMSYl7KsfsvhYnu0nQIvxsIGXok
-         ETNhXc1PAFzdWnYqr2oxK81F/XiXxbwdDr4+/hxo=
+        b=lkE7cQAja8zKRw8G4iZYKXal5rhtsQ7iDdRNyqjREE90LaWT0ISVQh9S6tOS5ntjG
+         MQDWKQ/3P/pDQRwZ9F4jmjCu03kRxiTIS6eUlB1VU2Rzao6kY+6Id1lQowfKlcd1PI
+         3sXAG92M8Hjtz34RNb7HAtDlhlFcoVncKccJNRvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.10 47/58] xen/xenbus: dont let xenbus_grant_ring() remove grants in error case
-Date:   Thu, 10 Mar 2022 15:19:07 +0100
-Message-Id: <20220310140814.208687707@linuxfoundation.org>
+        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.4 07/33] x86/speculation: Use generic retpoline by default on AMD
+Date:   Thu, 10 Mar 2022 15:19:08 +0100
+Message-Id: <20220310140808.963245222@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
+References: <20220310140808.741682643@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Kim Phillips <kim.phillips@amd.com>
 
-Commit 3777ea7bac3113005b7180e6b9dadf16d19a5827 upstream.
+commit 244d00b5dd4755f8df892c86cab35fb2cfd4f14b upstream.
 
-Letting xenbus_grant_ring() tear down grants in the error case is
-problematic, as the other side could already have used these grants.
-Calling gnttab_end_foreign_access_ref() without checking success is
-resulting in an unclear situation for any caller of xenbus_grant_ring()
-as in the error case the memory pages of the ring page might be
-partially mapped. Freeing them would risk unwanted foreign access to
-them, while not freeing them would leak memory.
+AMD retpoline may be susceptible to speculation. The speculation
+execution window for an incorrect indirect branch prediction using
+LFENCE/JMP sequence may potentially be large enough to allow
+exploitation using Spectre V2.
 
-In order to remove the need to undo any gnttab_grant_foreign_access()
-calls, use gnttab_alloc_grant_references() to make sure no further
-error can occur in the loop granting access to the ring pages.
+By default, don't use retpoline,lfence on AMD.  Instead, use the
+generic retpoline.
 
-It should be noted that this way of handling removes leaking of
-grant entries in the error case, too.
-
-This is CVE-2022-23040 / part of XSA-396.
-
-Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/xenbus/xenbus_client.c |   24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ arch/x86/kernel/cpu/bugs.c |    9 ---------
+ 1 file changed, 9 deletions(-)
 
---- a/drivers/xen/xenbus/xenbus_client.c
-+++ b/drivers/xen/xenbus/xenbus_client.c
-@@ -379,7 +379,14 @@ int xenbus_grant_ring(struct xenbus_devi
- 		      unsigned int nr_pages, grant_ref_t *grefs)
- {
- 	int err;
--	int i, j;
-+	unsigned int i;
-+	grant_ref_t gref_head;
-+
-+	err = gnttab_alloc_grant_references(nr_pages, &gref_head);
-+	if (err) {
-+		xenbus_dev_fatal(dev, err, "granting access to ring page");
-+		return err;
-+	}
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		unsigned long gfn;
-@@ -389,23 +396,14 @@ int xenbus_grant_ring(struct xenbus_devi
- 		else
- 			gfn = virt_to_gfn(vaddr);
- 
--		err = gnttab_grant_foreign_access(dev->otherend_id, gfn, 0);
--		if (err < 0) {
--			xenbus_dev_fatal(dev, err,
--					 "granting access to ring page");
--			goto fail;
--		}
--		grefs[i] = err;
-+		grefs[i] = gnttab_claim_grant_reference(&gref_head);
-+		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
-+						gfn, 0);
- 
- 		vaddr = vaddr + XEN_PAGE_SIZE;
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -898,15 +898,6 @@ static enum spectre_v2_mitigation __init
+ 		return SPECTRE_V2_NONE;
  	}
  
- 	return 0;
+-	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+-	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
+-		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
+-			pr_err("LFENCE not serializing, switching to generic retpoline\n");
+-			return SPECTRE_V2_RETPOLINE;
+-		}
+-		return SPECTRE_V2_LFENCE;
+-	}
 -
--fail:
--	for (j = 0; j < i; j++)
--		gnttab_end_foreign_access_ref(grefs[j], 0);
--	return err;
+ 	return SPECTRE_V2_RETPOLINE;
  }
- EXPORT_SYMBOL_GPL(xenbus_grant_ring);
  
 
 

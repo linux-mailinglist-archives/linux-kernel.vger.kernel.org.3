@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953574D4235
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A414D4239
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240208AbiCJIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S236766AbiCJIKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237999AbiCJIJC (ORCPT
+        with ESMTP id S235113AbiCJIKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:09:02 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D83613395B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:08:02 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id hw13so9864862ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:08:01 -0800 (PST)
+        Thu, 10 Mar 2022 03:10:14 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1270413395D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:09:14 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id m12so5878221edc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:09:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qgU1YiosBtNsX8vphzejZ6JG2mH1MwmM6we31LMy0vU=;
-        b=XLRUu4GLZhPreZ806DmRXf99JDmVKiWPeD1LAmNi7iFs6z59L9i4F/jRJrJzqAuARi
-         YAmhAmHeyyGhZBCOKFVLcVeIEULX25XpOtWyaOv66sQiLWnG03dQqvp6x10xSzfMN31O
-         +/KwWBXJfLYujoJ8RwtBipptXGR7a+5ojbcQ2nXwtJA0WLUC9YEVbJ/tyizIz3MPYhRL
-         /FMfBvFlNFGA8ztjCHVRzSwYlGlWTQatA7xT0yVR8mVHOnHBKTJ7GqntDNZXtfxfmT99
-         VRwDwzUKVLKrTIHdhlsq0P/caDi8xYsldEGJKFEwrYgVGk82TH18IxXM9pMzHhbS8zXW
-         U7BQ==
+        bh=YWbAcZy/i8HBYK2+LI1DmtpGjLhVyIVjDAmA+olRSX0=;
+        b=r6m/oi9HM5b3ptgnBPdqU/JT11+emPMCtpY8bhdnL6IBAKJN+vphDQcvrhnJTPc3pR
+         1JsCGgXBT8DO2kGWTbC0J+9Z3EF3A1Tp90hZAOCvXwlJkOLfxDgGSS5Pce72/04ugPzQ
+         +WnXeDRI7/T/T/lhFL0US+S7Z5tXpNe0WU+/m+G/P7ZZrvOJNGBx2WcsIgtZZQw5yIrK
+         UbvFaNl8O93Sd8kRmpWwK+FbCU9LXfog05Qc632veitsNPPygsBjRmw5wWM9NIsRTIpS
+         6Az7Jceq2XZi1vWGRXTwAUJYPWZpcrMA1R0yKz/ZJ3fGc1Cg3uz+4B2170k94UUMLIMf
+         /KGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qgU1YiosBtNsX8vphzejZ6JG2mH1MwmM6we31LMy0vU=;
-        b=J88cjtNWWStyiFv0bD/QCbbusahRqnz2gCYun8AG+O1pWBrDVs3DeDYgnCQwMIowr5
-         EM6FUxHSJM3aW/vkvlQ8mWVPuRe4Qq7ibQXhnfMxgDrRvjewujD7HxyVNXT/vA+uiQuV
-         jxDTdkjK2B/OJ+peTcT24D4NCqp0qS7eS3cbZWlhgRc/TcNX82/shPLAzWTzTmpx1U8S
-         ko/A5BXqG+jPzH7oNBi0kveLpJ1iHg7Jpm4RKUtas4h/LP34Y6ykKdIlBXLXHy5Wl+lz
-         Hdroi9c2Kg5jR4kQ2seKH5ueQvYky7zUCnrwLlhfmWCRgrp72tMgfkFt81pHMA7JwRpo
-         4BZw==
-X-Gm-Message-State: AOAM532V470k3VQKkKIlBVz5Bp8aCRcJDDRTKR0BCEdD59x20uVlDFpV
-        aYJg+jmOKfLO9gIgh0ti3EVhanUtBwB48hpM37exJA==
-X-Google-Smtp-Source: ABdhPJyk8Rd7RVAixssO/1MkmMF/h7pn5Vdo7uxGHhPCpqNsEQqkq7TGhVTpdF1GQhCClhgrzKqe7Q7gtj9jsduNMHU=
-X-Received: by 2002:a17:906:2899:b0:6d6:e479:1fe2 with SMTP id
- o25-20020a170906289900b006d6e4791fe2mr3149308ejd.394.1646899680427; Thu, 10
- Mar 2022 00:08:00 -0800 (PST)
+        bh=YWbAcZy/i8HBYK2+LI1DmtpGjLhVyIVjDAmA+olRSX0=;
+        b=fIfHI7inxqE07wGWPN2bXAK0fYl/8dy6LHCMTrneV8peTQpdxVn7Q19l1tvRSP2BQX
+         jS5t3KrOKUFN8CxFmzj0/TOTRLBTEQRehPiCYGHBgeBG/VedwzIF9xbwPJKOLSB4e10I
+         WU+Au0EFbDqaUFxSxGnAOsN/7ioP4XHEON1xvPxbZaqkqtwyPEBPZpIzupvAZqM0woFX
+         QXF/gFX/1eX/zS3mWi7J7Ti8kp+5TX+LwNsoK5UFIdwAn3VHApbmMuzMDJY28HbOKkXQ
+         b1g8Ysg4lWfa4oN8muBrnLQiFbzipRyKX33DrD+gWdvbLc65Wziwl10/kWRNa5mAL0CF
+         LLLA==
+X-Gm-Message-State: AOAM530+AZ6vRt5F5AxH9SuIhm7p5w2dS5zyej+e4Iyp74PUd9YB34dv
+        SysCd8W6SL6Ij6vto04iMq+PQ/2Ceu081DFoR9vT648vni07CA==
+X-Google-Smtp-Source: ABdhPJxKFn6YeDUx1PfZdbOvWIU7l3YrlqtrpTJvp5FIfH8MbYGg9inD0E2JsB/SRJMRmxjPhbDJO14wMifzXIGlkxQ=
+X-Received: by 2002:a05:6402:26d3:b0:416:4186:6d7d with SMTP id
+ x19-20020a05640226d300b0041641866d7dmr3159206edd.129.1646899752425; Thu, 10
+ Mar 2022 00:09:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220309083753.1561921-1-liupeng256@huawei.com>
-In-Reply-To: <20220309083753.1561921-1-liupeng256@huawei.com>
+References: <20220309083753.1561921-1-liupeng256@huawei.com> <20220309083753.1561921-2-liupeng256@huawei.com>
+In-Reply-To: <20220309083753.1561921-2-liupeng256@huawei.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 10 Mar 2022 03:07:48 -0500
-Message-ID: <CAFd5g457_aWs2mbiD0Eq6Tz=8dpjJD9nHa+iK-RTe8H6kXwT=A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] kunit: fix a UAF bug and do some optimization
+Date:   Thu, 10 Mar 2022 03:08:59 -0500
+Message-ID: <CAFd5g466XMWRszdn=Wdg4GXNv=KR-CZmWYZ0j0bG7_1QXtu-LQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kunit: fix UAF when run kfence test case test_gfpzero
 To:     Peng Liu <liupeng256@huawei.com>
 Cc:     glider@google.com, elver@google.com, dvyukov@google.com,
         akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
@@ -73,12 +73,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Mar 9, 2022 at 3:19 AM 'Peng Liu' via KUnit Development
 <kunit-dev@googlegroups.com> wrote:
 >
-> This series is to fix UAF when running kfence test case test_gfpzero,
-> which is time costly. This UAF bug can be easily triggered by setting
-> CONFIG_KFENCE_NUM_OBJECTS = 65535. Furthermore, some optimization for
-> kunit tests has been done.
+> Kunit will create a new thread to run an actual test case, and the
+> main process will wait for the completion of the actual test thread
+> until overtime. The variable "struct kunit test" has local property
+> in function kunit_try_catch_run, and will be used in the test case
+> thread. Task kunit_try_catch_run will free "struct kunit test" when
+> kunit runs overtime, but the actual test case is still run and an
+> UAF bug will be triggered.
+>
+> The above problem has been both observed in a physical machine and
+> qemu platform when running kfence kunit tests. The problem can be
+> triggered when setting CONFIG_KFENCE_NUM_OBJECTS = 65535. Under
+> this setting, the test case test_gfpzero will cost hours and kunit
+> will run to overtime. The follows show the panic log.
+>
+>   BUG: unable to handle page fault for address: ffffffff82d882e9
+>
+>   Call Trace:
+>    kunit_log_append+0x58/0xd0
+>    ...
+>    test_alloc.constprop.0.cold+0x6b/0x8a [kfence_test]
+>    test_gfpzero.cold+0x61/0x8ab [kfence_test]
+>    kunit_try_run_case+0x4c/0x70
+>    kunit_generic_run_threadfn_adapter+0x11/0x20
+>    kthread+0x166/0x190
+>    ret_from_fork+0x22/0x30
+>   Kernel panic - not syncing: Fatal exception
+>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+>   Ubuntu-1.8.2-1ubuntu1 04/01/2014
+>
+> To solve this problem, the test case thread should be stopped when
+> the kunit frame runs overtime. The stop signal will send in function
+> kunit_try_catch_run, and test_gfpzero will handle it.
+>
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
 
-I was able to reproduce the error you described and can confirm that I
-didn't see the UAF after applying your patches.
+Thanks for taking care of this.
 
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

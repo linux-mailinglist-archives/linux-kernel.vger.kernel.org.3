@@ -2,110 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19AE4D54AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BC04D54B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344383AbiCJWii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S1343898AbiCJWmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiCJWig (ORCPT
+        with ESMTP id S237358AbiCJWmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:38:36 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B05E53B45
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:37:34 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-267-5rxcuN6XPMuO1eF-qzLctA-1; Thu, 10 Mar 2022 22:37:32 +0000
-X-MC-Unique: 5rxcuN6XPMuO1eF-qzLctA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 22:37:30 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Mar 2022 22:37:30 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andrew Cooper' <Andrew.Cooper3@citrix.com>,
-        Bharata B Rao <bharata@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "ananth.narayan@amd.com" <ananth.narayan@amd.com>
-Subject: RE: [RFC PATCH v0 3/6] x86: Enable Upper Address Ignore(UAI) feature
-Thread-Topic: [RFC PATCH v0 3/6] x86: Enable Upper Address Ignore(UAI) feature
-Thread-Index: AQHYNLebTUcnJFmJckKqzLkQmpfxI6y5M6Ug
-Date:   Thu, 10 Mar 2022 22:37:30 +0000
-Message-ID: <bcd71ac6539e48359e8a80cb74115964@AcuMS.aculab.com>
-References: <20220310111545.10852-1-bharata@amd.com>
- <20220310111545.10852-4-bharata@amd.com>
- <7fccb7f2-fc88-993e-e1b2-919448844112@citrix.com>
-In-Reply-To: <7fccb7f2-fc88-993e-e1b2-919448844112@citrix.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 10 Mar 2022 17:42:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BACC182BF0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:41:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C0D5FCE243A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9227C340E8;
+        Thu, 10 Mar 2022 22:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646952066;
+        bh=8czA8393wMVTet7FIuzrOkrClOiMXavz/UUyUoeIubc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eNtMXi4pxdPlWc3meutQS1I+pNe9ek12x6LcyczB/7UBOXyOAVluWs0XNXvoy8CN0
+         BV5HB/NxSmNoIhuj1UD1Xfzsvzz0dlWGVJ8v6FDB3NbOkz9xapcmfJoSX7nBizGJmD
+         QArMpplLdqB2mf78pOkl1GpyKUje9iv70FEbeIV7iz2dvffnk759k9A2C33m+E8Iin
+         gR838woZBVEGvUn6CF5DxCTRfn5ld1P7NtlK2yKoSORabwHfc4uyqgp+XX8SyeC6sg
+         nuTgOdYz3qk63qdCm9y7JLWa2gZjsQOOYFWPAajemepwYoEJ6WNAbnM00SjWEoTm7j
+         HXc7TntjNupkw==
+Date:   Thu, 10 Mar 2022 23:41:03 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Scenario TREE07 with CONFIG_PREEMPT_DYNAMIC=n?
+Message-ID: <20220310224103.GA94994@lothringen>
+References: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQW5kcmV3IENvb3Blcg0KPiBTZW50OiAxMCBNYXJjaCAyMDIyIDE5OjQ3DQo+IA0KPiBP
-biAxMC8wMy8yMDIyIDExOjE1LCBCaGFyYXRhIEIgUmFvIHdyb3RlOg0KPiA+IGRpZmYgLS1naXQg
-YS9hcmNoL3g4Ni9rZXJuZWwvc2V0dXAuYyBiL2FyY2gveDg2L2tlcm5lbC9zZXR1cC5jDQo+ID4g
-aW5kZXggZjdhMTMyZWI3OTRkLi4xMjYxNWIxYjRhZjUgMTAwNjQ0DQo+ID4gLS0tIGEvYXJjaC94
-ODYva2VybmVsL3NldHVwLmMNCj4gPiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvc2V0dXAuYw0KPiA+
-IEBAIC03NDAsNiArNzQwLDEyIEBAIGR1bXBfa2VybmVsX29mZnNldChzdHJ1Y3Qgbm90aWZpZXJf
-YmxvY2sgKnNlbGYsIHVuc2lnbmVkIGxvbmcgdiwgdm9pZCAqcCkNCj4gPiAgCXJldHVybiAwOw0K
-PiA+ICB9DQo+ID4NCj4gPiArc3RhdGljIGlubGluZSB2b2lkIF9faW5pdCB1YWlfZW5hYmxlKHZv
-aWQpDQo+ID4gK3sNCj4gPiArCWlmIChib290X2NwdV9oYXMoWDg2X0ZFQVRVUkVfVUFJKSkNCj4g
-PiArCQltc3Jfc2V0X2JpdChNU1JfRUZFUiwgX0VGRVJfVUFJKTsNCj4gPiArfQ0KPiA+ICsNCj4g
-PiAgLyoNCj4gPiAgICogRGV0ZXJtaW5lIGlmIHdlIHdlcmUgbG9hZGVkIGJ5IGFuIEVGSSBsb2Fk
-ZXIuICBJZiBzbywgdGhlbiB3ZSBoYXZlIGFsc28gYmVlbg0KPiA+ICAgKiBwYXNzZWQgdGhlIGVm
-aSBtZW1tYXAsIHN5c3RhYiwgZXRjLiwgc28gd2Ugc2hvdWxkIHVzZSB0aGVzZSBkYXRhIHN0cnVj
-dHVyZXMNCj4gPiBAQCAtMTE0Niw2ICsxMTUyLDggQEAgdm9pZCBfX2luaXQgc2V0dXBfYXJjaChj
-aGFyICoqY21kbGluZV9wKQ0KPiA+DQo+ID4gIAl4ODZfaW5pdC5wYWdpbmcucGFnZXRhYmxlX2lu
-aXQoKTsNCj4gPg0KPiA+ICsJdWFpX2VuYWJsZSgpOw0KPiANCj4gSSB3b3VsZCB0aGluayBpbmNy
-ZWRpYmx5IGNhcmVmdWxseSBiZWZvcmUgZW5hYmxpbmcgVUFJIGJ5IGRlZmF1bHQuDQo+IA0KPiBT
-dWZmaWNlIGl0IHRvIHNheSB0aGF0IEludGVsIHdlcmUgdGFsa2VkIGRvd24gZnJvbSA3IGJpdHMg
-dG8gNiwgYW5kDQo+IGFwcGFyZW50bHkgQU1EIGRpZG4ndCBnZXQgdGhlIHNhbWUgbWVtbyBmcm9t
-IHRoZSBvcmlnaW5hbCByZXF1ZXN0ZXJzLg0KPiANCj4gVGhlIHByb2JsZW0gaXMgdGhhdCBVQUkg
-KyBMQTU3IG1lYW5zIHRoYXQgYWxsIHRoZSBwb2lzb24gcG9pbnRlcnMgY2Vhc2UNCj4gZnVuY3Rp
-b25pbmcgYXMgYSBkZWZlbmNlLWluLWRlcHRoIG1lY2hhbmlzbSwgYW5kIGJlY29tZSBsZWdhbCBw
-b2ludGVycw0KPiBwb2ludGluZyBhdCByYW5kb20gcG9zaXRpb25zIGluIHVzZXIgb3Iga2VybmVs
-IHNwYWNlLg0KDQpJc24ndCB0aGF0IHRydWUgcmVnYXJkbGVzcyBvZiBob3cgbWFueSBiaXRzIGFy
-ZSAnaWdub3JlZCcuDQpBRkFJQ1QgdGhlIG9ubHkgc2FuZSB0aGluZyB3b3VsZCBiZSB0byBoYXZl
-IHNvbWV0aGluZyBpbiB0aGUgY3B1DQp0aGF0IHZlcmlmaWVzIHRoZSAnaWdub3JlZCcgYml0cyBt
-YXRjaCB2YWx1ZXMgc2V0IGluIHRoZSBQVEUuDQpUaGF0IGNvdWxkIGJlIHVzZWQgdG8gZW5zdXJl
-ICh3ZWxsIG1ha2UgaXQgbW9yZSBsaWtlbHkpIHRoYXQgc3RhY2sNCmFjY2VzcyBzdGF5IGluIHRo
-ZSBzdGFjayBhbmQgcG9pbnRlcnMgdG8gbW1hcCgpZWQgZGF0YSBzdGF5DQpwb2ludGluZyB0byB0
-aGUgY29ycmVjdCBwYWdlcy4NCg0KSnVzdCBsZXR0aW5nIHVzZXIgYWRkcmVzcyBzcGFjZSBiZSBh
-bGlhc2VkIGEgbG90IG9mIHRpbWVzIGRvZXNuJ3QNCnNlZW0gbGlrZSBhIHNlY3VyaXR5IGZlYXR1
-cmUgdG8gbWUuDQpJdCBtdXN0IGhhdmUgc29tZSBzdHJhbmdlIHVzZSBjYXNlLg0KDQoJRGF2aWQN
-Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
-cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
-KFdhbGVzKQ0K
+On Thu, Mar 10, 2022 at 01:56:30PM -0800, Paul E. McKenney wrote:
+> Hello, Frederic,
+> 
+> I recently added CONFIG_PREEMPT_DYNAMIC=n to the TREE07 file, and since
+> then am getting roughly one RCU CPU stall warning (or silent hang)
+> per few tens of hours of rcutorture testing on dual-socket systems.
+> The stall warnings feature starvation of RCU grace-period kthread.
+> 
+> Any advice on debugging this?
 
+Oh, I'm testing that!

@@ -2,213 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24294D48FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AC14D4931
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242894AbiCJOLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S242701AbiCJOML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242760AbiCJOL1 (ORCPT
+        with ESMTP id S242818AbiCJOLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:11:27 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C66F9A4D4;
-        Thu, 10 Mar 2022 06:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646921425; x=1678457425;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=aXDmGBTRlSAIbebZ1eKgmeAE+5/9H+lFwtsMHbxfleU=;
-  b=Z4VC3B9yaIDESl8IUUm7CWKeW5VI6Gy+C9mvHguhOTBm2d2Y6YcToDCJ
-   ukrwNLoy9+V4A23zgQZnbKdp2JBre5P1r45C8i0nTL4AiEAnYjImlPzxF
-   j2RZCdeatisICJLy3cpI26A4rMeQ6DwnbPiRq4mS3wGZfqYSPvC9n3+G0
-   yKrphlTd8LiScJNN79C1qGinNO5Vse3NVur9/27lp/O+yw82haIuLzLIX
-   YcD+PkJhk9+p4yh97XyfxSnFoYJvJb3NjWIKgYOOTodBVUwq5t+qN0bqm
-   9wW0CevEEJ2BsBXsWwVT/01Lm0XhXVWIdXTk+jQUS3eWMHgHgNWk2l/bR
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="252823460"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="252823460"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:10:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="554655000"
-Received: from chaop.bj.intel.com ([10.240.192.101])
-  by orsmga008.jf.intel.com with ESMTP; 10 Mar 2022 06:10:16 -0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: [PATCH v5 06/13] KVM: Use kvm_userspace_memory_region_ext
-Date:   Thu, 10 Mar 2022 22:09:04 +0800
-Message-Id: <20220310140911.50924-7-chao.p.peng@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 09:11:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41419BAEE;
+        Thu, 10 Mar 2022 06:10:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0BC6B82674;
+        Thu, 10 Mar 2022 14:10:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EA0C340EB;
+        Thu, 10 Mar 2022 14:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646921428;
+        bh=9FKQXRvhoozs6lErb9ui0TiQ6mi3soKCGtB7BH6ZqiM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PsaS/cvaT3io84Q4FMZBEtp1UL4CV6mM/vQ4P2CG0OBmCFgQUKYuRmR4grMqLRmZc
+         yGvPA2sEyI+2O2Zqvl/KQgaH+ZarTorr3Tpck3dfFqqkJSWTTDmG4lLPU9RNWP6Sls
+         HPH7l7tSAl+/ibE9Y8AL3RLMyFb40ygtiYDOAGCg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.16 00/53] 5.16.14-rc2 review
+Date:   Thu, 10 Mar 2022 15:09:05 +0100
+Message-Id: <20220310140811.832630727@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc2.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.16.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.16.14-rc2
+X-KernelTest-Deadline: 2022-03-12T14:08+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new extended memslot structure kvm_userspace_memory_region_ext.
-The extended part (private_fd/ private_offset) will be copied from
-userspace only when KVM_MEM_PRIVATE is set. Internally old
-kvm_userspace_memory_region will still be used for places where the
-extended fields are not needed.
+Note, I'm sending all the patches again for all of the -rc2 releases as
+there has been a lot of churn from what was in -rc1 to -rc2.
 
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
----
- arch/x86/kvm/x86.c       | 12 ++++++------
- include/linux/kvm_host.h |  4 ++--
- virt/kvm/kvm_main.c      | 30 ++++++++++++++++++++----------
- 3 files changed, 28 insertions(+), 18 deletions(-)
+This is the start of the stable review cycle for the 5.16.14 release.
+There are 53 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8c06b8204fca..1d9dbef67715 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11757,13 +11757,13 @@ void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
- 	}
- 
- 	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
--		struct kvm_userspace_memory_region m;
-+		struct kvm_userspace_memory_region_ext m;
- 
--		m.slot = id | (i << 16);
--		m.flags = 0;
--		m.guest_phys_addr = gpa;
--		m.userspace_addr = hva;
--		m.memory_size = size;
-+		m.region.slot = id | (i << 16);
-+		m.region.flags = 0;
-+		m.region.guest_phys_addr = gpa;
-+		m.region.userspace_addr = hva;
-+		m.region.memory_size = size;
- 		r = __kvm_set_memory_region(kvm, &m);
- 		if (r < 0)
- 			return ERR_PTR_USR(r);
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 3be8116079d4..c92c70174248 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1082,9 +1082,9 @@ enum kvm_mr_change {
- };
- 
- int kvm_set_memory_region(struct kvm *kvm,
--			  const struct kvm_userspace_memory_region *mem);
-+		const struct kvm_userspace_memory_region_ext *region_ext);
- int __kvm_set_memory_region(struct kvm *kvm,
--			    const struct kvm_userspace_memory_region *mem);
-+		const struct kvm_userspace_memory_region_ext *region_ext);
- void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot);
- void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen);
- int kvm_arch_prepare_memory_region(struct kvm *kvm,
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 69c318fdff61..d11a2628b548 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1809,8 +1809,9 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
-  * Must be called holding kvm->slots_lock for write.
-  */
- int __kvm_set_memory_region(struct kvm *kvm,
--			    const struct kvm_userspace_memory_region *mem)
-+		const struct kvm_userspace_memory_region_ext *region_ext)
- {
-+	const struct kvm_userspace_memory_region *mem = &region_ext->region;
- 	struct kvm_memory_slot *old, *new;
- 	struct kvm_memslots *slots;
- 	enum kvm_mr_change change;
-@@ -1913,24 +1914,24 @@ int __kvm_set_memory_region(struct kvm *kvm,
- EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
- 
- int kvm_set_memory_region(struct kvm *kvm,
--			  const struct kvm_userspace_memory_region *mem)
-+		const struct kvm_userspace_memory_region_ext *region_ext)
- {
- 	int r;
- 
- 	mutex_lock(&kvm->slots_lock);
--	r = __kvm_set_memory_region(kvm, mem);
-+	r = __kvm_set_memory_region(kvm, region_ext);
- 	mutex_unlock(&kvm->slots_lock);
- 	return r;
- }
- EXPORT_SYMBOL_GPL(kvm_set_memory_region);
- 
- static int kvm_vm_ioctl_set_memory_region(struct kvm *kvm,
--					  struct kvm_userspace_memory_region *mem)
-+			struct kvm_userspace_memory_region_ext *region_ext)
- {
--	if ((u16)mem->slot >= KVM_USER_MEM_SLOTS)
-+	if ((u16)region_ext->region.slot >= KVM_USER_MEM_SLOTS)
- 		return -EINVAL;
- 
--	return kvm_set_memory_region(kvm, mem);
-+	return kvm_set_memory_region(kvm, region_ext);
- }
- 
- #ifndef CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT
-@@ -4476,14 +4477,23 @@ static long kvm_vm_ioctl(struct file *filp,
- 		break;
- 	}
- 	case KVM_SET_USER_MEMORY_REGION: {
--		struct kvm_userspace_memory_region kvm_userspace_mem;
-+		struct kvm_userspace_memory_region_ext region_ext;
- 
- 		r = -EFAULT;
--		if (copy_from_user(&kvm_userspace_mem, argp,
--						sizeof(kvm_userspace_mem)))
-+		if (copy_from_user(&region_ext, argp,
-+				sizeof(struct kvm_userspace_memory_region)))
- 			goto out;
-+		if (region_ext.region.flags & KVM_MEM_PRIVATE) {
-+			int offset = offsetof(
-+				struct kvm_userspace_memory_region_ext,
-+				private_offset);
-+			if (copy_from_user(&region_ext.private_offset,
-+					   argp + offset,
-+					   sizeof(region_ext) - offset))
-+				goto out;
-+		}
- 
--		r = kvm_vm_ioctl_set_memory_region(kvm, &kvm_userspace_mem);
-+		r = kvm_vm_ioctl_set_memory_region(kvm, &region_ext);
- 		break;
- 	}
- 	case KVM_GET_DIRTY_LOG: {
--- 
-2.17.1
+Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+Anything received after that time might be too late.
+
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc2.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.16.14-rc2
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
+
+Juergen Gross <jgross@suse.com>
+    xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
+
+Juergen Gross <jgross@suse.com>
+    xen/gnttab: fix gnttab_end_foreign_access() without page specified
+
+Juergen Gross <jgross@suse.com>
+    xen/pvcalls: use alloc/free_pages_exact()
+
+Juergen Gross <jgross@suse.com>
+    xen/9p: use alloc/free_pages_exact()
+
+Juergen Gross <jgross@suse.com>
+    xen: remove gnttab_query_foreign_access()
+
+Juergen Gross <jgross@suse.com>
+    xen/gntalloc: don't use gnttab_query_foreign_access()
+
+Juergen Gross <jgross@suse.com>
+    xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
+
+Juergen Gross <jgross@suse.com>
+    xen/netfront: don't use gnttab_query_foreign_access() for mapped status
+
+Juergen Gross <jgross@suse.com>
+    xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
+
+Juergen Gross <jgross@suse.com>
+    xen/grant-table: add gnttab_try_end_foreign_access()
+
+Juergen Gross <jgross@suse.com>
+    xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: fix build warning in proc-v7-bugs.c
+
+Nathan Chancellor <nathan@kernel.org>
+    arm64: Do not include __READ_ONCE() block in assembly files
+
+Nathan Chancellor <nathan@kernel.org>
+    ARM: Do not use NOCROSSREFS directive with ld.lld
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: fix co-processor register typo
+
+Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+    ARM: fix build error when BPF_SYSCALL is disabled
+
+James Morse <james.morse@arm.com>
+    arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+
+James Morse <james.morse@arm.com>
+    arm64: Use the clearbhb instruction in mitigations
+
+James Morse <james.morse@arm.com>
+    KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
+
+James Morse <james.morse@arm.com>
+    arm64: Mitigate spectre style branch history side channels
+
+James Morse <james.morse@arm.com>
+    arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
+
+James Morse <james.morse@arm.com>
+    arm64: Add percpu vectors for EL1
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Add macro for reading symbol addresses from the trampoline
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Add vectors that have the bhb mitigation sequences
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Allow the trampoline text to occupy multiple pages
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Make the kpti trampoline's kpti sequence optional
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Move trampoline macros out of ifdef'd section
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Don't assume tramp_vectors is the start of the vectors
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Move the trampoline data page before the text page
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Free up another register on kpti's tramp_exit path
+
+James Morse <james.morse@arm.com>
+    arm64: entry: Make the trampoline cleanup optional
+
+James Morse <james.morse@arm.com>
+    KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
+
+James Morse <james.morse@arm.com>
+    arm64: spectre: Rename spectre_v4_patch_fw_mitigation_conduit
+
+James Morse <james.morse@arm.com>
+    arm64: entry.S: Add ventry overflow sanity checks
+
+Joey Gouly <joey.gouly@arm.com>
+    arm64: cpufeature: add HWCAP for FEAT_RPRES
+
+Joey Gouly <joey.gouly@arm.com>
+    arm64: cpufeature: add HWCAP for FEAT_AFP
+
+Joey Gouly <joey.gouly@arm.com>
+    arm64: add ID_AA64ISAR2_EL1 sys register
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: include unprivileged BPF status in Spectre V2 reporting
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: Spectre-BHB workaround
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: use LOADADDR() to get load address of sections
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: early traps initialisation
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: report Spectre v2 status through sysfs
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Warn about Spectre v2 LFENCE mitigation
+
+Kim Phillips <kim.phillips@amd.com>
+    x86/speculation: Update link to AMD speculation whitepaper
+
+Kim Phillips <kim.phillips@amd.com>
+    x86/speculation: Use generic retpoline by default on AMD
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+
+Peter Zijlstra <peterz@infradead.org>
+    Documentation/hw-vuln: Update spectre doc
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/speculation: Add eIBRS + Retpoline options
+
+Peter Zijlstra (Intel) <peterz@infradead.org>
+    x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/hw-vuln/spectre.rst   |  50 +--
+ Documentation/admin-guide/kernel-parameters.txt |   8 +-
+ Documentation/arm64/cpu-feature-registers.rst   |  17 ++
+ Documentation/arm64/elf_hwcaps.rst              |   8 +
+ Makefile                                        |   4 +-
+ arch/arm/include/asm/assembler.h                |  10 +
+ arch/arm/include/asm/spectre.h                  |  32 ++
+ arch/arm/include/asm/vmlinux.lds.h              |  43 ++-
+ arch/arm/kernel/Makefile                        |   2 +
+ arch/arm/kernel/entry-armv.S                    |  79 ++++-
+ arch/arm/kernel/entry-common.S                  |  24 ++
+ arch/arm/kernel/spectre.c                       |  71 +++++
+ arch/arm/kernel/traps.c                         |  65 +++-
+ arch/arm/mm/Kconfig                             |  11 +
+ arch/arm/mm/proc-v7-bugs.c                      | 208 ++++++++++---
+ arch/arm64/Kconfig                              |   9 +
+ arch/arm64/include/asm/assembler.h              |  53 ++++
+ arch/arm64/include/asm/cpu.h                    |   1 +
+ arch/arm64/include/asm/cpufeature.h             |  29 ++
+ arch/arm64/include/asm/cputype.h                |   8 +
+ arch/arm64/include/asm/fixmap.h                 |   6 +-
+ arch/arm64/include/asm/hwcap.h                  |   2 +
+ arch/arm64/include/asm/insn.h                   |   1 +
+ arch/arm64/include/asm/kvm_host.h               |   5 +
+ arch/arm64/include/asm/rwonce.h                 |   4 +-
+ arch/arm64/include/asm/sections.h               |   5 +
+ arch/arm64/include/asm/spectre.h                |   4 +
+ arch/arm64/include/asm/sysreg.h                 |  18 ++
+ arch/arm64/include/asm/vectors.h                |  73 +++++
+ arch/arm64/include/uapi/asm/hwcap.h             |   2 +
+ arch/arm64/include/uapi/asm/kvm.h               |   5 +
+ arch/arm64/kernel/cpu_errata.c                  |   7 +
+ arch/arm64/kernel/cpufeature.c                  |  25 ++
+ arch/arm64/kernel/cpuinfo.c                     |   3 +
+ arch/arm64/kernel/entry.S                       | 214 +++++++++----
+ arch/arm64/kernel/image-vars.h                  |   4 +
+ arch/arm64/kernel/proton-pack.c                 | 391 +++++++++++++++++++++++-
+ arch/arm64/kernel/vmlinux.lds.S                 |   2 +-
+ arch/arm64/kvm/arm.c                            |   5 +-
+ arch/arm64/kvm/hyp/hyp-entry.S                  |   9 +
+ arch/arm64/kvm/hyp/nvhe/mm.c                    |   4 +-
+ arch/arm64/kvm/hyp/vhe/switch.c                 |   9 +-
+ arch/arm64/kvm/hypercalls.c                     |  12 +
+ arch/arm64/kvm/psci.c                           |  18 +-
+ arch/arm64/kvm/sys_regs.c                       |   2 +-
+ arch/arm64/mm/mmu.c                             |  12 +-
+ arch/arm64/tools/cpucaps                        |   1 +
+ arch/x86/include/asm/cpufeatures.h              |   2 +-
+ arch/x86/include/asm/nospec-branch.h            |  16 +-
+ arch/x86/kernel/alternative.c                   |   8 +-
+ arch/x86/kernel/cpu/bugs.c                      | 204 ++++++++++---
+ arch/x86/lib/retpoline.S                        |   2 +-
+ arch/x86/net/bpf_jit_comp.c                     |   2 +-
+ drivers/acpi/ec.c                               |  10 -
+ drivers/acpi/sleep.c                            |  14 +-
+ drivers/block/xen-blkfront.c                    |  63 ++--
+ drivers/net/xen-netfront.c                      |  54 ++--
+ drivers/scsi/xen-scsifront.c                    |   3 +-
+ drivers/xen/gntalloc.c                          |  25 +-
+ drivers/xen/grant-table.c                       |  71 +++--
+ drivers/xen/pvcalls-front.c                     |   8 +-
+ drivers/xen/xenbus/xenbus_client.c              |  24 +-
+ include/linux/arm-smccc.h                       |   5 +
+ include/linux/bpf.h                             |  12 +
+ include/xen/grant_table.h                       |  19 +-
+ kernel/sysctl.c                                 |   7 +
+ net/9p/trans_xen.c                              |  14 +-
+ tools/arch/x86/include/asm/cpufeatures.h        |   2 +-
+ 68 files changed, 1782 insertions(+), 358 deletions(-)
+
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF654D4AB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC804D4BE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346157AbiCJOmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S1343539AbiCJOj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343923AbiCJOb3 (ORCPT
+        with ESMTP id S1343925AbiCJOb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Mar 2022 09:31:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474DAD95EF;
-        Thu, 10 Mar 2022 06:28:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABF0DBD36;
+        Thu, 10 Mar 2022 06:28:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D686661C0A;
-        Thu, 10 Mar 2022 14:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91F6C340E8;
-        Thu, 10 Mar 2022 14:28:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC99D61C0A;
+        Thu, 10 Mar 2022 14:28:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EECC340E8;
+        Thu, 10 Mar 2022 14:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922508;
-        bh=5IG58LdHT4xAvpo1TWps4IujYggSLXE7CJz3LAeiwxk=;
+        s=korg; t=1646922512;
+        bh=oVZchNMBYQehnyKeJxmujUSCkykKcKMWao8G0T/Rvsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2Hx9S+1ftr7A4s6TptcEyLMAxpf5Yh0UmBqGSjCT8oyi78yLqAk6OIKosv+UviYy
-         CSKI3/0e5CnTcJYyIk8ifIg5bnQYQUHkNcE1GNuHuVw+wdDKbpWEhhmd5Wg0Vy6Z0H
-         6lewHzM3Y1FA0EbhgJFzQKe1FedbqSKxnBwB6zTI=
+        b=vErCtK6lGa7kWbr3BVHCSPaSKJuClzg4GXFZqMvmvI/uJ5uj+65w5FjgNhMwTgbMW
+         UAY6MWxguACgEwEWpu+6QF2XR8b9xWiVj6r/vkUmvO3eJ79Hc8/r6ucFWRJ2++eybd
+         +x6+Gc5w5XE1s4wlby7rtNlZMfDvpkwzEz9qUDmM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Demi Marie Obenour <demi@invisiblethingslab.com>,
         Juergen Gross <jgross@suse.com>,
         Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.4 22/33] xen/xenbus: dont let xenbus_grant_ring() remove grants in error case
-Date:   Thu, 10 Mar 2022 15:19:23 +0100
-Message-Id: <20220310140809.393007441@linuxfoundation.org>
+Subject: [PATCH 5.4 23/33] xen/grant-table: add gnttab_try_end_foreign_access()
+Date:   Thu, 10 Mar 2022 15:19:24 +0100
+Message-Id: <20220310140809.420824002@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
 References: <20220310140808.741682643@linuxfoundation.org>
@@ -58,77 +58,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Juergen Gross <jgross@suse.com>
 
-Commit 3777ea7bac3113005b7180e6b9dadf16d19a5827 upstream.
+Commit 6b1775f26a2da2b05a6dc8ec2b5d14e9a4701a1a upstream.
 
-Letting xenbus_grant_ring() tear down grants in the error case is
-problematic, as the other side could already have used these grants.
-Calling gnttab_end_foreign_access_ref() without checking success is
-resulting in an unclear situation for any caller of xenbus_grant_ring()
-as in the error case the memory pages of the ring page might be
-partially mapped. Freeing them would risk unwanted foreign access to
-them, while not freeing them would leak memory.
+Add a new grant table function gnttab_try_end_foreign_access(), which
+will remove and free a grant if it is not in use.
 
-In order to remove the need to undo any gnttab_grant_foreign_access()
-calls, use gnttab_alloc_grant_references() to make sure no further
-error can occur in the loop granting access to the ring pages.
+Its main use case is to either free a grant if it is no longer in use,
+or to take some other action if it is still in use. This other action
+can be an error exit, or (e.g. in the case of blkfront persistent grant
+feature) some special handling.
 
-It should be noted that this way of handling removes leaking of
-grant entries in the error case, too.
-
-This is CVE-2022-23040 / part of XSA-396.
+This is CVE-2022-23036, CVE-2022-23038 / part of XSA-396.
 
 Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/xenbus/xenbus_client.c |   24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ drivers/xen/grant-table.c |   14 ++++++++++++--
+ include/xen/grant_table.h |   12 ++++++++++++
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
---- a/drivers/xen/xenbus/xenbus_client.c
-+++ b/drivers/xen/xenbus/xenbus_client.c
-@@ -366,7 +366,14 @@ int xenbus_grant_ring(struct xenbus_devi
- 		      unsigned int nr_pages, grant_ref_t *grefs)
- {
- 	int err;
--	int i, j;
-+	unsigned int i;
-+	grant_ref_t gref_head;
-+
-+	err = gnttab_alloc_grant_references(nr_pages, &gref_head);
-+	if (err) {
-+		xenbus_dev_fatal(dev, err, "granting access to ring page");
-+		return err;
-+	}
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		unsigned long gfn;
-@@ -376,23 +383,14 @@ int xenbus_grant_ring(struct xenbus_devi
- 		else
- 			gfn = virt_to_gfn(vaddr);
- 
--		err = gnttab_grant_foreign_access(dev->otherend_id, gfn, 0);
--		if (err < 0) {
--			xenbus_dev_fatal(dev, err,
--					 "granting access to ring page");
--			goto fail;
--		}
--		grefs[i] = err;
-+		grefs[i] = gnttab_claim_grant_reference(&gref_head);
-+		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
-+						gfn, 0);
- 
- 		vaddr = vaddr + XEN_PAGE_SIZE;
- 	}
- 
- 	return 0;
--
--fail:
--	for (j = 0; j < i; j++)
--		gnttab_end_foreign_access_ref(grefs[j], 0);
--	return err;
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -436,11 +436,21 @@ static void gnttab_add_deferred(grant_re
+ 	       what, ref, page ? page_to_pfn(page) : -1);
  }
- EXPORT_SYMBOL_GPL(xenbus_grant_ring);
  
++int gnttab_try_end_foreign_access(grant_ref_t ref)
++{
++	int ret = _gnttab_end_foreign_access_ref(ref, 0);
++
++	if (ret)
++		put_free_entry(ref);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(gnttab_try_end_foreign_access);
++
+ void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
+ 			       unsigned long page)
+ {
+-	if (gnttab_end_foreign_access_ref(ref, readonly)) {
+-		put_free_entry(ref);
++	if (gnttab_try_end_foreign_access(ref)) {
+ 		if (page != 0)
+ 			put_page(virt_to_page(page));
+ 	} else
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -97,10 +97,22 @@ int gnttab_end_foreign_access_ref(grant_
+  * access has been ended, free the given page too.  Access will be ended
+  * immediately iff the grant entry is not in use, otherwise it will happen
+  * some time later.  page may be 0, in which case no freeing will occur.
++ * Note that the granted page might still be accessed (read or write) by the
++ * other side after gnttab_end_foreign_access() returns, so even if page was
++ * specified as 0 it is not allowed to just reuse the page for other
++ * purposes immediately.
+  */
+ void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
+ 			       unsigned long page);
+ 
++/*
++ * End access through the given grant reference, iff the grant entry is
++ * no longer in use.  In case of success ending foreign access, the
++ * grant reference is deallocated.
++ * Return 1 if the grant entry was freed, 0 if it is still in use.
++ */
++int gnttab_try_end_foreign_access(grant_ref_t ref);
++
+ int gnttab_grant_foreign_transfer(domid_t domid, unsigned long pfn);
+ 
+ unsigned long gnttab_end_foreign_transfer_ref(grant_ref_t ref);
 
 

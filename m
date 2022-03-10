@@ -2,487 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4C44D3DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C3E4D3DDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238894AbiCJAGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S238902AbiCJAHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiCJAGq (ORCPT
+        with ESMTP id S238896AbiCJAHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:06:46 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0E2AB458
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646870745; x=1678406745;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4aMMzI55SGl8c1zgk14wTxCGpG3WRn24JImT2MZfihA=;
-  b=UHR0+Nrn9g1VWTik/RQL8/cLHrQgTs0nkVODhHqxBdFJEG2wSY0IIvg7
-   EKXt7K5hvkNr42Gti4jDJxD+8QXcMjLBk2/x8Q7AOqk6PYK43MG+8e3AU
-   QPNnda/aHB0Thpr4DOXWJtmfHHmjWKr3wKjSoM+UGKkLkgusrhP77E+Gk
-   FZW0ka42JQUUtU5mNQYjewaOXkxZuqxhxdPw63a3kRI2l7QXf0TxzsVxh
-   5wFrQrxaFsjlTEV0z8kjnubNl9mn8kq/5xe9wAL4T2/5QXwWF9rFlxzlM
-   JsrQoNP+lZg7J0GuCkfvc2+3PzMv4lsxynpCSCuWaVwvsteBpAevFe9yG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="237288042"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="237288042"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 16:05:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="578587257"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2022 16:05:30 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nS6J7-00040O-Si; Thu, 10 Mar 2022 00:05:29 +0000
-Date:   Thu, 10 Mar 2022 08:04:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [jolsa-perf:bpf/kprobe_multi_4 3/11]
- include/linux/trace_events.h:784:42: warning: declaration of 'union
- bpf_attr' will not be visible outside of this function
-Message-ID: <202203100814.ubrhuffY-lkp@intel.com>
+        Wed, 9 Mar 2022 19:07:16 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBDEF1EA1
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:06:17 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso6770068pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:06:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IQJaIhmi/QzFmALiltJXNjf6ckrS2EgY1Uh0aPn7MYs=;
+        b=gHn6uRZhcwc/1/iluj+hvVI/tjLthpe0Akd+MQKuvfdxMcu9PCDly6aCrg472eEh3m
+         TjX0NOdopbKbRdKaTnbzERgZdM/mueEx2YG8+M+5257GEhp393PupeQgUlkt7oFEvDNE
+         3oK0YaD8xaVKZQHhdXj8we5uTjgvoB98hHYuntfbhhJEs/08fC7MpT6rEISUbYY/ic66
+         WSvO3h2xy30LL3YTP0oNjR8eybS0lFiAfsfYGA4HOD3rEng97uK2wZ6VlssMAfKNTXSz
+         EKoRjaRuHELjmnQMxekNcgSoQf+ZMttBSndyI4apgf7t9m0BmZJQgb+1OpttRu0tnJ2D
+         9JGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IQJaIhmi/QzFmALiltJXNjf6ckrS2EgY1Uh0aPn7MYs=;
+        b=A6ToL4a16EZmmXHD1ohdG4f7HFN4xm/M+4ukI5w0sL4AmkZscd/QM7FZN5h9Z4sAi3
+         hjUpM/R/Hjg/mB9RtqEv9nqKd2MHQAa+AktGYQSAZisbNwWvTJfEYnk61HpjSnRDD3xL
+         Fs0QTBXmKrih5H7zG3+EnrF8BxitCtRrUM0MKq13jMOTo1jibsohBAc353FSvHrBo2eJ
+         qAwKHC7TE4mQLJAehlalGJOCTvi7OdS8FyZxYKBrozoL7H65ko3IAUSNZ9CsyKfG4GQV
+         iPYCBm60AEsouZtr5oKDHh0oPCKCeg+ThwwQLUnxCgxgwYp5/gvGZhGpzffOLJ81mjqs
+         aLGA==
+X-Gm-Message-State: AOAM532KVddz8jisxJfzO0K1r3AQgKHPZMesTkpDGUZbLjM8QP0ADw2z
+        jOZBB2xtI0Ema/PftEJWPxxJO9VhlhlpNY6D93PuSw==
+X-Google-Smtp-Source: ABdhPJwb9kJQ7QI7FmWPhygsP7CpEdP0qVgYwpDcpFWyZG/Qf8Jpi7IliqWagwPdOiBZnW2yD9cno3XpwTf/bXrgthc=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr2305234pll.132.1646870776595; Wed, 09
+ Mar 2022 16:06:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220302082718.32268-1-songmuchun@bytedance.com> <20220302082718.32268-3-songmuchun@bytedance.com>
+In-Reply-To: <20220302082718.32268-3-songmuchun@bytedance.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 9 Mar 2022 16:06:05 -0800
+Message-ID: <CAPcyv4j7rn8OzWKydcCJNXdrhXm6h6Vq5n7uLzP5BSMJ_qSZgg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] dax: fix cache flush on PMD-mapped pages
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Hugh Dickins <hughd@google.com>, xiyuyang19@fudan.edu.cn,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ross Zwisler <zwisler@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, duanxiongchun@bytedance.com,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/kprobe_multi_4
-head:   02731d567ee31d7c7f012e9c5930f114ed1e2478
-commit: c330e21ba4633cb075ce0c4c5f936b16ed722666 [3/11] bpf: Add multi kprobe link
-config: s390-buildonly-randconfig-r001-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100814.ubrhuffY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=c330e21ba4633cb075ce0c4c5f936b16ed722666
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/kprobe_multi_4
-        git checkout c330e21ba4633cb075ce0c4c5f936b16ed722666
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/trace/
+On Wed, Mar 2, 2022 at 12:29 AM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+> However, it does not cover the full pages in a THP except a head page.
+> Replace it with flush_cache_range() to fix this issue.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This needs to clarify that this is just a documentation issue with the
+respect to properly documenting the expected usage of cache flushing
+before modifying the pmd. However, in practice this is not a problem
+due to the fact that DAX is not available on architectures with
+virtually indexed caches per:
 
-All warnings (new ones prefixed by >>):
+d92576f1167c dax: does not work correctly with virtual aliasing caches
 
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from kernel/trace/ftrace.c:45:
-   In file included from kernel/trace/trace_output.h:6:
-   In file included from kernel/trace/trace.h:17:
->> include/linux/trace_events.h:784:42: warning: declaration of 'union bpf_attr' will not be visible outside of this function [-Wvisibility]
-   bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-                                            ^
-   kernel/trace/ftrace.c:297:5: warning: no previous prototype for function '__register_ftrace_function' [-Wmissing-prototypes]
-   int __register_ftrace_function(struct ftrace_ops *ops)
-       ^
-   kernel/trace/ftrace.c:297:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __register_ftrace_function(struct ftrace_ops *ops)
-   ^
-   static 
-   kernel/trace/ftrace.c:340:5: warning: no previous prototype for function '__unregister_ftrace_function' [-Wmissing-prototypes]
-   int __unregister_ftrace_function(struct ftrace_ops *ops)
-       ^
-   kernel/trace/ftrace.c:340:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __unregister_ftrace_function(struct ftrace_ops *ops)
-   ^
-   static 
-   kernel/trace/ftrace.c:3905:15: warning: no previous prototype for function 'arch_ftrace_match_adjust' [-Wmissing-prototypes]
-   char * __weak arch_ftrace_match_adjust(char *str, const char *search)
-                 ^
-   kernel/trace/ftrace.c:3905:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   char * __weak arch_ftrace_match_adjust(char *str, const char *search)
-   ^
-   static 
-   kernel/trace/ftrace.c:3108:1: warning: unused function 'ops_references_rec' [-Wunused-function]
-   ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
-   ^
-   17 warnings generated.
---
-   In file included from kernel/trace/ring_buffer.c:8:
->> include/linux/trace_events.h:784:42: warning: declaration of 'union bpf_attr' will not be visible outside of this function [-Wvisibility]
-   bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-                                            ^
-   In file included from kernel/trace/ring_buffer.c:7:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:6:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if " len " > 254\n"                                           \
-            ^
-   <inline asm>:5:5: note: instantiated into assembly here
-   .if 6651b-6641b > 254
-       ^
-   In file included from kernel/trace/ring_buffer.c:7:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:6:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives does not support instructions blocks > 254 bytes
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives does not support instructions "    \
-            ^
-   <inline asm>:6:2: note: instantiated into assembly here
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   In file included from kernel/trace/ring_buffer.c:7:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:6:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if (" len ") %% 2\n"                                          \
-            ^
-   <inline asm>:8:5: note: instantiated into assembly here
-   .if (6651b-6641b) % 2
-       ^
-   In file included from kernel/trace/ring_buffer.c:7:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:6:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives instructions length is odd
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
-            ^
-   <inline asm>:9:2: note: instantiated into assembly here
-           .error "cpu alternatives instructions length is odd"
-           ^
-   In file included from kernel/trace/ring_buffer.c:7:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:6:
---
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:9:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:9:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:9:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:17:
->> include/linux/trace_events.h:784:42: warning: declaration of 'union bpf_attr' will not be visible outside of this function [-Wvisibility]
-   bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-                                            ^
-   In file included from kernel/trace/trace.c:15:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if " len " > 254\n"                                           \
-            ^
-   <inline asm>:5:5: note: instantiated into assembly here
-   .if 6651b-6641b > 254
-       ^
-   In file included from kernel/trace/trace.c:15:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives does not support instructions blocks > 254 bytes
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives does not support instructions "    \
-            ^
-   <inline asm>:6:2: note: instantiated into assembly here
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   In file included from kernel/trace/trace.c:15:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if (" len ") %% 2\n"                                          \
-            ^
-   <inline asm>:8:5: note: instantiated into assembly here
-   .if (6651b-6641b) % 2
-       ^
-   In file included from kernel/trace/trace.c:15:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives instructions length is odd
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
-            ^
-   <inline asm>:9:2: note: instantiated into assembly here
-           .error "cpu alternatives instructions length is odd"
-           ^
-   In file included from kernel/trace/trace.c:15:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
-           OLDINSTR_PADDING(oldinstr, num)                                 \
-..
+Otherwise, you can add:
 
-
-vim +784 include/linux/trace_events.h
-
-   755	
-   756	static inline int
-   757	perf_event_query_prog_array(struct perf_event *event, void __user *info)
-   758	{
-   759		return -EOPNOTSUPP;
-   760	}
-   761	static inline int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *p)
-   762	{
-   763		return -EOPNOTSUPP;
-   764	}
-   765	static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_prog *p)
-   766	{
-   767		return -EOPNOTSUPP;
-   768	}
-   769	static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
-   770	{
-   771		return NULL;
-   772	}
-   773	static inline void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
-   774	{
-   775	}
-   776	static inline int bpf_get_perf_event_info(const struct perf_event *event,
-   777						  u32 *prog_id, u32 *fd_type,
-   778						  const char **buf, u64 *probe_offset,
-   779						  u64 *probe_addr)
-   780	{
-   781		return -EOPNOTSUPP;
-   782	}
-   783	static inline int
- > 784	bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   785	{
-   786		return -EOPNOTSUPP;
-   787	}
-   788	#endif
-   789	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>

@@ -2,170 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFECE4D45A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE094D45A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241532AbiCJL1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 06:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S241573AbiCJL2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 06:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbiCJL1V (ORCPT
+        with ESMTP id S241561AbiCJL2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 06:27:21 -0500
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75923141E28
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:26:20 -0800 (PST)
-Received: from cap.home.8bytes.org (p549ad610.dip0.t-ipconnect.de [84.154.214.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by theia.8bytes.org (Postfix) with ESMTPSA id 94466DC;
-        Thu, 10 Mar 2022 12:26:17 +0100 (CET)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] x86/sev: Unroll string mmio with CC_ATTR_GUEST_UNROLL_STRING_IO
-Date:   Thu, 10 Mar 2022 12:26:15 +0100
-Message-Id: <20220310112615.31133-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 10 Mar 2022 06:28:35 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D309FF2;
+        Thu, 10 Mar 2022 03:27:33 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id hw13so10902884ejc.9;
+        Thu, 10 Mar 2022 03:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uxa1NnYR8j/XIXPuu7RmPrFzq9a1elgEFCKBxJFkaXg=;
+        b=qUKlqVEZnqn1N7FpHgDzNtb/hZ7AEY/iMZMM7wvYiebLHkLcSBbJE/ajxNJyIsIHQy
+         tD/vkytpLlRW+wbOXO/8Ds14p/vYqYGwSsMXUPBbPrIPk12ng9SasCzw2SR+RzVi5GIl
+         gvWTpPFLTrmVwvUQu/Qa1bpYLEpQ1LoZTOtUcAQYeScnp1sccGhLdWB5EBWWDwgcoiTz
+         XbF/UHVzFs9uslDe/YvkPMmOZNOzAIiqKdUHeNTaXywB7ipe++9lvNrbBJPSiQcGTa9n
+         HDvSWCdCEGme+p/qHWNDb7XRFYqAR1xAkchFAm3a1KDDGmyrzKObzBqL+atoNAad3HDY
+         Uojw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uxa1NnYR8j/XIXPuu7RmPrFzq9a1elgEFCKBxJFkaXg=;
+        b=Nz372D0Czp07VOc0ZzV07NeAuWam7qJYV2Rorz16LjXQUd2SAXK2/soKLPW3es1bAs
+         h0yw3UqiAcC7sLXVTLpKDscRXTptrIqZCGV048NnqTyH3HmPN50z1Pn+rcfqKLWf24yz
+         gnrjw4wOCuFdaNHVbEu+3eLcRQiws7AWcKIjXwQ7IcuukkXkibqT/OBF4QWXJeQpzXSf
+         iuzWhQK7c8rNRhHgPvR71TZnCI995L21JBXRtjW5E8RBZvbjNhlz0o3Nfrh8bXCQ8nVo
+         LWO1fOrd/nsyuC+lKi2IBIcgUI4Dql3CsX4093FHuyxctUZD11hNz6gV7PtuQGiXo04X
+         Pmmw==
+X-Gm-Message-State: AOAM532iqLxxl2qz0KgiYESPfG//tSVcQk4FsO6z2D3ZlLsAzKUbumAS
+        fVe/8NusVK1pIVNZJq/pVqTCBip5fbbIs3Ovi6U=
+X-Google-Smtp-Source: ABdhPJyyd+NMDS+SKxCCsV3dOGCg1IgjK7szmEs2qpr9CGv91olzYG09zyTWZ66vBMEOpZBzJvjdBH71djZU7RUt6Wg=
+X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
+ sd1-20020a1709076e0100b006d0562ce389mr3801168ejc.497.1646911652222; Thu, 10
+ Mar 2022 03:27:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220308181847.3276-1-kris@embeddedTS.com>
+In-Reply-To: <20220308181847.3276-1-kris@embeddedTS.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 10 Mar 2022 13:26:56 +0200
+Message-ID: <CAHp75VcOuJxeDobrGMMAjF92hcCxefmswHQyuUv4sF5FEU2m9w@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: ts4900: Do not set DAT and OE together
+To:     Kris Bahnsen <kris@embeddedts.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Featherston <mark@embeddedts.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+Bart, side note: I can't see your for-current in Linux Next for a few
+days, is everything okay?
 
-The io specific memcpy/memset functions use string mmio accesses to do
-their work. Under SEV the hypervisor can't emulate these instructions,
-because they read/write directly from/to encrypted memory.
+On Wed, Mar 9, 2022 at 1:47 AM Kris Bahnsen <kris@embeddedts.com> wrote:
+>
+> From: Mark Featherston <mark@embeddedTS.com>
+>
+> This works around an issue with the hardware where both OE and
+> DAT are exposed in the same register. If both are updated
+> simultaneously, the harware makes no guarantees that OE or DAT
 
-KVM will inject a page fault exception into the guest when it is asked
-to emulate string mmio instructions for an SEV guest:
+hardware
 
-	BUG: unable to handle page fault for address: ffffc90000065068
-	#PF: supervisor read access in kernel mode
-	#PF: error_code(0x0000) - not-present page
-	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
-	Oops: 0000 [#1] PREEMPT SMP NOPTI
-	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
+the OE
 
-As string mmio for an SEV guest can not be supported by the
-hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
-enabled kernels.
+> will actually change in any given order and may result in a
+> glitch of a few ns on a GPIO pin when changing direction and value
+> in a single write.
+>
+> Setting direction to input now only affects OE bit. Setting
 
-Cc: stable@vger.kernel.org #4.15+
-Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- arch/x86/lib/iomem.c | 63 ++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 58 insertions(+), 5 deletions(-)
+the OE bit
 
-diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
-index df50451d94ef..1246dd558f8d 100644
---- a/arch/x86/lib/iomem.c
-+++ b/arch/x86/lib/iomem.c
-@@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
- 		     : "memory");
- }
- 
--void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	if (unlikely(!n))
- 		return;
-@@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- 	}
- 	rep_movs(to, (const void *)from, n);
- }
--EXPORT_SYMBOL(memcpy_fromio);
- 
--void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	if (unlikely(!n))
- 		return;
-@@ -56,9 +55,8 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- 	}
- 	rep_movs((void *)to, (const void *) from, n);
- }
--EXPORT_SYMBOL(memcpy_toio);
- 
--void memset_io(volatile void __iomem *a, int b, size_t c)
-+static void string_memset_io(volatile void __iomem *a, int b, size_t c)
- {
- 	/*
- 	 * TODO: memset can mangle the IO patterns quite a bit.
-@@ -66,4 +64,59 @@ void memset_io(volatile void __iomem *a, int b, size_t c)
- 	 */
- 	memset((void *)a, b, c);
- }
-+
-+static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	const volatile char __iomem *in = from;
-+	char *out = to;
-+	int i;
-+
-+	for (i = 0; i < n; ++i)
-+		out[i] = in[i];
-+}
-+
-+static void unrolled_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	volatile char __iomem *out = to;
-+	const char *in = from;
-+	int i;
-+
-+	for (i = 0; i < n; ++i)
-+		out[i] = in[i];
-+}
-+
-+static void unrolled_memset_io(volatile void __iomem *a, int b, size_t c)
-+{
-+	volatile char __iomem *mem = a;
-+	int i;
-+
-+	for (i = 0; i < c; ++i)
-+		mem[i] = b;
-+}
-+
-+void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memcpy_fromio(to, from, n);
-+	else
-+		string_memcpy_fromio(to, from, n);
-+}
-+EXPORT_SYMBOL(memcpy_fromio);
-+
-+void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memcpy_toio(to, from, n);
-+	else
-+		string_memcpy_toio(to, from, n);
-+}
-+EXPORT_SYMBOL(memcpy_toio);
-+
-+void memset_io(volatile void __iomem *a, int b, size_t c)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memset_io(a, b, c);
-+	else
-+		string_memset_io(a, b, c);
-+}
- EXPORT_SYMBOL(memset_io);
+> direction to output updates DAT first, then OE.
+>
+> Fixes: 9c6686322d74 ("gpio: add Technologic I2C-FPGA gpio support")
+
+>
+
+There must be no blank lines in the tag block.
+
+> Signed-off-by: Mark Featherston <mark@embeddedTS.com>
+> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+
+...
+
+> + * Copyright (C) 2015-2018 Technologic Systems
+
+Not sure it's a valid change for a simple fix.
+
+...
+
+> -       /*
+> -        * This will clear the output enable bit, the other bits are
+> -        * dontcare when this is cleared
+> +       /* Only clear the OE bit here, requires a RMW. Prevents potential issue
+> +        * with OE and data getting to the physical pin at different times.
+>          */
+
+Keep the proper style for multi-line comments.
+
+...
+
+> +       /* If changing from an input to an output, we need to first set the
+> +        * proper data bit to what is requested and then set OE bit. This
+
+the OE bit
+
+> +        * prevents a glitch that can occur on the IO line
+> +        */
+
+Keep the proper style.
+
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko

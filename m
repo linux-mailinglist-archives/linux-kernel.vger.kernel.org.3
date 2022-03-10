@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9AA4D5280
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 127164D5282
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237613AbiCJTow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S240772AbiCJTri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbiCJTou (ORCPT
+        with ESMTP id S233157AbiCJTrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:44:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A6818E3E0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:43:48 -0800 (PST)
+        Thu, 10 Mar 2022 14:47:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11B194AA9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:46:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B361461349
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 181BEC340E8;
-        Thu, 10 Mar 2022 19:43:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80537B826EE
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:46:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F61C340E9;
+        Thu, 10 Mar 2022 19:46:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646941427;
-        bh=lcyk4Ya2kNNVHCO1+J6qMownn3rhNvf/MT7Pj2rbBSc=;
+        s=k20201202; t=1646941591;
+        bh=2s5QZZ0URnoNPjXrjpRvFydP8QHY5Y5WWKuZfRwYKW4=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=gRXmqDz5tDnnKg3dJXvLBSqtlxUaybiuObZ3bPNWe43ya0SmBm8LxjdgODG4Hncvf
-         Ou6HxOS/zKyH7yLoplt2bjAMZaihxvGP/2qw4kTk4ZYp8M9D0QNBBQuSC4WwD7xF/L
-         7vglH3pXTA89gdF7I3BiPc9Ogxb8UE92dZnZseRULUoHM1hlQSQBOGirxex215a2jf
-         WbGdTcHsjKqfQXI2FyBTmzPAIZcuR2yhhUn4xhqGoN5Cx47ooB7//o5uL5nixygn1U
-         Zng6UlIbqCzjuH4HFITF8A5GH38Z7vo01jS0pe42gNQB4X4POLYD9kTq4rJB4bFaKY
-         M2oMf0pqr+LLw==
+        b=rMzW6exEz5iCT4eJklgFLz4kHh3xekc4fb6PHx2wOFh8gpaYcUk6xDir94kjMGTyh
+         EXk8XGVhpEPCP1d7I05gxuIAqgRDL2ccJ0+o+RAti/Oe95kte9sCDFWk8QUvG0JMnx
+         7Z1A/pIwrrBxdOHyTkoT6NxBxvn3cT3Q44jlFjYEuhRWkCfdISDDni317mJlTScjNU
+         HW+dm9NEzMg5JikyHhSRqgrK1VCPHIWDH42MO6rRMAnbfAAai6cT1EkSuchq4FYDAd
+         96BEkJo2mAALUo5jhCwgiqOq7ozIMwfS0m6fXMRixlJS/P/H87O/7UwdU330MP70JK
+         VB8LibnT76TYA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AB8A75C0387; Thu, 10 Mar 2022 11:43:46 -0800 (PST)
-Date:   Thu, 10 Mar 2022 11:43:46 -0800
+        id B59A65C0387; Thu, 10 Mar 2022 11:46:30 -0800 (PST)
+Date:   Thu, 10 Mar 2022 11:46:30 -0800
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Frederic Weisbecker <frederic@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -51,15 +51,15 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Paul Gortmaker <paul.gortmaker@windriver.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 05/19] context_tracking: Split user tracking Kconfig
-Message-ID: <20220310194346.GT4285@paulmck-ThinkPad-P17-Gen-1>
+Subject: Re: [PATCH 07/19] context_tracking: Take IRQ eqs entrypoints over RCU
+Message-ID: <20220310194630.GU4285@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
 References: <20220302154810.42308-1-frederic@kernel.org>
- <20220302154810.42308-6-frederic@kernel.org>
+ <20220302154810.42308-8-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302154810.42308-6-frederic@kernel.org>
+In-Reply-To: <20220302154810.42308-8-frederic@kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,14 +70,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:47:56PM +0100, Frederic Weisbecker wrote:
-> Context tracking is going to be used not only to track user transitions
-> but also idle/IRQs/NMIs. The user tracking part will then become a
-> seperate feature. Prepare Kconfig for that.
-
-s/seperate/separate/ # nit
-
+On Wed, Mar 02, 2022 at 04:47:58PM +0100, Frederic Weisbecker wrote:
+> The RCU dynticks counter is going to be merged into the context tracking
+> subsystem. Prepare with moving the IRQ extended quiescent states
+> entrypoints to context tracking. For now those are dumb redirection to
+> existing RCU calls.
+> 
 > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+
 > Cc: Paul E. McKenney <paulmck@kernel.org>
 > Cc: Peter Zijlstra <peterz@infradead.org>
 > Cc: Thomas Gleixner <tglx@linutronix.de>
@@ -93,486 +95,457 @@ s/seperate/separate/ # nit
 > Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
 > Cc: Alex Belits <abelits@marvell.com>
 > ---
->  .../time/context-tracking/arch-support.txt    |  6 ++---
->  arch/Kconfig                                  |  4 ++--
->  arch/arm/Kconfig                              |  2 +-
->  arch/arm/kernel/entry-common.S                |  4 ++--
->  arch/arm/kernel/entry-header.S                |  4 ++--
->  arch/arm64/Kconfig                            |  2 +-
->  arch/csky/Kconfig                             |  2 +-
->  arch/csky/kernel/entry.S                      |  4 ++--
->  arch/mips/Kconfig                             |  2 +-
->  arch/powerpc/Kconfig                          |  2 +-
->  arch/powerpc/include/asm/context_tracking.h   |  2 +-
->  arch/riscv/Kconfig                            |  2 +-
->  arch/riscv/kernel/entry.S                     |  6 ++---
->  arch/sparc/Kconfig                            |  2 +-
->  arch/sparc/kernel/rtrap_64.S                  |  2 +-
->  arch/x86/Kconfig                              |  4 ++--
->  include/linux/context_tracking.h              | 12 +++++-----
->  include/linux/context_tracking_state.h        |  4 ++--
->  init/Kconfig                                  |  4 ++--
->  kernel/context_tracking.c                     |  6 ++++-
->  kernel/sched/core.c                           |  2 +-
->  kernel/time/Kconfig                           | 22 +++++++++++--------
->  22 files changed, 54 insertions(+), 46 deletions(-)
+>  .../RCU/Design/Requirements/Requirements.rst  | 10 ++++----
+>  Documentation/RCU/stallwarn.rst               |  4 ++--
+>  arch/Kconfig                                  |  2 +-
+>  arch/arm64/kernel/entry-common.c              |  6 ++---
+>  arch/x86/mm/fault.c                           |  2 +-
+>  drivers/cpuidle/cpuidle-psci.c                |  8 +++----
+>  include/linux/context_tracking_irq.h          | 17 +++++++++++++
+>  include/linux/context_tracking_state.h        |  1 +
+>  include/linux/entry-common.h                  | 10 ++++----
+>  include/linux/rcupdate.h                      |  5 ++--
+>  include/linux/tracepoint.h                    |  4 ++--
+>  kernel/context_tracking.c                     | 24 +++++++++++++++++--
+>  kernel/cpu_pm.c                               |  8 +++----
+>  kernel/entry/common.c                         | 12 +++++-----
+>  kernel/softirq.c                              |  4 ++--
+>  kernel/trace/trace.c                          |  6 ++---
+>  16 files changed, 81 insertions(+), 42 deletions(-)
+>  create mode 100644 include/linux/context_tracking_irq.h
 > 
-> diff --git a/Documentation/features/time/context-tracking/arch-support.txt b/Documentation/features/time/context-tracking/arch-support.txt
-> index 4ed116c2ec39..0696fd08429e 100644
-> --- a/Documentation/features/time/context-tracking/arch-support.txt
-> +++ b/Documentation/features/time/context-tracking/arch-support.txt
-> @@ -1,7 +1,7 @@
->  #
-> -# Feature name:          context-tracking
-> -#         Kconfig:       HAVE_CONTEXT_TRACKING
-> -#         description:   arch supports context tracking for NO_HZ_FULL
-> +# Feature name:          user-context-tracking
-> +#         Kconfig:       HAVE_CONTEXT_TRACKING_USER
-> +#         description:   arch supports user context tracking for NO_HZ_FULL
->  #
->      -----------------------
->      |         arch |status|
+> diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
+> index ff2be1ac54c4..e3dd5d71c798 100644
+> --- a/Documentation/RCU/Design/Requirements/Requirements.rst
+> +++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+> @@ -1844,10 +1844,10 @@ that meets this requirement.
+>  
+>  Furthermore, NMI handlers can be interrupted by what appear to RCU to be
+>  normal interrupts. One way that this can happen is for code that
+> -directly invokes rcu_irq_enter() and rcu_irq_exit() to be called
+> +directly invokes ct_irq_enter() and ct_irq_exit() to be called
+>  from an NMI handler. This astonishing fact of life prompted the current
+> -code structure, which has rcu_irq_enter() invoking
+> -rcu_nmi_enter() and rcu_irq_exit() invoking rcu_nmi_exit().
+> +code structure, which has ct_irq_enter() invoking
+> +rcu_nmi_enter() and ct_irq_exit() invoking rcu_nmi_exit().
+>  And yes, I also learned of this requirement the hard way.
+>  
+>  Loadable Modules
+> @@ -2195,7 +2195,7 @@ scheduling-clock interrupt be enabled when RCU needs it to be:
+>     sections, and RCU believes this CPU to be idle, no problem. This
+>     sort of thing is used by some architectures for light-weight
+>     exception handlers, which can then avoid the overhead of
+> -   rcu_irq_enter() and rcu_irq_exit() at exception entry and
+> +   ct_irq_enter() and ct_irq_exit() at exception entry and
+>     exit, respectively. Some go further and avoid the entireties of
+>     irq_enter() and irq_exit().
+>     Just make very sure you are running some of your tests with
+> @@ -2226,7 +2226,7 @@ scheduling-clock interrupt be enabled when RCU needs it to be:
+>  +-----------------------------------------------------------------------+
+>  | **Answer**:                                                           |
+>  +-----------------------------------------------------------------------+
+> -| One approach is to do ``rcu_irq_exit();rcu_irq_enter();`` every so    |
+> +| One approach is to do ``ct_irq_exit();ct_irq_enter();`` every so    |
+>  | often. But given that long-running interrupt handlers can cause other |
+>  | problems, not least for response time, shouldn't you work to keep     |
+>  | your interrupt handler's runtime within reasonable bounds?            |
+> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+> index bdd52b40f307..7858c3afa1f4 100644
+> --- a/Documentation/RCU/stallwarn.rst
+> +++ b/Documentation/RCU/stallwarn.rst
+> @@ -98,11 +98,11 @@ warnings:
+>  
+>  -	A low-level kernel issue that either fails to invoke one of the
+>  	variants of rcu_user_enter(), rcu_user_exit(), ct_idle_enter(),
+> -	ct_idle_exit(), rcu_irq_enter(), or rcu_irq_exit() on the one
+> +	ct_idle_exit(), ct_irq_enter(), or ct_irq_exit() on the one
+>  	hand, or that invokes one of them too many times on the other.
+>  	Historically, the most frequent issue has been an omission
+>  	of either irq_enter() or irq_exit(), which in turn invoke
+> -	rcu_irq_enter() or rcu_irq_exit(), respectively.  Building your
+> +	ct_irq_enter() or ct_irq_exit(), respectively.  Building your
+>  	kernel with CONFIG_RCU_EQS_DEBUG=y can help track down these types
+>  	of issues, which sometimes arise in architecture-specific code.
+>  
 > diff --git a/arch/Kconfig b/arch/Kconfig
-> index 678a80713b21..1a3b79cfc9e3 100644
+> index 1a3b79cfc9e3..66b2b6d4717b 100644
 > --- a/arch/Kconfig
 > +++ b/arch/Kconfig
-> @@ -762,7 +762,7 @@ config HAVE_ARCH_WITHIN_STACK_FRAMES
->  	  and similar) by implementing an inline arch_within_stack_frames(),
->  	  which is used by CONFIG_HARDENED_USERCOPY.
->  
-> -config HAVE_CONTEXT_TRACKING
-> +config HAVE_CONTEXT_TRACKING_USER
-
-Just checking...  This means that only some configs will see userland
-execution as being different than kernel execution, correct?  (Which
-is the case today, to be fair.)
-
-							Thanx, Paul
-
->  	bool
->  	help
->  	  Provide kernel/user boundaries probes necessary for subsystems
-> @@ -773,7 +773,7 @@ config HAVE_CONTEXT_TRACKING
->  	  protected inside rcu_irq_enter/rcu_irq_exit() but preemption or signal
+> @@ -770,7 +770,7 @@ config HAVE_CONTEXT_TRACKING_USER
+>  	  Syscalls need to be wrapped inside user_exit()-user_enter(), either
+>  	  optimized behind static key or through the slow path using TIF_NOHZ
+>  	  flag. Exceptions handlers must be wrapped as well. Irqs are already
+> -	  protected inside rcu_irq_enter/rcu_irq_exit() but preemption or signal
+> +	  protected inside ct_irq_enter/ct_irq_exit() but preemption or signal
 >  	  handling on irq exit still need to be protected.
 >  
-> -config HAVE_CONTEXT_TRACKING_OFFSTACK
-> +config HAVE_CONTEXT_TRACKING_USER_OFFSTACK
->  	bool
->  	help
->  	  Architecture neither relies on exception_enter()/exception_exit()
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index fabe39169b12..2c5688f20421 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -81,7 +81,7 @@ config ARM
->  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if ARM_LPAE
->  	select HAVE_ARM_SMCCC if CPU_V7
->  	select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
-> -	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_C_RECORDMCOUNT
->  	select HAVE_DEBUG_KMEMLEAK if !XIP_KERNEL
->  	select HAVE_DMA_CONTIGUOUS if MMU
-> diff --git a/arch/arm/kernel/entry-common.S b/arch/arm/kernel/entry-common.S
-> index ac86c34682bb..5be34b7fe41e 100644
-> --- a/arch/arm/kernel/entry-common.S
-> +++ b/arch/arm/kernel/entry-common.S
-> @@ -26,7 +26,7 @@
->  #include "entry-header.S"
+>  config HAVE_CONTEXT_TRACKING_USER_OFFSTACK
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index ef7fcefb96bd..43ca8cf4e1dd 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -40,7 +40,7 @@ static __always_inline void __enter_from_kernel_mode(struct pt_regs *regs)
 >  
->  saved_psr	.req	r8
-> -#if defined(CONFIG_TRACE_IRQFLAGS) || defined(CONFIG_CONTEXT_TRACKING)
-> +#if defined(CONFIG_TRACE_IRQFLAGS) || defined(CONFIG_CONTEXT_TRACKING_USER)
->  saved_pc	.req	r9
->  #define TRACE(x...) x
->  #else
-> @@ -36,7 +36,7 @@ saved_pc	.req	lr
+>  	if (!IS_ENABLED(CONFIG_TINY_RCU) && is_idle_task(current)) {
+>  		lockdep_hardirqs_off(CALLER_ADDR0);
+> -		rcu_irq_enter();
+> +		ct_irq_enter();
+>  		trace_hardirqs_off_finish();
 >  
->  	.section .entry.text,"ax",%progbits
->  	.align	5
-> -#if !(IS_ENABLED(CONFIG_TRACE_IRQFLAGS) || IS_ENABLED(CONFIG_CONTEXT_TRACKING) || \
-> +#if !(IS_ENABLED(CONFIG_TRACE_IRQFLAGS) || IS_ENABLED(CONFIG_CONTEXT_TRACKING_USER) || \
->  	IS_ENABLED(CONFIG_DEBUG_RSEQ))
->  /*
->   * This is the fast syscall return path.  We do as little as possible here,
-> diff --git a/arch/arm/kernel/entry-header.S b/arch/arm/kernel/entry-header.S
-> index 3af2a521e1d6..cd1ce0a9c652 100644
-> --- a/arch/arm/kernel/entry-header.S
-> +++ b/arch/arm/kernel/entry-header.S
-> @@ -361,7 +361,7 @@
->   * between user and kernel mode.
->   */
->  	.macro ct_user_exit, save = 1
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  	.if	\save
->  	stmdb   sp!, {r0-r3, ip, lr}
->  	bl	user_exit_callable
-> @@ -373,7 +373,7 @@
->  	.endm
+>  		regs->exit_rcu = true;
+> @@ -74,7 +74,7 @@ static __always_inline void __exit_to_kernel_mode(struct pt_regs *regs)
+>  		if (regs->exit_rcu) {
+>  			trace_hardirqs_on_prepare();
+>  			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> -			rcu_irq_exit();
+> +			ct_irq_exit();
+>  			lockdep_hardirqs_on(CALLER_ADDR0);
+>  			return;
+>  		}
+> @@ -82,7 +82,7 @@ static __always_inline void __exit_to_kernel_mode(struct pt_regs *regs)
+>  		trace_hardirqs_on();
+>  	} else {
+>  		if (regs->exit_rcu)
+> -			rcu_irq_exit();
+> +			ct_irq_exit();
+>  	}
+>  }
 >  
->  	.macro ct_user_enter, save = 1
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  	.if	\save
->  	stmdb   sp!, {r0-r3, ip, lr}
->  	bl	user_enter_callable
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 6978140edfa4..96e75d7fa0a3 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -169,7 +169,7 @@ config ARM64
->  	select HAVE_C_RECORDMCOUNT
->  	select HAVE_CMPXCHG_DOUBLE
->  	select HAVE_CMPXCHG_LOCAL
-> -	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_DEBUG_KMEMLEAK
->  	select HAVE_DMA_CONTIGUOUS
->  	select HAVE_DYNAMIC_FTRACE
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 132f43f12dd8..c94cc907b828 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -42,7 +42,7 @@ config CSKY
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_MMAP_RND_BITS
->  	select HAVE_ARCH_SECCOMP_FILTER
-> -	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_VIRT_CPU_ACCOUNTING_GEN
->  	select HAVE_DEBUG_BUGVERBOSE
->  	select HAVE_DEBUG_KMEMLEAK
-> diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-> index bc734d17c16f..547b4cd1b24b 100644
-> --- a/arch/csky/kernel/entry.S
-> +++ b/arch/csky/kernel/entry.S
-> @@ -19,7 +19,7 @@
->  .endm
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index d0074c6ed31a..b781785b1ff3 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1526,7 +1526,7 @@ DEFINE_IDTENTRY_RAW_ERRORCODE(exc_page_fault)
 >  
->  .macro	context_tracking
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  	mfcr	a0, epsr
->  	btsti	a0, 31
->  	bt	1f
-> @@ -159,7 +159,7 @@ ret_from_exception:
->  	and	r10, r9
->  	cmpnei	r10, 0
->  	bt	exit_work
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  	jbsr	user_enter_callable
->  #endif
->  1:
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 058446f01487..efcab39667ea 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -55,7 +55,7 @@ config MIPS
->  	select HAVE_ARCH_TRACEHOOK
->  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if CPU_SUPPORTS_HUGEPAGES
->  	select HAVE_ASM_MODVERSIONS
-> -	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_TIF_NOHZ
->  	select HAVE_C_RECORDMCOUNT
->  	select HAVE_DEBUG_KMEMLEAK
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index b779603978e1..9a889f919fed 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -192,7 +192,7 @@ config PPC
->  	select HAVE_ARCH_SECCOMP_FILTER
->  	select HAVE_ARCH_TRACEHOOK
->  	select HAVE_ASM_MODVERSIONS
-> -	select HAVE_CONTEXT_TRACKING		if PPC64
-> +	select HAVE_CONTEXT_TRACKING_USER		if PPC64
->  	select HAVE_C_RECORDMCOUNT
->  	select HAVE_DEBUG_KMEMLEAK
->  	select HAVE_DEBUG_STACKOVERFLOW
-> diff --git a/arch/powerpc/include/asm/context_tracking.h b/arch/powerpc/include/asm/context_tracking.h
-> index f2682b28b050..4b63931c49e0 100644
-> --- a/arch/powerpc/include/asm/context_tracking.h
-> +++ b/arch/powerpc/include/asm/context_tracking.h
-> @@ -2,7 +2,7 @@
->  #ifndef _ASM_POWERPC_CONTEXT_TRACKING_H
->  #define _ASM_POWERPC_CONTEXT_TRACKING_H
+>  	/*
+>  	 * Entry handling for valid #PF from kernel mode is slightly
+> -	 * different: RCU is already watching and rcu_irq_enter() must not
+> +	 * different: RCU is already watching and ct_irq_enter() must not
+>  	 * be invoked because a kernel fault on a user space address might
+>  	 * sleep.
+>  	 *
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index b51b5df08450..fe31b2d522b3 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -68,12 +68,12 @@ static int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
+>  		return -1;
 >  
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  #define SCHEDULE_USER bl	schedule_user
->  #else
->  #define SCHEDULE_USER bl	schedule
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 5adcbd9b5e88..36953ec26294 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -80,7 +80,7 @@ config RISCV
->  	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
->  	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
->  	select HAVE_ASM_MODVERSIONS
-> -	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_DEBUG_KMEMLEAK
->  	select HAVE_DMA_CONTIGUOUS if MMU
->  	select HAVE_EBPF_JIT if MMU
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 5fbaa7be18a2..a773526fb3cc 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -111,7 +111,7 @@ _save_context:
->  	call trace_hardirqs_off
->  #endif
+>  	/* Do runtime PM to manage a hierarchical CPU toplogy. */
+> -	rcu_irq_enter_irqson();
+> +	ct_irq_enter_irqson();
+>  	if (s2idle)
+>  		dev_pm_genpd_suspend(pd_dev);
+>  	else
+>  		pm_runtime_put_sync_suspend(pd_dev);
+> -	rcu_irq_exit_irqson();
+> +	ct_irq_exit_irqson();
 >  
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  	/* If previous state is in user mode, call user_exit_callable(). */
->  	li   a0, SR_PP
->  	and a0, s1, a0
-> @@ -176,7 +176,7 @@ handle_syscall:
->  	 */
->  	csrs CSR_STATUS, SR_IE
->  #endif
-> -#if defined(CONFIG_TRACE_IRQFLAGS) || defined(CONFIG_CONTEXT_TRACKING)
-> +#if defined(CONFIG_TRACE_IRQFLAGS) || defined(CONFIG_CONTEXT_TRACKING_USER)
->  	/* Recover a0 - a7 for system calls */
->  	REG_L a0, PT_A0(sp)
->  	REG_L a1, PT_A1(sp)
-> @@ -251,7 +251,7 @@ resume_userspace:
->  	andi s1, s0, _TIF_WORK_MASK
->  	bnez s1, work_pending
+>  	state = psci_get_domain_state();
+>  	if (!state)
+> @@ -81,12 +81,12 @@ static int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
 >  
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  	call user_enter_callable
->  #endif
+>  	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
 >  
-> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-> index 1cab1b284f1a..e736120f4333 100644
-> --- a/arch/sparc/Kconfig
-> +++ b/arch/sparc/Kconfig
-> @@ -71,7 +71,7 @@ config SPARC64
->  	select HAVE_DYNAMIC_FTRACE
->  	select HAVE_FTRACE_MCOUNT_RECORD
->  	select HAVE_SYSCALL_TRACEPOINTS
-> -	select HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_TIF_NOHZ
->  	select HAVE_DEBUG_KMEMLEAK
->  	select IOMMU_HELPER
-> diff --git a/arch/sparc/kernel/rtrap_64.S b/arch/sparc/kernel/rtrap_64.S
-> index c5fd4b450d9b..eef102765a7e 100644
-> --- a/arch/sparc/kernel/rtrap_64.S
-> +++ b/arch/sparc/kernel/rtrap_64.S
-> @@ -15,7 +15,7 @@
->  #include <asm/visasm.h>
->  #include <asm/processor.h>
+> -	rcu_irq_enter_irqson();
+> +	ct_irq_enter_irqson();
+>  	if (s2idle)
+>  		dev_pm_genpd_resume(pd_dev);
+>  	else
+>  		pm_runtime_get_sync(pd_dev);
+> -	rcu_irq_exit_irqson();
+> +	ct_irq_exit_irqson();
 >  
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  # define SCHEDULE_USER schedule_user
->  #else
->  # define SCHEDULE_USER schedule
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index ebe8fc76949a..fbda20f6cf08 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -182,8 +182,8 @@ config X86
->  	select HAVE_ASM_MODVERSIONS
->  	select HAVE_CMPXCHG_DOUBLE
->  	select HAVE_CMPXCHG_LOCAL
-> -	select HAVE_CONTEXT_TRACKING		if X86_64
-> -	select HAVE_CONTEXT_TRACKING_OFFSTACK	if HAVE_CONTEXT_TRACKING
-> +	select HAVE_CONTEXT_TRACKING_USER		if X86_64
-> +	select HAVE_CONTEXT_TRACKING_USER_OFFSTACK	if HAVE_CONTEXT_TRACKING_USER
->  	select HAVE_C_RECORDMCOUNT
->  	select HAVE_OBJTOOL_MCOUNT		if STACK_VALIDATION
->  	select HAVE_DEBUG_KMEMLEAK
-> diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-> index 40badd62ad56..75738f20e111 100644
-> --- a/include/linux/context_tracking.h
-> +++ b/include/linux/context_tracking.h
-> @@ -10,7 +10,7 @@
->  #include <asm/ptrace.h>
+>  	cpu_pm_exit();
 >  
->  
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  extern void context_tracking_cpu_track_user(int cpu);
->  
->  /* Called with interrupts disabled.  */
-> @@ -52,7 +52,7 @@ static inline enum ctx_state exception_enter(void)
->  {
->  	enum ctx_state prev_ctx;
->  
-> -	if (IS_ENABLED(CONFIG_HAVE_CONTEXT_TRACKING_OFFSTACK) ||
-> +	if (IS_ENABLED(CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK) ||
->  	    !context_tracking_enabled())
->  		return 0;
->  
-> @@ -65,7 +65,7 @@ static inline enum ctx_state exception_enter(void)
->  
->  static inline void exception_exit(enum ctx_state prev_ctx)
->  {
-> -	if (!IS_ENABLED(CONFIG_HAVE_CONTEXT_TRACKING_OFFSTACK) &&
-> +	if (!IS_ENABLED(CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK) &&
->  	    context_tracking_enabled()) {
->  		if (prev_ctx != CONTEXT_KERNEL)
->  			ct_user_enter(prev_ctx);
-> @@ -109,14 +109,14 @@ static inline enum ctx_state ct_state(void) { return CONTEXT_DISABLED; }
->  static __always_inline bool context_tracking_guest_enter(void) { return false; }
->  static inline void context_tracking_guest_exit(void) { }
->  
-> -#endif /* !CONFIG_CONTEXT_TRACKING */
-> +#endif /* !CONFIG_CONTEXT_TRACKING_USER */
->  
->  #define CT_WARN_ON(cond) WARN_ON(context_tracking_enabled() && (cond))
->  
-> -#ifdef CONFIG_CONTEXT_TRACKING_FORCE
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER_FORCE
->  extern void context_tracking_init(void);
->  #else
->  static inline void context_tracking_init(void) { }
-> -#endif /* CONFIG_CONTEXT_TRACKING_FORCE */
-> +#endif /* CONFIG_CONTEXT_TRACKING_USER_FORCE */
->  
->  #endif
+> diff --git a/include/linux/context_tracking_irq.h b/include/linux/context_tracking_irq.h
+> new file mode 100644
+> index 000000000000..60e3ed15a04e
+> --- /dev/null
+> +++ b/include/linux/context_tracking_irq.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_CONTEXT_TRACKING_IRQ_H
+> +#define _LINUX_CONTEXT_TRACKING_IRQ_H
+> +
+> +#ifdef CONFIG_CONTEXT_TRACKING
+> +void ct_irq_enter(void);
+> +void ct_irq_exit(void);
+> +void ct_irq_enter_irqson(void);
+> +void ct_irq_exit_irqson(void);
+> +#else
+> +static inline void ct_irq_enter(void) { }
+> +static inline void ct_irq_exit(void) { }
+> +static inline void ct_irq_enter_irqson(void) { }
+> +static inline void ct_irq_exit_irqson(void) { }
+> +#endif
+> +
+> +#endif
 > diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-> index 65a60d3313b0..64dbbb880378 100644
+> index 64dbbb880378..cdc692caa01d 100644
 > --- a/include/linux/context_tracking_state.h
 > +++ b/include/linux/context_tracking_state.h
-> @@ -22,7 +22,7 @@ struct context_tracking {
->  	} state;
->  };
+> @@ -4,6 +4,7 @@
 >  
-> -#ifdef CONFIG_CONTEXT_TRACKING
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
->  extern struct static_key_false context_tracking_key;
->  DECLARE_PER_CPU(struct context_tracking, context_tracking);
+>  #include <linux/percpu.h>
+>  #include <linux/static_key.h>
+> +#include <linux/context_tracking_irq.h>
 >  
-> @@ -50,6 +50,6 @@ static inline bool context_tracking_in_user(void) { return false; }
->  static inline bool context_tracking_enabled(void) { return false; }
->  static inline bool context_tracking_enabled_cpu(int cpu) { return false; }
->  static inline bool context_tracking_enabled_this_cpu(void) { return false; }
-> -#endif /* CONFIG_CONTEXT_TRACKING */
-> +#endif /* CONFIG_CONTEXT_TRACKING_USER */
+>  struct context_tracking {
+>  	/*
+> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+> index 2e2b8d6140ed..7c6b1d864448 100644
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -396,7 +396,7 @@ void irqentry_exit_to_user_mode(struct pt_regs *regs);
+>  /**
+>   * struct irqentry_state - Opaque object for exception state storage
+>   * @exit_rcu: Used exclusively in the irqentry_*() calls; signals whether the
+> - *            exit path has to invoke rcu_irq_exit().
+> + *            exit path has to invoke ct_irq_exit().
+>   * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures that
+>   *           lockdep state is restored correctly on exit from nmi.
+>   *
+> @@ -434,12 +434,12 @@ typedef struct irqentry_state {
+>   *
+>   * For kernel mode entries RCU handling is done conditional. If RCU is
+>   * watching then the only RCU requirement is to check whether the tick has
+> - * to be restarted. If RCU is not watching then rcu_irq_enter() has to be
+> - * invoked on entry and rcu_irq_exit() on exit.
+> + * to be restarted. If RCU is not watching then ct_irq_enter() has to be
+> + * invoked on entry and ct_irq_exit() on exit.
+>   *
+> - * Avoiding the rcu_irq_enter/exit() calls is an optimization but also
+> + * Avoiding the ct_irq_enter/exit() calls is an optimization but also
+>   * solves the problem of kernel mode pagefaults which can schedule, which
+> - * is not possible after invoking rcu_irq_enter() without undoing it.
+> + * is not possible after invoking ct_irq_enter() without undoing it.
+>   *
+>   * For user mode entries irqentry_enter_from_user_mode() is invoked to
+>   * establish the proper context for NOHZ_FULL. Otherwise scheduling on exit
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index 38258542a6c3..5efba2bfa689 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -29,6 +29,7 @@
+>  #include <linux/lockdep.h>
+>  #include <asm/processor.h>
+>  #include <linux/cpumask.h>
+> +#include <linux/context_tracking_irq.h>
 >  
->  #endif
-> diff --git a/init/Kconfig b/init/Kconfig
-> index e9119bf54b1f..22525443de90 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -498,11 +498,11 @@ config VIRT_CPU_ACCOUNTING_NATIVE
+>  #define ULONG_CMP_GE(a, b)	(ULONG_MAX / 2 >= (a) - (b))
+>  #define ULONG_CMP_LT(a, b)	(ULONG_MAX / 2 < (a) - (b))
+> @@ -143,9 +144,9 @@ static inline void rcu_nocb_flush_deferred_wakeup(void) { }
+>   */
+>  #define RCU_NONIDLE(a) \
+>  	do { \
+> -		rcu_irq_enter_irqson(); \
+> +		ct_irq_enter_irqson(); \
+>  		do { a; } while (0); \
+> -		rcu_irq_exit_irqson(); \
+> +		ct_irq_exit_irqson(); \
+>  	} while (0)
 >  
->  config VIRT_CPU_ACCOUNTING_GEN
->  	bool "Full dynticks CPU time accounting"
-> -	depends on HAVE_CONTEXT_TRACKING
-> +	depends on HAVE_CONTEXT_TRACKING_USER
->  	depends on HAVE_VIRT_CPU_ACCOUNTING_GEN
->  	depends on GENERIC_CLOCKEVENTS
->  	select VIRT_CPU_ACCOUNTING
-> -	select CONTEXT_TRACKING
-> +	select CONTEXT_TRACKING_USER
->  	help
->  	  Select this option to enable task and CPU time accounting on full
->  	  dynticks systems. This accounting is implemented by watching every
+>  /*
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 28031b15f878..55717a2eda08 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -200,13 +200,13 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  		 */							\
+>  		if (rcuidle) {						\
+>  			__idx = srcu_read_lock_notrace(&tracepoint_srcu);\
+> -			rcu_irq_enter_irqson();				\
+> +			ct_irq_enter_irqson();				\
+>  		}							\
+>  									\
+>  		__DO_TRACE_CALL(name, TP_ARGS(args));			\
+>  									\
+>  		if (rcuidle) {						\
+> -			rcu_irq_exit_irqson();				\
+> +			ct_irq_exit_irqson();				\
+>  			srcu_read_unlock_notrace(&tracepoint_srcu, __idx);\
+>  		}							\
+>  									\
 > diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-> index 7b6643d2075d..42054841af3f 100644
+> index 3d479f363275..b63ff851472e 100644
 > --- a/kernel/context_tracking.c
 > +++ b/kernel/context_tracking.c
-> @@ -22,6 +22,8 @@
->  #include <linux/export.h>
->  #include <linux/kprobes.h>
->  
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER
-> +
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/context_tracking.h>
->  
-> @@ -222,7 +224,7 @@ void __init context_tracking_cpu_track_user(int cpu)
->  	initialized = true;
->  }
->  
-> -#ifdef CONFIG_CONTEXT_TRACKING_FORCE
-> +#ifdef CONFIG_CONTEXT_TRACKING_USER_FORCE
->  void __init context_tracking_init(void)
->  {
->  	int cpu;
-> @@ -231,3 +233,5 @@ void __init context_tracking_init(void)
->  		context_tracking_cpu_track_user(cpu);
->  }
->  #endif
-> +
-> +#endif /* #ifdef CONFIG_CONTEXT_TRACKING_USER */
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 2e4ae00e52d1..e79485afb58c 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -6398,7 +6398,7 @@ void __sched schedule_idle(void)
->  	} while (need_resched());
->  }
->  
-> -#if defined(CONFIG_CONTEXT_TRACKING) && !defined(CONFIG_HAVE_CONTEXT_TRACKING_OFFSTACK)
-> +#if defined(CONFIG_CONTEXT_TRACKING_USER) && !defined(CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK)
->  asmlinkage __visible void __sched schedule_user(void)
->  {
+> @@ -75,7 +75,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+>  			 * At this stage, only low level arch entry code remains and
+>  			 * then we'll run in userspace. We can assume there won't be
+>  			 * any RCU read-side critical section until the next call to
+> -			 * user_exit() or rcu_irq_enter(). Let's remove RCU's dependency
+> +			 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
+>  			 * on the tick.
+>  			 */
+>  			if (state == CONTEXT_USER) {
+> @@ -112,7 +112,7 @@ void ct_user_enter(enum ctx_state state)
 >  	/*
-> diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
-> index 27b7868b5c30..aad89cc96787 100644
-> --- a/kernel/time/Kconfig
-> +++ b/kernel/time/Kconfig
-> @@ -111,7 +111,7 @@ config NO_HZ_FULL
->  	# NO_HZ_COMMON dependency
->  	# We need at least one periodic CPU for timekeeping
->  	depends on SMP
-> -	depends on HAVE_CONTEXT_TRACKING
-> +	depends on HAVE_CONTEXT_TRACKING_USER
->  	# VIRT_CPU_ACCOUNTING_GEN dependency
->  	depends on HAVE_VIRT_CPU_ACCOUNTING_GEN
->  	select NO_HZ_COMMON
-> @@ -140,28 +140,32 @@ endchoice
->  config CONTEXT_TRACKING
->         bool
->  
-> -config CONTEXT_TRACKING_FORCE
-> -	bool "Force context tracking"
-> -	depends on CONTEXT_TRACKING
-> +config CONTEXT_TRACKING_USER
-> +       select CONTEXT_TRACKING
-> +       bool
+>  	 * Some contexts may involve an exception occuring in an irq,
+>  	 * leading to that nesting:
+> -	 * rcu_irq_enter() rcu_user_exit() rcu_user_exit() rcu_irq_exit()
+> +	 * ct_irq_enter() rcu_user_exit() rcu_user_exit() ct_irq_exit()
+>  	 * This would mess up the dyntick_nesting count though. And rcu_irq_*()
+>  	 * helpers are enough to protect RCU uses inside the exception. So
+>  	 * just return immediately if we detect we are in an IRQ.
+> @@ -247,3 +247,23 @@ void ct_idle_exit(void)
+>  	rcu_idle_exit();
+>  }
+>  EXPORT_SYMBOL_GPL(ct_idle_exit);
 > +
-> +config CONTEXT_TRACKING_USER_FORCE
-> +	bool "Force user context tracking"
-> +	depends on CONTEXT_TRACKING_USER
->  	default y if !NO_HZ_FULL
->  	help
->  	  The major pre-requirement for full dynticks to work is to
-> -	  support the context tracking subsystem. But there are also
-> +	  support the user context tracking subsystem. But there are also
->  	  other dependencies to provide in order to make the full
->  	  dynticks working.
+> +noinstr void ct_irq_enter(void)
+> +{
+> +	rcu_irq_enter();
+> +}
+> +
+> +noinstr void ct_irq_exit(void)
+> +{
+> +	rcu_irq_exit();
+> +}
+> +
+> +void ct_irq_enter_irqson(void)
+> +{
+> +	rcu_irq_enter_irqson();
+> +}
+> +
+> +void ct_irq_exit_irqson(void)
+> +{
+> +	rcu_irq_exit_irqson();
+> +}
+> diff --git a/kernel/cpu_pm.c b/kernel/cpu_pm.c
+> index 246efc74e3f3..ba4ba71facf9 100644
+> --- a/kernel/cpu_pm.c
+> +++ b/kernel/cpu_pm.c
+> @@ -35,11 +35,11 @@ static int cpu_pm_notify(enum cpu_pm_event event)
+>  	 * disfunctional in cpu idle. Copy RCU_NONIDLE code to let RCU know
+>  	 * this.
+>  	 */
+> -	rcu_irq_enter_irqson();
+> +	ct_irq_enter_irqson();
+>  	rcu_read_lock();
+>  	ret = raw_notifier_call_chain(&cpu_pm_notifier.chain, event, NULL);
+>  	rcu_read_unlock();
+> -	rcu_irq_exit_irqson();
+> +	ct_irq_exit_irqson();
 >  
->  	  This option stands for testing when an arch implements the
-> -	  context tracking backend but doesn't yet fulfill all the
-> +	  user context tracking backend but doesn't yet fulfill all the
->  	  requirements to make the full dynticks feature working.
->  	  Without the full dynticks, there is no way to test the support
-> -	  for context tracking and the subsystems that rely on it: RCU
-> +	  for user context tracking and the subsystems that rely on it: RCU
->  	  userspace extended quiescent state and tickless cputime
->  	  accounting. This option copes with the absence of the full
-> -	  dynticks subsystem by forcing the context tracking on all
-> +	  dynticks subsystem by forcing the user context tracking on all
->  	  CPUs in the system.
+>  	return notifier_to_errno(ret);
+>  }
+> @@ -49,11 +49,11 @@ static int cpu_pm_notify_robust(enum cpu_pm_event event_up, enum cpu_pm_event ev
+>  	unsigned long flags;
+>  	int ret;
 >  
->  	  Say Y only if you're working on the development of an
-> -	  architecture backend for the context tracking.
-> +	  architecture backend for the user context tracking.
+> -	rcu_irq_enter_irqson();
+> +	ct_irq_enter_irqson();
+>  	raw_spin_lock_irqsave(&cpu_pm_notifier.lock, flags);
+>  	ret = raw_notifier_call_chain_robust(&cpu_pm_notifier.chain, event_up, event_down, NULL);
+>  	raw_spin_unlock_irqrestore(&cpu_pm_notifier.lock, flags);
+> -	rcu_irq_exit_irqson();
+> +	ct_irq_exit_irqson();
 >  
->  	  Say N otherwise, this option brings an overhead that you
->  	  don't want in production.
+>  	return notifier_to_errno(ret);
+>  }
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index bad713684c2e..cebc98b8adc6 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -327,7 +327,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+>  	}
+>  
+>  	/*
+> -	 * If this entry hit the idle task invoke rcu_irq_enter() whether
+> +	 * If this entry hit the idle task invoke ct_irq_enter() whether
+>  	 * RCU is watching or not.
+>  	 *
+>  	 * Interrupts can nest when the first interrupt invokes softirq
+> @@ -338,12 +338,12 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+>  	 * not nested into another interrupt.
+>  	 *
+>  	 * Checking for rcu_is_watching() here would prevent the nesting
+> -	 * interrupt to invoke rcu_irq_enter(). If that nested interrupt is
+> +	 * interrupt to invoke ct_irq_enter(). If that nested interrupt is
+>  	 * the tick then rcu_flavor_sched_clock_irq() would wrongfully
+>  	 * assume that it is the first interrupt and eventually claim
+>  	 * quiescent state and end grace periods prematurely.
+>  	 *
+> -	 * Unconditionally invoke rcu_irq_enter() so RCU state stays
+> +	 * Unconditionally invoke ct_irq_enter() so RCU state stays
+>  	 * consistent.
+>  	 *
+>  	 * TINY_RCU does not support EQS, so let the compiler eliminate
+> @@ -356,7 +356,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+>  		 * as in irqentry_enter_from_user_mode().
+>  		 */
+>  		lockdep_hardirqs_off(CALLER_ADDR0);
+> -		rcu_irq_enter();
+> +		ct_irq_enter();
+>  		instrumentation_begin();
+>  		trace_hardirqs_off_finish();
+>  		instrumentation_end();
+> @@ -414,7 +414,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+>  			trace_hardirqs_on_prepare();
+>  			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+>  			instrumentation_end();
+> -			rcu_irq_exit();
+> +			ct_irq_exit();
+>  			lockdep_hardirqs_on(CALLER_ADDR0);
+>  			return;
+>  		}
+> @@ -436,7 +436,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+>  		 * was not watching on entry.
+>  		 */
+>  		if (state.exit_rcu)
+> -			rcu_irq_exit();
+> +			ct_irq_exit();
+>  	}
+>  }
+>  
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index 41f470929e99..7b6761c1a0f3 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -607,7 +607,7 @@ void irq_enter_rcu(void)
+>   */
+>  void irq_enter(void)
+>  {
+> -	rcu_irq_enter();
+> +	ct_irq_enter();
+>  	irq_enter_rcu();
+>  }
+>  
+> @@ -659,7 +659,7 @@ void irq_exit_rcu(void)
+>  void irq_exit(void)
+>  {
+>  	__irq_exit_rcu();
+> -	rcu_irq_exit();
+> +	ct_irq_exit();
+>  	 /* must be last! */
+>  	lockdep_hardirq_exit();
+>  }
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index a569a0cb81ee..7c500c708180 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -3088,15 +3088,15 @@ void __trace_stack(struct trace_array *tr, unsigned int trace_ctx,
+>  	/*
+>  	 * When an NMI triggers, RCU is enabled via rcu_nmi_enter(),
+>  	 * but if the above rcu_is_watching() failed, then the NMI
+> -	 * triggered someplace critical, and rcu_irq_enter() should
+> +	 * triggered someplace critical, and ct_irq_enter() should
+>  	 * not be called from NMI.
+>  	 */
+>  	if (unlikely(in_nmi()))
+>  		return;
+>  
+> -	rcu_irq_enter_irqson();
+> +	ct_irq_enter_irqson();
+>  	__ftrace_trace_stack(buffer, trace_ctx, skip, NULL);
+> -	rcu_irq_exit_irqson();
+> +	ct_irq_exit_irqson();
+>  }
+>  
+>  /**
 > -- 
 > 2.25.1
 > 

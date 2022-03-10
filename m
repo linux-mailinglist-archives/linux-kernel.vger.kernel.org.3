@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1384D4716
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BF54D4718
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242053AbiCJMhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S242039AbiCJMhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242041AbiCJMhI (ORCPT
+        with ESMTP id S232156AbiCJMhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:37:08 -0500
-X-Greylist: delayed 110 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 04:36:05 PST
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BC5141E0A;
-        Thu, 10 Mar 2022 04:36:05 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 5F84F5FD0B;
-        Thu, 10 Mar 2022 15:36:03 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1646915763;
-        bh=sAYFudhND3JlipbN3vSkDC50/DPj1pm3r26FdfVkax4=;
-        h=From:To:Subject:Date:Message-ID:Reply-To:Content-Type:
-         MIME-Version;
-        b=dsTdKg7P9XYY0xTqRk9ZJ2V+xj0OHIYXQVcgFO3MBFH0LsqwBFmjtfq1yTnOPWBOH
-         ezCI1mn7LRQiZGBmgxhRb6adWdpgkx7lkewq1oY8b/3YbAbSp0RqNq33fhN13F7ui3
-         FJGhM2VHhnr8dzZ4YtgqCvhQ2uP9lKVgwaWQMfv8YRmbT+P8+WgcCLV6jICiGijAyr
-         s32lmCAgcdqJongEeF7rc2L74NJoxYJmT7wnIN6FduTEXHJ6rclv1qHWysB6jJfGcc
-         P9gQHbF977Ny8Qy88SLufkm5T9B/SigrwHKMTqEfPuMsToZFdFDHBew1LU67KIC2Nc
-         uSSAvoQ1SJjmA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 10 Mar 2022 15:36:03 +0300 (MSK)
-From:   =?utf-8?B?0JrRgNCw0YHQvdC+0LIg0JDRgNGB0LXQvdC40Lkg0JLQu9Cw0LTQuNC80Lg=?=
-         =?utf-8?B?0YDQvtCy0LjRhw==?= <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        =?utf-8?B?0KDQvtC60L7RgdC+0LIg0JTQvNC40YLRgNC40Lkg0JTQvNC40YLRgNC40LU=?=
-         =?utf-8?B?0LLQuNGH?= <DDRokosov@sberdevices.ru>
-Subject: 
-Thread-Index: AQHYNHtecbA/6LWnrk+GBWwyAuzxZQ==
-Date:   Thu, 10 Mar 2022 12:35:53 +0000
-Message-ID: <1a92beea-6c77-69b6-07e0-1e8f0242d898@sberdevices.ru>
-Reply-To: "17514ec6-6e04-6ef9-73ba-b21da09f0f6f@sberdevices.ru" 
-          <17514ec6-6e04-6ef9-73ba-b21da09f0f6f@sberdevices.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E1DD52A50505C44A82EACBB6B1B31C19@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Thu, 10 Mar 2022 07:37:04 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA6141E23;
+        Thu, 10 Mar 2022 04:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zmYAbKnVCCZBlerHQbcYZ1CzE/Z7tVO/OGbPWC3kXis=; b=1JYrbN1ExafiKL3d3v99aHh4Nt
+        1kEo2q+AuKnq8xNXYr66yfslkv8hP+eRsPnkhrel/uVcxEIFtKdue2bC/DZ5qRQDbOnuYud3KV2ix
+        ZM5vAiMmEdACb7S8FMNjB44ablaxRhEiV9ypbq8bkDyz4W+57dZzf4cZYA2ZGglyCYLTO8MAS1yAn
+        /dbn9xVhVVVF+QhQ3GiC9/F7Ja4Fxc7q/8ZpfWtIFw2sTAjKKQf5UoJrOA+1NxwMKP/g8HXvrrDH0
+        RM3kNsF6GJzyeLQWzGiZsqx0j52ZgqP0+T3w0JCjn2pXTIdj8sc7EnQDqOrV4ax0qv6xeclYqq8oJ
+        csfoehfw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57764)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nSI1N-00018O-TJ; Thu, 10 Mar 2022 12:35:58 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nSI1L-0000Yc-38; Thu, 10 Mar 2022 12:35:55 +0000
+Date:   Thu, 10 Mar 2022 12:35:55 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
+ __read_once_word_nocheck
+Message-ID: <Yinwq3Z9l0selLLS@shell.armlinux.org.uk>
+References: <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk>
+ <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+ <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+ <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+ <Yij2cZVKwPexGsTf@shell.armlinux.org.uk>
+ <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
+ <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
+ <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/10 08:46:00 #18933400
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,43 +73,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbSAzZDdmYTJhNTdhMmRkNjBhMThiMjAxZjg1MzdiNzE3YjVmYzQzY2YzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQ0KRnJvbTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZAc2JlcmRldmlj
-ZXMucnU+DQpEYXRlOiBNb24sIDMgSmFuIDIwMjIgMTQ6NDQ6MDIgKzAzMDANClN1YmplY3Q6IFtS
-RkMgUEFUQ0ggdjEgMi8zXSBhZl92c29jazogU09DS19TRVFQQUNLRVQgcmVjZWl2ZSB0aW1lb3V0
-IHRlc3QNCg0KVGVzdCBmb3IgcmVjZWl2ZSB0aW1lb3V0IGNoZWNrOiBjb25uZWN0aW9uIGlzIGVz
-dGFibGlzaGVkLA0KcmVjZWl2ZXIgc2V0cyB0aW1lb3V0LCBidXQgc2VuZGVyIGRvZXMgbm90aGlu
-Zy4gUmVjZWl2ZXIncw0KJ3JlYWQoKScgY2FsbCBtdXN0IHJldHVybiBFQUdBSU4uDQoNClNpZ25l
-ZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0t
-DQogdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgfCA0OSArKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA0OSBpbnNlcnRpb25zKCspDQoNCmRp
-ZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYyBiL3Rvb2xzL3Rlc3Rp
-bmcvdnNvY2svdnNvY2tfdGVzdC5jDQppbmRleCAyYTM2MzhjMGEwMDguLmFhMmRlMjdkMGY3NyAx
-MDA2NDQNCi0tLSBhL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jDQorKysgYi90b29s
-cy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYw0KQEAgLTM5MSw2ICszOTEsNTAgQEAgc3RhdGlj
-IHZvaWQgdGVzdF9zZXFwYWNrZXRfbXNnX3RydW5jX3NlcnZlcihjb25zdCBzdHJ1Y3QgdGVzdF9v
-cHRzICpvcHRzKQ0KIAljbG9zZShmZCk7DQogfQ0KIA0KK3N0YXRpYyB2b2lkIHRlc3Rfc2VxcGFj
-a2V0X3RpbWVvdXRfY2xpZW50KGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMgKm9wdHMpDQorew0KKwlp
-bnQgZmQ7DQorCXN0cnVjdCB0aW1ldmFsIHR2Ow0KKwljaGFyIGR1bW15Ow0KKw0KKwlmZCA9IHZz
-b2NrX3NlcXBhY2tldF9jb25uZWN0KG9wdHMtPnBlZXJfY2lkLCAxMjM0KTsNCisJaWYgKGZkIDwg
-MCkgew0KKwkJcGVycm9yKCJjb25uZWN0Iik7DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7DQorCX0N
-CisNCisJdHYudHZfc2VjID0gMTsNCisJdHYudHZfdXNlYyA9IDA7DQorDQorCWlmIChzZXRzb2Nr
-b3B0KGZkLCBTT0xfU09DS0VULCBTT19SQ1ZUSU1FTywgKHZvaWQgKikmdHYsIHNpemVvZih0dikp
-ID09IC0xKSB7DQorCQlwZXJyb3IoInNldHNvY2tvcHQgJ1NPX1JDVlRJTUVPJyIpOw0KKwkJZXhp
-dChFWElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCWlmICgocmVhZChmZCwgJmR1bW15LCBzaXplb2Yo
-ZHVtbXkpKSAhPSAtMSkgfHwNCisJICAgIChlcnJubyAhPSBFQUdBSU4pKSB7DQorCQlwZXJyb3Io
-IkVBR0FJTiBleHBlY3RlZCIpOw0KKwkJZXhpdChFWElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCWNv
-bnRyb2xfd3JpdGVsbigiV0FJVERPTkUiKTsNCisJY2xvc2UoZmQpOw0KK30NCisNCitzdGF0aWMg
-dm9pZCB0ZXN0X3NlcXBhY2tldF90aW1lb3V0X3NlcnZlcihjb25zdCBzdHJ1Y3QgdGVzdF9vcHRz
-ICpvcHRzKQ0KK3sNCisJaW50IGZkOw0KKw0KKwlmZCA9IHZzb2NrX3NlcXBhY2tldF9hY2NlcHQo
-Vk1BRERSX0NJRF9BTlksIDEyMzQsIE5VTEwpOw0KKwlpZiAoZmQgPCAwKSB7DQorCQlwZXJyb3Io
-ImFjY2VwdCIpOw0KKwkJZXhpdChFWElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCWNvbnRyb2xfZXhw
-ZWN0bG4oIldBSVRET05FIik7DQorCWNsb3NlKGZkKTsNCit9DQorDQogc3RhdGljIHN0cnVjdCB0
-ZXN0X2Nhc2UgdGVzdF9jYXNlc1tdID0gew0KIAl7DQogCQkubmFtZSA9ICJTT0NLX1NUUkVBTSBj
-b25uZWN0aW9uIHJlc2V0IiwNCkBAIC00MzEsNiArNDc1LDExIEBAIHN0YXRpYyBzdHJ1Y3QgdGVz
-dF9jYXNlIHRlc3RfY2FzZXNbXSA9IHsNCiAJCS5ydW5fY2xpZW50ID0gdGVzdF9zZXFwYWNrZXRf
-bXNnX3RydW5jX2NsaWVudCwNCiAJCS5ydW5fc2VydmVyID0gdGVzdF9zZXFwYWNrZXRfbXNnX3Ry
-dW5jX3NlcnZlciwNCiAJfSwNCisJew0KKwkJLm5hbWUgPSAiU09DS19TRVFQQUNLRVQgdGltZW91
-dCIsDQorCQkucnVuX2NsaWVudCA9IHRlc3Rfc2VxcGFja2V0X3RpbWVvdXRfY2xpZW50LA0KKwkJ
-LnJ1bl9zZXJ2ZXIgPSB0ZXN0X3NlcXBhY2tldF90aW1lb3V0X3NlcnZlciwNCisJfSwNCiAJe30s
-DQogfTsNCiANCi0tIA0KMi4yNS4xDQo=
+On Wed, Mar 09, 2022 at 09:42:29PM +0100, Ard Biesheuvel wrote:
+> On Wed, 9 Mar 2022 at 20:39, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 09, 2022 at 08:14:30PM +0100, Ard Biesheuvel wrote:
+> > > The backtrace dumped by __die() uses the pt_regs from the exception
+> > > context as the starting point, so the exception entry code that deals
+> > > with the condition that triggered the oops is omitted, and does not
+> > > have to be unwound.
+> >
+> > That is true, but that's not really the case I was thinking about.
+> > I was thinking more about cases such as RCU stalls, soft lockups,
+> > etc.
+> >
+> > For example:
+> >
+> > https://www.linuxquestions.org/questions/linux-kernel-70/kenel-v4-4-60-panic-in-igmp6_send-and-and-__neigh_create-4175704721/
+> >
+> > In that stack trace, the interesting bits are not the beginning of
+> > the stack trace down to __irq_svc, but everything beyond __irq_svc,
+> > since the lockup is probably caused by being stuck in
+> > _raw_write_lock_bh().
+> >
+> > It's these situations that we will totally destroy debuggability for,
+> > and the only way around that would be to force frame pointers and
+> > ARM builds (not Thumb-2 as that requires the unwinder... which means
+> > a Thumb-2 kernel soft lockup would be undebuggable.
+> >
+> 
+> Indeed.
+> 
+> But that means that the only other choice we have is to retain the
+> imprecise nature of the current solution (which usually works fine
+> btw), and simply deal with the faulting double dereference of vsp in
+> the unwinder code. We simply don't know whether the exception was
+> taken at a point where the stack frame is consistent with the unwind
+> data.
+
+Okay, further analysis (for the record, since I've said much of this on
+IRC):
+
+What we have currently is a robust unwinder that will cope when things
+go wrong, such as an interrupt taken during the prologue of a function.
+The way it copes is by two mechanisms:
+
+        /* store the highest address on the stack to avoid crossing it*/
+        low = frame->sp;
+        ctrl.sp_high = ALIGN(low, THREAD_SIZE);
+
+These two represent the allowable bounds of the kernel stack. When we
+run the unwinder, before each unwind instruction we check whether the
+current SP value is getting close to the top of the kernel stack, and
+if so, turn on additional checking:
+
+                if ((ctrl.sp_high - ctrl.vrs[SP]) < sizeof(ctrl.vrs))
+                        ctrl.check_each_pop = 1;
+
+that will ensure if we go off the top of the kernel stack, the
+unwinder will report failure, and not access those addresses.
+
+After each instruction, we check whether the SP value is within the
+above bounds:
+
+                if (ctrl.vrs[SP] < low || ctrl.vrs[SP] >= ctrl.sp_high)
+                        return -URC_FAILURE;
+
+This means that the unwinder can never modify SP to point outside of
+the kernel stack region identified by low..ctrl.sp_high, thereby
+protecting the load inside unwind_pop_register() from ever
+dereferencing something outside of the kernel stack. Moreover, it also
+prevents the unwinder modifying SP to point below the current stack
+frame.
+
+The problem has been introduced by trying to make the unwinder cope
+with IRQ stacks in b6506981f880 ("ARM: unwind: support unwinding across
+multiple stacks"):
+
+-       if (!load_sp)
++       if (!load_sp) {
+                ctrl->vrs[SP] = (unsigned long)vsp;
++       } else {
++               ctrl->sp_low = ctrl->vrs[SP];
++               ctrl->sp_high = ALIGN(ctrl->sp_low, THREAD_SIZE);
++       }
+
+Now, whenever SP is loaded, we reset the allowable range for the SP
+value, and this completely defeats the protections we previously had
+which were ensuring that:
+
+1) the SP value doesn't jump back _down_ the kernel stack resulting
+   in an infinite unwind loop.
+2) the SP value doesn't end up outside the kernel stack.
+
+We need those protections to prevent these problems that are being
+reported - and the most efficient way I can think of doing that is to
+somehow valudate the new SP value _before_ we modify sp_low and
+sp_high, so these two limits are always valid.
+
+Merely changing the READ_ONCE_NOCHECK() to be get_kernel_nocheck()
+will only partly fix this problem - it will stop the unwinder oopsing
+the kernel, but definitely doesn't protect against (1) and doesn't
+protect against SP pointing at some thing that is accessible (e.g.
+a device or other kernel memory.)
+
+We're yet again at Thursday, with the last linux-next prior to the
+merge window being created this evening, which really doesn't leave
+much time to get this sorted... and we can't say "this code should
+have been in earlier in the cycle" this time around, because these
+changes to the unwinder have been present in linux-next prior to
+5.17-rc2. Annoyingly, it seems merging stuff earlier in the cycle
+doesn't actually solve the problem of these last minute debugging
+panics.
+
+Any suggestions for what we should do? Can we come up with some way
+to validate the new SP value before 6pm UTC this evening?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

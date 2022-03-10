@@ -2,138 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AAE4D4A0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829184D49F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241609AbiCJOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S1343595AbiCJOkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245076AbiCJOUa (ORCPT
+        with ESMTP id S1343928AbiCJOb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:20:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AAE5FBC;
-        Thu, 10 Mar 2022 06:19:28 -0800 (PST)
+        Thu, 10 Mar 2022 09:31:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6318AE61C3;
+        Thu, 10 Mar 2022 06:28:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D26BB825A7;
-        Thu, 10 Mar 2022 14:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C07FC340E8;
-        Thu, 10 Mar 2022 14:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646921966;
-        bh=x54tX+WKuRg2TSvnQQqf6l2VpZTFE8lhw3ZR3z0WJ2M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ee3TXcpv5ErDmwlnyjdM1OmjTD/eCcgnpinuVmL9ClQr82doa/r8DwtMUJCa1gfWj
-         Z4/XbUDbDP5d1cWN1Ob80gAddAJ5nMfThGnYURtL/Sf/vBghV6pPWs8a3R6G2xhTeR
-         ejpwpghmYBoSH/IDq2nozt090C/xo6q2Yj6OYhy50IPzGLhK8mkz8KMy3v+N1TqeEs
-         KqhEePEvOu/nqlJSDjImSIPYRHar3NQuJmf4N+W7HmtXPHdZI/kUWvsPFm9VppEjKs
-         deSh+comtVv0aITzT3cMEZBNkqr2T6BRRwi7r16aoSxGXO9Fo0vVXAA6L4CLXL6JP2
-         qHjcu8wAH8i7w==
-Message-ID: <e442e6b1-2612-d8fb-793a-5e6f11851f21@kernel.org>
-Date:   Thu, 10 Mar 2022 08:19:24 -0600
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1A6961B18;
+        Thu, 10 Mar 2022 14:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC3FC340EB;
+        Thu, 10 Mar 2022 14:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646922516;
+        bh=u3MPRhz3LolOEDLh4n9zyf8HGP1wy3l7fXxeuN5Uxtc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=umAZBocdyW/0xAFOxdEK5DlNDnDfuLORV0UyT1U4T9i76Rty684pwLCTgiXSSQIFX
+         hkqSYXz7WdhyrozZ0fBCqv/XTenRyjPpV9eKfjSfZO97YbqAyq2nY1euUcoTwDLYUD
+         /acBp1zZvK/j729w399TPVfDf0trMZ8lAMxcoL3o=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>
+Subject: [PATCH 5.4 24/33] xen/blkfront: dont use gnttab_query_foreign_access() for mapped status
+Date:   Thu, 10 Mar 2022 15:19:25 +0100
+Message-Id: <20220310140809.449265331@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
+References: <20220310140808.741682643@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] EDAC: altera: Add SDRAM ECC check for U-Boot
-Content-Language: en-US
-To:     niravkumar.l.rabara@intel.com, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220305014118.4794-1-niravkumar.l.rabara@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220305014118.4794-1-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Juergen Gross <jgross@suse.com>
+
+Commit abf1fd5919d6238ee3bc5eb4a9b6c3947caa6638 upstream.
+
+It isn't enough to check whether a grant is still being in use by
+calling gnttab_query_foreign_access(), as a mapping could be realized
+by the other side just after having called that function.
+
+In case the call was done in preparation of revoking a grant it is
+better to do so via gnttab_end_foreign_access_ref() and check the
+success of that operation instead.
+
+For the ring allocation use alloc_pages_exact() in order to avoid
+high order pages in case of a multi-page ring.
+
+If a grant wasn't unmapped by the backend without persistent grants
+being used, set the device state to "error".
+
+This is CVE-2022-23036 / part of XSA-396.
+
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Roger Pau Monné <roger.pau@citrix.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/block/xen-blkfront.c |   63 +++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 26 deletions(-)
+
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -1344,7 +1344,8 @@ free_shadow:
+ 			rinfo->ring_ref[i] = GRANT_INVALID_REF;
+ 		}
+ 	}
+-	free_pages((unsigned long)rinfo->ring.sring, get_order(info->nr_ring_pages * XEN_PAGE_SIZE));
++	free_pages_exact(rinfo->ring.sring,
++			 info->nr_ring_pages * XEN_PAGE_SIZE);
+ 	rinfo->ring.sring = NULL;
+ 
+ 	if (rinfo->irq)
+@@ -1428,9 +1429,15 @@ static int blkif_get_final_status(enum b
+ 	return BLKIF_RSP_OKAY;
+ }
+ 
+-static bool blkif_completion(unsigned long *id,
+-			     struct blkfront_ring_info *rinfo,
+-			     struct blkif_response *bret)
++/*
++ * Return values:
++ *  1 response processed.
++ *  0 missing further responses.
++ * -1 error while processing.
++ */
++static int blkif_completion(unsigned long *id,
++			    struct blkfront_ring_info *rinfo,
++			    struct blkif_response *bret)
+ {
+ 	int i = 0;
+ 	struct scatterlist *sg;
+@@ -1453,7 +1460,7 @@ static bool blkif_completion(unsigned lo
+ 
+ 		/* Wait the second response if not yet here. */
+ 		if (s2->status < REQ_DONE)
+-			return false;
++			return 0;
+ 
+ 		bret->status = blkif_get_final_status(s->status,
+ 						      s2->status);
+@@ -1504,42 +1511,43 @@ static bool blkif_completion(unsigned lo
+ 	}
+ 	/* Add the persistent grant into the list of free grants */
+ 	for (i = 0; i < num_grant; i++) {
+-		if (gnttab_query_foreign_access(s->grants_used[i]->gref)) {
++		if (!gnttab_try_end_foreign_access(s->grants_used[i]->gref)) {
+ 			/*
+ 			 * If the grant is still mapped by the backend (the
+ 			 * backend has chosen to make this grant persistent)
+ 			 * we add it at the head of the list, so it will be
+ 			 * reused first.
+ 			 */
+-			if (!info->feature_persistent)
+-				pr_alert_ratelimited("backed has not unmapped grant: %u\n",
+-						     s->grants_used[i]->gref);
++			if (!info->feature_persistent) {
++				pr_alert("backed has not unmapped grant: %u\n",
++					 s->grants_used[i]->gref);
++				return -1;
++			}
+ 			list_add(&s->grants_used[i]->node, &rinfo->grants);
+ 			rinfo->persistent_gnts_c++;
+ 		} else {
+ 			/*
+-			 * If the grant is not mapped by the backend we end the
+-			 * foreign access and add it to the tail of the list,
+-			 * so it will not be picked again unless we run out of
+-			 * persistent grants.
++			 * If the grant is not mapped by the backend we add it
++			 * to the tail of the list, so it will not be picked
++			 * again unless we run out of persistent grants.
+ 			 */
+-			gnttab_end_foreign_access(s->grants_used[i]->gref, 0, 0UL);
+ 			s->grants_used[i]->gref = GRANT_INVALID_REF;
+ 			list_add_tail(&s->grants_used[i]->node, &rinfo->grants);
+ 		}
+ 	}
+ 	if (s->req.operation == BLKIF_OP_INDIRECT) {
+ 		for (i = 0; i < INDIRECT_GREFS(num_grant); i++) {
+-			if (gnttab_query_foreign_access(s->indirect_grants[i]->gref)) {
+-				if (!info->feature_persistent)
+-					pr_alert_ratelimited("backed has not unmapped grant: %u\n",
+-							     s->indirect_grants[i]->gref);
++			if (!gnttab_try_end_foreign_access(s->indirect_grants[i]->gref)) {
++				if (!info->feature_persistent) {
++					pr_alert("backed has not unmapped grant: %u\n",
++						 s->indirect_grants[i]->gref);
++					return -1;
++				}
+ 				list_add(&s->indirect_grants[i]->node, &rinfo->grants);
+ 				rinfo->persistent_gnts_c++;
+ 			} else {
+ 				struct page *indirect_page;
+ 
+-				gnttab_end_foreign_access(s->indirect_grants[i]->gref, 0, 0UL);
+ 				/*
+ 				 * Add the used indirect page back to the list of
+ 				 * available pages for indirect grefs.
+@@ -1554,7 +1562,7 @@ static bool blkif_completion(unsigned lo
+ 		}
+ 	}
+ 
+-	return true;
++	return 1;
+ }
+ 
+ static irqreturn_t blkif_interrupt(int irq, void *dev_id)
+@@ -1620,12 +1628,17 @@ static irqreturn_t blkif_interrupt(int i
+ 		}
+ 
+ 		if (bret.operation != BLKIF_OP_DISCARD) {
++			int ret;
++
+ 			/*
+ 			 * We may need to wait for an extra response if the
+ 			 * I/O request is split in 2
+ 			 */
+-			if (!blkif_completion(&id, rinfo, &bret))
++			ret = blkif_completion(&id, rinfo, &bret);
++			if (!ret)
+ 				continue;
++			if (unlikely(ret < 0))
++				goto err;
+ 		}
+ 
+ 		if (add_id_to_freelist(rinfo, id)) {
+@@ -1731,8 +1744,7 @@ static int setup_blkring(struct xenbus_d
+ 	for (i = 0; i < info->nr_ring_pages; i++)
+ 		rinfo->ring_ref[i] = GRANT_INVALID_REF;
+ 
+-	sring = (struct blkif_sring *)__get_free_pages(GFP_NOIO | __GFP_HIGH,
+-						       get_order(ring_size));
++	sring = alloc_pages_exact(ring_size, GFP_NOIO);
+ 	if (!sring) {
+ 		xenbus_dev_fatal(dev, -ENOMEM, "allocating shared ring");
+ 		return -ENOMEM;
+@@ -1742,7 +1754,7 @@ static int setup_blkring(struct xenbus_d
+ 
+ 	err = xenbus_grant_ring(dev, rinfo->ring.sring, info->nr_ring_pages, gref);
+ 	if (err < 0) {
+-		free_pages((unsigned long)sring, get_order(ring_size));
++		free_pages_exact(sring, ring_size);
+ 		rinfo->ring.sring = NULL;
+ 		goto fail;
+ 	}
+@@ -2720,11 +2732,10 @@ static void purge_persistent_grants(stru
+ 		list_for_each_entry_safe(gnt_list_entry, tmp, &rinfo->grants,
+ 					 node) {
+ 			if (gnt_list_entry->gref == GRANT_INVALID_REF ||
+-			    gnttab_query_foreign_access(gnt_list_entry->gref))
++			    !gnttab_try_end_foreign_access(gnt_list_entry->gref))
+ 				continue;
+ 
+ 			list_del(&gnt_list_entry->node);
+-			gnttab_end_foreign_access(gnt_list_entry->gref, 0, 0UL);
+ 			rinfo->persistent_gnts_c--;
+ 			gnt_list_entry->gref = GRANT_INVALID_REF;
+ 			list_add_tail(&gnt_list_entry->node, &rinfo->grants);
 
 
-On 3/4/22 19:41, niravkumar.l.rabara@intel.com wrote:
-> From: Rabara Niravkumar L <niravkumar.l.rabara@intel.com>
-> 
-> A bug in legacy U-Boot causes a crash during SDRAM boot if ECC
-> is not enabled in the bitstream but enabled in the Linux config.
-> 
-> Memory mapped read of the ECC Enabled bit was only enabled
-> if U-Boot determined ECC was enabled in the bitstream.
-> 
-> The Linux driver checks the ECC enable bit using a memory map
-> read. In the ECC disabled bitstream case, U-Boot didn't
-> enable ECC register memory map reads and since they are not
-> allowed this results in a crash.
-> 
-> This patch always reads the ECC Enable register through a
-> SMC call which is always allowed and it works with legacy
-> and current U-Boot.
-> 
-> Signed-off-by: Rabara Niravkumar L <niravkumar.l.rabara@intel.com>
-> ---
->   drivers/edac/altera_edac.c | 40 +++++++++++++++++++++++++++++++++++++-
->   1 file changed, 39 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index 5dd29789f97d..e7e8e624a436 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -1083,8 +1083,46 @@ static int __init __maybe_unused altr_init_a10_ecc_device_type(char *compat)
->   
->   #ifdef CONFIG_EDAC_ALTERA_SDRAM
->   
-> +/*
-> + * A legacy U-Boot bug only enabled memory mapped access to the ECC Enable
-> + * register if ECC is enabled. Linux checks the ECC Enable register to
-> + * determine ECC status.
-> + * Use an SMC call (which always works) to determine ECC enablement.
-> + */
-> +static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
-> +{
-> +	const struct edac_device_prv_data *prv = device->data;
-> +	unsigned long sdram_ecc_addr;
-> +	struct arm_smccc_res result;
-> +	struct device_node *np;
-> +	phys_addr_t sdram_addr;
-> +	u32 read_reg;
-> +	int ret;
-> +
-> +	np = of_find_compatible_node(NULL, NULL, "altr,sdr-ctl");
-> +	if (!np)
-> +		goto sdram_err;
-> +
-> +	sdram_addr = of_translate_address(np, of_get_address(np, 0,
-> +							     NULL, NULL));
-> +	of_node_put(np);
-> +	sdram_ecc_addr = (unsigned long)sdram_addr + prv->ecc_en_ofst;
-> +	arm_smccc_smc(INTEL_SIP_SMC_REG_READ, sdram_ecc_addr,
-> +		      0, 0, 0, 0, 0, 0, &result);
-> +	read_reg = (unsigned int)result.a1;
-> +	ret = (int)result.a0;
-> +	if (!ret && (read_reg & prv->ecc_enable_mask))
-> +		return 0;
-> +
-> +sdram_err:
-> +	edac_printk(KERN_ERR, EDAC_DEVICE,
-> +		    "%s: No ECC present or ECC disabled.\n",
-> +		    device->edac_dev_name);
-> +	return -ENODEV;
-> +}
-> +
->   static const struct edac_device_prv_data s10_sdramecc_data = {
-> -	.setup = altr_check_ecc_deps,
-> +	.setup = altr_s10_sdram_check_ecc_deps,
->   	.ce_clear_mask = ALTR_S10_ECC_SERRPENA,
->   	.ue_clear_mask = ALTR_S10_ECC_DERRPENA,
->   	.ecc_enable_mask = ALTR_S10_ECC_EN,
-
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>

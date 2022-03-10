@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C3E4D3DDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EAC4D3DE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238902AbiCJAHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
+        id S238906AbiCJAHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238896AbiCJAHQ (ORCPT
+        with ESMTP id S236719AbiCJAHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:07:16 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBDEF1EA1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:06:17 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso6770068pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IQJaIhmi/QzFmALiltJXNjf6ckrS2EgY1Uh0aPn7MYs=;
-        b=gHn6uRZhcwc/1/iluj+hvVI/tjLthpe0Akd+MQKuvfdxMcu9PCDly6aCrg472eEh3m
-         TjX0NOdopbKbRdKaTnbzERgZdM/mueEx2YG8+M+5257GEhp393PupeQgUlkt7oFEvDNE
-         3oK0YaD8xaVKZQHhdXj8we5uTjgvoB98hHYuntfbhhJEs/08fC7MpT6rEISUbYY/ic66
-         WSvO3h2xy30LL3YTP0oNjR8eybS0lFiAfsfYGA4HOD3rEng97uK2wZ6VlssMAfKNTXSz
-         EKoRjaRuHELjmnQMxekNcgSoQf+ZMttBSndyI4apgf7t9m0BmZJQgb+1OpttRu0tnJ2D
-         9JGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IQJaIhmi/QzFmALiltJXNjf6ckrS2EgY1Uh0aPn7MYs=;
-        b=A6ToL4a16EZmmXHD1ohdG4f7HFN4xm/M+4ukI5w0sL4AmkZscd/QM7FZN5h9Z4sAi3
-         hjUpM/R/Hjg/mB9RtqEv9nqKd2MHQAa+AktGYQSAZisbNwWvTJfEYnk61HpjSnRDD3xL
-         Fs0QTBXmKrih5H7zG3+EnrF8BxitCtRrUM0MKq13jMOTo1jibsohBAc353FSvHrBo2eJ
-         qAwKHC7TE4mQLJAehlalGJOCTvi7OdS8FyZxYKBrozoL7H65ko3IAUSNZ9CsyKfG4GQV
-         iPYCBm60AEsouZtr5oKDHh0oPCKCeg+ThwwQLUnxCgxgwYp5/gvGZhGpzffOLJ81mjqs
-         aLGA==
-X-Gm-Message-State: AOAM532KVddz8jisxJfzO0K1r3AQgKHPZMesTkpDGUZbLjM8QP0ADw2z
-        jOZBB2xtI0Ema/PftEJWPxxJO9VhlhlpNY6D93PuSw==
-X-Google-Smtp-Source: ABdhPJwb9kJQ7QI7FmWPhygsP7CpEdP0qVgYwpDcpFWyZG/Qf8Jpi7IliqWagwPdOiBZnW2yD9cno3XpwTf/bXrgthc=
-X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
- d22-20020a170902729600b0014b4bc60e81mr2305234pll.132.1646870776595; Wed, 09
- Mar 2022 16:06:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20220302082718.32268-1-songmuchun@bytedance.com> <20220302082718.32268-3-songmuchun@bytedance.com>
-In-Reply-To: <20220302082718.32268-3-songmuchun@bytedance.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 9 Mar 2022 16:06:05 -0800
-Message-ID: <CAPcyv4j7rn8OzWKydcCJNXdrhXm6h6Vq5n7uLzP5BSMJ_qSZgg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] dax: fix cache flush on PMD-mapped pages
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Hugh Dickins <hughd@google.com>, xiyuyang19@fudan.edu.cn,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Wed, 9 Mar 2022 19:07:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65100EBBA0;
+        Wed,  9 Mar 2022 16:06:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0158960AFA;
+        Thu, 10 Mar 2022 00:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94412C340E8;
+        Thu, 10 Mar 2022 00:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646870813;
+        bh=ymR0+7HJt+j828kNldSOLB8CDGjogSDdd9MtZMnSRf8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kY4jITnnMG2z8hapDLQ2cYnx22dUElqPtYRFwkydqNXC94aVJ4vIe3ToaGgauI/Ei
+         o/PoV/dPeuwBheaYOAfmNgwhXc2T5xK+OoHwgk74JyhTZ+cYTTwL+Yx4VLXQF557Mr
+         eQ6gzsSvwABZk7reqgfbWBsU4RJHb7oKmA1dbdMVejuT3KnntEQsX8It+6/ijhaPmJ
+         GCgsgkzkgh8zLtrr042Vt6IdGjqj7w6etciUlmLiQ1hbMmlrsK4ReWCufg2T0rPGa+
+         1UcnL9YglRTf4F6D20QupWzWYFChxdAnqax/zQnghbnkBNozxhtuX/M7UlTlOV8X3w
+         1WtYGoXz5f45w==
+Date:   Wed, 9 Mar 2022 17:06:45 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, duanxiongchun@bytedance.com,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: Re: [PATCH 0/4] [v4] Kbuild: std=gnu11 changes
+Message-ID: <YilBFcKIN1Ao5Ld1@dev-arch.thelio-3990X>
+References: <20220308215615.14183-1-arnd@kernel.org>
+ <CAHk-=wjsCrVxToP0Zx+cUAVZmSKi=Y6NP1+VnBcoPyPPEBfonQ@mail.gmail.com>
+ <CAK7LNAQoFFVLfkhA7FC9vDbvc4wdLginYeRHL0xHVAumu6p=uw@mail.gmail.com>
+ <CAK7LNASuy5hSOU7Y7Tr8_6Ks1ZqEeUKv_-c6fDjMubq0_ENRaw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASuy5hSOU7Y7Tr8_6Ks1ZqEeUKv_-c6fDjMubq0_ENRaw@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 12:29 AM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
-> However, it does not cover the full pages in a THP except a head page.
-> Replace it with flush_cache_range() to fix this issue.
+On Wed, Mar 09, 2022 at 06:18:18PM +0900, Masahiro Yamada wrote:
+> On Wed, Mar 9, 2022 at 11:16 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Wed, Mar 9, 2022 at 9:09 AM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
+> > >
+> > > On Tue, Mar 8, 2022 at 1:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > >
+> > > > From: Arnd Bergmann <arnd@arndb.de>
+> > > >
+> > > > I've incorporated the feedback from Masahiro Yamada in this
+> > > > version, splitting out one more patch, rebasing on top of
+> > > > the kbuild tree, and changing the order of the patches.
+> > > >
+> > > > Please apply to the kbuild tree.
+> > >
+> > > I'd actually like to see this as a separate branch, so that I can
+> > > merge it early - or other peoples git branches end up depending on it.
+> >
+> >
+> > OK, I can apply this to a separate branch, kbuild-gnu11.
+> > (and I will queue this up shortly because it is already -rc7)
+> >
+> > Then, I will send two pull reqs in the next MW,
+> > but please note they will conflict with each other,
+> > between this gnu11 patch set and the following
+> > one in my usual kbuild branch:
+> >
+> > https://patchwork.kernel.org/project/linux-kbuild/patch/20220201213542.2808035-1-quic_eberman@quicinc.com/
+> >
+> >
+> > I hope this is not a complex conflict, but please let me know
+> > if you have any requests to me.
+> >
+> >
+> >
+> >
+> >
+> 
+> 
+> All, applied to linux-kbuild/kbuild-gnu11.
+> 
+> If somebody wants to give Reviewed-by, Acked-by, Tested-by, please.
+> 
+> I will append them later.
 
-This needs to clarify that this is just a documentation issue with the
-respect to properly documenting the expected usage of cache flushing
-before modifying the pmd. However, in practice this is not a problem
-due to the fact that DAX is not available on architectures with
-virtually indexed caches per:
+For the series:
 
-d92576f1167c dax: does not work correctly with virtual aliasing caches
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Otherwise, you can add:
-
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Cheers,
+Nathan

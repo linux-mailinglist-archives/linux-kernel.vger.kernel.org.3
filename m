@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2A14D4FF3
+	by mail.lfdr.de (Postfix) with ESMTP id A93014D4FF4
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244254AbiCJRKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S244325AbiCJRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiCJRKi (ORCPT
+        with ESMTP id S230394AbiCJRKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:10:38 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6915C194
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:09:36 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id s11so5632653pfu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:09:36 -0800 (PST)
+        Thu, 10 Mar 2022 12:10:37 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E323115C18D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:09:35 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id 15-20020a17090a098f00b001bef0376d5cso5788942pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:09:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=9vsxDLv0jRYrdMWCdK+DvGUDoE+ZiEKYs1dLFeqWbTY=;
-        b=E4BgBkJ+Xq4T2ddFS5W7BfSpnvoEsJJgEbqQef7Yz2rjMCUEx+9alT20ZbC1rEb5oG
-         JduZegrQo51xuIG9Wun90nbMjAe4Kn+rTq63gKtbGdUA1oJF2fTgQygIQ7a+xHmQYcp3
-         tAuJOoQNKvuQHvR5y24LzV3AQawgUieAiAvEiar4r+dkwSVtEKVHIDecem1aIftRqrVt
-         1MJ9eABNl8N+ADd8QmEy4KCj5+ZZwupUvhbRh5ks6abaD65Xxvl/md65Sao4OShh9ihh
-         prBEsm6wEV5SSpbiRoUoARtmFfSy3e3D0YTBBepuQVX5Ph36/8eyH69OooluxSbheTIq
-         Qh2Q==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CXJIZNeGajqwp6jaZzleHdYhvxqijXnXTAupo8pKN9M=;
+        b=lkIwxy6irebs+k/g2EEyfbXiasFCFgahK3OeU5fC2Ii0Y5QhEn2BSvvhMpLkQlo92x
+         o7AI6Rt8Y7ZaHZS3TUKcz2wg/vR6Jb7fSn2JNwzdKOwq/I94ZLftFHUPTTAz2G/BHTFa
+         z5Gnmchvcv3bT8PRLZ85jHkLetABtlxc229LHQVxqD8S0KAuV3bD7BgnITLcjewJxVbe
+         BhAa7IPXGTPVWRa4DV+z0xzCIabyAxPU478EEd/8GFu2hhrpkyY4O+/KT+GxWupFSjQF
+         3k7VOB5klVfc7wBJh7/6JRh9FmrP8aS8iFz+JWLZ6uKBSEbcwftUXPae7H25xv6Xngn7
+         uauA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=9vsxDLv0jRYrdMWCdK+DvGUDoE+ZiEKYs1dLFeqWbTY=;
-        b=S+WRIITU6mbSZSPKfNNo78ZJ2rf/Nja7PEiuroMgRU0iV1bT4g75bjnkQtpQ6TBnRs
-         vnhnDYUKxZjIEXX3yAXXNOTfXKLR0/MQpR5nATlBhaC+Cly8KYpMKQEcSMNWBWgs14KF
-         oNzqQ+J1+62VSK+C7WbHbHhL5cCpWAN8Xx4j6BuXJ+SM4TDF0zd3Z1LKRLk3SDO9XCWw
-         yedWuyKR/fWWzubVz5vUFO0mCUjIO29OtjBTKFivzIbM+AGSqLNraaDw4vmg0wR3+OHV
-         Bx+Xqz1yOPwWpW2P4x+dZZXCN2vVtZ5BIba0WvZsvs20ubDaZejYLti9IJIvKVLmTlhZ
-         3qXg==
-X-Gm-Message-State: AOAM531Xdyhl1RL1EOStw9ZnuzFQIoJTMvOq6bP8o6V3IgIFjJRAwDbW
-        wndNx8xCQQuxRqY73ysXLc8IXw==
-X-Google-Smtp-Source: ABdhPJxnz9epEpZ/4W/EkXe8NMBZnqltyihGTRilS5fQnFLc6+e4CXAYBKGHy5Viezd+couNh+TERQ==
-X-Received: by 2002:a63:121e:0:b0:380:8c48:e043 with SMTP id h30-20020a63121e000000b003808c48e043mr4837588pgl.356.1646932176183;
-        Thu, 10 Mar 2022 09:09:36 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id z11-20020a056a001d8b00b004f74f8268cbsm6372992pfw.85.2022.03.10.09.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=CXJIZNeGajqwp6jaZzleHdYhvxqijXnXTAupo8pKN9M=;
+        b=J8TAHaukx+3gjhh2ap+bq706/xciZeDkcOL9FTxp/PnV2vsxjGeK4OlNjC/KfvqjWX
+         4Ssc7cz2TGBPFMSDORBACyN8zqrLCWTWzR10jiQespGMdB5VnCcITw8HcCIkvJHaSFFG
+         fd6BKIDLu1lkugLmB5D1IHpuJLNaaNgo2ol4GWzZkkq3YpuJqv6286d2oq/3V1/zZ9lZ
+         vKkAwfgJcA7nDZldGRjumQT+//9EtEitjHClkvuewOCbrgAssMxwSPVAiicJLtv2qyfo
+         JLCMyXGY32aENW1xE2s4Wvz5c5t78OgC40zVO2bkxACdUOuMFo98JXWFYRtfgV3C1zJY
+         IaIg==
+X-Gm-Message-State: AOAM533oPhY/HIEEdkbWw9g1+4g/XRlAM2JAKBw0vuGXIXrugFv3Tyiz
+        tNXFdPspSiEExN1/zRXB+q0hGw==
+X-Google-Smtp-Source: ABdhPJyVpypYQN9Wk4w5jvTCoAvJF9ERDsONHaoBVGcGWK0xcagj5xUzmVuqgSTOM+V37tN6snUXVw==
+X-Received: by 2002:a17:902:c40a:b0:151:a792:71f2 with SMTP id k10-20020a170902c40a00b00151a79271f2mr6129701plk.36.1646932175179;
         Thu, 10 Mar 2022 09:09:35 -0800 (PST)
-Subject: [PATCH] RISC-V: Add CONFIG_{NON,}PORTABLE
-Date:   Thu, 10 Mar 2022 09:08:45 -0800
-Message-Id: <20220310170845.17614-1-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id js15-20020a17090b148f00b001bfc8614b93sm3926516pjb.1.2022.03.10.09.09.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 09:09:34 -0800 (PST)
+Date:   Thu, 10 Mar 2022 09:09:34 -0800 (PST)
+X-Google-Original-Date: Thu, 10 Mar 2022 09:08:29 PST (-0800)
+Subject:     Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
+In-Reply-To: <CAK8P3a3mzax-OiaxBcxM_RgKNsd6N8HW0odRmw38u2jKE5aYaQ@mail.gmail.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, michael@michaelkloos.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
 To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-3e1f2147-7acb-4dd7-8fce-41ec72def1d7@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -69,116 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+On Wed, 09 Mar 2022 23:54:17 PST (-0800), Arnd Bergmann wrote:
+> On Thu, Mar 10, 2022 at 8:34 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> On Wed, 09 Mar 2022 02:02:27 PST (-0800), Arnd Bergmann wrote:
+>> > On Wed, Mar 9, 2022 at 6:28 AM Michael T. Kloos <michael@michaelkloos.com> wrote:
+>>
+>> That'd be wonderful, but unfortunately we're trending the other way --
+>> we're at the point where "words in the specification have meaning" is
+>> controversial, so trying to talk about which flavors of the
+>> specification are standard is just meaningless.  I obviously hope that
+>> gets sorted out, as we've clearly been pointed straight off a cliff for
+>> a while now, but LMKL isn't the place to have that discussion.  We've
+>> all seen this before, nobody needs to be convinced this leads to a mess.
+>>
+>> Until we get to the point where "I wrote 'RISC-V' on that potato I found
+>> in my couch" can be conclusively determined not compliant with the spec,
+>> it's just silly to try and talk about what is.
+>
+> I would argue that codifying the required extensions through kernel source
 
-The RISC-V port has collected a handful of options that are
-fundamentally non-portable.  To prevent users from shooting themselves
-in the foot, hide them all behind a config entry that explicitly calls
-out that non-portable binaries may be produced.
+The problem here isn't the required extensions, it's that vendors can 
+claim to implement an extension on hardware that doesn't exhibit any of 
+the behavior the specification expresses that systems with those 
+extensions must have.  The D1 is a very concrete example of this.
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> code is much stronger than interpreting a specification. Ideally the
+> specification
+> would match what the kernel requires, but it's not the end of the world if
+> the kernel ends up making decisions that are different: If Linux can do
+> runtime detection of non-M, non-A or pre-standard extensions and handle
+> them correctly without a notable performance impact, it can do that. Or
+> Linux could end up requiring things that are normally there but not
+> in the scope of the spec.
+>
+> Regardless of who determines what the compatible subset is, I think there
+> is value in splitting out Kconfig options that prevent booting on normal
+> RV64GC machines (XIP, NOMMU, 32-bit, ...). This would probably
+> not include the non-M option, as long as a non-M kernel works as
+> expected on CPUs with the M instructions.
 
----
-This came up in the context of the no-M patch:
-https://lore.kernel.org/lkml/CAK8P3a3mzax-OiaxBcxM_RgKNsd6N8HW0odRmw38u2jKE5aYaQ@mail.gmail.com/
-
-I'm not sure I strictly need both PORTABLE and NONPORTABLE, but it's the
-only way I could come up with to force things like EFI.  I'll poke
-around Kconfig a bit more, but I figured this is going to lead to a
-discussion so it'd be better to just send this crusty version so we at
-least have something concrete to talk about.
-
-I've only given this a smoke test (ie, defconfig looks OK).  I'll go
-through all the configs if folks think this is the right way to go -- I
-figure it's better to have the discussion on a more focused patch than
-on that M patch, as this is really an orthogonal issue.
-
-I'm not really sure what the right option is here: I'm not selecting
-things like errata and basic drivers, but I could buy the argument that
-disabling those results in non-portable systems.  I am selecting EFI,
-that might not be strictly required now but it's the direction we're
-going so I figure we might as well start now.  I've also hidden 32BIT
-behind this, I could see that going either way but my guess is that
-users of 32-bit systems won't care about portable binaries.  I'm also
-not sure if this should be tied to something like EMBEDDED or EXPERT.
-
-My biggest worry with this is that users might get the feeling that
-current kernels will be compatible with new hardware, that's just not
-how RISC-V works.  I tried to write the help text indicating that, I'm
-not sure I like how it reads so I'll almost certainly take another shot
-at it (though suggestions are, of course, welcome).
-
-I'm also a bit worried that vendors might get the feeling we're not
-going to support systems that need modifications to these portablity
-requirements.  That's also not the case, as there's really no way for
-vendors to make sure their systems continue to run portable kernels
-aside from just releasing them publicly so we can test them.
----
- arch/riscv/Kconfig | 28 ++++++++++++++++++++++++++--
- 1 file changed, 26 insertions(+), 2 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..de0916d7aca7 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -9,6 +9,7 @@ config 64BIT
- 
- config 32BIT
- 	bool
-+	depends on NONPORTABLE
- 
- config RISCV
- 	def_bool y
-@@ -485,6 +486,7 @@ config STACKPROTECTOR_PER_TASK
- 
- config PHYS_RAM_BASE_FIXED
- 	bool "Explicitly specified physical RAM address"
-+	depends on NONPORTABLE
- 	default n
- 
- config PHYS_RAM_BASE
-@@ -498,7 +500,7 @@ config PHYS_RAM_BASE
- 
- config XIP_KERNEL
- 	bool "Kernel Execute-In-Place from ROM"
--	depends on MMU && SPARSEMEM
-+	depends on MMU && SPARSEMEM && NONPORTABLE
- 	# This prevents XIP from being enabled by all{yes,mod}config, which
- 	# fail to build since XIP doesn't support large kernels.
- 	depends on !COMPILE_TEST
-@@ -538,9 +540,31 @@ endmenu
- 
- config BUILTIN_DTB
- 	bool
--	depends on OF
-+	depends on OF && NONPORTABLE
- 	default y if XIP_KERNEL
- 
-+config NONPORTABLE
-+	bool "Allow configurations that result in non-portable kernels"
-+	help
-+	  RISC-V kernel binaries are compatibile between all known systems
-+	  whenever possible, but there are some use cases that can only be
-+	  satisfied by configurations that result in kernel binaries that are
-+	  not portable between systems.
-+
-+	  Selecting N does not guarntee kernels will be portable to all knows
-+	  systems.  Selecting any of the options guarded by NONPORTABLE will
-+	  result in kernel binaries that are unlikely to be portable between
-+	  systems.
-+
-+	  If unsure, say N.
-+
-+config PORTABLE
-+	bool
-+	default !NONPORTABLE
-+	select EFI
-+	select OF
-+	select MMU
-+
- menu "Power management options"
- 
- source "kernel/power/Kconfig"
--- 
-2.34.1
-
+I get the value to having an option hiding these things, as users might 
+shoot themselves in the foot.  I sent a patch, not sure it's exactly 
+what we want but at least it's something concrete to discuss.

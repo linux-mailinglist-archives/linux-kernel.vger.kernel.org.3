@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABA34D4A01
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FD34D4A60
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245257AbiCJOjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:39:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S245306AbiCJOj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343855AbiCJObZ (ORCPT
+        with ESMTP id S1343875AbiCJOb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:25 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3FAC6261
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:27:40 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B305468B05; Thu, 10 Mar 2022 15:27:36 +0100 (CET)
-Date:   Thu, 10 Mar 2022 15:27:36 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] task_work: simplify the task_work_add() interface
-Message-ID: <20220310142736.GA1103@lst.de>
-References: <20220223072754.616027-1-hch@lst.de> <58c5f828-df7d-6698-e2d6-2a869e134dd4@kernel.dk>
+        Thu, 10 Mar 2022 09:31:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B501C9A3C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:27:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF72061CF0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C99C340EB;
+        Thu, 10 Mar 2022 14:27:43 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 09:27:42 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: ftrace: no need to acquire text_mutex when
+ executed in stop_machine
+Message-ID: <20220310092742.4fcc7131@gandalf.local.home>
+In-Reply-To: <20220310045454.672097-1-changbin.du@gmail.com>
+References: <20220310045454.672097-1-changbin.du@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58c5f828-df7d-6698-e2d6-2a869e134dd4@kernel.dk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 05:43:25AM -0700, Jens Axboe wrote:
-> On 2/23/22 12:27 AM, Christoph Hellwig wrote:
-> > Provide a low-level task_work_add_nonotify interface that just adds
-> > the work to the list and open code the TWA_SIGNAL and TWA_NONE callers
-> > using it.  task_work_add() itself now only handles the common TWA_RESUME
-> > case and can drop the notify argument.
+On Thu, 10 Mar 2022 12:54:54 +0800
+Changbin Du <changbin.du@gmail.com> wrote:
+
+> It's safe to patch text segment in stop_machine. No race is possible here.
+> Besides, there is a false positive for the lock assertion in
+> patch_insn_write() since the lock is not held by cpu migration thread.
 > 
-> Not sure this is much of a cleanup, and a potential fast case of
-> TWA_NONE will now still still set TIF_NOTIFY_RESUME. Also:
-
-No, the old TWA_NONE case is switched to task_work_add_nonotify and
-does not set TIF_NOTIFY_RESUME.
-
+> So we actually don't need our ftrace_arch_code_modify_prepare/post(). And
+> the lock assertion in patch_insn_write() should be removed to avoid
+> producing lots of false positive warnings.
 > 
-> > diff --git a/fs/io_uring.c b/fs/io_uring.c
-> > index 77b9c7e4793bf..94116a102dc61 100644
-> > --- a/fs/io_uring.c
-> > +++ b/fs/io_uring.c
-> > @@ -9606,7 +9606,7 @@ static __cold void io_ring_exit_work(struct work_struct *work)
-> >  					ctx_node);
-> >  		/* don't spin on a single task if cancellation failed */
-> >  		list_rotate_left(&ctx->tctx_list);
-> > -		ret = task_work_add(node->task, &exit.task_work, TWA_SIGNAL);
-> > +		ret = task_work_add_nonotify(node->task, &exit.task_work);
-> >  		if (WARN_ON_ONCE(ret))
-> >  			continue;
-> 
-> This one is now no longer setting TIF_NOTIFY_SIGNAL.
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
 
-Yes, this was a rebase bug.
+Ideally, RISC-V should try to get off of the stop_machine approach, and
+move to the breakpoint modification.
 
-> If you want to get rid of the argument, why not just have separate
-> helpers? task_work_add_signal(), task_work_add_resume(),
-> task_work_add(). Setting TWA_RESUME unconditionally because it's the
-> common use case doesn't seem ideal.
-
-In this series, task_work_add_nonotify is what you seems to call
-task_work_add, task_work_add is this series is what you call
-task_work_add_resume and task_work_add_signal is open coded because
-there aren't a whole lot of users.  But if you want I can add
-task_work_add_signal and rename task_work_add to task_work_add_resume,
-but I think keeping the task_work_add_nonotify name for the low-level
-helper is a lot more descriptive.
+-- Steve

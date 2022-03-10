@@ -2,84 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F444D4803
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755864D480A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242362AbiCJNZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
+        id S242405AbiCJN3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiCJNZt (ORCPT
+        with ESMTP id S239631AbiCJN3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:25:49 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679C7CF38E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:24:48 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 260653F30F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646918687;
-        bh=AC2QV+BOHtvgXwOifEM5ca7aMnsr4tiE4ebM/MHFh6A=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=qyHJdoGNlIK0srWqi4VrDXjZsdZ9cWdy7a87s78PZy32tSo2ZAktOA2rI8z+fMNm+
-         +saeeae/TAO2ttLDHFHqzUu/9aphnYtcsgypfsBP7sxGcuAaKO8NmfVwKVYSigYByf
-         Sshb7APxwH4ydWUVWyt0TUtm4SdFxJJjvjlSlBOXBDHJzazFY6uaOmjV2hhSMGMvHl
-         x0rW+PoOurcjywDK+1XQg82Hae0rDxfYB8BGsdtlIfaOYAyczU2lzIuwlheDrLdCSp
-         CLKYIwDlPhubJQYkW8oDPdm7jjqqCiV7D+R2PdBH+hmkn0WeTYAxH59Rk/hFV4zG+c
-         v714aKTmfD1PQ==
-Received: by mail-ej1-f71.google.com with SMTP id q22-20020a1709064cd600b006db14922f93so3106968ejt.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:24:47 -0800 (PST)
+        Thu, 10 Mar 2022 08:29:43 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5399B7E097
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:28:42 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dbda4f6331so40445257b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Y7gj1hh0DB6tOe5ZHLoKoc4NT1CoUMRgYUbu9GMxm2c=;
+        b=PcVpr1GuJ8GWX7vf+TIimRwnGcf2+y85xAnLxuU2LUy2f3fQvacSZe04/oqKr+rH9u
+         z+Mzxnr08X1dcLD0Jay42IB6TJ5iGT0POTC0ttrQUJB1d61SU9fVUqhqUXx0zC5okjsX
+         0KX5+vyrQtwS5RL2K7LAYxFrds7AusjU+jQBzD48W1TRgQEmYztDpXMuKKywO7n/PaWb
+         /NQ60qbU+NJGzv0bccEORsiLVxhvmwKtUg3rORQFjXWU+/SNjP/fFGAQoaL/T5JtfHRA
+         MVach1kF0AFBZPtTCqeb/cE2ZeVUIJ1PzwUCGEeJCUamNwv40I1K6AkyAUKlmtSSS8rR
+         NJMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AC2QV+BOHtvgXwOifEM5ca7aMnsr4tiE4ebM/MHFh6A=;
-        b=Cl+6uForhGqMn1uWF6v040pGCQ0eKcpWbi8dN4AtwKo6Y0pbt5ylDC/j7n3FcJTX1W
-         hCKESov8EdY/J39u9dDVd3lQPRg0YHHIO2WnHh2Zy7YYPbzcB5gR5JmFuowjpRDMJnrd
-         YfbyysMNPq81EiyOdbczJAsYNgBSqGyTzDTCvAF8DM/obQhZIQ9gCi+9BKpxlVmfKGZ9
-         vbEYXZguH7fF0yGifqzD2EBbYe2jBrjjP2Q5jwNfkxQlQG/XFJlwUhS31aanRarpvSuB
-         z+MmfGxhlObooqnBiik0zHjCjkqGyQyzSOyoCCDSbxpJ63Tkco7x18bJ6QB89EEOZ/0v
-         caDA==
-X-Gm-Message-State: AOAM533BB2H6GV/dPUEL+luZ9kOzM/1WFNPzuNgYU/JqM1C4HBcmzppS
-        4R/cegdLacljqa35C3k2qFTQ2GynSaXwih8zR3esFO5mXoxrioekULGNADQHhzYe0IrjLnKj8Av
-        acSg4uxtetwTwWx5d8ZDANeUGbiy2iqX5obEfX1KS4Q==
-X-Received: by 2002:a17:907:c16:b0:6db:682:c8c9 with SMTP id ga22-20020a1709070c1600b006db0682c8c9mr4311065ejc.153.1646918686614;
-        Thu, 10 Mar 2022 05:24:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxh96pIcaZjepw8fDG5gEIFBY3lCXTrIeHF6wSWe/4lVWb3KtEgtjp2SDkTN4L1ahVqkj5lJg==
-X-Received: by 2002:a17:907:c16:b0:6db:682:c8c9 with SMTP id ga22-20020a1709070c1600b006db0682c8c9mr4311039ejc.153.1646918686230;
-        Thu, 10 Mar 2022 05:24:46 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id m24-20020a170906161800b006d420027b63sm1780101ejd.18.2022.03.10.05.24.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 05:24:45 -0800 (PST)
-Message-ID: <6f34f80e-da06-337d-167e-2410309e0f4d@canonical.com>
-Date:   Thu, 10 Mar 2022 14:24:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root
- Port
-Content-Language: en-US
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     lorenzo.pieralisi@arm.com, bhelgaas@google.com, michals@xilinx.com,
-        robh@kernel.org
-References: <20220309120025.6721-1-bharat.kumar.gogada@xilinx.com>
- <20220309120025.6721-2-bharat.kumar.gogada@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220309120025.6721-2-bharat.kumar.gogada@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Y7gj1hh0DB6tOe5ZHLoKoc4NT1CoUMRgYUbu9GMxm2c=;
+        b=rpb9xaPPO9jCIztavzZWtoV1k+2t7Jme1q5nDDdJiQ1hEb8f6Jq+V0UxE4cCNhTylO
+         ROITv/tfvT7b3XXxkgLhgiM+ik7toudT+JMDlNcVJ0cQSY/P6hQQ+UsPj9LTSs+RLIOA
+         H5j/pnW7y+piJ59CChMxJJuweibBU78lTwW+HHeOkJpUE6+ltrBh+wzKK264rGVgDCt7
+         JdUr6w3dZYDE82z1zSxTyz1ntWPSH7LnbHJzDmtZrsky1KtqacAuI2fcOihTZmJURTLc
+         v2Mm+xPA8tbKl9FE37nYDUctbKSWEcDrklw26pYbtuc//l8FFyAejv61/CojqbauRcca
+         Uhpg==
+X-Gm-Message-State: AOAM530XJ78u53p4TagFXcBXYnkjeo0mFf44kO7Vr2XQwHTkncer/ONn
+        N8ro0rEEP8KzMc3autdsyCvt7Rg8Ohw=
+X-Google-Smtp-Source: ABdhPJzwtkhkPUqBI9gHc2Q828U5TjP3S4ysN896s6N7UbdNSqH6k6QsxiSTVNH6MbtAUxTir1E/uiQLaqI=
+X-Received: from jiyong.seo.corp.google.com ([2401:fa00:d:11:f59e:134:eb7:e1d2])
+ (user=jiyong job=sendgmr) by 2002:a25:7903:0:b0:622:3940:7c7c with SMTP id
+ u3-20020a257903000000b0062239407c7cmr4031710ybc.334.1646918921467; Thu, 10
+ Mar 2022 05:28:41 -0800 (PST)
+Date:   Thu, 10 Mar 2022 22:28:29 +0900
+Message-Id: <20220310132830.88203-1-jiyong@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH v2] vsock: each transport cycles only on its own sockets
+From:   Jiyong Park <jiyong@google.com>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     adelva@google.com, Jiyong Park <jiyong@google.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,55 +70,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2022 13:00, Bharat Kumar Gogada wrote:
-> Xilinx Versal Premium series has CPM5 block which supports Root Port
-> functioning at Gen5 speed.
-> 
-> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
-> 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> ---
->  .../bindings/pci/xilinx-versal-cpm.yaml       | 47 ++++++++++++++++---
->  1 file changed, 40 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> index 32f4641085bc..97c7229d7f91 100644
-> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> @@ -14,17 +14,21 @@ allOf:
->  
->  properties:
->    compatible:
-> -    const: xlnx,versal-cpm-host-1.00
-> +    contains:
-> +      enum:
-> +        - xlnx,versal-cpm-host-1.00
-> +        - xlnx,versal-cpm5-host-1.00
->  
->    reg:
-> -    items:
-> -      - description: Configuration space region and bridge registers.
-> -      - description: CPM system level control and status registers.
-> +    description: |
-> +      Should contain cpm_slcr, cfg registers location and length.
-> +      For xlnx,versal-cpm5-host-1.00, it should also contain cpm_csr.
-> +    minItems: 2
-> +    maxItems: 3
+When iterating over sockets using vsock_for_each_connected_socket, make
+sure that a transport filters out sockets that don't belong to the
+transport.
 
-You removed here list of items, which should stay. See also
-https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
-how to do it.
+There actually was an issue caused by this; in a nested VM
+configuration, destroying the nested VM (which often involves the
+closing of /dev/vhost-vsock if there was h2g connections to the nested
+VM) kills not only the h2g connections, but also all existing g2h
+connections to the (outmost) host which are totally unrelated.
 
->  
->    reg-names:
-> -    items:
-> -      - const: cfg
-> -      - const: cpm_slcr
-> +    minItems: 2
-> +    maxItems: 3
+Tested: Executed the following steps on Cuttlefish (Android running on a
+VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
+connection inside the VM, (2) open and then close /dev/vhost-vsock by
+`exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
+session is not reset.
 
-The same.
+[1] https://android.googlesource.com/device/google/cuttlefish/
 
+Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
+Signed-off-by: Jiyong Park <jiyong@google.com>
+---
+Changes in v2:
+  - Squashed into a single patch
 
-Best regards,
-Krzysztof
+ drivers/vhost/vsock.c            | 3 ++-
+ include/net/af_vsock.h           | 3 ++-
+ net/vmw_vsock/af_vsock.c         | 9 +++++++--
+ net/vmw_vsock/virtio_transport.c | 7 +++++--
+ net/vmw_vsock/vmci_transport.c   | 3 ++-
+ 5 files changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+index 37f0b4274113..e6c9d41db1de 100644
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -753,7 +753,8 @@ static int vhost_vsock_dev_release(struct inode *inode, struct file *file)
+ 
+ 	/* Iterating over all connections for all CIDs to find orphans is
+ 	 * inefficient.  Room for improvement here. */
+-	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
++	vsock_for_each_connected_socket(&vhost_transport.transport,
++					vhost_vsock_reset_orphans);
+ 
+ 	/* Don't check the owner, because we are in the release path, so we
+ 	 * need to stop the vsock device in any case.
+diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+index ab207677e0a8..f742e50207fb 100644
+--- a/include/net/af_vsock.h
++++ b/include/net/af_vsock.h
+@@ -205,7 +205,8 @@ struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr);
+ struct sock *vsock_find_connected_socket(struct sockaddr_vm *src,
+ 					 struct sockaddr_vm *dst);
+ void vsock_remove_sock(struct vsock_sock *vsk);
+-void vsock_for_each_connected_socket(void (*fn)(struct sock *sk));
++void vsock_for_each_connected_socket(struct vsock_transport *transport,
++				     void (*fn)(struct sock *sk));
+ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
+ bool vsock_find_cid(unsigned int cid);
+ 
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 38baeb189d4e..f04abf662ec6 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -334,7 +334,8 @@ void vsock_remove_sock(struct vsock_sock *vsk)
+ }
+ EXPORT_SYMBOL_GPL(vsock_remove_sock);
+ 
+-void vsock_for_each_connected_socket(void (*fn)(struct sock *sk))
++void vsock_for_each_connected_socket(struct vsock_transport *transport,
++				     void (*fn)(struct sock *sk))
+ {
+ 	int i;
+ 
+@@ -343,8 +344,12 @@ void vsock_for_each_connected_socket(void (*fn)(struct sock *sk))
+ 	for (i = 0; i < ARRAY_SIZE(vsock_connected_table); i++) {
+ 		struct vsock_sock *vsk;
+ 		list_for_each_entry(vsk, &vsock_connected_table[i],
+-				    connected_table)
++				    connected_table) {
++			if (vsk->transport != transport)
++				continue;
++
+ 			fn(sk_vsock(vsk));
++		}
+ 	}
+ 
+ 	spin_unlock_bh(&vsock_table_lock);
+diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+index fb3302fff627..5afc194a58bb 100644
+--- a/net/vmw_vsock/virtio_transport.c
++++ b/net/vmw_vsock/virtio_transport.c
+@@ -24,6 +24,7 @@
+ static struct workqueue_struct *virtio_vsock_workqueue;
+ static struct virtio_vsock __rcu *the_virtio_vsock;
+ static DEFINE_MUTEX(the_virtio_vsock_mutex); /* protects the_virtio_vsock */
++static struct virtio_transport virtio_transport; /* forward declaration */
+ 
+ struct virtio_vsock {
+ 	struct virtio_device *vdev;
+@@ -384,7 +385,8 @@ static void virtio_vsock_event_handle(struct virtio_vsock *vsock,
+ 	switch (le32_to_cpu(event->id)) {
+ 	case VIRTIO_VSOCK_EVENT_TRANSPORT_RESET:
+ 		virtio_vsock_update_guest_cid(vsock);
+-		vsock_for_each_connected_socket(virtio_vsock_reset_sock);
++		vsock_for_each_connected_socket(&virtio_transport.transport,
++						virtio_vsock_reset_sock);
+ 		break;
+ 	}
+ }
+@@ -662,7 +664,8 @@ static void virtio_vsock_remove(struct virtio_device *vdev)
+ 	synchronize_rcu();
+ 
+ 	/* Reset all connected sockets when the device disappear */
+-	vsock_for_each_connected_socket(virtio_vsock_reset_sock);
++	vsock_for_each_connected_socket(&virtio_transport.transport,
++					virtio_vsock_reset_sock);
+ 
+ 	/* Stop all work handlers to make sure no one is accessing the device,
+ 	 * so we can safely call virtio_reset_device().
+diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+index 7aef34e32bdf..735d5e14608a 100644
+--- a/net/vmw_vsock/vmci_transport.c
++++ b/net/vmw_vsock/vmci_transport.c
+@@ -882,7 +882,8 @@ static void vmci_transport_qp_resumed_cb(u32 sub_id,
+ 					 const struct vmci_event_data *e_data,
+ 					 void *client_data)
+ {
+-	vsock_for_each_connected_socket(vmci_transport_handle_detach);
++	vsock_for_each_connected_socket(&vmci_transport,
++					vmci_transport_handle_detach);
+ }
+ 
+ static void vmci_transport_recv_pkt_work(struct work_struct *work)
+
+base-commit: 3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
+-- 
+2.35.1.723.g4982287a31-goog
+

@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06AE4D5494
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2F54D5497
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245017AbiCJW1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S245456AbiCJW3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243798AbiCJW1e (ORCPT
+        with ESMTP id S235627AbiCJW3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:27:34 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F308215720F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:26:32 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id p8so6303569pfh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:26:32 -0800 (PST)
+        Thu, 10 Mar 2022 17:29:17 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8F9D77
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:28:15 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id z8so7499686oix.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:28:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Aszcqf0XzWd+vGCqLcwZjvXnBs5FuOMxPb9/Mu3JCCI=;
-        b=j4up3fvZP3RyylsJ9f8if9qONF63efuuIPHdC3e+bnSQzMOXWIwXtm4+cXUH8Xk/8u
-         mCWhjASpjFnuA50pTSy978KkmDVMd8bDx+n8bnP1B1ENoVgMP7PBTzqBxfkuHjxYVYpK
-         V5P0Tv9tybb6X6+oPb7F0WX4bkgM/wnxrvd+g=
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=L50gyqenwrlhooMlFljcH3M9Bm8aHoxCPPqfCu4Q2BI=;
+        b=lURtiOIQm1Fzr/7eATPUeCmC6bh/GUI2W8hKvwkH9I5Hgz6q2OQzhef9p6ImjTcXHe
+         h9faC3slkGhKUbotxd9MX4b/AQgERTCnrg8AAYxcGdc17lw9MrZ0WXSHvTmMSg0bp/3f
+         FBjQvky5iTLBZTvxN8ZfaDt5N4ytq6+LxzfDc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Aszcqf0XzWd+vGCqLcwZjvXnBs5FuOMxPb9/Mu3JCCI=;
-        b=uVf7vQ+UE6pAMnLoc612xLIqgbns6J/1sDXaqb3BCiV7bD+tQYQ+kxo7l6QqtYhCpi
-         C16UCyOzEpKMRJuzhy18PPGEMytsbaX6mACM17jk5pm46vOtk8QxHWIJECfhxxXgF92N
-         cIAbxZ0Tku5VXZzVz46t5DBrVaQb0w4JnpTc0fvERjA5RchsAYclvaY51orptm/49yNf
-         bCAzQeqBFbS/k1buDPdoPuaJ4Nom51D7LzRx/qfpw2gAoJLorxhV7Dgnd/N+6p+bTumX
-         uxPYCr1OjSzcii+K2DDUtEKMZASU3dbzDZWWRA0nTx8NI3bctsm1xgmjDZ50WySKOSEZ
-         gJSA==
-X-Gm-Message-State: AOAM532LDgYnuzsX4630mfydOdvZrYUDPTWUuqFES5+jgubBlcNUDQQ0
-        ij/fAGv0shSc0F3XBSbQQ7t57w==
-X-Google-Smtp-Source: ABdhPJwzt2JV4k3c8RM0r9etZlt407JYgwTP/eOTDXDZnSClVqk9SYiX0qpDX8J571cmIjKJ85eryQ==
-X-Received: by 2002:a63:e958:0:b0:380:132:5da8 with SMTP id q24-20020a63e958000000b0038001325da8mr5940030pgj.114.1646951192448;
-        Thu, 10 Mar 2022 14:26:32 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n18-20020a628f12000000b004f743724c75sm7684011pfd.53.2022.03.10.14.26.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 14:26:31 -0800 (PST)
-Date:   Thu, 10 Mar 2022 14:26:31 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        martin.fernandez@eclypsium.com, daniel.gutson@eclypsium.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init
- code
-Message-ID: <202203101425.B6B598947A@keescook>
-References: <20220310210210.2124637-1-brendanhiggins@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=L50gyqenwrlhooMlFljcH3M9Bm8aHoxCPPqfCu4Q2BI=;
+        b=5wSBeouu/7k7YyP7TSQ22Yq6BOQHTv2o7WpA9aF7v/hyt4QdwzsSNS56B/yqLQtxPP
+         1kNKFQZqoVEq++4K2XpgiL7E4fpod6JhM8MSd6dGeX5Khjg4u5JCzuVQD5WxS8WWX+3p
+         fwWvkzzMz8bH4zG4MYjULRpwCDnh/R+tS6MxI/F5p1KZtWMfiOuq32o9U5qpXDkZuha1
+         uNVGA2MF8BQX0n3k5VCjemAHSlFt3z3pB6MhNgPw9c5dKxzWoWx9uXfU9mV+kre2yPw3
+         LQTNLc6TeI+qzrmG9Mb7jkUYf9yZoKXafR+/CCmXfz/va4NaFZNPldEgSYcWFE0znu+W
+         fFaQ==
+X-Gm-Message-State: AOAM532dYZJq9dELIOQqh14IOWYIJe8xcam1Pr7jtMLdn6eLw2o1GHg7
+        SpdWuBIt+yAZz2pki7naM3i71jw65gAVvw==
+X-Google-Smtp-Source: ABdhPJz5k0vitjPY00OS9QKIXyOGTge4rA2yWMVhe8B/IrOBfOa8Lh5TCXso/P4dVRUtlc4pa6N4VA==
+X-Received: by 2002:a05:6808:179c:b0:2d9:c4bd:cbe with SMTP id bg28-20020a056808179c00b002d9c4bd0cbemr10850938oib.163.1646951294923;
+        Thu, 10 Mar 2022 14:28:14 -0800 (PST)
+Received: from [192.168.1.230] (cpe-68-203-7-69.austin.res.rr.com. [68.203.7.69])
+        by smtp.gmail.com with ESMTPSA id d2-20020a05683025c200b005b248ae4d4asm3152258otu.59.2022.03.10.14.28.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 14:28:14 -0800 (PST)
+Message-ID: <b6601087-0b11-33cc-904a-1133d1500a10@cloudflare.com>
+Date:   Thu, 10 Mar 2022 16:28:13 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310210210.2124637-1-brendanhiggins@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quentin@isovalent.com, ast@kernel.org, andrii@kernel.org
+From:   Chris Arges <carges@cloudflare.com>
+Subject: [PATCH] bpftool: ensure bytes_memlock json output is correct
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,74 +67,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 01:02:10PM -0800, Brendan Higgins wrote:
-> Add support for a new kind of kunit_suite registration macro called
-> kunit_test_init_suite(); this new registration macro allows the
-> registration of kunit_suites that reference functions marked __init and
-> data marked __initdata.
+From 40107402b805c4eaca5ce7a0db66d10e9219f2bf Mon Sep 17 00:00:00 2001
+From: Chris J Arges <carges@cloudflare.com>
+Date: Wed, 9 Mar 2022 15:41:58 -0600
+Subject: [PATCH] bpftool: ensure bytes_memlock json output is correct
 
-O_o is this due to the "_probe" name being used? I think that likely
-deserves a comment in the code, so the "how" of the warning suppression
-is clear.
+If a bpf map is created over 2^32 the memlock value as displayed in JSON
+format will be incorrect. Use atoll instead of atoi so that the correct
+number is displayed.
 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+```
+$ bpftool map create /sys/fs/bpf/test_bpfmap type hash key 4 \
+  value 1024 entries 4194304 name test_bpfmap
+$ bpftool map list
+1: hash  name test_bpfmap  flags 0x0
+        key 4B  value 1024B  max_entries 4194304  memlock 4328521728B
+$ sudo bpftool map list -j | jq .[].bytes_memlock
+33554432
+```
 
-Regardless:
+Signed-off-by: Chris J Arges <carges@cloudflare.com>
+---
+ tools/bpf/bpftool/map.c  | 2 +-
+ tools/bpf/bpftool/prog.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
-> ---
-> 
-> This patch is in response to a KUnit user issue[1] in which the user was
-> attempting to test some init functions; although this is a functional
-> solution as long as KUnit tests only run during the init phase, we will
-> need to do more work if we ever allow tests to run after the init phase
-> is over; it is for this reason that this patch adds a new registration
-> macro rather than simply modifying the existing macros.
-> 
-> [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-> 
-> ---
->  include/kunit/test.h | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b26400731c02..1878e585f6d3 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -379,6 +379,27 @@ static inline int kunit_run_all_tests(void)
->  
->  #define kunit_test_suite(suite)	kunit_test_suites(&suite)
->  
-> +/**
-> + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-> + *			      containing init functions or init data.
-> + *
-> + * @__suites: a statically allocated list of &struct kunit_suite.
-> + *
-> + * This functions identically as &kunit_test_suites() except that it suppresses
-> + * modpost warnings for referencing functions marked __init or data marked
-> + * __initdata; this is OK because currently KUnit only runs tests upon boot
-> + * during the init phase or upon loading a module during the init phase.
-> + *
-> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-> + * tests must be excluded.
-> + */
-> +#define kunit_test_init_suites(__suites...)				\
-> +	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
-> +			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
-> +			    ##__suites)
-> +
-> +#define kunit_test_init_suite(suite)	kunit_test_init_suites(&suite)
-> +
->  #define kunit_suite_for_each_test_case(suite, test_case)		\
->  	for (test_case = suite->test_cases; test_case->run_case; test_case++)
->  
-> 
-> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> -- 
-> 2.35.1.723.g4982287a31-goog
-> 
-
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index cc530a229812..7002f815b7ed 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -504,7 +504,7 @@ static int show_map_close_json(int fd, struct bpf_map_info *info)
+ 	jsonw_uint_field(json_wtr, "max_entries", info->max_entries);
+ 
+ 	if (memlock)
+-		jsonw_int_field(json_wtr, "bytes_memlock", atoi(memlock));
++		jsonw_int_field(json_wtr, "bytes_memlock", atoll(memlock));
+ 	free(memlock);
+ 
+ 	if (info->type == BPF_MAP_TYPE_PROG_ARRAY) {
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 2a21d50516bc..edd8a9619341 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -480,7 +480,7 @@ static void print_prog_json(struct bpf_prog_info *info, int fd)
+ 
+ 	memlock = get_fdinfo(fd, "memlock");
+ 	if (memlock)
+-		jsonw_int_field(json_wtr, "bytes_memlock", atoi(memlock));
++		jsonw_int_field(json_wtr, "bytes_memlock", atoll(memlock));
+ 	free(memlock);
+ 
+ 	if (info->nr_map_ids)
 -- 
-Kees Cook
+2.25.1
+

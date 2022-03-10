@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54944D49B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D12D4D4A21
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243335AbiCJOXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S243521AbiCJOXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244018AbiCJOSj (ORCPT
+        with ESMTP id S244237AbiCJOTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:18:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D4985839E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646921670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Go8Xs3nn4xJMSXzgfTAf+aN/PVriO9262aZwriGw3dc=;
-        b=SbP21VwOkJLVBvsDRZUpMuwStWnJf7WXE06qN/50+Fl5ValL9/DcXE7q6juFkm/NubcBku
-        wnlk202DLALBcIbhbl3iCCL+w/i/B+/1RcwoCqZFjmAPiHxOGM9IXjplB4axYOgDE72CRN
-        STtmQwxgkUrtYTeBg8joukrksO9Ee28=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-jxb75OsfMOKFPquduDDrWA-1; Thu, 10 Mar 2022 09:14:27 -0500
-X-MC-Unique: jxb75OsfMOKFPquduDDrWA-1
-Received: by mail-wm1-f71.google.com with SMTP id h206-20020a1c21d7000000b003552c13626cso4129900wmh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:14:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Go8Xs3nn4xJMSXzgfTAf+aN/PVriO9262aZwriGw3dc=;
-        b=JpbjxcPJd3J1rwyDs+Ug0TImojWqqm0GBh9bEss7eZqDSv4ypCzRCc35scReFeKjPO
-         9F+LrqiPV0Ykp6JzWO8ZTfASDEx6p7p1jhMVMiSf0J8GndjnA5bxapPpVV5ddMmtxF4C
-         zyOxVI1/hoxq2PcJeno9fxEIVANK4psazF/An9yM/JKjwfRMhYTuB6hfJ1uU6fyjBU5v
-         jQgSv6bZ/94kMtl0yBPRT06IoFrZs8BpBArptexsB2RWECA/emf2F5T7McoGr1MXOB0O
-         U+mRGPe1UcMFMd5mQD0/UtOYae7/IeUi+i5ZpMpd592g7L/ilp78Nkok0fANgpNxrdhz
-         0Kvg==
-X-Gm-Message-State: AOAM531mJzEILaRZRLG3ZdkpUbyN/BF1tHjrL6Th/dbNDlA2tx3MCAeL
-        yTrlZCtIr5UYOBlyYHRx9x83oXoYoWi9XGDtkTz7jbYI3gorxAqT78rwUbClz8aLlt7Y2EvQWjn
-        brPVLLhU+AEqcMbt8d16+05dq
-X-Received: by 2002:a7b:c759:0:b0:389:82c6:ac44 with SMTP id w25-20020a7bc759000000b0038982c6ac44mr11566476wmk.168.1646921664255;
-        Thu, 10 Mar 2022 06:14:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyJrE6GOOprlJAb2464K/jVRkVAPfidu7mYv+i734cs8hDz4HbESzpyS0sW35U1EuqGVJzrQw==
-X-Received: by 2002:a7b:c759:0:b0:389:82c6:ac44 with SMTP id w25-20020a7bc759000000b0038982c6ac44mr11566447wmk.168.1646921663950;
-        Thu, 10 Mar 2022 06:14:23 -0800 (PST)
-Received: from sgarzare-redhat (host-212-171-187-184.pool212171.interbusiness.it. [212.171.187.184])
-        by smtp.gmail.com with ESMTPSA id e18-20020adfdbd2000000b001e4bbbe5b92sm4687989wrj.76.2022.03.10.06.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 06:14:23 -0800 (PST)
-Date:   Thu, 10 Mar 2022 15:14:20 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jiyong Park <jiyong@google.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, adelva@google.com,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] vsock: each transport cycles only on its own sockets
-Message-ID: <20220310141420.lsdchdfcybzmdhnz@sgarzare-redhat>
-References: <20220310135012.175219-1-jiyong@google.com>
+        Thu, 10 Mar 2022 09:19:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CE816EAA5;
+        Thu, 10 Mar 2022 06:15:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D52D961C99;
+        Thu, 10 Mar 2022 14:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E1CC340E8;
+        Thu, 10 Mar 2022 14:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646921702;
+        bh=yo5cNZOSv/J/WvklnDG16ry9Bw3elHchQ9q/vBCqvbQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=maGHS2m9LDj84cxFFYKfEByaP+07rvv+owPqT7QN/rWpqfNcEJIgelSZsi89z4YEO
+         eQ1qFs24G5TKKZ37vfsaWUuoahmWC2QwUDpYhUJOWTcA5ftlnYtglXuIm3C+NzvXVX
+         gBXYfhzm3t7ZnwmCGQflz+r+w3644ExZdU582Wf+q3jK8KdwigqrOzzNj+ZaARW29C
+         7hn4UDgR975l1tpTzDFBwdz4PbSL/O4tpE2aHK4RWiwc0aMs1RoAbAgXX3XjuS86s3
+         HePHW4K+4ISCDz6AYjeZei8oxFadEePkK2O4JH54dDvQ9xfKcmwPJoy+iQaWP2GBHv
+         67tYi9URG2iMw==
+Received: by mail-ed1-f51.google.com with SMTP id w4so7136387edc.7;
+        Thu, 10 Mar 2022 06:15:02 -0800 (PST)
+X-Gm-Message-State: AOAM533sFQ6Hbbpfbrv8YOLkfiPhbxZKL1SafpwCxR7e05ac5nwXrzTk
+        mQQIcSGNUYNUX0PJA3TAFi6msy0GoFfApICOQg==
+X-Google-Smtp-Source: ABdhPJxTKjB6jCuITpAJueLD1jR/nypmp0A/gmHHrMEnwEcpJdUe3bQ2Gx3VCz4Rpb6k9VX70aM1nvGlH0UAjjLTElI=
+X-Received: by 2002:a05:6402:5256:b0:416:97d1:a6a2 with SMTP id
+ t22-20020a056402525600b0041697d1a6a2mr4571157edd.280.1646921700547; Thu, 10
+ Mar 2022 06:15:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220310135012.175219-1-jiyong@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <c5ea7235-8642-6a89-f4ce-bd0861b6e4aa@linaro.org> <CA+V-a8tkhERx+8zDae5aWkNQ9Oxd1AamRL=i4TDC2X8RGgAo0w@mail.gmail.com>
+ <5e13c1ba-0bf5-e360-c350-e7a1a1402350@linaro.org>
+In-Reply-To: <5e13c1ba-0bf5-e360-c350-e7a1a1402350@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 10 Mar 2022 08:14:48 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+CWKvkHMNhAa3o_rSLy_+AoHi6wkB3MRM8O3jJ5sG_Wg@mail.gmail.com>
+Message-ID: <CAL_Jsq+CWKvkHMNhAa3o_rSLy_+AoHi6wkB3MRM8O3jJ5sG_Wg@mail.gmail.com>
+Subject: Re: [PATCH] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the interrupt
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 10:50:11PM +0900, Jiyong Park wrote:
->When iterating over sockets using vsock_for_each_connected_socket, make
->sure that a transport filters out sockets that don't belong to the
->transport.
+On Thu, Mar 10, 2022 at 4:42 AM Srinivas Kandagatla
+<srinivas.kandagatla@linaro.org> wrote:
 >
->There actually was an issue caused by this; in a nested VM
->configuration, destroying the nested VM (which often involves the
->closing of /dev/vhost-vsock if there was h2g connections to the nested
->VM) kills not only the h2g connections, but also all existing g2h
->connections to the (outmost) host which are totally unrelated.
 >
->Tested: Executed the following steps on Cuttlefish (Android running on a
->VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
->connection inside the VM, (2) open and then close /dev/vhost-vsock by
->`exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
->session is not reset.
 >
->[1] https://android.googlesource.com/device/google/cuttlefish/
->
->Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
->Signed-off-by: Jiyong Park <jiyong@google.com>
->---
->Changes in v3:
->  - Fixed the build error in vmci_transport.c
->Changes in v2:
->  - Squashed into a single patch
->
-> drivers/vhost/vsock.c            | 3 ++-
-> include/net/af_vsock.h           | 3 ++-
-> net/vmw_vsock/af_vsock.c         | 9 +++++++--
-> net/vmw_vsock/virtio_transport.c | 7 +++++--
-> net/vmw_vsock/vmci_transport.c   | 5 ++++-
-> 5 files changed, 20 insertions(+), 7 deletions(-)
+> On 10/03/2022 10:23, Lad, Prabhakar wrote:
+> > On Thu, Mar 10, 2022 at 10:16 AM Srinivas Kandagatla
+> > <srinivas.kandagatla@linaro.org> wrote:
+> >>
+> >>
+> >>
+> >> On 24/12/2021 16:13, Lad Prabhakar wrote:
+> >>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> >>> allocation of IRQ resources in DT core code, this causes an issue
+> >>
+> >> Are you saying that we should not be using platform_get_resource(pdev,
+> >> IORESOURCE_IRQ, ...) on drivers that support DT?
 
-It seems okay now, I ran my test suite and everything seems to be fine:
+We should be using platform_get_irq(). (period, on all platform drivers)
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> >>> when using hierarchical interrupt domains using "interrupts" property
+> >>> in the node as this bypasses the hierarchical setup and messes up the
+> >>> irq chaining.
+> >>
+> >> Should this not be fixed in the DT core itself?
+> >>
+> > Yes the plan is to fix in the DT core itself (refer [0]).
+> >
+> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> >
+> >>>
+> >>> In preparation for removal of static setup of IRQ resource from DT core
+> >>> code use platform_get_irq().
+> >>
+> >> I would prefer this patch to be part of the series that removes IRQ
+> >> resource handling from DT core.
+> >>
+> > Since there are too many users (which are in different subsystems)
+> > getting this all in single series would be a pain. As a result it is
+> > split up into individual subsystems.
+> Am happy for this to be included in that series,
+> TBH, this patch make more sense along with that series than by itself.
 
-Thanks,
-Stefano
+No it doesn't. This is no different than converting to devm_* variants
+or other cleanups to match current preferred styles.
 
+Treewide cross subsystem clean-ups are a huge pain to merge. Why would
+you ask for that when it is clearly not necessary?
+
+Rob

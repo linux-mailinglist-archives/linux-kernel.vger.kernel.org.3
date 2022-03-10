@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E14B4D539C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25EB4D539D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343958AbiCJVbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S245739AbiCJVcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240780AbiCJVbt (ORCPT
+        with ESMTP id S1343965AbiCJVcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:31:49 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BB1190B41
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:30:47 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id g6-20020a9d6486000000b005acf9a0b644so4941905otl.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:30:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5qJr9oFbO6WYeiROwbwsIG7qIaqfAiFr4KdfM+v42WQ=;
-        b=GGPM27WOTI7uu5IJ0L11WadFp88pFu0pH7S28DbERHgwUzT8k4DvxicY7dS6et2tJu
-         kYL4cLdwSJSyDWsRRa1s5aM6bRXC4uzyaTcbCs4zNkSwDjfYb056Yg8suKnbcJ1BJw0K
-         yPmBXjkr8su9AJEu9lQrWQprsp+K4gCWSDBdY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5qJr9oFbO6WYeiROwbwsIG7qIaqfAiFr4KdfM+v42WQ=;
-        b=lNX/tjDzTuvnb+OnfFhlHekRZVapHe7S0V0gEq2AnWhbfK8+R8hS88KonlkzyPJpOt
-         bL4zrOsYj7D+ygxr3Wmh0nSiEetB+fMzX+4zOyRtXrN2vT+6xPfmbn0c6Ga3aMB+WZ2n
-         9YOxfsmR7O2x8Oo1MtbTWfI3TO9hcmYPXx34rvo63N0icKFaxrePTNLmJrjnJy+Kh2QD
-         22ywxpOXE24iPXazfRSucN1WrAYwej/8mN13qntj3jucAtfMlei+/7Srel0TKy8g9ZDT
-         QdHxBMgwckEciyZb/XFmNjcMc2ZiHjhDd9tkSI/sSNRHzv39YrbJ0AZAxswSSSxiyGf9
-         nd2Q==
-X-Gm-Message-State: AOAM532TJKEioh7xnq4GYgh7taJXdB7blTUZ8qEfKVbjlbURQ5jdEAoB
-        O3yFLp7ncgyRRPOjsE1vwTIfsQ==
-X-Google-Smtp-Source: ABdhPJys/PJe9Ij2hy1VoO6dGuDkJ0EYEPKkUlm8DUiPR7ZIeU4gvYdRfui73v63MgqFAuL7T8NX8A==
-X-Received: by 2002:a05:6830:40a1:b0:5b2:2ab2:4211 with SMTP id x33-20020a05683040a100b005b22ab24211mr3467163ott.171.1646947847097;
-        Thu, 10 Mar 2022 13:30:47 -0800 (PST)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id bb39-20020a05680816a700b002d9a8eb89fasm2737249oib.46.2022.03.10.13.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 13:30:46 -0800 (PST)
-Date:   Thu, 10 Mar 2022 15:30:44 -0600
-From:   Justin Forbes <jmforbes@linuxtx.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 00/53] 5.16.14-rc2 review
-Message-ID: <YipuBM+HbbZ3q7b6@fedora64.linuxtx.org>
-References: <20220310140811.832630727@linuxfoundation.org>
+        Thu, 10 Mar 2022 16:32:07 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14260192CB5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:31:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646947866; x=1678483866;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dEQEXfZpDDy+joKRUKFQ8Y/ONso7mcKQlN243kDuOBM=;
+  b=FwY7rLk2mo2k+QXTk2w8zkghjLF0Z48GGFJc2dGBBh4Yrx1zBVbs3dgl
+   jROiRAYPS+mlazsZDbZ1ueN1PGXlR/0BjzPrTsw/CwHJYaTPTnJxTBkLZ
+   lpgJQVDDSNJyaZCqhICRw+YZNwuGXJt8jIDGH10ocq7XoQ/6zLykkgaXb
+   83hrdT0ygFY200I/eEPFZRz2NZJnwS0t5YMGFgV/8mkednvPdvWodsLQw
+   LQrtMthHF/Q0k9c1vGImaHJyA3XUl9AmMJubrF2U2zf5xYXFecEVUJxDR
+   cKQ/RdOIjFBHp+WY+TXin+5HSVEAp/ebtKb6kcAA8v8Sd8wyU3B2rawQ9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237556682"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="237556682"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:31:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="633146174"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 13:31:03 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSQNC-0005Q8-RG; Thu, 10 Mar 2022 21:31:02 +0000
+Date:   Fri, 11 Mar 2022 05:30:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH 5/5] staging: vt6656: Remove unused rf_type in card.c
+Message-ID: <202203110539.GOSgwFnJ-lkp@intel.com>
+References: <e768dbb116e79349aa083747729213d2d1ca7af9.1646935331.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310140811.832630727@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e768dbb116e79349aa083747729213d2d1ca7af9.1646935331.git.philipp.g.hortmann@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 03:09:05PM +0100, Greg Kroah-Hartman wrote:
-> Note, I'm sending all the patches again for all of the -rc2 releases as
-> there has been a lot of churn from what was in -rc1 to -rc2.
-> 
-> This is the start of the stable review cycle for the 5.16.14 release.
-> There are 53 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Philipp,
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+[auto build test WARNING on staging/staging-testing]
+
+url:    https://github.com/0day-ci/linux/commits/Philipp-Hortmann/staging-vt6656-Remove-unused-5GHz-support/20220311-025658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git b25c7dc13fb8842e8634bd846a7a96f2176f0244
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203110539.GOSgwFnJ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ddc1ba8087bf857aa6120e70814d4f161aba6cdc
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Philipp-Hortmann/staging-vt6656-Remove-unused-5GHz-support/20220311-025658
+        git checkout ddc1ba8087bf857aa6120e70814d4f161aba6cdc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/staging/vt6656/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/staging/vt6656/card.c: In function 'vnt_set_bss_mode':
+>> drivers/staging/vt6656/card.c:441:23: warning: variable 'bb_vga_0' set but not used [-Wunused-but-set-variable]
+     441 |         unsigned char bb_vga_0 = 0x1c;
+         |                       ^~~~~~~~
+
+
+vim +/bb_vga_0 +441 drivers/staging/vt6656/card.c
+
+92b96797118e58 Forest Bond  2009-06-13  435  
+81969fd8abc104 Oscar Carter 2020-04-25  436  int vnt_set_bss_mode(struct vnt_private *priv)
+92b96797118e58 Forest Bond  2009-06-13  437  {
+35452e10610617 Oscar Carter 2020-04-29  438  	int ret;
+91387f5eb9fc22 Oscar Carter 2020-04-29  439  	unsigned char type = priv->bb_type;
+91387f5eb9fc22 Oscar Carter 2020-04-29  440  	unsigned char data = 0;
+91387f5eb9fc22 Oscar Carter 2020-04-29 @441  	unsigned char bb_vga_0 = 0x1c;
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

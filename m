@@ -2,50 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624854D439A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCDF4D439C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240862AbiCJJgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S240865AbiCJJhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiCJJgY (ORCPT
+        with ESMTP id S230107AbiCJJhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:36:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75F8139CEF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:35:23 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1EBA01F441;
-        Thu, 10 Mar 2022 09:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646904922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=vvwr9IQ/HApVfG5EbXjqoEechaWCEohW8qhJvhEvg9w=;
-        b=TpUEa9/rR3ex7LW6Oy+jnIlV4MER3qTYYp4wCy0wsl4cbS6tIfwC7GrHW7ymYV5DOpIQCm
-        L3NK5u4ovG0QWvAAGWwEz+JTrEp42VudIBROM3fvkAhS8mtfO7up1AFU8vKKjuSqNkOqMV
-        ZHSLHbUB5CUaF7IFPp/aoHmSh4b/LHY=
-Received: from alley.suse.cz (unknown [10.100.224.162])
-        by relay2.suse.de (Postfix) with ESMTP id 9793EA3B81;
-        Thu, 10 Mar 2022 09:35:21 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH] kthread: Make it clear that create_kthread() might be terminated by any fatal signal
-Date:   Thu, 10 Mar 2022 10:34:55 +0100
-Message-Id: <20220310093455.15176-1-pmladek@suse.com>
-X-Mailer: git-send-email 2.26.2
+        Thu, 10 Mar 2022 04:37:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D1813A1ED;
+        Thu, 10 Mar 2022 01:36:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=irYEUP1LT5nKyhqvu9/7+diZD18yg6h9RclMUqCTiQc=; b=N0t7WEhdE6u1lZitiQcVOtvC6R
+        L38cospM2R9+1sl5T4IcUHRAckeRgvvSsw6rKbwkO31ku+d9bN+F2sGfE7LqJ5awdeq77cGgZ7o94
+        T5/F1X7nn77kYNEuIlmo+bKxLhO+totKRMvaQDOrzDUqX5v0aOsiwSpZ2dfIJ4YA9sujVUa3CKMcL
+        rO2+Y9lVnP+4iqNEyNMqVI5BC5P2DUYnrU8nYpoTnIbtezeFfb63GFPlcVq9arMHV3N+G7qJgXyPO
+        HHPTUy+jCjd60hWnbcBCqw7Ukcb4nmeLFWeLw1J5LnRRuMDLD9Wyp8IVhwpLAglzqTQ8v5+a3hqLY
+        xP2KazhQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSFCo-000ODF-8c; Thu, 10 Mar 2022 09:35:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A26ED300268;
+        Thu, 10 Mar 2022 10:35:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5F120264E62B7; Thu, 10 Mar 2022 10:35:32 +0100 (CET)
+Date:   Thu, 10 Mar 2022 10:35:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
+ <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,105 +68,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comments in kernel/kthread.c create a feeling that only SIGKILL
-is able to break create_kthread().
+On Wed, Mar 09, 2022 at 11:09:17AM -0800, Alexei Starovoitov wrote:
+> Pulled above and it got even worse.
+> With kasan and lockdep during qemu boot I see:
+> [    1.147498] rcu_scheduler_active = 1, debug_locks = 1
+> [    1.147498] 2 locks held by kthreadd/2:
+> [    1.147498]  #0: ffff888100362b80 (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x71/0x380
+> [    1.147498]  #1: ffff8881f6a3a218 (&rq->__lock){-...}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x40
+> [    1.147498]
+> [    1.147498] stack backtrace:
+> [    1.147498] CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc7-02289-gc958c6aae879 #1
+> [    1.147498] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> [    1.147498] Call Trace:
+> [    1.147498]  <TASK>
+> [    1.147498]  dump_stack_lvl+0x48/0x5b
+> [    1.147498]  cpuacct_charge+0x2b3/0x390
+> [    1.147498]  update_curr+0x33e/0x7d0
+> [    1.147498]  dequeue_entity+0x28/0xdf0
+> [    1.147498]  ? rcu_read_lock_bh_held+0xa0/0xa0
+> [    1.147498]  dequeue_task_fair+0x1fa/0xd60
+> [    1.147498]  __do_set_cpus_allowed+0x253/0x620
+> [    1.147498]  __set_cpus_allowed_ptr_locked+0x25f/0x450
+> [    1.147498]  __set_cpus_allowed_ptr+0x7c/0xa0
+> [    1.147498]  ? __set_cpus_allowed_ptr_locked+0x450/0x450
+> [    1.147498]  ? _raw_spin_unlock_irqrestore+0x34/0x60
+> [    1.147498]  ? lockdep_hardirqs_on+0x7d/0x100
+> [    1.147498]  kthreadd+0x48/0x610
+> [    1.147498]  ? _raw_spin_unlock_irq+0x28/0x50
+> [    1.147498]  ? kthread_is_per_cpu+0xc0/0xc0
+> [    1.147498]  ret_from_fork+0x1f/0x30
 
-In reality, wait_for_completion_killable() might be killed by any
-fatal signal that does not have a custom handler:
+Yeah, sorry about that, currently arguing with Paul about that one.
+Should go away if you disable the RCU lockdep thing. The warning itself
+is a false positive and more harmful than anything else due to it
+generating a possible printk deadlock.
 
-	(!siginmask(signr, SIG_KERNEL_IGNORE_MASK|SIG_KERNEL_STOP_MASK) && \
-	 (t)->sighand->action[(signr)-1].sa.sa_handler == SIG_DFL)
+> Most of the time it hangs during the boot.
+> I'm using gcc 8.5 and qemu -smp 8
 
-static inline void signal_wake_up(struct task_struct *t, bool resume)
-{
-	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-}
+> With qemu -smp 1 it luckly boots.
+> Then I run test_progs and see:
+> Summary: 215/1115 PASSED, 4 SKIPPED, 18 FAILED
+> All trampoline tests fail.
+> Here is one:
+> $ test_progs -t fentry
+> test_fentry_fexit:PASS:fentry_skel_load 0 nsec
+> test_fentry_fexit:PASS:fexit_skel_load 0 nsec
+> test_fentry_fexit:PASS:fentry_attach 0 nsec
+> test_fentry_fexit:FAIL:fexit_attach unexpected error: -1 (errno 19)
+> #54 fentry_fexit:FAIL
+> 
+> or
+> 
+> ./test_progs -t xdp_bpf
+> test_xdp_bpf2bpf:PASS:test_xdp__open_and_load 0 nsec
+> test_xdp_bpf2bpf:PASS:test_xdp_bpf2bpf__open 0 nsec
+> test_xdp_bpf2bpf:PASS:test_xdp_bpf2bpf__load 0 nsec
+> libbpf: prog 'trace_on_entry': failed to attach: Device or resource busy
+> libbpf: prog 'trace_on_entry': failed to auto-attach: -16
+> test_xdp_bpf2bpf:FAIL:test_xdp_bpf2bpf__attach unexpected error: -16 (errno 16)
+> #225 xdp_bpf2bpf:FAIL
 
-static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
-{
-[...]
-	/*
-	 * Found a killable thread.  If the signal will be fatal,
-	 * then start taking the whole group down immediately.
-	 */
-	if (sig_fatal(p, sig) ...) {
-		if (!sig_kernel_coredump(sig)) {
-		[...]
-			do {
-				task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
-				sigaddset(&t->pending.signal, SIGKILL);
-				signal_wake_up(t, 1);
-			} while_each_thread(p, t);
-			return;
-		}
-	}
-}
-
-Update the comments in kernel/kthread.c to make this more obvious.
-
-The motivation for this change was debugging why a module initialization
-failed. The module was being loaded from initrd. It "magically" failed
-when systemd was switching to the real root. The clean up operations
-sent SIGTERM to various pending processed that were started from initrd.
-
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- kernel/kthread.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 38c6dd822da8..6f994c354adb 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -341,7 +341,7 @@ static int kthread(void *_create)
- 
- 	self = to_kthread(current);
- 
--	/* If user was SIGKILLed, I release the structure. */
-+	/* Release the structure when caller killed by a fatal signal. */
- 	done = xchg(&create->done, NULL);
- 	if (!done) {
- 		kfree(create);
-@@ -399,7 +399,7 @@ static void create_kthread(struct kthread_create_info *create)
- 	/* We want our own signal handler (we take no signals by default). */
- 	pid = kernel_thread(kthread, create, CLONE_FS | CLONE_FILES | SIGCHLD);
- 	if (pid < 0) {
--		/* If user was SIGKILLed, I release the structure. */
-+		/* Release the structure when caller killed by a fatal signal. */
- 		struct completion *done = xchg(&create->done, NULL);
- 
- 		if (!done) {
-@@ -441,9 +441,9 @@ struct task_struct *__kthread_create_on_node(int (*threadfn)(void *data),
- 	 */
- 	if (unlikely(wait_for_completion_killable(&done))) {
- 		/*
--		 * If I was SIGKILLed before kthreadd (or new kernel thread)
--		 * calls complete(), leave the cleanup of this structure to
--		 * that thread.
-+		 * If I was killed by a fatal signal before kthreadd (or new
-+		 * kernel thread) calls complete(), leave the cleanup of this
-+		 * structure to that thread.
- 		 */
- 		if (xchg(&create->done, NULL))
- 			return ERR_PTR(-EINTR);
-@@ -877,7 +877,7 @@ __kthread_create_worker(int cpu, unsigned int flags,
-  *
-  * Returns a pointer to the allocated worker on success, ERR_PTR(-ENOMEM)
-  * when the needed structures could not get allocated, and ERR_PTR(-EINTR)
-- * when the worker was SIGKILLed.
-+ * when the caller was killed by a fatal signal.
-  */
- struct kthread_worker *
- kthread_create_worker(unsigned int flags, const char namefmt[], ...)
-@@ -926,7 +926,7 @@ EXPORT_SYMBOL(kthread_create_worker);
-  * Return:
-  * The pointer to the allocated worker on success, ERR_PTR(-ENOMEM)
-  * when the needed structures could not get allocated, and ERR_PTR(-EINTR)
-- * when the worker was SIGKILLed.
-+ * when the caller was killed by a fatal signal.
-  */
- struct kthread_worker *
- kthread_create_worker_on_cpu(int cpu, unsigned int flags,
--- 
-2.26.2
-
+Urgh.. I totally missed that in flood of output. Let me go try and
+figure out what's happening there.

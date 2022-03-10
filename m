@@ -2,149 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9909D4D51F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B024D5195
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245505AbiCJSiZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 13:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S245521AbiCJSmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 13:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiCJSiW (ORCPT
+        with ESMTP id S236522AbiCJSmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 13:38:22 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1702919D638
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:37:21 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso4447910iov.16
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:37:21 -0800 (PST)
+        Thu, 10 Mar 2022 13:42:37 -0500
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB1A18CC6E;
+        Thu, 10 Mar 2022 10:41:35 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id z30so12697287ybi.2;
+        Thu, 10 Mar 2022 10:41:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
-         :content-transfer-encoding;
-        bh=LYK3nhgyD/Ny5AedOdu53cRFHrQjQndHfGqYjWxTv10=;
-        b=GbumdhubsWScBK9zGE71yflYA2PcgvB3GvvBKMxwIEIzqD3sLCNjcBkzJyYAzg2zs9
-         9r8gJA1fIjEBnhwchdtebNwMjB+37Nx0OEqB3lNlpLcaB59uRha2rVRtK6dWZue+9E97
-         vGL9buJVJQUZ5RhZ93ypBVaV2KCl+LJntyCN0dplt88UudVgL4sqckwO7uQ0aE6C+iJh
-         6+cDObNaygZSvR3b/SM2XWidkUlK+PEVTDkVMAwazstb3xaP0LsfEMATfY9gDyOxLK5j
-         Ktr1h6CtIpMS67TvIaRce6WsX4yr9hxij1pGFUqhh1RZGKUA8a9kZyM3rvlJVHtLbAGJ
-         9rCg==
-X-Gm-Message-State: AOAM532FxCcmlll83jqG0IyI0kl+5MVY2UkqHabvZpCOKZhefDErwJ/S
-        mTxKxlXbbKjmnHckKKHBUriafaUv0qrmST8sC54woMQwHVmo
-X-Google-Smtp-Source: ABdhPJyO4snl/KIWGs+wTTMW3KVNN9VcA1ZTFF0sRWA0kDSRXP9wtScBTqSM6MCJ+rSLjTH6qVrLL7iHvL8l6p3QQIrJZslaA2ae
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=13TxOU0S8NBFESOsxbGBhGz4ZbFFV+NQfSMkbEK2sWc=;
+        b=GV6HZBlPMr6NRJcGdRHyUS2nDYAXMDIInRFbIA4MNh4DcTVNy98mDq3KaoO1OP9XEx
+         LhrzDOMjEp2iEdKWDGeQ7GN01wjgYgQkYoGKQGuGTkHhfpHMYVckbWxf6vE0ZtqJGflQ
+         6KEPm6AW68F53LwUa2/BWdJd5PNW4QwH9i0FPq3zABUiYA1VtGmHsfq8P3phYDwXmvWI
+         jt05thavZfKzhRkpR3KVqy0vwObsWypol5HVsbSGuxB2SWIYd/EFR3Z0ivZjeiGmuAC0
+         SIXzSkq/Szj6tXCpt2wGiuk1sc8pdLQYDQxfigbio4ajAlLGyb57yio5EzxS/DbjrDUV
+         mSSw==
+X-Gm-Message-State: AOAM531YcRKG5vSGO0cfh9w472tlZ0JEIQWcVmK4CskKcvGTnCZxnk7i
+        tISjU8VCeLS8Ih6bH1VlInt41Xwvtky0WVEe/ZA=
+X-Google-Smtp-Source: ABdhPJxGwk37z7MrFsXQm4fAvzG+/F0AgwrksqGx10vPmhinydH0rqF4RpDuuGFiK5G3rJK42r4+jTKdSUuouR9rF5A=
+X-Received: by 2002:a25:f306:0:b0:628:9a03:9ab8 with SMTP id
+ c6-20020a25f306000000b006289a039ab8mr5031280ybs.622.1646937695057; Thu, 10
+ Mar 2022 10:41:35 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8796:0:b0:645:bd36:3833 with SMTP id
- f22-20020a5d8796000000b00645bd363833mr4837920ion.158.1646937440370; Thu, 10
- Mar 2022 10:37:20 -0800 (PST)
-Date:   Thu, 10 Mar 2022 10:37:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000019c51e05d9e18158@google.com>
-Subject: [syzbot] BUG: missing reserved tailroom
-From:   syzbot <syzbot+0e91362d99386dc5de99@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, toke@redhat.com, yhs@fb.com
+References: <20220305110214.3018986-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220305110214.3018986-1-dmitry.baryshkov@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Mar 2022 19:41:24 +0100
+Message-ID: <CAJZ5v0joyDHaADD-y1K3Hi9iTPoHZ5965c65FGjrtf+4bQ7nFA@mail.gmail.com>
+Subject: Re: [PATCH] PM: core: keep irq flags in device_pm_check_callbacks
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Mar 5, 2022 at 12:02 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> The function device_pm_check_callbacks() can be called under the spin
+> lock (in the reported case it happens from genpd_add_device() ->
+> dev_pm_domain_set(), when the genpd uses spinlocks rather than mutexes.
+>
+> However this function uncoditionally uses spin_lock_irq() /
+> spin_unlock_irq(), thus not preserving the CPU flags. Use the
+> irqsave/irqrestore instead.
+>
+> The backtrace for the reference:
+> [    2.752010] ------------[ cut here ]------------
+> [    2.756769] raw_local_irq_restore() called with IRQs enabled
+> [    2.762596] WARNING: CPU: 4 PID: 1 at kernel/locking/irqflag-debug.c:10 warn_bogus_irq_restore+0x34/0x50
+> [    2.772338] Modules linked in:
+> [    2.775487] CPU: 4 PID: 1 Comm: swapper/0 Tainted: G S                5.17.0-rc6-00384-ge330d0d82eff-dirty #684
+> [    2.781384] Freeing initrd memory: 46024K
+> [    2.785839] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    2.785841] pc : warn_bogus_irq_restore+0x34/0x50
+> [    2.785844] lr : warn_bogus_irq_restore+0x34/0x50
+> [    2.785846] sp : ffff80000805b7d0
+> [    2.785847] x29: ffff80000805b7d0 x28: 0000000000000000 x27: 0000000000000002
+> [    2.785850] x26: ffffd40e80930b18 x25: ffff7ee2329192b8 x24: ffff7edfc9f60800
+> [    2.785853] x23: ffffd40e80930b18 x22: ffffd40e80930d30 x21: ffff7edfc0dffa00
+> [    2.785856] x20: ffff7edfc09e3768 x19: 0000000000000000 x18: ffffffffffffffff
+> [    2.845775] x17: 6572206f74206465 x16: 6c696166203a3030 x15: ffff80008805b4f7
+> [    2.853108] x14: 0000000000000000 x13: ffffd40e809550b0 x12: 00000000000003d8
+> [    2.860441] x11: 0000000000000148 x10: ffffd40e809550b0 x9 : ffffd40e809550b0
+> [    2.867774] x8 : 00000000ffffefff x7 : ffffd40e809ad0b0 x6 : ffffd40e809ad0b0
+> [    2.875107] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+> [    2.882440] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff7edfc03a8000
+> [    2.889774] Call trace:
+> [    2.892290]  warn_bogus_irq_restore+0x34/0x50
+> [    2.896770]  _raw_spin_unlock_irqrestore+0x94/0xa0
+> [    2.901690]  genpd_unlock_spin+0x20/0x30
+> [    2.905724]  genpd_add_device+0x100/0x2d0
+> [    2.909850]  __genpd_dev_pm_attach+0xa8/0x23c
+> [    2.914329]  genpd_dev_pm_attach_by_id+0xc4/0x190
+> [    2.919167]  genpd_dev_pm_attach_by_name+0x3c/0xd0
+> [    2.924086]  dev_pm_domain_attach_by_name+0x24/0x30
+> [    2.929102]  psci_dt_attach_cpu+0x24/0x90
+> [    2.933230]  psci_cpuidle_probe+0x2d4/0x46c
+> [    2.937534]  platform_probe+0x68/0xe0
+> [    2.941304]  really_probe.part.0+0x9c/0x2fc
+> [    2.945605]  __driver_probe_device+0x98/0x144
+> [    2.950085]  driver_probe_device+0x44/0x15c
+> [    2.954385]  __device_attach_driver+0xb8/0x120
+> [    2.958950]  bus_for_each_drv+0x78/0xd0
+> [    2.962896]  __device_attach+0xd8/0x180
+> [    2.966843]  device_initial_probe+0x14/0x20
+> [    2.971144]  bus_probe_device+0x9c/0xa4
+> [    2.975092]  device_add+0x380/0x88c
+> [    2.978679]  platform_device_add+0x114/0x234
+> [    2.983067]  platform_device_register_full+0x100/0x190
+> [    2.988344]  psci_idle_init+0x6c/0xb0
+> [    2.992113]  do_one_initcall+0x74/0x3a0
+> [    2.996060]  kernel_init_freeable+0x2fc/0x384
+> [    3.000543]  kernel_init+0x28/0x130
+> [    3.004132]  ret_from_fork+0x10/0x20
+> [    3.007817] irq event stamp: 319826
+> [    3.011404] hardirqs last  enabled at (319825): [<ffffd40e7eda0268>] __up_console_sem+0x78/0x84
+> [    3.020332] hardirqs last disabled at (319826): [<ffffd40e7fd6d9d8>] el1_dbg+0x24/0x8c
+> [    3.028458] softirqs last  enabled at (318312): [<ffffd40e7ec90410>] _stext+0x410/0x588
+> [    3.036678] softirqs last disabled at (318299): [<ffffd40e7ed1bf68>] __irq_exit_rcu+0x158/0x174
+> [    3.045607] ---[ end trace 0000000000000000 ]---
+>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/base/power/main.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 04ea92cbd9cf..08c8a69d7b81 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -2018,7 +2018,9 @@ static bool pm_ops_is_empty(const struct dev_pm_ops *ops)
+>
+>  void device_pm_check_callbacks(struct device *dev)
+>  {
+> -       spin_lock_irq(&dev->power.lock);
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&dev->power.lock, flags);
+>         dev->power.no_pm_callbacks =
+>                 (!dev->bus || (pm_ops_is_empty(dev->bus->pm) &&
+>                  !dev->bus->suspend && !dev->bus->resume)) &&
+> @@ -2027,7 +2029,7 @@ void device_pm_check_callbacks(struct device *dev)
+>                 (!dev->pm_domain || pm_ops_is_empty(&dev->pm_domain->ops)) &&
+>                 (!dev->driver || (pm_ops_is_empty(dev->driver->pm) &&
+>                  !dev->driver->suspend && !dev->driver->resume));
+> -       spin_unlock_irq(&dev->power.lock);
+> +       spin_unlock_irqrestore(&dev->power.lock, flags);
+>  }
+>
+>  bool dev_pm_skip_suspend(struct device *dev)
+> --
 
-syzbot found the following issue on:
-
-HEAD commit:    de55c9a1967c Merge branch 'Add support for transmitting pa..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14ce88ad700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2fa13781bcea50fc
-dashboard link: https://syzkaller.appspot.com/bug?extid=0e91362d99386dc5de99
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f36345700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c8ca65700000
-
-The issue was bisected to:
-
-commit b530e9e1063ed2b817eae7eec6ed2daa8be11608
-Author: Toke Høiland-Jørgensen <toke@redhat.com>
-Date:   Wed Mar 9 10:53:42 2022 +0000
-
-    bpf: Add "live packet" mode for XDP in BPF_PROG_RUN
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17696e55700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14e96e55700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10e96e55700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0e91362d99386dc5de99@syzkaller.appspotmail.com
-Fixes: b530e9e1063e ("bpf: Add "live packet" mode for XDP in BPF_PROG_RUN")
-
-------------[ cut here ]------------
-XDP_WARN: xdp_update_frame_from_buff(line:274): Driver BUG: missing reserved tailroom
-WARNING: CPU: 0 PID: 3590 at net/core/xdp.c:599 xdp_warn+0x28/0x30 net/core/xdp.c:599
-Modules linked in:
-CPU: 0 PID: 3590 Comm: syz-executor167 Not tainted 5.17.0-rc6-syzkaller-01958-gde55c9a1967c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:xdp_warn+0x28/0x30 net/core/xdp.c:599
-Code: 40 00 41 55 49 89 fd 41 54 41 89 d4 55 48 89 f5 e8 2d 08 3a fa 4c 89 e9 44 89 e2 48 89 ee 48 c7 c7 80 ea b0 8a e8 ef c7 cd 01 <0f> 0b 5d 41 5c 41 5d c3 55 53 48 89 fb e8 06 08 3a fa 48 8d 7b ec
-RSP: 0018:ffffc9000370f6f8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff888018d8a198 RCX: 0000000000000000
-RDX: ffff88802272d700 RSI: ffffffff815fe2c8 RDI: fffff520006e1ed1
-RBP: ffffffff8ab54aa0 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff815f895e R11: 0000000000000000 R12: 0000000000000112
-R13: ffffffff8ab54780 R14: ffff888018d8a000 R15: ffff888018d8ae98
-FS:  000055555694a300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020001000 CR3: 000000007255a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- xdp_update_frame_from_buff include/net/xdp.h:274 [inline]
- xdp_update_frame_from_buff include/net/xdp.h:260 [inline]
- xdp_test_run_init_page+0x3f1/0x500 net/bpf/test_run.c:143
- page_pool_set_pp_info net/core/page_pool.c:268 [inline]
- __page_pool_alloc_pages_slow+0x269/0x1050 net/core/page_pool.c:339
- page_pool_alloc_pages+0xb6/0x100 net/core/page_pool.c:372
- page_pool_dev_alloc_pages include/net/page_pool.h:197 [inline]
- xdp_test_run_batch net/bpf/test_run.c:280 [inline]
- bpf_test_run_xdp_live+0x53a/0x18c0 net/bpf/test_run.c:363
- bpf_prog_test_run_xdp+0x8f6/0x1440 net/bpf/test_run.c:1317
- bpf_prog_test_run kernel/bpf/syscall.c:3363 [inline]
- __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4665
- __do_sys_bpf kernel/bpf/syscall.c:4751 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4749 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4749
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fc3679a71f9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdd3b6d268 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc3679a71f9
-RDX: 0000000000000048 RSI: 0000000020000000 RDI: 000000000000000a
-RBP: 00007fc36796b1e0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc36796b270
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Applied as 5.18 material, thanks!

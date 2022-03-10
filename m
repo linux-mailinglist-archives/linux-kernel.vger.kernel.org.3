@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9D14D4A69
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0648F4D4A37
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240043AbiCJO0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S245171AbiCJOeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243299AbiCJOV6 (ORCPT
+        with ESMTP id S244412AbiCJO2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:21:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3341B4585;
-        Thu, 10 Mar 2022 06:20:41 -0800 (PST)
+        Thu, 10 Mar 2022 09:28:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFE3D10A5;
+        Thu, 10 Mar 2022 06:23:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DDDEB825F3;
-        Thu, 10 Mar 2022 14:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6ED2C340E8;
-        Thu, 10 Mar 2022 14:20:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DF55B82672;
+        Thu, 10 Mar 2022 14:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29DCC340E8;
+        Thu, 10 Mar 2022 14:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922039;
-        bh=dBM59trElM9mKdvh5X3TAf3lhidiLDUO/YzmBUoNg2U=;
+        s=korg; t=1646922230;
+        bh=iG4dGyVQTtgev5VOsQ8d1I4SvBWcNj19Mn9JiAy+Rwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WAMimDajIseW2eD/R1WNxzdhMSrjAyVl2qFZDpWKS1AC9re5MgFIhtr26jbyt2Lfv
-         1/9L7ESn2b9+tsG1F5jw8jop1A+iWvNKAEKX6zecL9u/1Xyj+QCwZZKnip6IH/UnGr
-         w7ragcqIfaYKox8Y0UKhQMk6nVirBNGg+ediEmD8=
+        b=EACZd+laC1OYAHRa7MnhKtmtwsF/b1jPGjhKfyB1J3XDHpBwEXjFIPWz2SfDLgN3K
+         b0asMn5jWG9libXqx0H6er3eJ1WePPDA7gc0T2eLrm5Oa81PkOd9vS+sHJXYWWGHsd
+         L2OGUsvY+p7DgMBuy0O++kKj20eCBqTqy/UEYa0I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 18/31] ARM: fix build error when BPF_SYSCALL is disabled
-Date:   Thu, 10 Mar 2022 15:18:31 +0100
-Message-Id: <20220310140808.067420708@linuxfoundation.org>
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.10 12/58] ARM: use LOADADDR() to get load address of sections
+Date:   Thu, 10 Mar 2022 15:18:32 +0100
+Message-Id: <20220310140813.225153043@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
-References: <20220310140807.524313448@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,31 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-commit 330f4c53d3c2d8b11d86ec03a964b86dc81452f5 upstream.
+commit 8d9d651ff2270a632e9dc497b142db31e8911315 upstream.
 
-It was missing a semicolon.
+Use the linker's LOADADDR() macro to get the load address of the
+sections, and provide a macro to set the start and end symbols.
 
-Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: 25875aa71dfe ("ARM: include unprivileged BPF status in Spectre V2 reporting").
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/spectre.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/include/asm/vmlinux.lds.h |   19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
---- a/arch/arm/kernel/spectre.c
-+++ b/arch/arm/kernel/spectre.c
-@@ -10,7 +10,7 @@ static bool _unprivileged_ebpf_enabled(v
- #ifdef CONFIG_BPF_SYSCALL
- 	return !sysctl_unprivileged_bpf_disabled;
- #else
--	return false
-+	return false;
+--- a/arch/arm/include/asm/vmlinux.lds.h
++++ b/arch/arm/include/asm/vmlinux.lds.h
+@@ -26,6 +26,11 @@
+ #define ARM_MMU_DISCARD(x)	x
  #endif
- }
+ 
++/* Set start/end symbol names to the LMA for the section */
++#define ARM_LMA(sym, section)						\
++	sym##_start = LOADADDR(section);				\
++	sym##_end = LOADADDR(section) + SIZEOF(section)
++
+ #define PROC_INFO							\
+ 		. = ALIGN(4);						\
+ 		__proc_info_begin = .;					\
+@@ -110,19 +115,19 @@
+  * only thing that matters is their relative offsets
+  */
+ #define ARM_VECTORS							\
+-	__vectors_start = .;						\
++	__vectors_lma = .;						\
+ 	.vectors 0xffff0000 : AT(__vectors_start) {			\
+ 		*(.vectors)						\
+ 	}								\
+-	. = __vectors_start + SIZEOF(.vectors);				\
+-	__vectors_end = .;						\
++	ARM_LMA(__vectors, .vectors);					\
++	. = __vectors_lma + SIZEOF(.vectors);				\
+ 									\
+-	__stubs_start = .;						\
+-	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_start) {		\
++	__stubs_lma = .;						\
++	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) {		\
+ 		*(.stubs)						\
+ 	}								\
+-	. = __stubs_start + SIZEOF(.stubs);				\
+-	__stubs_end = .;						\
++	ARM_LMA(__stubs, .stubs);					\
++	. = __stubs_lma + SIZEOF(.stubs);				\
+ 									\
+ 	PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
  
 
 

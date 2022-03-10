@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87234D4C30
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4FC4D4C15
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244619AbiCJOwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:52:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S245708AbiCJOjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiCJObl (ORCPT
+        with ESMTP id S1343917AbiCJOb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD4CDF62;
-        Thu, 10 Mar 2022 06:30:33 -0800 (PST)
+        Thu, 10 Mar 2022 09:31:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BC8E3C76;
+        Thu, 10 Mar 2022 06:28:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78E5061C0A;
-        Thu, 10 Mar 2022 14:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F4DC340E8;
-        Thu, 10 Mar 2022 14:30:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 632D1B82544;
+        Thu, 10 Mar 2022 14:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F38C340E8;
+        Thu, 10 Mar 2022 14:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922632;
-        bh=aznECDtrCLjMhduI5pusl4speT9yyZT4RO1s2dy+4IM=;
+        s=korg; t=1646922491;
+        bh=hcmMPrD/HN9xwyxoEWxYnoKf3Q5krhbZGmA8gMdOtgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mahVTAik+bLAkDkkQl+4aeG0NwwK4rFNCTFKr1cX7gK+kVtKu48uY9UEniGl2CL1u
-         CXu8lkn088HmH1mBGdpjJuefyXzAEkotCZKUo7OmZhN9oRboq6mVElu8pD4DZVvfjM
-         tp0BxA87u8b7B86Nd854OOVGGvB9pytjJAcu9gvg=
+        b=WCEta4gtzYRt/eLXwYR+QwDex85u0di6JhF4IXeoXlJLTuWyf91ZjnONh6G8zU3yi
+         uZwtgDuT4BW7p0gpg15WPLok2NpBjAi1XTs0q4mh0HzxXk2vRPbKMXK48YhcuOnKuQ
+         ojDfKSKJJK7QA023RbER4U4rNAro0cbXQEYK7R6k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 5.15 39/58] KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
-Date:   Thu, 10 Mar 2022 15:19:28 +0100
-Message-Id: <20220310140814.096796487@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: [PATCH 5.4 33/33] Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
+Date:   Thu, 10 Mar 2022 15:19:34 +0100
+Message-Id: <20220310140809.711995140@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-References: <20220310140812.983088611@linuxfoundation.org>
+In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
+References: <20220310140808.741682643@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit a5905d6af492ee6a4a2205f0d550b3f931b03d03 upstream.
+This reverts commit 9d09cb110868f027d015fbc6c64ba1e45a69a192 which is
+commit dc0075ba7f387fe4c48a8c674b11ab6f374a6acc upstream.
 
-KVM allows the guest to discover whether the ARCH_WORKAROUND SMCCC are
-implemented, and to preserve that state during migration through its
-firmware register interface.
+It's been reported to cause problems with a number of Fedora and Arch
+Linux users, so drop it for now until that is resolved.
 
-Add the necessary boiler plate for SMCCC_ARCH_WORKAROUND_3.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
+Link: https://lore.kernel.org/r/CAJZ5v0gE52NT=4kN4MkhV3Gx=M5CeMGVHOF0jgTXDb5WwAMs_Q@mail.gmail.com
+Link: https://lore.kernel.org/r/31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+Reported-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Sasha Levin <sashal@kernel.org>
+Cc: Justin Forbes <jmforbes@linuxtx.org>
+Cc: Mark Pearson <markpearson@lenovo.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/uapi/asm/kvm.h |    5 +++++
- arch/arm64/kvm/hypercalls.c       |   12 ++++++++++++
- arch/arm64/kvm/psci.c             |   18 +++++++++++++++++-
- 3 files changed, 34 insertions(+), 1 deletion(-)
+ drivers/acpi/ec.c    |   10 ----------
+ drivers/acpi/sleep.c |   14 ++++++++++----
+ 2 files changed, 10 insertions(+), 14 deletions(-)
 
---- a/arch/arm64/include/uapi/asm/kvm.h
-+++ b/arch/arm64/include/uapi/asm/kvm.h
-@@ -281,6 +281,11 @@ struct kvm_arm_copy_mte_tags {
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED	3
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED     	(1U << 4)
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -2003,16 +2003,6 @@ bool acpi_ec_dispatch_gpe(void)
+ 		return true;
  
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3	KVM_REG_ARM_FW_REG(3)
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL		0
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL		1
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED	2
-+
- /* SVE registers */
- #define KVM_REG_ARM64_SVE		(0x15 << KVM_REG_ARM_COPROC_SHIFT)
+ 	/*
+-	 * Cancel the SCI wakeup and process all pending events in case there
+-	 * are any wakeup ones in there.
+-	 *
+-	 * Note that if any non-EC GPEs are active at this point, the SCI will
+-	 * retrigger after the rearming in acpi_s2idle_wake(), so no events
+-	 * should be missed by canceling the wakeup here.
+-	 */
+-	pm_system_cancel_wakeup();
+-
+-	/*
+ 	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
+ 	 * to allow the caller to process events properly after that.
+ 	 */
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -1003,13 +1003,19 @@ static bool acpi_s2idle_wake(void)
+ 		if (acpi_check_wakeup_handlers())
+ 			return true;
  
---- a/arch/arm64/kvm/hypercalls.c
-+++ b/arch/arm64/kvm/hypercalls.c
-@@ -107,6 +107,18 @@ int kvm_hvc_call_handler(struct kvm_vcpu
- 				break;
- 			}
- 			break;
-+		case ARM_SMCCC_ARCH_WORKAROUND_3:
-+			switch (arm64_get_spectre_bhb_state()) {
-+			case SPECTRE_VULNERABLE:
-+				break;
-+			case SPECTRE_MITIGATED:
-+				val[0] = SMCCC_RET_SUCCESS;
-+				break;
-+			case SPECTRE_UNAFFECTED:
-+				val[0] = SMCCC_ARCH_WORKAROUND_RET_UNAFFECTED;
-+				break;
-+			}
-+			break;
- 		case ARM_SMCCC_HV_PV_TIME_FEATURES:
- 			val[0] = SMCCC_RET_SUCCESS;
- 			break;
---- a/arch/arm64/kvm/psci.c
-+++ b/arch/arm64/kvm/psci.c
-@@ -406,7 +406,7 @@ int kvm_psci_call(struct kvm_vcpu *vcpu)
+-		/*
+-		 * Check non-EC GPE wakeups and if there are none, cancel the
+-		 * SCI-related wakeup and dispatch the EC GPE.
+-		 */
++		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
+ 		if (acpi_ec_dispatch_gpe())
+ 			return true;
  
- int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
- {
--	return 3;		/* PSCI version and two workaround registers */
-+	return 4;		/* PSCI version and three workaround registers */
- }
++		/*
++		 * Cancel the SCI wakeup and process all pending events in case
++		 * there are any wakeup ones in there.
++		 *
++		 * Note that if any non-EC GPEs are active at this point, the
++		 * SCI will retrigger after the rearming below, so no events
++		 * should be missed by canceling the wakeup here.
++		 */
++		pm_system_cancel_wakeup();
+ 		acpi_os_wait_events_complete();
  
- int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
-@@ -420,6 +420,9 @@ int kvm_arm_copy_fw_reg_indices(struct k
- 	if (put_user(KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2, uindices++))
- 		return -EFAULT;
- 
-+	if (put_user(KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3, uindices++))
-+		return -EFAULT;
-+
- 	return 0;
- }
- 
-@@ -459,6 +462,17 @@ static int get_kernel_wa_level(u64 regid
- 		case SPECTRE_VULNERABLE:
- 			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL;
- 		}
-+		break;
-+	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
-+		switch (arm64_get_spectre_bhb_state()) {
-+		case SPECTRE_VULNERABLE:
-+			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL;
-+		case SPECTRE_MITIGATED:
-+			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL;
-+		case SPECTRE_UNAFFECTED:
-+			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED;
-+		}
-+		return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL;
- 	}
- 
- 	return -EINVAL;
-@@ -475,6 +489,7 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *
- 		break;
- 	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
- 	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
-+	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
- 		val = get_kernel_wa_level(reg->id) & KVM_REG_FEATURE_LEVEL_MASK;
- 		break;
- 	default:
-@@ -520,6 +535,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *
- 	}
- 
- 	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
-+	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
- 		if (val & ~KVM_REG_FEATURE_LEVEL_MASK)
- 			return -EINVAL;
- 
+ 		/*
 
 

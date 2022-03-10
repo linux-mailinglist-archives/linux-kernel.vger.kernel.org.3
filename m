@@ -2,132 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98574D4897
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FF74D489E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242681AbiCJOJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S242700AbiCJOKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242674AbiCJOJg (ORCPT
+        with ESMTP id S234624AbiCJOKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:09:36 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A9A483A0;
-        Thu, 10 Mar 2022 06:08:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1646921315; x=1678457315;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=ZlfLsYmHFoXvZJjxmzvnW/gnvrq665EAuqt/A6c1G+Q=;
-  b=J+7qU4hRd954R9lofyYFjL+HD8451PuztlpnppzwL9yqNkGXe7Ouf39O
-   t4cYVaARqet0u+U2WWnbN8KlD8HEhyGjfP3/pZGqyTW6XOybAEMGwwZzH
-   feU9/jIPYYgAvskke91n1Gpmj0bxunfKAHjcrmupuvdBfI0oG822cN+jZ
-   La5OyskEYKgIx+N3BBsjngq/zvz53HjbR0SAwrxtaCEyzpanLh8W589N3
-   MBGS0WkSPmOOF9WtKkZU8Y/t0OHAgwL5PprdFDnN0axD7+1mfG0jaPs7L
-   MbS/Uv52z+lanXOu/IF1vGVqJ7wLcWNmN6Y2pftn5wM3uGaOGFT8qHHc+
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,170,1643644800"; 
-   d="scan'208";a="194973029"
-Received: from mail-co1nam11lp2171.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.171])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Mar 2022 22:08:34 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qw8lD14Ehtqo6VNmZyfa9zbdY0q1fTHOVPspgexH68a/vrhya4sKcW5MIZTjo+4n2QHgjcQkkF3skzG/pSgtbytvj8JxdNASRsy3dpqzdbKRwL3bzZBUqovc84ukbrGXQcJL0r+3jY7Bh5mae0Zrprokilo2b2/F2SG0WlsKZQY0Up37ak82QuJ3exgYX7Vm6EvlSI5Ngn5N/ysMNWiJwrVc+nMEgpNjrcIk3NOiyZn7nwbK+efoib46gOotwkPnJ3qgYFvfvRfY1FrIlVmBTBaXabVjkoVo31UG+iPzZPz3W4QMlnuITkmC/9u+uVbFt6yzAS/dQ7O6kuqBuWHB3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gZiZVvfoLvE0Mj24DA0K3vA/uaIP5w/+eN1yUESfDVg=;
- b=Vj/xgBAu4LYDwcYV+xA1b++8Zj1RpFtkV0ShvhetR+yosPark145gMr0KcB/hzM1XyCEPy5BZpYOhJhj5BESYUAS6+Zr6wvHKtELI5WzDaXpScMxo+R0m7DsjkQ9oKKKxVAet3ZoYrknW340nWx8cB4sQs06I4+zsDt0xYisnVINKAbNL05BGmNVMXzppkEBnu7GRU7AJZAeImWy+lGWBJLaqmPOzw4A/AP4IMRscY2yZCz8OeFmwi6vR+L4aciDHeoLvH++dYwo30h40iPVpU3cJuSRpgj2/S4Fmf30NAekApjhKbi1aMQ755eoWF00O8xUPl5xgNg6Bnm9LIPlPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gZiZVvfoLvE0Mj24DA0K3vA/uaIP5w/+eN1yUESfDVg=;
- b=fA8TLQUTJWxE57sAajLJWFEVehYOHqQGk0w8L0SsoclkRFp2zNKdTz8cdvh221eIX58yTkxIgRo/zRJ+5VN78KVQVsF7XBYhq8XX1HZxmpcml9xPSMHGpaiy7xhx4td0JTZQxyDVeZeumiZDaiVIOAxZxWZLsK4XuA+SQ0cvggc=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- CO6PR04MB7762.namprd04.prod.outlook.com (2603:10b6:5:355::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5061.21; Thu, 10 Mar 2022 14:08:34 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::941d:9fe8:b1bd:ea4b]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::941d:9fe8:b1bd:ea4b%6]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
- 14:08:33 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Marc Mattmueller <marc.mattmueller@netmodule.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] mmc: core: add reliable write setting to sysfs and
- update on read
-Thread-Topic: [PATCH 2/2] mmc: core: add reliable write setting to sysfs and
- update on read
-Thread-Index: AQHYM6Iq238/wKtYGUOfp7PikKmAbqy4qSIg
-Date:   Thu, 10 Mar 2022 14:08:33 +0000
-Message-ID: <DM6PR04MB65751B0413F8A2FDC72F05B9FC0B9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <cover.1646820083.git.marc.mattmueller@netmodule.com>
- <d68d8c8edda35a050a6e92b0ff1d57dd3e7c61d6.1646820083.git.marc.mattmueller@netmodule.com>
-In-Reply-To: <d68d8c8edda35a050a6e92b0ff1d57dd3e7c61d6.1646820083.git.marc.mattmueller@netmodule.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 65ed6b34-f5dc-4278-4d01-08da029f76a0
-x-ms-traffictypediagnostic: CO6PR04MB7762:EE_
-x-microsoft-antispam-prvs: <CO6PR04MB7762B411A682AD82AEF19E47FC0B9@CO6PR04MB7762.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dL+8dKW7VVk8JYFO+P/Ah6JCEhN63NPniVeOC7Z7ws6A/p/1h/m5XsD/1DgP4k+zrIoRFOP22MOt3JoWZxQNM8CdhOFR1JSUC0Nmo3qnyegJK0aistn6nRiroHFV15e920dVGMF/9ygQoWjdl673DAsyRmAwQZd5qlCZc2RXWCsACtmBkaMziFzFksR/sxddo5AqrZodp5Bt2ifAhDuaUs4itor2AEi4sJOgQi9eXsI7nuLT33qJojgKldG4T3jB6ahyhD6dTqvoENuQiZ3vf+RfRdhSvUNCXujzMuGKsVg/N29VTMcD+U4Ep5ZovihOW/5GzAOnP7niOlzA4LU93ipMtR6/qPaewQ7dARWkz/GpatvMPkmPw6KU5gA9ZDPl5dAf0io/UNZRkbpnZeQkKc7J+3lD7SY1KfvAZmM1gGyFIrF3vP34VTjRWG4StPWfOqZcycR5meZjPPHtEVI8AfEsZxctH1gDaEL+aK+0ZiV5f14pGTYb4I3ITkbqPZQ2aI9f9PuV65P6Q6B9P4ewrjzl2+fm/ffhKpnp2k6mfwrIPn0uJD2P0F5nNjfQdh8nTWSyCzj0dMhqISBnsR5aM8bGqFgAJjKersOG8iL2OMPvcU4JxoJUkIlLGXb5CmF1PmQojfxw0FlFQs5UqLuaJ6wE+Le2raaiZNs2z5J/nFHLrlfWyh7YhbPLhbJs0lPUbBEtG2I6tH72tyGvVWTIfg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(2906002)(6506007)(508600001)(66946007)(8676002)(66446008)(66476007)(66556008)(5660300002)(76116006)(122000001)(86362001)(55016003)(38100700002)(82960400001)(7696005)(33656002)(38070700005)(9686003)(64756008)(83380400001)(71200400001)(110136005)(15650500001)(8936002)(52536014)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?b9o9aUsayJ+RI9xiVkdvPdoU8Kfoe+g8B8f1Lxv3Jjat4q+2J3fwEY3yqa8c?=
- =?us-ascii?Q?XzUY/dlgvOmz1uAl0iwPQdX12EUCaR4vjdp31I2CDmf+n3DHQgUAlVslk+Ig?=
- =?us-ascii?Q?wyj0Fax8d/BDoQf0PwIBQVnjfmxXyRANfpJ6BUNh5hoybUQndKRbWkI4iSSX?=
- =?us-ascii?Q?uL5anyMKQKMp0Tl70gyYiety8ZuYgPqpY5vYJ7Zd9pPCUUTKlRTaWrb1OZsK?=
- =?us-ascii?Q?31S9lD8T7cm+da7Im/uhv/yoOWWZhRAOrvbTU13QmrN4dxuQZ4haVbOq4+cp?=
- =?us-ascii?Q?Yi+6vS2RE+QfTf6/tHZ+x+9mwH/tQNGJIt/n2vYG6E9UpV07NZgTqZ4pa2cV?=
- =?us-ascii?Q?PFZd10DJ2spnOb7gbe+yPdILqaOUYSqqaYl7K41qsIu3QEp3/swq50AErvuq?=
- =?us-ascii?Q?sRaHfAqILTEbmenfIycQat0jSDMuh0Nq9v10PmuX0MsLC72oLT9bSlt9PD1d?=
- =?us-ascii?Q?kEnbmjAK1eM8ZEWEzAQ8BygA1UDFMiTqJJdR/+u5WgIQienThx0qhccvK0Pg?=
- =?us-ascii?Q?+REYgUdRGcxDpAPGJXPuOZ9DkbNzaUkyC3/SO6bTki5rPxsUT6hBCR/3szXS?=
- =?us-ascii?Q?nIyskxG6+Mzus90KSYLB2ag50/VXIQizDJdLjl1YjHWFoCmI+97N2siOtC00?=
- =?us-ascii?Q?mfM5vIRxg/CQFaKVHBLOX3ow1R0Hgz3SMlDZWaVJTCssEdqE3J4s0JT6uV65?=
- =?us-ascii?Q?F8733BTxerSzIIJciDNlGOXN8XMKLn14aNBh3iEzG628vNwqUV4g4jJ+S5Qe?=
- =?us-ascii?Q?tveopBJMojCsUGdEfMMXpoPyv9uTG5QNESLrInaW9DNWryoqdLPozrJMaO1K?=
- =?us-ascii?Q?rwsGplMi/9npKFnbnmsqepYyCDqC9BuB+/seRicl0DB9mske+eG8P7BrmEjN?=
- =?us-ascii?Q?GTcjLWg/QLTc+dvNskxSeqYpI+y9OwamJHvTNVZz0W9fOSOLJEaP8Qm71LmD?=
- =?us-ascii?Q?G7X9DcXv7BW+Q+B3b6jGmsulJwuRuzBYgtT+F3kKALid9p8Dwsg5zV93SGGX?=
- =?us-ascii?Q?pnckgf3yCCdPRLo7ZnGNFycOSIiDPjb1nGgUMxHsTNOo1wNrmLOUNXNAADtJ?=
- =?us-ascii?Q?Bharlm1D6X0j49QS/39X2amFqUql9dAyFlsYHmlTEYdcKzpKN1TTZUxZBWHS?=
- =?us-ascii?Q?zMGbssy+ytv57ZqMfCVp+othBGoVgx3sewbbWYCsk+SzgJ9hHCqgxNhi0XIu?=
- =?us-ascii?Q?p8Jlj9WP5IERiSBlBKvYj2LHOcNn450UDB49rQsK1m83I6uS3EdgOOWw7fgC?=
- =?us-ascii?Q?cgtZ9cPnW47UajBhimGTWV7WTZH+EAnYovgHvezn980tLEJInMjLprxvkZsR?=
- =?us-ascii?Q?9xfoMUt0nnxVKDFxI7BAcBuXSoj+r/5B9plHDbMQfgqVbh+tPyv48sRqZ4He?=
- =?us-ascii?Q?tLU68tRUTxD1Z9MxPHWMw+/BjmCQLwPtm4zohYPP/X3EJ7N5Cx8NhphlkBEJ?=
- =?us-ascii?Q?XriunXa4lWo+tVjxf1VqSn4zvwjdb1Vf?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65ed6b34-f5dc-4278-4d01-08da029f76a0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2022 14:08:33.9306
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2G3KQ2Go2hBAMcaEPekrBZsnja2CWEYJVDifb6DmmY1ZRXE2F6gKaiuHEDLVi88GYIrJejsV8ruiNMMtVp1wKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB7762
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        Thu, 10 Mar 2022 09:10:37 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD6457499;
+        Thu, 10 Mar 2022 06:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646921376; x=1678457376;
+  h=from:to:cc:subject:date:message-id;
+  bh=qOgHsb0TerXs6BotdtqnRubNe5gkoi8JAE7y4owcZNM=;
+  b=VZlo9WvZcFU4DH2iqp1IjB67PABnlJsF9QhgcCF6EcBm3VDewb1X0B0+
+   W8WI3OVfW/mhp7Wg5eD2/hbKcuzjTtQPJtC789aDwv8GdPElk+sMGUsZS
+   vURPkq1sobN1O6AWYxOvpC+9gS2zL4h0I/K1GskaALPljzgLjEciH8QNO
+   44yp4iUSaYRzC3lARrk6qo26GOqKoiBe+LrIH/4oQl1otVB5PMCMHDa2m
+   2+dOC/INdY3M4GD8XyqY8a8vM3oXKg1UHPlMoeF2qO9UmGeYf54TjCGg9
+   6t6jUGArYu78iuBvyF9OPbpe592icTlZp4R+JvY5L/Sa2+qLertW6jvsI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242702393"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="242702393"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:09:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="554654744"
+Received: from chaop.bj.intel.com ([10.240.192.101])
+  by orsmga008.jf.intel.com with ESMTP; 10 Mar 2022 06:09:27 -0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM guest private memory 
+Date:   Thu, 10 Mar 2022 22:08:58 +0800
+Message-Id: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,121 +79,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=20
-> The mmc reliable write setting (from ext_csd) was not available on the sy=
-sfs.
-> Thus, added rel_param and rel_write_set to sysfs and added the update of
-> rel_write_set on sysfs read.
-Here also - why adding ABI when its already available via mmc-utils?
+This is the v5 of this series which tries to implement the fd-based KVM
+guest private memory. The patches are based on latest kvm/queue branch
+commit:
 
-Thanks,
-Avri
+  d5089416b7fb KVM: x86: Introduce KVM_CAP_DISABLE_QUIRKS2
+ 
+Introduction
+------------
+In general this patch series introduce fd-based memslot which provides
+guest memory through memory file descriptor fd[offset,size] instead of
+hva/size. The fd can be created from a supported memory filesystem
+like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
+and the the memory backing store exchange callbacks when such memslot
+gets created. At runtime KVM will call into callbacks provided by the
+backing store to get the pfn with the fd+offset. Memory backing store
+will also call into KVM callbacks when userspace fallocate/punch hole
+on the fd to notify KVM to map/unmap secondary MMU page tables.
 
->=20
-> Signed-off-by: Marc Mattmueller <marc.mattmueller@netmodule.com>
-> ---
->  drivers/mmc/core/mmc.c   | 29 +++++++++++++++++++++++++++++
->  include/linux/mmc/card.h |  1 +
->  include/linux/mmc/mmc.h  |  1 +
->  3 files changed, 31 insertions(+)
->=20
-> diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c index
-> d9537c894e33..a64d1ecb0de9 100644
-> --- a/drivers/mmc/core/mmc.c
-> +++ b/drivers/mmc/core/mmc.c
-> @@ -364,6 +364,10 @@ static int
-> mmc_update_ext_csd_runtime_params(struct mmc_card *card, u8
-> *ext_csd)  {
->         int err =3D 0;
->=20
-> +       /* eMMC v4.41 or later */
-> +       if (card->ext_csd.rev >=3D 5)
-> +               card->ext_csd.rel_wr_set =3D ext_csd[EXT_CSD_WR_REL_SET];
-> +
->         /* eMMC v5 or later */
->         if (card->ext_csd.rev >=3D 7) {
->                 card->ext_csd.pre_eol_info =3D ext_csd[EXT_CSD_PRE_EOL_IN=
-FO];
-> @@ -587,6 +591,7 @@ static int mmc_decode_ext_csd(struct mmc_card
-> *card, u8 *ext_csd)
->                 }
->=20
->                 card->ext_csd.rel_param =3D ext_csd[EXT_CSD_WR_REL_PARAM]=
-;
-> +               card->ext_csd.rel_wr_set =3D ext_csd[EXT_CSD_WR_REL_SET];
->                 card->ext_csd.rst_n_function =3D
-> ext_csd[EXT_CSD_RST_N_FUNCTION];
->=20
->                 /*
-> @@ -820,6 +825,7 @@ MMC_DEV_ATTR(name, "%s\n", card-
-> >cid.prod_name);  MMC_DEV_ATTR(oemid, "0x%04x\n", card->cid.oemid);
-> MMC_DEV_ATTR(prv, "0x%x\n", card->cid.prv);  MMC_DEV_ATTR(rev,
-> "0x%x\n", card->ext_csd.rev);
-> +MMC_DEV_ATTR(rel_param, "0x%02x\n", card->ext_csd.rel_param);
->  MMC_DEV_ATTR(serial, "0x%08x\n", card->cid.serial);
-> MMC_DEV_ATTR(enhanced_area_offset, "%llu\n",
->                 card->ext_csd.enhanced_area_offset);
-> @@ -886,6 +892,27 @@ static ssize_t pre_eol_info_show(struct device
-> *dev,
->=20
->  static DEVICE_ATTR_RO(pre_eol_info);
->=20
-> +static ssize_t rel_write_set_show(struct device *dev,
-> +                                 struct device_attribute *attr,
-> +                                 char *buf) {
-> +       int err =3D 0;
-> +       struct mmc_card *card =3D mmc_dev_to_card(dev);
-> +
-> +       /* before eMMC v4.41 */
-> +       if (card->ext_csd.rev < 5)
-> +               return sprintf(buf, "%s\n", "-");
-> +
-> +       /* eMMC v4.41 or later */
-> +       err =3D mmc_update_csd(card);
-> +       if (err)
-> +               return (ssize_t)err;
-> +
-> +       return sprintf(buf, "0x%02x\n", card->ext_csd.rel_wr_set); }
-> +
-> +static DEVICE_ATTR_RO(rel_write_set);
-> +
->  static ssize_t mmc_fwrev_show(struct device *dev,
->                               struct device_attribute *attr,
->                               char *buf) @@ -931,6 +958,8 @@ static struc=
-t attribute
-> *mmc_std_attrs[] =3D {
->         &dev_attr_oemid.attr,
->         &dev_attr_prv.attr,
->         &dev_attr_rev.attr,
-> +       &dev_attr_rel_param.attr,
-> +       &dev_attr_rel_write_set.attr,
->         &dev_attr_pre_eol_info.attr,
->         &dev_attr_life_time.attr,
->         &dev_attr_serial.attr,
-> diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h index
-> 37f975875102..21c47893fcb4 100644
-> --- a/include/linux/mmc/card.h
-> +++ b/include/linux/mmc/card.h
-> @@ -48,6 +48,7 @@ struct mmc_ext_csd {
->         u8                      sec_feature_support;
->         u8                      rel_sectors;
->         u8                      rel_param;
-> +       u8                      rel_wr_set;
->         bool                    enhanced_rpmb_supported;
->         u8                      part_config;
->         u8                      cache_ctrl;
-> diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h index
-> d9a65c6a8816..42afd442a70a 100644
-> --- a/include/linux/mmc/mmc.h
-> +++ b/include/linux/mmc/mmc.h
-> @@ -266,6 +266,7 @@ static inline bool mmc_ready_for_data(u32 status)
->  #define EXT_CSD_BKOPS_START            164     /* W */
->  #define EXT_CSD_SANITIZE_START         165     /* W */
->  #define EXT_CSD_WR_REL_PARAM           166     /* RO */
-> +#define EXT_CSD_WR_REL_SET             167     /* R/W */
->  #define EXT_CSD_RPMB_MULT              168     /* RO */
->  #define EXT_CSD_FW_CONFIG              169     /* R/W */
->  #define EXT_CSD_BOOT_WP                        173     /* R/W */
-> --
-> 2.20.1
+Comparing to existing hva-based memslot, this new type of memslot allows
+guest memory unmapped from host userspace like QEMU and even the kernel
+itself, therefore reduce attack surface and prevent bugs.
+
+Based on this fd-based memslot, we can build guest private memory that
+is going to be used in confidential computing environments such as Intel
+TDX and AMD SEV. When supported, the memory backing store can provide
+more enforcement on the fd and KVM can use a single memslot to hold both
+the private and shared part of the guest memory. 
+
+mm extension
+---------------------
+Introduces new MFD_INACCESSIBLE flag for memfd_create(), the file created
+with these flags cannot read(), write() or mmap() etc via normal
+MMU operations. The file content can only be used with the newly
+introduced memfile_notifier extension.
+
+The memfile_notifier extension provides two sets of callbacks for KVM to
+interact with the memory backing store:
+  - memfile_notifier_ops: callbacks for memory backing store to notify
+    KVM when memory gets allocated/invalidated.
+  - memfile_pfn_ops: callbacks for KVM to call into memory backing store
+    to request memory pages for guest private memory.
+
+The memfile_notifier extension also provides APIs for memory backing
+store to register/unregister itself and to trigger the notifier when the
+bookmarked memory gets fallocated/invalidated.
+
+memslot extension
+-----------------
+Add the private fd and the fd offset to existing 'shared' memslot so that
+both private/shared guest memory can live in one single memslot. A page in
+the memslot is either private or shared. A page is private only when it's
+already allocated in the backing store fd, all the other cases it's treated
+as shared, this includes those already mapped as shared as well as those
+having not been mapped. This means the memory backing store is the place
+which tells the truth of which page is private.
+
+Private memory map/unmap and conversion
+---------------------------------------
+Userspace's map/unmap operations are done by fallocate() ioctl on the
+backing store fd.
+  - map: default fallocate() with mode=0.
+  - unmap: fallocate() with FALLOC_FL_PUNCH_HOLE.
+The map/unmap will trigger above memfile_notifier_ops to let KVM map/unmap
+secondary MMU page tables.
+
+Test
+----
+To test the new functionalities of this patch TDX patchset is needed.
+Since TDX patchset has not been merged so I did two kinds of test:
+
+-  Regresion test on kvm/queue (this patch)
+   Most new code are not covered. I only tested building and booting.
+
+-  New Funational test on latest TDX code
+   The patch is rebased to latest TDX code and tested the new
+   funcationalities.
+
+For TDX test please see below repos:
+Linux: https://github.com/chao-p/linux/tree/privmem-v5.1
+QEMU: https://github.com/chao-p/qemu/tree/privmem-v4
+
+And an example QEMU command line:
+-object tdx-guest,id=tdx \
+-object memory-backend-memfd-private,id=ram1,size=2G \
+-machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
+
+Changelog
+----------
+v5:
+  - Removed userspace visible F_SEAL_INACCESSIBLE, instead using an
+    in-kernel flag (SHM_F_INACCESSIBLE for shmem). Private fd can only
+    be created by MFD_INACCESSIBLE.
+  - Introduced new APIs for backing store to register itself to
+    memfile_notifier instead of direct function call.
+  - Added the accounting and restriction for MFD_INACCESSIBLE memory.
+  - Added KVM API doc for new memslot extensions and man page for the new
+    MFD_INACCESSIBLE flag.
+  - Removed the overlap check for mapping the same file+offset into
+    multiple gfns due to perf consideration, warned in document.
+  - Addressed other comments in v4.
+v4:
+  - Decoupled the callbacks between KVM/mm from memfd and use new
+    name 'memfile_notifier'.
+  - Supported register multiple memslots to the same backing store.
+  - Added per-memslot pfn_ops instead of per-system.
+  - Reworked the invalidation part.
+  - Improved new KVM uAPIs (private memslot extension and memory
+    error) per Sean's suggestions.
+  - Addressed many other minor fixes for comments from v3.
+v3:
+  - Added locking protection when calling
+    invalidate_page_range/fallocate callbacks.
+  - Changed memslot structure to keep use useraddr for shared memory.
+  - Re-organized F_SEAL_INACCESSIBLE and MEMFD_OPS.
+  - Added MFD_INACCESSIBLE flag to force F_SEAL_INACCESSIBLE.
+  - Commit message improvement.
+  - Many small fixes for comments from the last version.
+
+Links to previous discussions
+-----------------------------
+[1] Original design proposal:
+https://lkml.kernel.org/kvm/20210824005248.200037-1-seanjc@google.com/
+[2] Updated proposal and RFC patch v1:
+https://lkml.kernel.org/linux-fsdevel/20211111141352.26311-1-chao.p.peng@linux.intel.com/
+[3] Patch v4: https://lkml.org/lkml/2022/1/18/395
+
+Chao Peng (10):
+  mm: Introduce memfile_notifier
+  mm/shmem: Restrict MFD_INACCESSIBLE memory against RLIMIT_MEMLOCK
+  KVM: Extend the memslot to support fd-based private memory
+  KVM: Use kvm_userspace_memory_region_ext
+  KVM: Add KVM_EXIT_MEMORY_ERROR exit
+  KVM: Use memfile_pfn_ops to obtain pfn for private pages
+  KVM: Handle page fault for private memory
+  KVM: Register private memslot to memory backing store
+  KVM: Zap existing KVM mappings when pages changed in the private fd
+  KVM: Expose KVM_MEM_PRIVATE
+
+Kirill A. Shutemov (2):
+  mm/memfd: Introduce MFD_INACCESSIBLE flag
+  mm/shmem: Support memfile_notifier
+
+ Documentation/virt/kvm/api.rst   |  59 +++++++++--
+ arch/x86/kvm/Kconfig             |   1 +
+ arch/x86/kvm/mmu/mmu.c           |  73 +++++++++++++-
+ arch/x86/kvm/mmu/paging_tmpl.h   |  11 ++-
+ arch/x86/kvm/x86.c               |  12 +--
+ include/linux/kvm_host.h         |  49 ++++++++-
+ include/linux/memfile_notifier.h |  64 ++++++++++++
+ include/linux/shmem_fs.h         |  11 +++
+ include/uapi/linux/kvm.h         |  17 ++++
+ include/uapi/linux/memfd.h       |   1 +
+ mm/Kconfig                       |   4 +
+ mm/Makefile                      |   1 +
+ mm/memfd.c                       |  26 ++++-
+ mm/memfile_notifier.c            | 114 +++++++++++++++++++++
+ mm/shmem.c                       | 156 +++++++++++++++++++++++++++++
+ virt/kvm/kvm_main.c              | 165 +++++++++++++++++++++++++++----
+ 16 files changed, 717 insertions(+), 47 deletions(-)
+ create mode 100644 include/linux/memfile_notifier.h
+ create mode 100644 mm/memfile_notifier.c
+
+-- 
+2.17.1
 

@@ -2,232 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10DF4D5222
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863474D5198
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245450AbiCJT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S244420AbiCJTad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243566AbiCJT3A (ORCPT
+        with ESMTP id S240436AbiCJTaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:29:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A43F3EAA1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:27:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CC161154
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A86C340E8;
-        Thu, 10 Mar 2022 19:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646940477;
-        bh=yTiicAe1GiprjsUYUFCzX3ycb9cWzOEx/0Zt7V7Jr/k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nPa+yPJxLdpQW9C/WpPwDgLJScjWDeCDUOn+0e3jEnk72Z3G0l0NjCuAC3PmBY/XF
-         BWu9k1Ote2WsxFjvYOplOAQd81+33rPxyoGFwzrg9q3gLPtNDIlwFEWc4btF9gcPYV
-         3485T8U82vnb+WoHiNIl8bfCFcQk6NYX5GGSBNeiWUx64/yDLGvc87nPP+QDie/Mh3
-         bJGJcQFpysJsF+i+w/S6JzINP3a844/Vryhxt5rfzaqY90jhglJ8MFWihiHKvLnQy4
-         pncCePj/RSeBJCOsKX8tSBYhq4NAWumROOAiNalkt1zp4d08hlVRZFpdd+DjWh3Z//
-         AWjSkjljHqLuA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 22D6C5C0387; Thu, 10 Mar 2022 11:27:57 -0800 (PST)
-Date:   Thu, 10 Mar 2022 11:27:57 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 01/19] context_tracking: Rename
- __context_tracking_enter/exit() to __ct_user_enter/exit()
-Message-ID: <20220310192757.GS4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220302154810.42308-1-frederic@kernel.org>
- <20220302154810.42308-2-frederic@kernel.org>
+        Thu, 10 Mar 2022 14:30:30 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550C213C3BD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:29:27 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2e2ca8d7812so8540567b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fCphOwvog5CR9xCI2b5FDRuXSQsxiJyxhbdn/smQ+b4=;
+        b=XS4njOn68MemfU9zs/tszcIIbd6//uLsmy3S1DZEFiYtOKHRV2IYeJapWCCA7Pe1hk
+         V4wuRcMQg5zOQH9mr3keyF7lOVNz2+b18MfH3UKyaK3UbujqhEft1q7jAKujJ/xCjyc7
+         A9SQx155ypdnZM7LsJq6Q25ZAmZ9hqLB+rVFxzkLxTVA8P1r3FB2mIde/CcWmY6Qjgyr
+         KXMK8jpJ4wkESb/Ee9kmquwK0qzNYJXOujYwiG9cQZUNfrdm82hEUiPQKM6FMtcc98cd
+         tvWApc1rWf0PB4z/lG3mCFC0hVfbMaUXCIwCRkqOGQKNjnuio414n9kOswijILQMpldd
+         e07Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fCphOwvog5CR9xCI2b5FDRuXSQsxiJyxhbdn/smQ+b4=;
+        b=39Y1XPTHkj+tZ2+SwtD2meVqyBh2eVF6tB5sJAsSwS8Ar9IPiJbQovIEQfyZyyiAD3
+         eEyaZHPWVowUdNq8TxiEWi1HpI6Qz6L3xALEQphEJcr0hH2bhJbqgzBhHgS1CC+GUT3b
+         3/zue2s9W1GgRcdvBvAW/9DYOCYw00B/YAwU0Ru4b7dXUlLpZzOlbRRs3sFyetEzp/Up
+         GocVZv5cTjD6J/0bmqMWEzy7JulmhUJIs9cmodaFPmo5jdJiVOepjZGFY6B5la+CB5C/
+         hMqTr4IEu8n4sypOV8Ksq7AWi/IxzQnxYUpQNF2lunJbA1xUVt43h28y7QsQZsOKmYjU
+         aSYw==
+X-Gm-Message-State: AOAM532/sZocvLjo1BMAYWLeyGetwu01un2TFg26r00g+fIvkWeLw4dw
+        mROT2aV1jNFvd8neBPNAgpLIhJoPCIqJ6jy/m4RflA==
+X-Google-Smtp-Source: ABdhPJwzfDlXw81/eBIXOSlMhPCdutKwJXBijhpTgzHMP1CnJwbpPMTeI+5VMc38WWfyFmQP94nX3V9NcNDr0WM9olw=
+X-Received: by 2002:a81:91cb:0:b0:2dc:bad:5873 with SMTP id
+ i194-20020a8191cb000000b002dc0bad5873mr5335180ywg.156.1646940566374; Thu, 10
+ Mar 2022 11:29:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302154810.42308-2-frederic@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310164532.1821490-1-bgardon@google.com> <Yio8QtuMd6COcnEw@google.com>
+In-Reply-To: <Yio8QtuMd6COcnEw@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 10 Mar 2022 13:29:15 -0600
+Message-ID: <CANgfPd9xr5ev7fEiwBVUi89iHkuywq-Ba9zOeCMSTFmLkO243w@mail.gmail.com>
+Subject: Re: [PATCH 00/13] KVM: x86: Add a cap to disable NX hugepages on a VM
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:47:52PM +0100, Frederic Weisbecker wrote:
-> The context tracking namespace is going to expand and some new functions
-> will require even longer names. Start shrinking the context_tracking
-> prefix to "ct" as is already the case for some existing macros, this
-> will make the introduction of new functions easier.
-> 
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+On Thu, Mar 10, 2022 at 11:58 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Mar 10, 2022, Ben Gardon wrote:
+> >   selftests: KVM: Wrap memslot IDs in a struct for readability
+> >   selftests: KVM: Add memslot parameter to VM vaddr allocation
+> >   selftests: KVM: Add memslot parameter to elf_load
+>
+> I really, really, don't want to go down this path of proliferating memslot crud
+> throughout the virtual memory allocators.  I would much rather we solve this by
+> teaching the VM creation helpers to (optionally) use hugepages.  The amount of
+> churn required just so that one test can back code with hugepages is absurd, and
+> there's bound to be tests in the future that want to force hugepages as well.
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+I agree that proliferating the memslots argument isn't strictly
+required for this test, but doing so makes it much easier to make
+assertions about hugepage counts and such because you don't have your
+stacks and page tables backed with hugepages.
 
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> Cc: Yu Liao<liaoyu15@huawei.com>
-> Cc: Phil Auld <pauld@redhat.com>
-> Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
-> Cc: Alex Belits <abelits@marvell.com>
-> ---
->  include/linux/context_tracking.h | 12 ++++++------
->  kernel/context_tracking.c        | 20 ++++++++++----------
->  2 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-> index 7a14807c9d1a..773035124bad 100644
-> --- a/include/linux/context_tracking.h
-> +++ b/include/linux/context_tracking.h
-> @@ -14,8 +14,8 @@
->  extern void context_tracking_cpu_set(int cpu);
->  
->  /* Called with interrupts disabled.  */
-> -extern void __context_tracking_enter(enum ctx_state state);
-> -extern void __context_tracking_exit(enum ctx_state state);
-> +extern void __ct_user_enter(enum ctx_state state);
-> +extern void __ct_user_exit(enum ctx_state state);
->  
->  extern void context_tracking_enter(enum ctx_state state);
->  extern void context_tracking_exit(enum ctx_state state);
-> @@ -38,13 +38,13 @@ static inline void user_exit(void)
->  static __always_inline void user_enter_irqoff(void)
->  {
->  	if (context_tracking_enabled())
-> -		__context_tracking_enter(CONTEXT_USER);
-> +		__ct_user_enter(CONTEXT_USER);
->  
->  }
->  static __always_inline void user_exit_irqoff(void)
->  {
->  	if (context_tracking_enabled())
-> -		__context_tracking_exit(CONTEXT_USER);
-> +		__ct_user_exit(CONTEXT_USER);
->  }
->  
->  static inline enum ctx_state exception_enter(void)
-> @@ -74,7 +74,7 @@ static inline void exception_exit(enum ctx_state prev_ctx)
->  static __always_inline bool context_tracking_guest_enter(void)
->  {
->  	if (context_tracking_enabled())
-> -		__context_tracking_enter(CONTEXT_GUEST);
-> +		__ct_user_enter(CONTEXT_GUEST);
->  
->  	return context_tracking_enabled_this_cpu();
->  }
-> @@ -82,7 +82,7 @@ static __always_inline bool context_tracking_guest_enter(void)
->  static __always_inline void context_tracking_guest_exit(void)
->  {
->  	if (context_tracking_enabled())
-> -		__context_tracking_exit(CONTEXT_GUEST);
-> +		__ct_user_exit(CONTEXT_GUEST);
->  }
->  
->  /**
-> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-> index 36a98c48aedc..ad2a973393a6 100644
-> --- a/kernel/context_tracking.c
-> +++ b/kernel/context_tracking.c
-> @@ -51,15 +51,15 @@ static __always_inline void context_tracking_recursion_exit(void)
->  }
->  
->  /**
-> - * context_tracking_enter - Inform the context tracking that the CPU is going
-> - *                          enter user or guest space mode.
-> + * __ct_user_enter - Inform the context tracking that the CPU is going
-> + *		     to enter user or guest space mode.
->   *
->   * This function must be called right before we switch from the kernel
->   * to user or guest space, when it's guaranteed the remaining kernel
->   * instructions to execute won't use any RCU read side critical section
->   * because this function sets RCU in extended quiescent state.
->   */
-> -void noinstr __context_tracking_enter(enum ctx_state state)
-> +void noinstr __ct_user_enter(enum ctx_state state)
->  {
->  	/* Kernel threads aren't supposed to go to userspace */
->  	WARN_ON_ONCE(!current->mm);
-> @@ -101,7 +101,7 @@ void noinstr __context_tracking_enter(enum ctx_state state)
->  	}
->  	context_tracking_recursion_exit();
->  }
-> -EXPORT_SYMBOL_GPL(__context_tracking_enter);
-> +EXPORT_SYMBOL_GPL(__ct_user_enter);
->  
->  void context_tracking_enter(enum ctx_state state)
->  {
-> @@ -119,7 +119,7 @@ void context_tracking_enter(enum ctx_state state)
->  		return;
->  
->  	local_irq_save(flags);
-> -	__context_tracking_enter(state);
-> +	__ct_user_enter(state);
->  	local_irq_restore(flags);
->  }
->  NOKPROBE_SYMBOL(context_tracking_enter);
-> @@ -132,8 +132,8 @@ void context_tracking_user_enter(void)
->  NOKPROBE_SYMBOL(context_tracking_user_enter);
->  
->  /**
-> - * context_tracking_exit - Inform the context tracking that the CPU is
-> - *                         exiting user or guest mode and entering the kernel.
-> + * __ct_user_exit - Inform the context tracking that the CPU is
-> + * 		    exiting user or guest mode and entering the kernel.
->   *
->   * This function must be called after we entered the kernel from user or
->   * guest space before any use of RCU read side critical section. This
-> @@ -143,7 +143,7 @@ NOKPROBE_SYMBOL(context_tracking_user_enter);
->   * This call supports re-entrancy. This way it can be called from any exception
->   * handler without needing to know if we came from userspace or not.
->   */
-> -void noinstr __context_tracking_exit(enum ctx_state state)
-> +void noinstr __ct_user_exit(enum ctx_state state)
->  {
->  	if (!context_tracking_recursion_enter())
->  		return;
-> @@ -166,7 +166,7 @@ void noinstr __context_tracking_exit(enum ctx_state state)
->  	}
->  	context_tracking_recursion_exit();
->  }
-> -EXPORT_SYMBOL_GPL(__context_tracking_exit);
-> +EXPORT_SYMBOL_GPL(__ct_user_exit);
->  
->  void context_tracking_exit(enum ctx_state state)
->  {
-> @@ -176,7 +176,7 @@ void context_tracking_exit(enum ctx_state state)
->  		return;
->  
->  	local_irq_save(flags);
-> -	__context_tracking_exit(state);
-> +	__ct_user_exit(state);
->  	local_irq_restore(flags);
->  }
->  NOKPROBE_SYMBOL(context_tracking_exit);
-> -- 
-> 2.25.1
-> 
+Those patches are a lot of churn, but at least to me, they make the
+code much more readable. Currently there are many functions which just
+pass along 0 for the memslot, and often have multiple other numerical
+arguments, which makes it hard to understand what the function is
+doing.
+
+I don't think explicitly specifying memslots really adds that much
+overhead to the tests, and I'd rather have control over that than
+implicitly cramming everything into memslot 0.
+
+If you have a better way to manage the memslots and create virtual
+mappings for / load code into other memslots, I'm open to it, but we
+should do something about it.

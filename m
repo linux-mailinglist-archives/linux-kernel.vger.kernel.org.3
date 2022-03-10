@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE954D5426
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E13A4D5432
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243463AbiCJWIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S240265AbiCJWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiCJWIg (ORCPT
+        with ESMTP id S240075AbiCJWJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:08:36 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E283C3B01A;
-        Thu, 10 Mar 2022 14:07:32 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id d10so15113841eje.10;
-        Thu, 10 Mar 2022 14:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N+bQm7oSKXNbzL13c/MNl/tddfyzw2sHDv2mP5LKoHU=;
-        b=mSmh9CRF/SPistOhGnbTWogGzHmBWpRFtPespWHdrBJg+91FKLLTqaudEHxtNKrEV8
-         yUZ2VcqHfxSMkpwVwGcLoQNzY4kvljmW2CMxvHWD9s65sylpXFhiOihcK9TRyWmis7kO
-         2jFgjWZEn1S/8ZLJek4Ff7q9tJ0UKrgTMLKk1zP190LVLYSYlgZRDtNS+VrBBK4o3ozZ
-         yUSsyFsdhQj8aR+3qQMAdrtOXWWr8hssghFI+PUSY3PBaLkUrrGX9m7DgCe34SRrRZAu
-         ofYtBdclMpquqggxVU3qB6HPX/vcZnFV1pnr6Zrn6FlVtmue0c89oAT/76FiiYnbVMjJ
-         4JNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N+bQm7oSKXNbzL13c/MNl/tddfyzw2sHDv2mP5LKoHU=;
-        b=pIPhJX8L1JhnrffZa8jQ/RTl5YHSJB/ySMqMzyl2idt5Vsh/aEwEdf6vG37i8OjvKZ
-         9lP4ABu7Y5fSPGriFifQpANcmNVs6KPq90P/lem36k9xxk9SIqOTq4M6fM7F9auXHQkB
-         usf+6v5X/MDW/70Ao9XjJqHs8gVF49vE36zEAxKCHzFbT+I72Q0qnZVmMEJGgFPUcp9T
-         ODO4dxksVIWHJq+XJk6aTXGp6EjJXs1tEwQBXaiNgnqP4U5tRq6ZM7DYKAeB1/snwY/2
-         3ETsgPA+TEB9L1gUbwdL82hlJAA+xjs+9v8NSStMjoWOdHFUE4COv62QElnCOsvxaHBx
-         bq4g==
-X-Gm-Message-State: AOAM53273EEOHK3NX7Wnb9A7amwR4ygA2rQTvrFpQO3EhpQ10K4XZ0n8
-        uwAEcOD9WrNIA0/1V9Ucl4taCSdTDZg=
-X-Google-Smtp-Source: ABdhPJzF2sw5rugahKzH8n8lxMVuWWePuxitJpHKpluAUzRIosjoOiXtxsDJ/gnSTmDFwmk2CHeaUQ==
-X-Received: by 2002:a17:907:761c:b0:6d6:e553:7bd1 with SMTP id jx28-20020a170907761c00b006d6e5537bd1mr6067525ejc.5.1646950051169;
-        Thu, 10 Mar 2022 14:07:31 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id gb2-20020a170907960200b006dac65a914esm2207892ejc.125.2022.03.10.14.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 14:07:30 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [PATCH] firmware: qcom_scm: Add compatible for ipq806x
-Date:   Thu, 10 Mar 2022 23:07:23 +0100
-Message-Id: <20220310220723.3772-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 10 Mar 2022 17:09:53 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4C65FF0B;
+        Thu, 10 Mar 2022 14:08:50 -0800 (PST)
+Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nSQxd-000Ayr-EU; Thu, 10 Mar 2022 23:08:42 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nSQxd-000LZN-0J; Thu, 10 Mar 2022 23:08:41 +0100
+Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
+To:     Guo Zhengkui <guozhengkui@vivo.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Christy Lee <christylee@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com
+References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net>
+ <20220309033518.1743-1-guozhengkui@vivo.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ba71e22a-cf59-b2bd-50c0-d0c9fb3f4e08@iogearbox.net>
+Date:   Thu, 10 Mar 2022 23:08:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220309033518.1743-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26477/Thu Mar 10 10:34:39 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,26 +68,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible for ipq806x. Just like ipq4019, ipq806x doesn't require
-Core, Iface or Bus clock.
+On 3/9/22 4:35 AM, Guo Zhengkui wrote:
+> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
+> 
+> Use `ARRAY_SIZE(arr)` in bpf_util.h instead of forms like
+> `sizeof(arr)/sizeof(arr[0])`.
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/firmware/qcom_scm.c | 1 +
- 1 file changed, 1 insertion(+)
+BPF CI fails with:
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 7db8066b19fd..7348c5894821 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1338,6 +1338,7 @@ static const struct of_device_id qcom_scm_dt_match[] = {
- 							     SCM_HAS_IFACE_CLK |
- 							     SCM_HAS_BUS_CLK)
- 	},
-+	{ .compatible = "qcom,scm-ipq806x" },
- 	{ .compatible = "qcom,scm-ipq4019" },
- 	{ .compatible = "qcom,scm-mdm9607", .data = (void *)(SCM_HAS_CORE_CLK |
- 							     SCM_HAS_IFACE_CLK |
--- 
-2.34.1
+https://github.com/kernel-patches/bpf/runs/5498238267?check_suite_focus=true
 
+   pahole: Multithreading requires elfutils >= 0.178. Continuing with a single thread...
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:130:8: error: redefinition of 'bpf_map_def'
+   struct bpf_map_def {
+          ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:685:8: note: previous definition is here
+   struct bpf_map_def {
+          ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:138:6: error: redefinition of 'libbpf_pin_type'
+   enum libbpf_pin_type {
+        ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:191:6: note: previous definition is here
+   enum libbpf_pin_type {
+        ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:139:2: error: redefinition of enumerator 'LIBBPF_PIN_NONE'
+           LIBBPF_PIN_NONE,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:192:2: note: previous definition is here
+           LIBBPF_PIN_NONE,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:141:2: error: redefinition of enumerator 'LIBBPF_PIN_BY_NAME'
+           LIBBPF_PIN_BY_NAME,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:194:2: note: previous definition is here
+           LIBBPF_PIN_BY_NAME,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:144:6: error: redefinition of 'libbpf_tristate'
+   enum libbpf_tristate {
+        ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1304:6: note: previous definition is here
+   enum libbpf_tristate {
+        ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:145:2: error: redefinition of enumerator 'TRI_NO'
+           TRI_NO = 0,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1305:2: note: previous definition is here
+           TRI_NO = 0,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:146:2: error: redefinition of enumerator 'TRI_YES'
+           TRI_YES = 1,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1306:2: note: previous definition is here
+           TRI_YES = 1,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:147:2: error: redefinition of enumerator 'TRI_MODULE'
+           TRI_MODULE = 2,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1307:2: note: previous definition is here
+           TRI_MODULE = 2,
+           ^
+   8 errors generated.
+   make: *** [Makefile:488: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/test_rdonly_maps.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   Error: Process completed with exit code 2.

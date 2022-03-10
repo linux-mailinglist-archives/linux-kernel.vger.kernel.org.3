@@ -2,120 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E064D41C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512C44D41CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240075AbiCJHZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 02:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S238682AbiCJH2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 02:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240066AbiCJHY5 (ORCPT
+        with ESMTP id S232862AbiCJH2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 02:24:57 -0500
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30089.outbound.protection.outlook.com [40.107.3.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167775AEE8;
-        Wed,  9 Mar 2022 23:23:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BVCsV8PYkjKvCDNeIM41TB7oUXapSR/EcWcjSLMiOJ5eTTPAe3nQ8l+uy5WzdYHc6CR2ieIesfppTigfuAi9DKnEV7GsuFD7T2X+DIqll/Q1Y906zaOyj52bYC3QYD0jIPuAdoJlz15ok/hD5iL792KJ1uMfoDkUIRAq21KwFOYqtnJVXet8adBnn4iVVoCCy9QL1M8i1WXHKurFIt2hGAEDfnpvRFMXe8oklOdGs0aiffSqvpahzXBHGmom7Y2RR0ADa40liDe6rQxh8xCddV/xLCU3HHXio9HQscSLwiJMzGJlWELDOu2AhLgGCE9sADqo7DDLOaRL94vt3wJ8Ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SLpu8HmjCbE8lcWyUL8S8u1q7AJnLoZgOVsJ2Ebg3ag=;
- b=NlxeIK0wjwHhH4Qij/R4ufBGOSQoiHzIeLP122iVGGeGHQtOMpdqC74LxYjztTNKPMXZr1cpRMeYDJnEi3x0oxrE+VkpEGIWFA+yYI5sc4wVyBL+Qxsj0DyqQa+D5p/m/wr4rH5Vc+ZJqHf478NsUS7ZTSliTQxa/T3B6W8rqDqp590tjukTOIH9FXqY4bvaH+AeLS90ZVbkPHrQa/b+K5twkVu3TejEhx2DZUezyLjO4o22kg4oSSFNQNFIdHLWMT3yZu9Ytt3gGm7AKiw2xPUoZ67RvFJAyqd6H3zQekmeRnkVP2kTcGK9+u2EEQKFMaqgX9LMmZYi28UftflxCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SLpu8HmjCbE8lcWyUL8S8u1q7AJnLoZgOVsJ2Ebg3ag=;
- b=cv4WuJ9M7QwQWY0gdDp8PQ7gmrgn3mmssVnUjghNsDColCoM82JGOyVfwOq+JhbEQsKHvu+gwKmf21/T+qURjt/I2YsTHHPWK9ih8jiBt1h0WRWkYbf68MXb+tYg4jViC71nNR9lPckryWef9vA17xPgxK/+sLfPJwXCzsjk00Y=
-Received: from AM9PR04MB8397.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::5)
- by AM0PR04MB5268.eurprd04.prod.outlook.com (2603:10a6:208:c0::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Thu, 10 Mar
- 2022 07:23:55 +0000
-Received: from AM9PR04MB8397.eurprd04.prod.outlook.com
- ([fe80::6c00:1ab7:6949:b79]) by AM9PR04MB8397.eurprd04.prod.outlook.com
- ([fe80::6c00:1ab7:6949:b79%3]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
- 07:23:55 +0000
-From:   Claudiu Manoil <claudiu.manoil@nxp.com>
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Y.B. Lu" <yangbo.lu@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net v2] gianfar: ethtool: Fix refcount leak in
- gfar_get_ts_info
-Thread-Topic: [PATCH net v2] gianfar: ethtool: Fix refcount leak in
- gfar_get_ts_info
-Thread-Index: AQHYNCGtN3clJ+D1hUuog5ZVB2MFSqy4NvOA
-Date:   Thu, 10 Mar 2022 07:23:54 +0000
-Message-ID: <AM9PR04MB8397C4159072C82CD99895EF960B9@AM9PR04MB8397.eurprd04.prod.outlook.com>
-References: <e68aa1f1-233f-6e5b-21a6-0443d565ca65@intel.com>
- <20220310015313.14938-1-linmq006@gmail.com>
-In-Reply-To: <20220310015313.14938-1-linmq006@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 16ff4231-b2aa-4223-d5ea-08da0266ef42
-x-ms-traffictypediagnostic: AM0PR04MB5268:EE_
-x-microsoft-antispam-prvs: <AM0PR04MB5268A744135597E1C038B184960B9@AM0PR04MB5268.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IKNx3w7Fomm8ooN58WW8SfH/akxCAG5XcUq9WNgmLSwTJxIn/BU90w9S33YwsmRSiL8wGJxZaopsSHcj6rzCyEDl9KrsOEZq4dgfTv1IqV1vJ2xSekSwjawEyPoY4oR0q5LZ3nr+NhSFMz1n6y4OehVbwD5oxooyyvn+XTjHlB7bpq/1Q9Bco7/COyl/g2iWsl+G1Dsto+SGz4lMirQT4ltGXt9xEmdf5DHQrNconhY0AOu6Sz2NzlNl2XoPvaz8mja2NLsb/lM8BbD4ek0PNs0mZ4xnxDQw+uOU0KARVmPntMCGjnV3htCxOSHHlgny16K2lI+yL+VN2hDo2qlr68XqCl0BcUJ4bWbP2qUl0fI+OZFC85HpXn54UytB/3fFzTkng4WTQR3SHU0R1ewAhieBOLpCvY2UFFvzYekykYOC2K14nDsnbv1iup/w0l/m92LxH6OYksa9WzPUTa0hbWwlPdqUtcb5rBs4EvjPPsmy88ibBlUa48+MbgjZiJcb4l2CCsZnrqC2HbVXY16FqtSeOEjda4suXZWKjT6UffO27HAmmHXKsGmy5U3bbSe1oTTMSLcUZ4esytquDwCK40LXZT/q1Ho0u6iy2MFSLqiiAlyKgEYgwcTKy4cliOhxj2m2suT9VZJ6qT0/6W9Jhjrq9KvHewUkHNp1bDd21kPHfr4Ih5r8veRKYDKWkR5u2ZhOuGJmmuydV0LMNZZQhQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8397.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(86362001)(55016003)(110136005)(5660300002)(9686003)(66946007)(6506007)(2906002)(7696005)(64756008)(66446008)(76116006)(66476007)(53546011)(55236004)(66556008)(8936002)(4744005)(33656002)(71200400001)(498600001)(26005)(186003)(52536014)(38100700002)(38070700005)(8676002)(44832011)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?a/bKKP85lFYDufIGqmKInUf9570uwt7uyOOuRAAyQUJxi+AGkt86GwWVrHsy?=
- =?us-ascii?Q?UZwOVuF2ucwMVTB8gcms+340+oDLgqOl8ycSmye2wYEbh0NG1tAj68RxSC6R?=
- =?us-ascii?Q?itdzJuLM7/eJqJqgIGPj7SH8ePyl84GyayMmGiEskG1ce3H2Lm1VnsVsRgRA?=
- =?us-ascii?Q?VkCvClMYE+8DkArYE+YN5W6rCQP+Im89thhS+c28fQ6y1kjSwukO1bvHCpJl?=
- =?us-ascii?Q?lpjB6/W5q6KJe0B80eydbfIf66kP4j9fAy7Hw10ZFQHzBPMerfzK0dSLv3Ue?=
- =?us-ascii?Q?6SkkRv3tBM77+zbDtCi/vNl4ht20ZRC+2J1obzf0rcMGnSxwCY1nsQ8xH/du?=
- =?us-ascii?Q?wGgdV7Nhmi2pNEBZAbeBVxUiAwva5FIVxWy11nPY3LOa51tdlewiq6QJRPMU?=
- =?us-ascii?Q?i3PfhpQZ7yViIHCL/7GkJUPMqW2iLzmY4DnMLEIjgmrGrfMQUMm2uihr18Ak?=
- =?us-ascii?Q?3pECpRBdl+4Dqy7jCNQ6cpyAsnzkGPHuNYk1JgWBRc3p7qB1/c6fx9wN/cKM?=
- =?us-ascii?Q?sVk5Dtw+P18LH0h/RC+gnRiWSL3Cdot14HnIzwtv+e8Zm4Yv9T3ZnKFB+6L9?=
- =?us-ascii?Q?vpqmRm98wkKLy5Sa1S2M6HPuFk5a3bsoTMHiFu4h5HIUwWzrKDGVEqrzuc/L?=
- =?us-ascii?Q?9So72OuahuVwxxpxlClMQE7j+PC6v0vdr9hTDBDxJu+Lhzbr8joBOmNeTwe8?=
- =?us-ascii?Q?yxAumJyyqL1j/fe+JXUirkIUSq5xEDOpqxXo37NrOEFILE09WTolKxGR1cPL?=
- =?us-ascii?Q?CDBOSjVj4Bcb9Fo8YqeS18thHDsXA5O0LKlMg2vJSDACIExPc2oscMKJwPCI?=
- =?us-ascii?Q?mcYF31td7PEejgzk44KeVPmCQ3mgP2ChYzHn8g8Hfa5gMkzCFa6wNKN3M2fV?=
- =?us-ascii?Q?H6qeNpajBXmzUugOsLn1sawF//Y+5aWvTwy6RmWR5yjbjmXj2q4keje/5gpr?=
- =?us-ascii?Q?inrbLQY1FMqLWGDVubhqRpUOc/3Cao264KUz7zZGDy3hcOkh6kYdWLxvjB0V?=
- =?us-ascii?Q?q1TLcW+mnT6ZdLlyc8HidQWGWS3aR/CEKE9HNLiIIt5oLlBi0BOLzBL9ahyv?=
- =?us-ascii?Q?+3Sj6fhBtSmz+V2EqKAaaNglAFOXXh4OrMn534bVfkk0UUNbg5B2IfWnC0wM?=
- =?us-ascii?Q?hW2DadXPSfIIyHMrL89Ze75EoK5UXzF50JbuLrxnyDGikdbNncQXz8lQQwqV?=
- =?us-ascii?Q?iAYU3xLaT9iKp820QpMNjbcseug5jZUPajD+pTHozPdSp7ZhFMZZqkUOfnyV?=
- =?us-ascii?Q?ilRBvZGfzBzKVtdNhY8dJAUYGjS54IBrcKLlbmt8qSFM/yUQkFTXKwmzsDFi?=
- =?us-ascii?Q?AZRFybncIPvlExP6xQWBsmo7QPuKzo4vp2suy5mH5jZYRFjbDgJE/gaL4RFJ?=
- =?us-ascii?Q?WaeE3QL7sZXrgFY4VtctyYmC+jS+RZJgf8CXfXFCk1SZbMALnMNnBSVrE7zV?=
- =?us-ascii?Q?WuSWe4nhUrJ/q4+w4+V4V9u/inlk1urY4Hg6ixJx9hoC1lm08FfCw+zPXlTQ?=
- =?us-ascii?Q?L06Ms7cY+79o0wBJqOuNB3xbC6Zwi/1AmGtZit7ZojUGXlQSa1L1uppiFjHq?=
- =?us-ascii?Q?QUGfCg1wW+de7gYIEE3cmObSI0ICcOZOgdykd+GJW0VRKkDMxuIzIkjNm/2g?=
- =?us-ascii?Q?ekEpJE82WBxv980MgQ7qkg4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 10 Mar 2022 02:28:16 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEE5131F5B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 23:27:16 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A39D93F1A3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646897234;
+        bh=+acyt1BEYt28lv14s1mevIXPMuYm70g76NXbcp8FI4Q=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=SaIFu3DHMD6KLPrqimQpuybhX1AUlezmi5jCG/bV0YdpuWxQrU/jzStgpq7d3Oq/p
+         0fko3rPVmuchvWW0T2FTkelQUXvxhU4Tvp+APrOWg1HaKIeQb1CVHEdkWcHEx/D3UF
+         JkjB9iik3SnSqvH1gPURipG3G0kL3PK5BajRIpEBwscaZwvY3NR4kfp90lzQLn6LgZ
+         lq4L47LYCiXpsxOxFm/ArAf2AtyqplHDBLjPLYFPpKaUYMbbN17lYF5T4sRY+LK7rY
+         vSSTZEu6NITPQS8+vwdvRZP+prXXimSjfInZm0H/PNn+3nd/5ZZd8pLTaBMdn+gwST
+         OiPoKp2Nx+u2Q==
+Received: by mail-ej1-f69.google.com with SMTP id l24-20020a170906a41800b006da873d66b6so2620547ejz.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 23:27:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+acyt1BEYt28lv14s1mevIXPMuYm70g76NXbcp8FI4Q=;
+        b=mfVyiuFisyGvgVvJFPNpUWMNLECcyFMgvXia90JuHZvEUzRq/0lRkzlv07l6+peZrd
+         eMHKv7xYl1+rcIYDK9vV/lRCL0BjYtsg4g4s0cFj2o9Q3o71cFx/Iog9wKP+kUuRPfhU
+         EoW+Yx7bvhlyyvDoVxy6DlQ0FD0ikT2pmcpBhMuvNi2gXYauzW2EUQtW9eUEGu2T8Nvq
+         7/9d/mmxs2zf8g94K5Q5K2cKda2TXEC5Y2nbJu4fyEjWuf0OAVa/zMtfxB0X1w6StVJz
+         47YkmSyGlLPXXWva6gl2xEpIwoMpkY+FlgExciXyUZsquAbo7K8dP0eGSKiMAsAJVhh1
+         CseQ==
+X-Gm-Message-State: AOAM533NIHuh9WUT9WoFEOolZWfGUYr1lAnmYI+6E3q+SrpkeNprXk+1
+        KnzL1vGTt8OqR1scWkLQyRwZBNpCfGVSgdqMnx+O4LlP8fitZzFX3e3He+nmc7Wf9sBJ5p6NBrR
+        sKsiS9sYIc9mF1A7tJs5IfzLbHaUNsnXr6cBunl0EFQ==
+X-Received: by 2002:a05:6402:138c:b0:413:3d99:f2d6 with SMTP id b12-20020a056402138c00b004133d99f2d6mr2952786edv.189.1646897234319;
+        Wed, 09 Mar 2022 23:27:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzzQuVV4dB21GEZgLzk4Y0WlFO6imhKw5gqs41AlbOenE756SkJgsXrLljtdN3cWc0hbCtd/Q==
+X-Received: by 2002:a05:6402:138c:b0:413:3d99:f2d6 with SMTP id b12-20020a056402138c00b004133d99f2d6mr2952776edv.189.1646897234145;
+        Wed, 09 Mar 2022 23:27:14 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id kq26-20020a170906abda00b006da87077172sm1528795ejb.29.2022.03.09.23.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 23:27:13 -0800 (PST)
+Message-ID: <947f3f39-7f49-d411-8aa6-094ada825c34@canonical.com>
+Date:   Thu, 10 Mar 2022 08:27:12 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8397.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16ff4231-b2aa-4223-d5ea-08da0266ef42
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2022 07:23:54.9463
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3UK6MUASn5Rg1hkMZ6RA1ior6gLH7MOBEEuksPItKPu2DE6HqT+MwkUG/zIR5h/0QKhbGAQBnSEWhy43pNUjYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5268
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: extcon: maxim,max77843: add MAX77843
+ bindings
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
+References: <20220111174805.223732-1-krzysztof.kozlowski@canonical.com>
+ <20220111174805.223732-3-krzysztof.kozlowski@canonical.com>
+ <CAL_Jsq+cNrh=o7RL=2SH5888=YU9m1QhA5q+eCTFXVbbw57oJA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAL_Jsq+cNrh=o7RL=2SH5888=YU9m1QhA5q+eCTFXVbbw57oJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,29 +93,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Miaoqian Lin <linmq006@gmail.com>
-> Sent: Thursday, March 10, 2022 3:53 AM
-> To: Claudiu Manoil <claudiu.manoil@nxp.com>; David S. Miller
-> <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Y.B. Lu
-> <yangbo.lu@nxp.com>; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: linmq006@gmail.com
-> Subject: [PATCH net v2] gianfar: ethtool: Fix refcount leak in gfar_get_t=
-s_info
->=20
-> The of_find_compatible_node() function returns a node pointer with
-> refcount incremented, We should use of_node_put() on it when done
-> Add the missing of_node_put() to release the refcount.
->=20
-> Fixes: 7349a74ea75c ("net: ethernet: gianfar_ethtool: get phc index throu=
-gh
-> drvdata")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> ---
-> changes in v2:
-> - Fix the subject
-> ---
+On 09/03/2022 22:03, Rob Herring wrote:
+> On Tue, Jan 11, 2022 at 11:48 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> Document the bindings for MAX77843 MUIC/extcon driver, based on
+>> Exynos5433 TM2 devicetree.  These are neither accurate nor finished
+>> bindings but at least allow parsing existing DTS files.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>>  .../bindings/extcon/maxim,max77843.yaml       | 40 +++++++++++++++++++
+>>  1 file changed, 40 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml b/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
+>> new file mode 100644
+>> index 000000000000..f9ffe3d6f957
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
+>> @@ -0,0 +1,40 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/extcon/maxim,max77843.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim MAX77843 MicroUSB and Companion Power Management IC Extcon
+>> +
+>> +maintainers:
+>> +  - Chanwoo Choi <cw00.choi@samsung.com>
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> +
+>> +description: |
+>> +  This is a part of device tree bindings for Maxim MAX77843 MicroUSB
+>> +  Integrated Circuit (MUIC).
+>> +
+>> +  See also Documentation/devicetree/bindings/mfd/maxim,max77843.yaml for
+>> +  additional information and example.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: maxim,max77843-muic
+>> +
+>> +  connector:
+>> +    $ref: /schemas/connector/usb-connector.yaml#
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/port
+> 
+> Now failing in -next:
+> 
+> Documentation/devicetree/bindings/mfd/maxim,max77843.example.dt.yaml:
+> pmic@66: extcon:ports: Unevaluated properties are not allowed ('port'
+> was unexpected)
+>   From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/maxim,max77843.yaml
+> 
+> s/port/ports/
 
-Reviewed-by: Claudiu Manoil <claudiu.manoil@nxp.com>
+I'll fix it up. I wonder why I did not see warning before...
+
+Best regards,
+Krzysztof

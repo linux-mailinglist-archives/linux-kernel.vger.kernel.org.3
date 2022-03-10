@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929624D53A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D44E4D53A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245745AbiCJVdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S244859AbiCJVkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbiCJVdr (ORCPT
+        with ESMTP id S237075AbiCJVkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:33:47 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F06F8EB78
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:32:44 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id C791A1F4625B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646947961;
-        bh=Ad6/roeSAR4BixHcrT4+iGSvNLDw1gu2KhDRPm1QmOI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DAjwBk9IS4h+tkGWFqJgy653Mej/36sRdc+xbnApxYzqc8yJloEoMOnVFTkkXES6f
-         cpoI4OPaCh3SyI9cA6kBBGardXWx5w6u/YfWEddJGCM04h5ROvuYd7GZlS+8wLkfoW
-         Cqx0asjEytolyRKKJaX5mILV851glPROg3vYET/59Yqjw8iBBH5LxnuresEsIlfZtt
-         gfuFTfdSXcf64glac0pqPyEpWfhCV+UhI2fhKOv3b01+hGZKXP/i0CtjVF2m/bumWS
-         UECBIX3FyQGjThzDNlt6BWweBJ3oNdk/uE2QrR41rAZj509FRn9V56ucG0KXeGr7kQ
-         KXl2tvoSwKVCA==
-Message-ID: <ef372381-2a80-bb2f-c999-bb55c5596475@collabora.com>
-Date:   Fri, 11 Mar 2022 00:32:37 +0300
+        Thu, 10 Mar 2022 16:40:11 -0500
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FFABECC3;
+        Thu, 10 Mar 2022 13:39:07 -0800 (PST)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nSQUh-0006Ir-2l; Thu, 10 Mar 2022 22:38:47 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] nSVM: L1 -> L2 event injection fixes and a self-test
+Date:   Thu, 10 Mar 2022 22:38:36 +0100
+Message-Id: <cover.1646944472.git.maciej.szmigiero@oracle.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel@lists.freedesktop.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <4ce1e172-799c-cba3-0a72-4a6fdf2c6d2f@suse.de>
- <caa9a2ea-d1b4-fa96-0e90-37a89aa0c000@collabora.com>
- <d1169f34-ccd8-299d-af1f-f45da37556db@suse.de>
- <c9b344ab-b674-d600-da13-94b329a9d46b@collabora.com>
- <3caec8f4-1bc8-bd52-4a36-5223b633704e@suse.de>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <3caec8f4-1bc8-bd52-4a36-5223b633704e@suse.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 22:02, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 09.03.22 um 23:25 schrieb Dmitry Osipenko:
->>>
->>> The reason for this work is to keep GEM shmem pages mapped and allocated
->>> even while the BO is neither mapped nor pinned.  As it is now, GEM SHMEM
->>> creates and releases pages on each pin and unpin, and maps and unmaps
->>> memory ranges on each vmap and vunmap.  It's all wasteful. Only the
->>> first pin and vmap calls should establish pages and mappings and only
->>> the purge and free functions should release them.
->>
->> Hm, aren't maps and pins already refcounted?
-> 
-> They are. But even when the refcounter reaches 0 on deref, there's no
-> need to remove the mapping or free the memory pages. We can keep them
-> around for the next ref operation.  Only the shrinker's purge or freeing
-> the object has to do such clean-up operations.  Such behavior is
-> supported by TTM and we already use it in VRAM helpers as well.
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-When driver won't want to pin BO at the creation time? Looks like all
-shmem users do this today, and thus, pages shouldn't be freed until BO
-is destroyed or purged.
+There are some issues with respect to nSVM L1 -> L2 event injection.
+
+First, the next_rip field of a VMCB is *not* an output-only field for a VMRUN.
+This field value (instead of the saved guest RIP) in used by the CPU for
+the return address pushed on stack when injecting a software interrupt or
+INT3 or INTO exception (this was confirmed by AMD).
+
+On a VMRUN that does event injection it has similar function as VMX's
+VM_ENTRY_INSTRUCTION_LEN field, although, in contrast to VMX, it holds an
+absolute RIP value, not a relative increment.
+
+However, KVM seems to treat this field as a unidirectional hint from the CPU
+to the hypervisor - there seems to be no specific effort to maintain this
+field consistency for such VMRUN.
+
+This is mostly visible with running a nested guest, with L1 trying to inject
+an event into its L2.
+In this case, we need to make sure the next_rip field gets synced from
+vmcb12 to vmcb02.
+
+Another issue is that pending L1 -> L2 events are forgotten if there is an
+intervening L0 VMEXIT during their delivery.
+We need to make sure they are remembered (including their desired next_rip
+field value) until they are either re-injected into L2 successfully or
+returned back to L1 in the EXITINTINFO field upon a nested VMEXIT.
+
+A new KVM self-test that checks for the nSVM issues described above is
+included in this patch series.
+
+These issues are SVM-specific - all the use cases described above already
+work correctly with VMX.
+
+This patch set was tested with both Linux and Windows nested guests.
+
+  KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
+  KVM: SVM: Downgrade BUG_ON() to WARN_ON() in svm_inject_irq()
+  KVM: nSVM: Don't forget about L1-injected events
+  KVM: nSVM: Restore next_rip when doing L1 -> L2 event re-injection
+  KVM: selftests: nSVM: Add svm_nested_soft_inject_test
+
+ arch/x86/kvm/svm/nested.c                     |  69 +++++++-
+ arch/x86/kvm/svm/svm.c                        |  60 ++++++-
+ arch/x86/kvm/svm/svm.h                        |  48 ++++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/svm_util.h   |   2 +
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  | 147 ++++++++++++++++++
+ 7 files changed, 324 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+

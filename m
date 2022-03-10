@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711164D5051
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019604D505B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244771AbiCJRWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        id S244653AbiCJRWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244692AbiCJRWW (ORCPT
+        with ESMTP id S244592AbiCJRWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:22:22 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F4D199D4D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:17 -0800 (PST)
+        Thu, 10 Mar 2022 12:22:06 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0992F199D40
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646932877; x=1678468877;
+  t=1646932864; x=1678468864;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bpNLdvD0glY7GspXdaBYQNJVO+MYEUPR9GUQkRRXSOU=;
-  b=PSApOHzp+PBrweRcBANy51TsHElAoey0l1QBTQUDkdLPx70w5COrM0P5
-   c0yf9crFGkjufg9CcrK0ktnG/a/OJ1WQ10SNBuIIEFZbs8tgBJNzfj5aO
-   f5Sp1umGHAOgLJ41yD/W/GPEQbQ2vEhV7uugQrfEOWcsfrTkkkrwn4zKn
-   JAgVLI8XqFWrSM/nHi26OoAfY2Uv5Mch7zf9O+40xTihmNtbQB9dBOmrn
-   W35KsSk3h8IG5aQjCW2smkSghyREelUuh/GhsaiU1YqPFxYaGNeODaAPC
-   TGzA3Ev8KJZIY4J3gRxMVjzCFM4nhWubjInksfcXk9ClgXlKIA3o46tMu
+  bh=uPfCwCLIhEO1e+fi1mrejHCAQdkmQVhrehDTb7JigWc=;
+  b=m8pS0C+iKvFa21Au1qywUJrzYqK6P/aqsvZ/7Hi2NWNw+DXhu1zOY8CX
+   ECR9k994mhOOIY1gwRYsm9ReQeTsX/RHwcjOSBXkKk/qgBOgM6wi2hMlb
+   MOdy5yH3E6xPrsFaj4IwWt713c8sUnQ+KpDr+wCOPwltOpJOQSnQ4fLPv
+   STvNFtCePDjXMeV5Z4Zsx2up6QdOojegM1p51M5imLc10wYGZN1o7KNQZ
+   RKlltoxOet8tUvDG8LNEn5Rx9dit6sJvbhq+YUBLbUfhTF1fM/jblRNJc
+   qOLRAr1Ynmn77Bk+UbB4ADDW1/AhrcFOdTfRwn5r+zB97tND/T4sZydGI
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="242758937"
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="316032937"
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="242758937"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:50 -0800
+   d="scan'208";a="316032937"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:52 -0800
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="633064339"
+   d="scan'208";a="496337923"
 Received: from gdavids1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.65.108])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:49 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:52 -0800
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,9 +45,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V9 11/45] x86/pkeys: Enable PKS on cpus which support it
-Date:   Thu, 10 Mar 2022 09:19:45 -0800
-Message-Id: <20220310172019.850939-12-ira.weiny@intel.com>
+Subject: [PATCH V9 12/45] mm/pkeys: Define PKS page table macros
+Date:   Thu, 10 Mar 2022 09:19:46 -0800
+Message-Id: <20220310172019.850939-13-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310172019.850939-1-ira.weiny@intel.com>
 References: <20220310172019.850939-1-ira.weiny@intel.com>
@@ -55,149 +55,110 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+From: Fenghua Yu <fenghua.yu@intel.com>
 
-Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
-specific, manipulation of permission restrictions on supervisor page
-mappings.  It uses a supervisor specific MSR to assign permissions to
-the pkeys.
+Kernel PKS consumers will need a way to assign their pkey to pages.
 
-When PKS is configured and the cpu supports PKS, initialize the MSR, and
-enable the hardware.
+Define _PAGE_PKEY() and PAGE_KERNEL_PKEY() to allow users to set a pkey
+on a PTE.
 
-Add asm/pks.h to store new internal functions and structures such as
-pks_setup().
+Add documentation.
 
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Co-developed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 
 ---
 Changes for V9
-	Reword commit message
-	Move this after the patch defining PKS_INIT_VALUE
+	From Dave Hansen
+		s/PKey/pkey
 
 Changes for V8
-	Move setup_pks() into this patch with a default of all access
-		for all pkeys.
-	From Thomas
-		s/setup_pks/pks_setup/
-	Update Change log to better reflect exactly what this patch does.
+	Split out from the 'Add PKS kernel API' patch
+	Include documentation in this patch
 ---
- arch/x86/include/asm/msr-index.h            |  1 +
- arch/x86/include/asm/pks.h                  | 15 +++++++++++++++
- arch/x86/include/uapi/asm/processor-flags.h |  2 ++
- arch/x86/kernel/cpu/common.c                |  2 ++
- arch/x86/mm/pkeys.c                         | 17 +++++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 arch/x86/include/asm/pks.h
+ Documentation/core-api/protection-keys.rst |  6 ++++++
+ arch/x86/include/asm/pgtable_types.h       | 22 ++++++++++++++++++++++
+ include/linux/pgtable.h                    |  4 ++++
+ 3 files changed, 32 insertions(+)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index a4a39c3e0f19..6b0a6e0300a4 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -787,6 +787,7 @@
- 
- #define MSR_IA32_TSC_DEADLINE		0x000006E0
- 
-+#define MSR_IA32_PKRS			0x000006E1
- 
- #define MSR_TSX_FORCE_ABORT		0x0000010F
- 
-diff --git a/arch/x86/include/asm/pks.h b/arch/x86/include/asm/pks.h
-new file mode 100644
-index 000000000000..8180fc59790b
---- /dev/null
-+++ b/arch/x86/include/asm/pks.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_PKS_H
-+#define _ASM_X86_PKS_H
+diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
+index d501bd27ee29..fe63acf5abbe 100644
+--- a/Documentation/core-api/protection-keys.rst
++++ b/Documentation/core-api/protection-keys.rst
+@@ -136,3 +136,9 @@ PKS Key Allocation
+ ------------------
+ .. kernel-doc:: include/linux/pks-keys.h
+         :doc: PKS_KEY_ALLOCATION
 +
-+#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
++Adding pages to a pkey protected domain
++---------------------------------------
 +
-+void pks_setup(void);
-+
-+#else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
-+
-+static inline void pks_setup(void) { }
-+
-+#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
-+
-+#endif /* _ASM_X86_PKS_H */
-diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
-index bcba3c643e63..191c574b2390 100644
---- a/arch/x86/include/uapi/asm/processor-flags.h
-+++ b/arch/x86/include/uapi/asm/processor-flags.h
-@@ -130,6 +130,8 @@
- #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
- #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
- #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
-+#define X86_CR4_PKS_BIT		24 /* enable Protection Keys for Supervisor */
-+#define X86_CR4_PKS		_BITUL(X86_CR4_PKS_BIT)
++.. kernel-doc:: arch/x86/include/asm/pgtable_types.h
++        :doc: PKS_KEY_ASSIGNMENT
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index 40497a9020c6..e1d4535b525e 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -71,6 +71,22 @@
+ 			 _PAGE_PKEY_BIT2 | \
+ 			 _PAGE_PKEY_BIT3)
  
- /*
-  * x86-64 Task Priority Register, CR8
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 7b8382c11788..83c1abce7d93 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -59,6 +59,7 @@
- #include <asm/cpu_device_id.h>
- #include <asm/uv/uv.h>
- #include <asm/sigframe.h>
-+#include <asm/pks.h>
- 
- #include "cpu.h"
- 
-@@ -1632,6 +1633,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
- 
- 	x86_init_rdrand(c);
- 	setup_pku(c);
-+	pks_setup();
- 
- 	/*
- 	 * Clear/Set all flags overridden by options, need do it
-diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index 7c90b2188c5f..f904376570f4 100644
---- a/arch/x86/mm/pkeys.c
-+++ b/arch/x86/mm/pkeys.c
-@@ -6,6 +6,7 @@
- #include <linux/debugfs.h>		/* debugfs_create_u32()		*/
- #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
- #include <linux/pkeys.h>                /* PKEY_*                       */
-+#include <linux/pks-keys.h>
- #include <uapi/asm-generic/mman-common.h>
- 
- #include <asm/cpufeature.h>             /* boot_cpu_has, ...            */
-@@ -209,3 +210,19 @@ u32 pkey_update_pkval(u32 pkval, u8 pkey, u32 accessbits)
- 	pkval &= ~(PKEY_ACCESS_MASK << shift);
- 	return pkval | accessbits << shift;
- }
-+
-+#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
-+
-+/*
-+ * PKS is independent of PKU and either or both may be supported on a CPU.
++/**
++ * DOC: PKS_KEY_ASSIGNMENT
++ *
++ * The following macros are used to set a pkey value in a supervisor PTE.
++ *
++ * .. code-block:: c
++ *
++ *         #define _PAGE_KEY(pkey)
++ *         #define PAGE_KERNEL_PKEY(pkey)
 + */
-+void pks_setup(void)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-+		return;
++#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
++#define _PAGE_PKEY(pkey)	(_AT(pteval_t, pkey) << _PAGE_BIT_PKEY_BIT0)
++#else
++#define _PAGE_PKEY(pkey)	(_AT(pteval_t, 0))
++#endif
 +
-+	wrmsrl(MSR_IA32_PKRS, PKS_INIT_VALUE);
-+	cr4_set_bits(X86_CR4_PKS);
-+}
+ #if defined(CONFIG_X86_64) || defined(CONFIG_X86_PAE)
+ #define _PAGE_KNL_ERRATUM_MASK (_PAGE_DIRTY | _PAGE_ACCESSED)
+ #else
+@@ -226,6 +242,12 @@ enum page_cache_mode {
+ #define PAGE_KERNEL_IO		__pgprot_mask(__PAGE_KERNEL_IO)
+ #define PAGE_KERNEL_IO_NOCACHE	__pgprot_mask(__PAGE_KERNEL_IO_NOCACHE)
+ 
++#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
++#define PAGE_KERNEL_PKEY(pkey)	__pgprot_mask(__PAGE_KERNEL | _PAGE_PKEY(pkey))
++#else
++#define PAGE_KERNEL_PKEY(pkey) PAGE_KERNEL
++#endif
 +
-+#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
+ #endif	/* __ASSEMBLY__ */
+ 
+ /*         xwr */
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index f4f4077b97aa..bcef6b306fcb 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1511,6 +1511,10 @@ static inline bool arch_has_pfn_modify_check(void)
+ # define PAGE_KERNEL_EXEC PAGE_KERNEL
+ #endif
+ 
++#ifndef PAGE_KERNEL_PKEY
++#define PAGE_KERNEL_PKEY(pkey) PAGE_KERNEL
++#endif
++
+ /*
+  * Page Table Modification bits for pgtbl_mod_mask.
+  *
 -- 
 2.35.1
 

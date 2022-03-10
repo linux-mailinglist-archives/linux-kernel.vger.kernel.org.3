@@ -2,93 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453934D449A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04D84D44A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbiCJKbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S241260AbiCJKcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbiCJKbI (ORCPT
+        with ESMTP id S240030AbiCJKcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:31:08 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FAD139109
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:30:05 -0800 (PST)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MNc1T-1nmFeR0u1z-00P7kn for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022
- 11:30:04 +0100
-Received: by mail-wr1-f53.google.com with SMTP id t11so7192640wrm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:30:04 -0800 (PST)
-X-Gm-Message-State: AOAM533h2NQhDlMa1mamJYbp9NTR07JsUlZmTVP2lG5u8CeGM90u2T93
-        MbjDOfCiuhTnE2CU6ST2Lyp7HY7CbgYKJExn+Mw=
-X-Google-Smtp-Source: ABdhPJzsF5MzvG2xycGj6tQMwNy8qNwsmOgxiOyipSIlNToREeL3z7dcYGqcbdOJelWseKLIGlic23KJUIY+0F5Tok8=
-X-Received: by 2002:a5d:6810:0:b0:203:7cbb:20be with SMTP id
- w16-20020a5d6810000000b002037cbb20bemr2991507wru.219.1646908203883; Thu, 10
- Mar 2022 02:30:03 -0800 (PST)
+        Thu, 10 Mar 2022 05:32:00 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B798013DE3C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:30:59 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2dc242a79beso52410917b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GEIKOgAspd11sCcksbwlQC1hgUyJX16lFrTFDurSqL0=;
+        b=dPd6hyEcvmtuMDfVZVrmJ9pq4L1ctnGz96ODjH+VHv84r7zoI7lclitqyvah9DoWPd
+         XI/zcqWf3jZg0C0bATpo2hYzsh1WdRaRfSoaNJmA7QhnYbjfP9ntQ8lrI1iz+F3gUggQ
+         vS0/32fUU4aOJR0bdcDWjbUtHCWJXrM6EQUPEn0pxukoPGMjP4eAwEI1kiNSyI8GqMDS
+         SVAvulj2wUh70ET3AshyWqdTpGu0SSp5ES/18HBG2AByXD52T6XW/J8QXux5jt90h87c
+         vONbKMa3SyIL2s4YwZz7M5X8Y3ZWOPoKFKo1AoXKTNlV+A5Z3E8B1ANP+HpVdYvFqPRF
+         nrsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GEIKOgAspd11sCcksbwlQC1hgUyJX16lFrTFDurSqL0=;
+        b=VggpUzuBdKMFzAAA4Y5GJQz/qzGXk4cqr8/FXfYk1qmcx2vuE2VmrrvYNGgpKkNBAB
+         GjNx1SwyYdJxGDOK4SwAQ5B39VOyWqwR1p4OvhVfniFC5vTEYvBc4bkRRQSjUUAJHTl2
+         a2zugsONBh5FqmTfLTp5p+ZeBUoDz4uc71NC9PLdD9TCQpE5LNZzxT3KYFLxSZyG1ZSm
+         7z0lJgWaiPDj5weeUh9k9t4ypX3vN8mSpaCHYONE82s2BAymTQANy9lehWzBwK+sXOh+
+         p4qP+vQIOr3rDya7bGUHrAO11RZUQSCCczVoQoIEpPHqmIGlqu8cf/NmeebTKKKn7MmJ
+         Frcw==
+X-Gm-Message-State: AOAM5325RWuGQvXW3jrrBRAFMuNQ1NdnyHB/2ay2Qy5UxP0KgwVciIYR
+        tb9R7kCJ0t1SCjzO1xawyYA2DTK5aI2LHNRYjex+Wg==
+X-Google-Smtp-Source: ABdhPJyxz6RxicR07EAcW/kfCDhQdIURBoEkhQwDSD7HihZjf5U3WcCubUufIBZrJi4JfXwuxZJPVNQ6UFx87k+2eRM=
+X-Received: by 2002:a81:486:0:b0:2d7:7785:3f33 with SMTP id
+ 128-20020a810486000000b002d777853f33mr3386035ywe.516.1646908258973; Thu, 10
+ Mar 2022 02:30:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20220310065045.24772-1-yuehaibing@huawei.com> <20220310095852.GA1699@willie-the-truck>
- <CAK8P3a2=iRLqM36wwxtQRrCwrZ2-tkBZPZCqqba-4kmk9GxcCw@mail.gmail.com> <20220310102125.GA1883@willie-the-truck>
-In-Reply-To: <20220310102125.GA1883@willie-the-truck>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Mar 2022 11:29:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0K973ggjPStn+qe1w_NqwV_C4up+k2mcG8uV5fV0+cnA@mail.gmail.com>
-Message-ID: <CAK8P3a0K973ggjPStn+qe1w_NqwV_C4up+k2mcG8uV5fV0+cnA@mail.gmail.com>
-Subject: Re: [PATCH v2 -next] perf/marvell: cn10k Fix build error without CONFIG_OF
-To:     Will Deacon <will@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, YueHaibing <yuehaibing@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>, bbudiredla@marvell.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220309155859.734715884@linuxfoundation.org> <b17d6dad-b5b3-6c59-b156-831913f7cd3e@linaro.org>
+In-Reply-To: <b17d6dad-b5b3-6c59-b156-831913f7cd3e@linaro.org>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Thu, 10 Mar 2022 11:30:48 +0100
+Message-ID: <CADYN=9+VTyVCxuMBNfYGdLX+BzOhXPPURy8iaLDywyqmyiBZyw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/43] 5.15.28-rc1 review
+To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Zk6gt/DZYAp6IvpKsENrp7pkOYBGwTfi+h0ViOXQJ+29a7vDSZW
- z60PWJuWuWzTPeWPrWfrCEzzznAwSaEDZlH/fPXijC0FEuM8Ecf4A3pG6ikHU7BiweouHWd
- 0+njNU+OApYwUZy71NgC648CPATsI59ThGPwui7h2pRm1RZSWjz0wfj2AakxkpZaed5MgBw
- sEJUFGMjLdrZLmmGtjbGw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8QhIep5onN8=:UE805ZQLkxPhLXehJJ430p
- grkusd08Wiw77WNjIxjRQvBF83AVVgFQ1RHS5QY3AuqZClVNrrDOOd37xt+N10bJSc2Caa+o+
- lgYuM/OSZjoiX2TjxNfT301hZ5Ivy22H2w+ubEKORVyz1WhKLo9Bbb3x5SdHHrigFZucyMh1c
- krNN5lG10kh1jJA0I1RBP4wnbiE94yReI6FXh8E1W3OaU7AMeXocgGYqp+SkGoBKZUvbwh0vu
- 592OJCJpQI8WupQH4XZIwOyYVcN+Ey+zTZIqaHPS6XKGLPeXq4PtW+HnVfQGYHDcPEvWPyOHl
- HimI3SILFzgud0bBy+g9RkWa6/nBSgvhqqao/REcHtTWUdu6UP5IdWQAiKVfzD0L5a1IAujP5
- eXjAsZRCOsnbmaCcy0w90Q3yS6LBk0OUvxD4ptOer0EohhkHSBIpH+sWiXxLEM/sx1osQ73IM
- RCTv1Al+OOWHwc7O+lrGMB+5ZTnLUfcXCxyK3seGAh4Rh3ouaJMONoyh18KfraE4ypJQIKhTL
- xBQABYIecqmQqAehYclasFsJ6jecqQFgvEShWUtH3tl2gOD/uwvL1Vtsy+2F1TJEHq/nVJJiO
- p4mQ+GLIoOu4UOAJ6llQuBnTEByihJOEncl6EuttdmRJYUkMk2783bC3wGx1qKTghy07lqkxP
- DkYjyPwLA0n8vj0G3/yR0CNId0l1h3GpCDR0dlqw5uL10h0RJ2bov5ApKFca3g20su1ls31vs
- krrWDLW6GA80wtzUj92KMePS3Lbs04D5g+DyIsPZpYim2LYrCfgiE84YcmfPtV0Wg7lFzsUeu
- GeplBGLD90YxtFq+6GBWV93ZofZGsv5f7XEkct5HUPFZWdkhnE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:21 AM Will Deacon <will@kernel.org> wrote:
-> On Thu, Mar 10, 2022 at 11:04:21AM +0100, Arnd Bergmann wrote:
-> > On Thu, Mar 10, 2022 at 10:58 AM Will Deacon <will@kernel.org> wrote:
+On Wed, 9 Mar 2022 at 22:14, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wrot=
+e:
 >
-> I think the problem is when the #ifdefs are removed but the use of
-> of_match_ptr() remains, leading to reports from the robot:
+> Hello!
 >
-> https://lore.kernel.org/r/202201041700.01KZEzhb-lkp@intel.com
+> On 09/03/22 09:59, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.28 release.
+> > There are 43 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.28-rc1.gz
+> > or in the git tree and branch at:
+> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 >
-> Should we therefore remove of_match_ptr() altogether? It seems like it's
-> leading people in the wrong direction here.
+> Regressions found.
+>
 
-There may be valid uses for it, e.g. if the array referenced by it is
-in a separate, and conditionally compiled file, or if the #ifdef block
-covers more than just the table.
+[...]
 
-Removing 1563 instances of it also takes a lot of work. Almost
-all of them are probably useless, and quite a lot of them are
-actively wrong, because they refer to arrays without an #ifdef.
+>
+>
+> And here's one for Clang (same imx_v4_v5_defconfig config, but with clang=
+-11):
+>
+>    ld.lld: error: ./arch/arm/kernel/vmlinux.lds:117: AT expected, but got=
+ NOCROSSREFS
+>    >>>  __vectors_lma =3D .; OVERLAY 0xffff0000 : NOCROSSREFS AT(__vector=
+s_lma) { .vectors { *(.vectors) } .vectors.bhb.loop8 { *(.vectors.bhb.loop8=
+) } .vectors.bhb.bpiall { *(.vectors.bhb.bpiall) } } __vectors_start =3D LO=
+ADADDR(.vectors); __vectors_end =3D LOADADDR(.vectors) + SIZEOF(.vectors); =
+__vectors_bhb_loop8_start =3D LOADADDR(.vectors.bhb.loop8); __vectors_bhb_l=
+oop8_end =3D LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __v=
+ectors_bhb_bpiall_start =3D LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bp=
+iall_end =3D LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); .=
+ =3D __vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF=
+(.vectors.bhb.bpiall); __stubs_lma =3D .; .stubs ADDR(.vectors) + 0x1000 : =
+AT(__stubs_lma) { *(.stubs) } __stubs_start =3D LOADADDR(.stubs); __stubs_e=
+nd =3D LOADADDR(.stubs) + SIZEOF(.stubs); . =3D __stubs_lma + SIZEOF(.stubs=
+); PROVIDE(vector_fiq_offset =3D vector_fiq - ADDR(.vectors));
+>    >>>                                          ^
+>    make[1]: *** [/builds/linux/Makefile:1183: vmlinux] Error 1
 
-Maybe coccinelle can help here.
+Bisection showed patch 8f4782a68faf ("ARM: Spectre-BHB workaround") as
+the faulty patch.
 
-        Arnd
+
+Cheers,
+Anders

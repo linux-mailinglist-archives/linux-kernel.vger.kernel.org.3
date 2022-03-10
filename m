@@ -2,235 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78D34D46BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF514D46BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241958AbiCJMWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S241968AbiCJMXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiCJMWl (ORCPT
+        with ESMTP id S237763AbiCJMXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:22:41 -0500
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3103B13D559;
-        Thu, 10 Mar 2022 04:21:41 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id h196so4158665qke.12;
-        Thu, 10 Mar 2022 04:21:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qpr3RDAC4KKd5tO3nXUWw1dDTj6+AwHTeZrBPzvyIHA=;
-        b=ryHjI+/DOSDVNHuhyNbZFyUsS1Je/AcQXQc0UyxyVErLiZOxj2jk3OzLN1fACqV14b
-         vjVXq1cAlRqXK0l/yq406DOIOl9G/DXXH391oulnk8Q70srEFwaTPQTyrz1PA48t7H+r
-         OyW0HqEk57LK6g2FwjMsjRkbPshcwAI5DnqfMjaTUtOWY3m+X10QqFP0em96OQjUa5lb
-         vcKrYqzCkHg/a2I93flM+ySiAyatRjBNruasKkB6im7BvYadUMHAo53kDvntWS9bW7Be
-         PK0fHPdCeWezL3WCVvJXwrz4C3qNQ92grGdgKbKR2vVWN1swsKfOv9ll0aWhLaiRC3Yn
-         kBKw==
-X-Gm-Message-State: AOAM531qVQcW8C2Uo7qXBt1MT4XUm3o1Lpc5GHbESn1g93I4H+Sc+fVP
-        5tYeXXmG6xpaQjEjTr3307AvaOdjJw/Kag==
-X-Google-Smtp-Source: ABdhPJyigrQSiKQnf1kFfnoMz1H8PG0+r/G1aXaxNLC+zl8Re6eKw3fUAfkOFQ74kP8Wiot8JbxNFg==
-X-Received: by 2002:a05:620a:4493:b0:67b:1ead:13b8 with SMTP id x19-20020a05620a449300b0067b1ead13b8mr2742334qkp.716.1646914899758;
-        Thu, 10 Mar 2022 04:21:39 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id u21-20020ae9c015000000b0067d4b2e1050sm1230287qkk.55.2022.03.10.04.21.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:21:39 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2dbd8777564so56272317b3.0;
-        Thu, 10 Mar 2022 04:21:38 -0800 (PST)
-X-Received: by 2002:a81:5a08:0:b0:2db:d8c6:7e4f with SMTP id
- o8-20020a815a08000000b002dbd8c67e4fmr3674889ywb.256.1646914898324; Thu, 10
- Mar 2022 04:21:38 -0800 (PST)
+        Thu, 10 Mar 2022 07:23:38 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B5C63F4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:22:36 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nSHoO-0000Ms-7H; Thu, 10 Mar 2022 13:22:32 +0100
+Message-ID: <09086ab6-10ff-6334-6148-2fab9df64f9a@leemhuis.info>
+Date:   Thu, 10 Mar 2022 13:22:20 +0100
 MIME-Version: 1.0
-References: <20220310090048.1933020-1-laurent@vivier.eu> <20220310090048.1933020-3-laurent@vivier.eu>
-In-Reply-To: <20220310090048.1933020-3-laurent@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Mar 2022 13:21:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXS9kcLapc+AY=F78G1Jv8ANjQcTosU1En=F273E+cFbA@mail.gmail.com>
-Message-ID: <CAMuHMdXS9kcLapc+AY=F78G1Jv8ANjQcTosU1En=F273E+cFbA@mail.gmail.com>
-Subject: Re: [PATCH v15 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <john.stultz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Bug 215658 - arch/powerpc/mm/mmu_context.o Assembler messages:
+ Error: unrecognized opcode: `dssall' (PowerMac G4)
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <831731e2-6769-3d36-0cdf-721437452fcc@leemhuis.info>
+ <1367d2de-bc44-fb96-c1ef-fd4cf0fb82f4@csgroup.eu>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <1367d2de-bc44-fb96-c1ef-fd4cf0fb82f4@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646914956;75fb1994;
+X-HE-SMSGID: 1nSHoO-0000Ms-7H
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC tty
-dropped stable
+On 10.03.22 12:22, Christophe Leroy wrote:
+> Le 10/03/2022 à 11:39, Thorsten Leemhuis a écrit :
+>> Hi, this is your Linux kernel regression tracker.
+>>
+>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+>> acted upon since it was reported about a week ago, that's why I decided
+>> to forward it to the lists and a few relevant people to the CC. To quote
+>> from the ticket:
+> 
+> I already looked at it when the ticket was opened and that's a bit puzzling.
 
-Note that this is a dependency for later patches in this series,
-so I think everything should go in together (through the m68k tree?).
+Yeah, same here, but I decided I to pick it up, as that's what I'm here for.
 
-On Thu, Mar 10, 2022 at 10:01 AM Laurent Vivier <laurent@vivier.eu> wrote:
->
-> Revert
-> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->
-> and define gf_ioread32()/gf_iowrite32() to be able to use accessors
-> defined by the architecture.
->
-> Cc: stable@vger.kernel.org # v5.11+
-> Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> With v5.16.12 and the config file in the bug report I have no such problem:
+> 
+>    CC      arch/powerpc/mm/fault.o
+>    CC      arch/powerpc/mm/mem.o
+> [...]
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-(given on v14)
+Maybe it's one of those bugs related to the version of binutils?
 
-> ---
->  drivers/tty/goldfish.c   | 20 ++++++++++----------
->  include/linux/goldfish.h | 15 +++++++++++----
->  2 files changed, 21 insertions(+), 14 deletions(-)
+> The bug is puzzling because it says the problem is introduced by commit 
+> d51f86cfd8e3 ("powerpc/mm: Switch obsolete dssall to .long") whereas the 
+> purpose of that commit is exactly to fix the issue you are reporting.
 >
-> diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
-> index 5ed19a9857ad..10c13b93ed52 100644
-> --- a/drivers/tty/goldfish.c
-> +++ b/drivers/tty/goldfish.c
-> @@ -61,13 +61,13 @@ static void do_rw_io(struct goldfish_tty *qtty,
->         spin_lock_irqsave(&qtty->lock, irq_flags);
->         gf_write_ptr((void *)address, base + GOLDFISH_TTY_REG_DATA_PTR,
->                      base + GOLDFISH_TTY_REG_DATA_PTR_HIGH);
-> -       __raw_writel(count, base + GOLDFISH_TTY_REG_DATA_LEN);
-> +       gf_iowrite32(count, base + GOLDFISH_TTY_REG_DATA_LEN);
->
->         if (is_write)
-> -               __raw_writel(GOLDFISH_TTY_CMD_WRITE_BUFFER,
-> +               gf_iowrite32(GOLDFISH_TTY_CMD_WRITE_BUFFER,
->                        base + GOLDFISH_TTY_REG_CMD);
->         else
-> -               __raw_writel(GOLDFISH_TTY_CMD_READ_BUFFER,
-> +               gf_iowrite32(GOLDFISH_TTY_CMD_READ_BUFFER,
->                        base + GOLDFISH_TTY_REG_CMD);
->
->         spin_unlock_irqrestore(&qtty->lock, irq_flags);
-> @@ -142,7 +142,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
->         unsigned char *buf;
->         u32 count;
->
-> -       count = __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-> +       count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
->         if (count == 0)
->                 return IRQ_NONE;
->
-> @@ -159,7 +159,7 @@ static int goldfish_tty_activate(struct tty_port *port, struct tty_struct *tty)
->  {
->         struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
->                                                                         port);
-> -       __raw_writel(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
->         return 0;
->  }
->
-> @@ -167,7 +167,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
->  {
->         struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
->                                                                         port);
-> -       __raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
->  }
->
->  static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
-> @@ -202,7 +202,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
->  {
->         struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
->         void __iomem *base = qtty->base;
-> -       return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-> +       return gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
->  }
->
->  static void goldfish_tty_console_write(struct console *co, const char *b,
-> @@ -355,7 +355,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
->          * on Ranchu emulator (qemu2) returns 1 here and
->          * driver will use physical addresses.
->          */
-> -       qtty->version = __raw_readl(base + GOLDFISH_TTY_REG_VERSION);
-> +       qtty->version = gf_ioread32(base + GOLDFISH_TTY_REG_VERSION);
->
->         /*
->          * Goldfish TTY device on Ranchu emulator (qemu2)
-> @@ -374,7 +374,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
->                 }
->         }
->
-> -       __raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
-> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
->
->         ret = request_irq(irq, goldfish_tty_interrupt, IRQF_SHARED,
->                           "goldfish_tty", qtty);
-> @@ -436,7 +436,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
->  #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
->  static void gf_early_console_putchar(struct uart_port *port, int ch)
->  {
-> -       __raw_writel(ch, port->membase);
-> +       gf_iowrite32(ch, port->membase);
->  }
->
->  static void gf_early_write(struct console *con, const char *s, unsigned int n)
-> diff --git a/include/linux/goldfish.h b/include/linux/goldfish.h
-> index 12be1601fd84..bcc17f95b906 100644
-> --- a/include/linux/goldfish.h
-> +++ b/include/linux/goldfish.h
-> @@ -8,14 +8,21 @@
->
->  /* Helpers for Goldfish virtual platform */
->
-> +#ifndef gf_ioread32
-> +#define gf_ioread32 ioread32
-> +#endif
-> +#ifndef gf_iowrite32
-> +#define gf_iowrite32 iowrite32
-> +#endif
-> +
->  static inline void gf_write_ptr(const void *ptr, void __iomem *portl,
->                                 void __iomem *porth)
->  {
->         const unsigned long addr = (unsigned long)ptr;
->
-> -       __raw_writel(lower_32_bits(addr), portl);
-> +       gf_iowrite32(lower_32_bits(addr), portl);
->  #ifdef CONFIG_64BIT
-> -       __raw_writel(upper_32_bits(addr), porth);
-> +       gf_iowrite32(upper_32_bits(addr), porth);
->  #endif
->  }
->
-> @@ -23,9 +30,9 @@ static inline void gf_write_dma_addr(const dma_addr_t addr,
->                                      void __iomem *portl,
->                                      void __iomem *porth)
->  {
-> -       __raw_writel(lower_32_bits(addr), portl);
-> +       gf_iowrite32(lower_32_bits(addr), portl);
->  #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> -       __raw_writel(upper_32_bits(addr), porth);
-> +       gf_iowrite32(upper_32_bits(addr), porth);
->  #endif
->  }
+> And as far as I can see that commit is not in v5.16.12, so my feeling is 
+> that somethings wrong with the bug report.
+> 
+> By the way I think that cherry-picking that commit into v5.16.12 should 
+> fix it.
 
-Gr{oetje,eeting}s,
+Maybe that's what he had meant to be writing? Maybe your comment in the
+ticket will lead to some enlightenment.
 
-                        Geert
+Thx for looking into this.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Ciao, Thorsten
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>>> 5.16.12 kernel build for my G4 DP on my Talos II fails with:
+>>>
+>>> [...]
+>>>    CC      arch/powerpc/mm/init_32.o
+>>>    CC      arch/powerpc/mm/pgtable_32.o
+>>>    CC      arch/powerpc/mm/pgtable-frag.o
+>>>    CC      arch/powerpc/mm/ioremap.o
+>>>    CC      arch/powerpc/mm/ioremap_32.o
+>>>    CC      arch/powerpc/mm/init-common.o
+>>>    CC      arch/powerpc/mm/mmu_context.o
+>>> {standard input}: Assembler messages:
+>>> {standard input}:30: Error: unrecognized opcode: `dssall'
+>>> make[2]: *** [scripts/Makefile.build:287: arch/powerpc/mm/mmu_context.o] Fehler 1
+>>> make[1]: *** [scripts/Makefile.build:549: arch/powerpc/mm] Fehler 2
+>>> make: *** [Makefile:1846: arch/powerpc] Error 2
+>>>
+>>> This seems to have been introduced by commit d51f86cfd8e378d4907958db77da3074f6dce3ba "powerpc/mm: Switch obsolete dssall to .long"
+>>>
+>>> Reverting this commit fixes the build for my G4.
+>>
+>> Could somebody take a look into this? Or was this discussed somewhere
+>> else already? Or even fixed?
+>>
+>> Anyway, to get this tracked:
+>>
+>> #regzbot introduced: d51f86cfd8e378d4907958db77da3074f6dce3ba
+>> #regzbot from: Erhard F <erhard_f@mailbox.org>
+>> #regzbot title:  arch/powerpc/mm/mmu_context.o Assembler messages:
+>> Error: unrecognized opcode: `dssall' (PowerMac G4)
+>> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215658
+>>
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>
+>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+>> reports on my table. I can only look briefly into most of them and lack
+>> knowledge about most of the areas they concern. I thus unfortunately
+>> will sometimes get things wrong or miss something important. I hope
+>> that's not the case here; if you think it is, don't hesitate to tell me
+>> in a public reply, it's in everyone's interest to set the public record
+>> straight.

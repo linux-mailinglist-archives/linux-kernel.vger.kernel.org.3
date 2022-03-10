@@ -2,97 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594D44D4E28
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116D34D4E33
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240598AbiCJQIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S240654AbiCJQJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbiCJQIA (ORCPT
+        with ESMTP id S233234AbiCJQJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:08:00 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E4D186466;
-        Thu, 10 Mar 2022 08:06:58 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A441E1F40649
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646928417;
-        bh=ZiS/SPnwQg61kBgd93FXFvniwS51SClGVI0Qf1ZMNxk=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=VFAI6Al10tnepVyxeGIIzzYWTeLv5ZQBIqdkRLEtxjcGAt2khOqoqObnB7LoK6+yz
-         N9YEyXhenA8DXI0VTQcbby7Si5uZpdZJNJJC8jBhV3V7bwSeNVGn5f0y95yQvmTn/G
-         CRhaEbydHUGeJVNZpo60qJ0OhDFG+4YCJBKECSdSmXUo2+v7Q/lO8xJSzZplnDgDnI
-         RCBXTLzrqMcVqq16Rltr1qS2Dnqov9qLLCllIRVSzzqVqRjPbDeBbA+ODnkFvScLOe
-         xSAr3zv6md0Zz9+YKjkBPgl7vaudM1LuTWqF4lDvDbJlPncEkvCI5S2zfSwHEIA+sK
-         T45amm6QPgw5A==
-Message-ID: <f6e2a491-d701-d05c-eb3b-2f8f5c080a16@collabora.com>
-Date:   Thu, 10 Mar 2022 17:06:54 +0100
+        Thu, 10 Mar 2022 11:09:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A138413859A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:08:20 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646928498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hr+m6fRu/g1wdrMoiOwPUFJNQ6DkCbll2sk1K5dMoDc=;
+        b=0uoKfsCfbpL9j+kiWHu/ot32XJZkds2YHbxwl2MhqJ4RKM+028bnTqGQvv0+Fz91W5BooI
+        BSKE4NdBYLQBjpKR9ADXVpJLUaiOvdoZWkEv883wHl3DJz5uR0aamIdT84y0F+pPacpjXE
+        kMhqtnqGxiVQWGNVNekfP4D/kAODq2wHi1Gk8yiwsW8aEpV8HCP9fueHwKSPtC16Pc6iuM
+        sOzXrL2gSBLkdf50GDF57nJ80rwHHUq9HALZVRNatZ8eptaeuGT9WLJMneMkf1JUGrbA8R
+        R66SIEuGf8fBfH//5FnSNsoXqeY4oHO4cjhDq2nhm/ZVba+tzGvBJPVwb59y1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646928498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hr+m6fRu/g1wdrMoiOwPUFJNQ6DkCbll2sk1K5dMoDc=;
+        b=yAg9m2XaiUqFUGiHKUnkWIBFeqDWjmZu6dlfcIy5zuiB3HBLB1ahfrxmwNuhLeon893fwL
+        2xwk660N5UQbQTAw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 11/13] printk: reimplement console_lock for
+ proper kthread support
+In-Reply-To: <YioMcSe0P0Z7ksiW@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-12-john.ogness@linutronix.de>
+ <YhYKP/UuSKENGwfj@alley> <87tuc7xma0.fsf@jogness.linutronix.de>
+ <YioMcSe0P0Z7ksiW@alley>
+Date:   Thu, 10 Mar 2022 17:14:18 +0106
+Message-ID: <87wnh14wp9.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] pinctrl: mediatek: Fix missing of_node_put() in
- mtk_pctrl_init
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hongzhou Yang <hongzhou.yang@mediatek.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220308071155.21114-1-linmq006@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220308071155.21114-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/03/22 08:11, Miaoqian Lin ha scritto:
-> The device_node pointer is returned by of_parse_phandle()  with refcount
-> incremented. We should use of_node_put() on it when done.
-> 
-> Fixes: a6df410d420a ("pinctrl: mediatek: Add Pinctrl/GPIO driver for mt8135.")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On 2022-03-10, Petr Mladek <pmladek@suse.com> wrote:
+>    console_unlock()
+>    {
+> 	  [...]
+> 	  if (may_schedule)
+> 	      retry = console_trylock_sched();
+> 	  else
+> 	      retry = console_trylock();
+>    }
 
-Thanks!
+I believe the main confusion comes from the function name I chose and
+the poor function description. Using your above code idea and changing
+to a more fitting name, I would suggest:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+    console_unlock()
+    {
+ 	  [...]
+ 	  if (may_schedule)
+ 	      retry = console_lock_reacquire();
+ 	  else
+ 	      retry = console_trylock();
+    }
 
-> ---
->   drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> index 5f7c421ab6e7..334cb85855a9 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> @@ -1038,6 +1038,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
->   	node = of_parse_phandle(np, "mediatek,pctl-regmap", 0);
->   	if (node) {
->   		pctl->regmap1 = syscon_node_to_regmap(node);
-> +		of_node_put(node);
->   		if (IS_ERR(pctl->regmap1))
->   			return PTR_ERR(pctl->regmap1);
->   	} else if (regmap) {
-> @@ -1051,6 +1052,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
->   	node = of_parse_phandle(np, "mediatek,pctl-regmap", 1);
->   	if (node) {
->   		pctl->regmap2 = syscon_node_to_regmap(node);
-> +		of_node_put(node);
->   		if (IS_ERR(pctl->regmap2))
->   			return PTR_ERR(pctl->regmap2);
->   	}
-> 
+This console_lock_reacquire() acquires the console lock the same way
+that console_lock() does it. The only reason we don't just use
+console_lock() is because we want to perform a try on @console_sem. But
+if we are successful, in the end, we have re-taken the console lock
+exactly as console_lock() did before: @console_sem locked, kthreads
+blocked by mutex.
 
+You say this creates deadlock potential, but I do not see how that could
+be. We are in the same context and locking the same way we did before.
+
+But my primary concern is not the naming or workarounds or confusing
+APIs. So we should not let ourselves be diverted by that aspect.
+
+My primary concern is the technical difference when a schedulable
+context reacquires via atomic counter (which fails if any kthread is
+active) vs. reacquiring via mutex (which never fails).
+
+The reason for the reacquire is because (during direct printing) we see
+that a new record appeared and we need to make sure it gets printed
+(because other direct printers may have aborted, expecting us to print
+it).
+
+This scenario is only interesting if kthread printers exist because
+otherwise @console_sem is enough to handle the direct printing.
+
+So the questions are:
+
+1. Is it OK to assume the new record will be printed if any kthread is
+active? If yes, then it is enough to use the atomic counter.
+
+2. Or, since we are responsible for direct printing, do we want to be
+certain that the record is printed by printing it ourselves? If yes,
+then we must block all the kthreads and perform the printing directly to
+all the consoles. This requires the mutex approach.
+
+IMHO #1 will relies heavily on kthreads waking up and printing (even
+though the printk caller requested direct printing), whereas #2 will
+cause direct printers to more actively print (possibly printing more
+than was requested).
+
+I prefer to go the route of #2 because it is more conservative. IMHO,
+when direct printing becomes active, we really should make a strong
+effort to direct print.
+
+Having now stated the issues (hopefully clearly), I will not fight for
+#2. If you say it is enough to rely on the kthreads in this scenario,
+then I will implement the atomic counter solution for my v2.
+
+John

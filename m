@@ -2,118 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6DB4D4B8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDFE4D4B5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344766AbiCJOlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S243566AbiCJOYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244733AbiCJO30 (ORCPT
+        with ESMTP id S245059AbiCJOUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:29:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628D9DCE00;
-        Thu, 10 Mar 2022 06:24:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81F7BB82544;
-        Thu, 10 Mar 2022 14:24:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B31A4C340E8;
-        Thu, 10 Mar 2022 14:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922271;
-        bh=PD8YDBuRBOII3aVAAcFtCX2cx+HFLHuZPpAQYmq1x+Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TtiwXKaqZ+uZBDt91hUaHlJDDA90eMjUYS2e7KJpX5D7py3Hn675r0Y4F4N2WYuZK
-         Hr3fkM7qg6lCDcW4RBiFFVlkq5f4mIqBowekXE0d+uBpBK74h5QNwWCsEszZg7t/Dk
-         bn2qT9mxzZjb1gkx10I+k/mQtVT72NCqzKCgpf5c=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 5.10 25/58] arm64: entry: Make the trampoline cleanup optional
-Date:   Thu, 10 Mar 2022 15:18:45 +0100
-Message-Id: <20220310140813.593477273@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 10 Mar 2022 09:20:22 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A524B0C56
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:18:50 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id l12so7886342ljh.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eWVv6eZyJg/+eUaoLT3dUwImTgfJSRuKymGltshbh80=;
+        b=t7ALIPtw3FdXJEbivsDE3RXilGcI4LV6NZYNfsWaSRTH6omQWzDYIA0tmwsHGbNr67
+         egYoSkwO7q3t/m4u4zyTsFoeR+4oUxKD1s8HksaEci2TecLoN7NXYq6TtsnOG+DTMvpo
+         SIaK3KH3enNAKLMC9xa73KIHTlJwf57TUmKQlQ4GbDIVJK8Pr5NXSosQe83VUu4dtNE7
+         d3VZAKYTFYs9mrBebIuNxsc0ZQ4lLxALwlq39XFyL7Yle7Pnq0VhyjD3aFcATyqFdKvE
+         kx6MQ7Bv3ASpRIzZfoV9FBhel6UcyaZ6z1FEWcIFVNTc6Zo4Cn9xtaP9u/7A6VJAuVFe
+         xIug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eWVv6eZyJg/+eUaoLT3dUwImTgfJSRuKymGltshbh80=;
+        b=EXjKZNz3KRKrRtTJYyWRX7FAqEMhYvTM0HMjMkE/3RYk0RtEVVLvJBcH1FU4KROXgi
+         mTYn/wpPv6DsKpT41PhY2+84LO3hj44hhEa+ATcN1pTL4TqGg9WqlKd0Lye6VkORrt/A
+         1sYthfTfz5hesbO/5M5AbeiQbcut/a7xZayBO6hycGS/gjGG2/qMSFMvvj18f3l6wO/g
+         SPreoD2A2ygt91YNKzCMjE2xjnqK696vasrLSnJD/0N7xx1RLroPh9+UtyYWbbP9UzDq
+         l7vd7xlaaO9XMFmagoKHKd7XyqTYFYCbbT8ewyaoszM9G7MVfdykLe9rx6zxCpRG2YLw
+         uBRg==
+X-Gm-Message-State: AOAM533nzryfABm8EerkQqYiPpqPy5w/bVEvNmhcK7d69vSUm9Aw06CI
+        o5GeLQDncnjpF6rm230VVqEOjg==
+X-Google-Smtp-Source: ABdhPJxwinz6PetJ7dJRMmCVaeTN7Ts24q7yumXDa7xtozCjI+p6OkvWdIt8sgLgi3gI8hBYO12QAQ==
+X-Received: by 2002:a2e:2f0e:0:b0:246:1a59:8f04 with SMTP id v14-20020a2e2f0e000000b002461a598f04mr3253760ljv.409.1646921928481;
+        Thu, 10 Mar 2022 06:18:48 -0800 (PST)
+Received: from [192.168.51.243] ([78.128.78.220])
+        by smtp.gmail.com with ESMTPSA id bt23-20020a056512261700b00443e7fa1c26sm1000809lfb.261.2022.03.10.06.18.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 06:18:48 -0800 (PST)
+Message-ID: <7ed798dd-49c1-171b-4b72-4e2b2c9c660d@blackwall.org>
+Date:   Thu, 10 Mar 2022 16:18:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH iproute2-next 0/3] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+Content-Language: en-US
+To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+References: <20220310133617.575673-1-schultz.hans+netdev@gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220310133617.575673-1-schultz.hans+netdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+On 10/03/2022 15:36, Hans Schultz wrote:
+> This patch set extends the locked port feature for devices
+> that are behind a locked port, but do not have the ability to
+> authorize themselves as a supplicant using IEEE 802.1X.
+> Such devices can be printers, meters or anything related to
+> fixed installations. Instead of 802.1X authorization, devices
+> can get access based on their MAC addresses being whitelisted.
+> 
+> For an authorization daemon to detect that a device is trying
+> to get access through a locked port, the bridge will add the
+> MAC address of the device to the FDB with a locked flag to it.
+> Thus the authorization daemon can catch the FDB add event and
+> check if the MAC address is in the whitelist and if so replace
+> the FDB entry without the locked flag enabled, and thus open
+> the port for the device.
+> 
+> This feature is known as MAC-Auth or MAC Authentication Bypass
+> (MAB) in Cisco terminology, where the full MAB concept involves
+> additional Cisco infrastructure for authorization. There is no
+> real authentication process, as the MAC address of the device
+> is the only input the authorization daemon, in the general
+> case, has to base the decision if to unlock the port or not.
+> 
+> With this patch set, an implementation of the offloaded case is
+> supplied for the mv88e6xxx driver. When a packet ingresses on
+> a locked port, an ATU miss violation event will occur. When
+> handling such ATU miss violation interrupts, the MAC address of
+> the device is added to the FDB with a zero destination port
+> vector (DPV) and the MAC address is communicated through the
+> switchdev layer to the bridge, so that a FDB entry with the
+> locked flag enabled can be added.
+> 
+> Hans Schultz (3):
+>    net: bridge: add fdb flag to extent locked port feature
+>    net: switchdev: add support for offloading of fdb locked flag
+>    net: dsa: mv88e6xxx: mac-auth/MAB implementation
+> 
+>   drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
+>   drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
+>   drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
+>   drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
+>   drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
+>   .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
+>   .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
+>   drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
+>   drivers/net/dsa/mv88e6xxx/port.h              |  1 +
+>   include/net/switchdev.h                       |  3 +-
+>   include/uapi/linux/neighbour.h                |  1 +
+>   net/bridge/br.c                               |  3 +-
+>   net/bridge/br_fdb.c                           | 13 +++-
+>   net/bridge/br_input.c                         | 11 ++-
+>   net/bridge/br_private.h                       |  5 +-
+>   15 files changed, 167 insertions(+), 14 deletions(-)
+>   create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+>   create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+> 
 
-commit d739da1694a0eaef0358a42b76904b611539b77b upstream.
-
-Subsequent patches will add additional sets of vectors that use
-the same tricks as the kpti vectors to reach the full-fat vectors.
-The full-fat vectors contain some cleanup for kpti that is patched
-in by alternatives when kpti is in use. Once there are additional
-vectors, the cleanup will be needed in more cases.
-
-But on big/little systems, the cleanup would be harmful if no
-trampoline vector were in use. Instead of forcing CPUs that don't
-need a trampoline vector to use one, make the trampoline cleanup
-optional.
-
-Entry at the top of the vectors will skip the cleanup. The trampoline
-vectors can then skip the first instruction, triggering the cleanup
-to run.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/arm64/kernel/entry.S |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -65,14 +65,18 @@
- .Lventry_start\@:
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- 	.if	\el == 0
--alternative_if ARM64_UNMAP_KERNEL_AT_EL0
-+	/*
-+	 * This must be the first instruction of the EL0 vector entries. It is
-+	 * skipped by the trampoline vectors, to trigger the cleanup.
-+	 */
-+	b	.Lskip_tramp_vectors_cleanup\@
- 	.if	\regsize == 64
- 	mrs	x30, tpidrro_el0
- 	msr	tpidrro_el0, xzr
- 	.else
- 	mov	x30, xzr
- 	.endif
--alternative_else_nop_endif
-+.Lskip_tramp_vectors_cleanup\@:
- 	.endif
- #endif
- 
-@@ -831,7 +835,7 @@ alternative_if_not ARM64_WORKAROUND_CAVI
- 	prfm	plil1strm, [x30, #(1b - tramp_vectors)]
- alternative_else_nop_endif
- 	msr	vbar_el1, x30
--	add	x30, x30, #(1b - tramp_vectors)
-+	add	x30, x30, #(1b - tramp_vectors + 4)
- 	isb
- 	ret
- .org 1b + 128	// Did we overflow the ventry slot?
-
+This doesn't look like an iproute2 patch-set. I think you've messed the target
+in the subject.
 

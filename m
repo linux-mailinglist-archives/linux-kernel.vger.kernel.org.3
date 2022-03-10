@@ -2,107 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C0C4D49D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEC54D4A0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243509AbiCJO1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S242812AbiCJObn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243774AbiCJOXP (ORCPT
+        with ESMTP id S243704AbiCJO0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:23:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E380158D89
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:21:15 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0720C1691;
-        Thu, 10 Mar 2022 06:21:07 -0800 (PST)
-Received: from [10.57.43.53] (unknown [10.57.43.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C7B03FA20;
-        Thu, 10 Mar 2022 06:21:04 -0800 (PST)
-Message-ID: <39f8d67f-dd0b-e8de-e007-619eee86c98e@arm.com>
-Date:   Thu, 10 Mar 2022 14:21:00 +0000
+        Thu, 10 Mar 2022 09:26:12 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EAA1390F8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:22:17 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id r16-20020a92ac10000000b002c1ec9fa8edso3313111ilh.23
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:22:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=pt6H2yEOvbchK2G/mDFNXqaD9NNW74OxNiZGPSNIUtM=;
+        b=OI0NOsjzrpVu91ftMRMTk+vMZoojOevoOIyQqNHn+etkLkojmjoe7G5M6YIjzLXV1s
+         fNI7OaFHVR5+JJMkfGIm8jBLdDX9RJp3Z8ZfcGQKAaXA9qLF4dTtkkA8c/pzSXuJPH31
+         ISkeQO/KRHp6bcdgXOCCkq8Kt/oHCrwZ+EVkBp2BICJsEBskGt/VvoWSbNeWHO2/8GM6
+         qip/3WqxoBcP0FVZ+K+vg5qLzQ2/4yNjh/RIM94fgN3z3EzLca46s7JDP5uAr7i1B5yt
+         KI8rSNhcQuXUVL1gHh6lZqMQpC7T1Zo12NaJzNABbGDCT7Z9XIBEcx73Oko3AB2vQEa9
+         N7Mw==
+X-Gm-Message-State: AOAM530gb5byGMcw/xI3Sex88QR7Sa4AjSsrjqMPgBR9mjFkxNloHCHA
+        J5TZ0w9rR6tX16J1D3iqf2E5t3RUUWgG+TFEHLjXhdLU9xXu
+X-Google-Smtp-Source: ABdhPJxO5gO8RMGycxaiSjpAHPo/WwHF1PocT7lXNL6skBMH8eWBmrdKDQXngaT1plEH6LU71jfsudv/ZUBdL904rx77l8dJrn1D
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 2/2] ARM: remove support for NOMMU ARMv4/v5
-Content-Language: en-GB
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-References: <20220309144138.360482-1-arnd@kernel.org>
- <20220309144138.360482-2-arnd@kernel.org>
- <27250b4e-cf04-0dab-d658-bb472face5ea@arm.com>
- <CAK8P3a20ccBbAwgVkq3n6tMehFH4YEyzquTkF3V=nJ46Tk4ePg@mail.gmail.com>
- <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com>
- <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:2192:b0:2bf:e954:5588 with SMTP id
+ j18-20020a056e02219200b002bfe9545588mr3904031ila.101.1646922130772; Thu, 10
+ Mar 2022 06:22:10 -0800 (PST)
+Date:   Thu, 10 Mar 2022 06:22:10 -0800
+In-Reply-To: <20220310084247.1148-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000093d7ec05d9ddf04f@google.com>
+Subject: Re: [syzbot] INFO: task hung in port100_probe
+From:   syzbot <syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-10 09:23, Arnd Bergmann wrote:
-> On Thu, Mar 10, 2022 at 2:22 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->>
->> On Wed, Mar 9, 2022 at 5:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
->>> Robin
->>>> In that case, it would probably make sense to garbage-collect all the
->>>> configs, setup code and other stuff relating to older MMU-less CPU cores
->>>> like ARM1156, ARM940, etc. at the same time.
->>>
->>> Right, good idea. These are only selected by CONFIG_ARCH_INTEGRATOR,
->>> but that in turn doesn't build for CONFIG_MMU=n because it depends on
->>> ARCH_MULTIPLATFORM. I'll send a patch for these.
->>
->> Just delete these, I do have these CPU tiles around but they are so obscure
->> and I never got around to even testing to boot them.
-> 
-> Right, of course you couldn't boot test them because it has been
-> impossible to even select them in Kconfig for years. I've added
-> a patch to completely remove the five v4/v5 NOMMU cores now,
-> will send that later.
-> 
-> There are five more cores that are only referenced by mach-integrator
-> that are supposed to work (922T, 1020, 1020E, 1022, 1026). Have you
-> ever tested those, or should we consider removing them as well?
-> 
-> At some point, there was a proposal to add an arm10 based SoC
-> to mainline, but that never happened and I'm fairly sure it won't
-> come back now.
+Hello,
 
-FWIW I have an Integrator/CM1026 that I'd love to play with purely for 
-giggles, but it needs some serious archaeology to find and flash some 
-firmware for it first.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-I also have a couple of "real" ARM1026s in the form of Conexant 
-Solos-based routers[1] which I've done a little hacking on, but don't 
-see myself ever realistically having enough time or motivation to 
-actually upstream anything. And at this point I don't see OpenWRT having 
-any more interest in boards with only 15MB of RAM (yes, they really do 
-boot with "mem=15M" to reserve 1MB for the modem...)
+Reported-and-tested-by: syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com
 
-Cheers,
-Robin.
+Tested on:
 
-[1] https://openwrt.org/toh/linksys/wag54g2
+commit:         1db333d9 Merge tag 'spi-fix-v5.17-rc7' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=16438642a37fea1
+dashboard link: https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

@@ -2,158 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394584D45E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F415E4D45EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241618AbiCJLjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 06:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S241653AbiCJLlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 06:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiCJLjv (ORCPT
+        with ESMTP id S229742AbiCJLlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 06:39:51 -0500
-Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F6713D43;
-        Thu, 10 Mar 2022 03:38:50 -0800 (PST)
-Received: from pps.filterd (m0174679.ppops.net [127.0.0.1])
-        by mx0a-0039f301.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22ABJ6Mu003522;
-        Thu, 10 Mar 2022 11:38:38 GMT
-Received: from eur04-he1-obe.outbound.protection.outlook.com (mail-he1eur04lp2056.outbound.protection.outlook.com [104.47.13.56])
-        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3eqgbmr260-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 11:38:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fEv9ARC1G45pwQrQ7g7HeA+rhxEp2dQNd4Q1lXIiG7PcytC4wOUH15Vh8NpKuwMimQrxMdMQMf1q4qR2c5lihcgpBaH0sXD4kIaSPnaAGkvmABr+7sttWURNlZwBVFZGWOLrckpeAh8lp7awzsLnP2nl/KhqMRnQ8GnjvN8c1pyqqCrBvm2duns5jFjbAhMxu5N3adSQd7refIoUzdDsLH3o/8BpeddOMuiQkKYSYbUYdL0mRY/PY+9h6vtjniM4sDB7qje6RC4TyIJb5IaasrPZ2yxLyEtzgcPo0j6WHydNbm9hqIQqiA15VxNyZEwqHPpXkJYa0tpQTNLrpLUBNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TAAGGCbWRyhblMDzORG60I5hTcmFhzlOj/eCLM6IDV8=;
- b=V0iKxy+2XQhq9NRgshB3MKc1CSP1Ysy6f0UGPAiCbTtvQdItICryboQTGrmdqMe0JhTm4DPlhMc2y3OepXyrKX4MJXaFklHpEF4gE6vb78UxfNpXB0nYq5DVSiOz6fzZ/5oK5v3QwXpNnNShD+JX4iKHBWqXNx2VvdqtwdlItFLCJ+TjcT+Emd7V+rrvF8rVCaHIjH+8k9VFg/qlmyAEddUgxWGRBhy01WAUoPdcfilJ1ctkRdftVRngLAaXULZpXCOpbQalyQLmS6hLvSMa7RGxT/PV888/wP7mtxuVRhQTuZ+R+GDDIYzWEi9Z22kh8wMcDBSjDgFh3t0W0AB6pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TAAGGCbWRyhblMDzORG60I5hTcmFhzlOj/eCLM6IDV8=;
- b=L/unSBhb5C4MSTOEIx1zrTkbW/QK/KI45+2FFBpsxhZ6W1dAj+4uXnZw401qXpfMMNLgapwFchyCAK98bVI5y1X4evElJmrWLilsx2FTKFSXk8RuAD85lyrScOoSwKFMlfdWiP18q6Yp4GbIhxhkB4NEK3dgPAfbXsr629r1tlgXj56j29oF6bn6xAWMDvBcYWUI2hwkfGNoNV3+DuC2x2QQusSpX7FcLlQ56g+VtxJgWfSqGlqpuZb9oJ9BoquUGFOnDoZgVKmOYK2hp7Zm4f/QhR2db0k8D0ckByf+wObXnxJ+3PnulMV8CUwQk840//OCsFMRSH3EQXRT0Ju6mw==
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
- by DB7PR03MB3611.eurprd03.prod.outlook.com (2603:10a6:5:5::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.14; Thu, 10 Mar 2022 11:38:34 +0000
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::b12a:5b52:7c19:fbc]) by PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::b12a:5b52:7c19:fbc%5]) with mapi id 15.20.5061.022; Thu, 10 Mar 2022
- 11:38:34 +0000
-From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: Add vendor prefix for Xen hypervisor
-Thread-Topic: [PATCH v2 1/2] dt-bindings: Add vendor prefix for Xen hypervisor
-Thread-Index: AQHYMfvSuP8YiJuDk0OiMGC/BZe6B6y17mKAgAKUZIA=
-Date:   Thu, 10 Mar 2022 11:38:34 +0000
-Message-ID: <20220310113833.GA187897@EPUAKYIW015D>
-References: <cover.1646639462.git.oleksii_moisieiev@epam.com>
- <aece6fd976980131120456800de3558e1e2308a0.1646639462.git.oleksii_moisieiev@epam.com>
- <Yie5P/vcBz44QcPd@robh.at.kernel.org>
-In-Reply-To: <Yie5P/vcBz44QcPd@robh.at.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 27d16d02-1bdc-42ae-7ece-08da028a827e
-x-ms-traffictypediagnostic: DB7PR03MB3611:EE_
-x-microsoft-antispam-prvs: <DB7PR03MB3611B6338F3F321997882810E30B9@DB7PR03MB3611.eurprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AlvqMv6CUg21B6GIImZkpdLM8vDCY9bI0R64vdgjUbLtROR3WbC1ptycY2aP+z84qwPaM29bE3xc/FpOMH4b/pQ+fZjQzJtDetkjiBLC3zuQQJK4+NX7S2sCJiVQaznrsZ42d4y9xBr+619FnX3MOa/gEvmCFVCnP4q7R+SWzFsdUTnJUNvp4rQzRnt8pNzdrjnz6ui6NfCVK+bzUCbEHtPQPfPzrOB/BLgGkDmkAO8y+8ZuerN90tRNRbyZMFXZIqRaZhu1DZ/Cjb91KXpaHrjmA2zBYCFTxBBkZbQqNCT8K9fQIGhFjB3zD/aa/R25SIqenWp4z1/CzTl6WIa+lPLcR63Or6KwDKWyZTWxFV7l0gqpmrXmxaUmFMRArR48ja38VZvmeTHRg5JhGub/xkzvg1hEO3LfvR7lRyUFiVDdtFKOsOmoRUMgfvhaigfpm0SYzOGdVfUHQdcX/tC756tOh6OsXhDIw50XvRPtPsTEO5jsbfQ+jhPjxwVNDgyA2BBCZtNEBWPA8Kkr4zgUlcXJJVBO0MGFN4ZnfI/zl5A0+QVUEmLN5geKKjQZUQiSfL+fR3i3JTbxeuWy3pxOpz/KSqE5T7E38cFw6EP+hIDLxeKKn9iOYtwo5Xs88kqOLnuLsRdWTalRoX6i/M8MXGVdTvHcy9W6d879IJmScUB5/A7FKwJpA9EeJSLYc67jxyQuYVIyHzbUgVn/t3/FKw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(66946007)(66476007)(26005)(2906002)(186003)(66446008)(316002)(66556008)(54906003)(6916009)(33656002)(8676002)(38070700005)(71200400001)(508600001)(9686003)(6512007)(6506007)(55236004)(1076003)(4326008)(122000001)(83380400001)(38100700002)(64756008)(4744005)(6486002)(76116006)(5660300002)(91956017)(33716001)(86362001)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?98npYEttNFXg3qtw8uWvVozjpoumMfNOIBp7STpZnKdcsGjqzmy5+vxqDB6R?=
- =?us-ascii?Q?P9dyGgggmIpe0iXBYN2STDYLCeYFjVc909zI0gsTKYHdhClVsbRlrXKP5ID5?=
- =?us-ascii?Q?/hsNhm/SMmnCwIdZN8sfJchYvqwKcK1CYtOtAh+P4u+ZGQ9AqFS5X6SfZfAc?=
- =?us-ascii?Q?qiSR5EeNhdMLLbthM/HRe3YgGICZQYWvbw9L6LKzcxvfrUwVK4YoKpiljpjC?=
- =?us-ascii?Q?b4oA9q61CKDtnlFByw895hCNPvcC96sjE1m3gffe8unoJ64Qqa/fm8MO1pJA?=
- =?us-ascii?Q?ShnUtjEjPG+vyvxrRoUz4hyZFsQh+o06CdYToYSGwUGWyp7bvPawiMwi/g+G?=
- =?us-ascii?Q?zWh/GSz4jq+dP2PaKtCEB9ShW+TwgE301a+pySNZf8vDjI4kGWIk/r2Kf+YF?=
- =?us-ascii?Q?oILv9NE4J3shT0oeZHTe589oc6cjtCxd4EPUg7EGT+EE2pscmdaDJdpbguVc?=
- =?us-ascii?Q?pKLAzJ/pDdSnuvfxrXrrzBlHjTVnl1BeGuUxSNA3jAJUcouKi9l6m5cptu+P?=
- =?us-ascii?Q?ewaNhARrETvJ7eRBeLGFuAhY3n2KYgcuzgQmRkQBriMcmEfGh9TFRMTQ9Euh?=
- =?us-ascii?Q?YKu0U466ne59cXaevzwLPpvEbQNQ3LMC8htltPObLTtT2QBfTgx4VthGlLsZ?=
- =?us-ascii?Q?FBuqVfjYSvLBbqFP8Qh6VE4ZFkW+/lGs2k4i9tfaB6oen/vWFn9IZhQCv9F8?=
- =?us-ascii?Q?0g8iCDRsLfTWDMA/4jiW3o+As693ETeQxnCCtazTsxpevheuVwRh2qbns4S8?=
- =?us-ascii?Q?Oumqae8bIeOcGYB8SpWW8lIr8OAWrlkLgXyfJvrw/hIqpN36H5c5lHYq39tJ?=
- =?us-ascii?Q?xfx+VUwg9R/900l4r7/N4x+f9asqYPH3kSZ1APmdCvZ5PoyqCoJ5BM/qLYIx?=
- =?us-ascii?Q?ZNt6ITMBx88kNJ/Lalu+FYBLUBCbj39vhNFkFoeGkZNLJqv877nHw1Nvz2HS?=
- =?us-ascii?Q?YKie3/6CHsgRNl2U9feTuHRJ7UVwKoHxcyjdYpb4xsY1qgU9VHunogyqw1VR?=
- =?us-ascii?Q?ryuL4bXOG+WqOHhlOhlLWqLENqcPtMY824DJ1kj/XkO2Aa4I6OqiqzwhlbQH?=
- =?us-ascii?Q?vVXbUzGGvcrOgmkg0s52l+idsMZEMCX7RdFQPSx8URvYKcyBjfTER7Wl594x?=
- =?us-ascii?Q?B5aMyofyuIP1QoOqu5XifvRgCWWuf1QfHcyGLivKrykZbBC1lWubBCvEIBN4?=
- =?us-ascii?Q?3FQL4QvEFA6o8ZgwngqzQqW4MOu+ms/WJURacjI8sGgVGI0adw+Q2193pqTR?=
- =?us-ascii?Q?TZndZoTRSdZNo+h3bfRYewHoqZD7QHt7L7OudNjSmPRmw6oaHpeCKtLTuquC?=
- =?us-ascii?Q?f5w6eR2n2iZv9KtNdxFsIE0t4QZeW4lIlPRiz1N8j2s/MVojS/pMW9uQG8BY?=
- =?us-ascii?Q?8Q4ydDgnYbS6SKZmQld8g+zD4ItGIlgchI/Lh/7KSAIHTE18+UH81OX/NmDm?=
- =?us-ascii?Q?6xm3EcCfiCSzkvUOoyol3A+A2RcpWIYyAQr8I/X6gVlSwThdB3BZUxOOlT6C?=
- =?us-ascii?Q?8QwBJSL4nd7cJujwR/xWBeA7j/+iVsF3Lo/VNYiiT2zPyQ4VO+jOOTBCaSib?=
- =?us-ascii?Q?PFAwv55d5C2v+1C/8Gl9fd0vxJMMqPVjBBHDkvANWwuLwTNfGAcgWfrFuIUH?=
- =?us-ascii?Q?7QGoG0QX77Ljv+mn1UYFSw301pTiWCw1w7fJM1Vks3ZuEmwKKHkPG0x0X2B6?=
- =?us-ascii?Q?pKkd5AMezbK4/s7p+UN6ikrLe3Q=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A9250671E015FD4AB2D29D151565D55C@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 10 Mar 2022 06:41:00 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F40E144F4E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646912399; x=1678448399;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Wpca4C65XdKLmfSnIgeeBjDyTO0VYFF8iimFhIYI9rY=;
+  b=eiX1hn+/2VOHBQQIUj5aUYRJeJTfQYugVfAnukcaRvFyZnic6axnNJO0
+   /UlraSlYK+Ahv0xFt/vrldK8x9ai43wNCTmlGtB1wzIaQ7MC5yPy5f3eY
+   x6os3J6UKgj8meCRajDBlb2XR7jK70p8L7Pw5l/LEEt9qdpwJXbrZ65ah
+   Ecp6IyahOkESNKzO60JhSP6ZKp4R6Wv9Ku6KWClTnISGLrF1uVYzD/1zq
+   QKl/awnNx5kKD5wFLO/ew1UfrH31PXKWUyaMqzjYozNrn8AZ8O9VQIB5x
+   E61P3nAIz4+xnzp/mZtvP23sdZfLjRi/4X9KWTADs9cvDGFY4bU+rPSfI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254057571"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="254057571"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 03:39:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="781431401"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Mar 2022 03:39:55 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSH99-0004rb-7p; Thu, 10 Mar 2022 11:39:55 +0000
+Date:   Thu, 10 Mar 2022 19:39:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [masahiroy:for-next 3/5] lib/raid6/neon1.c:39:9: warning: mixing
+ declarations and code is incompatible with standards before C99
+Message-ID: <202203101914.axpeuY5Y-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: epam.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27d16d02-1bdc-42ae-7ece-08da028a827e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2022 11:38:34.3011
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AdIChTSqiYcT2J6fCidjoRj8IBs9BilYzM8I6hraMFh4INsg+VP8/4ebNnY8hTh7x/Rnrg+jjdKJapMWO/18Ym92d+He9nsiVYChytbSV1U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB3611
-X-Proofpoint-GUID: 5R-FwF5WAlzeTJrh48RbwS5UvaPS8RY6
-X-Proofpoint-ORIG-GUID: 5R-FwF5WAlzeTJrh48RbwS5UvaPS8RY6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-10_03,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
- clxscore=1015 mlxlogscore=854 suspectscore=0 adultscore=0 phishscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203100061
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+head:   cf4a68247a204c9d46768fabaf7de68a39d8b7c9
+commit: 6992f0b3f0fd879b31095263986ba1aedb27c83b [3/5] Kbuild: move to -std=gnu11
+config: arm64-randconfig-r026-20220310 (https://download.01.org/0day-ci/archive/20220310/202203101914.axpeuY5Y-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=6992f0b3f0fd879b31095263986ba1aedb27c83b
+        git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+        git fetch --no-tags masahiroy for-next
+        git checkout 6992f0b3f0fd879b31095263986ba1aedb27c83b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash lib/raid6/
 
-On Tue, Mar 08, 2022 at 02:14:55PM -0600, Rob Herring wrote:
-> On Mon, 07 Mar 2022 08:17:43 +0000, Oleksii Moisieiev wrote:
-> > Xen is an open source stage-1 hypervisor.
-> >=20
-> > Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> > ---
-> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
->=20
-> As 'xen' has been missing regardless of patch 2, I fixed up the commit=20
-> message and applied, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So IIUC - this patch is already applied and I don't need to add it v3?
+All warnings (new ones prefixed by >>):
 
-Best regards,
-Oleksii.=
+>> lib/raid6/neon1.c:39:9: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return vshlq_n_u8(v, 1);
+                  ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:48:20: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return (unative_t)vshrq_n_s8((int8x16_t)v, 7);
+                             ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25303:13: note: expanded from macro 'vshrq_n_s8'
+     int8x16_t __ret; \
+               ^
+   lib/raid6/neon1.c:56:6: warning: no previous prototype for function 'raid6_neon1_gen_syndrome_real' [-Wmissing-prototypes]
+   void raid6_neon1_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+        ^
+   lib/raid6/neon1.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void raid6_neon1_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+   ^
+   static 
+   lib/raid6/neon1.c:117:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:118:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:126:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:127:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 3);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:133:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 6);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:134:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 2);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon1.c:86:6: warning: no previous prototype for function 'raid6_neon1_xor_syndrome_real' [-Wmissing-prototypes]
+   void raid6_neon1_xor_syndrome_real(int disks, int start, int stop,
+        ^
+   lib/raid6/neon1.c:86:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void raid6_neon1_xor_syndrome_real(int disks, int start, int stop,
+   ^
+   static 
+   10 warnings generated.
+--
+>> lib/raid6/neon2.c:39:9: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return vshlq_n_u8(v, 1);
+                  ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:48:20: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return (unative_t)vshrq_n_s8((int8x16_t)v, 7);
+                             ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25303:13: note: expanded from macro 'vshrq_n_s8'
+     int8x16_t __ret; \
+               ^
+   lib/raid6/neon2.c:56:6: warning: no previous prototype for function 'raid6_neon2_gen_syndrome_real' [-Wmissing-prototypes]
+   void raid6_neon2_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+        ^
+   lib/raid6/neon2.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void raid6_neon2_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+   ^
+   static 
+   lib/raid6/neon2.c:138:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:139:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w21 = vshrq_n_u8(wq1, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:140:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:141:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w11 = vshlq_n_u8(wq1, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:151:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:152:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w21 = vshrq_n_u8(wq1, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:153:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 3);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:154:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w11 = vshlq_n_u8(wq1, 3);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:162:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 6);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:163:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w21 = vshrq_n_u8(wq1, 6);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:164:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 2);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:165:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w11 = vshlq_n_u8(wq1, 2);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon2.c:97:6: warning: no previous prototype for function 'raid6_neon2_xor_syndrome_real' [-Wmissing-prototypes]
+   void raid6_neon2_xor_syndrome_real(int disks, int start, int stop,
+        ^
+   lib/raid6/neon2.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void raid6_neon2_xor_syndrome_real(int disks, int start, int stop,
+   ^
+   static 
+   16 warnings generated.
+--
+>> lib/raid6/neon4.c:39:9: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return vshlq_n_u8(v, 1);
+                  ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:48:20: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return (unative_t)vshrq_n_s8((int8x16_t)v, 7);
+                             ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25303:13: note: expanded from macro 'vshrq_n_s8'
+     int8x16_t __ret; \
+               ^
+   lib/raid6/neon4.c:56:6: warning: no previous prototype for function 'raid6_neon4_gen_syndrome_real' [-Wmissing-prototypes]
+   void raid6_neon4_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+        ^
+   lib/raid6/neon4.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void raid6_neon4_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+   ^
+   static 
+   lib/raid6/neon4.c:180:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:181:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w21 = vshrq_n_u8(wq1, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:182:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w22 = vshrq_n_u8(wq2, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:183:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w23 = vshrq_n_u8(wq3, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:184:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:185:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w11 = vshlq_n_u8(wq1, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:186:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w12 = vshlq_n_u8(wq2, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:187:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w13 = vshlq_n_u8(wq3, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:201:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:202:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w21 = vshrq_n_u8(wq1, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:203:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w22 = vshrq_n_u8(wq2, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:204:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w23 = vshrq_n_u8(wq3, 5);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:205:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 3);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon4.c:206:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w11 = vshlq_n_u8(wq1, 3);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+--
+>> lib/raid6/neon8.c:39:9: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return vshlq_n_u8(v, 1);
+                  ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:48:20: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           return (unative_t)vshrq_n_s8((int8x16_t)v, 7);
+                             ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25303:13: note: expanded from macro 'vshrq_n_s8'
+     int8x16_t __ret; \
+               ^
+   lib/raid6/neon8.c:56:6: warning: no previous prototype for function 'raid6_neon8_gen_syndrome_real' [-Wmissing-prototypes]
+   void raid6_neon8_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+        ^
+   lib/raid6/neon8.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void raid6_neon8_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs)
+   ^
+   static 
+   lib/raid6/neon8.c:264:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w20 = vshrq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:265:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w21 = vshrq_n_u8(wq1, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:266:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w22 = vshrq_n_u8(wq2, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:267:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w23 = vshrq_n_u8(wq3, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:268:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w24 = vshrq_n_u8(wq4, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:269:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w25 = vshrq_n_u8(wq5, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:270:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w26 = vshrq_n_u8(wq6, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:271:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w27 = vshrq_n_u8(wq7, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:25231:14: note: expanded from macro 'vshrq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:272:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w10 = vshlq_n_u8(wq0, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:273:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w11 = vshlq_n_u8(wq1, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:274:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w12 = vshlq_n_u8(wq2, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:275:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w13 = vshlq_n_u8(wq3, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:276:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w14 = vshlq_n_u8(wq4, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+     uint8x16_t __ret; \
+                ^
+   lib/raid6/neon8.c:277:10: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                           w15 = vshlq_n_u8(wq5, 4);
+                                 ^
+   /opt/cross/clang-276ca87382/lib/clang/15.0.0/include/arm_neon.h:24823:14: note: expanded from macro 'vshlq_n_u8'
+..
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

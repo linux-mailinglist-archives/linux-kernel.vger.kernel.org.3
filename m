@@ -2,139 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54344D3E3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D5B4D3E41
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbiCJAgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S238993AbiCJAhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233666AbiCJAgw (ORCPT
+        with ESMTP id S233863AbiCJAhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:36:52 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EABFFDFA6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:35:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646872553; x=1678408553;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4c5cbHZGG2HhzXo93CXNIjzewjIojCUGpdScSsBCp3w=;
-  b=Yzy0ZvLz/ysAbkddyQgy0jCsJIsd8w9aMm6sMTRgslcZz/hzZLkmo4oM
-   KbTYxfowOpfK6tmPq8sKckw3W7qgyFB/kxYJbfua+mxV5qxCl1qkbxqFM
-   4/g9TGXpMkCICq+e8VJlYDwad+qIXto/Xc+vRflI/3mq03O9SvSOTlu92
-   uVlgEkaCy/18NpJ3zo/2cfZSeWe67Tvt4BW3haLCBb1bto8BFOaGbicnX
-   6oJ1C1grePJwdZsf7HZaT3yw0I9DPXql37mIovTg/ssd5bUPUvZSJjtlc
-   MWBpDsA82uDcIDi8ARuQB3Y2B1EaA9lht7YMZDi5C4ugYB5/ynV8IzJVb
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242568522"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="242568522"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 16:35:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="513757226"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2022 16:35:50 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nS6mU-00043Y-5Z; Thu, 10 Mar 2022 00:35:50 +0000
-Date:   Thu, 10 Mar 2022 08:35:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-Message-ID: <202203100800.57nn24sm-lkp@intel.com>
+        Wed, 9 Mar 2022 19:37:32 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269B61052A2;
+        Wed,  9 Mar 2022 16:36:32 -0800 (PST)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0F6043F12B;
+        Thu, 10 Mar 2022 00:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646872582;
+        bh=aGcEVKAOrTGJDxPnhMFB8dBVhKHNAxc+BYirL6/tWsM=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=BYcRRKMHEhVvCIE5GQndE0fWH8AB88n1S+NB+OFT5mhAdCfel9WaZnM7MMLoMwdJQ
+         B2oh8wyzyiPADr5/tlD9kTKjsC+csb1cGCRZGjsAMms3Hx0NsCb9M+b0Mr2o0rMP1Y
+         Zay8WaezyhcUvaucSu1O5f0KOzdBDM4lUG7wyEJfOmAi/n6j+lCUGSCNjzy8MMmu/9
+         SIfbic208WqVNTTRroZTJWwC4ZhfR6ZxY7RqdjIq/h6hqENjBzNTi5ttL2W4R7uNtV
+         jSNaMsl9THVP1b6TK8KjBKMVLKrSbxV3OYaQ92a6MyWXj7zV1ctF8K2s4EhOObdF7C
+         XrboieAjFlQRw==
+Message-ID: <8d520529-4d3e-4874-f359-0ead9207cead@canonical.com>
+Date:   Wed, 9 Mar 2022 16:36:04 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        James Morris <jmorris@namei.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20220228215935.748017-1-mic@digikod.net>
+ <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
+ <f6b63133-d555-a77c-0847-de15a9302283@digikod.net>
+ <CAHC9VhQd3rL-13k0u39Krkdjp2_dtPfgEPxr=kawWUM9FjjOsw@mail.gmail.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <CAHC9VhQd3rL-13k0u39Krkdjp2_dtPfgEPxr=kawWUM9FjjOsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-commit: 558c303c9734af5a813739cd284879227f7297d2 arm64: Mitigate spectre style branch history side channels
-date:   13 days ago
-config: arm64-randconfig-r013-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100800.57nn24sm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=558c303c9734af5a813739cd284879227f7297d2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 558c303c9734af5a813739cd284879227f7297d2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On 3/9/22 13:31, Paul Moore wrote:
+> On Tue, Mar 1, 2022 at 5:15 AM Mickaël Salaün <mic@digikod.net> wrote:
+>> On 01/03/2022 10:22, Christian Brauner wrote:
+>>> On Mon, Feb 28, 2022 at 10:59:35PM +0100, Mickaël Salaün wrote:
+>>>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>>>
+>>>> While transitionning to ACC_MODE() with commit 5300990c0370 ("Sanitize
+>>>> f_flags helpers") and then fixing it with commit 6d125529c6cb ("Fix
+>>>> ACC_MODE() for real"), we lost an open flags consistency check.  Opening
+>>>> a file with O_WRONLY | O_RDWR leads to an f_flags containing MAY_READ |
+>>>> MAY_WRITE (thanks to the ACC_MODE() helper) and an empty f_mode.
+>>>> Indeed, the OPEN_FMODE() helper transforms 3 (an incorrect value) to 0.
+>>>>
+>>>> Fortunately, vfs_read() and vfs_write() both check for FMODE_READ, or
+>>>> respectively FMODE_WRITE, and return an EBADF error if it is absent.
+>>>> Before commit 5300990c0370 ("Sanitize f_flags helpers"), opening a file
+>>>> with O_WRONLY | O_RDWR returned an EINVAL error.  Let's restore this safe
+>>>> behavior.
+>>>
+>>> That specific part seems a bit risky at first glance. Given that the
+>>> patch referenced is from 2009 this means we've been allowing O_WRONLY |
+>>> O_RDWR to succeed for almost 13 years now.
+>>
+>> Yeah, it's an old bug, but we should keep in mind that a file descriptor
+>> created with such flags cannot be used to read nor write. However,
+>> unfortunately, it can be used for things like ioctl, fstat, chdir… I
+>> don't know if there is any user of this trick.
+>>
+>> Either way, there is an inconsistency between those using ACC_MODE() and
+>> those using OPEN_FMODE(). If we decide to take a side for the behavior
+>> of one or the other, without denying to create such FD, it could also
+>> break security policies. We have to choose what to potentially break…
+> 
+> I'm not really liking the idea that the empty/0 f_mode field leads to
+> SELinux doing an ioctl access check as opposed to the expected
+> read|write check.  Yes, other parts of the code catch the problem, but
+> this is bad from a SELinux perspective.  Looking quickly at the other
+> LSMs, it would appear that other LSMs are affected as well.
+> 
+> If we're not going to fix file::f_mode, the LSMs probably need to
+> consider using file::f_flags directly in conjunction with a correct
+> OPEN_FMODE() macro (or better yet a small inline function that isn't
+> as ugly).
+> 
+yeah, I have to agree
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
->> <instantiation>:4:2: error: invalid fixup for movz/movk instruction
-    mov w0, #ARM_SMCCC_ARCH_WORKAROUND_3
-    ^
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

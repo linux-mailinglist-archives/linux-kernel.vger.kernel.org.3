@@ -2,87 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB534D416B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D854D417B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239941AbiCJG53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 01:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S239960AbiCJHCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 02:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbiCJG51 (ORCPT
+        with ESMTP id S239961AbiCJHCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 01:57:27 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691BA12F166;
-        Wed,  9 Mar 2022 22:56:22 -0800 (PST)
-X-UUID: 0f88401c93af4acdaeca098eb708ea0c-20220310
-X-UUID: 0f88401c93af4acdaeca098eb708ea0c-20220310
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 841881774; Thu, 10 Mar 2022 14:56:13 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 10 Mar 2022 14:56:12 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Mar 2022 14:56:12 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <linmq006@gmail.com>
-CC:     <bhelgaas@google.com>, <chuanjia.liu@mediatek.com>,
-        <jianjun.wang@mediatek.com>, <kw@linux.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-pci@vger.kernel.org>,
-        <lorenzo.pieralisi@arm.com>, <matthias.bgg@gmail.com>,
-        <robh@kernel.org>, <ryder.lee@mediatek.com>
-Subject: Re: [PATCH] PCI: mediatek: Fix refcount leak in mtk_pcie_subsys_powerup
-Date:   Thu, 10 Mar 2022 14:56:12 +0800
-Message-ID: <20220310065612.26452-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220309091953.5630-1-linmq006@gmail.com>
-References: <20220309091953.5630-1-linmq006@gmail.com>
+        Thu, 10 Mar 2022 02:02:05 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B435812F434;
+        Wed,  9 Mar 2022 23:00:55 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9ABD468CFE; Thu, 10 Mar 2022 08:00:43 +0100 (CET)
+Date:   Thu, 10 Mar 2022 08:00:41 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zi Yan <ziy@nvidia.com>, Hari Bathini <hbathini@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ARM/dma-mapping: Remove CMA code when not built with
+ CMA
+Message-ID: <20220310070041.GA24874@lst.de>
+References: <20220309175107.195182-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309175107.195182-1-keescook@chromium.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
-
-> The of_find_compatible_node() function returns a node pointer with
-> refcount incremented, We should use of_node_put() on it when done
-> Add the missing of_node_put() to release the refcount.
+On Wed, Mar 09, 2022 at 09:51:07AM -0800, Kees Cook wrote:
+> The MAX_CMA_AREAS could be set to 0, which would result in code that would
+> attempt to operate beyond the end of a zero-sized array. If CONFIG_CMA
+> is disabled, just remove this code entirely. Found when building with
+> -Warray-bounds:
 > 
-> Fixes: 87e8657ba99c ("PCI: mediatek: Add new method to get shared pcie-cfg base address")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/pci/controller/pcie-mediatek.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index ddfbd4aebdec..be8bd919cb88 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -1008,6 +1008,7 @@ static int mtk_pcie_subsys_powerup(struct mtk_pcie *pcie)
->  					   "mediatek,generic-pciecfg");
->  	if (cfg_node) {
->  		pcie->cfg = syscon_node_to_regmap(cfg_node);
-> +		of_node_put(cfg_node);
->  		if (IS_ERR(pcie->cfg))
->  			return PTR_ERR(pcie->cfg);
->  	}
+> arch/arm/mm/dma-mapping.c:396:22: warning: array subscript <unknown> is outside array bounds of 'str
+> uct dma_contig_early_reserve[0]' [-Warray-bounds]
+>   396 |         dma_mmu_remap[dma_mmu_remap_num].size = size;
+>       |         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+> arch/arm/mm/dma-mapping.c:389:40: note: while referencing 'dma_mmu_remap'
+>   389 | static struct dma_contig_early_reserve dma_mmu_remap[MAX_CMA_AREAS] __initdata;
 
-Thanks for this patch.
+Looks good:
 
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-
-Thanks,
-Miles
+Reviewed-by: Christoph Hellwig <hch@lst.de>

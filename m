@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE4B4D4AA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B9E4D4B24
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345498AbiCJOl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S244736AbiCJOdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245590AbiCJOal (ORCPT
+        with ESMTP id S244236AbiCJO2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:30:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8856D182D98;
-        Thu, 10 Mar 2022 06:26:30 -0800 (PST)
+        Thu, 10 Mar 2022 09:28:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78E2C7906;
+        Thu, 10 Mar 2022 06:23:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2720F61DE2;
-        Thu, 10 Mar 2022 14:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D464EC36AE2;
-        Thu, 10 Mar 2022 14:26:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E10D8B82615;
+        Thu, 10 Mar 2022 14:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B513C340E8;
+        Thu, 10 Mar 2022 14:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922389;
-        bh=dqDpI/5xQ7Av+jQXodxQtvhlZ6BRecM6BgdEoxb4u4Y=;
+        s=korg; t=1646922210;
+        bh=yxgoumT1YLDdhdq5IBgheUbGQSZm44o0PVleM4hr8QE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tdwtNeOOjgo8MuggDvsHSZ/EU6eI8jSoV6TeXVQiCHgbfWxxGQD2etbWUoZXY2IFw
-         JCs8B5l7thV12JW33uXFqKAauCrOGZJzY1aVvhx42Lw3OSAt7z1LTuPUO46U+cpvY2
-         WNe7CmUgHinrhMFHq9W6jbuX37iGT9zgHm2/b7To=
+        b=RNMSxsimwp70xhs4XctV+7JrHnmK7350zaDAD7ow74IEpdHSXxAIB7iN2jPrZrmRF
+         Yai3lADtVOKUrhK2sd18CClbmvmn2tTd0ChFeLSwl0ZwlvP1GpCAa9+CiU0ahZC8AP
+         GqDmisMsmtk4Wes8f71WbPFLtPcU2LBgCQzf+g1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.10 21/58] arm64: cpufeature: add HWCAP for FEAT_AFP
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 4.19 14/33] ARM: early traps initialisation
 Date:   Thu, 10 Mar 2022 15:18:41 +0100
-Message-Id: <20220310140813.479479299@linuxfoundation.org>
+Message-Id: <20220310140808.166993548@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,118 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joey Gouly <joey.gouly@arm.com>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-commit 5c13f042e73200b50573ace63e1a6b94e2917616 upstream.
+commit 04e91b7324760a377a725e218b5ee783826d30f5 upstream.
 
-Add a new HWCAP to detect the Alternate Floating-point Behaviour
-feature (FEAT_AFP), introduced in Armv8.7.
+Provide a couple of helpers to copy the vectors and stubs, and also
+to flush the copied vectors and stubs.
 
-Also expose this to userspace in the ID_AA64MMFR1_EL1 feature register.
-
-Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211210165432.8106-2-joey.gouly@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/arm64/cpu-feature-registers.rst |    9 +++++++++
- Documentation/arm64/elf_hwcaps.rst            |    4 ++++
- arch/arm64/include/asm/hwcap.h                |    1 +
- arch/arm64/include/asm/sysreg.h               |    1 +
- arch/arm64/include/uapi/asm/hwcap.h           |    1 +
- arch/arm64/kernel/cpufeature.c                |    2 ++
- arch/arm64/kernel/cpuinfo.c                   |    1 +
- 7 files changed, 19 insertions(+)
+ arch/arm/kernel/traps.c |   27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
---- a/Documentation/arm64/cpu-feature-registers.rst
-+++ b/Documentation/arm64/cpu-feature-registers.rst
-@@ -275,6 +275,15 @@ infrastructure:
-      | SVEVer                       | [3-0]   |    y    |
-      +------------------------------+---------+---------+
- 
-+  8) ID_AA64MMFR1_EL1 - Memory model feature register 1
-+
-+     +------------------------------+---------+---------+
-+     | Name                         |  bits   | visible |
-+     +------------------------------+---------+---------+
-+     | AFP                          | [47-44] |    y    |
-+     +------------------------------+---------+---------+
-+
-+
- Appendix I: Example
- -------------------
- 
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -249,6 +249,10 @@ HWCAP2_ECV
- 
-     Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
- 
-+HWCAP2_AFP
-+
-+    Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -106,6 +106,7 @@
- #define KERNEL_HWCAP_BTI		__khwcap2_feature(BTI)
- #define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
- #define KERNEL_HWCAP_ECV		__khwcap2_feature(ECV)
-+#define KERNEL_HWCAP_AFP		__khwcap2_feature(AFP)
- 
- /*
-  * This yields a mask that user programs can use to figure out what
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -801,6 +801,7 @@
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -830,10 +830,22 @@ static inline void __init kuser_init(voi
+ }
  #endif
  
- /* id_aa64mmfr1 */
-+#define ID_AA64MMFR1_AFP_SHIFT		44
- #define ID_AA64MMFR1_ETS_SHIFT		36
- #define ID_AA64MMFR1_TWED_SHIFT		32
- #define ID_AA64MMFR1_XNX_SHIFT		28
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -76,5 +76,6 @@
- #define HWCAP2_BTI		(1 << 17)
- #define HWCAP2_MTE		(1 << 18)
- #define HWCAP2_ECV		(1 << 19)
-+#define HWCAP2_AFP		(1 << 20)
++#ifndef CONFIG_CPU_V7M
++static void copy_from_lma(void *vma, void *lma_start, void *lma_end)
++{
++	memcpy(vma, lma_start, lma_end - lma_start);
++}
++
++static void flush_vectors(void *vma, size_t offset, size_t size)
++{
++	unsigned long start = (unsigned long)vma + offset;
++	unsigned long end = start + size;
++
++	flush_icache_range(start, end);
++}
++
+ void __init early_trap_init(void *vectors_base)
+ {
+-#ifndef CONFIG_CPU_V7M
+-	unsigned long vectors = (unsigned long)vectors_base;
+ 	extern char __stubs_start[], __stubs_end[];
+ 	extern char __vectors_start[], __vectors_end[];
+ 	unsigned i;
+@@ -854,17 +866,20 @@ void __init early_trap_init(void *vector
+ 	 * into the vector page, mapped at 0xffff0000, and ensure these
+ 	 * are visible to the instruction stream.
+ 	 */
+-	memcpy((void *)vectors, __vectors_start, __vectors_end - __vectors_start);
+-	memcpy((void *)vectors + 0x1000, __stubs_start, __stubs_end - __stubs_start);
++	copy_from_lma(vectors_base, __vectors_start, __vectors_end);
++	copy_from_lma(vectors_base + 0x1000, __stubs_start, __stubs_end);
  
- #endif /* _UAPI__ASM_HWCAP_H */
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -309,6 +309,7 @@ static const struct arm64_ftr_bits ftr_i
- };
+ 	kuser_init(vectors_base);
  
- static const struct arm64_ftr_bits ftr_id_aa64mmfr1[] = {
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_AFP_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_ETS_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_TWED_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR1_XNX_SHIFT, 4, 0),
-@@ -2262,6 +2263,7 @@ static const struct arm64_cpu_capabiliti
- 	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
- #endif /* CONFIG_ARM64_MTE */
- 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
-+	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
- 	{},
- };
- 
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -95,6 +95,7 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_BTI]		= "bti",
- 	[KERNEL_HWCAP_MTE]		= "mte",
- 	[KERNEL_HWCAP_ECV]		= "ecv",
-+	[KERNEL_HWCAP_AFP]		= "afp",
- };
- 
- #ifdef CONFIG_COMPAT
+-	flush_icache_range(vectors, vectors + PAGE_SIZE * 2);
++	flush_vectors(vectors_base, 0, PAGE_SIZE * 2);
++}
+ #else /* ifndef CONFIG_CPU_V7M */
++void __init early_trap_init(void *vectors_base)
++{
+ 	/*
+ 	 * on V7-M there is no need to copy the vector table to a dedicated
+ 	 * memory area. The address is configurable and so a table in the kernel
+ 	 * image can be used.
+ 	 */
+-#endif
+ }
++#endif
 
 

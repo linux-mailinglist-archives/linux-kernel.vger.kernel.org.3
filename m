@@ -2,140 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FF34D42E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EFA4D42E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbiCJIzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S240531AbiCJIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240516AbiCJIzE (ORCPT
+        with ESMTP id S230053AbiCJIzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:55:04 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E53137584
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:54:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2oGu8FQ5/9r0UV/0NCGt/L5DZqE4AtMMTx7LTMP7U6s=; b=VtsSmo3TV36022J8PPW/BtHeYs
-        z58gQdYZFXHFgrWM8VmpRVrSPVm3H0PHBcN5O1RJoELD8Swtoxqoc9pWb1OyD8/8WgzYs8TzAHOWv
-        0PaquqlfTYRF5hST0VrNMdD2awZ1A+XaU+aN6ee0bAP4j0UAQO5d1ZynEt+jO0ELBgIAfiRM5PPlK
-        GDuVbtGkJ/Azc2hh2LjIIGzxpOsAoBcDgYL3lAwwSOczrrmuErTFo7QMMmywi5ScPlGGtlX8FMKxJ
-        eUQPqg3q3cOVqv7qpvA87/E0okrCNABpV0kJ6yBGBv0AuWRSC69V3yHPTn/mhLWYJgHXdxGjd5wMg
-        +F8qZDfw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSEYY-00H4Bs-FH; Thu, 10 Mar 2022 08:53:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 40F3D3000E6;
-        Thu, 10 Mar 2022 09:53:57 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F0FBB264E62B5; Thu, 10 Mar 2022 09:53:56 +0100 (CET)
-Date:   Thu, 10 Mar 2022 09:53:56 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] sched/preempt: Tell about PREEMPT_DYNAMIC on kernel
- headers
-Message-ID: <Yim8pJPBLOPtSTw+@hirez.programming.kicks-ass.net>
-References: <20220202145954.458370-1-frederic@kernel.org>
- <87mtj9nn3q.mognet@arm.com>
- <20220217111240.GA742892@lothringen>
+        Thu, 10 Mar 2022 03:55:39 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4960C137594
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:54:38 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id q10so6715738ljc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=CckdNSYPYZf2rZDScH/OvPXL2AjJadCF3mmLi4f4hcw=;
+        b=OatCttRymAWh3ZREbboDujJz9m9mKb6j9QdM/3v3pS2K7KTkLFG+k8cG9fBTZNcjdW
+         gtGT+tN3NJ6VW/p4KfmHQJkDdLVYos5GzYyJ/9unQlgQ7cESvTm1HxBCfo1UCONKsdMm
+         fwJvsu20JYy4EgZ9iXhjGJXCxJUgGl7DqkzGCH1068ATWlthRii7cMKewPdC+RWmp7Ec
+         Vk/08waJ10OZFdJJHx4hWZ2HEwobcM6uqlSOgmO8XDYCIS1m7CAnRuzZ+NsP0cR65E15
+         9rVUj82I+XRk4+qVe34UIhzmH1TyfDWLDb03haGYYvuwK7SAE6u4k976t+9z36hGu1x/
+         4Img==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=CckdNSYPYZf2rZDScH/OvPXL2AjJadCF3mmLi4f4hcw=;
+        b=TwSJ2gJ6sNrfh5Ukm6Kzq5C67Ta3PKBCsfCY/SXsi5S1GpR/TbT1KHprE5ufG4jzYk
+         apMj5YiLW/XTwXEvXFw/SAPmrmnfZkQXV9QhoTaDO3xkxpqPHhW8FGZw/d5aGzLs+QkQ
+         825ATj+Wcs3jREYQc4Iuja5578aghe3x1UMqiVMp28uq/jFMQQKhywdhgmkWyZRr7kbj
+         F7d6//lj1Gz4fr1yT5Yj9QgcI62vmTvHbXKIk3xp1LrLcjQe+XYiIA8igmRPuH3jSh7y
+         sL5p0dyTxT8c4o4Op/qIQx9Nt/006RMrY2cidazPhQlLvbvO0UMtR8QBjKjgf3KVJy9Z
+         b9hw==
+X-Gm-Message-State: AOAM532JQVk9r2STyrK2pOEQ7JCPYOsve9u9Qp/Kz+MveaZNpIx+vadM
+        qL8izAucC/cnJqvV658lQx39Tg==
+X-Google-Smtp-Source: ABdhPJyT9zHZ3f1sEfsPPT+MAGLK40P2VJsgf5dFrtb2TuGFvPhzjjL/2zlTfTNdsy2R3JDbzm0O0A==
+X-Received: by 2002:a2e:98c2:0:b0:247:e357:3dd7 with SMTP id s2-20020a2e98c2000000b00247e3573dd7mr2309660ljj.227.1646902476516;
+        Thu, 10 Mar 2022 00:54:36 -0800 (PST)
+Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
+        by smtp.gmail.com with ESMTPSA id w16-20020a2e8210000000b00247f7de532bsm901205ljg.69.2022.03.10.00.54.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 00:54:34 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 07/10] net: dsa: Pass MST state changes to
+ driver
+In-Reply-To: <20220303222055.7a5pr4la3wmuuekc@skbuf>
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-8-tobias@waldekranz.com>
+ <20220303222055.7a5pr4la3wmuuekc@skbuf>
+Date:   Thu, 10 Mar 2022 09:54:34 +0100
+Message-ID: <87mthymblh.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217111240.GA742892@lothringen>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 12:12:40PM +0100, Frederic Weisbecker wrote:
+On Fri, Mar 04, 2022 at 00:20, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Tue, Mar 01, 2022 at 11:03:18AM +0100, Tobias Waldekranz wrote:
+>> Add the usual trampoline functionality from the generic DSA layer down
+>> to the drivers for MST state changes.
+>> 
+>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>> ---
+>>  include/net/dsa.h  |  2 ++
+>>  net/dsa/dsa_priv.h |  2 ++
+>>  net/dsa/port.c     | 30 ++++++++++++++++++++++++++++++
+>>  net/dsa/slave.c    |  6 ++++++
+>>  4 files changed, 40 insertions(+)
+>> 
+>> diff --git a/include/net/dsa.h b/include/net/dsa.h
+>> index cc8acb01bd9b..096e6e3a8e1e 100644
+>> --- a/include/net/dsa.h
+>> +++ b/include/net/dsa.h
+>> @@ -943,6 +943,8 @@ struct dsa_switch_ops {
+>>  				     struct dsa_bridge bridge);
+>>  	void	(*port_stp_state_set)(struct dsa_switch *ds, int port,
+>>  				      u8 state);
+>> +	int	(*port_mst_state_set)(struct dsa_switch *ds, int port,
+>> +				      const struct switchdev_mst_state *state);
+>>  	void	(*port_fast_age)(struct dsa_switch *ds, int port);
+>>  	int	(*port_pre_bridge_flags)(struct dsa_switch *ds, int port,
+>>  					 struct switchdev_brport_flags flags,
+>> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+>> index 87ec0697e92e..a620e079ebc5 100644
+>> --- a/net/dsa/dsa_priv.h
+>> +++ b/net/dsa/dsa_priv.h
+>> @@ -198,6 +198,8 @@ static inline struct net_device *dsa_master_find_slave(struct net_device *dev,
+>>  void dsa_port_set_tag_protocol(struct dsa_port *cpu_dp,
+>>  			       const struct dsa_device_ops *tag_ops);
+>>  int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age);
+>> +int dsa_port_set_mst_state(struct dsa_port *dp,
+>> +			   const struct switchdev_mst_state *state);
+>>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy);
+>>  int dsa_port_enable(struct dsa_port *dp, struct phy_device *phy);
+>>  void dsa_port_disable_rt(struct dsa_port *dp);
+>> diff --git a/net/dsa/port.c b/net/dsa/port.c
+>> index 5f45cb7d70ba..26cfbc8ab499 100644
+>> --- a/net/dsa/port.c
+>> +++ b/net/dsa/port.c
+>> @@ -108,6 +108,36 @@ int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age)
+>>  	return 0;
+>>  }
+>>  
+>> +int dsa_port_set_mst_state(struct dsa_port *dp,
+>> +			   const struct switchdev_mst_state *state)
+>> +{
+>> +	struct dsa_switch *ds = dp->ds;
+>> +	int err, port = dp->index;
+>> +
+>> +	if (!ds->ops->port_mst_state_set)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	err = ds->ops->port_mst_state_set(ds, port, state);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	if (!dsa_port_can_configure_learning(dp) || dp->learning) {
+>> +		switch (state->state) {
+>> +		case BR_STATE_DISABLED:
+>> +		case BR_STATE_BLOCKING:
+>> +		case BR_STATE_LISTENING:
+>> +			/* Ideally we would only fast age entries
+>> +			 * belonging to VLANs controlled by this
+>> +			 * MST.
+>> +			 */
+>> +			dsa_port_fast_age(dp);
+>
+> Does mv88e6xxx support this? If it does, you might just as well
+> introduce another variant of ds->ops->port_fast_age() for an msti.
 
-> From: Frederic Weisbecker <frederic@kernel.org>
-> Date: Wed, 2 Feb 2022 15:59:54 +0100
-> Subject: [PATCH] sched/preempt: Tell about PREEMPT_DYNAMIC on kernel headers
-> 
-> Displaying "PREEMPT" on kernel headers when CONFIG_PREEMPT_DYNAMIC=y
-> can be misleading for anybody involved in remote debugging because it
-> is then not guaranteed that there is an actual preemption behaviour. It
-> depends on default Kconfig or boot defined choices.
-> 
-> Therefore, tell about PREEMPT_DYNAMIC on static kernel headers and leave
-> the search for the actual preemption behaviour to browsing dmesg.
-> 
-> Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+You can limit ATU operations to a particular FID. So the way I see it we
+could either have:
 
-Hurmph.. if you all think this matters I suppose.
+int (*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 vid)
 
-Let me go queue it.
++ Maybe more generic. You could imagine there being a way to trigger
+  this operation from userspace for example.
+- We would have to keep the VLAN<->MSTI mapping in the DSA layer in
+  order to be able to do the fan-out in dsa_port_set_mst_state.
 
-> ---
->  init/Makefile       |  3 ++-
->  scripts/mkcompile_h | 17 ++++++++++++-----
->  2 files changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/init/Makefile b/init/Makefile
-> index 06326e304384..d82623d7fc8e 100644
-> --- a/init/Makefile
-> +++ b/init/Makefile
-> @@ -31,7 +31,8 @@ quiet_cmd_compile.h = CHK     $@
->        cmd_compile.h = \
->  	$(CONFIG_SHELL) $(srctree)/scripts/mkcompile_h $@	\
->  	"$(UTS_MACHINE)" "$(CONFIG_SMP)" "$(CONFIG_PREEMPT_BUILD)"	\
-> -	"$(CONFIG_PREEMPT_RT)" "$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
-> +	"$(CONFIG_PREEMPT_DYNAMIC)" "$(CONFIG_PREEMPT_RT)" \
-> +	"$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
->  
->  include/generated/compile.h: FORCE
->  	$(call cmd,compile.h)
-> diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
-> index 6a2a04d92f42..ca40a5258c87 100755
-> --- a/scripts/mkcompile_h
-> +++ b/scripts/mkcompile_h
-> @@ -5,9 +5,10 @@ TARGET=$1
->  ARCH=$2
->  SMP=$3
->  PREEMPT=$4
-> -PREEMPT_RT=$5
-> -CC_VERSION="$6"
-> -LD=$7
-> +PREEMPT_DYNAMIC=$5
-> +PREEMPT_RT=$6
-> +CC_VERSION="$7"
-> +LD=$8
->  
->  # Do not expand names
->  set -f
-> @@ -41,8 +42,14 @@ fi
->  UTS_VERSION="#$VERSION"
->  CONFIG_FLAGS=""
->  if [ -n "$SMP" ] ; then CONFIG_FLAGS="SMP"; fi
-> -if [ -n "$PREEMPT" ] ; then CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT"; fi
-> -if [ -n "$PREEMPT_RT" ] ; then CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_RT"; fi
-> +
-> +if [ -n "$PREEMPT_RT" ] ; then
-> +	CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_RT"
-> +elif [ -n "$PREEMPT_DYNAMIC" ] ; then
-> +	CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_DYNAMIC"
-> +elif [ -n "$PREEMPT" ] ; then
-> +	CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT"
-> +fi
->  
->  # Truncate to maximum length
->  UTS_LEN=64
-> -- 
-> 2.25.1
-> 
+or:
+
+int (*port_msti_fast_age)(struct dsa_switch *ds, int port, u16 msti)
+
++ Let's the mapping be an internal affair in the driver.
+- Perhaps, less generically useful.
+
+Which one do you prefer? Or is there a hidden third option? :)
+
+> And since it is new code, you could require that drivers _do_ support
+> configuring learning before they could support MSTP. After all, we don't
+> want to keep legacy mechanisms in place forever.
+
+By "configuring learning", do you mean this new fast-age-per-vid/msti,
+or being able to enable/disable learning per port? If it's the latter,
+I'm not sure I understand how those two are related.

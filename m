@@ -2,128 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E2A4D4C38
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3404D4C57
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344517AbiCJOx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S245258AbiCJOzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237294AbiCJOfv (ORCPT
+        with ESMTP id S1344083AbiCJOk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:35:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA0C1409D8;
-        Thu, 10 Mar 2022 06:31:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEA9AB8267B;
-        Thu, 10 Mar 2022 14:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F20C340F3;
-        Thu, 10 Mar 2022 14:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922704;
-        bh=3IHfz12xGSF/+hJenSrupdOYi3sChCsC8kMrYjgoioE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AcdtFAMlnxuT+FgCIaRDn+WtdlOBqWBcputrek/hQEhaT25xx4tQ3cvumOmqdAm+D
-         NtQpXVDn13Lkl3XvVbFlM7ZFQ69Oih5robv+5EB16iZmzVAR4CCFt14Csf68hsaY6Y
-         jf9zb8e1Y5jNpv6tmSIIyD5YqA+BMXhr4fjZTox0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Justin Forbes <jmforbes@linuxtx.org>,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: [PATCH 5.15 58/58] Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-Date:   Thu, 10 Mar 2022 15:19:47 +0100
-Message-Id: <20220310140814.628899103@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-References: <20220310140812.983088611@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 10 Mar 2022 09:40:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9544177769;
+        Thu, 10 Mar 2022 06:34:21 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B8ABA1F385;
+        Thu, 10 Mar 2022 14:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646922308; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9oyl8q6a0pE4tkTdghKtSetTuXxb7oTZ8Q26t0KopSU=;
+        b=CDqCUdW98NX4xao4cH0hW5eFGo7JmrTtReY1xcHgZaiSMsdzTEPP8xwqA3Vd02gpeV/Rkh
+        4TizuOZp5GNhYeTCPsycYAysbRq+PkOXfC20v9qpuyAjPc4G+AG/EKFhLgg3aaNkvnW4L2
+        9g1UkY/FTwurSxa5QImUxJROUNVX7bg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646922308;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9oyl8q6a0pE4tkTdghKtSetTuXxb7oTZ8Q26t0KopSU=;
+        b=XRDUjwGgjhFeHPJDbwJd0gd/7jiiTyfY9lrRXdS9pc8DUm+LM83ePWZWol/LYPVCogZJny
+        q7MjF6Bi+uuNVfCw==
+Received: from vasant-suse.fritz.box (unknown [10.163.24.178])
+        by relay2.suse.de (Postfix) with ESMTP id DCCD1A3B8A;
+        Thu, 10 Mar 2022 14:25:07 +0000 (UTC)
+From:   Vasant Karasulli <vkarasulli@suse.de>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ddiss@suse.de
+Cc:     Vasant Karasulli <vkarasulli@suse.de>
+Subject: [PATCH v2 0/2] exfat: allow access to paths with trailing dots
+Date:   Thu, 10 Mar 2022 15:24:53 +0100
+Message-Id: <20220310142455.23127-1-vkarasulli@suse.de>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patchset is the version 2 of the patch that introduces
+a new exfat mount option 'keep_last_dots' that does the following:
+1. Allows users to resolve paths carrying trailing period '.' characters.
+2. Disallows users to create files carrying trailing period '.' characters.
 
-This reverts commit e799974e7cbb2e77ec12431512e155574c6ed333 which is
-commit dc0075ba7f387fe4c48a8c674b11ab6f374a6acc upstream.
+Version 1 of the patch:
+ https://lore.kernel.org/linux-fsdevel/20210818111123.19818-1-ddiss@suse.de/
 
-It's been reported to cause problems with a number of Fedora and Arch
-Linux users, so drop it for now until that is resolved.
+ Feedback will be appreciated.
 
-Link: https://lore.kernel.org/r/CAJZ5v0gE52NT=4kN4MkhV3Gx=M5CeMGVHOF0jgTXDb5WwAMs_Q@mail.gmail.com
-Link: https://lore.kernel.org/r/31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Reported-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Sasha Levin <sashal@kernel.org>
-Cc: Justin Forbes <jmforbes@linuxtx.org>
-Cc: Mark Pearson <markpearson@lenovo.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/acpi/ec.c    |   10 ----------
- drivers/acpi/sleep.c |   14 ++++++++++----
- 2 files changed, 10 insertions(+), 14 deletions(-)
+ Thanks,
+ Vasant
 
---- a/drivers/acpi/ec.c
-+++ b/drivers/acpi/ec.c
-@@ -2052,16 +2052,6 @@ bool acpi_ec_dispatch_gpe(void)
- 		return true;
- 
- 	/*
--	 * Cancel the SCI wakeup and process all pending events in case there
--	 * are any wakeup ones in there.
--	 *
--	 * Note that if any non-EC GPEs are active at this point, the SCI will
--	 * retrigger after the rearming in acpi_s2idle_wake(), so no events
--	 * should be missed by canceling the wakeup here.
--	 */
--	pm_system_cancel_wakeup();
--
--	/*
- 	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
- 	 * to allow the caller to process events properly after that.
- 	 */
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -739,15 +739,21 @@ bool acpi_s2idle_wake(void)
- 			return true;
- 		}
- 
--		/*
--		 * Check non-EC GPE wakeups and if there are none, cancel the
--		 * SCI-related wakeup and dispatch the EC GPE.
--		 */
-+		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
- 		if (acpi_ec_dispatch_gpe()) {
- 			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
- 			return true;
- 		}
- 
-+		/*
-+		 * Cancel the SCI wakeup and process all pending events in case
-+		 * there are any wakeup ones in there.
-+		 *
-+		 * Note that if any non-EC GPEs are active at this point, the
-+		 * SCI will retrigger after the rearming below, so no events
-+		 * should be missed by canceling the wakeup here.
-+		 */
-+		pm_system_cancel_wakeup();
- 		acpi_os_wait_events_complete();
- 
- 		/*
+Vasant Karasulli (2):
+  The "keep_last_dots" mount option will, in a subsequent commit,
+    control whether or not trailing periods '.' are stripped from path
+    components during file lookup or file creation.
+  exfat currently unconditionally strips trailing periods '.' when
+    performing path lookup, but allows them in the filenames during file
+    creation. This is done intentionally, loosely following Windows
+    behaviour and specifications which state:
 
+ fs/exfat/exfat_fs.h |  3 ++-
+ fs/exfat/namei.c    | 50 ++++++++++++++++++++++++++++++++-------------
+ fs/exfat/super.c    |  7 +++++++
+ 3 files changed, 45 insertions(+), 15 deletions(-)
+
+
+base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
+prerequisite-patch-id: aa89fed0f25e0593bd930cb1925a61318970af3b
+prerequisite-patch-id: b82d57cf11a808fd91ebce196ad90742f266ae39
+prerequisite-patch-id: 8fb922007d8da42e7d8915ad4192c3a881384720
+prerequisite-patch-id: 80a740f0cc838892abca091667fa5b407611ea39
+prerequisite-patch-id: 70a6044affdfcfba97c7651fb2150fa42cf01805
+prerequisite-patch-id: a017bdbdcc66df4dd3a66ba03a37714b8e68d253
+prerequisite-patch-id: 52771ab4aa8cbdafed3594d7d9a0c75b8a53f6e4
+prerequisite-patch-id: fe388ead9e78b2e67bfb1ddfd5cd60a496c12d1c
+prerequisite-patch-id: fb7ef4d34a652d20b3c6edefaf72ca6298d1e8f4
+prerequisite-patch-id: 4194bee4bb9ee6eaeb6ee1ddd82cb84cdcab8d38
+prerequisite-patch-id: e178f0c524a65e855ffb7861f1b9a9b2d56a2428
+prerequisite-patch-id: e35925ec691c2fa8c167c19844cb40ef090845aa
+prerequisite-patch-id: 6f54f7183bb0c519f9f76d8645da5a881ca71458
+prerequisite-patch-id: b2d2dc9c206fbfc0c80f1be3d9ab031ba2dfd279
+prerequisite-patch-id: 47a6c9093808e07f6ff561d011566a4ee4e7465a
+prerequisite-patch-id: 70b5f29b3208d4e0b8bd27900618aeaba901d19a
+prerequisite-patch-id: 56b6ad48cc9999893d34e7378ad1bbad293ca52b
+prerequisite-patch-id: 3318f5c0bb1dac4c932e892329c52c1a118633b4
+prerequisite-patch-id: e6aa617911d8647d1b7764c6916e3a01ffed1371
+prerequisite-patch-id: 60f8292acf6a200ce4b8f0080a4e7e6429f0f78f
+prerequisite-patch-id: e2f2b35b6e7c1aaa6a9b22e563c0f753df5fbe88
+prerequisite-patch-id: 70880c12ac3be19b196165cf4a06baf3b6074072
+prerequisite-patch-id: 55d302be95eccc06e20360e5b392f72e7249ea76
+prerequisite-patch-id: 0fc645d44f0354b6217c3a713d1ac144de7c786f
+prerequisite-patch-id: ebf526d3226975950e8997ed5f83f9b11d631aa5
+prerequisite-patch-id: ddb73fe6ea6d1e72b379f480b47ec60162352eb7
+prerequisite-patch-id: 091d1b77db64fcd1832dbe1db820fd4685f5651b
+prerequisite-patch-id: 30006d3af6ae601664ddee4c468520dc800b27bf
+prerequisite-patch-id: fcfb1b6ee7b1c7ab5cdd02d71113551c710a21ca
+prerequisite-patch-id: 8f225e2d574ffabb6ed842e92543fd0aab52fa19
+prerequisite-patch-id: cf3c7778997c4ca97ab08b195cfe861c565f504c
+prerequisite-patch-id: 0757c9df4b98726a778f260c4c8ac12f764a2a66
+prerequisite-patch-id: 60d1cbbfad4650cce75ffea3253629e8bd9a512c
+prerequisite-patch-id: 6657313f73334d9d56215ce286cb0d96674a9c9d
+prerequisite-patch-id: 352c99d07523c55e000b9df37a938da22bfedb9f
+prerequisite-patch-id: 27176966d0b2d1b98804f3de159a39fcbff0dc9a
+prerequisite-patch-id: 6d0311021d93c54e5a306af2d40f43b482a7ee66
+prerequisite-patch-id: b5d02eeea8fd63acf76bf7ad5235c20e68858d16
+prerequisite-patch-id: f169a13a30c2b09839055a91dd8853c476e8c3f7
+prerequisite-patch-id: 14df2ff4090dc2b7518be5a48feec7711628e0d4
+prerequisite-patch-id: f4d3503460646e4accd4c54f44f9593816fc62a0
+prerequisite-patch-id: 9205bc688a48d7ab778b6bd8454890e1fb7cc039
+prerequisite-patch-id: 48513af66ec62d400de1d559f7e75327610b5686
+prerequisite-patch-id: 2169938ae51c00399f010f88027bf70b05a1d90f
+prerequisite-patch-id: 2b9450e957e69b30414bbf0e1cc3caebd334f654
+prerequisite-patch-id: 0c7d6e599af288ca298bbc59a08246715982a7ab
+prerequisite-patch-id: a2c1416d88c502ef5b7d621325e2f6712e56a3f4
+prerequisite-patch-id: bb6d17d263aa6dab21e87887c98b535595e25c1f
+prerequisite-patch-id: f7fa011b9e279104d8c8e2bf09fb5d3ab3f34b67
+prerequisite-patch-id: 8358ac66a9d65695fb2bc02637cfddf4695ddeaa
+prerequisite-patch-id: 665d9352bf8e6ffc4b7c0ff25659468b5262d4e7
+prerequisite-patch-id: 307e544949317538681dc124fdf2b33df538d897
+prerequisite-patch-id: 31616804feb9f7b6d5e010d5306b0304005d5efe
+prerequisite-patch-id: f8065fb1765262737c2222ad80d2f3d60454e955
+prerequisite-patch-id: d99c3d909e24f1ca3269c1e08034f7936f3a5622
+prerequisite-patch-id: 0e1efe816412e68314ec226f80b2ded7d2fb33a0
+prerequisite-patch-id: 1cf9b69fe0847e9961756cbd69858aecbdab9d1e
+--
+2.32.0
 

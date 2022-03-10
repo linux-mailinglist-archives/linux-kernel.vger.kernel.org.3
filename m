@@ -2,150 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8564D445A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C484D4460
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240458AbiCJKRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:17:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S241139AbiCJKS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241108AbiCJKRd (ORCPT
+        with ESMTP id S232377AbiCJKSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:17:33 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C03413DE07;
-        Thu, 10 Mar 2022 02:16:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C3BE1650;
-        Thu, 10 Mar 2022 02:16:31 -0800 (PST)
-Received: from [10.57.41.41] (unknown [10.57.41.41])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 583BA3FA27;
-        Thu, 10 Mar 2022 02:16:28 -0800 (PST)
-Message-ID: <b88268b2-97c3-4f61-44e9-fa6105d91be9@arm.com>
-Date:   Thu, 10 Mar 2022 10:16:25 +0000
+        Thu, 10 Mar 2022 05:18:53 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C94A554B0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:17:50 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id w27so8566546lfa.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:17:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ok2yIWNdYw6UT5efIAaPeOu7HZzSRGXMlO55ACJQkJA=;
+        b=iFB1j+Q2fbiLFyCEX66U0kNp3R9Qdjv5othk0HJtDc2koSj6UaHKn2IGAqWRW1srde
+         83/F+janZ5NyYA/TbT8hP3qMpuxwDcs+Hsmm5M7olP4d98+JP0b0cjAXIi5je2Pkk3vy
+         CwQRiqmsLBbLHQTdFz1H6D3p9Yq+eQH6L0ozOBmN0tLogA0aNw+uevLz3ol6JQgP8Di+
+         uqkd0BRWhgDZdMpWrnilq2tFFuwxUkdzz3pBJ++1f3oR55zUi20lDRqI0qZWQfUMs1rD
+         QHePrR5mY8w/q7oY6LnLziLRnEnookfGFge72iCcTKzqTvZLiTLBiYzk1/YZ715UeuYk
+         aj7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ok2yIWNdYw6UT5efIAaPeOu7HZzSRGXMlO55ACJQkJA=;
+        b=VYxvEGlRMBavm6khvi7LFEHAWsLa1oXZvw4vorvZAs7fDUiKRN4LVHqZ9LiEyEHK4F
+         PhW1l90xztTJGj754YHeS2SkvxqGUx1z2bfFh5i4irbrrvN4pJD+rkJqROsx1B/SXQH+
+         wcEzFUzq9FCYT9i4ZI7Imf+JjtwziqwdlyyF359No31k73kbh2weDlwzzjWSsGaIM8l9
+         MCGw7+RUGRMQIhRZAKEsyMN1ciLgUCZs0hMzVYxjDMrwaByqKmMsEBz+kHMvPx50KWjl
+         ZjoiwZScgA9fQqohuanfm640rNS7+ifPm/siwnje76v/zsfshhGxYMGWBwWx+Ug6KwI7
+         wsZw==
+X-Gm-Message-State: AOAM5339DLgzMvlELVGN8STV16i80xNnh7yqZdSnHFWeh/ui9Z3Cf5f4
+        t16v3e977w9XYBMxw7l4OBJT7A==
+X-Google-Smtp-Source: ABdhPJwBLpPZruapkiuD/6bfRKohLHFYZXOqojAnrZrEwuSgOh2iA/UtAX49f1b2E4n4vKWILkebQg==
+X-Received: by 2002:ac2:420e:0:b0:448:1c25:f22d with SMTP id y14-20020ac2420e000000b004481c25f22dmr2563248lfh.476.1646907468987;
+        Thu, 10 Mar 2022 02:17:48 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id n19-20020a2eb793000000b00247ec95fddfsm984566ljo.33.2022.03.10.02.17.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 02:17:48 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] net: phy: Kconfig: micrel_phy: fix dependency issue
+Date:   Thu, 10 Mar 2022 11:17:44 +0100
+Message-Id: <20220310101744.1053425-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2 7/8] perf/tools: Extend branch type classification
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, acme@kernel.org
-Cc:     suzuki.poulose@arm.com, Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220309033642.144769-1-anshuman.khandual@arm.com>
- <20220309033642.144769-8-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220309033642.144769-8-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When building driver CONFIG_MICREL_PHY the follow error shows up:
 
+aarch64-linux-gnu-ld: drivers/net/phy/micrel.o: in function `lan8814_ts_info':
+micrel.c:(.text+0x1764): undefined reference to `ptp_clock_index'
+micrel.c:(.text+0x1764): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `ptp_clock_index'
+aarch64-linux-gnu-ld: drivers/net/phy/micrel.o: in function `lan8814_probe':
+micrel.c:(.text+0x4720): undefined reference to `ptp_clock_register'
+micrel.c:(.text+0x4720): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `ptp_clock_register'
 
-On 09/03/2022 03:36, Anshuman Khandual wrote:
-> This updates the perf tool with generic branch type classification with new
-> ABI extender place holder i.e PERF_BR_EXTEND_ABI, the new 4 bit branch type
-> field i.e perf_branch_entry.new_type, new generic page fault related branch
-> types and some arch specific branch types as added earlier in the kernel.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  tools/include/uapi/linux/perf_event.h | 16 +++++++++++++++-
->  tools/perf/util/branch.c              |  3 ++-
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-> index 26d8f0b5ac0d..d29280adc3c4 100644
-> --- a/tools/include/uapi/linux/perf_event.h
-> +++ b/tools/include/uapi/linux/perf_event.h
-> @@ -255,9 +255,22 @@ enum {
->  	PERF_BR_IRQ		= 12,	/* irq */
->  	PERF_BR_SERROR		= 13,	/* system error */
->  	PERF_BR_NO_TX		= 14,	/* not in transaction */
-> +	PERF_BR_EXTEND_ABI	= 15,	/* extend ABI */
->  	PERF_BR_MAX,
->  };
->  
-> +enum {
-> +	PERF_BR_NEW_FAULT_ALGN		= 0,    /* Alignment fault */
-> +	PERF_BR_NEW_FAULT_DATA		= 1,    /* Data fault */
-> +	PERF_BR_NEW_FAULT_INST		= 2,    /* Inst fault */
-> +	PERF_BR_NEW_ARCH_1		= 3,    /* Architecture specific */
-> +	PERF_BR_NEW_ARCH_2		= 4,    /* Architecture specific */
-> +	PERF_BR_NEW_ARCH_3		= 5,    /* Architecture specific */
-> +	PERF_BR_NEW_ARCH_4		= 6,    /* Architecture specific */
-> +	PERF_BR_NEW_ARCH_5		= 7,    /* Architecture specific */
-> +	PERF_BR_NEW_MAX,
-> +};
-> +
->  #define PERF_SAMPLE_BRANCH_PLM_ALL \
->  	(PERF_SAMPLE_BRANCH_USER|\
->  	 PERF_SAMPLE_BRANCH_KERNEL|\
-> @@ -1372,7 +1385,8 @@ struct perf_branch_entry {
->  		abort:1,    /* transaction abort */
->  		cycles:16,  /* cycle count to last branch */
->  		type:4,     /* branch type */
-> -		reserved:40;
-> +		new_type:4, /* additional branch type */
-> +		reserved:36;
->  };
->  
->  union perf_sample_weight {
-> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-> index abc673347bee..4bd52de0527c 100644
-> --- a/tools/perf/util/branch.c
-> +++ b/tools/perf/util/branch.c
-> @@ -53,7 +53,8 @@ const char *branch_type_name(int type)
->  		"ERET",
->  		"IRQ",
->  		"SERROR",
-> -		"NO_TX"
-> +		"NO_TX",
-> +		"EXTEND_ABI"
+Rework Kconfig for MICREL_PHY to depend on 'PTP_1588_CLOCK_OPTIONAL ||
+!NETWORK_PHY_TIMESTAMPING'. Arnd describes in a good way why its needed
+to add this depends in patch e5f31552674e ("ethernet: fix PTP_1588_CLOCK
+dependencies").
 
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ drivers/net/phy/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Shouldn't we hide this implementation detail from users? They just want to know
-the branch type, they don't want to see the extend_abi stuff.
+diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+index 902495afcb38..ea7571a2b39b 100644
+--- a/drivers/net/phy/Kconfig
++++ b/drivers/net/phy/Kconfig
+@@ -220,6 +220,7 @@ config MEDIATEK_GE_PHY
+ 
+ config MICREL_PHY
+ 	tristate "Micrel PHYs"
++	depends on PTP_1588_CLOCK_OPTIONAL
+ 	help
+ 	  Supports the KSZ9021, VSC8201, KS8001 PHYs.
+ 
+-- 
+2.35.1
 
-It should be possible to fix all the perf internals so that it's transparent and
-any code using or printing the branch type has some accessor that works out what
-the final type is rather than having to re-implement that logic everywhere.
-
-So I don't think adding the string "EXTEND_ABI" would be needed because it would
-never be shown.
-
-If we just want to discuss the new extend ABI kernel side changes then I think this
-patch can be dropped and we can do the full perf tool side implementation
-in a more complete way later.
-
-James
-
->  	};
->  
->  	if (type >= 0 && type < PERF_BR_MAX)

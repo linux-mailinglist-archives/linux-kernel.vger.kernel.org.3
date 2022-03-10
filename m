@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A414D4239
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1D04D423B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiCJIKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S240216AbiCJILA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235113AbiCJIKO (ORCPT
+        with ESMTP id S232834AbiCJIK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:10:14 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1270413395D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:09:14 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id m12so5878221edc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:09:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YWbAcZy/i8HBYK2+LI1DmtpGjLhVyIVjDAmA+olRSX0=;
-        b=r6m/oi9HM5b3ptgnBPdqU/JT11+emPMCtpY8bhdnL6IBAKJN+vphDQcvrhnJTPc3pR
-         1JsCGgXBT8DO2kGWTbC0J+9Z3EF3A1Tp90hZAOCvXwlJkOLfxDgGSS5Pce72/04ugPzQ
-         +WnXeDRI7/T/T/lhFL0US+S7Z5tXpNe0WU+/m+G/P7ZZrvOJNGBx2WcsIgtZZQw5yIrK
-         UbvFaNl8O93Sd8kRmpWwK+FbCU9LXfog05Qc632veitsNPPygsBjRmw5wWM9NIsRTIpS
-         6Az7Jceq2XZi1vWGRXTwAUJYPWZpcrMA1R0yKz/ZJ3fGc1Cg3uz+4B2170k94UUMLIMf
-         /KGA==
+        Thu, 10 Mar 2022 03:10:58 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCEC13396D;
+        Thu, 10 Mar 2022 00:09:58 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id jq9so4012994qvb.0;
+        Thu, 10 Mar 2022 00:09:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YWbAcZy/i8HBYK2+LI1DmtpGjLhVyIVjDAmA+olRSX0=;
-        b=fIfHI7inxqE07wGWPN2bXAK0fYl/8dy6LHCMTrneV8peTQpdxVn7Q19l1tvRSP2BQX
-         jS5t3KrOKUFN8CxFmzj0/TOTRLBTEQRehPiCYGHBgeBG/VedwzIF9xbwPJKOLSB4e10I
-         WU+Au0EFbDqaUFxSxGnAOsN/7ioP4XHEON1xvPxbZaqkqtwyPEBPZpIzupvAZqM0woFX
-         QXF/gFX/1eX/zS3mWi7J7Ti8kp+5TX+LwNsoK5UFIdwAn3VHApbmMuzMDJY28HbOKkXQ
-         b1g8Ysg4lWfa4oN8muBrnLQiFbzipRyKX33DrD+gWdvbLc65Wziwl10/kWRNa5mAL0CF
-         LLLA==
-X-Gm-Message-State: AOAM530+AZ6vRt5F5AxH9SuIhm7p5w2dS5zyej+e4Iyp74PUd9YB34dv
-        SysCd8W6SL6Ij6vto04iMq+PQ/2Ceu081DFoR9vT648vni07CA==
-X-Google-Smtp-Source: ABdhPJxKFn6YeDUx1PfZdbOvWIU7l3YrlqtrpTJvp5FIfH8MbYGg9inD0E2JsB/SRJMRmxjPhbDJO14wMifzXIGlkxQ=
-X-Received: by 2002:a05:6402:26d3:b0:416:4186:6d7d with SMTP id
- x19-20020a05640226d300b0041641866d7dmr3159206edd.129.1646899752425; Thu, 10
- Mar 2022 00:09:12 -0800 (PST)
+        bh=HfibjxXpSiDUQkdsSWqfUL3zPU0FxzAokd4WU1kLbJM=;
+        b=VIHeGNCzsEug6JSTznyhYDRuqFYhNS5IM+wCUly3SyVu8S0B9DaDbotAGybkwkGGUw
+         bu+229bxuffmxyN3GNyVZmD8jv3yaRW9lchcZU+J3qmkgsTqT7ncNw/85MYVI3yAo9xz
+         fpaYFMwt8y5ScjXf3ngWvmLw7pDcZu3yMYL+71q3oeOsGfGLQdrLcyfBWseLSyF+s9Q7
+         Y244WsdUGzjpyQVtHfnd/u63AUmUETwI4cIWYGN/eEkB6imcYurnxzZ7trhM7curroMN
+         /2DpUA7JZWrbIqO1el24YNj+s+/9kqvGPTn6hi40ALf9FavrG7bFFTZwC1QhtkRUgxOO
+         CExA==
+X-Gm-Message-State: AOAM531WzJaKG2X44Px14YzepFfZR8WSJFjGIjvyVF5w+mPYEBZrzsEm
+        sqXQ40E05Oz4hsvFl630lOaPk7OcwmIFmg==
+X-Google-Smtp-Source: ABdhPJxICWNDTxNVx7O/YwUWXStD8W1F+v06J6hGPZuCfIaFgRldu+p1o0OD3lSlzKcHSygKWfyaIw==
+X-Received: by 2002:a05:6214:29e9:b0:435:3428:d0f3 with SMTP id jv9-20020a05621429e900b004353428d0f3mr2751669qvb.28.1646899796952;
+        Thu, 10 Mar 2022 00:09:56 -0800 (PST)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id 22-20020ac85916000000b002d6844c51b9sm2811209qty.86.2022.03.10.00.09.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 00:09:56 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id f38so9391427ybi.3;
+        Thu, 10 Mar 2022 00:09:56 -0800 (PST)
+X-Received: by 2002:a5b:5d0:0:b0:623:c68d:d473 with SMTP id
+ w16-20020a5b05d0000000b00623c68dd473mr2923471ybp.506.1646899795891; Thu, 10
+ Mar 2022 00:09:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220309083753.1561921-1-liupeng256@huawei.com> <20220309083753.1561921-2-liupeng256@huawei.com>
-In-Reply-To: <20220309083753.1561921-2-liupeng256@huawei.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 10 Mar 2022 03:08:59 -0500
-Message-ID: <CAFd5g466XMWRszdn=Wdg4GXNv=KR-CZmWYZ0j0bG7_1QXtu-LQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kunit: fix UAF when run kfence test case test_gfpzero
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     glider@google.com, elver@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        wangkefeng.wang@huawei.com
+References: <20220113160115.5375-1-bp@alien8.de> <YeBzxuO0wLn/B2Ew@mit.edu>
+ <YeCuNapJLK4M5sat@zn.tnic> <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
+ <YeHLIDsjGB944GSP@zn.tnic> <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
+ <YeHQmbMYyy92AbBp@zn.tnic> <YeKyBP5rac8sVvWw@zn.tnic> <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
+ <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 10 Mar 2022 09:09:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVLyu6LNONJa1QcMGv__bWSCRvVq9haD7=fOm1k5O3Pnw@mail.gmail.com>
+Message-ID: <CAMuHMdVLyu6LNONJa1QcMGv__bWSCRvVq9haD7=fOm1k5O3Pnw@mail.gmail.com>
+Subject: Re: [PATCH] a.out: Stop building a.out/osf1 support on alpha and m68k
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "Theodore Ts'o" <tytso@mit.edu>, X86 ML <x86@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
+        Michael Cree <mcree@orcon.net.nz>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 3:19 AM 'Peng Liu' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Wed, Mar 9, 2022 at 9:04 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> There has been repeated discussion on removing a.out support, the most
+> recent was[1].  Having read through a bunch of the discussion it looks
+> like no one has see any reason why we need to keep a.out support.
 >
-> Kunit will create a new thread to run an actual test case, and the
-> main process will wait for the completion of the actual test thread
-> until overtime. The variable "struct kunit test" has local property
-> in function kunit_try_catch_run, and will be used in the test case
-> thread. Task kunit_try_catch_run will free "struct kunit test" when
-> kunit runs overtime, but the actual test case is still run and an
-> UAF bug will be triggered.
+> The m68k maintainer has even come out in favor of removing a.out
+> support[2].
 >
-> The above problem has been both observed in a physical machine and
-> qemu platform when running kfence kunit tests. The problem can be
-> triggered when setting CONFIG_KFENCE_NUM_OBJECTS = 65535. Under
-> this setting, the test case test_gfpzero will cost hours and kunit
-> will run to overtime. The follows show the panic log.
+> At a practical level with only two rarely used architectures building
+> a.out support, it gets increasingly hard to test and to care about.
+> Which means the code will almost certainly bit-rot.
 >
->   BUG: unable to handle page fault for address: ffffffff82d882e9
+> Let's see if anyone cares about a.out support on the last two
+> architectures that build it, by disabling the build of the support in
+> Kconfig.  If anyone cares, this can be easily reverted, and we can then
+> have a discussion about what it is going to take to support a.out
+> binaries in the long term.
 >
->   Call Trace:
->    kunit_log_append+0x58/0xd0
->    ...
->    test_alloc.constprop.0.cold+0x6b/0x8a [kfence_test]
->    test_gfpzero.cold+0x61/0x8ab [kfence_test]
->    kunit_try_run_case+0x4c/0x70
->    kunit_generic_run_threadfn_adapter+0x11/0x20
->    kthread+0x166/0x190
->    ret_from_fork+0x22/0x30
->   Kernel panic - not syncing: Fatal exception
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
->   Ubuntu-1.8.2-1ubuntu1 04/01/2014
->
-> To solve this problem, the test case thread should be stopped when
-> the kunit frame runs overtime. The stop signal will send in function
-> kunit_try_catch_run, and test_gfpzero will handle it.
->
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+> Cc: Richard Henderson <rth@twiddle.net>
+> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> Cc: Matt Turner <mattst88@gmail.com>
+> Cc: linux-alpha@vger.kernel.org
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: linux-m68k@lists.linux-m68k.org
+> [1] https://lkml.kernel.org/r/20220113160115.5375-1-bp@alien8.de
+> [2] https://lkml.kernel.org/r/CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Thanks for taking care of this.
+>  arch/m68k/Kconfig  | 1 -
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

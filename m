@@ -2,101 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85F84D54CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F61D4D54D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344545AbiCJWsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S1344471AbiCJWu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344516AbiCJWsC (ORCPT
+        with ESMTP id S1343931AbiCJWuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:48:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81D48190C2E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:47:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646952420;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=5RPKCM0lEg804VClGL4CVuzIW9F3xMPb2KUhtOXX3OU=;
-        b=EYv4B0ITi4t9vJkl9VNhBncpoG4TGiIuM+BTSfM0rdruKK/5TWrKm0tQeWQTnh52x9A9yy
-        spunl1MbRT86dSQ1hS1hjDbOFzcAt+fQyAB5QznX3XrnVLQa+gYVPXM0XU8TkDxSTB8nCi
-        Xo2LTekImQdR3lQ5jHEz2YWz2piYZrQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-6PvtaaVyMVuXa87gqAps2w-1; Thu, 10 Mar 2022 17:46:57 -0500
-X-MC-Unique: 6PvtaaVyMVuXa87gqAps2w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 42D161006AA5;
-        Thu, 10 Mar 2022 22:46:55 +0000 (UTC)
-Received: from localhost (unknown [10.22.9.69])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C30C4CEEE;
-        Thu, 10 Mar 2022 22:46:53 +0000 (UTC)
-Date:   Thu, 10 Mar 2022 19:46:52 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 5.10.104-rt63
-Message-ID: <Yip/3Gp8iiVbZ85Z@uudg.org>
+        Thu, 10 Mar 2022 17:50:24 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FC9CFB94
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:49:21 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id qa43so15201957ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X/rtu54ntkVXnZ8WzhCGXP7Ng7Fgx6ahBoAiWoEdfPI=;
+        b=Tzc/GE6Ob61G7++79zVEuQGKO+ogy/3CB20AUrZdJUjo1sx41vjLvG+BMIGTdZoxB1
+         Erf7uWEqzMBZb2IoSJC/G2Ca4Xi/oPJKvDIWf7s8Py+FL6LIb2g/4VQuTDsFBgXF3n5H
+         4Z79gfx785IaI419QwidGq/mlIJ5ubUpuL8AKRkkokYS6pb/ku3dbtr5vK2CQxZwRBOy
+         aEZxnbOXpvp8N20npvalpFp89W8dhnrTqiCIxmLGZkimL27HeAmHQhRXuahcpJmUJ9sw
+         YPL+GFZ1uWa4nb1oFe0rtrUBQwChHvRd42wsy/ngQ+slNDpqK2d61m8R+Wqe6Il1JmwO
+         bqNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X/rtu54ntkVXnZ8WzhCGXP7Ng7Fgx6ahBoAiWoEdfPI=;
+        b=Cz/Pn62z1ORe59BHJw68rvspmUG3pT9p1PArfC8AjJvXOFSsRdIIpMfgR4repHxyIf
+         dWh6Gezatdh/vLJKP7KpM54at5QZ54b8/kbRq6amrlWzL170mYeeh8ULhDUO6O5h26Xt
+         U+7EsiaKoU6LpkCZ1HcVz9E2jz3qU0rCXbKEfd60VM8+dF3LIYniI1IVsVkDkKWWiQF0
+         M7YUgDuQZIDOqSb4g2pvDoL8duoadO0GNdrzR5rpphLjz2gkew8p/R5Z6DGcy04nbGfQ
+         wP9cnvr6TVnD+T6ig9GoG7+yhIY4k4LCG2ixXeaRUUs8T/MBtDzgfMFEn8UMwuIIyTSO
+         rXaQ==
+X-Gm-Message-State: AOAM530bLZLxnwcy9rU43fYZ0idVU6WgXq9YADj3lQFZjrQ0b1/0Ue0O
+        Q4pUefgbDJoZyyBVpeVAPnpTup+EGhhepXLqadUb9Q==
+X-Google-Smtp-Source: ABdhPJwvPdPyuimNpDBevrBCyvPyfsYSzk8kAV9GyxvoX1Uv2iDYVHx2fKq2U6+k0Gl472gvzynfUgHXOpbiBgT0qT0=
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id
+ ho43-20020a1709070eab00b006da8ec5d386mr6264799ejc.668.1646952560219; Thu, 10
+ Mar 2022 14:49:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220310210210.2124637-1-brendanhiggins@google.com>
+In-Reply-To: <20220310210210.2124637-1-brendanhiggins@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 10 Mar 2022 17:49:08 -0500
+Message-ID: <CAFd5g46NmmNy5ueRjDnCkgjHy75KVUXA0xcTXtXjxLg7mgKJng@mail.gmail.com>
+Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
+To:     shuah <shuah@kernel.org>, David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        Daniel Gutson <daniel.gutson@eclypsium.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
++Jeremy Kerr - Just remembered that Jeremy is doing some work here and
+might be somewhat interested.
 
-I'm pleased to announce the 5.10.104-rt63 stable release.
-
-This release is just an update to the new stable 5.10.104
-version and no RT specific changes have been made.
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v5.10-rt
-  Head SHA1: 25351c7de42560c8de93eaaef03c722942c13038
-
-Or to build 5.10.104-rt63 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.104.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10.104-rt63.patch.xz
-
-
-All keys used for the uploads can be found on the following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-
-Enjoy!
-Luis
-
+On Thu, Mar 10, 2022 at 4:02 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Add support for a new kind of kunit_suite registration macro called
+> kunit_test_init_suite(); this new registration macro allows the
+> registration of kunit_suites that reference functions marked __init and
+> data marked __initdata.
+>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>
+> This patch is in response to a KUnit user issue[1] in which the user was
+> attempting to test some init functions; although this is a functional
+> solution as long as KUnit tests only run during the init phase, we will
+> need to do more work if we ever allow tests to run after the init phase
+> is over; it is for this reason that this patch adds a new registration
+> macro rather than simply modifying the existing macros.
+>
+> [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
+>
+> ---
+>  include/kunit/test.h | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index b26400731c02..1878e585f6d3 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -379,6 +379,27 @@ static inline int kunit_run_all_tests(void)
+>
+>  #define kunit_test_suite(suite)        kunit_test_suites(&suite)
+>
+> +/**
+> + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
+> + *                           containing init functions or init data.
+> + *
+> + * @__suites: a statically allocated list of &struct kunit_suite.
+> + *
+> + * This functions identically as &kunit_test_suites() except that it suppresses
+> + * modpost warnings for referencing functions marked __init or data marked
+> + * __initdata; this is OK because currently KUnit only runs tests upon boot
+> + * during the init phase or upon loading a module during the init phase.
+> + *
+> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
+> + * tests must be excluded.
+> + */
+> +#define kunit_test_init_suites(__suites...)                            \
+> +       __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
+> +                           CONCATENATE(__UNIQUE_ID(suites), _probe),   \
+> +                           ##__suites)
+> +
+> +#define kunit_test_init_suite(suite)   kunit_test_init_suites(&suite)
+> +
+>  #define kunit_suite_for_each_test_case(suite, test_case)               \
+>         for (test_case = suite->test_cases; test_case->run_case; test_case++)
+>
+>
+> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+> --
+> 2.35.1.723.g4982287a31-goog
+>

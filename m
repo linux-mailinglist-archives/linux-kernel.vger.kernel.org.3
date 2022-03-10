@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8774D3F7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0C94D3F82
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238372AbiCJDBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S238970AbiCJDCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiCJDBs (ORCPT
+        with ESMTP id S234539AbiCJDCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:01:48 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A27B124C3B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 19:00:46 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 376552C0C61;
-        Thu, 10 Mar 2022 03:00:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1646881244;
-        bh=bhyF/NCDXANrCw6v9FLOgZoyTG+XDLRL020LrUJIdEo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nqdCnlxNG74lIoOiQsoGhAnF2YXVFhcPabOttpOFU0cyA2I7uzLfmIwLPoU+J8iWk
-         nFAbVhw6wfr954swdBfDqCF7pym3uWlS9Q9Lw5g2jkqF0lzmqzx4yh1V6iQ9lz1O6A
-         3UUvy8ifLBcB4a7qEFjI8Skq165QGVtsSl3zVsgVGenVSKpytQNkjnibhqJNxBQqoI
-         YnmhIe+jjhiCmJHvbh1Oev2h7A5MyjOD4jy1wfKm8JGyYPLHNv1lKN3ilzn1VZceOJ
-         u4opikFZBYhXtmHDEUu3700binh2Qk8iDexMJmVvxtuUmbnAjiib6vI8Ql9NJk9e/y
-         +ZrmAjjFepSqg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B622969db0004>; Thu, 10 Mar 2022 16:00:43 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 9C82913EE9C;
-        Thu, 10 Mar 2022 16:00:43 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id ACBCF2A00D4; Thu, 10 Mar 2022 16:00:41 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v1 4/4] arm64: marvell: enable the 98DX2530 pinctrl driver
-Date:   Thu, 10 Mar 2022 16:00:39 +1300
-Message-Id: <20220310030039.2833808-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310030039.2833808-1-chris.packham@alliedtelesis.co.nz>
-References: <20220310030039.2833808-1-chris.packham@alliedtelesis.co.nz>
+        Wed, 9 Mar 2022 22:02:20 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 470201255B9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 19:01:18 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAC3vdnaaSliK8S8Ag--.21223S2;
+        Thu, 10 Mar 2022 11:00:43 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dan.carpenter@oracle.com, vkoul@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] ASoC: soc-compress: Change the check for codec_dai
+Date:   Thu, 10 Mar 2022 11:00:41 +0800
+Message-Id: <20220310030041.1556323-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=XQcNo-tEeLJW46c85tUA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAC3vdnaaSliK8S8Ag--.21223S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr1rZr4UJFWkuw4xGw15Jwb_yoW8AFW7pr
+        4xurW2qFyrtFyIvw4rAw4S93WfGryxua1F9FnIv34xAr45XFs8Ww1Utw4vyFW8C3yDtr1D
+        Z39FyayfWFn8CFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit makes sure the drivers for the 98DX2530 pin controller is
-enabled.
+It should be better to reverse the check on codec_dai
+and returned early in order to be easier to understand.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Fixes: de2c6f98817f ("ASoC: soc-compress: prevent the potentially use of null pointer")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- arch/arm64/Kconfig.platforms | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/soc-compress.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 21697449d762..6bbb56901794 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -183,11 +183,13 @@ config ARCH_MVEBU
- 	select PINCTRL_ARMADA_37XX
- 	select PINCTRL_ARMADA_AP806
- 	select PINCTRL_ARMADA_CP110
-+	select PINCTRL_AC5
- 	help
- 	  This enables support for Marvell EBU familly, including:
- 	   - Armada 3700 SoC Family
- 	   - Armada 7K SoC Family
- 	   - Armada 8K SoC Family
-+	   - 98DX2530 SoC Family
-=20
- config ARCH_MXC
- 	bool "ARMv8 based NXP i.MX SoC family"
---=20
-2.35.1
+diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
+index f4b376a71be8..e9dd25894dc0 100644
+--- a/sound/soc/soc-compress.c
++++ b/sound/soc/soc-compress.c
+@@ -567,16 +567,19 @@ int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
+ 		return -EINVAL;
+ 	}
+ 
+-	/* check client and interface hw capabilities */
+-	if (codec_dai) {
+-		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
+-		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
+-			playback = 1;
+-		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
+-		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
+-			capture = 1;
++	if (!codec_dai) {
++		dev_err(rtd->card->dev, "Missing codec\n");
++		return -EINVAL;
+ 	}
+ 
++	/* check client and interface hw capabilities */
++	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
++	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
++		playback = 1;
++	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
++	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
++		capture = 1;
++
+ 	/*
+ 	 * Compress devices are unidirectional so only one of the directions
+ 	 * should be set, check for that (xor)
+-- 
+2.25.1
 

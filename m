@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8DB4D4FFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D8A4D5003
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244338AbiCJRLz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 12:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S243955AbiCJRPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiCJRLy (ORCPT
+        with ESMTP id S230394AbiCJRPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:11:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A6215D3A3;
-        Thu, 10 Mar 2022 09:10:53 -0800 (PST)
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MVubb-1ncZTj3dn3-00RsYH; Thu, 10 Mar 2022 18:10:50 +0100
-Received: by mail-wm1-f42.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so3795999wmp.5;
-        Thu, 10 Mar 2022 09:10:50 -0800 (PST)
-X-Gm-Message-State: AOAM533Pva/6bc6aKl5NsMGMPWfBgB9p++ShzNiUPxMEGAXBCb4lmMad
-        N8GKHnFe8nFPkZPHSy72vli44q0P5iV4TltTq94=
-X-Google-Smtp-Source: ABdhPJxY8hGm9BEQKWwA3R6ukJGTZsnEU2TjUOjQUHCfOHpxv80mjDHnXeVwtelmj78dbQthb1oQ3YX63RkYL8slNoM=
-X-Received: by 2002:a1c:f20b:0:b0:389:c99a:4360 with SMTP id
- s11-20020a1cf20b000000b00389c99a4360mr10282657wmc.174.1646932250447; Thu, 10
- Mar 2022 09:10:50 -0800 (PST)
+        Thu, 10 Mar 2022 12:15:41 -0500
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D543182D85
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:14:40 -0800 (PST)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-2e2ca8d7812so4236087b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:14:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=oeXnfgK9BOKBTMDptF2I1vpIGSBc56TF64IaWy5xIn0=;
+        b=VOYDLLvylnkTA8J8uaILkF5NrclnhmkUUKYnqCDxPF1SO2iXi+0u2lThdABNuzNOPH
+         5BxjdpDHfAsYKoahy8NCUPqLuP4fHK+HZ3FqH878w2Gqm4TStaNB2aRFsFsxtUbSNFME
+         SxjFh/BLGlbMNWL2sjr7zjun6RCokxZy60xB3Zy8mqnmPbTu3KVFmG6VepnszOYLirQ0
+         0HYVX1yWWUUqbq80zBoGCZ9QBRE9x43Hs/jZXxZaNQKpFSXgI2wYVqOlKsk/fKuvpfKo
+         ePxyE4ZerSLlZG+rF7BVXCnK8IC/Wh0CIsvcYFfbBWlV7GTZXRYbYVK/e6CmOI8MXnHN
+         qt3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=oeXnfgK9BOKBTMDptF2I1vpIGSBc56TF64IaWy5xIn0=;
+        b=o9GylZFRTYCrhQRWsfmL2y4kiHfahEAo4xwwX8L1yyw308UyO+tn+qSZLLnjrclvpp
+         PLZMEkmP07U4YXXgZR/2POEjyW9AtWbg7YgALnD65M1jQe7J3UIhu1BGBqDUERa0Dm1b
+         lImWKtGhZbZXfR0nFHqpfNZ7uVJ5qNcaTPhBX/mRJWmbS+W3qzcI4eUNIXrNPGDUdiJV
+         aB+p4CcrhDLH0nJC/qFWFBejPou1A9nrLKWaaePHJUT0kHElZQ7yX1IHOGzsVE7ZNwL+
+         3ax83l38HY4LFnUs7sbb3HuXpCHze8Ip5VALa5GncjnJnmacRkKLZQ/u1ClmUotkbCiS
+         8d/g==
+X-Gm-Message-State: AOAM533Trqt2VHWu37GVI5IRwhpF3yeil1uYZ/mHeODfh/890qdjvG7z
+        5RznIfhnNs4AYLLUE2e91ECetU1BDgY6WjwyIrA=
+X-Google-Smtp-Source: ABdhPJwRpHcWTJQcVuyYbZJEWcJ3RAaB5jzjlt7LgBHT8dqvQwr5crAymKpMHLzlm0dEFbJ0qCPwS+z8ZqHBf2ASANU=
+X-Received: by 2002:a81:9954:0:b0:2dc:973d:ec56 with SMTP id
+ q81-20020a819954000000b002dc973dec56mr4990804ywg.270.1646932477190; Thu, 10
+ Mar 2022 09:14:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20220310072924.0EF1EC340EC@smtp.kernel.org> <c0eb0b0f-1fdb-b653-fbf9-4b1bd7c26efa@infradead.org>
-In-Reply-To: <c0eb0b0f-1fdb-b653-fbf9-4b1bd7c26efa@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Mar 2022 18:10:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a23aduadfJsSEFdXB3a0B_krC9LLEfa-erSsSXcqzVqtw@mail.gmail.com>
-Message-ID: <CAK8P3a23aduadfJsSEFdXB3a0B_krC9LLEfa-erSsSXcqzVqtw@mail.gmail.com>
-Subject: Re: mmotm 2022-03-09-23-28 uploaded (drivers/perf/marvell_cn10k_ddr_pmu.c)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mm-commits@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
+Sender: mrselisabeth73peter@gmail.com
+Received: by 2002:a05:7110:5281:b0:16e:b1af:6354 with HTTP; Thu, 10 Mar 2022
+ 09:14:36 -0800 (PST)
+From:   "Mrs.Joan Chen" <mrs.joan71chen@gmail.com>
+Date:   Thu, 10 Mar 2022 17:14:36 +0000
+X-Google-Sender-Auth: aGYOmASPYVfgyb-wpWGLNwGzzlU
+Message-ID: <CAHZyUciBvy4vDT1AvkO5Y5iHg93pVY7Gw5uwHc4uV0yDzoSDyQ@mail.gmail.com>
+Subject: Dear Child of God
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:M7v+Mq5EbLAcuH2nYt7VJxsI46M2PrCK7TQVAAoFnYFrbqEGMRu
- VogCi2EPJhfb9Swue5MgWnXjXk7ihfznZWshF5Ddt7LO9ZgIAitWKoTadRjOZBRXBsUJlYl
- leTGBxjRHR02d8ztcrmvo1IzNcWYtsvKYq8s6MUL+1gBPPsyOFrQ4ih0+yAIa4fRrLtEWNn
- nfoHGkcGiSHdlejkPronA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9aSgktNS7nM=:4WZK+WY6ORo1deaLb2MVKm
- sVK1XWvJhQPlEDUx5dWw27gKovOkzZzv0OPu5+6QP41aytxAyiHJ++HZjdbOIZQHGdFKTSW7/
- IrUGBg1ZvzLBrGHUMJt8SSa6fsETsZatVOX3z054xdXyg3Qe8V5qmqj0e+3cpGUvZXxMrHRXt
- CSpQEfGLR5PpvmMXreqCRoyNacNvQpPYWsIa9Vjk5hLwl/pIDLf7OFptwBd6N4VjXyPH5uclw
- nykRRUqjnr1RBT1pJZUUjN4uvf+5INgUMChpC7R7t8cTXPn23P+hPM5t5at2Z0MZr8kMNI8To
- Wz7wORa9tDvbI1vs1GzU2otzuZGVxfc+8DrqcuMhJKNVBKzblxFDUpGhIGWZ2yxtLQIa0cewq
- Rf50JR7lk6K0vNnBp/okUmtggJyM7LZSIxjXQnCeTTM3yayL/PI92j+iywU4kio2pJTv0UrSw
- VPjQe4TnmubJ9uJdMTHbqmYnZEtRjjgZt7Im4ZTxOWS/1VFC/P8nkncPM1rlInXyEIydqhWaV
- htVxRWgJB5IwAuRSZstzsLBUqrUimfdNNJx0UXeZu3pBiNoDJ/DHOqCzEPD5C9VVsiMrexpa0
- RjwwZNFpa2IfuKgy8zwyF+3LKzLvmBRn063edbqNQV0MPfSIJIK661zxK8h8tdBVqoYSsPnKk
- I0dz11y7GWAdy5Ws9y1lyzugSjY96QoPur43R8VEiM3Es4/pnpw2TKePpw/DMoyvPl8M=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,HK_NAME_FM_MR_MRS,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1143 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrs.joan71chen[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 HK_NAME_FM_MR_MRS No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  3.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 5:34 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 3/9/22 23:29, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2022-03-09-23-28 has been uploaded to
-> >
-> >    https://www.ozlabs.org/~akpm/mmotm/
-> >
-> > mmotm-readme.txt says
-> >
-> > README for mm-of-the-moment:
-> >
-> > https://www.ozlabs.org/~akpm/mmotm/
-> >
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> >
-> > You will need quilt to apply these patches to the latest Linus release (5.x
-> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > https://ozlabs.org/~akpm/mmotm/series
->
-> on x86_64:
->
-> ../drivers/perf/marvell_cn10k_ddr_pmu.c:723:21: error: ‘cn10k_ddr_pmu_of_match’ undeclared here (not in a function); did you mean ‘cn10k_ddr_pmu_driver’?
->    .of_match_table = cn10k_ddr_pmu_of_match,
->                      ^~~~~~~~~~~~~~~~~~~~~~
->
-> Full randconfig file is attached.
->
+Dear Child of God,
 
-I suppose this is caused by having two different fixes applied, one that removes
-the of_match_ptr(), and one that adds an #ifdef. Either one would be correct,
-but the combination is not.
+Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
+CHRIST the giver of every good thing. Good day and compliments of the
+seasons, i know this letter will definitely come to you as a huge
+surprise, but I implore you to take the time to go through it
+carefully as the decision you make will go off a long way to determine
+my future and continued existence. I am Mrs.Joan Chen aging widow of
+57 years old suffering from long time illness.I have some funds I
+inherited from my late husband, the sum of (21 Million Dollars) and I
+needed a very honest and God fearing who can withdraw this money then
+use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
+CHARITY WORKS. I found your email address from the internet after
+honest prayers to the LORD to bring me a helper and i decided to
+contact you if you may be willing and interested to handle these trust
+funds in good faith before anything happens to me.
 
-       Arnd
+I accept this decision because I do not have any child who will
+inherit this money after I die. I want your urgent reply to me so that
+I will give you the deposit receipt which the SECURITY COMPANY issued
+to me as next of kin for immediate transfer of the money to your
+account in your country, to start the good work of God, I want you to
+use the 20/percent of the total amount to help yourself in doing the
+project. I am desperately in keen need of assistance and I have
+summoned up courage to contact you for this task, you must not fail me
+and the millions of the poor people in our todays WORLD. This is no
+stolen money and there are no dangers involved,100% RISK FREE with
+full legal proof. Please if you would be able to use the funds for the
+Charity works kindly let me know immediately.I will appreciate your
+utmost confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish.
+Please
+kindly respond quickly for further details.
+
+Hoping to receive your response as soon as possible.
+
+Your urgently responses is needed
+
+Thanks and Remain blessed
+Mrs.Joan Chen

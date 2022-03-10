@@ -2,163 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1F14D533B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3C44D533F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245572AbiCJUuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S245583AbiCJUuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241255AbiCJUuF (ORCPT
+        with ESMTP id S236624AbiCJUup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:50:05 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A325F186477
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646945344; x=1678481344;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KRMDn0WMJL9ra8G8+QzHxQoTSxBFdSyU1WmgdWNLOTU=;
-  b=GVeluKW6NFuevXtSzNFFN0JO3yGvDoeTMCO5fnCTDIC99hof5JEoh0kH
-   SVRdVu5c9nBFBD4CQOZEWvvATq0DJfaZyapCYoswjnUY0UcKGbeTTvMMX
-   dhBjRuAwvP0bm8fcSaFtTiPcV0yRDrftAXMYaYpNjpc0romKTTazQRPuZ
-   yFMkb0GwnTZVM8aYnH0q1xlpOERDrv1ue1jqQr+Tq8ZQv/80GiXHGn7iw
-   fUzcolot+cMAZoc40OIPaHxaB1r329I8dvtnVLW3bz0mwYS0VlnF8bnnx
-   3aZ+pffViD+qO7ivmquV1agD0OCmYVDLm74pe+M6yisY8jZS2vj5G9xBV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254205625"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="254205625"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 12:49:03 -0800
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="554843297"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 12:49:03 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 2/2] x86/split-lock: Remove unused TIF_SLD bit
-Date:   Thu, 10 Mar 2022 12:48:54 -0800
-Message-Id: <20220310204854.31752-3-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310204854.31752-1-tony.luck@intel.com>
-References: <20220217012721.9694-1-tony.luck@intel.com>
- <20220310204854.31752-1-tony.luck@intel.com>
+        Thu, 10 Mar 2022 15:50:45 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347DF187E1A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:43 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id 3so11574178lfr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
+        b=Y7FvDAJsL40Mo2PA9+bZiLPYtKMnLPXzXJ5HLFicNxmCzZdjJYLjv5yqpsyhCi7vOr
+         CD+QPTbXobrKHAuNAA7EVyR6s5AJ2oTb3lHlMncdUyYPQ4ai6e5Om/5yCjw+F2P89/hF
+         lzvVtisopmYw9PsQWFgxf4X1aLVZkcgRXPVxUBeu2A8j9m7lL4/+HuQTMMTU8yAuUPIr
+         /9UskIi+Izx38o1RWUn/mGiOU115InWglwpA0y6MGBMTHlx/0TvsozCBTKVyaBjguFqC
+         U25qw5VYUkLud9lfcYzlxnt+DNX0zT/h2pGf4bXY+rXL37GWa3nX4nAjILfxiBwfELTC
+         y3yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
+        b=HPOZUAFjeo93Ij+4bA4poGIj1edbsBShVlKHZ82yB2O6Yu1VIwuWso+AUvU8B9Az9+
+         zG0V3l7xU1sh2p7b/imeA2VMEG5aGIaa7AftEhaU0Ls5qw42pXxZonOrjfKelqLCIFV5
+         RRl3ovcnLmn8obTXCXiW9LCaqNxG2CCsPn84NGWk2p3FWa1yBFitfeIPNHqWZnUpdBMa
+         Myb7eQ73XeJpm7BTag6bgwmxMymtikOiGyjsiRcaERclezEOdk3CZBQyi9ACGFvniaJ3
+         nxj39tGK6n24gOUyl4PFiVnN4zdBC7Mvs4jkuV7nPWdjEhH5x4EQ+ZwOSPa6MbB9qSdK
+         GzxA==
+X-Gm-Message-State: AOAM533lMLot7qwK9whe4DjWIYyg7Grvu1XCAWSyhZWl3HZSrpT5UOoL
+        A+DKlGcIxeAiBkjFUsLlk/PavBXqP6A9IpWiZEUHMg==
+X-Google-Smtp-Source: ABdhPJy8imNzaXNZDqs43TGptWccGDGO5gCC4bQU1a3VTUFE15BERAeVO8Mg8dbe5wwLt+vA1yx3Tir6Y+d/zYS/XIE=
+X-Received: by 2002:a05:6512:31d4:b0:445:e4ef:c0f8 with SMTP id
+ j20-20020a05651231d400b00445e4efc0f8mr4046529lfe.626.1646945381031; Thu, 10
+ Mar 2022 12:49:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+ <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net> <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+ <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
+In-Reply-To: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 10 Mar 2022 12:49:29 -0800
+Message-ID: <CAKwvOdkyi1c9TvP_Bzn3+71kKsJzAbQZmgDzfDM8c7sce-V0Dw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes to the "warn" mode of split lock handling mean that
-TIF_SLD is never set.
+On Thu, Mar 10, 2022 at 2:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Mar 10, 2022 at 09:22:59AM +0000, David Laight wrote:
+> > From: Peter Zijlstra
+> > > Sent: 10 March 2022 09:05
+> > >
+> > > On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+> > >
+> > > > I observed the following error when building with
+> > > > CONFIG_LTO_CLANG_FULL=y enabled:
+> > > >
+> > > > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> > > > already defined
+> > > >         ibt_selftest_ip:
+> > > >         ^
+> > > >
+> > > > Seems to come from
+> > > > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
+> > > >
+> > > > Commenting out the label in the inline asm, I then observed:
+> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> > > > callable instruction with modified stack frame
+> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> > > > mismatch: cfa1=4+64 cfa2=4+8
+> > > > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+> > > > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> > > > the ibt_selftest_ip label).
+> > >
+> > LTO has probably inlined it twice.
+>
+> Indeed, adding noinline to ibt_selftest() makes it work.
 
-Remove the bit, and the functions that use it.
+Yep, that LGTM. If you end up sticking that as a patch on top:
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/include/asm/cpu.h         |  2 --
- arch/x86/include/asm/thread_info.h |  4 +---
- arch/x86/kernel/cpu/intel.c        | 12 ------------
- arch/x86/kernel/process.c          |  3 ---
- 4 files changed, 1 insertion(+), 20 deletions(-)
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index 33d41e350c79..e346f5c103b7 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -42,14 +42,12 @@ unsigned int x86_model(unsigned int sig);
- unsigned int x86_stepping(unsigned int sig);
- #ifdef CONFIG_CPU_SUP_INTEL
- extern void __init sld_setup(struct cpuinfo_x86 *c);
--extern void switch_to_sld(unsigned long tifn);
- extern bool handle_user_split_lock(struct pt_regs *regs, long error_code);
- extern bool handle_guest_split_lock(unsigned long ip);
- extern void handle_bus_lock(struct pt_regs *regs);
- u8 get_this_hybrid_cpu_type(void);
- #else
- static inline void __init sld_setup(struct cpuinfo_x86 *c) {}
--static inline void switch_to_sld(unsigned long tifn) {}
- static inline bool handle_user_split_lock(struct pt_regs *regs, long error_code)
- {
- 	return false;
-diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
-index ebec69c35e95..f0cb881c1d69 100644
---- a/arch/x86/include/asm/thread_info.h
-+++ b/arch/x86/include/asm/thread_info.h
-@@ -92,7 +92,6 @@ struct thread_info {
- #define TIF_NOCPUID		15	/* CPUID is not accessible in userland */
- #define TIF_NOTSC		16	/* TSC is not accessible in userland */
- #define TIF_NOTIFY_SIGNAL	17	/* signal notifications exist */
--#define TIF_SLD			18	/* Restore split lock detection on context switch */
- #define TIF_MEMDIE		20	/* is terminating due to OOM killer */
- #define TIF_POLLING_NRFLAG	21	/* idle is polling for TIF_NEED_RESCHED */
- #define TIF_IO_BITMAP		22	/* uses I/O bitmap */
-@@ -116,7 +115,6 @@ struct thread_info {
- #define _TIF_NOCPUID		(1 << TIF_NOCPUID)
- #define _TIF_NOTSC		(1 << TIF_NOTSC)
- #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
--#define _TIF_SLD		(1 << TIF_SLD)
- #define _TIF_POLLING_NRFLAG	(1 << TIF_POLLING_NRFLAG)
- #define _TIF_IO_BITMAP		(1 << TIF_IO_BITMAP)
- #define _TIF_SPEC_FORCE_UPDATE	(1 << TIF_SPEC_FORCE_UPDATE)
-@@ -128,7 +126,7 @@ struct thread_info {
- /* flags to check in __switch_to() */
- #define _TIF_WORK_CTXSW_BASE					\
- 	(_TIF_NOCPUID | _TIF_NOTSC | _TIF_BLOCKSTEP |		\
--	 _TIF_SSBD | _TIF_SPEC_FORCE_UPDATE | _TIF_SLD)
-+	 _TIF_SSBD | _TIF_SPEC_FORCE_UPDATE)
- 
- /*
-  * Avoid calls to __switch_to_xtra() on UP as STIBP is not evaluated.
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 2536784511e3..7cba84616c20 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -1241,18 +1241,6 @@ void handle_bus_lock(struct pt_regs *regs)
- 	}
- }
- 
--/*
-- * This function is called only when switching between tasks with
-- * different split-lock detection modes. It sets the MSR for the
-- * mode of the new task. This is right most of the time, but since
-- * the MSR is shared by hyperthreads on a physical core there can
-- * be glitches when the two threads need different modes.
-- */
--void switch_to_sld(unsigned long tifn)
--{
--	sld_update_msr(!(tifn & _TIF_SLD));
--}
--
- /*
-  * Bits in the IA32_CORE_CAPABILITIES are not architectural, so they should
-  * only be trusted if it is confirmed that a CPU model implements a
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 81d8ef036637..47db777da92a 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -686,9 +686,6 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
- 		/* Enforce MSR update to ensure consistent state */
- 		__speculation_ctrl_update(~tifn, tifn);
- 	}
--
--	if ((tifp ^ tifn) & _TIF_SLD)
--		switch_to_sld(tifn);
- }
- 
- /*
+For the kernel IBT series @ v4 plus this diff:
+
+Tested-by: Nick Desaulniers <ndesaulniers@google.com> # llvm build, non-IBT boot
+
+>
+>
+> ---
+> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> index d8bbc705efe5..0c737cc31ee5 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
+>         return NOTIFY_STOP;
+>  }
+>
+> -static void __init int3_selftest(void)
+> +/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
+> +static noinline void __init int3_selftest(void)
+>  {
+>         static __initdata struct notifier_block int3_exception_nb = {
+>                 .notifier_call  = int3_exception_notify,
+> @@ -794,9 +795,8 @@ static void __init int3_selftest(void)
+>         /*
+>          * Basically: int3_magic(&val); but really complicated :-)
+>          *
+> -        * Stick the address of the INT3 instruction into int3_selftest_ip,
+> -        * then trigger the INT3, padded with NOPs to match a CALL instruction
+> -        * length.
+> +        * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
+> +        * notifier above will emulate CALL for us.
+>          */
+>         asm volatile ("int3_selftest_ip:\n\t"
+>                       ANNOTATE_NOENDBR
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index 837cc3c7d4f4..fb89a2f1011f 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -214,7 +214,7 @@ DEFINE_IDTENTRY(exc_overflow)
+>
+>  static __ro_after_init bool ibt_fatal = true;
+>
+> -void ibt_selftest_ip(void); /* code label defined in asm below */
+> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
+>
+>  enum cp_error_code {
+>         CP_EC        = (1 << 15) - 1,
+> @@ -238,7 +238,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+>         if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
+>                 return;
+>
+> -       if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
+> +       if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
+
+(Though adding the address of operator & to the function name in the
+comparisons isn't strictly necessary; functions used in expressions
+"decay" into function pointers; I guess the standard calls these
+"function designators." I see that's been added to be consistent
+between the two...See 6.3.2.1.4 of
+http://open-std.org/jtc1/sc22/wg14/www/docs/n2731.pdf pdf page
+62/printed page 46.)
+
+>                 regs->ax = 0;
+>                 return;
+>         }
+> @@ -252,7 +252,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+>         BUG();
+>  }
+>
+> -bool ibt_selftest(void)
+> +/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
+> +noinline bool ibt_selftest(void)
+>  {
+>         unsigned long ret;
+>
+
+
 -- 
-2.35.1
-
+Thanks,
+~Nick Desaulniers

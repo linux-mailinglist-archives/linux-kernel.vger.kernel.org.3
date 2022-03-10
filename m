@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A464D4FC5
+	by mail.lfdr.de (Postfix) with ESMTP id C0E2B4D4FC6
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiCJQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S244319AbiCJQxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244327AbiCJQxB (ORCPT
+        with ESMTP id S244227AbiCJQxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:53:01 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8033198D30
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:51:57 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id 9so5385229pll.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:51:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y6eO8XbobmJwk07KyUQcG8ew/bFwEAqu4InZOavV7ZM=;
-        b=YTkLBhADqm9amv8PHrviGDK7uKbDAZgW7pTRiKrarMaKDkgVtNpIIN+9hNVp4Ef3qI
-         3w8N8HgC43l507NznwsW5B3iVpzhTE+71LKzCdVPMk0OUcTgdrWfYg31w9PWfxTgc3Vv
-         QDGxj6g6cf9/tGJQbvLczxTLlCPUEuuKI8PxM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y6eO8XbobmJwk07KyUQcG8ew/bFwEAqu4InZOavV7ZM=;
-        b=v0YnPQwxGYEfSwP2rviIxQwOMXLujHXGu3B1zIvQfxPygbRJxMPFMAFBX+XWeCnTN4
-         nsc5qpGa9RH8y4m0z2T8H4EceK96Zel3CYzJJKpMsfYIOh+5JdVZ+BCyGzqXbb7lf4oD
-         VXKD/yrQ0+wR38pkssZOmKmcM0ZfFSxqU7zTNdjbOYP91Eoyvkc2HA8a2Qmoq9VB3DVF
-         fkWewSBk2Ola6oQAYzxPyl8a9BEkqPlGLaN+Uzn6MgjZawQCn18sHtiS2vhBd+zrl0wJ
-         y5KXGIhY77Qhz9r6qvI1Zo+dCN87RRCpAk1uWDUISoUU3VE5YeKQRbph38dxXFm/KkGw
-         CCFw==
-X-Gm-Message-State: AOAM530JVFQcMM4hzpaV+dUKzocw8GMyoq7RZRLa2IHWCR/8B7DiSrXT
-        KbcEApUsawoWLLdg4ejT9IprSg==
-X-Google-Smtp-Source: ABdhPJwbpPcd4SwVPizlO9aynJTzqL0J0dIIdt2zDjb56noFAp2YlrMV9nMDaEqeoxUa/R1A7MI0gA==
-X-Received: by 2002:a17:902:7e4d:b0:14f:e295:5a41 with SMTP id a13-20020a1709027e4d00b0014fe2955a41mr5872399pln.27.1646931117342;
-        Thu, 10 Mar 2022 08:51:57 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id lb4-20020a17090b4a4400b001b9b20eabc4sm7078816pjb.5.2022.03.10.08.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 08:51:56 -0800 (PST)
-Date:   Thu, 10 Mar 2022 08:51:56 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, Adam Langley <agl@google.com>,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH v2 1/1] sign-file: Do not attempt to use the ENGINE_* API
- if it's not available
-Message-ID: <202203100851.C00D9AB73@keescook>
-References: <20211005161833.1522737-1-lee.jones@linaro.org>
- <Yicwb+Ceiu8JjVIS@google.com>
+        Thu, 10 Mar 2022 11:53:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E38D198ECC;
+        Thu, 10 Mar 2022 08:52:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0D4D61D00;
+        Thu, 10 Mar 2022 16:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6280C340F4;
+        Thu, 10 Mar 2022 16:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646931128;
+        bh=ElymF9bFBBy1n24Im00MyTY3vz1EhoElO8yoHTyT2Zg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Z70GlNfyR7y91BnSVAjrftfXRydpAHUstcfbT9kmLqCpC8Xi5BIJ4bUql++NwerUQ
+         mv+2o9v/HbYoXIxSh/yPNi9dU0ijzdfXyE4I1+2olecaFEXzFkvoUqSQOFMqOTrMcZ
+         s5KuQfMnUoU+6nTRDN0DPraDx6M6Jtky3H4lP056kVAwQv036ELq4uZZPUKxpRRZjt
+         /AihjRI1VnAnB4w/jYrsxXj3occUe+v/MobUfDePfOfl6aJYwPpH9FDEK5yy8Jxjja
+         p47PJ0RyxTVJeehnyCe1dUX8/XjqL8KcBGb1bUd2fD/wWT89BjadXIe+v6QCynrBiv
+         /Fl6gs1yoqCgA==
+Date:   Thu, 10 Mar 2022 10:52:06 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, alex@ghiti.fr,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Toan Le <toan@os.amperecomputing.com>,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v8 01/14] sizes.h: Add SZ_1T macro
+Message-ID: <20220310165206.GA163581@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yicwb+Ceiu8JjVIS@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b020d8dcedb2753a894722147a0b5de25b2ae29b.1646847561.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,88 +64,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:31:11AM +0000, Lee Jones wrote:
-> OpenSSL's ENGINE API is deprecated in OpenSSL v3.0.
->
-> Use OPENSSL_NO_ENGINE to ensure the ENGINE API is only used if it is
-> present.  This will safeguard against compile errors when using SSL
-> implementations which lack support for this deprecated API.
-
-On Fedora rawhide, I'm still seeing a bunch of warnings:
-
-scripts/sign-file.c: In function 'display_openssl_errors':
-scripts/sign-file.c:89:9: warning: 'ERR_get_error_line' is deprecated: Since OpenSSL 3.0 [-Wdeprecat
-ed-declarations]
-   89 |         while ((e = ERR_get_error_line(&file, &line))) {
-      |         ^~~~~
-In file included from scripts/sign-file.c:29:
-/usr/include/openssl/err.h:411:15: note: declared here
-  411 | unsigned long ERR_get_error_line(const char **file, int *line);
-      |               ^~~~~~~~~~~~~~~~~~
-scripts/sign-file.c: In function 'drain_openssl_errors':
-scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is deprecated: Since OpenSSL 3.0 [-Wdepreca
-ted-declarations]
-  102 |         while (ERR_get_error_line(&file, &line)) {}
-      |         ^~~~~
-/usr/include/openssl/err.h:411:15: note: declared here
-  411 | unsigned long ERR_get_error_line(const char **file, int *line);
-      |               ^~~~~~~~~~~~~~~~~~
-...
-
-
->
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: keyrings@vger.kernel.org
-> Co-developed-by: Adam Langley <agl@google.com>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+On Wed, Mar 09, 2022 at 06:44:35PM +0100, Christophe Leroy wrote:
+> Today drivers/pci/controller/pci-xgene.c defines SZ_1T
+> 
+> Move it into linux/sizes.h so that it can be re-used elsewhere.
+> 
+> Link: https://lore.kernel.org/r/575cb7164cf124c75df7cb9242ea7374733942bf.1642752946.git.christophe.leroy@csgroup.eu
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Toan Le <toan@os.amperecomputing.com>
+> Cc: linux-pci@vger.kernel.org
 > ---
-> v2: Clear up subject and patch description to avoid confusion
->
-> scripts/sign-file.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->
-> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-> index fbd34b8e8f578..fa3fa59db6669 100644
-> --- a/scripts/sign-file.c
-> +++ b/scripts/sign-file.c
-> @@ -135,7 +135,9 @@ static int pem_pw_cb(char *buf, int len, int w, void *v)
->  static EVP_PKEY *read_private_key(const char *private_key_name)
->  {
->  	EVP_PKEY *private_key;
-> +	BIO *b;
->
-> +#ifndef OPENSSL_NO_ENGINE
->  	if (!strncmp(private_key_name, "pkcs11:", 7)) {
->  		ENGINE *e;
->
-> @@ -153,17 +155,16 @@ static EVP_PKEY *read_private_key(const char *private_key_name)
->  		private_key = ENGINE_load_private_key(e, private_key_name,
->  						      NULL, NULL);
->  		ERR(!private_key, "%s", private_key_name);
-> -	} else {
-> -		BIO *b;
-> -
-> -		b = BIO_new_file(private_key_name, "rb");
-> -		ERR(!b, "%s", private_key_name);
-> -		private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
-> -						      NULL);
-> -		ERR(!private_key, "%s", private_key_name);
-> -		BIO_free(b);
-> +		return private_key;
->  	}
-> +#endif
->
-> +	b = BIO_new_file(private_key_name, "rb");
-> +	ERR(!b, "%s", private_key_name);
-> +	private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
-> +					      NULL);
-> +	ERR(!private_key, "%s", private_key_name);
-> +	BIO_free(b);
->  	return private_key;
->  }
+>  This patch is already in linux-next but not in Linus' tree yet
 
---
-Kees Cook
+What would you like me to do about this?  It's in linux-next, which
+means it will go to Linus' tree during the next merge window.
+
+But this is 01/14; are there other patches that I should be looking
+at?  Do I need to coordinate this with other patches that depend on
+it?
+
+>  drivers/pci/controller/pci-xgene.c | 1 -
+>  include/linux/sizes.h              | 2 ++
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
+> index 0d5acbfc7143..77c1fe7e11f9 100644
+> --- a/drivers/pci/controller/pci-xgene.c
+> +++ b/drivers/pci/controller/pci-xgene.c
+> @@ -49,7 +49,6 @@
+>  #define EN_REG				0x00000001
+>  #define OB_LO_IO			0x00000002
+>  #define XGENE_PCIE_DEVICEID		0xE004
+> -#define SZ_1T				(SZ_1G*1024ULL)
+>  #define PIPE_PHY_RATE_RD(src)		((0xc000 & (u32)(src)) >> 0xe)
+>  
+>  #define XGENE_V1_PCI_EXP_CAP		0x40
+> diff --git a/include/linux/sizes.h b/include/linux/sizes.h
+> index 1ac79bcee2bb..84aa448d8bb3 100644
+> --- a/include/linux/sizes.h
+> +++ b/include/linux/sizes.h
+> @@ -47,6 +47,8 @@
+>  #define SZ_8G				_AC(0x200000000, ULL)
+>  #define SZ_16G				_AC(0x400000000, ULL)
+>  #define SZ_32G				_AC(0x800000000, ULL)
+> +
+> +#define SZ_1T				_AC(0x10000000000, ULL)
+>  #define SZ_64T				_AC(0x400000000000, ULL)
+>  
+>  #endif /* __LINUX_SIZES_H__ */
+> -- 
+> 2.34.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

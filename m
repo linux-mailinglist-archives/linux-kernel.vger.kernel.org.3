@@ -2,224 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1955D4D5545
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C834D5548
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244493AbiCJX0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 18:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
+        id S1344650AbiCJX0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 18:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235482AbiCJX0M (ORCPT
+        with ESMTP id S1344626AbiCJX0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 18:26:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 987BD1965D2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646954709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iigEMniBW4cDGKyN9CUUK0j40uMHVCfBaIIQTILpT74=;
-        b=f7uLGSnkryLQ1z1ybqA1KBCFpnhHoKgve5Kb6FhyCOTXsuG8pvBYWFDtMMlGpOy4U0d6v5
-        cnTAUzeSPQ529HMWezb31MzYpfi/Q9co3oNXjJTajO4ZauM2igYCvdYbbXXfiByt0NTYy/
-        8ReOwgt1slQuGbel0Ra7OzwBdLWpBtY=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-lp6rQmGeMmm-s2YUGYmbSA-1; Thu, 10 Mar 2022 18:25:08 -0500
-X-MC-Unique: lp6rQmGeMmm-s2YUGYmbSA-1
-Received: by mail-qt1-f198.google.com with SMTP id bq21-20020a05622a1c1500b002e06d6279d5so5270251qtb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:25:08 -0800 (PST)
+        Thu, 10 Mar 2022 18:26:20 -0500
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968E4199D4F;
+        Thu, 10 Mar 2022 15:25:18 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so8657547oos.9;
+        Thu, 10 Mar 2022 15:25:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iigEMniBW4cDGKyN9CUUK0j40uMHVCfBaIIQTILpT74=;
-        b=sj0ddXKE3s1uQYFcjcltX7X8gZj/ZWv7/viley+pSaJLEj88SW7gRpqXGNy+1wh0nE
-         +zMUNJEf3gj3IoCyUg40kVWi+J33IBnBmUrNVslt/+mDVlcomONthoX8H4vIq5vhAnZV
-         e4iPG+xXJs8V6T9bR5+KGuSxhIIWpFjswxq8MMelXsUOlLSd4oRnWnvFtys/BIQc4EJM
-         yI6LjJqViZb0Nr9j1zjPkho4FkpYVd85kV1muRSiWCtzeQQqQDQt0VWuGpT4FXnxrzAc
-         hRMUJOISF8cumhIADUSVHpL4LmM1hygiwauikNqFn5z8vi8y5QE2NIEJZzYQ/48d08DR
-         mcWg==
-X-Gm-Message-State: AOAM533H0AkwmpiWHfPMCGSHjPYtXFHdJ5Twt9fImO4qyeH/YqJ4YyMN
-        9fdFI3316njzbDnP18hAl8YkIscMxaRXYKF5C/yLKMP3+Osn0hQ4lwcEQkYK1RdF2rJKy0Lx/Qm
-        Px021mZh507ZvZYNFAehfHEhK
-X-Received: by 2002:ac8:7c51:0:b0:2e1:a3b3:a6b7 with SMTP id o17-20020ac87c51000000b002e1a3b3a6b7mr6162340qtv.405.1646954708048;
-        Thu, 10 Mar 2022 15:25:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZdYVt/hej+NP9MnBR8KLbsb88RCsWan4ZfQgvzscZnZrchdDUePzbeAIICc8SuT/WZdaawQ==
-X-Received: by 2002:ac8:7c51:0:b0:2e1:a3b3:a6b7 with SMTP id o17-20020ac87c51000000b002e1a3b3a6b7mr6162320qtv.405.1646954707747;
-        Thu, 10 Mar 2022 15:25:07 -0800 (PST)
-Received: from xps13.. (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id x6-20020a376306000000b0067b32a8568esm2962230qkb.101.2022.03.10.15.25.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6w+O5WHCDjl5wbn5DykYEU1YA3lse6HoQ4X4n2SBQ0E=;
+        b=J+i4uYHKChdyvoeOwlEpvTxygenISaQqBC4Z7mFUgRaBY+cVVXUQwb4Vqg4zvBNBO3
+         4eBdDYmGnwOumfnOCgyZeN/5naHbkBybxt/dEEH/ZbkxNUyU0vO3jD5GPShMc/lw7J6I
+         AzGRAVt6b6UkIF9HqhfuELZs6+ZTbZanjhOoYb6w7f57aCqNViaoAVdyG8H+aGgbB+m8
+         1YBtLZ53wjhDbCNaEqpyX2oIuARTJuH6D3Mnkba0vm+i3RCSm8deoBUe+DbopVvRZ9JV
+         SOrjYfZyCGAWkP4lTKGf/HfO/+J+wjiqAqhkzjOst5JIr/yBXCeCilH46/QSxw7muItx
+         /yVA==
+X-Gm-Message-State: AOAM531P8MT1e89ysVRgTCxdsXfz0cXoLPW29rHuaLKFHL9Y2jJXsFox
+        Wfa57Cc5XBeigGlH85E+IQ==
+X-Google-Smtp-Source: ABdhPJw93wspnZY5lHnUvT+I+4Eho5yHyZHour2RJDedXvX/kod1RlNzg/cMBeVPl0llJZbBUOlpeQ==
+X-Received: by 2002:a05:6870:f70a:b0:da:bbb7:ab59 with SMTP id ej10-20020a056870f70a00b000dabbb7ab59mr2269545oab.93.1646954717912;
+        Thu, 10 Mar 2022 15:25:17 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x7-20020a4a8687000000b003191a2edc67sm3245292ooh.7.2022.03.10.15.25.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 15:25:07 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     bjorn.andersson@linaro.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] crypto: qcom-rng: ensure buffer for generate is completely filled
-Date:   Thu, 10 Mar 2022 18:24:59 -0500
-Message-Id: <20220310232459.749638-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 10 Mar 2022 15:25:17 -0800 (PST)
+Received: (nullmailer pid 2291916 invoked by uid 1000);
+        Thu, 10 Mar 2022 23:25:16 -0000
+Date:   Thu, 10 Mar 2022 17:25:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
+        robert.marko@sartura.hr, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 1/4] dt-bindings: pinctrl: mvebu: Document bindings
+ for AC5
+Message-ID: <YiqI3Gjcf8AFVQYL@robh.at.kernel.org>
+References: <20220310030039.2833808-1-chris.packham@alliedtelesis.co.nz>
+ <20220310030039.2833808-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310030039.2833808-2-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The generate function in struct rng_alg expects that the destination
-buffer is completely filled if the function returns 0. qcom_rng_read()
-can run into a situation where the buffer is partially filled with
-randomness and the remaining part of the buffer is zeroed since
-qcom_rng_generate() doesn't check the return value. This issue can
-be reproduced by running the following from libkcapi:
+On Thu, Mar 10, 2022 at 04:00:36PM +1300, Chris Packham wrote:
+> Add JSON schema for marvell,ac5-pinctrl present on the Marvell 98DX2530
+> SoC.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  .../bindings/pinctrl/marvell,ac5-pinctrl.yaml | 73 +++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..c7ab3d0e8420
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/marvell,ac5-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell AC5 pin controller
+> +
+> +maintainers:
+> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+> +
+> +description:
+> +  Bindings for Marvell's AC5 memory-mapped pin controller.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: marvell,ac5-pinctrl
+> +      - const: syscon
+> +      - const: simple-mfd
 
-    kcapi-rng -b 9000000 > OUTFILE
+How is this a 'syscon' or 'simple-mfd' For syscon, what other 
+functions/registers does it have? For simple-mfd, what other functions? 
+You haven't defined them in the schema.
 
-The generated OUTFILE will have three huge sections that contain all
-zeros, and this is caused by the code where the test
-'val & PRNG_STATUS_DATA_AVAIL' fails.
+blank line needed here.
 
-Let's fix this issue by ensuring that qcom_rng_read() always returns
-with a full buffer if the function returns success. Let's also have
-qcom_rng_generate() return the correct value.
-
-Here's some statistics from the ent project
-(https://www.fourmilab.ch/random/) that shows information about the
-quality of the generated numbers:
-
-    $ ent -c qcom-random-before
-    Value Char Occurrences Fraction
-      0           606748   0.067416
-      1            33104   0.003678
-      2            33001   0.003667
-    ...
-    253   �        32883   0.003654
-    254   �        33035   0.003671
-    255   �        33239   0.003693
-
-    Total:       9000000   1.000000
-
-    Entropy = 7.811590 bits per byte.
-
-    Optimum compression would reduce the size
-    of this 9000000 byte file by 2 percent.
-
-    Chi square distribution for 9000000 samples is 9329962.81, and
-    randomly would exceed this value less than 0.01 percent of the
-    times.
-
-    Arithmetic mean value of data bytes is 119.3731 (127.5 = random).
-    Monte Carlo value for Pi is 3.197293333 (error 1.77 percent).
-    Serial correlation coefficient is 0.159130 (totally uncorrelated =
-    0.0).
-
-Without this patch, the results of the chi-square test is 0.01%, and
-the numbers are certainly not random according to ent's project page.
-The results improve with this patch:
-
-    $ ent -c qcom-random-after
-    Value Char Occurrences Fraction
-      0            35432   0.003937
-      1            35127   0.003903
-      2            35424   0.003936
-    ...
-    253   �        35201   0.003911
-    254   �        34835   0.003871
-    255   �        35368   0.003930
-
-    Total:       9000000   1.000000
-
-    Entropy = 7.999979 bits per byte.
-
-    Optimum compression would reduce the size
-    of this 9000000 byte file by 0 percent.
-
-    Chi square distribution for 9000000 samples is 258.77, and randomly
-    would exceed this value 42.24 percent of the times.
-
-    Arithmetic mean value of data bytes is 127.5006 (127.5 = random).
-    Monte Carlo value for Pi is 3.141277333 (error 0.01 percent).
-    Serial correlation coefficient is 0.000468 (totally uncorrelated =
-    0.0).
-
-This change was tested on a Nexus 5 phone (msm8974 SoC).
-
-Signed-off-by: Brian Masney <bmasney@redhat.com>
-Fixes: ceec5f5b5988 ("crypto: qcom-rng - Add Qcom prng driver")
-Cc: stable@vger.kernel.org # 4.19+
----
- drivers/crypto/qcom-rng.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/crypto/qcom-rng.c b/drivers/crypto/qcom-rng.c
-index 99ba8d51d102..11f30fd48c14 100644
---- a/drivers/crypto/qcom-rng.c
-+++ b/drivers/crypto/qcom-rng.c
-@@ -8,6 +8,7 @@
- #include <linux/clk.h>
- #include <linux/crypto.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -43,16 +44,19 @@ static int qcom_rng_read(struct qcom_rng *rng, u8 *data, unsigned int max)
- {
- 	unsigned int currsize = 0;
- 	u32 val;
-+	int ret;
- 
- 	/* read random data from hardware */
- 	do {
--		val = readl_relaxed(rng->base + PRNG_STATUS);
--		if (!(val & PRNG_STATUS_DATA_AVAIL))
--			break;
-+		ret = readl_poll_timeout(rng->base + PRNG_STATUS, val,
-+					 val & PRNG_STATUS_DATA_AVAIL,
-+					 200, 10000);
-+		if (ret)
-+			return ret;
- 
- 		val = readl_relaxed(rng->base + PRNG_DATA_OUT);
- 		if (!val)
--			break;
-+			return -EINVAL;
- 
- 		if ((max - currsize) >= WORD_SZ) {
- 			memcpy(data, &val, WORD_SZ);
-@@ -61,11 +65,10 @@ static int qcom_rng_read(struct qcom_rng *rng, u8 *data, unsigned int max)
- 		} else {
- 			/* copy only remaining bytes */
- 			memcpy(data, &val, max - currsize);
--			break;
- 		}
- 	} while (currsize < max);
- 
--	return currsize;
-+	return 0;
- }
- 
- static int qcom_rng_generate(struct crypto_rng *tfm,
-@@ -87,7 +90,7 @@ static int qcom_rng_generate(struct crypto_rng *tfm,
- 	mutex_unlock(&rng->lock);
- 	clk_disable_unprepare(rng->clk);
- 
--	return 0;
-+	return ret;
- }
- 
- static int qcom_rng_seed(struct crypto_rng *tfm, const u8 *seed,
--- 
-2.34.1
-
+> +  reg:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  '-pins$':
+> +    type: object
+> +    $ref: pinmux-node.yaml#
+> +
+> +    properties:
+> +      marvell,function:
+> +        $ref: "/schemas/types.yaml#/definitions/string"
+> +        description:
+> +          Indicates the function to select.
+> +        enum: [ gpio, i2c0, i2c1, nand, sdio, spi0, spi1, uart0, uart1, uart2, uart3 ]
+> +
+> +      marvell,pins:
+> +        $ref: /schemas/types.yaml#/definitions/string-array
+> +        description:
+> +          Array of MPP pins to be used for the given function.
+> +        minItems: 1
+> +        items:
+> +          enum: [ mpp0, mpp1, mpp2, mpp3, mpp4, mpp5, mpp6, mpp7, mpp8, mpp9,
+> +                  mpp10, mpp11, mpp12, mpp13, mpp14, mpp15, mpp16, mpp17, mpp18, mpp19,
+> +                  mpp20, mpp21, mpp22, mpp23, mpp24, mpp25, mpp26, mpp27, mpp28, mpp29,
+> +                  mpp30, mpp31, mpp32, mpp33, mpp34, mpp35, mpp36, mpp37, mpp38, mpp39,
+> +                  mpp40, mpp41, mpp42, mpp43, mpp44, mpp45 ]
+> +
+> +allOf:
+> +  - $ref: "pinctrl.yaml#"
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pinctrl@80020100 {
+> +      compatible = "marvell,ac5-pinctrl",
+> +      "syscon", "simple-mfd";
+> +      reg = <0x80020100 0x20>;
+> +
+> +      i2c0_pins: i2c0-pins {
+> +        marvell,pins = "mpp26", "mpp27";
+> +        marvell,function = "i2c0";
+> +      };
+> +
+> +      i2c0_gpio: i2c0-gpio-pins {
+> +        marvell,pins = "mpp26", "mpp27";
+> +        marvell,function = "gpio";
+> +      };
+> +    };
+> -- 
+> 2.35.1
+> 
+> 

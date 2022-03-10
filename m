@@ -2,143 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558424D43E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AA64D43F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241223AbiCJJyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S233892AbiCJJzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:55:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241065AbiCJJyP (ORCPT
+        with ESMTP id S241200AbiCJJyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:54:15 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2730D43495;
-        Thu, 10 Mar 2022 01:53:01 -0800 (PST)
-Received: from zn.tnic (p200300ea97193878fa50b3d92789953a.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3878:fa50:b3d9:2789:953a])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 161DB1EC0666;
-        Thu, 10 Mar 2022 10:52:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646905974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C7SYYYmumQIkxqqsiGcyl2TiH2G1lYGXE1GrXXcBob8=;
-        b=Ii/dYHkpaq43SMEdSWX4MR6Z7g6ssoQ7Tx/VYrv43CcM56pDfFrklpCjuR9prAo6cz1rWr
-        mZfHQ/mgz0TpIYt8vWSiaLGQw4VZOJleN8DBJOMvL0ZZYLc1g12X2kGmOp5YYt3L4O5suF
-        yRtdP/RYoJIhXH6Nk4Y2K8tE+mfpC2U=
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-edac <linux-edac@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/5] EDAC/mc: Get rid of edac_align_ptr()
-Date:   Thu, 10 Mar 2022 10:52:54 +0100
-Message-Id: <20220310095254.1510-6-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220310095254.1510-1-bp@alien8.de>
-References: <20220310095254.1510-1-bp@alien8.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 04:54:51 -0500
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 076F8CB91A;
+        Thu, 10 Mar 2022 01:53:42 -0800 (PST)
+Received: from smtpclient.apple (p5b3d2183.dip0.t-ipconnect.de [91.61.33.131])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 95E34CECD9;
+        Thu, 10 Mar 2022 10:53:41 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH] Bluetooth: btusb: Add missing Chicony device for Realtek
+ RTL8723BE
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20220308145731.23166-1-tiwai@suse.de>
+Date:   Thu, 10 Mar 2022 10:53:41 +0100
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <96FE1499-AD74-48EC-9B05-FE8E1CAFF582@holtmann.org>
+References: <20220308145731.23166-1-tiwai@suse.de>
+To:     Takashi Iwai <tiwai@suse.de>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+Hi Takashi,
 
-Get rid of it now that it is unused.
+> Chicony Electronics BT device with 04f2:b49f seems to be a missing
+> entry for Realtek RTL8723BE.
+> 
+> T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=03 Dev#=  4 Spd=12   MxCh= 0
+> D:  Ver= 2.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=04f2 ProdID=b49f Rev= 2.00
+> S:  Manufacturer=Realtek
+> S:  Product=Bluetooth Radio
+> S:  SerialNumber=00e04c000001
+> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> 
+> BugLink: https://bugzilla.opensuse.org/show_bug.cgi?id=1196779
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+> drivers/bluetooth/btusb.c | 1 +
+> 1 file changed, 1 insertion(+)
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- drivers/edac/edac_mc.c     | 55 --------------------------------------
- drivers/edac/edac_module.h |  2 --
- 2 files changed, 57 deletions(-)
+patch has been applied to bluetooth-next tree.
 
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index b9b298a59f46..387b6851c975 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -170,61 +170,6 @@ const char * const edac_mem_types[] = {
- };
- EXPORT_SYMBOL_GPL(edac_mem_types);
- 
--/**
-- * edac_align_ptr - Prepares the pointer offsets for a single-shot allocation
-- * @p:		pointer to a pointer with the memory offset to be used. At
-- *		return, this will be incremented to point to the next offset
-- * @size:	Size of the data structure to be reserved
-- * @n_elems:	Number of elements that should be reserved
-- *
-- * If 'size' is a constant, the compiler will optimize this whole function
-- * down to either a no-op or the addition of a constant to the value of '*p'.
-- *
-- * The 'p' pointer is absolutely needed to keep the proper advancing
-- * further in memory to the proper offsets when allocating the struct along
-- * with its embedded structs, as edac_device_alloc_ctl_info() does it
-- * above, for example.
-- *
-- * At return, the pointer 'p' will be incremented to be used on a next call
-- * to this function.
-- */
--void *edac_align_ptr(void **p, unsigned int size, int n_elems)
--{
--	unsigned int align, r;
--	void *ptr = *p;
--
--	*p += size * n_elems;
--
--	/*
--	 * 'p' can possibly be an unaligned item X such that sizeof(X) is
--	 * 'size'.  Adjust 'p' so that its alignment is at least as
--	 * stringent as what the compiler would provide for X and return
--	 * the aligned result.
--	 * Here we assume that the alignment of a "long long" is the most
--	 * stringent alignment that the compiler will ever provide by default.
--	 * As far as I know, this is a reasonable assumption.
--	 */
--	if (size > sizeof(long))
--		align = sizeof(long long);
--	else if (size > sizeof(int))
--		align = sizeof(long);
--	else if (size > sizeof(short))
--		align = sizeof(int);
--	else if (size > sizeof(char))
--		align = sizeof(short);
--	else
--		return (char *)ptr;
--
--	r = (unsigned long)ptr % align;
--
--	if (r == 0)
--		return (char *)ptr;
--
--	*p += align - r;
--
--	return (void *)(((unsigned long)ptr) + align - r);
--}
--
- static void _edac_mc_free(struct mem_ctl_info *mci)
- {
- 	put_device(&mci->dev);
-diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
-index aa1f91688eb8..96f6de0c8ff6 100644
---- a/drivers/edac/edac_module.h
-+++ b/drivers/edac/edac_module.h
-@@ -59,8 +59,6 @@ extern void edac_device_reset_delay_period(struct edac_device_ctl_info
- 					   *edac_dev, unsigned long value);
- extern void edac_mc_reset_delay_period(unsigned long value);
- 
--extern void *edac_align_ptr(void **p, unsigned size, int n_elems);
--
- /*
-  * EDAC debugfs functions
-  */
--- 
-2.29.2
+Regards
+
+Marcel
 

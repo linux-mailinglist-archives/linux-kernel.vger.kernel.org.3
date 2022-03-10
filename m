@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFD04D4BE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F644D4ABF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243711AbiCJOht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:37:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S229886AbiCJO1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245650AbiCJOaq (ORCPT
+        with ESMTP id S243712AbiCJOZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:30:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E77184630;
-        Thu, 10 Mar 2022 06:26:35 -0800 (PST)
+        Thu, 10 Mar 2022 09:25:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537B015F373;
+        Thu, 10 Mar 2022 06:21:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BB461CFB;
-        Thu, 10 Mar 2022 14:26:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C46C340E8;
-        Thu, 10 Mar 2022 14:26:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 931D6B82678;
+        Thu, 10 Mar 2022 14:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72F1C340EB;
+        Thu, 10 Mar 2022 14:21:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922392;
-        bh=i/sntCpNH5GroLhd61OVs50uRsZvFc/O/fHof6GetNI=;
+        s=korg; t=1646922082;
+        bh=WMBsDGoFwKsBC3UgmdydLX9aTvQjG9Z/G7T0quQ9LAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lpsY7IxN4ZIxRCXTp1VFQzeP0tYBWB7qTi5EqiWHrmaaZGlLYzX46sH2vW/iZbw3f
-         NANz0uJQgLCvKUrvKfQdty3VESAVuVMPO/JJBweSoiLmz8ZPaL5Epem8Ne3kQA4SlF
-         uLhE+GwbU3+8O3yuWufggtGEakIykbXIGpI0aeVg=
+        b=Zb7Ot0ZLD3/IpdTGiL2I+T+bKCl54QkryaeFAiyaihphbFHL8BsHpmCe+amaPMRlx
+         RBMCQSmEJFZKiuR9xeIxdH3KtgsHnPU4KEXBF+lpAx72u3pwGSbQ5DleqgtQxEv4pG
+         vz8LAFF/ZckAtWtQgmKVKm33XycdbABeWz765yAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.10 22/58] arm64: cpufeature: add HWCAP for FEAT_RPRES
-Date:   Thu, 10 Mar 2022 15:18:42 +0100
-Message-Id: <20220310140813.507388640@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Simon Gaiser <simon@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 30/31] xen/gnttab: fix gnttab_end_foreign_access() without page specified
+Date:   Thu, 10 Mar 2022 15:18:43 +0100
+Message-Id: <20220310140808.419605112@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
+References: <20220310140807.524313448@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,107 +56,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joey Gouly <joey.gouly@arm.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 1175011a7d0030d49dc9c10bde36f08f26d0a8ee upstream.
+Commit 42baefac638f06314298087394b982ead9ec444b upstream.
 
-Add a new HWCAP to detect the Increased precision of Reciprocal Estimate
-and Reciprocal Square Root Estimate feature (FEAT_RPRES), introduced in Armv8.7.
+gnttab_end_foreign_access() is used to free a grant reference and
+optionally to free the associated page. In case the grant is still in
+use by the other side processing is being deferred. This leads to a
+problem in case no page to be freed is specified by the caller: the
+caller doesn't know that the page is still mapped by the other side
+and thus should not be used for other purposes.
 
-Also expose this to userspace in the ID_AA64ISAR2_EL1 feature register.
+The correct way to handle this situation is to take an additional
+reference to the granted page in case handling is being deferred and
+to drop that reference when the grant reference could be freed
+finally.
 
-Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211210165432.8106-4-joey.gouly@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+This requires that there are no users of gnttab_end_foreign_access()
+left directly repurposing the granted page after the call, as this
+might result in clobbered data or information leaks via the not yet
+freed grant reference.
+
+This is part of CVE-2022-23041 / XSA-396.
+
+Reported-by: Simon Gaiser <simon@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/arm64/cpu-feature-registers.rst |    8 ++++++++
- Documentation/arm64/elf_hwcaps.rst            |    4 ++++
- arch/arm64/include/asm/hwcap.h                |    1 +
- arch/arm64/include/uapi/asm/hwcap.h           |    1 +
- arch/arm64/kernel/cpufeature.c                |    2 ++
- arch/arm64/kernel/cpuinfo.c                   |    1 +
- 6 files changed, 17 insertions(+)
+ drivers/xen/grant-table.c |   30 +++++++++++++++++++++++-------
+ include/xen/grant_table.h |    7 ++++++-
+ 2 files changed, 29 insertions(+), 8 deletions(-)
 
---- a/Documentation/arm64/cpu-feature-registers.rst
-+++ b/Documentation/arm64/cpu-feature-registers.rst
-@@ -283,6 +283,14 @@ infrastructure:
-      | AFP                          | [47-44] |    y    |
-      +------------------------------+---------+---------+
- 
-+  9) ID_AA64ISAR2_EL1 - Instruction set attribute register 2
-+
-+     +------------------------------+---------+---------+
-+     | Name                         |  bits   | visible |
-+     +------------------------------+---------+---------+
-+     | RPRES                        | [7-4]   |    y    |
-+     +------------------------------+---------+---------+
-+
- 
- Appendix I: Example
- -------------------
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -253,6 +253,10 @@ HWCAP2_AFP
- 
-     Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
- 
-+HWCAP2_RPRES
-+
-+    Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -107,6 +107,7 @@
- #define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
- #define KERNEL_HWCAP_ECV		__khwcap2_feature(ECV)
- #define KERNEL_HWCAP_AFP		__khwcap2_feature(AFP)
-+#define KERNEL_HWCAP_RPRES		__khwcap2_feature(RPRES)
- 
- /*
-  * This yields a mask that user programs can use to figure out what
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -77,5 +77,6 @@
- #define HWCAP2_MTE		(1 << 18)
- #define HWCAP2_ECV		(1 << 19)
- #define HWCAP2_AFP		(1 << 20)
-+#define HWCAP2_RPRES		(1 << 21)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -206,6 +206,7 @@ static const struct arm64_ftr_bits ftr_i
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -114,6 +114,10 @@ struct gnttab_ops {
+ 	 * return the frame.
+ 	 */
+ 	unsigned long (*end_foreign_transfer_ref)(grant_ref_t ref);
++	/*
++	 * Read the frame number related to a given grant reference.
++	 */
++	unsigned long (*read_frame)(grant_ref_t ref);
  };
  
- static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_RPRES_SHIFT, 4, 0),
- 	ARM64_FTR_END,
+ struct unmap_refs_callback_data {
+@@ -278,6 +282,11 @@ int gnttab_end_foreign_access_ref(grant_
+ }
+ EXPORT_SYMBOL_GPL(gnttab_end_foreign_access_ref);
+ 
++static unsigned long gnttab_read_frame_v1(grant_ref_t ref)
++{
++	return gnttab_shared.v1[ref].frame;
++}
++
+ struct deferred_entry {
+ 	struct list_head list;
+ 	grant_ref_t ref;
+@@ -307,12 +316,9 @@ static void gnttab_handle_deferred(unsig
+ 		spin_unlock_irqrestore(&gnttab_list_lock, flags);
+ 		if (_gnttab_end_foreign_access_ref(entry->ref, entry->ro)) {
+ 			put_free_entry(entry->ref);
+-			if (entry->page) {
+-				pr_debug("freeing g.e. %#x (pfn %#lx)\n",
+-					 entry->ref, page_to_pfn(entry->page));
+-				put_page(entry->page);
+-			} else
+-				pr_info("freeing g.e. %#x\n", entry->ref);
++			pr_debug("freeing g.e. %#x (pfn %#lx)\n",
++				 entry->ref, page_to_pfn(entry->page));
++			put_page(entry->page);
+ 			kfree(entry);
+ 			entry = NULL;
+ 		} else {
+@@ -337,9 +343,18 @@ static void gnttab_handle_deferred(unsig
+ static void gnttab_add_deferred(grant_ref_t ref, bool readonly,
+ 				struct page *page)
+ {
+-	struct deferred_entry *entry = kmalloc(sizeof(*entry), GFP_ATOMIC);
++	struct deferred_entry *entry;
++	gfp_t gfp = (in_atomic() || irqs_disabled()) ? GFP_ATOMIC : GFP_KERNEL;
+ 	const char *what = KERN_WARNING "leaking";
+ 
++	entry = kmalloc(sizeof(*entry), gfp);
++	if (!page) {
++		unsigned long gfn = gnttab_interface->read_frame(ref);
++
++		page = pfn_to_page(gfn_to_pfn(gfn));
++		get_page(page);
++	}
++
+ 	if (entry) {
+ 		unsigned long flags;
+ 
+@@ -1011,6 +1026,7 @@ static const struct gnttab_ops gnttab_v1
+ 	.update_entry			= gnttab_update_entry_v1,
+ 	.end_foreign_access_ref		= gnttab_end_foreign_access_ref_v1,
+ 	.end_foreign_transfer_ref	= gnttab_end_foreign_transfer_ref_v1,
++	.read_frame			= gnttab_read_frame_v1,
  };
  
-@@ -2264,6 +2265,7 @@ static const struct arm64_cpu_capabiliti
- #endif /* CONFIG_ARM64_MTE */
- 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
- 	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
-+	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_RPRES_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
- 	{},
- };
- 
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -96,6 +96,7 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_MTE]		= "mte",
- 	[KERNEL_HWCAP_ECV]		= "ecv",
- 	[KERNEL_HWCAP_AFP]		= "afp",
-+	[KERNEL_HWCAP_RPRES]		= "rpres",
- };
- 
- #ifdef CONFIG_COMPAT
+ static void gnttab_request_version(void)
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -100,7 +100,12 @@ int gnttab_end_foreign_access_ref(grant_
+  * Note that the granted page might still be accessed (read or write) by the
+  * other side after gnttab_end_foreign_access() returns, so even if page was
+  * specified as 0 it is not allowed to just reuse the page for other
+- * purposes immediately.
++ * purposes immediately. gnttab_end_foreign_access() will take an additional
++ * reference to the granted page in this case, which is dropped only after
++ * the grant is no longer in use.
++ * This requires that multi page allocations for areas subject to
++ * gnttab_end_foreign_access() are done via alloc_pages_exact() (and freeing
++ * via free_pages_exact()) in order to avoid high order pages.
+  */
+ void gnttab_end_foreign_access(grant_ref_t ref, int readonly,
+ 			       unsigned long page);
 
 

@@ -2,205 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3C44D533F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454774D5344
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245583AbiCJUuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S1343541AbiCJUvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbiCJUup (ORCPT
+        with ESMTP id S245695AbiCJUvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:50:45 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347DF187E1A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:43 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 3so11574178lfr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
-        b=Y7FvDAJsL40Mo2PA9+bZiLPYtKMnLPXzXJ5HLFicNxmCzZdjJYLjv5yqpsyhCi7vOr
-         CD+QPTbXobrKHAuNAA7EVyR6s5AJ2oTb3lHlMncdUyYPQ4ai6e5Om/5yCjw+F2P89/hF
-         lzvVtisopmYw9PsQWFgxf4X1aLVZkcgRXPVxUBeu2A8j9m7lL4/+HuQTMMTU8yAuUPIr
-         /9UskIi+Izx38o1RWUn/mGiOU115InWglwpA0y6MGBMTHlx/0TvsozCBTKVyaBjguFqC
-         U25qw5VYUkLud9lfcYzlxnt+DNX0zT/h2pGf4bXY+rXL37GWa3nX4nAjILfxiBwfELTC
-         y3yg==
+        Thu, 10 Mar 2022 15:51:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2875188848
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646945397;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/wHyperqVD6yT4MZyOSDrCItm0ScJpHPiGZO3nX6coc=;
+        b=dme5Spj3BzzmWYzkmx+4hVXJm3vJNXtajhD3vUv9xHvg9kh0tV61kxIm7RmiuzwaCkz8+C
+        2+LuCi6po277se54UUIv8OV4yDOF+14aNMGs5GrEhZWPq18RwwQLtCelIq21SZDOaBAQr9
+        jyv6vmH1Z+qgu+CKS9QEJEOfMgwm7Qc=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-VZ9mlrzOMu-TGyDzVn3NYQ-1; Thu, 10 Mar 2022 15:49:56 -0500
+X-MC-Unique: VZ9mlrzOMu-TGyDzVn3NYQ-1
+Received: by mail-il1-f200.google.com with SMTP id a20-20020a056e02121400b002c61b8c0841so4131527ilq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:49:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LoJnjb1eTkY6RbpEBPOSq+mDiZAbj8l9xQTfBcxy8oU=;
-        b=HPOZUAFjeo93Ij+4bA4poGIj1edbsBShVlKHZ82yB2O6Yu1VIwuWso+AUvU8B9Az9+
-         zG0V3l7xU1sh2p7b/imeA2VMEG5aGIaa7AftEhaU0Ls5qw42pXxZonOrjfKelqLCIFV5
-         RRl3ovcnLmn8obTXCXiW9LCaqNxG2CCsPn84NGWk2p3FWa1yBFitfeIPNHqWZnUpdBMa
-         Myb7eQ73XeJpm7BTag6bgwmxMymtikOiGyjsiRcaERclezEOdk3CZBQyi9ACGFvniaJ3
-         nxj39tGK6n24gOUyl4PFiVnN4zdBC7Mvs4jkuV7nPWdjEhH5x4EQ+ZwOSPa6MbB9qSdK
-         GzxA==
-X-Gm-Message-State: AOAM533lMLot7qwK9whe4DjWIYyg7Grvu1XCAWSyhZWl3HZSrpT5UOoL
-        A+DKlGcIxeAiBkjFUsLlk/PavBXqP6A9IpWiZEUHMg==
-X-Google-Smtp-Source: ABdhPJy8imNzaXNZDqs43TGptWccGDGO5gCC4bQU1a3VTUFE15BERAeVO8Mg8dbe5wwLt+vA1yx3Tir6Y+d/zYS/XIE=
-X-Received: by 2002:a05:6512:31d4:b0:445:e4ef:c0f8 with SMTP id
- j20-20020a05651231d400b00445e4efc0f8mr4046529lfe.626.1646945381031; Thu, 10
- Mar 2022 12:49:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
- <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net> <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
- <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
-In-Reply-To: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 10 Mar 2022 12:49:29 -0800
-Message-ID: <CAKwvOdkyi1c9TvP_Bzn3+71kKsJzAbQZmgDzfDM8c7sce-V0Dw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=/wHyperqVD6yT4MZyOSDrCItm0ScJpHPiGZO3nX6coc=;
+        b=Z2zKGKcwsaJir470fWILgLbSa5n2iI5SXDtHsUUvMm0xOujaUJCpqlP/G1I26gyUfu
+         zBZZyR3LjMQVp9ntCmqYTMTjORD4RSZCIqE8bE9e6TKX0nrQc581QEGwdLwVYiiFsL3E
+         souKO26e/Gv3j8hBoboCFQl0Rm33nrLf/djpIFAacnO9BgTtdfatM4dZq3qixVFEJAkl
+         EcWZW8POTozbdRoOu6/Wi2ydJ3yvIrhODr57OPguUVI1PaYvd7YNLeCUwgK4FfnoQG+f
+         ziSyY/V0zm8a45bQpfvO3JuHHgpe/43qzjoVvwn7J23es/uQoO6LsVO87O492nM8lfnv
+         5ROA==
+X-Gm-Message-State: AOAM531f5/5k8Rqy0DRi6vJQis3oJ1mmSneDemccOQMPXpIqvJV07C5/
+        yRCMpcjLF6XhdRCT1xsOYnemvfBCzT8Nr28ohSV1MD3lngGczeNAZtxpbBdgqZC/I7okyYMqxV+
+        MdtnWTSKpyFgRDmJPWnumNMuW
+X-Received: by 2002:a05:6e02:180d:b0:2c7:733a:f11d with SMTP id a13-20020a056e02180d00b002c7733af11dmr710113ilv.23.1646945395829;
+        Thu, 10 Mar 2022 12:49:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzdGHIOmSFlUA27ptxSyyRFHgWYtRYdyaS5HXsHLwYYnrbDuYuHO7OCWr0eIL08JCnOU3b0MA==
+X-Received: by 2002:a05:6e02:180d:b0:2c7:733a:f11d with SMTP id a13-20020a056e02180d00b002c7733af11dmr710078ilv.23.1646945395433;
+        Thu, 10 Mar 2022 12:49:55 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id b11-20020a056e02184b00b002c66e75d5f7sm3455113ilv.39.2022.03.10.12.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 12:49:55 -0800 (PST)
+Date:   Thu, 10 Mar 2022 13:49:54 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
+        Xu Zaibo <xuzaibo@huawei.com>
+Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220310134954.0df4bb12.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB527634CCF86829E0680E5E678C0A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
+        <20220304205720.GE219866@nvidia.com>
+        <20220307120513.74743f17.alex.williamson@redhat.com>
+        <aac9a26dc27140d9a1ce56ebdec393a6@huawei.com>
+        <20220307125239.7261c97d.alex.williamson@redhat.com>
+        <BN9PR11MB5276EBE887402EBE22630BAB8C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20220308123312.1f4ba768.alex.williamson@redhat.com>
+        <BN9PR11MB527634CCF86829E0680E5E678C0A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: Red Hat
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 2:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Mar 10, 2022 at 09:22:59AM +0000, David Laight wrote:
-> > From: Peter Zijlstra
-> > > Sent: 10 March 2022 09:05
-> > >
-> > > On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
-> > >
-> > > > I observed the following error when building with
-> > > > CONFIG_LTO_CLANG_FULL=y enabled:
+On Wed, 9 Mar 2022 10:11:06 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
+
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Wednesday, March 9, 2022 3:33 AM
+> >=20
+> > On Tue, 8 Mar 2022 08:11:11 +0000
+> > "Tian, Kevin" <kevin.tian@intel.com> wrote:
+> >  =20
+> > > > From: Alex Williamson <alex.williamson@redhat.com>
+> > > > Sent: Tuesday, March 8, 2022 3:53 AM =20
+> > > > > =20
+> > > > > > I think we still require acks from Bjorn and Zaibo for select p=
+atches
+> > > > > > in this series. =20
+> > > > >
+> > > > > I checked with Ziabo. He moved projects and is no longer looking =
+into =20
+> > > > crypto stuff. =20
+> > > > > Wangzhou and LiuLongfang now take care of this. Received acks fro=
+m =20
+> > > > Wangzhou =20
+> > > > > already and I will request Longfang to provide his. Hope that's o=
+k. =20
 > > > >
-> > > > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> > > > already defined
-> > > >         ibt_selftest_ip:
-> > > >         ^
-> > > >
-> > > > Seems to come from
-> > > > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> > > >
-> > > > Commenting out the label in the inline asm, I then observed:
-> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> > > > callable instruction with modified stack frame
-> > > > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> > > > mismatch: cfa1=4+64 cfa2=4+8
-> > > > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> > > > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> > > > the ibt_selftest_ip label).
+> > > > Maybe a good time to have them update MAINTAINERS as well.  Thanks,
+> > > > =20
 > > >
-> > LTO has probably inlined it twice.
->
-> Indeed, adding noinline to ibt_selftest() makes it work.
+> > > I have one question here (similar to what we discussed for mdev befor=
+e).
+> > >
+> > > Now we are adding vendor specific drivers under /drivers/vfio. Two dr=
+ivers
+> > > on radar and more will come. Then what would be the criteria for
+> > > accepting such a driver? Do we prefer to a model in which the author =
+=20
+> > should =20
+> > > provide enough background for vfio community to understand how it =20
+> > works =20
+> > > or as done here just rely on the PF driver owner to cover device spec=
+ific
+> > > code?
+> > >
+> > > If the former we may need document some process for what information
+> > > is necessary and also need secure increased review bandwidth from key
+> > > reviewers in vfio community.
+> > >
+> > > If the latter then how can we guarantee no corner case overlooked by =
+both
+> > > sides (i.e. how to know the coverage of total reviews)? Another open =
+is =20
+> > who =20
+> > > from the PF driver sub-system should be considered as the one to give=
+ the
+> > > green signal. If the sub-system maintainer trusts the PF driver owner=
+ and
+> > > just pulls commits from him then having the r-b from the PF driver ow=
+ner is
+> > > sufficient. But if the sub-system maintainer wants to review detail c=
+hange
+> > > in every underlying driver then we probably also want to get the ack =
+from
+> > > the maintainer.
+> > >
+> > > Overall I didn't mean to slow down the progress of this series. But a=
+bove
+> > > does be some puzzle occurred in my review. =F0=9F=98=8A =20
+> >=20
+> > Hi Kevin,
+> >=20
+> > Good questions, I'd like a better understanding of expectations as
+> > well.  I think the intentions are the same as any other sub-system, the
+> > drivers make use of shared interfaces and extensions and the role of
+> > the sub-system should be to make sure those interfaces are used
+> > correctly and extensions fit well within the overall design.  However,
+> > just as the network maintainer isn't expected to fully understand every
+> > NIC driver, I think/hope we have the same expectations here.  It's
+> > certainly a benefit to the community and perceived trustworthiness if
+> > each driver outlines its operating model and security nuances, but
+> > those are only ever going to be the nuances identified by the people
+> > who have the access and energy to evaluate the device.
+> >=20
+> > It's going to be up to the community to try to determine that any new
+> > drivers are seriously considering security and not opening any new gaps
+> > relative to behavior using the base vfio-pci driver.  For the driver
+> > examples we have, this seems a bit easier than evaluating an entire
+> > mdev device because they're largely providing direct access to the
+> > device rather than trying to multiplex a shared physical device.  We
+> > can therefore focus on incremental functionality, as both drivers have
+> > done, implementing a boilerplate vendor driver, then adding migration
+> > support.  I imagine this won't always be the case though and some
+> > drivers will re-implement much of the core to support further emulation
+> > and shared resources.
+> >=20
+> > So how do we as a community want to handle this?  I wouldn't mind, I'd
+> > actually welcome, some sort of review requirement for new vfio vendor
+> > driver variants.  Is that reasonable?  What would be the criteria?
+> > Approval from the PF driver owner, if different/necessary, and at least
+> > one unaffiliated reviewer (preferably an active vfio reviewer or
+> > existing vfio variant driver owner/contributor)?  Ideas welcome.
+> > Thanks,
+> >  =20
+>=20
+> Yes, and the criteria is the hard part. In the end it largely depend on=20
+> the expectations of the reviewers. =20
+>=20
+> If the unaffiliated reviewer only cares about the usage of shared=20
+> interfaces or extensions as you said then what this series does is
+> just fine. Such type of review can be easily done via reading code=20
+> and doesn't require detail device knowledge.
+>=20
+> On the other hand if the reviewer wants to do a full functional
+> review of how migration is actually supported for such device,=20
+> whatever information (patch description, code comment, kdoc,
+> etc.) necessary to build a standalone migration story would be
+> appreciated, e.g.:
+>=20
+>   - What composes the device state?
+>   - Which portion of the device state is exposed to and managed
+>     by the user and which is hidden from the user (i.e. controlled
+>     by the PF driver)?
+>   - Interface between the vfio driver and the device (and/or PF
+>     driver) to manage the device state;
+>   - Rich functional-level comments for the reviewer to dive into
+>     the migration flow;
+>   - ...
+>=20
+> I guess we don't want to force one model over the other. Just
+> from my impression the more information the driver can=20
+> provide the more time I'd like to spend on the review. Otherwise
+> it has to trend to the minimal form i.e. the first model.
+>=20
+> and currently I don't have a concrete idea how the 2nd model will
+> work. maybe it will get clear only when a future driver attracts=20
+> people to do thorough review...
 
-Yep, that LGTM. If you end up sticking that as a patch on top:
+Do you think we should go so far as to formalize this via a MAINTAINERS
+entry, for example:
 
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+diff --git a/Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst b/Doc=
+umentation/vfio/vfio-pci-vendor-driver-acceptance.rst
+new file mode 100644
+index 000000000000..54ebafcdd735
+--- /dev/null
++++ b/Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst
+@@ -0,0 +1,35 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Acceptance criteria for vfio-pci device specific driver variants
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++Overview
++--------
++The vfio-pci driver exists as a device agnostic driver using the
++system IOMMU and relying on the robustness of platform fault
++handling to provide isolated device access to userspace.  While the
++vfio-pci driver does include some device specific support, further
++extensions for yet more advanced device specific features are not
++sustainable.  The vfio-pci driver has therefore split out
++vfio-pci-core as a library that may be reused to implement features
++requiring device specific knowledge, ex. saving and loading device
++state for the purposes of supporting migration.
++
++In support of such features, it's expected that some device specific
++variants may interact with parent devices (ex. SR-IOV PF in support of
++a user assigned VF) or other extensions that may not be otherwise
++accessible via the vfio-pci base driver.  Authors of such drivers
++should be diligent not to create exploitable interfaces via such
++interactions or allow unchecked userspace data to have an effect
++beyond the scope of the assigned device.
++
++New driver submissions are therefore requested to have approval via
++Sign-off for any interactions with parent drivers.  Additionally,
++drivers should make an attempt to provide sufficient documentation
++for reviewers to understand the device specific extensions, for
++example in the case of migration data, how is the device state
++composed and consumed, which portions are not otherwise available to
++the user via vfio-pci, what safeguards exist to validate the data,
++etc.  To that extent, authors should additionally expect to require
++reviews from at least one of the listed reviewers, in addition to the
++overall vfio maintainer.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4322b5321891..4f7d26f9aac6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20314,6 +20314,13 @@ F:	drivers/vfio/mdev/
+ F:	include/linux/mdev.h
+ F:	samples/vfio-mdev/
+=20
++VFIO PCI VENDOR DRIVERS
++R:	Your Name <your.name@here.com>
++L:	kvm@vger.kernel.org
++S:	Maintained
++P:	Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst
++F:	drivers/vfio/pci/*/
++
+ VFIO PLATFORM DRIVER
+ M:	Eric Auger <eric.auger@redhat.com>
+ L:	kvm@vger.kernel.org
 
-For the kernel IBT series @ v4 plus this diff:
+Ideally we'd have at least Yishai, Shameer, Jason, and yourself listed
+as reviewers (Connie and I are included via the higher level entry).
+Thoughts from anyone?  Volunteers for reviewers if we want to press
+forward with this as formal acceptance criteria?  Thanks,
 
-Tested-by: Nick Desaulniers <ndesaulniers@google.com> # llvm build, non-IBT boot
+Alex
 
->
->
-> ---
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index d8bbc705efe5..0c737cc31ee5 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
->         return NOTIFY_STOP;
->  }
->
-> -static void __init int3_selftest(void)
-> +/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
-> +static noinline void __init int3_selftest(void)
->  {
->         static __initdata struct notifier_block int3_exception_nb = {
->                 .notifier_call  = int3_exception_notify,
-> @@ -794,9 +795,8 @@ static void __init int3_selftest(void)
->         /*
->          * Basically: int3_magic(&val); but really complicated :-)
->          *
-> -        * Stick the address of the INT3 instruction into int3_selftest_ip,
-> -        * then trigger the INT3, padded with NOPs to match a CALL instruction
-> -        * length.
-> +        * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
-> +        * notifier above will emulate CALL for us.
->          */
->         asm volatile ("int3_selftest_ip:\n\t"
->                       ANNOTATE_NOENDBR
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 837cc3c7d4f4..fb89a2f1011f 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -214,7 +214,7 @@ DEFINE_IDTENTRY(exc_overflow)
->
->  static __ro_after_init bool ibt_fatal = true;
->
-> -void ibt_selftest_ip(void); /* code label defined in asm below */
-> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
->
->  enum cp_error_code {
->         CP_EC        = (1 << 15) - 1,
-> @@ -238,7 +238,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->         if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
->                 return;
->
-> -       if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-> +       if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
-
-(Though adding the address of operator & to the function name in the
-comparisons isn't strictly necessary; functions used in expressions
-"decay" into function pointers; I guess the standard calls these
-"function designators." I see that's been added to be consistent
-between the two...See 6.3.2.1.4 of
-http://open-std.org/jtc1/sc22/wg14/www/docs/n2731.pdf pdf page
-62/printed page 46.)
-
->                 regs->ax = 0;
->                 return;
->         }
-> @@ -252,7 +252,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->         BUG();
->  }
->
-> -bool ibt_selftest(void)
-> +/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
-> +noinline bool ibt_selftest(void)
->  {
->         unsigned long ret;
->
-
-
--- 
-Thanks,
-~Nick Desaulniers

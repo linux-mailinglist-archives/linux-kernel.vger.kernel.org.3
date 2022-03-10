@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B9E4D4B24
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 525E34D4A0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244736AbiCJOdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S243787AbiCJO1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244236AbiCJO2i (ORCPT
+        with ESMTP id S243558AbiCJOYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:28:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78E2C7906;
-        Thu, 10 Mar 2022 06:23:33 -0800 (PST)
+        Thu, 10 Mar 2022 09:24:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0241F15AF17;
+        Thu, 10 Mar 2022 06:21:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E10D8B82615;
-        Thu, 10 Mar 2022 14:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B513C340E8;
-        Thu, 10 Mar 2022 14:23:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31893B8254A;
+        Thu, 10 Mar 2022 14:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8996EC340E8;
+        Thu, 10 Mar 2022 14:21:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922210;
-        bh=yxgoumT1YLDdhdq5IBgheUbGQSZm44o0PVleM4hr8QE=;
+        s=korg; t=1646922073;
+        bh=homSW79ERgDC4wOvioAVB6uYm3zjRaRoNQR6qFezAr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RNMSxsimwp70xhs4XctV+7JrHnmK7350zaDAD7ow74IEpdHSXxAIB7iN2jPrZrmRF
-         Yai3lADtVOKUrhK2sd18CClbmvmn2tTd0ChFeLSwl0ZwlvP1GpCAa9+CiU0ahZC8AP
-         GqDmisMsmtk4Wes8f71WbPFLtPcU2LBgCQzf+g1Q=
+        b=XCvN8tt0HgQ6QLqTMLPC0/TaWWpdNWKPvj/1aQlfTOzjaAAnP2+5B8U1A2/pWAUz7
+         MvCR6wN8NG5Nz0YppkCG9TVQad83IjxjDCir+dO6F4OH/3pG0UYoFmjYtxBIXk4prt
+         eeBVke3nK4g3AYuHKFHr29h3uaMZcEWmSkUqgHYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4.19 14/33] ARM: early traps initialisation
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 28/31] xen: remove gnttab_query_foreign_access()
 Date:   Thu, 10 Mar 2022 15:18:41 +0100
-Message-Id: <20220310140808.166993548@linuxfoundation.org>
+Message-Id: <20220310140808.360509359@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
-References: <20220310140807.749164737@linuxfoundation.org>
+In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
+References: <20220310140807.524313448@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+From: Juergen Gross <jgross@suse.com>
 
-commit 04e91b7324760a377a725e218b5ee783826d30f5 upstream.
+Commit 1dbd11ca75fe664d3e54607547771d021f531f59 upstream.
 
-Provide a couple of helpers to copy the vectors and stubs, and also
-to flush the copied vectors and stubs.
+Remove gnttab_query_foreign_access(), as it is unused and unsafe to
+use.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+All previous use cases assumed a grant would not be in use after
+gnttab_query_foreign_access() returned 0. This information is useless
+in best case, as it only refers to a situation in the past, which could
+have changed already.
+
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/traps.c |   27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ drivers/xen/grant-table.c |   19 -------------------
+ include/xen/grant_table.h |    2 --
+ 2 files changed, 21 deletions(-)
 
---- a/arch/arm/kernel/traps.c
-+++ b/arch/arm/kernel/traps.c
-@@ -830,10 +830,22 @@ static inline void __init kuser_init(voi
- }
- #endif
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -114,13 +114,6 @@ struct gnttab_ops {
+ 	 * return the frame.
+ 	 */
+ 	unsigned long (*end_foreign_transfer_ref)(grant_ref_t ref);
+-	/*
+-	 * Query the status of a grant entry. Ref parameter is reference of
+-	 * queried grant entry, return value is the status of queried entry.
+-	 * Detailed status(writing/reading) can be gotten from the return value
+-	 * by bit operations.
+-	 */
+-	int (*query_foreign_access)(grant_ref_t ref);
+ };
  
-+#ifndef CONFIG_CPU_V7M
-+static void copy_from_lma(void *vma, void *lma_start, void *lma_end)
-+{
-+	memcpy(vma, lma_start, lma_end - lma_start);
-+}
-+
-+static void flush_vectors(void *vma, size_t offset, size_t size)
-+{
-+	unsigned long start = (unsigned long)vma + offset;
-+	unsigned long end = start + size;
-+
-+	flush_icache_range(start, end);
-+}
-+
- void __init early_trap_init(void *vectors_base)
+ struct unmap_refs_callback_data {
+@@ -255,17 +248,6 @@ int gnttab_grant_foreign_access(domid_t
+ }
+ EXPORT_SYMBOL_GPL(gnttab_grant_foreign_access);
+ 
+-static int gnttab_query_foreign_access_v1(grant_ref_t ref)
+-{
+-	return gnttab_shared.v1[ref].flags & (GTF_reading|GTF_writing);
+-}
+-
+-int gnttab_query_foreign_access(grant_ref_t ref)
+-{
+-	return gnttab_interface->query_foreign_access(ref);
+-}
+-EXPORT_SYMBOL_GPL(gnttab_query_foreign_access);
+-
+ static int gnttab_end_foreign_access_ref_v1(grant_ref_t ref, int readonly)
  {
--#ifndef CONFIG_CPU_V7M
--	unsigned long vectors = (unsigned long)vectors_base;
- 	extern char __stubs_start[], __stubs_end[];
- 	extern char __vectors_start[], __vectors_end[];
- 	unsigned i;
-@@ -854,17 +866,20 @@ void __init early_trap_init(void *vector
- 	 * into the vector page, mapped at 0xffff0000, and ensure these
- 	 * are visible to the instruction stream.
- 	 */
--	memcpy((void *)vectors, __vectors_start, __vectors_end - __vectors_start);
--	memcpy((void *)vectors + 0x1000, __stubs_start, __stubs_end - __stubs_start);
-+	copy_from_lma(vectors_base, __vectors_start, __vectors_end);
-+	copy_from_lma(vectors_base + 0x1000, __stubs_start, __stubs_end);
+ 	u16 flags, nflags;
+@@ -1029,7 +1011,6 @@ static const struct gnttab_ops gnttab_v1
+ 	.update_entry			= gnttab_update_entry_v1,
+ 	.end_foreign_access_ref		= gnttab_end_foreign_access_ref_v1,
+ 	.end_foreign_transfer_ref	= gnttab_end_foreign_transfer_ref_v1,
+-	.query_foreign_access		= gnttab_query_foreign_access_v1,
+ };
  
- 	kuser_init(vectors_base);
+ static void gnttab_request_version(void)
+--- a/include/xen/grant_table.h
++++ b/include/xen/grant_table.h
+@@ -118,8 +118,6 @@ int gnttab_grant_foreign_transfer(domid_
+ unsigned long gnttab_end_foreign_transfer_ref(grant_ref_t ref);
+ unsigned long gnttab_end_foreign_transfer(grant_ref_t ref);
  
--	flush_icache_range(vectors, vectors + PAGE_SIZE * 2);
-+	flush_vectors(vectors_base, 0, PAGE_SIZE * 2);
-+}
- #else /* ifndef CONFIG_CPU_V7M */
-+void __init early_trap_init(void *vectors_base)
-+{
- 	/*
- 	 * on V7-M there is no need to copy the vector table to a dedicated
- 	 * memory area. The address is configurable and so a table in the kernel
- 	 * image can be used.
- 	 */
--#endif
- }
-+#endif
+-int gnttab_query_foreign_access(grant_ref_t ref);
+-
+ /*
+  * operations on reserved batches of grant references
+  */
 
 

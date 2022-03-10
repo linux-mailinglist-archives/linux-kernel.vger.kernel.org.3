@@ -2,55 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B6F4D4A8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70B84D4BC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245341AbiCJOjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S238790AbiCJOhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343869AbiCJOb0 (ORCPT
+        with ESMTP id S245145AbiCJOaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AB5C4E06;
-        Thu, 10 Mar 2022 06:27:41 -0800 (PST)
+        Thu, 10 Mar 2022 09:30:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20D41688EE;
+        Thu, 10 Mar 2022 06:25:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E5C161D22;
-        Thu, 10 Mar 2022 14:27:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8C4C340E8;
-        Thu, 10 Mar 2022 14:27:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4941BB82615;
+        Thu, 10 Mar 2022 14:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8230FC36AE2;
+        Thu, 10 Mar 2022 14:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922460;
-        bh=zMW4Lex3NIwRpcAAAaCfwEW3/J0cPpUtzbhCt+891Os=;
-        h=From:To:Cc:Subject:Date:From;
-        b=biXSAqd1qb7UPMXykBlw/OGDV2GU8/mHgyyiXRlC9Xu/RJb92ozM9Cs/IUbSrS9tR
-         h/ZFm4gpSu7tQm+N6Jze1mGf1bEYG5xJY0DrkkQhF9/HHYYm5vuUOx1taEKyJV/gOx
-         Iw/e2scXP6z0VoFEGUajWjnmMx8jZ3lH1V1f3sVo=
+        s=korg; t=1646922327;
+        bh=KQ/z7MJIjzydCdxJw2qt2ZWgIt4pm1aDURrKJrC2ub0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b3FXbM1cS/tBmJP1An5meBuT9X6mo0UW+6W2A5dYUdDdPrdmvxPnXUNnoNtDw+MZi
+         gdxmG0BIXUrxWuJ0Gh5fHQ326Chm/KdF7rQJLdJwA6Q6FrRelOx6YS659Oe+ZOtUlI
+         8OJ2egbacLkh4zudL3EEFx98OoViDcdDXYy1wT9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.4 00/33] 5.4.184-rc2 review
-Date:   Thu, 10 Mar 2022 15:19:01 +0100
-Message-Id: <20220310140808.741682643@linuxfoundation.org>
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.10 42/58] arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+Date:   Thu, 10 Mar 2022 15:19:02 +0100
+Message-Id: <20220310140814.068974463@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.184-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.184-rc2
-X-KernelTest-Deadline: 2022-03-12T14:08+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,166 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.184 release.
-There are 33 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: James Morse <james.morse@arm.com>
 
-Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-Anything received after that time might be too late.
+commit 58c9a5060cb7cd529d49c93954cdafe81c1d642a upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.184-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-and the diffstat can be found below.
+The mitigations for Spectre-BHB are only applied when an exception is
+taken from user-space. The mitigation status is reported via the spectre_v2
+sysfs vulnerabilities file.
 
-thanks,
+When unprivileged eBPF is enabled the mitigation in the exception vectors
+can be avoided by an eBPF program.
 
-greg k-h
+When unprivileged eBPF is enabled, print a warning and report vulnerable
+via the sysfs vulnerabilities file.
 
--------------
-Pseudo-Shortlog of commits:
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm64/kernel/proton-pack.c |   26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.184-rc2
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-
-Juergen Gross <jgross@suse.com>
-    xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
-
-Juergen Gross <jgross@suse.com>
-    xen/gnttab: fix gnttab_end_foreign_access() without page specified
-
-Juergen Gross <jgross@suse.com>
-    xen/pvcalls: use alloc/free_pages_exact()
-
-Juergen Gross <jgross@suse.com>
-    xen/9p: use alloc/free_pages_exact()
-
-Juergen Gross <jgross@suse.com>
-    xen: remove gnttab_query_foreign_access()
-
-Juergen Gross <jgross@suse.com>
-    xen/gntalloc: don't use gnttab_query_foreign_access()
-
-Juergen Gross <jgross@suse.com>
-    xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
-
-Juergen Gross <jgross@suse.com>
-    xen/netfront: don't use gnttab_query_foreign_access() for mapped status
-
-Juergen Gross <jgross@suse.com>
-    xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
-
-Juergen Gross <jgross@suse.com>
-    xen/grant-table: add gnttab_try_end_foreign_access()
-
-Juergen Gross <jgross@suse.com>
-    xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: fix build warning in proc-v7-bugs.c
-
-Nathan Chancellor <nathan@kernel.org>
-    ARM: Do not use NOCROSSREFS directive with ld.lld
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: fix co-processor register typo
-
-Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-    ARM: fix build error when BPF_SYSCALL is disabled
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: include unprivileged BPF status in Spectre V2 reporting
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: Spectre-BHB workaround
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: use LOADADDR() to get load address of sections
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: early traps initialisation
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: report Spectre v2 status through sysfs
-
-Mark Rutland <mark.rutland@arm.com>
-    arm/arm64: smccc/psci: add arm_smccc_1_1_get_conduit()
-
-Steven Price <steven.price@arm.com>
-    arm/arm64: Provide a wrapper for SMCCC 1.1 calls
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/speculation: Warn about Spectre v2 LFENCE mitigation
-
-Kim Phillips <kim.phillips@amd.com>
-    x86/speculation: Update link to AMD speculation whitepaper
-
-Kim Phillips <kim.phillips@amd.com>
-    x86/speculation: Use generic retpoline by default on AMD
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
-
-Peter Zijlstra <peterz@infradead.org>
-    Documentation/hw-vuln: Update spectre doc
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/speculation: Add eIBRS + Retpoline options
-
-Peter Zijlstra (Intel) <peterz@infradead.org>
-    x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
-
-Peter Zijlstra <peterz@infradead.org>
-    x86,bugs: Unconditionally allow spectre_v2=retpoline,amd
-
-Borislav Petkov <bp@suse.de>
-    x86/speculation: Merge one test in spectre_v2_user_select_mitigation()
-
-
--------------
-
-Diffstat:
-
- Documentation/admin-guide/hw-vuln/spectre.rst   |  48 ++++--
- Documentation/admin-guide/kernel-parameters.txt |   8 +-
- Makefile                                        |   4 +-
- arch/arm/include/asm/assembler.h                |  10 ++
- arch/arm/include/asm/spectre.h                  |  32 ++++
- arch/arm/kernel/Makefile                        |   2 +
- arch/arm/kernel/entry-armv.S                    |  79 ++++++++-
- arch/arm/kernel/entry-common.S                  |  24 +++
- arch/arm/kernel/spectre.c                       |  71 ++++++++
- arch/arm/kernel/traps.c                         |  65 ++++++-
- arch/arm/kernel/vmlinux.lds.h                   |  43 ++++-
- arch/arm/mm/Kconfig                             |  11 ++
- arch/arm/mm/proc-v7-bugs.c                      | 200 +++++++++++++++++++---
- arch/x86/include/asm/cpufeatures.h              |   2 +-
- arch/x86/include/asm/nospec-branch.h            |  16 +-
- arch/x86/kernel/cpu/bugs.c                      | 216 +++++++++++++++++-------
- drivers/acpi/ec.c                               |  10 --
- drivers/acpi/sleep.c                            |  14 +-
- drivers/block/xen-blkfront.c                    |  63 ++++---
- drivers/firmware/psci/psci.c                    |  15 ++
- drivers/net/xen-netfront.c                      |  54 +++---
- drivers/scsi/xen-scsifront.c                    |   3 +-
- drivers/xen/gntalloc.c                          |  25 +--
- drivers/xen/grant-table.c                       |  71 ++++----
- drivers/xen/pvcalls-front.c                     |   8 +-
- drivers/xen/xenbus/xenbus_client.c              |  24 ++-
- include/linux/arm-smccc.h                       |  74 ++++++++
- include/linux/bpf.h                             |  12 ++
- include/xen/grant_table.h                       |  19 ++-
- kernel/sysctl.c                                 |   8 +
- net/9p/trans_xen.c                              |  14 +-
- tools/arch/x86/include/asm/cpufeatures.h        |   2 +-
- 32 files changed, 970 insertions(+), 277 deletions(-)
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <linux/arm-smccc.h>
++#include <linux/bpf.h>
+ #include <linux/cpu.h>
+ #include <linux/device.h>
+ #include <linux/nospec.h>
+@@ -110,6 +111,15 @@ static const char *get_bhb_affected_stri
+ 	}
+ }
+ 
++static bool _unprivileged_ebpf_enabled(void)
++{
++#ifdef CONFIG_BPF_SYSCALL
++	return !sysctl_unprivileged_bpf_disabled;
++#else
++	return false;
++#endif
++}
++
+ ssize_t cpu_show_spectre_v2(struct device *dev, struct device_attribute *attr,
+ 			    char *buf)
+ {
+@@ -129,6 +139,9 @@ ssize_t cpu_show_spectre_v2(struct devic
+ 		v2_str = "CSV2";
+ 		fallthrough;
+ 	case SPECTRE_MITIGATED:
++		if (bhb_state == SPECTRE_MITIGATED && _unprivileged_ebpf_enabled())
++			return sprintf(buf, "Vulnerable: Unprivileged eBPF enabled\n");
++
+ 		return sprintf(buf, "Mitigation: %s%s\n", v2_str, bhb_str);
+ 	case SPECTRE_VULNERABLE:
+ 		fallthrough;
+@@ -1108,3 +1121,16 @@ void noinstr spectre_bhb_patch_loop_iter
+ 					 AARCH64_INSN_MOVEWIDE_ZERO);
+ 	*updptr++ = cpu_to_le32(insn);
+ }
++
++#ifdef CONFIG_BPF_SYSCALL
++#define EBPF_WARN "Unprivileged eBPF is enabled, data leaks possible via Spectre v2 BHB attacks!\n"
++void unpriv_ebpf_notify(int new_state)
++{
++	if (spectre_v2_state == SPECTRE_VULNERABLE ||
++	    spectre_bhb_state != SPECTRE_MITIGATED)
++		return;
++
++	if (!new_state)
++		pr_err("WARNING: %s", EBPF_WARN);
++}
++#endif
 
 

@@ -2,44 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B04B4D52F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 902CA4D5319
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244740AbiCJURD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S244996AbiCJUbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiCJURA (ORCPT
+        with ESMTP id S232725AbiCJUbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:17:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3F515C1AC
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:15:59 -0800 (PST)
+        Thu, 10 Mar 2022 15:31:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB96ECB10;
+        Thu, 10 Mar 2022 12:30:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A0A1B826EE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3363BC340E9;
-        Thu, 10 Mar 2022 20:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646943356;
-        bh=ak+v21TU0T7xdjHzfC5DTvQ+6ElifXCS3gGz+2uZCu0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=xFw9q3PUtkr/fx+2yGAem7DF31e/ARSI3GJye80gNtF1h0m1NZ+KJDIY+VjUSbQRZ
-         5Y7mpNVZQqbTzLkjRtOs/tGrNyjD9RJdw+mPknuHeCs7gtzc9IoM2V3FXAa9PwbwGK
-         WKejIqhJv1ZxKnMWlpZ+q2LO9122Za5c1f5vYMbA=
-Date:   Thu, 10 Mar 2022 21:15:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [GIT PULL] Staging driver fixes for 5.17-rc8
-Message-ID: <YipceDbnLhoJKnWW@kroah.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD1616179E;
+        Thu, 10 Mar 2022 20:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39F9BC340F7;
+        Thu, 10 Mar 2022 20:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646944210;
+        bh=eREIy7aXyXOJiNE/a+y3BVUxOQadsmenqakhiafoC0s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QgMbCyroHXEFfM5i5u1MfFEghBG0gbawl16KY3a3t7lhPUV0SRh0fEb3qSieURQbU
+         pbADUMJFe46PI8F2ke5jKo5P59bzkjbtb4Fand4ZobKA/lK12hKCJJi6fWqXE9B+8J
+         6jFfPEZIOflaNfav7kIwk8ylw6ccyHPqctJadf9evkGI8ZFEeTma2BLadQORurmEwO
+         1YDxu29zRjjZTcIkx6Ip1X9vlLXZ2QYyutEifigbPeR56jIoEkZrkI51Tae9EJWC9W
+         ZtXFsS6JRAFGgthTrKJQX/MTzjTJ9giJvQGEw2ZI351BB7hoEephjvl7DoelwAwwSF
+         S/F6adZNpZrUw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 18610F0383F;
+        Thu, 10 Mar 2022 20:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] gianfar: ethtool: Fix refcount leak in
+ gfar_get_ts_info
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164694421009.25928.3425721477014489869.git-patchwork-notify@kernel.org>
+Date:   Thu, 10 Mar 2022 20:30:10 +0000
+References: <20220310015313.14938-1-linmq006@gmail.com>
+In-Reply-To: <20220310015313.14938-1-linmq006@gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     claudiu.manoil@nxp.com, davem@davemloft.net, kuba@kernel.org,
+        yangbo.lu@nxp.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,49 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+Hello:
 
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-are available in the Git repository at:
+On Thu, 10 Mar 2022 01:53:13 +0000 you wrote:
+> The of_find_compatible_node() function returns a node pointer with
+> refcount incremented, We should use of_node_put() on it when done
+> Add the missing of_node_put() to release the refcount.
+> 
+> Fixes: 7349a74ea75c ("net: ethernet: gianfar_ethtool: get phc index through drvdata")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+> 
+> [...]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.17-rc8
+Here is the summary with links:
+  - [net,v2] gianfar: ethtool: Fix refcount leak in gfar_get_ts_info
+    https://git.kernel.org/netdev/net/c/2ac5b58e645c
 
-for you to fetch changes up to 342e7c6ea58200e45bcaa9bdd8402a5531c4777e:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  staging: rtl8723bs: Improve the comment explaining the locking rules (2022-03-02 16:38:24 +0100)
 
-----------------------------------------------------------------
-Staging driver fixes for 5.17-rc8
-
-Here are 3 small fixes for staging drivers for 5.17-rc8 or -final, which
-ever comes next.
-
-They resolve some reported problems:
-	- rtl8723bs wifi driver deadlock fix for reported problem that
-	  is a revert of a previous patch.  Also a documentation fix is
-	  added so that the same problem hopefully can not come back
-	  again.
-	- gdm724x driver use-after-free fix for a reported problem.
-
-All of these have been in linux-next for a while with no reported
-problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      staging: gdm724x: fix use after free in gdm_lte_rx()
-
-Hans de Goede (2):
-      staging: rtl8723bs: Fix access-point mode deadlock
-      staging: rtl8723bs: Improve the comment explaining the locking rules
-
- drivers/staging/gdm724x/gdm_lte.c              |  5 +++--
- drivers/staging/rtl8723bs/core/rtw_mlme_ext.c  |  7 +++++--
- drivers/staging/rtl8723bs/core/rtw_recv.c      | 10 +++++++---
- drivers/staging/rtl8723bs/core/rtw_sta_mgt.c   | 22 ++++++++++------------
- drivers/staging/rtl8723bs/core/rtw_xmit.c      | 16 +++++++++-------
- drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c |  2 ++
- drivers/staging/rtl8723bs/include/rtw_mlme.h   |  8 ++++++--
- 7 files changed, 42 insertions(+), 28 deletions(-)

@@ -2,325 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AC14D4931
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289614D48DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242701AbiCJOML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S242846AbiCJOMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242818AbiCJOLf (ORCPT
+        with ESMTP id S242009AbiCJOLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:11:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41419BAEE;
-        Thu, 10 Mar 2022 06:10:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0BC6B82674;
-        Thu, 10 Mar 2022 14:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EA0C340EB;
-        Thu, 10 Mar 2022 14:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646921428;
-        bh=9FKQXRvhoozs6lErb9ui0TiQ6mi3soKCGtB7BH6ZqiM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PsaS/cvaT3io84Q4FMZBEtp1UL4CV6mM/vQ4P2CG0OBmCFgQUKYuRmR4grMqLRmZc
-         yGvPA2sEyI+2O2Zqvl/KQgaH+ZarTorr3Tpck3dfFqqkJSWTTDmG4lLPU9RNWP6Sls
-         HPH7l7tSAl+/ibE9Y8AL3RLMyFb40ygtiYDOAGCg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.16 00/53] 5.16.14-rc2 review
-Date:   Thu, 10 Mar 2022 15:09:05 +0100
-Message-Id: <20220310140811.832630727@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.16.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.16.14-rc2
-X-KernelTest-Deadline: 2022-03-12T14:08+00:00
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 09:11:37 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B38151C74;
+        Thu, 10 Mar 2022 06:10:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646921433; x=1678457433;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=Z4vQdKuwJGnUEOHT5u0YKIBAyF/sX/jaF7InK/l4l/o=;
+  b=a//0wszSMmmgEDRiNXJlX0hrN8yPbfqmcHc1/LB5ZZ0bNqNi0PxAobKJ
+   hPht3jZ+OsAmhn5kISR0FfnHblo8wQ5ll9TY42QGel7FbaJOdGagJEn6u
+   X+0F14BeNdX8UVg6bYDLV8gs4+MW1YLXc90nX4/FArevUQh4btsUhtrEo
+   jM6m4e0gkawwQszQJaYsNHElFFiySS4Fk86yjy8JtlSLm4BLMyemTUcwu
+   ShtYmhgfaCrzJBr0MfKddByffI9J/oE5TrO7hT47YwtLzYcnMQJqpsQJ1
+   KjjoObJMY5U3z2h65QchwqQ23RnYvejub3UEsLv0j4MyV7qyPmhgAp2gc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255448395"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="255448395"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:10:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="554655053"
+Received: from chaop.bj.intel.com ([10.240.192.101])
+  by orsmga008.jf.intel.com with ESMTP; 10 Mar 2022 06:10:24 -0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: [PATCH v5 07/13] KVM: Add KVM_EXIT_MEMORY_ERROR exit
+Date:   Thu, 10 Mar 2022 22:09:05 +0800
+Message-Id: <20220310140911.50924-8-chao.p.peng@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note, I'm sending all the patches again for all of the -rc2 releases as
-there has been a lot of churn from what was in -rc1 to -rc2.
-
-This is the start of the stable review cycle for the 5.16.14 release.
-There are 53 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.14-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.16.14-rc2
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-
-Juergen Gross <jgross@suse.com>
-    xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
-
-Juergen Gross <jgross@suse.com>
-    xen/gnttab: fix gnttab_end_foreign_access() without page specified
-
-Juergen Gross <jgross@suse.com>
-    xen/pvcalls: use alloc/free_pages_exact()
-
-Juergen Gross <jgross@suse.com>
-    xen/9p: use alloc/free_pages_exact()
-
-Juergen Gross <jgross@suse.com>
-    xen: remove gnttab_query_foreign_access()
-
-Juergen Gross <jgross@suse.com>
-    xen/gntalloc: don't use gnttab_query_foreign_access()
-
-Juergen Gross <jgross@suse.com>
-    xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
-
-Juergen Gross <jgross@suse.com>
-    xen/netfront: don't use gnttab_query_foreign_access() for mapped status
-
-Juergen Gross <jgross@suse.com>
-    xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
-
-Juergen Gross <jgross@suse.com>
-    xen/grant-table: add gnttab_try_end_foreign_access()
-
-Juergen Gross <jgross@suse.com>
-    xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: fix build warning in proc-v7-bugs.c
-
-Nathan Chancellor <nathan@kernel.org>
-    arm64: Do not include __READ_ONCE() block in assembly files
-
-Nathan Chancellor <nathan@kernel.org>
-    ARM: Do not use NOCROSSREFS directive with ld.lld
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: fix co-processor register typo
-
-Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-    ARM: fix build error when BPF_SYSCALL is disabled
-
-James Morse <james.morse@arm.com>
-    arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
-
-James Morse <james.morse@arm.com>
-    arm64: Use the clearbhb instruction in mitigations
-
-James Morse <james.morse@arm.com>
-    KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
-
-James Morse <james.morse@arm.com>
-    arm64: Mitigate spectre style branch history side channels
-
-James Morse <james.morse@arm.com>
-    arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
-
-James Morse <james.morse@arm.com>
-    arm64: Add percpu vectors for EL1
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Add macro for reading symbol addresses from the trampoline
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Add vectors that have the bhb mitigation sequences
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Allow the trampoline text to occupy multiple pages
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Make the kpti trampoline's kpti sequence optional
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Move trampoline macros out of ifdef'd section
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Don't assume tramp_vectors is the start of the vectors
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Move the trampoline data page before the text page
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Free up another register on kpti's tramp_exit path
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Make the trampoline cleanup optional
-
-James Morse <james.morse@arm.com>
-    KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
-
-James Morse <james.morse@arm.com>
-    arm64: spectre: Rename spectre_v4_patch_fw_mitigation_conduit
-
-James Morse <james.morse@arm.com>
-    arm64: entry.S: Add ventry overflow sanity checks
-
-Joey Gouly <joey.gouly@arm.com>
-    arm64: cpufeature: add HWCAP for FEAT_RPRES
-
-Joey Gouly <joey.gouly@arm.com>
-    arm64: cpufeature: add HWCAP for FEAT_AFP
-
-Joey Gouly <joey.gouly@arm.com>
-    arm64: add ID_AA64ISAR2_EL1 sys register
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: include unprivileged BPF status in Spectre V2 reporting
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: Spectre-BHB workaround
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: use LOADADDR() to get load address of sections
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: early traps initialisation
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: report Spectre v2 status through sysfs
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/speculation: Warn about Spectre v2 LFENCE mitigation
-
-Kim Phillips <kim.phillips@amd.com>
-    x86/speculation: Update link to AMD speculation whitepaper
-
-Kim Phillips <kim.phillips@amd.com>
-    x86/speculation: Use generic retpoline by default on AMD
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
-
-Peter Zijlstra <peterz@infradead.org>
-    Documentation/hw-vuln: Update spectre doc
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/speculation: Add eIBRS + Retpoline options
-
-Peter Zijlstra (Intel) <peterz@infradead.org>
-    x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
-
-
--------------
-
-Diffstat:
-
- Documentation/admin-guide/hw-vuln/spectre.rst   |  50 +--
- Documentation/admin-guide/kernel-parameters.txt |   8 +-
- Documentation/arm64/cpu-feature-registers.rst   |  17 ++
- Documentation/arm64/elf_hwcaps.rst              |   8 +
- Makefile                                        |   4 +-
- arch/arm/include/asm/assembler.h                |  10 +
- arch/arm/include/asm/spectre.h                  |  32 ++
- arch/arm/include/asm/vmlinux.lds.h              |  43 ++-
- arch/arm/kernel/Makefile                        |   2 +
- arch/arm/kernel/entry-armv.S                    |  79 ++++-
- arch/arm/kernel/entry-common.S                  |  24 ++
- arch/arm/kernel/spectre.c                       |  71 +++++
- arch/arm/kernel/traps.c                         |  65 +++-
- arch/arm/mm/Kconfig                             |  11 +
- arch/arm/mm/proc-v7-bugs.c                      | 208 ++++++++++---
- arch/arm64/Kconfig                              |   9 +
- arch/arm64/include/asm/assembler.h              |  53 ++++
- arch/arm64/include/asm/cpu.h                    |   1 +
- arch/arm64/include/asm/cpufeature.h             |  29 ++
- arch/arm64/include/asm/cputype.h                |   8 +
- arch/arm64/include/asm/fixmap.h                 |   6 +-
- arch/arm64/include/asm/hwcap.h                  |   2 +
- arch/arm64/include/asm/insn.h                   |   1 +
- arch/arm64/include/asm/kvm_host.h               |   5 +
- arch/arm64/include/asm/rwonce.h                 |   4 +-
- arch/arm64/include/asm/sections.h               |   5 +
- arch/arm64/include/asm/spectre.h                |   4 +
- arch/arm64/include/asm/sysreg.h                 |  18 ++
- arch/arm64/include/asm/vectors.h                |  73 +++++
- arch/arm64/include/uapi/asm/hwcap.h             |   2 +
- arch/arm64/include/uapi/asm/kvm.h               |   5 +
- arch/arm64/kernel/cpu_errata.c                  |   7 +
- arch/arm64/kernel/cpufeature.c                  |  25 ++
- arch/arm64/kernel/cpuinfo.c                     |   3 +
- arch/arm64/kernel/entry.S                       | 214 +++++++++----
- arch/arm64/kernel/image-vars.h                  |   4 +
- arch/arm64/kernel/proton-pack.c                 | 391 +++++++++++++++++++++++-
- arch/arm64/kernel/vmlinux.lds.S                 |   2 +-
- arch/arm64/kvm/arm.c                            |   5 +-
- arch/arm64/kvm/hyp/hyp-entry.S                  |   9 +
- arch/arm64/kvm/hyp/nvhe/mm.c                    |   4 +-
- arch/arm64/kvm/hyp/vhe/switch.c                 |   9 +-
- arch/arm64/kvm/hypercalls.c                     |  12 +
- arch/arm64/kvm/psci.c                           |  18 +-
- arch/arm64/kvm/sys_regs.c                       |   2 +-
- arch/arm64/mm/mmu.c                             |  12 +-
- arch/arm64/tools/cpucaps                        |   1 +
- arch/x86/include/asm/cpufeatures.h              |   2 +-
- arch/x86/include/asm/nospec-branch.h            |  16 +-
- arch/x86/kernel/alternative.c                   |   8 +-
- arch/x86/kernel/cpu/bugs.c                      | 204 ++++++++++---
- arch/x86/lib/retpoline.S                        |   2 +-
- arch/x86/net/bpf_jit_comp.c                     |   2 +-
- drivers/acpi/ec.c                               |  10 -
- drivers/acpi/sleep.c                            |  14 +-
- drivers/block/xen-blkfront.c                    |  63 ++--
- drivers/net/xen-netfront.c                      |  54 ++--
- drivers/scsi/xen-scsifront.c                    |   3 +-
- drivers/xen/gntalloc.c                          |  25 +-
- drivers/xen/grant-table.c                       |  71 +++--
- drivers/xen/pvcalls-front.c                     |   8 +-
- drivers/xen/xenbus/xenbus_client.c              |  24 +-
- include/linux/arm-smccc.h                       |   5 +
- include/linux/bpf.h                             |  12 +
- include/xen/grant_table.h                       |  19 +-
- kernel/sysctl.c                                 |   7 +
- net/9p/trans_xen.c                              |  14 +-
- tools/arch/x86/include/asm/cpufeatures.h        |   2 +-
- 68 files changed, 1782 insertions(+), 358 deletions(-)
-
+This new KVM exit allows userspace to handle memory-related errors. It
+indicates an error happens in KVM at guest memory range [gpa, gpa+size).
+The flags includes additional information for userspace to handle the
+error. Currently bit 0 is defined as 'private memory' where '1'
+indicates error happens due to private memory access and '0' indicates
+error happens due to shared memory access.
+
+After private memory is enabled, this new exit will be used for KVM to
+exit to userspace for shared memory <-> private memory conversion in
+memory encryption usage.
+
+In such usage, typically there are two kind of memory conversions:
+  - explicit conversion: happens when guest explicitly calls into KVM to
+    map a range (as private or shared), KVM then exits to userspace to
+    do the map/unmap operations.
+  - implicit conversion: happens in KVM page fault handler.
+    * if the fault is due to a private memory access then causes a
+      userspace exit for a shared->private conversion request when the
+      page has not been allocated in the private memory backend.
+    * If the fault is due to a shared memory access then causes a
+      userspace exit for a private->shared conversion request when the
+      page has already been allocated in the private memory backend.
+
+Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+---
+ Documentation/virt/kvm/api.rst | 22 ++++++++++++++++++++++
+ include/uapi/linux/kvm.h       |  9 +++++++++
+ 2 files changed, 31 insertions(+)
+
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index f76ac598606c..bad550c2212b 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6216,6 +6216,28 @@ array field represents return values. The userspace should update the return
+ values of SBI call before resuming the VCPU. For more details on RISC-V SBI
+ spec refer, https://github.com/riscv/riscv-sbi-doc.
+ 
++::
++
++		/* KVM_EXIT_MEMORY_ERROR */
++		struct {
++  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
++			__u32 flags;
++			__u32 padding;
++			__u64 gpa;
++			__u64 size;
++		} memory;
++If exit reason is KVM_EXIT_MEMORY_ERROR then it indicates that the VCPU has
++encountered a memory error which is not handled by KVM kernel module and
++userspace may choose to handle it. The 'flags' field indicates the memory
++properties of the exit.
++
++ - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
++   private memory access when the bit is set otherwise the memory error is
++   caused by shared memory access when the bit is clear.
++
++'gpa' and 'size' indicate the memory range the error occurs at. The userspace
++may handle the error and return to KVM to retry the previous memory access.
++
+ ::
+ 
+ 		/* Fix the size of the union. */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index a523d834efc8..9ad0c8aa0263 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -278,6 +278,7 @@ struct kvm_xen_exit {
+ #define KVM_EXIT_X86_BUS_LOCK     33
+ #define KVM_EXIT_XEN              34
+ #define KVM_EXIT_RISCV_SBI        35
++#define KVM_EXIT_MEMORY_ERROR     36
+ 
+ /* For KVM_EXIT_INTERNAL_ERROR */
+ /* Emulate instruction failed. */
+@@ -495,6 +496,14 @@ struct kvm_run {
+ 			unsigned long args[6];
+ 			unsigned long ret[2];
+ 		} riscv_sbi;
++		/* KVM_EXIT_MEMORY_ERROR */
++		struct {
++#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
++			__u32 flags;
++			__u32 padding;
++			__u64 gpa;
++			__u64 size;
++		} memory;
+ 		/* Fix the size of the union. */
+ 		char padding[256];
+ 	};
+-- 
+2.17.1
 

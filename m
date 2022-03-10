@@ -2,144 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E1D4D54BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E314D54C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344402AbiCJWno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S1344406AbiCJWns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344399AbiCJWnd (ORCPT
+        with ESMTP id S1344404AbiCJWne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:43:33 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF58B43;
+        Thu, 10 Mar 2022 17:43:34 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90F4B59
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:42:31 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id q13so6143643plk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=H0dJecyPS2t445Yyuaocacfsz4kMpFTNDFKZg5I5Xqo=;
+        b=i2+4Hhkq0ffVuy/voAgJ7Oie2KiFixt/XYRgrrvr6dmSS6Qob5Wmq9eVqbssVG/Prz
+         NZKOO3RZDuV1X5NCn3/n69tAPp9lX1Q8rfhM9oczaPrXHNiLC7k/Aqdn/AuwHiAldis2
+         G2Gz0IpLA0/WkI4mr0CL1pkAmvljkK0MqjH7oZuZ0AeS0C2qPAhHZGoaVoB3Km3j5tE5
+         1PZkCUi8Sjgri2Mi5KBmQGRAzr0wfrySJPF6OjoYKqatacXrXCJsZ0FohWDwgJKVE04B
+         b7XCJdSrDWHSVxF2XGnY6kwky7gCnRwqeHHuDWF3JvOd1hc/hnbHvT62GCX8HpFGNF4G
+         T0jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=H0dJecyPS2t445Yyuaocacfsz4kMpFTNDFKZg5I5Xqo=;
+        b=54YeESA5MnK7K/s73UGYzsB3ueDvJlcPMj/EqRPqTsbjDYi7mHBhc6US8pJSY0Qxzc
+         DwlgFrxzgJIkmGuqcjga4BFg/lEGXZGH7n+hOilEzkc3zKexfS9Uc6FHtyUfEpxad6dl
+         w9LMPutrFNpoLVCDER+WGqMQT7jbPrclJaYFAhVLwkmuCMkHxoe75mGDzbK/TRTqRN6M
+         EO5XJC15OBaqSMRZ47SZEhpefQFGbKjOGBVli7F0Jvlwt1OqIMs4exiMy+SBQc0n9O0G
+         3jCVUfWVzXTWGm0hWo9SNEboQUMAoLJWGqwejWAiUBr32OSPvWDHwpSV//A34rajnVYz
+         szvw==
+X-Gm-Message-State: AOAM533SjyTXGNGQBxJ0dsNW4azje4qJcXvFPZRa/vhKHDlXD1PUugqP
+        DYtg9Kn7361zJfFRhobM5rwDTw==
+X-Google-Smtp-Source: ABdhPJz+HM8Z5oVHOCVhGxstjdd7fA+IbJhbFxh8NNun6SGE5r59isngyOt7OckA9+Vcvc9xTcThVg==
+X-Received: by 2002:a17:902:cccc:b0:14e:e89c:c669 with SMTP id z12-20020a170902cccc00b0014ee89cc669mr7408737ple.58.1646952150727;
         Thu, 10 Mar 2022 14:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646952151; x=1678488151;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=izaQGn4N6pWq6eZ9auQerRJ5Q9RTLRKiYGRicinCT3M=;
-  b=RRZFR1N/tF6MgPVmVb3YAcBc4JfN4q0El5TDPkcSNSFV+NGSsUuCuEdS
-   xJQBipGgguRTnsuNdXuHURaHFRYw1uePPuMeQpCJ6sYShslHf1SNxb4SS
-   sTE+FvoQdeWjoeTY6n5NUb9AfvN/cB03K3QtUJpGgoJwTIb/JM0XSVAO1
-   WZADNbMsR1q/MsIdPseSmBMaTyo1gLSztHfI9qqPNnc9hC8DzIf7b9F+j
-   HrpOgdyklGRP85g34G8DulhMbGq0yLYvT4hDFrJLTzHhT5ImP61+tOLCV
-   6kRk9uYY+MzCie9/cP+kwxR0Wau7AD03dbOfxLGol/7czbcYyWi4U4O94
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="242847417"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="242847417"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:42:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="642748946"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Mar 2022 14:42:29 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     lenb@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Use firmware default EPP
-Date:   Thu, 10 Mar 2022 14:42:23 -0800
-Message-Id: <20220310224223.684007-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id y10-20020a63b50a000000b0038088a28ec0sm6504255pge.22.2022.03.10.14.42.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 14:42:30 -0800 (PST)
+Message-ID: <62a9b061-1cf5-dff1-c062-a3961de92dca@linaro.org>
+Date:   Thu, 10 Mar 2022 14:42:29 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
+References: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
+ <20220310221328.877987-1-tadeusz.struk@linaro.org>
+ <20220310143011.00c21f53@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
+In-Reply-To: <20220310143011.00c21f53@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some specific platforms (E.g. AlderLake) the balance performance
-EPP is updated from the hard coded value in the driver. This acts as
-the default and balance_performance EPP. The purpose of this EPP
-update is to reach maximum 1 core turbo frequency (when possible) out
-of the box.
+On 3/10/22 14:30, Jakub Kicinski wrote:
+>> +
+>> +			/*
+>> +			 *	Check if there is still room for payload
+>> +			 */
+> TBH I think the check is self-explanatory. Not worth a banner comment,
+> for sure.
 
-Although we can achieve the objective by using hard coded value in the
-driver, there can be other EPP which can be better in terms of power.
-But that will be very subjective based on platform and use cases.
-This is not practical to have a per platform specific default hard coded
-in the driver.
+Ok
 
-If a platform wants to specify default EPP, it can be set in the firmware.
-If this EPP is not the chipset default of 0x80 (balance_perf_epp unless
-driver changed it) and more performance oriented but not 0, the driver
-can use this as the default and balanced_perf EPP. In this case no driver
-update is required every time there is some new platform and default EPP.
+> 
+>> +			if (fragheaderlen >= mtu) {
+>> +				err = -EMSGSIZE;
+>> +				kfree_skb(skb);
+>> +				goto error;
+>> +			}
+> Not sure if Willem prefers this placement, but seems like we can lift
+> this check out of the loop, as soon as fragheaderlen and mtu are known.
+> 
 
-If the firmware didn't update the EPP from the chipset default then
-the hard coded value is used as per existing implementation.
+He said to check it before the skb_put() and so I did.
+The fragheaderlen is known early, but mtu can be updated inside the loop
+by ip6_append_data_mtu() so I'm not sure we can do the check before that.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
- 1 file changed, 32 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index bc7f7e6759bd..846bb3a78788 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1692,6 +1692,37 @@ static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
- 	}
- }
- 
-+static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
-+{
-+	cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
-+
-+	/*
-+	 * If this CPU gen doesn't call for change in balance_perf
-+	 * EPP return.
-+	 */
-+	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
-+		return;
-+
-+	/*
-+	 * If powerup EPP is something other than chipset default 0x80 and
-+	 * - is more performance oriented than 0x80 (default balance_perf EPP)
-+	 * - But less performance oriented than performance EPP
-+	 *   then use this as new balance_perf EPP.
-+	 */
-+	if (cpudata->epp_default < HWP_EPP_BALANCE_PERFORMANCE &&
-+	    cpudata->epp_default > HWP_EPP_PERFORMANCE) {
-+		epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = cpudata->epp_default;
-+		return;
-+	}
-+
-+	/*
-+	 * Use hard coded value per gen to update the balance_perf
-+	 * and default EPP.
-+	 */
-+	cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
-+	intel_pstate_set_epp(cpudata, cpudata->epp_default);
-+}
-+
- static void intel_pstate_hwp_enable(struct cpudata *cpudata)
- {
- 	/* First disable HWP notification interrupt till we activate again */
-@@ -1705,12 +1736,7 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
- 	if (cpudata->epp_default >= 0)
- 		return;
- 
--	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE) {
--		cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
--	} else {
--		cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
--		intel_pstate_set_epp(cpudata, cpudata->epp_default);
--	}
-+	intel_pstate_update_epp_defaults(cpudata);
- }
- 
- static int atom_get_min_pstate(void)
 -- 
-2.31.1
-
+Thanks,
+Tadeusz

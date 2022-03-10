@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA2D4D4A0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC234D4B38
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344374AbiCJOko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S243779AbiCJO1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244277AbiCJO2o (ORCPT
+        with ESMTP id S243446AbiCJOXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:28:44 -0500
+        Thu, 10 Mar 2022 09:23:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7838CD327;
-        Thu, 10 Mar 2022 06:23:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C0BC0848;
+        Thu, 10 Mar 2022 06:21:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 267F661CEE;
-        Thu, 10 Mar 2022 14:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A28C340E8;
-        Thu, 10 Mar 2022 14:23:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F166861B1F;
+        Thu, 10 Mar 2022 14:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F9EC340F3;
+        Thu, 10 Mar 2022 14:21:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922204;
-        bh=hgyMPXKpyrjFSr7gjjGkb1FgtZRbJo9afPZLy+xNAuM=;
+        s=korg; t=1646922068;
+        bh=a//jtcByFiHXOCJ+/M4jiKQWdvoAGv/83F2/7HhgSnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M9H+Cn0i4QAr6tRVMGU85GSzMuAmxPBESBlj1zEHIMG5wP9egZvTOTpBmcdJKEyvw
-         W0A2kxZ+ewQuDeFLzI4F96M8eHCscw468xUmbZmaB9O1vfkIUGYNjIngsDaSSRksKS
-         8m1Y9UblGnKLxtmavT20mAOXVyPrh5yHZ+JBUBT0=
+        b=NyYIpXODMGCgB8IrRaQr0BmaGqjxx6PXsVLObvVw7npUvhLAzOLVGdXb9PRtFvple
+         zkIgRJ4956kfGlpKeWPfE7UBlUZh17NCDhk7T0FGS37wLPHQbOHJhezUBEEEvQJghl
+         yfwE7c5Up2PaX9SrFqv7+x9PlNzi3QNb+H1ZdW5s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 4.19 12/33] arm/arm64: smccc/psci: add arm_smccc_1_1_get_conduit()
+        stable@vger.kernel.org,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 26/31] xen/scsifront: dont use gnttab_query_foreign_access() for mapped status
 Date:   Thu, 10 Mar 2022 15:18:39 +0100
-Message-Id: <20220310140808.107537721@linuxfoundation.org>
+Message-Id: <20220310140808.303290685@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
-References: <20220310140807.749164737@linuxfoundation.org>
+In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
+References: <20220310140807.524313448@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 6b7fe77c334ae59fed9500140e08f4f896b36871 upstream.
+Commit 33172ab50a53578a95691310f49567c9266968b0 upstream.
 
-SMCCC callers are currently amassing a collection of enums for the SMCCC
-conduit, and are having to dig into the PSCI driver's internals in order
-to figure out what to do.
+It isn't enough to check whether a grant is still being in use by
+calling gnttab_query_foreign_access(), as a mapping could be realized
+by the other side just after having called that function.
 
-Let's clean this up, with common SMCCC_CONDUIT_* definitions, and an
-arm_smccc_1_1_get_conduit() helper that abstracts the PSCI driver's
-internal state.
+In case the call was done in preparation of revoking a grant it is
+better to do so via gnttab_try_end_foreign_access() and check the
+success of that operation instead.
 
-We can kill off the PSCI_CONDUIT_* definitions once we've migrated users
-over to the new interface.
+This is CVE-2022-23038 / part of XSA-396.
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Acked-by: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/psci.c   |   15 +++++++++++++++
- include/linux/arm-smccc.h |   16 ++++++++++++++++
- 2 files changed, 31 insertions(+)
+ drivers/scsi/xen-scsifront.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/firmware/psci.c
-+++ b/drivers/firmware/psci.c
-@@ -64,6 +64,21 @@ struct psci_operations psci_ops = {
- 	.smccc_version = SMCCC_VERSION_1_0,
- };
+--- a/drivers/scsi/xen-scsifront.c
++++ b/drivers/scsi/xen-scsifront.c
+@@ -233,12 +233,11 @@ static void scsifront_gnttab_done(struct
+ 		return;
  
-+enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void)
-+{
-+	if (psci_ops.smccc_version < SMCCC_VERSION_1_1)
-+		return SMCCC_CONDUIT_NONE;
-+
-+	switch (psci_ops.conduit) {
-+	case PSCI_CONDUIT_SMC:
-+		return SMCCC_CONDUIT_SMC;
-+	case PSCI_CONDUIT_HVC:
-+		return SMCCC_CONDUIT_HVC;
-+	default:
-+		return SMCCC_CONDUIT_NONE;
-+	}
-+}
-+
- typedef unsigned long (psci_fn)(unsigned long, unsigned long,
- 				unsigned long, unsigned long);
- static psci_fn *invoke_psci_fn;
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -89,6 +89,22 @@
+ 	for (i = 0; i < shadow->nr_grants; i++) {
+-		if (unlikely(gnttab_query_foreign_access(shadow->gref[i]))) {
++		if (unlikely(!gnttab_try_end_foreign_access(shadow->gref[i]))) {
+ 			shost_printk(KERN_ALERT, info->host, KBUILD_MODNAME
+ 				     "grant still in use by backend\n");
+ 			BUG();
+ 		}
+-		gnttab_end_foreign_access(shadow->gref[i], 0, 0UL);
+ 	}
  
- #include <linux/linkage.h>
- #include <linux/types.h>
-+
-+enum arm_smccc_conduit {
-+	SMCCC_CONDUIT_NONE,
-+	SMCCC_CONDUIT_SMC,
-+	SMCCC_CONDUIT_HVC,
-+};
-+
-+/**
-+ * arm_smccc_1_1_get_conduit()
-+ *
-+ * Returns the conduit to be used for SMCCCv1.1 or later.
-+ *
-+ * When SMCCCv1.1 is not present, returns SMCCC_CONDUIT_NONE.
-+ */
-+enum arm_smccc_conduit arm_smccc_1_1_get_conduit(void);
-+
- /**
-  * struct arm_smccc_res - Result from SMC/HVC call
-  * @a0-a3 result values from registers 0 to 3
+ 	kfree(shadow->sg);
 
 

@@ -2,68 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C964D538D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D854D5393
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245651AbiCJVXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
+        id S1343944AbiCJV0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241349AbiCJVXW (ORCPT
+        with ESMTP id S241349AbiCJV0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:23:22 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6121340C5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:22:20 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id e1-20020a17090a280100b001bf44b6d74bso6573636pjd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:22:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=qRRs8zRW18fnuj2lktSzz3aYXNKWNfKl0U5tPzfpaDI=;
-        b=GS0GmZD8PEzbODWqLyVCkGoL9RbPsBlbFOfCOazfvkiKaDAE2xYXXucAPlAVNo6x7f
-         YaBAf49ZeLkNGRVdW80Db2Dlh03vydb6xGvfg5faGuQCt9Ki2Pn2zRgPxAsw6AONGIqg
-         VXyXp6kkyKPbgMoJQpFVBiP7dlgXfQ3RlwhI03Oj/P8+/PH3retUlmMvtW0ikKfZwN4e
-         ngLxXjrUBh1zO0VgIlMwt/vYZN0yu9ik9W6laQXM0+khb3WveMfisWTyyyawYkqg8mzH
-         +fdQxnvLjXaX6qLELUsLdCNuSS1Uj0fi6rmVWyw+2IRrsPVdKH4bQBrz967n3kq1vfNh
-         DUmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=qRRs8zRW18fnuj2lktSzz3aYXNKWNfKl0U5tPzfpaDI=;
-        b=1hkz3eY3Gwqg/UE0PtdGeOBsopCSLK3riobyzQZjC0QhOMmyrgA8bvlbBvMVIPEFJZ
-         rE+eb6R2EFpQ/5bWqlBMG488zFqcIKzxEPoR8dDpEt7YmtYYyy1ixlYoklzSdriz+7cw
-         CKoM+YQ6K7ZugziiRjhwMxlKAU+rE/sDh03XEb3eByCD/yFs+k6AREd2DPwBEe53zoKN
-         FbjAa4DZGtwuahVvl8rntH/9YxrjjzKWfX1g9MQ39sP1VyvmXR0FZNTpxA2l3Nk8AtR3
-         KfvfVlLfBKpHLg3OeGnMo8+Ijf8JeFX9cyzlJrDiq0MN6gjT83rFllxXKc0EoRuznnGS
-         xwtA==
-X-Gm-Message-State: AOAM533/4Aho4AcC/NQdFHtxzddIw7CzXIy4Z/D1JO8ugQcejwmfCW4b
-        vjm6VgiVnVRWkRVTT66zwfvjkZ5f2r1T/Q==
-X-Google-Smtp-Source: ABdhPJzHPq7JSF4fI/09YngjD3tvyclfPwydKynzcpftI+w12oVUmW1U9qo97t+qm3XmFxWttVJ/lxxpVfpfKQ==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a05:6a00:134a:b0:4f7:644b:97aa with SMTP
- id k10-20020a056a00134a00b004f7644b97aamr6939037pfu.45.1646947340366; Thu, 10
- Mar 2022 13:22:20 -0800 (PST)
-Date:   Thu, 10 Mar 2022 21:22:17 +0000
-Message-Id: <20220310212217.2258637-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH v5] driver core: Add sysfs support for physical location of a device
-From:   Won Chung <wonchung@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Won Chung <wonchung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Thu, 10 Mar 2022 16:26:30 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2071.outbound.protection.outlook.com [40.107.102.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3365BDCE1E;
+        Thu, 10 Mar 2022 13:25:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UVllZwB5ECHvJH2IyQ89Nye24LYaU5et5XJBG6gm7pa2ODMhLx4QnJGqlciO3gLPxMqL1gCq5R0j/bdER0ihAmEEOccuTDDd4qK8a0c0vOqXt9Nt+XZPx3rD6/bNnflDbCLNaHnBXKjfzZvFaSQIhEE0myg5QLBMcSIdRxyvMVqhz+kwnL4bnybNSbTgPoD4yl3IJp7tv09mly3ecTiFoGBqQtBfNlt6KGQ/gmkQsRrFwnjZexctCiVYKtkVWcq3bccjWICY5vvoCKj9zcVaJYJMGGnJCqKA2jkHQ1Rim3SuG81z7lDLFK7DVB2XUtNI6RUPZYnOHcVdriDhSS7srg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VxDlasSjwoxIsuuU61ufTGmMNKV2DESd2lqFJBudYCo=;
+ b=XeqxjBA2J8AWNXP12JWF62Dr0bu8aew0Srs3BGoNfSb5s+xvDKLddVm8yY4Z5xqspHOIy0vFRkfdAhFmveaZQg9hTEMSvGUD5aM3ZvP/jYhU4GD0TM/T4Lf4g604UacSXDVAlO5LTSSBtU7hGOEug3l4gm8Qb0q8EOUfAil4EjVkINJrrs6HyqUyU3m/rE88I31mONRQyhpcCBw5wsvOvCFjXyHSkHU7XS8YIWF+zDpuZEpR3l3KSzwhEvmGtEg+mz7uA3rRk5iG+dS/ubxkcIHVcvYdCK0F7YrXhn92mQZjiONRAabrUC7dqw3jyBlcJub5OWWXEPd/wmskTE1cBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VxDlasSjwoxIsuuU61ufTGmMNKV2DESd2lqFJBudYCo=;
+ b=ot29g+cn4x8lT375236et9lL82+PmJEz9rygzZQQjmNYLKYMhe7vfZ1xKUqS0buMfPd0yv1I1olH+dHiKdgZ6Oz3JgwFrS+BfqH8kausnneUwV+2lVBut1OJ0OHqMUxka/mQooG5s/4PfadGDDm2HATZethI8H/Fs56j6HlLDVE=
+Received: from MWHPR22CA0051.namprd22.prod.outlook.com (2603:10b6:300:12a::13)
+ by BL0PR12MB4964.namprd12.prod.outlook.com (2603:10b6:208:1c7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.21; Thu, 10 Mar
+ 2022 21:25:25 +0000
+Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:12a:cafe::58) by MWHPR22CA0051.outlook.office365.com
+ (2603:10b6:300:12a::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.29 via Frontend
+ Transport; Thu, 10 Mar 2022 21:25:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5061.22 via Frontend Transport; Thu, 10 Mar 2022 21:25:24 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 10 Mar
+ 2022 15:25:23 -0600
+Date:   Thu, 10 Mar 2022 15:25:04 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Peter Gonda <pgonda@google.com>
+CC:     Brijesh Singh <brijesh.singh@amd.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <brijesh.ksingh@gmail.com>, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v12 32/46] x86/compressed/64: Add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <20220310212504.2kt6sidexljh2s6p@amd.com>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-33-brijesh.singh@amd.com>
+ <CAMkAt6pO0xZb2pye-VEKdFQ_dYFgLA21fkYmnYPTWo8mzPrKDQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAMkAt6pO0xZb2pye-VEKdFQ_dYFgLA21fkYmnYPTWo8mzPrKDQ@mail.gmail.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ed03dfac-293f-4f5f-20f6-08da02dc7d81
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4964:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB49645B03BB34C959A7F3A359950B9@BL0PR12MB4964.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dc5De7F/SPbdODKSJyDNg+XnMEqYEzmy/VzVpUDnEvVJnfV2bpWZR7YvAX5BxZNVlzsktyhvkYl72vlSmAkiILWHOnq6RBPyMIzp/KiDOQUf+6TIt5V4gk8ErxEWNEeXTNJoH6E6q8fcnOGHEQLzxxJBJT4W8dxDAbg5dCMQmW3dzlBO3PkZp6u2LzO8b4JCdWeAc/zFjQXuiNTZ4+8CU/0EbxgqqwZUzyA2UyXqWMdgaOLuMd9ct18oJJIV8FdHvXllu3myUd0MwxdU+bcR5wE88T/PghoA267TJrqKAbFJ/UimRKu2cku3Th3V2rDf2kCe+qjlZl96xYA/4nKTHJ1mfzuKJpgg2sL/hEtzy23F9uqYEbx6RFAKS1JmlNRaZHpvmFM6Y23oLAJUeL2WIwjZlfiuHM5gL9VndN7Uw6gmQmt006fGwD/5SVRiaRYTgytMz6KplT3FXc2Jum5u0OhDwq3WfYA9UpXH0ihxEqKEld72/8CsrqvuYqy0aFPrwHjMo23bWAFB9mKcxHp+UYBgqEQdpvkni2pqN9g5B+pjVl5NowXpsPIw3XFFtdO+G4BFbVqljbcIHnO5d8b9TQM+z3N3e/rnuLnUwBg3h2oyz+7qcD/DQhOSIKm8aQ2PY/e52Yn1x8r/WQrVD7ZpheQakj3HKdkHxo/BsMG0wxa0hfMWtS4XKlQoUG4g456X5bgl+Dwp3BRnDl47tqJPiw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(70206006)(1076003)(5660300002)(44832011)(86362001)(82310400004)(508600001)(40460700003)(8676002)(4326008)(7406005)(2616005)(356005)(36860700001)(7416002)(47076005)(81166007)(70586007)(336012)(6916009)(36756003)(26005)(426003)(316002)(54906003)(16526019)(8936002)(6666004)(53546011)(83380400001)(186003)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 21:25:24.6146
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed03dfac-293f-4f5f-20f6-08da02dc7d81
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4964
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,448 +131,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ACPI table includes _PLD fields for a device, create a new
-directory (physical_location) in sysfs to share _PLD fields.
+On Thu, Mar 10, 2022 at 07:51:17AM -0700, Peter Gonda wrote:
+> ()
+> 
+> On Mon, Mar 7, 2022 at 2:35 PM Brijesh Singh <brijesh.singh@amd.com> wrote:
+> > +static int snp_cpuid_postprocess(struct cpuid_leaf *leaf)
+> > +{
+> > +       struct cpuid_leaf leaf_hv = *leaf;
+> > +
+> > +       switch (leaf->fn) {
+> > +       case 0x1:
+> > +               snp_cpuid_hv(&leaf_hv);
+> > +
+> > +               /* initial APIC ID */
+> > +               leaf->ebx = (leaf_hv.ebx & GENMASK(31, 24)) | (leaf->ebx & GENMASK(23, 0));
+> > +               /* APIC enabled bit */
+> > +               leaf->edx = (leaf_hv.edx & BIT(9)) | (leaf->edx & ~BIT(9));
+> > +
+> > +               /* OSXSAVE enabled bit */
+> > +               if (native_read_cr4() & X86_CR4_OSXSAVE)
+> > +                       leaf->ecx |= BIT(27);
+> > +               break;
+> > +       case 0x7:
+> > +               /* OSPKE enabled bit */
+> > +               leaf->ecx &= ~BIT(4);
+> > +               if (native_read_cr4() & X86_CR4_PKE)
+> > +                       leaf->ecx |= BIT(4);
+> > +               break;
+> > +       case 0xB:
+> > +               leaf_hv.subfn = 0;
+> > +               snp_cpuid_hv(&leaf_hv);
+> > +
+> > +               /* extended APIC ID */
+> > +               leaf->edx = leaf_hv.edx;
+> > +               break;
+> > +       case 0xD: {
+> > +               bool compacted = false;
+> > +               u64 xcr0 = 1, xss = 0;
+> > +               u32 xsave_size;
+> > +
+> > +               if (leaf->subfn != 0 && leaf->subfn != 1)
+> > +                       return 0;
+> > +
+> > +               if (native_read_cr4() & X86_CR4_OSXSAVE)
+> > +                       xcr0 = xgetbv(XCR_XFEATURE_ENABLED_MASK);
+> > +               if (leaf->subfn == 1) {
+> > +                       /* Get XSS value if XSAVES is enabled. */
+> > +                       if (leaf->eax & BIT(3)) {
+> > +                               unsigned long lo, hi;
+> > +
+> > +                               asm volatile("rdmsr" : "=a" (lo), "=d" (hi)
+> > +                                                    : "c" (MSR_IA32_XSS));
+> > +                               xss = (hi << 32) | lo;
+> > +                       }
+> > +
+> > +                       /*
+> > +                        * The PPR and APM aren't clear on what size should be
+> > +                        * encoded in 0xD:0x1:EBX when compaction is not enabled
+> > +                        * by either XSAVEC (feature bit 1) or XSAVES (feature
+> > +                        * bit 3) since SNP-capable hardware has these feature
+> > +                        * bits fixed as 1. KVM sets it to 0 in this case, but
+> > +                        * to avoid this becoming an issue it's safer to simply
+> > +                        * treat this as unsupported for SNP guests.
+> > +                        */
+> > +                       if (!(leaf->eax & (BIT(1) | BIT(3))))
+> > +                               return -EINVAL;
+> 
+> I couldn't get this patch set to boot and I found that I was setting
+> these XSAVE cpuid bits wrong. This took me a while to debug because
+> inside of handle_vc_boot_ghcb() this -EINVAL means we jump into the
+> halt loop, in addition the early_printk()s inside of that function
+> don't seem to  be working for me but should the halt in
+> handle_vc_boot_ghcb() be replaced with an sev_es_terminate() or
+> something?
 
-Currently without PLD information, when there are multiple of same
-devices, it is hard to distinguish which device corresponds to which
-physical device at which location. For example, when there are two Type
-C connectors, it is hard to find out which connector corresponds to the
-Type C port on the left panel versus the Type C port on the right panel.
-With PLD information provided, we can determine which specific device at
-which location is doing what.
+For consistency, the error is propagated up the stack the same way as with
+all other individual handlers, and it's up to the current #VC handler
+function how it wants to handle errors. The other #VC handlers terminate,
+but this one has used a halt loop since its initial implementation in 2020
+(1aa9aa8ee517e).
 
-_PLD output includes much more fields, but only generic fields are added
-and exposed to sysfs, so that non-ACPI devices can also support it in
-the future. The minimal generic fields needed for locating a device are
-the following.
-- panel
-- vertical_position
-- horizontal_position
-- dock
-- lid
+Joerg, do you have more background on that? Would it make sense, outside
+of this series, to change it to a terminate? Maybe with a specific set
+of error codes for ES_{OK,UNSUPPORTED,VMM_ERROR,DECODE_FAILED}?
 
-Signed-off-by: Won Chung <wonchung@google.com>
----
+> 
+> I am still working on why the early_printk()s in that function are not
+> working, it seems that they lead to a different halt.
 
-Changes from v4
-- Remove physical_location directory when device is deleted.
-- Correctly handle error from adding physical_location in
-  device_add_attrs().
+I don't see a different halt. They just don't seem to print anything.
+(keep in mind you still need to advance the IP or else the guest is
+still gonna end up spinning here, even if you're removing the halt loop
+for testing purposes)
 
-Changes from v3
-- Move dev_add_physical_location() and dev_attr_physical_location_group
-  to driver/base/physical_location.h.
-- Use pointer and reorder physical_location in struct device to pack its
-  bytes. (checked using pahole)
-- Unify naming to physical_location since the name location is used in
-  some places like USB port for different information.
+> working, it seems that they lead to a different halt. Have you tested
+> any of those error paths manually? For example if you set your CPUID
+> bits to explicitly fail here do you see the expected printks?
 
-Changes from v2
-- Use sysfs_emit to create files.
-- Correct mix of spaces and tabs.
+I think at that point in the code, when the XSAVE stuff is setup, the
+console hasn't been enabled yet, so messages would get buffered until they
+get flushed later (which won't happen since there's halt loop after). I
+know in some cases devs will dump the log buffer from memory instead to get
+at the error messages for early failures. (Maybe that's also why Joerg
+decided to use a halt loop there instead of terminating?)
 
-Changes from v1
-- Correct directory names in Documentation.
-- Clarify namings in core.c
+That said, I did some testing to confirm with earlyprintk=serial|vga and
+I don't see the error messages even if I modify the #VC handler to allow
+booting to continue. pr_err() messages however do show up if I drop the
+halt loop. So maybe pr_err() is more appropriate here? But it doesn't
+really matter unless you plan on digging into guest memory for the logs.
 
- .../testing/sysfs-devices-physical_location   |  42 ++++++
- drivers/base/Makefile                         |   1 +
- drivers/base/core.c                           |  11 ++
- drivers/base/physical_location.c              | 137 ++++++++++++++++++
- drivers/base/physical_location.h              |  16 ++
- include/linux/device.h                        |  73 ++++++++++
- 6 files changed, 280 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_locati=
-on
- create mode 100644 drivers/base/physical_location.c
- create mode 100644 drivers/base/physical_location.h
-
-diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Do=
-cumentation/ABI/testing/sysfs-devices-physical_location
-new file mode 100644
-index 000000000000..202324b87083
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-physical_location
-@@ -0,0 +1,42 @@
-+What:		/sys/devices/.../physical_location
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		This directory contains information on physical location of
-+		the device connection point with respect to the system's
-+		housing.
-+
-+What:		/sys/devices/.../physical_location/panel
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		Describes which panel surface of the system=E2=80=99s housing the
-+		device connection point resides on.
-+
-+What:		/sys/devices/.../physical_location/vertical_position
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		Describes vertical position of the device connection point on
-+		the panel surface.
-+
-+What:		/sys/devices/.../physical_location/horizontal_position
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		Describes horizontal position of the device connection point on
-+		the panel surface.
-+
-+What:		/sys/devices/.../physical_location/dock
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		"Yes" if the device connection point resides in a docking
-+		station or a port replicator. "No" otherwise.
-+
-+What:		/sys/devices/.../physical_location/lid
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		"Yes" if the device connection point resides on the lid of
-+		laptop system. "No" otherwise.
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index 02f7f1358e86..83217d243c25 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_DEV_COREDUMP) +=3D devcoredump.o
- obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) +=3D platform-msi.o
- obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) +=3D arch_topology.o
- obj-$(CONFIG_GENERIC_ARCH_NUMA) +=3D arch_numa.o
-+obj-$(CONFIG_ACPI) +=3D physical_location.o
-=20
- obj-y			+=3D test/
-=20
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 7bb957b11861..9054a2d8bbb6 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -32,6 +32,7 @@
- #include <linux/dma-map-ops.h> /* for dma_default_coherent */
-=20
- #include "base.h"
-+#include "physical_location.h"
- #include "power/power.h"
-=20
- #ifdef CONFIG_SYSFS_DEPRECATED
-@@ -2649,8 +2650,17 @@ static int device_add_attrs(struct device *dev)
- 			goto err_remove_dev_waiting_for_supplier;
- 	}
-=20
-+	if (dev_add_physical_location(dev)) {
-+		error =3D device_add_group(dev,
-+			&dev_attr_physical_location_group);
-+		if (error)
-+			goto err_remove_dev_removable;
-+	}
-+
- 	return 0;
-=20
-+ err_remove_dev_removable:
-+	device_remove_file(dev, &dev_attr_removable);
-  err_remove_dev_waiting_for_supplier:
- 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
-  err_remove_dev_online:
-@@ -2672,6 +2682,7 @@ static void device_remove_attrs(struct device *dev)
- 	struct class *class =3D dev->class;
- 	const struct device_type *type =3D dev->type;
-=20
-+	device_remove_group(dev, &dev_attr_physical_location_group);
- 	device_remove_file(dev, &dev_attr_removable);
- 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
- 	device_remove_file(dev, &dev_attr_online);
-diff --git a/drivers/base/physical_location.c b/drivers/base/physical_locat=
-ion.c
-new file mode 100644
-index 000000000000..4c1a52ecd7f6
---- /dev/null
-+++ b/drivers/base/physical_location.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device physical location support
-+ *
-+ * Author: Won Chung <wonchung@google.com>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/sysfs.h>
-+
-+#include "physical_location.h"
-+
-+bool dev_add_physical_location(struct device *dev)
-+{
-+	struct acpi_pld_info *pld;
-+	acpi_status status;
-+
-+	if (!has_acpi_companion(dev))
-+		return false;
-+
-+	status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-+	if (ACPI_FAILURE(status))
-+		return false;
-+
-+	dev->physical_location =3D
-+		kzalloc(sizeof(*dev->physical_location), GFP_KERNEL);
-+	dev->physical_location->panel =3D pld->panel;
-+	dev->physical_location->vertical_position =3D pld->vertical_position;
-+	dev->physical_location->horizontal_position =3D pld->horizontal_position;
-+	dev->physical_location->dock =3D pld->dock;
-+	dev->physical_location->lid =3D pld->lid;
-+
-+	return true;
-+}
-+
-+static ssize_t panel_show(struct device *dev, struct device_attribute *att=
-r,
-+	char *buf)
-+{
-+	const char *panel;
-+
-+	switch (dev->physical_location->panel) {
-+	case DEVICE_PANEL_TOP:
-+		panel =3D "top";
-+		break;
-+	case DEVICE_PANEL_BOTTOM:
-+		panel =3D "bottom";
-+		break;
-+	case DEVICE_PANEL_LEFT:
-+		panel =3D "left";
-+		break;
-+	case DEVICE_PANEL_RIGHT:
-+		panel =3D "right";
-+		break;
-+	case DEVICE_PANEL_FRONT:
-+		panel =3D "front";
-+		break;
-+	default:
-+		panel =3D "unknown";
-+	}
-+	return sysfs_emit(buf, "%s\n", panel);
-+}
-+static DEVICE_ATTR_RO(panel);
-+
-+static ssize_t vertical_position_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	const char *vertical_position;
-+
-+	switch (dev->physical_location->vertical_position) {
-+	case DEVICE_VERT_POS_UPPER:
-+		vertical_position =3D "upper";
-+		break;
-+	case DEVICE_VERT_POS_CENTER:
-+		vertical_position =3D "center";
-+		break;
-+	case DEVICE_VERT_POS_LOWER:
-+		vertical_position =3D "lower";
-+		break;
-+	default:
-+		vertical_position =3D "unknown";
-+	}
-+	return sysfs_emit(buf, "%s\n", vertical_position);
-+}
-+static DEVICE_ATTR_RO(vertical_position);
-+
-+static ssize_t horizontal_position_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	const char *horizontal_position;
-+
-+	switch (dev->physical_location->horizontal_position) {
-+	case DEVICE_HORI_POS_LEFT:
-+		horizontal_position =3D "left";
-+		break;
-+	case DEVICE_HORI_POS_CENTER:
-+		horizontal_position =3D "center";
-+		break;
-+	case DEVICE_HORI_POS_RIGHT:
-+		horizontal_position =3D "right";
-+		break;
-+	default:
-+		horizontal_position =3D "unknown";
-+	}
-+	return sysfs_emit(buf, "%s\n", horizontal_position);
-+}
-+static DEVICE_ATTR_RO(horizontal_position);
-+
-+static ssize_t dock_show(struct device *dev, struct device_attribute *attr=
-,
-+	char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n",
-+		dev->physical_location->dock ? "yes" : "no");
-+}
-+static DEVICE_ATTR_RO(dock);
-+
-+static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
-+	char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n",
-+		dev->physical_location->lid ? "yes" : "no");
-+}
-+static DEVICE_ATTR_RO(lid);
-+
-+static struct attribute *dev_attr_physical_location[] =3D {
-+	&dev_attr_panel.attr,
-+	&dev_attr_vertical_position.attr,
-+	&dev_attr_horizontal_position.attr,
-+	&dev_attr_dock.attr,
-+	&dev_attr_lid.attr,
-+	NULL,
-+};
-+
-+const struct attribute_group dev_attr_physical_location_group =3D {
-+	.name =3D "physical_location",
-+	.attrs =3D dev_attr_physical_location,
-+};
-+
-diff --git a/drivers/base/physical_location.h b/drivers/base/physical_locat=
-ion.h
-new file mode 100644
-index 000000000000..82cde9f1b161
---- /dev/null
-+++ b/drivers/base/physical_location.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Device physical location support
-+ *
-+ * Author: Won Chung <wonchung@google.com>
-+ */
-+
-+#include <linux/device.h>
-+
-+#ifdef CONFIG_ACPI
-+extern bool dev_add_physical_location(struct device *dev);
-+extern const struct attribute_group dev_attr_physical_location_group;
-+#else
-+static inline bool dev_add_physical_location(struct device *dev) { return =
-false; };
-+static const struct attribute_group dev_attr_physical_location_group =3D {=
-};
-+#endif
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 93459724dcde..766fbea6ca83 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -386,6 +386,75 @@ struct dev_msi_info {
- #endif
- };
-=20
-+/**
-+ * enum device_physical_location_panel - Describes which panel surface of =
-the
-+ * system's housing the device connection point resides on.
-+ * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
-+ * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
-+ * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
-+ * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
-+ * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
-+ * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
-+ * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknow=
-n.
-+ */
-+enum device_physical_location_panel {
-+	DEVICE_PANEL_TOP,
-+	DEVICE_PANEL_BOTTOM,
-+	DEVICE_PANEL_LEFT,
-+	DEVICE_PANEL_RIGHT,
-+	DEVICE_PANEL_FRONT,
-+	DEVICE_PANEL_BACK,
-+	DEVICE_PANEL_UNKNOWN,
-+};
-+
-+/**
-+ * enum device_physical_location_vertical_position - Describes vertical
-+ * position of the device connection point on the panel surface.
-+ * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of pan=
-el.
-+ * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of p=
-anel.
-+ * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of pan=
-el.
-+ */
-+enum device_physical_location_vertical_position {
-+	DEVICE_VERT_POS_UPPER,
-+	DEVICE_VERT_POS_CENTER,
-+	DEVICE_VERT_POS_LOWER,
-+};
-+
-+/**
-+ * enum device_physical_location_horizontal_position - Describes horizonta=
-l
-+ * position of the device connection point on the panel surface.
-+ * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel=
-.
-+ * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of p=
-anel.
-+ * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of pan=
-el.
-+ */
-+enum device_physical_location_horizontal_position {
-+	DEVICE_HORI_POS_LEFT,
-+	DEVICE_HORI_POS_CENTER,
-+	DEVICE_HORI_POS_RIGHT,
-+};
-+
-+/**
-+ * struct device_physical_location - Device data related to physical locat=
-ion
-+ * of the device connection point.
-+ * @panel: Panel surface of the system's housing that the device connectio=
-n
-+ *         point resides on.
-+ * @vertical_position: Vertical position of the device connection point wi=
-thin
-+ *                     the panel.
-+ * @horizontal_position: Horizontal position of the device connection poin=
-t
-+ *                       within the panel.
-+ * @dock: Set if the device connection point resides in a docking station =
-or
-+ *        port replicator.
-+ * @lid: Set if this device connection point resides on the lid of laptop
-+ *       system.
-+ */
-+struct device_physical_location {
-+	enum device_physical_location_panel panel;
-+	enum device_physical_location_vertical_position vertical_position;
-+	enum device_physical_location_horizontal_position horizontal_position;
-+	bool dock;
-+	bool lid;
-+};
-+
- /**
-  * struct device - The basic device structure
-  * @parent:	The device's "parent" device, the device to which it is attach=
-ed.
-@@ -453,6 +522,8 @@ struct dev_msi_info {
-  * 		device (i.e. the bus driver that discovered the device).
-  * @iommu_group: IOMMU group the device belongs to.
-  * @iommu:	Per device generic IOMMU runtime data
-+ * @physical_location: Describes physical location of the device connectio=
-n
-+ *		point in the system housing.
-  * @removable:  Whether the device can be removed from the system. This
-  *              should be set by the subsystem / bus driver that discovere=
-d
-  *              the device.
-@@ -567,6 +638,8 @@ struct device {
- 	struct iommu_group	*iommu_group;
- 	struct dev_iommu	*iommu;
-=20
-+	struct device_physical_location *physical_location;
-+
- 	enum device_removable	removable;
-=20
- 	bool			offline_disabled:1;
---=20
-2.35.1.723.g4982287a31-goog
-
+So maybe reworking the error handling in handle_vc_boot_ghcb() to use
+sev_es_terminate() might be warranted, but probably worth checking with
+Joerg first, and should be done as a separate series since it is not
+SNP-related.

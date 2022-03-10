@@ -2,141 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B8D4D42CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D466E4D42CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240489AbiCJIqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S240470AbiCJIqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240497AbiCJIqq (ORCPT
+        with ESMTP id S231738AbiCJIqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:46:46 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97316A66F8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:45:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646901946; x=1678437946;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4i/2eeImYjknEWIhRQmXUuA5/J5BsCM2h33VWH6yLWI=;
-  b=Kg7IqBkqWaZVMOUQyYzoUtzS4DEDAzIePY7tqywqVdHM1jS7q5UWVZDB
-   +U8P5FInJrq2sys+RauX1NXMoojLQtMfrCvMq+Kgu++FrkzLPwIez5OrB
-   jnABckkQlBSgjVuo+o/4sAtOyA7HwyNM3RqJfPizFt2U+/hVcCUwTQZun
-   VigXmf/8IgB5+ibvpAOcZNzpkI6Ni2/XysMhUMHe16bWF85us9ql69GAv
-   JilcmWlNXGC4O8A0/y0c/uwWGFmk1S2e1hdpZ0sZm5fCJu/DJa+vgE4Qi
-   opADPP8p8h7E7C9BEa6Z9dA4T4yG6xb9C0Z62cPaS81SIs9nz5v9GWn1h
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235802447"
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="235802447"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 00:45:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="632915314"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 00:45:45 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSEQa-0004ff-D4; Thu, 10 Mar 2022 08:45:44 +0000
-Date:   Thu, 10 Mar 2022 16:45:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dai Ngo <dai.ngo@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [cel:nfsd-courteous-server 39/39] fs/nfsd/nfs4state.c:2460:44:
- warning: format '%ld' expects argument of type 'long int', but argument 3
- has type 'u64' {aka 'long long unsigned int'}
-Message-ID: <202203101651.SDV0fBRF-lkp@intel.com>
+        Thu, 10 Mar 2022 03:46:36 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2892C8189A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:45:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7CNkExPZGr37ETx08CFw0OJRaskcsi0wkihRq0QBeX8=; b=eFOdIQsQ4S7hjurF+puepjPscW
+        lpDc504LNqvHSPzx2aDl/wKyQcYqlglZW0P1cMhzBuAQpj3YB74QO0NY6yF6pnJjNuSj5i+VIB645
+        9hv1FHIn2hu+JbtB5+RK4bGENiIg2Cuxnfx89jJJjcG5MtlEkPIG9UUGObtpOhlh1ifB0zAr2RuMm
+        GgwTT5vKYqGKOP5qrM8tu3nFfunT4nDSvDXsmkUTauwJLpI54OLYGTaIGpTVuYfZ+rjTg0BtVgaYN
+        o2C3JK2yGrpttn7yxUZ6JYjpBmJRffyXq3zADCxkC4w9t0ikhI5RZDPycehdlqP/u3X+LnjillSJ8
+        BDhu9qAw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSEQC-000Lwu-ID; Thu, 10 Mar 2022 08:45:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3E1403000E6;
+        Thu, 10 Mar 2022 09:45:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B7BEF201699FB; Thu, 10 Mar 2022 09:45:17 +0100 (CET)
+Date:   Thu, 10 Mar 2022 09:45:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        vincent.guittot@linaro.org, bristot@redhat.com,
+        zhaolei@cn.fujitsu.com, tj@kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] sched/cpuacct: optimize away RCU read lock
+Message-ID: <Yim6nUmfGk5FHv6K@hirez.programming.kicks-ass.net>
+References: <20220220051426.5274-1-zhouchengming@bytedance.com>
+ <20220220051426.5274-2-zhouchengming@bytedance.com>
+ <CGME20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f@eucas1p2.samsung.com>
+ <f4bc652b-115f-35b5-91db-bad3b30fed9b@samsung.com>
+ <YifniVyoJ9NNU+pv@hirez.programming.kicks-ass.net>
+ <20220308234403.GC4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220308234403.GC4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
-head:   25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
-commit: 25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea [39/39] NFSD: Show state of courtesy clients in client info
-config: x86_64-rhel-8.3-kunit (https://download.01.org/0day-ci/archive/20220310/202203101651.SDV0fBRF-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel nfsd-courteous-server
-        git checkout 25cf03b50a8a38217a4e1a9b178af4d9afa2b9ea
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfsd/
+On Tue, Mar 08, 2022 at 03:44:03PM -0800, Paul E. McKenney wrote:
+> On Wed, Mar 09, 2022 at 12:32:25AM +0100, Peter Zijlstra wrote:
+> > On Wed, Mar 09, 2022 at 12:20:33AM +0100, Marek Szyprowski wrote:
+> > > On 20.02.2022 06:14, Chengming Zhou wrote:
+> > > > Since cpuacct_charge() is called from the scheduler update_curr(),
+> > > > we must already have rq lock held, then the RCU read lock can
+> > > > be optimized away.
+> > > >
+> > > > And do the same thing in it's wrapper cgroup_account_cputime(),
+> > > > but we can't use lockdep_assert_rq_held() there, which defined
+> > > > in kernel/sched/sched.h.
+> > > >
+> > > > Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> > > 
+> > > This patch landed recently in linux-next as commit dc6e0818bc9a 
+> > > ("sched/cpuacct: Optimize away RCU read lock"). On my test systems I 
+> > > found that it triggers a following warning in the early boot stage:
+> > > 
+> > > Calibrating delay loop (skipped), value calculated using timer 
+> > > frequency.. 48.00 BogoMIPS (lpj=240000)
+> > > pid_max: default: 32768 minimum: 301
+> > > Mount-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
+> > > Mountpoint-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
+> > > CPU: Testing write buffer coherency: ok
+> > > CPU0: Spectre v2: using BPIALL workaround
+> > > 
+> > > =============================
+> > > WARNING: suspicious RCU usage
+> > > 5.17.0-rc5-00050-gdc6e0818bc9a #11458 Not tainted
+> > > -----------------------------
+> > > ./include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
+> > 
+> > Arguably, with the flavours folded again, rcu_dereference_check() ought
+> > to default include rcu_read_lock_sched_held() or its equivalent I
+> > suppose.
+> > 
+> > Paul?
+> 
+> That would reduce the number of warnings, but it also would hide bugs.
+> 
+> So, are you sure you really want this?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't understand... Since the flavours got merged regular RCU has it's
+quescent state held off by preempt_disable. So how can relying on that
+cause bugs?
 
-All warnings (new ones prefixed by >>):
+And if we can rely on that, then surely rcu_dereferenced_check() ought
+to play by the same rules, otherwise we get silly warnings like these at
+hand.
 
-   fs/nfsd/nfs4state.c: In function 'client_info_show':
->> fs/nfsd/nfs4state.c:2460:44: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Wformat=]
-    2460 |  seq_printf(m, "time since last renew: %02ld:%02d:%02d\n", hrs, mins, secs);
-         |                                        ~~~~^               ~~~
-         |                                            |               |
-         |                                            long int        u64 {aka long long unsigned int}
-         |                                        %02lld
+Specifically, we removed the rcu_read_lock() here because this has
+rq->lock held, which is a raw_spinlock_t which very much implies preempt
+disable, on top of that, it's also an IRQ-safe lock and thus IRQs will
+be disabled.
 
-
-vim +2460 fs/nfsd/nfs4state.c
-
-  2437	
-  2438	static int client_info_show(struct seq_file *m, void *v)
-  2439	{
-  2440		struct inode *inode = m->private;
-  2441		struct nfs4_client *clp;
-  2442		u64 clid, hrs;
-  2443		u32 mins, secs;
-  2444	
-  2445		clp = get_nfsdfs_clp(inode);
-  2446		if (!clp)
-  2447			return -ENXIO;
-  2448		memcpy(&clid, &clp->cl_clientid, sizeof(clid));
-  2449		seq_printf(m, "clientid: 0x%llx\n", clid);
-  2450		seq_printf(m, "address: \"%pISpc\"\n", (struct sockaddr *)&clp->cl_addr);
-  2451		if (test_bit(NFSD4_CLIENT_CONFIRMED, &clp->cl_flags))
-  2452			seq_puts(m, "status: confirmed\n");
-  2453		else
-  2454			seq_puts(m, "status: unconfirmed\n");
-  2455		seq_printf(m, "courtesy client: %s\n",
-  2456			test_bit(NFSD4_CLIENT_COURTESY, &clp->cl_flags) ? "yes" : "no");
-  2457		hrs = div_u64_rem(ktime_get_boottime_seconds() - clp->cl_time,
-  2458					3600, &secs);
-  2459		mins = div_u64_rem((u64)secs, 60, &secs);
-> 2460		seq_printf(m, "time since last renew: %02ld:%02d:%02d\n", hrs, mins, secs);
-  2461		seq_printf(m, "name: ");
-  2462		seq_quote_mem(m, clp->cl_name.data, clp->cl_name.len);
-  2463		seq_printf(m, "\nminor version: %d\n", clp->cl_minorversion);
-  2464		if (clp->cl_nii_domain.data) {
-  2465			seq_printf(m, "Implementation domain: ");
-  2466			seq_quote_mem(m, clp->cl_nii_domain.data,
-  2467						clp->cl_nii_domain.len);
-  2468			seq_printf(m, "\nImplementation name: ");
-  2469			seq_quote_mem(m, clp->cl_nii_name.data, clp->cl_nii_name.len);
-  2470			seq_printf(m, "\nImplementation time: [%lld, %ld]\n",
-  2471				clp->cl_nii_time.tv_sec, clp->cl_nii_time.tv_nsec);
-  2472		}
-  2473		seq_printf(m, "callback state: %s\n", cb_state2str(clp->cl_cb_state));
-  2474		seq_printf(m, "callback address: %pISpc\n", &clp->cl_cb_conn.cb_addr);
-  2475		drop_client(clp);
-  2476	
-  2477		return 0;
-  2478	}
-  2479	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+There is no possible way for RCU to make progress.

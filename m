@@ -2,307 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FDA4D43BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CC24D43BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240897AbiCJJsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S240901AbiCJJt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240911AbiCJJr7 (ORCPT
+        with ESMTP id S233237AbiCJJtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:47:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68FF813AA08
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:46:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646905617;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BJj1yH1VXfhLvRJ8+zGrbpkPmlf5E1ndVM90qQ671Jg=;
-        b=QiHgXUxjP8Ctmgkg+xqVBK9dpIWDEVjU/ZP3izrwbo8U18h3sfvKHMVXuI9XDZNvM/peMM
-        mYy7WW9o0Eh8XQsXswPA/qzqGvTxMzONPPQMOOKPQtIqycuK0rls3ug0r7h/Rp6RoI1MoW
-        khEVD+6flNzTGAYGQqe/tpIDRtwavqM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-573-gioaHyxBN9OOxLLLcEpTnQ-1; Thu, 10 Mar 2022 04:46:56 -0500
-X-MC-Unique: gioaHyxBN9OOxLLLcEpTnQ-1
-Received: by mail-wr1-f70.google.com with SMTP id z16-20020adff1d0000000b001ef7dc78b23so1486698wro.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:46:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-transfer-encoding:content-language;
-        bh=BJj1yH1VXfhLvRJ8+zGrbpkPmlf5E1ndVM90qQ671Jg=;
-        b=H0Dn7N28+8HLw+/mWewG4hM2eyTcthx17bQFXdMow0iTCOW9o/XN8gXmg5gcTMUfVo
-         fwkkucalhoapESeZyBAfXOmCFDSdHmzgtBf8Jr857OY3hR/FjH4Kcj4J1NiIDpkA1G1K
-         9sie3h9zFRDmHGreZVBI+OWjhE1rl8aLiyNGO+vS+HXVCYFBHqFkVEN3FbSTRJriFmDa
-         AOs48/W4Fwkh0+gLmDXlH8Rtpn8D5lQridt6WNYB/cBnF+ul/WMMzZDuXeA3gXIpw64t
-         xOzGkfLyFmH6KvuUcX9s3I6nxnGRMcDYaZCI0GOFVtlPXVheXKnnri5dZ/I5FdxaUhFZ
-         +ptw==
-X-Gm-Message-State: AOAM531We27tREq4bqh0f+8f5cY9Y1wBuPHZ+xUPz64XpsliLDLmNcgd
-        R3zRmi+kZE4600LeVB2gadoi2a4fI/tW++QUgZwM8YUz3pC5rO6+cI205semhTnKhmnPWVY01Ov
-        hCq93vOHJm/VpJWQ8CsANbGUTD4PAF+S2LW/ZAmlgHrbO6YA4jtwULi4oUylInboRTQHevglVH+
-        Ajnbw=
-X-Received: by 2002:a5d:5009:0:b0:1f1:f87e:2e26 with SMTP id e9-20020a5d5009000000b001f1f87e2e26mr2912978wrt.404.1646905614838;
-        Thu, 10 Mar 2022 01:46:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz7wzT+XTVpeEzBUmQvpXc+eICuFzdxvcvXTNLQwGJIuVjVygEpg34U15LBeet6UiFJhxQ4/g==
-X-Received: by 2002:a5d:5009:0:b0:1f1:f87e:2e26 with SMTP id e9-20020a5d5009000000b001f1f87e2e26mr2912935wrt.404.1646905614477;
-        Thu, 10 Mar 2022 01:46:54 -0800 (PST)
-Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056000018c00b001f079518150sm3776956wrx.93.2022.03.10.01.46.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 01:46:53 -0800 (PST)
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v8 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220308054421.847385-1-baolu.lu@linux.intel.com>
-From:   Eric Auger <eric.auger@redhat.com>
-Message-ID: <fb386c59-2359-0230-6340-3f8c8710b0f1@redhat.com>
-Date:   Thu, 10 Mar 2022 10:46:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 10 Mar 2022 04:49:24 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2098.outbound.protection.outlook.com [40.107.255.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9637125C9F;
+        Thu, 10 Mar 2022 01:48:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=augWVoaibgtLB5BOD+n2oDGsHGaUJWz9KQ0zcBSa3QBW43zCxyfL4m6caKqgHYAY1LtJfC0n2HW1YYDSrgIbaCqkkFO8hijlLWeHyBYppTNQmY7RAZ0/vyrJX1YSWqz4/ACjN0WZrZLg2KyYXqchhuR7fWtggcNP7GCjUHvO7MHZRpQG/2oqfTtI2bPR8E29IzrHsuRcMEo9k62q+LQR2JRkgoqChiTB5v8BqpdVKoFkODEq1Pxw1Dqkpt7aEeHJItwWnnyl+VxMjs7l1o6WugQVt30jS706vg9ex/reuCKsovnZeDhZzoNTFSvmtU9sdeRvL7Lj0+9Q2jfMrRmD0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vQftdU4xHPrN49RZbHmGY4m1rLaAsap84Dtb65x/gcM=;
+ b=IDFeMegF7uVcoJ636gOJOuYqeL2X/01+nvGkZBX9Fck0XnKl+e98ql2BX4XXz1c72q5N8DViL6nQz6pMbGgosBhwcIt2tanufOeje0Tv2seK1JE0dvfCp9ftV9nv30uGD+u1STFYY7eWYxr1hmtWHZdoE0EcBFwdAnl/y5dIIxOwgcIk6XqtllQEhe+yHfylZpi7gZNS4+0Vy5WPTF42x/81C/aZPbCemitjqRzeccTo2XNbXMrzfcJ5TbaowJ6p5pueieJwJMXJmFMxsmc1FXuFrubFgY4BW1ctis7CfAUyx4H2lC1wHBwzesTuMKZtDd5MC92ue8K/fpMLaE27Jg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vQftdU4xHPrN49RZbHmGY4m1rLaAsap84Dtb65x/gcM=;
+ b=a12KKMhOPISoru8+hN3M2IA/kyKq311AblgTUFymIFSMy1orpzqjTJo9DAz8+Artk7OROPZHXZYk9sgycdRsyyQIN+uSAA5Qsy6aTsUJZxhpTE2sMzbx55PLqNqlXM5Td0X3/R6yBWEw77ZFwAv1tw48SwxyFYuAgcFdKiCOmQE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by HK0PR06MB3858.apcprd06.prod.outlook.com (2603:1096:203:ba::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 10 Mar
+ 2022 09:48:19 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
+ 09:48:19 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] spi: rockchip-sfc: fix platform_get_irq.cocci warning
+Date:   Thu, 10 Mar 2022 01:48:06 -0800
+Message-Id: <20220310094806.13734-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0118.apcprd03.prod.outlook.com
+ (2603:1096:4:91::22) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-In-Reply-To: <20220308054421.847385-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 13d8be47-4bb5-44c8-05ea-08da027b1b4b
+X-MS-TrafficTypeDiagnostic: HK0PR06MB3858:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB3858155B5062D5B2E5969286A20B9@HK0PR06MB3858.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l+vecqVIQVgaXvrg+IPFv/zgdKborkIAXyh2Pwn/ituAAdpJxW/6gd40bvEjx+/uLXJHATn9bY8eoj6Ik8Z3huHyX7LjGtFdlXN3rjMAO/oy97nebBRg2esNhw494zNfil0CbQBLvbPgSTDOwq1m5tVdZ8Qy7s+wkSfQIvp6DMjcaVBxrBZwFjYBWSQEoSAo49qF4bHhdgSEO3GWzPitNpHSM/qCreONSTQref8LiGhw4IleDo97vaHsPjnN59crAdAGuZ5B42LNqBGGCkSKKYhQV3RfRE0M4J4tKjy8yuGvhuABBp9FqB4dn8JwzxUNNwTCGBv8kh8vIR20wHmVbRj4iAa2Arn7hvotn7UTNP3XhB2aTrrRyjw//Lu7H3nhkYYXc0cZDJUu+raZI1RJ+UJfkLklKMFUhdMY4/2T0K0OyXwWIft1TFSpdvF6VZrG6kk7Ql1SnAQvbUwluoksbvXMOLBh3NLYUBw3qMv/0BUBBH7kosJkI/ePcoZC2FhApYKeoWQSh6GmGQIHdAmHHWtB5AgV0C8PDg8NQrVkuXRv0liimMz0pFJvQof6NruxwbFlihperKEtaB4aQ4YDyYeaaHj8u7fPi05jVCnduDlQUpKzfPK7QyluTMsk2kReZ1vWs4PdtvpgqWioFjvFy0OiXIvKoJqVZ0ITn9BA59V/emPjvgifTDC0eZzbY85LbOY4mTKn29HE3oZ4rwmm8A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(66556008)(8676002)(4326008)(66476007)(83380400001)(66946007)(508600001)(1076003)(107886003)(6512007)(110136005)(2616005)(6506007)(316002)(52116002)(6486002)(4744005)(8936002)(86362001)(5660300002)(38350700002)(38100700002)(186003)(26005)(2906002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gIvkth4Pduc28AzVI1Z/SWyW6Rl+qiKawIVexzq7vio9VG2tC1iohJBPQ9TC?=
+ =?us-ascii?Q?5TCzoF8ItBoIjjFdr1H+b7dfC61vH2Uq97z+1Xpn354uczVVk7Uu4sG6KrHQ?=
+ =?us-ascii?Q?79Y8l92mhmoCrkFOB7seL/roQH7E7bOh5Y0jVDBh2Gz7Yo7KTlaHTHgRJMQL?=
+ =?us-ascii?Q?EpqxMOUzxUoQ+F9iUo+y7KP6OAjQ9xEuVx19XrmmS8FJ2hGwhHeLsIHtS8lt?=
+ =?us-ascii?Q?ymRIM6B3Y7SZfYO4UE3exJ+J1Nrpw2XtAi8jm5va9TIGc72zfZeI/RKKP68Q?=
+ =?us-ascii?Q?q0kufsnTCj+xT92XDTl24cXQpc9BPlhZgzpcu00/jwNCXmEM21jl8WyOeQCr?=
+ =?us-ascii?Q?hy9pH746NegnfarP1tP7YsSjFkwQg5IIcXpf4g091X6tw5jx9pbJvfqDRCk6?=
+ =?us-ascii?Q?H5tXsbEJeeSiwjgCRs6MlNzFvE/eIVAFwP6QZAnjxcHJev3QrstoEm8b/BmM?=
+ =?us-ascii?Q?iBaqCuNfjxENs47waqWeBb63ePYZpd94YT/Hs5Oyth+s3bTTa7aNF8n7CqtU?=
+ =?us-ascii?Q?S++U+E8dk8T35Zv7wb98N5jA80gSf3EchhMQXnbOKB7C1XXGm088G1Na4QKA?=
+ =?us-ascii?Q?4bbVs/QAjyxVrpWI+0FnqRVP74xML+6HaYetLgyu1+pnD6XoHlKpJVSBnclv?=
+ =?us-ascii?Q?YU7arAf69bFGmNA5a7bOz9H/IYPER1gr8jS4nIX5EYM6WberIEDs12URiBYP?=
+ =?us-ascii?Q?FMz/3sZjkKwvZ4yHGHFij31P2eV1xmOx+Rs1ZLrsXp79+zOqnCeWK++B9Sw9?=
+ =?us-ascii?Q?sfpAocWtBiVQIg5SVDa/JfaJAZ5TlDETXEhZiPnCAiQr4c8i+heYQ3bSaLTv?=
+ =?us-ascii?Q?y12qeiE/0Q0fPbkM/Ok57VVtzQSZwVIwvSzauLgEvUOFFoRG8UtBedKdoul0?=
+ =?us-ascii?Q?jTaxl5qphLj0C+qiElrL5w3ZxNZRUbvWljd83kATJJztP6tHSz8CDzJ0UU5I?=
+ =?us-ascii?Q?EeMMe08u8Ya4lHald7wnT5VZd5u7yVp8FK0IWo7pJ4P6ygJoEoihBuQxO4MX?=
+ =?us-ascii?Q?NwF695A1sMdkZPP+Xf0QQHIaATWwySwO9k9eHDEy+O1L/KaKGSxIqfg/cfwy?=
+ =?us-ascii?Q?XkvG3aZTYQnad2PC+9oGwyel5NuSRtLJxnJD+OS5f3R64HJpKWBIOOcO7Npm?=
+ =?us-ascii?Q?J+1TK8c6EMocQsSYl6WAZuHL4pARQ0rK6HOT4plPCMfQALIs9lRwSqyEOpVI?=
+ =?us-ascii?Q?SOZYe/B4Ot4XaF1eiyj3nDUZ8DgbmVgZRO1F2mFS/n1Ro6qe8MvT/hb+y23y?=
+ =?us-ascii?Q?DRk94/i/4OInpevnxeyreHcXHiEux1JQuiKUNC+HUYhaBUXBn40fSVL3dhZj?=
+ =?us-ascii?Q?8ugvmf/UcsnaOY6hjhMdl+J35nVeC7YsiL9rlPLok4fmfNY1mG+JKRLurvSZ?=
+ =?us-ascii?Q?7MkVHAduDG1aeVLWYd1/l/OyeO7HKfs7seAYNUaG6Ish5EdMtz+aIoSa1ReZ?=
+ =?us-ascii?Q?yTtFe89nfApRoP8CzP9UCpwOrYuagGV5Lx159FG0KfigtvMQsJRif1uXHOG4?=
+ =?us-ascii?Q?6+dja35Npsn4P3RK3PsT8wCPbdDEhC6XpG19BvI1NhFGwOmYx7csBH6DyOiY?=
+ =?us-ascii?Q?bokDa1eucTPEp0ZDgDvq1Ds0GiY17d7ByCjzHdjxhA+bdfalmSbxsJEynHp4?=
+ =?us-ascii?Q?igPvdu8P7RUctr+awd7xrIQ=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13d8be47-4bb5-44c8-05ea-08da027b1b4b
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 09:48:19.0355
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xr2Qm9f0mAUc3HCYsW5HmZfOgzM0JGX74HnyL3Stwxh1KRNfrsyweTSqCkFJCCXBGm3GsomLdgAsZhPYq8bOeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3858
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lu,
+Remove dev_err() messages after platform_get_irq*() failures.
+platform_get_irq() already prints an error.
 
-On 3/8/22 6:44 AM, Lu Baolu wrote:
-> Hi folks,
->
-> The iommu group is the minimal isolation boundary for DMA. Devices in
-> a group can access each other's MMIO registers via peer to peer DMA
-> and also need share the same I/O address space.
->
-> Once the I/O address space is assigned to user control it is no longer
-> available to the dma_map* API, which effectively makes the DMA API
-> non-working.
->
-> Second, userspace can use DMA initiated by a device that it controls
-> to access the MMIO spaces of other devices in the group. This allows
-> userspace to indirectly attack any kernel owned device and it's driver.
->
-> Therefore groups must either be entirely under kernel control or
-> userspace control, never a mixture. Unfortunately some systems have
-> problems with the granularity of groups and there are a couple of
-> important exceptions:
->
->  - pci_stub allows the admin to block driver binding on a device and
->    make it permanently shared with userspace. Since PCI stub does not
->    do DMA it is safe, however the admin must understand that using
->    pci_stub allows userspace to attack whatever device it was bound
->    it.
->
->  - PCI bridges are sometimes included in groups. Typically PCI bridges
->    do not use DMA, and generally do not have MMIO regions.
->
-> Generally any device that does not have any MMIO registers is a
-> possible candidate for an exception.
->
-> Currently vfio adopts a workaround to detect violations of the above
-> restrictions by monitoring the driver core BOUND event, and hardwiring
-> the above exceptions. Since there is no way for vfio to reject driver
-> binding at this point, BUG_ON() is triggered if a violation is
-> captured (kernel driver BOUND event on a group which already has some
-> devices assigned to userspace). Aside from the bad user experience
-> this opens a way for root userspace to crash the kernel, even in high
-> integrity configurations, by manipulating the module binding and
-> triggering the BUG_ON.
->
-> This series solves this problem by making the user/kernel ownership a
-> core concept at the IOMMU layer. The driver core enforces kernel
-> ownership while drivers are bound and violations now result in a error
-> codes during probe, not BUG_ON failures.
->
-> Patch partitions:
->   [PATCH 1-4]: Detect DMA ownership conflicts during driver binding;
->   [PATCH 5-7]: Add security context management for assigned devices;
->   [PATCH 8-11]: Various cleanups.
->
-> This is also part one of three initial series for IOMMUFD:
->  * Move IOMMU Group security into the iommu layer
->  - Generic IOMMUFD implementation
->  - VFIO ability to consume IOMMUFD
->
-> Change log:
-> v1: initial post
->   - https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
->
-> v2:
->   - https://lore.kernel.org/linux-iommu/20211128025051.355578-1-baolu.lu@linux.intel.com/
->
->   - Move kernel dma ownership auto-claiming from driver core to bus
->     callback. [Greg/Christoph/Robin/Jason]
->     https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#m153706912b770682cb12e3c28f57e171aa1f9d0c
->
->   - Code and interface refactoring for iommu_set/release_dma_owner()
->     interfaces. [Jason]
->     https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
->
->   - [NEW]Add new iommu_attach/detach_device_shared() interfaces for
->     multiple devices group. [Robin/Jason]
->     https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
->
->   - [NEW]Use iommu_attach/detach_device_shared() in drm/tegra drivers.
->
->   - Refactoring and description refinement.
->
-> v3:
->   - https://lore.kernel.org/linux-iommu/20211206015903.88687-1-baolu.lu@linux.intel.com/
->
->   - Rename bus_type::dma_unconfigure to bus_type::dma_cleanup. [Greg]
->     https://lore.kernel.org/linux-iommu/c3230ace-c878-39db-1663-2b752ff5384e@linux.intel.com/T/#m6711e041e47cb0cbe3964fad0a3466f5ae4b3b9b
->
->   - Avoid _platform_dma_configure for platform_bus_type::dma_configure.
->     [Greg]
->     https://lore.kernel.org/linux-iommu/c3230ace-c878-39db-1663-2b752ff5384e@linux.intel.com/T/#m43fc46286611aa56a5c0eeaad99d539e5519f3f6
->
->   - Patch "0012-iommu-Add-iommu_at-de-tach_device_shared-for-mult.patch"
->     and "0018-drm-tegra-Use-the-iommu-dma_owner-mechanism.patch" have
->     been tested by Dmitry Osipenko <digetx@gmail.com>.
->
-> v4:
->   - https://lore.kernel.org/linux-iommu/20211217063708.1740334-1-baolu.lu@linux.intel.com/
->   - Remove unnecessary tegra->domain chech in the tegra patch. (Jason)
->   - Remove DMA_OWNER_NONE. (Joerg)
->   - Change refcount to unsigned int. (Christoph)
->   - Move mutex lock into group set_dma_owner functions. (Christoph)
->   - Add kernel doc for iommu_attach/detach_domain_shared(). (Christoph)
->   - Move dma auto-claim into driver core. (Jason/Christoph)
->
-> v5:
->   - https://lore.kernel.org/linux-iommu/20220104015644.2294354-1-baolu.lu@linux.intel.com/
->   - Move kernel dma ownership auto-claiming from driver core to bus
->     callback. (Greg)
->   - Refactor the iommu interfaces to make them more specific.
->     (Jason/Robin)
->   - Simplify the dma ownership implementation by removing the owner
->     type. (Jason)
->   - Commit message refactoring for PCI drivers. (Bjorn)
->   - Move iommu_attach/detach_device() improvement patches into another
->     series as there are a lot of code refactoring and cleanup staffs
->     in various device drivers.
->
-> v6:
->   - https://lore.kernel.org/linux-iommu/20220218005521.172832-1-baolu.lu@linux.intel.com/
->   - Refine comments and commit mesages.
->   - Rename iommu_group_set_dma_owner() to iommu_group_claim_dma_owner().
->   - Rename iommu_device_use/unuse_kernel_dma() to
->     iommu_device_use/unuse_default_domain().
->   - Remove unnecessary EXPORT_SYMBOL_GPL.
->   - Change flag name from no_kernel_api_dma to driver_managed_dma.
->   - Merge 4 "Add driver dma ownership management" patches into single
->     one.
->
-> v7:
->   - We discussed about adding some fields in driver structure and
->     intercepting it in the bus notifier for driver unbinding. We agreed
->     that the driver structure should not be used out of the driver core.
->   - As iommu_group_claim/release_dma_owner() are only used by the VFIO,
->     there're no use cases for multiple calls for a single group.
->   - Add some commit messages in "vfio: Set DMA ownership for
->     VFIO" to describe the intentional enhancement of unsafe bridge
->     drivers.
->   - Comments refinement.
->
-> v8:
->   - Move iommu_use_default_domain() to the end of .dma_configure
->     callback to avoid firmware-data-ordering thing.
->     Link: https://lore.kernel.org/linux-iommu/e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com/
+Generated by: scripts/coccinelle/api/platform_get_irq.cocci
 
-Feel free to add my T-b
-Tested-by: Eric Auger <eric.auger@redhat.com>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/spi/spi-rockchip-sfc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Thanks
-
-Eric
->   - Add Acked-by from PCI and VFIO maintainers.
->
-> This is based on next branch of linux-iommu tree:
-> https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
-> and also available on github:
-> https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v8
->
-> Best regards,
-> baolu
->
-> Jason Gunthorpe (1):
->   vfio: Delete the unbound_list
->
-> Lu Baolu (10):
->   iommu: Add DMA ownership management interfaces
->   driver core: Add dma_cleanup callback in bus_type
->   amba: Stop sharing platform_dma_configure()
->   bus: platform,amba,fsl-mc,PCI: Add device DMA ownership management
->   PCI: pci_stub: Set driver_managed_dma
->   PCI: portdrv: Set driver_managed_dma
->   vfio: Set DMA ownership for VFIO devices
->   vfio: Remove use of vfio_group_viable()
->   vfio: Remove iommu group notifier
->   iommu: Remove iommu group changes notifier
->
->  include/linux/amba/bus.h              |   8 +
->  include/linux/device/bus.h            |   3 +
->  include/linux/fsl/mc.h                |   8 +
->  include/linux/iommu.h                 |  54 +++---
->  include/linux/pci.h                   |   8 +
->  include/linux/platform_device.h       |  10 +-
->  drivers/amba/bus.c                    |  37 +++-
->  drivers/base/dd.c                     |   5 +
->  drivers/base/platform.c               |  21 ++-
->  drivers/bus/fsl-mc/fsl-mc-bus.c       |  24 ++-
->  drivers/iommu/iommu.c                 | 228 ++++++++++++++++--------
->  drivers/pci/pci-driver.c              |  18 ++
->  drivers/pci/pci-stub.c                |   1 +
->  drivers/pci/pcie/portdrv_pci.c        |   2 +
->  drivers/vfio/fsl-mc/vfio_fsl_mc.c     |   1 +
->  drivers/vfio/pci/vfio_pci.c           |   1 +
->  drivers/vfio/platform/vfio_amba.c     |   1 +
->  drivers/vfio/platform/vfio_platform.c |   1 +
->  drivers/vfio/vfio.c                   | 245 ++------------------------
->  19 files changed, 338 insertions(+), 338 deletions(-)
->
+diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
+index a46b38544027..bd87d3c92dd3 100644
+--- a/drivers/spi/spi-rockchip-sfc.c
++++ b/drivers/spi/spi-rockchip-sfc.c
+@@ -624,10 +624,8 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
+ 
+ 	/* Find the irq */
+ 	ret = platform_get_irq(pdev, 0);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to get the irq\n");
++	if (ret < 0)
+ 		goto err_irq;
+-	}
+ 
+ 	ret = devm_request_irq(dev, ret, rockchip_sfc_irq_handler,
+ 			       0, pdev->name, sfc);
+-- 
+2.17.1
 

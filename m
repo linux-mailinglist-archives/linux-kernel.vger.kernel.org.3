@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBA74D430D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C93D84D430C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbiCJJGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S240597AbiCJJGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:06:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiCJJGf (ORCPT
+        with ESMTP id S233760AbiCJJGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:06:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F069137768;
-        Thu, 10 Mar 2022 01:05:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=asZaKof/Ycf9Yl/IenjXZLrN7xJYPH+zuWKph/YnaGE=; b=mPNMJ1Y4nU566VAWE+/NYgv08b
-        fnoUNB++Yh/YKvbCQYGfC8U772Xr6Xf6cRnvIb/1RPGfBQ+7ctL/m6ntNGPUbgCz+7y8MEzVM8vTX
-        AadX+R+AmeKWwfoeS+z2TK2R7SJ7VcVvWpIuf42dJ69D2Ws1aeq3t4asGj4pZv0Aj3/YjpMFFSPD3
-        i/rW8D4rdjYC9pHvANvFG0HJJTAzLZR6cb8sOdvF+OJPZh/OoMwUu8tYjcPF5WT6Ys/vHywQDhZKc
-        5tFCASSZpCD/LLA1tyKH5+S7oUWSmBwbGmLjiu5EPiCx2HFyXRO/vnxoFuEAe7SHVJioEAx4hxOgs
-        bFD5LLxw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSEjK-000Mm2-EX; Thu, 10 Mar 2022 09:05:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1367430041D;
-        Thu, 10 Mar 2022 10:05:05 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E86EC264E62B6; Thu, 10 Mar 2022 10:05:04 +0100 (CET)
-Date:   Thu, 10 Mar 2022 10:05:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
-        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+        Thu, 10 Mar 2022 04:06:33 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AE213774A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:05:29 -0800 (PST)
+Date:   Thu, 10 Mar 2022 09:05:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646903127;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c3LN9tbjUzKhY8RdE4seLNj3gQk1WEmV55c4SIzaR1k=;
+        b=i4O6jjs98gBRt1sPdElKfFMk3Xc0gDwQVMcS22MSBoCbSmZQ3z+Z1mkiY9aOKeZ0/adSpz
+        0OfvkrLVG1jpOq4lAUAgNnRQaVIOw2HEPfK3ABO6n9xDBo4n7DcmaQPaUSSU5QkBa5ROLC
+        mBuQ+Iei5IjVHR5jJ7342kebVPcVz7jGyIaVIgf18LO4MLcA1NZssYJwGhPKFHxcm9iHqU
+        FE7SdNEpItVR1LphueuNjmSYb5lkygLdP2G066KnBcyTKSAhmIGAUWMvyBt4B5H6dlZ6Ds
+        4v6Vn0zC+UsuD0VneF8zFStsQdnpku2tqe3Z4rWDkZNIX3rMpa/uACKDS9XEww==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646903127;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c3LN9tbjUzKhY8RdE4seLNj3gQk1WEmV55c4SIzaR1k=;
+        b=POHiQqKRNwzaan4oOHI3ceHRzRjIiDsQKalpLf/Z/7raDopIqgEx03jjPfaTmkKMVvpvXS
+        E273Kp82HE2PIZDg==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Fix cpumask allocation
+ for FIQs
+Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220310050238.4478-1-guozhengkui@vivo.com>
+References: <20220310050238.4478-1-guozhengkui@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+Message-ID: <164690312459.16921.18336689219451954515.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,83 +64,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-> I observed the following error when building with
-> CONFIG_LTO_CLANG_FULL=y enabled:
-> 
-> ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> already defined
->         ibt_selftest_ip:
->         ^
-> 
-> Seems to come from
-> commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> 
-> Commenting out the label in the inline asm, I then observed:
-> vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> callable instruction with modified stack frame
-> vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> mismatch: cfa1=4+64 cfa2=4+8
-> These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> the ibt_selftest_ip label).
+Commit-ID:     dc29812dbc873ae00bf19a4b8661984d7cce7a2e
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/dc29812dbc873ae00bf19a4b8661984d7cce7a2e
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Thu, 10 Mar 2022 08:34:58 
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Thu, 10 Mar 2022 08:58:34 
 
-Urgh.. I'm thikning this is a clang bug :/
+irqchip/apple-aic: Fix cpumask allocation for FIQs
 
-The code in question is:
+An emparassing typo: allocating a pointer instead of the object
+pointed to. No harm done, as the pointer is large enough for
+what we are using the object for, but still...
 
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220310050238.4478-1-guozhengkui@vivo.com
+---
+ drivers/irqchip/irq-apple-aic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-void ibt_selftest_ip(void); /* code label defined in asm below */
-
-DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-{
-	/* ... */
-
-	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-		regs->ax = 0;
-		return;
-	}
-
-	/* ... */
-}
-
-bool ibt_selftest(void)
-{
-	unsigned long ret;
-
-	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
-	     ANNOTATE_RETPOLINE_SAFE
-	     "	jmp *%%rax\n\t"
-	     "ibt_selftest_ip:\n\t"
-	     UNWIND_HINT_FUNC
-	     ANNOTATE_NOENDBR
-	     "	nop\n\t"
-
-	     : "=a" (ret) : : "memory");
-
-	return !ret;
-}
-
-There is only a single definition of that symbol, the one in the asm.
-The other is a declaration, which is used in the exception handler to
-compare against regs->ip.
-
-So what this code does is trigger an explicit #CP and special case that
-in the handler. For that the handler needs to know the special IP that
-will trigger the failure, this is cummunicated with that symbol.
-
-> Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
-> in a vm WITHOUT IBT support.
-> 
-> Any idea what's the status of IBT emulation in QEMU, and if it exists,
-> what's the necessary `-cpu` flag to enable it?
-
-I have a very ugly kvm patch that goes with a very ugly qemu patch to
-make it work. I would very much not recommend those getting merged.
-
-Someone with some actual kvm/qemu foo should do one. The complicating
-factor is that IA32_S_CET also contains SHSTK enable bits, so a straight
-passthrough like I use relies on the guest never setting those bits or
-keeping the pieces. It either needs to filter the MSR or implement the
-full CET mess.
+diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+index b40199c..3f1d2f3 100644
+--- a/drivers/irqchip/irq-apple-aic.c
++++ b/drivers/irqchip/irq-apple-aic.c
+@@ -810,7 +810,7 @@ static void build_fiq_affinity(struct aic_irq_chip *ic, struct device_node *aff)
+ 	if (WARN_ON(n < 0))
+ 		return;
+ 
+-	ic->fiq_aff[fiq] = kzalloc(sizeof(ic->fiq_aff[fiq]), GFP_KERNEL);
++	ic->fiq_aff[fiq] = kzalloc(sizeof(*ic->fiq_aff[fiq]), GFP_KERNEL);
+ 	if (!ic->fiq_aff[fiq])
+ 		return;
+ 

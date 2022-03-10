@@ -2,532 +2,957 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597614D52D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7635F4D52D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244141AbiCJUIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S244325AbiCJUIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244467AbiCJUIH (ORCPT
+        with ESMTP id S243700AbiCJUIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:08:07 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6370199D43
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:05 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id a5so6065648pfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PYweMQPrL7uEAHG8rV7QHiZlJFz7RCkoOfajbH3ejo4=;
-        b=EaJ5VTOfsIEU87Iy0ZVt55RTUVB0cMXSbNW6P0EtF5ra8YSURsBXkLmPsG63tKssyj
-         xozJKYjE+mukDiYG42m+pn1tTdBbIMZRl4+he0S4Ryamh2gMJOrs/WLWRpk0ZTALQOuJ
-         Ge81sf7oZJvRo3UzpXsF7kBKcn172plFfqSoNYEHJX5y0hSgP/ueF66Uy4P9hpgAEijQ
-         bHJIwzORRCVSInnMBjGuI7hrQJj/CTSDwF9MxeUUyAKz4VGIPAtcajHZ/WEPLUD03BMR
-         uFVLEEEimap9cpJlWuolvMqnP1sV0Y0PlekhBvk6XE1nersNmub0pp9UXrt5DgnZ7GsO
-         bFHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=PYweMQPrL7uEAHG8rV7QHiZlJFz7RCkoOfajbH3ejo4=;
-        b=3mJ1hnIMFqyISpE9IOYS7/7+ou6aMun53we/YVUFVsc2QC0oxmPM+x3i4GPI27I3wm
-         eKH0EDqLVsEP1/5iqDW0xGkkeQiLucSWmCQTLbR2wA/2CwvJrZvE3Y0sVBJseoK72iH8
-         XvqXk3DJF2OnfbzmPdYkmqETZqmuTDeQ6bdYajraw2yGYVpiCwl9GMvf24jsZJdB4ISO
-         GOHB3AWPZR4X2JR0+OyTgnT+6Sl5+qE48E2GyeB/sG19UhFdDdCrli+rGSKq3vXqLGMl
-         uvyFf0NI+A98O4l2d2hTqYml79rFZV3xm1QWlEbRre5f0ADGzDGifdQmdvzftulk51GY
-         V8+w==
-X-Gm-Message-State: AOAM532HWw3c+Ja22eh3b3kfGfZXNIharBD+TGzp28i8YmnDN7nU57rG
-        tzgaQNbBcaVJglTfwhemGsn40Z4WJGr8wA==
-X-Google-Smtp-Source: ABdhPJzhOXoW6OwvM2FHUtGIvUxdf+sz2sxEB7RpLjE2gpOfme94+fw0tQUiz26yM3o/MnPHDrqAZw==
-X-Received: by 2002:a63:2d8:0:b0:37c:4e75:302c with SMTP id 207-20020a6302d8000000b0037c4e75302cmr5642507pgc.580.1646942824907;
-        Thu, 10 Mar 2022 12:07:04 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id f2-20020a056a0022c200b004f7649f78dbsm5654302pfj.139.2022.03.10.12.07.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 12:07:04 -0800 (PST)
-Date:   Thu, 10 Mar 2022 12:07:04 -0800 (PST)
-X-Google-Original-Date: Thu, 10 Mar 2022 12:06:08 PST (-0800)
-Subject:     Re: [PATCH v6] riscv: Fixed misaligned memory access.  Fixed pointer comparison.
-In-Reply-To: <20220308010321.6123-1-michael@michaelkloos.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        michael@michaelkloos.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     michael@michaelkloos.com
-Message-ID: <mhng-30aeea98-312c-4e7c-b135-6ae7a77f0f8b@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 15:08:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80FD198EFC
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:07:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52201B8270A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D878C340E9;
+        Thu, 10 Mar 2022 20:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646942826;
+        bh=Ut8PwZ+JnT4bkZemWFxMHdCnXE2MnDs28ihTsX5qLUc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Afk3h8Lg8X3HPF8I9kCVIxPIOrnT7IcYm+3Qq3IBIUsRGikJONy5B7MFjJ1INVlLf
+         m7UGtc1XoRXAv4rrbY9ExBiWxSeDM5m2MTHtaGjp3q4yk1xO7foCFQ/lUDtI1YW66W
+         Ta7Wep8HF7Q4z578Uv6EM5VkU3bAPeKBFkkRC56IKjD+Jch0S0QakR77a81Kb2dUPx
+         QYhZTCKuQoDlksNLdzhY7P4hzvIDmFhrzkl2D9Gwkp2qr3zmXy6u+NJ3A/5u+1bdgn
+         ggqExubudTm0zifbu6IG7WhuusVOjSYxStf1bdAd5u8Om3RzPEr8+AT/DjfkurL9V3
+         AhMDlywmciHjg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BD5985C038D; Thu, 10 Mar 2022 12:07:05 -0800 (PST)
+Date:   Thu, 10 Mar 2022 12:07:05 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 14/19] rcu/context-tracking: Move RCU-dynticks internal
+ functions to context_tracking
+Message-ID: <20220310200705.GA4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220302154810.42308-1-frederic@kernel.org>
+ <20220302154810.42308-15-frederic@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302154810.42308-15-frederic@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Mar 2022 17:03:21 PST (-0800), michael@michaelkloos.com wrote:
-> Rewrote the RISC-V memmove() assembly implementation.  The
-> previous implementation did not check memory alignment and it
-> compared 2 pointers with a signed comparison.  The misaligned
-> memory access would cause the kernel to crash on systems that
-> did not emulate it in firmware and did not support it in hardware.
-> Firmware emulation is slow and may not exist.  The RISC-V spec
-> does not guarantee that support for misaligned memory accesses
-> will exist.  It should not be depended on.
->
-> This patch now checks for XLEN granularity of co-alignment between
-> the pointers.  Failing that, copying is done by loading from the 2
-> contiguous and naturally aligned XLEN memory locations containing
-> the overlapping XLEN sized data to be copied.  The data is shifted
-> into the correct place and binary or'ed together on each
-> iteration.  The result is then stored into the corresponding
-> naturally aligned XLEN sized location in the destination.  For
-> unaligned data at the terminations of the regions to be copied
-> or for copies less than (2 * XLEN) in size, byte copy is used.
->
-> This patch also now uses unsigned comparison for the pointers and
-> migrates to the newer assembler annotations from the now deprecated
-> ones.
->
-> [v3]
->
-> Fixed the build issue reported by the test robot.  Changed the
-> copy implementation based on the suggestion by David Laight.
->
-> One change that could potentially still be made is to roll one
-> of the values loaded in the copy loop into the next iteration
-> of the fixup loop, rather than reloading both values from memory
-> on each iteration.  It would require some more logic and I'm
-> really not sure that it is worth it.  It could be added in a
-> later patch.  For now, this fixes the issues I set out to fix.
->
-> [v4]
->
-> I could not resist implementing the optimization I mentioned in
-> my v3 notes.  I have implemented the roll over of data by cpu
-> register in the misaligned fixup copy loops.  Now, only one load
-> from memory is required per iteration of the loop.
->
-> [v5]
->
-> Optimized copy loops by replacing the unconditional jumps to
-> conditional branches with conditional branches themselves,
-> spaced loads and the use of the loaded data to minimize pipeline
-> stalling on in-order CPUs, and unrolled the misaligned copy loop
-> by one iteration.
->
-> [v6]
->
-> I have reverted to alphanumeric labels for easier reading per
-> the request of Palmer Dabbelt.  My idea in using numbers was to
-> minimize polution of the symbol tables in the kernel elf file.
-> But that really doesn't matter much and this makes debugging and
-> code reading easier when viewing an objdump of the kernel elf.
->
-> I have also made one additial minor optimization.  I changed the
-> forward src index counter from register a3 to register a1.  This
-> means that we don't have to copy the value from a1 to a3 in the
-> start of this implementation.  I put it off until the end because
-> it only removed 1 one-time-use instruction at the cost of
-> decreased readability.
+On Wed, Mar 02, 2022 at 04:48:05PM +0100, Frederic Weisbecker wrote:
+> Move the core RCU eqs/dynticks functions to context tracking so that
+> we can later merge all that code within context tracking.
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 
-I think I said I put the v5 on for-next, but it looks like I dropped the 
-ball and had only put it on my staging branch.  I usually like to avoid 
-rebasing for-next when possible, but given that one never actually 
-landed I'm going to just take this one instead.
+I am not sure that you want rcu_dynticks_task_enter() and friends in
+context tracking, but I have no objection to them living there.  ;-)
 
-This time in's really actually or for-next, though, so please send 
-anything else as a follow-on.
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-Thanks!
-
->
-> Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
+> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> Cc: Yu Liao<liaoyu15@huawei.com>
+> Cc: Phil Auld <pauld@redhat.com>
+> Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
+> Cc: Alex Belits <abelits@marvell.com>
 > ---
->  arch/riscv/lib/memmove.S | 368 +++++++++++++++++++++++++++++++++------
->  1 file changed, 310 insertions(+), 58 deletions(-)
->
-> diff --git a/arch/riscv/lib/memmove.S b/arch/riscv/lib/memmove.S
-> index 07d1d2152ba5..e0609e1f0864 100644
-> --- a/arch/riscv/lib/memmove.S
-> +++ b/arch/riscv/lib/memmove.S
-> @@ -1,64 +1,316 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2022 Michael T. Kloos <michael@michaelkloos.com>
-> + */
->
->  #include <linux/linkage.h>
->  #include <asm/asm.h>
->
-> -ENTRY(__memmove)
-> -WEAK(memmove)
-> -        move    t0, a0
-> -        move    t1, a1
-> -
-> -        beq     a0, a1, exit_memcpy
-> -        beqz    a2, exit_memcpy
-> -        srli    t2, a2, 0x2
-> -
-> -        slt     t3, a0, a1
-> -        beqz    t3, do_reverse
-> -
-> -        andi    a2, a2, 0x3
-> -        li      t4, 1
-> -        beqz    t2, byte_copy
-> -
-> -word_copy:
-> -        lw      t3, 0(a1)
-> -        addi    t2, t2, -1
-> -        addi    a1, a1, 4
-> -        sw      t3, 0(a0)
-> -        addi    a0, a0, 4
-> -        bnez    t2, word_copy
-> -        beqz    a2, exit_memcpy
-> -        j       byte_copy
-> -
-> -do_reverse:
-> -        add     a0, a0, a2
-> -        add     a1, a1, a2
-> -        andi    a2, a2, 0x3
-> -        li      t4, -1
-> -        beqz    t2, reverse_byte_copy
-> -
-> -reverse_word_copy:
-> -        addi    a1, a1, -4
-> -        addi    t2, t2, -1
-> -        lw      t3, 0(a1)
-> -        addi    a0, a0, -4
-> -        sw      t3, 0(a0)
-> -        bnez    t2, reverse_word_copy
-> -        beqz    a2, exit_memcpy
-> -
-> -reverse_byte_copy:
-> -        addi    a0, a0, -1
-> -        addi    a1, a1, -1
-> +SYM_FUNC_START(__memmove)
-> +SYM_FUNC_START_WEAK(memmove)
-> +	/*
-> +	 * Returns
-> +	 *   a0 - dest
-> +	 *
-> +	 * Parameters
-> +	 *   a0 - Inclusive first byte of dest
-> +	 *   a1 - Inclusive first byte of src
-> +	 *   a2 - Length of copy n
-> +	 *
-> +	 * Because the return matches the parameter register a0,
-> +	 * we will not clobber or modify that register.
-> +	 *
-> +	 * Note: This currently only works on little-endian.
-> +	 * To port to big-endian, reverse the direction of shifts
-> +	 * in the 2 misaligned fixup copy loops.
-> +	 */
->
-> +	/* Return if nothing to do */
-> +	beq a0, a1, return_from_memmove
-> +	beqz a2, return_from_memmove
-> +
-> +	/*
-> +	 * Register Uses
-> +	 *      Forward Copy: a1 - Index counter of src
-> +	 *      Reverse Copy: a4 - Index counter of src
-> +	 *      Forward Copy: t3 - Index counter of dest
-> +	 *      Reverse Copy: t4 - Index counter of dest
-> +	 *   Both Copy Modes: t5 - Inclusive first multibyte/aligned of dest
-> +	 *   Both Copy Modes: t6 - Non-Inclusive last multibyte/aligned of dest
-> +	 *   Both Copy Modes: t0 - Link / Temporary for load-store
-> +	 *   Both Copy Modes: t1 - Temporary for load-store
-> +	 *   Both Copy Modes: t2 - Temporary for load-store
-> +	 *   Both Copy Modes: a5 - dest to src alignment offset
-> +	 *   Both Copy Modes: a6 - Shift ammount
-> +	 *   Both Copy Modes: a7 - Inverse Shift ammount
-> +	 *   Both Copy Modes: a2 - Alternate breakpoint for unrolled loops
-> +	 */
-> +
-> +	/*
-> +	 * Solve for some register values now.
-> +	 * Byte copy does not need t5 or t6.
-> +	 */
-> +	mv   t3, a0
-> +	add  t4, a0, a2
-> +	add  a4, a1, a2
-> +
-> +	/*
-> +	 * Byte copy if copying less than (2 * SZREG) bytes. This can
-> +	 * cause problems with the bulk copy implementation and is
-> +	 * small enough not to bother.
-> +	 */
-> +	andi t0, a2, -(2 * SZREG)
-> +	beqz t0, byte_copy
-> +
-> +	/*
-> +	 * Now solve for t5 and t6.
-> +	 */
-> +	andi t5, t3, -SZREG
-> +	andi t6, t4, -SZREG
-> +	/*
-> +	 * If dest(Register t3) rounded down to the nearest naturally
-> +	 * aligned SZREG address, does not equal dest, then add SZREG
-> +	 * to find the low-bound of SZREG alignment in the dest memory
-> +	 * region.  Note that this could overshoot the dest memory
-> +	 * region if n is less than SZREG.  This is one reason why
-> +	 * we always byte copy if n is less than SZREG.
-> +	 * Otherwise, dest is already naturally aligned to SZREG.
-> +	 */
-> +	beq  t5, t3, 1f
-> +		addi t5, t5, SZREG
-> +	1:
-> +
-> +	/*
-> +	 * If the dest and src are co-aligned to SZREG, then there is
-> +	 * no need for the full rigmarole of a full misaligned fixup copy.
-> +	 * Instead, do a simpler co-aligned copy.
-> +	 */
-> +	xor  t0, a0, a1
-> +	andi t1, t0, (SZREG - 1)
-> +	beqz t1, coaligned_copy
-> +	/* Fall through to misaligned fixup copy */
-> +
-> +misaligned_fixup_copy:
-> +	bltu a1, a0, misaligned_fixup_copy_reverse
-> +
-> +misaligned_fixup_copy_forward:
-> +	jal  t0, byte_copy_until_aligned_forward
-> +
-> +	andi a5, a1, (SZREG - 1) /* Find the alignment offset of src (a1) */
-> +	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
-> +	sub  a5, a1, t3 /* Find the difference between src and dest */
-> +	andi a1, a1, -SZREG /* Align the src pointer */
-> +	addi a2, t6, SZREG /* The other breakpoint for the unrolled loop*/
-> +
-> +	/*
-> +	 * Compute The Inverse Shift
-> +	 * a7 = XLEN - a6 = XLEN + -a6
-> +	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
-> +	 * Add that to XLEN.  XLEN = SZREG * 8.
-> +	 */
-> +	not  a7, a6
-> +	addi a7, a7, (SZREG * 8 + 1)
-> +
-> +	/*
-> +	 * Fix Misalignment Copy Loop - Forward
-> +	 * load_val0 = load_ptr[0];
-> +	 * do {
-> +	 * 	load_val1 = load_ptr[1];
-> +	 * 	store_ptr += 2;
-> +	 * 	store_ptr[0 - 2] = (load_val0 >> {a6}) | (load_val1 << {a7});
-> +	 *
-> +	 * 	if (store_ptr == {a2})
-> +	 * 		break;
-> +	 *
-> +	 * 	load_val0 = load_ptr[2];
-> +	 * 	load_ptr += 2;
-> +	 * 	store_ptr[1 - 2] = (load_val1 >> {a6}) | (load_val0 << {a7});
-> +	 *
-> +	 * } while (store_ptr != store_ptr_end);
-> +	 * store_ptr = store_ptr_end;
-> +	 */
-> +
-> +	REG_L t0, (0 * SZREG)(a1)
-> +	1:
-> +	REG_L t1, (1 * SZREG)(a1)
-> +	addi  t3, t3, (2 * SZREG)
-> +	srl   t0, t0, a6
-> +	sll   t2, t1, a7
-> +	or    t2, t0, t2
-> +	REG_S t2, ((0 * SZREG) - (2 * SZREG))(t3)
-> +
-> +	beq   t3, a2, 2f
-> +
-> +	REG_L t0, (2 * SZREG)(a1)
-> +	addi  a1, a1, (2 * SZREG)
-> +	srl   t1, t1, a6
-> +	sll   t2, t0, a7
-> +	or    t2, t1, t2
-> +	REG_S t2, ((1 * SZREG) - (2 * SZREG))(t3)
-> +
-> +	bne   t3, t6, 1b
-> +	2:
-> +	mv    t3, t6 /* Fix the dest pointer in case the loop was broken */
-> +
-> +	add  a1, t3, a5 /* Restore the src pointer */
-> +	j byte_copy_forward /* Copy any remaining bytes */
-> +
-> +misaligned_fixup_copy_reverse:
-> +	jal  t0, byte_copy_until_aligned_reverse
-> +
-> +	andi a5, a4, (SZREG - 1) /* Find the alignment offset of src (a4) */
-> +	slli a6, a5, 3 /* Multiply by 8 to convert that to bits to shift */
-> +	sub  a5, a4, t4 /* Find the difference between src and dest */
-> +	andi a4, a4, -SZREG /* Align the src pointer */
-> +	addi a2, t5, -SZREG /* The other breakpoint for the unrolled loop*/
-> +
-> +	/*
-> +	 * Compute The Inverse Shift
-> +	 * a7 = XLEN - a6 = XLEN + -a6
-> +	 * 2s complement negation to find the negative: -a6 = ~a6 + 1
-> +	 * Add that to XLEN.  XLEN = SZREG * 8.
-> +	 */
-> +	not  a7, a6
-> +	addi a7, a7, (SZREG * 8 + 1)
-> +
-> +	/*
-> +	 * Fix Misalignment Copy Loop - Reverse
-> +	 * load_val1 = load_ptr[0];
-> +	 * do {
-> +	 * 	load_val0 = load_ptr[-1];
-> +	 * 	store_ptr -= 2;
-> +	 * 	store_ptr[1] = (load_val0 >> {a6}) | (load_val1 << {a7});
-> +	 *
-> +	 * 	if (store_ptr == {a2})
-> +	 * 		break;
-> +	 *
-> +	 * 	load_val1 = load_ptr[-2];
-> +	 * 	load_ptr -= 2;
-> +	 * 	store_ptr[0] = (load_val1 >> {a6}) | (load_val0 << {a7});
-> +	 *
-> +	 * } while (store_ptr != store_ptr_end);
-> +	 * store_ptr = store_ptr_end;
-> +	 */
-> +
-> +	REG_L t1, ( 0 * SZREG)(a4)
-> +	1:
-> +	REG_L t0, (-1 * SZREG)(a4)
-> +	addi  t4, t4, (-2 * SZREG)
-> +	sll   t1, t1, a7
-> +	srl   t2, t0, a6
-> +	or    t2, t1, t2
-> +	REG_S t2, ( 1 * SZREG)(t4)
-> +
-> +	beq   t4, a2, 2f
-> +
-> +	REG_L t1, (-2 * SZREG)(a4)
-> +	addi  a4, a4, (-2 * SZREG)
-> +	sll   t0, t0, a7
-> +	srl   t2, t1, a6
-> +	or    t2, t0, t2
-> +	REG_S t2, ( 0 * SZREG)(t4)
-> +
-> +	bne   t4, t5, 1b
-> +	2:
-> +	mv    t4, t5 /* Fix the dest pointer in case the loop was broken */
-> +
-> +	add  a4, t4, a5 /* Restore the src pointer */
-> +	j byte_copy_reverse /* Copy any remaining bytes */
+>  include/linux/context_tracking.h |  12 ++
+>  include/linux/rcutree.h          |   3 +
+>  kernel/context_tracking.c        | 347 +++++++++++++++++++++++++++++++
+>  kernel/rcu/tree.c                | 326 +----------------------------
+>  kernel/rcu/tree.h                |   5 -
+>  kernel/rcu/tree_plugin.h         |  36 +---
+>  6 files changed, 366 insertions(+), 363 deletions(-)
+> 
+> diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+> index 52a2e23d5107..086546569d14 100644
+> --- a/include/linux/context_tracking.h
+> +++ b/include/linux/context_tracking.h
+> @@ -122,6 +122,18 @@ static inline void context_tracking_init(void) { }
+>  #ifdef CONFIG_CONTEXT_TRACKING
+>  extern void ct_idle_enter(void);
+>  extern void ct_idle_exit(void);
+> +extern unsigned long rcu_dynticks_inc(int incby);
 > +
 > +/*
-> + * Simple copy loops for SZREG co-aligned memory locations.
-> + * These also make calls to do byte copies for any unaligned
-> + * data at their terminations.
+> + * Is the current CPU in an extended quiescent state?
+> + *
+> + * No ordering, as we are sampling CPU-local information.
 > + */
-> +coaligned_copy:
-> +	bltu a1, a0, coaligned_copy_reverse
+> +static __always_inline bool rcu_dynticks_curr_cpu_in_eqs(void)
+> +{
+> +	return !(arch_atomic_read(this_cpu_ptr(&context_tracking.dynticks)) & 0x1);
+> +}
 > +
-> +coaligned_copy_forward:
-> +	jal t0, byte_copy_until_aligned_forward
+>  #else
+>  static inline void ct_idle_enter(void) { }
+>  static inline void ct_idle_exit(void) { }
+> diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+> index 6d111a3c0cc0..408435ff7a06 100644
+> --- a/include/linux/rcutree.h
+> +++ b/include/linux/rcutree.h
+> @@ -59,6 +59,9 @@ void rcu_irq_exit_check_preempt(void);
+>  static inline void rcu_irq_exit_check_preempt(void) { }
+>  #endif
+>  
+> +struct task_struct;
+> +void rcu_preempt_deferred_qs(struct task_struct *t);
 > +
-> +	1:
-> +	REG_L t1, ( 0 * SZREG)(a1)
-> +	addi  a1, a1, SZREG
-> +	addi  t3, t3, SZREG
-> +	REG_S t1, (-1 * SZREG)(t3)
-> +	bne   t3, t6, 1b
+>  void exit_rcu(void);
+>  
+>  void rcu_scheduler_starting(void);
+> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+> index 7be7a2044d3a..dc24a9782bbd 100644
+> --- a/kernel/context_tracking.c
+> +++ b/kernel/context_tracking.c
+> @@ -21,6 +21,353 @@
+>  #include <linux/hardirq.h>
+>  #include <linux/export.h>
+>  #include <linux/kprobes.h>
+> +#include <trace/events/rcu.h>
 > +
-> +	j byte_copy_forward /* Copy any remaining bytes */
+> +#define TPS(x)  tracepoint_string(x)
 > +
-> +coaligned_copy_reverse:
-> +	jal t0, byte_copy_until_aligned_reverse
+> +/* Record the current task on dyntick-idle entry. */
+> +static __always_inline void rcu_dynticks_task_enter(void)
+> +{
+> +#if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
+> +	WRITE_ONCE(current->rcu_tasks_idle_cpu, smp_processor_id());
+> +#endif /* #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL) */
+> +}
 > +
-> +	1:
-> +	REG_L t1, (-1 * SZREG)(a4)
-> +	addi  a4, a4, -SZREG
-> +	addi  t4, t4, -SZREG
-> +	REG_S t1, ( 0 * SZREG)(t4)
-> +	bne   t4, t5, 1b
+> +/* Record no current task on dyntick-idle exit. */
+> +static __always_inline void rcu_dynticks_task_exit(void)
+> +{
+> +#if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
+> +	WRITE_ONCE(current->rcu_tasks_idle_cpu, -1);
+> +#endif /* #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL) */
+> +}
 > +
-> +	j byte_copy_reverse /* Copy any remaining bytes */
+> +/* Turn on heavyweight RCU tasks trace readers on idle/user entry. */
+> +static __always_inline void rcu_dynticks_task_trace_enter(void)
+> +{
+> +#ifdef CONFIG_TASKS_TRACE_RCU
+> +	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
+> +		current->trc_reader_special.b.need_mb = true;
+> +#endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
+> +}
+> +
+> +/* Turn off heavyweight RCU tasks trace readers on idle/user exit. */
+> +static __always_inline void rcu_dynticks_task_trace_exit(void)
+> +{
+> +#ifdef CONFIG_TASKS_TRACE_RCU
+> +	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
+> +		current->trc_reader_special.b.need_mb = false;
+> +#endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
+> +}
 > +
 > +/*
-> + * These are basically sub-functions within the function.  They
-> + * are used to byte copy until the dest pointer is in alignment.
-> + * At which point, a bulk copy method can be used by the
-> + * calling code.  These work on the same registers as the bulk
-> + * copy loops.  Therefore, the register values can be picked
-> + * up from where they were left and we avoid code duplication
-> + * without any overhead except the call in and return jumps.
+> + * Increment the current CPU's context_tracking structure's ->dynticks field
+> + * with ordering.  Return the new value.
 > + */
-> +byte_copy_until_aligned_forward:
-> +	beq  t3, t5, 2f
-> +	1:
-> +	lb   t1,  0(a1)
-> +	addi a1, a1, 1
-> +	addi t3, t3, 1
-> +	sb   t1, -1(t3)
-> +	bne  t3, t5, 1b
-> +	2:
-> +	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
-> +
-> +byte_copy_until_aligned_reverse:
-> +	beq  t4, t6, 2f
-> +	1:
-> +	lb   t1, -1(a4)
-> +	addi a4, a4, -1
-> +	addi t4, t4, -1
-> +	sb   t1,  0(t4)
-> +	bne  t4, t6, 1b
-> +	2:
-> +	jalr zero, 0x0(t0) /* Return to multibyte copy loop */
+> +noinstr unsigned long rcu_dynticks_inc(int incby)
+> +{
+> +	return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.dynticks));
+> +}
 > +
 > +/*
-> + * Simple byte copy loops.
-> + * These will byte copy until they reach the end of data to copy.
-> + * At that point, they will call to return from memmove.
+> + * Record entry into an extended quiescent state.  This is only to be
+> + * called when not already in an extended quiescent state, that is,
+> + * RCU is watching prior to the call to this function and is no longer
+> + * watching upon return.
 > + */
->  byte_copy:
-> -        lb      t3, 0(a1)
-> -        addi    a2, a2, -1
-> -        sb      t3, 0(a0)
-> -        add     a1, a1, t4
-> -        add     a0, a0, t4
-> -        bnez    a2, byte_copy
+> +static noinstr void rcu_dynticks_eqs_enter(void)
+> +{
+> +	int seq;
+> +
+> +	/*
+> +	 * CPUs seeing atomic_add_return() must see prior RCU read-side
+> +	 * critical sections, and we also must force ordering with the
+> +	 * next idle sojourn.
+> +	 */
+> +	rcu_dynticks_task_trace_enter();  // Before ->dynticks update!
+> +	seq = rcu_dynticks_inc(1);
+> +	// RCU is no longer watching.  Better be in extended quiescent state!
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && (seq & 0x1));
+> +}
+> +
+> +/*
+> + * Record exit from an extended quiescent state.  This is only to be
+> + * called from an extended quiescent state, that is, RCU is not watching
+> + * prior to the call to this function and is watching upon return.
+> + */
+> +static noinstr void rcu_dynticks_eqs_exit(void)
+> +{
+> +	int seq;
+> +
+> +	/*
+> +	 * CPUs seeing atomic_add_return() must see prior idle sojourns,
+> +	 * and we also must force ordering with the next RCU read-side
+> +	 * critical section.
+> +	 */
+> +	seq = rcu_dynticks_inc(1);
+> +	// RCU is now watching.  Better not be in an extended quiescent state!
+> +	rcu_dynticks_task_trace_exit();  // After ->dynticks update!
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !(seq & 0x1));
+> +}
+> +
+> +/*
+> + * Enter an RCU extended quiescent state, which can be either the
+> + * idle loop or adaptive-tickless usermode execution.
+> + *
+> + * We crowbar the ->dynticks_nmi_nesting field to zero to allow for
+> + * the possibility of usermode upcalls having messed up our count
+> + * of interrupt nesting level during the prior busy period.
+> + */
+> +static noinstr void rcu_eqs_enter(bool user)
+> +{
+> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> +
+> +	WARN_ON_ONCE(ct->dynticks_nmi_nesting != DYNTICK_IRQ_NONIDLE);
+> +	WRITE_ONCE(ct->dynticks_nmi_nesting, 0);
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) &&
+> +		     ct->dynticks_nesting == 0);
+> +	if (ct->dynticks_nesting != 1) {
+> +		// RCU will still be watching, so just do accounting and leave.
+> +		ct->dynticks_nesting--;
+> +		return;
+> +	}
+> +
+> +	lockdep_assert_irqs_disabled();
+> +	instrumentation_begin();
+> +	trace_rcu_dyntick(TPS("Start"), ct->dynticks_nesting, 0, atomic_read(&ct->dynticks));
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+> +	rcu_preempt_deferred_qs(current);
+> +
+> +	// instrumentation for the noinstr rcu_dynticks_eqs_enter()
+> +	instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> +
+> +	instrumentation_end();
+> +	WRITE_ONCE(ct->dynticks_nesting, 0); /* Avoid irq-access tearing. */
+> +	// RCU is watching here ...
+> +	rcu_dynticks_eqs_enter();
+> +	// ... but is no longer watching here.
+> +	rcu_dynticks_task_enter();
+> +}
+> +
+> +/**
+> + * rcu_idle_enter - inform RCU that current CPU is entering idle
+> + *
+> + * Enter idle mode, in other words, -leave- the mode in which RCU
+> + * read-side critical sections can occur.  (Though RCU read-side
+> + * critical sections can occur in irq handlers in idle, a possibility
+> + * handled by irq_enter() and irq_exit().)
+> + *
+> + * If you add or remove a call to rcu_idle_enter(), be sure to test with
+> + * CONFIG_RCU_EQS_DEBUG=y.
+> + */
+> +void rcu_idle_enter(void)
+> +{
+> +	lockdep_assert_irqs_disabled();
+> +	rcu_eqs_enter(false);
+> +}
+> +
+> +#ifdef CONFIG_NO_HZ_FULL
+> +/**
+> + * rcu_user_enter - inform RCU that we are resuming userspace.
+> + *
+> + * Enter RCU idle mode right before resuming userspace.  No use of RCU
+> + * is permitted between this call and rcu_user_exit(). This way the
+> + * CPU doesn't need to maintain the tick for RCU maintenance purposes
+> + * when the CPU runs in userspace.
+> + *
+> + * If you add or remove a call to rcu_user_enter(), be sure to test with
+> + * CONFIG_RCU_EQS_DEBUG=y.
+> + */
+> +noinstr void rcu_user_enter(void)
+> +{
+> +	rcu_eqs_enter(true);
+> +}
+> +#endif /* CONFIG_NO_HZ_FULL */
+> +
+> +/**
+> + * rcu_nmi_exit - inform RCU of exit from NMI context
+> + *
+> + * If we are returning from the outermost NMI handler that interrupted an
+> + * RCU-idle period, update ct->dynticks and ct->dynticks_nmi_nesting
+> + * to let the RCU grace-period handling know that the CPU is back to
+> + * being RCU-idle.
+> + *
+> + * If you add or remove a call to rcu_nmi_exit(), be sure to test
+> + * with CONFIG_RCU_EQS_DEBUG=y.
+> + */
+> +noinstr void rcu_nmi_exit(void)
+> +{
+> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> +
+> +	instrumentation_begin();
+> +	/*
+> +	 * Check for ->dynticks_nmi_nesting underflow and bad ->dynticks.
+> +	 * (We are exiting an NMI handler, so RCU better be paying attention
+> +	 * to us!)
+> +	 */
+> +	WARN_ON_ONCE(ct->dynticks_nmi_nesting <= 0);
+> +	WARN_ON_ONCE(rcu_dynticks_curr_cpu_in_eqs());
+> +
+> +	/*
+> +	 * If the nesting level is not 1, the CPU wasn't RCU-idle, so
+> +	 * leave it in non-RCU-idle state.
+> +	 */
+> +	if (ct->dynticks_nmi_nesting != 1) {
+> +		trace_rcu_dyntick(TPS("--="), ct->dynticks_nmi_nesting, ct->dynticks_nmi_nesting - 2,
+> +				  atomic_read(&ct->dynticks));
+> +		WRITE_ONCE(ct->dynticks_nmi_nesting, /* No store tearing. */
+> +			   ct->dynticks_nmi_nesting - 2);
+> +		instrumentation_end();
+> +		return;
+> +	}
+> +
+> +	/* This NMI interrupted an RCU-idle CPU, restore RCU-idleness. */
+> +	trace_rcu_dyntick(TPS("Startirq"), ct->dynticks_nmi_nesting, 0, atomic_read(&ct->dynticks));
+> +	WRITE_ONCE(ct->dynticks_nmi_nesting, 0); /* Avoid store tearing. */
+> +
+> +	// instrumentation for the noinstr rcu_dynticks_eqs_enter()
+> +	instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> +	instrumentation_end();
+> +
+> +	// RCU is watching here ...
+> +	rcu_dynticks_eqs_enter();
+> +	// ... but is no longer watching here.
+> +
+> +	if (!in_nmi())
+> +		rcu_dynticks_task_enter();
+> +}
+> +
+> +/*
+> + * Exit an RCU extended quiescent state, which can be either the
+> + * idle loop or adaptive-tickless usermode execution.
+> + *
+> + * We crowbar the ->dynticks_nmi_nesting field to DYNTICK_IRQ_NONIDLE to
+> + * allow for the possibility of usermode upcalls messing up our count of
+> + * interrupt nesting level during the busy period that is just now starting.
+> + */
+> +static void noinstr rcu_eqs_exit(bool user)
+> +{
+> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> +	long oldval;
+> +
+> +	lockdep_assert_irqs_disabled();
+> +	oldval = ct->dynticks_nesting;
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && oldval < 0);
+> +	if (oldval) {
+> +		// RCU was already watching, so just do accounting and leave.
+> +		ct->dynticks_nesting++;
+> +		return;
+> +	}
+> +	rcu_dynticks_task_exit();
+> +	// RCU is not watching here ...
+> +	rcu_dynticks_eqs_exit();
+> +	// ... but is watching here.
+> +	instrumentation_begin();
+> +
+> +	// instrumentation for the noinstr rcu_dynticks_eqs_exit()
+> +	instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> +
+> +	trace_rcu_dyntick(TPS("End"), ct->dynticks_nesting, 1, atomic_read(&ct->dynticks));
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+> +	WRITE_ONCE(ct->dynticks_nesting, 1);
+> +	WARN_ON_ONCE(ct->dynticks_nmi_nesting);
+> +	WRITE_ONCE(ct->dynticks_nmi_nesting, DYNTICK_IRQ_NONIDLE);
+> +	instrumentation_end();
+> +}
+> +
+> +/**
+> + * rcu_idle_exit - inform RCU that current CPU is leaving idle
+> + *
+> + * Exit idle mode, in other words, -enter- the mode in which RCU
+> + * read-side critical sections can occur.
+> + *
+> + * If you add or remove a call to rcu_idle_exit(), be sure to test with
+> + * CONFIG_RCU_EQS_DEBUG=y.
+> + */
+> +void rcu_idle_exit(void)
+> +{
+> +	unsigned long flags;
+> +
+> +	local_irq_save(flags);
+> +	rcu_eqs_exit(false);
+> +	local_irq_restore(flags);
+> +}
+> +EXPORT_SYMBOL_GPL(rcu_idle_exit);
+> +
+> +#ifdef CONFIG_NO_HZ_FULL
+> +/**
+> + * rcu_user_exit - inform RCU that we are exiting userspace.
+> + *
+> + * Exit RCU idle mode while entering the kernel because it can
+> + * run a RCU read side critical section anytime.
+> + *
+> + * If you add or remove a call to rcu_user_exit(), be sure to test with
+> + * CONFIG_RCU_EQS_DEBUG=y.
+> + */
+> +void noinstr rcu_user_exit(void)
+> +{
+> +	rcu_eqs_exit(true);
+> +}
+> +#endif /* ifdef CONFIG_NO_HZ_FULL */
+> +
+> +/**
+> + * rcu_nmi_enter - inform RCU of entry to NMI context
+> + *
+> + * If the CPU was idle from RCU's viewpoint, update ct->dynticks and
+> + * ct->dynticks_nmi_nesting to let the RCU grace-period handling know
+> + * that the CPU is active.  This implementation permits nested NMIs, as
+> + * long as the nesting level does not overflow an int.  (You will probably
+> + * run out of stack space first.)
+> + *
+> + * If you add or remove a call to rcu_nmi_enter(), be sure to test
+> + * with CONFIG_RCU_EQS_DEBUG=y.
+> + */
+> +noinstr void rcu_nmi_enter(void)
+> +{
+> +	long incby = 2;
+> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> +
+> +	/* Complain about underflow. */
+> +	WARN_ON_ONCE(ct->dynticks_nmi_nesting < 0);
+> +
+> +	/*
+> +	 * If idle from RCU viewpoint, atomically increment ->dynticks
+> +	 * to mark non-idle and increment ->dynticks_nmi_nesting by one.
+> +	 * Otherwise, increment ->dynticks_nmi_nesting by two.  This means
+> +	 * if ->dynticks_nmi_nesting is equal to one, we are guaranteed
+> +	 * to be in the outermost NMI handler that interrupted an RCU-idle
+> +	 * period (observation due to Andy Lutomirski).
+> +	 */
+> +	if (rcu_dynticks_curr_cpu_in_eqs()) {
+> +
+> +		if (!in_nmi())
+> +			rcu_dynticks_task_exit();
+> +
+> +		// RCU is not watching here ...
+> +		rcu_dynticks_eqs_exit();
+> +		// ... but is watching here.
+> +
+> +		instrumentation_begin();
+> +		// instrumentation for the noinstr rcu_dynticks_curr_cpu_in_eqs()
+> +		instrument_atomic_read(&ct->dynticks, sizeof(ct->dynticks));
+> +		// instrumentation for the noinstr rcu_dynticks_eqs_exit()
+> +		instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> +
+> +		incby = 1;
+> +	} else if (!in_nmi()) {
+> +		instrumentation_begin();
+> +		rcu_irq_enter_check_tick();
+> +	} else  {
+> +		instrumentation_begin();
+> +	}
+> +
+> +	trace_rcu_dyntick(incby == 1 ? TPS("Endirq") : TPS("++="),
+> +			  ct->dynticks_nmi_nesting,
+> +			  ct->dynticks_nmi_nesting + incby, atomic_read(&ct->dynticks));
+> +	instrumentation_end();
+> +	WRITE_ONCE(ct->dynticks_nmi_nesting, /* Prevent store tearing. */
+> +		   ct->dynticks_nmi_nesting + incby);
+> +	barrier();
+> +}
+>  
+>  #ifdef CONFIG_CONTEXT_TRACKING_USER
+>  
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 938537958c27..e55a44ed19b6 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -62,6 +62,7 @@
+>  #include <linux/vmalloc.h>
+>  #include <linux/mm.h>
+>  #include <linux/kasan.h>
+> +#include <linux/context_tracking.h>
+>  #include "../time/tick-internal.h"
+>  
+>  #include "tree.h"
+> @@ -259,56 +260,6 @@ void rcu_softirq_qs(void)
+>  	rcu_tasks_qs(current, false);
+>  }
+>  
+> -/*
+> - * Increment the current CPU's rcu_data structure's ->dynticks field
+> - * with ordering.  Return the new value.
+> - */
+> -static noinline noinstr unsigned long rcu_dynticks_inc(int incby)
+> -{
+> -	return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.dynticks));
+> -}
 > -
-> -exit_memcpy:
-> -        move a0, t0
-> -        move a1, t1
-> -        ret
-> -END(__memmove)
-> +	bltu a1, a0, byte_copy_reverse
-> +
-> +byte_copy_forward:
-> +	beq  t3, t4, 2f
-> +	1:
-> +	lb   t1,  0(a1)
-> +	addi a1, a1, 1
-> +	addi t3, t3, 1
-> +	sb   t1, -1(t3)
-> +	bne  t3, t4, 1b
-> +	2:
-> +	ret
-> +
-> +byte_copy_reverse:
-> +	beq  t4, t3, 2f
-> +	1:
-> +	lb   t1, -1(a4)
-> +	addi a4, a4, -1
-> +	addi t4, t4, -1
-> +	sb   t1,  0(t4)
-> +	bne  t4, t3, 1b
-> +	2:
-> +
-> +return_from_memmove:
-> +	ret
-> +
-> +SYM_FUNC_END(memmove)
-> +SYM_FUNC_END(__memmove)
+> -/*
+> - * Record entry into an extended quiescent state.  This is only to be
+> - * called when not already in an extended quiescent state, that is,
+> - * RCU is watching prior to the call to this function and is no longer
+> - * watching upon return.
+> - */
+> -static noinstr void rcu_dynticks_eqs_enter(void)
+> -{
+> -	int seq;
+> -
+> -	/*
+> -	 * CPUs seeing atomic_add_return() must see prior RCU read-side
+> -	 * critical sections, and we also must force ordering with the
+> -	 * next idle sojourn.
+> -	 */
+> -	rcu_dynticks_task_trace_enter();  // Before ->dynticks update!
+> -	seq = rcu_dynticks_inc(1);
+> -	// RCU is no longer watching.  Better be in extended quiescent state!
+> -	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && (seq & 0x1));
+> -}
+> -
+> -/*
+> - * Record exit from an extended quiescent state.  This is only to be
+> - * called from an extended quiescent state, that is, RCU is not watching
+> - * prior to the call to this function and is watching upon return.
+> - */
+> -static noinstr void rcu_dynticks_eqs_exit(void)
+> -{
+> -	int seq;
+> -
+> -	/*
+> -	 * CPUs seeing atomic_add_return() must see prior idle sojourns,
+> -	 * and we also must force ordering with the next RCU read-side
+> -	 * critical section.
+> -	 */
+> -	seq = rcu_dynticks_inc(1);
+> -	// RCU is now watching.  Better not be in an extended quiescent state!
+> -	rcu_dynticks_task_trace_exit();  // After ->dynticks update!
+> -	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !(seq & 0x1));
+> -}
+> -
+>  /*
+>   * Reset the current CPU's ->dynticks counter to indicate that the
+>   * newly onlined CPU is no longer in an extended quiescent state.
+> @@ -328,16 +279,6 @@ static void rcu_dynticks_eqs_online(void)
+>  	rcu_dynticks_inc(1);
+>  }
+>  
+> -/*
+> - * Is the current CPU in an extended quiescent state?
+> - *
+> - * No ordering, as we are sampling CPU-local information.
+> - */
+> -static __always_inline bool rcu_dynticks_curr_cpu_in_eqs(void)
+> -{
+> -	return !(arch_atomic_read(this_cpu_ptr(&context_tracking.dynticks)) & 0x1);
+> -}
+> -
+>  /*
+>   * Snapshot the ->dynticks counter with full ordering so as to allow
+>   * stable comparison of this counter with past and future snapshots.
+> @@ -606,65 +547,7 @@ void rcutorture_get_gp_data(enum rcutorture_type test_type, int *flags,
+>  }
+>  EXPORT_SYMBOL_GPL(rcutorture_get_gp_data);
+>  
+> -/*
+> - * Enter an RCU extended quiescent state, which can be either the
+> - * idle loop or adaptive-tickless usermode execution.
+> - *
+> - * We crowbar the ->dynticks_nmi_nesting field to zero to allow for
+> - * the possibility of usermode upcalls having messed up our count
+> - * of interrupt nesting level during the prior busy period.
+> - */
+> -static noinstr void rcu_eqs_enter(bool user)
+> -{
+> -	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> -
+> -	WARN_ON_ONCE(ct->dynticks_nmi_nesting != DYNTICK_IRQ_NONIDLE);
+> -	WRITE_ONCE(ct->dynticks_nmi_nesting, 0);
+> -	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) &&
+> -		     ct->dynticks_nesting == 0);
+> -	if (ct->dynticks_nesting != 1) {
+> -		// RCU will still be watching, so just do accounting and leave.
+> -		ct->dynticks_nesting--;
+> -		return;
+> -	}
+> -
+> -	lockdep_assert_irqs_disabled();
+> -	instrumentation_begin();
+> -	trace_rcu_dyntick(TPS("Start"), ct->dynticks_nesting, 0, atomic_read(&ct->dynticks));
+> -	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+> -	rcu_preempt_deferred_qs(current);
+> -
+> -	// instrumentation for the noinstr rcu_dynticks_eqs_enter()
+> -	instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> -
+> -	instrumentation_end();
+> -	WRITE_ONCE(ct->dynticks_nesting, 0); /* Avoid irq-access tearing. */
+> -	// RCU is watching here ...
+> -	rcu_dynticks_eqs_enter();
+> -	// ... but is no longer watching here.
+> -	rcu_dynticks_task_enter();
+> -}
+> -
+> -/**
+> - * rcu_idle_enter - inform RCU that current CPU is entering idle
+> - *
+> - * Enter idle mode, in other words, -leave- the mode in which RCU
+> - * read-side critical sections can occur.  (Though RCU read-side
+> - * critical sections can occur in irq handlers in idle, a possibility
+> - * handled by irq_enter() and irq_exit().)
+> - *
+> - * If you add or remove a call to rcu_idle_enter(), be sure to test with
+> - * CONFIG_RCU_EQS_DEBUG=y.
+> - */
+> -void rcu_idle_enter(void)
+> -{
+> -	lockdep_assert_irqs_disabled();
+> -	rcu_eqs_enter(false);
+> -}
+> -
+> -#ifdef CONFIG_NO_HZ_FULL
+> -
+> -#if !defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK)
+> +#if defined(CONFIG_NO_HZ_FULL) && (!defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK))
+>  /*
+>   * An empty function that will trigger a reschedule on
+>   * IRQ tail once IRQs get re-enabled on userspace/guest resume.
+> @@ -702,78 +585,7 @@ noinstr void rcu_irq_work_resched(void)
+>  	}
+>  	instrumentation_end();
+>  }
+> -#endif /* #if !defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK) */
+> -
+> -/**
+> - * rcu_user_enter - inform RCU that we are resuming userspace.
+> - *
+> - * Enter RCU idle mode right before resuming userspace.  No use of RCU
+> - * is permitted between this call and rcu_user_exit(). This way the
+> - * CPU doesn't need to maintain the tick for RCU maintenance purposes
+> - * when the CPU runs in userspace.
+> - *
+> - * If you add or remove a call to rcu_user_enter(), be sure to test with
+> - * CONFIG_RCU_EQS_DEBUG=y.
+> - */
+> -noinstr void rcu_user_enter(void)
+> -{
+> -	rcu_eqs_enter(true);
+> -}
+> -
+> -#endif /* CONFIG_NO_HZ_FULL */
+> -
+> -/**
+> - * rcu_nmi_exit - inform RCU of exit from NMI context
+> - *
+> - * If we are returning from the outermost NMI handler that interrupted an
+> - * RCU-idle period, update ct->dynticks and ct->dynticks_nmi_nesting
+> - * to let the RCU grace-period handling know that the CPU is back to
+> - * being RCU-idle.
+> - *
+> - * If you add or remove a call to rcu_nmi_exit(), be sure to test
+> - * with CONFIG_RCU_EQS_DEBUG=y.
+> - */
+> -noinstr void rcu_nmi_exit(void)
+> -{
+> -	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> -
+> -	instrumentation_begin();
+> -	/*
+> -	 * Check for ->dynticks_nmi_nesting underflow and bad ->dynticks.
+> -	 * (We are exiting an NMI handler, so RCU better be paying attention
+> -	 * to us!)
+> -	 */
+> -	WARN_ON_ONCE(ct->dynticks_nmi_nesting <= 0);
+> -	WARN_ON_ONCE(rcu_dynticks_curr_cpu_in_eqs());
+> -
+> -	/*
+> -	 * If the nesting level is not 1, the CPU wasn't RCU-idle, so
+> -	 * leave it in non-RCU-idle state.
+> -	 */
+> -	if (ct->dynticks_nmi_nesting != 1) {
+> -		trace_rcu_dyntick(TPS("--="), ct->dynticks_nmi_nesting, ct->dynticks_nmi_nesting - 2,
+> -				  atomic_read(&ct->dynticks));
+> -		WRITE_ONCE(ct->dynticks_nmi_nesting, /* No store tearing. */
+> -			   ct->dynticks_nmi_nesting - 2);
+> -		instrumentation_end();
+> -		return;
+> -	}
+> -
+> -	/* This NMI interrupted an RCU-idle CPU, restore RCU-idleness. */
+> -	trace_rcu_dyntick(TPS("Startirq"), ct->dynticks_nmi_nesting, 0, atomic_read(&ct->dynticks));
+> -	WRITE_ONCE(ct->dynticks_nmi_nesting, 0); /* Avoid store tearing. */
+> -
+> -	// instrumentation for the noinstr rcu_dynticks_eqs_enter()
+> -	instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> -	instrumentation_end();
+> -
+> -	// RCU is watching here ...
+> -	rcu_dynticks_eqs_enter();
+> -	// ... but is no longer watching here.
+> -
+> -	if (!in_nmi())
+> -		rcu_dynticks_task_enter();
+> -}
+> +#endif /* #if defined(CONFIG_NO_HZ_FULL) && (!defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK)) */
+>  
+>  #ifdef CONFIG_PROVE_RCU
+>  /**
+> @@ -793,77 +605,6 @@ void rcu_irq_exit_check_preempt(void)
+>  }
+>  #endif /* #ifdef CONFIG_PROVE_RCU */
+>  
+> -/*
+> - * Exit an RCU extended quiescent state, which can be either the
+> - * idle loop or adaptive-tickless usermode execution.
+> - *
+> - * We crowbar the ->dynticks_nmi_nesting field to DYNTICK_IRQ_NONIDLE to
+> - * allow for the possibility of usermode upcalls messing up our count of
+> - * interrupt nesting level during the busy period that is just now starting.
+> - */
+> -static void noinstr rcu_eqs_exit(bool user)
+> -{
+> -	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> -	long oldval;
+> -
+> -	lockdep_assert_irqs_disabled();
+> -	oldval = ct->dynticks_nesting;
+> -	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && oldval < 0);
+> -	if (oldval) {
+> -		// RCU was already watching, so just do accounting and leave.
+> -		ct->dynticks_nesting++;
+> -		return;
+> -	}
+> -	rcu_dynticks_task_exit();
+> -	// RCU is not watching here ...
+> -	rcu_dynticks_eqs_exit();
+> -	// ... but is watching here.
+> -	instrumentation_begin();
+> -
+> -	// instrumentation for the noinstr rcu_dynticks_eqs_exit()
+> -	instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> -
+> -	trace_rcu_dyntick(TPS("End"), ct->dynticks_nesting, 1, atomic_read(&ct->dynticks));
+> -	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+> -	WRITE_ONCE(ct->dynticks_nesting, 1);
+> -	WARN_ON_ONCE(ct->dynticks_nmi_nesting);
+> -	WRITE_ONCE(ct->dynticks_nmi_nesting, DYNTICK_IRQ_NONIDLE);
+> -	instrumentation_end();
+> -}
+> -
+> -/**
+> - * rcu_idle_exit - inform RCU that current CPU is leaving idle
+> - *
+> - * Exit idle mode, in other words, -enter- the mode in which RCU
+> - * read-side critical sections can occur.
+> - *
+> - * If you add or remove a call to rcu_idle_exit(), be sure to test with
+> - * CONFIG_RCU_EQS_DEBUG=y.
+> - */
+> -void rcu_idle_exit(void)
+> -{
+> -	unsigned long flags;
+> -
+> -	local_irq_save(flags);
+> -	rcu_eqs_exit(false);
+> -	local_irq_restore(flags);
+> -}
+> -
+> -#ifdef CONFIG_NO_HZ_FULL
+> -/**
+> - * rcu_user_exit - inform RCU that we are exiting userspace.
+> - *
+> - * Exit RCU idle mode while entering the kernel because it can
+> - * run a RCU read side critical section anytime.
+> - *
+> - * If you add or remove a call to rcu_user_exit(), be sure to test with
+> - * CONFIG_RCU_EQS_DEBUG=y.
+> - */
+> -void noinstr rcu_user_exit(void)
+> -{
+> -	rcu_eqs_exit(true);
+> -}
+> -
+>  /**
+>   * __rcu_irq_enter_check_tick - Enable scheduler tick on CPU if RCU needs it.
+>   *
+> @@ -924,67 +665,6 @@ void __rcu_irq_enter_check_tick(void)
+>  	}
+>  	raw_spin_unlock_rcu_node(rdp->mynode);
+>  }
+> -#endif /* CONFIG_NO_HZ_FULL */
+> -
+> -/**
+> - * rcu_nmi_enter - inform RCU of entry to NMI context
+> - *
+> - * If the CPU was idle from RCU's viewpoint, update ct->dynticks and
+> - * ct->dynticks_nmi_nesting to let the RCU grace-period handling know
+> - * that the CPU is active.  This implementation permits nested NMIs, as
+> - * long as the nesting level does not overflow an int.  (You will probably
+> - * run out of stack space first.)
+> - *
+> - * If you add or remove a call to rcu_nmi_enter(), be sure to test
+> - * with CONFIG_RCU_EQS_DEBUG=y.
+> - */
+> -noinstr void rcu_nmi_enter(void)
+> -{
+> -	long incby = 2;
+> -	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> -
+> -	/* Complain about underflow. */
+> -	WARN_ON_ONCE(ct->dynticks_nmi_nesting < 0);
+> -
+> -	/*
+> -	 * If idle from RCU viewpoint, atomically increment ->dynticks
+> -	 * to mark non-idle and increment ->dynticks_nmi_nesting by one.
+> -	 * Otherwise, increment ->dynticks_nmi_nesting by two.  This means
+> -	 * if ->dynticks_nmi_nesting is equal to one, we are guaranteed
+> -	 * to be in the outermost NMI handler that interrupted an RCU-idle
+> -	 * period (observation due to Andy Lutomirski).
+> -	 */
+> -	if (rcu_dynticks_curr_cpu_in_eqs()) {
+> -
+> -		if (!in_nmi())
+> -			rcu_dynticks_task_exit();
+> -
+> -		// RCU is not watching here ...
+> -		rcu_dynticks_eqs_exit();
+> -		// ... but is watching here.
+> -
+> -		instrumentation_begin();
+> -		// instrumentation for the noinstr rcu_dynticks_curr_cpu_in_eqs()
+> -		instrument_atomic_read(&ct->dynticks, sizeof(ct->dynticks));
+> -		// instrumentation for the noinstr rcu_dynticks_eqs_exit()
+> -		instrument_atomic_write(&ct->dynticks, sizeof(ct->dynticks));
+> -
+> -		incby = 1;
+> -	} else if (!in_nmi()) {
+> -		instrumentation_begin();
+> -		rcu_irq_enter_check_tick();
+> -	} else  {
+> -		instrumentation_begin();
+> -	}
+> -
+> -	trace_rcu_dyntick(incby == 1 ? TPS("Endirq") : TPS("++="),
+> -			  ct->dynticks_nmi_nesting,
+> -			  ct->dynticks_nmi_nesting + incby, atomic_read(&ct->dynticks));
+> -	instrumentation_end();
+> -	WRITE_ONCE(ct->dynticks_nmi_nesting, /* Prevent store tearing. */
+> -		   ct->dynticks_nmi_nesting + incby);
+> -	barrier();
+> -}
+>  
+>  /*
+>   * Check to see if any future non-offloaded RCU-related work will need
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index 56d38568292b..a42c2a737e24 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -426,7 +426,6 @@ static void rcu_cpu_kthread_setup(unsigned int cpu);
+>  static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp);
+>  static bool rcu_preempt_has_tasks(struct rcu_node *rnp);
+>  static bool rcu_preempt_need_deferred_qs(struct task_struct *t);
+> -static void rcu_preempt_deferred_qs(struct task_struct *t);
+>  static void zero_cpu_stall_ticks(struct rcu_data *rdp);
+>  static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+>  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+> @@ -466,10 +465,6 @@ do {								\
+>  
+>  static void rcu_bind_gp_kthread(void);
+>  static bool rcu_nohz_full_cpu(void);
+> -static void rcu_dynticks_task_enter(void);
+> -static void rcu_dynticks_task_exit(void);
+> -static void rcu_dynticks_task_trace_enter(void);
+> -static void rcu_dynticks_task_trace_exit(void);
+>  
+>  /* Forward declarations for tree_stall.h */
+>  static void record_gp_stall_check_time(void);
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index 6b9bcd45c7b2..be4b74b46109 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -595,7 +595,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+>   * evaluate safety in terms of interrupt, softirq, and preemption
+>   * disabling.
+>   */
+> -static void rcu_preempt_deferred_qs(struct task_struct *t)
+> +void rcu_preempt_deferred_qs(struct task_struct *t)
+>  {
+>  	unsigned long flags;
+>  
+> @@ -1283,37 +1283,3 @@ static void rcu_bind_gp_kthread(void)
+>  		return;
+>  	housekeeping_affine(current, HK_FLAG_RCU);
+>  }
+> -
+> -/* Record the current task on dyntick-idle entry. */
+> -static __always_inline void rcu_dynticks_task_enter(void)
+> -{
+> -#if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
+> -	WRITE_ONCE(current->rcu_tasks_idle_cpu, smp_processor_id());
+> -#endif /* #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL) */
+> -}
+> -
+> -/* Record no current task on dyntick-idle exit. */
+> -static __always_inline void rcu_dynticks_task_exit(void)
+> -{
+> -#if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
+> -	WRITE_ONCE(current->rcu_tasks_idle_cpu, -1);
+> -#endif /* #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL) */
+> -}
+> -
+> -/* Turn on heavyweight RCU tasks trace readers on idle/user entry. */
+> -static __always_inline void rcu_dynticks_task_trace_enter(void)
+> -{
+> -#ifdef CONFIG_TASKS_TRACE_RCU
+> -	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
+> -		current->trc_reader_special.b.need_mb = true;
+> -#endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
+> -}
+> -
+> -/* Turn off heavyweight RCU tasks trace readers on idle/user exit. */
+> -static __always_inline void rcu_dynticks_task_trace_exit(void)
+> -{
+> -#ifdef CONFIG_TASKS_TRACE_RCU
+> -	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
+> -		current->trc_reader_special.b.need_mb = false;
+> -#endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
+> -}
+> -- 
+> 2.25.1
+> 

@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D7B4D51A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9909D4D51F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245503AbiCJShw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 13:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S245505AbiCJSiZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 13:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiCJShu (ORCPT
+        with ESMTP id S232657AbiCJSiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 13:37:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2DB19D630;
-        Thu, 10 Mar 2022 10:36:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4890E61E79;
-        Thu, 10 Mar 2022 18:36:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE8FC340E8;
-        Thu, 10 Mar 2022 18:36:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646937408;
-        bh=RdgCysgl6dR7J0j7duKi30HlTSNbetlrjcptAA8yIP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ORaAk5KDQ7MKF/ON/55HLWHpH4hL8dCDmsb+0tiseGNVUI7173pEQRS2YRjDFuP2d
-         g8voDYpZnRnm6Hlf9R7Ql/GPkOSM56Jfkhq/MXjURxh9/Ikr4UNUstBWB8objSCEGv
-         YDdg4YOl/OwUFVwmSjIM8h4lxYXLDbnXd/05buJtiyPxJ6fnhqL6afwtEAxWnfbDWK
-         XfqNfUFABIZ8dfrnkccAs1AfHA5Ooo/nwVEcdv5fPuelqf3m2qThPB7ZTDk5tBiCF3
-         lXwmN1oxcs+ruTpO0WT/iQgjJWF/goswaST0dk4R3X/7Rh5BwzJrB3X+NkMXBQRZZg
-         v0pnRLNb5v6+A==
-Date:   Thu, 10 Mar 2022 18:36:47 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
-Message-ID: <YipFP8B8MxMxTVBR@gmail.com>
-References: <20220303201312.3255347-1-kbusch@kernel.org>
- <20220303201312.3255347-7-kbusch@kernel.org>
- <your-ad-here.call-01646770901-ext-3299@work.hours>
- <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
- <YigzoKRJ1EHFRZY9@sol.localdomain>
- <20220309193126.GA3950874@dhcp-10-100-145-180.wdc.com>
- <YikEs7RNgPXTQolv@gmail.com>
- <20220310153959.GB329710@dhcp-10-100-145-180.wdc.com>
+        Thu, 10 Mar 2022 13:38:22 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1702919D638
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:37:21 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso4447910iov.16
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:37:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+         :content-transfer-encoding;
+        bh=LYK3nhgyD/Ny5AedOdu53cRFHrQjQndHfGqYjWxTv10=;
+        b=GbumdhubsWScBK9zGE71yflYA2PcgvB3GvvBKMxwIEIzqD3sLCNjcBkzJyYAzg2zs9
+         9r8gJA1fIjEBnhwchdtebNwMjB+37Nx0OEqB3lNlpLcaB59uRha2rVRtK6dWZue+9E97
+         vGL9buJVJQUZ5RhZ93ypBVaV2KCl+LJntyCN0dplt88UudVgL4sqckwO7uQ0aE6C+iJh
+         6+cDObNaygZSvR3b/SM2XWidkUlK+PEVTDkVMAwazstb3xaP0LsfEMATfY9gDyOxLK5j
+         Ktr1h6CtIpMS67TvIaRce6WsX4yr9hxij1pGFUqhh1RZGKUA8a9kZyM3rvlJVHtLbAGJ
+         9rCg==
+X-Gm-Message-State: AOAM532FxCcmlll83jqG0IyI0kl+5MVY2UkqHabvZpCOKZhefDErwJ/S
+        mTxKxlXbbKjmnHckKKHBUriafaUv0qrmST8sC54woMQwHVmo
+X-Google-Smtp-Source: ABdhPJyO4snl/KIWGs+wTTMW3KVNN9VcA1ZTFF0sRWA0kDSRXP9wtScBTqSM6MCJ+rSLjTH6qVrLL7iHvL8l6p3QQIrJZslaA2ae
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220310153959.GB329710@dhcp-10-100-145-180.wdc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5d:8796:0:b0:645:bd36:3833 with SMTP id
+ f22-20020a5d8796000000b00645bd363833mr4837920ion.158.1646937440370; Thu, 10
+ Mar 2022 10:37:20 -0800 (PST)
+Date:   Thu, 10 Mar 2022 10:37:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000019c51e05d9e18158@google.com>
+Subject: [syzbot] BUG: missing reserved tailroom
+From:   syzbot <syzbot+0e91362d99386dc5de99@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, toke@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,100 +59,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 07:39:59AM -0800, Keith Busch wrote:
-> On Wed, Mar 09, 2022 at 07:49:07PM +0000, Eric Biggers wrote:
-> > The issue is that every other "shash" algorithm besides crct10dif, including
-> > crc32 and crc32c, follow the convention of treating the digest as bytes.  Doing
-> > otherwise is unusual for the crypto API.  So I have a slight preference for
-> > treating it as bytes.  Perhaps see what Herbert Xu (maintainer of the crypto
-> > API, Cc'ed) recommends?
-> 
-> I'm okay either way, they're both simple enough. Here is an update atop
-> this series to match the other shash conventions if this is preferred
-> over my�previous fix:
-> 
-> ---
-> diff --git a/block/t10-pi.c b/block/t10-pi.c
-> index 914d8cddd43a..f9eb45571bc7 100644
-> --- a/block/t10-pi.c
-> +++ b/block/t10-pi.c
-> @@ -282,7 +282,7 @@ EXPORT_SYMBOL(t10_pi_type3_ip);
->  
->  static __be64 ext_pi_crc64(void *data, unsigned int len)
->  {
-> -	return cpu_to_be64(crc64_rocksoft(data, len));
-> +	return cpu_to_be64(le64_to_cpu(crc64_rocksoft(data, len)));
->  }
->  
->  static blk_status_t ext_pi_crc64_generate(struct blk_integrity_iter *iter,
-> diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-> index f1a22794c404..f9e5f601c657 100644
-> --- a/crypto/testmgr.h
-> +++ b/crypto/testmgr.h
-> @@ -3686,11 +3686,11 @@ static const struct hash_testvec crc64_rocksoft_tv_template[] = {
->  	{
->  		.plaintext	= zeroes,
->  		.psize		= 4096,
-> -		.digest		= (u8 *)(u64[]){ 0x6482d367eb22b64eull },
-> +		.digest		= "\x4e\xb6\x22\xeb\x67\xd3\x82\x64",
->  	}, {
->  		.plaintext	= ones,
->  		.psize		= 4096,
-> -		.digest		= (u8 *)(u64[]){ 0xc0ddba7302eca3acull },
-> +		.digest		= "\xac\xa3\xec\x02\x73\xba\xdd\xc0",
->  	}
->  };
->  
-> diff --git a/include/linux/crc64.h b/include/linux/crc64.h
-> index e044c60d1e61..5319f9a9fc19 100644
-> --- a/include/linux/crc64.h
-> +++ b/include/linux/crc64.h
-> @@ -12,7 +12,7 @@
->  u64 __pure crc64_be(u64 crc, const void *p, size_t len);
->  u64 __pure crc64_rocksoft_generic(u64 crc, const void *p, size_t len);
->  
-> -u64 crc64_rocksoft(const unsigned char *buffer, size_t len);
-> -u64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len);
-> +__le64 crc64_rocksoft(const unsigned char *buffer, size_t len);
-> +__le64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len);
->  
->  #endif /* _LINUX_CRC64_H */
-> diff --git a/lib/crc64-rocksoft.c b/lib/crc64-rocksoft.c
-> index fc9ae0da5df7..215acb79a15d 100644
-> --- a/lib/crc64-rocksoft.c
-> +++ b/lib/crc64-rocksoft.c
-> @@ -54,16 +54,16 @@ static struct notifier_block crc64_rocksoft_nb = {
->  	.notifier_call = crc64_rocksoft_notify,
->  };
->  
-> -u64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len)
-> +__le64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len)
->  {
->  	struct {
->  		struct shash_desc shash;
-> -		u64 crc;
-> +		__le64 crc;
->  	} desc;
->  	int err;
->  
->  	if (static_branch_unlikely(&crc64_rocksoft_fallback))
-> -		return crc64_rocksoft_generic(crc, buffer, len);
-> +		return cpu_to_le64(crc64_rocksoft_generic(crc, buffer, len));
->  
->  	rcu_read_lock();
->  	desc.shash.tfm = rcu_dereference(crc64_rocksoft_tfm);
-> @@ -77,7 +77,7 @@ u64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len)
->  }
->  EXPORT_SYMBOL_GPL(crc64_rocksoft_update);
->  
-> -u64 crc64_rocksoft(const unsigned char *buffer, size_t len)
-> +__le64 crc64_rocksoft(const unsigned char *buffer, size_t len)
->  {
->  	return crc64_rocksoft_update(0, buffer, len);
->  }
-> --
+Hello,
 
-I think the lib functions should still use native endianness, like what crc32
-does.
+syzbot found the following issue on:
 
-- Eric
+HEAD commit:    de55c9a1967c Merge branch 'Add support for transmitting pa..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14ce88ad700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2fa13781bcea50fc
+dashboard link: https://syzkaller.appspot.com/bug?extid=0e91362d99386dc5de99
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f36345700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c8ca65700000
+
+The issue was bisected to:
+
+commit b530e9e1063ed2b817eae7eec6ed2daa8be11608
+Author: Toke Høiland-Jørgensen <toke@redhat.com>
+Date:   Wed Mar 9 10:53:42 2022 +0000
+
+    bpf: Add "live packet" mode for XDP in BPF_PROG_RUN
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17696e55700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14e96e55700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10e96e55700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0e91362d99386dc5de99@syzkaller.appspotmail.com
+Fixes: b530e9e1063e ("bpf: Add "live packet" mode for XDP in BPF_PROG_RUN")
+
+------------[ cut here ]------------
+XDP_WARN: xdp_update_frame_from_buff(line:274): Driver BUG: missing reserved tailroom
+WARNING: CPU: 0 PID: 3590 at net/core/xdp.c:599 xdp_warn+0x28/0x30 net/core/xdp.c:599
+Modules linked in:
+CPU: 0 PID: 3590 Comm: syz-executor167 Not tainted 5.17.0-rc6-syzkaller-01958-gde55c9a1967c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:xdp_warn+0x28/0x30 net/core/xdp.c:599
+Code: 40 00 41 55 49 89 fd 41 54 41 89 d4 55 48 89 f5 e8 2d 08 3a fa 4c 89 e9 44 89 e2 48 89 ee 48 c7 c7 80 ea b0 8a e8 ef c7 cd 01 <0f> 0b 5d 41 5c 41 5d c3 55 53 48 89 fb e8 06 08 3a fa 48 8d 7b ec
+RSP: 0018:ffffc9000370f6f8 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff888018d8a198 RCX: 0000000000000000
+RDX: ffff88802272d700 RSI: ffffffff815fe2c8 RDI: fffff520006e1ed1
+RBP: ffffffff8ab54aa0 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff815f895e R11: 0000000000000000 R12: 0000000000000112
+R13: ffffffff8ab54780 R14: ffff888018d8a000 R15: ffff888018d8ae98
+FS:  000055555694a300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020001000 CR3: 000000007255a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ xdp_update_frame_from_buff include/net/xdp.h:274 [inline]
+ xdp_update_frame_from_buff include/net/xdp.h:260 [inline]
+ xdp_test_run_init_page+0x3f1/0x500 net/bpf/test_run.c:143
+ page_pool_set_pp_info net/core/page_pool.c:268 [inline]
+ __page_pool_alloc_pages_slow+0x269/0x1050 net/core/page_pool.c:339
+ page_pool_alloc_pages+0xb6/0x100 net/core/page_pool.c:372
+ page_pool_dev_alloc_pages include/net/page_pool.h:197 [inline]
+ xdp_test_run_batch net/bpf/test_run.c:280 [inline]
+ bpf_test_run_xdp_live+0x53a/0x18c0 net/bpf/test_run.c:363
+ bpf_prog_test_run_xdp+0x8f6/0x1440 net/bpf/test_run.c:1317
+ bpf_prog_test_run kernel/bpf/syscall.c:3363 [inline]
+ __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4665
+ __do_sys_bpf kernel/bpf/syscall.c:4751 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4749 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4749
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fc3679a71f9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdd3b6d268 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc3679a71f9
+RDX: 0000000000000048 RSI: 0000000020000000 RDI: 000000000000000a
+RBP: 00007fc36796b1e0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc36796b270
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

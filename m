@@ -2,72 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEC54D4A0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D9E4D4AF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242812AbiCJObn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S245025AbiCJOeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243704AbiCJO0M (ORCPT
+        with ESMTP id S243996AbiCJO2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:26:12 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EAA1390F8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:22:17 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id r16-20020a92ac10000000b002c1ec9fa8edso3313111ilh.23
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:22:17 -0800 (PST)
+        Thu, 10 Mar 2022 09:28:09 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44E3B2D6C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:23:07 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id w27so9732522lfa.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:23:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+mgizJNjOYF4lch4iTAKF7piDFY6Ykg49t6OGyo4hho=;
+        b=H97fj5Xc9OYd/KWfmpTAh3vt0Gmh7v3twAo/7Y+iRLHI1rglIJs8yAG/HuTkBnnUE5
+         7LlMAKLiPw+FiRiIMh73MYSiLInF5I3Ij/jGq45LOIuY0gZqSNgdnAAVgrB8sVF2LscA
+         ywS5RXFZWN0s7pCP/xcixRch5bTE6FUvJwoQmV8IAUioaq/ao9sq+yhG43AOjiCC3idW
+         lFHW40TW4ZrC8rpggm9YpSHwVy08NxMpWgHvh4J3LqPt26aqgWh47f5Hds7ZA/53a6ew
+         lBD4thx0TyjxK1TJZmhYXCb2OoMSdgy6WCqrG1lttLVVtev+MkS2Ms/f8rR1Jf/3MRJ4
+         fL4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=pt6H2yEOvbchK2G/mDFNXqaD9NNW74OxNiZGPSNIUtM=;
-        b=OI0NOsjzrpVu91ftMRMTk+vMZoojOevoOIyQqNHn+etkLkojmjoe7G5M6YIjzLXV1s
-         fNI7OaFHVR5+JJMkfGIm8jBLdDX9RJp3Z8ZfcGQKAaXA9qLF4dTtkkA8c/pzSXuJPH31
-         ISkeQO/KRHp6bcdgXOCCkq8Kt/oHCrwZ+EVkBp2BICJsEBskGt/VvoWSbNeWHO2/8GM6
-         qip/3WqxoBcP0FVZ+K+vg5qLzQ2/4yNjh/RIM94fgN3z3EzLca46s7JDP5uAr7i1B5yt
-         KI8rSNhcQuXUVL1gHh6lZqMQpC7T1Zo12NaJzNABbGDCT7Z9XIBEcx73Oko3AB2vQEa9
-         N7Mw==
-X-Gm-Message-State: AOAM530gb5byGMcw/xI3Sex88QR7Sa4AjSsrjqMPgBR9mjFkxNloHCHA
-        J5TZ0w9rR6tX16J1D3iqf2E5t3RUUWgG+TFEHLjXhdLU9xXu
-X-Google-Smtp-Source: ABdhPJxO5gO8RMGycxaiSjpAHPo/WwHF1PocT7lXNL6skBMH8eWBmrdKDQXngaT1plEH6LU71jfsudv/ZUBdL904rx77l8dJrn1D
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+mgizJNjOYF4lch4iTAKF7piDFY6Ykg49t6OGyo4hho=;
+        b=YOSTejpJwdfJ0Nmw637vXt6B1ZJvpPdqFnlMbaNdKW0bz2aFthHhhQe/BrGpVuv9mO
+         d2Z2za4EhmlqlArFRVrtcXiLcVuS+OksFzoosRoC92wXm+sqqma7RZFBL0yBy7uQf77l
+         ViIlVGS4scCmKtUJbq6c8YZqa2t77OBj58T4yW7AEq+53Ah1FJQCw/iFd/bXwi91KOwo
+         Fjr/duA6i3t0fhdKOxUEiI8FFCD6h5cM7nVQ9/eQOHQcHPrpnC7xbPxn8+nm6NlPuBOl
+         pOURpzTPvgYFeEUtFjKsdblqlOoAsCSq/ISmxIfnpBvTZKa5YBQv7wqCh2ddtyJwOifH
+         vKYA==
+X-Gm-Message-State: AOAM531Gkufm5PKjpyDlZRQiDu47VN4Ic9nd6kJb9SSi/IrQClQTw0Wm
+        xZ5XumWrmk0VGw0U/lgFRrCq4boU9uOeQA==
+X-Google-Smtp-Source: ABdhPJy8W5W97zwjQGUdYTRF8dxaIBmJza5DDIfiUsHku/UJSAHqRnHnDwpVLS/0u+lMaWugKl+UqA==
+X-Received: by 2002:ac2:4342:0:b0:445:b98c:edd3 with SMTP id o2-20020ac24342000000b00445b98cedd3mr3190060lfl.348.1646922179267;
+        Thu, 10 Mar 2022 06:22:59 -0800 (PST)
+Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id cf12-20020a056512280c00b004485b8f37b7sm676993lfb.277.2022.03.10.06.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 06:22:58 -0800 (PST)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     wsa@kernel.org, upstream@semihalf.com, jsd@semihalf.com
+Subject: [PATCH -next] i2c: designware: Add helper to remove redundancy
+Date:   Thu, 10 Mar 2022 15:22:36 +0100
+Message-Id: <20220310142236.192811-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2192:b0:2bf:e954:5588 with SMTP id
- j18-20020a056e02219200b002bfe9545588mr3904031ila.101.1646922130772; Thu, 10
- Mar 2022 06:22:10 -0800 (PST)
-Date:   Thu, 10 Mar 2022 06:22:10 -0800
-In-Reply-To: <20220310084247.1148-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000093d7ec05d9ddf04f@google.com>
-Subject: Re: [syzbot] INFO: task hung in port100_probe
-From:   syzbot <syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Simplify code by adding an extra static function for sending I2C
+requests and verifying results.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Jan Dabros <jsd@semihalf.com>
+---
+ drivers/i2c/busses/i2c-designware-amdpsp.c | 44 ++++++++++++----------
+ 1 file changed, 24 insertions(+), 20 deletions(-)
 
-Reported-and-tested-by: syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com
+diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+index c64e459afb5c..cc758792f150 100644
+--- a/drivers/i2c/busses/i2c-designware-amdpsp.c
++++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+@@ -229,6 +229,26 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+ 	return ret;
+ }
+ 
++static int psp_send_i2c_req_check_err(enum psp_i2c_req_type request)
++{
++	int status;
++
++	status = psp_send_i2c_req(request);
++	if (status) {
++		if (status == -ETIMEDOUT)
++			dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
++				(request == PSP_I2C_REQ_ACQUIRE) ?
++				"release" : "acquire");
++		else
++			dev_err(psp_i2c_dev, "PSP communication error\n");
++
++		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
++		psp_i2c_mbox_fail = true;
++	}
++
++	return status;
++}
++
+ static int psp_acquire_i2c_bus(void)
+ {
+ 	int status;
+@@ -248,17 +268,9 @@ static int psp_acquire_i2c_bus(void)
+ 		goto cleanup;
+ 	};
+ 
+-	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
+-	if (status) {
+-		if (status == -ETIMEDOUT)
+-			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
+-		else
+-			dev_err(psp_i2c_dev, "PSP communication error\n");
+-
+-		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+-		psp_i2c_mbox_fail = true;
++	status = psp_send_i2c_req_check_err(PSP_I2C_REQ_ACQUIRE);
++	if (status)
+ 		goto cleanup;
+-	}
+ 
+ 	psp_i2c_sem_acquired = jiffies;
+ 	psp_i2c_access_count++;
+@@ -293,17 +305,9 @@ static void psp_release_i2c_bus(void)
+ 		goto cleanup;
+ 
+ 	/* Send a release command to PSP */
+-	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
+-	if (status) {
+-		if (status == -ETIMEDOUT)
+-			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
+-		else
+-			dev_err(psp_i2c_dev, "PSP communication error\n");
+-
+-		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+-		psp_i2c_mbox_fail = true;
++	status = psp_send_i2c_req_check_err(PSP_I2C_REQ_RELEASE);
++	if (status)
+ 		goto cleanup;
+-	}
+ 
+ 	dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
+ 		jiffies_to_msecs(jiffies - psp_i2c_sem_acquired));
+-- 
+2.35.1.616.g0bdcbb4464-goog
 
-Tested on:
-
-commit:         1db333d9 Merge tag 'spi-fix-v5.17-rc7' of git://git.ke..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=16438642a37fea1
-dashboard link: https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.

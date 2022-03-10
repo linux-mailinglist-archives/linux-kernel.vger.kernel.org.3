@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F03A4D5044
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BB44D5048
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244556AbiCJRWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S245071AbiCJRYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244495AbiCJRVy (ORCPT
+        with ESMTP id S245169AbiCJRXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:21:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53404198EE5;
-        Thu, 10 Mar 2022 09:20:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDB20B82717;
-        Thu, 10 Mar 2022 17:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BABC340E8;
-        Thu, 10 Mar 2022 17:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646932843;
-        bh=aqZ6qfSaJ4ZT3MvuYHmkAUdH5yODv/pa6W9FZCUG3jY=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=XVN+3gV/pjdKqqFKUwH9gg20w19VyJManoJeniyXzKCG/8ijSP6zG6EulhfFAWNp0
-         WMuECX5DL+uDY+0cgk5HMkLALQ99sUflLJaMB0XWivClUxZhKop8gcCuuf7iyzND9d
-         reXmrMrmSFWZdnIzbbPJCJrSYwUHk6TqqbUP2TnXk9nQvdYb9B1e11gnyJ1DLOBEx9
-         9iJ0KFAxIepQ6YjI3/L2j9A3rNwGsTMHgIR83We9evNLG/YTykrktTMylze5vA9baV
-         86wWHaaEefN6xQHMXEivmld/ddBezH/d008w2/7Ql/WF8xwBolkdWbBUUdismvYVa9
-         3B8NLM9eagatA==
-Date:   Thu, 10 Mar 2022 09:20:42 -0800 (PST)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-cc:     Rob Herring <robh@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: Add vendor prefix for Xen
- hypervisor
-In-Reply-To: <20220310113833.GA187897@EPUAKYIW015D>
-Message-ID: <alpine.DEB.2.22.394.2203100919410.3261@ubuntu-linux-20-04-desktop>
-References: <cover.1646639462.git.oleksii_moisieiev@epam.com> <aece6fd976980131120456800de3558e1e2308a0.1646639462.git.oleksii_moisieiev@epam.com> <Yie5P/vcBz44QcPd@robh.at.kernel.org> <20220310113833.GA187897@EPUAKYIW015D>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 10 Mar 2022 12:23:14 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC6199E0D;
+        Thu, 10 Mar 2022 09:22:05 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id F04C31F45971
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646932924;
+        bh=i/m/QTnQZtO4pBYr23EP3F44855Vs8iYB2YeC5Sa160=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=lQNDzoqQcQHi40W8Q9fdlv96g/Qst7bGRrx7JPFO2XzG8cMyCq2/ljTUvOXR/3h6o
+         Q74NFnvFP+tWixKoVB8+4HgPFZZgqKYQDWyisnA10wrjz2r80y4OmnBBQ0ShSylOq7
+         o/J00VuAaH3/YLLFbNmRIjvHxGL8oXs+VjFpz4UgjCK3hLKefJoTiLNua9luhZT70Z
+         MPSFaZfACdLIC+p5CRmtJmNyiEiTkgOhe5zSuYc9Y6pSXdL0P0nn0tU5ARwrQKceSg
+         mGY8CbJbATym5tGu7VP54KoaA3rfzv5iQ8XOmcQ6wIRKo+JOI7+5AsxhVZuUirgC88
+         sSk+UGbI3Xb4A==
+Message-ID: <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
+Date:   Thu, 10 Mar 2022 22:21:57 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Cc:     usama.anjum@collabora.com, Shuah Khan <shuah@kernel.org>,
+        kernel@collabora.com, kernelci@groups.io,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
+ CFI_FORWARD_PROTO
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+References: <20220217205620.2512094-1-usama.anjum@collabora.com>
+ <202203091122.A51B31230A@keescook>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <202203091122.A51B31230A@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,21 +58,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022, Oleksii Moisieiev wrote:
-> On Tue, Mar 08, 2022 at 02:14:55PM -0600, Rob Herring wrote:
-> > On Mon, 07 Mar 2022 08:17:43 +0000, Oleksii Moisieiev wrote:
-> > > Xen is an open source stage-1 hypervisor.
-> > > 
-> > > Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > 
-> > As 'xen' has been missing regardless of patch 2, I fixed up the commit 
-> > message and applied, thanks!
+On 3/10/22 12:22 AM, Kees Cook wrote:
+> On Fri, Feb 18, 2022 at 01:56:19AM +0500, Muhammad Usama Anjum wrote:
+>> Add config options which are needed for LKDTM sub-tests.
+>> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
+>> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
+>> INIT_ON_FREE_DEFAULT_ON config.
+>>
+>> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
+>> kind. Turn it off for now by default until proper support.
 > 
-> So IIUC - this patch is already applied and I don't need to add it v3?
+> Building under LTO Clang on arm64, this is available. What's the right
+> way to add a CONFIG that isn't always available?
+> 
+> -Kees
+Yeah, as you had mentioned
+(https://github.com/kernelci/kernelci-project/issues/84#issuecomment-1042015431):
 
-Yes, that's right. Congratulations for your first official device tree
-binding change :-)
+CFI_FORWARD_PROTO is going to fail unless there is an active CFI system
+in place of some kind. Right now this depends on arm64+Clang. In the
+future, this will be arch-agnostic+Clang, but for the moment, it should
+be safe to exclude this test.
+
+In this patch, I'm turning off CFI_FORWARD_PROTO by default here. We can
+re-enable it when it becomes arch agnostic. CFI_FORWARD_PROTO cannot be
+turned off by using a config. Please let me know your thoughts otherwise.
+
+-- 
+Muhammad Usama Anjum

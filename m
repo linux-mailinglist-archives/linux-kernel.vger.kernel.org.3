@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C842F4D47D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0894D47D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242340AbiCJNPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S240708AbiCJNPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242325AbiCJNPD (ORCPT
+        with ESMTP id S242363AbiCJNPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:15:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D8E7DA9D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:14:00 -0800 (PST)
+        Thu, 10 Mar 2022 08:15:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C33B8D683;
+        Thu, 10 Mar 2022 05:14:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03367B8261A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:13:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D642C340EB;
-        Thu, 10 Mar 2022 13:13:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F2A2B825DB;
+        Thu, 10 Mar 2022 13:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30FAC340E8;
+        Thu, 10 Mar 2022 13:14:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646918037;
-        bh=QDNquidF6BeD/URlJSXbDXcfjvClofQSBuYPeZ+AuDc=;
+        s=k20201202; t=1646918044;
+        bh=998PEMbF12m2v2E5Wc4oqi+ST2tEgniPYPGUEtiGWOM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=reG3wPZ4rvbFfjAtFgKD8h/dhEUhG8YfKCpvzgTJGkrTo65UYiw5NJxBmswqHzu29
-         m2IudxMyKuJW58+9AMrjSz82xeCQII1ZV0Vpp3i2LY6RNYTgC0IyuCugt7B8qMQb3H
-         9zeHtfVKBIvkaUhixpz5GSVcMuBbqVOR8ekRZxTbVgSp6o4vPAJ3Ic+W4mWqtm2259
-         Cao57n20ZR5wpOR+HCahzxKiIJAuOqXRtZ30CM3icTWp2VwXiQxkTL2t3PC+psoipo
-         mO04ato1boi6qtkbunj2r0dim1dBC9SDLAXmRUyi0AfqbOuEU+4CEZm0I1x+gR0MY+
-         4LJkOhppkNzeQ==
+        b=UHL5yUfFP1gj4upC7sC5uIJnHlGgbGNekIBT6EhTGo8qxzlX74cND+8ULQUmoqtRU
+         Lt1aSVoynOgq6OxiU2A+kOdpJ7DJeX7Lfce6oUIitPczvmz9r4BHgaVurX+ymtuCY2
+         0u+1EhjI/ac2EiwW/EKkHPnqTK2TP83lK+4E4TZuU7HN4Wm5AKsmGr+UeQ99TEF7Ee
+         ik/YzBAZMKBvKvz7qT0JtOSviGD2MekAO74wn/M1E49EC9hzKpDqLPnvAJRU/k1SiY
+         O2Z7swgXzMm2iI5e8Rmk4zSnt6kKHpYcWTGcV1e1xAvrgHk5KsdcAdcZKl39+cB3Xq
+         LLidYPE7LtE6Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>, tiwai@suse.com,
-        alsa-devel@alsa-project.org, nicoleotsuka@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, perex@perex.cz,
-        festevam@gmail.com, Xiubo.Lee@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <1646879863-27711-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1646879863-27711-1-git-send-email-shengjiu.wang@nxp.com>
-Subject: Re: [PATCH] ASoC: fsl_spdif: Disable TX clock when stop
-Message-Id: <164691803517.2018412.16511906603132824768.b4-ty@kernel.org>
-Date:   Thu, 10 Mar 2022 13:13:55 +0000
+To:     linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Yihao Han <hanyihao@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com
+In-Reply-To: <20220310094806.13734-1-hanyihao@vivo.com>
+References: <20220310094806.13734-1-hanyihao@vivo.com>
+Subject: Re: [PATCH] spi: rockchip-sfc: fix platform_get_irq.cocci warning
+Message-Id: <164691804258.2018710.17609029778468697922.b4-ty@kernel.org>
+Date:   Thu, 10 Mar 2022 13:14:02 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,24 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 10:37:43 +0800, Shengjiu Wang wrote:
-> The TX clock source may be changed in next case, need to
-> disable it when stop, otherwise the TX may not work after
-> changing the clock source, error log is:
+On Thu, 10 Mar 2022 01:48:06 -0800, Yihao Han wrote:
+> Remove dev_err() messages after platform_get_irq*() failures.
+> platform_get_irq() already prints an error.
 > 
-> aplay: pcm_write:2058: write error: Input/output error
+> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
 > 
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: fsl_spdif: Disable TX clock when stop
-      commit: 6ddf611219ba8f7c8fa0d26b39710a641e7d37a5
+[1/1] spi: rockchip-sfc: fix platform_get_irq.cocci warning
+      commit: 2cfdf0b4441aa918c3b18142740c92407b3c35a2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

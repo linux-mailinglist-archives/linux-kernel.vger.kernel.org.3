@@ -2,90 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5C54D46EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A33B4D46FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242006AbiCJM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S242019AbiCJMag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbiCJM3o (ORCPT
+        with ESMTP id S233734AbiCJMae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:29:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1587F81899
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:28:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646915322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/VafedsefDAeccwtNNOU8Qnj3l5Nry7zWypwpz3i1HM=;
-        b=EEACC+tmW0IjLpkmLW6wP8niLRjizn/LSTt6KHLxuN5xHFgvGTo0cPzVYmjDph3XJvJnKE
-        iDmGjHJovFUFTs2hLDLSCfch/FIbwJttBXla2B9NvEvrBruTm8uUXZNc/AQdvbOsS/aLU+
-        GKOlQj9I6nubZuYf1P5SUCdd2XiLCgU=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-636-WEg2n0xNPpOuB3UidVIRnQ-1; Thu, 10 Mar 2022 07:28:41 -0500
-X-MC-Unique: WEg2n0xNPpOuB3UidVIRnQ-1
-Received: by mail-ej1-f72.google.com with SMTP id h22-20020a1709060f5600b006b11a2d3dcfso3031759ejj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:28:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/VafedsefDAeccwtNNOU8Qnj3l5Nry7zWypwpz3i1HM=;
-        b=YNNyY8Sgo3E7Dp0XlnUqkeuTtDHSx6e9c4DPgwDbfB1jJN3Im2pJp/CBWqiAnsdoB3
-         96t0ijimRrZb5KWmqosm992Yyc2IVli/3INVvTXx3K98y6UTbQLBCy5wh396PAsgzqo4
-         nqCr0W2IzAo6E0Yuglk93j04DKFLxcqHxnyvZmeMk1h6if7O6Od5NV8s+3ehxpLRM6ip
-         3fGLYWo2JRFxVKM8Ivq8VdVU2Bo69Ew3pnx3e2JNCHLtKsClCn36ubBIn9c7pZii18W4
-         Zl0tPlI/zb4OOKUIIbWX1WilYmv7BLw+VbnduhFjTZN2uZTCYK9QtDwxr9Ykx1SH4ppJ
-         Ag+Q==
-X-Gm-Message-State: AOAM531aarcHRAU8eAne7Tfvt9H4zO1Mn9rKOfIe4772ceaBKILh34Fw
-        SNnc11J0w1LdGVkkDSdJrMuYXD7sVJgtb3Q3JBddlG81zpJ+7jGKJew9xqag+DDABx3608wkA4o
-        QU/cTNU2zORWQfDQsK71mAn9n
-X-Received: by 2002:a17:907:d03:b0:6da:9618:7ddd with SMTP id gn3-20020a1709070d0300b006da96187dddmr4043000ejc.341.1646915319875;
-        Thu, 10 Mar 2022 04:28:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeXf6u9l7+3+snGK+VBlx3Qlyb60nhABu8yvzpWxOMJf6ZWsZGZlrftndTf4/C7nBxoCi4gQ==
-X-Received: by 2002:a17:907:d03:b0:6da:9618:7ddd with SMTP id gn3-20020a1709070d0300b006da96187dddmr4042967ejc.341.1646915319596;
-        Thu, 10 Mar 2022 04:28:39 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm1871774edx.58.2022.03.10.04.28.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:28:39 -0800 (PST)
-Message-ID: <b41cfd4d-3f55-168a-e96c-cf2d11d50f28@redhat.com>
-Date:   Thu, 10 Mar 2022 13:28:38 +0100
+        Thu, 10 Mar 2022 07:30:34 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7266A818A5;
+        Thu, 10 Mar 2022 04:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646915373; x=1678451373;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=KpU7qHsFQttScVYV4Sy+C7cKf/dHAGOyV91juLQL6gk=;
+  b=NgFY8eRdD81ohSejE1d5DO20LjYbv3RY7ET76nPkYeMlSHg+aTstckek
+   S8/ctGS3G1ijTVnjn2V2MsmQBDECfd/WZvpxEVm2IgscOkJs+vKOoW2R1
+   Tg5/RbkIrbMIVpdK/CSoAwz4XaaVqm/BSVs7q72b21hpCQNN2lU//vuSh
+   KrvPemzpbYV7jvLCigfVO/dNhbya2kQUeWEN3/Dclbug8ZNYwZd4FyuZW
+   fQTUUJSUa5eBvBFgNovM0f5gwecjeXRZKDkfFUsU6KY5xe+PUvF7W7awO
+   v+fMUYdLsZ5fp5+4hzDD/MyQsKaGsAhe6tFIDP6zC3mCuyqEtSCIUS5B/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="318459313"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="318459313"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 04:29:31 -0800
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="554624288"
+Received: from mborg-mobl.ger.corp.intel.com ([10.252.33.144])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 04:29:23 -0800
+Date:   Thu, 10 Mar 2022 14:29:21 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-api@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [RFC PATCH 6/7] serial: General support for multipoint
+ addresses
+In-Reply-To: <20220309190521.GA9832@wunner.de>
+Message-ID: <6feb796a-ea58-9a6-f2f9-a11ca72acfd@linux.intel.com>
+References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com> <20220302095606.14818-7-ilpo.jarvinen@linux.intel.com> <20220306194001.GD19394@wunner.de> <ab43569c-6488-12a6-823-3ef09f2849d@linux.intel.com> <20220309190521.GA9832@wunner.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 3/3] x86/PCI: Preserve host bridge windows completely
- covered by E820
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, wse@tuxedocomputers.com
-References: <20220309181518.GA63422@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220309181518.GA63422@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: multipart/mixed; boundary="8323329-24784813-1646915371=:1973"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,73 +82,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 3/9/22 19:15, Bjorn Helgaas wrote:
-> On Sat, Mar 05, 2022 at 11:37:23AM +0100, Hans de Goede wrote:
->> On 3/4/22 16:46, Hans de Goede wrote:
->>> On 3/4/22 16:32, Bjorn Helgaas wrote:
->>>> On Fri, Mar 04, 2022 at 03:16:42PM +0100, Hans de Goede wrote:
->>>>> On 3/4/22 04:51, Bjorn Helgaas wrote:
->>>>>> From: Bjorn Helgaas <bhelgaas@google.com>
->>>>>>
->>>>>> Many folks have reported PCI devices not working.  It could affect any
->>>>>> device, but most reports are for Thunderbolt controllers on Lenovo Yoga and
->>>>>> Clevo Barebone laptops and the touchpad on Lenovo IdeaPads.
->>>>>> ...
+--8323329-24784813-1646915371=:1973
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+
+On Wed, 9 Mar 2022, Lukas Wunner wrote:
+
+> On Mon, Mar 07, 2022 at 11:48:01AM +0200, Ilpo Järvinen wrote:
+> > On Sun, 6 Mar 2022, Lukas Wunner wrote:
+> > > On Wed, Mar 02, 2022 at 11:56:05AM +0200, Ilpo Järvinen wrote:
+> > > > This change is necessary for supporting devices with RS485
+> > > > multipoint addressing [*].
+> > > 
+> > > If this is only used with RS485, why can't we just store the
+> > > addresses in struct serial_rs485 and use the existing TIOCSRS485
+> > > and TIOCGRS485 ioctls?  There's 20 bytes of padding left in
+> > > struct serial_rs485 which you could use.  No need to add more
+> > > user-space ABI.
+> > 
+> > It could if it is agreed that serial multipoint addressing is just
+> > a thing in RS-485 and nowhere else? In that case, there is no point
+> > in adding more generic support for it.
 > 
->>>>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
->>>>>> index 7378ea146976..405f0af53e3d 100644
->>>>>> --- a/arch/x86/kernel/resource.c
->>>>>> +++ b/arch/x86/kernel/resource.c
->>>>>> @@ -39,6 +39,17 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
->>>>>>  		e820_start = entry->addr;
->>>>>>  		e820_end = entry->addr + entry->size - 1;
->>>>>>  
->>>>>> +		/*
->>>>>> +		 * If an E820 entry covers just part of the resource, we
->>>>>> +		 * assume E820 is telling us about something like host
->>>>>> +		 * bridge register space that is unavailable for PCI
->>>>>> +		 * devices.  But if it covers the *entire* resource, it's
->>>>>> +		 * more likely just telling us that this is MMIO space, and
->>>>>> +		 * that doesn't need to be removed.
->>>>>> +		 */
->>>>>> +		if (e820_start <= avail->start && avail->end <= e820_end)
->>>>>> +			continue;
->>>>>> +
->>>>>
->>>>> IMHO it would be good to add some logging here, since hitting this is
->>>>> somewhat of a special case. For the Fedora test kernels I did I changed
->>>>> this to:
->>>>>
->>>>> 		if (e820_start <= avail->start && avail->end <= e820_end) {
->>>>> 			dev_info(dev, "resource %pR fully covered by e820 entry [mem %#010Lx-%#010Lx]\n",
->>>>> 				 avail, e820_start, e820_end);
->>>>> 			continue;
->>>>> 		}
->>>>>
->>>>> And I expect/hope to see this new info message on the ideapad with the
->>>>> touchpad issue.
+> It's just that the above-quoted sentence in the commit message
+> specifically mentions RS485.
+
+That sentence is just to justify why addressing mode is needed,
+not to take a stance on whether it is only used with RS485 or not.
+
+> If you intend to use it with RS232
+> as well, that should be made explicit, otherwise one wonders why
+> it wasn't integrated into struct serial_rs485.
 > 
-> I added this logging.
-> 
->> So I just got the first report back from the Fedora test 5.16.12 kernel
->> with this series added. Good news on the ideapad this wotks fine to
->> fix the touchpad issue (as expected).
-> 
-> Any "Tested-by" I could add?  If we can, I'd really like to give some
-> credit to the folks who suffered through this and helped resolve it.
+> I have no idea how common 9th bit addressing mode is with RS232.
+> Goggle turns up links saying it's mainly used with RS485, "but also
+> RS232".  Since RS232 isn't a bus but a point-to-point link,
+> 9th bit addressing doesn't seem to make as much sense.
 
-Good point, the reporter of:
-https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+While I don't know any better, I can image though that with an 
+RS232-to-RS485 converter, it could make some sense.
 
-has done most of the ideapad with touchpad issues testing for me
-and has been very helpful. I agree he deserves credit for this.
+If I put them back to serial_rs485 / rs485 config, it's basically just 
+where I initially started from with this patchset (offlist).
 
-I've asked him if he is ok with adding a Tested-by tag and if yes,
-which email we should use.
 
-Regards,
+-- 
+ i.
 
-Hans
-
+--8323329-24784813-1646915371=:1973--

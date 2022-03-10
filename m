@@ -2,142 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E13A4D5432
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82714D5439
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240265AbiCJWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S1344046AbiCJWKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240075AbiCJWJx (ORCPT
+        with ESMTP id S240075AbiCJWKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:09:53 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4C65FF0B;
-        Thu, 10 Mar 2022 14:08:50 -0800 (PST)
-Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nSQxd-000Ayr-EU; Thu, 10 Mar 2022 23:08:42 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nSQxd-000LZN-0J; Thu, 10 Mar 2022 23:08:41 +0100
-Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
-To:     Guo Zhengkui <guozhengkui@vivo.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Yucong Sun <sunyucong@gmail.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Christy Lee <christylee@fb.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Cc:     zhengkui_guo@outlook.com
-References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net>
- <20220309033518.1743-1-guozhengkui@vivo.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ba71e22a-cf59-b2bd-50c0-d0c9fb3f4e08@iogearbox.net>
-Date:   Thu, 10 Mar 2022 23:08:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 10 Mar 2022 17:10:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0174AD4470;
+        Thu, 10 Mar 2022 14:09:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 926B261AD2;
+        Thu, 10 Mar 2022 22:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A48C340E8;
+        Thu, 10 Mar 2022 22:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646950176;
+        bh=tMUOhG6pFcuv+nm+xL9hctLl6S7C9WHjH9Uakei9h3Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XlPypQDQiKimc+h5jKNd/kO20l9tAqk2BjsVoie/Ir707iCNJhlJgKriUcj3G2zdX
+         8m01cRbngXRKN0YjPpanM5FEfNRSpfYRchDNbi2tLcAO9qCl/FbpIVHNx/qSQjo4HE
+         r4PL8GZy442kLEBI7fKQAiDtPC/W//sp1Vtz6UKA22WfZ4Y7lAJeGkfCsrlqVVdR3Y
+         ovazFtLUEt/TlGYsrimlshq2DcRGEDMrRmnCis+9h06SO3Dd65pkUANXuiwvRQhq8F
+         t9bH9RpU5iz2pydQQJFd0F60Hybi4JRKNf+CoIM0Q+tbigNW7gqiYYw9i0rRaF/jMy
+         OaWfZLNLMlYEA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH 0/2] linux/types.h: Tidy __bitwise, add __CHECKER__ hints
+Date:   Thu, 10 Mar 2022 16:09:25 -0600
+Message-Id: <20220310220927.245704-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220309033518.1743-1-guozhengkui@vivo.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26477/Thu Mar 10 10:34:39 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 4:35 AM, Guo Zhengkui wrote:
-> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
-> 
-> Use `ARRAY_SIZE(arr)` in bpf_util.h instead of forms like
-> `sizeof(arr)/sizeof(arr[0])`.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-BPF CI fails with:
+- Tidy up __bitwise__, which is unused except in the __bitwise definition
 
-https://github.com/kernel-patches/bpf/runs/5498238267?check_suite_focus=true
+- Add hints about what __CHECKER__ means
 
-   pahole: Multithreading requires elfutils >= 0.178. Continuing with a single thread...
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:130:8: error: redefinition of 'bpf_map_def'
-   struct bpf_map_def {
-          ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:685:8: note: previous definition is here
-   struct bpf_map_def {
-          ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:138:6: error: redefinition of 'libbpf_pin_type'
-   enum libbpf_pin_type {
-        ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:191:6: note: previous definition is here
-   enum libbpf_pin_type {
-        ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:139:2: error: redefinition of enumerator 'LIBBPF_PIN_NONE'
-           LIBBPF_PIN_NONE,
-           ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:192:2: note: previous definition is here
-           LIBBPF_PIN_NONE,
-           ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:141:2: error: redefinition of enumerator 'LIBBPF_PIN_BY_NAME'
-           LIBBPF_PIN_BY_NAME,
-           ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:194:2: note: previous definition is here
-           LIBBPF_PIN_BY_NAME,
-           ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:144:6: error: redefinition of 'libbpf_tristate'
-   enum libbpf_tristate {
-        ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1304:6: note: previous definition is here
-   enum libbpf_tristate {
-        ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:145:2: error: redefinition of enumerator 'TRI_NO'
-           TRI_NO = 0,
-           ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1305:2: note: previous definition is here
-           TRI_NO = 0,
-           ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:146:2: error: redefinition of enumerator 'TRI_YES'
-           TRI_YES = 1,
-           ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1306:2: note: previous definition is here
-           TRI_YES = 1,
-           ^
-   In file included from progs/test_rdonly_maps.c:7:
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:147:2: error: redefinition of enumerator 'TRI_MODULE'
-           TRI_MODULE = 2,
-           ^
-   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1307:2: note: previous definition is here
-           TRI_MODULE = 2,
-           ^
-   8 errors generated.
-   make: *** [Makefile:488: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/test_rdonly_maps.o] Error 1
-   make: *** Waiting for unfinished jobs....
-   Error: Process completed with exit code 2.
+Bjorn Helgaas (2):
+  linux/types.h: Remove unnecessary __bitwise__
+  Documentation/sparse: Add hints about __CHECKER__
+
+ Documentation/dev-tools/sparse.rst | 2 ++
+ include/linux/compiler_types.h     | 1 +
+ include/uapi/linux/types.h         | 6 +++---
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+
+-- 
+2.25.1
+

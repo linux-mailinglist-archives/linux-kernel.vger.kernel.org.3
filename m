@@ -2,106 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085344D4368
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9B54D436B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240756AbiCJJYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S240763AbiCJJZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234905AbiCJJYr (ORCPT
+        with ESMTP id S236025AbiCJJZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:24:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA1C41F9C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:23:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 10 Mar 2022 04:25:15 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0185F1390FB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:24:14 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAAF561CE0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5D1C340F5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:23:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646904225;
-        bh=ghWIRBpDe2KEAVCmoHp7Q73RTvUTaZ4QY3GIe47sHG4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r5h1dEGELer/PyJT2bmbIKs7FfKKt+fy6CgNWJMCCCUj79x7EJ3KDSAtpVQHEJlRJ
-         fTF4WSTHSHU1pOHqnEObNcxR321dTuydV2aqSDVnNKfp6IHzBxBsFeEOkq1X0c902F
-         PBYvhaBFv4QDsY4oe2IAXf17J+U/DBFq/3vd2rhtbIpCuS01u4+WvOtTH1IrvX2A45
-         hxJTLjbxekhBErPYXXXXeGoOBsgkSk8+ALg0WBoj6qhZ0h92SwRQcZ+KLQW9c2rwkj
-         l8URJKlFzGeHr5QRlfrR8AHtkI88QM81MCNYajvj09LPpDwAmVrWzFC0fRFsF8a+WK
-         w69srkpzvjFNg==
-Received: by mail-wm1-f49.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so2968249wmp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:23:45 -0800 (PST)
-X-Gm-Message-State: AOAM532N3vpgv7IcfQyfr7dH7Qg2BWXyilU+tp3zEc9h5x4PxM0jpH6X
-        GWI4lvqrtuPFn0nZW2EwN6MvTFQVHQHQbW0lZ6E=
-X-Google-Smtp-Source: ABdhPJy9fLy7k9/BDB1ORE6SEXrnrnjsiqkOQ++S0LDxTpeeZglK8bHJkNch3V5qLVb9KO3Iv15wwX5nmXcoq0mPksc=
-X-Received: by 2002:a7b:c746:0:b0:385:506e:7c8b with SMTP id
- w6-20020a7bc746000000b00385506e7c8bmr2664089wmk.71.1646904223578; Thu, 10 Mar
- 2022 01:23:43 -0800 (PST)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DA7E83F321
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646904252;
+        bh=Vq+x+LnICgNgSaQrOStld4MyN/N8TRx3ztXdKLjhEx0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=TGeX02+LAEvK7aT8Bf5Yu4E9v3PIQzt969ZzIKi2WGoDh8xc875K3W2tbcVsXqX3Y
+         GGVJ+ADeFWPeUeKWkg8I9ne2Y7np+M7Y1MoKH1cMYX2A2jQFako0ALgihZO6oUAHRy
+         vTEmK8e5gFvq1WzYbOtPcotoZNV8UYRRBi0nAaFoyCZiPM0qx1VAJvvvY4R5f5m4gH
+         93UU9ddanFJqIUrO9ZOV+8OMFbelP43QJtRofog3kfQM8xf+/zTOo438D5kH+YqS7Q
+         +E2G6EFZ1kQiaIa/oQw1BaO+EwFPofNguFIJdWKo4FSYb8GZfc4bR2HqUvxZXWetnC
+         hC/uhDak6fgDg==
+Received: by mail-ed1-f70.google.com with SMTP id l24-20020a056402231800b00410f19a3103so2785077eda.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:24:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vq+x+LnICgNgSaQrOStld4MyN/N8TRx3ztXdKLjhEx0=;
+        b=lJuKad1vyIPGR6J0c0oZID/WZQ0Sit3xED+RaU1Y7Th0MEn6Zme64XLrtO6XbOFm6b
+         TFS8jmw7NYufNL6NbenUqBDyRYoUeB7wOFlDKi4tmNaCrm8kVPc3V4045uvr+LimkFeQ
+         s4eV9W57babQU9TU5S1xTIF0wDcdCGGeMFrA8rqrta6q4uZMmInPV6aEjEnWrtKjzQx5
+         iU0ZJAJ6Fih+GbcKYkft7Gqzx/90+dIp6186Q7TXcw6OJIzX/W98OLZ6jnESagYHQ8fn
+         G1pq8M3O8YbeMALMBpsGMJ3/BddrW3B23cF87jVCzs+Q3GduoFIyC04ZDM2R14o0nwQZ
+         An8A==
+X-Gm-Message-State: AOAM533V+RR1jyyhOC6EbKn9G65tzIIEC8nFZVzG7eiRqMUgm8KKOLQ5
+        1tMIAR2GcdL09BB0Fvw94CriPVyRfwAZi2lvg6njha3SW1wAQNCA1SOa6IGz1C23ne7uCR38wYB
+        Q2ibEepjGJwjlSE4qPbX61z98wBNCK+lZ7jiDGNee2A==
+X-Received: by 2002:aa7:de84:0:b0:40f:db98:d0f9 with SMTP id j4-20020aa7de84000000b0040fdb98d0f9mr3362736edv.366.1646904252551;
+        Thu, 10 Mar 2022 01:24:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwBzUrALp6RBw3QyI4DMV1UDz3vpwLuHFpa3ac6hmg3GtuGPDpwGZ4fXoqGkaFiZShadZCanA==
+X-Received: by 2002:aa7:de84:0:b0:40f:db98:d0f9 with SMTP id j4-20020aa7de84000000b0040fdb98d0f9mr3362710edv.366.1646904252290;
+        Thu, 10 Mar 2022 01:24:12 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170906780400b006ce69ff6050sm1601377ejm.69.2022.03.10.01.24.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 01:24:11 -0800 (PST)
+Message-ID: <d3ac3e2f-71fd-b2b4-7c7e-bb43c681d14e@canonical.com>
+Date:   Thu, 10 Mar 2022 10:24:10 +0100
 MIME-Version: 1.0
-References: <20220309144138.360482-1-arnd@kernel.org> <20220309144138.360482-2-arnd@kernel.org>
- <27250b4e-cf04-0dab-d658-bb472face5ea@arm.com> <CAK8P3a20ccBbAwgVkq3n6tMehFH4YEyzquTkF3V=nJ46Tk4ePg@mail.gmail.com>
- <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com>
-In-Reply-To: <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 10 Mar 2022 10:23:27 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
-Message-ID: <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ARM: remove support for NOMMU ARMv4/v5
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 05/10] dt-bindings: clock: Add bindings for SP7021
+ clock driver
+Content-Language: en-US
+To:     Qin Jian <qinjian@cqplus1.com>, robh+dt@kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1646892810.git.qinjian@cqplus1.com>
+ <80256ac7f67c041ae3070638aa6499ee0d0ee0c6.1646892810.git.qinjian@cqplus1.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <80256ac7f67c041ae3070638aa6499ee0d0ee0c6.1646892810.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 2:22 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Wed, Mar 9, 2022 at 5:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > Robin
-> > > In that case, it would probably make sense to garbage-collect all the
-> > > configs, setup code and other stuff relating to older MMU-less CPU cores
-> > > like ARM1156, ARM940, etc. at the same time.
-> >
-> > Right, good idea. These are only selected by CONFIG_ARCH_INTEGRATOR,
-> > but that in turn doesn't build for CONFIG_MMU=n because it depends on
-> > ARCH_MULTIPLATFORM. I'll send a patch for these.
->
-> Just delete these, I do have these CPU tiles around but they are so obscure
-> and I never got around to even testing to boot them.
+On 10/03/2022 07:28, Qin Jian wrote:
+> Add documentation to describe Sunplus SP7021 clock driver bindings.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+> Remove the internal clock parent from DTS
+> ---
+>  .../bindings/clock/sunplus,sp7021-clkc.yaml   |  39 ++++++
+>  MAINTAINERS                                   |   2 +
+>  include/dt-bindings/clock/sp-sp7021.h         | 112 ++++++++++++++++++
+>  3 files changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/sp-sp7021.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+> new file mode 100644
+> index 000000000..7d6e3fdd7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/sunplus,sp7021-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SP7021 SoC Clock Controller Binding
+> +
+> +maintainers:
+> +  - Qin Jian <qinjian@cqplus1.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-clkc
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - "#clock-cells"
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    clkc: clock-controller@9c000000 {
+> +      compatible = "sunplus,sp7021-clkc";
+> +      #clock-cells = <1>;
+> +      reg = <0x9c000000 0x280>;
 
-Right, of course you couldn't boot test them because it has been
-impossible to even select them in Kconfig for years. I've added
-a patch to completely remove the five v4/v5 NOMMU cores now,
-will send that later.
+In DTS code, please put reg after compatible. In all your examples and
+DTS patches.
 
-There are five more cores that are only referenced by mach-integrator
-that are supposed to work (922T, 1020, 1020E, 1022, 1026). Have you
-ever tested those, or should we consider removing them as well?
 
-At some point, there was a proposal to add an arm10 based SoC
-to mainline, but that never happened and I'm fairly sure it won't
-come back now.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-        Arnd
+
+Best regards,
+Krzysztof

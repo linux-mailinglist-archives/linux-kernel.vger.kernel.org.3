@@ -2,193 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BF54D4718
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88314D471D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242039AbiCJMhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S242064AbiCJMhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiCJMhE (ORCPT
+        with ESMTP id S242041AbiCJMhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:37:04 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA6141E23;
-        Thu, 10 Mar 2022 04:36:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zmYAbKnVCCZBlerHQbcYZ1CzE/Z7tVO/OGbPWC3kXis=; b=1JYrbN1ExafiKL3d3v99aHh4Nt
-        1kEo2q+AuKnq8xNXYr66yfslkv8hP+eRsPnkhrel/uVcxEIFtKdue2bC/DZ5qRQDbOnuYud3KV2ix
-        ZM5vAiMmEdACb7S8FMNjB44ablaxRhEiV9ypbq8bkDyz4W+57dZzf4cZYA2ZGglyCYLTO8MAS1yAn
-        /dbn9xVhVVVF+QhQ3GiC9/F7Ja4Fxc7q/8ZpfWtIFw2sTAjKKQf5UoJrOA+1NxwMKP/g8HXvrrDH0
-        RM3kNsF6GJzyeLQWzGiZsqx0j52ZgqP0+T3w0JCjn2pXTIdj8sc7EnQDqOrV4ax0qv6xeclYqq8oJ
-        csfoehfw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57764)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nSI1N-00018O-TJ; Thu, 10 Mar 2022 12:35:58 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nSI1L-0000Yc-38; Thu, 10 Mar 2022 12:35:55 +0000
-Date:   Thu, 10 Mar 2022 12:35:55 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
- __read_once_word_nocheck
-Message-ID: <Yinwq3Z9l0selLLS@shell.armlinux.org.uk>
-References: <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
- <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
- <YijCkHHhpleeADAO@shell.armlinux.org.uk>
- <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
- <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
- <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
- <Yij2cZVKwPexGsTf@shell.armlinux.org.uk>
- <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
- <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
- <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+        Thu, 10 Mar 2022 07:37:11 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A564148671;
+        Thu, 10 Mar 2022 04:36:11 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E7B1C20B7178;
+        Thu, 10 Mar 2022 04:36:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E7B1C20B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646915770;
+        bh=OpLazLHgo7JUDorbgPvzn5XPP27hWdflyI7VUjRdwJM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oWQjaQXeK6bs8wAX1nWaVSxmsT0mTsCAm8ubndFXfYmqBoPy4pR1J2MCW8qgC70/+
+         j2WyfH50ToQIyBVT6qVk00okQRSwfzpftPWUGJpJIetXHGVn07FRhKe+jFnwmYr7Nc
+         1SSZjx6jwP186N8aTa+7k3/OrfLBHo5dpEQy22ho=
+Message-ID: <574cbef1-89ce-3e43-cebb-5db1d8e854e5@linux.microsoft.com>
+Date:   Thu, 10 Mar 2022 06:36:09 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Content-Language: en-US
+To:     Miroslav Benes <mbenes@suse.cz>, Mark Brown <broonie@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+ <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
+ <YiY6hecX0pVWowQ7@sirena.org.uk>
+ <c494fa10-e973-c137-b637-66bde327611c@linux.microsoft.com>
+ <YiiT2lFuxc3ob+Zq@sirena.org.uk>
+ <alpine.LSU.2.21.2203100923470.16704@pobox.suse.cz>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <alpine.LSU.2.21.2203100923470.16704@pobox.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 09:42:29PM +0100, Ard Biesheuvel wrote:
-> On Wed, 9 Mar 2022 at 20:39, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Wed, Mar 09, 2022 at 08:14:30PM +0100, Ard Biesheuvel wrote:
-> > > The backtrace dumped by __die() uses the pt_regs from the exception
-> > > context as the starting point, so the exception entry code that deals
-> > > with the condition that triggered the oops is omitted, and does not
-> > > have to be unwound.
-> >
-> > That is true, but that's not really the case I was thinking about.
-> > I was thinking more about cases such as RCU stalls, soft lockups,
-> > etc.
-> >
-> > For example:
-> >
-> > https://www.linuxquestions.org/questions/linux-kernel-70/kenel-v4-4-60-panic-in-igmp6_send-and-and-__neigh_create-4175704721/
-> >
-> > In that stack trace, the interesting bits are not the beginning of
-> > the stack trace down to __irq_svc, but everything beyond __irq_svc,
-> > since the lockup is probably caused by being stuck in
-> > _raw_write_lock_bh().
-> >
-> > It's these situations that we will totally destroy debuggability for,
-> > and the only way around that would be to force frame pointers and
-> > ARM builds (not Thumb-2 as that requires the unwinder... which means
-> > a Thumb-2 kernel soft lockup would be undebuggable.
-> >
+
+
+On 3/10/22 02:33, Miroslav Benes wrote:
+> On Wed, 9 Mar 2022, Mark Brown wrote:
 > 
-> Indeed.
+>> On Tue, Mar 08, 2022 at 04:00:35PM -0600, Madhavan T. Venkataraman wrote:
+>>
+>>> It is just that patch 11 that defines "select
+>>> HAVE_RELIABLE_STACKTRACE" did not receive any comments from you
+>>> (unless I missed a comment that came from you. That is entirely
+>>> possible. If I missed it, my bad). Since you suggested that change, I
+>>> just wanted to make sure that that patch looks OK to you.
+>>
+>> I think that's more a question for the livepatch people to be honest -
+>> it's not entirely a technical one, there's a bunch of confidence level
+>> stuff going on.  For example there was some suggestion that people might
+>> insist on having objtool support, though there's also substantial
+>> pushback on making objtool a requirement for anything from other
+>> quarters.  I was hoping that posting that patch would provoke some
+>> discussion about what exactly is needed but that's not happened thus
+>> far.
 > 
-> But that means that the only other choice we have is to retain the
-> imprecise nature of the current solution (which usually works fine
-> btw), and simply deal with the faulting double dereference of vsp in
-> the unwinder code. We simply don't know whether the exception was
-> taken at a point where the stack frame is consistent with the unwind
-> data.
+> I think everyone will be happy with HAVE_RELIABLE_STACKTRACE on arm64 as 
+> long as there is a guarantee that stack traces are really reliable. My 
+> understanding is that there is still some work to be done on arm64 arch 
+> side (but I may have misunderstood what Mark R. said elsewhere). And yes, 
+> then there is a question of objtool. It is one option but not the only 
+> one. There have been proposals of implementing guarantees on a compiler 
+> side and leaving objtool for x86_64 only (albeit objtool may bring more 
+> features to the table... ORC, arch features checking).
+> 
+> Madhavan also mentioned that he enhanced objtool and he planned to submit 
+> it eventually 
+> (https://lore.kernel.org/all/1a0e19db-a7f8-4c8e-0163-398fcd364d54@linux.microsoft.com/T/#u), 
+> so maybe arm64 maintainers could decide on a future direction based on 
+> that?
+> 
 
-Okay, further analysis (for the record, since I've said much of this on
-IRC):
+Yes. I am working on that right now. Hope to send it out soon.
 
-What we have currently is a robust unwinder that will cope when things
-go wrong, such as an interrupt taken during the prologue of a function.
-The way it copes is by two mechanisms:
-
-        /* store the highest address on the stack to avoid crossing it*/
-        low = frame->sp;
-        ctrl.sp_high = ALIGN(low, THREAD_SIZE);
-
-These two represent the allowable bounds of the kernel stack. When we
-run the unwinder, before each unwind instruction we check whether the
-current SP value is getting close to the top of the kernel stack, and
-if so, turn on additional checking:
-
-                if ((ctrl.sp_high - ctrl.vrs[SP]) < sizeof(ctrl.vrs))
-                        ctrl.check_each_pop = 1;
-
-that will ensure if we go off the top of the kernel stack, the
-unwinder will report failure, and not access those addresses.
-
-After each instruction, we check whether the SP value is within the
-above bounds:
-
-                if (ctrl.vrs[SP] < low || ctrl.vrs[SP] >= ctrl.sp_high)
-                        return -URC_FAILURE;
-
-This means that the unwinder can never modify SP to point outside of
-the kernel stack region identified by low..ctrl.sp_high, thereby
-protecting the load inside unwind_pop_register() from ever
-dereferencing something outside of the kernel stack. Moreover, it also
-prevents the unwinder modifying SP to point below the current stack
-frame.
-
-The problem has been introduced by trying to make the unwinder cope
-with IRQ stacks in b6506981f880 ("ARM: unwind: support unwinding across
-multiple stacks"):
-
--       if (!load_sp)
-+       if (!load_sp) {
-                ctrl->vrs[SP] = (unsigned long)vsp;
-+       } else {
-+               ctrl->sp_low = ctrl->vrs[SP];
-+               ctrl->sp_high = ALIGN(ctrl->sp_low, THREAD_SIZE);
-+       }
-
-Now, whenever SP is loaded, we reset the allowable range for the SP
-value, and this completely defeats the protections we previously had
-which were ensuring that:
-
-1) the SP value doesn't jump back _down_ the kernel stack resulting
-   in an infinite unwind loop.
-2) the SP value doesn't end up outside the kernel stack.
-
-We need those protections to prevent these problems that are being
-reported - and the most efficient way I can think of doing that is to
-somehow valudate the new SP value _before_ we modify sp_low and
-sp_high, so these two limits are always valid.
-
-Merely changing the READ_ONCE_NOCHECK() to be get_kernel_nocheck()
-will only partly fix this problem - it will stop the unwinder oopsing
-the kernel, but definitely doesn't protect against (1) and doesn't
-protect against SP pointing at some thing that is accessible (e.g.
-a device or other kernel memory.)
-
-We're yet again at Thursday, with the last linux-next prior to the
-merge window being created this evening, which really doesn't leave
-much time to get this sorted... and we can't say "this code should
-have been in earlier in the cycle" this time around, because these
-changes to the unwinder have been present in linux-next prior to
-5.17-rc2. Annoyingly, it seems merging stuff earlier in the cycle
-doesn't actually solve the problem of these last minute debugging
-panics.
-
-Any suggestions for what we should do? Can we come up with some way
-to validate the new SP value before 6pm UTC this evening?
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Madhavan

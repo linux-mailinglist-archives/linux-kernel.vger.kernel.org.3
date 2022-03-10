@@ -2,144 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B244D4EF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1B84D4EFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244161AbiCJQY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        id S242091AbiCJQYy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 11:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244838AbiCJQXO (ORCPT
+        with ESMTP id S244047AbiCJQYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:23:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70C9F1986FB
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:21:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646929289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6OEvdGln4GLB/K6WbXv/BIS67SElyOgtgishIXX+IXU=;
-        b=SQo9TRpbuRykNsn+zSkuGI/UeWhQ7D9Zt9GlLfwk4XGiz/VKsEAgnfh78siEt1V5awALOX
-        GEY5u1UMTvHDqb/KVmneZJSBM5XqQELxotEygr+tcLrISsg/nrzhHoJ5tejkmfruSN6Dhl
-        MLf5xqmrW5bpWodFsutdAT427VdGY4A=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-ixK_enuePSaw29LoFcSyjg-1; Thu, 10 Mar 2022 11:21:24 -0500
-X-MC-Unique: ixK_enuePSaw29LoFcSyjg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 25C5F1854E31;
-        Thu, 10 Mar 2022 16:21:04 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 089AB7C04D;
-        Thu, 10 Mar 2022 16:20:36 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 20/20] afs: Maintain netfs_i_context::remote_i_size
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-afs@lists.infradead.org,
-        dhowells@redhat.com, Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@redhat.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 10 Mar 2022 16:20:35 +0000
-Message-ID: <164692923592.2099075.5466132542956550401.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
-References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Thu, 10 Mar 2022 11:24:46 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09883195300;
+        Thu, 10 Mar 2022 08:22:23 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nSLYO-00055v-2B; Thu, 10 Mar 2022 17:22:16 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     cgel.zte@gmail.com, mturquette@baylibre.com,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] clk/rockchip: Use of_device_get_match_data()
+Date:   Thu, 10 Mar 2022 17:22:15 +0100
+Message-ID: <2697395.DCgNgQjydf@diego>
+In-Reply-To: <20220309185738.2192EC340EC@smtp.kernel.org>
+References: <20220304011703.2061466-1-chi.minghao@zte.com.cn> <20220309185738.2192EC340EC@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make afs use netfslib's tracking for the server's idea of what the current
-inode size is independently of inode->i_size.  We really want to use this
-value when calculating the new vnode size when initiating a StoreData RPC
-op rather than the size stat() presents to the user (ie. inode->i_size) as
-the latter is affected by as-yet uncommitted writes.
+Am Mittwoch, 9. März 2022, 19:57:36 CET schrieb Stephen Boyd:
+> Quoting cgel.zte@gmail.com (2022-03-03 17:17:03)
+> > From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> > 
+> > Use of_device_get_match_data() to simplify the code.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> > ---
+> >  drivers/clk/rockchip/clk-rk3399.c | 8 +-------
+> >  1 file changed, 1 insertion(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/clk/rockchip/clk-rk3399.c b/drivers/clk/rockchip/clk-rk3399.c
+> > index 306910a3a0d3..b1b67bfb63b8 100644
+> > --- a/drivers/clk/rockchip/clk-rk3399.c
+> > +++ b/drivers/clk/rockchip/clk-rk3399.c
+> > @@ -1634,14 +1634,8 @@ static const struct of_device_id clk_rk3399_match_table[] = {
+> >  static int __init clk_rk3399_probe(struct platform_device *pdev)
+> >  {
+> >         struct device_node *np = pdev->dev.of_node;
+> > -       const struct of_device_id *match;
+> >         const struct clk_rk3399_inits *init_data;
+> > -
+> > -       match = of_match_device(clk_rk3399_match_table, &pdev->dev);
+> > -       if (!match || !match->data)
+> > -               return -EINVAL;
+> > -
+> > -       init_data = match->data;
+> > +       init_data = of_device_get_match_data(&pdev->dev);
+> 
+> The translation doesn't look equivalent. Before we would bail out of
+> probe if match data isn't there with an error. That isn't possible of
+> course with further investigation but please make a note of this in the
+> commit text to aid review.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-cc: linux-cachefs@redhat.com
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/164623014626.3564931.8375344024648265358.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/164678220204.1200972.17408022517463940584.stgit@warthog.procyon.org.uk/ # v2
----
+We _do have_ Rockchip clock drivers serving multiple socs already
+(rk3188+rk3066 for example) and as patterns are duplicated often from
+one existing driver to a new one, I think it makes sense to have the
+error handling done correctly.
 
- fs/afs/inode.c |    1 +
- fs/afs/write.c |    7 +++----
- 2 files changed, 4 insertions(+), 4 deletions(-)
+So doing
+	init_data = of_device_get_match_data(&pdev->dev);
+	if (init_data)
+		return -EINVAL;
+as before.
 
-diff --git a/fs/afs/inode.c b/fs/afs/inode.c
-index 5b5e40197655..2fe402483ad5 100644
---- a/fs/afs/inode.c
-+++ b/fs/afs/inode.c
-@@ -246,6 +246,7 @@ static void afs_apply_status(struct afs_operation *op,
- 		 * idea of what the size should be that's not the same as
- 		 * what's on the server.
- 		 */
-+		vnode->netfs_ctx.remote_i_size = status->size;
- 		if (change_size) {
- 			afs_set_i_size(vnode, status->size);
- 			inode->i_ctime = t;
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index e4b47f67a408..85c9056ba9fb 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -353,9 +353,10 @@ static const struct afs_operation_ops afs_store_data_operation = {
- static int afs_store_data(struct afs_vnode *vnode, struct iov_iter *iter, loff_t pos,
- 			  bool laundering)
- {
-+	struct netfs_i_context *ictx = &vnode->netfs_ctx;
- 	struct afs_operation *op;
- 	struct afs_wb_key *wbk = NULL;
--	loff_t size = iov_iter_count(iter), i_size;
-+	loff_t size = iov_iter_count(iter);
- 	int ret = -ENOKEY;
- 
- 	_enter("%s{%llx:%llu.%u},%llx,%llx",
-@@ -377,15 +378,13 @@ static int afs_store_data(struct afs_vnode *vnode, struct iov_iter *iter, loff_t
- 		return -ENOMEM;
- 	}
- 
--	i_size = i_size_read(&vnode->vfs_inode);
--
- 	afs_op_set_vnode(op, 0, vnode);
- 	op->file[0].dv_delta = 1;
- 	op->file[0].modification = true;
- 	op->store.write_iter = iter;
- 	op->store.pos = pos;
- 	op->store.size = size;
--	op->store.i_size = max(pos + size, i_size);
-+	op->store.i_size = max(pos + size, ictx->remote_i_size);
- 	op->store.laundering = laundering;
- 	op->mtime = vnode->vfs_inode.i_mtime;
- 	op->flags |= AFS_OPERATION_UNINTR;
+If due to some strange coincidence the condition is triggered
+this would cause a null-ptr-dereference with the direct call to
+	init_data->scripts
+below, which might or might not be hidden due to the (early-)console
+being up yet, where with correct error handling a system might at
+least come up to a point to complain about a missing clock driver.
+
+
+
+> Also, please don't send new versions of
+> patches in reply to previous versions of patches. It breaks my patch
+> workflow. Thanks in advance.
+> 
+> >         if (init_data->inits)
+> >                 init_data->inits(np);
+> >
+> 
+
+
 
 

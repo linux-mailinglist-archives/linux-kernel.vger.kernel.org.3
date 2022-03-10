@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AFD4D4C3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FB44D4C43
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344876AbiCJOx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S235120AbiCJOyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345277AbiCJOlq (ORCPT
+        with ESMTP id S1345916AbiCJOmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:41:46 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D1218E40E;
-        Thu, 10 Mar 2022 06:36:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=X8rk1wKGgoot4D0abN1n7B47xEHjhOnmzv7J1avYjn0=; b=tcgNy46d72iV0QSf94ZwkSbPZc
-        fiCNYP4pWJM8c/hJV6i7JGSHbwAcifxMJ5QS248qdiiElDvdtzg0y/Q1EP3mDErc9XjqNUBk7Jcy3
-        R594egyRYg1kQrikaVNnld5cbVTlffScORNO6vcm5TKrGaHoFYXiuCjNuGfKq5G9Wk5I=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nSJtv-00A9C3-9m; Thu, 10 Mar 2022 15:36:23 +0100
-Date:   Thu, 10 Mar 2022 15:36:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        david.laight@aculab.com
-Subject: Re: [PATCH net-next v2] net: lan966x: Improve the CPU TX bitrate.
-Message-ID: <YioM5zVqFtFxYhc+@lunn.ch>
-References: <20220310084005.262551-1-horatiu.vultur@microchip.com>
+        Thu, 10 Mar 2022 09:42:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4000935273;
+        Thu, 10 Mar 2022 06:37:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96629B8267B;
+        Thu, 10 Mar 2022 14:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B86C340E8;
+        Thu, 10 Mar 2022 14:37:33 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 09:37:31 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
+        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, mhiramat@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <20220310093731.78a6a8d5@gandalf.local.home>
+In-Reply-To: <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+        <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+        <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+        <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+        <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
+        <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+        <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+        <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310084005.262551-1-horatiu.vultur@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,29 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 09:40:05AM +0100, Horatiu Vultur wrote:
-> When doing manual injection of the frame, it is required to check if the
-> TX FIFO is ready to accept the next word of the frame. For this we are
-> using 'readx_poll_timeout_atomic', the only problem is that before it
-> actually checks the status, is determining the time when to finish polling
-> the status. Which seems to be an expensive operation.
-> Therefore check the status of the TX FIFO before calling
-> 'readx_poll_timeout_atomic'.
-> Doing this will improve the TX bitrate by ~70%. Because 99% the FIFO is
-> ready by that time. The measurements were done using iperf3.
-> 
-> Before:
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-10.03  sec  55.2 MBytes  46.2 Mbits/sec    0 sender
-> [  5]   0.00-10.04  sec  53.8 MBytes  45.0 Mbits/sec      receiver
-> 
-> After:
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-10.10  sec  95.0 MBytes  78.9 Mbits/sec    0 sender
-> [  5]   0.00-10.11  sec  95.0 MBytes  78.8 Mbits/sec      receiver
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+On Thu, 10 Mar 2022 14:47:18 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index acb50fb7ed2d..2d86d3c09d64 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -5354,6 +5381,11 @@ int modify_ftrace_direct(unsigned long ip,
+>  	mutex_lock(&direct_mutex);
+>  
+>  	mutex_lock(&ftrace_lock);
+> +
+> +	ip = ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
 
-    Andrew
+Perhaps this should go into find_direct_entry() instead, as I think you are
+adding it before all the find_direct_entry() callers.
+
+And find_direct_entry will update the ip.
+
+-- Steve
+
+>  	entry = find_direct_entry(&ip, &rec);
+>  	if (!entry)
+>  		goto out_unlock;
+

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4404D4B83
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465204D4AA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243520AbiCJO0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S244051AbiCJO2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243464AbiCJOWn (ORCPT
+        with ESMTP id S243529AbiCJOZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:22:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034B4150405;
-        Thu, 10 Mar 2022 06:20:53 -0800 (PST)
+        Thu, 10 Mar 2022 09:25:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01BAF94F5;
+        Thu, 10 Mar 2022 06:22:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8203961CFF;
-        Thu, 10 Mar 2022 14:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4796CC36AFA;
-        Thu, 10 Mar 2022 14:20:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ADBD61B63;
+        Thu, 10 Mar 2022 14:22:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F121C340E8;
+        Thu, 10 Mar 2022 14:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922051;
-        bh=xj+QdKUrjDDFGwApWZ1l3iJAR6528yj7oSQnmuWft5c=;
+        s=korg; t=1646922128;
+        bh=rSTOUX5LUvBCX6WBogDAqooyuvYNrP66hsRf3uWRExc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AWb06PBKrVLK88WItDC1xqqzyv9KFokfR818sFONlLPjDwoH+n7qqDE4EXkcD0WX0
-         RtoV0MYWgMg/Rpdh9E9stLTqEnzOrluRMz9HPvyE7AxDiAU1CEATkYjVyybg7xoYka
-         AcQZR+zPug4yRn5i4sQ67A24koLgv/EcopiIEpCw=
+        b=SAgKYSgKURonAmjkHsHT5TkFzrDKNLN1m87C12SWq7Bu3n0Ho1Sn9TTVD+lKBTw76
+         PrdmdBdxsedPGxGPiSLwN4j0iosI563wblcqMqUS74ontKfQI3LkELC1+vXZJYF0V+
+         PoYI0R9ArEL/fhIOreeg235XjI8jD1OP1DR3oXcY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 21/31] ARM: fix build warning in proc-v7-bugs.c
+        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 4.19 07/33] x86/speculation: Use generic retpoline by default on AMD
 Date:   Thu, 10 Mar 2022 15:18:34 +0100
-Message-Id: <20220310140808.155501261@linuxfoundation.org>
+Message-Id: <20220310140807.965113257@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.524313448@linuxfoundation.org>
-References: <20220310140807.524313448@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+From: Kim Phillips <kim.phillips@amd.com>
 
-commit b1a384d2cbccb1eb3f84765020d25e2c1929706e upstream.
+commit 244d00b5dd4755f8df892c86cab35fb2cfd4f14b upstream.
 
-The kernel test robot discovered that building without
-HARDEN_BRANCH_PREDICTOR issues a warning due to a missing
-argument to pr_info().
+AMD retpoline may be susceptible to speculation. The speculation
+execution window for an incorrect indirect branch prediction using
+LFENCE/JMP sequence may potentially be large enough to allow
+exploitation using Spectre V2.
 
-Add the missing argument.
+By default, don't use retpoline,lfence on AMD.  Instead, use the
+generic retpoline.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 9dd78194a372 ("ARM: report Spectre v2 status through sysfs")
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mm/proc-v7-bugs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/bugs.c |    8 --------
+ 1 file changed, 8 deletions(-)
 
---- a/arch/arm/mm/proc-v7-bugs.c
-+++ b/arch/arm/mm/proc-v7-bugs.c
-@@ -110,7 +110,8 @@ static unsigned int spectre_v2_install_w
- #else
- static unsigned int spectre_v2_install_workaround(unsigned int method)
- {
--	pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n");
-+	pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n",
-+		smp_processor_id());
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -898,14 +898,6 @@ static enum spectre_v2_mitigation __init
+ 		return SPECTRE_V2_NONE;
+ 	}
  
- 	return SPECTRE_VULNERABLE;
+-	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
+-		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
+-			pr_err("LFENCE not serializing, switching to generic retpoline\n");
+-			return SPECTRE_V2_RETPOLINE;
+-		}
+-		return SPECTRE_V2_LFENCE;
+-	}
+-
+ 	return SPECTRE_V2_RETPOLINE;
  }
+ 
 
 

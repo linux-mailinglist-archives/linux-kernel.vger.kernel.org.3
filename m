@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC42E4D45BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE924D45C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiCJLgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 06:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S241642AbiCJLg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 06:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241626AbiCJLgS (ORCPT
+        with ESMTP id S241632AbiCJLgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 06:36:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85015142348
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:35:18 -0800 (PST)
+        Thu, 10 Mar 2022 06:36:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13BB142361
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:35:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E3E261585
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724FBC340E9;
-        Thu, 10 Mar 2022 11:35:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6869EB823C3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DF3C340E8;
+        Thu, 10 Mar 2022 11:35:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646912117;
-        bh=qHuRMGS4wNJnueSlJQQpCm5eLSpGCGZ8/lMw/2uIL7g=;
+        s=k20201202; t=1646912120;
+        bh=TWvMPTJzJ27GVP5gpFDJ0b1Mu0lLmlwPszikGKU7gBE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=D9t13BIJivNlo6iNcy24bXbEPD8ihuA0od8GaW4khcm4weEH+eOA950zEYYOx4YrG
-         0YbmLFgWX8+lUnycD2DXH0/MryX0wQdYl4WWp9XOfGWImk/FKLW9/QFgRiM4JE4yE+
-         srbRhYLAsn3eWxFqLVwn6KVWUL+7R8QMyozDlzCmAoyZt5gXT48NO/PmqHaqhV9FLJ
-         gRn1nV4OenfkzGFz1SNWJqbdmCE6CJzHKH1OHkatioyQkKgp+ijZovhNgoGGFNzchU
-         +LYIzfxqVDAZAfXbcphDHOlf2OIYuPLCQOLOLgk0ccwAdu6Z8pL+7pcAL33nPvuAAq
-         feAbVZDQM/mfg==
+        b=SjxVeEe3tindzUNM1tmZ9KNYMK0v6ASZA/EP3CEWuJevKVaibwyTz/JylOfKN49Ch
+         vajwUmReDfpo9oUzy9cmeuD+ZjDuZxo7PIms1b7lgKWNYjMVIZmjqmnE7VUoTpHJH4
+         bV1dVMg0luDW1Z0EetyLJUBmzsmxbeZROjO60vCEY7MOedZWPk2SfmdYMR4AVVkty6
+         2h3faUwC0+5+bX2jWGgq8KqNwANm25FAu6kpFp88VEzrCPXvaJZfx+onlYqDkdC2WB
+         b0bogAhhXetSurArqeFqRRSR3pm/ygoB8LYRyke36XtQFUX5h/brgWkwt50zcSMfi/
+         ezbFSUgwrivRw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>, quic_srivasam@quicinc.com,
-        perex@perex.cz, tiwai@suse.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Randy Dunlap <rdunlap@infradead.org>, lgirdwood@gmail.com
-In-Reply-To: <20220309124453.25841-1-srinivas.kandagatla@linaro.org>
-References: <20220309124453.25841-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] ASoC: qcom: fix Kconfig for SC7280
-Message-Id: <164691211518.13798.17099640461553438579.b4-ty@kernel.org>
-Date:   Thu, 10 Mar 2022 11:35:15 +0000
+To:     shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, perex@perex.cz,
+        tiwai@suse.com, nicoleotsuka@gmail.com,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        alsa-devel@alsa-project.org, festevam@gmail.com,
+        lgirdwood@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1646822293-26965-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1646822293-26965-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_rpmsg: Remove SET_SYSTEM_SLEEP_PM_OPS callback
+Message-Id: <164691211764.13798.1783261167562942909.b4-ty@kernel.org>
+Date:   Thu, 10 Mar 2022 11:35:17 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,19 +57,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 12:44:53 +0000, Srinivas Kandagatla wrote:
-> select would force the symbol to value without checking the dependencies.
-> In this case selecting TX and RX MACROs directly without checking its
-> dependency on COMMON_CLK would break builds on platform which do no
-> set COMMON_CLK.
-> ex:
-> WARNING: unmet direct dependencies detected for SND_SOC_LPASS_RX_MACRO
->   Depends on [n]: SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] && COMMON_CLK [=n]
->   Selected by [m]:
->   - SND_SOC_SC7280 [=m] && SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] &&
-> 	 SND_SOC_QCOM [=m] && I2C [=y] && SOUNDWIRE [=m]
+On Wed, 9 Mar 2022 18:38:13 +0800, Shengjiu Wang wrote:
+> For sound need to be continuously output at suspend with rpmsg
+> sound card, so need to keep the clock always on at suspend,
+> then suspend & resume callback is not needed.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -76,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: qcom: fix Kconfig for SC7280
-      commit: 31ef579d433a6bcd6b942edea372040298295acf
+[1/1] ASoC: fsl_rpmsg: Remove SET_SYSTEM_SLEEP_PM_OPS callback
+      commit: 8b1d3b733f3e6acaab6c6bc9968ee0e058900a7e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

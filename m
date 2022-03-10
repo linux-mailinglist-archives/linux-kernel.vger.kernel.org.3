@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5B44D47D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB184D47D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242323AbiCJNOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S242333AbiCJNPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242315AbiCJNOx (ORCPT
+        with ESMTP id S242329AbiCJNO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:14:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399A1583B1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:13:52 -0800 (PST)
+        Thu, 10 Mar 2022 08:14:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBD278926
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:13:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB01D61A2F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E865EC340F3;
-        Thu, 10 Mar 2022 13:13:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B27FB8261C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D35C340E8;
+        Thu, 10 Mar 2022 13:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646918031;
-        bh=2Ijf7mnkC3H3KU2ylXeDHiFTv2e24/Uk6a1zlh5kRPY=;
+        s=k20201202; t=1646918035;
+        bh=t2XbWwQwvFMkiF2+x62xGVRkeCafGaXLEBPkGZlDV0E=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=W5a5GfAxUilpGsPS8yY+hkrYHKQPkjoxTrpfjxhl72kvueUSNMuQ0gaapHSZ4ghse
-         j32wYoyeRhLegBnEmgZbLNNPOq733ITRasukMHDj/zvYwESBPbqlDgmcmPsiSTP+jy
-         2k52aLnRCfRilPvB5XcRmdLaxT28w8eiz8jE6jvysJl8mWnBI0YSi+IAsbPdvSKyF8
-         WHgbUbHvF2jlj2lVe2LQRcVNVB5dtgVkt3HL/JVrhG8CO0lESBYn0ncotAZHCRpk0J
-         VuzBNMVjFQQUy7O0i7sJA7gFBBZISdtC+LTiidQyG+RywY0L0IoVdWl/3twXqFyanW
-         hZMdByCv29iDA==
+        b=Kd3PDT/WHiC0r1y03Q9M9UNClYYdwsirULQWFXWuwXuGjnNLph6HgKPPd/A8QeImb
+         EinmR0G3aeTUv1e9T3mu4l9gFOM8zVDD/eF+2pbBvdOuewP8bI4espTABMiHg6CGzF
+         FPBMA6BuWGslBd0AOh1pO1+Fn+IupyZRzK/Cm4wsUZ3WtZi97iN+Cb8B6xmEczAxDc
+         isEuU5Vqg1F60Jud761jRazT83SfiDMiyQ7MKCk5MUUX71un25KK7XpFETsY9m/3bA
+         t/OcZ5PgchwWdbxi+JDpaOHXPiDtMgDXxukd0wCWnXDzWY34OWm+P0PQYz0esItPiV
+         3OKywL0t0lepQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        codrin.ciubotariu@microchip.com
-Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        lgirdwood@gmail.com, claudiu.beznea@microchip.com,
-        alexandre.belloni@bootlin.com,
-        Abaci Robot <abaci@linux.alibaba.com>, perex@perex.cz,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220310082756.1183-1-jiapeng.chong@linux.alibaba.com>
-References: <20220310082756.1183-1-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH v2] ASoC: atmel: mchp-pdmc: Remove unnecessary print function dev_err()
-Message-Id: <164691802867.2018412.8160055841689752479.b4-ty@kernel.org>
-Date:   Thu, 10 Mar 2022 13:13:48 +0000
+To:     s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        shawnguo@kernel.org, linux-imx@nxp.com, tiwai@suse.com,
+        xobs@kosagi.com, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Wang Wensheng <wangwensheng4@huawei.com>,
+        nicoleotsuka@gmail.com, shengjiu.wang@gmail.com,
+        festevam@gmail.com, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz, kernel@pengutronix.de,
+        Xiubo.Lee@gmail.com
+Cc:     xuqiang36@huawei.com
+In-Reply-To: <20220310091902.129299-1-wangwensheng4@huawei.com>
+References: <20220310091902.129299-1-wangwensheng4@huawei.com>
+Subject: Re: [PATCH -next] ASoC: imx-es8328: Fix error return code in imx_es8328_probe()
+Message-Id: <164691803138.2018412.9652252221395822627.b4-ty@kernel.org>
+Date:   Thu, 10 Mar 2022 13:13:51 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,16 +61,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 16:27:56 +0800, Jiapeng Chong wrote:
-> The print function dev_err() is redundant because
-> platform_get_irq() already prints an error.
+On Thu, 10 Mar 2022 09:19:02 +0000, Wang Wensheng wrote:
+> Fix to return a negative error code from the error handling case instead
+> of 0, as done elsewhere in this function.
 > 
-> Eliminate the follow coccicheck warning:
 > 
-> ./sound/soc/atmel/mchp-pdmc.c:991:2-9: line 991 is redundant because
-> platform_get_irq() already prints an error.
-> 
-> [...]
 
 Applied to
 
@@ -76,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: atmel: mchp-pdmc: Remove unnecessary print function dev_err()
-      commit: 2588a01431a85a9bb8b2eac9023181ddd714a695
+[1/1] ASoC: imx-es8328: Fix error return code in imx_es8328_probe()
+      commit: 3b891513f95cba3944e72c1139ea706d04f3781b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

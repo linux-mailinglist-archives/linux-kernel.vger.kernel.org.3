@@ -2,109 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6364D547C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECA64D548F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344364AbiCJWTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S1344368AbiCJWYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236742AbiCJWTk (ORCPT
+        with ESMTP id S232058AbiCJWYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:19:40 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ED94F456;
-        Thu, 10 Mar 2022 14:18:38 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id o106-20020a9d2273000000b005b21f46878cso5036537ota.3;
-        Thu, 10 Mar 2022 14:18:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uVBl4IjExhMMGQyqVZdtBYxJhbtlhf7V3EID45rNLsk=;
-        b=WIfaa4MTWFgPdWVPTIhscW20nxEv2YZRBZ6MKNUK6tA6jh7CuKuXJza6CnlyBR5zII
-         YH37ztxy/f5SihWbQpbvht0FiVj5DQco41fFOGD0bUC9CQ4CIp7J8cjjHO+FO7RvlgSo
-         Y30P8PLWwTLXveBxecjVxrn492bZhaj+a2B7ZHqwfk1IqqPMmHFioSGnGZNq+Vd+WXUK
-         6JxXYSH3IES2Hhy1Qx3RfUnWdsy8t7iEmWK/W0JSHqmeFOmgzEEqNa1XPOhRMPCFhHop
-         aFlU5bPBlR1zUCYhHwkuxufBGOqnpctoeNXMiyrJBK6GC3f3D8De0LWjk/KeR3kGVv3U
-         xdbQ==
-X-Gm-Message-State: AOAM533cVcQ4qmfod0yfrIYWqpiXMRoxHy9KqWpBpqeU8tBaG/3GOoPM
-        NhNOml8Dvh4HIi7xji62mg==
-X-Google-Smtp-Source: ABdhPJymVHkEV5XxQpBNmw5S/gpv0K8uSPo3RhUKisPITsq2PFiS19pD2qkEoukGiphCl2E24hUkYQ==
-X-Received: by 2002:a9d:77d7:0:b0:5b2:29b0:70cb with SMTP id w23-20020a9d77d7000000b005b229b070cbmr3556144otl.276.1646950718003;
-        Thu, 10 Mar 2022 14:18:38 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i126-20020acab884000000b002d9f958bceesm2925916oif.41.2022.03.10.14.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 14:18:36 -0800 (PST)
-Received: (nullmailer pid 2185267 invoked by uid 1000);
-        Thu, 10 Mar 2022 22:18:35 -0000
-Date:   Thu, 10 Mar 2022 16:18:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     broonie@kernel.org, tiwai@suse.com, matthias.bgg@gmail.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aaronyu@google.com,
-        yc.hung@mediatek.com
-Subject: Re: [PATCH 5/5] dt-bindings: mediatek: mt8195: add
- mt8195-mt6359-max98390-rt5682 document
-Message-ID: <Yip5O3t0Ymyc2h+p@robh.at.kernel.org>
-References: <20220308072435.22460-1-trevor.wu@mediatek.com>
- <20220308072435.22460-6-trevor.wu@mediatek.com>
+        Thu, 10 Mar 2022 17:24:10 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8CBF4D3F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646950989; x=1678486989;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fF+3qyUbUukq0jg8sTNO94/16OGrvG79CjMrQVctGRM=;
+  b=eL3HYQ+6wn4kiqityd0wayy7d8bZ2605eCui2DwYGcIs7rKt9CFmuSfQ
+   rJIMUpFp+84YPW/0ZJOw74IGUq8llsgrmcMaTr/HphIt3d+iJcdBirQ/5
+   dtFJSyvV01NCD9rLtyMwnkVQlhrgKAgn9r5uzWRsa6keQnDGYaTdhr+CF
+   L7F/EaYBaXktMMiJPGeS4CA+hDXfrKfOAAQz6Flp3+xbr0oKrV4tsa9CM
+   QKjxACaflIrJjTQBLFiWKwDYRq12/UaMPdM854q2M9szDrA82h2657HEn
+   8i+fp+5jy2a4JsN4RJ+Rzncasvn6TfViGsPBWsIqb/t3iRmp6eBBZJvZj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="252961178"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="252961178"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:23:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="633160066"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 14:23:04 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSRBY-0005Ta-5G; Thu, 10 Mar 2022 22:23:04 +0000
+Date:   Fri, 11 Mar 2022 06:22:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Scull <ascull@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype
+ for function 'nvhe_hyp_panic_handler'
+Message-ID: <202203110617.SylT3htc-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308072435.22460-6-trevor.wu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 03:24:35PM +0800, Trevor Wu wrote:
-> This patch adds document for mt8195 board with mt6359, max98390 and
-> rt5682.
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  .../sound/mt8195-mt6359-max98390-rt5682.yaml  | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mt8195-mt6359-max98390-rt5682.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/mt8195-mt6359-max98390-rt5682.yaml b/Documentation/devicetree/bindings/sound/mt8195-mt6359-max98390-rt5682.yaml
-> new file mode 100644
-> index 000000000000..7ec14d61b109
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/mt8195-mt6359-max98390-rt5682.yaml
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/mt8195-mt6359-max98390-rt5682.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek MT8195 with MT6359, MAX98390 and RT5682 ASoC sound card driver
-> +
-> +maintainers:
-> +  - Trevor Wu <trevor.wu@mediatek.com>
-> +
-> +description:
-> +  This binding describes the MT8195 sound card.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8195_mt6359_max98390_rt5682
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
+commit: aec0fae62e47050019474936248a311a0ab08705 KVM: arm64: Log source when panicking from nVHE hyp
+date:   11 months ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203110617.SylT3htc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec0fae62e47050019474936248a311a0ab08705
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout aec0fae62e47050019474936248a311a0ab08705
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
 
-You have nodes for each of these components, why do we need new 
-compatible string for each combination. You can figure out the 
-combination by looking at each of those nodes.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Second, why does each combination need a new schema doc?
+All warnings (new ones prefixed by >>):
 
-Rob
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:182:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_CP14_64]    = kvm_handle_cp14_64,
+                                     ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:183:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_HVC32]      = handle_hvc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:184:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SMC32]      = handle_smc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:185:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_HVC64]      = handle_hvc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:186:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SMC64]      = handle_smc,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:187:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SYS64]      = kvm_handle_sys_reg,
+                                     ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:188:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SVE]        = handle_sve,
+                                     ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:189:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_IABT_LOW]   = kvm_handle_guest_abort,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:190:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_DABT_LOW]   = kvm_handle_guest_abort,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:191:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_SOFTSTP_LOW]= kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:192:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_WATCHPT_LOW]= kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:193:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_BREAKPT_LOW]= kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:194:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_BKPT32]     = kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:195:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_BRK64]      = kvm_handle_guest_debug,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:196:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_FP_ASIMD]   = handle_no_fpsimd,
+                                     ^~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:197:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [ESR_ELx_EC_PAC]        = kvm_handle_ptrauth,
+                                     ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:176:27: note: previous initialization is here
+           [0 ... ESR_ELx_EC_MAX]  = kvm_handle_unknown_ec,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype for function 'nvhe_hyp_panic_handler' [-Wmissing-prototypes]
+   void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+                          ^
+   arch/arm64/kvm/handle_exit.c:295:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+   ^
+   static 
+   22 warnings generated.
+
+
+vim +/nvhe_hyp_panic_handler +295 arch/arm64/kvm/handle_exit.c
+
+   294	
+ > 295	void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

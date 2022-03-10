@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4FC4D4C15
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E2A4D4C38
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245708AbiCJOjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S1344517AbiCJOx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343917AbiCJOb3 (ORCPT
+        with ESMTP id S237294AbiCJOfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:29 -0500
+        Thu, 10 Mar 2022 09:35:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BC8E3C76;
-        Thu, 10 Mar 2022 06:28:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA0C1409D8;
+        Thu, 10 Mar 2022 06:31:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 632D1B82544;
-        Thu, 10 Mar 2022 14:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F38C340E8;
-        Thu, 10 Mar 2022 14:28:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEA9AB8267B;
+        Thu, 10 Mar 2022 14:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F20C340F3;
+        Thu, 10 Mar 2022 14:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922491;
-        bh=hcmMPrD/HN9xwyxoEWxYnoKf3Q5krhbZGmA8gMdOtgo=;
+        s=korg; t=1646922704;
+        bh=3IHfz12xGSF/+hJenSrupdOYi3sChCsC8kMrYjgoioE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCEta4gtzYRt/eLXwYR+QwDex85u0di6JhF4IXeoXlJLTuWyf91ZjnONh6G8zU3yi
-         uZwtgDuT4BW7p0gpg15WPLok2NpBjAi1XTs0q4mh0HzxXk2vRPbKMXK48YhcuOnKuQ
-         ojDfKSKJJK7QA023RbER4U4rNAro0cbXQEYK7R6k=
+        b=AcdtFAMlnxuT+FgCIaRDn+WtdlOBqWBcputrek/hQEhaT25xx4tQ3cvumOmqdAm+D
+         NtQpXVDn13Lkl3XvVbFlM7ZFQ69Oih5robv+5EB16iZmzVAR4CCFt14Csf68hsaY6Y
+         jf9zb8e1Y5jNpv6tmSIIyD5YqA+BMXhr4fjZTox0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         Justin Forbes <jmforbes@linuxtx.org>,
         Mark Pearson <markpearson@lenovo.com>
-Subject: [PATCH 5.4 33/33] Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-Date:   Thu, 10 Mar 2022 15:19:34 +0100
-Message-Id: <20220310140809.711995140@linuxfoundation.org>
+Subject: [PATCH 5.15 58/58] Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
+Date:   Thu, 10 Mar 2022 15:19:47 +0100
+Message-Id: <20220310140814.628899103@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
-References: <20220310140808.741682643@linuxfoundation.org>
+In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
+References: <20220310140812.983088611@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-This reverts commit 9d09cb110868f027d015fbc6c64ba1e45a69a192 which is
+This reverts commit e799974e7cbb2e77ec12431512e155574c6ed333 which is
 commit dc0075ba7f387fe4c48a8c674b11ab6f374a6acc upstream.
 
 It's been reported to cause problems with a number of Fedora and Arch
@@ -80,7 +80,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/acpi/ec.c
 +++ b/drivers/acpi/ec.c
-@@ -2003,16 +2003,6 @@ bool acpi_ec_dispatch_gpe(void)
+@@ -2052,16 +2052,6 @@ bool acpi_ec_dispatch_gpe(void)
  		return true;
  
  	/*
@@ -99,17 +99,19 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	 */
 --- a/drivers/acpi/sleep.c
 +++ b/drivers/acpi/sleep.c
-@@ -1003,13 +1003,19 @@ static bool acpi_s2idle_wake(void)
- 		if (acpi_check_wakeup_handlers())
+@@ -739,15 +739,21 @@ bool acpi_s2idle_wake(void)
  			return true;
+ 		}
  
 -		/*
 -		 * Check non-EC GPE wakeups and if there are none, cancel the
 -		 * SCI-related wakeup and dispatch the EC GPE.
 -		 */
 +		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
- 		if (acpi_ec_dispatch_gpe())
+ 		if (acpi_ec_dispatch_gpe()) {
+ 			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
  			return true;
+ 		}
  
 +		/*
 +		 * Cancel the SCI wakeup and process all pending events in case

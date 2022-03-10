@@ -2,119 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC6A4D4C55
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512F34D4C62
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244977AbiCJOzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S245381AbiCJOzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346342AbiCJOnr (ORCPT
+        with ESMTP id S238187AbiCJOoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:43:47 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1D413C9C3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646923342; x=1678459342;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OJKaj+dkol1FacgiHUcMifV8v9tMiNuuIHX0fa00Bf0=;
-  b=cZYxKy9zOUtL4DMKQVD40nTVZPagwdvFwMkC82MsqvwiV81YMSEO/Hpj
-   PcZwoOxdR6+JWOniW9KMXA56Au/OXjhomEVHujyhrLvF8oJgBcrsoGrZu
-   h7opOcVEaBUNoT5pg4GhPDFL5x9z30n3VvWKVbXM+NdPuuUB7IR3ZvcIT
-   iUyPqaYXtvnFzUcdQF9O0s5Tq4NGy+pJtIuaoa1oeap50rQsWyfP3PjCu
-   WTzGTnFBLhPS2e7nD6CYGXx0Qvw0iGaglhEpTFI4/DTmDY/0qX7BLYQ0f
-   YEzQYcbn2Hp1zrOrznSJ8WNTLMMhqrSj9qBtoRoYLAwCbsdbVR3Oub0Jy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255455234"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="255455234"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:42:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="633006274"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2022 06:42:21 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSJzg-00051c-7O; Thu, 10 Mar 2022 14:42:20 +0000
-Date:   Thu, 10 Mar 2022 22:42:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>
-Subject: arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for
- function 'kvm_compute_final_ctr_el0'
-Message-ID: <202203102230.x3TDH4ku-lkp@intel.com>
+        Thu, 10 Mar 2022 09:44:02 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB961405D9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:42:55 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id r22so8030501ljd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:42:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oX+0+0DrmOoX0UExiTkiHRjD/PO3ZH5Ft00ctb+zEKI=;
+        b=BPRxLuF7n9XtXKwdeuqh95S7kLErSQclSFQdNbqGbFJzJDWmH3Wb/7tEyV1xG95wMw
+         3kfJn51SgR+rTE1KpBjnUHqhhPoUXLJkWK+2Sf6IzO+SXdPbgjlz4oTP4PumMIuY1Kh9
+         82W408Q+3DHPUpvvBOA94keBEAhpUUShpbH0B+Pc+PJD2Ftg49ukCTKAiwNEOvfhD/Lf
+         0TMEKTsBipQwuvdQH7hRdmkTpVhg84LKl76WgqErn7VycOpPuBNIXbyTdgEBwpCnlBB1
+         VmWf2fE/wBz0r3YFwYTUg3Bg7BE2NJX8UgNpaxHiC/UtDM0JXF4h6uIS0ZkI0vC+k1zS
+         cKeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oX+0+0DrmOoX0UExiTkiHRjD/PO3ZH5Ft00ctb+zEKI=;
+        b=lVc8yjPR3YAV6egdpM5GoD4AfbG32jVFy6oZ0GR4BIIPERfMdc4GMflXykxbFKKOT6
+         p4v8Y2Y/4IMzn3tiIrDGgb5Cq/5+z3AItN0zt/w4W6DD8U9kmY1fmsEDxWDpkliMGXcB
+         yAgF/ov42tNLrm/wxmN/oMzqnNLjKjFWkPGhmKI7HA/MYj2nTruvYdUnSjpqKhmH+o/H
+         JHJEjy16sa6ofU711KJarvc5yD6DWpslPVWHB/38vRJ4aOC5iW/NkZRPrjvGYM5aK8Hp
+         2v7S5z1kAjwoVdZw77p1KfpWt8THdFKmAX65eAmtRPoOJQVtMp2wO8+T16rPHFQfy7ME
+         kIvQ==
+X-Gm-Message-State: AOAM531kpWtNk6bbMq+CvE9iKd8+z0xRMu+eE3ivE/2yKAQiOqVVa2Rc
+        YLThkRFMm0goFGdh2yFMiM0WFQ==
+X-Google-Smtp-Source: ABdhPJzP722lajsvMrc+HnxWeW8vAyZEGMHRiNsgRflMATS3Pym4yKLaKJpYUjtyELBKGe+n4wy8BQ==
+X-Received: by 2002:a2e:8745:0:b0:248:600:6649 with SMTP id q5-20020a2e8745000000b0024806006649mr3207422ljj.63.1646923373450;
+        Thu, 10 Mar 2022 06:42:53 -0800 (PST)
+Received: from [192.168.51.243] ([78.128.78.220])
+        by smtp.gmail.com with ESMTPSA id t2-20020a2e2d02000000b00244dc8ba5absm1100714ljt.117.2022.03.10.06.42.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 06:42:53 -0800 (PST)
+Message-ID: <0eeaf59f-e7eb-7439-3c0a-17e7ac6741f0@blackwall.org>
+Date:   Thu, 10 Mar 2022 16:42:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH net-next 1/3] net: bridge: add fdb flag to extent locked
+ port feature
+Content-Language: en-US
+To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
+ <20220310142320.611738-2-schultz.hans+netdev@gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220310142320.611738-2-schultz.hans+netdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
-commit: 755db23420a1ce4b740186543432983e9bbe713e KVM: arm64: Generate final CTR_EL0 value when running in Protected mode
-date:   12 months ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220310/202203102230.x3TDH4ku-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=755db23420a1ce4b740186543432983e9bbe713e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 755db23420a1ce4b740186543432983e9bbe713e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/kvm/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
+On 10/03/2022 16:23, Hans Schultz wrote:
+> Add an intermediate state for clients behind a locked port to allow for
+> possible opening of the port for said clients. This feature corresponds
+> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
+> latter defined by Cisco.
+> 
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>   include/uapi/linux/neighbour.h |  1 +
+>   net/bridge/br_fdb.c            |  6 ++++++
+>   net/bridge/br_input.c          | 11 ++++++++++-
+>   net/bridge/br_private.h        |  3 ++-
+>   4 files changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
+> index db05fb55055e..83115a592d58 100644
+> --- a/include/uapi/linux/neighbour.h
+> +++ b/include/uapi/linux/neighbour.h
+> @@ -208,6 +208,7 @@ enum {
+>   	NFEA_UNSPEC,
+>   	NFEA_ACTIVITY_NOTIFY,
+>   	NFEA_DONT_REFRESH,
+> +	NFEA_LOCKED,
+>   	__NFEA_MAX
+>   };
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hmm, can you use NDA_FLAGS_EXT instead ?
+That should simplify things and reduce the nl size.
 
-All warnings (new ones prefixed by >>):
+>   #define NFEA_MAX (__NFEA_MAX - 1)
+> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+> index 6ccda68bd473..396dcf3084cf 100644
+> --- a/net/bridge/br_fdb.c
+> +++ b/net/bridge/br_fdb.c
+> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
+>   	struct nda_cacheinfo ci;
+>   	struct nlmsghdr *nlh;
+>   	struct ndmsg *ndm;
+> +	u8 ext_flags = 0;
+>   
+>   	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
+>   	if (nlh == NULL)
+> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
+>   		ndm->ndm_flags |= NTF_EXT_LEARNED;
+>   	if (test_bit(BR_FDB_STICKY, &fdb->flags))
+>   		ndm->ndm_flags |= NTF_STICKY;
+> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
+> +		ext_flags |= 1 << NFEA_LOCKED;
+>   
+>   	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
+>   		goto nla_put_failure;
+>   	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
+>   		goto nla_put_failure;
+> +	if (nla_put_u8(skb, NDA_FDB_EXT_ATTRS, ext_flags))
+> +		goto nla_put_failure;
+> +
+>   	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
+>   	ci.ndm_confirmed = 0;
+>   	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
+> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> index e0c13fcc50ed..897908484b18 100644
+> --- a/net/bridge/br_input.c
+> +++ b/net/bridge/br_input.c
+> @@ -75,6 +75,7 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+>   	struct net_bridge_mcast *brmctx;
+>   	struct net_bridge_vlan *vlan;
+>   	struct net_bridge *br;
+> +	unsigned long flags = 0;
 
-   arch/arm64/kvm/va_layout.c:188:6: warning: no previous prototype for function 'kvm_patch_vector_branch' [-Wmissing-prototypes]
-   void kvm_patch_vector_branch(struct alt_instr *alt,
-        ^
-   arch/arm64/kvm/va_layout.c:188:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_patch_vector_branch(struct alt_instr *alt,
-   ^
-   static 
-   arch/arm64/kvm/va_layout.c:286:6: warning: no previous prototype for function 'kvm_get_kimage_voffset' [-Wmissing-prototypes]
-   void kvm_get_kimage_voffset(struct alt_instr *alt,
-        ^
-   arch/arm64/kvm/va_layout.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_get_kimage_voffset(struct alt_instr *alt,
-   ^
-   static 
->> arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for function 'kvm_compute_final_ctr_el0' [-Wmissing-prototypes]
-   void kvm_compute_final_ctr_el0(struct alt_instr *alt,
-        ^
-   arch/arm64/kvm/va_layout.c:292:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_compute_final_ctr_el0(struct alt_instr *alt,
-   ^
-   static 
-   3 warnings generated.
+Please move this below...
 
+>   	u16 vid = 0;
+>   	u8 state;
+>   
+> @@ -94,8 +95,16 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+>   			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+>   
+>   		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
+> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags)) {
+> +			if (!fdb_src) {
 
-vim +/kvm_compute_final_ctr_el0 +292 arch/arm64/kvm/va_layout.c
+... here where it's only used.
 
-   291	
- > 292	void kvm_compute_final_ctr_el0(struct alt_instr *alt,
+> +				set_bit(BR_FDB_ENTRY_LOCKED, &flags);
+> +				br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);
+> +			}
+>   			goto drop;
+> +		} else {
+> +			if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags))
+> +				goto drop;
+> +		}
+>   	}
+>   
+>   	nbp_switchdev_frame_mark(p, skb);
+> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> index 48bc61ebc211..f5a0b68c4857 100644
+> --- a/net/bridge/br_private.h
+> +++ b/net/bridge/br_private.h
+> @@ -248,7 +248,8 @@ enum {
+>   	BR_FDB_ADDED_BY_EXT_LEARN,
+>   	BR_FDB_OFFLOADED,
+>   	BR_FDB_NOTIFY,
+> -	BR_FDB_NOTIFY_INACTIVE
+> +	BR_FDB_NOTIFY_INACTIVE,
+> +	BR_FDB_ENTRY_LOCKED,
+>   };
+>   
+>   struct net_bridge_fdb_key {
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

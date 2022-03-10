@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1539D4D485C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F230F4D4861
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242543AbiCJNtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        id S242554AbiCJNuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242514AbiCJNtG (ORCPT
+        with ESMTP id S242553AbiCJNus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:49:06 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3991CA6504;
-        Thu, 10 Mar 2022 05:48:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=h62QDpiv0sKvaMSzpmkYIhLgXWs1pYU6I0XpXuvuC+g=; b=qWHF2TELafU4ktGyB58Bp5t9ET
-        ZCzNQd9HNEVgHDVn0qsfyyOGwILkEXGUyq+Yd2ZDEcbSRKhDnM75gHogn5YBSDjiwyjDb6lcCJ3Tk
-        CYVF3eDEwIlPxaBXe8cmzqxGXrRgCNs5gxHH/bxELWn7uZYDprNxXEtJZxojQg0Zbpv5EoZCefUgF
-        GiFbwfmmdMRSDvzLvx6aqgoozhS0keNlvyligzRlGNSTjzrkL3tvRN0tfxu2H0BhMiIujagxOBu2o
-        oNvr+KGfzfiVKqcNwUTHO2IrN4tliYuyglZqF4u2p84593kP6FY9icvFIF9tX2zLJ3JF/Be0SayjH
-        QtJ3kLcA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSJ8T-00H7ra-Bi; Thu, 10 Mar 2022 13:47:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A9B93000E6;
-        Thu, 10 Mar 2022 14:47:18 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DA87326719DE3; Thu, 10 Mar 2022 14:47:18 +0100 (CET)
-Date:   Thu, 10 Mar 2022 14:47:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
- <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
- <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+        Thu, 10 Mar 2022 08:50:48 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDB114F98C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:49:47 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id l2so10972784ybe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YrHkxxw7wa90Lz7KvljazCkAUUcPibWKOq87Yk0/n0Y=;
+        b=XGmoL/c7V6Yac4ZEaR34Gjm6a6GdVsGuTpFSzLBHc7yEcOzghG/dIhCfJ+IGa6DGll
+         um2nX+BPpcofKOEbHuoL0ARr8fftC54cYzbFusMr6qktOlTX3nwet/pOE/oOrbEgTbIm
+         srktgS+dbasgTIFOXTRuTk/81fHPS2YRD5Neg1yH/Cl5HvDHv3i0A72w/W3xYjyBQMzc
+         EsCvzG6S6GbCocy2VVx00HQUHM2UZlwJ+TSmxKTBTpCMToZr7jfpd1ggOOExyE3B8Yrg
+         WIa0Nno/JDdKOiGkQZstYOF7gMjwyDZY62fKy6S1uh2KkxNO/Jr9NuUMbgUc+oyiHHoM
+         aWWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YrHkxxw7wa90Lz7KvljazCkAUUcPibWKOq87Yk0/n0Y=;
+        b=kC82jHiKZdeltID1v/JDuc/kWIO3w5o5mcOMRiIyo1MXDP3hOjM15BgM6AOJqL7cbq
+         Zd+YNcj6xV7bKRf/liqJrP87QRao/tV3jhcTte+zIZ+9ckaofnZnNfnPbOUm3o8u+Jmd
+         6PHVRIgCeWVXCM43SHsEtAZmYjuvbICdbF056IAwBgjYos+0qwSI/WPMaHGd/qznyA6q
+         PABUowX8J8qGsoW7WkhYAMBgaymn2B6VPb5LV9iGsOFdjmeKk9ubRI8OSg8L/i+8luOH
+         NY2iZ8p5POZEJHlzoOUKLy+Tmh1HjKxvEQJgNfI0McxXySJRy1wUdfU7FZ4dIiGTktyv
+         GLag==
+X-Gm-Message-State: AOAM533naME6XbBU8LoEqdN3UMTWU1wV3/15a7xuNv/IgJyWXbnkcrRv
+        FPTxVvmGd7NNk6zPmn6kW5qmzEXFDHbHsJSTidmp7g==
+X-Google-Smtp-Source: ABdhPJxEyh0BnHyunA1YVnIuCNPWGZHleKd1WO6N3gi7S+63k2cJ+dICHYCAS3kauxgrvZDRc7AkiSHCwy8gPXQMxcI=
+X-Received: by 2002:a25:8390:0:b0:629:2839:9269 with SMTP id
+ t16-20020a258390000000b0062928399269mr3888598ybk.246.1646920186546; Thu, 10
+ Mar 2022 05:49:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220302082718.32268-1-songmuchun@bytedance.com>
+ <20220302082718.32268-3-songmuchun@bytedance.com> <CAPcyv4j7rn8OzWKydcCJNXdrhXm6h6Vq5n7uLzP5BSMJ_qSZgg@mail.gmail.com>
+In-Reply-To: <CAPcyv4j7rn8OzWKydcCJNXdrhXm6h6Vq5n7uLzP5BSMJ_qSZgg@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 10 Mar 2022 21:48:01 +0800
+Message-ID: <CAMZfGtUNRAb3qnx5-ZV1uPEx1aLNbkzjJw5JrUzX8tMbR9AGNg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] dax: fix cache flush on PMD-mapped pages
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Hugh Dickins <hughd@google.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ross Zwisler <zwisler@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +82,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 10:35:32AM +0100, Peter Zijlstra wrote:
+On Thu, Mar 10, 2022 at 8:06 AM Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> On Wed, Mar 2, 2022 at 12:29 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+> > However, it does not cover the full pages in a THP except a head page.
+> > Replace it with flush_cache_range() to fix this issue.
+>
+> This needs to clarify that this is just a documentation issue with the
+> respect to properly documenting the expected usage of cache flushing
+> before modifying the pmd. However, in practice this is not a problem
+> due to the fact that DAX is not available on architectures with
+> virtually indexed caches per:
 
-> > $ test_progs -t fentry
-> > test_fentry_fexit:PASS:fentry_skel_load 0 nsec
-> > test_fentry_fexit:PASS:fexit_skel_load 0 nsec
-> > test_fentry_fexit:PASS:fentry_attach 0 nsec
-> > test_fentry_fexit:FAIL:fexit_attach unexpected error: -1 (errno 19)
-> > #54 fentry_fexit:FAIL
+Right. I'll add this into the commit log.
 
-This seems to cure the above. fexit_bpf2bpf is still failing, I'll dig
-into that after lunch.
+>
+> d92576f1167c dax: does not work correctly with virtual aliasing caches
+>
+> Otherwise, you can add:
+>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index acb50fb7ed2d..2d86d3c09d64 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5354,6 +5381,11 @@ int modify_ftrace_direct(unsigned long ip,
- 	mutex_lock(&direct_mutex);
- 
- 	mutex_lock(&ftrace_lock);
-+
-+	ip = ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	entry = find_direct_entry(&ip, &rec);
- 	if (!entry)
- 		goto out_unlock;
+Thanks.

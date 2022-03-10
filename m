@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB2F4D5018
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D0C4D5045
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244416AbiCJRVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S244731AbiCJRXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiCJRVN (ORCPT
+        with ESMTP id S245014AbiCJRXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:21:13 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5341918DABD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:20:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EB4AD1F381;
-        Thu, 10 Mar 2022 17:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646932810; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y2qHs0Wjl9zJzGdGxDrgMP6oGxVwLROgKQ2hwHB4Zl0=;
-        b=cJWyOjQ/cay6MLEYucd1t8/5qgEOabdfrwDOkZM9KeHEfZn+gPWqf5IETP5D4hgIQSKgQP
-        SOSHdPu3j4DosiKwQ+PY5jHuAzB6vhawjN6yvWs6EpSloZXin+pjF3w1/nQXl/QWnaVuS+
-        xQOx2AwY2i1AtdoFo+6kpAvVILSnM/Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646932810;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y2qHs0Wjl9zJzGdGxDrgMP6oGxVwLROgKQ2hwHB4Zl0=;
-        b=IB7kr07EZbKhyhiioW1RbT1MKzjN0sJDozOhy8mg9LKuqmOPxqbWH+iqa6BUXOJB/qKUHG
-        KNZQOTJJzYudviAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5DB313A66;
-        Thu, 10 Mar 2022 17:20:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vQSfK0ozKmKgLgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 10 Mar 2022 17:20:10 +0000
-Message-ID: <e36be28d-b4a3-966e-e067-0942784485ac@suse.cz>
-Date:   Thu, 10 Mar 2022 18:20:10 +0100
+        Thu, 10 Mar 2022 12:23:00 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A971719CCFB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646932908; x=1678468908;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YWrHF323fKzmMvTAQ5OGka1RcQpaIQBfJCMlhK0zcn4=;
+  b=Gfi6G2SBXXsQIBYJ+4Mo1WFQTsysS/T7k2cbjUV3wHRn5s4dAFvUkPQd
+   JcOE5Ulm9gY1Wol2i0dc82mjx0RY+xYXzBIzJDYBjR0prZd9E7XOp8WYj
+   XErb5LInUozvCKImzyZDZCtg8a8ivIGQFUYjjWvre8fgwEjZLR5JkXQGG
+   i+Uq/Kg0GALkFn5L0UM3/HEdSlLZufJ28Bp4mZDgYnA30l1/y+CpaHk4C
+   i3AysXX3K0JHuT8AhS9JgT+GTteCPnuRBO7Kwxv95QdVAeF99So3yVxlI
+   Gm7BJoWiWopgeec4zog/JDsa/seOZhOS6v+cTh9ja5GvTfkcAq+ToWoUn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254142181"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="254142181"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:48 -0800
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="712450536"
+Received: from gdavids1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.65.108])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:47 -0800
+From:   ira.weiny@intel.com
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V9 37/45] memremap_pages: Introduce devmap_protected()
+Date:   Thu, 10 Mar 2022 09:20:11 -0800
+Message-Id: <20220310172019.850939-38-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220310172019.850939-1-ira.weiny@intel.com>
+References: <20220310172019.850939-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 0/2] Cleanups for slab
-Content-Language: en-US
-To:     sxwjean@me.com, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, longman@redhat.com, guro@fb.com,
-        willy@infradead.org, roman.gushchin@linux.dev
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Xiongwei Song <sxwjean@gmail.com>
-References: <20220310140701.87908-1-sxwjean@me.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220310140701.87908-1-sxwjean@me.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +63,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 15:06, sxwjean@me.com wrote:
-> From: Xiongwei Song <sxwjean@gmail.com>
-> 
-> 2 cleanups, no functionality changed.
+From: Ira Weiny <ira.weiny@intel.com>
 
-Thanks, added to slab for-next
+Consumers of protected dev_pagemaps can check the PGMAP_PROTECTION flag to
+see if the devmap is protected.  However, most contexts will have a struct
+page not the pagemap structure directly.
 
-> ---
-> Since v2:
->  - Add the detailed history of parameter @s of alloc_slab_page(),
->    message from Matthew Wilcox.
->  - Collect Reviewed-by and Acked-by. Thanks Matthew Wilcox, David Rientjes
->    and Roman Gushchin.
-> 
-> Since v1:
->  - https://lore.kernel.org/all/20220309145052.219138-1-sxwjean@me.com/
-> ---
-> 
-> Xiongwei Song (2):
->   mm: slab: Delete unused SLAB_DEACTIVATED flag
->   mm: slub: Delete useless parameter of alloc_slab_page()
-> 
->  include/linux/slab.h | 3 ---
->  mm/slub.c            | 8 ++++----
->  2 files changed, 4 insertions(+), 7 deletions(-)
-> 
+Define devmap_protected() to determine if a page is part of a
+dev_pagemap mapping and if the page is protected by additional
+protections.
+
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ include/linux/mm.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9ab799403004..4ca24329848a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1151,6 +1151,23 @@ static inline bool pgmap_protection_available(void)
+ 	return pks_available();
+ }
+ 
++DECLARE_STATIC_KEY_FALSE(dev_pgmap_protection_static_key);
++
++/*
++ * devmap_protected() requires a reference on the page to ensure there is no
++ * races with dev_pagemap tear down.
++ */
++static inline bool devmap_protected(struct page *page)
++{
++	if (!static_branch_unlikely(&dev_pgmap_protection_static_key))
++		return false;
++	if (!is_zone_device_page(page))
++		return false;
++	if (page->pgmap->flags & PGMAP_PROTECTION)
++		return true;
++	return false;
++}
++
+ #else
+ 
+ static inline bool pgmap_protection_available(void)
+-- 
+2.35.1
 

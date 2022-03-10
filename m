@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE824D414C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA584D4150
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiCJGnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 01:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
+        id S239892AbiCJGr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 01:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239864AbiCJGnn (ORCPT
+        with ESMTP id S230060AbiCJGr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 01:43:43 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE07F5F90
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 22:42:42 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KDfXz0TrZz9sYG;
-        Thu, 10 Mar 2022 14:38:59 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 14:42:40 +0800
-Subject: Re: [PATCH -next] perf/marvell: cn10k Fix build error without
- CONFIG_OF
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        <bbudiredla@marvell.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220309140617.33860-1-yuehaibing@huawei.com>
- <CAK8P3a1UBX2c0-VQtQd885U-=+RHxn_mZzD6ELk-B4cq+09afg@mail.gmail.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <cdcdd201-840d-a928-1746-7656994cb12e@huawei.com>
-Date:   Thu, 10 Mar 2022 14:42:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Thu, 10 Mar 2022 01:47:56 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D34212F16B;
+        Wed,  9 Mar 2022 22:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QYoybJRryYmwPgaJ9ZMJlhq3VSC3EaI4oWd0Salhzq8=; b=sDQewlcmFcu36Plc0ssMjwdcu6
+        xABG21CxjYWaSekz0olxZSfCTlCmo8Mhvq0wjUyF61q3WYWn4mJO5jJ+YRNV2FgmHgdHvlvEKS10J
+        Kw9ofVwcAnLSjRiv2hiP8WUV8vDzoO7gvCa8aCC61A1gWW3gvhKFjgXhiY4AIH33exK5udpJC6+WQ
+        LMBSDr7eKStarZPgyLBpw7R5/DJ15UN1G17udcx52OuQOj/GdrvmLlBmPysvBU/hyvE99GuH50u+N
+        LaTQasVqJnNogROVUyJfNCsIdbVDDDlXGMsRWTtLk9VCLznBg5V3CitLMY0ESGKauhy8PdKGxTqkS
+        rmiKZVDA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSCZY-00BePO-KI; Thu, 10 Mar 2022 06:46:52 +0000
+Date:   Wed, 9 Mar 2022 22:46:52 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgel.zte@gmail.com, axboe@kernel.dk, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: remove PSI annotations from submit_bio
+Message-ID: <Yime3HdbEqFgRVtO@infradead.org>
+References: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
+ <Yij9eygSYy5MSIA0@cmpxchg.org>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1UBX2c0-VQtQd885U-=+RHxn_mZzD6ELk-B4cq+09afg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yij9eygSYy5MSIA0@cmpxchg.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,25 +54,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/9 22:11, Arnd Bergmann wrote:
-> On Wed, Mar 9, 2022 at 3:06 PM YueHaibing <yuehaibing@huawei.com> wrote:
->>
->> drivers/perf/marvell_cn10k_ddr_pmu.c:723:21: error: ‘cn10k_ddr_pmu_of_match’ undeclared here (not in a function); did you mean ‘cn10k_ddr_pmu_driver’?
->>          .of_match_table = cn10k_ddr_pmu_of_match,
->>                            ^~~~~~~~~~~~~~~~~~~~~~
->>
->> Use of_match_ptr() to fix this.
->>
->> Fixes: 7cf83e222bce ("perf/marvell: CN10k DDR performance monitor support")
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On Wed, Mar 09, 2022 at 02:18:19PM -0500, Johannes Weiner wrote:
+> On Wed, Mar 09, 2022 at 09:43:24AM +0000, cgel.zte@gmail.com wrote:
+> > From: Yang Yang <yang.yang29@zte.com.cn>
+> > 
+> > psi tracks the time spent submitting the IO of refaulting pages[1].
+> > But after we tracks refault stalls from swap_readpage[2][3], there
+> > is no need to do so anymore. Since swap_readpage already includes
+> > IO submitting time.
+> > 
+> > [1] commit b8e24a9300b0 ("block: annotate refault stalls from IO submission")
+> > [2] commit 937790699be9 ("mm/page_io.c: annotate refault stalls from swap_readpage")
+> > [3] commit 2b413a1a728f ("mm: page_io: fix psi memory pressure error on cold swapins")
+> > 
+> > Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> > Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
 > 
-> It's generally better to remove the #ifdef around the match table
-> definition instead,
-> which improves readability, and has no downsides on the machines this actually
-> runs on, because CONFIG_OF is always enabled on arm64.
+> It's still needed by file cache refaults!
 
-Ok， will do this in v2, thanks!
-> 
->       Arnd
-> .
-> 
+Can we get proper annotations for those please?  These bio-level hooks are
+horrible and a maintainance nightmware.

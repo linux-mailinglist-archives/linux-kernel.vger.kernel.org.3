@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499434D4A9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8114D49D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbiCJOgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S243872AbiCJOcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244828AbiCJO3d (ORCPT
+        with ESMTP id S243735AbiCJO0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:29:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04B71405C1;
-        Thu, 10 Mar 2022 06:24:44 -0800 (PST)
+        Thu, 10 Mar 2022 09:26:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5B7154D2E;
+        Thu, 10 Mar 2022 06:22:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A005BB82683;
-        Thu, 10 Mar 2022 14:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A544C340E8;
-        Thu, 10 Mar 2022 14:24:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E9EB61B63;
+        Thu, 10 Mar 2022 14:22:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35177C36AF9;
+        Thu, 10 Mar 2022 14:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922280;
-        bh=4V4EDjYNF4xqOm3IhKKiac1VO/Sb5F21Yw8VdkksPQ4=;
+        s=korg; t=1646922147;
+        bh=U3EXImq8gUZIXidQsm+kHu1XAwQQbkW0LhGr+JscwNY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w3saS5Xj6cZUEJmIogVuASiA4vDsDsFN4TO3t8d5GL0HLAq+ymny/ykwUU6u/gsYC
-         KhlPP33jdOAavEet9LKbsR8NQbtx6R7GNbJPYhg+hQ+CTt2dAqN4EiHOHbC4B1bqLu
-         7mt3pntsW0983THvTRDBKThOrMiadtbYJmKzaj34=
+        b=Ni7qKHcomFYnswdvoQfPvmVC1rB2HSGYJ2lwgZQFEKiY+2dHJB1o1R9aQQ2hc885N
+         uy79xygd+9UP9v39m938Q0Aj5YD8WID8rRsjWIIF4ZUj1i0bl5Nc7q06mi4zzh4rDc
+         ZN20PexPc4W0uKplRjZBGPzXCIv/uZtvIvAThbGU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 5.10 28/58] arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.19 21/33] ARM: Do not use NOCROSSREFS directive with ld.lld
 Date:   Thu, 10 Mar 2022 15:18:48 +0100
-Message-Id: <20220310140813.678468825@linuxfoundation.org>
+Message-Id: <20220310140808.369034766@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+References: <20220310140807.749164737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 6c5bf79b69f911560fbf82214c0971af6e58e682 upstream.
+commit 36168e387fa7d0f1fe0cd5cf76c8cea7aee714fa upstream.
 
-Systems using kpti enter and exit the kernel through a trampoline mapping
-that is always mapped, even when the kernel is not. tramp_valias is a macro
-to find the address of a symbol in the trampoline mapping.
+ld.lld does not support the NOCROSSREFS directive at the moment, which
+breaks the build after commit b9baf5c8c5c3 ("ARM: Spectre-BHB
+workaround"):
 
-Adding extra sets of vectors will expand the size of the entry.tramp.text
-section to beyond 4K. tramp_valias will be unable to generate addresses
-for symbols beyond 4K as it uses the 12 bit immediate of the add
-instruction.
+  ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got NOCROSSREFS
 
-As there are now two registers available when tramp_alias is called,
-use the extra register to avoid the 4K limit of the 12 bit immediate.
+Support for this directive will eventually be implemented, at which
+point a version check can be added. To avoid breaking the build in the
+meantime, just define NOCROSSREFS to nothing when using ld.lld, with a
+link to the issue for tracking.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
+Cc: stable@vger.kernel.org
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1609
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/entry.S |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ arch/arm/kernel/vmlinux.lds.h |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -128,9 +128,12 @@
- .org .Lventry_start\@ + 128	// Did we overflow the ventry slot?
- 	.endm
- 
--	.macro tramp_alias, dst, sym
-+	.macro tramp_alias, dst, sym, tmp
- 	mov_q	\dst, TRAMP_VALIAS
--	add	\dst, \dst, #(\sym - .entry.tramp.text)
-+	adr_l	\tmp, \sym
-+	add	\dst, \dst, \tmp
-+	adr_l	\tmp, .entry.tramp.text
-+	sub	\dst, \dst, \tmp
- 	.endm
- 
- 	/*
-@@ -367,10 +370,10 @@ alternative_else_nop_endif
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- 	bne	4f
- 	msr	far_el1, x29
--	tramp_alias	x30, tramp_exit_native
-+	tramp_alias	x30, tramp_exit_native, x29
- 	br	x30
- 4:
--	tramp_alias	x30, tramp_exit_compat
-+	tramp_alias	x30, tramp_exit_compat, x29
- 	br	x30
+--- a/arch/arm/kernel/vmlinux.lds.h
++++ b/arch/arm/kernel/vmlinux.lds.h
+@@ -25,6 +25,14 @@
+ #define ARM_MMU_DISCARD(x)	x
  #endif
- 	.else
-@@ -1131,7 +1134,7 @@ alternative_if_not ARM64_UNMAP_KERNEL_AT
- alternative_else_nop_endif
  
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
--	tramp_alias	dst=x5, sym=__sdei_asm_exit_trampoline
-+	tramp_alias	dst=x5, sym=__sdei_asm_exit_trampoline, tmp=x3
- 	br	x5
- #endif
- SYM_CODE_END(__sdei_asm_handler)
++/*
++ * ld.lld does not support NOCROSSREFS:
++ * https://github.com/ClangBuiltLinux/linux/issues/1609
++ */
++#ifdef CONFIG_LD_IS_LLD
++#define NOCROSSREFS
++#endif
++
+ /* Set start/end symbol names to the LMA for the section */
+ #define ARM_LMA(sym, section)						\
+ 	sym##_start = LOADADDR(section);				\
 
 

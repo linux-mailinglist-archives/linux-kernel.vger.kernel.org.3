@@ -2,107 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091B64D4F87
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14714D4F86
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242763AbiCJQoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S242659AbiCJQoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240945AbiCJQoV (ORCPT
+        with ESMTP id S240945AbiCJQoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:44:21 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2065.outbound.protection.outlook.com [40.107.212.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A37159E86;
-        Thu, 10 Mar 2022 08:43:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JZR/oSTVdM8BozSbnnXY1/HgJK3ApCpnrBhUyIGEq+aqxYZ3UWAQaTYXFOcMgbFkqdxNt9vJ5eHmddIH0XUbnzJoEs7Rpge+LUawoU9RgDV+3lg3OQP8wP4YH5JyUBD1i0kjgHlWUcJv8+ufF60X6i9KnHayhHSRGZ2WcM0vC8QiwDJgQrX8wuqwPXVpy7MD4jY3yeT/jYdpu/rQ0bf0yg1p2e/RxUg5FbWXi/eSuwYCtiJ0KaU+BsF8xVORtKF37Ya1WhKUKUubGKukC8/57qvw4iB9+obiogStlRJTDxJOZWDoKuTr/CRjJHXU8mC9FujVf1F6qORVUjS2HGODOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lOsccuODO3ein78CsvfflSxfNbKB2PBGc0H+XdYUEdY=;
- b=GiFv2U86uB48Qnn8E+ZlL3W4bc4iRUMzgTGBc+zixTlg/LN7IK9jU/Z0hdSCv98xwBaYHN2umGWeR4xo5DBUc4Avvh55Jfgjt5/osBme7x/t+54X92DibhL5Yy4iK9AzWovuCed4n9wk+p4OYRyB0FTKcwS9HzM0ZC44WpC2uAs7FMu/shTE19mRFIsdLfRSFi0TnGmbtp1HmkkTEomnq1+2zjZ4ioTQlbPIMrpgScksMGNahNf81QfUlIcsutcdAUBub/oiD53XC+7tDxGkRM5263Pv3Cosi/lI7EuIwXztwp3GnxcIv9e2f5XFpNVGAk792y/dNHkylnpkrA8pBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lOsccuODO3ein78CsvfflSxfNbKB2PBGc0H+XdYUEdY=;
- b=fz6N8vJzqXMQukrZgpKtlIJkb7ojZbF1bRQmhjWxsltBA0j8ykC6lyTn7PmWhZmR/wVNSy91GupJKoxUn4iw9WC0d7lzTrxFWa393YBSaky05RX+ciZbi/ASBobo4O3tstahNGbt0T87lrfdBoEMyApTzOhVhnMPkxvrp+VlK0Y=
-Received: from BN9PR03CA0381.namprd03.prod.outlook.com (2603:10b6:408:f7::26)
- by MN2PR02MB6685.namprd02.prod.outlook.com (2603:10b6:208:1d5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 10 Mar
- 2022 16:43:16 +0000
-Received: from BN1NAM02FT007.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::ef) by BN9PR03CA0381.outlook.office365.com
- (2603:10b6:408:f7::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.20 via Frontend
- Transport; Thu, 10 Mar 2022 16:43:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT007.mail.protection.outlook.com (10.13.3.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5061.22 via Frontend Transport; Thu, 10 Mar 2022 16:43:16 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 10 Mar 2022 08:42:46 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 10 Mar 2022 08:42:46 -0800
-Envelope-to: git@xilinx.com,
- broonie@kernel.org,
- linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=57612 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1nSLsE-0003SM-6S; Thu, 10 Mar 2022 08:42:46 -0800
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@xilinx.com>, <akumarma@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH 2/2] spi: spi-cadence: Fix kernel-doc format for resume/suspend
-Date:   Thu, 10 Mar 2022 22:12:35 +0530
-Message-ID: <20220310164235.32230-3-amit.kumar-mahapatra@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220310164235.32230-1-amit.kumar-mahapatra@xilinx.com>
-References: <20220310164235.32230-1-amit.kumar-mahapatra@xilinx.com>
+        Thu, 10 Mar 2022 11:44:08 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5AD15339D;
+        Thu, 10 Mar 2022 08:43:06 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FFB2491;
+        Thu, 10 Mar 2022 17:43:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646930584;
+        bh=JobkSz9PjzQCB+BdMbkG0Fu1XaJc8qVBZmb6CvwuwxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wdnWPcU5EsqVjam8ty9NNALBQvBXc7F5kDRyYy6w9siK6lOblLY0k9zdZfAk2D087
+         fnyHP7mJTbZhG7bAz4EwtccHgC9HKfkKoq1dq6fTnXRqZ+Jaq4lC3ZK8lcsMtifS0a
+         uvUC1EW55jPMM512PwxOBcX4eUvhL19Xi+Ue/vM4=
+Date:   Thu, 10 Mar 2022 18:42:48 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v3 3/3] drm/bridge: ti-sn65dsi86: Support hotplug
+ detection
+Message-ID: <YioqiGtni8Y7X4M1@pendragon.ideasonboard.com>
+References: <20220310152227.2122960-1-kieran.bingham+renesas@ideasonboard.com>
+ <20220310152227.2122960-4-kieran.bingham+renesas@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 18d1e972-5618-4f06-d5e6-08da02b513a4
-X-MS-TrafficTypeDiagnostic: MN2PR02MB6685:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR02MB66856563CE00DFFD6DE52991BA0B9@MN2PR02MB6685.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qAHgYla3kOg3rTCblgVVEX3DjbpJnuB3lbojvbW7dmGiJJuemxJdzV41joHSOPhlhh8MC9cXEeh+HkGJ4w7M4EVTMTDIqD87ASKksfxHy/9eOWG0lP40cRPvKgCKiYjSE9v/tE8a6uk7FupOVV8O4aEbzWVkcNk2ygCX2bvvrWGudKzkLTspxJrf4vM2vWdoRfn5zDyc5VwNIuH10yYE1AqwN06Z4SAby/YhHzNqfCMai4DAQ6lHQgqfvscA95oF2z0JuKY66OaB9qK9DCIN1HFR3JeRiQtdCpZBq9CZQ+gg0YQmr8QqLQg5znxkAMf5Ve1lNyCuzMjPz5EuD0p9SHdqSFgNyHwMNaHgQaLaLOntJ54tmmrkaYgY8S3fQd2LiD9bYI9u4pSe9LKHGKpAqhIIbb99haVhFD7Fp7fvPtLbVbrv7Ha3YJKvKrEth2HtMNUYldnNyxqzv9Qly8fmsQ2Aksq8CUQeAtVaOHt7lc2+2W585i4zmZQrx5c/RlRNUYN2Wi7V1zAealMn/Tx6GENEyWuNjHWlsnw5lIn6cASWg2YNspePz0ZC2Mr70ggb4crZ2gKeeAX0opdHMO004/VQX+C0tY1m1BOca3KFEn1IKFVQbwXacWvSiwp1hIdmjUibbATtkTaoT5ntVLHYW1Ytf3J+Tc8OAT2f6nMKrrVa76SYJ2umxXateKhCxKg0y8GXuS7PV4yH/HW7WfCogQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36860700001)(508600001)(316002)(7696005)(15650500001)(47076005)(1076003)(107886003)(6666004)(2616005)(36756003)(336012)(426003)(186003)(83380400001)(26005)(4326008)(356005)(2906002)(82310400004)(8676002)(70206006)(70586007)(8936002)(6916009)(9786002)(5660300002)(7636003)(40460700003)(54906003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 16:43:16.6690
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18d1e972-5618-4f06-d5e6-08da02b513a4
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT007.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6685
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220310152227.2122960-4-kieran.bingham+renesas@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,45 +57,292 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Simek <michal.simek@xilinx.com>
+Hi Kieran,
 
-Kernel function name don't match with function name.
+Thank you for the patch.
 
-Error log:
-drivers/spi/spi-cadence.c:662: warning: expecting prototype for
-cdns_spi_runtime_resume(). Prototype was for cnds_runtime_resume() instead
-drivers/spi/spi-cadence.c:691: warning: expecting prototype for
-cdns_spi_runtime_suspend(). Prototype was for cnds_runtime_suspend()
-instead
+On Thu, Mar 10, 2022 at 03:22:27PM +0000, Kieran Bingham wrote:
+> When the SN65DSI86 is used in DisplayPort mode, its output is likely
+> routed to a DisplayPort connector, which can benefit from hotplug
+> detection. Support it in such cases, with polling mode only for now.
 
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
----
- drivers/spi/spi-cadence.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Don't we support IRQ mode too now ?
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index aff3f4241840..87bb29ac4d7c 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -650,7 +650,7 @@ static int __maybe_unused cdns_spi_resume(struct device *dev)
- }
- 
- /**
-- * cdns_spi_runtime_resume - Runtime resume method for the SPI driver
-+ * cdns_runtime_resume - Runtime resume method for the SPI driver
-  * @dev:	Address of the platform_device structure
-  *
-  * This function enables the clocks
-@@ -679,7 +679,7 @@ static int __maybe_unused cdns_runtime_resume(struct device *dev)
- }
- 
- /**
-- * cdns_spi_runtime_suspend - Runtime suspend method for the SPI driver
-+ * cdns_runtime_suspend - Runtime suspend method for the SPI driver
-  * @dev:	Address of the platform_device structure
-  *
-  * This function disables the clocks
+> The implementation is limited to the bridge operations, as the connector
+> operations are legacy and new users should use
+> DRM_BRIDGE_ATTACH_NO_CONNECTOR.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> ---
+> Changes since v1:
+> 
+> - Document the no_hpd field
+> - Rely on the SN_HPD_DISABLE_REG default value in the HPD case
+> - Add a TODO comment regarding IRQ support
+> [Kieran]
+> - Fix spelling s/assrted/asserted/
+> - Only enable HPD on DisplayPort connector.
+> - Support IRQ based hotplug detect
+> 
+> Changes since v2: [Kieran]
+>  - Use unsigned int for values read by regmap
+>  - Update HPD support warning message
+>  - Only enable OP_HPD if IRQ support enabled.
+>  - Only register IRQ handler during ti_sn_bridge_probe()
+>  - Store IRQ in the struct ti_sn65dsi86
+>  - Register IRQ only when !no-hpd
+>  - Refactor DRM_BRIDGE_OP_DETECT and DRM_BRIDGE_OP_HPD handling
+> 
+>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 142 +++++++++++++++++++++++---
+>  1 file changed, 129 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> index d581c820e5d8..328a48f09f97 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> @@ -70,6 +70,7 @@
+>  #define  BPP_18_RGB				BIT(0)
+>  #define SN_HPD_DISABLE_REG			0x5C
+>  #define  HPD_DISABLE				BIT(0)
+> +#define  HPD_DEBOUNCED_STATE			BIT(4)
+>  #define SN_GPIO_IO_REG				0x5E
+>  #define  SN_GPIO_INPUT_SHIFT			4
+>  #define  SN_GPIO_OUTPUT_SHIFT			0
+> @@ -106,10 +107,24 @@
+>  #define SN_PWM_EN_INV_REG			0xA5
+>  #define  SN_PWM_INV_MASK			BIT(0)
+>  #define  SN_PWM_EN_MASK				BIT(1)
+> +#define SN_IRQ_EN_REG				0xE0
+> +#define  IRQ_EN					BIT(0)
+> +#define SN_IRQ_HPD_REG				0xE6
+> +#define  IRQ_HPD_EN				BIT(0)
+> +#define  IRQ_HPD_INSERTION_EN			BIT(1)
+> +#define  IRQ_HPD_REMOVAL_EN			BIT(2)
+> +#define  IRQ_HPD_REPLUG_EN			BIT(3)
+> +#define  IRQ_HPD_PLL_UNLOCK_EN			BIT(5)
+>  #define SN_AUX_CMD_STATUS_REG			0xF4
+>  #define  AUX_IRQ_STATUS_AUX_RPLY_TOUT		BIT(3)
+>  #define  AUX_IRQ_STATUS_AUX_SHORT		BIT(5)
+>  #define  AUX_IRQ_STATUS_NAT_I2C_FAIL		BIT(6)
+> +#define SN_IRQ_HPD_STATUS_REG			0xF5
+> +#define  IRQ_HPD_STATUS				BIT(0)
+> +#define  IRQ_HPD_INSERTION_STATUS		BIT(1)
+> +#define  IRQ_HPD_REMOVAL_STATUS			BIT(2)
+> +#define  IRQ_HPD_REPLUG_STATUS			BIT(3)
+> +#define  IRQ_PLL_UNLOCK				BIT(5)
+>  
+>  #define MIN_DSI_CLK_FREQ_MHZ	40
+>  
+> @@ -168,6 +183,12 @@
+>   * @pwm_enabled:  Used to track if the PWM signal is currently enabled.
+>   * @pwm_pin_busy: Track if GPIO4 is currently requested for GPIO or PWM.
+>   * @pwm_refclk_freq: Cache for the reference clock input to the PWM.
+> + *
+> + * @no_hpd:       Disable hot-plug detection as instructed by device tree (used
+> + *                for instance for eDP panels whose HPD signal won't be asserted
+> + *                until the panel is turned on, and is thus not usable for
+> + *                downstream device detection).
+> + * @irq:          IRQ number for the device.
+>   */
+>  struct ti_sn65dsi86 {
+>  	struct auxiliary_device		bridge_aux;
+> @@ -202,6 +223,9 @@ struct ti_sn65dsi86 {
+>  	atomic_t			pwm_pin_busy;
+>  #endif
+>  	unsigned int			pwm_refclk_freq;
+> +
+> +	bool				no_hpd;
+> +	int				irq;
+>  };
+>  
+>  static const struct regmap_range ti_sn65dsi86_volatile_ranges[] = {
+> @@ -316,23 +340,25 @@ static void ti_sn65dsi86_enable_comms(struct ti_sn65dsi86 *pdata)
+>  	ti_sn_bridge_set_refclk_freq(pdata);
+>  
+>  	/*
+> -	 * HPD on this bridge chip is a bit useless.  This is an eDP bridge
+> -	 * so the HPD is an internal signal that's only there to signal that
+> -	 * the panel is done powering up.  ...but the bridge chip debounces
+> -	 * this signal by between 100 ms and 400 ms (depending on process,
+> -	 * voltage, and temperate--I measured it at about 200 ms).  One
+> +	 * As this is an eDP bridge, the output will be connected to a fixed
+> +	 * panel in most systems. HPD is in that case only an internal signal
+> +	 * to signal that the panel is done powering up. The bridge chip
+> +	 * debounces this signal by between 100 ms and 400 ms (depending on
+> +	 * process, voltage, and temperate--I measured it at about 200 ms). One
+>  	 * particular panel asserted HPD 84 ms after it was powered on meaning
+>  	 * that we saw HPD 284 ms after power on.  ...but the same panel said
+>  	 * that instead of looking at HPD you could just hardcode a delay of
+> -	 * 200 ms.  We'll assume that the panel driver will have the hardcoded
+> -	 * delay in its prepare and always disable HPD.
+> +	 * 200 ms. HPD is thus a bit useless. For this type of use cases, we'll
+> +	 * assume that the panel driver will have the hardcoded delay in its
+> +	 * prepare and always disable HPD.
+>  	 *
+> -	 * If HPD somehow makes sense on some future panel we'll have to
+> -	 * change this to be conditional on someone specifying that HPD should
+> -	 * be used.
+> +	 * However, on some systems, the output is connected to a DisplayPort
+> +	 * connector. HPD is needed in such cases. To accommodate both use
+> +	 * cases, enable HPD only when requested.
+>  	 */
+> -	regmap_update_bits(pdata->regmap, SN_HPD_DISABLE_REG, HPD_DISABLE,
+> -			   HPD_DISABLE);
+> +	if (pdata->no_hpd)
+> +		regmap_update_bits(pdata->regmap, SN_HPD_DISABLE_REG,
+> +				   HPD_DISABLE, HPD_DISABLE);
+>  
+>  	pdata->comms_enabled = true;
+>  
+> @@ -1135,6 +1161,36 @@ static void ti_sn_bridge_atomic_post_disable(struct drm_bridge *bridge,
+>  	pm_runtime_put_sync(pdata->dev);
+>  }
+>  
+> +static enum drm_connector_status ti_sn_bridge_detect(struct drm_bridge *bridge)
+> +{
+> +	struct ti_sn65dsi86 *pdata = bridge_to_ti_sn65dsi86(bridge);
+> +	int val;
+> +
+> +	regmap_read(pdata->regmap, SN_HPD_DISABLE_REG, &val);
+> +
+> +	return val & HPD_DEBOUNCED_STATE ? connector_status_connected
+> +					 : connector_status_disconnected;
+> +}
+> +
+> +static void ti_sn_bridge_hpd_enable(struct drm_bridge *bridge)
+> +{
+> +	struct ti_sn65dsi86 *pdata = bridge_to_ti_sn65dsi86(bridge);
+> +
+> +	/* The device must remain active for HPD to function */
+> +	pm_runtime_get_sync(pdata->dev);
+> +	regmap_write(pdata->regmap, SN_IRQ_HPD_REG,
+> +		     IRQ_HPD_EN | IRQ_HPD_INSERTION_EN |
+> +		     IRQ_HPD_REMOVAL_EN | IRQ_HPD_REPLUG_EN);
+> +}
+> +
+> +static void ti_sn_bridge_hpd_disable(struct drm_bridge *bridge)
+> +{
+> +	struct ti_sn65dsi86 *pdata = bridge_to_ti_sn65dsi86(bridge);
+> +
+> +	regmap_write(pdata->regmap, SN_IRQ_HPD_REG, 0);
+> +	pm_runtime_put_autosuspend(pdata->dev);
+> +}
+> +
+>  static struct edid *ti_sn_bridge_get_edid(struct drm_bridge *bridge,
+>  					  struct drm_connector *connector)
+>  {
+> @@ -1153,6 +1209,9 @@ static const struct drm_bridge_funcs ti_sn_bridge_funcs = {
+>  	.detach = ti_sn_bridge_detach,
+>  	.mode_valid = ti_sn_bridge_mode_valid,
+>  	.get_edid = ti_sn_bridge_get_edid,
+> +	.detect = ti_sn_bridge_detect,
+> +	.hpd_enable = ti_sn_bridge_hpd_enable,
+> +	.hpd_disable = ti_sn_bridge_hpd_disable,
+>  	.atomic_pre_enable = ti_sn_bridge_atomic_pre_enable,
+>  	.atomic_enable = ti_sn_bridge_atomic_enable,
+>  	.atomic_disable = ti_sn_bridge_atomic_disable,
+> @@ -1223,6 +1282,34 @@ static int ti_sn_bridge_parse_dsi_host(struct ti_sn65dsi86 *pdata)
+>  	return 0;
+>  }
+>  
+> +static irqreturn_t ti_sn65dsi86_irq_handler(int irq, void *arg)
+> +{
+> +	struct ti_sn65dsi86 *pdata = arg;
+> +	int ret;
+> +	unsigned int hpd;
+> +
+> +	ret = regmap_read(pdata->regmap, SN_IRQ_HPD_STATUS_REG, &hpd);
+> +	if (ret || !hpd)
+> +		return IRQ_NONE;
+> +
+> +	if (hpd & IRQ_HPD_INSERTION_STATUS)
+> +		drm_bridge_hpd_notify(&pdata->bridge, connector_status_connected);
+> +
+> +	if (hpd & IRQ_HPD_REMOVAL_STATUS)
+> +		drm_bridge_hpd_notify(&pdata->bridge, connector_status_disconnected);
+> +
+> +	/* When replugged, ensure we trigger a detect to update the display */
+> +	if (hpd & IRQ_HPD_REPLUG_STATUS)
+> +		drm_bridge_hpd_notify(&pdata->bridge, connector_status_disconnected);
+> +
+> +	/* reset the status registers */
+
+s/registers/register/
+
+> +	regmap_write(pdata->regmap, SN_IRQ_HPD_STATUS_REG,
+> +		     IRQ_HPD_STATUS | IRQ_HPD_INSERTION_STATUS |
+> +		     IRQ_HPD_REMOVAL_STATUS | IRQ_HPD_REPLUG_STATUS);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+>  			      const struct auxiliary_device_id *id)
+>  {
+> @@ -1236,6 +1323,14 @@ static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+>  		return PTR_ERR(pdata->next_bridge);
+>  	}
+>  
+> +	pdata->no_hpd = of_property_read_bool(np, "no-hpd");
+> +	if (pdata->next_bridge->type != DRM_MODE_CONNECTOR_DisplayPort &&
+> +	    !pdata->no_hpd) {
+> +		dev_warn(pdata->dev,
+> +			 "HPD support only implemented for full DP connectors\n");
+> +		pdata->no_hpd = true;
+> +	}
+> +
+>  	ti_sn_bridge_parse_lanes(pdata, np);
+>  
+>  	ret = ti_sn_bridge_parse_dsi_host(pdata);
+> @@ -1247,9 +1342,29 @@ static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+>  	pdata->bridge.type = pdata->next_bridge->type == DRM_MODE_CONNECTOR_DisplayPort
+>  			   ? DRM_MODE_CONNECTOR_DisplayPort : DRM_MODE_CONNECTOR_eDP;
+>  
+> -	if (pdata->bridge.type == DRM_MODE_CONNECTOR_DisplayPort)
+> +	if (pdata->bridge.type == DRM_MODE_CONNECTOR_DisplayPort) {
+>  		pdata->bridge.ops = DRM_BRIDGE_OP_EDID;
+>  
+> +		if (!pdata->no_hpd)
+> +			pdata->bridge.ops |= DRM_BRIDGE_OP_DETECT;
+> +	}
+> +
+> +	if (!pdata->no_hpd && pdata->irq > 0) {
+> +		dev_err(pdata->dev, "registering IRQ %d\n", pdata->irq);
+
+As you've noted, this should be removed.
+
+> +
+> +		ret = devm_request_threaded_irq(pdata->dev, pdata->irq, NULL,
+> +						ti_sn65dsi86_irq_handler,
+> +						IRQF_ONESHOT, "sn65dsi86-irq",
+> +						pdata);
+> +		if (ret)
+> +			return dev_err_probe(pdata->dev, ret,
+> +					     "Failed to register DP interrupt\n");
+> +
+> +		/* Enable IRQ based HPD */
+> +		regmap_write(pdata->regmap, SN_IRQ_EN_REG, IRQ_EN);
+
+Do we have a guarantee that the device isn't PM-suspended here ? Should
+this be done in the PM resume handler ?
+
+> +		pdata->bridge.ops |= DRM_BRIDGE_OP_HPD;
+> +	}
+> +
+>  	drm_bridge_add(&pdata->bridge);
+>  
+>  	ret = ti_sn_attach_host(pdata);
+> @@ -1831,6 +1946,7 @@ static int ti_sn65dsi86_probe(struct i2c_client *client,
+>  		return -ENOMEM;
+>  	dev_set_drvdata(dev, pdata);
+>  	pdata->dev = dev;
+> +	pdata->irq = client->irq;
+>  
+>  	mutex_init(&pdata->comms_mutex);
+>  
+
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart

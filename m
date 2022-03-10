@@ -2,227 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5E84D3E71
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A6A4D3E7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiCJAwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S235102AbiCJA6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiCJAwd (ORCPT
+        with ESMTP id S238208AbiCJA6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:52:33 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D25A6E56B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:51:33 -0800 (PST)
+        Wed, 9 Mar 2022 19:58:06 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC710C0842
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:57:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646873493; x=1678409493;
+  t=1646873826; x=1678409826;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lkeupvj4kynTUScTDJhfQz76mAOO5ubgDQN4+bqAFrA=;
-  b=jMHOnKYQi2RrjC34divGYtrvX/ZFvgoK4u64V+GJoE6YHUo4PkpxfpTZ
-   3f8DltYDBka2bWPkjnkv0XDxuorTqxTPS5gvijlVA/lxPTmu/6unHPeWQ
-   Txct4qZDi1qJ4FjGVoF1dqkj+rAIA0utWsSoS/7kkalgn61Djeq564qAp
-   nx1zNtxwt85Wc2y6JfxiAHd3T/h0FiDpMWA/CQFhYACn7gOiW+bRO1R81
-   60SB1QX5cP/kJIRbfu5ZYxdkxr6V7ehlkA6/wknq9ZvFGFUv99VYlFwIr
-   En+L0cMiBHYLTP8QjKUlGAVT/p+FBSPKEPrcaJXtmvjkmXYuzl/Yd6T8F
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="255313771"
+  bh=EGCCGf78mu6c1NuKFEQ6fLhRTn1OWX4f7P2TPo065pc=;
+  b=cuC6WWF340+XQMp1CNHDScR/HNCjQ//6WmUHSVQTly6l5h3tLUovXwys
+   uEXltPU+VCTtfA/TGg7L1F21Y/zzz8eq6/qI+vp8y6+WcZhb3mUPZd9X8
+   TapzBxiMH6cXIztADjTInYrXL9UEUfD6ch3IYvTxvTkd26HAeVlJAx+S5
+   RsFSnNaanYb8qpXzJNvejq6CG/W9RC5RCoXbAWtDJ4cTn1QnEoj/+AvwQ
+   R9sTBOiEmvBo6iv4vKS1nW/hjXnpTzoQ6BBHqc8d/nJgKs+0eLrZeG37f
+   FAe6OG+vj0M6IvOiPvcXH3+JCrw1GCzvIsfcxSlOZuRZUT8qnsZqrVCVB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="242572006"
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="255313771"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 16:51:33 -0800
+   d="scan'208";a="242572006"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 16:57:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
-   d="scan'208";a="496053296"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2022 16:51:26 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 70C69211; Thu, 10 Mar 2022 02:51:45 +0200 (EET)
-Date:   Thu, 10 Mar 2022 03:51:45 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 11/30] x86/tdx: Handle in-kernel MMIO
-Message-ID: <20220310005145.hzv2lzxgs7uxblfr@black.fi.intel.com>
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-12-kirill.shutemov@linux.intel.com>
- <81a7ad6d-6bd9-7674-3229-67a5cd2e485a@intel.com>
+   d="scan'208";a="642361390"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2022 16:57:04 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nS771-00045W-Fx; Thu, 10 Mar 2022 00:57:03 +0000
+Date:   Thu, 10 Mar 2022 08:56:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH] mm: Only re-generate demotion targets when a numa node
+ changes its N_CPU state
+Message-ID: <202203100830.iDtoMHKt-lkp@intel.com>
+References: <20220309144644.4278-1-osalvador@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <81a7ad6d-6bd9-7674-3229-67a5cd2e485a@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220309144644.4278-1-osalvador@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 01:26:28PM -0800, Dave Hansen wrote:
-> On 3/2/22 06:27, Kirill A. Shutemov wrote:
-> > In non-TDX VMs, MMIO is implemented by providing the guest a mapping
-> > which will cause a VMEXIT on access and then the VMM emulating the
-> > instruction that caused the VMEXIT. That's not possible for TDX VM.
-> > 
-> > To emulate an instruction an emulator needs two things:
-> > 
-> >   - R/W access to the register file to read/modify instruction arguments
-> >     and see RIP of the faulted instruction.
-> > 
-> >   - Read access to memory where instruction is placed to see what to
-> >     emulate. In this case it is guest kernel text.
-> > 
-> > Both of them are not available to VMM in TDX environment:
-> > 
-> >   - Register file is never exposed to VMM. When a TD exits to the module,
-> >     it saves registers into the state-save area allocated for that TD.
-> >     The module then scrubs these registers before returning execution
-> >     control to the VMM, to help prevent leakage of TD state.
-> > 
-> >   - Memory is encrypted a TD-private key. The CPU disallows software
-> >     other than the TDX module and TDs from making memory accesses using
-> >     the private key.
-> 
-> Memory encryption has zero to do with this.  The TDX isolation
-> mechanisms are totally discrete from memory encryption, although they
-> are "neighbors" of sorts.
+Hi Oscar,
 
-Hm. I don't see why you say encryption is not relevant. VMM (host kernel)
-has ultimate access to guest memory cypher text. It can read it as
-cypher text without any issue (using KeyID-0).
+Thank you for the patch! Perhaps something to improve:
 
-Could you elaborate on the point?
+[auto build test WARNING on hnaz-mm/master]
 
-> > == Patching TDX drivers ==
-> > 
-> > Rather than touching the entire kernel, it might also be possible to
-> > just go after drivers that use MMIO in TDX guests.  Right now, that's
-> > limited only to virtio and some x86-specific drivers.
-> > 
-> > All virtio MMIO appears to be done through a single function, which
-> > makes virtio eminently easy to patch.
-> > 
-> > This approach will be adopted in the future, removing the bulk of
-> > MMIO #VEs. The #VE-based MMIO will remain serving non-virtio use cases.
-> 
-> This still doesn't *quite* do it for me for a justification.  Why can't
-> the non-virtio cases be converted as well?  Why doesn't the "patching
-> MMIO sites" work for x86 code too?
-> 
-> You really need to convince us that *this* approach will be required
-> forever.
+url:    https://github.com/0day-ci/linux/commits/Oscar-Salvador/mm-Only-re-generate-demotion-targets-when-a-numa-node-changes-its-N_CPU-state/20220309-224707
+base:   https://github.com/hnaz/linux-mm master
+config: sparc-randconfig-r001-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100830.iDtoMHKt-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8af0c9ff9475c64e31963a5810b127875081c5ff
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Oscar-Salvador/mm-Only-re-generate-demotion-targets-when-a-numa-node-changes-its-N_CPU-state/20220309-224707
+        git checkout 8af0c9ff9475c64e31963a5810b127875081c5ff
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash kernel/sched/
 
-What if I add:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-	Many drivers can potentially be used inside TDX guest (e.g. via device
-	passthough or random device emulation by VMM), but very few will.
-	Patching every possible driver is not practical. #VE-based MMIO provides
-	functionality for everybody. Performance-critical cases can be optimized
-	as needed.
+All warnings (new ones prefixed by >>):
 
-?
+   In file included from kernel/sched/sched.h:53,
+                    from kernel/sched/core.c:13:
+   include/linux/migrate.h:54:20: error: function declaration isn't a prototype [-Werror=strict-prototypes]
+      54 | static inline void set_migration_target_nodes() {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/migrate.h: In function 'set_migration_target_nodes':
+>> include/linux/migrate.h:54:20: warning: old-style function definition [-Wold-style-definition]
+   kernel/sched/core.c: At top level:
+   kernel/sched/core.c:3442:6: warning: no previous prototype for 'sched_set_stop_task' [-Wmissing-prototypes]
+    3442 | void sched_set_stop_task(int cpu, struct task_struct *stop)
+         |      ^~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from kernel/sched/sched.h:53,
+                    from kernel/sched/loadavg.c:9:
+   include/linux/migrate.h:54:20: error: function declaration isn't a prototype [-Werror=strict-prototypes]
+      54 | static inline void set_migration_target_nodes() {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/migrate.h: In function 'set_migration_target_nodes':
+>> include/linux/migrate.h:54:20: warning: old-style function definition [-Wold-style-definition]
+   cc1: some warnings being treated as errors
+--
+   In file included from kernel/sched/sched.h:53,
+                    from kernel/sched/fair.c:23:
+   include/linux/migrate.h:54:20: error: function declaration isn't a prototype [-Werror=strict-prototypes]
+      54 | static inline void set_migration_target_nodes() {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/migrate.h: In function 'set_migration_target_nodes':
+>> include/linux/migrate.h:54:20: warning: old-style function definition [-Wold-style-definition]
+   kernel/sched/fair.c: At top level:
+   kernel/sched/fair.c:11135:6: warning: no previous prototype for 'task_vruntime_update' [-Wmissing-prototypes]
+   11135 | void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from kernel/sched/sched.h:53,
+                    from kernel/sched/rt.c:6:
+   include/linux/migrate.h:54:20: error: function declaration isn't a prototype [-Werror=strict-prototypes]
+      54 | static inline void set_migration_target_nodes() {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/migrate.h: In function 'set_migration_target_nodes':
+>> include/linux/migrate.h:54:20: warning: old-style function definition [-Wold-style-definition]
+   kernel/sched/rt.c: At top level:
+   kernel/sched/rt.c:730:6: warning: no previous prototype for 'sched_rt_bandwidth_account' [-Wmissing-prototypes]
+     730 | bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-> > +static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
-> > +{
-> > +	char buffer[MAX_INSN_SIZE];
-> > +	unsigned long *reg, val;
-> > +	struct insn insn = {};
-> > +	enum mmio_type mmio;
-> > +	int size, extend_size;
-> > +	u8 extend_val = 0;
-> > +
-> > +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
-> > +		return false;
-> > +
-> > +	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
-> > +		return false;
-> > +
-> > +	mmio = insn_decode_mmio(&insn, &size);
-> > +	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
-> > +		return false;
-> > +
-> > +	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
-> > +		reg = insn_get_modrm_reg_ptr(&insn, regs);
-> > +		if (!reg)
-> > +			return false;
-> > +	}
-> > +
-> > +	ve->instr_len = insn.length;
-> > +
-> > +	switch (mmio) {
-> > +	case MMIO_WRITE:
-> > +		memcpy(&val, reg, size);
-> > +		return mmio_write(size, ve->gpa, val);
-> > +	case MMIO_WRITE_IMM:
-> > +		val = insn.immediate.value;
-> > +		return mmio_write(size, ve->gpa, val);
-> > +	case MMIO_READ:
-> > +	case MMIO_READ_ZERO_EXTEND:
-> > +	case MMIO_READ_SIGN_EXTEND:
-> > +		break;
-> > +	case MMIO_MOVS:
-> > +	case MMIO_DECODE_FAILED:
-> > +		/*
-> > +		 * MMIO was accessed with an instruction that could not be
-> > +		 * decoded or handled properly. It was likely not using io.h
-> > +		 * helpers or accessed MMIO accidentally.
-> > +		 */
-> > +		return false;
-> > +	default:
-> > +		/* Unknown insn_decode_mmio() decode value? */
-> > +		BUG();
-> > +	}
-> 
-> BUG()s are bad.  The set of insn_decode_mmio() return codes is known at
-> compile time.  If we're really on the lookout for unknown values, why
-> not just:
-> 
-> 	BUILD_BUG_ON(NR_MMIO_TYPES != 6); // or whatever
 
-This doesn't work.
+vim +54 include/linux/migrate.h
 
-We can pretend that the function only forced to return values from the
-enum. The truth is that it can return whatever int it wants. Type system
-in C is too week to guarantee anything here. The BUG() is backstop for it.
+    36	
+    37	extern void migrate_page_states(struct page *newpage, struct page *page);
+    38	extern void migrate_page_copy(struct page *newpage, struct page *page);
+    39	extern int migrate_huge_page_move_mapping(struct address_space *mapping,
+    40					  struct page *newpage, struct page *page);
+    41	extern int migrate_page_move_mapping(struct address_space *mapping,
+    42			struct page *newpage, struct page *page, int extra_count);
+    43	void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+    44					spinlock_t *ptl);
+    45	void folio_migrate_flags(struct folio *newfolio, struct folio *folio);
+    46	void folio_migrate_copy(struct folio *newfolio, struct folio *folio);
+    47	int folio_migrate_mapping(struct address_space *mapping,
+    48			struct folio *newfolio, struct folio *folio, int extra_count);
+    49	
+    50	extern bool numa_demotion_enabled;
+    51	#ifdef CONFIG_HOTPLUG_CPU
+    52	extern void set_migration_target_nodes(void);
+    53	#else
+  > 54	static inline void set_migration_target_nodes() {}
+    55	#endif
+    56	#else
+    57	
 
-This BUILD_BUG_ON() is useless. Compiler complains about missing case in
-the switch anyway.
-
-> Also, there are *lots* of ways for this function to just fall over and
-> fail.  Why does this particular failure mode deserve a BUG()?
-> 
-> Is there a reason a BUG() is better than returning failure which
-> presumably sets off the #GP-like logic?
-
-BUG() here makes it clear that the handler itself is buggy. Returning
-false and kicking in #GP-like logic indicates that something wrong with
-the code that triggered #VE. I think it is an important distinction.
-
-> Also, now that I've read this a few times, I've been confused by the
-> same thing a few times.  This is handling instructions that might read
-> or write or do both, correct?
-> 
-> Should that be made explicit in a function comment?
-
-Hm. Okay. Something like
-
-/* Handle reads from and writes to MMIO region. */
-
-before the function?
-
--- 
- Kirill A. Shutemov
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

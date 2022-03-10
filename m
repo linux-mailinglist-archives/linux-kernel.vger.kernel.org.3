@@ -2,90 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D034D5091
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435C84D5098
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245038AbiCJRcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:32:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S245203AbiCJReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236035AbiCJRcb (ORCPT
+        with ESMTP id S245307AbiCJRdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:32:31 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED54AF5402
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:31:28 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id a14so5180213qtx.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:31:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i7J8e206Bwozad+xJPF02nCEZhsFp5sZ0xZvk63VV68=;
-        b=UkGo0vpr4SaQ7VeIYfKdoCqVYOfqyZ3ua0gxQaiJfTvuIAdcEhC7UzaOYUa+8sTpBI
-         wYGfW0Oyu3FfBBXPWw6SmL7k9/Ix6fjwuGHvkSm5lrOgl0ENo1rP0RrjvEBxzxAp03Gh
-         zQ/3YctkGkQXC22sPfWYmqkvHsQeraa8bVSTnn2NJXnxYA2o5wMomQMsd54TRQk6BinA
-         66SHzCNzlLrkOoGYPJbmY/C9U3RloqxiyhcEza5IJT17waUWq6Pr7CkjrynsZ5QIxT6A
-         Ty6Wst/a7i05d2X56zLTgO7XY9bwMpKsT3BIpaI3jYkRcGuzXkvWvLMzj9Mop7ypQ0PI
-         yD4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i7J8e206Bwozad+xJPF02nCEZhsFp5sZ0xZvk63VV68=;
-        b=QNwL7bDHrdAE7rAMhQ15YaEz0AOef/0/17yRNDCDuhfh3XEnM6ZkAMXqPK/SDTXmbU
-         B3hDzuIBDnifrfulhU/LQXhbtqMnQ+T8QGUclfPATTv8WM47DwqiUSU3t1UZ5Z0ZL9uW
-         SCsSe4xf3AyL7qi9GHbQNd5kEoTwHOtLAqR0uc4IxevSir8FLDgi0aAg6TY4bzQ/lwvV
-         vYDVsBraSY4lCYrfkV7Q9WdP3UK1D1NhVzE35tyA2gEJtWZ+tVjdGVD+D7blF6aSUVnL
-         +YpkDrlNXL8tKihcOKzSnlFbsNIRV/muYZ/QrSbdmDjA2mAWXpWux6Ol7+WQiq+cYASF
-         Nrpw==
-X-Gm-Message-State: AOAM532BNSigBsOJX9xyu8GcrBBgXAW0mp4lG224+YaKCxatbXDhEOKk
-        zD6wtsWzJBgtsS4iwiRqDd/xpA==
-X-Google-Smtp-Source: ABdhPJwXrthz2QtCLsnFtqyDL0e1w0h1YTxxQQFSEJP3ZvHCIAN7kMeF7r6fRWtGJMhwK1gVmjpSbw==
-X-Received: by 2002:a05:622a:550:b0:2e0:7422:a1d5 with SMTP id m16-20020a05622a055000b002e07422a1d5mr5001583qtx.444.1646933488129;
-        Thu, 10 Mar 2022 09:31:28 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id bs11-20020a05620a470b00b004b2d02f8a92sm2579261qkb.126.2022.03.10.09.31.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 09:31:27 -0800 (PST)
-Date:   Thu, 10 Mar 2022 12:31:26 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     cgel.zte@gmail.com, axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: remove PSI annotations from submit_bio
-Message-ID: <Yio17pXawRuuVJFO@cmpxchg.org>
-References: <20220309094323.2082884-1-yang.yang29@zte.com.cn>
- <Yij9eygSYy5MSIA0@cmpxchg.org>
- <Yime3HdbEqFgRVtO@infradead.org>
- <YiokaQLWeulWpiCx@cmpxchg.org>
- <Yiok1xi0Hqmh1fbi@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yiok1xi0Hqmh1fbi@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 10 Mar 2022 12:33:21 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7C32F5402;
+        Thu, 10 Mar 2022 09:32:19 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6700120B7178;
+        Thu, 10 Mar 2022 09:32:19 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6700120B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646933539;
+        bh=rjWLUtjXMCjyslyq0fVUUUtRbPRDKlGeSrBa50NCzQQ=;
+        h=From:To:Subject:Date:From;
+        b=eP6W5vx30W5GhN1RTeXX3w9pg/i2T2iICF2reDJFTpBbjVcKFVZ3eoqqKHzgqul5u
+         lyWSFSnwFvhbHrFTEyPTOLLwKuDNQtT99irif3OvLWfOTf1nvHCWgATy5hZnH59ZMv
+         yUQUOqMzOxedrSWCyj2SilN98cO5JPkSfD/ZLxpo=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     ssengar@microsoft.com, haiyangz@microsoft.com, kys@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        davem@davemloft.net, kuba@kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: netvsc: remove break after return
+Date:   Thu, 10 Mar 2022 09:32:14 -0800
+Message-Id: <1646933534-29493-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 08:18:31AM -0800, Christoph Hellwig wrote:
-> On Thu, Mar 10, 2022 at 11:16:41AM -0500, Johannes Weiner wrote:
-> > The first version did that, but it was sprawling and not well-received:
-> > 
-> > https://lkml.org/lkml/2019/7/22/1261
-> 
-> Well, Dave's comments are spot on.  Except that we replaced it with
-> something even more horrible and not something sensible as he suggested.
+In function netvsc_process_raw_pkt for VM_PKT_DATA_USING_XFER_PAGES
+case there is already a 'return' statement which results 'break'
+as dead code
 
-Confused. I changed it the way Dave suggested, to which he replied
-"this is much cleaner and easier to maintain". Are we reading
-different threads? Care to elaborate?
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+ drivers/net/hyperv/netvsc.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
+index e675d10..9442f75 100644
+--- a/drivers/net/hyperv/netvsc.c
++++ b/drivers/net/hyperv/netvsc.c
+@@ -1630,7 +1630,6 @@ static int netvsc_process_raw_pkt(struct hv_device *device,
+ 
+ 	case VM_PKT_DATA_USING_XFER_PAGES:
+ 		return netvsc_receive(ndev, net_device, nvchan, desc);
+-		break;
+ 
+ 	case VM_PKT_DATA_INBAND:
+ 		netvsc_receive_inband(ndev, net_device, desc);
+-- 
+1.8.3.1
+

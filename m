@@ -2,144 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D58B4D5350
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4964D5352
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245601AbiCJVAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S245572AbiCJVAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245041AbiCJVAF (ORCPT
+        with ESMTP id S245041AbiCJVA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:00:05 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C116DDB859;
-        Thu, 10 Mar 2022 12:59:00 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id s35-20020a0568302aa300b005b2463a41faso4901057otu.10;
-        Thu, 10 Mar 2022 12:59:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KY8vboNBmqrfG0d73imgH39eTc9TfJDXwkAlFPUH9vc=;
-        b=t2IXZR4wxmUsjfVVIt+ZXBe/etuSSCckKTev7KfG1UoqmUn6jzZerWgpwYRh/7S0wU
-         fP2G36gV1zxQEI1BQPp9IEbmGEYYEkLFZ9xVqeKuhg0CiHmoKLqQlZSak/aNfVymVkCy
-         ktwFpqbIgQxknIe7SL0EpIEaD3xUd9m3+7ukCxLILrh1j7QacY2bS4k6xPT8k+p+97ES
-         kxU7wmuSgYjT+ms4HWcxTTwF01SDfJIskJxIWZN4l9loTLMrlHZiMSGL7/QxZqW8HMoI
-         Tn9wyswLBZj0FvnsIgJKFEGrczJWj6pyisVFeaWZ66TaKAb3uU4RaCapmk5+GeHXxBh/
-         CTXg==
-X-Gm-Message-State: AOAM530e0OkS+Axp5Ji0wn+rcj0IvHdGX5bpu5lAZC9Y1Ztfu1uAdgg3
-        BZrgmgLVohwOlExftOvLYKL2PfEMRw==
-X-Google-Smtp-Source: ABdhPJweLHgVJP/ACLxeR6y+GKz1ica7nyWcDw6WwkEkwllJY8ExbXdnGbaAQa1EOxVBGQr9EAhM2g==
-X-Received: by 2002:a9d:2ce:0:b0:5b2:1513:4997 with SMTP id 72-20020a9d02ce000000b005b215134997mr3460310otl.278.1646945940049;
-        Thu, 10 Mar 2022 12:59:00 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q189-20020acaf2c6000000b002da32f2035fsm2768709oih.2.2022.03.10.12.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 12:58:59 -0800 (PST)
-Received: (nullmailer pid 2058933 invoked by uid 1000);
-        Thu, 10 Mar 2022 20:58:58 -0000
-Date:   Thu, 10 Mar 2022 14:58:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     vigneshr@ti.com, richard@nod.at, miquel.raynal@bootlin.com,
-        joern@lazybastard.org, kernel@axis.com,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, frowand.list@gmail.com,
-        krzysztof.kozlowski@canonical.com
-Subject: Re: [PATCH 2/4] dt-bindings: reserved-memory: Add phram
-Message-ID: <YipmkgOuLZGVqH7S@robh.at.kernel.org>
-References: <20220307141549.2732179-1-vincent.whitchurch@axis.com>
- <20220307141549.2732179-3-vincent.whitchurch@axis.com>
+        Thu, 10 Mar 2022 16:00:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4FEDBD28;
+        Thu, 10 Mar 2022 12:59:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FC7BB82849;
+        Thu, 10 Mar 2022 20:59:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87145C340E8;
+        Thu, 10 Mar 2022 20:59:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ME2n1YTL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646945958;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ftjEjnH/rbsDeyFCjGVbhkWso1sbRUDgVGsJ454ha4=;
+        b=ME2n1YTLI1bjpJA3U9PsygwL2CYiWoB3BQ2ERoyg6APueWHj2gUBEcML3CGeE//KWas3hi
+        3jEEbISTG7AchhdPtPS5I/TiIOpfTsmHZfRyeRsJhmj7uYgPgS8x6vopOS+AsyrC0yudqK
+        zxfauqOQfPeASZl8ycSJDKJUT6mCZ4E=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 09fcd7fd (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 10 Mar 2022 20:59:18 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2dc28791ecbso72596157b3.4;
+        Thu, 10 Mar 2022 12:59:17 -0800 (PST)
+X-Gm-Message-State: AOAM5300vOhWmMe9IdxXQBizfIleaZHVw2tt6zu2CzZQeNkBNzwWByvm
+        r6KCVodXSDPlULc6NpTg/zndRGsJ/ru7EwkTj54=
+X-Google-Smtp-Source: ABdhPJw66GRc0k7x4PF+JjD6fyFCOyICz/HdgthgklVUv0i5hNJJrN1nqT5VBWrbVNOehwtXSZxd43NAzcsVcZrHx/I=
+X-Received: by 2002:a81:10c5:0:b0:2dc:4b7:d487 with SMTP id
+ 188-20020a8110c5000000b002dc04b7d487mr5640201ywq.396.1646945956540; Thu, 10
+ Mar 2022 12:59:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307141549.2732179-3-vincent.whitchurch@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220309152653.1244096-1-Jason@zx2c4.com> <20220309191850.1508953-1-Jason@zx2c4.com>
+ <YimFHeXgw9jfevWq@sol.localdomain>
+In-Reply-To: <YimFHeXgw9jfevWq@sol.localdomain>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 10 Mar 2022 13:59:05 -0700
+X-Gmail-Original-Message-ID: <CAHmME9ohyKKX4Qg_dyGq36MxFkhBoVQYYgs8uUoCfBkJNqfX7Q@mail.gmail.com>
+Message-ID: <CAHmME9ohyKKX4Qg_dyGq36MxFkhBoVQYYgs8uUoCfBkJNqfX7Q@mail.gmail.com>
+Subject: Re: [PATCH v2] random: reseed more often immediately after booting
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 03:15:47PM +0100, Vincent Whitchurch wrote:
-> Add bindings to allow MTD/block devices to be created in reserved-memory
-> regions using the "phram" driver.
+Hey Eric,
 
-What does 'ph' mean? Please define somewhere for the binding.
+On Wed, Mar 9, 2022 at 9:57 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> > not more than once per 5 minutes.
+>
+> Break up the above into multiple paragraphs?
 
-> 
-> This allows things like partitioning to be specified via the existing
-> devicetree bindings.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  .../bindings/reserved-memory/phram.yaml       | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reserved-memory/phram.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/phram.yaml b/Documentation/devicetree/bindings/reserved-memory/phram.yaml
-> new file mode 100644
-> index 000000000000..92e7a80ee87a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reserved-memory/phram.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reserved-memory/phram.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MTD/block device in RAM
-> +
-> +description: |
-> +  Use the reserved memory region as an MTD or block device.
-> +
-> +  If no-map is not set, cached mappings will be used for the memory region.
-> +
-> +maintainers:
-> +  - Vincent Whitchurch <vincent.whitchurch@axis.com>
-> +
-> +allOf:
-> +  - $ref: "reserved-memory.yaml"
-> +  - $ref: "../mtd/mtd.yaml"
+Will do.
 
-/schemas/mtd/mtd.yaml
+>
+> > +/*
+> > + * Return whether the crng seed is considered to be sufficiently
+> > + * old that a reseeding might be attempted. This is the case 5,
+> > + * 10, 20, 40, 80, and 160 seconds after boot, and after if the
+> > + * last reseeding was CRNG_RESEED_INTERVAL ago.
+> > + */
+> > +static bool crng_has_old_seed(void)
+> > +{
+> > +     static unsigned int next_init_secs = 5;
+> > +
+> > +     if (unlikely(next_init_secs < CRNG_RESEED_INTERVAL / HZ)) {
+>
+> The read of 'next_init_secs' needs READ_ONCE(), since it can be written to
+> concurrently.
 
-> +
-> +properties:
-> +  compatible:
-> +    const: phram
-> +
-> +  reg:
-> +    description: region of memory that contains the MTD/block device
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    reserved-memory {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        phram: flash@12340000 {
-> +            compatible = "phram";
-> +            label = "rootfs";
+Thanks, will fix.
 
-That's an odd example...
+> However, one thing that seems a bit odd is that this method can result in two
+> reseeds with very little time in between.  For example, if no one is using the
+> RNG from second 40-78, but then it is used in seconds 79-80, then it will be
+> reseeded at both seconds 79 and 80 if there is entropy available.
 
-> +            reg = <0x12340000 0x00800000>;
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
-> 
+I've been sort of going back and forth on this. I think the idea is
+that there are two relative time measurements. The ordinary one we use
+is time since last reseeding. But at boot, we're trying to account for
+the fact that entropy is coming in relative to the init process of the
+system, which means we need it to be relative to boot time rather than
+relative to the last reseeding. As you point out, this is a little
+wonky with how things are now, because we only ever reseed on usage.
+To get closer to what I have in mind, we could reseed in a timer, so
+that it hits it exactly on the 5,10,20,40,etc dot. But that seems a
+bit cumbersome and maybe unnecessary. The effect of the behavior of
+this v1 you pointed out is:
+
+- We might reseed at 79, and then fail to reseed at 80. Consequence:
+we lose 1 second of entropy that could have made it for that try.
+- We might reseed at 79, and then also reseed at 80 too. Consequence:
+that's a fairly quick refresh, but on the other hand, we're still
+requiring 256 bit credits, so maybe not so bad, and if we've got so
+much entropy coming in during that small period of time, maybe it
+really isn't a concern.
+
+So I'm not sure either of these cases really matter that much.
+
+> Perhaps the condition should still be:
+>
+>         time_after(jiffies, READ_ONCE(base_crng.birth) + interval);
+>
+> ... as it is in the non-early case, but where 'interval' is a function of
+> 'uptime' rather than always CRNG_RESEED_INTERVAL?  Maybe something like:
+>
+>         interval = CRNG_RESEED_INTERVAL;
+>         if (uptime < 2 * CRNG_RESEED_INTERVAL / HZ)
+>                 interval = max(5, uptime / 2) * HZ;
+
+I'd experimented with things like that, for example making it exponential:
+
+  static bool early_boot = true;
+  unsigned long interval = CRNG_RESEED_INTERVAL;
+
+  if (unlikely(READ_ONCE(early_boot))) {
+    unsigned int uptime = min_t(u64, INT_MAX, ktime_get_seconds());
+    if (uptime >= CRNG_RESEED_INTERVAL / HZ)
+      WRITE_ONCE(early_boot, false);
+    else
+      interval = (5U << fls(uptime / 5)) * HZ;
+  }
+  return time_after(jiffies, READ_ONCE(base_crng.birth) + interval);
+
+But the whole thing of combining relative-to-last-reseed with
+relative-to-boottime seems really strange. I'm not quite sure what
+that's supposed to represent, whereas what I have in v1 is
+"exponentially increasing intervals from boottime" which is fairly
+easy to understand.
+
+Jason

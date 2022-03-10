@@ -2,117 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C09A4D4882
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC3E4D4886
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242635AbiCJODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S242646AbiCJOEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbiCJODX (ORCPT
+        with ESMTP id S242640AbiCJOED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:03:23 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1D14E976
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646920942; x=1678456942;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uOwhborcRgavFTSUWMRWRCM1yBEHDdqFGkJhMAWS0dQ=;
-  b=iXjdJ2TDjCoVC2Rr12YFWIoj8pOJ63fTfIgt6FYi9fpPnZkL5ncPnmeg
-   byH//2WPT5qYB5VXB5fCfb5uLXVLkRO+jHnW43SGN63sfBykMQeDjmmM/
-   np5h167Lzkf5k/u0n49JSce5KDH6CXpX47P63zoTlFhsEkj/LAU07OjC8
-   Myanml3GeGDqXgGSFgw++B80VZPrTm5owOBa6iqX0pBsVXgu79IxBmM2a
-   e0s9FepX6RBzmDlwbx5GI+OXOaAZxb1lPLL3osTOpFWFVSauo5NwYZD9i
-   Af4tMJYgKn2vy8++FAY3g85EYHYgAlY0EAFIeBAqJv0xF61vFW8DTzkjq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="235204068"
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="235204068"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 06:02:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
-   d="scan'208";a="548017116"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2022 06:02:20 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSJMx-00050L-AI; Thu, 10 Mar 2022 14:02:19 +0000
-Date:   Thu, 10 Mar 2022 22:01:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
- 1249/8858] arch/mips/include/asm/page.h:12:10: fatal error: 'spaces.h' file
- not found
-Message-ID: <202203102157.Kyxw6NdP-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 09:04:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B613C8BE38
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:03:01 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F05FF210E9;
+        Thu, 10 Mar 2022 14:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646920979; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cT3dEO1xJTRPVumYeIvPPu1SHUArEx384wqIf7FTOS8=;
+        b=ksQ0aeN9krn4d0er3l0gCJBwOWnl2/y3H2evub/Jzli1faQotpj608Et54rigf6un5+yMH
+        JxtbyJcH/N9ALH6ukhg3TLtiRwXWTpfHFSLeL3+TmU9pouK/jrFzBrYi0FlJ3SP7tJxRdr
+        OzT78KbRCObpps9tjj2udeU51RS+kGA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646920979;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cT3dEO1xJTRPVumYeIvPPu1SHUArEx384wqIf7FTOS8=;
+        b=33c0q/WzR/zAPyGVXPVRWgYDRPbRYDvS5SD27rfPl7krCyB8ylN+MR/kKbCFrb9BuvtcZv
+        fpm5kSVKl0DgL3DA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 6DAC5A3B81;
+        Thu, 10 Mar 2022 14:02:59 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 15:02:59 +0100
+Message-ID: <s5h5yolgb1o.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     =?UTF-8?B?Ium7hOaWh+i+iSI=?= <huangwenhuia@uniontech.com>
+Cc:     "perex" <perex@perex.cz>, "tiwai" <tiwai@suse.com>,
+        "jeremy.szu" <jeremy.szu@canonical.com>,
+        "hui.wang" <hui.wang@canonical.com>,
+        "wse" <wse@tuxedocomputers.com>, "cam" <cam@neo-zeon.de>,
+        "kailang" <kailang@realtek.com>,
+        "tanureal" <tanureal@opensource.cirrus.com>,
+        "sami" <sami@loone.fi>, "alsa-devel" <alsa-devel@alsa-project.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+In-Reply-To: <tencent_0D06988048F675F173385A1F@qq.com>
+References: <20220310130301.22827-1-huangwenhuia@uniontech.com>
+        <s5hilsmey0h.wl-tiwai@suse.de>
+        <tencent_0D06988048F675F173385A1F@qq.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-head:   9771767708df4fcf51cd1642e041c804a86e740c
-commit: 08f67ef189ecce0f8330e53e5b78157f1b5afa19 [1249/8858] ANDROID: module: cfi: ensure __cfi_check alignment
-config: mips-cavium_octeon_defconfig (https://download.01.org/0day-ci/archive/20220310/202203102157.Kyxw6NdP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/08f67ef189ecce0f8330e53e5b78157f1b5afa19
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr1-d
-        git checkout 08f67ef189ecce0f8330e53e5b78157f1b5afa19
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips modules_prepare
+On Thu, 10 Mar 2022 14:58:36 +0100,
+黄文辉 wrote:
+> 
+> Hi  Takashi,
+> 
+> Thank you for your reply.
+> 
+> When booting with plugged headset, the headphone will be muted.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from scripts/module.lds.S:6:
->> arch/mips/include/asm/page.h:12:10: fatal error: 'spaces.h' file not found
-   #include <spaces.h>
-            ^~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:367: scripts/module.lds] Error 1
-   make[1]: *** [Makefile:1469: modules_prepare] Error 2
-   make: *** [Makefile:185: __sub-make] Error 2
-   make: Target 'modules_prepare' not remade because of errors.
+The muted state is the default behavior.  Wouldn't it be unmuted if
+you adjust the corresponding mixer element?
 
 
-vim +12 arch/mips/include/asm/page.h
+Takashi
 
-^1da177e4c3f415 include/asm-mips/page.h      Linus Torvalds  2005-04-16  11  
-^1da177e4c3f415 include/asm-mips/page.h      Linus Torvalds  2005-04-16 @12  #include <spaces.h>
-99502d94c3649c5 arch/mips/include/asm/page.h Nelson Elhage   2009-07-31  13  #include <linux/const.h>
-75b5b5e0a262790 arch/mips/include/asm/page.h Leonid Yegoshin 2013-11-14  14  #include <linux/kernel.h>
-75b5b5e0a262790 arch/mips/include/asm/page.h Leonid Yegoshin 2013-11-14  15  #include <asm/mipsregs.h>
-^1da177e4c3f415 include/asm-mips/page.h      Linus Torvalds  2005-04-16  16  
-
-:::::: The code at line 12 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Thanks.
+>  
+> ------------------ Original ------------------
+> From:  "Takashi Iwai"<tiwai@suse.de>;
+> Date:  Thu, Mar 10, 2022 09:29 PM
+> To:  "huangwenhui"<huangwenhuia@uniontech.com>;
+> Cc:  "perex"<perex@perex.cz>; "tiwai"<tiwai@suse.com>; "jeremy.szu"
+> <jeremy.szu@canonical.com>; "hui.wang"<hui.wang@canonical.com>; "wse"
+> <wse@tuxedocomputers.com>; "cam"<cam@neo-zeon.de>; "kailang"
+> <kailang@realtek.com>; "tanureal"<tanureal@opensource.cirrus.com>; "sami"
+> <sami@loone.fi>; "alsa-devel"<alsa-devel@alsa-project.org>; "linux-kernel"
+> <linux-kernel@vger.kernel.org>;
+> Subject:  Re: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP
+> machine with alc671
+>  
+> On Thu, 10 Mar 2022 14:03:01 +0100,
+> huangwenhui wrote:
+> >
+> > On a HP 288 Pro G8, the front Mic could not be detected.
+> >
+> > Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+> 
+> Thanks for the patch.  Most of the changes look OK, but one thing I
+> still don't get:
+> 
+> > + case HDA_FIXUP_ACT_INIT:
+> > + alc_write_coef_idx(codec, 0x19, 0xa054);
+> > + msleep(80);
+> > + snd_hda_codec_write(codec, hp_pin, 0,
+> > +     AC_VERB_SET_AMP_GAIN_MUTE, AMP_OUT_UNMUTE);
+> 
+> Why this unconditional unmute is required for fixing the mic problem?
+> 
+> Takashi
+> 
+> 

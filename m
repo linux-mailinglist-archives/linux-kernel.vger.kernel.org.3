@@ -2,60 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F97D4D4C7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D664D4C75
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244529AbiCJO5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S243167AbiCJO4c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 09:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347925AbiCJOvc (ORCPT
+        with ESMTP id S1347939AbiCJOvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:51:32 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBA71405C7;
-        Thu, 10 Mar 2022 06:48:44 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id BE0E51F45961
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646923723;
-        bh=ggeM4JSgsp6obEP3ZgCxoHKKLd674MO15iyeV5s6blM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=LC+uup07MAznJo/9jsdRQEAgzrweUQitMhy9VfKgqhVvUFrKPUwUeFujX49LAduGQ
-         gKp5GxqiLUeHMDkj+SSLrdjZ06fiCcc/wXoWXOWkaNshHeHS1IIpHTVhdH4Aw9qmRz
-         +K8kUscNY15sdTmSi6/uKqCywjRfviOFJOg1dNF436U/TOeJVpjESuMspVqftyMeYp
-         S2z/nCcmDGQ36Hvdc35p20o9txpYRCa0w+5iYoo79IxkU1Fr8+OVgZf5pe7CapOeyz
-         HtK3ZYr6kN6wgycaNP4QE5q+hWpszYIdBJLeKx6QFWWCECxtyhFtwmu1pkFJ7FGW2S
-         HhkKz0ft4OALQ==
-Message-ID: <57251e6c-a5e7-2388-f30e-365c56b52a42@collabora.com>
-Date:   Thu, 10 Mar 2022 15:48:39 +0100
+        Thu, 10 Mar 2022 09:51:35 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19C819C35;
+        Thu, 10 Mar 2022 06:50:32 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nSK7V-0004bE-W9; Thu, 10 Mar 2022 15:50:26 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, knaerzche@gmail.com
+Subject: Re: [PATCH] drm/rockchip: remove redundant assignment to pointer connector
+Date:   Thu, 10 Mar 2022 15:50:25 +0100
+Message-ID: <4453075.DPozGzHrQt@diego>
+In-Reply-To: <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
+References: <20220307181704.149076-1-colin.i.king@gmail.com> <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] PCI: mediatek: Fix refcount leak in
- mtk_pcie_subsys_powerup
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chuanjia Liu <chuanjia.liu@mediatek.com>,
-        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220309091953.5630-1-linmq006@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220309091953.5630-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,33 +47,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/03/22 10:19, Miaoqian Lin ha scritto:
-> The of_find_compatible_node() function returns a node pointer with
-> refcount incremented, We should use of_node_put() on it when done
-> Add the missing of_node_put() to release the refcount.
-> 
-> Fixes: 87e8657ba99c ("PCI: mediatek: Add new method to get shared pcie-cfg base address")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+Hi,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+looks like I wasn't in the original recipient list, so only got Nick's
+answer.
 
-> ---
->   drivers/pci/controller/pcie-mediatek.c | 1 +
->   1 file changed, 1 insertion(+)
+Am Mittwoch, 9. März 2022, 00:10:31 CET schrieb Nick Desaulniers:
+> On Mon, Mar 7, 2022 at 10:17 AM Colin Ian King <colin.i.king@gmail.com> wrote:
+> >
+> > The pointer connector is being assigned a value that is never read,
+> > it is being re-assigned in the following statement. The assignment
+> > is redundant and can be removed.
+> >
+> > Cleans up clang scan build warning:
+> > drivers/gpu/drm/rockchip/rockchip_rgb.c:153:2: warning: Value stored
+> > to 'connector' is never read [deadcode.DeadStores]
 > 
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index ddfbd4aebdec..be8bd919cb88 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -1008,6 +1008,7 @@ static int mtk_pcie_subsys_powerup(struct mtk_pcie *pcie)
->   					   "mediatek,generic-pciecfg");
->   	if (cfg_node) {
->   		pcie->cfg = syscon_node_to_regmap(cfg_node);
-> +		of_node_put(cfg_node);
->   		if (IS_ERR(pcie->cfg))
->   			return PTR_ERR(pcie->cfg);
->   	}
+> + Author & reviewer of:
+> Fixes: 2e87bf389e13 ("drm/rockchip: add DRM_BRIDGE_ATTACH_NO_CONNECTOR
+> flag to drm_bridge_attach")
 > 
+> >
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> > ---
+> >  drivers/gpu/drm/rockchip/rockchip_rgb.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> > index 2494b079489d..92a727931a49 100644
+> > --- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> > +++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> > @@ -150,7 +150,6 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+> >         if (ret)
+> >                 goto err_free_encoder;
+> >
+> > -       connector = &rgb->connector;
+> >         connector = drm_bridge_connector_init(rgb->drm_dev, encoder);
+
+I don't think this will work as expected.
+
+Yes, the whole thing looks a bit broken right now, but the connector
+field in the rockchip_rgb struct still exists and rockchip_rgb_fini also
+still uses it when calling drm_connector_cleanup.
+
+Same issue seems to exist in in rockchip_lvds.c with drm_connector_cleanup
+it seems.
+
+I guess drm_bridge_connector_destroy() is responsible for the cleanup so
+the drm_connector_cleanup call both in rockchip_rgb and rockchip_lvds
+as well as the local connector elements can go away as well?
+
+
+Heiko
+
+
+> >         if (IS_ERR(connector)) {
+> >                 DRM_DEV_ERROR(drm_dev->dev,
+> > --
+> > 2.35.1
+> >
+> >
+> 
+> 
+> 
+
+
 
 

@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79ED4D4293
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50054D429B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236678AbiCJIeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S240371AbiCJIeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbiCJIeL (ORCPT
+        with ESMTP id S240384AbiCJIei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:34:11 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DCC5C864;
-        Thu, 10 Mar 2022 00:33:09 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id s25so6675227lji.5;
-        Thu, 10 Mar 2022 00:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=5kbIEXrorz/H9DvUKGpzubyMEhfXDoMfMqyoxlkwx5s=;
-        b=UrjYq2/KyC3hvwORoAq2rAi9RMIsuR0umGHAz3DXdsGHU46VPLPpRZ7oxHgbMoZzfP
-         TpJPe7CbBMnfx/r97HrJIw8EChbICBje8UAdC9Xur7ScmBVscc+jU56Vbgzb0NFuyZ3L
-         Yr3DRddja/lhGnlemyu7O8ubgNs5p3fxjkfcF9hpjCvEkIDhWBW7Hb4SHkDbe9ZR3sKe
-         JSLTPqNPtGssgo/N6E/lV8jQE4RiK2pu5k5MCrEjkdKQGSt6kEugPFgkbIDoRlYVB0sl
-         u+5CMCvl2xxZtIiEx+I8NV02zzxhBW9yTYM3QTD8161ihrXzLxtgEfWnTWwBF8jH6EzQ
-         PARw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5kbIEXrorz/H9DvUKGpzubyMEhfXDoMfMqyoxlkwx5s=;
-        b=5Sh4abJehEyo0VSM39lvJygbENY3Nnhzu7pS7NqESB+Y0beRufDihnkM32zLB8ja2g
-         73a4PDMGbWsa4yrnizk34viClI8fdhjSngsK8+7q5yQnD7yaG7oMw94Am/ElGOpnVTfM
-         KOvV3EbnzhPDVC+dgqlz+urpLNB1yQiQN59HVAdETBLTrRo0yM+6DKVFBb9gqRUEMtmv
-         9JwDrdExcwBZ+O2BcGBmf5YpZ9P3TrAtBGqttSFZ020V54crHQsexaBh6e+GBbvZlhpA
-         cUYKE0fdcppNja9lY8EXYdfCB1SAg6nafGTV0YveLIIiQpU8g8newNS9KTy8gT+v3AmY
-         2JMw==
-X-Gm-Message-State: AOAM531E6ZhOwLRiE3ZyxIAjUBDxoE/DKD+Ofncibdhm8nI69ypf5j2G
-        o09l+pEoLyp6K0TaaslMsqA=
-X-Google-Smtp-Source: ABdhPJxzhyaNeFJBtRmOqugCqJRepynC1ipQE7qbVJiJc/tZWrPO6G4gzHfE6PWCrhciUe6CBTBY2w==
-X-Received: by 2002:a2e:54b:0:b0:248:744:b859 with SMTP id 72-20020a2e054b000000b002480744b859mr2331586ljf.37.1646901187276;
-        Thu, 10 Mar 2022 00:33:07 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id j7-20020a2e3c07000000b00247fd2f7f46sm926039lja.47.2022.03.10.00.33.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 00:33:06 -0800 (PST)
-Message-ID: <145c66e0-2ba5-712c-57de-82378328ec3f@gmail.com>
-Date:   Thu, 10 Mar 2022 09:33:06 +0100
+        Thu, 10 Mar 2022 03:34:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDA062A0F;
+        Thu, 10 Mar 2022 00:33:38 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A74FB1F442;
+        Thu, 10 Mar 2022 08:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646901216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3XKssLMVaaKPGr1fYyg9OX0U/rmkH9hiuCc6zH77j7Q=;
+        b=qojACQbACPKHg2O88Oh8MesyQEqAzw2krjz++XlOmWBvRAdlLq71H+D6n42CSkFFy71Lu6
+        TKSYmeJELupVwXybOOVVyMl6HNN/OvirvKDl5t9ZFstRSxR1aVQtw9zu9HEwPKN7jsH0am
+        NjqzGuhTZsBzL5pKn2XPVGIyzOl4IBE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646901216;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3XKssLMVaaKPGr1fYyg9OX0U/rmkH9hiuCc6zH77j7Q=;
+        b=/vDGK3s1A+NR9R9SPCaWsAPotrf+zvh7Blknz3wmt/QtfHAvD0wNfEedhH5hL25CG3CWtc
+        eKqwRkVjWoMlODAg==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5780FA3B83;
+        Thu, 10 Mar 2022 08:33:36 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 09:33:36 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Mark Brown <broonie@kernel.org>
+cc:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+In-Reply-To: <YiiT2lFuxc3ob+Zq@sirena.org.uk>
+Message-ID: <alpine.LSU.2.21.2203100923470.16704@pobox.suse.cz>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f> <20220117145608.6781-1-madvenka@linux.microsoft.com> <20220117145608.6781-7-madvenka@linux.microsoft.com> <YgutJKqYe8ss8LLd@FVFF77S0Q05N> <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
+ <YiY6hecX0pVWowQ7@sirena.org.uk> <c494fa10-e973-c137-b637-66bde327611c@linux.microsoft.com> <YiiT2lFuxc3ob+Zq@sirena.org.uk>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] tty: serial: bcm63xx: use more precise Kconfig symbol
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220310072239.4489-1-zajec5@gmail.com>
- <CAMuHMdWQNDABuT9uwAugrzdQM31wFtXX_9F8MviC-BRc-YngKw@mail.gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <CAMuHMdWQNDABuT9uwAugrzdQM31wFtXX_9F8MviC-BRc-YngKw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.03.2022 09:19, Geert Uytterhoeven wrote:
-> On Thu, Mar 10, 2022 at 8:22 AM Rafał Miłecki <zajec5@gmail.com> wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
->> documentation change regarding "depends" usage. Adjust Kconfig entry to
->> match current guidelines. Make this symbol available for relevant
->> architectures only.
->>
->> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
->> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform dependency practises")
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Thanks for your patch!
-> 
->> --- a/drivers/tty/serial/Kconfig
->> +++ b/drivers/tty/serial/Kconfig
->> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
->>   config SERIAL_BCM63XX
->>          tristate "Broadcom BCM63xx/BCM33xx UART support"
->>          select SERIAL_CORE
->> -       depends on COMMON_CLK
->> +       depends on MIPS || ARM || ARM64 || COMPILE_TEST
->> +       default ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC
-> 
-> So ARCH_BCM4908 covers ARM64, and BCM63XX || BMIPS_GENERIC
-> cover MIPS.  Is there some symbol covering ARM so we can change the
-> depends to
-> 
->      depends on FOO || ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
-> 
-> ?
+On Wed, 9 Mar 2022, Mark Brown wrote:
 
-Florian, Kevin: do you know what other platforms need that driver?
+> On Tue, Mar 08, 2022 at 04:00:35PM -0600, Madhavan T. Venkataraman wrote:
+> 
+> > It is just that patch 11 that defines "select
+> > HAVE_RELIABLE_STACKTRACE" did not receive any comments from you
+> > (unless I missed a comment that came from you. That is entirely
+> > possible. If I missed it, my bad). Since you suggested that change, I
+> > just wanted to make sure that that patch looks OK to you.
+> 
+> I think that's more a question for the livepatch people to be honest -
+> it's not entirely a technical one, there's a bunch of confidence level
+> stuff going on.  For example there was some suggestion that people might
+> insist on having objtool support, though there's also substantial
+> pushback on making objtool a requirement for anything from other
+> quarters.  I was hoping that posting that patch would provoke some
+> discussion about what exactly is needed but that's not happened thus
+> far.
 
-Ref: c0ec3fd123e9 ("tty: serial: bcm63xx: Allow bcm63xx_uart to be built on other platforms")
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c0ec3fd123e9e64e095fb221ace841e00c04e40b
+I think everyone will be happy with HAVE_RELIABLE_STACKTRACE on arm64 as 
+long as there is a guarantee that stack traces are really reliable. My 
+understanding is that there is still some work to be done on arm64 arch 
+side (but I may have misunderstood what Mark R. said elsewhere). And yes, 
+then there is a question of objtool. It is one option but not the only 
+one. There have been proposals of implementing guarantees on a compiler 
+side and leaving objtool for x86_64 only (albeit objtool may bring more 
+features to the table... ORC, arch features checking).
+
+Madhavan also mentioned that he enhanced objtool and he planned to submit 
+it eventually 
+(https://lore.kernel.org/all/1a0e19db-a7f8-4c8e-0163-398fcd364d54@linux.microsoft.com/T/#u), 
+so maybe arm64 maintainers could decide on a future direction based on 
+that?
+
+Regards
+Miroslav
+

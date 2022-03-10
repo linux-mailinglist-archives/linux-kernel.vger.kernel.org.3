@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4E84D3F3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 03:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B07694D3F46
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 03:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbiCJCYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 21:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
+        id S236388AbiCJCiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 21:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiCJCY1 (ORCPT
+        with ESMTP id S235547AbiCJCiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 21:24:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDA8B0A4E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 18:23:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ABF8612C8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E47CC340E8;
-        Thu, 10 Mar 2022 02:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646879006;
-        bh=vsCSujkruwQ7Gfz+lv2eJS9zTA2KT1+6Mo8i2mK76fU=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=s7sxN+7u0bpUTbbknOA/0GbPsbkvU9jhhZ32AlvSJru8JUmhTvzO9m2GAEEErYOPa
-         a5fyw2xeLNYmn1ZW8v0r5YQpUfnZNJF/Gmeypjj/HvvddQHitmnb4Z4R8F+F7goZod
-         1G95VhY42nhxUM/LoeAErnbGI2iJwaysNqs7+Bo9p2iIKNZBBrCNiB/U78kvtLG2Hh
-         3iGFWqy7zgmLshajCb/1sxdOjadwhnrFYAm6MSDZxw/KT+19yuHkQr9W0N+Bv9JS6L
-         2WZ1Q645um0NlXNVJ1zv/84AUkoxMvz38CWEwtLB7xMw254ZDC6shS2zwsAMuEFNOl
-         VZJxXKqcvC0DQ==
-Message-ID: <7b12573b-cad4-45b0-9e8a-9cc40a08b856@kernel.org>
-Date:   Thu, 10 Mar 2022 10:23:22 +0800
+        Wed, 9 Mar 2022 21:38:07 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2133.outbound.protection.outlook.com [40.107.215.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACCA11B5D3;
+        Wed,  9 Mar 2022 18:37:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cAW5cPo9m9HwzzeWy++vYMtrtYoYtV8/R8bun3ay+ttmjKUq5ubOCyNp1afs7lvmRo9sSIvhdMqoYKukI1XuZMMmDMq+8bx2dUJmCOCFJhFHLj3KDquYKsALKIngpCaS+iLpmJuTQ7MTCXKUzsfeqIj+kiHupMw/6nAtXzXNMmHKLS9nJHNFA+sGLW5hPxhNGUN4jbBt8vBimabI9rIGz6W8H6F/NaTeR3RGOdQriKQpeltXmmxw1eBsw/q36UCu3UlhBlwE6uq0oifFHJ4fsnQSvBkOLXCgfBuKMLlnSaX9zCb2K4wwtApoDOeqLVVxGRASJWrzp11yJAx7mZkxXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2xX2UvrUHXsghGFGUN8G7XEEuaNPiMx2PY5AkqKFSe0=;
+ b=l67ngrsaxZuCL5KMNohdWuWeEfRIu3UEla42C/akYn5mirdmty1WjA4Ilz2+Gf8qaMFrprbafcVfujntGEI6lFCTY+RdpZJNPAFLP0ud6K2drNj/g3EfVqFh5OkAvAfKFCLBApuYxig2UJrPeF8OUPm+8t2WTzwd2B3425eso9BDQ42mREuWuA7GrFUhJVm5cuk8sLKs1a1/tiBsUyX4qnlIwooHVsc07qEz/N3nKDIvVm/YvmFXz5WB+ykkq3iWQIwFAhN0IdMl2jO2NY11ecL0EAC3K6hZ9kUDUmJI2ZkpZPmjuWcpI5aXcmlUhWIe5gzS6/aa6/Mn+VHtKlcvgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2xX2UvrUHXsghGFGUN8G7XEEuaNPiMx2PY5AkqKFSe0=;
+ b=Mv8pK1pOdlaMfLQ0s/llyPHYS9Jy3Fn+jTkgxOyirRXIpYKpjKnhXgMHmxx2y9ZyfVx/9IF+b6UmHjqvILPU4Em2KsgkMeaUh/VRQBDcv/N+0eVWk1zPZyf8YXgXWn7lPXKhMioIBwUoJWsvyJhIo13iTBSD6Ky3EgyUh4Ib0f0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by TY0PR06MB5355.apcprd06.prod.outlook.com (2603:1096:400:215::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Thu, 10 Mar
+ 2022 02:37:02 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
+ 02:37:02 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] media: platform: mtk-vcodec: fix platform_get_irq.cocci warning
+Date:   Wed,  9 Mar 2022 18:36:45 -0800
+Message-Id: <20220310023645.10082-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR0302CA0004.apcprd03.prod.outlook.com
+ (2603:1096:3:2::14) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [f2fs-dev] [PATCH 2/2] f2fs: use spin_lock to avoid hang
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220309214834.3408741-1-jaegeuk@kernel.org>
- <20220309214834.3408741-2-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220309214834.3408741-2-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7a7ba819-377e-47f4-9b23-08da023edbb2
+X-MS-TrafficTypeDiagnostic: TY0PR06MB5355:EE_
+X-Microsoft-Antispam-PRVS: <TY0PR06MB53559687438278D4054C050DA20B9@TY0PR06MB5355.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G2Gzh3ssmc1x1Sk+QpsOkEdY/BY3oK8OYjnBM2G9P/soreijYLOhQuyPcL0rkQvunEeUQvXDF993ZX2IGZ8ze1rVqW4g+jnWKF218lgXJhxjVa8rre9X2NNGgxSGVZF3MXPbCD4b5H/sjXrQECjhgKP8OxlmLRgwL8ahypMtV5Q42XGMrp2aDh63S8kRTueerk3XvR4MaBlb+rscDxuetrEFgITGZW+L1CiMqx1dxX+LhFlPzBXlRVeXfJG6+JuBFlmS2oOootkOjz6KLFyf2MzlTT6XnHkGwz0XYald65YUlXyUR/8vlYMc1pmDRov48bnpE066lVYxARAOAbreNQ62gRC5pLowToZtlqCGX02G0PWPEVBysrZXmxXDfGfSo8lk0I1pzm2HRoYMqVf1kSR7Vqp5EPe2cig/WqQsFcS/unE9SzLnvniv2WNOqyaXiINZZYbgLsUi0vgveNDFXC9y/Ps9AqOvWlQ5TYIG9XNEm/JdieEJxLCCstOLHuttk6aen7OiEUZqwGIhw9Jyax24+v8jaE5hYmq2pmQhKvf8JXAEr2F9P1q7TrlxwFZMtlQ5BWgsmwnWETXUU6X2EM5gjkn5Q8jdAer3GUcKATjtd+PaFkiuvtIkS50WxOwmY7bYkDlIS1FabAa5CnGAn95+stYu+MhwFxuIpGFdnyksYJZmY8TmKlnvb7oaIbdSu7hJxs74UgZw5cDTS6PDXA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(110136005)(66946007)(6506007)(52116002)(83380400001)(316002)(38100700002)(66476007)(38350700002)(66556008)(4326008)(8676002)(6512007)(6666004)(2906002)(1076003)(36756003)(2616005)(4744005)(26005)(5660300002)(6486002)(508600001)(186003)(8936002)(107886003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9PRJ0ybPaQO4WDF9eFulaQrOBjhmjbJ5CcmGo5KUHIf9lVmKGjsAwkjIdP2i?=
+ =?us-ascii?Q?44ixx5d2k79wOzgw/w8fVKdLaFwhormAvytTXnShWLKn/MtOyhKxB0SdklY5?=
+ =?us-ascii?Q?eg6Jd/ogoYaUi8H8AYFmy5ayz2clzo/xLhyy42Eu4xbcCwxBkVK5BONOuB3a?=
+ =?us-ascii?Q?9s8GYbCOVBPwdYgMul6n6lsjeidStqQ1Y4rGf//BXQ6oCOBMsVCl47f+MoVS?=
+ =?us-ascii?Q?EvtXWDyH42uLZgR/9S8l8bYVHIKgpjeJh63lvSYBrnmp+XCLjx2KmgZbH+9w?=
+ =?us-ascii?Q?UVly5vzkCVSDpPdroVpXRTTtOK8nlU6xx1sdtq81kqWGsE5aGxvoRhbhFi/+?=
+ =?us-ascii?Q?9sQljXl/2E5dBV45KNmcccDKuQey4CR+MmfAmQrDdgBNeeuvfwBoHRyK4Sqd?=
+ =?us-ascii?Q?yCe0Hv9jv+1TITSxw8XQkMBSO8stp7llvsrRineu3dXLX9ji4iVis6L2IpCE?=
+ =?us-ascii?Q?6n1QglxGBYJsW/KVhy5EJvAhZvL64QOBZteQlYFrRIDqlzPhO5amj+QLsLsP?=
+ =?us-ascii?Q?1mkw4BoRdsO12HLh/IDIsXad4OlSOs5ITxtk0FPqaAlTfXpx1JhMYnzbFtho?=
+ =?us-ascii?Q?XBHrUAZtoD5OPfuQpjwKPSnPqSBqVxxULVZ7/cHE6Y58PsptBC26sAbJs28z?=
+ =?us-ascii?Q?B+2XFwqbMgCQpPJ5qSC//4MUR82EFi85zS/TjWfi9lGyiMCmRaBFq/ID+tjh?=
+ =?us-ascii?Q?ihfg37lKQxTwOSC29H0C0qmzuW4lTyov5J+5UQCTCWbaExEJcvHPVEa7Wnms?=
+ =?us-ascii?Q?kDVAPrZUUWxrceI/ScUf6eNzNUBvwAoSBcwyFZj1oOwRwuE6rSw9onYA/UsW?=
+ =?us-ascii?Q?7VJ/mh41KkZkLKmXO87L8ckjRNGTYnvYFJEIzoBwg9XPgW2cqpdSFzUIPMON?=
+ =?us-ascii?Q?MzvXPnyJHT4lMvkmCs4QFGVYzPcd3RcJHzRM7pFOAxD7NlAtZO3oT65BcR0x?=
+ =?us-ascii?Q?UY2A5TWyDBd00+7J4+GxzR+oiZDcjjOltJ8TbkyYGjvD9prc03gy/JOAPqG0?=
+ =?us-ascii?Q?9V7OFAm5HXkQAH0qSuyjcyA0R7AB9XGTVSWOjrT7TBn80E672bS8UGKJyVie?=
+ =?us-ascii?Q?YsKdu1fCkRDWJgOUR/VPd1zka9MgXNHE2ougxVASGFICQq5tvQvwumtVV1UX?=
+ =?us-ascii?Q?6qe1O/5LL+blGDH2xxzy7YkLuv0J2ks0odc2ZzJAnsg2B9UFw8cED0UNOpSR?=
+ =?us-ascii?Q?5LdyEUHKwsRaq7vp/kpGc6f9lCa450vYAUzGVR4Wfi+PfF/o6EMO0nqGEYuj?=
+ =?us-ascii?Q?MkylBFfpwL1wuwplUnyXUif7lwsA6saBadDNaG7OYFK3k3/Re1uKgBF879pu?=
+ =?us-ascii?Q?Y76nC2OKAlcXPisi1MaTcRQuft2HtF41jpp67fT0IlvHuocsq0S6xxDKag/m?=
+ =?us-ascii?Q?qlWHCErxMsaZlAAY6YW2ikqyN3sc70VnSgTzElPLC6puV2kyYOse6DPEvg3T?=
+ =?us-ascii?Q?mjGSSG7afxQ/Glb/nmrYhlzSS2+/riIJ?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a7ba819-377e-47f4-9b23-08da023edbb2
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 02:37:02.5364
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Lk9Xr8ud0sld5f9dhZF9b/fce1tyN6ttSKygdR64wqXOn+/5bjvnY5u2o7MZQF5G629Dec/GGPb01/pNRQMgKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5355
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/10 5:48, Jaegeuk Kim wrote:
-> [14696.634553] task:cat             state:D stack:    0 pid:1613738 ppid:1613735 flags:0x00000004
-> [14696.638285] Call Trace:
-> [14696.639038]  <TASK>
-> [14696.640032]  __schedule+0x302/0x930
-> [14696.640969]  schedule+0x58/0xd0
-> [14696.641799]  schedule_preempt_disabled+0x18/0x30
-> [14696.642890]  __mutex_lock.constprop.0+0x2fb/0x4f0
-> [14696.644035]  ? mod_objcg_state+0x10c/0x310
-> [14696.645040]  ? obj_cgroup_charge+0xe1/0x170
-> [14696.646067]  __mutex_lock_slowpath+0x13/0x20
-> [14696.647126]  mutex_lock+0x34/0x40
-> [14696.648070]  stat_show+0x25/0x17c0 [f2fs]
-> [14696.649218]  seq_read_iter+0x120/0x4b0
-> [14696.650289]  ? aa_file_perm+0x12a/0x500
-> [14696.651357]  ? lru_cache_add+0x1c/0x20
-> [14696.652470]  seq_read+0xfd/0x140
-> [14696.653445]  full_proxy_read+0x5c/0x80
-> [14696.654535]  vfs_read+0xa0/0x1a0
-> [14696.655497]  ksys_read+0x67/0xe0
-> [14696.656502]  __x64_sys_read+0x1a/0x20
-> [14696.657580]  do_syscall_64+0x3b/0xc0
-> [14696.658671]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [14696.660068] RIP: 0033:0x7efe39df1cb2
-> [14696.661133] RSP: 002b:00007ffc8badd948 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> [14696.662958] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007efe39df1cb2
-> [14696.664757] RDX: 0000000000020000 RSI: 00007efe399df000 RDI: 0000000000000003
-> [14696.666542] RBP: 00007efe399df000 R08: 00007efe399de010 R09: 00007efe399de010
-> [14696.668363] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000000000
-> [14696.670155] R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
-> [14696.671965]  </TASK>
-> [14696.672826] task:umount          state:D stack:    0 pid:1614985 ppid:1614984 flags:0x00004000
-> [14696.674930] Call Trace:
-> [14696.675903]  <TASK>
-> [14696.676780]  __schedule+0x302/0x930
-> [14696.677927]  schedule+0x58/0xd0
-> [14696.679019]  schedule_preempt_disabled+0x18/0x30
-> [14696.680412]  __mutex_lock.constprop.0+0x2fb/0x4f0
-> [14696.681783]  ? destroy_inode+0x65/0x80
-> [14696.683006]  __mutex_lock_slowpath+0x13/0x20
-> [14696.684305]  mutex_lock+0x34/0x40
-> [14696.685442]  f2fs_destroy_stats+0x1e/0x60 [f2fs]
-> [14696.686803]  f2fs_put_super+0x158/0x390 [f2fs]
-> [14696.688238]  generic_shutdown_super+0x7a/0x120
-> [14696.689621]  kill_block_super+0x27/0x50
-> [14696.690894]  kill_f2fs_super+0x7f/0x100 [f2fs]
-> [14696.692311]  deactivate_locked_super+0x35/0xa0
-> [14696.693698]  deactivate_super+0x40/0x50
-> [14696.694985]  cleanup_mnt+0x139/0x190
-> [14696.696209]  __cleanup_mnt+0x12/0x20
-> [14696.697390]  task_work_run+0x64/0xa0
-> [14696.698587]  exit_to_user_mode_prepare+0x1b7/0x1c0
-> [14696.700053]  syscall_exit_to_user_mode+0x27/0x50
-> [14696.701418]  do_syscall_64+0x48/0xc0
-> [14696.702630]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+Remove dev_err() messages after platform_get_irq*() failures.
+platform_get_irq() already prints an error.
 
-Any race case here? I didn't catch the root cause here...
-Thanks,
+Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 48dad9bb13d2..df7b25e9cbc8 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -115,10 +115,8 @@ static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
+ 		return 0;
+ 
+ 	dev->dec_irq = platform_get_irq(pdev, 0);
+-	if (dev->dec_irq < 0) {
+-		dev_err(&pdev->dev, "failed to get irq number");
++	if (dev->dec_irq < 0)
+ 		return dev->dec_irq;
+-	}
+ 
+ 	irq_set_status_flags(dev->dec_irq, IRQ_NOAUTOEN);
+ 	ret = devm_request_irq(&pdev->dev, dev->dec_irq,
+-- 
+2.17.1
+

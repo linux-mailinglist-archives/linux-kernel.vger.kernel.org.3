@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E59A4D4D7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F214D4D92
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbiCJPo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S236422AbiCJPsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbiCJPoY (ORCPT
+        with ESMTP id S230470AbiCJPsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:44:24 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7A7159286;
-        Thu, 10 Mar 2022 07:43:23 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id s207so6299003oie.11;
-        Thu, 10 Mar 2022 07:43:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=soUttN/B2ZCnCYNnwWUyVbvZvUR85ol+lks3Y4uSs3A=;
-        b=qSIU1x3rWNb6gAdYMjEzl55e3FRbyvbKCmhbd7jH3xT4AnCS0lE+1z0/DrokfuM+o5
-         4K46mGc2celL/2dzaUqDc2XvqIROC2XtQyuugifod4LA7aaxMstW/RWiWBLYwdt+0SjV
-         7x7eJcXHpU99E0xmJAoTkmgc/0cx/k3pmG8n4LxGxihh70EKCC8HhBwOyT0ud2plcUtE
-         5cNIOhom9MDguriaezi8NtvcAjdImpkMeUb3W44bD/i7TrdYNYXWXxert3Hk77qaCU0i
-         rniusVENO2tKjLYkGYe0pMSpjw/8eVUMmeQN6bmholdmf32M05zvaEXK7CkGjvJ3m3Bf
-         nQOA==
-X-Gm-Message-State: AOAM531ZcJKxEcquOnwo75Zgot9iGyIveCkxk4RxYzYwxNe1XYqMdFdl
-        QkXpJLJgvo9bew74YLVayI0hzM22aw==
-X-Google-Smtp-Source: ABdhPJx+RO+YLo1BVcqtSo3OVmm1tpYN5f4xdnCT6SLCcYDTlMGm/rRnaq3bxZF+sKnfJg0ZjUR2dw==
-X-Received: by 2002:a05:6808:118e:b0:2d9:a01a:4896 with SMTP id j14-20020a056808118e00b002d9a01a4896mr9645757oil.225.1646927002392;
-        Thu, 10 Mar 2022 07:43:22 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:20d2:449c:e413:94ed:2767:f2c4])
-        by smtp.gmail.com with ESMTPSA id f10-20020a9d5e8a000000b0059fa2fa9b4bsm2455393otl.13.2022.03.10.07.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 07:43:21 -0800 (PST)
-Received: (nullmailer pid 1686207 invoked by uid 1000);
-        Thu, 10 Mar 2022 15:43:19 -0000
-Date:   Thu, 10 Mar 2022 09:43:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/7] dt-bindings: interrupt-controller: apple,aic2:
- New binding for AICv2
-Message-ID: <Yiocl203Ix7DLXKj@robh.at.kernel.org>
-References: <20220309192123.152028-1-marcan@marcan.st>
- <20220309192123.152028-3-marcan@marcan.st>
+        Thu, 10 Mar 2022 10:48:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57687F14
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646927264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=l9mR/80qlAMFJEP55l81aNyJ85t2ielrHjLYKFMQaYQ=;
+        b=KTN9ECwFXlZhIrYTzh4nJ1Jj73oLE2AHdIqGDFOTsPTW4geGuehiSF3il+iTCGe9SzoQVf
+        JQhynYzFaucxP04hI1kxN4iwx14ysjqOVVNu4KwtJDEV7vKvWqEEck5t9adE1xTd7w5rip
+        JGVrsvFoAglNIhePWhm9rCoSXmxv0mM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-P74NfXXjNsGi-zE_7koIOA-1; Thu, 10 Mar 2022 10:47:41 -0500
+X-MC-Unique: P74NfXXjNsGi-zE_7koIOA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CD6A3520E;
+        Thu, 10 Mar 2022 15:47:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8889A832A5;
+        Thu, 10 Mar 2022 15:47:38 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] afs: Fix potential thrashing in afs writeback
+From:   David Howells <dhowells@redhat.com>
+To:     marc.dionne@auristor.com
+Cc:     linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 10 Mar 2022 15:47:37 +0000
+Message-ID: <164692725757.2097000.2060513769492301854.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309192123.152028-3-marcan@marcan.st>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 04:21:18AM +0900, Hector Martin wrote:
-> This new incompatible revision of the AIC peripheral introduces
-> multi-die support. This binding is based on apple,aic, but
-> changes interrupt-cells to add a new die argument.
-> 
-> Also adds a second reg entry to specify the offset of the event
-> register. Inexplicably, the capability registers allow us to compute
-> other register offsets, but not this one. This allows us to keep
-> forward-compatibility with future SoCs that will likely implement
-> different die counts, thus shifting the event register. Apple also
-> specify the offset explicitly in their their device tree...
+In afs_writepages_region(), if the dirty page we find is undergoing
+writeback or write to cache, but the sync_mode is WB_SYNC_NONE, we go round
+the loop trying the same page again and again with no pausing or waiting
+unless and until another thread manages to clear the writeback and fscache
+flags.
 
-their their
+Fix this with three measures:
 
-(checkpatch with codespell installed told me)
+ (1) Advance the start to after the page we found.
 
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../interrupt-controller/apple,aic2.yaml      | 98 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +-
->  2 files changed, 99 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
+ (2) Break out of the loop and return if rescheduling is requested.
 
-With that,
+ (3) Arbitrarily give up after a maximum of 5 skips.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 31143d5d515e ("AFS: implement basic file write support")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+---
+
+ fs/afs/write.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/fs/afs/write.c b/fs/afs/write.c
+index 85c9056ba9fb..bd0201f4939a 100644
+--- a/fs/afs/write.c
++++ b/fs/afs/write.c
+@@ -701,7 +701,7 @@ static int afs_writepages_region(struct address_space *mapping,
+ 	struct folio *folio;
+ 	struct page *head_page;
+ 	ssize_t ret;
+-	int n;
++	int n, skips = 0;
+ 
+ 	_enter("%llx,%llx,", start, end);
+ 
+@@ -752,8 +752,15 @@ static int afs_writepages_region(struct address_space *mapping,
+ #ifdef CONFIG_AFS_FSCACHE
+ 				folio_wait_fscache(folio);
+ #endif
++			} else {
++				start += folio_size(folio);
+ 			}
+ 			folio_put(folio);
++			if (wbc->sync_mode == WB_SYNC_NONE) {
++				if (skips >= 5 || need_resched())
++					break;
++				skips++;
++			}
+ 			continue;
+ 		}
+ 
+
+

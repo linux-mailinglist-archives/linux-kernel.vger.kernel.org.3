@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A67C4D4364
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3FB4D4367
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240749AbiCJJXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:23:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S240754AbiCJJYI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 04:24:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240726AbiCJJXf (ORCPT
+        with ESMTP id S240726AbiCJJYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:23:35 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10AD1AF23
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:22:30 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BF62E3F336
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646904149;
-        bh=urZkMj1CVFHDmDBVJ94HruqSmh7h0kdRAgFJ0/wcFrI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=eC0pWIRIZ3ZKVY0UP6TqSKe5v0RkHI4hjZmxHw7J7rBYxa8hATx9s0qA5E4TmDOqy
-         IQ7XMp5CtkIzqXpYMMWT920y4UkPSVtcjbp1xS/XoBhwwe0lX+TnmOdMpO6E8R91jH
-         BS+F1xmAt3PLs/VtKp6pFk/7tHugbcA3aQDAYQFW0pVq6ozBbRJO2920VyYPxglCal
-         0VJkeJCzl5+CLy2Wf9LQ2WRtdQSdNgDIa2z20v9mkzxaaCS3pL/IL8YHukbRPYRfnC
-         ai9jl43Pl2JJzKyW12oLofuwhhkJ+3XE70C+0PkBGHlliuC+R71nUBhkc3St38SzQR
-         Y+4CeAykp/ZDw==
-Received: by mail-ej1-f71.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so2764297ejw.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:22:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=urZkMj1CVFHDmDBVJ94HruqSmh7h0kdRAgFJ0/wcFrI=;
-        b=P/YzO+Q29Dz8q4Vf8BVkxS8Jt2WydTJgSEGIRCy3wXM5t9yUg2Tr7jYdwDwM7ww0kB
-         tJnWIdEJuGfQjFFOkmQTx3n0rBTxknl4CBZywCShrpa5uenSqtGbbkoJteCxbRVtXjXm
-         R7gvEptREP14ZVpbfCs464uZXu1xbQNCyLP3T8G1+g+3rCcFsobkelQs7Tf9AKpH8A11
-         71SA1FugQpipN8iDCSfdrbrG+EfOyl7i4Q0f3gShhS2Sc7NegJOI6zW4hjHTEu32oY+G
-         f4GcRsJTy/iTBdFoRS2WnIkI7RlyIkDO3bJla4k0IjeWAyZguNgxXXT62wKjXXndQeDO
-         8sKA==
-X-Gm-Message-State: AOAM5323ewl7Z1l781sIFdVbZsm7UGSN60l531SjGDgXw+PFps8rshYk
-        T/EfnC2i+1xiFF1YgqGiEfjLlW/5jkdZ6/cqRV84gED44VxCa095CnOeEf2x5Ip2jP/XDWyGnRg
-        NLdmWav5yzmGCMPrHhB14QzdREPq0hK3L6mQAwvzNqQ==
-X-Received: by 2002:a05:6402:5255:b0:416:6089:b23f with SMTP id t21-20020a056402525500b004166089b23fmr3275295edd.87.1646904148954;
-        Thu, 10 Mar 2022 01:22:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx8GzTU6l3uc5oXfjJxqxMo0SlXcIWmtaWXAFmIM5inJcUnvOtC5zOyN2yO3KsVjUmD5zVvMA==
-X-Received: by 2002:a05:6402:5255:b0:416:6089:b23f with SMTP id t21-20020a056402525500b004166089b23fmr3275277edd.87.1646904148803;
-        Thu, 10 Mar 2022 01:22:28 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056402354600b004167d09f418sm1744200edd.55.2022.03.10.01.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 01:22:28 -0800 (PST)
-Message-ID: <cb6f313d-7e02-2341-c1b2-f4dba8ad981d@canonical.com>
-Date:   Thu, 10 Mar 2022 10:22:27 +0100
+        Thu, 10 Mar 2022 04:24:07 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02EA22D1E5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:23:03 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-189-Cn9pbkHFPAe5BCPpwhZIzg-1; Thu, 10 Mar 2022 09:23:00 +0000
+X-MC-Unique: Cn9pbkHFPAe5BCPpwhZIzg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 09:22:59 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 10 Mar 2022 09:22:59 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Zijlstra' <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH v4 00/45] x86: Kernel IBT
+Thread-Topic: [PATCH v4 00/45] x86: Kernel IBT
+Thread-Index: AQHYNF3uCfkzaUw3o020v7uo0T//Qqy4V9+w
+Date:   Thu, 10 Mar 2022 09:22:59 +0000
+Message-ID: <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+ <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 02/10] dt-bindings: arm: sunplus: Add bindings for
- Sunplus SP7021 SoC boards
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Qin Jian <qinjian@cqplus1.com>, robh+dt@kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1646892810.git.qinjian@cqplus1.com>
- <7b9357809c002f6dd76c6fdd738a4ea8af62cb26.1646892810.git.qinjian@cqplus1.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <7b9357809c002f6dd76c6fdd738a4ea8af62cb26.1646892810.git.qinjian@cqplus1.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2022 07:28, Qin Jian wrote:
-> This introduces bindings for boards based Sunplus SP7021 SoC.
+From: Peter Zijlstra
+> Sent: 10 March 2022 09:05
 > 
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
-> Add SoC compatible: "sunplus,sp7021"
-> ---
->  .../bindings/arm/sunplus,sp7021.yaml          | 28 +++++++++++++++++++
->  MAINTAINERS                                   |  7 +++++
->  2 files changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+> On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
 > 
+> > I observed the following error when building with
+> > CONFIG_LTO_CLANG_FULL=y enabled:
+> >
+> > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> > already defined
+> >         ibt_selftest_ip:
+> >         ^
+> >
+> > Seems to come from
+> > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
+> >
+> > Commenting out the label in the inline asm, I then observed:
+> > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> > callable instruction with modified stack frame
+> > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> > mismatch: cfa1=4+64 cfa2=4+8
+> > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+> > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> > the ibt_selftest_ip label).
+> 
+> Urgh.. I'm thikning this is a clang bug :/
+> 
+> The code in question is:
+> 
+> 
+> void ibt_selftest_ip(void); /* code label defined in asm below */
+> 
+> DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> {
+> 	/* ... */
+> 
+> 	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
+> 		regs->ax = 0;
+> 		return;
+> 	}
+> 
+> 	/* ... */
+> }
+> 
+> bool ibt_selftest(void)
+> {
+> 	unsigned long ret;
+> 
+> 	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
+> 	     ANNOTATE_RETPOLINE_SAFE
+> 	     "	jmp *%%rax\n\t"
+> 	     "ibt_selftest_ip:\n\t"
+> 	     UNWIND_HINT_FUNC
+> 	     ANNOTATE_NOENDBR
+> 	     "	nop\n\t"
+> 
+> 	     : "=a" (ret) : : "memory");
+> 
+> 	return !ret;
+> }
+> 
+> There is only a single definition of that symbol, the one in the asm.
+> The other is a declaration, which is used in the exception handler to
+> compare against regs->ip.
 
+LTO has probably inlined it twice.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Best regards,
-Krzysztof

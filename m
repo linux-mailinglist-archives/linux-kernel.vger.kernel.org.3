@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8191C4D4FA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3564D4FAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244407AbiCJQrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S243850AbiCJQsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244187AbiCJQrb (ORCPT
+        with ESMTP id S244119AbiCJQrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:47:31 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A808B198D2C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:20 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id z13-20020a1709027e8d00b001518de7a06cso2971153pla.14
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:20 -0800 (PST)
+        Thu, 10 Mar 2022 11:47:36 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6FE198ECA
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:23 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id gm17-20020a17090b101100b001c21939cad2so782756pjb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:46:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=OmK9ig5jJPqHc1lT2kwZLVXWHtYR0m8aDz/I++ZnaZg=;
-        b=HdFmzmvSIq4czsk8EyXnKZqkaBCWAJbd0VwxsSv4+1Yw7/3bw6MYRa7aMqdk0mV1e1
-         VHNRH9xx/5Te44HQJHZxuyptGPbnXf/j+pXB8dusDq5udVzrfFDbXHWHGiOxW42yBKen
-         taetvPR9Zt8E8HQhExhww8N+Q6aj4bq83pNPzWJvmGhzYl+GVOBOWmdrug0kgrir4KZz
-         L6/euPHhjKO+W6ssAnsgPJ21R2zI0j4v2cB3usLUUpZK8YA/1cRRoCXlU3X5FAklbDdX
-         P1J5k3k7z+EPGWsSylCef3Wx0ns0t++tyYbzx6fhn5LJuHFXaBPNV8cRK6oFrWrcojdz
-         pcgw==
+        bh=lSRTllOR9r6/nLyxV36+XgGPCp0gJBo+opj3caznl+k=;
+        b=ectWumox3D7lwv3ygc0FdA62EqZF3SruvaSume3D5rakSI7TpPx3hcZuhxP6/9u1Lf
+         /qBK5JVoPUFvR+moyFhzUibr6F075GEVqrzdZ26n+fqzWdU6QrkETCPG632GLVrM6wX6
+         Cytt7F/5aR60/f8XrR19dRV3b8PAWuo6O3tW01nA1/wKFAw8if6nSY87Ba0efOlcdpe7
+         G/07cRhUj1Mz3Z6lbtDbKuZoRFydKAFVQN1etgCFSyG372u+iO1IwIaTRKJ/t/9mwIcp
+         JhKd5sUgRnNnq2BarHsaQm1Kd7RI11qGHd5WdxHf9LOcRG29qXmdMzaTQ5kuOyHXRZvL
+         CbxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=OmK9ig5jJPqHc1lT2kwZLVXWHtYR0m8aDz/I++ZnaZg=;
-        b=Caq70BoX5IWdUW9C/rvPcfO4intxqlLcIRyAUa1uQBtxGLaufeZwH3OoeDCn1G8DgD
-         nAFEtk8rLQN6cydiuFSBFbMwx3LxNdhyA4CXAAzg5zt6RMEIlOy5Kx/Kqg326VQaCi5d
-         oWXb0qwW6E304nCA7B8Sqva1z0WMQAXP9g35cusOZMY0miSurHpTY16XC2xi7tiB1TqR
-         ExE7E2s0JwgwxtESwLyC6m3k1mwHfnaDLLLhifh+DIjMsF4sVt/1OhOOciOehBgYUGQi
-         hWeMOkgYvmIRZftGBezpnbsZtHFgDaQwCffN4Yosw5aZox+e0rF4QJKu3TXVRoD5P2lY
-         +QHQ==
-X-Gm-Message-State: AOAM533GPAl0yI5EVJe5NSjr4uLPdODDIvy5piCkSGtU/dvawiKgSyKm
-        DaiHMR0MacibSkojSCzCn64VnCB+RTj8G3CMV/GoImsqTh+LMI3HWkNCf+/a9D7nF6pwOde9CXL
-        TBYslbL9Ya+tjyyYcMFzGHklnP7DS8IyCQ0G0jJQ+5YQjiPT+kTBNEsjxSupUhLZM2ZKHJ4Vf
-X-Google-Smtp-Source: ABdhPJwrSHkEApdTW6RNQ1Yq3YoC+LnnBLVKJr3xZgwX2aqe4qJL7KcpDIGjBo9jF5gVpEqZyPMtdxBy110l
+        bh=lSRTllOR9r6/nLyxV36+XgGPCp0gJBo+opj3caznl+k=;
+        b=jWTGglLk7q5IyC1QOWVVaqtVoIb2kIrNjX0MS9XSy4Dba9VICxCRHAeVSmJk4byTyI
+         T+S8ImAq4bF7njxQvnnk7Y2cF+pSu8CtDdD9TXVBpjK+5bqWWRPY1Q2LxvI7XanqhzmE
+         m2O/IBZe8mYBGCmxhXtov4iMp83UIgYJbmTbVMDRnRX4rBxO3bFSchTlxDYAQJMbyjv7
+         AAUscEudui5U+0jy5e0NQFwOtEzrOo5o9xmPEjls8TU+MMRd22sckODSKJ7KVewZ3C5+
+         swunGOu0TW8Q80dJBsOeePVsoMYd7vKboSyK3HLUxUlDbfTALpTLt4MPEGcIoeoaAfEZ
+         AS9g==
+X-Gm-Message-State: AOAM5331nkr/Cb6A9JqzPumycPiW7ksgRVaYk9TwWCcoisNMmyL/4tB5
+        VpO69p81znUk/CMxyZRkkr/dIStnUTYqIuAkKUnuloU6W0dsrVdft1JDvAnXbUJFTRy2lCcUdNU
+        JVf9FMoSWSaJ5RyRK4yCWe2GBQiReqqn5PcqVeAvHH2ZodSl3Rjq6Mqma/7A/GjC4xhDBuY48
+X-Google-Smtp-Source: ABdhPJxl3fnS2a59GPzC3rTVspwk/LybLE/JpU6Fr2EWIc2Lsku1IXeppMG3yQI2T4+MqEuXaj7YPi4mpTIJ
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:2d58:733f:1853:8e86])
- (user=bgardon job=sendgmr) by 2002:a17:90b:1e10:b0:1bf:6c78:54a9 with SMTP id
- pg16-20020a17090b1e1000b001bf6c7854a9mr94496pjb.1.1646930779582; Thu, 10 Mar
- 2022 08:46:19 -0800 (PST)
-Date:   Thu, 10 Mar 2022 08:45:31 -0800
+ (user=bgardon job=sendgmr) by 2002:a17:903:4054:b0:151:be03:2994 with SMTP id
+ n20-20020a170903405400b00151be032994mr6045519pla.77.1646930782505; Thu, 10
+ Mar 2022 08:46:22 -0800 (PST)
+Date:   Thu, 10 Mar 2022 08:45:32 -0800
 In-Reply-To: <20220310164532.1821490-1-bgardon@google.com>
-Message-Id: <20220310164532.1821490-13-bgardon@google.com>
+Message-Id: <20220310164532.1821490-14-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220310164532.1821490-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH 12/13] KVM: x86/MMU: Require reboot permission to disable NX hugepages
+Subject: [PATCH 13/13] selftests: KVM: Test disabling NX hugepages on a VM
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -75,64 +75,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that the userspace actor attempting to disable NX hugepages has
-permission to reboot the system. Since disabling NX hugepages would
-allow a guest to crash the system, it is similar to reboot permissions.
+Add an argument to the NX huge pages test to test disabling the feature
+on a VM using the new capability.
 
-This approach is the simplest permission gating, but passing a file
-descriptor opened for write for the module parameter would also work
-well and be more precise.
-The latter approach was suggested by Sean Christopherson.
-
-Suggested-by: Jim Mattson <jmattson@google.com>
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/x86.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ .../selftests/kvm/include/kvm_util_base.h     |  2 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  7 +++
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c | 49 ++++++++++++++-----
+ .../kvm/x86_64/nx_huge_pages_test.sh          |  2 +-
+ 4 files changed, 48 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 74351cbb9b5b..995f30667619 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4256,7 +4256,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_SYS_ATTRIBUTES:
- 	case KVM_CAP_VAPIC:
- 	case KVM_CAP_ENABLE_CAP:
--	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
- 		r = 1;
- 		break;
- 	case KVM_CAP_EXIT_HYPERCALL:
-@@ -4359,6 +4358,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_DISABLE_QUIRKS2:
- 		r = KVM_X86_VALID_QUIRKS;
- 		break;
-+	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-+		/*
-+		 * Since the risk of disabling NX hugepages is a guest crashing
-+		 * the system, ensure the userspace process has permission to
-+		 * reboot the system.
-+		 */
-+		r = capable(CAP_SYS_BOOT);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -6050,6 +6057,15 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 		mutex_unlock(&kvm->lock);
- 		break;
- 	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-+		/*
-+		 * Since the risk of disabling NX hugepages is a guest crashing
-+		 * the system, ensure the userspace process has permission to
-+		 * reboot the system.
-+		 */
-+		if (!capable(CAP_SYS_BOOT)) {
-+			r = -EPERM;
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 530b5272fae2..8302cf9b1e1d 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -420,4 +420,6 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
+ 
+ uint32_t guest_get_vcpuid(void);
+ 
++void vm_disable_nx_huge_pages(struct kvm_vm *vm);
++
+ #endif /* SELFTEST_KVM_UTIL_BASE_H */
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index f9591dad1010..880786fe9fac 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -2760,3 +2760,10 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
+ 	return value;
+ }
+ 
++void vm_disable_nx_huge_pages(struct kvm_vm *vm)
++{
++	struct kvm_enable_cap cap = { 0 };
++
++	cap.cap = KVM_CAP_VM_DISABLE_NX_HUGE_PAGES;
++	vm_enable_cap(vm, &cap);
++}
+diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+index 5cbcc777d0ab..1020a4758664 100644
+--- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
++++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+@@ -56,12 +56,39 @@ static void check_split_count(struct kvm_vm *vm, int expected_splits)
+ 		    expected_splits, actual_splits);
+ }
+ 
++static void help(void)
++{
++	puts("");
++	printf("usage: nx_huge_pages_test.sh [-x]\n");
++	puts("");
++	printf(" -x: Allow executable huge pages on the VM.\n");
++	puts("");
++	exit(0);
++}
++
+ int main(int argc, char **argv)
+ {
+ 	struct kvm_vm *vm;
++	bool disable_nx = false;
++	int opt;
++
++	while ((opt = getopt(argc, argv, "x")) != -1) {
++		switch (opt) {
++		case 'x':
++			disable_nx = true;
++			break;
++		case 'h':
++		default:
++			help();
 +			break;
 +		}
- 		kvm->arch.disable_nx_huge_pages = true;
- 		kvm_update_nx_huge_pages(kvm);
- 		r = 0;
++	}
+ 
+ 	vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+ 
++	if (disable_nx)
++		vm_disable_nx_huge_pages(vm);
++
+ 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+ 				    HPAGE_PADDR_START, HPAGE_SLOT,
+ 				    HPAGE_SLOT_NPAGES, 0);
+@@ -81,25 +108,25 @@ int main(int argc, char **argv)
+ 	 * at 2M.
+ 	 */
+ 	run_guest_code(vm, guest_code0);
+-	check_2m_page_count(vm, 2);
+-	check_split_count(vm, 2);
++	check_2m_page_count(vm, disable_nx ? 4 : 2);
++	check_split_count(vm, disable_nx ? 0 : 2);
+ 
+ 	/*
+ 	 * guest_code1 is in the same huge page as data1, so it will cause
+ 	 * that huge page to be remapped at 4k.
+ 	 */
+ 	run_guest_code(vm, guest_code1);
+-	check_2m_page_count(vm, 1);
+-	check_split_count(vm, 3);
++	check_2m_page_count(vm, disable_nx ? 4 : 1);
++	check_split_count(vm, disable_nx ? 0 : 3);
+ 
+ 	/* Run guest_code0 again to check that is has no effect. */
+ 	run_guest_code(vm, guest_code0);
+-	check_2m_page_count(vm, 1);
+-	check_split_count(vm, 3);
++	check_2m_page_count(vm, disable_nx ? 4 : 1);
++	check_split_count(vm, disable_nx ? 0 : 3);
+ 
+ 	/* Give recovery thread time to run */
+ 	sleep(3);
+-	check_2m_page_count(vm, 1);
++	check_2m_page_count(vm, disable_nx ? 4 : 1);
+ 	check_split_count(vm, 0);
+ 
+ 	/*
+@@ -107,13 +134,13 @@ int main(int argc, char **argv)
+ 	 * again to check that pages are mapped at 2M again.
+ 	 */
+ 	run_guest_code(vm, guest_code0);
+-	check_2m_page_count(vm, 2);
+-	check_split_count(vm, 2);
++	check_2m_page_count(vm, disable_nx ? 4 : 2);
++	check_split_count(vm, disable_nx ? 0 : 2);
+ 
+ 	/* Pages are once again split from running guest_code1. */
+ 	run_guest_code(vm, guest_code1);
+-	check_2m_page_count(vm, 1);
+-	check_split_count(vm, 3);
++	check_2m_page_count(vm, disable_nx ? 4 : 1);
++	check_split_count(vm, disable_nx ? 0 : 3);
+ 
+ 	kvm_vm_free(vm);
+ 
+diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+index a5f946fb0626..205d8c9fd750 100755
+--- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
++++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+@@ -14,7 +14,7 @@ echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+ echo 2 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+ echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+ 
+-./nx_huge_pages_test
++./nx_huge_pages_test "${@}"
+ RET=$?
+ 
+ echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
 -- 
 2.35.1.616.g0bdcbb4464-goog
 

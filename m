@@ -2,212 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FC44D445C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CD34D4459
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241127AbiCJKRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S240603AbiCJKRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241108AbiCJKRw (ORCPT
+        with ESMTP id S230205AbiCJKRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:17:52 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEFB13D934;
-        Thu, 10 Mar 2022 02:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QxtDdpYcf2JOJsi93GYP3dL8Ehp+16/1AcbmlLBV8SI=; b=DfaF72qUfGgARtmwcXdEeQaVt6
-        +UkPOlx2TBKBhG5WEVjjZ5Nshc+6uAKuTHeqpCbhZjZVAngNTGN8APsy0tsHTocIhXGjaaCK+o4uj
-        Ya7FMADf+iaWzf8fy9Qv93yuv+NWuxDKH44KMppwWWKQ18yW8ZNG8/9y1cNcTnSL1mPKzMDEJS9su
-        HFy9JLFEIffeGJtgfcIDX/ANlFCZocLXeCXbrc5IE99qinD6DHKl4EswHu3DGQB0hJDOEQ3YKv1rp
-        y+LSoMjDOkJKM5ntw6YEFwElx0Ewwi1fgDERMNJ39+9Jnp7BzX0Q4IwVTcpeqIWiLK/Tt+iVuSbpX
-        YK09Y1Qg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSFq2-00H50N-2H; Thu, 10 Mar 2022 10:16:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7791C30027B;
-        Thu, 10 Mar 2022 11:16:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5AD152B52E224; Thu, 10 Mar 2022 11:16:03 +0100 (CET)
-Date:   Thu, 10 Mar 2022 11:16:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
- <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
- <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
+        Thu, 10 Mar 2022 05:17:20 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E00D1285B4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:16:19 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so3094863wmf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:16:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=04ryZIvTRUDhoUYmcvNQt9Swok7h0slWygeHVa8vqiY=;
+        b=Zd+TYWLsSoSNZ4+/oqHc8x5LYljlVmF7e5FaMcx556ItTvBHOLjGkpe92tMUlHeg84
+         X2TJbDLtMC75+dpMRAH3b0To67/E5an/De1MrzB0ANAFWByKf1MDsjrwZHLQdJgL/PCl
+         mfdgGLZuCT0FL3SnDYD5obVjh0eEykCQwtBWxEQXywF77qF6hpGivHmJ3ibcr5EedMYh
+         CzJmC3TRzjVh+D6G1Rz87t+jjp8bQZkrUZTBeFWjPn+PaOL7h0hghF+tk0xVtakvyo6u
+         aO95fA5W/7bY8YxsNe/4GByhqCmWH5Ad9Nyyih9514EE8DbPhKoN9epwwmS47fWrGnj7
+         gwQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=04ryZIvTRUDhoUYmcvNQt9Swok7h0slWygeHVa8vqiY=;
+        b=Ig8GAcvXgDWS/O4UTuwEk8wqXnrILh9GZLK9mTd/1jHqlkCvJmmbcucXakx8YxNTqJ
+         nWxTGnXTfSnZef8jI42T7spjJb30LyefJymPkduFRtx06kRCFwPs0r9DrKOL/l3LuQFz
+         3GoS8fRLaoiwYJ5d6oUbfmAVaXTGOujgz+i+J0/k3xIaG2OnUq8MU7q9Cx/BgxvGWMbm
+         mwWz1oPdZ2UlytyOqHwcMn+1Jo0ar/lWW92qiRO4GUjeXPi6M9mmar77Ussb6FcnwhfP
+         WckHNRE6/+McfR1Yv5Of8fkSPx69E0q+r7+hW58z6dZHC+NLGcLGBM4SZT5V1wHPPPXR
+         Apew==
+X-Gm-Message-State: AOAM530zH/jzxIw6c144WmGSZqEvnBOwCDjs7RFqrClG858pKkxLMo9n
+        TwFZ4GlE90LJhSXkXB1PiZWQ5w==
+X-Google-Smtp-Source: ABdhPJyywi34YHOHVhNPxnoUPjmKH7B/IOtSTulhMR1UULi9LtjP9plyHy6KFFq/cJtVWwQ6br/aJA==
+X-Received: by 2002:a05:600c:1f15:b0:389:ab64:fe80 with SMTP id bd21-20020a05600c1f1500b00389ab64fe80mr11070007wmb.141.1646907378180;
+        Thu, 10 Mar 2022 02:16:18 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id k10-20020adfe3ca000000b001f0329ba94csm5594508wrm.18.2022.03.10.02.16.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 02:16:17 -0800 (PST)
+Message-ID: <c5ea7235-8642-6a89-f4ce-bd0861b6e4aa@linaro.org>
+Date:   Thu, 10 Mar 2022 10:16:16 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 09:22:59AM +0000, David Laight wrote:
-> From: Peter Zijlstra
-> > Sent: 10 March 2022 09:05
-> > 
-> > On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
-> > 
-> > > I observed the following error when building with
-> > > CONFIG_LTO_CLANG_FULL=y enabled:
-> > >
-> > > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> > > already defined
-> > >         ibt_selftest_ip:
-> > >         ^
-> > >
-> > > Seems to come from
-> > > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> > >
-> > > Commenting out the label in the inline asm, I then observed:
-> > > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> > > callable instruction with modified stack frame
-> > > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> > > mismatch: cfa1=4+64 cfa2=4+8
-> > > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> > > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> > > the ibt_selftest_ip label).
-> > 
-> > Urgh.. I'm thikning this is a clang bug :/
-> > 
-> > The code in question is:
-> > 
-> > 
-> > void ibt_selftest_ip(void); /* code label defined in asm below */
-> > 
-> > DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> > {
-> > 	/* ... */
-> > 
-> > 	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-> > 		regs->ax = 0;
-> > 		return;
-> > 	}
-> > 
-> > 	/* ... */
-> > }
-> > 
-> > bool ibt_selftest(void)
-> > {
-> > 	unsigned long ret;
-> > 
-> > 	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
-> > 	     ANNOTATE_RETPOLINE_SAFE
-> > 	     "	jmp *%%rax\n\t"
-> > 	     "ibt_selftest_ip:\n\t"
-> > 	     UNWIND_HINT_FUNC
-> > 	     ANNOTATE_NOENDBR
-> > 	     "	nop\n\t"
-> > 
-> > 	     : "=a" (ret) : : "memory");
-> > 
-> > 	return !ret;
-> > }
-> > 
-> > There is only a single definition of that symbol, the one in the asm.
-> > The other is a declaration, which is used in the exception handler to
-> > compare against regs->ip.
+
+
+On 24/12/2021 16:13, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+
+Are you saying that we should not be using platform_get_resource(pdev, 
+IORESOURCE_IRQ, ...) on drivers that support DT?
+
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+
+Should this not be fixed in the DT core itself?
+
 > 
-> LTO has probably inlined it twice.
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
 
-Indeed, adding noinline to ibt_selftest() makes it work.
+I would prefer this patch to be part of the series that removes IRQ 
+resource handling from DT core.
 
 
----
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index d8bbc705efe5..0c737cc31ee5 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
- 	return NOTIFY_STOP;
- }
- 
--static void __init int3_selftest(void)
-+/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
-+static noinline void __init int3_selftest(void)
- {
- 	static __initdata struct notifier_block int3_exception_nb = {
- 		.notifier_call	= int3_exception_notify,
-@@ -794,9 +795,8 @@ static void __init int3_selftest(void)
- 	/*
- 	 * Basically: int3_magic(&val); but really complicated :-)
- 	 *
--	 * Stick the address of the INT3 instruction into int3_selftest_ip,
--	 * then trigger the INT3, padded with NOPs to match a CALL instruction
--	 * length.
-+	 * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
-+	 * notifier above will emulate CALL for us.
- 	 */
- 	asm volatile ("int3_selftest_ip:\n\t"
- 		      ANNOTATE_NOENDBR
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 837cc3c7d4f4..fb89a2f1011f 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -214,7 +214,7 @@ DEFINE_IDTENTRY(exc_overflow)
- 
- static __ro_after_init bool ibt_fatal = true;
- 
--void ibt_selftest_ip(void); /* code label defined in asm below */
-+extern void ibt_selftest_ip(void); /* code label defined in asm below */
- 
- enum cp_error_code {
- 	CP_EC        = (1 << 15) - 1,
-@@ -238,7 +238,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
- 	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
- 		return;
- 
--	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-+	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
- 		regs->ax = 0;
- 		return;
- 	}
-@@ -252,7 +252,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
- 	BUG();
- }
- 
--bool ibt_selftest(void)
-+/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
-+noinline bool ibt_selftest(void)
- {
- 	unsigned long ret;
- 
+--srini
+
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
+> 
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+> 
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> 
+> Cheers,
+> Prabhakar
+> ---
+>   drivers/slimbus/qcom-ngd-ctrl.c | 10 ++++------
+>   1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+> index 7040293c2ee8..0f29a08b4c09 100644
+> --- a/drivers/slimbus/qcom-ngd-ctrl.c
+> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
+> @@ -1526,13 +1526,11 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
+>   	if (IS_ERR(ctrl->base))
+>   		return PTR_ERR(ctrl->base);
+>   
+> -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -	if (!res) {
+> -		dev_err(&pdev->dev, "no slimbus IRQ resource\n");
+> -		return -ENODEV;
+> -	}
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> -	ret = devm_request_irq(dev, res->start, qcom_slim_ngd_interrupt,
+> +	ret = devm_request_irq(dev, ret, qcom_slim_ngd_interrupt,
+>   			       IRQF_TRIGGER_HIGH, "slim-ngd", ctrl);
+>   	if (ret) {
+>   		dev_err(&pdev->dev, "request IRQ failed\n");

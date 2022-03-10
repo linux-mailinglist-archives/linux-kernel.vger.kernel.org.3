@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D144E4D41D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2AA4D41DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240092AbiCJHeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 02:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S240104AbiCJHf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 02:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235458AbiCJHeI (ORCPT
+        with ESMTP id S235458AbiCJHf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 02:34:08 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FE35C66E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 23:33:07 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D2E4A3F30F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646897584;
-        bh=TgML8vcIsj55qZzyrpKzLOZN/rXvmVkt87rh4Y06uDM=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=GEAP9l+oL78qZbRvoGBzjpJkRrcaDQzjOv7kW2gFipV7oMXEKB8icpV28zrxV5Okx
-         eM9bptitZTMNYNYXUZ/j7J3w3a98qDTWA4mVNFrI6jwyH+li6TEFWAhwsisoJwvMa0
-         wA+Z0keuyq3THw2Fksix5+Ws5JAlcU9jxwdU04OQFz+9fzfSYBs5ZLNZjG9jKFCmt6
-         7zbKzWeZvxW/kBHz+qnrbwPAubrx8hgRz0t1Q1erqOgrO708E2xV/g9diS3eAPQf+M
-         gj2JW/nL1Nr+RtTSXfC+n97v12FeYowbjslv+RXsl3AKBsdz75lIz3Eb/edYIwwXzr
-         MC7l3uylt4/5A==
-Received: by mail-ed1-f71.google.com with SMTP id b9-20020aa7d489000000b0041669cd2cbfso2609416edr.16
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 23:33:04 -0800 (PST)
+        Thu, 10 Mar 2022 02:35:27 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBB579C78
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 23:34:26 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id a5so4423686pfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 23:34:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/cRXQiSJ5rIWf1RgUsbCqPw2RjGrtPdegUrxegBFwDg=;
+        b=drrvyjXC5GTw4mGN3hjmCpR4QqGXIdZSM8NzuvaH9FuH+GTzewAH4wwF4CgXUGxcdJ
+         5TnxSaZKkOGH5yGtGUUzB37aeaMs9mvj0uLtZ2ganFOtQa86at1qEmdYMYvzfUDN/GIO
+         O4rhe3+a/Z7sFLYsq+h9w3AKpTJ9SpNVv3H1Aw1kwhHo+JG4+LuTXBUBYY0rqWQghPpQ
+         bWHTyxzC+O9Np97hHOAC1dk329FWk4V4ijry9Wgxj/8gGRCP8o0laEBybE37BQO+j3Cy
+         vajQqKyd7NcfoUaPMrXhgQqD8m5o7M6z4UNC3YyZb4gb4MgpoUSVbZn41VMgICH7+oeN
+         rNcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TgML8vcIsj55qZzyrpKzLOZN/rXvmVkt87rh4Y06uDM=;
-        b=E85ez9YhNTgWGq/raj1UsGlaGOQllD/av2gej/Z+sieNi1UBV1ngVgXaDLjGwdBVO9
-         Lm6KiwpuJX9LelSE29S55enH5Sw8Kn4IBmPRHAMwu8kw3gLGABDR0zlft9NsuYi1IAdf
-         Tkx4lSAbhAyWgb/sG8vMxZvJofH7ijE5MlqgunS8X4RGA5pHvJEVMG7ANM1mKsWkntJt
-         p5Br2Usfee9RkucXq8KvhKcyOOYCf8gL+twHzSdaAe/NVBwaP0FI5EBK9KwxEo2iCW3p
-         FluoFPGEifuV7ENHzXuF9MWXKvx4YQMq3tBCe9p0UKTWMqFhREUZ/6/G6NLKO9qdM7dQ
-         SW0A==
-X-Gm-Message-State: AOAM530MhlYqzi374+KmCPpvzdIIrRZUYDlQc2LSKZU9ntKu4MKeOxDc
-        +gSerHO8CJKx0tjdWqk+WU1znho7sM7VOkp47FN+he47CWL45TTFPgGsDyujQjoGI3hRfxrh0LV
-        p5zFF6dmpML0M3NhCE1Ah9GPbPeaYXtQx8QZdxILqVQ==
-X-Received: by 2002:a17:907:6d14:b0:6d9:565a:ed0 with SMTP id sa20-20020a1709076d1400b006d9565a0ed0mr3005868ejc.331.1646897583797;
-        Wed, 09 Mar 2022 23:33:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxRXVwL9gA+TMs2+QC00qdM7V4AHy3V4XlW18f1P6pA5J8sS0tY30urvNkwogvuZq2bAwWLLw==
-X-Received: by 2002:a17:907:6d14:b0:6d9:565a:ed0 with SMTP id sa20-20020a1709076d1400b006d9565a0ed0mr3005858ejc.331.1646897583641;
-        Wed, 09 Mar 2022 23:33:03 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id q9-20020a17090609a900b006cd30a3c4f0sm1533494eje.147.2022.03.09.23.33.02
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=/cRXQiSJ5rIWf1RgUsbCqPw2RjGrtPdegUrxegBFwDg=;
+        b=Uxy5Jhsz2YsFkHF+PmGnapyRw0Pn2PjZV+YbzSgpM6/aP7FcHgDTuA5XWkKLDZewLY
+         r297fH29P9gqTI4hjaWJeM6iGdxH91BrVoAEkhqeK9+fuq/NVou0DPyTj4YQH6NF1+P2
+         ubbocuoItza0Gsdfb/jlBEQ9l9QMq+NIaOzLfjBCGEJ8IOer27W86A3V22QSuj9BA7IY
+         6uHyJPisA860RR3NrT+adpCz/SbLOvW9VohwpOOEzTJSYlbSPJoWKHVy3ie/qIzKfRgU
+         QeChcztVQHnk3cRbvvj1+NwK1HCP+sTU9Te4RXPRgLfByj5FXISJjj8W/LXl8yK1mPzZ
+         0bqw==
+X-Gm-Message-State: AOAM532o2xZ/kbSxELuUpieoKqgUpL3t31rSa6ghYtnFfWuD6/Lm9NRL
+        eY3GV/Sl/c7smF1IXodkt6EHSQ==
+X-Google-Smtp-Source: ABdhPJxc+q7DDbxs0t4/P+31ptJrnup2lYJR0GZZf7c/akfYD1VQ0loaR35m7vzsGzW58v1D87rQwQ==
+X-Received: by 2002:a05:6a00:2444:b0:4f7:73bb:7582 with SMTP id d4-20020a056a00244400b004f773bb7582mr2011116pfj.39.1646897666298;
+        Wed, 09 Mar 2022 23:34:26 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id j16-20020a63e750000000b00373598b8cbfsm4482675pgk.74.2022.03.09.23.34.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 23:33:03 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-Subject: [PATCH] dt-bindings: extcon: maxim,max77843: fix ports type
-Date:   Thu, 10 Mar 2022 08:32:58 +0100
-Message-Id: <20220310073258.24060-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
+        Wed, 09 Mar 2022 23:34:25 -0800 (PST)
+Date:   Wed, 09 Mar 2022 23:34:25 -0800 (PST)
+X-Google-Original-Date: Wed, 09 Mar 2022 23:21:11 PST (-0800)
+Subject:     Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
+In-Reply-To: <YimjbmdACoQOk+hj@infradead.org>
+CC:     michael@michaelkloos.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Message-ID: <mhng-08a28047-b563-41f4-b705-f27b88554f2c@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "ports" property can contain multiple ports as name suggests, so it
-should be using "ports" type from device graphs.
+On Wed, 09 Mar 2022 23:06:22 PST (-0800), Christoph Hellwig wrote:
+> Why?
 
-Reported-by: Rob Herring <robh@kernel.org>
-Fixes: 9729cad0278b ("dt-bindings: extcon: maxim,max77843: Add MAX77843 bindings")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+I have no idea, but this has come up a few times before.
 
----
+IIRC the original port had a no-M flavor (don't remember if it even made 
+it to the original patch submission, but it was around for a bit).  We 
+decided to drop this under the theory that nobody would use it: 
+essentially, if you can afford the handful of MiB of memory required to 
+run Linux then you've probably got a multiplier.
 
-Hi Lee,
+If someone has hardware that lacks M and users care about running Linux 
+on that then I'm happy to support it.  I'll still point out the 
+silliness of that decision, but if it's too late to change things then 
+I'd rather support the hardware.  If it's one of these "fill out every 
+possible allowed ISA flavor, even if nobody has one that runs Linux" 
+then I don't see a reason to bother -- there's an infinite amount of 
+allowable RISC-V implementations, we'll all go crazy chasing them 
+around.
 
-This is a fix for a commit in your next branch.
----
- Documentation/devicetree/bindings/extcon/maxim,max77843.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml b/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
-index f9ffe3d6f957..0216ec868c3e 100644
---- a/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
-+++ b/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
-@@ -25,7 +25,7 @@ properties:
-     $ref: /schemas/connector/usb-connector.yaml#
- 
-   ports:
--    $ref: /schemas/graph.yaml#/properties/port
-+    $ref: /schemas/graph.yaml#/properties/ports
-     description:
-       Any connector to the data bus of this controller should be modelled using
-       the OF graph bindings specified
--- 
-2.32.0
-
+FWIW: to a first order, that applies to the no-A stuff as well (though 
+that got dropped because the Arm folks pointed out a way to support that 
+was way better than ours).

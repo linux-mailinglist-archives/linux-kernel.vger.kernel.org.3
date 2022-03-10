@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547B14D4CF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D9C4D4D68
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240694AbiCJPZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
+        id S237496AbiCJP0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiCJPZH (ORCPT
+        with ESMTP id S232844AbiCJP0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:25:07 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6BA15722D;
-        Thu, 10 Mar 2022 07:24:03 -0800 (PST)
-Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nSKdt-000DUs-L2; Thu, 10 Mar 2022 16:23:53 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nSKdt-0007vB-6m; Thu, 10 Mar 2022 16:23:53 +0100
-Subject: Re: [PATCH] bpf: test_run: use kvfree() for memory allocated with
- kvmalloc()
-To:     Yihao Han <hanyihao@vivo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, toke@redhat.com
-References: <20220310092828.13405-1-hanyihao@vivo.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b611d5d6-fb8c-0c9d-ca12-7131765001ca@iogearbox.net>
-Date:   Thu, 10 Mar 2022 16:23:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 10 Mar 2022 10:26:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C7615697B;
+        Thu, 10 Mar 2022 07:25:08 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 6B0911F45A2A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646925907;
+        bh=G44TKaXJ2702MH14xQ2xJ5CzDZDhej3DrvU8W8AmQpM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SXhuKhFEp8Pn5kLpJ9uE75VypUMiWbTDJVSbQOK8PeLRuwMErkdO4jbich+dzPauC
+         qCJWCscyap4JMwtArGtY5HzKtdvHxmWP7UbBPZXUPeHdFbn2BmwfQ33I7MwQG8brbd
+         fYowneCd2ko50BtGZSUUzuRyJ/wegpIExSkuV6lgm16tPDRBenjMZEc9g8r/MZCpiT
+         JZBtRYcs3DiM/nITjUjJB6X2evoUXrnf21ef/sN5ap4/j6gW50i8UJIkGflgdbeBHL
+         docIDtmUfdlSE6vs5URQcIca6NSmP9Jcr8vaydjsb9YA3GvDJgCzFyl9ueHgXddWqI
+         r4s8PlBH5D3EQ==
+Message-ID: <ead686bc-06ae-c572-999a-af22c183550f@collabora.com>
+Date:   Thu, 10 Mar 2022 16:25:04 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220310092828.13405-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/5] ASoC: mediatek: mt8195: add reset controller
 Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        tiwai@suse.com, robh+dt@kernel.org, matthias.bgg@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aaronyu@google.com,
+        yc.hung@mediatek.com
+References: <20220308072435.22460-1-trevor.wu@mediatek.com>
+ <20220308072435.22460-2-trevor.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220308072435.22460-2-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26477/Thu Mar 10 10:34:39 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ You have plenty of folks in Cc, just not Toke given b530e9e1063e, so added him. ;) ]
+Il 08/03/22 08:24, Trevor Wu ha scritto:
+> Audio hardware is possibly used in the firmware stage, so resetting audio
+> hardware before regcache records default register values is required.
+> 
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 
-On 3/10/22 10:28 AM, Yihao Han wrote:
-> It is allocated with kvmalloc(), the corresponding release function
-> should not be kfree(), use vfree() instead.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-nit: s/vfree/kvfree/
-
-> Generated by: scripts/coccinelle/api/kfree_mismatch.cocci
-
-Fixed up typo and added Fixes tag before pushing, thanks!
-
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
 > ---
->   net/bpf/test_run.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   sound/soc/mediatek/mt8195/mt8195-afe-pcm.c | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
 > 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 25169908be4a..b7e1e5f61c50 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -196,9 +196,9 @@ static int xdp_test_run_setup(struct xdp_test_data *xdp, struct xdp_buff *orig_c
->   err_mmodel:
->   	page_pool_destroy(pp);
->   err_pp:
-> -	kfree(xdp->skbs);
-> +	kvfree(xdp->skbs);
->   err_skbs:
-> -	kfree(xdp->frames);
-> +	kvfree(xdp->frames);
->   	return err;
->   }
+> diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
+> index 550636500949..72b2c6d629b9 100644
+> --- a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
+> +++ b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/of_platform.h>
+>   #include <linux/of_reserved_mem.h>
+>   #include <linux/pm_runtime.h>
+> +#include <linux/reset.h>
+>   #include "mt8195-afe-common.h"
+>   #include "mt8195-afe-clk.h"
+>   #include "mt8195-reg.h"
+> @@ -3056,6 +3057,7 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
+>   	struct mtk_base_afe *afe;
+>   	struct mt8195_afe_private *afe_priv;
+>   	struct device *dev = &pdev->dev;
+> +	struct reset_control *rstc;
+>   	int i, irq_id, ret;
+>   	struct snd_soc_component *component;
 >   
-> 
+> @@ -3092,6 +3094,20 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	/* reset controller to reset audio regs before regmap cache */
+> +	rstc = devm_reset_control_get_exclusive(dev, "audiosys");
+> +	if (IS_ERR(rstc)) {
+> +		ret = PTR_ERR(rstc);
+> +		dev_err(dev, "could not get audiosys reset:%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = reset_control_reset(rstc);
+> +	if (ret) {
+> +		dev_err(dev, "failed to trigger audio reset:%d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	spin_lock_init(&afe_priv->afe_ctrl_lock);
+>   
+>   	mutex_init(&afe->irq_alloc_lock);
+
+
 

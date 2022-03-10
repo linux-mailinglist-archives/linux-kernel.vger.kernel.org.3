@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3054D4321
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BBD4D4319
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiCJJIH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 04:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S240673AbiCJJIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240660AbiCJJHu (ORCPT
+        with ESMTP id S240621AbiCJJHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:07:50 -0500
+        Thu, 10 Mar 2022 04:07:46 -0500
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA993137768;
-        Thu, 10 Mar 2022 01:06:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D09138588;
+        Thu, 10 Mar 2022 01:06:44 -0800 (PST)
 Received: from quad ([82.142.8.122]) by mrelayeu.kundenserver.de (mreue109
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1N6srB-1oDfpd1yL1-018ODl; Thu, 10
- Mar 2022 10:00:50 +0100
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1M9npT-1nXRKb378X-005nBf; Thu, 10
+ Mar 2022 10:00:52 +0100
 From:   Laurent Vivier <laurent@vivier.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -30,29 +30,30 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         John Stultz <john.stultz@linaro.org>,
-        Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v15 0/5] m68k: Add Virtual M68k Machine
-Date:   Thu, 10 Mar 2022 10:00:43 +0100
-Message-Id: <20220310090048.1933020-1-laurent@vivier.eu>
+        Laurent Vivier <laurent@vivier.eu>, stable@vger.kernel.org
+Subject: [PATCH v15 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+Date:   Thu, 10 Mar 2022 10:00:45 +0100
+Message-Id: <20220310090048.1933020-3-laurent@vivier.eu>
 X-Mailer: git-send-email 2.35.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220310090048.1933020-1-laurent@vivier.eu>
+References: <20220310090048.1933020-1-laurent@vivier.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:e5xppiFh9Gm+arxF2OZAGeqW7ue2mRq0txNg7MRNVTuzlkS2xFL
- u6WvJrjpCXp1AT+h+BZevjw4TPRI2SadJRcUUi1UD7vcvC2+khScZheSgXavzTvqIhE3eES
- 9BEdXlZwWkuQQCVVpy29yFQ/7WORpOYw8ZRDvtFqSUWp0gHdakk8YPwNYh3nNGBWPzxovuj
- oHtmUIHSWdwFBju+3YoTA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0jQqKP24XY4=:IVE67pbq1tJIaS4eIkmqcp
- tEqCBkRwbZgdqVcwjhPGt7pk5lITnvE9Wrzcv9D75lWkfcsYAXwUFa3nsoWxC7aMkh8COFOPG
- KUGjFFEluaXJu22jlhSL7rnCeWi/VWlWZ8w/ZTS1A2Xk5qS2YQHXPfHzWxE8p3CQWRhNG260N
- YJV2zkjos2Y4MGCpuEQ99i/PVVdkSNdAmxGzNHGYJP12m0x9pnNtuSd6WAKWEdZT5XyHJis44
- 21vz5OP5ffUt6++KS5uGIfrKo9MFdsx5OMRF352ra1A8rHXZzZkbxdTMF6qD8b0ddXRi4IwsV
- 7MKuaWrMYOP6Tj01nNB/+dfAmpQmpbq42q3TyqHJJZfTyMIlKHZeN5aBJIDPJkA5V2D+/jh61
- B6rJO9vlGhbvu5sKrXJGIaMhCw9IuE40MnNPSOBHTVeBcPuTxbmzwJSZqDdJHTS1MjMP8lmSu
- W0tnBofQEhfFYnQ4bpNUchhxzCuDpbun/jtXWxkaqowsi+Bj0INkAXYMRqts9AJMD3+P83Ewg
- HZQHnwcZcF3wQg9FmPggg+hUg3M9y0vHh99h9F/ui4CXy5LuzIUjrn00q3nwVcEMexuDzFxba
- qhYMRJ6jl06P5mGAMBoM7SvmfUk5WZKLUK8VdBCXBwlwXT3VgnKsQg0WpRSz2/GfTK0CPAxb4
- 61JRUHAbXHUVLSM9meUaIyOiMLSKSbKFoYBIa0Ejj0xBXDYR8RJ8U12UVzBHz6nu/mCs=
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:z6VvWaMgbVWgHGjT5VEVpvMDtRYjzT4gaVfuJs+Sr1bSIuiz2j0
+ tW3g8E/iSgn9b2ivVYHbbsXO6b/Bz7x+w91vgPBTmjRb+25hoxnRK78xGN80BD3wi83Kuj+
+ 60/c9jw86yLddUGQXsIcUPJcJbQxHYTUr1HOps4Mw6yFMV/NLMCJTr3/Qt0VxmYV3KJD8nu
+ xz9aBxCNCbMoC/MNt9SoA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bAk46WjY1/c=:8nu3NroU6bDNMJuRnyjolE
+ 7ewStpnvXrFIOAG9eOmlswTuEsO7Vu7HidhvSk9nqcOoDlk6E2WNx50ZUzCY+NBi2E1trBQV+
+ FYk1uQet6HusLh4/wtBNchxdHjgQitLOpfm12pxgD2T3Hg5Nw/ZiHxHwtG1D+tP4tHCJZlLId
+ RMyThOvSlG2fqTMUAMOeEPt5rQXBoYy8HAwWTuWNXD0ZJjTwgj3//ORL89vu8l7OeHLWE5Vew
+ WE+1LS5uE3wjBUA6DFirnNvJCYJU7AUAufVMwG61+k4pPiW13+QuYfGdg5mj3AtFPkVwbu2J+
+ VOzXp5Ugi+IVOPi9LnKa+7GnC9GiSGTehx3RfH2Uk0WVCqIBWS6fLaHKR2WNEdNRJDscbzfPX
+ T4uEA+zLgCvc42NfoS8SeVfhLIsU3DYCYAE2kMeWcZHoMkWuE31JuObnmxCIePcrTMd1wxbnr
+ PiTipDSBNfs8Mb7PoX8GuYsdhw4MRUZnAjIzqRhYnewFcWiFq+5cjfiSp+rjlP3w6OcJRXa0I
+ D46G9J8hXxNYlWzHOj9kGokCH5RppHiSPVZNtw9LiXp/meZc25bj64W92iNvVcISaBf9PlqVd
+ DcRt7yOVDE4hTbNBp+2nLUFYThD1ORTD381WPmApulPtbyKwpuArMrewkAhztz0q3Zg8ReBmE
+ JhWWnmlNgsor/6aTF2VSxLgqcZYmfADHMIHzXKyokZj5TNzQWuWfeg9gLbYtvaIwS0Rg=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
         RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -62,204 +63,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The most powerful m68k machine emulated by QEMU is a Quadra 800,
-but this machine is very limited: only 1 GiB of memory and only some
-specific interfaces, with no DMA.
+Revert
+commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
 
-The Virtual M68k Machine is based on Goldfish interfaces defined by Google
-for Android simulator. It uses Goldfish-rtc (timer and RTC),
-Goldfish-pic (PIC) and Goldfish-tty (for early tty).
+and define gf_ioread32()/gf_iowrite32() to be able to use accessors
+defined by the architecture.
 
-The machine is created with 128 virtio-mmio buses, and they can
-be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
+Cc: stable@vger.kernel.org # v5.11+
+Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ drivers/tty/goldfish.c   | 20 ++++++++++----------
+ include/linux/goldfish.h | 15 +++++++++++----
+ 2 files changed, 21 insertions(+), 14 deletions(-)
 
-The virtual m68k machine has been merged in QEMU and will be available
-with the release 6.0.
-
-This series introduces the support of this new machine in the linux kernel.
-
-If you want to try:
-
-- Configure and build latest QEMU with (or download qemu 6.0 binary):
-
-  .../configure --target-list=m68k-softmmu --enable-virglrenderer
-  make
-
-- Configure and build linux with:
-
-  make virt_defconfig
-  make vmlinux
-
-A pre-installed qcow2 disk image is available at:
-
-http://vivier.eu/debian-10.0.qcow2
-
-You can run the machine with something like:
-
-qemu-system-m68k -M virt \
-  -m 3G \
-  -chardev stdio,signal=off,mux=on,id=char0 \
-  -mon chardev=char0,mode=readline \
-  -kernel vmlinux \
-  -append "console=hvc0 root=/dev/vda2" \
-  -blockdev node-name=system,driver=file,filename=debian-10.0.qcow2 \
-  -blockdev node-name=drive0,driver=qcow2,file=system \
-  -device virtio-blk-device,drive=drive0 \
-  -serial chardev:char0 \
-  -device virtio-net-device,netdev=hostnet0 \
-  -netdev bridge,id=hostnet0,br=virbr0,helper=/usr/libexec/qemu-bridge-helper \
-  -device virtio-serial-device \
-  -device virtio-gpu-device \
-  -device virtconsole,chardev=char0 \
-  -device virtio-keyboard-device \
-  -device virtio-mouse-device
-
-You can watch a presentation about the machine on the Planet m68k channel:
-
-    https://youtu.be/s_ve0bCC9q4
-    [Demo at 38:00]
-
-v15:
-- rebase
-- update clocksource patch description to remove URL
-
-v14:
-- address Geert's comments on v13
-
-v13:
-- rework clocksource according to Daniel's comments
-- move the timer registers definition to include/clocksource/timer-goldfish.h
-
-v12:
-- add request_resource() for pic and virtctrl
-- enable virtio-snd in virt_defconfig
-- add #include <linux/goldfish.h> in rtc and timer
-
-v11:
-- rename goldfish_ioread32()/goldfish_iowrite32() to gf_ioread32()/gfiowrite32()
-- move them to linux/goldfish.h and m68k/asm/io.h
-- change patches order (tty first to revert my previous work)
-- fix clocksource by clearing interrupt on tick not on next_event()
-  and clearing shift
-- add missing clocksource_register_hz()
-- rebase
-
-v10:
-- move goldfish_ioread32()/goldfish_iowrite32() to io.h
-- also update goldfish-tty
-- use READ_ONCE()/WRITE_ONCE() for in_nmi
-
-v9:
-- include <linux/memblock.h> to declare min_low_pfn
-- goldfish accessors: s/CONFIG_CPU_BIG_ENDIAN/CONFIG_M68K/
-
-v8:
-- GF_PUT_CHAR is a 32bit register (in arch/m68k/kernel/head.S)
-- rework goldfish-pic and virt_ctrl
-
-v7:
-- add "#include <linux/slab.h>" in timer-goldfish.c for kzalloc()
-- update timer-goldfish Kconfig
-- remove EXPORT_SYMBOL()
-- introduce goldfish_ioread32()/goldfish_iowrite32()
-
-v6:
-- fix goldfish-rtc endianness
-- move goldfish-timer code to drivers/clocksource
-- remove LEGACY_TIMER_TICK and use directly goldfish-timer
-
-v5:
-- add GENERIC_CLOCKEVENTS in Kconfig.machine
-
-v4:
-- update PATCH 1: comments and parameter names
-- add a patch to move to generic clockevents
-  (I prefer to have a separate patch as it can be used as an example to
-   move from legacy timer tick to generic clockevents)
-
-v3:
-- introduce config.h to export prototypes to arch/m68k/kernel/setup_mm.c
-- define virt_nmi_handler as static
-
-v2:
-- Remove VIRTO_MENU set y
-- sort the selects
-- add CONFIG_LOCALVERSION="-virt"
-- generate virt_defconfig using "make savedefconfig"
-- rename MACH_VIRTONLY to MACH_VIRT_ONLY
-- add a test_notvirt label in head.S
-- rework iounmap() to use two separate #ifdefs
-- use %u in virt_get_model()
-- drop show_registers() in config.c
-- drop pr_err() from config_virt()
-- sort includes in ints.c
-- call virt_irq_enable() in virt_irq_startup()
-- drop virt_irq_shutdown() and use virt_irq_disable()
-- move in_nmi into virt_nmi_handler()
-- use pr_warn() in virt_nmi_handler()
-- rework goldfish_pic_irq() IRQ scan
-- copy goldfish-pic IRQs related information from QEMU hw/m68k/virt
-- add a comment to "min_low_pfn = 0"
-- use platform_device_register_simple()
-- use goldfish_timer_read(), upper_32_bits() and lower_32_bits()
-
-Thanks,
-Laurent
-
-Laurent Vivier (5):
-  m68k: add asm/config.h
-  tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-  rtc: goldfish: use gf_ioread32()/gf_iowrite32()
-  clocksource/drivers: Add a goldfish-timer clocksource
-  m68k: introduce a virtual m68k machine
-
- arch/m68k/Kbuild                           |   1 +
- arch/m68k/Kconfig.machine                  |  17 +++
- arch/m68k/amiga/config.c                   |   1 +
- arch/m68k/apollo/config.c                  |   1 +
- arch/m68k/atari/config.c                   |   1 +
- arch/m68k/bvme6000/config.c                |   1 +
- arch/m68k/configs/virt_defconfig           |  68 +++++++++
- arch/m68k/hp300/config.c                   |   1 +
- arch/m68k/include/asm/config.h             |  35 +++++
- arch/m68k/include/asm/io.h                 |   3 +
- arch/m68k/include/asm/irq.h                |   3 +-
- arch/m68k/include/asm/pgtable_mm.h         |   7 +
- arch/m68k/include/asm/setup.h              |  44 ++++--
- arch/m68k/include/asm/virt.h               |  25 ++++
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 +++
- arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
- arch/m68k/kernel/Makefile                  |   1 +
- arch/m68k/kernel/head.S                    |  31 +++++
- arch/m68k/kernel/setup_mm.c                |  30 ++--
- arch/m68k/mac/config.c                     |   1 +
- arch/m68k/mm/kmap.c                        |  21 ++-
- arch/m68k/mvme147/config.c                 |   1 +
- arch/m68k/mvme16x/config.c                 |   1 +
- arch/m68k/q40/config.c                     |   1 +
- arch/m68k/virt/Makefile                    |   6 +
- arch/m68k/virt/config.c                    | 130 +++++++++++++++++
- arch/m68k/virt/ints.c                      | 155 +++++++++++++++++++++
- arch/m68k/virt/platform.c                  |  72 ++++++++++
- drivers/clocksource/Kconfig                |   7 +
- drivers/clocksource/Makefile               |   1 +
- drivers/clocksource/timer-goldfish.c       | 153 ++++++++++++++++++++
- drivers/rtc/rtc-goldfish.c                 |  44 +++---
- drivers/tty/goldfish.c                     |  20 +--
- include/clocksource/timer-goldfish.h       |  31 +++++
- include/linux/goldfish.h                   |  15 +-
- 35 files changed, 868 insertions(+), 80 deletions(-)
- create mode 100644 arch/m68k/configs/virt_defconfig
- create mode 100644 arch/m68k/include/asm/config.h
- create mode 100644 arch/m68k/include/asm/virt.h
- create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
- create mode 100644 arch/m68k/virt/Makefile
- create mode 100644 arch/m68k/virt/config.c
- create mode 100644 arch/m68k/virt/ints.c
- create mode 100644 arch/m68k/virt/platform.c
- create mode 100644 drivers/clocksource/timer-goldfish.c
- create mode 100644 include/clocksource/timer-goldfish.h
-
+diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+index 5ed19a9857ad..10c13b93ed52 100644
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -61,13 +61,13 @@ static void do_rw_io(struct goldfish_tty *qtty,
+ 	spin_lock_irqsave(&qtty->lock, irq_flags);
+ 	gf_write_ptr((void *)address, base + GOLDFISH_TTY_REG_DATA_PTR,
+ 		     base + GOLDFISH_TTY_REG_DATA_PTR_HIGH);
+-	__raw_writel(count, base + GOLDFISH_TTY_REG_DATA_LEN);
++	gf_iowrite32(count, base + GOLDFISH_TTY_REG_DATA_LEN);
+ 
+ 	if (is_write)
+-		__raw_writel(GOLDFISH_TTY_CMD_WRITE_BUFFER,
++		gf_iowrite32(GOLDFISH_TTY_CMD_WRITE_BUFFER,
+ 		       base + GOLDFISH_TTY_REG_CMD);
+ 	else
+-		__raw_writel(GOLDFISH_TTY_CMD_READ_BUFFER,
++		gf_iowrite32(GOLDFISH_TTY_CMD_READ_BUFFER,
+ 		       base + GOLDFISH_TTY_REG_CMD);
+ 
+ 	spin_unlock_irqrestore(&qtty->lock, irq_flags);
+@@ -142,7 +142,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
+ 	unsigned char *buf;
+ 	u32 count;
+ 
+-	count = __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
++	count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
+ 	if (count == 0)
+ 		return IRQ_NONE;
+ 
+@@ -159,7 +159,7 @@ static int goldfish_tty_activate(struct tty_port *port, struct tty_struct *tty)
+ {
+ 	struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
+ 									port);
+-	__raw_writel(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
++	gf_iowrite32(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
+ 	return 0;
+ }
+ 
+@@ -167,7 +167,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
+ {
+ 	struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
+ 									port);
+-	__raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
++	gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
+ }
+ 
+ static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
+@@ -202,7 +202,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
+ {
+ 	struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
+ 	void __iomem *base = qtty->base;
+-	return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
++	return gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
+ }
+ 
+ static void goldfish_tty_console_write(struct console *co, const char *b,
+@@ -355,7 +355,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+ 	 * on Ranchu emulator (qemu2) returns 1 here and
+ 	 * driver will use physical addresses.
+ 	 */
+-	qtty->version = __raw_readl(base + GOLDFISH_TTY_REG_VERSION);
++	qtty->version = gf_ioread32(base + GOLDFISH_TTY_REG_VERSION);
+ 
+ 	/*
+ 	 * Goldfish TTY device on Ranchu emulator (qemu2)
+@@ -374,7 +374,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	__raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
++	gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
+ 
+ 	ret = request_irq(irq, goldfish_tty_interrupt, IRQF_SHARED,
+ 			  "goldfish_tty", qtty);
+@@ -436,7 +436,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
+ #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
+ static void gf_early_console_putchar(struct uart_port *port, int ch)
+ {
+-	__raw_writel(ch, port->membase);
++	gf_iowrite32(ch, port->membase);
+ }
+ 
+ static void gf_early_write(struct console *con, const char *s, unsigned int n)
+diff --git a/include/linux/goldfish.h b/include/linux/goldfish.h
+index 12be1601fd84..bcc17f95b906 100644
+--- a/include/linux/goldfish.h
++++ b/include/linux/goldfish.h
+@@ -8,14 +8,21 @@
+ 
+ /* Helpers for Goldfish virtual platform */
+ 
++#ifndef gf_ioread32
++#define gf_ioread32 ioread32
++#endif
++#ifndef gf_iowrite32
++#define gf_iowrite32 iowrite32
++#endif
++
+ static inline void gf_write_ptr(const void *ptr, void __iomem *portl,
+ 				void __iomem *porth)
+ {
+ 	const unsigned long addr = (unsigned long)ptr;
+ 
+-	__raw_writel(lower_32_bits(addr), portl);
++	gf_iowrite32(lower_32_bits(addr), portl);
+ #ifdef CONFIG_64BIT
+-	__raw_writel(upper_32_bits(addr), porth);
++	gf_iowrite32(upper_32_bits(addr), porth);
+ #endif
+ }
+ 
+@@ -23,9 +30,9 @@ static inline void gf_write_dma_addr(const dma_addr_t addr,
+ 				     void __iomem *portl,
+ 				     void __iomem *porth)
+ {
+-	__raw_writel(lower_32_bits(addr), portl);
++	gf_iowrite32(lower_32_bits(addr), portl);
+ #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+-	__raw_writel(upper_32_bits(addr), porth);
++	gf_iowrite32(upper_32_bits(addr), porth);
+ #endif
+ }
+ 
 -- 
 2.35.1
 

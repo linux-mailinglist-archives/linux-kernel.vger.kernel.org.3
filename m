@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9F74D44F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9A34D44F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241402AbiCJKtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S241392AbiCJKs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241381AbiCJKtG (ORCPT
+        with ESMTP id S241381AbiCJKsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:49:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369A013F03
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:48:05 -0800 (PST)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22AAKiDm023317;
-        Thu, 10 Mar 2022 10:47:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=UV+X5J1OdcME8oyPlGRp8HVP5l/DmgVHImLcf3K+ddA=;
- b=V3E3pm1HKox0XeP6J4y7aBWnSEfXjRGMOTafSk/D7UFDVQNluP/M46KYqO9gnuE77GMz
- 3jg4/bu3sPT/GM9F7nCf+aBNQlmQqV31Xp8sQLOsNCyMNfHYV58nF/SmWQaxYjcPHNw5
- vVPQH4E+PXBW5V1whG01XIdbxfnZPmIEVb/evAUJtUPzBuVoXCvwttC68dPWe58Lgrbk
- 61r5o0mTX4KrPiICKsHJULaYGAndmZrXv6sCbuxpzqGyak0fCN+5dKdFAr/W4keArMoE
- tiarAttFoB4tRPUMXX9xuCAQ17BF1dKo0CgA7DrDbtKN6tbWPF5CumqytyKJBLcN3ri9 0w== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ep0sdqpte-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 10:47:55 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22AAch5n005626;
-        Thu, 10 Mar 2022 10:47:54 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3enpk2x3em-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 10:47:54 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22AAloKj37945642
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Mar 2022 10:47:50 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2E965204E;
-        Thu, 10 Mar 2022 10:47:50 +0000 (GMT)
-Received: from li-NotSettable.ibm.com.com (unknown [9.43.68.168])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 61ABE5204F;
-        Thu, 10 Mar 2022 10:47:49 +0000 (GMT)
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>, cclaudio@linux.ibm.com
-Subject: [PATCH] perf trace: Fix SIGSEGV when processing augmented args
-Date:   Thu, 10 Mar 2022 16:17:41 +0530
-Message-Id: <20220310104741.209834-1-naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 10 Mar 2022 05:48:54 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33E8637A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:47:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646909273; x=1678445273;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MzMAdsv55pFk0fS6LjtMyulpOtE7bHXFh95B1tLmkgA=;
+  b=lSh/K97oNhx8bDGK9eAzNKAux1UhY9NK30ds3sEEG80h2ARZO7FyNwR/
+   WdIXOJ1pER8NHeBRZVnimARLqkjeTpmtICPbjC74mtIV7vu+Nes3FnHoi
+   bMRT7ZXN1VlTQfIexoExJSTnzuVIK8ypydDyedl8l68P8GQ9tKaDG2aFS
+   fndoPFA4rYKdtH6xKMVlu3F1cRbGX4HiykB3KcQ7vVAba87te5ySaQio7
+   fvCUpbu2wfZ9z/EC01Fz4c9764F2CKkUL4laqOIZyZnU2OmZWMP2QvAf0
+   LYXTX1ZwNxG1uZ/QnzypFbgmdjtFmbhf4l9MH8MMO28JNWP+4g8SmUyUL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254048756"
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="254048756"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 02:47:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,170,1643702400"; 
+   d="scan'208";a="578754323"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2022 02:47:52 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSGKl-0004of-DE; Thu, 10 Mar 2022 10:47:51 +0000
+Date:   Thu, 10 Mar 2022 18:47:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alessio Balsini <balsini@google.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 1034/9999] usr/include/linux/fuse.h:888: found __[us]{8,16,32,64} type
+ without #include <linux/types.h>
+Message-ID: <202203101849.Vpu9XtZ0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DEridyfWJVYNaC7c7f8xYhyhbuXJ_RTN
-X-Proofpoint-GUID: DEridyfWJVYNaC7c7f8xYhyhbuXJ_RTN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-10_03,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- clxscore=1011 bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203100056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,56 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On powerpc, 'perf trace' is crashing with a SIGSEGV when trying to
-process a perf data file created with 'perf trace record -p':
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   2d490f129561c7cb45482b0aa866e7b973489e8f
+commit: 5e424f85962b0353631642f4da402f2003c218ba [1034/9999] ANDROID: fuse/passthrough: API V2 with __u32 open argument
+config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20220310/202203101849.Vpu9XtZ0-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/5e424f85962b0353631642f4da402f2003c218ba
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout 5e424f85962b0353631642f4da402f2003c218ba
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-  #0  0x00000001225b8988 in syscall_arg__scnprintf_augmented_string <snip> at builtin-trace.c:1492
-  #1  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1492
-  #2  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1486
-  #3  0x00000001225bdd9c in syscall_arg_fmt__scnprintf_val <snip> at builtin-trace.c:1973
-  #4  syscall__scnprintf_args <snip> at builtin-trace.c:2041
-  #5  0x00000001225bff04 in trace__sys_enter <snip> at builtin-trace.c:2319
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The size captured in the augmented arg looks corrupt, resulting in the
-augmented arg pointer being adjusted incorrectly. Fix this by checking
-that the size is reasonable.
+All warnings (new ones prefixed by >>):
 
-Reported-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+>> usr/include/linux/fuse.h:888: found __[us]{8,16,32,64} type without #include <linux/types.h>
+
 ---
-While this resolves the 'perf trace' crash, I'm not yet sure why the
-size for the augmented arg is corrupt. This looks to be happening when
-processing the sample for 'read' syscall. Any pointers?
-
-Thanks,
-- Naveen
-
-
- tools/perf/builtin-trace.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 52b137a184a66a..150c9cbe3316b8 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -1487,10 +1487,12 @@ static size_t syscall_arg__scnprintf_augmented_string(struct syscall_arg *arg, c
- 	 * So that the next arg with a payload can consume its augmented arg, i.e. for rename* syscalls
- 	 * we would have two strings, each prefixed by its size.
- 	 */
--	int consumed = sizeof(*augmented_arg) + augmented_arg->size;
-+	int consumed = sizeof(*augmented_arg) + (unsigned int)augmented_arg->size;
- 
--	arg->augmented.args = ((void *)arg->augmented.args) + consumed;
--	arg->augmented.size -= consumed;
-+	if (consumed < arg->augmented.size) {
-+		arg->augmented.args = ((void *)arg->augmented.args) + consumed;
-+		arg->augmented.size -= consumed;
-+	}
- 
- 	return printed;
- }
-
-base-commit: e314fe9c2ad65adcb62fa98376a5f35502e4f4dd
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

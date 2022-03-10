@@ -2,157 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273604D53BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8534F4D53B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 22:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245656AbiCJVnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 16:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S1344037AbiCJVnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 16:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbiCJVnH (ORCPT
+        with ESMTP id S241488AbiCJVnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:43:07 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A694192CB8;
-        Thu, 10 Mar 2022 13:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646948526; x=1678484526;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Wu9xQh13qOE2SQCUN+y0wm4du69ScDsFeOiJ0FkDQCg=;
-  b=hu5I3kLUlNxdMCRcYV9cnVBayhOR06Nxg62cf/odlqFUTxua12rU2iHE
-   ah5uJko2e+wzA+HWmz9tQW1lrTX/Od/Xenm9Y8EgQKMlo8dnSn6WIa4MT
-   E1oeemwQp1Nku5xIknUrljMj9R3QmMzEUsMiACbXahJ60cPKYM7CjC4Ka
-   7pZm/iLK/5BaHMCu8GeTuXCmk6ra4Tmxj+GwtEusQLyDnbFh8X9aHISK+
-   L68RMiwhAOksG2tldnN0aezPmzoRG9Zro5FH/JZM22HQRoaJSaId+qXwx
-   7w/m9hiEOfdziZVtKeOXvPiWVBx6lL75tVteYUTPrf4HsWVtH19i4vTII
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="235338638"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="235338638"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:42:05 -0800
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="596833491"
-Received: from dhrumil1-mobl1.amr.corp.intel.com (HELO [10.209.77.231]) ([10.209.77.231])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 13:42:03 -0800
-Message-ID: <4062bb5c-1e9c-5e1f-5b27-2a4a8fb58078@intel.com>
-Date:   Thu, 10 Mar 2022 13:42:01 -0800
+        Thu, 10 Mar 2022 16:43:16 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3BA19417D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:42:12 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2db569555d6so73531457b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 13:42:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=X1pCWOxN1ukIne/lto86DuwN95tdGaxh3GRtyvz2dIg=;
+        b=J4suHYHMFQjki4DGGqcv+lWRKy1XqEZBaZFqAcg73gjqA2x+qHjWNvBNR8c8ZCyecS
+         /0H6mm0cFlOfnSNiEu1xl/wyjhmnoae4XDhKSHta/Jrcn1Iupn2lo+C3myyzgAZrHmjL
+         Xpn8dYzBtFltgSHuPERecyg3SUr+3DdlwhxhNshY2hNqtC1vHLx3Q9hRYaKpOuEFNvpl
+         yh9jTU6wHiVdDLM/A4xXitM+ySjsXQ74tJFpYax1dUdKptwopQN/gzTTmvIePUuJRYPo
+         Kw7KpLFxEj7UMU1HALiedRdoeLdU9Q6lWCQvo7K09/4n6vHWQgW4VkKbhO8jyf6hG2qD
+         6FHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=X1pCWOxN1ukIne/lto86DuwN95tdGaxh3GRtyvz2dIg=;
+        b=sUSe5x3blA8rCaRealU9rHbklE2Np08ORrK9hLhQqgyH2GByGDPhUOKP6iQIr9YLGa
+         DWM6WktzjqabhY6r0jnF20c5sN2oU2fDvCVBy1lrzl4DJJoluWsxaz4WAOCG11J24xZ9
+         a0KuHHjr8xSuPyR43n/nCU/SuNcwHf9bdCGh+G0pOEUL1cpLoxlVPrwb1jEabD6c/q50
+         +eAirzP+1lTDC65H3v7LfFgsYi6UrAR7PzvHQvHP2QCyW8F6z15D/j25DT8L8X/+BUvs
+         Vgcr7gA57cACiH6BZSmuljOYQJX+yqzYnnamz8gN2Gi2yf6753+UdPu02R1YgoDDYCTb
+         +NFQ==
+X-Gm-Message-State: AOAM533strrVYHjUWPNV4fVUzB5aKB3QVbJuyQPGSGF2kfEgf/+SHXlx
+        1sPBFeC/XzKHAa/6rH2RVNfdTewbJZEpaRgS38YnUA==
+X-Google-Smtp-Source: ABdhPJyWnPXGxFM36m84FiBwDSt+c0Dq7q2AbT937AavjMnMLI1vw9qCHGkygnXVzfEzx9RUgnngEn0cnZiFIjXfPa8=
+X-Received: by 2002:a81:983:0:b0:2dc:62af:71eb with SMTP id
+ 125-20020a810983000000b002dc62af71ebmr5848548ywj.9.1646948531807; Thu, 10 Mar
+ 2022 13:42:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [RFC 07/10] platform/x86/intel/ifs: Create kthreads for online
- cpus for scan test
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
- <20220301195457.21152-8-jithu.joseph@intel.com>
- <09b5b05018a8600ca8fab896790ab16827c80e4e.camel@intel.com>
- <e282377b-8ee4-99fc-432f-2aa3441b2989@intel.com>
- <CAPcyv4gcfMZu38EAGBq59A-RPUmR3fFiamRiR6QaP=D1gPS+6A@mail.gmail.com>
- <1503c7940a7149679025173a46dd0daf@intel.com>
-From:   "Kok, Auke" <auke-jan.h.kok@intel.com>
-In-Reply-To: <1503c7940a7149679025173a46dd0daf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a0d:df06:0:0:0:0:0 with HTTP; Thu, 10 Mar 2022 13:42:11
+ -0800 (PST)
+In-Reply-To: <20220310210210.2124637-1-brendanhiggins@google.com>
+References: <20220310210210.2124637-1-brendanhiggins@google.com>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Thu, 10 Mar 2022 18:42:11 -0300
+Message-ID: <CAKgze5ZCov7a7A2_s+dRXRdPNDfd54-VBq06PdM8mQvf9aq=zQ@mail.gmail.com>
+Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        daniel.gutson@eclypsium.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/7/22 09:46, Luck, Tony wrote:
->>> These are software(driver) defined error codes. Rest of the error codes are supplied by
->>> the hardware. Software defined error codes were kept at the other end to provide ample space
->>> in case (future) hardware decides to provide extend error codes.
->> Why put them in the same number space? Separate software results from
->> the raw hardware results and have a separate mechanism to convey each.
-> We wanted to include in the "details" file, which is otherwise a direct copy of
-> the SCAN_STATUS MSR. Making sure the software error codes didn't overlap
-> with any h/w generated codes seemed like a good idea.
+On 3/10/22, Brendan Higgins <brendanhiggins@google.com> wrote:
+> Add support for a new kind of kunit_suite registration macro called
+> kunit_test_init_suite(); this new registration macro allows the
+> registration of kunit_suites that reference functions marked __init and
+> data marked __initdata.
 >
-> But maybe we should have done this with additional string values in the status
-> file:
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
 >
-> Current:
+> This patch is in response to a KUnit user issue[1] in which the user was
+> attempting to test some init functions; although this is a functional
+> solution as long as KUnit tests only run during the init phase, we will
+> need to do more work if we ever allow tests to run after the init phase
+> is over; it is for this reason that this patch adds a new registration
+> macro rather than simply modifying the existing macros.
 >
-> pass
-> untested
-> fail
+> [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
 >
-> Add a couple of new options for the s/w cases:
+> ---
+>  include/kunit/test.h | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 >
-> sw_timeout
-> sw_retries_exceeded
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index b26400731c02..1878e585f6d3 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -379,6 +379,27 @@ static inline int kunit_run_all_tests(void)
+>
+>  #define kunit_test_suite(suite)	kunit_test_suites(&suite)
+>
+> +/**
+> + * kunit_test_init_suites() - used to register one or more &struct
+> kunit_suite
+> + *			      containing init functions or init data.
+> + *
+> + * @__suites: a statically allocated list of &struct kunit_suite.
+> + *
+> + * This functions identically as &kunit_test_suites() except that it
+> suppresses
+> + * modpost warnings for referencing functions marked __init or data marked
+> + * __initdata; this is OK because currently KUnit only runs tests upon
+> boot
+> + * during the init phase or upon loading a module during the init phase.
+> + *
+> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot,
+> these
+> + * tests must be excluded.
+> + */
+> +#define kunit_test_init_suites(__suites...)				\
+> +	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
+> +			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
+> +			    ##__suites)
+> +
+> +#define kunit_test_init_suite(suite)	kunit_test_init_suites(&suite)
+> +
+>  #define kunit_suite_for_each_test_case(suite, test_case)		\
+>  	for (test_case = suite->test_cases; test_case->run_case; test_case++)
+>
+>
+> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+> --
+> 2.35.1.723.g4982287a31-goog
+>
+>
 
+Thanks for the feature :)
 
-We've made a userspace implementation for this API already as part of 
-opendcdiag that uses it:
-
-https://github.com/opendcdiag/opendcdiag/commit/0cbfcee30e0666b0f79a2e452d7f8167d2a0cb90
-
-What I really like is that with this proposed API, we can unambiguously 
-determine whether "the core failed" or "everything is fine, for now" by 
-reading a single file. I hate to see this file become unusable because 
-its content changes from "pass" to "sw_timeout" or, even worse, it 
-changes from "fail" to "sw_timeout". That would render it useless for 
-the purpose that I think our users will be looking at it.
-
-So, my preference would be to keep this file functioning as-is in this 
-patch series.
-
-I would think that some sort of expandable "statistics" file would be a 
-better way to output various metrics:
-
-```
-
-sw_timeout: 0
-
-sw_retries_exceeded: 2
-
-runs: 42
-
-first_run: 1405529347
-
-last_run: 1646948140
-
-<etc..>
-
-```
-
-just as a suggested alternative for more/incompatble output values or a 
-complex, dynamic format.
-
-I don't have any use in opendcdiag for these values and data. If someone 
-does, they should want to chime in perhaps.
-
-
-Auke
-
+Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>

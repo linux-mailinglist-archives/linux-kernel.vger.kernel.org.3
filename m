@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F2C4D4D42
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB584D4D0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbiCJP3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S237730AbiCJPaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiCJP3O (ORCPT
+        with ESMTP id S232025AbiCJPaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:29:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 783AABD3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646926090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OxmhgsYDn7lN+Q9MYhLi71z6xn1cSXOJwJ0aQe2hQ+o=;
-        b=T5RyIYcFqN48CN7CIalc12XykVE/70e3LRyIRYZH7VqmxpfTd6d6E9d1xhP3I03p8aQZCM
-        ctm/Ovc3j7rnehpeb+PsJMtDfFobEsQ2C2jb6ktrd4mcbcqt9U2owR5M0H3JDUEFzkPsit
-        HA3KoEyeA+iA6vdLo4XICJ1NSa9NV3k=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-OYrXhFR6NOGT-QssaWz7Hw-1; Thu, 10 Mar 2022 10:28:09 -0500
-X-MC-Unique: OYrXhFR6NOGT-QssaWz7Hw-1
-Received: by mail-wr1-f69.google.com with SMTP id l10-20020a05600012ca00b001f1e4669c98so1798450wrx.23
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:28:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OxmhgsYDn7lN+Q9MYhLi71z6xn1cSXOJwJ0aQe2hQ+o=;
-        b=gBluLZOVkpkDe/KVEMXxfT+n/w8QvZkbL0mu8w4vClxyVYDUpYCzm3eOh51Lwu7KLw
-         yjw93uyxt02zCW2AdfPIzYoPUEsfFwcJg5jD8VW5D7gYkSBhwFXqRLgIt8BDfrJTS3dI
-         erOLBQjprBwz5lnYgk3wdlMVa9QIyN5h/1+hu4RfcnvQ3/1+qMvqrd/B/CWKZS5V71VY
-         0D9cvKAQI64IHbkLfE6ftgLzSDSszcrmuMlclDkpHrrr4UxxjioMH5x0eyIN5Bxpxjv1
-         qG7vOCitI/d0OXnfKbxL+Y1hlQwqbHpuCt/eZYdD6t1Zyl2BoRf2xDsXwi4UAhOLdJLK
-         R8+w==
-X-Gm-Message-State: AOAM531BYHuhhIxyjfikiGQZKiQsmGUyi/98Hfn4ONukov5LUIsWZS2e
-        p4A59sWwBN5z7ZkN8TVukkgETg9uy7ln05FYWf1uMpZiwjv1wtWzKRanwCgcgXIZZxhFdVfKwJG
-        d3hu5bDxAZxKrX9DwefXic4/k
-X-Received: by 2002:adf:d1c2:0:b0:1f1:f89a:24ba with SMTP id b2-20020adfd1c2000000b001f1f89a24bamr4024602wrd.515.1646926087874;
-        Thu, 10 Mar 2022 07:28:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvVyRWRHj93/hZgey9ZXI65IZxEXwz2fuNHtQ5iBMjN5xH2pI0mLBomxlME5TCxbw4FP1ESQ==
-X-Received: by 2002:adf:d1c2:0:b0:1f1:f89a:24ba with SMTP id b2-20020adfd1c2000000b001f1f89a24bamr4024578wrd.515.1646926087550;
-        Thu, 10 Mar 2022 07:28:07 -0800 (PST)
-Received: from redhat.com ([2.53.27.107])
-        by smtp.gmail.com with ESMTPSA id x14-20020adfffce000000b001f1dfee4867sm5998858wrs.99.2022.03.10.07.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 07:28:06 -0800 (PST)
-Date:   Thu, 10 Mar 2022 10:28:03 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Jiyong Park <jiyong@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, adelva@google.com,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] vsock: each transport cycles only on its own sockets
-Message-ID: <20220310102636-mutt-send-email-mst@kernel.org>
-References: <20220310135012.175219-1-jiyong@google.com>
- <20220310141420.lsdchdfcybzmdhnz@sgarzare-redhat>
+        Thu, 10 Mar 2022 10:30:05 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5B4B0158DA9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:29:03 -0800 (PST)
+Received: (qmail 1545480 invoked by uid 1000); 10 Mar 2022 10:29:02 -0500
+Date:   Thu, 10 Mar 2022 10:29:02 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
+        rob@robgreener.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] memory leak in usb_get_configuration
+Message-ID: <YioZPi6Q9k2Luznl@rowland.harvard.edu>
+References: <000000000000351b8605d9d1d1bf@google.com>
+ <b7bd6b82-03e3-eac8-21f5-1b05c97c98a3@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220310141420.lsdchdfcybzmdhnz@sgarzare-redhat>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b7bd6b82-03e3-eac8-21f5-1b05c97c98a3@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 03:14:20PM +0100, Stefano Garzarella wrote:
-> On Thu, Mar 10, 2022 at 10:50:11PM +0900, Jiyong Park wrote:
-> > When iterating over sockets using vsock_for_each_connected_socket, make
-> > sure that a transport filters out sockets that don't belong to the
-> > transport.
-> > 
-> > There actually was an issue caused by this; in a nested VM
-> > configuration, destroying the nested VM (which often involves the
-> > closing of /dev/vhost-vsock if there was h2g connections to the nested
-> > VM) kills not only the h2g connections, but also all existing g2h
-> > connections to the (outmost) host which are totally unrelated.
-> > 
-> > Tested: Executed the following steps on Cuttlefish (Android running on a
-> > VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
-> > connection inside the VM, (2) open and then close /dev/vhost-vsock by
-> > `exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
-> > session is not reset.
-> > 
-> > [1] https://android.googlesource.com/device/google/cuttlefish/
-> > 
-> > Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
-> > Signed-off-by: Jiyong Park <jiyong@google.com>
-> > ---
-> > Changes in v3:
-> >  - Fixed the build error in vmci_transport.c
-> > Changes in v2:
-> >  - Squashed into a single patch
-> > 
-> > drivers/vhost/vsock.c            | 3 ++-
-> > include/net/af_vsock.h           | 3 ++-
-> > net/vmw_vsock/af_vsock.c         | 9 +++++++--
-> > net/vmw_vsock/virtio_transport.c | 7 +++++--
-> > net/vmw_vsock/vmci_transport.c   | 5 ++++-
-> > 5 files changed, 20 insertions(+), 7 deletions(-)
+On Thu, Mar 10, 2022 at 10:51:42AM +0100, Oliver Neukum wrote:
 > 
-> It seems okay now, I ran my test suite and everything seems to be fine:
+> On 10.03.22 00:54, syzbot wrote:
 > 
-> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
+> >
+> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 0014404f9c18
 > 
-> Thanks,
-> Stefanoc
+>  
 
-Thanks!
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> From 785609ab0d95c753dc31267b3c4da585c16e0274 Mon Sep 17 00:00:00 2001
+> From: Oliver Neukum <oneukum@suse.com>
+> Date: Thu, 10 Mar 2022 10:40:36 +0100
+> Subject: [PATCH] USB: hub: fix memory leak on failure of usb_get_config
+> 
+> kfree()s on the error path need to be added.
 
-Not a new regression so I think we should take this in the next cycle,
-let's be careful here especially since previous version was not even
-build-tested by the contributor.
+No, they don't.  The config and rawdescriptors buffers get freed later 
+on in usb_destroy_configuration().
 
--- 
-MST
+This problem is something else.  Probably whatever driver is calling 
+gspca_probe() (see the console log) is taking a reference to the 
+usb_device or usb_interface and then failing to release that reference 
+on its error path.
+
+Alan Stern
+
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/usb/core/config.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> index 48bc8a4814ac..548ce5ca6847 100644
+> --- a/drivers/usb/core/config.c
+> +++ b/drivers/usb/core/config.c
+> @@ -885,12 +885,16 @@ int usb_get_configuration(struct usb_device *dev)
+>  
+>  	length = ncfg * sizeof(char *);
+>  	dev->rawdescriptors = kzalloc(length, GFP_KERNEL);
+> -	if (!dev->rawdescriptors)
+> -		return -ENOMEM;
+> +	if (!dev->rawdescriptors) {
+> +		result = -ENOMEM;
+> +		goto err2;
+> +	}
+>  
+>  	desc = kmalloc(USB_DT_CONFIG_SIZE, GFP_KERNEL);
+> -	if (!desc)
+> -		return -ENOMEM;
+> +	if (!desc) {
+> +		result = -ENOMEM;
+> +		goto err2;
+> +	}
+>  
+>  	for (cfgno = 0; cfgno < ncfg; cfgno++) {
+>  		/* We grab just the first descriptor so we know how long
+> @@ -952,6 +956,11 @@ int usb_get_configuration(struct usb_device *dev)
+>  err:
+>  	kfree(desc);
+>  	dev->descriptor.bNumConfigurations = cfgno;
+> +err2:
+> +	kfree(dev->rawdescriptors);
+> +	kfree(dev->config);
+> +	dev->rawdescriptors = NULL;
+> +	dev->config = NULL;
+>  
+>  	return result;
+>  }
+> -- 
+> 2.34.1
+> 
 

@@ -2,103 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C964D544E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A574D5458
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236998AbiCJWMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S240265AbiCJWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344288AbiCJWMW (ORCPT
+        with ESMTP id S1344206AbiCJWNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:12:22 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2FF1959FD;
-        Thu, 10 Mar 2022 14:11:19 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id h5so4738103plf.7;
-        Thu, 10 Mar 2022 14:11:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sJtRQWdq4waWAK78t+Qlr4uvVn6+TVA/NXnkQKyCfR0=;
-        b=XEjjVvVPHj8Bi47L6m7zQ0HyWoha6Q/crhLzG5MOnom3tpRvkwpJc2VmO8VcQavi+O
-         nRE4TIvwqxYinENPuk6mTDHWo+6e/USFk2AjcX1XGBSusmeNGIyJEmqGdc15VqyAeMYl
-         UxIWiNatr3axUkqovzi73Od3BZIYt+Bl14E5pAc7TI/Vmuyto1le/WlYy5jF1urwk8Zt
-         7xIh0vI5hFuuzBBNVcFIvkPHAkX0BeIsgzXUKYhMIm7dLmkhnN0rUNVpWgVSkstlajHQ
-         8YHHDQ0cvH3D8m7B8AnGfrygRIxQjibY5D5DbUp5v6FIhyAXYl2OLSQTuqK3E1crUSOd
-         W89g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sJtRQWdq4waWAK78t+Qlr4uvVn6+TVA/NXnkQKyCfR0=;
-        b=IjC/Qwjyw4/0VLQF5pcukb623vGs9Dt2tiCEeqsBD3YHornyvunMecD7FrBCGUqez9
-         IEJk1xdmjMKtK9zFDDrka6Kf/XrQZKYuyUQh+JGYAdRjafOIhqNsABGmcHdOEzmBdz6a
-         pRut0T7z0fi4cbMYHkP+uTiH/aQATvf++n1o6MESKAiSxMEeolG/FSFhkPO/Cjw+gDzo
-         8rjGFsB54bMXZjbJQwIXQb0Z1gCxTVXodGX+QqexhTwyyst7NNRb5M7CmBvvCWq2Lc0j
-         +JEw3jlBHwaqWabxnNI0mA9Jfe3o+FiV9DoeGHqSUo2CsKr2qXyKlCI/w+5YqbG4lXp+
-         rKaA==
-X-Gm-Message-State: AOAM533BO26girR3Wchb+u0qr3wPVbs1FP1JW3nhjvdDf9/VjOv7slao
-        MQJDgQUg7nn2n0eX6A2w/n8=
-X-Google-Smtp-Source: ABdhPJzultsm+nDhb1Qnt9FcYy/+0XeEVWqdvDZKv00JQ3LhVIvUy410SkMjInlDd0UL9xsA8FbIIA==
-X-Received: by 2002:a17:902:b490:b0:14c:da4a:deca with SMTP id y16-20020a170902b49000b0014cda4adecamr7520334plr.134.1646950278331;
-        Thu, 10 Mar 2022 14:11:18 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id m17-20020a639411000000b0038011819be9sm6532708pge.41.2022.03.10.14.11.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 14:11:17 -0800 (PST)
-Subject: Re: [PATCH 5.4 00/33] 5.4.184-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220310140808.741682643@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <ca649916-3948-2564-5a37-62028b15b77b@gmail.com>
-Date:   Thu, 10 Mar 2022 14:11:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 10 Mar 2022 17:13:12 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7ED1965D5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646950329; x=1678486329;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UewVuhQaCjCdHTVDQx3SfR/44XuKb97nfoSzDsCJ17c=;
+  b=LvG9acZIMYT2ZM1wY5hx0Y1BR5Slf7N5+ZL+C2CnwokP2/ZJ0Wt9s/2w
+   mDhIzjubsd2dATDNJCnWs04VrTSo/gWvifF+2VF6FpUlqs47Htho0m00+
+   /GVyl9HpuHmJZOa2gFSNwp8+xPutOibZGoW1WKfrgCJ3s/3hqmi+ZtzS5
+   40H1LK0VMEOqLAf3IZMjppmwVSv4McRgBazN+8JEXQdCxStnimMQsEVG2
+   fVesIhjSx3Qzf7lspSHA99Xok4PFkwVW6y+VhVkQJQ29KOB8flLQHcp8d
+   YJcQkCW4ySch91RAtuN55p8QNbESJkKDhw3fnjR85lxc2Dx/iQSu1mXav
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="235345636"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="235345636"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:12:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="578978445"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2022 14:12:04 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSR0t-0005Ss-QX; Thu, 10 Mar 2022 22:12:03 +0000
+Date:   Fri, 11 Mar 2022 06:11:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tom <support@vamrs.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 29/64]
+ drivers/soc/sifive/sifive_l2_cache.c:152:17: error: implicit declaration of
+ function 'writeq'; did you mean 'writeb'?
+Message-ID: <202203110634.lyi263Cj-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 6:19 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.184 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.184-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+tree:   https://github.com/esmil/linux visionfive
+head:   996f88ea65b2f557926d7fe73d69fdc2da92430a
+commit: def7ba448ac4b53b788d238985ef97702dc802a1 [29/64] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-randconfig-r033-20220310 (https://download.01.org/0day-ci/archive/20220311/202203110634.lyi263Cj-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/def7ba448ac4b53b788d238985ef97702dc802a1
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout def7ba448ac4b53b788d238985ef97702dc802a1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+All errors (new ones prefixed by >>):
+
+   drivers/soc/sifive/sifive_l2_cache.c: In function 'sifive_l2_flush64_range':
+>> drivers/soc/sifive/sifive_l2_cache.c:152:17: error: implicit declaration of function 'writeq'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+     152 |                 writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+         |                 ^~~~~~
+         |                 writeb
+   cc1: some warnings being treated as errors
+
+
+vim +152 drivers/soc/sifive/sifive_l2_cache.c
+
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+   142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

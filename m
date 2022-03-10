@@ -2,113 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2F94D3E2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75374D3E2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236833AbiCJAbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S238548AbiCJAcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbiCJAbl (ORCPT
+        with ESMTP id S231609AbiCJAcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:31:41 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198A611C7CA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:30:42 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id n19so6645435lfh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:30:42 -0800 (PST)
+        Wed, 9 Mar 2022 19:32:02 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D41F124C04
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:31:02 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id z4so3320419pgh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:31:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+bEaQ5W7/uwxuPOhbs7aFS9WiQFjr1dAU1fc+RFzx3w=;
-        b=GO1t2zd3diCLOfc1GR/4QHxRBwrXV3/Ri2DyCkq4E1Njl+mjDqufI33kutF5DdEGbM
-         gwB9uJ0GOTZZadP1Tx+ogWkrvDnn+qqvel7Ys+vdsRnsIM9i3ysfWrJ4HXUr8JdUKcrm
-         8A2f7TXgUf1IHxsom0VuQZ+muNjQGSsk5YvC8JFZvHiaS81hWoKbwhk3n+AEmcByhmI2
-         3xtNdmnsv5psAM65huJgPO0CxRkkDVJDB4Sjet93q4qclZOwmw6QnjR5wd7Yv/wnoodE
-         3FRZGLdaYleo426aRw5WO3nGJPErBzgC1aGr/9IMEZoxny2/W4khl7VKOy0p1ToVzBr3
-         HfZg==
+         :cc:content-transfer-encoding;
+        bh=XAK6UQcVdFywQafnZbczeEpSjkkUEsUm28p2DeHOwuM=;
+        b=aoVvvC+wR80TWp9+dvnTBG5a42cYKc+R2euTCMM0LN6Bn/vS8rni+MvQX38gdCnzfS
+         DZU0kDthmOQkY+sUUcFddx3aN0c40RMlhJ7AmQE4LbyIfXUa0qKAy85CHAQtmU5UmtSH
+         EKSmccSOJGNAa4vMPQvBCTEDI8iecqzjbYoQouY4ht3OJH6Ktyo15JtYBJ1Wowax9Yyz
+         r4LIrLXxUwKt1TnsWc4ytKxn2K3VF7ZdWdMWlhy7BFAu026Hdh84P4akKiM9dCpfEwm2
+         9hRxdNNUcKh+DI69MFRL9RN0yVrcbWYA/nhuNbQ8pRFge3GCArtSQQNk5WUYkqqHsVJy
+         3GZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+bEaQ5W7/uwxuPOhbs7aFS9WiQFjr1dAU1fc+RFzx3w=;
-        b=M8LUNtIkzf1pNK4nsUG1/iQmIgAyIXRkTDOwFllBJegeaobWQfl/rtA5O9w3qiYJCU
-         TVNvJKUsHP3Ksfk2wb2L3D88yrkzi2Lin9Wg6QFBlUiUBv7Kp8KFOOreoaVV7C1V4K1a
-         D6nkzEk+Ks9VQRFBj2WO4bupPgNCzmW63R4/VeEO1E/KTh4xKuGOW9mrr3J9elIB09va
-         U5zxUP+PTGEVprQAZsIRkIUTsFLzqRiHE8VcYMdpt5hdpgF9evvGF9t2AVAx4tnsjtQV
-         E8UV513tHPj3AfARp4xnssjGAK9tGLS5VxU6lbQCbWcweeG8NzVcv36IcTwcNzdfysCH
-         1BOw==
-X-Gm-Message-State: AOAM533T8x5/7+ch3xamG47U38xxzpkVjdL1IT9KrnbJ+I/A9cakdH+W
-        /tgA6fS0sTvp26PUzIz1vxLz7c8+JvvTWhHv/KkxBQ==
-X-Google-Smtp-Source: ABdhPJzUUdb5H/LMWsKDBHyHNBeZMnD/yO8aJ/W7N28+TxUIsfQLa/4g1x3U6w4mi39mlp++/YJ9Y98gdyc+MF3LGG0=
-X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
- z14-20020a056512308e00b0044838266d68mr1329592lfd.184.1646872240210; Wed, 09
- Mar 2022 16:30:40 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XAK6UQcVdFywQafnZbczeEpSjkkUEsUm28p2DeHOwuM=;
+        b=KGF6+PqrHJ19Oxr8NOIhGHigmNpmrNe/b9Vn8jiTuZcQunposI5qxnKdPBUJS1vxvG
+         8x8uwZt7xFA3soUuqrFf3d/nZKD7/BfhtBVt25L96l/5t5n5YDoLA5dwXOsTOkPxVsZB
+         7eXQjjykf7vJMUrHI0gn8WzCdJHgfvu9cZra+oaqJ8PrFPL1f3ghFKtxd1CR/Cib3Z/C
+         hyU102Na927AqpTQwCmctKCK0CXmepmIffG5yMP/fHwPw6QZLzjdDWx7rC0XxZrF9U/0
+         U7bfTkg3lQ2Ws/2lJ9Ab1EGpX1bHvAJBRTllR6aAlNhmOFQft1W4rS7VtWP4aRTZFllr
+         HFuw==
+X-Gm-Message-State: AOAM5325xjPusq2jYKkvQ+jtY4h8YO/Ij6pxDvRbUWnSDdWrTDz0PYYV
+        efbLytwK/m6j9aQTfescnzdbyiNQqIwTXPI7ITs=
+X-Google-Smtp-Source: ABdhPJzYlVySOdrZmPs/c1gnoQZpE19IYyHyHgeqi5Z01bSBVV+Uw5v2Q7r51Ur9JJtyQEvf4KoN64b2+uL0ZvCvRmo=
+X-Received: by 2002:a62:8c44:0:b0:4c4:8072:e588 with SMTP id
+ m65-20020a628c44000000b004c48072e588mr2112278pfd.11.1646872261851; Wed, 09
+ Mar 2022 16:31:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
-In-Reply-To: <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 9 Mar 2022 16:30:28 -0800
-Message-ID: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
-        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220309091449.2753904-1-naoya.horiguchi@linux.dev>
+ <CAHbLzkrmHS+nPbw1YZj-rE-ECgRr2nD40d-ZbxPvf05o-rmNcA@mail.gmail.com> <20220310000024.GA1577304@hori.linux.bs1.fc.nec.co.jp>
+In-Reply-To: <20220310000024.GA1577304@hori.linux.bs1.fc.nec.co.jp>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 9 Mar 2022 16:30:50 -0800
+Message-ID: <CAHbLzkpWV4oP86oe4BXop20KMJqwEmSkpFmZfT+q38hs90oqKA@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/hwpoison: set PageHWPoison after taking page lock
+ in memory_failure_hugetlb()
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 2:32 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, Mar 9, 2022 at 4:01 PM HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3=E3=80=80=
+=E7=9B=B4=E4=B9=9F)
+<naoya.horiguchi@nec.com> wrote:
 >
-> On Tue, Mar 08, 2022 at 11:01:04PM +0100, Peter Zijlstra wrote:
-> > On Tue, Mar 08, 2022 at 12:00:52PM -0800, Alexei Starovoitov wrote:
-> > > On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
-> > > > Hopefully last posting...
-> > > >
-> > > > Since last time:
-> > > >  - verified clang-14-rc2 works
-> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+> On Wed, Mar 09, 2022 at 01:55:30PM -0800, Yang Shi wrote:
+> > On Wed, Mar 9, 2022 at 1:15 AM Naoya Horiguchi
+> > <naoya.horiguchi@linux.dev> wrote:
+> > >
+> > > From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > >
+> > > There is a race condition between memory_failure_hugetlb() and hugetl=
+b
+> > > free/demotion, which causes setting PageHWPoison flag on the wrong pa=
+ge
+> > > (which was a hugetlb when memory_failrue() was called, but was remove=
+d
+> > > or demoted when memory_failure_hugetlb() is called).  This results in
+> > > killing wrong processes.  So set PageHWPoison flag with holding page =
+lock,
+> > >
+> > > Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > > ---
+> > >  mm/memory-failure.c | 27 ++++++++++++---------------
+> > >  1 file changed, 12 insertions(+), 15 deletions(-)
+> > >
+> > > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> > > index ac6492e36978..fe25eee8f9d6 100644
+> > > --- a/mm/memory-failure.c
+> > > +++ b/mm/memory-failure.c
+> > > @@ -1494,24 +1494,11 @@ static int memory_failure_hugetlb(unsigned lo=
+ng pfn, int flags)
+> > >         int res;
+> > >         unsigned long page_flags;
+> > >
+> > > -       if (TestSetPageHWPoison(head)) {
+> > > -               pr_err("Memory failure: %#lx: already hardware poison=
+ed\n",
+> > > -                      pfn);
+> > > -               res =3D -EHWPOISON;
+> > > -               if (flags & MF_ACTION_REQUIRED)
+> > > -                       res =3D kill_accessing_process(current, page_=
+to_pfn(head), flags);
+> > > -               return res;
+> > > -       }
+> > > -
+> > > -       num_poisoned_pages_inc();
+> > > -
+> > >         if (!(flags & MF_COUNT_INCREASED)) {
+> > >                 res =3D get_hwpoison_page(p, flags);
+> >
+> > I'm not an expert of hugetlb, I may be wrong. I'm wondering how this
+> > could solve the race? Is the below race still possible?
+> >
+> > __get_hwpoison_page()
+> >   head =3D compound_head(page)
+> >
+> > hugetlb demotion (1G --> 2M)
+> >   get_hwpoison_huge_page(head, &hugetlb);
+>
+> Thanks for the comment.
+> I assume Miaohe's patch below introduces additional check to detect the
+> race.  The patch calls compound_head() for the raw error page again, so
+> the demotion case should be detected.  I'll make the dependency clear in
+> the commit log.
+>
+> https://lore.kernel.org/linux-mm/20220228140245.24552-2-linmiaohe@huawei.=
+com/
+>
+> >
+> >
+> > Then the head may point to a 2M page, but the hwpoisoned subpage is
+> > not in that 2M range?
+> >
+> >
+> > >                 if (!res) {
+> > >                         lock_page(head);
+> > >                         if (hwpoison_filter(p)) {
+> > > -                               if (TestClearPageHWPoison(head))
+> > > -                                       num_poisoned_pages_dec();
+> > >                                 unlock_page(head);
+> > >                                 return -EOPNOTSUPP;
+> > >                         }
+> > > @@ -1544,13 +1531,16 @@ static int memory_failure_hugetlb(unsigned lo=
+ng pfn, int flags)
+> > >         page_flags =3D head->flags;
+> > >
+> > >         if (hwpoison_filter(p)) {
+> > > -               if (TestClearPageHWPoison(head))
+> > > -                       num_poisoned_pages_dec();
+> > >                 put_page(p);
+> > >                 res =3D -EOPNOTSUPP;
+> > >                 goto out;
+> > >         }
+> > >
+> > > +       if (TestSetPageHWPoison(head))
+> >
+> > And I don't think "head" is still the head you expected if the race
+> > happened. I think we need to re-retrieve the head once the page
+> > refcount is bumped and locked.
+>
+> I think the above justification works for this.
+> When the kernel reaches this line, the hugepage is properly pinned withou=
+t being
+> freed or demoted, so "head" is still pointing to the same head page as ex=
+pected.
 
-I observed the following error when building with
-CONFIG_LTO_CLANG_FULL=y enabled:
+I think Mike's comment in the earlier email works for this too. The
+huge page may get demoted before the page is pinned and locked, so the
+actual hwpoisoned subpage may belong to another smaller huge page now.
 
-ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-already defined
-        ibt_selftest_ip:
-        ^
 
-Seems to come from
-commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-
-Commenting out the label in the inline asm, I then observed:
-vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-callable instruction with modified stack frame
-vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-mismatch: cfa1=4+64 cfa2=4+8
-These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-the ibt_selftest_ip label).
-
-Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
-in a vm WITHOUT IBT support.
-
-Any idea what's the status of IBT emulation in QEMU, and if it exists,
-what's the necessary `-cpu` flag to enable it?
--- 
-Thanks,
-~Nick Desaulniers
+>
+> Thanks,
+> Naoya Horiguchi
+>
+> >
+> > > +               goto already_hwpoisoned;
+> > > +
+> > > +       num_poisoned_pages_inc();
+> > > +
+> > >         /*
+> > >          * TODO: hwpoison for pud-sized hugetlb doesn't work right no=
+w, so
+> > >          * simply disable it. In order to make it work properly, we n=
+eed
+> > > @@ -1576,6 +1566,13 @@ static int memory_failure_hugetlb(unsigned lon=
+g pfn, int flags)
+> > >  out:
+> > >         unlock_page(head);
+> > >         return res;
+> > > +already_hwpoisoned:
+> > > +       unlock_page(head);
+> > > +       pr_err("Memory failure: %#lx: already hardware poisoned\n", p=
+fn);
+> > > +       res =3D -EHWPOISON;
+> > > +       if (flags & MF_ACTION_REQUIRED)
+> > > +               res =3D kill_accessing_process(current, page_to_pfn(h=
+ead), flags);
+> > > +       return res;
+> > >  }
+> > >
+> > >  static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+> > > --
+> > > 2.25.1
+> > >

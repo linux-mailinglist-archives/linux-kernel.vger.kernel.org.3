@@ -2,176 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B044F4D4FDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1162A4D4F52
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242928AbiCJRBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S240442AbiCJQbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239378AbiCJRBb (ORCPT
+        with ESMTP id S241402AbiCJQbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:01:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBF391052B5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:00:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646931628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 10 Mar 2022 11:31:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E7190C28;
+        Thu, 10 Mar 2022 08:30:38 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 993FC21106;
+        Thu, 10 Mar 2022 16:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646929837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gB57+YJ6YRkHA5rn3XMB0b7INMSeUreN8Q0XW45JxlQ=;
-        b=EsmjpLvXnqtn6g13HKQTDYmRaOiOA73STjoj3PEpIZGdtD/milM/TnUshmyQTawNy7GCLf
-        SnOAf3DZ7lhqU4Zz4JpWA93u9ksd1VUJm1tGwGxQka0c5Dt4Do+Uz4CXaptgUcQbUk4Yg0
-        IkX/rSKBYMCPpPTUNsmyaXDBfUyJHNE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-549-jF7EAev0PwOP_S1xQduOpQ-1; Thu, 10 Mar 2022 12:00:25 -0500
-X-MC-Unique: jF7EAev0PwOP_S1xQduOpQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=rtb1rpQqcRQCkvtCGrkuFprYkSi8v2+4VhQD8sTU1iQ=;
+        b=fTC/GF69dbM0prQum/0nJ3Pn9C7bea80Rr6+qNB0x1hp7/ZlBD9X2pvwglJpCvcc/+Ykbt
+        S5b2oKS292hYBN3q4ALs27OSkeVf/8ebPH4HUpnJzGeWErc3AKlXwY35yrreGb0k+9qP+k
+        YmhzroE5OASmlta5LQd2va+kFWy6joY=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E1BC1091DA1;
-        Thu, 10 Mar 2022 17:00:24 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AEFA5106F968;
-        Thu, 10 Mar 2022 16:59:20 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id D77CA416CE5D; Thu, 10 Mar 2022 13:30:14 -0300 (-03)
-Date:   Thu, 10 Mar 2022 13:30:14 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>
-Subject: Re: [patch v11 07/13] task isolation: sync vmstats conditional on
- changes
-Message-ID: <YionlrkrON9cp7SK@fuller.cnet>
-References: <20220204173537.429902988@fedora.localdomain>
- <20220204173554.763888172@fedora.localdomain>
- <20220207151915.GA526112@lothringen>
+        by relay2.suse.de (Postfix) with ESMTPS id 7C0AAA3B83;
+        Thu, 10 Mar 2022 16:30:37 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 17:30:34 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>, jpoimboe@redhat.com,
+        jikos@kernel.org, joe.lawrence@redhat.com,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [External] Re: [PATCH v2] livepatch: Don't block removal of
+ patches that are safe to unload
+Message-ID: <Yionqn3d9OQF4UiT@alley>
+References: <20220303105446.7152-1-zhouchengming@bytedance.com>
+ <YicnIIatfgLc2NN2@alley>
+ <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
+ <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220207151915.GA526112@lothringen>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 04:19:15PM +0100, Frederic Weisbecker wrote:
-> On Fri, Feb 04, 2022 at 02:35:44PM -0300, Marcelo Tosatti wrote:
-> > Rather than syncing VM-stats on every return to userspace
-> > (or VM-entry), keep track of changes through a per-CPU bool.
-> > 
-> > This improves performance when enabling task isolated
-> > for vcpu VMs.
-> > 
-> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > ---
-> > v11:
-> > - Add TIF_TASK_ISOL bit to thread info flags and use it
-> >   to decide whether to perform task isolation work on
-> >   return to userspace     
-> > 
-> >  include/linux/vmstat.h |   13 ++++++++++++-
-> >  mm/vmstat.c            |   29 ++++++++++++++++++++++++++++-
-> >  2 files changed, 40 insertions(+), 2 deletions(-)
-> > 
-> > Index: linux-2.6/include/linux/vmstat.h
-> > ===================================================================
-> > --- linux-2.6.orig/include/linux/vmstat.h
-> > +++ linux-2.6/include/linux/vmstat.h
-> > @@ -22,7 +22,18 @@ int sysctl_vm_numa_stat_handler(struct c
-> >  #endif
-> >  
-> >  #if defined(CONFIG_SMP) && defined(CONFIG_TASK_ISOLATION)
-> > -void sync_vmstat(void);
-> > +DECLARE_PER_CPU_ALIGNED(bool, vmstat_dirty);
-> > +
-> > +extern struct static_key vmstat_sync_enabled;
-> > +
-> > +void __sync_vmstat(void);
-> > +static inline void sync_vmstat(void)
-> > +{
-> > +	if (static_key_false(&vmstat_sync_enabled))
-> > +		__sync_vmstat();
-> > +}
-> > +
-> > +void init_sync_vmstat(void);
-> >  #else
-> >  static inline void sync_vmstat(void)
-> >  {
-> > Index: linux-2.6/mm/vmstat.c
-> > ===================================================================
-> > --- linux-2.6.orig/mm/vmstat.c
-> > +++ linux-2.6/mm/vmstat.c
-> > @@ -334,6 +334,31 @@ void set_pgdat_percpu_threshold(pg_data_
-> >  	}
-> >  }
-> >  
-> > +#ifdef CONFIG_TASK_ISOLATION
-> > +struct static_key vmstat_sync_enabled;
-> > +DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
-> > +
-> > +static inline void mark_vmstat_dirty(void)
-> > +{
-> > +	if (!static_key_false(&vmstat_sync_enabled))
-> > +		return;
-> > +
-> > +	raw_cpu_write(vmstat_dirty, true);
+On Thu 2022-03-10 20:57:54, Chengming Zhou wrote:
+> Hi,
 > 
-> Why not __this_cpu_write() ? Shouldn't we make sure we are not
-> preemptible and not mark the wrong CPU?
+> On 2022/3/9 1:49 上午, Miroslav Benes wrote:
+> > On Tue, 8 Mar 2022, Petr Mladek wrote:
+> > 
+> >> On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
+> >>> module_put() is currently never called for a patch with forced flag, to block
+> >>> the removal of that patch module that might still be in use after a forced
+> >>> transition.
+> >>>
+> >>> But klp_force_transition() will set all patches on the list to be forced, since
+> >>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
+> >>> has removed stack ordering of the livepatches, it will cause all other patches can't
+> >>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
+> >>>
+> >>> In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
+> >>> transition. It can still be unloaded safely as long as it has passed through
+> >>> the consistency model in KLP_UNPATCHED transition.
+> >>
+> >> It really looks safe. klp_check_stack_func() makes sure that @new_func
+> >> is not on the stack when klp_target_state == KLP_UNPATCHED. As a
+> >> result, the system should not be using code from the livepatch module
+> >> when KLP_UNPATCHED transition cleanly finished.
+> >>
+> >>
+> >>> But the exception is when force transition of an atomic replace patch, we
+> >>> have to set all previous patches to forced, or they will be removed at
+> >>> the end of klp_try_complete_transition().
+> >>>
+> >>> This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
+> >>> case, and keep the old behavior when in atomic replace case.
+> >>>
+> >>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> >>> ---
+> >>> v2: interact nicely with the atomic replace feature noted by Miroslav.
+> >>> ---
+> >>>  kernel/livepatch/transition.c | 8 ++++++--
+> >>>  1 file changed, 6 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> >>> index 5683ac0d2566..34ffb8c014ed 100644
+> >>> --- a/kernel/livepatch/transition.c
+> >>> +++ b/kernel/livepatch/transition.c
+> >>> @@ -641,6 +641,10 @@ void klp_force_transition(void)
+> >>>  	for_each_possible_cpu(cpu)
+> >>>  		klp_update_patch_state(idle_task(cpu));
+> >>>  
+> >>> -	klp_for_each_patch(patch)
+> >>> -		patch->forced = true;
+> >>> +	if (klp_target_state == KLP_UNPATCHED)
+> >>> +		klp_transition_patch->forced = true;
+> >>> +	else if (klp_transition_patch->replace) {
+> >>> +		klp_for_each_patch(patch)
+> >>> +			patch->forced = true;
+> >>
+> >> This works only because there is should be only one patch when
+> >> klp_target_state == KLP_UNPATCHED and
+> >> klp_transition_patch->forced == true.
+> > 
+> > I probably misunderstand, but the above is not generally true, is it? I 
+> > mean, if the transition patch is forced during its disablement, it does 
+> > not say anything about the amount of enabled patches.
+> > 
+> >> But it is a bit tricky. I would do it the other way:
+> >>
+> >> 	if (klp_transition_patch->replace) {
+> >> 		klp_for_each_patch(patch)
+> >> 			patch->forced = true;
+> >> 	} else if (klp_target_state == KLP_UNPATCHED) {
+> >> 		klp_transition_patch->forced = true;
+> >> 	}
+> >>
+> >> It looks more sane. And it makes it more clear
+> >> that the special handling of KLP_UNPATCHED transition
+> >> is done only when the atomic replace is not used.
+> > 
+> > But it is not the same. ->replace being true only comes into play when a 
+> > patch is enabled. If it is disabled, then it behaves like any other patch.
+> > 
+> > So, if there is ->replace patch enabled (and it is the only patch present) 
+> > and then more !->replace patches are loaded and then if ->replace patch is 
+> > disabled and forced, your proposal would give a different result than what 
+> > Chengming submitted, because in your case all the other patches will get 
+> > ->forced set to true, while it is not the case in the original. It would 
+> > be an unnecessary restriction if I am not missing something.
+> 
+> At first glance, I thought both way is right. But after looking at the case
+> you mentioned above, they are not the same indeed. The original patch
+> treat ->replace and not ->replace patches the same in KLP_UNPATCHED transition,
+> and only set all patches to forced in the atomic replace transition.
 
-#ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-/*
- * If we have cmpxchg_local support then we do not need to incur the overhead
- * that comes with local_irq_save/restore if we use this_cpu_cmpxchg.
- *
- * mod_state() modifies the zone counter state through atomic per cpu
- * operations.
- *
- * Overstep mode specifies how overstep should handled:
- *     0       No overstepping
- *     1       Overstepping half of threshold
- *     -1      Overstepping minus half of threshold
-*/
-static inline void mod_zone_state(struct zone *zone,
-       enum zone_stat_item item, long delta, int overstep_mode)
-{
-        struct per_cpu_zonestat __percpu *pcp = zone->per_cpu_zonestats;
-        s8 __percpu *p = pcp->vm_stat_diff + item;
-        long o, n, t, z;
+I see. OK, Chengming's code makes sense. But we should make the commit
+message more clear. Something like:
 
-        do {
-                z = 0;  /* overflow to zone counters */
+<draft>
+module_put() is not called for a patch with "forced" flag. It should
+block the removal of the livepatch module when the code might still
+be in use after forced transition.
 
-Perhaps one can
+klp_force_transition() currently sets "force" flag for all patches on
+the list.
 
-                        n = -os;
-                }
-        } while (this_cpu_cmpxchg(*p, o, n) != o);
-							<-- migrate
-        if (z)
-                zone_page_state_add(z, zone, item);
-        mark_vmstat_dirty();
+In fact, any patch can be safely unloaded when it passed through
+the consistency model in KLP_UNPATCHED transition.
 
+By other words, the "forced" flag must be set only for livepatches
+that are being removed. In particular, set the "forced" flag:
 
-But we assume the task which is using task isolation is pinned to a single CPU,
-so that should not happen.
+  + only for klp_transition_patch when the transition to KLP_UNPATCHED
+    state was forced.
 
+  + all replaced patches when the transition to KLP_PATCHED state was
+    forced and the patch was replacing the existing patches.
+</draft>
+
+It means that we should could actually do:
+
+	if (klp_target_state == KLP_UNPATCHED) {
+		klp_transition_patch->forced = true;
+	} else if (klp_transition_patch->replace) {
+		klp_for_each_patch(patch) {
+			if (patch != klp_transition_patch)
+				patch->forced = true;
+		}
+	}
+
+Huh, that is tricky ;-)
+
+Best Regards,
+Petr

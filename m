@@ -2,153 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1AA4D5210
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78614D517F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245485AbiCJSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 13:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S245456AbiCJSfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 13:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbiCJSfx (ORCPT
+        with ESMTP id S230273AbiCJSfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 13:35:53 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7288A19D621;
-        Thu, 10 Mar 2022 10:34:51 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id m2so5691241pll.0;
-        Thu, 10 Mar 2022 10:34:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fZTabEAQ65sqak7IeRk/QmG52+JEgAGMHd10hUU/HKM=;
-        b=gzVNO3biIrix2FoQLOK5xkz0oczUF6xvtNh+4XdiTSSDWoKkuQsV1bJNPyZRc6W24N
-         Mi9PuQdiXg5oRw3IAHQY9Zzc5twR4Q630OzwPCn5ALyrPeXEXinkmQqMMbN6cx03/cGY
-         feitvHICwO+FnxITf3KSxNRZByyyIWOHVxMCd6KYvzDzJz82270Lla2MpEyxhSWVuror
-         cSxs+2WkYe7AwsQGg5aWYBOygC+i5T9HLApC+u+Q3ICFCtzeVNhhI410Jzk/Kw3c5YfO
-         5dKmy312HoLu2ffHY0jqIu5KiRdRvv2j9443I4O5GNLS+5qvT76RHe/oyl9ze8l0l3EH
-         9N8A==
+        Thu, 10 Mar 2022 13:35:40 -0500
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001E419BE7D;
+        Thu, 10 Mar 2022 10:34:38 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id l2so12627885ybe.8;
+        Thu, 10 Mar 2022 10:34:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fZTabEAQ65sqak7IeRk/QmG52+JEgAGMHd10hUU/HKM=;
-        b=ZXqpsM/GaSIY7GctWU5vV9w7PR0VUaIYX61kaLjRoab85J07Az9NHXJZQd2Y11wnRk
-         Y9lzLeJ3N+NQ9q8OEWhOVbqK+3L/k3tDovMTCEpiwPjRhCvTIxYnENVTYx3sTTjV+2z0
-         RehtJuTE6L9DhEV4+LSCA6wLdubYSToX2nH9D2ebnDjQnFeJO4q7we5QoBoZIyYvDfGp
-         e+UNgtyiMYT1PbxgvCvQTEgQpkCwloMw1YypQN1gDedz7YbRrbappOI6s2YuPeQdyOTm
-         IMPor/W+TnUiihjHcpj2kxxWgCauQ9NWGsbxwx3YMrijDpb9v2w7S84a2vXgmYUq1tKz
-         sIpQ==
-X-Gm-Message-State: AOAM531IY/V+lLBeGpsATqGT48iQXbwpKuKYBbVpqtjVHBff9VShwMF/
-        /NLtfmxYuS0ZTBoOkQvdAZ4=
-X-Google-Smtp-Source: ABdhPJxeRwPmh4o/BYU0MiPTeqwVhPQIxIKwxcuBlPTRcRFErAYkviEyFX1vEiiQJRY1f1MAibMxuw==
-X-Received: by 2002:a17:902:bc47:b0:151:ac43:eae0 with SMTP id t7-20020a170902bc4700b00151ac43eae0mr6579800plz.117.1646937290952;
-        Thu, 10 Mar 2022 10:34:50 -0800 (PST)
-Received: from localhost.localdomain ([103.149.162.114])
-        by smtp.gmail.com with ESMTPSA id k23-20020aa790d7000000b004f6c8b7c13bsm7255155pfk.132.2022.03.10.10.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 10:34:50 -0800 (PST)
-From:   Dongli Si <kvmx86@gmail.com>
-X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
-To:     peterz@infradead.org, joerg.roedel@amd.com
-Cc:     liam.merwick@oracle.com, kim.phillips@amd.com, mingo@kernel.org,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] perf/x86/amd: Don't touch the Host-only bit inside the guest hypervisor
-Date:   Fri, 11 Mar 2022 02:34:04 +0800
-Message-Id: <20220310183404.1291725-1-sidongli1997@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CKn4UlhzcUis8Bod+pO2Kn++YD/HSd7Iu7VmYfBTVZM=;
+        b=xgQMxkw5Ep7ub7g8g3Ru4hcxT9Q7fXpAsGnqZY3bdPl4cFKAzf6+BKzg8B5vgCIDa4
+         q5pX57WVf77GiEOAQ573sTtSWeLwFH9TfAk30GOiM2QZBUX2yFF6qFOZnyMKlgRsx4Bu
+         8AkUtfGmNKsThBrVza/1p/4a/fEFMTghb3z1rdn8lSBQYGGUU0xZWWUY50he/2Qzy/kr
+         OpR5jfRcjzWX+eOE69xSHAX+eYSzbX6mrsXnUSREEYgMseMHHsjji7dQUHT4mSnDzrTK
+         8Y8F+0WA6cEUHtxWYmTH3WlsLBxK+sudnFtlQGwArktBuADceX97g8SFdiTwKi9sS0Jy
+         XzbQ==
+X-Gm-Message-State: AOAM532AaXKb9mIXkqfaPFzDOmpeJVszYRkUvJymUbS0urpkwG5sHp+b
+        XC6gmtjeVBU5N25QncRlRuhxgW+iJzVC/NijCmKi3Bxp
+X-Google-Smtp-Source: ABdhPJwHLUi+wpcAaHInVE7qN7vZrvuzV2+E/wEOsJ/PA6SH67oZUEn+KQ0Li+yPzZfnqptU8X6gQzO93F1w18bomXw=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr4844677ybe.365.1646937278267; Thu, 10
+ Mar 2022 10:34:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20220309223431.26560-1-chang.seok.bae@intel.com> <20220309223431.26560-3-chang.seok.bae@intel.com>
+In-Reply-To: <20220309223431.26560-3-chang.seok.bae@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Mar 2022 19:34:27 +0100
+Message-ID: <CAJZ5v0g2ZU8PY8QkGD1Nb6VH37pm=ho8ZYa3h3UBRWDoH+xqnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] intel_idle: Add a new flag to initialize the AMX state
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongli Si <sidongli1997@gmail.com>
+On Wed, Mar 9, 2022 at 11:42 PM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> The non-initialized AMX state can be the cause of C-state demotion from C6
+> to C1E. This low-power idle state may improve power savings and thus result
+> in a higher available turbo frequency budget.
+>
+> This behavior is implementation-specific. Initialize the state for the C6
+> entrance of Sapphire Rapids as needed.
+>
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Tested-by : Zhang Rui <rui.zhang@intel.com>
+> Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes from v1:
+> * Simplify the code with a new flag (Rui).
+> * Rebase on Artem's patches for SPR intel_idle.
+> * Massage the changelog.
+>
+> Dependency on the new C-state table for SPR:
+> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=9edf3c0ffef0ec1bed8300315852b5c6a0997130
+> ---
+>  drivers/idle/intel_idle.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 1c7c25909e54..6ecbeffdf785 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -54,6 +54,7 @@
+>  #include <asm/intel-family.h>
+>  #include <asm/mwait.h>
+>  #include <asm/msr.h>
+> +#include <asm/fpu/api.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>
+> @@ -99,6 +100,11 @@ static unsigned int mwait_substates __initdata;
+>   */
+>  #define CPUIDLE_FLAG_ALWAYS_ENABLE     BIT(15)
+>
+> +/*
+> + * Initialize large xstate for the C6-state entrance.
+> + */
+> +#define CPUIDLE_FLAG_INIT_XSTATE       BIT(16)
+> +
+>  /*
+>   * MWAIT takes an 8-bit "hint" in EAX "suggesting"
+>   * the C-state (top nibble) and sub-state (bottom nibble)
+> @@ -136,6 +142,9 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>         if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
+>                 local_irq_enable();
+>
+> +       if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +               fpu_idle_fpregs();
+> +
+>         mwait_idle_with_hints(eax, ecx);
+>
+>         return index;
+> @@ -156,8 +165,12 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>  static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+>                                        struct cpuidle_driver *drv, int index)
+>  {
+> -       unsigned long eax = flg2MWAIT(drv->states[index].flags);
+>         unsigned long ecx = 1; /* break on interrupt flag */
+> +       struct cpuidle_state *state = &drv->states[index];
+> +       unsigned long eax = flg2MWAIT(state->flags);
+> +
+> +       if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +               fpu_idle_fpregs();
+>
+>         mwait_idle_with_hints(eax, ecx);
+>
+> @@ -792,7 +805,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+>         {
+>                 .name = "C6",
+>                 .desc = "MWAIT 0x20",
+> -               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED | \
 
-With nested virtualization, when the guest hypervisor runs a nested guest
-and if uses "perf record" in an AMD Milan guest hypervisor, the guest
-hypervisor dmesg will reports the following warning message:
+Why is the backslash at the end of the line needed?
 
-[] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000510076)
-at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
-[] Call Trace:
-[]  <IRQ>
-[]  ? x86_pmu_enable+0x146/0x300
-[]  __perf_install_in_context+0x150/0x170
-
-The AMD64_EVENTSEL_HOSTONLY bit is defined and used on the host, while
-the guest hypervisor performance monitor unit should avoid such use.
-
-Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
-Signed-off-by: Dongli Si <sidongli1997@gmail.com>
----
-v2: Add run_as_host function and improve description
-v1: https://lore.kernel.org/all/20220227132640.3-1-sidongli1997@gmail.com/
-
- arch/x86/events/amd/core.c        |  4 +++-
- arch/x86/include/asm/hypervisor.h | 10 ++++++++++
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 9687a8aef01c..14cd079243a4 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -8,6 +8,7 @@
- #include <linux/jiffies.h>
- #include <asm/apicdef.h>
- #include <asm/nmi.h>
-+#include <asm/hypervisor.h>
- 
- #include "../perf_event.h"
- 
-@@ -1027,7 +1028,8 @@ void amd_pmu_enable_virt(void)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
--	cpuc->perf_ctr_virt_mask = 0;
-+	if (run_as_host())
-+		cpuc->perf_ctr_virt_mask = 0;
- 
- 	/* Reload all events */
- 	amd_pmu_disable_all();
-diff --git a/arch/x86/include/asm/hypervisor.h b/arch/x86/include/asm/hypervisor.h
-index e41cbf2ec41d..fcc66c23cc72 100644
---- a/arch/x86/include/asm/hypervisor.h
-+++ b/arch/x86/include/asm/hypervisor.h
-@@ -73,11 +73,21 @@ static inline bool hypervisor_is_type(enum x86_hypervisor_type type)
- {
- 	return x86_hyper_type == type;
- }
-+
-+static inline bool run_as_host(void)
-+{
-+	return hypervisor_is_type(X86_HYPER_NATIVE);
-+}
- #else
- static inline void init_hypervisor_platform(void) { }
- static inline bool hypervisor_is_type(enum x86_hypervisor_type type)
- {
- 	return type == X86_HYPER_NATIVE;
- }
-+
-+static inline bool run_as_host(void)
-+{
-+	return true;
-+}
- #endif /* CONFIG_HYPERVISOR_GUEST */
- #endif /* _ASM_X86_HYPERVISOR_H */
--- 
-2.32.0
-
+> +                                          CPUIDLE_FLAG_INIT_XSTATE,
+>                 .exit_latency = 290,
+>                 .target_residency = 800,
+>                 .enter = &intel_idle,
+> --

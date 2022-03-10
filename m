@@ -2,169 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAA94D4FAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87E74D4F9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244117AbiCJQsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S242998AbiCJQqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244757AbiCJQsU (ORCPT
+        with ESMTP id S241095AbiCJQqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:48:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E11161104
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646930839; x=1678466839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+lt5lFj32tlNLLvrEG/HXlx0i8mjc9DRePULl3+S6JQ=;
-  b=EsXCKGkIahVo8igPNFKvKQCl++kMDEPAHe5c0SNHRSxV21S2uffAyogt
-   h0UkVu9KgOk81vcvGO4jPfmB8Blps7120Y0Pj7dwUAIIHLFg4humq+GXO
-   f5IYJnLbgyKmwBaYjIr2Csxi+mXn526pN9Nti9Ua/aoRIs7FlnMBooSBg
-   QeoOJRUgpa4h6SqQFiGeB4RtYUrMAVsBkwO2l8bl7ZkmX2j/1aOmfnTlD
-   bImK0sJs+2UV9eJrWAXLsMlH9S4nPtotaCVPtULPHGGdoSt7KmLi4IzFZ
-   8pj1kMN2Ec/YkW+oWoIeZ9U965p6xgYXvvMbZLCZUGtgbVnjQ8gfMVS4+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254130894"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="254130894"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 08:45:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="781516956"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Mar 2022 08:45:30 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSLus-0005AA-5k; Thu, 10 Mar 2022 16:45:30 +0000
-Date:   Fri, 11 Mar 2022 00:44:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
- expression
-Message-ID: <202203110052.4qnkNzyc-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 11:46:46 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3591715C65E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:45:45 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d7eaa730d9so45416197b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:45:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=u3uM3T4fqIIeENkI/oDpiYVbdZfSHJ4n+nq816F+RHI=;
+        b=U2lUv0c5x8Z0tN10iiJZ878tYRw0HCaxpmIWdgxRG42XmJ2qQxvxlr55QWE0uba6NF
+         w24obauq196u/V/FWSukU1rEvuuXS7Gf9PI09w9CreeXa151tTESSChdK1qsS85Q3Q9d
+         XN0VJMNQxqbYSykfz4PV70Nu+JGcqny+V5ajpc2ECC5Dp8L/O2lXAY9IrdtoB3+OQSLI
+         yuumD9zr9RQEjaXpH5KegTN5RlU/lUVzKJUGxIl+7Qw3MjA6LvVNgWlK84i131Rv6yO4
+         pTJeWOmDo20DosIqYhXf0PI87OtHUU3jGeDwXWZKQAW0BmE1+lm0lGbPTfjEXCpiqi5+
+         b8SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=u3uM3T4fqIIeENkI/oDpiYVbdZfSHJ4n+nq816F+RHI=;
+        b=hcpMz2bdA8eRYFgWAGw92edxRpP8osPoiYs1x/GuzKHVPZ3mWM0FDqTnTvL+CH2dp9
+         dMKvymiMBmh5o9en7wNE3VEl5ND8/SFV29+9Rk6jShHGPTVL9YaO3kjnMuaRyoyk5Mcd
+         vHF/nbC45s/y1dk5yzOdOFJiZeN1eD3J4MRkYnrZBoO6W7ZOmpfHjuVXg0Lfv/H4hWBY
+         mcGX2+K2Nv8MB0Lme0FlIl50zIIhJ1mQJ4Z7tDKrHPeK1Hu/7YlxYJ73XLoFfscC1nFY
+         z26fXkZjMS37XdWOB4UdglBSbiVd6794XKeq2dddqvS870i0LwzcpKWXVKr32m9ayJ5i
+         SQDQ==
+X-Gm-Message-State: AOAM530UIhnCYbZ2j3etcFZ7ZjXw6q/8FyqUv7qN0jwvqy5VCkj67dVX
+        MYbCP47NuOk79tyNS+KHJdim7vmQ55b2ESppWdCWh+A7Ggm0ClMLoLrTHvpzNmI7F6QDfRshJ3z
+        dLWOGz0sBVVLEpEzFiHqik1b7WCbFHLL3fxd2/IeClh68tv8ZfHcTmgxREhk7GWjJ6/pXaG3o
+X-Google-Smtp-Source: ABdhPJydjXqqkEgL+Wd+e99wiH5YSGHqTeHibW+DKcVMd0Qem1lVbAgVSdLWzBZL6FnyP7b5P0DAKt1MkO5E
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:2d58:733f:1853:8e86])
+ (user=bgardon job=sendgmr) by 2002:a25:c0ce:0:b0:628:7267:b0f2 with SMTP id
+ c197-20020a25c0ce000000b006287267b0f2mr4785097ybf.570.1646930744265; Thu, 10
+ Mar 2022 08:45:44 -0800 (PST)
+Date:   Thu, 10 Mar 2022 08:45:19 -0800
+Message-Id: <20220310164532.1821490-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH 00/13] KVM: x86: Add a cap to disable NX hugepages on a VM
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
-commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
-date:   7 months ago
-config: arc-randconfig-s032-20220310 (https://download.01.org/0day-ci/archive/20220311/202203110052.4qnkNzyc-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e188f3330a13df904d77003846eafd3edf99009d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/ fs/ kernel/ net/ipv4/
+Given the high cost of NX hugepages in terms of TLB performance, it may
+be desirable to disable the mitigation on a per-VM basis. In the case of public
+cloud providers with many VMs on a single host, some VMs may be more trusted
+than others. In order to maximize performance on critical VMs, while still
+providing some protection to the host from iTLB Multihit, allow the mitigation
+to be selectively disabled.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Disabling NX hugepages on a VM is relatively straightforward, but I took this
+as an opportunity to add some NX hugepages test coverage and clean up selftests
+infrastructure a bit.
 
+Patches 1-2 add some library calls for accessing stats via the binary stats API.
+Patches 3-5 improve memslot ID handling in the KVM util library.
+Patch 6 is a misc logging improvement.
+Patches 7 and 13 implement an NX hugepages test.
+Patches 8, 9, 10, and 12 implement disabling NX on a VM.
+Patch 11 is a small cleanup of a bad merge.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
-   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
-   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
-   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
-   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
-   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
-   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
-   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
-   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
-   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
->> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
->> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
---
-   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:350:17: sparse:     expected struct file **old_fds
-   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:351:17: sparse:     expected struct file **new_fds
-   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
-   fs/file.c:366:17: sparse:    struct file *
->> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
-   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
-   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
---
-   net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
-   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
-   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
->> net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
-   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
-   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
+This series was tested with the new selftest and the rest of the KVM selftests
+on an Intel Haswell machine.
 
-vim +279 arch/arc/kernel/smp.c
+The following tests failed, but I do not believe that has anything to do with
+this series:
+	userspace_io_test
+	vmx_nested_tsc_scaling_test
+	vmx_preemption_timer_test
 
-41195d236e8445 Vineet Gupta    2013-01-18  261  
-ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
-41195d236e8445 Vineet Gupta    2013-01-18  263  {
-f2a4aa5646687f Vineet Gupta    2013-11-26  264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
-41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
-41195d236e8445 Vineet Gupta    2013-01-18  267  
-f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
-f2a4aa5646687f Vineet Gupta    2013-11-26  269  
-41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
-41195d236e8445 Vineet Gupta    2013-01-18  271  
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
-6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
-d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
-41195d236e8445 Vineet Gupta    2013-01-18  280  
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
-82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
-ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
-41195d236e8445 Vineet Gupta    2013-01-18  291  
-41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
-41195d236e8445 Vineet Gupta    2013-01-18  293  }
-41195d236e8445 Vineet Gupta    2013-01-18  294  
+Ben Gardon (13):
+  selftests: KVM: Dump VM stats in binary stats test
+  selftests: KVM: Test reading a single stat
+  selftests: KVM: Wrap memslot IDs in a struct for readability
+  selftests: KVM: Add memslot parameter to VM vaddr allocation
+  selftests: KVM: Add memslot parameter to elf_load
+  selftests: KVM: Improve error message in vm_phy_pages_alloc
+  selftests: KVM: Add NX huge pages test
+  KVM: x86/MMU: Factor out updating NX hugepages state for a VM
+  KVM: x86/MMU: Track NX hugepages on a per-VM basis
+  KVM: x86/MMU: Allow NX huge pages to be disabled on a per-vm basis
+  KVM: x86: Fix errant brace in KVM capability handling
+  KVM: x86/MMU: Require reboot permission to disable NX hugepages
+  selftests: KVM: Test disabling NX hugepages on a VM
 
-:::::: The code at line 279 was first introduced by commit
-:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
+ arch/x86/include/asm/kvm_host.h               |   3 +
+ arch/x86/kvm/mmu.h                            |   9 +-
+ arch/x86/kvm/mmu/mmu.c                        |  23 +-
+ arch/x86/kvm/mmu/spte.c                       |   7 +-
+ arch/x86/kvm/mmu/spte.h                       |   3 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    |   3 +-
+ arch/x86/kvm/x86.c                            |  24 +-
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +-
+ .../selftests/kvm/aarch64/psci_cpu_on_test.c  |   2 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |   7 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |  45 +--
+ .../selftests/kvm/hardware_disable_test.c     |   2 +-
+ .../selftests/kvm/include/kvm_util_base.h     |  57 ++--
+ .../selftests/kvm/include/x86_64/vmx.h        |   4 +-
+ .../selftests/kvm/kvm_binary_stats_test.c     |   6 +
+ .../selftests/kvm/kvm_page_table_test.c       |   9 +-
+ .../selftests/kvm/lib/aarch64/processor.c     |   7 +-
+ tools/testing/selftests/kvm/lib/elf.c         |   5 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 311 +++++++++++++++---
+ .../selftests/kvm/lib/kvm_util_internal.h     |   2 +-
+ .../selftests/kvm/lib/perf_test_util.c        |   4 +-
+ .../selftests/kvm/lib/riscv/processor.c       |   5 +-
+ .../selftests/kvm/lib/s390x/processor.c       |   9 +-
+ .../kvm/lib/x86_64/nx_huge_pages_guest.S      |  45 +++
+ .../selftests/kvm/lib/x86_64/processor.c      |  11 +-
+ tools/testing/selftests/kvm/lib/x86_64/svm.c  |   8 +-
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |  26 +-
+ .../selftests/kvm/max_guest_memory_test.c     |   6 +-
+ .../kvm/memslot_modification_stress_test.c    |   6 +-
+ .../testing/selftests/kvm/memslot_perf_test.c |  11 +-
+ .../selftests/kvm/set_memory_region_test.c    |   8 +-
+ tools/testing/selftests/kvm/steal_time.c      |   3 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |   6 +-
+ .../testing/selftests/kvm/x86_64/cpuid_test.c |   2 +-
+ .../kvm/x86_64/emulator_error_test.c          |   2 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |   2 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |   6 +-
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |   2 +-
+ .../selftests/kvm/x86_64/mmu_role_test.c      |   3 +-
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c | 149 +++++++++
+ .../kvm/x86_64/nx_huge_pages_test.sh          |  25 ++
+ .../selftests/kvm/x86_64/set_boot_cpu_id.c    |   2 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |   2 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  10 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |   2 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |   4 +-
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    |   2 +-
+ 48 files changed, 704 insertions(+), 190 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/nx_huge_pages_guest.S
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+ create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
 
-:::::: TO: Vineet Gupta <vgupta@synopsys.com>
-:::::: CC: Vineet Gupta <vgupta@synopsys.com>
+-- 
+2.35.1.616.g0bdcbb4464-goog
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

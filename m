@@ -2,115 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D9C4D4D68
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30F64D4D02
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237496AbiCJP0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S234930AbiCJP0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiCJP0K (ORCPT
+        with ESMTP id S230029AbiCJP0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:26:10 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C7615697B;
-        Thu, 10 Mar 2022 07:25:08 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 6B0911F45A2A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646925907;
-        bh=G44TKaXJ2702MH14xQ2xJ5CzDZDhej3DrvU8W8AmQpM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SXhuKhFEp8Pn5kLpJ9uE75VypUMiWbTDJVSbQOK8PeLRuwMErkdO4jbich+dzPauC
-         qCJWCscyap4JMwtArGtY5HzKtdvHxmWP7UbBPZXUPeHdFbn2BmwfQ33I7MwQG8brbd
-         fYowneCd2ko50BtGZSUUzuRyJ/wegpIExSkuV6lgm16tPDRBenjMZEc9g8r/MZCpiT
-         JZBtRYcs3DiM/nITjUjJB6X2evoUXrnf21ef/sN5ap4/j6gW50i8UJIkGflgdbeBHL
-         docIDtmUfdlSE6vs5URQcIca6NSmP9Jcr8vaydjsb9YA3GvDJgCzFyl9ueHgXddWqI
-         r4s8PlBH5D3EQ==
-Message-ID: <ead686bc-06ae-c572-999a-af22c183550f@collabora.com>
-Date:   Thu, 10 Mar 2022 16:25:04 +0100
+        Thu, 10 Mar 2022 10:26:52 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6D7157219;
+        Thu, 10 Mar 2022 07:25:51 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id p15so12859013ejc.7;
+        Thu, 10 Mar 2022 07:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hyr8lchvSxJvVZvNNPRmAWrg1/xZg5k7PwIJtfWhQPA=;
+        b=bB7/5s/t/KzBLjcRGi2a9yGaVZ4RKGv+dQSLbu4MBPn2IvdV6nEbbtK+IJEVEUhFrU
+         AEQWAVL3khsmCLwMf/oY50KBGMhO3I/P4yeEqz1MAOY2jvDFMxiGncvs8dmVgqH8IOh6
+         Q9vKmIyt8Ece8Ho2qaJ5DKEhdjtnUGbnEQVe4+sf5JKK2ccoFbV6tzCDVOBhdgTcwzy+
+         9at2DIXGe3+rklhwUjtkbp1MK0hTrg0VRt6VqcJiRQ3fnFj54dX6Ou4mjD0Ifg9X/yKq
+         CpeeKl/hZnZWHIh88lDfqVJM6mjuAOWJXOvrkanPpYYwe37q/ivX5qI4eBJX12+UgyDy
+         kgZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hyr8lchvSxJvVZvNNPRmAWrg1/xZg5k7PwIJtfWhQPA=;
+        b=3fN0/Mpq5cgBehkCvAnBXrlUreucjDK0vFbkJZjeCcdFesNK4vHmQKUFrqX5R3QOJ2
+         XPqJClf7b3Wld/uU1N4AHNZYI1mwLwoykxYFfOi+8bObu80OeSBzQNwR7kEpdQ21cbGn
+         CeyK8Y8shQuL9HJnHYstkQKcu7XcByXNDJjH9/B6ltS+uJ2qst1e19lAy7difsMQUwWk
+         +kYp7XnjulLD2UoljkOJDfxJVw75rqEZ+jDso867m1f4tOBbFH0aF1DHVug5wBpqJwz4
+         +GiW1BHNAiALxp54Lbe0kSEIWzC7HEBdeuMES3oM28k7+hVC5KAMYZh4/zkdanObIC4P
+         GxRw==
+X-Gm-Message-State: AOAM531/w8dZRqNRN9t1HBVgP/s0mw5hxLd/zxHCKpJqSRWuMOIguQhd
+        8GIjv5PWhGbyW6Ofvk48Pr8=
+X-Google-Smtp-Source: ABdhPJyeyXIwnxx7GpXcIqMRyfd7KwZ2in6ydXgLTZ+VY3mJEJDH9hq+D3/8NJaRPmbwCXUcwrRYFw==
+X-Received: by 2002:a17:907:7711:b0:6ce:e03c:e1e2 with SMTP id kw17-20020a170907771100b006cee03ce1e2mr4707576ejc.769.1646925949456;
+        Thu, 10 Mar 2022 07:25:49 -0800 (PST)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id y14-20020a056402440e00b00416046b623csm2297799eda.2.2022.03.10.07.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 07:25:48 -0800 (PST)
+Date:   Thu, 10 Mar 2022 17:25:47 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 10/10] net: dsa: mv88e6xxx: MST Offloading
+Message-ID: <20220310152547.etuov6kpqotnyv2p@skbuf>
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-11-tobias@waldekranz.com>
+ <20220303222658.7ykn6grkkp6htm7a@skbuf>
+ <87k0d1n8ko.fsf@waldekranz.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 1/5] ASoC: mediatek: mt8195: add reset controller
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        tiwai@suse.com, robh+dt@kernel.org, matthias.bgg@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aaronyu@google.com,
-        yc.hung@mediatek.com
-References: <20220308072435.22460-1-trevor.wu@mediatek.com>
- <20220308072435.22460-2-trevor.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220308072435.22460-2-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k0d1n8ko.fsf@waldekranz.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/03/22 08:24, Trevor Wu ha scritto:
-> Audio hardware is possibly used in the firmware stage, so resetting audio
-> hardware before regcache records default register values is required.
+On Thu, Mar 10, 2022 at 04:14:31PM +0100, Tobias Waldekranz wrote:
+> On Fri, Mar 04, 2022 at 00:26, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > On Tue, Mar 01, 2022 at 11:03:21AM +0100, Tobias Waldekranz wrote:
+> >> Allocate a SID in the STU for each MSTID in use by a bridge and handle
+> >> the mapping of MSTIDs to VLANs using the SID field of each VTU entry.
+> >> 
+> >> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> >> ---
+> >>  drivers/net/dsa/mv88e6xxx/chip.c | 178 +++++++++++++++++++++++++++++++
+> >>  drivers/net/dsa/mv88e6xxx/chip.h |  13 +++
+> >>  2 files changed, 191 insertions(+)
+> >> 
+> >> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+> >> index c14a62aa6a6c..4fb4ec1dff79 100644
+> >> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> >> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> >> @@ -1818,6 +1818,137 @@ static int mv88e6xxx_stu_setup(struct mv88e6xxx_chip *chip)
+> >>  	return mv88e6xxx_stu_loadpurge(chip, &stu);
+> >>  }
+> >>  
+> >> +static int mv88e6xxx_sid_new(struct mv88e6xxx_chip *chip, u8 *sid)
+> >> +{
+> >> +	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
+> >> +	struct mv88e6xxx_mst *mst;
+> >> +
+> >> +	set_bit(0, busy);
+> >> +
+> >> +	list_for_each_entry(mst, &chip->msts, node) {
+> >> +		set_bit(mst->stu.sid, busy);
+> >> +	}
+> >> +
+> >> +	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
+> >> +
+> >> +	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
+> >> +}
+> >> +
+> >> +static int mv88e6xxx_sid_put(struct mv88e6xxx_chip *chip, u8 sid)
+> >> +{
+> >> +	struct mv88e6xxx_mst *mst, *tmp;
+> >> +	int err = 0;
+> >> +
+> >> +	list_for_each_entry_safe(mst, tmp, &chip->msts, node) {
+> >> +		if (mst->stu.sid == sid) {
+> >> +			if (refcount_dec_and_test(&mst->refcnt)) {
+> >> +				mst->stu.valid = false;
+> >> +				err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
+> >
+> > It is interesting what to do if this fails. Possibly not this, because
+> > the entry remains in hardware but not in software.
 > 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> True, I will let the error bubble up and keep the SW state in sync with
+> the hardware.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Ok. For what it's worth, if you bump a refcount from 0 to 1 as part of
+the error handling here, you need to do so using refcount_set(1), not
+refcount_inc(). I found this out in commit 232deb3f9567 ("net: dsa:
+avoid refcount warnings when ->port_{fdb,mdb}_del returns error").
+Just thought I'd mention it in case you didn't know, to avoid a future
+respin for that reason.
 
-> ---
->   sound/soc/mediatek/mt8195/mt8195-afe-pcm.c | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
+> >> +				list_del(&mst->node);
+> >> +				kfree(mst);
+> >> +			}
+> >> +
+> >> +			return err;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	return -ENOENT;
+> >> +}
+> >> +
+> >> +static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, struct net_device *br,
+> >> +			     u16 msti, u8 *sid)
+> >> +{
+> >> +	struct mv88e6xxx_mst *mst;
+> >> +	int err, i;
+> >> +
+> >> +	if (!br)
+> >> +		return 0;
+> >
+> > Is this condition possible?
 > 
-> diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-> index 550636500949..72b2c6d629b9 100644
-> --- a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-> +++ b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-> @@ -16,6 +16,7 @@
->   #include <linux/of_platform.h>
->   #include <linux/of_reserved_mem.h>
->   #include <linux/pm_runtime.h>
-> +#include <linux/reset.h>
->   #include "mt8195-afe-common.h"
->   #include "mt8195-afe-clk.h"
->   #include "mt8195-reg.h"
-> @@ -3056,6 +3057,7 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
->   	struct mtk_base_afe *afe;
->   	struct mt8195_afe_private *afe_priv;
->   	struct device *dev = &pdev->dev;
-> +	struct reset_control *rstc;
->   	int i, irq_id, ret;
->   	struct snd_soc_component *component;
->   
-> @@ -3092,6 +3094,20 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	/* reset controller to reset audio regs before regmap cache */
-> +	rstc = devm_reset_control_get_exclusive(dev, "audiosys");
-> +	if (IS_ERR(rstc)) {
-> +		ret = PTR_ERR(rstc);
-> +		dev_err(dev, "could not get audiosys reset:%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = reset_control_reset(rstc);
-> +	if (ret) {
-> +		dev_err(dev, "failed to trigger audio reset:%d\n", ret);
-> +		return ret;
-> +	}
-> +
->   	spin_lock_init(&afe_priv->afe_ctrl_lock);
->   
->   	mutex_init(&afe->irq_alloc_lock);
+> Removing.
+> 
+> >> +
+> >> +	if (!mv88e6xxx_has_stu(chip))
+> >> +		return -EOPNOTSUPP;
+> >> +
+> >> +	list_for_each_entry(mst, &chip->msts, node) {
+> >> +		if (mst->br == br && mst->msti == msti) {
+> >> +			refcount_inc(&mst->refcnt);
+> >> +			*sid = mst->stu.sid;
+> >> +			return 0;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	err = mv88e6xxx_sid_new(chip, sid);
+> >> +	if (err)
+> >> +		return err;
+> >> +
+> >> +	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
+> >> +	if (!mst)
+> >> +		return -ENOMEM;
+> >
+> > This leaks the new SID.
+> 
+> I don't think so, the SID is just calculated based on what is in
+> chip->msts. However:
+> 
+> - The naming is bad. Will change.
 
+I see now. My bad. What are you renaming it to? If it isn't as concise
+you could still keep it sid_new(). I see atu_new() is based on the same
+find_first_zero_bit() concept.
 
+> >> +
+> >> +	INIT_LIST_HEAD(&mst->node);
+> >> +	refcount_set(&mst->refcnt, 1);
+> >> +	mst->br = br;
+> >> +	mst->msti = msti;
+> >> +	mst->stu.valid = true;
+> >> +	mst->stu.sid = *sid;
+> >> +
+> >> +	/* The bridge starts out all ports in the disabled state. But
+> >> +	 * a STU state of disabled means to go by the port-global
+> >> +	 * state. So we set all user port's initial state to blocking,
+> >> +	 * to match the bridge's behavior.
+> >> +	 */
+> >> +	for (i = 0; i < mv88e6xxx_num_ports(chip); i++)
+> >> +		mst->stu.state[i] = dsa_is_user_port(chip->ds, i) ?
+> >> +			MV88E6XXX_PORT_CTL0_STATE_BLOCKING :
+> >> +			MV88E6XXX_PORT_CTL0_STATE_DISABLED;
+> >> +
+> >> +	list_add_tail(&mst->node, &chip->msts);
+> >> +	return mv88e6xxx_stu_loadpurge(chip, &mst->stu);
+> >
+> > And this doesn't behave too well on failure (the MSTID exists in
+> > software but not in hardware).
+> 
+> Yes, fixing in v3.
+> 
+> >> +}
+> >> +
+> >> +static int mv88e6xxx_port_mst_state_set(struct dsa_switch *ds, int port,
+> >> +					const struct switchdev_mst_state *st)
+> >> +{
+> >> +	struct dsa_port *dp = dsa_to_port(ds, port);
+> >> +	struct mv88e6xxx_chip *chip = ds->priv;
+> >> +	struct mv88e6xxx_mst *mst;
+> >> +	u8 state;
+> >> +	int err;
+> >> +
+> >> +	if (!mv88e6xxx_has_stu(chip))
+> >> +		return -EOPNOTSUPP;
+> >> +
+> >> +	switch (st->state) {
+> >> +	case BR_STATE_DISABLED:
+> >> +	case BR_STATE_BLOCKING:
+> >> +	case BR_STATE_LISTENING:
+> >> +		state = MV88E6XXX_PORT_CTL0_STATE_BLOCKING;
+> >> +		break;
+> >> +	case BR_STATE_LEARNING:
+> >> +		state = MV88E6XXX_PORT_CTL0_STATE_LEARNING;
+> >> +		break;
+> >> +	case BR_STATE_FORWARDING:
+> >> +		state = MV88E6XXX_PORT_CTL0_STATE_FORWARDING;
+> >> +		break;
+> >> +	default:
+> >> +		return -EINVAL;
+> >> +	}
+> >> +
+> >> +	list_for_each_entry(mst, &chip->msts, node) {
+> >> +		if (mst->br == dsa_port_bridge_dev_get(dp) &&
+> >> +		    mst->msti == st->msti) {
+> >> +			if (mst->stu.state[port] == state)
+> >> +				return 0;
+> >> +
+> >> +			mst->stu.state[port] = state;
+> >> +			mv88e6xxx_reg_lock(chip);
+> >> +			err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
+> >> +			mv88e6xxx_reg_unlock(chip);
+> >> +			return err;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	return -ENOENT;
+> >> +}
+> >> +
+> >>  static int mv88e6xxx_port_check_hw_vlan(struct dsa_switch *ds, int port,
+> >>  					u16 vid)
+> >>  {
+> >> @@ -2437,6 +2568,12 @@ static int mv88e6xxx_port_vlan_leave(struct mv88e6xxx_chip *chip,
+> >>  	if (err)
+> >>  		return err;
+> >>  
+> >> +	if (!vlan.valid && vlan.sid) {
+> >> +		err = mv88e6xxx_sid_put(chip, vlan.sid);
+> >> +		if (err)
+> >> +			return err;
+> >> +	}
+> >> +
+> >>  	return mv88e6xxx_g1_atu_remove(chip, vlan.fid, port, false);
+> >>  }
+> >>  
+> >> @@ -2482,6 +2619,44 @@ static int mv88e6xxx_port_vlan_del(struct dsa_switch *ds, int port,
+> >>  	return err;
+> >>  }
+> >>  
+> >> +static int mv88e6xxx_vlan_msti_set(struct dsa_switch *ds,
+> >> +				   const struct switchdev_attr *attr)
+> >> +{
+> >> +	const struct switchdev_vlan_attr *vattr = &attr->u.vlan_attr;
+> >> +	struct mv88e6xxx_chip *chip = ds->priv;
+> >> +	struct mv88e6xxx_vtu_entry vlan;
+> >> +	u8 new_sid;
+> >> +	int err;
+> >> +
+> >> +	mv88e6xxx_reg_lock(chip);
+> >> +
+> >> +	err = mv88e6xxx_vtu_get(chip, vattr->vid, &vlan);
+> >> +	if (err)
+> >> +		goto unlock;
+> >> +
+> >> +	if (!vlan.valid) {
+> >> +		err = -EINVAL;
+> >> +		goto unlock;
+> >> +	}
+> >> +
+> >> +	err = mv88e6xxx_sid_get(chip, attr->orig_dev, vattr->msti, &new_sid);
+> >> +	if (err)
+> >> +		goto unlock;
+> >> +
+> >> +	if (vlan.sid) {
+> >> +		err = mv88e6xxx_sid_put(chip, vlan.sid);
+> >> +		if (err)
+> >> +			goto unlock;
+> >> +	}
+> >> +
+> >> +	vlan.sid = new_sid;
+> >> +	err = mv88e6xxx_vtu_loadpurge(chip, &vlan);
+> >
+> > Maybe you could move mv88e6xxx_sid_put() after this succeeds?
+> 
+> Yep. Also made sure to avoid needless updates of the VTU entry if it
+> already belonged to the correct SID.
+> 
+> Thanks for the great review!
 
+I realize I gave you conflicting advice here, first with inverting the
+refcount_inc() with the refcount_dec(), then with having fast handling
+of noop-changes to vlan.sid. I hope you're able to make some sense out
+of that and avoid the obvious issue with the refcount temporarily
+dropping to zero before going back to 1, which makes the sanity checker
+complain.

@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292D04D45C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BD34D45C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 12:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241657AbiCJLgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 06:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S241669AbiCJLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 06:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241650AbiCJLg3 (ORCPT
+        with ESMTP id S241678AbiCJLgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 06:36:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EE714237A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:35:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2BC5B81EF7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 11:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20060C340F3;
-        Thu, 10 Mar 2022 11:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646912125;
-        bh=AnDM7FNCQi75VSOYT6xKBeT+BDE6bxlYZVn7KRHx63U=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=k+VS0Ue73un/AjXuiuoFw90Gps1nTbaWecCkV9N9DLS3Gn6zq33rkwvipTqMtKZyL
-         RyXXOGbRwCQDV/q7nzerB6Paj/sk92/CLNvtzQHAgL6no6Xs+O8cBXlTRrk3trESRO
-         xmk/T/+OXD4DAA4tRxMA8ih+W/uh9JvGeVHK5n1fou2vvOMSqMBMHLUkPuLTRWnnHY
-         Lth2108o4NjYQWaynuX6mMPMBZTLh0iQXDHueziwgPOdyM30W/YJkMy2UzCZdMMdXX
-         e01vJo2tz+5tuxZdBz1KZYzrPfO+UbFpCf+doblZoISICBRcy956OvvzVK/cNlhxRB
-         XIY03BjYQ1VBQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        pierre-louis.bossart@linux.intel.com
-Cc:     kai.vehmanen@linux.intel.com, perex@perex.cz, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        sound-open-firmware@alsa-project.org,
-        ranjani.sridharan@linux.intel.com,
-        Abaci Robot <abaci@linux.alibaba.com>, daniel.baluta@nxp.com,
-        lgirdwood@gmail.com
-In-Reply-To: <20220309004929.125558-2-jiapeng.chong@linux.alibaba.com>
-References: <20220309004929.125558-1-jiapeng.chong@linux.alibaba.com> <20220309004929.125558-2-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH 1/2] ASoC: SOF: amd: Remove unneeded semicolon
-Message-Id: <164691212284.13798.8164925619305971959.b4-ty@kernel.org>
-Date:   Thu, 10 Mar 2022 11:35:22 +0000
+        Thu, 10 Mar 2022 06:36:35 -0500
+Received: from smtp.tom.com (smtprz01.163.net [106.3.154.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4E69144F5E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 03:35:33 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by vip-app02.163.net (Postfix) with ESMTP id 7198C440128
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:35:32 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646912132; bh=9NFV5tI+G3N523bN1IXvF7Uy8KRnhGygKs9kPGcs2QI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=2Z4FS8uDWQ647GF1UqnkOOOwanPfnHb9XKAH7XYxnGyvLjMgO4BQ/YPL7i4FxnbL0
+         cC3f23M/Jxv7wmrLkIGPDd/52eHa2Koo+iCxECla8jFxHl4OhPosRLej5aa4/rcmup
+         0xH+WIa8WPB4cYuf0EfmpddKRJI0FEAuh6nxjgVY=
+Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
+          by localhost (TOM SMTP Server) with SMTP ID -1914667527
+          for <linux-kernel@vger.kernel.org>;
+          Thu, 10 Mar 2022 19:35:32 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646912132; bh=9NFV5tI+G3N523bN1IXvF7Uy8KRnhGygKs9kPGcs2QI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=2Z4FS8uDWQ647GF1UqnkOOOwanPfnHb9XKAH7XYxnGyvLjMgO4BQ/YPL7i4FxnbL0
+         cC3f23M/Jxv7wmrLkIGPDd/52eHa2Koo+iCxECla8jFxHl4OhPosRLej5aa4/rcmup
+         0xH+WIa8WPB4cYuf0EfmpddKRJI0FEAuh6nxjgVY=
+Received: from localhost (unknown [101.93.196.13])
+        by antispamvip.163.net (Postfix) with ESMTPA id 7E0FF154153A;
+        Thu, 10 Mar 2022 19:35:26 +0800 (CST)
+Date:   Thu, 10 Mar 2022 19:35:25 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 1/2] nvmet-tcp: support specifying the
+ congestion-control
+Message-ID: <20220310193525.0000407d@tom.com>
+In-Reply-To: <20220310190636.00001695@tom.com>
+References: <20220309053711.2561-1-sunmingbao@tom.com>
+        <20220309061541.GB31316@lst.de>
+        <20220309175203.00006ee2@tom.com>
+        <20220310083811.GA26953@lst.de>
+        <20220310190636.00001695@tom.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 08:49:29 +0800, Jiapeng Chong wrote:
-> Fix the following coccicheck warnings:
-> 
-> ./sound/soc/sof/amd/acp.c:280:3-4: Unneeded semicolon.
-> 
-> 
+On Thu, 10 Mar 2022 19:06:36 +0800
+Mingbao Sun <sunmingbao@tom.com> wrote:
 
-Applied to
+> On Thu, 10 Mar 2022 09:38:11 +0100
+> Christoph Hellwig <hch@lst.de> wrote:
+>=20
+> > On Wed, Mar 09, 2022 at 05:52:03PM +0800, Mingbao Sun wrote:
+> > > On Wed, 9 Mar 2022 07:15:41 +0100
+> > > Christoph Hellwig <hch@lst.de> wrote:
+> > >  =20
+> > > > On Wed, Mar 09, 2022 at 01:37:11PM +0800, Mingbao Sun wrote: =20
+> > > > > +		if (port->nport->tcp_congestion) {
+> > > > > +			icsk_new =3D inet_csk(newsock->sk);
+> > > > > +			if (icsk_new->icsk_ca_ops !=3D icsk->icsk_ca_ops) {
+> > > > > +				pr_warn("congestion abnormal: expected %s, actual %s.\n",
+> > > > > +					icsk->icsk_ca_ops->name,
+> > > > > +					icsk_new->icsk_ca_ops->name);
+> > > > > +			}
+> > > > > +		}   =20
+> > > >=20
+> > > > What is the point of having this code? =20
+> > >=20
+> > > Well, this could happen in certain circumstances.
+> > > Take the result from my test as an example:
+> > >=20
+> > >     - The congestion of the listening socket of the target was set to
+> > >       =E2=80=98dctcp=E2=80=99.
+> > >=20
+> > >     - But the congestion of the socket of the host side was set to
+> > >       =E2=80=98cubic=E2=80=99.
+> > >=20
+> > >     - Then the congestion of the socket of the new connection at the
+> > >       target side would automatically be altered to =E2=80=98dctcp-re=
+no=E2=80=99.
+> > >=20
+> > > In case tcp_congestion was explicitly set for the target, it can be
+> > > supposed that the user attaches great importance to performance.
+> > > So we=E2=80=99d better make the users aware that the system is not wo=
+rking
+> > > in the way they expect.  =20
+> >=20
+> > A warning message really seems very severe for a condition like this.
+> > Maybe the better interface is a way to figure out which congestion
+> > control algorithm is in use by reading a sysfs file.
+>=20
+> Well, a target could have a great number of TCP sockets.
+>=20
+> I feel it=E2=80=99s not proper to create a sysfs entry for each socket.
+> And for those sockets that do not have the exception of
+> congestion-control, it=E2=80=99s merely a waste of resources.
+>=20
+> Also, since these sockets generate and die dynamically, the info
+> exported via fs may even do not have the opportunity to be seen by
+> the user.
+>=20
+> Anyway, if you insist that the checking and warning here is not proper,
+> I can remove it.=20
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/2] ASoC: SOF: amd: Remove unneeded semicolon
-      commit: 5af07dad696422d48368409461a754990faa713c
-[2/2] ASoC: SOF: amd: Remove unneeded semicolon
-      commit: 5af07dad696422d48368409461a754990faa713c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+How about replacing pr_warn with pr_warn_once?

@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5904D517A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F594D5226
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 20:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343522AbiCJTUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 14:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S1343535AbiCJTUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 14:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237363AbiCJTUe (ORCPT
+        with ESMTP id S237363AbiCJTUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:20:34 -0500
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A0C266C;
-        Thu, 10 Mar 2022 11:19:32 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id u3so12868748ybh.5;
-        Thu, 10 Mar 2022 11:19:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RsZ3zXGw1xKWGbwqOAoJ3iWwiAdQKU/G/m5iJq8ngBs=;
-        b=TqjosO+kDrRHp0Nm1/x7xbob+lAO+bjQldG4Yk1r/94x2AuPh+LqedNWwEJeytv/4P
-         sWFozjU5E9DwHXaGXYw4ZZECEmZHuEebYSYtmD4pt55TMkpg/we8r6HUHDb/0FkTBIkt
-         EGn2E8R8vU6WpOdWVfUlKq7hPRun/7IuJyapWqji5EL06PeNBy8gBB+WNfLGttdPerJz
-         wbtw41ahtkiA/epVlIzpJlPq0hII9fJOqvD2UZHb6eGnrIZpY0XdvVTg46hSDpXC5xTp
-         CXtDaet4Uz+VzwVe/S9XKB8Cxxp6yTYsJjQZlyk+T/Bi3oK7kc3nSENt4Uru/2mO3h/l
-         SjMw==
-X-Gm-Message-State: AOAM533UqW1HmKR56LXVj+J2E98mDYuWySvHGsx6rv93KpltbcqPblqX
-        aC3R08PoGuaFC9hC8uFMY5/3dzhezmPkSywGEwM=
-X-Google-Smtp-Source: ABdhPJwzdvxZaw5N4g/ICTjGlkN/17w0aoXA26cjkq/DTm08OWp+q0EfHKjM3aQPrhzB3c1ppgNlyJTsryVMtKpDRAk=
-X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
- h62-20020a253a41000000b0062886a20dbcmr5000136yba.633.1646939970903; Thu, 10
- Mar 2022 11:19:30 -0800 (PST)
+        Thu, 10 Mar 2022 14:20:49 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B92AB7C54;
+        Thu, 10 Mar 2022 11:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=+ux52yQrmOIHTp92xmuhCZ/Mwz615e3tMXTxWgDbPLw=; b=spU9UH5LCCexXx5va1ti5hdUtj
+        tkfrXi1vszkVVeGy8acnWqg668BRfY04aOGNY4bTcc5LQ9uek/mQRsee6I3fan8SSjalRy1G33klJ
+        Q8IW963Cv8l5/Na2q7lMtjnBSXPnLY1nOvcQimFoWaU9fU03ICeUxt1icQ3NGdYpzdg0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nSOJy-00AAri-PO; Thu, 10 Mar 2022 20:19:34 +0100
+Date:   Thu, 10 Mar 2022 20:19:34 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, paskripkin@gmail.com
+Subject: Re: [PATCH net-next v1 4/4] net: usb: asix: suspend internal PHY if
+ external is used
+Message-ID: <YipPRtJSlSh6YLHY@lunn.ch>
+References: <20220310114434.3465481-1-o.rempel@pengutronix.de>
+ <20220310114434.3465481-4-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20220309020750.65399-1-ilkka@os.amperecomputing.com>
- <20220309020750.65399-3-ilkka@os.amperecomputing.com> <YinAtUVV5e24r34j@lpieralisi>
-In-Reply-To: <YinAtUVV5e24r34j@lpieralisi>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Mar 2022 20:19:20 +0100
-Message-ID: <CAJZ5v0ggVdrc9a0kFe4uu7r_B3rH393iN2c2FsJ7OUQf8jd89A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
- Dump and Reset device
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Cc:     Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        James Morse <james.morse@arm.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        patches@amperecomputing.com, scott@os.amperecomputing.com,
-        Darren Hart <darren@os.amperecomputing.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310114434.3465481-4-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 10:11 AM Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
->
-> On Tue, Mar 08, 2022 at 06:07:50PM -0800, Ilkka Koskinen wrote:
-> > ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
-> > Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
-> > issue diagnostic dump and reset via an SDEI event or an interrupt.
-> > This patch implements SDEI path.
-> >
-> > [0] https://developer.arm.com/documentation/den0093/latest/
-> >
-> > Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/acpi/arm64/Kconfig  |  10 ++++
-> >  drivers/acpi/arm64/Makefile |   1 +
-> >  drivers/acpi/arm64/agdi.c   | 116 ++++++++++++++++++++++++++++++++++++
-> >  drivers/acpi/bus.c          |   2 +
-> >  include/linux/acpi_agdi.h   |  13 ++++
-> >  5 files changed, 142 insertions(+)
-> >  create mode 100644 drivers/acpi/arm64/agdi.c
-> >  create mode 100644 include/linux/acpi_agdi.h
->
-> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On Thu, Mar 10, 2022 at 12:44:34PM +0100, Oleksij Rempel wrote:
+> In case external PHY is used, we need to take care of internal PHY.
+> Since there are no methods to disable this PHY from the MAC side, we
+> need to suspend it.
+> This we reduce electrical noise (PHY is continuing to send FLPs) and power
+> consumption by 0,22W.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/usb/asix.h         |  3 +++
+>  drivers/net/usb/asix_devices.c | 16 +++++++++++++++-
+>  2 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+> index 072760d76a72..8a087205355d 100644
+> --- a/drivers/net/usb/asix.h
+> +++ b/drivers/net/usb/asix.h
+> @@ -158,6 +158,8 @@
+>  #define AX_EEPROM_MAGIC		0xdeadbeef
+>  #define AX_EEPROM_LEN		0x200
+>  
+> +#define AX_INTERNAL_PHY_ADDR	0x10
+> +
+>  /* This structure cannot exceed sizeof(unsigned long [5]) AKA 20 bytes */
+>  struct asix_data {
+>  	u8 multi_filter[AX_MCAST_FILTER_SIZE];
+> @@ -183,6 +185,7 @@ struct asix_common_private {
+>  	struct asix_rx_fixup_info rx_fixup_info;
+>  	struct mii_bus *mdio;
+>  	struct phy_device *phydev;
+> +	struct phy_device *phydev_int;
+>  	u16 phy_addr;
+>  	bool embd_phy;
+>  	u8 chipcode;
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index fb617eb551bb..2c63fbe32ca2 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -679,6 +679,20 @@ static int ax88772_init_phy(struct usbnet *dev)
+>  
+>  	phy_attached_info(priv->phydev);
+>  
+> +	if (priv->embd_phy)
+> +		return 0;
 
-Both patches in the series applied as 5.18 material, thanks!
+Minor nit pick: There appears to be some inconsistency with internal
+and embedded. I think they are meant to mean the same thing? Maybe
+replace internal with embedded in this patch?
+
+The rest looks O.K.
+
+    Andrew

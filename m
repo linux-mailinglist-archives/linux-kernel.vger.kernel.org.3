@@ -2,142 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D614D3EF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5174D3F03
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238340AbiCJBwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 20:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
+        id S238954AbiCJByr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 20:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236818AbiCJBwX (ORCPT
+        with ESMTP id S235354AbiCJByo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 20:52:23 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A437127D79;
-        Wed,  9 Mar 2022 17:51:22 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KDX3W1HZlz1GCK0;
-        Thu, 10 Mar 2022 09:46:31 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 09:51:20 +0800
-Subject: Re: IPv4 saddr do not match with selected output device in double
- default gateways scene
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-To:     David Miller <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>, <ja@ssi.bg>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <58c15089-f1c7-675e-db4b-b6dfdad4b497@huawei.com>
-Message-ID: <0de63268-a33b-d514-9457-1332c8aec58e@huawei.com>
-Date:   Thu, 10 Mar 2022 09:51:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 9 Mar 2022 20:54:44 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB27128581;
+        Wed,  9 Mar 2022 17:53:44 -0800 (PST)
+Received: from integral2.. (unknown [114.10.7.234])
+        by gnuweeb.org (Postfix) with ESMTPSA id 0374F7E2CC;
+        Thu, 10 Mar 2022 01:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1646877223;
+        bh=VgvFD5PbNA6rugPitfY9YWmZEniNGGoHTmksEfV3s5g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Y2ogKybWOlxy7/UPV3zKqH5BrFkKd1xUhTr4NS0ZSaHHd7p/xDuMumAn/y5f5vA8z
+         9J98xi8r+omMB/qCvmLVpaI3WVqvp/yMHgGenDInz0Hy8+njGonEZPJG8atDYTMqQE
+         kHsSavRTvHIbMhBov1XzSILqM4qqgf7jN1DDSEzhUC+QLmfWWGsvZEDfLRruKiIaYt
+         Ds0DAvdEwKfzv3Bo/9hmNUzadj/haNEkhU7Ylq0V5N+zrkN8FLwfWvP+nuWSUO5Ep/
+         lZaSnPTtbIn410Ouay0Urj2F3PRA3r5/sE7WX4WrldZUNJ3iUV1Qjw4QihHaLfx8vk
+         vGM/Zzt0FpgLQ==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, gwml@vger.gnuweeb.org, x86@kernel.org
+Subject: [PATCH v5 0/2] Two x86 fixes
+Date:   Thu, 10 Mar 2022 08:53:04 +0700
+Message-Id: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <58c15089-f1c7-675e-db4b-b6dfdad4b497@huawei.com>
-Content-Type: text/plain; charset="gbk"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Create VLAN devices and add default gateways with following commands:
-> 
-> # ip link add link eth2 dev eth2.71 type vlan id 71
-> # ip link add link eth2 dev eth2.72 type vlan id 72
-> # ip addr add 192.168.71.41/24 dev eth2.71
-> # ip addr add 192.168.72.41/24 dev eth2.72
-> # ip link set eth2.71 up
-> # ip link set eth2.72 up
-> # route add -net default gw 192.168.71.1 dev eth2.71
-> # route add -net default gw 192.168.72.1 dev eth2.72
-> 
-> Add a nameserver configuration in the following file:
-> # cat /etc/resolv.conf
-> nameserver 8.8.8.8
-> 
-> Use the following command trigger DNS packet:
-> # ping www.baidu.com
-> 
-> Assume the above test machine is client.
-> 
-> Of course, we should also create VLAN devices in peer server as following:
-> 
-> # ip link add link eth2 dev eth2.71 type vlan id 71
-> # ip link add link eth2 dev eth2.72 type vlan id 72
-> # ip addr add 192.168.71.1/24 dev eth2.71
-> # ip addr add 192.168.72.1/24 dev eth2.72
-> # ip link set eth2.71 up
-> # ip link set eth2.72 up
-> 
-> We capture packets with tcpdump in client machine when ping:
-> # tcpdump -i eth2 -vne
-> ...
-> 20:30:22.996044 52:54:00:20:23:a9 > 52:54:00:d2:4f:e3, ethertype 802.1Q (0x8100), length 77: vlan 71, p 0, ethertype IPv4, (tos 0x0, ttl 64, id 25407, offset 0, flags [DF], proto UDP (17), length 59)
->     192.168.72.41.42666 > 8.8.8.8.domain: 58562+ A? www.baidu.com. (31)
-> 20:30:22.996125 52:54:00:20:23:a9 > 52:54:00:d2:4f:e3, ethertype 802.1Q (0x8100), length 77: vlan 71, p 0, ethertype IPv4, (tos 0x0, ttl 64, id 25408, offset 0, flags [DF], proto UDP (17), length 59)
->     192.168.72.41.42666 > 8.8.8.8.domain: 25803+ AAAA? www.baidu.com. (31)
-> ...
-> 
-> We can find that IPv4 saddr "192.168.72.41" do not match with selected VLAN device "eth2.71".
+Hi,
 
-Is there anyone familiar with route/fib realization? And thank you for your warm-hearted help!
+Two x86 fixes in this series.
 
-> 
-> I tracked the related processes, and found that user space program uses connect() firstly, then sends UDP packet.
-> 
-> The problem happens in the connect() process. Analysis as following with codes:
-> 
-> static inline struct rtable *ip_route_connect(struct flowi4 *fl4,
-> 					      __be32 dst, __be32 src, u32 tos,
-> 					      int oif, u8 protocol,
-> 					      __be16 sport, __be16 dport,
-> 					      struct sock *sk)
-> {
-> 	struct net *net = sock_net(sk);
-> 	struct rtable *rt;
-> 
-> 	ip_route_connect_init(fl4, dst, src, tos, oif, protocol,
-> 			      sport, dport, sk);
-> 
-> 	if (!dst || !src) {
-> 
-> 		/* rtable and fl4 are matched after the first __ip_route_output_key().
-> 		 * rtable->dst.dev->name == "eth2.72" && rtable->rt_gw4 == 0x148a8c0
-> 		 * fl4->saddr == 0x2948a8c0
-> 		 */
-> 		rt = __ip_route_output_key(net, fl4);
-> 		if (IS_ERR(rt))
-> 			return rt;
-> 		ip_rt_put(rt);
-> 		flowi4_update_output(fl4, oif, tos, fl4->daddr, fl4->saddr);
-> 	}
-> 	security_sk_classify_flow(sk, flowi4_to_flowi_common(fl4));
-> 
-> 	/* rtable and fl4 do not match after the second __ip_route_output_key().
-> 	 * rtable->dst.dev->name == "eth2.71" && rtable->rt_gw4 == 0x147a8c0
-> 	 * fl4->saddr == 0x2948a8c0
-> 	 */
-> 	return ip_route_output_flow(net, fl4, sk);
-> }
-> 
-> Deep tracking, it because fa->fa_default has changed in fib_select_default() after first __ip_route_output_key() process,
-> and a new fib_nh is selected in fib_select_default() within the second __ip_route_output_key() process but not update flowi4.
-> So the phenomenon described at the beginning happens.
-> 
-> Does it a kernel bug or a user problem? If it is a kernel bug, is there any good solution?
-> 
+1) x86/delay: Fix the wrong Assembly constraint in delay_loop() function.
+2) x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails.
+
+## Changelog
+
+v5:
+  - Mark patch #1 for stable.
+  - Commit message improvement for patch #1 and #2.
+  - Fold in changes from Yazen and Alviro (for patch #2).
+
+v4:
+  - Address comment from Greg, sha1 commit Fixes only needs
+    to be 12 chars.
+  - Add the author of the fixed commit to the CC list.
+
+v3:
+  - Fold in changes from Alviro, the previous version is still
+    leaking @bank[n].
+
+v2:
+  - Fix wrong copy/paste.
+
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+Ammar Faizi (2):
+  x86/delay: Fix the wrong asm constraint in `delay_loop()`
+  x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails
+
+ arch/x86/kernel/cpu/mce/amd.c | 32 +++++++++++++++++++-------------
+ arch/x86/lib/delay.c          |  4 ++--
+ 2 files changed, 21 insertions(+), 15 deletions(-)
+
+
+base-commit: 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
+-- 
+Ammar Faizi
 

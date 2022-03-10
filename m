@@ -2,104 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188984D52E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264F84D52ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244559AbiCJULK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S244630AbiCJUMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240295AbiCJULH (ORCPT
+        with ESMTP id S233319AbiCJUL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:11:07 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D912B9BBAA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=EudowKxfuxNie/ZjDfg6vUBWXj6aFVtwbByn8cDt7u0=; b=KLfK5
-        LOPvlCEY+dbh4fbpastBX+zfJn5iFUDHcdp+MUaGJd5qE9DZWpDNYguBfD7VQtiWoXPch/2af1BPo
-        9N/bXphDDYVXm7QWcFOWTlx/wAohslHDHNewkmh+dq/7vIUGvISsGltk3Bi8/k7z8Saf+n51heS+k
-        +QImFLyPlJ3vlXVX2wlVKWauAClsOHiGF1hRHuxuwaN5BvgKiPrh1yyKLVUD+uHMMt83ZCO80Pa6T
-        yQt9ZYB056GPJz7MgCafSaTxvWm0Fu4n3WlaZXFnKYmsm+ShpX1KrOeStWLL9HTWvRSFOKztcaHPr
-        jHrlLpTaAwL5rAEaRIML00ecOT8JQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nSP6Z-0001lX-L2; Thu, 10 Mar 2022 20:09:47 +0000
-Date:   Thu, 10 Mar 2022 20:09:42 +0000
-From:   John Keeping <john@metanate.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Daniel Beer <daniel.beer@igorinstitute.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ASoC: tas5805m: fix pdn polarity
-Message-ID: <YipbBti4yeq2HzCe@donbot>
-References: <20220309135649.195277-1-john@metanate.com>
- <YijOHNT0eqDyoviP@sirena.org.uk>
- <YijTk0/UTXpjFiRq@donbot>
- <YijVrgZ+Ysv9J/8E@sirena.org.uk>
- <YikLB4+xHVxjFTSL@donbot>
- <YikiXAseSiODXfrD@sirena.org.uk>
+        Thu, 10 Mar 2022 15:11:58 -0500
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3747E9BBAA;
+        Thu, 10 Mar 2022 12:10:57 -0800 (PST)
+Received: by mail-ot1-f41.google.com with SMTP id t8-20020a0568301e2800b005b235a56f2dso4818551otr.9;
+        Thu, 10 Mar 2022 12:10:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6UR/WFOFq3EqUbPef1y1xYnsL6gNNVdISGkg2vViX9w=;
+        b=jSOjD66O9efOSNd39a/Mwrnin8brCNeIHaiB3s6dDJ+C78WDD+zhH5jol0lg7ficLK
+         4a+v7sGAlIq5RpzIuLUDQXBFd85PETFKapRsTGz7wzIEFQGaQXYv9GR0TIWo4fxIBVOk
+         FoVnxmgVB0A2OyGN+NDT1TwGTfUQ2GouHTICHtA63o1aOBSFDLovfTgrqkMPfn0Dywae
+         i65PQ9KjmjMu83j3y7kHBzUvikq8Yf+LZsa/AN/G81wuDtvpYMc9qF9RxEa1cCTLqarX
+         25BS5CH8vVPkvkgLSWr8p8PPjjYnyfzOc39YkHAkm96mgrXQgTxwZXnykWzrCmIDp7Qx
+         pVrw==
+X-Gm-Message-State: AOAM532SiSZJ/7TtU+suHAp6/GopoEZW1Hrn6UzRE7Wnrew1vtKCUWw0
+        lASZLvBYOUEP47f4o1GL4w==
+X-Google-Smtp-Source: ABdhPJxL7g6Qf3ansWpLK6G9FxO6gNGunWkYCEA8ijqWIMaeMWYNdpuYZ1hvk+PT1yUf71ucL/d07Q==
+X-Received: by 2002:a05:6830:31ad:b0:599:7af5:d470 with SMTP id q13-20020a05683031ad00b005997af5d470mr3373087ots.50.1646943056529;
+        Thu, 10 Mar 2022 12:10:56 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a14-20020a544e0e000000b002d97bda3874sm2705452oiy.57.2022.03.10.12.10.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 12:10:55 -0800 (PST)
+Received: (nullmailer pid 1982443 invoked by uid 1000);
+        Thu, 10 Mar 2022 20:10:54 -0000
+Date:   Thu, 10 Mar 2022 14:10:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, alexander.stein@ew.tq-group.com,
+        shawnguo@kernel.org, l.stach@pengutronix.de, linux-imx@nxp.com,
+        p.zabel@pengutronix.de, vkoul@kernel.org,
+        devicetree@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhelgaas@google.com
+Subject: Re: [PATCH v2 4/7] dt-bindings: imx6q-pcie: Add iMX8MP PCIe
+ compatible string
+Message-ID: <YipbTpT1B6dHSpt2@robh.at.kernel.org>
+References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
+ <1646644054-24421-5-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YikiXAseSiODXfrD@sirena.org.uk>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1646644054-24421-5-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 09:55:40PM +0000, Mark Brown wrote:
-> On Wed, Mar 09, 2022 at 08:16:07PM +0000, John Keeping wrote:
-> > On Wed, Mar 09, 2022 at 04:28:30PM +0000, Mark Brown wrote:
+On Mon, 07 Mar 2022 17:07:31 +0800, Richard Zhu wrote:
+> Add i.MX8MP PCIe compatible string.
 > 
-> > > I think the device tree binding needs to be clarified here to be
-> > > explicit about this since there's obviously some room for user confusion
-> > > here.  We can probably get away with a change at this point since it's
-> > > not hit a release but we do need to try to avoid the situation where any
-> > > other implementations use active high polarity for the bindings.
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> > Taking a quick survey of the other devices that have a pdn-gpios
-> > property:
-> 
-> > - tvp5150 is correct with the driver setting 0 to make the device active
-> 
-> > - tas571x also sets 0 to make the device active
-> 
-> > - ak4375 uses the opposite sense setting PDN = 1 to make the device
-> >   active; this has no in-tree users and was merged as part of v5.17-rc1
-> >   so it's not in a released kernel yet
-> 
-> Sure, I still think it would be good to update the binding document to
-> clarify things as part of your patch - the binding currently just has it
-> as the "pdn" pin not the /pdn pin or anything.
 
-I've been thinking about this but I can't really think what to say.
-tas571x's binding says:
-
-	GPIO specifier for the TAS571x's active low powerdown line
-
-Is that the sort of wording you have in mind?
-
-To me it seems like a general principle that the GPIO_ACTIVE_{HIGH,LOW}
-flags should be used to indicate how the pin works so that the driver
-consistently uses logical levels regardless of how the hardware is
-wired.
-
-From the driver point of view pdn-gpios is effectively reset-gpios by
-another name and it's pretty consistent that setting a reset GPIO to 1
-means the device is inaccessible.
-
-Maybe this just means I'm approaching this "down" from the software
-abstraction more than "up" from the hardware.
+Applied, thanks!

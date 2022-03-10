@@ -2,165 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387E54D50A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34634D50A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245376AbiCJRef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S245047AbiCJRfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245210AbiCJRee (ORCPT
+        with ESMTP id S240641AbiCJRfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:34:34 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A57141457
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:33:32 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id v14so879813qta.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SS7nrrNHVUaT5n6CRCXmiOuXobp29ColNc9iGvYhPoU=;
-        b=W860HSrEH6X1gW4Zy3kzEe2y2LtS9ojECWxkLzo2l+t9tgStOGe7Vy2L9ba+PqRBa7
-         6d8oeeU3rO1yqshfOqQ2ItFwtWlKG8ytM8pBp4wpUJLHqp+LOlT8XtChDuGY2DM1H2Sk
-         iWZkNLLqo3taaaK0r8wE7mqslSO/ql/Y9sP8oQPCYTxFB/3GaCq+H6lLQOONTalkurCD
-         pp+Uc0PpsDsdlIShrk1IQ50U4A586LzklHw5+pSblvQeh3GXnRnC+QpNhUFb++8S/l4/
-         lARsEWhAwmyZg0x3ziyOor53HxFOcFWjicr4hoKARk29D8eyeAxj7Gj2rR7HhgKQ8yAb
-         ccHA==
+        Thu, 10 Mar 2022 12:35:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8DB718BA50
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:34:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646933678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+sI8yl68F8AaSxc5/19rLFgsuz0y8nt6Rj/YSh3VHaE=;
+        b=OLTQGWpaYtuHXDafAtrAHvckTYIX7so9rgjr9MdvRg3UE7uhHY5O/ZoleWfYuprOQUsHEY
+        Awl/Vjrm1jCxK5u0JLg55y/py7k0j/wqG+zgAftwCrqLLaeN9D+9+KR0zjB4RyN7w7rvad
+        paJljT5Sg0/0tsfUPix37+NUJdym+LY=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-341-aI2_fF5HP_eSUqNYYbJJWA-1; Thu, 10 Mar 2022 12:34:37 -0500
+X-MC-Unique: aI2_fF5HP_eSUqNYYbJJWA-1
+Received: by mail-qt1-f197.google.com with SMTP id l19-20020a05622a175300b002e1a85b5b52so2513991qtk.21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:34:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SS7nrrNHVUaT5n6CRCXmiOuXobp29ColNc9iGvYhPoU=;
-        b=lqeKFbSGOskU2pBGWsUvr7vqLxKrRtBA5ttg8Y4nsUkPcM4MLwaNkwDSHUUTlCHO2d
-         UZU/s9hXhXwC+ohuFOA8EzC4hgf3RPUZHsd8XO3hgRgkLYGuc2gse0d8YTyOYTBDGV61
-         T0+EPeftQ1RKiIKei8zGEoNJ0tWp7NruLgQPwyEKKFoYCriC4YjjPiJ0PE2nNSI28LYz
-         mpO1ACNM5OMSY1Yp+Da8/EiayklqvvdlBK6m/O9QyyWUqzvGHLNij5Fhk6KyR/YUFB7P
-         H3O3bkpexcMrbAtBUOEJdxlCZwCRD9/pApaiRn9bcAcZAAFVuDpg+CTr0rXFq4Hl+ViB
-         ql1w==
-X-Gm-Message-State: AOAM531eEQnae89nL1a26/gom8i+Fp56QRAHovhxSCRLYM3qRk/u0Stq
-        VlEH6IJUkZqWWiKiaXew7daMxiqMnW4=
-X-Google-Smtp-Source: ABdhPJxit/rmksipRHf/BeDOQkFVVO2zhm6AByZFq1nkwuCV8CybKbmmH7hgpnJ+D2nzYyHN+0ky6g==
-X-Received: by 2002:a05:622a:1903:b0:2dd:a07e:659e with SMTP id w3-20020a05622a190300b002dda07e659emr4823568qtc.360.1646933611675;
-        Thu, 10 Mar 2022 09:33:31 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id w4-20020a05620a0e8400b0067b1bcd081csm2485354qkm.66.2022.03.10.09.33.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 09:33:27 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2dc348dab52so66325707b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:33:26 -0800 (PST)
-X-Received: by 2002:a0d:e288:0:b0:2db:f50a:9d10 with SMTP id
- l130-20020a0de288000000b002dbf50a9d10mr5058002ywe.419.1646933605614; Thu, 10
- Mar 2022 09:33:25 -0800 (PST)
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=+sI8yl68F8AaSxc5/19rLFgsuz0y8nt6Rj/YSh3VHaE=;
+        b=dtiYrknJLsV9Mlj2tT54ctKFrc+5xEg3ZuAirIZsGD9QTBGSDIPlbDKFm4/zMMtao9
+         fuWGN6RVfoLp/FLxwgaaWLwHoTIrO8Pi6bmHyngmW2xx4UzRRdqHtJ/vWZPPq7tQrJ1y
+         uBvhZ0kHWVzw0Tza5ZoIauTdXpKNuYxmdlNPzOvdK6+geZpzBjZ35BCI2Jia26WNWWe9
+         5DHIPp8hwwNCVNXlfJBdzOs72ghBk+QuiVa/AgGPSJZKvGadlRML3YfzfByMzwCE56Ni
+         +7xH/aFl9hOs3kLHzhm6Tti3nsAZhzC8Dvkn1Vg3Ak5n55qGWEZOXSLz7l+rqexAg6xD
+         XNUA==
+X-Gm-Message-State: AOAM5309Cu8DgRKCNdj63IVa8d12bjyLp9zBe/crpjeE2TzOt61lGtRx
+        vHB1LjzMibrKHCADTwmaKqdwosc6va+eQMFGbO5C63Ffc21El1RwnjIUG/DqBv6O/wb/poleJWP
+        Rlqih8NjcrkWVaK3usmQp/OWH
+X-Received: by 2002:ac8:5f84:0:b0:2e0:6965:c999 with SMTP id j4-20020ac85f84000000b002e06965c999mr4925473qta.477.1646933676596;
+        Thu, 10 Mar 2022 09:34:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzM49ZVae3bPgm0svuUu3uf+AJzp4pMchlkgmKNd23/D20Xgvy0iFYR1hc8U1liK5jF6Izwyg==
+X-Received: by 2002:ac8:5f84:0:b0:2e0:6965:c999 with SMTP id j4-20020ac85f84000000b002e06965c999mr4925451qta.477.1646933676349;
+        Thu, 10 Mar 2022 09:34:36 -0800 (PST)
+Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
+        by smtp.gmail.com with ESMTPSA id t28-20020a05620a005c00b00662fb1899d2sm2562187qkt.0.2022.03.10.09.34.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 09:34:35 -0800 (PST)
+Message-ID: <dd054c962818716e718bd9b446ee5322ca097675.camel@redhat.com>
+Subject: Re: [PATCH v3 12/20] ceph: Make ceph_init_request() check caps on
+ readahead
+From:   Jeff Layton <jlayton@redhat.com>
+To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
+Cc:     ceph-devel@vger.kernel.org,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 10 Mar 2022 12:34:34 -0500
+In-Reply-To: <164692907694.2099075.10081819855690054094.stgit@warthog.procyon.org.uk>
+References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
+         <164692907694.2099075.10081819855690054094.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
- <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com> <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
- <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org> <45522c89-a3b4-4b98-232b-9c69470124a3@linaro.org>
- <ff2e1007-5883-5178-6415-326d6ae69c34@kernel.org> <8fdab42f-171f-53d7-8e0e-b29161c0e3e2@linaro.org>
- <CA+FuTSeAL7TsdW4t7=G91n3JLuYehUCnDGH4_rHS=vjm1-Nv9Q@mail.gmail.com> <c7608cf0-fda2-1aa6-b0c1-3d4e0b5cad0e@linaro.org>
-In-Reply-To: <c7608cf0-fda2-1aa6-b0c1-3d4e0b5cad0e@linaro.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 10 Mar 2022 12:32:49 -0500
-X-Gmail-Original-Message-ID: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
-Message-ID: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
-        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:06 AM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
->
-> On 3/10/22 06:39, Willem de Bruijn wrote:
-> > On Wed, Mar 9, 2022 at 4:37 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
-> >>
-> >> On 3/8/22 21:01, David Ahern wrote:
-> >>> On 3/8/22 12:46 PM, Tadeusz Struk wrote:
-> >>>> That fails in the same way:
-> >>>>
-> >>>> skbuff: skb_over_panic: text:ffffffff83e7b48b len:65575 put:65575
-> >>>> head:ffff888101f8a000 data:ffff888101f8a088 tail:0x100af end:0x6c0
-> >>>> dev:<NULL>
-> >>>> ------------[ cut here ]------------
-> >>>> kernel BUG at net/core/skbuff.c:113!
-> >>>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> >>>> CPU: 0 PID: 1852 Comm: repro Not tainted
-> >>>> 5.17.0-rc7-00020-gea4424be1688-dirty #19
-> >>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35
-> >>>> RIP: 0010:skb_panic+0x173/0x175
-> >>>>
-> >>>> I'm not sure how it supposed to help since it doesn't change the
-> >>>> alloclen at all.
-> >>>
-> >>> alloclen is a function of fraglen and fraglen is a function of datalen.
-> >>
-> >> Ok, but in this case it doesn't affect the alloclen and it still fails.
-> >
-> > This is some kind of non-standard packet that is being constructed. Do
-> > we understand how it is different?
-> >
-> > The .syz reproducer is generally a bit more readable than the .c
-> > equivalent. Though not as much as an strace of the binary, if you
-> > can share that.
-> >
-> > r0 = socket$inet6_icmp_raw(0xa, 0x3, 0x3a)
-> > connect$inet6(r0, &(0x7f0000000040)={0xa, 0x0, 0x0, @dev, 0x6}, 0x1c)
-> > setsockopt$inet6_IPV6_HOPOPTS(r0, 0x29, 0x36,
-> > &(0x7f0000000100)=ANY=[@ANYBLOB="52b3"], 0x5a0)
-> > sendmmsg$inet(r0, &(0x7f00000002c0)=[{{0x0, 0x0,
-> > &(0x7f0000000000)=[{&(0x7f00000000c0)="1d2d", 0xfa5f}], 0x1}}], 0x1,
-> > 0xfe80)
->
-> Here it is:
-> https://termbin.com/krtr
-> It won't be of much help, I'm afraid, as the offending sendmmsg()
-> call isn't fully printed.
+On Thu, 2022-03-10 at 16:17 +0000, David Howells wrote:
+> Move the caps check from ceph_readahead() to ceph_init_request(),
+> conditional on the origin being NETFS_READAHEAD so that in a future patch,
+> ceph can point its ->readahead() vector directly at netfs_readahead().
+> 
+> Changes
+> =======
+> ver #3)
+>  - Split from the patch to add a netfs inode context[1].
+>  - Need to store the caps got in rreq->netfs_priv for later freeing.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: ceph-devel@vger.kernel.org
+> cc: linux-cachefs@redhat.com
+> Link: https://lore.kernel.org/r/8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org/ [1]
+> ---
+> 
+>  fs/ceph/addr.c |   69 +++++++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 41 insertions(+), 28 deletions(-)
+> 
+> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+> index 9189257476f8..6d056db41f50 100644
+> --- a/fs/ceph/addr.c
+> +++ b/fs/ceph/addr.c
+> @@ -354,6 +354,45 @@ static void ceph_netfs_issue_read(struct netfs_io_subrequest *subreq)
+>  	dout("%s: result %d\n", __func__, err);
+>  }
+>  
+> +static int ceph_init_request(struct netfs_io_request *rreq, struct file *file)
+> +{
+> +	struct inode *inode = rreq->inode;
+> +	int got = 0, want = CEPH_CAP_FILE_CACHE;
+> +	int ret = 0;
+> +
+> +	if (file) {
+> +		struct ceph_rw_context *rw_ctx;
+> +		struct ceph_file_info *fi = file->private_data;
+> +
+> +		rw_ctx = ceph_find_rw_context(fi);
+> +		if (rw_ctx)
+> +			return 0;
+> +	}
+> +
+> +	if (rreq->origin != NETFS_READAHEAD)
+> +		return 0;
+> +
 
-Thanks. It does offer some hints on the other two syscalls:
+^^^
+I think you should move this check above the if (file) block above it.
+We don't need to anything at all if we're not in readahead.
 
-[pid   644] connect(3, {sa_family=AF_INET6, sin6_port=htons(0),
-sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "fe80::", &sin6_addr),
-sin6_scope_id=if_nametoindex("tunl0")}, 28) = 0
-[pid   644] setsockopt(3, SOL_IPV6, IPV6_HOPOPTS,
-"R\263\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"...,
-1440) = 0
+> +	/*
+> +	 * readahead callers do not necessarily hold Fcb caps
+> +	 * (e.g. fadvise, madvise).
+> +	 */
+> +	ret = ceph_try_get_caps(inode, CEPH_CAP_FILE_RD, want, true, &got);
+> +	if (ret < 0) {
+> +		dout("start_read %p, error getting cap\n", inode);
+> +		return ret;
+> +	}
+> +
+> +	if (!(got & want)) {
+> +		dout("start_read %p, no cache cap\n", inode);
+> +		return -EACCES;
+> +	}
+> +	if (ret == 0)
+> +		return -EACCES;
+> +
+> +	rreq->netfs_priv = (void *)(uintptr_t)got;
+> +	return 0;
+> +}
+> +
+>  static void ceph_readahead_cleanup(struct address_space *mapping, void *priv)
+>  {
+>  	struct inode *inode = mapping->host;
+> @@ -365,7 +404,7 @@ static void ceph_readahead_cleanup(struct address_space *mapping, void *priv)
+>  }
+>  
+>  static const struct netfs_request_ops ceph_netfs_read_ops = {
+> -	.is_cache_enabled	= ceph_is_cache_enabled,
+> +	.init_request		= ceph_init_request,
+>  	.begin_cache_operation	= ceph_begin_cache_operation,
+>  	.issue_read		= ceph_netfs_issue_read,
+>  	.expand_readahead	= ceph_netfs_expand_readahead,
+> @@ -393,33 +432,7 @@ static int ceph_readpage(struct file *file, struct page *subpage)
+>  
+>  static void ceph_readahead(struct readahead_control *ractl)
+>  {
+> -	struct inode *inode = file_inode(ractl->file);
+> -	struct ceph_file_info *fi = ractl->file->private_data;
+> -	struct ceph_rw_context *rw_ctx;
+> -	int got = 0;
+> -	int ret = 0;
+> -
+> -	if (ceph_inode(inode)->i_inline_version != CEPH_INLINE_NONE)
+> -		return;
+> -
+> -	rw_ctx = ceph_find_rw_context(fi);
+> -	if (!rw_ctx) {
+> -		/*
+> -		 * readahead callers do not necessarily hold Fcb caps
+> -		 * (e.g. fadvise, madvise).
+> -		 */
+> -		int want = CEPH_CAP_FILE_CACHE;
+> -
+> -		ret = ceph_try_get_caps(inode, CEPH_CAP_FILE_RD, want, true, &got);
+> -		if (ret < 0)
+> -			dout("start_read %p, error getting cap\n", inode);
+> -		else if (!(got & want))
+> -			dout("start_read %p, no cache cap\n", inode);
+> -
+> -		if (ret <= 0)
+> -			return;
+> -	}
+> -	netfs_readahead(ractl, &ceph_netfs_read_ops, (void *)(uintptr_t)got);
+> +	netfs_readahead(ractl, &ceph_netfs_read_ops, NULL);
+>  }
+>  
+>  #ifdef CONFIG_CEPH_FSCACHE
+> 
+> 
 
-IPV6_HOPOPTS is ns_capable CAP_NET_RAW.
+-- 
+Jeff Layton <jlayton@redhat.com>
 
-So this adds 1440 bytes to opt_nflen, which is included in
-fragheaderlen, causing that to be exactly mtu. This means that the
-payload can never be sent, as each fragment header eats up the entire
-mtu? This is without any transport headers that would only be part of
-the first fragment (which go into opt_flen).
-
-If you can maybe catch the error before the skb_put and just return
-EINVAL, we might see whether sendmmsg is relevant or a simple send
-would be equivalent. (not super important, that appears unrelated.)

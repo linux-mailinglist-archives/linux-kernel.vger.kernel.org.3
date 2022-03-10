@@ -2,85 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9276F4D3FE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2918F4D3FE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbiCJDvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S239345AbiCJDvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239320AbiCJDvL (ORCPT
+        with ESMTP id S234822AbiCJDvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:51:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CAE12A761;
-        Wed,  9 Mar 2022 19:50:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 405A5617CB;
-        Thu, 10 Mar 2022 03:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 954DAC340F6;
-        Thu, 10 Mar 2022 03:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646884210;
-        bh=kdFN+ZxawFeOYO+NPEeoYxMxb8yCjIulGptx4+kxFBI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mWXPnwv0LP0a/bNmIr9AIjjCIAkTM/2ftvieTdSnA085ddeL2fMMosmysItaY1+R8
-         jszRl3navG2SJwDS8XNRlhddER0RdGcW1Hw+TCc1OY6+YK/ICogwYUOZiPEZbcNUAv
-         fgPXbaDbOSWBcJxh0sTwQGGiekKIH7O/0fVtQrYhgtb/wc6yEvbQzzm3hhED0/dZhV
-         W5krj9YyTH08FEW+qXAnnIe/LINZmwn+M5SPBeKqeF8GcT4rmxYdjuRDdKwgc4L9cD
-         w431LL1xdPutbE6IdnN40FrZ5kxNdN7lFYcbq4/uDPcTkDe4kjgnvO/yBnCqGPNmZC
-         hZpNwchngx5xw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 771DDE8DD5B;
-        Thu, 10 Mar 2022 03:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 9 Mar 2022 22:51:41 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5AE12B764;
+        Wed,  9 Mar 2022 19:50:39 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V6mcjkH_1646884234;
+Received: from IT-C02W23QPG8WN.local(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0V6mcjkH_1646884234)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 10 Mar 2022 11:50:35 +0800
+Subject: Re: [RESEND PATCH 2/2] perf/x86: improve the event scheduling to
+ avoid unnecessary pmu_stop/start
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>
+Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephane Eranian <eranian@google.com>,
+        mark rutland <mark.rutland@arm.com>,
+        jiri olsa <jolsa@redhat.com>,
+        namhyung kim <namhyung@kernel.org>,
+        borislav petkov <bp@alien8.de>, x86@kernel.org,
+        "h. peter anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220304110351.47731-1-simon.wy@alibaba-inc.com>
+ <20220304110351.47731-2-simon.wy@alibaba-inc.com>
+ <YiIyrFn7upPEouVt@hirez.programming.kicks-ass.net>
+ <0c119da1-053b-a2d6-1579-8fb09dbe8e63@linux.alibaba.com>
+ <YidREXNn2AtI3V1c@hirez.programming.kicks-ass.net>
+From:   Wen Yang <wenyang@linux.alibaba.com>
+Message-ID: <271bc186-7ffb-33c8-4934-cda2beb94816@linux.alibaba.com>
+Date:   Thu, 10 Mar 2022 11:50:33 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <YidREXNn2AtI3V1c@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH linux-next v2] drivers: vxlan: fix returnvar.cocci warning
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164688421048.27281.6372396210369759355.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Mar 2022 03:50:10 +0000
-References: <20220308134321.29862-1-guozhengkui@vivo.com>
-In-Reply-To: <20220308134321.29862-1-guozhengkui@vivo.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, roopa@nvidia.com,
-        edumazet@google.com, bigeasy@linutronix.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhengkui_guo@outlook.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue,  8 Mar 2022 21:43:09 +0800 you wrote:
-> Fix the following coccicheck warning:
+ÔÚ 2022/3/8 ÏÂÎç8:50, Peter Zijlstra Ð´µÀ:
+> On Sun, Mar 06, 2022 at 10:36:38PM +0800, Wen Yang wrote:
 > 
-> drivers/net/vxlan/vxlan_core.c:2995:5-8:
-> Unneeded variable: "ret". Return "0" on line 3004.
+>> The perf event generated by the above script A (cycles:D), and the counter
+>> it used changes from #1 to #3. We use perf event in pinned mode, and then
+>> continuously read its value for a long time, but its PMU counter changes
 > 
-> Fixes: f9c4bb0b245c ("vxlan: vni filtering support on collect metadata device")
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> Yes, so what?
 > 
-> [...]
+>> , so the counter value will also jump.
+> 
+> I fail to see how the counter value will jump when we reprogram the
+> thing. When we stop we update the value, then reprogram on another
+> counter and continue. So where does it go sideways?
+> 
+>>
+>> 0xffff88b72db85800:
+>> The perf event generated by the above script A (instructions:D), which has
+>> always occupied #fixed_instruction.
+>>
+>> 0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000:
+>> Theses perf events are generated by the above script B.
+>>
+>>
+>>>>
+>>>> so it will cause unnecessary pmu_stop/start and also cause abnormal cpi.
+>>>
+>>> How?!?
+>>>
+>>
+>> We may refer to the x86_pmu_enable function:
+>> step1: save events moving to new counters
+>> step2: reprogram moved events into new counters
+>>
+>> especially:
+>>
+>> static inline int match_prev_assignment(struct hw_perf_event *hwc,
+>>                      struct cpu_hw_events *cpuc,
+>>                      int i)
+>> {
+>>      return hwc->idx == cpuc->assign[i] &&
+>>          hwc->last_cpu == smp_processor_id() &&
+>>          hwc->last_tag == cpuc->tags[i];
+>> }
+> 
+> I'm not seeing an explanation for how a counter value is not preserved.
+> 
+>>>> Cloud servers usually continuously monitor the cpi data of some important
+>>>> services. This issue affects performance and misleads monitoring.
+>>>>
+>>>> The current event scheduling algorithm is more than 10 years old:
+>>>> commit 1da53e023029 ("perf_events, x86: Improve x86 event scheduling")
+>>>
+>>> irrelevant
+>>>
+>>
+>> commit 1da53e023029 ("perf_events, x86: Improve x86 event scheduling")
+>>
+>> This commit is the basis of the perf event scheduling algorithm we currently
+>> use.
+> 
+> Well yes. But how is the age of it relevant?
+> 
+>> The reason why the counter above changed from #1 to #3 can be found from it:
+>> The algorithm takes into account the list of counter constraints
+>> for each event. It assigns events to counters from the most
+>> constrained, i.e., works on only one counter, to the least
+>> constrained, i.e., works on any counter.
+>>
+>> the nmi watchdog permanently consumes one fp (*cycles*).
+>>   therefore, when the above shell script obtains *cycles:D*
+>> again, it has to use a GP, and its weight is 5.
+>> but other events (like *cache-misses*) have a weight of 4,
+>> so the counter used by *cycles:D* will often be taken away.
+> 
+> So what?
+> 
+> I mean, it is known the algorithm isn't optimal, but at least it's
+> bounded. There are event sets that will fail to schedule but could, but
+> I don't think you're talking about that.
+> 
+> Event migrating to a different counter is not a problem. This is
+> expected and normal. Code *must* be able to deal with it.
+> 
+>> In addition, we also found that this problem may affect NMI watchdog in the
+>> production cluster.
+>> The NMI watchdog also uses a fixed counter in fixed mode. Usually, it is The
+>> first element of the event_list array, so it usually takes precedence and
+>> can get a fixed counter.
+>> But if the administrator closes the watchdog first and then enables it, it
+>> may be at the end of the event_list array, so its expected fixed counter may
+>> be occupied by other perf event, and it can only use one GP. In this way,
+>> there is a similar issue here: the PMU counter used by the NMI watchdog may
+>> be disabled/enabled frequently and unnecessarily.
+> 
+> Again, I'm not seeing a problem. If you create more events than we have
+> hardware counters we'll rotate the list and things will get scheduled in
+> all sorts of order. This works.
+> 
+>> Any advice or guidance on this would be appreciated.
+> 
+> I'm still not sure what your actual problem is; I suspect you're using
+> perf wrong.
+> 
+> Are you using rdpmc and not respecting the scheme described in
+> include/uapi/linux/perf_events.h:perf_event_mmap_page ?
+> 
+> Note that if you're using pinned counters you can simplify that scheme
+> by ignoring all the timekeeping nonsense. In that case it does become
+> significantly simpler/faster.
+> 
+> But you cannot use rdpmc without using the mmap page's self-monitoring
+> data.
+> 
 
-Here is the summary with links:
-  - [linux-next,v2] drivers: vxlan: fix returnvar.cocci warning
-    https://git.kernel.org/netdev/net-next/c/e58bc864630f
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The current algorithm is outstanding and has been running stably for so 
+many years, and all existing performance work benefits from it.
+
+We're just trying to optimize a little bit.
+
+As you pointed out, some non-compliant rdpmc can cause problems. But you 
+also know that linux is the foundation of cloud servers, and many 
+third-party programs run on it (we don't have any code for it), and we 
+can only observe that the monitoring data will jitter abnormally (the 
+probability of this issue is not high, about dozens of tens of thousands 
+of machines).
+
+We also see that the existing perf code is also trying to avoid frequent 
+changes of the pmu counter, such as:
+
+
+     /*
+      * fastpath, try to reuse previous register
+      */
+     for (i = 0; i < n; i++) {
+         u64 mask;
+
+         hwc = &cpuc->event_list[i]->hw;
+         c = cpuc->event_constraint[i];
+
+         /* never assigned */
+         if (hwc->idx == -1)
+             break;
+
+         /* constraint still honored */
+         if (!test_bit(hwc->idx, c->idxmsk))
+             break;
+
+         mask = BIT_ULL(hwc->idx);
+         if (is_counter_pair(hwc))
+             mask |= mask << 1;
+
+         /* not already used */
+         if (used_mask & mask)
+             break;
+
+         used_mask |= mask;
+
+         if (assign)
+             assign[i] = hwc->idx;
+     }
+
+
+But it only works when the perf events are reduced.
+
+    and nother example (via the PERF_HES_ARCH flag):
+
+          * step1: save events moving to new counters
+          */
+         for (i = 0; i < n_running; i++) {
+...
+             /*
+              * Ensure we don't accidentally enable a stopped
+              * counter simply because we rescheduled.
+              */
+             if (hwc->state & PERF_HES_STOPPED)
+                 hwc->state |= PERF_HES_ARCH;
+
+             x86_pmu_stop(event, PERF_EF_UPDATE);
+         }
+
+         /*
+          * step2: reprogram moved events into new counters
+          */
+         for (i = 0; i < cpuc->n_events; i++) {
+...
+
+             if (hwc->state & PERF_HES_ARCH)
+                 continue;
+
+             x86_pmu_start(event, PERF_EF_RELOAD);
+         }
+
+
+Now we are just follow this idea.
+
+In the scenario of increasing perf events, we also try to reuse the 
+previous PMU counters.
+Finally, if this attempt fails, still fall back to the original 
+algorithm and reassign all PMU counters. eg:
+
+      /* slow path */
+-    if (i != n)
+-        unsched = _perf_assign_events(constraints, n,
+-                wmin, wmax, gpmax, assign);
++    if (i != n) {
++        unsched = _perf_assign_events(constraints, n, wmin, wmax, gpmax,
++                msk_counters, msk_event, assign);
++        if (unsched)
++            unsched = _perf_assign_events(constraints, n, wmin, wmax, 
+gpmax,
++                    0, 0, assign);
++    }
+
+
+We have applied the above optimizations in some small-scale clusters and 
+verified that the abnormal cpi data has indeed disappeared. It might 
+also improve performance a bit.
+
+
+Your guidance has been particularly helpful.
+
+Best wishes,
+Wen
+
+
+
 
 

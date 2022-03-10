@@ -2,47 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6E74D4C40
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C424D4C49
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiCJOyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S244714AbiCJOyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:54:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346126AbiCJOmh (ORCPT
+        with ESMTP id S1346152AbiCJOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:42:37 -0500
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AA31B9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:38:56 -0800 (PST)
-X-QQ-mid: bizesmtp78t1646923117t1yfmc7d
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 10 Mar 2022 22:38:32 +0800 (CST)
-X-QQ-SSF: 01400000002000C0I000000A0000000
-X-QQ-FEAT: TskX/GkkryDRy/00gIknMd3S4WQpsQw9/GgNGOXVV7pfpVYMCclbmtw0PYgdK
-        b2JafgLLvYQJSesKATXv48bnN7UpBTzC3eHRRhEFumvXM9tdfndR5C1plnl1f3WODzSsvvr
-        Nrgctx0cCoUDALhGlRTI86OhTcaSB1XlFfH/weyyyXu6lgBJ6LeyQpzsE0QvCefEZQ6p7bZ
-        rtqtS3q0DvvR9j41SO+vma8JEuh1WuIAmTVEUzCUYZGmEM8LHETynBbfRbaXXNAS4qUVXFZ
-        6AmBGLmiWSANrzNg2C/qAET/o4DlDq2NLysPUUQlf1IKPcQwAb6Q3MA9ZGOQwa3Ra+/ElhY
-        QAJJf+YCJOK7GC1c1OkYeBsGExQyR3j4/JTwmpIDYZYV3vrjG9ND8nU3JYjiQ==
-X-QQ-GoodBg: 1
-From:   Lianjie Zhang <zhanglianjie@uniontech.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lianjie Zhang <zhanglianjie@uniontech.com>
-Subject: [PATCH v3] cpufreq: unify the show() and store() styles of attr and use __ATTR_XX macro
-Date:   Thu, 10 Mar 2022 22:38:30 +0800
-Message-Id: <20220310143830.4677-1-zhanglianjie@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 10 Mar 2022 09:42:38 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA74107A97
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:40:28 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c4so4752882qtx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:40:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ts+dK3ttiY6R8zZea2yK4md86bxaZKIr+AquYrk3oLk=;
+        b=T4jwBlYZ27/C0gS7bBdNRi5VTaFy92J44Ybzk0KAMHe8N76j3PisechWpbiJ+ucg1U
+         YKnlg9x+UG2ZZ1dLdlUW8DhpFGxJTwkOhTrQEzV8y3cPTMPnKFllQnH1dIzJ6Rc6WEU6
+         +VabZFESxEvq3xiZZpCMMGdMqB2PsRZGzLJVuT4PH7rZCIVHuZx91YGI2dP2KpctJrqR
+         TmtwU30hLrjjDkk53sxc6uSi1Zr9furEM4pVB0ypgU3xIrBI98XltJE3fua6VaLNSA3U
+         PQ9cU4e1bhn9uWp7HGulZ43Pq9QYuaMPEiwP2OJVBjeGfnJKqLE9FjcWXNhWDpFB3oDU
+         EVog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ts+dK3ttiY6R8zZea2yK4md86bxaZKIr+AquYrk3oLk=;
+        b=4S2VPnJp5RBOXYknkIY4n8xNPoQ11phVHO3nHLcfopEz7CIK4n53SCnUCfG3ptEcOv
+         UeVfzhKb/bSWZU/eDmmSxQ5qmnyo1od4fPXgjGTCqGoMJ486mdx4KAyOQ0HNB1OTu/1U
+         fVC4IPDMSqG08lL/NJQPiSMr3WIYZL4PRGTKYEf3gDrWXm+GwuAxhVcRMF08dlQVaLl6
+         +WXj1J45dZDPPf1HIs3pmHnOeQRMBt5+fCreeFU3VrPxAvwsBspmw6wEE4MfP2uHfuMD
+         8Wq1SxynwG1K3vLmT0vWBVdC6Ep0gJK5OvaKjzgtlNpSTmKjVLkp+r8/NeFw7eACT0fk
+         17Tg==
+X-Gm-Message-State: AOAM532tujs6wxX9cmyudRQKcCH13yCqCgwADHzZWeSoWE/v/42o1pgH
+        9ifXaz03il76MVRnreyc5zhNWlkyHi8=
+X-Google-Smtp-Source: ABdhPJxr0dEK7G1srJM7yBK7rFpcwb3YIYiQ87ELaD2MrsmwW6Ms8ZDJ4rwM21+XVzEJfmkUd1nKlw==
+X-Received: by 2002:ac8:7c51:0:b0:2e1:a3b3:a6b7 with SMTP id o17-20020ac87c51000000b002e1a3b3a6b7mr4104620qtv.405.1646923227713;
+        Thu, 10 Mar 2022 06:40:27 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id p2-20020a05620a15e200b0067d2c0455bcsm2317044qkm.36.2022.03.10.06.40.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 06:40:26 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2dbd97f9bfcso59965537b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:40:26 -0800 (PST)
+X-Received: by 2002:a81:594:0:b0:2dc:8978:1d64 with SMTP id
+ 142-20020a810594000000b002dc89781d64mr4126054ywf.348.1646923225818; Thu, 10
+ Mar 2022 06:40:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
+ <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com> <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
+ <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org> <45522c89-a3b4-4b98-232b-9c69470124a3@linaro.org>
+ <ff2e1007-5883-5178-6415-326d6ae69c34@kernel.org> <8fdab42f-171f-53d7-8e0e-b29161c0e3e2@linaro.org>
+In-Reply-To: <8fdab42f-171f-53d7-8e0e-b29161c0e3e2@linaro.org>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 10 Mar 2022 09:39:48 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSeAL7TsdW4t7=G91n3JLuYehUCnDGH4_rHS=vjm1-Nv9Q@mail.gmail.com>
+Message-ID: <CA+FuTSeAL7TsdW4t7=G91n3JLuYehUCnDGH4_rHS=vjm1-Nv9Q@mail.gmail.com>
+Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
+        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,192 +95,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Usually /sys directory under the file, the corresponding Attribute
-contains .show and .store, and their naming style is filename_show() and
-filename_store(). But all naming style in 'cpufreq' is show_filename()
-and store_filename(), resulting in __ATTR_RW() and __ATTR_RO() macros
-cannot be used to simplify code, So need to change naming style.
-Use helper macro __ATTR_XX  to make code more clear.
+On Wed, Mar 9, 2022 at 4:37 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+>
+> On 3/8/22 21:01, David Ahern wrote:
+> > On 3/8/22 12:46 PM, Tadeusz Struk wrote:
+> >> That fails in the same way:
+> >>
+> >> skbuff: skb_over_panic: text:ffffffff83e7b48b len:65575 put:65575
+> >> head:ffff888101f8a000 data:ffff888101f8a088 tail:0x100af end:0x6c0
+> >> dev:<NULL>
+> >> ------------[ cut here ]------------
+> >> kernel BUG at net/core/skbuff.c:113!
+> >> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> >> CPU: 0 PID: 1852 Comm: repro Not tainted
+> >> 5.17.0-rc7-00020-gea4424be1688-dirty #19
+> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35
+> >> RIP: 0010:skb_panic+0x173/0x175
+> >>
+> >> I'm not sure how it supposed to help since it doesn't change the
+> >> alloclen at all.
+> >
+> > alloclen is a function of fraglen and fraglen is a function of datalen.
+>
+> Ok, but in this case it doesn't affect the alloclen and it still fails.
 
-Signed-off-by: Lianjie Zhang <zhanglianjie@uniontech.com>
+This is some kind of non-standard packet that is being constructed. Do
+we understand how it is different?
 
-diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-index 08515f7e515f..b6bd0ff35323 100644
---- a/drivers/cpufreq/cpufreq_conservative.c
-+++ b/drivers/cpufreq/cpufreq_conservative.c
-@@ -146,7 +146,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
+The .syz reproducer is generally a bit more readable than the .c
+equivalent. Though not as much as an strace of the binary, if you
+can share that.
 
- /************************** sysfs interface ************************/
-
--static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
-+static ssize_t sampling_down_factor_store(struct gov_attr_set *attr_set,
- 					  const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -161,7 +161,7 @@ static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
-+static ssize_t up_threshold_store(struct gov_attr_set *attr_set,
- 				  const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -177,7 +177,7 @@ static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_down_threshold(struct gov_attr_set *attr_set,
-+static ssize_t down_threshold_store(struct gov_attr_set *attr_set,
- 				    const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -195,7 +195,7 @@ static ssize_t store_down_threshold(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
-+static ssize_t ignore_nice_load_store(struct gov_attr_set *attr_set,
- 				      const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -220,7 +220,7 @@ static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_freq_step(struct gov_attr_set *attr_set, const char *buf,
-+static ssize_t freq_step_store(struct gov_attr_set *attr_set, const char *buf,
- 			       size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index 63f7c219062b..0d42cf8b88d8 100644
---- a/drivers/cpufreq/cpufreq_governor.c
-+++ b/drivers/cpufreq/cpufreq_governor.c
-@@ -27,7 +27,7 @@ static DEFINE_MUTEX(gov_dbs_data_mutex);
-
- /* Common sysfs tunables */
- /*
-- * store_sampling_rate - update sampling rate effective immediately if needed.
-+ * sampling_rate_store - update sampling rate effective immediately if needed.
-  *
-  * If new rate is smaller than the old, simply updating
-  * dbs.sampling_rate might not be appropriate. For example, if the
-@@ -41,7 +41,7 @@ static DEFINE_MUTEX(gov_dbs_data_mutex);
-  * This must be called with dbs_data->mutex held, otherwise traversing
-  * policy_dbs_list isn't safe.
-  */
--ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
-+ssize_t sampling_rate_store(struct gov_attr_set *attr_set, const char *buf,
- 			    size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -80,7 +80,7 @@ ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
-
- 	return count;
- }
--EXPORT_SYMBOL_GPL(store_sampling_rate);
-+EXPORT_SYMBOL_GPL(sampling_rate_store);
-
- /**
-  * gov_update_cpu_data - Update CPU load data.
-diff --git a/drivers/cpufreq/cpufreq_governor.h b/drivers/cpufreq/cpufreq_governor.h
-index bab8e6140377..a5a0bc3cc23e 100644
---- a/drivers/cpufreq/cpufreq_governor.h
-+++ b/drivers/cpufreq/cpufreq_governor.h
-@@ -51,7 +51,7 @@ static inline struct dbs_data *to_dbs_data(struct gov_attr_set *attr_set)
- }
-
- #define gov_show_one(_gov, file_name)					\
--static ssize_t show_##file_name						\
-+static ssize_t file_name##_show						\
- (struct gov_attr_set *attr_set, char *buf)				\
- {									\
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);		\
-@@ -60,7 +60,7 @@ static ssize_t show_##file_name						\
- }
-
- #define gov_show_one_common(file_name)					\
--static ssize_t show_##file_name						\
-+static ssize_t file_name##_show						\
- (struct gov_attr_set *attr_set, char *buf)				\
- {									\
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);		\
-@@ -68,12 +68,10 @@ static ssize_t show_##file_name						\
- }
-
- #define gov_attr_ro(_name)						\
--static struct governor_attr _name =					\
--__ATTR(_name, 0444, show_##_name, NULL)
-+static struct governor_attr _name = __ATTR_RO(_name)
-
- #define gov_attr_rw(_name)						\
--static struct governor_attr _name =					\
--__ATTR(_name, 0644, show_##_name, store_##_name)
-+static struct governor_attr _name = __ATTR_RW(_name)
-
- /* Common to all CPUs of a policy */
- struct policy_dbs_info {
-@@ -176,7 +174,7 @@ void od_register_powersave_bias_handler(unsigned int (*f)
- 		(struct cpufreq_policy *, unsigned int, unsigned int),
- 		unsigned int powersave_bias);
- void od_unregister_powersave_bias_handler(void);
--ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
-+ssize_t sampling_rate_store(struct gov_attr_set *attr_set, const char *buf,
- 			    size_t count);
- void gov_update_cpu_data(struct dbs_data *dbs_data);
- #endif /* _CPUFREQ_GOVERNOR_H */
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index 6a41ea4729b8..e8fbf970ff07 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -202,7 +202,7 @@ static unsigned int od_dbs_update(struct cpufreq_policy *policy)
- /************************** sysfs interface ************************/
- static struct dbs_governor od_dbs_gov;
-
--static ssize_t store_io_is_busy(struct gov_attr_set *attr_set, const char *buf,
-+static ssize_t io_is_busy_store(struct gov_attr_set *attr_set, const char *buf,
- 				size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -220,7 +220,7 @@ static ssize_t store_io_is_busy(struct gov_attr_set *attr_set, const char *buf,
- 	return count;
- }
-
--static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
-+static ssize_t up_threshold_store(struct gov_attr_set *attr_set,
- 				  const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -237,7 +237,7 @@ static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
-+static ssize_t sampling_down_factor_store(struct gov_attr_set *attr_set,
- 					  const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -265,7 +265,7 @@ static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
-+static ssize_t ignore_nice_load_store(struct gov_attr_set *attr_set,
- 				      const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
-@@ -290,7 +290,7 @@ static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
- 	return count;
- }
-
--static ssize_t store_powersave_bias(struct gov_attr_set *attr_set,
-+static ssize_t powersave_bias_store(struct gov_attr_set *attr_set,
- 				    const char *buf, size_t count)
- {
- 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
---
-2.20.1
-
-
-
+r0 = socket$inet6_icmp_raw(0xa, 0x3, 0x3a)
+connect$inet6(r0, &(0x7f0000000040)={0xa, 0x0, 0x0, @dev, 0x6}, 0x1c)
+setsockopt$inet6_IPV6_HOPOPTS(r0, 0x29, 0x36,
+&(0x7f0000000100)=ANY=[@ANYBLOB="52b3"], 0x5a0)
+sendmmsg$inet(r0, &(0x7f00000002c0)=[{{0x0, 0x0,
+&(0x7f0000000000)=[{&(0x7f00000000c0)="1d2d", 0xfa5f}], 0x1}}], 0x1,
+0xfe80)

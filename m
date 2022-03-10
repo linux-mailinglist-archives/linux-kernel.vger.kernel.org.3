@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681614D40F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D574C4D40FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 07:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239703AbiCJGCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 01:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S239665AbiCJGMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 01:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239694AbiCJGBm (ORCPT
+        with ESMTP id S238151AbiCJGMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 01:01:42 -0500
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF09A95A0C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 22:00:41 -0800 (PST)
-Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 75292802D24E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:00:40 +0000 (UTC)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 49BE71004816F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 06:00:10 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id SBqLnuHc7Qs3CSBqLn0Ht2; Thu, 10 Mar 2022 06:00:09 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=d8AwdTvE c=1 sm=1 tr=0 ts=622993e9
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=o8Y5sQTvuykA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yajlbt+YeY76/rg3JHZACzjis9a5SFJqA0/NXSk0Yak=; b=vWLhuPzkFhepNyNJT2gV6lgncS
-        GCfLbAx/puCCG5Mp2Mp0L8rM0/wnlL4gWekstxl312tcKeV8Q4QFymxc+6jl49MgqqFMZ5uqMvCUC
-        3sdi+TUb1G6WYO8ZLwNMfSTUs;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60038 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nSBqK-002h63-Bo; Wed, 09 Mar 2022 23:00:08 -0700
-Subject: Re: [PATCH 5.15 00/43] 5.15.28-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220309155859.734715884@linuxfoundation.org>
-In-Reply-To: <20220309155859.734715884@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <ee9211b0-563b-e1e0-da26-c00610ebfc6a@w6rz.net>
-Date:   Wed, 9 Mar 2022 22:00:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 10 Mar 2022 01:12:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CCB6C1ED;
+        Wed,  9 Mar 2022 22:11:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E16106191C;
+        Thu, 10 Mar 2022 06:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5DCC340E8;
+        Thu, 10 Mar 2022 06:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646892693;
+        bh=+NRsmFooFziApBCrU39ZrDWDpT82NCDcWI2bwFAfxLQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lvOi1HG4F/nEVju0MUqWvgfXpukS80FBaYaZEuuwUboWQ2H8kjjD8VNNF/HXjPLJX
+         nu4PsCTIXrQt0A/OBIs7033cPFN0Fc9f8pLWotjPiynqVHgs50DLrCd/gz3qz3eEgB
+         PEXte7CnSpNLcrCz9Uvv9uReARgruJhMRRzSbtfDk7LoyxUUz2mtji0HsEgz97zl5j
+         kfb/d1gI/yxFqeiwJLsEFhCkfGe66lF0JaBbvpzzviBbughdUoBmK4UJB3KRBSQiRK
+         IYcoGSm8R5mmijav0DMrhVx064bWob7MRyOakzUqcavS3H2gCKrGMHKnmq3C6YdxT0
+         +aCb6LCq6SocA==
+Date:   Thu, 10 Mar 2022 08:10:48 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>
+Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
+ permissions
+Message-ID: <YimWaAqEnXHbLdjh@iki.fi>
+References: <cover.1644274683.git.reinette.chatre@intel.com>
+ <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com>
+ <YhLhoMFPyOFZ2fsX@iki.fi>
+ <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nSBqK-002h63-Bo
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:60038
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 7:59 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.28 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.28-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Feb 23, 2022 at 07:21:50PM +0000, Dhanraj, Vijay wrote:
+> Hi All,
+> 
+> Regarding the recent update of splitting the page permissions change
+> request into two IOCTLS (RELAX and RESTRICT), can we combine them into
+> one? That is, revert to how it was done in the v1 version?
+> 
+> Why? Currently in Gramine (a library OS for unmodified applications,
+> https://gramineproject.io/) with the new proposed change, one needs to
+> store the page permission for each page or range of pages. And for every
+> request of `mmap` or `mprotect`, Gramine would have to do a lookup of the
+> page permissions for the request range and then call the respective IOCTL
+> either RESTRICT or RELAX. This seems a little overwhelming.
+> 
+> Request: Instead, can we do `MODPE`,  call `RESTRICT` IOCTL, and then do
+> an `EACCEPT` irrespective of RELAX or RESTRICT page permission request?
+> With this approach, we can avoid storing  page permissions and simplify
+> the implementation.
+> 
+> I understand RESTRICT IOCTL would do a `MODPR` and trigger `ETRACK` flows
+> to do TLB shootdowns which might not be needed for RELAX IOCTL but I am
+> not sure what will be the performance impact. Is there any data point to
+> see the performance impact?
+> 
+> Thanks,
+> -Vijay
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+This should get better in the next versuin. "relax" is gone. And for
+dynamic EAUG'd pages only VMA and EPCM permissions matter, i.e.
+internal vm_max_prot_bits is set to RWX.
 
-Tested-by: Ron Economos <re@w6rz.net>
+I patched the existing series eno
 
+For Enarx I'm using the following patterns.
+
+Shim mmap() handler:
+1. Ask host for mmap() syscall.
+2. Construct secinfo matching the protection bits.
+3. For each page in the address range: EACCEPTCOPY with a
+   zero page.
+    
+Shim mprotect() handler:
+1. Ask host for mprotect() syscall.
+2. For each page in the address range: EACCEPT with PROT_NONE
+   secinfo and EMODPE with the secinfo having the prot bits.
+    
+Backend mprotect() handler:
+1. Invoke ENCLAVE_RESTRICT_PERMISSIONS ioctl for the address
+   range with PROT_NONE.
+2. Invoke real mprotect() syscall.
+
+Not super-complicated.
+
+That is the safest way to changes permissions i.e. use EMODPR only to reset
+the permissions, and EMODPE as EMODP. Then the page is always either
+inaccessible completely or with the correct permissions.
+
+Any other ways to use EMODPR are a bit questionable. That's why I tend to
+think that it would be better to kernel provide only limited version of it
+to reset the permissions. Most of the other use will be most likely
+mis-use. IMHO there is only one legit pattern to use it, i.e. "least
+racy" pattern.
+
+I would replace SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS with
+SGX_IOC_ENCLAVE_RESET_PERMISSIONS that resets pages to PROT_NONE or embed
+this straight into mprotect().
+
+BR, Jarkko

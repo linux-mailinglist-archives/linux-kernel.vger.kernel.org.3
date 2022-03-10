@@ -2,152 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A86D4D43A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF844D43A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240882AbiCJJm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        id S240874AbiCJJmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240895AbiCJJm4 (ORCPT
+        with ESMTP id S240868AbiCJJmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:42:56 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626591390FE;
-        Thu, 10 Mar 2022 01:41:55 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id f38so9776621ybi.3;
-        Thu, 10 Mar 2022 01:41:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tT6nf67TbLSBp2rbhJr13jOgaIDBEc469MROckwe8vc=;
-        b=iS9lbCbfo2u2JazBPIIK3Y8/jaXlveAmOaC3uF755dM/grgc/4GfKLvxD1OsTa3SJD
-         eURsvCGkTpyyMkyJa2slJQK9EJYoXKPOMgXt5ckSIJPK1ML5Inbb9fT/2UVUqXCJQkhY
-         GkneITmnX/lKTPKV1+UO6B7+jZBd0KHOWkCGtFdlhOXCgVM9L9Pdod7CURwTb0HRrrtc
-         LBLHo6j843q1Po6rQqmwGRg7SN2yoFFgYeAljKPSUtPR5EPkRiPgi2Typ96ic/MNk2r0
-         kU+hP0ch15P1fvH7nv+VuN/ligEFJYDnNX0g5rrhJ4GqLPDSO+UOdOIs5xysq7sFUuIm
-         4AhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tT6nf67TbLSBp2rbhJr13jOgaIDBEc469MROckwe8vc=;
-        b=jj4Qb4AYKyS0lXfhmkTDdOgn/TNfKVJ//DsnOn1Z7rkT5mSUvxTIA90XdWwX/Lf/kV
-         /4rgJsU+iEcWJXcHZ6wzlDGTaAqm9NL+BPdji60roHeKx5hbxXX/yuVzBcI1hwGVCKxL
-         yXk1w/iMgS1IU+Ml+W3d329O5Jr1AbA8gB74BmVHwv97uPtKayuQmnU4EORcEso7Bhhs
-         a+DAKHfdyqpsHRBbyV2kG9kMIDClV99Nq62ZcAvq/FE8GLqtuyifwlPyszXuQFpVnpkR
-         C4R7l6U1icvX7I20pvEoime7trJdU0xPAwJ5aWLXayjRx1npcP9jDFeLy3pFWXm6Y1g8
-         lQIw==
-X-Gm-Message-State: AOAM531jwkxfHKup8YKWtVbAy1mjUbm7uMOCCRNJgjLL1JtArJ0DrafM
-        dYCZ2ZyNIZpjHBDub4ynymb5tYyTzsHZf8H5lyU=
-X-Google-Smtp-Source: ABdhPJxNOYS1Pm40lqZ2WnHaLpHailEM7oJLtLx6G5madRVza8MpeWKi/LSD1FOjRXBua1V919WpBMTwtsXKey9CdGA=
-X-Received: by 2002:a25:fc26:0:b0:628:689c:df81 with SMTP id
- v38-20020a25fc26000000b00628689cdf81mr2954201ybd.183.1646905314585; Thu, 10
- Mar 2022 01:41:54 -0800 (PST)
+        Thu, 10 Mar 2022 04:42:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBC850048
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:41:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1A2201F441;
+        Thu, 10 Mar 2022 09:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646905297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1dM+aQbQ1wyhu6vHFToiv7SxO6mhzbdA+ydL1e2axks=;
+        b=CYBGfYpMk4O82Vn/9uFc8VwVbh5xIy+MiegfowqwK2e4fMtXYI3fwVlsyxBkVSG8h1HoQ3
+        +Cub8yYGR9uowtsaMRhmGa66TBCTKvzVC+Cy6O2CpiaF6ebXjw3gAnNI5oK4yO+lpfldXE
+        +e74zYdogqWlVd2jZOCuNVidcl6P610=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646905297;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1dM+aQbQ1wyhu6vHFToiv7SxO6mhzbdA+ydL1e2axks=;
+        b=fbfwyGsMvGbc9SQ29JIS9x5a/ojOftwxJhk5BIBLZ2wJRhi5rb86nMzMXdwI73BM4aMsj1
+        W4OsjrTm74d79hBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BBB813FA3;
+        Thu, 10 Mar 2022 09:41:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HDUZIdDHKWI/WQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 10 Mar 2022 09:41:36 +0000
+Message-ID: <5b108bbb-0ddc-0f46-1b4b-6ceaa95727f2@suse.cz>
+Date:   Thu, 10 Mar 2022 10:41:36 +0100
 MIME-Version: 1.0
-References: <20220309155856.155540075@linuxfoundation.org> <CADVatmMODnr1vQ3VGLOACT16wLEFA6hFrTzY44VdPO2M7gX+iw@mail.gmail.com>
- <CADVatmMceoHeQqFDEJND_3GmSeQqgefeP0Z9_Zi=UTAVfZ71RQ@mail.gmail.com> <YijwKvDQxJzoYpFR@kroah.com>
-In-Reply-To: <YijwKvDQxJzoYpFR@kroah.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Thu, 10 Mar 2022 09:41:18 +0000
-Message-ID: <CADVatmMkbwBNUhjb-S6=zVhiHi7s2Exqbwq3vXPsNzCutbYR-A@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/18] 4.19.234-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 4/9] mm: streamline COW logic in do_swap_page()
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org
+References: <20220131162940.210846-1-david@redhat.com>
+ <20220131162940.210846-5-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220131162940.210846-5-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 9:18 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Mar 09, 2022 at 06:15:08PM +0000, Sudip Mukherjee wrote:
-> > On Wed, Mar 9, 2022 at 6:08 PM Sudip Mukherjee
-> > <sudipm.mukherjee@gmail.com> wrote:
-> > >
-> > > Hi Greg,
-> > >
-> > > On Wed, Mar 9, 2022 at 4:03 PM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > This is the start of the stable review cycle for the 4.19.234 release.
-> > > > There are 18 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > > >
-> > > > Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> > > > Anything received after that time might be too late.
-> > >
-> > > My tests are still running, but just an initial result for you,
-> > >
-> > > x86_64 defconfig fails with:
-> > > arch/x86/kernel/cpu/bugs.c: In function 'spectre_v2_select_mitigation':
-> > > arch/x86/kernel/cpu/bugs.c:973:41: error: implicit declaration of
-> > > function 'unprivileged_ebpf_enabled'
-> > > [-Werror=implicit-function-declaration]
-> > >   973 |         if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
-> >
-> > And, lots of failures in arm builds also.
-> > Error:
-> > arch/arm/common/secure_cntvoff.S: Assembler messages:
-> > arch/arm/common/secure_cntvoff.S:24: Error: co-processor register
-> > expected -- `mcr p15,0,r0,c7,r5,4'
-> > arch/arm/common/secure_cntvoff.S:27: Error: co-processor register
-> > expected -- `mcr p15,0,r0,c7,r5,4'
-> > arch/arm/common/secure_cntvoff.S:29: Error: co-processor register
-> > expected -- `mcr p15,0,r0,c7,r5,4'
-> > make[1]: *** [scripts/Makefile.build:403:
-> > arch/arm/common/secure_cntvoff.o] Error 1
-> > make[1]: *** Waiting for unfinished jobs....
-> > arch/arm/kernel/entry-common.S: Assembler messages:
-> > arch/arm/kernel/entry-common.S:178: Error: co-processor register
-> > expected -- `mcr p15,0,r0,c7,r5,4'
-> > arch/arm/kernel/entry-common.S:187: Error: co-processor register
-> > expected -- `mcr p15,0,r0,c7,r5,4'
-> > make[1]: *** [scripts/Makefile.build:403:
-> > arch/arm/kernel/entry-common.o] Error 1
-> > make[1]: *** Waiting for unfinished jobs....
-> > arch/arm/mm/cache-v7.S: Assembler messages:
-> > arch/arm/mm/cache-v7.S:64: Error: co-processor register expected --
-> > `mcr p15,0,r0,c7,r5,4'
-> > arch/arm/mm/cache-v7.S:137: Error: co-processor register expected --
-> > `mcr p15,0,r0,c7,r5,4'
-> > arch/arm/mm/cache-v7.S:171: Error: co-processor register expected --
-> > `mcr p15,0,r0,c7,r5,4'
-> > arch/arm/mm/cache-v7.S:299: Error: co-processor register expected --
-> > `mcr p15,0,r0,c7,r5,4'
-> > make[1]: *** [scripts/Makefile.build:403: arch/arm/mm/cache-v7.o] Error 1
->
-> All clang builds for arm are known to fail, and some arm64 clang builds
-> will also fail.  I have seen initial patches for arm64, will let the
-> clang developers come up with the arm fix as I have no idea how to
-> handle that.  This just mirrors Linus's tree right now :)
->
-> Unless this is gcc?
+On 1/31/22 17:29, David Hildenbrand wrote:
+> Currently we have a different COW logic when:
+> * triggering a read-fault to swapin first and then trigger a write-fault
+>   -> do_swap_page() + do_wp_page()
+> * triggering a write-fault to swapin
+>   -> do_swap_page() + do_wp_page() only if we fail reuse in do_swap_page()
+> 
+> The COW logic in do_swap_page() is different than our reuse logic in
+> do_wp_page(). The COW logic in do_wp_page() -- page_count() == 1 --  makes
+> currently sure that we certainly don't have a remaining reference, e.g.,
+> via GUP, on the target page we want to reuse: if there is any unexpected
+> reference, we have to copy to avoid information leaks.
+> 
+> As do_swap_page() behaves differently, in environments with swap enabled we
+> can currently have an unintended information leak from the parent to the
+> child, similar as known from CVE-2020-29374:
+> 
+> 	1. Parent writes to anonymous page
+> 	-> Page is mapped writable and modified
+> 	2. Page is swapped out
+> 	-> Page is unmapped and replaced by swap entry
+> 	3. fork()
+> 	-> Swap entries are copied to child
+> 	4. Child pins page R/O
+> 	-> Page is mapped R/O into child
+> 	5. Child unmaps page
+> 	-> Child still holds GUP reference
+> 	6. Parent writes to page
+> 	-> Page is reused in do_swap_page()
+> 	-> Child can observe changes
+> 
+> Exchanging 2. and 3. should have the same effect.
+> 
+> Let's apply the same COW logic as in do_wp_page(), conditionally trying to
+> remove the page from the swapcache after freeing the swap entry, however,
+> before actually mapping our page. We can change the order now that
+> we use try_to_free_swap(), which doesn't care about the mapcount,
+> instead of reuse_swap_page().
+> 
+> To handle references from the LRU pagevecs, conditionally drain the local
+> LRU pagevecs when required, however, don't consider the page_count() when
+> deciding whether to drain to keep it simple for now.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-This is gcc version 11.2.1 20220301
-
-Guenter has also reported the same: "Almost all arm builds, all
-branches from 4.9.y to 5.16.y:"
-
-
-
---
-Regards
-Sudip
+Acked-by: Vlastimil Babka <vbabka@suse.cz>

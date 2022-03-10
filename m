@@ -2,87 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319F34D50B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80F04D50B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242935AbiCJRhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S245170AbiCJRh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238533AbiCJRh2 (ORCPT
+        with ESMTP id S245250AbiCJRhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:37:28 -0500
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C5F18DA81;
-        Thu, 10 Mar 2022 09:36:27 -0800 (PST)
-Received: from 1nSMi8-0007OR-VX by out3d.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nSMiA-0007RW-TQ; Thu, 10 Mar 2022 09:36:26 -0800
-Received: by emcmailer; Thu, 10 Mar 2022 09:36:26 -0800
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3d.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nSMi8-0007OR-VX; Thu, 10 Mar 2022 09:36:24 -0800
-Received: from tsdebian (unknown [75.164.75.221])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 09C892F5C;
-        Thu, 10 Mar 2022 10:36:24 -0700 (MST)
-Message-ID: <1646933773.2804.1.camel@embeddedTS.com>
-Subject: Re: [PATCH v3 1/2] gpio: ts4900: Do not set DAT and OE together
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Thu, 10 Mar 2022 12:37:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05203191418;
+        Thu, 10 Mar 2022 09:36:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 937F361DFD;
+        Thu, 10 Mar 2022 17:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69144C340E8;
+        Thu, 10 Mar 2022 17:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646933811;
+        bh=h0waVYpyuTnkxGPqGqawZDdOqQAy45V3TgKXqVDiUgs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gGgZ9ufXsEo9xVy70iZNBJODuGslQ1+tolhXfEhoXVWR6AqvkeyQcsvQeD/AOt2V4
+         7GfFsQc0SBybJ2TgT/QjnghtIz9FaqXAZcua97AnhAxTWfZzZebelbBOCiHU8DeQjK
+         z7dWBNBei5WZ6MNIHnI4x152MF+LBn3KBWls7cuIwjczDJhFfIMbhz0DNortW5fqIg
+         LeDnJ08FqIqa+M74JiEfpJtCeE/z+XV3CAn8npZPVXcBkF0imyPcw9sOYTllUQT1aD
+         Dl+ym1SUXxpRfOkBQmv4qsjEswk1zps8/YN7keBqTbZeozmOrjrOsFeG9Au5LbJ8Wf
+         nu50xEtAaOVvg==
+Date:   Thu, 10 Mar 2022 10:36:43 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Featherston <mark@embeddedts.com>
-Date:   Thu, 10 Mar 2022 09:36:13 -0800
-In-Reply-To: <CAHp75Vdu1r0S2ZCjH2mjToYZiwQTOiUAvY5v-T7f=u28tVuxcQ@mail.gmail.com>
-References: <20220310011617.29660-1-kris@embeddedTS.com>
-         <20220310011617.29660-2-kris@embeddedTS.com>
-         <CAHp75Vdu1r0S2ZCjH2mjToYZiwQTOiUAvY5v-T7f=u28tVuxcQ@mail.gmail.com>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=1FAV9s0Divigxh+nUf89EO0OPgHVoo4GOAY0f7g9/+g=;b=cVMEJL4SBd2BYmBxpAnrk9srTZpa/0kDx6fP41R57+aiw+gtegXkiGKis1bK8DCMv32dJmxlv8SBLSaAIF0Euz3e132sfe3IBWh1B6a8pfwMwKWt8xugsz8LZh1eUvUliSbd50yaupMAB5BsG5ztkkqQz8fYspb2aWm7u75Myb/JnDtr9SEQ7R7hdXFCNn8uw1zxHvpMyA1pO0jqZNexTgpSWlEdOAhWIdFJrcAAB93deL0Yi9HHAfifxptqdDKNyDjZc3WARlXNuffRL2rwE/9xj8OveI+HDRxy7Wtii6BqvOqVr+pk7zWg/I4KUmiSP/3HawELuB8nOvbuESsbzw==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+Message-ID: <Yio3K4bgdyFEBy7J@dev-arch.thelio-3990X>
+References: <20220304170813.1689186-1-nathan@kernel.org>
+ <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+ <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
+ <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-10 at 16:48 +0200, Andy Shevchenko wrote:
-> On Thu, Mar 10, 2022 at 2:22 PM Kris Bahnsen <kris@embeddedts.com> wrote:
-> > 
-> > From: Mark Featherston <mark@embeddedTS.com>
+On Wed, Mar 09, 2022 at 06:33:40PM +0900, Masahiro Yamada wrote:
+> On Wed, Mar 9, 2022 at 12:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
+> > > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > >
+> > > > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+> > > > index d32616891dcf..68b74416ec48 100644
+> > > > --- a/Documentation/kbuild/llvm.rst
+> > > > +++ b/Documentation/kbuild/llvm.rst
+> > > > @@ -49,17 +49,36 @@ example: ::
+> > > >  LLVM Utilities
+> > > >  --------------
+> > > >
+> > > > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
+> > > > -to enable them. ::
+> > > > -
+> > > > -       make LLVM=1
+> > > > -
+> > > > -They can be enabled individually. The full list of the parameters: ::
+> > > > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
+> > > > +The full list of supported make variables: ::
+> > > >
+> > > >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
+> > > >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+> > > >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+> > > >
+> > > > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
+> > > > +
+> > > > +       make LLVM=1
+> > > > +
+> > > > +If your LLVM tools are not available in your PATH, you can supply their
+> > > > +location using the LLVM variable with a trailing slash: ::
+> > > > +
+> > > > +       make LLVM=/path/to/llvm/
+> > > > +
+> > > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
+> > >
+> > > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
+> > > works and (my interpretation of what) Masahiro said "if anyone asks
+> > > for this, here's how we could do that."  I don't think I've seen an
+> > > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
+> > > won't hold this patch up over that.  Either way:
+> >
+> > Right, there has not been an explicit ask for the prefix support yet,
+> > although I know I personally would use it, but I think that it is worth
+> > doing now instead of later for a few reasons:
+> >
+> > 1. It makes path goofs easier to spot. If you do
+> >
+> >      $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
+> >
+> >    with a path to LLVM that does not exist (maybe you are bisecting an
+> >    issue and using a temporary build of LLVM and you forgot the path it
+> >    was in), you fall back to the LLVM tools that are in other places in
+> >    your PATH, which is not what the developer intended. I know that I
+> >    have messed up bisects that way. If you did
+> >
+> >      $ make LLVM=/path/to/llvm/
+> >
+> >    with a path that does not exist, there will be an error much earlier:
+> >
+> >      $ make LLVM=/this/path/does/not/exist/ defconfig
+> >      /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
+> >
+> > 2. It does not take that much more code or documentation to support. It
+> >    is the same amount of code as the suffix and the documentation is
+> >    roughly the same amount of lines as well.
+> >
+> > 3. If we wait to implement the path-based use of $(LLVM), we have three
+> >    "sequence" points: the initial support of $(LLVM), the suffix
+> >    support, and the prefix support. As we are constantly working with
+> >    various trees, it would make it harder to know what to use when. If
+> >    we just do it in the same patch, we know 5.18+ can use both of these
+> >    methods.
+> >
+> > However, at the end of the day, we are a team and if you feel like we
+> > should only have suffix support, I am more than happy to push a v3 that
+> > does just that and we can revist prefix support in the future. Just let
+> > me know!
 > 
-> Same comments as per v2.
 > 
+> I do not have a strong opinion about this.
+> (I just mentioned the LLVM=/path/to/llvm/ form because I guessed
+> somebody would request this sooner or later.)
+> 
+> 
+> If you want me to pick up this version, I will apply it with fixing up
+> a nit pointed out by Kees   (": ::" -> "::")
+> 
+> If you want to send v3, that is fine with me as well.
+> 
+> Please let me know your thoughts.
 
-Thanks, I'll get a v4 put together shortly to clean that up.
+Given Nick's response, please pick up this revision with Kees' nit.
+Thank you!
+
+Cheers,
+Nathan
+
+> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > > > +
+> > > > +If your LLVM tools have a version suffix and you want to test with that
+> > > > +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
+> > > > +can pass the suffix using the ``LLVM`` variable: ::
+> > > > +
+> > > > +       make LLVM=-14
+> > > > +
+> > > > +which will use ``clang-14``, ``ld.lld-14``, etc.
+> > > > +
+> > > > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
+> > > > +``LLVM=1``.
+> > >
+> > > Hmm... I can see someone's build wrappers setting LLVM=1, then them
+> > > being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
+> > > might expect.  But Masahiro says let's fix this later which is fine.
+> >
+> > Sure, I guess that is a reasonable case to support. I'll see if I can
+> > come up with something that makes sense after this change lands.
+> >
+> > Cheers,
+> > Nathan
+> 
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada

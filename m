@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D772F4D43FE
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD3D4D43FC
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241023AbiCJJyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 04:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S241050AbiCJJyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbiCJJxt (ORCPT
+        with ESMTP id S241003AbiCJJxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:53:49 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB352644;
-        Thu, 10 Mar 2022 01:52:43 -0800 (PST)
+        Thu, 10 Mar 2022 04:53:53 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075DDE9C;
+        Thu, 10 Mar 2022 01:52:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646905966; x=1678441966;
+  t=1646905971; x=1678441971;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LThCuAfW7xET2MZo5q9C4gm+wpOhS9QVzkmQqBCA9Y8=;
-  b=G3KUvY6BVKJgpAagRumJGmvKE15Vew73F0XwSca3ppFUyIPn4VNHd0C7
-   Gnb7Z8gn2syEb94btDhFz82m+kksStxtTpknSetakPgSHWzTEFGhoc753
-   woVzqTcUR2FO2xuNaZBtUvJlMBM98IhLsPfPr3lZ3TTdlKlALypkq6sjw
-   aiCAuwUlG7tQeirOoOLLHaBWKAmJM51qOmmgsMkyZBu/5vof7Gowc91X1
-   SMAKU55WdTl/d90ths84LNTztOgyXWs80iXK/ZRQ2gd1Q9irPL9NGbOsz
-   iBbX0gO6k0lboEWUAF2YJcdjPyct3R7svvB6yRRBL7tRjQZPU9I09Rygt
-   Q==;
+  bh=inbCfOApjHcZj6rPnStLuoDA+QTiQF8O+NIL6iLwJf0=;
+  b=qmJJ6uQq0kKauMzpcWUCC6/zR479/yu4//+sB765AgOB6hQn/BSCJBzl
+   OUmWBziMn8409Kj7a3nH5uPYxQjDqxbInAEkgPbsP0gQPSDCQGdMq2fUs
+   1HMX+dcb6+eJR6p0u4+2vTiLs/IT9ve7G+59MMVHJBAClbPVhHAexiunw
+   27oCijoJiCLnCJbI/wy2qMksT+aLojRM2vDDYWj7kqrnShmLOp//hK7Kn
+   0KoDgBlhVJDLIvzQ1QLT5NrKSkN5/V8VvmsWB6RQGcbmVVwjundo5J/Sq
+   RpClC4MEamMiCsvPbC3hBohgAVWKHNZ9mOls9cRcrPdD8B5WYJqZvjIQI
+   g==;
 X-IronPort-AV: E=Sophos;i="5.90,170,1643698800"; 
-   d="scan'208";a="165253128"
+   d="scan'208";a="148746148"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 02:52:42 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 02:52:50 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 10 Mar 2022 02:52:41 -0700
+ 15.1.2375.17; Thu, 10 Mar 2022 02:52:49 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 02:52:37 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 02:52:43 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
         <nicolas.ferre@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v9 06/13] media: atmel: atmel-isc-base: use mutex to lock awb workqueue from streaming
-Date:   Thu, 10 Mar 2022 11:51:55 +0200
-Message-ID: <20220310095202.2701399-7-eugen.hristev@microchip.com>
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Subject: [PATCH v9 07/13] media: atmel: atmel-isc: compact the controller formats list
+Date:   Thu, 10 Mar 2022 11:51:56 +0200
+Message-ID: <20220310095202.2701399-8-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220310095202.2701399-1-eugen.hristev@microchip.com>
 References: <20220310095202.2701399-1-eugen.hristev@microchip.com>
@@ -65,139 +66,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AWB workqueue runs in a kernel thread and needs to be synchronized
-w.r.t. the streaming status.
-It is possible that streaming is stopped while the AWB workq is running.
-In this case it is likely that the check for vb2_start_streaming_called is done
-at one point in time, but the AWB computations are done later, including a call
-to isc_update_profile, which requires streaming to be started.
-Thus , isc_update_profile will fail if during this operation sequence the
-streaming was stopped.
-To solve this issue, a mutex is added, that will serialize the awb work and
-streaming stopping, with the mention that either streaming is stopped
-completely including termination of the last frame is done, and after that
-the AWB work can check stream status and stop; either first AWB work is
-completed and after that the streaming can stop correctly.
-The awb spin lock cannot be used since this spinlock is taken in the same
-context and using it in the stop streaming will result in a recursion BUG.
+Compact the list array to be more readable.
+No other changes, only cosmetic.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 29 ++++++++++++++++---
- drivers/media/platform/atmel/atmel-isc.h      |  2 ++
- 2 files changed, 27 insertions(+), 4 deletions(-)
+ .../media/platform/atmel/atmel-sama5d2-isc.c  | 51 ++++++----------
+ .../media/platform/atmel/atmel-sama7g5-isc.c  | 60 +++++++------------
+ 2 files changed, 37 insertions(+), 74 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 448bf281c61a..ee1dda6707a0 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -401,6 +401,7 @@ static void isc_stop_streaming(struct vb2_queue *vq)
- 	struct isc_buffer *buf;
- 	int ret;
- 
-+	mutex_lock(&isc->awb_mutex);
- 	v4l2_ctrl_activate(isc->do_wb_ctrl, false);
- 
- 	isc->stop = true;
-@@ -410,6 +411,8 @@ static void isc_stop_streaming(struct vb2_queue *vq)
- 		v4l2_err(&isc->v4l2_dev,
- 			 "Timeout waiting for end of the capture\n");
- 
-+	mutex_unlock(&isc->awb_mutex);
-+
- 	/* Disable DMA interrupt */
- 	regmap_write(isc->regmap, ISC_INTDIS, ISC_INT_DDONE);
- 
-@@ -1397,10 +1400,6 @@ static void isc_awb_work(struct work_struct *w)
- 	u32 min, max;
- 	int ret;
- 
--	/* streaming is not active anymore */
--	if (isc->stop)
--		return;
--
- 	if (ctrls->hist_stat != HIST_ENABLED)
- 		return;
- 
-@@ -1455,7 +1454,24 @@ static void isc_awb_work(struct work_struct *w)
- 	}
- 	regmap_write(regmap, ISC_HIS_CFG + isc->offsets.his,
- 		     hist_id | baysel | ISC_HIS_CFG_RAR);
-+
-+	/*
-+	 * We have to make sure the streaming has not stopped meanwhile.
-+	 * ISC requires a frame to clock the internal profile update.
-+	 * To avoid issues, lock the sequence with a mutex
-+	 */
-+	mutex_lock(&isc->awb_mutex);
-+
-+	/* streaming is not active anymore */
-+	if (isc->stop) {
-+		mutex_unlock(&isc->awb_mutex);
-+		return;
-+	};
-+
- 	isc_update_profile(isc);
-+
-+	mutex_unlock(&isc->awb_mutex);
-+
- 	/* if awb has been disabled, we don't need to start another histogram */
- 	if (ctrls->awb)
- 		regmap_write(regmap, ISC_CTRLEN, ISC_CTRL_HISREQ);
-@@ -1548,6 +1564,7 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
- 			 */
- 			v4l2_ctrl_activate(isc->do_wb_ctrl, false);
- 		}
-+		mutex_unlock(&isc->awb_mutex);
- 
- 		/* if we have autowhitebalance on, start histogram procedure */
- 		if (ctrls->awb == ISC_WB_AUTO &&
-@@ -1740,6 +1757,7 @@ static void isc_async_unbind(struct v4l2_async_notifier *notifier,
- {
- 	struct isc_device *isc = container_of(notifier->v4l2_dev,
- 					      struct isc_device, v4l2_dev);
-+	mutex_destroy(&isc->awb_mutex);
- 	cancel_work_sync(&isc->awb_work);
- 	video_unregister_device(&isc->video_dev);
- 	v4l2_ctrl_handler_free(&isc->ctrls.handler);
-@@ -1850,6 +1868,8 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
- 	isc->current_subdev = container_of(notifier,
- 					   struct isc_subdev_entity, notifier);
- 	mutex_init(&isc->lock);
-+	mutex_init(&isc->awb_mutex);
-+
- 	init_completion(&isc->comp);
- 
- 	/* Initialize videobuf2 queue */
-@@ -1930,6 +1950,7 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
- 	video_unregister_device(vdev);
- 
- isc_async_complete_err:
-+	mutex_destroy(&isc->awb_mutex);
- 	mutex_destroy(&isc->lock);
- 	return ret;
- }
-diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-index 9cc69c3ae26d..f98f25a55e73 100644
---- a/drivers/media/platform/atmel/atmel-isc.h
-+++ b/drivers/media/platform/atmel/atmel-isc.h
-@@ -229,6 +229,7 @@ enum isc_scaler_pads {
-  *
-  * @lock:		lock for serializing userspace file operations
-  *			with ISC operations
-+ * @awb_mutex:		serialize access to streaming status from awb work queue
-  * @awb_lock:		lock for serializing awb work queue operations
-  *			with DMA/buffer operations
-  *
-@@ -307,6 +308,7 @@ struct isc_device {
- 	struct work_struct	awb_work;
- 
- 	struct mutex		lock;
-+	struct mutex		awb_mutex;
- 	spinlock_t		awb_lock;
- 
- 	struct regmap_field	*pipeline[ISC_PIPE_LINE_NODE_NUM];
+diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+index 025c3e8a7e95..d96ee3373889 100644
+--- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
+@@ -60,56 +60,39 @@
+ static const struct isc_format sama5d2_controller_formats[] = {
+ 	{
+ 		.fourcc		= V4L2_PIX_FMT_ARGB444,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_ARGB555,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_RGB565,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_ABGR32,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_XBGR32,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YUV420,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YUYV,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YUV422P,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_GREY,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_Y10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SBGGR8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGBRG8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGRBG8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SRGGB8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SBGGR10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGBRG10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGRBG10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SRGGB10,
+ 	},
+ };
+diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+index 9dc75eed0098..e07ae188c15f 100644
+--- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+@@ -63,65 +63,45 @@
+ static const struct isc_format sama7g5_controller_formats[] = {
+ 	{
+ 		.fourcc		= V4L2_PIX_FMT_ARGB444,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_ARGB555,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_RGB565,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_ABGR32,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_XBGR32,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YUV420,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_UYVY,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_VYUY,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YUYV,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YUV422P,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_GREY,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_Y10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_Y16,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SBGGR8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGBRG8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGRBG8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SRGGB8,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SBGGR10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGBRG10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGRBG10,
+-	},
+-	{
++	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SRGGB10,
+ 	},
+ };
 -- 
 2.25.1
 

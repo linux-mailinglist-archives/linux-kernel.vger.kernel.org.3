@@ -2,169 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C834D5548
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9F74D5554
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344650AbiCJX0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 18:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S245250AbiCJX1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 18:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344626AbiCJX0U (ORCPT
+        with ESMTP id S1344086AbiCJX05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 18:26:20 -0500
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968E4199D4F;
-        Thu, 10 Mar 2022 15:25:18 -0800 (PST)
-Received: by mail-oo1-f41.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so8657547oos.9;
-        Thu, 10 Mar 2022 15:25:18 -0800 (PST)
+        Thu, 10 Mar 2022 18:26:57 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FEE19ABD5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:25:55 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id bc27so5990595pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:25:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ejJjmdbNGVk0Ojn9gs31SAw6IuTYvfqq7ug7NCCkkt4=;
+        b=onIx2e9X0TzzdYS9bDwjnzCQL6eZTBbf+XJonIjFE7H559YPkcY+EhmcsSUTYccP7P
+         SJhQkA9/eitkZ6RjDtU8Casbh0s5w49mbQFTWLMchOLcU7UVtTkD54CeHJL02skXriet
+         PElVeFd230TUHFlwda1A5LSJhaSTD+Bxgbibu/IKEXmZ3J+nggAKvfIS3QhoOtknOwKs
+         QKEIoTVTIi/ZmcjBt6AMvlUYOomvLKkOEmN2AJpl/yhf31HAVBpWthxNzm7juMSUt8dw
+         DXE48U7DiDyM87kNgix+yq6u8HeLPvQ6BLJxv/YvFub9TgJMoM1intVwQvSH9rQM+b2Q
+         9MVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6w+O5WHCDjl5wbn5DykYEU1YA3lse6HoQ4X4n2SBQ0E=;
-        b=J+i4uYHKChdyvoeOwlEpvTxygenISaQqBC4Z7mFUgRaBY+cVVXUQwb4Vqg4zvBNBO3
-         4eBdDYmGnwOumfnOCgyZeN/5naHbkBybxt/dEEH/ZbkxNUyU0vO3jD5GPShMc/lw7J6I
-         AzGRAVt6b6UkIF9HqhfuELZs6+ZTbZanjhOoYb6w7f57aCqNViaoAVdyG8H+aGgbB+m8
-         1YBtLZ53wjhDbCNaEqpyX2oIuARTJuH6D3Mnkba0vm+i3RCSm8deoBUe+DbopVvRZ9JV
-         SOrjYfZyCGAWkP4lTKGf/HfO/+J+wjiqAqhkzjOst5JIr/yBXCeCilH46/QSxw7muItx
-         /yVA==
-X-Gm-Message-State: AOAM531P8MT1e89ysVRgTCxdsXfz0cXoLPW29rHuaLKFHL9Y2jJXsFox
-        Wfa57Cc5XBeigGlH85E+IQ==
-X-Google-Smtp-Source: ABdhPJw93wspnZY5lHnUvT+I+4Eho5yHyZHour2RJDedXvX/kod1RlNzg/cMBeVPl0llJZbBUOlpeQ==
-X-Received: by 2002:a05:6870:f70a:b0:da:bbb7:ab59 with SMTP id ej10-20020a056870f70a00b000dabbb7ab59mr2269545oab.93.1646954717912;
-        Thu, 10 Mar 2022 15:25:17 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x7-20020a4a8687000000b003191a2edc67sm3245292ooh.7.2022.03.10.15.25.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ejJjmdbNGVk0Ojn9gs31SAw6IuTYvfqq7ug7NCCkkt4=;
+        b=JeUlvMZnVAPVvsCbjF7XaTuB/Lyu78HeG+uWOlvZbPtX58sO5bT4E7uWXs+L5j7JSQ
+         5vLOzmTBCt2ylNtxcJ/HnUIt0h6oGTOvSlYoYgYVxOxZYQq3sx39g0vlwrrzB0t+UbyB
+         vjJijodMAWOx8TAzAv0NJDXJsrZGB1enTEh6cmI7mRcZhS2H6Xj72MGziwsZ7yrO/Wnc
+         L7i+Mm+1MaWXh7HnmcU3t13Ygf/qGHNUOrswiCShNAffikwXBp5SC5Z5q9B4iNjVJ9EJ
+         MFeJ5UV7cFu1UpLShvurbiLrdN466/WIwnezkYYthxFdEWMHjl5+Ajy6rNJzEcYnXFfq
+         ZDow==
+X-Gm-Message-State: AOAM531aS3iwMbgHC9qbN+8w65RC/0epoA+UmCGGWF0cnm4E/SNND/rH
+        vQUlHKA8kosdaPolPOiEkyMhmw==
+X-Google-Smtp-Source: ABdhPJzv6gLDrKCUJmstikLr5c12MnrtNWMmsWP1SNNEHRV+MGXn9BOQlivb1Lqc4nAFEDZ9B4Opyg==
+X-Received: by 2002:a05:6a02:10a:b0:37f:f691:b094 with SMTP id bg10-20020a056a02010a00b0037ff691b094mr5995278pgb.184.1646954755255;
+        Thu, 10 Mar 2022 15:25:55 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b001bf0d92e1c7sm6995703pjh.41.2022.03.10.15.25.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 15:25:17 -0800 (PST)
-Received: (nullmailer pid 2291916 invoked by uid 1000);
-        Thu, 10 Mar 2022 23:25:16 -0000
-Date:   Thu, 10 Mar 2022 17:25:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
-        robert.marko@sartura.hr, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 1/4] dt-bindings: pinctrl: mvebu: Document bindings
- for AC5
-Message-ID: <YiqI3Gjcf8AFVQYL@robh.at.kernel.org>
-References: <20220310030039.2833808-1-chris.packham@alliedtelesis.co.nz>
- <20220310030039.2833808-2-chris.packham@alliedtelesis.co.nz>
+        Thu, 10 Mar 2022 15:25:54 -0800 (PST)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     kuba@kernel.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
+Subject: [PATCH v3] net: ipv6: fix skb_over_panic in __ip6_append_data
+Date:   Thu, 10 Mar 2022 15:25:38 -0800
+Message-Id: <20220310232538.1044947-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
+References: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310030039.2833808-2-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 04:00:36PM +1300, Chris Packham wrote:
-> Add JSON schema for marvell,ac5-pinctrl present on the Marvell 98DX2530
-> SoC.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  .../bindings/pinctrl/marvell,ac5-pinctrl.yaml | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..c7ab3d0e8420
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/marvell,ac5-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell AC5 pin controller
-> +
-> +maintainers:
-> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
-> +
-> +description:
-> +  Bindings for Marvell's AC5 memory-mapped pin controller.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: marvell,ac5-pinctrl
-> +      - const: syscon
-> +      - const: simple-mfd
+Syzbot found a kernel bug in the ipv6 stack:
+LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
+The reproducer triggers it by sending a crafted message via sendmmsg()
+call, which triggers skb_over_panic, and crashes the kernel:
 
-How is this a 'syscon' or 'simple-mfd' For syscon, what other 
-functions/registers does it have? For simple-mfd, what other functions? 
-You haven't defined them in the schema.
+skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
+head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
+dev:<NULL>
 
-blank line needed here.
+Update the check that prevents an invalid packet with MTU equall to the
+fregment header size to eat up all the space for payload.
 
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  '-pins$':
-> +    type: object
-> +    $ref: pinmux-node.yaml#
-> +
-> +    properties:
-> +      marvell,function:
-> +        $ref: "/schemas/types.yaml#/definitions/string"
-> +        description:
-> +          Indicates the function to select.
-> +        enum: [ gpio, i2c0, i2c1, nand, sdio, spi0, spi1, uart0, uart1, uart2, uart3 ]
-> +
-> +      marvell,pins:
-> +        $ref: /schemas/types.yaml#/definitions/string-array
-> +        description:
-> +          Array of MPP pins to be used for the given function.
-> +        minItems: 1
-> +        items:
-> +          enum: [ mpp0, mpp1, mpp2, mpp3, mpp4, mpp5, mpp6, mpp7, mpp8, mpp9,
-> +                  mpp10, mpp11, mpp12, mpp13, mpp14, mpp15, mpp16, mpp17, mpp18, mpp19,
-> +                  mpp20, mpp21, mpp22, mpp23, mpp24, mpp25, mpp26, mpp27, mpp28, mpp29,
-> +                  mpp30, mpp31, mpp32, mpp33, mpp34, mpp35, mpp36, mpp37, mpp38, mpp39,
-> +                  mpp40, mpp41, mpp42, mpp43, mpp44, mpp45 ]
-> +
-> +allOf:
-> +  - $ref: "pinctrl.yaml#"
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pinctrl@80020100 {
-> +      compatible = "marvell,ac5-pinctrl",
-> +      "syscon", "simple-mfd";
-> +      reg = <0x80020100 0x20>;
-> +
-> +      i2c0_pins: i2c0-pins {
-> +        marvell,pins = "mpp26", "mpp27";
-> +        marvell,function = "i2c0";
-> +      };
-> +
-> +      i2c0_gpio: i2c0-gpio-pins {
-> +        marvell,pins = "mpp26", "mpp27";
-> +        marvell,function = "gpio";
-> +      };
-> +    };
-> -- 
-> 2.35.1
-> 
-> 
+The reproducer can be found here:
+LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
+
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+
+Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+v2: Instead of updating the alloclen add a check that prevents
+    an invalid packet with MTU equall to the fregment header size
+    to eat up all the space for payload.
+    Fix suggested by Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+
+v3: Update existing check outside of the while loop.
+---
+ net/ipv6/ip6_output.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index 4788f6b37053..194832663d85 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1476,8 +1476,8 @@ static int __ip6_append_data(struct sock *sk,
+ 		      sizeof(struct frag_hdr) : 0) +
+ 		     rt->rt6i_nfheader_len;
+ 
+-	if (mtu < fragheaderlen ||
+-	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
++	if (mtu <= fragheaderlen ||
++	    ((mtu - fragheaderlen) & ~7) + fragheaderlen <= sizeof(struct frag_hdr))
+ 		goto emsgsize;
+ 
+ 	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
+-- 
+2.35.1
+

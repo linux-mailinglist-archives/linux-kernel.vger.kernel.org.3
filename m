@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2AA4D41DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9964D41E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 08:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbiCJHf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 02:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S240110AbiCJHfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 02:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235458AbiCJHf1 (ORCPT
+        with ESMTP id S240101AbiCJHf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 02:35:27 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBB579C78
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 23:34:26 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id a5so4423686pfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 23:34:26 -0800 (PST)
+        Thu, 10 Mar 2022 02:35:28 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529247892C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 23:34:28 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v4so4499226pjh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 23:34:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=/cRXQiSJ5rIWf1RgUsbCqPw2RjGrtPdegUrxegBFwDg=;
-        b=drrvyjXC5GTw4mGN3hjmCpR4QqGXIdZSM8NzuvaH9FuH+GTzewAH4wwF4CgXUGxcdJ
-         5TnxSaZKkOGH5yGtGUUzB37aeaMs9mvj0uLtZ2ganFOtQa86at1qEmdYMYvzfUDN/GIO
-         O4rhe3+a/Z7sFLYsq+h9w3AKpTJ9SpNVv3H1Aw1kwhHo+JG4+LuTXBUBYY0rqWQghPpQ
-         bWHTyxzC+O9Np97hHOAC1dk329FWk4V4ijry9Wgxj/8gGRCP8o0laEBybE37BQO+j3Cy
-         vajQqKyd7NcfoUaPMrXhgQqD8m5o7M6z4UNC3YyZb4gb4MgpoUSVbZn41VMgICH7+oeN
-         rNcw==
+        bh=pB6gK1JUXPe0uL+qrSzcwuxnE8NCS9QIX0sZYbeurTo=;
+        b=lAb20Kihrehyn5GddRYNlLZde6SVbtLD6FzerIMv7eZvtL3sbdj+73S+tLhpNmw5UJ
+         tshNHs/Mi7cANEP1Zj80aQ/N5B0sz2O5kjImG8/+T3cwq+8FG2XPkFmaHqa6/9chZ7g8
+         /nOihdYxiR7PaKacSgWlLKnP207Jz1eV2gEFGOiGLn/I6vzc+PrfyUx+6/GNK9XFM73f
+         r97IA57ckoafcvjVae9/dGfBjF2FeWg5v/Io4Cgwhgsompar72JizyqqaqRszXs+wYz/
+         Hp9Cb3jtY2nMfID2JLvQRcs/WJdmvo2czFLzJQXcB1SgseLV+79NKd+T/7EjuUJzpXRp
+         fgZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=/cRXQiSJ5rIWf1RgUsbCqPw2RjGrtPdegUrxegBFwDg=;
-        b=Uxy5Jhsz2YsFkHF+PmGnapyRw0Pn2PjZV+YbzSgpM6/aP7FcHgDTuA5XWkKLDZewLY
-         r297fH29P9gqTI4hjaWJeM6iGdxH91BrVoAEkhqeK9+fuq/NVou0DPyTj4YQH6NF1+P2
-         ubbocuoItza0Gsdfb/jlBEQ9l9QMq+NIaOzLfjBCGEJ8IOer27W86A3V22QSuj9BA7IY
-         6uHyJPisA860RR3NrT+adpCz/SbLOvW9VohwpOOEzTJSYlbSPJoWKHVy3ie/qIzKfRgU
-         QeChcztVQHnk3cRbvvj1+NwK1HCP+sTU9Te4RXPRgLfByj5FXISJjj8W/LXl8yK1mPzZ
-         0bqw==
-X-Gm-Message-State: AOAM532o2xZ/kbSxELuUpieoKqgUpL3t31rSa6ghYtnFfWuD6/Lm9NRL
-        eY3GV/Sl/c7smF1IXodkt6EHSQ==
-X-Google-Smtp-Source: ABdhPJxc+q7DDbxs0t4/P+31ptJrnup2lYJR0GZZf7c/akfYD1VQ0loaR35m7vzsGzW58v1D87rQwQ==
-X-Received: by 2002:a05:6a00:2444:b0:4f7:73bb:7582 with SMTP id d4-20020a056a00244400b004f773bb7582mr2011116pfj.39.1646897666298;
-        Wed, 09 Mar 2022 23:34:26 -0800 (PST)
+        bh=pB6gK1JUXPe0uL+qrSzcwuxnE8NCS9QIX0sZYbeurTo=;
+        b=aTkp9Vn0n6kROyZbRCya/pKPRS/6oUFZd1Y3ttXA4EcQ+XGtuBGUtwWf2W3PU6ik6P
+         b+VKhz9YyyYQNDRBNayxPaFw8cR143v9tMD3BY9SabsZPt2lMDCDb5aIqx1EnMXsdoBj
+         /atIZIgpxV3QKeAria8SSgp7lCScb9kjfOjNCry2z2HUuA476RXMNfPrPPZfd86JgCLI
+         e+UAnpHAwSYyQcK3iy6fxqOgUXTVcHF2Wa6bZxdayJTVBp7nHJSdM273b7S3Buj98x7Y
+         qdHd5Ncqp2DmuxnfRTWeOBCToQXmutszm4YEN+Ge0CfTc7VnbvH+QH2rJaWftpGt8E8e
+         ctcQ==
+X-Gm-Message-State: AOAM530YLG7qrJQAYjGLevZCQuVMnDULeD9w844MSGTWUcyU0VuDSvIL
+        +K/rPoyynsRFBChid5+kPpCnoA==
+X-Google-Smtp-Source: ABdhPJz3jbz0Ao1c1aN34ZBdfv3vtjWtKrnKEumeNN4OD89F9XtIYbdZBYzODo25zFpeltVWYBT47A==
+X-Received: by 2002:a17:902:cf08:b0:151:9d28:f46f with SMTP id i8-20020a170902cf0800b001519d28f46fmr3544457plg.53.1646897667710;
+        Wed, 09 Mar 2022 23:34:27 -0800 (PST)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id j16-20020a63e750000000b00373598b8cbfsm4482675pgk.74.2022.03.09.23.34.25
+        by smtp.gmail.com with ESMTPSA id e4-20020a17090ab38400b001bf9519fe8bsm7946653pjr.38.2022.03.09.23.34.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 23:34:25 -0800 (PST)
-Date:   Wed, 09 Mar 2022 23:34:25 -0800 (PST)
-X-Google-Original-Date: Wed, 09 Mar 2022 23:21:11 PST (-0800)
+        Wed, 09 Mar 2022 23:34:27 -0800 (PST)
+Date:   Wed, 09 Mar 2022 23:34:27 -0800 (PST)
+X-Google-Original-Date: Wed, 09 Mar 2022 23:33:55 PST (-0800)
 Subject:     Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
-In-Reply-To: <YimjbmdACoQOk+hj@infradead.org>
+In-Reply-To: <CAK8P3a2Mr_z6h7eg1O8ZN5_qE-o+8KFFBum3CxyuDYeF50s1dw@mail.gmail.com>
 CC:     michael@michaelkloos.com, Paul Walmsley <paul.walmsley@sifive.com>,
         aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Message-ID: <mhng-08a28047-b563-41f4-b705-f27b88554f2c@palmer-mbp2014>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-1ed81282-b17a-43ef-9030-fc538d96892b@palmer-mbp2014>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -70,26 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Mar 2022 23:06:22 PST (-0800), Christoph Hellwig wrote:
-> Why?
+On Wed, 09 Mar 2022 02:02:27 PST (-0800), Arnd Bergmann wrote:
+> On Wed, Mar 9, 2022 at 6:28 AM Michael T. Kloos
+> <michael@michaelkloos.com> wrote:
+>>
+>> Added a new config symbol RISCV_ISA_M to enable the usage of the
+>> multiplication, division, and remainder (modulus) instructions
+>> from the M-extension.  This configures the march build flag to
+>> either include or omit it.
+>>
+>> I didn't find any assembly using any of the instructions from
+>> the M-extension.  However, the BPF JIT is a complicating factor.
+>> Currently, it emits M-extension instructions to implement various
+>> BPF operations.  For now, I have made HAVE_EBPF_JIT depend on
+>> CONFIG_RISCV_ISA_M.
+>>
+>> I have added the supplementary integer arithmetic functions in
+>> the file "arch/riscv/lib/ext_m_supplement.c".  All the code
+>> contained in this file is wrapped in an ifndef contingent on the
+>> presence of CONFIG_RISCV_ISA_M.
+>>
+>> Signed-off-by: Michael T. Kloos <michael@michaelkloos.com>
+>
+> The patch looks fine to me, but I increasingly get the feeling that the
+> entire platform feature selection in Kconfig should be guarded with
+> a global flag that switches between "fully generic" and "fully custom"
+> builds, where the generic kernel assumes that all the standard
+> features (64-bit, C, M, FPU, MMU, UEFI, ...) are present, the
+> incompatible options (XIP, PHYS_RAM_BASE_FIXED,
+> CMDLINE_FORCE, BUILTIN_DTB, ...) are force-disabled,
+> and all optional features (V/B/P/H extensions, custom instructions,
+> platform specific device drivers, ...) are runtime detected.
 
-I have no idea, but this has come up a few times before.
+That'd be wonderful, but unfortunately we're trending the other way -- 
+we're at the point where "words in the specification have meaning" is 
+controversial, so trying to talk about which flavors of the 
+specification are standard is just meaningless.  I obviously hope that 
+gets sorted out, as we've clearly been pointed straight off a cliff for 
+a while now, but LMKL isn't the place to have that discussion.  We've 
+all seen this before, nobody needs to be convinced this leads to a mess.
 
-IIRC the original port had a no-M flavor (don't remember if it even made 
-it to the original patch submission, but it was around for a bit).  We 
-decided to drop this under the theory that nobody would use it: 
-essentially, if you can afford the handful of MiB of memory required to 
-run Linux then you've probably got a multiplier.
+Until we get to the point where "I wrote 'RISC-V' on that potato I found 
+in my couch" can be conclusively determined not compliant with the spec, 
+it's just silly to try and talk about what is.
 
-If someone has hardware that lacks M and users care about running Linux 
-on that then I'm happy to support it.  I'll still point out the 
-silliness of that decision, but if it's too late to change things then 
-I'd rather support the hardware.  If it's one of these "fill out every 
-possible allowed ISA flavor, even if nobody has one that runs Linux" 
-then I don't see a reason to bother -- there's an infinite amount of 
-allowable RISC-V implementations, we'll all go crazy chasing them 
-around.
-
-FWIW: to a first order, that applies to the no-A stuff as well (though 
-that got dropped because the Arm folks pointed out a way to support that 
-was way better than ours).
+> At the moment, those three types are listed at the same level,
+> which gives the impression that they can be freely mixed.
+>
+>          Arnd

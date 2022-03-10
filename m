@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86904D478A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07BD4D4797
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242240AbiCJNCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S242244AbiCJNDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiCJNCK (ORCPT
+        with ESMTP id S232078AbiCJNDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:02:10 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC3814A236;
-        Thu, 10 Mar 2022 05:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=70R22vwzhtLg0RUkMuxpW44PSeqNDUBN6BLNKNfbnG4=; b=XlQNuq71CUdhCu80QW/JOZertY
-        3EQLNtADyxvQS/k3oI06CLbNAVfAcx5TQe7iTyCMEnjkQyADQubBMFAw0+2n+ttdfU4RYMzt9RUg3
-        FKcUxGmd9bVIaL2WXwC5AIXZ/1MXidq0spESB9VWiwKQ+tzHXdQhrSd2vFP8jSTRb/7EC15fGxrPe
-        QDHIgP7CnICV9KqPBrphjWvZT1GHVHblK8xKy6FC0R+KUmjzRj78F5faWTiUe8W5GGpPqij2ql4rt
-        UlP+RRhMvRh2mWsbJPfG42eelvHNtleeW6WNQvwTrOHFTinh7GKCz+BmLMbiL5ZJpj3JS6miEVUpI
-        te5dO4aA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57768)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nSIPf-00019l-33; Thu, 10 Mar 2022 13:01:03 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nSIPd-0000aV-KZ; Thu, 10 Mar 2022 13:01:01 +0000
-Date:   Thu, 10 Mar 2022 13:01:01 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
- __read_once_word_nocheck
-Message-ID: <Yin2jQqW+pUWJZ7E@shell.armlinux.org.uk>
-References: <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
- <YijCkHHhpleeADAO@shell.armlinux.org.uk>
- <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
- <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
- <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
- <Yij2cZVKwPexGsTf@shell.armlinux.org.uk>
- <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
- <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
- <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
- <Yinwq3Z9l0selLLS@shell.armlinux.org.uk>
+        Thu, 10 Mar 2022 08:03:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C29014AC9B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646917320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RWMS1CuuTjg/dxyi6dNPKqfhAnq0QfD6tRtdo/5dGxE=;
+        b=M8vdPttm3qoDioC6t6zAahc/jPD7xmN4zOYjG72kxvkZJVhNgSgHJ3ZtDQrlNOZKHPknpW
+        TGvu98CmtS7JXR2RI9QbErd7jljKUPvrfhsvznR6x97nshfRzr6qhcwcZKtgn/R5HuMw9J
+        qYUdO5eqNS2PG+g9esWMs64IJ8L7SAQ=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-456-SRaUPU3lMrifyawy4VVcgQ-1; Thu, 10 Mar 2022 08:01:59 -0500
+X-MC-Unique: SRaUPU3lMrifyawy4VVcgQ-1
+Received: by mail-wr1-f69.google.com with SMTP id a5-20020adfdd05000000b001f023fe32ffso1663000wrm.18
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 05:01:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RWMS1CuuTjg/dxyi6dNPKqfhAnq0QfD6tRtdo/5dGxE=;
+        b=NQpWTpFpXEp6qNdHcMRVrjw/wRffInW1Fqn4uj+0xCBA7A1CqzC/h00Rqwe4IQKd07
+         MrMEDsqzGOMV0q8rxbKuhDImMR9wDVvDSKN2TI8cKI0IS1L7N5KU0wdi3z/n7ScB09yW
+         gvqmccx7NT2ZpcfIjGxaG1fZmidvlqtNkTChq4F3kLkOqnXgyW6khFZ4I8aXDjSHZnm9
+         c/0ocdsm85yTEZRCDVMrEhxqzNpYcvP/ao1fyJLdmi7pfQwpoa1O11qhvBk/ixyPzNFQ
+         HlwijkqJt5R5KB55Zi94tEtIFhLeUwzv+5T7hj0Rf8rXKm2JFlw1ce4OvaKVxJQfhoOT
+         2jsg==
+X-Gm-Message-State: AOAM532wYpaUU6zle+AKyMxpPf1rlWrTPTIc6sCpc6XC09ZyzF1ctnkB
+        3HAcaPUVtYy7uD4nZzdoX5HQvZf6PpL9f+dfkgK9iza2dk5hgA2GoUS7aOX9/pCGir5kcB+FGtj
+        laf7qPxwJ/M/HAhsdgwtibGj8
+X-Received: by 2002:a5d:6d41:0:b0:1ef:f32c:18ee with SMTP id k1-20020a5d6d41000000b001eff32c18eemr3489820wri.532.1646917318225;
+        Thu, 10 Mar 2022 05:01:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzG8zUynya3aZ1k62/HZYUuzx+jvS8PFleAyItoEwxyNae7kQtcQuOPFd+KwfonhP3HTCC0Bw==
+X-Received: by 2002:a5d:6d41:0:b0:1ef:f32c:18ee with SMTP id k1-20020a5d6d41000000b001eff32c18eemr3489798wri.532.1646917317914;
+        Thu, 10 Mar 2022 05:01:57 -0800 (PST)
+Received: from redhat.com ([2.53.27.107])
+        by smtp.gmail.com with ESMTPSA id r186-20020a1c2bc3000000b0037bdd94a4e5sm4477363wmr.39.2022.03.10.05.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 05:01:57 -0800 (PST)
+Date:   Thu, 10 Mar 2022 08:01:53 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jiyong Park <jiyong@google.com>
+Cc:     sgarzare@redhat.com, stefanha@redhat.com, jasowang@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, adelva@google.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] vsock: each transport cycles only on its own sockets
+Message-ID: <20220310075933-mutt-send-email-mst@kernel.org>
+References: <20220310125425.4193879-1-jiyong@google.com>
+ <20220310125425.4193879-2-jiyong@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yinwq3Z9l0selLLS@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20220310125425.4193879-2-jiyong@google.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,155 +79,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 12:35:55PM +0000, Russell King (Oracle) wrote:
-> On Wed, Mar 09, 2022 at 09:42:29PM +0100, Ard Biesheuvel wrote:
-> > On Wed, 9 Mar 2022 at 20:39, Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > >
-> > > On Wed, Mar 09, 2022 at 08:14:30PM +0100, Ard Biesheuvel wrote:
-> > > > The backtrace dumped by __die() uses the pt_regs from the exception
-> > > > context as the starting point, so the exception entry code that deals
-> > > > with the condition that triggered the oops is omitted, and does not
-> > > > have to be unwound.
-> > >
-> > > That is true, but that's not really the case I was thinking about.
-> > > I was thinking more about cases such as RCU stalls, soft lockups,
-> > > etc.
-> > >
-> > > For example:
-> > >
-> > > https://www.linuxquestions.org/questions/linux-kernel-70/kenel-v4-4-60-panic-in-igmp6_send-and-and-__neigh_create-4175704721/
-> > >
-> > > In that stack trace, the interesting bits are not the beginning of
-> > > the stack trace down to __irq_svc, but everything beyond __irq_svc,
-> > > since the lockup is probably caused by being stuck in
-> > > _raw_write_lock_bh().
-> > >
-> > > It's these situations that we will totally destroy debuggability for,
-> > > and the only way around that would be to force frame pointers and
-> > > ARM builds (not Thumb-2 as that requires the unwinder... which means
-> > > a Thumb-2 kernel soft lockup would be undebuggable.
-> > >
-> > 
-> > Indeed.
-> > 
-> > But that means that the only other choice we have is to retain the
-> > imprecise nature of the current solution (which usually works fine
-> > btw), and simply deal with the faulting double dereference of vsp in
-> > the unwinder code. We simply don't know whether the exception was
-> > taken at a point where the stack frame is consistent with the unwind
-> > data.
+On Thu, Mar 10, 2022 at 09:54:24PM +0900, Jiyong Park wrote:
+> When iterating over sockets using vsock_for_each_connected_socket, make
+> sure that a transport filters out sockets that don't belong to the
+> transport.
 > 
-> Okay, further analysis (for the record, since I've said much of this on
-> IRC):
+> There actually was an issue caused by this; in a nested VM
+> configuration, destroying the nested VM (which often involves the
+> closing of /dev/vhost-vsock if there was h2g connections to the nested
+> VM) kills not only the h2g connections, but also all existing g2h
+> connections to the (outmost) host which are totally unrelated.
 > 
-> What we have currently is a robust unwinder that will cope when things
-> go wrong, such as an interrupt taken during the prologue of a function.
-> The way it copes is by two mechanisms:
+> Tested: Executed the following steps on Cuttlefish (Android running on a
+> VM) [1]: (1) Enter into an `adb shell` session - to have a g2h
+> connection inside the VM, (2) open and then close /dev/vhost-vsock by
+> `exec 3< /dev/vhost-vsock && exec 3<&-`, (3) observe that the adb
+> session is not reset.
 > 
->         /* store the highest address on the stack to avoid crossing it*/
->         low = frame->sp;
->         ctrl.sp_high = ALIGN(low, THREAD_SIZE);
+> [1] https://android.googlesource.com/device/google/cuttlefish/
 > 
-> These two represent the allowable bounds of the kernel stack. When we
-> run the unwinder, before each unwind instruction we check whether the
-> current SP value is getting close to the top of the kernel stack, and
-> if so, turn on additional checking:
+> Fixes: c0cfa2d8a788 ("vsock: add multi-transports support")
+> Signed-off-by: Jiyong Park <jiyong@google.com>
+> ---
+>  drivers/vhost/vsock.c            | 4 ++++
+>  net/vmw_vsock/virtio_transport.c | 7 +++++++
+>  net/vmw_vsock/vmci_transport.c   | 5 +++++
+>  3 files changed, 16 insertions(+)
 > 
->                 if ((ctrl.sp_high - ctrl.vrs[SP]) < sizeof(ctrl.vrs))
->                         ctrl.check_each_pop = 1;
-> 
-> that will ensure if we go off the top of the kernel stack, the
-> unwinder will report failure, and not access those addresses.
-> 
-> After each instruction, we check whether the SP value is within the
-> above bounds:
-> 
->                 if (ctrl.vrs[SP] < low || ctrl.vrs[SP] >= ctrl.sp_high)
->                         return -URC_FAILURE;
-> 
-> This means that the unwinder can never modify SP to point outside of
-> the kernel stack region identified by low..ctrl.sp_high, thereby
-> protecting the load inside unwind_pop_register() from ever
-> dereferencing something outside of the kernel stack. Moreover, it also
-> prevents the unwinder modifying SP to point below the current stack
-> frame.
-> 
-> The problem has been introduced by trying to make the unwinder cope
-> with IRQ stacks in b6506981f880 ("ARM: unwind: support unwinding across
-> multiple stacks"):
-> 
-> -       if (!load_sp)
-> +       if (!load_sp) {
->                 ctrl->vrs[SP] = (unsigned long)vsp;
-> +       } else {
-> +               ctrl->sp_low = ctrl->vrs[SP];
-> +               ctrl->sp_high = ALIGN(ctrl->sp_low, THREAD_SIZE);
-> +       }
-> 
-> Now, whenever SP is loaded, we reset the allowable range for the SP
-> value, and this completely defeats the protections we previously had
-> which were ensuring that:
-> 
-> 1) the SP value doesn't jump back _down_ the kernel stack resulting
->    in an infinite unwind loop.
-> 2) the SP value doesn't end up outside the kernel stack.
-> 
-> We need those protections to prevent these problems that are being
-> reported - and the most efficient way I can think of doing that is to
-> somehow valudate the new SP value _before_ we modify sp_low and
-> sp_high, so these two limits are always valid.
-> 
-> Merely changing the READ_ONCE_NOCHECK() to be get_kernel_nocheck()
-> will only partly fix this problem - it will stop the unwinder oopsing
-> the kernel, but definitely doesn't protect against (1) and doesn't
-> protect against SP pointing at some thing that is accessible (e.g.
-> a device or other kernel memory.)
-> 
-> We're yet again at Thursday, with the last linux-next prior to the
-> merge window being created this evening, which really doesn't leave
-> much time to get this sorted... and we can't say "this code should
-> have been in earlier in the cycle" this time around, because these
-> changes to the unwinder have been present in linux-next prior to
-> 5.17-rc2. Annoyingly, it seems merging stuff earlier in the cycle
-> doesn't actually solve the problem of these last minute debugging
-> panics.
-> 
-> Any suggestions for what we should do? Can we come up with some way
-> to validate the new SP value before 6pm UTC this evening?
+> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> index 37f0b4274113..853ddac00d5b 100644
+> --- a/drivers/vhost/vsock.c
+> +++ b/drivers/vhost/vsock.c
+> @@ -722,6 +722,10 @@ static void vhost_vsock_reset_orphans(struct sock *sk)
+>  	 * executing.
+>  	 */
+>  
+> +	/* Only handle our own sockets */
+> +	if (vsk->transport != &vhost_transport.transport)
+> +		return;
+> +
+>  	/* If the peer is still valid, no need to reset connection */
+>  	if (vhost_vsock_get(vsk->remote_addr.svm_cid))
+>  		return;
 
-Also, looking deeper at the last linaro job report:
 
-https://lkft.validation.linaro.org/scheduler/job/4688599#L684
+We know this is incomplete though. So I think it's the wrong thing to do
+when you backport, too. If all you worry about is breaking a binary
+module interface, how about simply exporting a new function when you
+backport. Thus you will have downstream both:
 
-the dumped memory doesn't look like an exception stack. If it was,
-e82aab40 would be the saved CPSR value and c388eb80 would be the PC
-value, both of which are nonsense.
+void vsock_for_each_connected_socket(void (*fn)(struct sock *sk));
 
-The stack that we were in (and we dumped out in full) was:
+void vsock_for_each_connected_socket_new(struct vsock_transport *transport,
+                                    void (*fn)(struct sock *sk));
 
-Stack: (0xc381bb30 to 0xc381c000)
 
-and the exception stack (the saved pt_regs) is:
+and then upstream we can squash these two patches.
 
-                                    r0       r1       r2       r3       r4
-bfa0: c2ba47c0 0000000a c2ba1358 ffff9537 c2c05d00 00400140 c62d5624 c1948b20
-         r5       r6       r7       r8       r9       r10      fp       ip
-bfc0: e82ab498 c62d5400 c35377a0 c62d5404 25706000 c381bfe8 c62d5400 00000001
-         sp       lr       pc      cpsr    orig_r0
-bfe0: c5fcfc48 c036251c c0995a14 20040013 ffffffff c5fcfc7c c62d5400 c0300bf0
+Hmm?
 
-but, we end up dumping out:
 
-Exception stack(0xc5fcfc98 to 0xc5fcfce0)
-fc80:                                                       b6a3ab70 00000004
-fca0: 00000000 00000004 b6a3ab70 c055f928 c388eb80 c5fcfd40 00000000 c5fcfd50
-fcc0: 00000005 00000051 e82aad1c c03ae570 00000000 c388eb80 c3512a20 e82aab40
+> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> index fb3302fff627..61b24eb31d4b 100644
+> --- a/net/vmw_vsock/virtio_transport.c
+> +++ b/net/vmw_vsock/virtio_transport.c
+> @@ -24,6 +24,7 @@
+>  static struct workqueue_struct *virtio_vsock_workqueue;
+>  static struct virtio_vsock __rcu *the_virtio_vsock;
+>  static DEFINE_MUTEX(the_virtio_vsock_mutex); /* protects the_virtio_vsock */
+> +static struct virtio_transport virtio_transport; /* forward declaration */
+>  
+>  struct virtio_vsock {
+>  	struct virtio_device *vdev;
+> @@ -357,11 +358,17 @@ static void virtio_vsock_event_fill(struct virtio_vsock *vsock)
+>  
+>  static void virtio_vsock_reset_sock(struct sock *sk)
+>  {
+> +	struct vsock_sock *vsk = vsock_sk(sk);
+> +
+>  	/* vmci_transport.c doesn't take sk_lock here either.  At least we're
+>  	 * under vsock_table_lock so the sock cannot disappear while we're
+>  	 * executing.
+>  	 */
+>  
+> +	/* Only handle our own sockets */
+> +	if (vsk->transport != &virtio_transport.transport)
+> +		return;
+> +
+>  	sk->sk_state = TCP_CLOSE;
+>  	sk->sk_err = ECONNRESET;
+>  	sk_error_report(sk);
+> diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+> index 7aef34e32bdf..cd2f01513fae 100644
+> --- a/net/vmw_vsock/vmci_transport.c
+> +++ b/net/vmw_vsock/vmci_transport.c
+> @@ -803,6 +803,11 @@ static void vmci_transport_handle_detach(struct sock *sk)
+>  	struct vsock_sock *vsk;
+>  
+>  	vsk = vsock_sk(sk);
+> +
+> +	/* Only handle our own sockets */
+> +	if (vsk->transport != &vmci_transport)
+> +		return;
+> +
+>  	if (!vmci_handle_is_invalid(vmci_trans(vsk)->qp_handle)) {
+>  		sock_set_flag(sk, SOCK_DONE);
+>  
+> -- 
+> 2.35.1.723.g4982287a31-goog
 
-Firstly, that's in the wrong stack to be dumping for the exception
-stack, and secondly, why is it 0x50 bytes above the saved SP value from
-the real exception stack - that makes no sense in itself.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

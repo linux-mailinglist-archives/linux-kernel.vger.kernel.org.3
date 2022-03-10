@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633AF4D3EB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEE14D3EB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbiCJBXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 20:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S237036AbiCJBYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 20:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiCJBXT (ORCPT
+        with ESMTP id S232553AbiCJBYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 20:23:19 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE3412756E;
-        Wed,  9 Mar 2022 17:22:20 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22A0a8rw022133;
-        Thu, 10 Mar 2022 01:22:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=BMOQijfPxKxeD41463c4qMnhFFwbfqkfwHXCsb/Fq0c=;
- b=Lqrezjg734uyFYsf+eiY5loDGf3Wl8tHyvxmb64V1oFZNwhK1LjTsxgLOU+oI7FtidoB
- 89/H5Ae/63B7zrjNBLQVS5MBASbepF7aNGClBa1IuLr3tTzV9fV6CLuAFwgpclDhJvN/
- AaVHZUecmuBPfjV0xOmgEW5Q4ro5/1qg2m+3b3/L4DXaF8g1NdAG/5d+GozKfieZz+p/
- crWrSZ8h7v8eenjjS/xS/ABo+vYX+lLV5+Pk5hKFz2GnBjHo/Aug2XIXExBlBMLlxzg9
- YJpyJTlXDRe/X+vbsQIHJuD8cSY1e01bOLYA+q7nQ7hQxag5S/qyIHceWSq5GaWy+DTX pQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3enu2tdp90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 01:22:13 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22A1IEFQ022641;
-        Thu, 10 Mar 2022 01:22:12 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3enu2tdp87-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 01:22:12 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22A1DgIN019159;
-        Thu, 10 Mar 2022 01:22:09 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3epysw8kjs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 01:22:09 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22A1M7bT54788386
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Mar 2022 01:22:07 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28D3BAE055;
-        Thu, 10 Mar 2022 01:22:07 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89058AE053;
-        Thu, 10 Mar 2022 01:22:06 +0000 (GMT)
-Received: from localhost (unknown [9.43.30.40])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 10 Mar 2022 01:22:06 +0000 (GMT)
-Date:   Thu, 10 Mar 2022 06:52:05 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 0/9] ext4: Improve FC trace events and discuss one FC
- failure
-Message-ID: <20220310012143.hdssmcricg3rohfw@riteshh-domain>
-References: <cover.1645558375.git.riteshh@linux.ibm.com>
- <YijoeFbb54zHMHq6@mit.edu>
+        Wed, 9 Mar 2022 20:24:08 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D952B96
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:23:09 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2db2add4516so42748167b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 17:23:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ws9DDxQhvCEEb7BpXYKAziEzXNx+Th/TR7SYTtd0TTQ=;
+        b=rPsL/UBSo75uMp4Kf4nWtT3UmSyBb+aUjlKo7XO76dew6M+tRnOTBKom4Rkf30yX1P
+         j/V9sqWLqsUYMqCurq0M4aq8rHEaSLVt4DUdM3rFOmKzAwTBenKB5ytJJ5biMLVwWPg4
+         W8tVLU0pNc0c9r4CqnxJP5Wq4xYRDBuSH8jLyXSZnNzc2jBml6ze4twSn6IngDsEOBJF
+         mu3B1/CvZo1d34EDoxRvRj2mHhS5lb7o7/KFvZmfgu9yZNZu07ig//34FX3rjgErW4Rd
+         FarGDXiXTiFkYCrnK8S0LLn5ooNOx/bkP2jv2KuC17CBMcEuayYvxNPWJGms8PvAZlua
+         GAOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ws9DDxQhvCEEb7BpXYKAziEzXNx+Th/TR7SYTtd0TTQ=;
+        b=HaUNlXPWm8LlldkvJemOFu9CfOkXDEU/jkuLBsJfgkZRQYDGCrD+kKzObgX295GOB0
+         YB1fhv0fgy6M8q2CmhswZ6Ws+7T4iYDqaqkIJO0O+9FK4/j3fjAhqWmOIMEd2azGJ9KO
+         QD5BI1RcvzDT1oP8gy8cuNTXlOEJEOLP+XkblblHCJhy32ZLDr8LAnfnbmWlDzRNTGeH
+         LYxDt+fZT2tSebc+cMNDl0mAAXcZiBD1NU2dKUS4rTzlZCLfXjkDStX3HZ0+lqQznXue
+         Uw4Po5c1hmDBin3wpJ1kU8uZzsHO8jur3aYA7T7eABtdf0TBV39S3G2yK+KlXmgXqbOz
+         jkiQ==
+X-Gm-Message-State: AOAM533ZLoDasJYB1UXvBph43pye3dENF2keHenx8uVAmVt9JTO3dYCn
+        ejLy6TQMhtdgGTIxT+735YyUoetPDd8GvDp6w7vlwiQKJy5NhQ==
+X-Google-Smtp-Source: ABdhPJz66JQy/7OqGLGZmSbVvxn4N7z0wbJVqc4K4gqb0fIa80CrjLzJgWezBlCYZftD5uvE0w/ZkwVpokmDSpngMmU=
+X-Received: by 2002:a81:854:0:b0:2db:255b:dd6 with SMTP id 81-20020a810854000000b002db255b0dd6mr2200475ywi.140.1646875388271;
+ Wed, 09 Mar 2022 17:23:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YijoeFbb54zHMHq6@mit.edu>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LnCoX3j89LYzev5GI7-bf1AqZ10Pt6tB
-X-Proofpoint-GUID: fNvst2t0P-Qe5zjBVhwHIC86rvMcJ3sx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-09_10,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
- impostorscore=0 phishscore=0 suspectscore=0 malwarescore=0 mlxlogscore=444
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203100002
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+References: <20220309144138.360482-1-arnd@kernel.org> <20220309144138.360482-2-arnd@kernel.org>
+ <27250b4e-cf04-0dab-d658-bb472face5ea@arm.com> <CAK8P3a20ccBbAwgVkq3n6tMehFH4YEyzquTkF3V=nJ46Tk4ePg@mail.gmail.com>
+In-Reply-To: <CAK8P3a20ccBbAwgVkq3n6tMehFH4YEyzquTkF3V=nJ46Tk4ePg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 10 Mar 2022 02:22:56 +0100
+Message-ID: <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: remove support for NOMMU ARMv4/v5
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,17 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/09 12:48PM, Theodore Ts'o wrote:
-> Ritesh,
+On Wed, Mar 9, 2022 at 5:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> Robin
+> > In that case, it would probably make sense to garbage-collect all the
+> > configs, setup code and other stuff relating to older MMU-less CPU cores
+> > like ARM1156, ARM940, etc. at the same time.
 >
-> Were you going to be sending a revised version of this patch series?
+> Right, good idea. These are only selected by CONFIG_ARCH_INTEGRATOR,
+> but that in turn doesn't build for CONFIG_MMU=n because it depends on
+> ARCH_MULTIPLATFORM. I'll send a patch for these.
 
-Hello Ted,
+Just delete these, I do have these CPU tiles around but they are so obscure
+and I never got around to even testing to boot them.
 
-Due to some unexpected guests at home, I was on leave since last weekend.
-I am starting to work from today. Let me work on the revised version of this
-patch series. I will try to complete it before end of day i.e. before
-our call.
-
-
--ritesh
+Yours,
+Linus Walleij

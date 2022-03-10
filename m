@@ -2,77 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2AD4D4268
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8104A4D426C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 09:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240307AbiCJIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 03:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
+        id S240301AbiCJIYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 03:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiCJIXK (ORCPT
+        with ESMTP id S230470AbiCJIYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:23:10 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C15D1301B6;
-        Thu, 10 Mar 2022 00:22:10 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so1339992pjb.3;
-        Thu, 10 Mar 2022 00:22:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z/Mr8oh0sWKEm17KedkzMdcKpYvzoba3uTd2uHZZr9s=;
-        b=X5ihtfVuum0YUKHMU2jEqc/tEzjv6a/y4+REtlgaXQECTGRJCtu/aJJcsq4m7/KfJK
-         UMf4hBdUYJGwVdbYQU94a57SU+/YGmMW5CpdGa+K+enoInnOnlkuQh3oKmJpphJLPZIl
-         g6wHG7Gb7E38d32RU4uxaz0ZXrnkuXDBBwUqkvhJdDUvd92wYPEmD1j8chbQ4sBo78xS
-         +uy4b2cX5ouWwTKYhmfgqn6lWt88VxBQcyZ5pzEofdgRvdjJx0R5iv4xvk6HweHwxP8R
-         L/mhBMQcw/f/ODTz0BevBtf7MG6muzgCjI3QRjpWzHLkYgayzOmhnQDnxJRKbAmQYIn7
-         wF2g==
+        Thu, 10 Mar 2022 03:24:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90DB8134DF7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:23:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646900628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/+l4Wm/+i9uQFSCO6Q6PGOilIGdBXACV/1I5jpny3c0=;
+        b=JK9gxxRKf7N77Uv2eV0Bot1yVxAS77yPFhPC6ADpQD9BH1LOWM+FOyYCRfZIa/f0XVasSX
+        6+mLL74RuXwGNAzWi4wG/XuZY0GS8HYuZf5JLgtYCHyFX9T85GXc9GoRamzUnpOUazIWSL
+        RG3DKQdcSs9yVq37IktkS8+l7DuWpfY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-516-3iTui-AXPZ6OwzS7WEfICQ-1; Thu, 10 Mar 2022 03:23:47 -0500
+X-MC-Unique: 3iTui-AXPZ6OwzS7WEfICQ-1
+Received: by mail-wm1-f69.google.com with SMTP id k41-20020a05600c1ca900b00389a2b983efso1828764wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 00:23:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=z/Mr8oh0sWKEm17KedkzMdcKpYvzoba3uTd2uHZZr9s=;
-        b=Jr5vYbi+27vFnlf0Hpg+G1x5Y3PgAUo5gsbVD7pSdjGH12XqjjioGH1YnWJgcyMtZG
-         f7WkA1qnv80bxblPv9R7E7Khe+q+ZLpnhRBBlJfwk72exXS91rbLUDnsvHIznrmQWELF
-         QFQRw9kL9jhhndkrXV/tt5gPon71dfv/xQb/0n1N8Wxz2kIX23H49jbg5Oow/bLSnAcM
-         DYp33yAbnxC3sqFkRfFsGMl3DEPJGQB8uBiTMGXhZaVF6JbCVj3EZLQcO9iwmc9WWHbq
-         3E2vQ8Y6t5y4NyhSrxwFqMqtfTRcbhsU/GMbymhwLjQbMxjN39z7fGEsVZOM98OHl7jT
-         NQwg==
-X-Gm-Message-State: AOAM532MnYzqx2AjoVEqfgbDvpEBX8sx1kmmqiyV/ZtWTiCjLWoci8r0
-        Vo0x2YDwxZwThhAvfh5dNBzasvU1QRs=
-X-Google-Smtp-Source: ABdhPJxaKvATvJcKM/p3sRrZdAYUBZaW3EkkpE4vAwzzsPiNpXHpRAotjVf4CnOg/RpQyF5KKuyVMg==
-X-Received: by 2002:a17:90b:2092:b0:1be:e373:2ed9 with SMTP id hb18-20020a17090b209200b001bee3732ed9mr3773083pjb.128.1646900529744;
-        Thu, 10 Mar 2022 00:22:09 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:e7f1:5749:9be:64e1])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056a000c8c00b004e1a76f0a8asm5903008pfv.51.2022.03.10.00.22.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 00:22:09 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eugene Loh <eugene.loh@oracle.com>, Hao Luo <haoluo@google.com>
-Subject: [PATCH 2/2] bpf/selftests: Test skipping stacktrace
-Date:   Thu, 10 Mar 2022 00:22:02 -0800
-Message-Id: <20220310082202.1229345-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-In-Reply-To: <20220310082202.1229345-1-namhyung@kernel.org>
-References: <20220310082202.1229345-1-namhyung@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=/+l4Wm/+i9uQFSCO6Q6PGOilIGdBXACV/1I5jpny3c0=;
+        b=QYL1JOWM3rKI8l30uBeqYbveDk8zAFjy79Jf8s7fVnGp81InwlrbaM97dwyEzkdzYo
+         VLVIzfXURVaPRbpF1ofk/b1IbIUAQiof6RL0VwSrpOMwRG6T6O6fgPSLMIAYn2qO7wo6
+         5jBwcVUU2vgZMElFccrLv5VcbynATkotp6SLR9ryM5KSMtFfyHHkm93qUUoN73tp6BQh
+         6SwqMgrb2nPO8EAtxcj4rkLCJ9S7NnvCfscW/ZwfO7K76mEQFcg+3DpsWRyfwxHhllXn
+         Qs9Qo+H2N7NyU442wXXGGIRowCarqPvs2jIUzTSCXtGU1sIyLOmw2VkxjiR/2wwIgT5B
+         5Rjg==
+X-Gm-Message-State: AOAM530zSe33H/grxqEHNTAGUi/u56jr/vtstPtgXf0fWmwKjqiFrHLE
+        yARUb+uvNCsM7b8QUYMOnrUPfhzMzRnJ32cw85BMoING1OQ4toyisteLpOfc7pxj7ot1EvsW4FO
+        hkCCfmxNa0suQefjCSVGRnaHG
+X-Received: by 2002:a7b:c94e:0:b0:386:3694:3e78 with SMTP id i14-20020a7bc94e000000b0038636943e78mr2547359wml.22.1646900626459;
+        Thu, 10 Mar 2022 00:23:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyZ5LGXrpDG+oZXlWmRve+wbXFrXo6EIpXvBD1ZCdvaQeZfsct49X7TFx7LGk8Zp1FwATZQ/w==
+X-Received: by 2002:a7b:c94e:0:b0:386:3694:3e78 with SMTP id i14-20020a7bc94e000000b0038636943e78mr2547338wml.22.1646900626207;
+        Thu, 10 Mar 2022 00:23:46 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id i8-20020a7bc948000000b003898dfd7990sm4200666wml.29.2022.03.10.00.23.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 00:23:45 -0800 (PST)
+Message-ID: <9059fa71-330f-f04f-b155-2850abb72a71@redhat.com>
+Date:   Thu, 10 Mar 2022 09:23:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ARM/dma-mapping: Remove CMA code when not built with CMA
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zi Yan <ziy@nvidia.com>, Hari Bathini <hbathini@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20220309175107.195182-1-keescook@chromium.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220309175107.195182-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,184 +92,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test case for stacktrace with skip > 0 using a small sized
-buffer.  It didn't support skipping entries greater than or equal to
-the size of buffer and filled the skipped part with 0.
+On 09.03.22 18:51, Kees Cook wrote:
+> The MAX_CMA_AREAS could be set to 0, which would result in code that would
+> attempt to operate beyond the end of a zero-sized array. If CONFIG_CMA
+> is disabled, just remove this code entirely. Found when building with
+> -Warray-bounds:
+> 
+> arch/arm/mm/dma-mapping.c:396:22: warning: array subscript <unknown> is outside array bounds of 'str
+> uct dma_contig_early_reserve[0]' [-Warray-bounds]
+>   396 |         dma_mmu_remap[dma_mmu_remap_num].size = size;
+>       |         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+> arch/arm/mm/dma-mapping.c:389:40: note: while referencing 'dma_mmu_remap'
+>   389 | static struct dma_contig_early_reserve dma_mmu_remap[MAX_CMA_AREAS] __initdata;
+>       |                                        ^~~~~~~~~~~~~
+> 
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Logan Gunthorpe <logang@deltatee.com>
+> Cc: Martin Oliveira <martin.oliveira@eideticom.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Hari Bathini <hbathini@linux.ibm.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- .../bpf/prog_tests/stacktrace_map_skip.c      | 72 ++++++++++++++++
- .../selftests/bpf/progs/stacktrace_map_skip.c | 82 +++++++++++++++++++
- 2 files changed, 154 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
- create mode 100644 tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
-new file mode 100644
-index 000000000000..bcb244aa3c78
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "stacktrace_map_skip.skel.h"
-+
-+#define TEST_STACK_DEPTH  2
-+
-+void test_stacktrace_map_skip(void)
-+{
-+	struct stacktrace_map_skip *skel;
-+	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
-+	int err, stack_trace_len;
-+	__u32 key, val, duration = 0;
-+
-+	skel = stacktrace_map_skip__open_and_load();
-+	if (CHECK(!skel, "skel_open_and_load", "skeleton open failed\n"))
-+		return;
-+
-+	/* find map fds */
-+	control_map_fd = bpf_map__fd(skel->maps.control_map);
-+	if (CHECK_FAIL(control_map_fd < 0))
-+		goto out;
-+
-+	stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
-+	if (CHECK_FAIL(stackid_hmap_fd < 0))
-+		goto out;
-+
-+	stackmap_fd = bpf_map__fd(skel->maps.stackmap);
-+	if (CHECK_FAIL(stackmap_fd < 0))
-+		goto out;
-+
-+	stack_amap_fd = bpf_map__fd(skel->maps.stack_amap);
-+	if (CHECK_FAIL(stack_amap_fd < 0))
-+		goto out;
-+
-+	err = stacktrace_map_skip__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed\n"))
-+		goto out;
-+
-+	/* give some time for bpf program run */
-+	sleep(1);
-+
-+	/* disable stack trace collection */
-+	key = 0;
-+	val = 1;
-+	bpf_map_update_elem(control_map_fd, &key, &val, 0);
-+
-+	/* for every element in stackid_hmap, we can find a corresponding one
-+	 * in stackmap, and vise versa.
-+	 */
-+	err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
-+	if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
-+	if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	stack_trace_len = TEST_STACK_DEPTH * sizeof(__u64);
-+	err = compare_stack_ips(stackmap_fd, stack_amap_fd, stack_trace_len);
-+	if (CHECK(err, "compare_stack_ips stackmap vs. stack_amap",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	if (CHECK(skel->bss->failed, "check skip",
-+		  "failed to skip some depth: %d", skel->bss->failed))
-+		goto out;
-+
-+out:
-+	stacktrace_map_skip__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c b/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
-new file mode 100644
-index 000000000000..323248b17ae4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define TEST_STACK_DEPTH         2
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} control_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} stackid_hmap SEC(".maps");
-+
-+typedef __u64 stack_trace_t[TEST_STACK_DEPTH];
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, stack_trace_t);
-+} stackmap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, stack_trace_t);
-+} stack_amap SEC(".maps");
-+
-+/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
-+struct sched_switch_args {
-+	unsigned long long pad;
-+	char prev_comm[TASK_COMM_LEN];
-+	int prev_pid;
-+	int prev_prio;
-+	long long prev_state;
-+	char next_comm[TASK_COMM_LEN];
-+	int next_pid;
-+	int next_prio;
-+};
-+
-+int failed = 0;
-+
-+SEC("tracepoint/sched/sched_switch")
-+int oncpu(struct sched_switch_args *ctx)
-+{
-+	__u32 max_len = TEST_STACK_DEPTH * sizeof(__u64);
-+	__u32 key = 0, val = 0, *value_p;
-+	__u64 *stack_p;
-+
-+	value_p = bpf_map_lookup_elem(&control_map, &key);
-+	if (value_p && *value_p)
-+		return 0; /* skip if non-zero *value_p */
-+
-+	/* it should allow skipping whole buffer size entries */
-+	key = bpf_get_stackid(ctx, &stackmap, TEST_STACK_DEPTH);
-+	if ((int)key >= 0) {
-+		/* The size of stackmap and stack_amap should be the same */
-+		bpf_map_update_elem(&stackid_hmap, &key, &val, 0);
-+		stack_p = bpf_map_lookup_elem(&stack_amap, &key);
-+		if (stack_p) {
-+			bpf_get_stack(ctx, stack_p, max_len, TEST_STACK_DEPTH);
-+			/* it wrongly skipped all the entries and filled zero */
-+			if (stack_p[0] == 0)
-+				failed = 1;
-+		}
-+	} else if ((int)key == -14/*EFAULT*/) {
-+		/* old kernel doesn't support skipping that many entries */
-+		failed = 2;
-+	}
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+
 -- 
-2.35.1.723.g4982287a31-goog
+Thanks,
+
+David / dhildenb
 

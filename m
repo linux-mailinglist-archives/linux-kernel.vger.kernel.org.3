@@ -2,179 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CEF4D4432
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D584D4436
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbiCJKGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S241013AbiCJKGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiCJKGJ (ORCPT
+        with ESMTP id S239862AbiCJKGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:06:09 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40EB12E740
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:05:07 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8877E20013;
-        Thu, 10 Mar 2022 10:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646906706;
+        Thu, 10 Mar 2022 05:06:32 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E102B13D927;
+        Thu, 10 Mar 2022 02:05:29 -0800 (PST)
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1646906727;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=88r9SgegOwj8JcyRTnLX0jSIAfsVNO9jUeNpV3IJC6M=;
-        b=VWKcO82M/UFRq9ncCnHhc1uhr2+cFBMzb4ICDHJnsYIBlfPf9lXM2zhemM1A96CYGg8UxQ
-        jVmsDVQmvLtmMv8CwYyYdVPxAaHyA+LZTBmruCooU4hZoNVu+g60EEoQy5a4SWPCjUnXEG
-        0SnpY0dfQ7VGJu4mR9HW3LEL8icthyQg9/fvhOzk67ZNf09Njo6OFSrb3v+2VL+Nfvvvn4
-        DVK2/kS1Siby/ud2l0PEAp5SbHOjSHXxcfjgseNOmJ+dPqP4JGukI7sW2KYP7aoGidyRpc
-        pK/BeRfCAVmRiZSyvpJkNOZHQy1dIqc2up41GC2Uz+90UW+Htw0M+Cv7ky4P3g==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: marvell: armada-37xx: Remap IO space to
- bus address 0x0
-In-Reply-To: <20220304163027.29357-1-pali@kernel.org>
-References: <20220218212526.16021-1-pali@kernel.org>
- <20220304163027.29357-1-pali@kernel.org>
-Date:   Thu, 10 Mar 2022 11:05:00 +0100
-Message-ID: <87k0d2i0mr.fsf@BL-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        bh=3foo4IBq+VNhTGJqCbz0M875nlbh1xPHd3tOvuW4KPk=;
+        b=m18yJ7+5O81EhFALTkHrcN9BnzZPnwiX4RwKnfLgeyQdTsRL2BlqBOaM77EfP8pZtHRnHC
+        hnklXbDLIdF9cmwZub3OG0hpqDvo+x+B57ZULVi360JxHzgXG3+pQWqVu7aCAG3KeeRa7a
+        khFmgFaILiLG6tfli7+fyVxkL+KLMyM=
+Date:   Thu, 10 Mar 2022 10:05:26 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <41c8d5b613b7c6944ac304edab90a563@linux.dev>
+Subject: Re: [PATCH rdma-next] Revert "RDMA/core: Fix ib_qp_usecnt_dec()
+ called when error"
+To:     "Leon Romanovsky" <leon@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        "Jason Gunthorpe" <jgg@nvidia.com>
+In-Reply-To: <YinJfYLOrzzhPykO@unreal>
+References: <YinJfYLOrzzhPykO@unreal>
+ <74c11029adaf449b3b9228a77cc82f39e9e892c8.1646851220.git.leonro@nvidia.com>
+ <18cd9e734496d2ab93cbe77d446fd33d@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Pali,
-
-> Legacy and old PCI I/O based cards do not support 32-bit I/O addressing.
->
-> Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
-> 'ranges' DT property") kernel can set different PCIe address on CPU and
-> different on the bus for the one A37xx address mapping without any firmwa=
-re
-> support in case the bus address does not conflict with other A37xx mappin=
-g.
->
-> So remap I/O space to the bus address 0x0 to enable support for old legacy
-> I/O port based cards which have hardcoded I/O ports in low address space.
->
-> Note that DDR on A37xx is mapped to bus address 0x0. And mapping of I/O
-> space can be set to address 0x0 too because MEM space and I/O space are
-> separate and so do not conflict.
->
-> Remapping IO space on Turris Mox to different address is not possible to
-> due bootloader bug.
->
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Fixes: 76f6386b25cc ("arm64: dts: marvell: Add Aardvark PCIe support for =
-Armada 3700")
-> Cc: stable@vger.kernel.org # 64f160e19e92 ("PCI: aardvark: Configure PCIe=
- resources from 'ranges' DT property")
-> Cc: stable@vger.kernel.org # 514ef1e62d65 ("arm64: dts: marvell: armada-3=
-7xx: Extend PCIe MEM space")
->
-Cc: stable@vger.kernel.org # ???????????? ("arm64: dts: marvell: armada-37x=
-x: Increase PCIe IO size from 64 KiB to 1 MiB")
-
-This patch has been refused by Arnd so I removed it from the mvebu/fixes
-branch so you should not apply anything on top of it.
-
-Actually I still try to first apply the old patch and then this one but
-it still fail. And it is also failed when I applied this one on a
-v5.17-rc1, so I wondered on which did create this patch.
-
-Gr=C3=A9gory
-
-> ---
-> Changes in v2:
-> * Do not remap IO space on Turris Mox
-> ---
->  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 7 ++++++-
->  arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 2 +-
->  2 files changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arc=
-h/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> index 6581092c2c90..2838e3f65ada 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> @@ -150,17 +150,22 @@
->  	slot-power-limit =3D <10000>;
->  	/*
->  	 * U-Boot port for Turris Mox has a bug which always expects that "rang=
-es" DT property
->  	 * contains exactly 2 ranges with 3 (child) address cells, 2 (parent) a=
-ddress cells and
-> -	 * 2 size cells and also expects that the second range starts at 16 MB =
-offset. If these
-> +	 * 2 size cells and also expects that the second range starts at 16 MB =
-offset. Also it
-> +	 * expects that first range uses same address for PCI (child) and CPU (=
-parent) cells (so
-> +	 * no remapping) and that this address is the lowest from all specified=
- ranges. If these
->  	 * conditions are not met then U-Boot crashes during loading kernel DTB=
- file. PCIe address
->  	 * space is 128 MB long, so the best split between MEM and IO is to use=
- fixed 16 MB window
->  	 * for IO and the rest 112 MB (64+32+16) for MEM. Controller supports 3=
-2-bit IO mapping.
->  	 * This bug is not present in U-Boot ports for other Armada 3700 device=
-s and is fixed in
->  	 * U-Boot version 2021.07. See relevant U-Boot commits (the last one co=
-ntains fix):
->  	 * https://source.denx.de/u-boot/u-boot/-/commit/cb2ddb291ee6fcbddd6d8f=
-4ff49089dfe580f5d7
->  	 * https://source.denx.de/u-boot/u-boot/-/commit/c64ac3b3185aeb3846297a=
-d7391fc6df8ecd73bf
->  	 * https://source.denx.de/u-boot/u-boot/-/commit/4a82fca8e330157081fc13=
-2a591ebd99ba02ee33
-> +	 * Bug related to requirement of same child and parent addresses for fi=
-rst range is fixed
-> +	 * in U-Boot version 2022.04 by following commit:
-> +	 * https://source.denx.de/u-boot/u-boot/-/commit/1fd54253bca7d43d046bba=
-4853fe5fafd034bc17
->  	 */
->  	#address-cells =3D <3>;
->  	#size-cells =3D <2>;
->  	ranges =3D <0x81000000 0 0xe8000000   0 0xe8000000   0 0x01000000   /* =
-Port 0 IO */
-> diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/bo=
-ot/dts/marvell/armada-37xx.dtsi
-> index 549c3f7c5b27..a099b7787429 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> @@ -514,9 +514,9 @@
->  			 * IO at the end and the remaining seven windows
->  			 * (totaling 127 MiB) for MEM.
->  			 */
->  			ranges =3D <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /=
-* Port 0 MEM */
-> -				  0x81000000 0 0xeff00000   0 0xeff00000   0 0x00100000>; /* Port 0 =
-IO*/
-> +				  0x81000000 0 0x00000000   0 0xeff00000   0 0x00100000>; /* Port 0 =
-IO */
->  			interrupt-map-mask =3D <0 0 0 7>;
->  			interrupt-map =3D <0 0 0 1 &pcie_intc 0>,
->  					<0 0 0 2 &pcie_intc 1>,
->  					<0 0 0 3 &pcie_intc 2>,
-> --=20
-> 2.20.1
->
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+ok=EF=BC=8CIt seems that revert is the best option.=0A=0A=0AThanks=EF=BC=
+=81=0A -- Yajun=0A=0AMarch 10, 2022 5:48 PM, "Leon Romanovsky" <leon@kern=
+el.org> wrote:=0A=0A> On Thu, Mar 10, 2022 at 06:12:54AM +0000, Yajun Den=
+g wrote:=0A> =0A>> Hi, Leon.=0A>> Can you test the attached patch? If rev=
+ert it, ib_qp_usecnt_dec() would called before=0A>> ib_qp_usecnt_inc() wh=
+en=0A>> create_xrc_qp_user() return error.=0A> =0A> This patch brakes all=
+ RDMA drivers.=0A> =0A> [ 682.237910] ------------[ cut here ]-----------=
+-=0A> [ 682.239060] WARNING: CPU: 3 PID: 12201 at drivers/infiniband/core=
+/rdma_core.c:940=0A> uverbs_destroy_ufile_hw+0x1f1/0x270 [ib_uverbs]=0A> =
+[ 682.241313] Modules linked in: bonding rdma_ucm mlx5_ib ib_uverbs mlx5_=
+core nf_tables ib_ipoib=0A> ip_gre ib_umad ip6_gre gre ip6_tunnel tunnel6=
+ geneve ipip tunnel4 iptable_raw openvswitch nsh=0A> xt_conntrack xt_MASQ=
+UERADE nf_conntrack_netlink nfnetlink rpcrdma xt_addrtype ib_iser libiscs=
+i=0A> scsi_transport_iscsi rdma_cm iptable_nat nf_nat iw_cm br_netfilter =
+ib_cm ib_core overlay fuse [last=0A> unloaded: ib_uverbs]=0A> [ 682.24801=
+8] CPU: 3 PID: 12201 Comm: ibv_rc_pingpong Not tainted 5.17.0-rc1_rdma_ne=
+xt_mlx_43b963c=0A> #1=0A> [ 682.249942] Hardware name: QEMU Standard PC (=
+Q35 + ICH9, 2009), BIOS=0A> rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org =
+04/01/2014=0A> [ 682.252117] RIP: 0010:uverbs_destroy_ufile_hw+0x1f1/0x27=
+0 [ib_uverbs]=0A> [ 682.253453] Code: 3c 02 00 0f 85 8a 00 00 00 49 8b 85=
+ 10 01 00 00 48 85 c0 0f 84 0f ff ff ff 4c=0A> 89 e7 ff d0 e9 05 ff ff ff=
+ 0f 0b e9 75 ff ff ff <0f> 0b be 04 00 00 00 48 89 df e8 f0 e7 ff ff e9=
+=0A> a0 fe ff ff 4c 89=0A> [ 682.256929] RSP: 0018:ffff88812779fcf0 EFLAG=
+S: 00010206=0A> [ 682.258058] RAX: ffff88811423b520 RBX: ffff888185d31000=
+ RCX: ffffffffa09d1706=0A> [ 682.259457] RDX: 0000000000000000 RSI: 00000=
+00000000004 RDI: ffff88810cae21c0=0A> [ 682.260838] RBP: 0000000000000001=
+ R08: 0000000000000001 R09: ffff88810cae21c3=0A> [ 682.262282] R10: ffffe=
+d102195c438 R11: 00000000ffffffff R12: ffff888185d31198=0A> [ 682.263688]=
+ R13: ffffed1030ba6233 R14: ffff888185d310a0 R15: ffff888185d310c0=0A> [ =
+682.265078] FS: 0000000000000000(0000) GS:ffff8882a3f80000(0000) knlGS:00=
+00000000000000=0A> [ 682.266767] CS: 0010 DS: 0000 ES: 0000 CR0: 00000000=
+80050033=0A> [ 682.267948] CR2: 00007f715b6a6000 CR3: 0000000004226001 CR=
+4: 0000000000370ea0=0A> [ 682.269346] DR0: 0000000000000000 DR1: 00000000=
+00000000 DR2: 0000000000000000=0A> [ 682.270770] DR3: 0000000000000000 DR=
+6: 00000000fffe0ff0 DR7: 0000000000000400=0A> [ 682.272154] Call Trace:=
+=0A> [ 682.272769] <TASK>=0A> [ 682.273338] ib_uverbs_close+0x4d/0x250 [i=
+b_uverbs]=0A> [ 682.274422] __fput+0x1fc/0x8d0=0A> [ 682.275184] task_wor=
+k_run+0xc5/0x160=0A> [ 682.276007] do_exit+0xa33/0x23f0=0A> [ 682.276779]=
+ ? vfs_write+0x3c7/0x8e0=0A> [ 682.277625] ? mm_update_next_owner+0x6d0/0=
+x6d0=0A> [ 682.278615] ? ksys_write+0x176/0x1d0=0A> [ 682.279448] do_grou=
+p_exit+0xb7/0x2a0=0A> [ 682.280288] __x64_sys_exit_group+0x3a/0x50=0A> [ =
+682.281197] do_syscall_64+0x3d/0x90=0A> [ 682.282055] entry_SYSCALL_64_af=
+ter_hwframe+0x44/0xae=0A> [ 682.283130] RIP: 0033:0x7f715b941181=0A> [ 68=
+2.283949] Code: Unable to access opcode bytes at RIP 0x7f715b941157.=0A> =
+[ 682.285235] RSP: 002b:00007ffcf2b0d508 EFLAGS: 00000246 ORIG_RAX: 00000=
+000000000e7=0A> [ 682.286848] RAX: ffffffffffffffda RBX: 00007f715ba38470=
+ RCX: 00007f715b941181=0A> [ 682.288247] RDX: 000000000000003c RSI: 00000=
+000000000e7 RDI: 0000000000000001=0A> [ 682.289673] RBP: 0000000000000001=
+ R08: ffffffffffffff80 R09: 0000000000000000=0A> [ 682.291065] R10: 00000=
+00000000002 R11: 0000000000000246 R12: 00007f715ba38470=0A> [ 682.292441]=
+ R13: 0000000000000001 R14: 00007f715ba38948 R15: 0000000000000000=0A> [ =
+682.293859] </TASK>=0A> [ 682.294450] irq event stamp: 65515=0A> [ 682.29=
+5234] hardirqs last enabled at (65523): [<ffffffff8147c1d7>] __up_console=
+_sem+0x67/0x70=0A> [ 682.296949] hardirqs last disabled at (65530): [<fff=
+fffff8147c1bc>] __up_console_sem+0x4c/0x70=0A> [ 682.298487] ------------=
+[ cut here ]------------=0A> =0A> Thanks=0A> =0A>> Thanks=EF=BC=81=0A>> -=
+- Yajun=0A>> =0A>> March 10, 2022 2:42 AM, "Leon Romanovsky" <leon@kernel=
+.org> wrote:=0A>> =0A>> From: Leon Romanovsky <leonro@nvidia.com>=0A>> =
+=0A>> This reverts commit 7c4a539ec38f4ce400a0f3fcb5ff6c940fcd67bb. which=
+=0A>> causes to the following error in mlx4.=0A>> =0A>> [ 679.401416] ---=
+---------[ cut here ]------------=0A>> [ 679.403542] Destroy of kernel CQ=
+ shouldn't fail=0A>> [ 679.403580] WARNING: CPU: 4 PID: 18064 at include/=
+rdma/ib_verbs.h:3936=0A>> mlx4_ib_dealloc_xrcd+0x12e/0x1b0 [mlx4_ib]=0A>>=
+ [ 679.406534] Modules linked in: bonding ib_ipoib ip_gre ipip tunnel4 ge=
+neve rdma_ucm nf_tables=0A>> ib_umad mlx4_en mlx4_ib ib_uverbs mlx4_core =
+ip6_gre gre ip6_tunnel tunnel6 iptable_raw openvswitch=0A>> nsh rpcrdma i=
+b_iser libiscsi scsi_transport_iscsi rdma_cm iw_cm ib_cm ib_core xt_connt=
+rack=0A>> xt_MASQUERADE nf_conntrack_netlink nfnetlink xt_addrtype iptabl=
+e_nat nf_nat br_netfilter overlay=0A>> fuse [last unloaded: mlx4_core]=0A=
+>> [ 679.413323] CPU: 4 PID: 18064 Comm: ibv_xsrq_pingpo Not tainted 5.17=
+.0-rc7_master_62c6ecb #1=0A>> [ 679.415043] Hardware name: QEMU Standard =
+PC (Q35 + ICH9, 2009), BIOS=0A>> rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu=
+.org 04/01/2014=0A>> [ 679.417285] RIP: 0010:mlx4_ib_dealloc_xrcd+0x12e/0=
+x1b0 [mlx4_ib]=0A>> [ 679.418455] Code: 1e 93 08 00 40 80 fd 01 0f 87 fa =
+f1 04 00 83 e5 01 0f 85 2b ff ff ff 48 c7 c7=0A>> 20 4f b6 a0 c6 05 fd 92=
+ 08 00 01 e8 47 c9 82 e2 <0f> 0b e9 11 ff ff ff 0f b6 2d eb 92 08 00 40 8=
+0=0A>> fd 01 0f 87 b1 f1=0A>> [ 679.421993] RSP: 0018:ffff8881a4957750 EF=
+LAGS: 00010286=0A>> [ 679.423047] RAX: 0000000000000000 RBX: ffff8881ac4b=
+6800 RCX: 0000000000000000=0A>> [ 679.424420] RDX: 0000000000000027 RSI: =
+0000000000000004 RDI: ffffed103492aedc=0A>> [ 679.425818] RBP: 0000000000=
+000000 R08: 0000000000000001 R09: ffff8884d2e378eb=0A>> [ 679.427186] R10=
+: ffffed109a5c6f1d R11: 0000000000000001 R12: ffff888132620000=0A>> [ 679=
+.428553] R13: ffff8881a4957a90 R14: ffff8881aa2d4000 R15: ffff8881a4957ad=
+0=0A>> [ 679.429939] FS: 00007f0401747740(0000) GS:ffff8884d2e00000(0000)=
+ knlGS:0000000000000000=0A>> [ 679.431548] CS: 0010 DS: 0000 ES: 0000 CR0=
+: 0000000080050033=0A>> [ 679.432695] CR2: 000055f8ae036118 CR3: 00000001=
+2fe94005 CR4: 0000000000370ea0=0A>> [ 679.434099] DR0: 0000000000000000 D=
+R1: 0000000000000000 DR2: 0000000000000000=0A>> [ 679.435498] DR3: 000000=
+0000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400=0A>> [ 679.436914]=
+ Call Trace:=0A>> [ 679.437510] <TASK>=0A>> [ 679.438042] ib_dealloc_xrcd=
+_user+0xce/0x120 [ib_core]=0A>> [ 679.439245] ib_uverbs_dealloc_xrcd+0xad=
+/0x210 [ib_uverbs]=0A>> [ 679.440385] uverbs_free_xrcd+0xe8/0x190 [ib_uve=
+rbs]=0A>> [ 679.441453] destroy_hw_idr_uobject+0x7a/0x130 [ib_uverbs]=0A>=
+> [ 679.442568] uverbs_destroy_uobject+0x164/0x730 [ib_uverbs]=0A>> [ 679=
+.443699] uobj_destroy+0x72/0xf0 [ib_uverbs]=0A>> [ 679.444653] ib_uverbs_=
+cmd_verbs+0x19fb/0x3110 [ib_uverbs]=0A>> [ 679.445805] ? entry_SYSCALL_64=
+_after_hwframe+0x44/0xae=0A>> [ 679.446893] ? uverbs_finalize_object+0x50=
+/0x50 [ib_uverbs]=0A>> [ 679.448037] ? check_chain_key+0x24a/0x580=0A>> [=
+ 679.448919] ? uverbs_fill_udata+0x540/0x540 [ib_uverbs]=0A>> [ 679.45004=
+0] ? check_chain_key+0x24a/0x580=0A>> [ 679.450934] ? remove_vma+0xca/0x1=
+00=0A>> [ 679.451736] ? lock_acquire+0x1b1/0x4c0=0A>> [ 679.452553] ? loc=
+k_acquire+0x1b1/0x4c0=0A>> [ 679.453393] ? ib_uverbs_ioctl+0x11e/0x260 [i=
+b_uverbs]=0A>> [ 679.454438] ? __might_fault+0xb8/0x160=0A>> [ 679.455267=
+] ? lockdep_hardirqs_on_prepare+0x400/0x400=0A>> [ 679.456329] ib_uverbs_=
+ioctl+0x169/0x260 [ib_uverbs]=0A>> [ 679.457384] ? ib_uverbs_ioctl+0x11e/=
+0x260 [ib_uverbs]=0A>> [ 679.458443] ? ib_uverbs_cmd_verbs+0x3110/0x3110 =
+[ib_uverbs]=0A>> [ 679.459598] ? asm_sysvec_apic_timer_interrupt+0x12/0x2=
+0=0A>> [ 679.460689] ? mark_held_locks+0x9f/0xe0=0A>> [ 679.461577] __x64=
+_sys_ioctl+0x856/0x1550=0A>> [ 679.462439] ? vfs_fileattr_set+0x9f0/0x9f0=
+=0A>> [ 679.463328] ? __up_read+0x1a3/0x750=0A>> [ 679.464102] ? up_write=
++0x4a0/0x4a0=0A>> [ 679.464865] ? __vm_munmap+0x22e/0x2e0=0A>> [ 679.4656=
+90] ? __x64_sys_brk+0x840/0x840=0A>> [ 679.466519] ? __cond_resched+0x17/=
+0x80=0A>> [ 679.467340] ? lockdep_hardirqs_on_prepare+0x286/0x400=0A>> [ =
+679.468373] ? syscall_enter_from_user_mode+0x1d/0x50=0A>> [ 679.469411] d=
+o_syscall_64+0x3d/0x90=0A>> [ 679.470174] entry_SYSCALL_64_after_hwframe+=
+0x44/0xae=0A>> [ 679.471191] RIP: 0033:0x7f040191917b=0A>> [ 679.471961] =
+Code: 0f 1e fa 48 8b 05 1d ad 0c 00 64 c7=2000 26 00 00 00 48 c7 c0 ff ff=
+ ff ff c3 66=0A>> 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d=
+ 01 f0 ff ff 73 01 c3 48 8b 0d ed ac 0c 00=0A>> f7 d8 64 89 01 48=0A>> [ =
+679.475467] RSP: 002b:00007ffce7c4a038 EFLAGS: 00000246 ORIG_RAX: 0000000=
+000000010=0A>> [ 679.477014] RAX: ffffffffffffffda RBX: 00007ffce7c4a158 =
+RCX: 00007f040191917b=0A>> [ 679.478434] RDX: 00007ffce7c4a140 RSI: 00000=
+000c0181b01 RDI: 0000000000000003=0A>> [ 679.479840] RBP: 00007ffce7c4a12=
+0 R08: 000055f8ae02d080 R09: 0000000000000000=0A>> [ 679.481231] R10: 000=
+0000000000000 R11: 0000000000000246 R12: 00007ffce7c4a120=0A>> [ 679.4826=
+30] R13: 00007ffce7c4a110 R14: 000055f8ae02f440 R15: 0000000000000000=0A>=
+> [ 679.484003] </TASK>=0A>> [ 679.484535] irq event stamp: 62713=0A>> [ =
+679.485313] hardirqs last enabled at (62723): [<ffffffff81480f17>] __up_c=
+onsole_sem+0x67/0x70=0A>> [ 679.487019] hardirqs last disabled at (62730)=
+: [<ffffffff81480efc>] __up_console_sem+0x4c/0x70=0A>> [ 679.488734] soft=
+irqs last enabled at (62220): [<ffffffff8135679f>] __irq_exit_rcu+0x11f/0=
+x170=0A>> [ 679.490569] softirqs last disabled at (62215): [<ffffffff8135=
+679f>] __irq_exit_rcu+0x11f/0x170=0A>> [ 679.503168] ---[ end trace 00000=
+00000000000 ]---=0A>> =0A>> Fixes: 7c4a539ec38f ("RDMA/core: Fix ib_qp_us=
+ecnt_dec() called when error")=0A>> Signed-off-by: Leon Romanovsky <leonr=
+o@nvidia.com>=0A>> ---=0A>> drivers/infiniband/core/uverbs_cmd.c | 1 +=0A=
+>> drivers/infiniband/core/uverbs_std_types_qp.c | 1 +=0A>> drivers/infin=
+iband/core/verbs.c | 3 ++-=0A>> 3 files changed, 4 insertions(+), 1 delet=
+ion(-)=0A>> =0A>> diff --git a/drivers/infiniband/core/uverbs_cmd.c b/dri=
+vers/infiniband/core/uverbs_cmd.c=0A>> index 4437f834c0a7..6b6393176b3c 1=
+00644=0A>> --- a/drivers/infiniband/core/uverbs_cmd.c=0A>> +++ b/drivers/=
+infiniband/core/uverbs_cmd.c=0A>> @@ -1437,6 +1437,7 @@ static int create=
+_qp(struct uverbs_attr_bundle *attrs,=0A>> ret =3D PTR_ERR(qp);=0A>> goto=
+ err_put;=0A>> }=0A>> + ib_qp_usecnt_inc(qp);=0A>> =0A>> obj->uevent.uobj=
+ect.object =3D qp;=0A>> obj->uevent.event_file =3D READ_ONCE(attrs->ufile=
+->default_async_file);=0A>> diff --git a/drivers/infiniband/core/uverbs_s=
+td_types_qp.c=0A>> b/drivers/infiniband/core/uverbs_std_types_qp.c=0A>> i=
+ndex 75353e09c6fe..dd1075466f61 100644=0A>> --- a/drivers/infiniband/core=
+/uverbs_std_types_qp.c=0A>> +++ b/drivers/infiniband/core/uverbs_std_type=
+s_qp.c=0A>> @@ -254,6 +254,7 @@ static int UVERBS_HANDLER(UVERBS_METHOD_Q=
+P_CREATE)(=0A>> ret =3D PTR_ERR(qp);=0A>> goto err_put;=0A>> }=0A>> + ib_=
+qp_usecnt_inc(qp);=0A>> =0A>> if (attr.qp_type =3D=3D IB_QPT_XRC_TGT) {=
+=0A>> obj->uxrcd =3D container_of(xrcd_uobj, struct ib_uxrcd_object,=0A>>=
+ diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/v=
+erbs.c=0A>> index bc9a83f1ca2d..a9819c40a140 100644=0A>> --- a/drivers/in=
+finiband/core/verbs.c=0A>> +++ b/drivers/infiniband/core/verbs.c=0A>> @@ =
+-1245,7 +1245,6 @@ static struct ib_qp *create_qp(struct ib_device *dev, =
+struct ib_pd *pd,=0A>> if (ret)=0A>> goto err_security;=0A>> =0A>> - ib_q=
+p_usecnt_inc(qp);=0A>> rdma_restrack_add(&qp->res);=0A>> return qp;=0A>> =
+=0A>> @@ -1346,6 +1345,8 @@ struct ib_qp *ib_create_qp_kernel(struct ib_p=
+d *pd,=0A>> if (IS_ERR(qp))=0A>> return qp;=0A>> =0A>> + ib_qp_usecnt_inc=
+(qp);=0A>> +=0A>> if (qp_init_attr->cap.max_rdma_ctxs) {=0A>> ret =3D rdm=
+a_rw_init_mrs(qp, qp_init_attr);=0A>> if (ret)=0A>> --=0A>> 2.35.1

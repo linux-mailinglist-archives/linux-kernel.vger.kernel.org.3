@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CA14D4C0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5089E4D4C2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244118AbiCJO2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S243801AbiCJOey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243503AbiCJOZc (ORCPT
+        with ESMTP id S244476AbiCJO25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:25:32 -0500
+        Thu, 10 Mar 2022 09:28:57 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B958B7C7D;
-        Thu, 10 Mar 2022 06:22:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B80BD2248;
+        Thu, 10 Mar 2022 06:24:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29E5E61CEF;
-        Thu, 10 Mar 2022 14:21:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5D4C340E8;
-        Thu, 10 Mar 2022 14:21:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C02361CFB;
+        Thu, 10 Mar 2022 14:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D540C340E8;
+        Thu, 10 Mar 2022 14:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922109;
-        bh=cam9jz1lhBQ1bzbDOOb5/sES4ZWRJgbU5/7XX53WJgo=;
+        s=korg; t=1646922226;
+        bh=C+Kjyydpel09kWKlp+dh4V69PO5a/M+1eW27lj06JFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FfGPR7nTCLN/sUtzVCxnoXyfRT1TO/26ZsnQ//J9pm/S7V2b/d1PZ+H+r7KK4FSxg
-         s4rG9fieNXJfVlJ0GGZxw1JgsjZwlzkCjyV8C/V5JEPTY2g+BKbOB/+MUBDQYSmrAE
-         jvSg33J/I6e4+OR0eWPFpWhTmdPvDruS9xuSbEhg=
+        b=0GIoMIImdZnYvN/zIgcu7970ZxqYnnqYBiHWCTQEi6t3BCKDrb/5vVpatp0SmJjmg
+         q3fr8GR+wlLsiKQVcPdKtAkwbh1/XSLzB7s0Nvk+64nMCXlPh3xC/lZjn6ekyUlj6Y
+         +cpbHRjMiuEwfdzG+z9wi+l20C+MYWKgTa6WQ5Dg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Anthony Steinhauser <asteinhauser@google.com>,
-        Frank van der Linden <fllinden@amazon.com>
-Subject: [PATCH 4.19 01/33] x86/speculation: Merge one test in spectre_v2_user_select_mitigation()
-Date:   Thu, 10 Mar 2022 15:18:28 +0100
-Message-Id: <20220310140807.793272491@linuxfoundation.org>
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.10 11/58] ARM: early traps initialisation
+Date:   Thu, 10 Mar 2022 15:18:31 +0100
+Message-Id: <20220310140813.197349320@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
-References: <20220310140807.749164737@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,63 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-commit a5ce9f2bb665d1d2b31f139a02dbaa2dfbb62fa6 upstream.
+commit 04e91b7324760a377a725e218b5ee783826d30f5 upstream.
 
-Merge the test whether the CPU supports STIBP into the test which
-determines whether STIBP is required. Thus try to simplify what is
-already an insane logic.
+Provide a couple of helpers to copy the vectors and stubs, and also
+to flush the copied vectors and stubs.
 
-Remove a superfluous newline in a comment, while at it.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Anthony Steinhauser <asteinhauser@google.com>
-Link: https://lkml.kernel.org/r/20200615065806.GB14668@zn.tnic
-[fllinden@amazon.com: fixed contextual conflict (comment) for 4.19]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |   13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ arch/arm/kernel/traps.c |   27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -756,10 +756,12 @@ spectre_v2_user_select_mitigation(enum s
- 	}
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -806,10 +806,22 @@ static inline void __init kuser_init(voi
+ }
+ #endif
  
- 	/*
--	 * If enhanced IBRS is enabled or SMT impossible, STIBP is not
-+	 * If no STIBP, enhanced IBRS is enabled or SMT impossible, STIBP is not
- 	 * required.
++#ifndef CONFIG_CPU_V7M
++static void copy_from_lma(void *vma, void *lma_start, void *lma_end)
++{
++	memcpy(vma, lma_start, lma_end - lma_start);
++}
++
++static void flush_vectors(void *vma, size_t offset, size_t size)
++{
++	unsigned long start = (unsigned long)vma + offset;
++	unsigned long end = start + size;
++
++	flush_icache_range(start, end);
++}
++
+ void __init early_trap_init(void *vectors_base)
+ {
+-#ifndef CONFIG_CPU_V7M
+-	unsigned long vectors = (unsigned long)vectors_base;
+ 	extern char __stubs_start[], __stubs_end[];
+ 	extern char __vectors_start[], __vectors_end[];
+ 	unsigned i;
+@@ -830,17 +842,20 @@ void __init early_trap_init(void *vector
+ 	 * into the vector page, mapped at 0xffff0000, and ensure these
+ 	 * are visible to the instruction stream.
  	 */
--	if (!smt_possible || spectre_v2_enabled == SPECTRE_V2_IBRS_ENHANCED)
-+	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
-+	    !smt_possible ||
-+	    spectre_v2_enabled == SPECTRE_V2_IBRS_ENHANCED)
- 		return;
+-	memcpy((void *)vectors, __vectors_start, __vectors_end - __vectors_start);
+-	memcpy((void *)vectors + 0x1000, __stubs_start, __stubs_end - __stubs_start);
++	copy_from_lma(vectors_base, __vectors_start, __vectors_end);
++	copy_from_lma(vectors_base + 0x1000, __stubs_start, __stubs_end);
  
+ 	kuser_init(vectors_base);
+ 
+-	flush_icache_range(vectors, vectors + PAGE_SIZE * 2);
++	flush_vectors(vectors_base, 0, PAGE_SIZE * 2);
++}
+ #else /* ifndef CONFIG_CPU_V7M */
++void __init early_trap_init(void *vectors_base)
++{
  	/*
-@@ -771,12 +773,6 @@ spectre_v2_user_select_mitigation(enum s
- 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
- 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
- 
--	/*
--	 * If STIBP is not available, clear the STIBP mode.
--	 */
--	if (!boot_cpu_has(X86_FEATURE_STIBP))
--		mode = SPECTRE_V2_USER_NONE;
--
- 	spectre_v2_user_stibp = mode;
- 
- set_mode:
-@@ -1255,7 +1251,6 @@ static int ib_prctl_set(struct task_stru
- 		if (spectre_v2_user_ibpb == SPECTRE_V2_USER_NONE &&
- 		    spectre_v2_user_stibp == SPECTRE_V2_USER_NONE)
- 			return 0;
--
- 		/*
- 		 * With strict mode for both IBPB and STIBP, the instruction
- 		 * code paths avoid checking this task flag and instead,
+ 	 * on V7-M there is no need to copy the vector table to a dedicated
+ 	 * memory area. The address is configurable and so a table in the kernel
+ 	 * image can be used.
+ 	 */
+-#endif
+ }
++#endif
 
 

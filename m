@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52A24D4C2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326514D4C36
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345416AbiCJOlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:41:52 -0500
+        id S1344235AbiCJOxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:53:05 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245465AbiCJOac (ORCPT
+        with ESMTP id S1344062AbiCJObk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:30:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E83180218;
-        Thu, 10 Mar 2022 06:26:17 -0800 (PST)
+        Thu, 10 Mar 2022 09:31:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B173437022;
+        Thu, 10 Mar 2022 06:30:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30BF1B82615;
-        Thu, 10 Mar 2022 14:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6DEC340E8;
-        Thu, 10 Mar 2022 14:26:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AA81B81E9E;
+        Thu, 10 Mar 2022 14:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C4CC340E8;
+        Thu, 10 Mar 2022 14:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922374;
-        bh=MfHU0Kwo0xA5jQW28E3BI2IOIWOZWlLewPFWs+uMccc=;
+        s=korg; t=1646922611;
+        bh=Nvdc0gNUxRVbba+YUAyiUFdp6t8kfz07OiJe+ke0X5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vLNi7cVzw8Yv8g+1ZqEdppnF6OdCJlf4H21GOaEBd3mkHnJfUDAHE/d6MPsUTmBUO
-         lXbyBZAWsmxY6IotBlYSSqaruwgb6hQnhzIyBEzLkNJs7tW0utAETRG/uYoPL1X4NS
-         O0ElGum20UYtEZmRgz5WuXhfv27PvJ92aohEdtBs=
+        b=yLcYpLNmHZx5rXcqn5czy9wZWo8wZM2ZkW84+DZnADiGE46by3CrRTmXXSlV/Gwl0
+         lnxotoeSNkAD5mhBGGnmZ6+nZRu9w3cKL0/fDVDiKooOHR5XtCEVan0jkWQyIaiE7p
+         wS4LWz7s8oOK9c5NAj8lZyXRLopyUL/pRuwV4QBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Simon Gaiser <simon@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.10 55/58] xen/pvcalls: use alloc/free_pages_exact()
-Date:   Thu, 10 Mar 2022 15:19:15 +0100
-Message-Id: <20220310140814.433062031@linuxfoundation.org>
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 5.15 33/58] arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
+Date:   Thu, 10 Mar 2022 15:19:22 +0100
+Message-Id: <20220310140813.931763088@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
+References: <20220310140812.983088611@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: James Morse <james.morse@arm.com>
 
-Commit b0576cc9c6b843d99c6982888d59a56209341888 upstream.
+commit aff65393fa1401e034656e349abd655cfe272de0 upstream.
 
-Instead of __get_free_pages() and free_pages() use alloc_pages_exact()
-and free_pages_exact(). This is in preparation of a change of
-gnttab_end_foreign_access() which will prohibit use of high-order
-pages.
+kpti is an optional feature, for systems not using kpti a set of
+vectors for the spectre-bhb mitigations is needed.
 
-This is part of CVE-2022-23041 / XSA-396.
+Add another set of vectors, __bp_harden_el1_vectors, that will be
+used if a mitigation is needed and kpti is not in use.
 
-Reported-by: Simon Gaiser <simon@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+The EL1 ventries are repeated verbatim as there is no additional
+work needed for entry from EL1.
+
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/pvcalls-front.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/kernel/entry.S |   35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
---- a/drivers/xen/pvcalls-front.c
-+++ b/drivers/xen/pvcalls-front.c
-@@ -337,8 +337,8 @@ static void free_active_ring(struct sock
- 	if (!map->active.ring)
- 		return;
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -649,10 +649,11 @@ alternative_else_nop_endif
+ 	.macro tramp_ventry, vector_start, regsize, kpti
+ 	.align	7
+ 1:
+-	.if	\kpti == 1
+ 	.if	\regsize == 64
+ 	msr	tpidrro_el0, x30	// Restored in kernel_ventry
+ 	.endif
++
++	.if	\kpti == 1
+ 	/*
+ 	 * Defend against branch aliasing attacks by pushing a dummy
+ 	 * entry onto the return stack and using a RET instruction to
+@@ -740,6 +741,38 @@ SYM_DATA_END(__entry_tramp_data_start)
+ #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
  
--	free_pages((unsigned long)map->active.data.in,
--			map->active.ring->ring_order);
-+	free_pages_exact(map->active.data.in,
-+			 PAGE_SIZE << map->active.ring->ring_order);
- 	free_page((unsigned long)map->active.ring);
- }
- 
-@@ -352,8 +352,8 @@ static int alloc_active_ring(struct sock
- 		goto out;
- 
- 	map->active.ring->ring_order = PVCALLS_RING_ORDER;
--	bytes = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
--					PVCALLS_RING_ORDER);
-+	bytes = alloc_pages_exact(PAGE_SIZE << PVCALLS_RING_ORDER,
-+				  GFP_KERNEL | __GFP_ZERO);
- 	if (!bytes)
- 		goto out;
- 
+ /*
++ * Exception vectors for spectre mitigations on entry from EL1 when
++ * kpti is not in use.
++ */
++	.macro generate_el1_vector
++.Lvector_start\@:
++	kernel_ventry	1, t, 64, sync		// Synchronous EL1t
++	kernel_ventry	1, t, 64, irq		// IRQ EL1t
++	kernel_ventry	1, t, 64, fiq		// FIQ EL1h
++	kernel_ventry	1, t, 64, error		// Error EL1t
++
++	kernel_ventry	1, h, 64, sync		// Synchronous EL1h
++	kernel_ventry	1, h, 64, irq		// IRQ EL1h
++	kernel_ventry	1, h, 64, fiq		// FIQ EL1h
++	kernel_ventry	1, h, 64, error		// Error EL1h
++
++	.rept	4
++	tramp_ventry	.Lvector_start\@, 64, kpti=0
++	.endr
++	.rept 4
++	tramp_ventry	.Lvector_start\@, 32, kpti=0
++	.endr
++	.endm
++
++	.pushsection ".entry.text", "ax"
++	.align	11
++SYM_CODE_START(__bp_harden_el1_vectors)
++	generate_el1_vector
++SYM_CODE_END(__bp_harden_el1_vectors)
++	.popsection
++
++
++/*
+  * Register switch for AArch64. The callee-saved registers need to be saved
+  * and restored. On entry:
+  *   x0 = previous task_struct (must be preserved across the switch)
 
 

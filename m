@@ -2,374 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E29C4D4ACF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2164D4B00
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241261AbiCJOeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S1345613AbiCJOmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244418AbiCJO2y (ORCPT
+        with ESMTP id S245729AbiCJOav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:28:54 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDF3D109F;
-        Thu, 10 Mar 2022 06:23:57 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id s25so9687716lfs.10;
-        Thu, 10 Mar 2022 06:23:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=07et7HwSY9BHxN5Q8Cx8ST5Jg0BuLcxMuRIlXW2fIcQ=;
-        b=ck7d7Ixtes0T6imc+MFhHEuci+p6XMi1jVkv0oQgX4c/a0RHwucBs/ikAk9n0LHeGw
-         2h0mrhbjG+oTaEZ+C4qlu1SyjvybAGOhsWPMpgqfjwmqU0NG+tCG9df08ZIAhE1JEto+
-         FYz6cJGsbjVoD8omWIzxMjC0Fud9Q/i7Ey30Dfu62vFw5owRDTPQ8kL2iNxVzXY86k3U
-         WuAUNkFmYFJI4mVW514rJx6Gb9nMiDEeUfC8ifsw92UpUJZgkVuXXOEZqym2KbDuIn61
-         B2okrjkJK4GKRAMSuEmMTy8LPeQ+7RLUBJi9jKqzYsgsPpo6PJ1wdG31m0tcNpbV+zWa
-         1qOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=07et7HwSY9BHxN5Q8Cx8ST5Jg0BuLcxMuRIlXW2fIcQ=;
-        b=tylyFoeeXZTpEWpyU6s1K/4cZpk4Bstm82GxRl6BXHBmO9gsSHgPkpCgKo4ob+c/od
-         yhssCAhkZZhtthgrsTMq/KMu1kCge84cD8/NWpQiMtk6vTrgB2yhEjXp6C8blRZMkkdQ
-         lPHc5QLeJnzcQX4aO77BCa75y/b71+KO5lnF2yQX55AUX5YyRzQ28jmCbNNZRMO4XlnO
-         fwaZ3gTkTqUe5TyJ2kN+iyH9a83HzD+xktx+8UB62huaDPhUiMh3TYHOycgefR50iI17
-         LHCOYQE43WQktgbdWtSoYxwFJUHr9Z/3SoABFR6/Hu2oSdIWr3uMWadu8mFGbNFuK1RG
-         o+gQ==
-X-Gm-Message-State: AOAM530xQhMbo7YuiDpinSDIHE6wJKigRt7oNzvXdXn5p0XahWmsiIZd
-        G+CHgeIKidLWLIVGxHkQZvs=
-X-Google-Smtp-Source: ABdhPJyy/jn+6tMfQIsZVFwUZZV+QETTJ/CnrVbOxOmnnzG9gICK/yXmLQOnk8FS8iWeR6Jfi2pjAQ==
-X-Received: by 2002:a05:6512:4015:b0:448:2d9a:14f with SMTP id br21-20020a056512401500b004482d9a014fmr3111728lfb.156.1646922230642;
-        Thu, 10 Mar 2022 06:23:50 -0800 (PST)
-Received: from wse-c0127.beijerelectronics.com ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id 10-20020a2e080a000000b00247f82bbc6fsm1088932lji.54.2022.03.10.06.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 06:23:50 -0800 (PST)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB implementation
-Date:   Thu, 10 Mar 2022 15:23:20 +0100
-Message-Id: <20220310142320.611738-4-schultz.hans+netdev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
+        Thu, 10 Mar 2022 09:30:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854D9186461;
+        Thu, 10 Mar 2022 06:26:46 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id DF7EB1F381;
+        Thu, 10 Mar 2022 14:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646922345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=++Jw21RLpGNeaQls3k41a2AkvyCBXO9w+RoMdYIogPE=;
+        b=GZWn3eNCVSyZbAekI7KNyRFf5uXxm+oijBOaGyTNaM2/sruC9YIqDyJvG/mMC9CesdY/vA
+        XbJYBsSOErFba2VwMkmDpV2Xl8hqTNBK3dhL4krPn9hrAs09XZ92FFM4MzRFIUSt9DSq/o
+        KHg+h9LhKZEETfsdi6q1KfBQA6cRtrw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646922345;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=++Jw21RLpGNeaQls3k41a2AkvyCBXO9w+RoMdYIogPE=;
+        b=K57dwkBeez158WEN6yxWY9ftQ4J6I+SUcjXNVyz+JiFk0AUrdgy34vbCrL+3xG4fgOoZCg
+        /DRITECazwxbNmBw==
+Received: from vasant-suse.fritz.box (unknown [10.163.24.178])
+        by relay2.suse.de (Postfix) with ESMTP id 9C542A3BB4;
+        Thu, 10 Mar 2022 14:25:45 +0000 (UTC)
+From:   Vasant Karasulli <vkarasulli@suse.de>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ddiss@suse.de
+Cc:     Vasant Karasulli <vkarasulli@suse.de>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH v2 2/2] exfat currently unconditionally strips trailing periods '.' when performing path lookup, but allows them in the filenames during file creation. This is done intentionally, loosely following Windows behaviour and specifications which state:
+Date:   Thu, 10 Mar 2022 15:24:55 +0100
+Message-Id: <20220310142455.23127-3-vkarasulli@suse.de>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220310142455.23127-1-vkarasulli@suse.de>
+References: <20220310142455.23127-1-vkarasulli@suse.de>
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implementation for the Marvell mv88e6xxx chip series, is
-based on handling ATU miss violations occurring when packets
-ingress on a port that is locked. The mac address triggering
-the ATU miss violation is communicated through switchdev to
-the bridge module, which adds a fdb entry with the fdb locked
-flag set.
-Note: The locked port must have learning enabled for the ATU
-miss violation to occur.
+  #exFAT
+  The concatenated file name has the same set of illegal characters as
+  other FAT-based file systems (see Table 31).
 
-Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+  #FAT
+  ...
+  Leading and trailing spaces in a long name are ignored.
+  Leading and embedded periods are allowed in a name and are stored in
+  the long name. Trailing periods are ignored.
+
+Note: Leading and trailing space ' ' characters are currently retained
+by Linux kernel exfat, in conflict with the above specification.
+
+Some implementations, such as fuse-exfat, don't perform path trailer
+removal. When mounting images which contain trailing-dot paths, these
+paths are unreachable, e.g.:
+
+  + mount.exfat-fuse /dev/zram0 /mnt/test/
+  FUSE exfat 1.3.0
+  + cd /mnt/test/
+  + touch fuse_created_dots... '  fuse_created_spaces  '
+  + ls -l
+  total 0
+  -rwxrwxrwx 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
+  -rwxrwxrwx 1 root 0 0 Aug 18 09:45  fuse_created_dots...
+  + cd /
+  + umount /mnt/test/
+  + mount -t exfat /dev/zram0 /mnt/test
+  + cd /mnt/test
+  + ls -l
+  ls: cannot access 'fuse_created_dots...': No such file or directory
+  total 0
+  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
+  -????????? ? ?    ? ?            ?  fuse_created_dots...
+  + touch kexfat_created_dots... '  kexfat_created_spaces  '
+  + ls -l
+  ls: cannot access 'fuse_created_dots...': No such file or directory
+  total 0
+  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
+  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  kexfat_created_spaces  '
+  -????????? ? ?    ? ?            ?  fuse_created_dots...
+  -rwxr-xr-x 1 root 0 0 Aug 18 09:45  kexfat_created_dots
+  + cd /
+  + umount /mnt/test/
+
+With this change, the "keep_last_dots" mount option can be used to access
+paths with trailing periods and disallow creating files with names with
+trailing periods. E.g. continuing from the previous example:
+
+  + mount -t exfat -o keep_last_dots /dev/zram0 /mnt/test
+  + cd /mnt/test
+  + ls -l
+  total 0
+  -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  fuse_created_spaces  '
+  -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  kexfat_created_spaces  '
+  -rwxr-xr-x 1 root 0 0 Aug 18 10:32  fuse_created_dots...
+  -rwxr-xr-x 1 root 0 0 Aug 18 10:32  kexfat_created_dots
+
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1188964
+Link: https://lore.kernel.org/linux-fsdevel/003b01d755e4$31fb0d80$95f12880$
+@samsung.com/
+Link: https://docs.microsoft.com/en-us/windows/win32/fileio/exfat-specification
+Suggested-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Vasant Karasulli <vkarasulli@suse.de>
+Co-developed-by: David Disseldorp <ddiss@suse.de>
+Signed-off-by: David Disseldorp <ddiss@suse.de>
 ---
- drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
- drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
- drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
- drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
- drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
- .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
- .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
- drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
- drivers/net/dsa/mv88e6xxx/port.h              |  1 +
- 9 files changed, 138 insertions(+), 7 deletions(-)
- create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
- create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+ fs/exfat/namei.c | 50 ++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/Makefile b/drivers/net/dsa/mv88e6xxx/Makefile
-index c8eca2b6f959..3ca57709730d 100644
---- a/drivers/net/dsa/mv88e6xxx/Makefile
-+++ b/drivers/net/dsa/mv88e6xxx/Makefile
-@@ -15,3 +15,4 @@ mv88e6xxx-objs += port_hidden.o
- mv88e6xxx-$(CONFIG_NET_DSA_MV88E6XXX_PTP) += ptp.o
- mv88e6xxx-objs += serdes.o
- mv88e6xxx-objs += smi.o
-+mv88e6xxx-objs += mv88e6xxx_switchdev.o
-\ No newline at end of file
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 84b90fc36c58..e1b6bd738085 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1714,11 +1714,11 @@ static int mv88e6xxx_vtu_get(struct mv88e6xxx_chip *chip, u16 vid,
- 	return err;
+diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
+index af4eb39cc0c3..a4f8010fbd38 100644
+--- a/fs/exfat/namei.c
++++ b/fs/exfat/namei.c
+@@ -65,11 +65,14 @@ static int exfat_d_revalidate(struct dentry *dentry, unsigned int flags)
+ 	return ret;
  }
  
--static int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
--			      int (*cb)(struct mv88e6xxx_chip *chip,
--					const struct mv88e6xxx_vtu_entry *entry,
--					void *priv),
--			      void *priv)
-+int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-+		       int (*cb)(struct mv88e6xxx_chip *chip,
-+				 const struct mv88e6xxx_vtu_entry *entry,
-+				 void *priv),
-+		       void *priv)
+-/* returns the length of a struct qstr, ignoring trailing dots */
+-static unsigned int exfat_striptail_len(unsigned int len, const char *name)
++/* returns the length of a struct qstr, ignoring trailing dots if necessary */
++static unsigned int exfat_striptail_len(unsigned int len, const char *name,
++					bool keep_last_dots)
  {
- 	struct mv88e6xxx_vtu_entry entry = {
- 		.vid = mv88e6xxx_max_vid(chip),
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 30b92a265613..64e8fc470fdf 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -763,6 +763,11 @@ static inline void mv88e6xxx_reg_unlock(struct mv88e6xxx_chip *chip)
- 	mutex_unlock(&chip->reg_lock);
- }
- 
-+int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-+		       int (*cb)(struct mv88e6xxx_chip *chip,
-+				 const struct mv88e6xxx_vtu_entry *entry,
-+				 void *priv),
-+		       void *priv);
- int mv88e6xxx_fid_map(struct mv88e6xxx_chip *chip, unsigned long *bitmap);
- 
- #endif /* _MV88E6XXX_CHIP_H */
-diff --git a/drivers/net/dsa/mv88e6xxx/global1.h b/drivers/net/dsa/mv88e6xxx/global1.h
-index 2c1607c858a1..729cc0610d9a 100644
---- a/drivers/net/dsa/mv88e6xxx/global1.h
-+++ b/drivers/net/dsa/mv88e6xxx/global1.h
-@@ -136,6 +136,7 @@
- #define MV88E6XXX_G1_ATU_DATA_TRUNK				0x8000
- #define MV88E6XXX_G1_ATU_DATA_TRUNK_ID_MASK			0x00f0
- #define MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_MASK			0x3ff0
-+#define MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS		0x0000
- #define MV88E6XXX_G1_ATU_DATA_STATE_MASK			0x000f
- #define MV88E6XXX_G1_ATU_DATA_STATE_UC_UNUSED			0x0000
- #define MV88E6XXX_G1_ATU_DATA_STATE_UC_AGE_1_OLDEST		0x0001
-diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-index 40bd67a5c8e9..afa54fe8667e 100644
---- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-+++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-@@ -12,6 +12,8 @@
- 
- #include "chip.h"
- #include "global1.h"
-+#include "port.h"
-+#include "mv88e6xxx_switchdev.h"
- 
- /* Offset 0x01: ATU FID Register */
- 
-@@ -114,6 +116,18 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
- 	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
- }
- 
-+static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
-+{
-+	int err;
-+
-+	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
-+				 MV88E6XXX_G1_ATU_OP_BUSY | MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
-+	if (err)
-+		return err;
-+
-+	return mv88e6xxx_g1_atu_op_wait(chip);
-+}
-+
- static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
- {
- 	u16 val;
-@@ -356,11 +370,11 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 	int spid;
- 	int err;
- 	u16 val;
-+	u16 fid;
- 
- 	mv88e6xxx_reg_lock(chip);
- 
--	err = mv88e6xxx_g1_atu_op(chip, 0,
--				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
-+	err = mv88e6xxx_g1_read_atu_violation(chip);
- 	if (err)
- 		goto out;
- 
-@@ -368,6 +382,10 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 	if (err)
- 		goto out;
- 
-+	err = mv88e6xxx_g1_read(chip, MV88E6352_G1_ATU_FID, &fid);
-+	if (err)
-+		goto out;
-+
- 	err = mv88e6xxx_g1_atu_data_read(chip, &entry);
- 	if (err)
- 		goto out;
-@@ -396,6 +414,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 				    "ATU miss violation for %pM portvec %x spid %d\n",
- 				    entry.mac, entry.portvec, spid);
- 		chip->ports[spid].atu_miss_violation++;
-+		if (mv88e6xxx_port_is_locked(chip, chip->ports[spid].port))
-+			err = mv88e6xxx_switchdev_handle_atu_miss_violation(chip,
-+									    chip->ports[spid].port,
-+									    &entry,
-+									    fid);
-+		if (err)
-+			goto out;
- 	}
- 
- 	if (val & MV88E6XXX_G1_ATU_OP_FULL_VIOLATION) {
-diff --git a/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
-new file mode 100644
-index 000000000000..e0ca452b6f86
---- /dev/null
-+++ b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * mv88e6xxx_switchdev.c
-+ *
-+ *	Authors:
-+ *	Hans J. Schultz		<hans.schultz@westermo.com>
-+ *
-+ */
-+
-+#include <net/switchdev.h>
-+#include "chip.h"
-+#include "global1.h"
-+
-+struct mv88e6xxx_fid_search_ctx {
-+	u16 fid_search;
-+	u16 vid_found;
-+};
-+
-+static int mv88e6xxx_find_vid_on_matching_fid(struct mv88e6xxx_chip *chip,
-+					      const struct mv88e6xxx_vtu_entry *entry,
-+					      void *priv)
-+{
-+	struct mv88e6xxx_fid_search_ctx *ctx = priv;
-+
-+	if (ctx->fid_search == entry->fid) {
-+		ctx->vid_found = entry->vid;
-+		return 1;
+-	while (len && name[len - 1] == '.')
+-		len--;
++	if (!keep_last_dots) {
++		while (len && name[len - 1] == '.')
++			len--;
 +	}
-+	return 0;
-+}
-+
-+int mv88e6xxx_switchdev_handle_atu_miss_violation(struct mv88e6xxx_chip *chip,
-+						  int port,
-+						  struct mv88e6xxx_atu_entry *entry,
-+						  u16 fid)
-+{
-+	struct switchdev_notifier_fdb_info info = {
-+		.addr = entry->mac,
-+		.vid = 0,
-+		.added_by_user = false,
-+		.is_local = false,
-+		.offloaded = true,
-+		.locked = true,
-+	};
-+	struct mv88e6xxx_fid_search_ctx ctx;
-+	struct netlink_ext_ack *extack;
-+	struct net_device *brport;
-+	struct dsa_port *dp;
-+	int err;
-+
-+	ctx.fid_search = fid;
-+	err = mv88e6xxx_vtu_walk(chip, mv88e6xxx_find_vid_on_matching_fid, &ctx);
-+	if (err < 0)
-+		return err;
-+	if (err == 1)
-+		info.vid = ctx.vid_found;
-+	else
-+		return -ENODATA;
-+
-+	dp = dsa_to_port(chip->ds, port);
-+	brport = dsa_port_to_bridge_port(dp);
-+	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE, brport, &info.info, extack);
-+	if (err)
-+		return err;
-+	entry->portvec = MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS;
-+	return mv88e6xxx_g1_atu_loadpurge(chip, fid, entry);
-+}
-diff --git a/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
-new file mode 100644
-index 000000000000..127f3098f745
---- /dev/null
-+++ b/drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later
-+ *
-+ * mv88e6xxx_switchdev.h
-+ *
-+ *	Authors:
-+ *	Hans J. Schultz		<hans.schultz@westermo.com>
-+ *
-+ */
-+
-+#ifndef DRIVERS_NET_DSA_MV88E6XXX_MV88E6XXX_SWITCHDEV_H_
-+#define DRIVERS_NET_DSA_MV88E6XXX_MV88E6XXX_SWITCHDEV_H_
-+
-+#include <net/switchdev.h>
-+
-+int mv88e6xxx_switchdev_handle_atu_miss_violation(struct mv88e6xxx_chip *chip,
-+						  int port,
-+						  struct mv88e6xxx_atu_entry *entry,
-+						  u16 fid);
-+
-+#endif /* DRIVERS_NET_DSA_MV88E6XXX_MV88E6XXX_SWITCHDEV_H_ */
-diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-index 795b3128768f..6b375b0caa2c 100644
---- a/drivers/net/dsa/mv88e6xxx/port.c
-+++ b/drivers/net/dsa/mv88e6xxx/port.c
-@@ -1239,6 +1239,17 @@ int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
- 	return err;
+ 	return len;
  }
  
-+bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port)
-+{
-+	u16 reg;
-+
-+	if (mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg))
-+		return false;
-+	if (!(reg & MV88E6XXX_PORT_CTL0_SA_FILT_DROP_ON_LOCK))
-+		return false;
-+	return true;
-+}
-+
- int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
- 			    bool locked)
+@@ -83,7 +86,8 @@ static int exfat_d_hash(const struct dentry *dentry, struct qstr *qstr)
+ 	struct super_block *sb = dentry->d_sb;
+ 	struct nls_table *t = EXFAT_SB(sb)->nls_io;
+ 	const unsigned char *name = qstr->name;
+-	unsigned int len = exfat_striptail_len(qstr->len, qstr->name);
++	unsigned int len = exfat_striptail_len(qstr->len, qstr->name,
++			   EXFAT_SB(sb)->options.keep_last_dots);
+ 	unsigned long hash = init_name_hash(dentry);
+ 	int i, charlen;
+ 	wchar_t c;
+@@ -104,8 +108,10 @@ static int exfat_d_cmp(const struct dentry *dentry, unsigned int len,
  {
-diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-index e0a705d82019..09ea8f1615bb 100644
---- a/drivers/net/dsa/mv88e6xxx/port.h
-+++ b/drivers/net/dsa/mv88e6xxx/port.h
-@@ -374,6 +374,7 @@ int mv88e6xxx_port_set_fid(struct mv88e6xxx_chip *chip, int port, u16 fid);
- int mv88e6xxx_port_get_pvid(struct mv88e6xxx_chip *chip, int port, u16 *pvid);
- int mv88e6xxx_port_set_pvid(struct mv88e6xxx_chip *chip, int port, u16 pvid);
+ 	struct super_block *sb = dentry->d_sb;
+ 	struct nls_table *t = EXFAT_SB(sb)->nls_io;
+-	unsigned int alen = exfat_striptail_len(name->len, name->name);
+-	unsigned int blen = exfat_striptail_len(len, str);
++	unsigned int alen = exfat_striptail_len(name->len, name->name,
++				EXFAT_SB(sb)->options.keep_last_dots);
++	unsigned int blen = exfat_striptail_len(len, str,
++				EXFAT_SB(sb)->options.keep_last_dots);
+ 	wchar_t c1, c2;
+ 	int charlen, i;
  
-+bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port);
- int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
- 			    bool locked);
+@@ -136,7 +142,8 @@ static int exfat_utf8_d_hash(const struct dentry *dentry, struct qstr *qstr)
+ {
+ 	struct super_block *sb = dentry->d_sb;
+ 	const unsigned char *name = qstr->name;
+-	unsigned int len = exfat_striptail_len(qstr->len, qstr->name);
++	unsigned int len = exfat_striptail_len(qstr->len, qstr->name,
++			       EXFAT_SB(sb)->options.keep_last_dots);
+ 	unsigned long hash = init_name_hash(dentry);
+ 	int i, charlen;
+ 	unicode_t u;
+@@ -161,8 +168,11 @@ static int exfat_utf8_d_cmp(const struct dentry *dentry, unsigned int len,
+ 		const char *str, const struct qstr *name)
+ {
+ 	struct super_block *sb = dentry->d_sb;
+-	unsigned int alen = exfat_striptail_len(name->len, name->name);
+-	unsigned int blen = exfat_striptail_len(len, str);
++	unsigned int alen = exfat_striptail_len(name->len, name->name,
++				EXFAT_SB(sb)->options.keep_last_dots);
++	unsigned int blen = exfat_striptail_len(len, str,
++				EXFAT_SB(sb)->options.keep_last_dots);
++
+ 	unicode_t u_a, u_b;
+ 	int charlen, i;
  
+@@ -416,13 +426,25 @@ static int __exfat_resolve_path(struct inode *inode, const unsigned char *path,
+ 	struct super_block *sb = inode->i_sb;
+ 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
+ 	struct exfat_inode_info *ei = EXFAT_I(inode);
++	int pathlen = strlen(path);
+ 
+-	/* strip all trailing periods */
+-	namelen = exfat_striptail_len(strlen(path), path);
++	/*
++	 * get the length of the pathname excluding
++	 * trailing periods, if any.
++	 */
++	namelen = exfat_striptail_len(pathlen, path, false);
++	if (EXFAT_SB(sb)->options.keep_last_dots) {
++		/*
++		 * Do not allow the creation of files with names
++		 * ending with period(s).
++		 */
++		if (!lookup && (namelen < pathlen))
++			return -EINVAL;
++		namelen = pathlen;
++	}
+ 	if (!namelen)
+ 		return -ENOENT;
+-
+-	if (strlen(path) > (MAX_NAME_LENGTH * MAX_CHARSET_SIZE))
++	if (pathlen > (MAX_NAME_LENGTH * MAX_CHARSET_SIZE))
+ 		return -ENAMETOOLONG;
+ 
+ 	/*
 -- 
-2.30.2
+2.32.0
 

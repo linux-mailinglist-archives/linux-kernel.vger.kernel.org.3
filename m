@@ -2,182 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E684D3DE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DC04D3DEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 01:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238921AbiCJAMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 19:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S238926AbiCJAPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 19:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiCJAMo (ORCPT
+        with ESMTP id S234684AbiCJAPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:12:44 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80843EC5C8;
-        Wed,  9 Mar 2022 16:11:44 -0800 (PST)
-Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1BA1520B7178;
-        Wed,  9 Mar 2022 16:11:44 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1BA1520B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1646871104;
-        bh=2Tm4jHRAvhNun2QtoHcsGtuySYa+7u6fWS5djlNGcM0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YgW+A9sFwuaX87VWP7tDUPnfuqdE5AvdWTtt+4+2LrRm0fC5LrIeM7Oj5LVOkprr3
-         ARB0O4jU1b26U14eLC81dMk+v6y5IPCtclRRr5YH24zIQ+3UUw8FUUyuXBk2x7jZ/U
-         T3Ey9O/1NhmrqJL23S9AnWNL5OPS205qC/+Ke818=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beaub@linux.microsoft.com
-Subject: [PATCH] user_events: Prevent dyn_event delete racing with ioctl add/delete
-Date:   Wed,  9 Mar 2022 16:11:41 -0800
-Message-Id: <20220310001141.1660-1-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 19:15:33 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BCD2BEC
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 16:14:33 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id m12so4889957edc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6YOi63Y4UP1PxQIOJspMhCwWLw9KtU08nAJtSydjZYc=;
+        b=ndLnV1n/Cj/VOOqVdnS1BUd+irOj0yq6+IhyDGRmeUD7EdPsTQEL0tSrZjhbJDKx5v
+         HKwiDEpH4dZd1KSzFoOc1+usH/ySFbHje/5+3KfuIxLocRKXPGtD287yO40DXZCx/hJh
+         TtDAT0zyBfLi10li350C7mskcVtQIQ6KYd1Is=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6YOi63Y4UP1PxQIOJspMhCwWLw9KtU08nAJtSydjZYc=;
+        b=Ka2WgB9a0L2GuORDvfainlxfEHc64FZ2+skaPwMgO6J17ggf3PqBnmHJ1zm7HxLEGQ
+         zSAIlQbJbc5P7lJHqdvtgz8Tl1MrzAywR0pD69KP2sWUZKycwqSaXUF+ayK9s/rEDBM5
+         LWAJ7gd5yZKSs9bwhatn6gK2y7sMIco+9fM6K10fgBbilWM9IhE5yxJvIF6ag6OlF6Q8
+         08F7kbQAU+8BOnKCeYdK9XzdcjDIDMFRMNUgSiH96KgtSaqLMICJn3x3cW6k4i22bGbr
+         16GJjPeKPAwdZGFrtPhgBXssVJe7q9j+bDiFzO0GCZh7Nu079MIAtcvlirCjrTly8glC
+         lAwQ==
+X-Gm-Message-State: AOAM531b5+6JuZbB9QbIPSIV9gZPmV3LFulsbITgZdeuDfbD5kNVsxew
+        XB3s7tGW5hUArZ+ZkTJiogu3gCZWg8uyG69v
+X-Google-Smtp-Source: ABdhPJzoQvIbuDhyBr0ytMGfchno5rZuIzAomLL/g3cGbo9HgxCbDsFPcXpt+8lbwucRymBaNcm8nA==
+X-Received: by 2002:aa7:cd81:0:b0:410:d64e:aa31 with SMTP id x1-20020aa7cd81000000b00410d64eaa31mr1876602edv.167.1646871271874;
+        Wed, 09 Mar 2022 16:14:31 -0800 (PST)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id h21-20020a170906829500b006cef3dcd067sm1262058ejx.174.2022.03.09.16.14.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 16:14:31 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id i66so2277179wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Mar 2022 16:14:30 -0800 (PST)
+X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
+ o24-20020a1c7518000000b0037c07ebf255mr9408784wmc.29.1646871270537; Wed, 09
+ Mar 2022 16:14:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20220309033018.17936-1-rdunlap@infradead.org>
+In-Reply-To: <20220309033018.17936-1-rdunlap@infradead.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 9 Mar 2022 16:14:18 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=ViPnSnoSYHSJFvyzkJ+Q+w7JuZFWS7u5BQxN6KHquGyw@mail.gmail.com>
+Message-ID: <CAD=FV=ViPnSnoSYHSJFvyzkJ+Q+w7JuZFWS7u5BQxN6KHquGyw@mail.gmail.com>
+Subject: Re: [PATCH v2] kgdboc: fix return value of __setup handler
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        He Zhe <zhe.he@windriver.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Find user_events always while under the event_mutex and before leaving
-the lock, add a ref count to the user_event. This ensures that all paths
-under the event_mutex that check the ref counts will be synchronized.
+Hi,
 
-The ioctl add/delete paths are protected by the reg_mutex. However,
-dyn_event is only protected by the event_mutex. The dyn_event delete
-path cannot acquire reg_mutex, since that could cause a deadlock between
-the ioctl delete case acquiring event_mutex after acquiring the reg_mutex.
+On Tue, Mar 8, 2022 at 7:30 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> __setup() handlers should return 1 to obsolete_checksetup() in
+> init/main.c to indicate that the boot option has been handled.
+> A return of 0 causes the boot option/value to be listed as an Unknown
+> kernel parameter and added to init's (limited) environment strings.
+> So return 1 from kgdboc_option_setup().
+>
+> Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
+>   kgdboc=kbd kgdbts=", will be passed to user space.
+>
+>  Run /sbin/init as init process
+>    with arguments:
+>      /sbin/init
+>    with environment:
+>      HOME=/
+>      TERM=linux
+>      BOOT_IMAGE=/boot/bzImage-517rc7
+>      kgdboc=kbd
+>      kgdbts=
+>
+> Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
+> Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> Cc: He Zhe <zhe.he@windriver.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: kgdb-bugreport@lists.sourceforge.net
+> Cc: Jason Wessel <jason.wessel@windriver.com>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: linux-serial@vger.kernel.org
+> ---
+> v2- correct Fixes: tag(s) (thanks Doug)
+>   - drop Cc: Laura Abbott <labbott@redhat.com> (bouncing)
+>   - add a reference to init/main.c::obsolete_checksetup()
+>
+>  drivers/tty/serial/kgdboc.c |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- kernel/trace/trace_events_user.c | 46 +++++++++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 2b5e9fdb63a0..1aaef2ab9f9f 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -135,6 +135,8 @@ static struct list_head *user_event_get_fields(struct trace_event_call *call)
-  * NOTE: Offsets are from the user data perspective, they are not from the
-  * trace_entry/buffer perspective. We automatically add the common properties
-  * sizes to the offset for the user.
-+ *
-+ * Upon success user_event has its ref count increased by 1.
-  */
- static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
- {
-@@ -591,8 +593,10 @@ static struct user_event *find_user_event(char *name, u32 *outkey)
- 	*outkey = key;
- 
- 	hash_for_each_possible(register_table, user, node, key)
--		if (!strcmp(EVENT_NAME(user), name))
-+		if (!strcmp(EVENT_NAME(user), name)) {
-+			atomic_inc(&user->refcnt);
- 			return user;
-+		}
- 
- 	return NULL;
- }
-@@ -881,7 +885,12 @@ static int user_event_create(const char *raw_command)
- 		return -ENOMEM;
- 
- 	mutex_lock(&reg_mutex);
-+
- 	ret = user_event_parse_cmd(name, &user);
-+
-+	if (!ret)
-+		atomic_dec(&user->refcnt);
-+
- 	mutex_unlock(&reg_mutex);
- 
- 	if (ret)
-@@ -1048,6 +1057,7 @@ static int user_event_trace_register(struct user_event *user)
- /*
-  * Parses the event name, arguments and flags then registers if successful.
-  * The name buffer lifetime is owned by this method for success cases only.
-+ * Upon success the returned user_event has its ref count increased by 1.
-  */
- static int user_event_parse(char *name, char *args, char *flags,
- 			    struct user_event **newuser)
-@@ -1055,7 +1065,12 @@ static int user_event_parse(char *name, char *args, char *flags,
- 	int ret;
- 	int index;
- 	u32 key;
--	struct user_event *user = find_user_event(name, &key);
-+	struct user_event *user;
-+
-+	/* Prevent dyn_event from racing */
-+	mutex_lock(&event_mutex);
-+	user = find_user_event(name, &key);
-+	mutex_unlock(&event_mutex);
- 
- 	if (user) {
- 		*newuser = user;
-@@ -1119,6 +1134,10 @@ static int user_event_parse(char *name, char *args, char *flags,
- 		goto put_user;
- 
- 	user->index = index;
-+
-+	/* Ensure we track ref */
-+	atomic_inc(&user->refcnt);
-+
- 	dyn_event_init(&user->devent, &user_event_dops);
- 	dyn_event_add(&user->devent, &user->call);
- 	set_bit(user->index, page_bitmap);
-@@ -1145,12 +1164,21 @@ static int delete_user_event(char *name)
- 	if (!user)
- 		return -ENOENT;
- 
--	if (atomic_read(&user->refcnt) != 0)
--		return -EBUSY;
-+	/* Ensure we are the last ref */
-+	if (atomic_read(&user->refcnt) != 1) {
-+		ret = -EBUSY;
-+		goto put_ref;
-+	}
- 
--	mutex_lock(&event_mutex);
- 	ret = destroy_user_event(user);
--	mutex_unlock(&event_mutex);
-+
-+	if (ret)
-+		goto put_ref;
-+
-+	return ret;
-+put_ref:
-+	/* No longer have this ref */
-+	atomic_dec(&user->refcnt);
- 
- 	return ret;
- }
-@@ -1338,6 +1366,9 @@ static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
- 
- 	ret = user_events_ref_add(file, user);
- 
-+	/* No longer need parse ref, ref_add either worked or not */
-+	atomic_dec(&user->refcnt);
-+
- 	/* Positive number is index and valid */
- 	if (ret < 0)
- 		return ret;
-@@ -1362,7 +1393,10 @@ static long user_events_ioctl_del(struct file *file, unsigned long uarg)
- 	if (IS_ERR(name))
- 		return PTR_ERR(name);
- 
-+	/* event_mutex prevents dyn_event from racing */
-+	mutex_lock(&event_mutex);
- 	ret = delete_user_event(name);
-+	mutex_unlock(&event_mutex);
- 
- 	kfree(name);
- 
-
-base-commit: 864ea0e10cc90416a01b46f0d47a6f26dc020820
--- 
-2.17.1
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

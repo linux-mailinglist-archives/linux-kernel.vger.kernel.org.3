@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737F44D3FCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175BC4D3FE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 04:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239277AbiCJDq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 22:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S239330AbiCJDvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 22:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiCJDq0 (ORCPT
+        with ESMTP id S239315AbiCJDvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:46:26 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553EE11AA3F;
-        Wed,  9 Mar 2022 19:45:26 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id f8so4025477pfj.5;
-        Wed, 09 Mar 2022 19:45:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sUHugP1rkHWpowr+YZ714WfJfAa3z1nzFU6NLJ0LF6M=;
-        b=Ic/bZ0l4vKgnBuvmGv+5XLkdkzIRHFMbHz/cG/H9xKYTUIReEfcFdwIXjAGSZnQTYV
-         GfSdhIVphD8Ku5HzcMH8HLCUUHBFCxoWM0NFnEwCm6HZ0ETSBz2PYNxHkyNjx8cuVAxg
-         vK1HYWkeZUOwTLm6tsOsLuyKbNr2JknF53FAJvp32qPU+otEpNDBtsL225Q7luXaoS1F
-         LUzRbHtK27W3ODs1LT1wX+7UpwFdDcGt9l4p1ePQrD89bKBzbVK1qzc7MPRuuATxRUy7
-         Ly96HL78mW7NWEIJYMNAuNqMfQhqEDtPI0EgP7txf/zJUIQiwzmxIJ4RqB9HzMzO6Eyf
-         3DDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sUHugP1rkHWpowr+YZ714WfJfAa3z1nzFU6NLJ0LF6M=;
-        b=dyNgXBbFFZV4jppMtxp/IIYsXr6WZaHHPDZwsQsx/OZxeY4m+aiDiuKq/s7fUy/tSV
-         79MEj/dcOw00Ac4yf6a9wCo0K426t4+wP9ILAvszYC8tvArq/ctVLolikqkqqaE4jVv1
-         YFS1Ppo3GXL17RJ1Z5T3X+5ZizmRI/hzlATGCzo5XVX9UQnZAlDtDkMRF+SQFU33/1Xp
-         OMW9pZOgG6mn7GTH2CU5AirxrOhwRC5NvfN6qr+oj0U2EEUx5aqmkbgj9gnFE40CmUVG
-         D90ladPjW8ulPGxetgNKwSF3SqbCXhDD2bPPpdMTnRz2FLO+HM/rcMxRFEbR20VlzTJo
-         94+A==
-X-Gm-Message-State: AOAM532AP03eOz4TXtzTYX8U/s8nJfpKXLZuabA5ehEId9sENRrw9TB9
-        Uf0AemjnXP+2aB/x8qRbswk=
-X-Google-Smtp-Source: ABdhPJxJLQaSq7P9QTfw2JGtRQa8BZSwlHXkKtpQ/V9fEEmU4me5Lzw9oyEm7XJdyQuR91h8ZYcEwg==
-X-Received: by 2002:a63:1849:0:b0:37c:9ad9:6897 with SMTP id 9-20020a631849000000b0037c9ad96897mr2429507pgy.362.1646883925818;
-        Wed, 09 Mar 2022 19:45:25 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056a001a0c00b004e1307b249csm4740680pfv.69.2022.03.09.19.45.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 19:45:25 -0800 (PST)
-Message-ID: <561a3c4f-16c6-1bde-0573-87ea12ae1a19@gmail.com>
-Date:   Wed, 9 Mar 2022 19:45:23 -0800
+        Wed, 9 Mar 2022 22:51:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9DE6D946;
+        Wed,  9 Mar 2022 19:50:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38EF3616EE;
+        Thu, 10 Mar 2022 03:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 87256C340F4;
+        Thu, 10 Mar 2022 03:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646884210;
+        bh=OW16WIE2WS+nMy1pZci5A2oqqRDPEZSYzU7wyzE3He0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rXUBnbJ+7wW71QeApDoRcXiFbDsE8TuTD5AQSPDVRh9l7hMzqnplLAL6+M/rPVw2a
+         YvNf80KTSZpQ3oQX4vG2CWGxU6UA4itYk4R4GCApJlSOfn5GipA8WoCrVKnv7tpFXL
+         2WLhvGFCQGs/cH7n9KlOCvIXxQ7blNsWcB0NqPqqk5eE/+28g/Nlf035WveWyjcXa/
+         dZdsFs435OnFgQmqJq3J0+ZGLkERyBsiwMlOisDqMFt3qCx3HDOhZkyPSrOf50Sq8d
+         UsnXhB5g17a5W3y5cZMByIaL2vhuha2M9yAbzfWdPisndmX4slThDVbYZ2+CkK6hVE
+         dMTWx9Jhd7oQA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6AEA5EAC095;
+        Thu, 10 Mar 2022 03:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 4.9 00/24] 4.9.306-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v5 1/1] net: dsa: microchip: ksz9477: implement MTU
+ configuration
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164688421043.27281.1517555067415457962.git-patchwork-notify@kernel.org>
+Date:   Thu, 10 Mar 2022 03:50:10 +0000
+References: <20220308135857.1119028-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220308135857.1119028-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, f.fainelli@gmail.com, vivien.didelot@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220309155856.295480966@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220309155856.295480966@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 3/9/2022 7:59 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.306 release.
-> There are 24 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue,  8 Mar 2022 14:58:57 +0100 you wrote:
+> This chips supports two ways to configure max MTU size:
+> - by setting SW_LEGAL_PACKET_DISABLE bit: if this bit is 0 allowed packed size
+>   will be between 64 and bytes 1518. If this bit is 1, it will accept
+>   packets up to 2000 bytes.
+> - by setting SW_JUMBO_PACKET bit. If this bit is set, the chip will
+>   ignore SW_LEGAL_PACKET_DISABLE value and use REG_SW_MTU__2 register to
+>   configure MTU size.
 > 
-> Responses should be made by Fri, 11 Mar 2022 15:58:48 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.306-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> [...]
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Here is the summary with links:
+  - [net-next,v5,1/1] net: dsa: microchip: ksz9477: implement MTU configuration
+    https://git.kernel.org/netdev/net-next/c/e18058ea9986
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+You are awesome, thank you!
 -- 
-Florian
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

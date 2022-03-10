@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1ED4D4D6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD3A4D4D43
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245503AbiCJPPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 10:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S236223AbiCJPRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 10:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243506AbiCJPPm (ORCPT
+        with ESMTP id S234279AbiCJPRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 10:15:42 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE5F2126
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:14:36 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id q5so8148271ljb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Eze/8M2gI0/1aPxBC8oNjaaWCvFby/x8ND3xWZra1Gk=;
-        b=JDhd3TyE53QQTFNn518ewb1ExwOApdXXEJW1aDE5Be9Sn0zuMirJ8Zcd1A7MCvaWUq
-         3XY1fjzMggkv1ldxzwzocSmv1scaP04XFE6RTGdib7C9HaN+7mtWgNMZRQPsZ240A67O
-         r0KuwT9DXQgPlm+L8Hnn+lBh3z/Kuea3tYpzU94npVEKbM1IWMUdqk6ZKyM3jPHfxomn
-         TuB1c4r/lDva+znWi2Pkte+YKJ4y1EYwGSE9HaFN2O1ViJIM1DNG0hpplTzWPYsjwhSb
-         +zCLVnrLindrZjLE51fDCHSCnywUvQ2fbUi7INLA4x1UZ8t9+gngZ1w1In3Cwl1xYCFj
-         WJmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Eze/8M2gI0/1aPxBC8oNjaaWCvFby/x8ND3xWZra1Gk=;
-        b=yBkxk9geK7vVv662xEiJPupcymCX2RkhGQsvDqfXE7nofR44iE82Pd4WZEfOwe4Ehr
-         Dl5HM8LBBpWTPPsYsQX/0KLlsR15A+KDWnjf8QZ+ikcyv+bAB3+yuR5xcSWctTVYulzi
-         A/okr22JE4SY/LLahoxuO69h9gsAoeYkLyiP0eevSazyZThotzrcaSn6R+r4x4Yi3zOn
-         sEPSzgrE7mIwVp5nykNyH8emE83Snlib8iNHBb74BAooQO1Wy9uyFSSw/D0xUpDoTfXO
-         IVtyeWsv3smXcrpxj9iT/FWk8t73KjFDzl4hdtYPmGAc3XKTx6W5tGjOd4I7FfnvJ6EN
-         2dmA==
-X-Gm-Message-State: AOAM5339frHojAT05W9RToPL44wYKE3FGyyAhNSEhHiq/9xVhqQ4K06P
-        BNXLNCm3uLEt8PD3xFqRSelCaw==
-X-Google-Smtp-Source: ABdhPJwnRxRsFwfExg2LFKi8X51nSOcL450NxvZfSsH2xnJVTTBvAShauyIOr0ArHxmnUAhRDccEyA==
-X-Received: by 2002:a05:651c:2115:b0:246:2a10:acb8 with SMTP id a21-20020a05651c211500b002462a10acb8mr3386215ljq.345.1646925274899;
-        Thu, 10 Mar 2022 07:14:34 -0800 (PST)
-Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
-        by smtp.gmail.com with ESMTPSA id c16-20020a056512105000b0044315cbf157sm1026257lfb.64.2022.03.10.07.14.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 07:14:34 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 10/10] net: dsa: mv88e6xxx: MST Offloading
-In-Reply-To: <20220303222658.7ykn6grkkp6htm7a@skbuf>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
- <20220301100321.951175-11-tobias@waldekranz.com>
- <20220303222658.7ykn6grkkp6htm7a@skbuf>
-Date:   Thu, 10 Mar 2022 16:14:31 +0100
-Message-ID: <87k0d1n8ko.fsf@waldekranz.com>
+        Thu, 10 Mar 2022 10:17:42 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06050DFEB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 07:16:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646925402; x=1678461402;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=newON6Td/5uryxsFhwVOGc46gIaVqhB7PFlNeP0VW6Y=;
+  b=gYdJAEioB5H2LRSR+H0v+UtAVMXqzmRtnA1cFldFkZKp39wONSBxe4ME
+   VQabVbBNId3pnpGtGXf9rDICVpA9axX9Sl/KmLWJUgeJpLVfNURCE90Gm
+   kYqUtJhHP0zj4qAXco0EY0B4FjqHwjuPnfAEcb1q4V8iEEae0YH9DNjNP
+   cTHOL6u0t3qahAJPKtuOxM+UAAFKL91eky9iLS8V+DsjRc6QSO8ylnpMQ
+   jULy4KlViEdPkNFSEYHGUupArkXpvIsxWtsi6mpdU8V0LlHgM3j4OPEpE
+   Qm4a81sVvrczJjHT8ekNVb4Iew5LzoEKMCTbyqNDpJdj+cD//2RxvdO05
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="252840303"
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="252840303"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 07:16:34 -0800
+X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
+   d="scan'208";a="688685867"
+Received: from efrantz-mobl1.amr.corp.intel.com (HELO [10.212.252.101]) ([10.212.252.101])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 07:16:34 -0800
+Message-ID: <81b6f618-05bc-f7d0-5461-4c3f0ca42d3f@intel.com>
+Date:   Thu, 10 Mar 2022 07:16:27 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Bharata B Rao <bharata@amd.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, x86@kernel.org,
+        kirill.shutemov@linux.intel.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        oleg@redhat.com, ananth.narayan@amd.com
+References: <20220310111545.10852-1-bharata@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [RFC PATCH v0 0/6] x86/AMD: Userspace address tagging
+In-Reply-To: <20220310111545.10852-1-bharata@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,238 +65,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 00:26, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Tue, Mar 01, 2022 at 11:03:21AM +0100, Tobias Waldekranz wrote:
->> Allocate a SID in the STU for each MSTID in use by a bridge and handle
->> the mapping of MSTIDs to VLANs using the SID field of each VTU entry.
->> 
->> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
->> ---
->>  drivers/net/dsa/mv88e6xxx/chip.c | 178 +++++++++++++++++++++++++++++++
->>  drivers/net/dsa/mv88e6xxx/chip.h |  13 +++
->>  2 files changed, 191 insertions(+)
->> 
->> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
->> index c14a62aa6a6c..4fb4ec1dff79 100644
->> --- a/drivers/net/dsa/mv88e6xxx/chip.c
->> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
->> @@ -1818,6 +1818,137 @@ static int mv88e6xxx_stu_setup(struct mv88e6xxx_chip *chip)
->>  	return mv88e6xxx_stu_loadpurge(chip, &stu);
->>  }
->>  
->> +static int mv88e6xxx_sid_new(struct mv88e6xxx_chip *chip, u8 *sid)
->> +{
->> +	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
->> +	struct mv88e6xxx_mst *mst;
->> +
->> +	set_bit(0, busy);
->> +
->> +	list_for_each_entry(mst, &chip->msts, node) {
->> +		set_bit(mst->stu.sid, busy);
->> +	}
->> +
->> +	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
->> +
->> +	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
->> +}
->> +
->> +static int mv88e6xxx_sid_put(struct mv88e6xxx_chip *chip, u8 sid)
->> +{
->> +	struct mv88e6xxx_mst *mst, *tmp;
->> +	int err = 0;
->> +
->> +	list_for_each_entry_safe(mst, tmp, &chip->msts, node) {
->> +		if (mst->stu.sid == sid) {
->> +			if (refcount_dec_and_test(&mst->refcnt)) {
->> +				mst->stu.valid = false;
->> +				err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
->
-> It is interesting what to do if this fails. Possibly not this, because
-> the entry remains in hardware but not in software.
+On 3/10/22 03:15, Bharata B Rao wrote:>
+> This patchset builds on that prctl() extension and adds support
+> for AMD UAI. AMD implementation is kept separate as equivalent
+> Intel LAM implementation is likely to be different due to different
+> bit positions and tag width.
 
-True, I will let the error bubble up and keep the SW state in sync with
-the hardware.
+Please don't keep the implementations separate.
 
->> +				list_del(&mst->node);
->> +				kfree(mst);
->> +			}
->> +
->> +			return err;
->> +		}
->> +	}
->> +
->> +	return -ENOENT;
->> +}
->> +
->> +static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, struct net_device *br,
->> +			     u16 msti, u8 *sid)
->> +{
->> +	struct mv88e6xxx_mst *mst;
->> +	int err, i;
->> +
->> +	if (!br)
->> +		return 0;
->
-> Is this condition possible?
+We'll have one x86 implementation of address bit masking.  Both the
+Intel and AMD implementations will feed into a shared implementation.
+Something _like_ the cc_set_mask() interface where both implementations
+do their detection and then call into common code to say how many bits
+are being ignored.
 
-Removing.
+A good litmus test for this is how many vendor-specific checks there are
+in common code.  If there are a lot of them, it's not a good sign for
+the design.
 
->> +
->> +	if (!mv88e6xxx_has_stu(chip))
->> +		return -EOPNOTSUPP;
->> +
->> +	list_for_each_entry(mst, &chip->msts, node) {
->> +		if (mst->br == br && mst->msti == msti) {
->> +			refcount_inc(&mst->refcnt);
->> +			*sid = mst->stu.sid;
->> +			return 0;
->> +		}
->> +	}
->> +
->> +	err = mv88e6xxx_sid_new(chip, sid);
->> +	if (err)
->> +		return err;
->> +
->> +	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
->> +	if (!mst)
->> +		return -ENOMEM;
->
-> This leaks the new SID.
+I'd also highly suggest going over Kirill's patch set in detail.  There
+are things like this:
 
-I don't think so, the SID is just calculated based on what is in
-chip->msts. However:
+> https://lore.kernel.org/linux-mm/20210205151631.43511-10-kirill.shutemov@linux.intel.com/
 
-- The naming is bad. Will change.
+which seem pretty sane to me but which are (I think) missing in this set.
 
->> +
->> +	INIT_LIST_HEAD(&mst->node);
->> +	refcount_set(&mst->refcnt, 1);
->> +	mst->br = br;
->> +	mst->msti = msti;
->> +	mst->stu.valid = true;
->> +	mst->stu.sid = *sid;
->> +
->> +	/* The bridge starts out all ports in the disabled state. But
->> +	 * a STU state of disabled means to go by the port-global
->> +	 * state. So we set all user port's initial state to blocking,
->> +	 * to match the bridge's behavior.
->> +	 */
->> +	for (i = 0; i < mv88e6xxx_num_ports(chip); i++)
->> +		mst->stu.state[i] = dsa_is_user_port(chip->ds, i) ?
->> +			MV88E6XXX_PORT_CTL0_STATE_BLOCKING :
->> +			MV88E6XXX_PORT_CTL0_STATE_DISABLED;
->> +
->> +	list_add_tail(&mst->node, &chip->msts);
->> +	return mv88e6xxx_stu_loadpurge(chip, &mst->stu);
->
-> And this doesn't behave too well on failure (the MSTID exists in
-> software but not in hardware).
-
-Yes, fixing in v3.
-
->> +}
->> +
->> +static int mv88e6xxx_port_mst_state_set(struct dsa_switch *ds, int port,
->> +					const struct switchdev_mst_state *st)
->> +{
->> +	struct dsa_port *dp = dsa_to_port(ds, port);
->> +	struct mv88e6xxx_chip *chip = ds->priv;
->> +	struct mv88e6xxx_mst *mst;
->> +	u8 state;
->> +	int err;
->> +
->> +	if (!mv88e6xxx_has_stu(chip))
->> +		return -EOPNOTSUPP;
->> +
->> +	switch (st->state) {
->> +	case BR_STATE_DISABLED:
->> +	case BR_STATE_BLOCKING:
->> +	case BR_STATE_LISTENING:
->> +		state = MV88E6XXX_PORT_CTL0_STATE_BLOCKING;
->> +		break;
->> +	case BR_STATE_LEARNING:
->> +		state = MV88E6XXX_PORT_CTL0_STATE_LEARNING;
->> +		break;
->> +	case BR_STATE_FORWARDING:
->> +		state = MV88E6XXX_PORT_CTL0_STATE_FORWARDING;
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +
->> +	list_for_each_entry(mst, &chip->msts, node) {
->> +		if (mst->br == dsa_port_bridge_dev_get(dp) &&
->> +		    mst->msti == st->msti) {
->> +			if (mst->stu.state[port] == state)
->> +				return 0;
->> +
->> +			mst->stu.state[port] = state;
->> +			mv88e6xxx_reg_lock(chip);
->> +			err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
->> +			mv88e6xxx_reg_unlock(chip);
->> +			return err;
->> +		}
->> +	}
->> +
->> +	return -ENOENT;
->> +}
->> +
->>  static int mv88e6xxx_port_check_hw_vlan(struct dsa_switch *ds, int port,
->>  					u16 vid)
->>  {
->> @@ -2437,6 +2568,12 @@ static int mv88e6xxx_port_vlan_leave(struct mv88e6xxx_chip *chip,
->>  	if (err)
->>  		return err;
->>  
->> +	if (!vlan.valid && vlan.sid) {
->> +		err = mv88e6xxx_sid_put(chip, vlan.sid);
->> +		if (err)
->> +			return err;
->> +	}
->> +
->>  	return mv88e6xxx_g1_atu_remove(chip, vlan.fid, port, false);
->>  }
->>  
->> @@ -2482,6 +2619,44 @@ static int mv88e6xxx_port_vlan_del(struct dsa_switch *ds, int port,
->>  	return err;
->>  }
->>  
->> +static int mv88e6xxx_vlan_msti_set(struct dsa_switch *ds,
->> +				   const struct switchdev_attr *attr)
->> +{
->> +	const struct switchdev_vlan_attr *vattr = &attr->u.vlan_attr;
->> +	struct mv88e6xxx_chip *chip = ds->priv;
->> +	struct mv88e6xxx_vtu_entry vlan;
->> +	u8 new_sid;
->> +	int err;
->> +
->> +	mv88e6xxx_reg_lock(chip);
->> +
->> +	err = mv88e6xxx_vtu_get(chip, vattr->vid, &vlan);
->> +	if (err)
->> +		goto unlock;
->> +
->> +	if (!vlan.valid) {
->> +		err = -EINVAL;
->> +		goto unlock;
->> +	}
->> +
->> +	err = mv88e6xxx_sid_get(chip, attr->orig_dev, vattr->msti, &new_sid);
->> +	if (err)
->> +		goto unlock;
->> +
->> +	if (vlan.sid) {
->> +		err = mv88e6xxx_sid_put(chip, vlan.sid);
->> +		if (err)
->> +			goto unlock;
->> +	}
->> +
->> +	vlan.sid = new_sid;
->> +	err = mv88e6xxx_vtu_loadpurge(chip, &vlan);
->
-> Maybe you could move mv88e6xxx_sid_put() after this succeeds?
-
-Yep. Also made sure to avoid needless updates of the VTU entry if it
-already belonged to the correct SID.
-
-Thanks for the great review!
+I don't know if we can get there but, in an ideal world, this would be
+series with, say 7 patches.  Patches 1-5 are generic enabling.  Patch 6
+is tiny and does detection and enabling for UAI.  Patch 7 does the same
+for LAM.  All the patches in the series are acked from LAM and UAI folks.

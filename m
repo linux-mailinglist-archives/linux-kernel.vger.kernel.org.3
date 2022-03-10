@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926374D4AE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFD04D4BE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244564AbiCJOda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:33:30 -0500
+        id S243711AbiCJOht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:37:49 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244254AbiCJO2l (ORCPT
+        with ESMTP id S245650AbiCJOaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:28:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31B3C7E9B;
-        Thu, 10 Mar 2022 06:23:36 -0800 (PST)
+        Thu, 10 Mar 2022 09:30:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E77184630;
+        Thu, 10 Mar 2022 06:26:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEB0EB8267B;
-        Thu, 10 Mar 2022 14:23:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FEE4C340EB;
-        Thu, 10 Mar 2022 14:23:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BB461CFB;
+        Thu, 10 Mar 2022 14:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C46C340E8;
+        Thu, 10 Mar 2022 14:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922213;
-        bh=LVgMR7x7f/QGb4kjXXLf2lRP8FRdGB7xZ81j3KSgT2E=;
+        s=korg; t=1646922392;
+        bh=i/sntCpNH5GroLhd61OVs50uRsZvFc/O/fHof6GetNI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Go6NS+Da4Vk8UFSWbX7gM4XJoFmj/VRScYoo+GO04il4sJMpHEZfevMmlNpXnkwPt
-         Fw1UnIXKHpSYiWC6Es9z8TD3wO8aqEfCMkhCkbvLniQvwhFMfsBI7fm3s0HtZXUUxE
-         GSfkn+6XmEz2AZE4MiCD4+bnqwHpbt9aR1S5GfbA=
+        b=lpsY7IxN4ZIxRCXTp1VFQzeP0tYBWB7qTi5EqiWHrmaaZGlLYzX46sH2vW/iZbw3f
+         NANz0uJQgLCvKUrvKfQdty3VESAVuVMPO/JJBweSoiLmz8ZPaL5Epem8Ne3kQA4SlF
+         uLhE+GwbU3+8O3yuWufggtGEakIykbXIGpI0aeVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4.19 15/33] ARM: use LOADADDR() to get load address of sections
+        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 5.10 22/58] arm64: cpufeature: add HWCAP for FEAT_RPRES
 Date:   Thu, 10 Mar 2022 15:18:42 +0100
-Message-Id: <20220310140808.195623663@linuxfoundation.org>
+Message-Id: <20220310140813.507388640@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
-References: <20220310140807.749164737@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+References: <20220310140812.869208747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +57,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+From: Joey Gouly <joey.gouly@arm.com>
 
-commit 8d9d651ff2270a632e9dc497b142db31e8911315 upstream.
+commit 1175011a7d0030d49dc9c10bde36f08f26d0a8ee upstream.
 
-Use the linker's LOADADDR() macro to get the load address of the
-sections, and provide a macro to set the start and end symbols.
+Add a new HWCAP to detect the Increased precision of Reciprocal Estimate
+and Reciprocal Square Root Estimate feature (FEAT_RPRES), introduced in Armv8.7.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Also expose this to userspace in the ID_AA64ISAR2_EL1 feature register.
+
+Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211210165432.8106-4-joey.gouly@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/vmlinux.lds.h |   19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ Documentation/arm64/cpu-feature-registers.rst |    8 ++++++++
+ Documentation/arm64/elf_hwcaps.rst            |    4 ++++
+ arch/arm64/include/asm/hwcap.h                |    1 +
+ arch/arm64/include/uapi/asm/hwcap.h           |    1 +
+ arch/arm64/kernel/cpufeature.c                |    2 ++
+ arch/arm64/kernel/cpuinfo.c                   |    1 +
+ 6 files changed, 17 insertions(+)
 
---- a/arch/arm/kernel/vmlinux.lds.h
-+++ b/arch/arm/kernel/vmlinux.lds.h
-@@ -25,6 +25,11 @@
- #define ARM_MMU_DISCARD(x)	x
- #endif
+--- a/Documentation/arm64/cpu-feature-registers.rst
++++ b/Documentation/arm64/cpu-feature-registers.rst
+@@ -283,6 +283,14 @@ infrastructure:
+      | AFP                          | [47-44] |    y    |
+      +------------------------------+---------+---------+
  
-+/* Set start/end symbol names to the LMA for the section */
-+#define ARM_LMA(sym, section)						\
-+	sym##_start = LOADADDR(section);				\
-+	sym##_end = LOADADDR(section) + SIZEOF(section)
++  9) ID_AA64ISAR2_EL1 - Instruction set attribute register 2
 +
- #define PROC_INFO							\
- 		. = ALIGN(4);						\
- 		__proc_info_begin = .;					\
-@@ -100,19 +105,19 @@
-  * only thing that matters is their relative offsets
-  */
- #define ARM_VECTORS							\
--	__vectors_start = .;						\
-+	__vectors_lma = .;						\
- 	.vectors 0xffff0000 : AT(__vectors_start) {			\
- 		*(.vectors)						\
- 	}								\
--	. = __vectors_start + SIZEOF(.vectors);				\
--	__vectors_end = .;						\
-+	ARM_LMA(__vectors, .vectors);					\
-+	. = __vectors_lma + SIZEOF(.vectors);				\
- 									\
--	__stubs_start = .;						\
--	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_start) {		\
-+	__stubs_lma = .;						\
-+	.stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) {		\
- 		*(.stubs)						\
- 	}								\
--	. = __stubs_start + SIZEOF(.stubs);				\
--	__stubs_end = .;						\
-+	ARM_LMA(__stubs, .stubs);					\
-+	. = __stubs_lma + SIZEOF(.stubs);				\
- 									\
- 	PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
++     +------------------------------+---------+---------+
++     | Name                         |  bits   | visible |
++     +------------------------------+---------+---------+
++     | RPRES                        | [7-4]   |    y    |
++     +------------------------------+---------+---------+
++
  
+ Appendix I: Example
+ -------------------
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -253,6 +253,10 @@ HWCAP2_AFP
+ 
+     Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
+ 
++HWCAP2_RPRES
++
++    Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
++
+ 4. Unused AT_HWCAP bits
+ -----------------------
+ 
+--- a/arch/arm64/include/asm/hwcap.h
++++ b/arch/arm64/include/asm/hwcap.h
+@@ -107,6 +107,7 @@
+ #define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
+ #define KERNEL_HWCAP_ECV		__khwcap2_feature(ECV)
+ #define KERNEL_HWCAP_AFP		__khwcap2_feature(AFP)
++#define KERNEL_HWCAP_RPRES		__khwcap2_feature(RPRES)
+ 
+ /*
+  * This yields a mask that user programs can use to figure out what
+--- a/arch/arm64/include/uapi/asm/hwcap.h
++++ b/arch/arm64/include/uapi/asm/hwcap.h
+@@ -77,5 +77,6 @@
+ #define HWCAP2_MTE		(1 << 18)
+ #define HWCAP2_ECV		(1 << 19)
+ #define HWCAP2_AFP		(1 << 20)
++#define HWCAP2_RPRES		(1 << 21)
+ 
+ #endif /* _UAPI__ASM_HWCAP_H */
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -206,6 +206,7 @@ static const struct arm64_ftr_bits ftr_i
+ };
+ 
+ static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
++	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_RPRES_SHIFT, 4, 0),
+ 	ARM64_FTR_END,
+ };
+ 
+@@ -2264,6 +2265,7 @@ static const struct arm64_cpu_capabiliti
+ #endif /* CONFIG_ARM64_MTE */
+ 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
+ 	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
++	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_RPRES_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
+ 	{},
+ };
+ 
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -96,6 +96,7 @@ static const char *const hwcap_str[] = {
+ 	[KERNEL_HWCAP_MTE]		= "mte",
+ 	[KERNEL_HWCAP_ECV]		= "ecv",
+ 	[KERNEL_HWCAP_AFP]		= "afp",
++	[KERNEL_HWCAP_RPRES]		= "rpres",
+ };
+ 
+ #ifdef CONFIG_COMPAT
 
 

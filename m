@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3B34D5041
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15794D5036
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244641AbiCJRWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S244687AbiCJRWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238575AbiCJRWB (ORCPT
+        with ESMTP id S244572AbiCJRWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:22:01 -0500
+        Thu, 10 Mar 2022 12:22:05 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E3E198EEA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C444197B62
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:21:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646932860; x=1678468860;
+  t=1646932862; x=1678468862;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1tWPDyeaqpqP3+38dG/3atYvj81zVlkUqWonGq4wYBA=;
-  b=FGyoIk5OwXM9eGQU5z6jAuwyPIXlzpxfw1yD8G2NffDOATz9k4pvrwQE
-   AenOXvBoK9KskmwQYGYLUd/ZJ7RXaYKAddj7IXHp+yUI6wLnpri7YIvew
-   tuhPn3BW5+RKRs9e5z3RVXSwG322JV4d6p2aL31pr+l+l4IvLyDnoKNuo
-   KY1XkNHB1hu1dE7GdUlggOaTUiVtTW8HLaEdK1qVlqGOSz3lAlqEoltSr
-   dzST9U4apQ3N9ZXXFNfa9Tujtkle4Oe4qe5neCwq4GrMjQzbWKcUJFXFh
-   DX3UgjNhd2XlKbNr/4kfrLPUuODqOyurj93jCIlEoLSrX+KFFcefp0HyX
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254141974"
+  bh=6J1uPJwPyiqnISgR+DjIqM1ZSqTvGHjklXbWqm3EZ+U=;
+  b=NQt/PahlTpOeTeY0X2cvy47zA5QoopLCCk1CSbiUEbBjUL8NoShmuwb1
+   jbYN6PMmpMGNVs1UMSrqgrZvJck2E/MlFa66nwbZrI4+MbwOowcTyoplz
+   Ub5OVNP3bPHF2SnQL33v3x9ymDF+NZuWzORKzXy1Hs5dgfz5DlnX1CfUW
+   Ofv8SAlmL1nKFLOBFmAxcmWTu1LyAU9NTsGmiI6ffSWkbdAkpGp3CPQ0L
+   9QktraNvkJUWwcP+F96owSTWxh9r5nU1NRDdThH3OZkXrQg2nxxRnIkRS
+   afyNA79InDNRnfMQ4bUWunJckym8qPNF62XHvgiccnvdJMtxgLQbQ3yY3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254141985"
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="254141974"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:59 -0800
+   d="scan'208";a="254141985"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:02 -0800
 X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="611815982"
+   d="scan'208";a="596738243"
 Received: from gdavids1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.65.108])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:20:59 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 09:21:01 -0800
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,9 +45,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V9 16/45] x86/pkeys: Preserve the PKS MSR on context switch
-Date:   Thu, 10 Mar 2022 09:19:50 -0800
-Message-Id: <20220310172019.850939-17-ira.weiny@intel.com>
+Subject: [PATCH V9 17/45] mm/pkeys: Introduce pks_set_readwrite()
+Date:   Thu, 10 Mar 2022 09:19:51 -0800
+Message-Id: <20220310172019.850939-18-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310172019.850939-1-ira.weiny@intel.com>
 References: <20220310172019.850939-1-ira.weiny@intel.com>
@@ -65,155 +65,177 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The PKS MSR (PKRS) is a per-logical-processor register.  Unfortunately,
-the MSR is not managed by XSAVE.  Therefore, software must save/restore
-the MSR value on context switch.
+When kernel code needs access to a PKS protected page they will need to
+change the protections for the pkey to Read/Write.
 
-Allocate space in thread_struct to hold the saved MSR value.  Ensure all
-tasks, including the init_task are properly initialized.  Set the CPU
-PKRS value when a task is scheduled.
+Define pks_set_readwrite() to update the specified pkey.  Define
+pks_update_protection() as a helper to do the heavy lifting and allow
+for subsequent pks_set_*() calls.
 
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Define PKEY_READ_WRITE rather than use a magic value of '0' in
+pks_update_protection().
+
+Finally, ensure preemption is disabled for pks_write_pkrs() because the
+context of this call can not generally be predicted.
+
+pks.h is created to avoid conflicts and header dependencies with the
+user space pkey code.
+
+Add documentation.
+
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
-Changes for V9
-	From Dave Hansen
-		Clarify the commit message
+changes for v9
+	Move MSR documentation note to this patch
+	move declarations to incline/linux/pks.h
+	from rick edgecombe
+		change pkey type to u8
+	validate pkey range in pks_update_protection
+	from 0day
+		fix documentation link
+	from dave hansen
+		s/pks_mk_*/pks_set_*/
+		use pkey
 		s/pks_saved_pkrs/pkrs/
-		s/pks_write_current/x86_pkrs_load/
-		Change x86_pkrs_load to take the next thread instead of
-			'current'
 
-Changes for V8
-	From Thomas
-		Ensure pkrs_write_current() does not suffer the overhead
-		of preempt disable.
-		Fix setting of initial value
-		Remove flawed and broken create_initial_pkrs_value() in
-			favor of a much simpler and robust macro default
-		Update function names to be consistent.
-
-	s/pkrs_write_current/pks_write_current
-		This is a more consistent name
-	s/saved_pkrs/pks_saved_pkrs
-	s/pkrs_init_value/PKS_INIT_VALUE
-	Remove pks_init_task()
-		This function was added mainly to avoid the header file
-		issue.  Adding pks-keys.h solved that and saves the
-		complexity.
-
-Changes for V7
-	Move definitions from asm/processor.h to asm/pks.h
-	s/INIT_PKRS_VALUE/pkrs_init_value
-	Change pks_init_task()/pks_sched_in() to functions
-	s/pks_sched_in/pks_write_current to be used more generically
-	later in the series
+changes for v8
+	define pkey_read_write
+	make the call inline
+	clean up the names
+	use pks_write_pkrs() with preemption disabled
+	split this out from 'add pks kernel api'
+	include documentation in this patch
 ---
- arch/x86/include/asm/pks.h       |  2 ++
- arch/x86/include/asm/processor.h | 15 ++++++++++++++-
- arch/x86/kernel/process_64.c     |  2 ++
- arch/x86/mm/pkeys.c              |  9 +++++++++
- 4 files changed, 27 insertions(+), 1 deletion(-)
+ Documentation/core-api/protection-keys.rst | 15 +++++++++++
+ arch/x86/mm/pkeys.c                        | 31 ++++++++++++++++++++++
+ include/linux/pks.h                        | 31 ++++++++++++++++++++++
+ include/uapi/asm-generic/mman-common.h     |  1 +
+ 4 files changed, 78 insertions(+)
+ create mode 100644 include/linux/pks.h
 
-diff --git a/arch/x86/include/asm/pks.h b/arch/x86/include/asm/pks.h
-index 8180fc59790b..a7bad7301783 100644
---- a/arch/x86/include/asm/pks.h
-+++ b/arch/x86/include/asm/pks.h
-@@ -5,10 +5,12 @@
- #ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
+diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
+index 23330a7d53eb..e6564f5336b7 100644
+--- a/Documentation/core-api/protection-keys.rst
++++ b/Documentation/core-api/protection-keys.rst
+@@ -143,6 +143,21 @@ Adding pages to a pkey protected domain
+ .. kernel-doc:: arch/x86/include/asm/pgtable_types.h
+         :doc: PKS_KEY_ASSIGNMENT
  
- void pks_setup(void);
-+void x86_pkrs_load(struct thread_struct *thread);
- 
- #else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
- 
- static inline void pks_setup(void) { }
-+static inline void x86_pkrs_load(struct thread_struct *thread) { }
- 
- #endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
- 
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 2c5f12ae7d04..e3874c2d175e 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_PROCESSOR_H
- #define _ASM_X86_PROCESSOR_H
- 
-+#include <linux/pks-keys.h>
++Changing permissions of individual keys
++---------------------------------------
 +
- #include <asm/processor-flags.h>
- 
- /* Forward declaration, a strange C thing */
-@@ -527,6 +529,10 @@ struct thread_struct {
- 	 * PKRU is the hardware itself.
- 	 */
- 	u32			pkru;
-+#ifdef	CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
-+	/* Saved Protection key register for supervisor mappings */
-+	u32			pkrs;
-+#endif
- 
- 	/* Floating point and extended processor state */
- 	struct fpu		fpu;
-@@ -769,7 +775,14 @@ static inline void spin_lock_prefetch(const void *x)
- #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
- 
- #else
--#define INIT_THREAD { }
++.. kernel-doc:: include/linux/pks.h
++        :identifiers: pks_set_readwrite
 +
-+#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
-+#define INIT_THREAD  {			\
-+	.pkrs = PKS_INIT_VALUE,		\
-+}
-+#else
-+#define INIT_THREAD  { }
-+#endif
++MSR details
++~~~~~~~~~~~
++
++WRMSR is typically an architecturally serializing instruction.  However,
++WRMSR(MSR_IA32_PKRS) is an exception.  It is not a serializing instruction and
++instead maintains ordering properties similar to WRPKRU.  Thus it is safe to
++immediately use a mapping when the pks_set*() functions returns.  Check the
++latest SDM for details.
++
+ Testing
+ -------
  
- extern unsigned long KSTK_ESP(struct task_struct *task);
- 
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 3402edec236c..e703cc451128 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -59,6 +59,7 @@
- /* Not included via unistd.h */
- #include <asm/unistd_32_ia32.h>
- #endif
-+#include <asm/pks.h>
- 
- #include "process.h"
- 
-@@ -612,6 +613,7 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- 	x86_fsgsbase_load(prev, next);
- 
- 	x86_pkru_load(prev, next);
-+	x86_pkrs_load(next);
- 
- 	/*
- 	 * Switch the PDA and FPU contexts.
 diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index 10521f1a292e..39e4c2cbc279 100644
+index 39e4c2cbc279..e4cbc79686ea 100644
 --- a/arch/x86/mm/pkeys.c
 +++ b/arch/x86/mm/pkeys.c
-@@ -246,6 +246,15 @@ static inline void pks_write_pkrs(u32 new_pkrs)
- 	}
+@@ -6,6 +6,7 @@
+ #include <linux/debugfs.h>		/* debugfs_create_u32()		*/
+ #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
+ #include <linux/pkeys.h>                /* PKEY_*                       */
++#include <linux/pks.h>
+ #include <linux/pks-keys.h>
+ #include <uapi/asm-generic/mman-common.h>
+ 
+@@ -275,4 +276,34 @@ void pks_setup(void)
+ 	cr4_set_bits(X86_CR4_PKS);
  }
  
-+/* x86_pkrs_load() - Update CPU with the incoming thread pkrs value */
-+void x86_pkrs_load(struct thread_struct *thread)
++/*
++ * Do not call this directly, see pks_set*().
++ *
++ * @pkey: Key for the domain to change
++ * @protection: protection bits to be used
++ *
++ * Protection utilizes the same protection bits specified for User pkeys
++ *     PKEY_DISABLE_ACCESS
++ *     PKEY_DISABLE_WRITE
++ *
++ */
++void pks_update_protection(u8 pkey, u8 protection)
 +{
++	u32 pkrs;
++
 +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
 +		return;
 +
-+	pks_write_pkrs(thread->pkrs);
++	if (WARN_ON_ONCE(pkey >= PKS_KEY_MAX))
++		return;
++
++	pkrs = current->thread.pkrs;
++	current->thread.pkrs = pkey_update_pkval(pkrs, pkey,
++						 protection);
++	preempt_disable();
++	pks_write_pkrs(current->thread.pkrs);
++	preempt_enable();
++}
++EXPORT_SYMBOL_GPL(pks_update_protection);
++
+ #endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
+diff --git a/include/linux/pks.h b/include/linux/pks.h
+new file mode 100644
+index 000000000000..8b705a937b19
+--- /dev/null
++++ b/include/linux/pks.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PKS_H
++#define _LINUX_PKS_H
++
++#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
++
++#include <linux/types.h>
++
++#include <uapi/asm-generic/mman-common.h>
++
++void pks_update_protection(u8 pkey, u8 protection);
++
++/**
++ * pks_set_readwrite() - Make the domain Read/Write
++ * @pkey: the pkey for which the access should change.
++ *
++ * Allow all access, read and write, to the domain specified by pkey.  This is
++ * not a global update and only affects the current running thread.
++ */
++static inline void pks_set_readwrite(u8 pkey)
++{
++	pks_update_protection(pkey, PKEY_READ_WRITE);
 +}
 +
- /*
-  * PKS is independent of PKU and either or both may be supported on a CPU.
-  *
++#else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
++
++static inline void pks_set_readwrite(u8 pkey) {}
++
++#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
++
++#endif /* _LINUX_PKS_H */
+diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
+index 1567a3294c3d..3da6ac9e5ded 100644
+--- a/include/uapi/asm-generic/mman-common.h
++++ b/include/uapi/asm-generic/mman-common.h
+@@ -78,6 +78,7 @@
+ /* compatibility flags */
+ #define MAP_FILE	0
+ 
++#define PKEY_READ_WRITE		0x0
+ #define PKEY_DISABLE_ACCESS	0x1
+ #define PKEY_DISABLE_WRITE	0x2
+ #define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
 -- 
 2.35.1
 

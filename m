@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D4D4D4841
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616814D484D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 14:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241248AbiCJNlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 08:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S242503AbiCJNpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 08:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241052AbiCJNlm (ORCPT
+        with ESMTP id S241878AbiCJNpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 08:41:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017C3DA7A;
-        Thu, 10 Mar 2022 05:40:41 -0800 (PST)
+        Thu, 10 Mar 2022 08:45:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB6E14EF51;
+        Thu, 10 Mar 2022 05:44:10 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5D01E21106;
-        Thu, 10 Mar 2022 13:40:40 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7876F1F38C;
+        Thu, 10 Mar 2022 13:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646919640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1646919849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=s0WfDHnB3qQWf1YP5uxdfwdYs8AdzWWU3Bje0Q+7OV4=;
-        b=NAlFcq6v6X84cvG50ghJERg2gd+7VRyccxdqIjUK8tb/V4+tuRfK2ZQ091kkhYR5QjqLci
-        y/ZI7Nkz8X5iG0l76/f19dfW6gaehRPPmeTMLJ0pbNUBIsvZs52aOhwii2Hm96vcWca+YD
-        c7fFVZLnJF973Oj9RoZb9wqOUWODpXA=
+        bh=SnA7Np7gKd5jSmFECTnTj+bCIp39V/1d7NGlTPjvbgU=;
+        b=xyBYjFnzf0zsb18gUNwj8KfkaU+vYVRPt5SAkTv9ArkNk4MkcXwWyGnf5omo4tTdgkYRiF
+        5tfopdABu75vaO6WKoX8WJyoZJF0wsYuB0Q8tucworlIPO814pbw+pMzAXejqUe01Arixp
+        DcWpPVzgkoIHF/z4Zt++7BWjxc9MVjw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646919640;
+        s=susede2_ed25519; t=1646919849;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=s0WfDHnB3qQWf1YP5uxdfwdYs8AdzWWU3Bje0Q+7OV4=;
-        b=PRGjmFb2jd+ug6p3zxEGQeZVWnB7OHfUFbLnBx0Wb1GAx6oxQhDANgZMiIKRCXvNzxWllb
-        cF/7g5FKY3LoHBAA==
+        bh=SnA7Np7gKd5jSmFECTnTj+bCIp39V/1d7NGlTPjvbgU=;
+        b=rgDfQ9xY6vanCjwwxwJTaBOhnkq0oXMANqOElCGmf0hsywqcCVQyK9rdpLeuysvfBm91D2
+        0rYznLvFtMAeA9DA==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 4B8FEA3B87;
-        Thu, 10 Mar 2022 13:40:40 +0000 (UTC)
-Date:   Thu, 10 Mar 2022 14:40:40 +0100
-Message-ID: <s5hcziuexif.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 6D72FA3B87;
+        Thu, 10 Mar 2022 13:44:09 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 14:44:09 +0100
+Message-ID: <s5hbkydgbx2.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Lucas Tanure <tanureal@opensource.cirrus.com>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -49,10 +49,10 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: Re: [PATCH v3 03/16] sound: cs35l41: Move cs35l41_gpio_config to shared lib
-In-Reply-To: <20220308171730.454587-4-tanureal@opensource.cirrus.com>
+Subject: Re: [PATCH v3 01/16] sound: cs35l41: Unify hardware configuration
+In-Reply-To: <20220308171730.454587-2-tanureal@opensource.cirrus.com>
 References: <20220308171730.454587-1-tanureal@opensource.cirrus.com>
-        <20220308171730.454587-4-tanureal@opensource.cirrus.com>
+        <20220308171730.454587-2-tanureal@opensource.cirrus.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -68,16 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Mar 2022 18:17:17 +0100,
+On Tue, 08 Mar 2022 18:17:15 +0100,
 Lucas Tanure wrote:
-> 
-> ASoC and HDA can use a single function to configure the chip gpios.
-> 
-> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> +enum cs35l41_gpio_func {
+> +	CS35L41_HIZ,
+> +	CS35L41_GPIO,
+> +	CS35L41_INT_OPEN_DRAIN_GPIO2,
+> +	CS35L41_MCLK,
+> +	CS35L41_INT_PUSH_PULL_LOW_GPIO2,
+> +	CS35L41_INT_PUSH_PULL_HIGH_GPIO2,
+> +	CS35L41_PDM_CLK_GPIO2,
+> +	CS35L41_PDM_DATA_GPIO2,
+> +	CS35L41_MDSYNC_GPIO1 = 2,
+> +	CS35L41_PDM_CLK_GPIO1 = 4,
+> +	CS35L41_PDM_DATA_GPIO1 = 5,
+>  };
 
-Just use "ALSA:" prefix for the subject instead of "sound:" in case
-both ALSA HD-audio and ASoC are covered in the patch.
+So CS35L41_MDSYNC_GPIO1 is identical with *_DRAIN_GPIO2, i.e. it's an
+alias?
 
 
 thanks,

@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0193A4D5318
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A854D531E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 21:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244676AbiCJUbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 15:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S244823AbiCJUd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 15:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239379AbiCJUbN (ORCPT
+        with ESMTP id S232725AbiCJUdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 15:31:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB39ECB03;
-        Thu, 10 Mar 2022 12:30:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D44416179A;
-        Thu, 10 Mar 2022 20:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F464C340F5;
-        Thu, 10 Mar 2022 20:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646944210;
-        bh=P8GXSJtGS9vWK7KLpSBtCJ/qJIolUoM2eF1tNgOWcQE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UbXWkqW4AhEQ5EoqOpKySLsGH65tRAHjBfLHhftS3RnsEB7xg0vApvCOVbnCR0kzY
-         k1UkMQEpWVYL4fErBj5pBjLgjQkCrNg3MnNaJuOKFPxzidK+ksQ5L36jw0O5bUosKz
-         si7J8nu1HKgWbxTpDaqCSurZ3zKcquwWAH7rNWWoMgBtCQ417GvsTAXXfcOe/lzQUb
-         l9B5HD5snxcn5W9fumF+1oRrHorPBpjWD0O4jsA20VE1XG5Ng/OW9p/gGXLHBd2qXN
-         BpXzftnPPBrXUMX7G9Sjhk2xK+QQumjyrH8uMI2BDd5Wp+MTVAy9G4IpMdQ7/7v1td
-         mj8SX19VSoLpQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F3EDE8DD5B;
-        Thu, 10 Mar 2022 20:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 10 Mar 2022 15:33:22 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B022F3284
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:32:20 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id x4so7872383iop.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 12:32:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DLr3mQYXmDHbd+LBhBUi7dTKTmk6a0trl2Y2FAGkhQk=;
+        b=I/+Xd9JvfV4nd6qZCvwS8Ojf1XjyRTKJ2gaOyW9PLvPZXe72yXxjTZDQVFwtIOA4CD
+         7gj7jC/qRFTME2IISxgQqFam3G3Cee2O3wpazRsMEMN0TEh3VVhYaDwyCKAK+rlwrZ7b
+         5z2UClc6rkg6OE+PGBWlvmDS4qeULrf+P2Kiw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DLr3mQYXmDHbd+LBhBUi7dTKTmk6a0trl2Y2FAGkhQk=;
+        b=VKIXqVGoohL2NcoMeYG6HiBOtoxkRg3Ml//F6aW95lydXH3dZdAUnFM3mfj+O1Hl4j
+         rzsfoKGPkPjMsL9Q717560+S29uthoZlRpCuVK4r+OKUajGI+SEZ12kunSHad+CWNUTq
+         M4bT5Me6M+aSR8sL/YEtf2n5vOSvcz/8KJsPsz2FfsFZVuqmpK2u2yRpVarCUSeiShH2
+         krpPIYAkQ/Y0aem49qKRDpCqL7ZZ2XGH0yjLaANafZ/Q6HiCJ0wnIKQGo9qaKK2bVNVJ
+         bDHceNbzONV0HcMEIqjhULJ16fpd1BBAmjEt6NXkLCi0ePqSwxx0nVbf/lQOHY1c3zkq
+         ETHg==
+X-Gm-Message-State: AOAM532pwY7ch3nTl1TjPqxGxxNA6/z4YOP6Iy17Sk1sSOJ2EbZceR4G
+        E5hX+p8PZ9Rcz0MLoRAiT1KEcQ==
+X-Google-Smtp-Source: ABdhPJzGYJJ66lGrR9KD/M0EG6Zi/5nRvruDQV4FiOAuS/Sc7kzsbS/JS9cK6MUhafBgg6dI6oMGQg==
+X-Received: by 2002:a6b:ce01:0:b0:610:8f2:3b7 with SMTP id p1-20020a6bce01000000b0061008f203b7mr5389673iob.25.1646944339851;
+        Thu, 10 Mar 2022 12:32:19 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b10-20020a056602000a00b0064074921986sm3169961ioa.41.2022.03.10.12.32.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 12:32:19 -0800 (PST)
+Subject: Re: [PATCH v3] selftests/resctrl: Print a message if the result of
+ MBM&CMT tests is failed on Intel cpu
+To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220304103957.487660-1-tan.shaopeng@jp.fujitsu.com>
+ <9647f7ed-6a02-8603-0de4-3292d4d13157@linuxfoundation.org>
+ <TYAPR01MB63307F1C04270DD2D09ACF238B0B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <480705b1-6f22-e129-2db0-2a9c5841eacc@linuxfoundation.org>
+Date:   Thu, 10 Mar 2022 13:32:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ethtool: Fix refcount leak in gfar_get_ts_info
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164694421005.25928.8192632263617789696.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Mar 2022 20:30:10 +0000
-References: <20220309091149.775-1-linmq006@gmail.com>
-In-Reply-To: <20220309091149.775-1-linmq006@gmail.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     claudiu.manoil@nxp.com, davem@davemloft.net, kuba@kernel.org,
-        yangbo.lu@nxp.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <TYAPR01MB63307F1C04270DD2D09ACF238B0B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed,  9 Mar 2022 09:11:49 +0000 you wrote:
-> The of_find_compatible_node() function returns a node pointer with
-> refcount incremented, We should use of_node_put() on it when done
-> Add the missing of_node_put() to release the refcount.
+On 3/10/22 1:18 AM, tan.shaopeng@fujitsu.com wrote:
+> Hi Shuah,
 > 
-> Fixes: 7349a74ea75c ("net: ethernet: gianfar_ethtool: get phc index through drvdata")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> On 3/4/22 3:39 AM, Shaopeng Tan wrote:
+
+>> Also need to be rebased on mainline latest
 > 
-> [...]
+> I will rebased on mainline latest in next version.
+> 
 
-Here is the summary with links:
-  - ethtool: Fix refcount leak in gfar_get_ts_info
-    https://git.kernel.org/netdev/net/c/2ac5b58e645c
+>> Why is this a global? I am not seeing a reason. These detect_*()s could be
+>> moved to resctrl.h and get rid of globals.
+>>
+>> Instead of adding intel check to detect_amd() add detect_intel() or is_intel()
+>> and have ut return true of it detects intel.
+> 
+> "is_amd" and "is_intel" are called many times,
+> in this way, detect_vendor is called only once.
+> 
+You can do the lookup once and save the value to return for
+subsequent calls instead of using global values is_amd
+and is_intel.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+thanks,
+-- Shuah
 

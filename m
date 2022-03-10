@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E15D4D4682
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0824D468A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 13:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241436AbiCJMLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 07:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S241890AbiCJMOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 07:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239440AbiCJMK7 (ORCPT
+        with ESMTP id S230184AbiCJMO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 07:10:59 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F51470C1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 04:09:57 -0800 (PST)
-Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KDnsD2KZBzdb6l;
-        Thu, 10 Mar 2022 20:08:32 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Thu, 10 Mar 2022 20:09:55 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.174) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 20:09:54 +0800
-From:   Li Huafei <lihuafei1@huawei.com>
-To:     <peterz@infradead.org>, <tglx@linutronix.de>
-CC:     <alexandre.chartre@oracle.com>, <mhiramat@kernel.org>,
-        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <laijs@linux.alibaba.com>,
-        <chang.seok.bae@intel.com>, <fenghua.yu@intel.com>,
-        <thomas.tai@oracle.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/traps: Mark do_int3() NOKPROBE_SYMBOL
-Date:   Thu, 10 Mar 2022 20:09:15 +0800
-Message-ID: <20220310120915.63349-1-lihuafei1@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.174]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 07:14:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7077A0BDA;
+        Thu, 10 Mar 2022 04:13:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 640C3618B3;
+        Thu, 10 Mar 2022 12:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C6FC340E8;
+        Thu, 10 Mar 2022 12:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646914407;
+        bh=cmrIX5GYknBVl6iI+66Qn4zD4J81OajoQH+p0d8oR/Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aitcLcrAOnx6j0tj+ZzWSbpQkQWC7CooIKWegLgYUC670R7VBC2+PqCQqOD2bM8AC
+         f8iycwbUnSQLdgYPVHCuvQdR6ov4OKeOfPy7cQBTpqZMIhGn8dxsH5kiazTQUK2nXx
+         npRnTvkq4tRydzXj8E9piV5UG/d9fGEHygnj98eG9wjyxhl8xy/9P1jaaFYJPMtl1i
+         AEm3k9CWOwY3kk/kaa/3QT1rzinhvUZdElwBbl/lZal/+6hdzTJNfxxS7Zv3ZDNlqb
+         74K3VFLCOSwdmkuZ/PObswGn6ZSpSS7LF21bmQBpxcj1akkcthtHzQqEkiefQq6yu+
+         GEuSHCGHfJ6XA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.17-rc7
+Date:   Thu, 10 Mar 2022 12:13:11 +0000
+Message-Id: <20220310121327.63C6FC340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since kprobe_int3_handler() is called in do_int3(), probing do_int3()
-can cause a breakpoint recursion and crash the kernel. Therefore,
-do_int3() should be marked as NOKPROBE_SYMBOL.
+The following changes since commit 80808768e41324d2e23de89972b5406c1020e6e4:
 
-Fixes: 21e28290b317 ("x86/traps: Split int3 handler up")
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
----
- arch/x86/kernel/traps.c | 1 +
- 1 file changed, 1 insertion(+)
+  spi: rockchip: terminate dma transmission when slave abort (2022-02-17 15:33:18 +0000)
 
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index c9d566dcf89a..8143693a7ea6 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -659,6 +659,7 @@ static bool do_int3(struct pt_regs *regs)
- 
- 	return res == NOTIFY_STOP;
- }
-+NOKPROBE_SYMBOL(do_int3);
- 
- static void do_int3_user(struct pt_regs *regs)
- {
--- 
-2.17.1
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.17-rc7
+
+for you to fetch changes up to 1a4e53d2fc4f68aa654ad96d13ad042e1a8e8a7d:
+
+  spi: Fix invalid sgs value (2022-03-08 12:27:33 +0000)
+
+----------------------------------------------------------------
+spi: Fix for v5.17
+
+One fix for type conversion issues when working out maximum
+scatter/gather segment sizes which caused problems for some systems
+which where the limits overflow due to the type conversion.
+
+----------------------------------------------------------------
+Biju Das (1):
+      spi: Fix invalid sgs value
+
+ drivers/spi/spi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)

@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4415E4D4FD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD92A4D4F74
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239853AbiCJRA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S241154AbiCJQk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiCJRAy (ORCPT
+        with ESMTP id S229769AbiCJQk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:00:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AE33F47F6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646931592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qt3CDQJKVzIsT9TVSQg9SdqCzF9dYBE8SsUrYs4k4eA=;
-        b=Gx3xvWw8ieAcmO26PI0DXfm8YamNc5DwAbOcxXIy6+APkTzq7mlbWHTn0nOOhdvoN3Q98Q
-        aH1IjrykBmYspoYByy3ta5M/QSafDoy5Lsuhl19i1zmmUfzBcVTdK9ErHMlLS23CgH62AI
-        u8hLEIkLQUBwzFJVRc5C5Sjna6vPa2w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-u9DRl8NgPXa7BTYf6RKqKw-1; Thu, 10 Mar 2022 11:59:51 -0500
-X-MC-Unique: u9DRl8NgPXa7BTYf6RKqKw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7DADF800D55;
-        Thu, 10 Mar 2022 16:59:49 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AEF82865A2;
-        Thu, 10 Mar 2022 16:59:20 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id DD89F416D5CB; Thu, 10 Mar 2022 13:35:51 -0300 (-03)
-Date:   Thu, 10 Mar 2022 13:35:51 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>
-Subject: Re: [patch v11 10/13] KVM: x86: process isolation work from VM-entry
- code path
-Message-ID: <Yioo59Rd52rUZ/+F@fuller.cnet>
-References: <20220204173537.429902988@fedora.localdomain>
- <20220204173554.897857855@fedora.localdomain>
- <20220207154707.GC526451@lothringen>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207154707.GC526451@lothringen>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Thu, 10 Mar 2022 11:40:56 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAB285640;
+        Thu, 10 Mar 2022 08:39:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646930384;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Cl9sjRgxnYq/vT3JiOhrwxYvJL9HDIU+3FT0Qx31Dqc=;
+    b=jc58DKoe3Iq/6XIYtYjOy9LF0ZOKXhhLsgyNLz5mXaM7d5CsSqfL8+LdLspuacGa8z
+    Rs7F+KSG21bnm5+MYXTr/AGklLIEag60lFsPFOlfJqSXuMNxcyR95cV48m+zlyVCsXrI
+    z7SLrnwzsUyvqlOPYW0xD+SI1LCCUUGA/eD9Q0XNd839pkhs9vcm7OWHl8Jb1LZiLdDQ
+    +22tXfbnaQx3I3uSf/uOMBO6bgi71M4p3deihvXBlzK8SVUIFhQ1gIFT9vttM57CygkX
+    xsXS4+Dt+pVdpGEtceP4VPjhP55NrIKruQK9XjwbrTGMaN+HF9qEx2AyXcN5jha+yaw3
+    wtFw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3j8N+"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 SBL|AUTH)
+    with ESMTPSA id 30b171y2AGdi0EG
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 10 Mar 2022 17:39:44 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [BUG] new MIPS compile error on v5.15.27
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <AF60728F-AF8B-4906-A510-66E880D86ADE@goldelico.com>
+Date:   Thu, 10 Mar 2022 17:39:42 +0100
+Cc:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <66A2A2FB-712D-4484-A0E7-DD6763F8965B@goldelico.com>
+References: <D148EFBD-55E0-449A-AD2A-12C80ABD4FC4@goldelico.com>
+ <20220310162818.GA4436@lst.de>
+ <AF60728F-AF8B-4906-A510-66E880D86ADE@goldelico.com>
+To:     Christoph Hellwig <hch@lst.de>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,68 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 04:47:07PM +0100, Frederic Weisbecker wrote:
-> On Fri, Feb 04, 2022 at 02:35:47PM -0300, Marcelo Tosatti wrote:
-> > VM-entry code path is an entry point similar to userspace return
-> > when task isolation is concerned.
-> > 
-> > Call isolation_exit_to_user_mode before VM-enter.
-> > 
-> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > ---
-> > v11
-> > - Add TIF_TASK_ISOL bit to thread info flags and use it
-> >   to decide whether to perform task isolation work on
-> >   return to userspace                                   (Frederic W. Weisbecker)
-> > 
-> >  include/linux/entry-kvm.h |    4 +++-
-> >  kernel/entry/kvm.c        |   18 ++++++++++++++----
-> >  2 files changed, 17 insertions(+), 5 deletions(-)
-> > 
-> > Index: linux-2.6/kernel/entry/kvm.c
-> > ===================================================================
-> > --- linux-2.6.orig/kernel/entry/kvm.c
-> > +++ linux-2.6/kernel/entry/kvm.c
-> > @@ -2,6 +2,7 @@
-> >  
-> >  #include <linux/entry-kvm.h>
-> >  #include <linux/kvm_host.h>
-> > +#include <linux/task_isolation.h>
-> >  
-> >  static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
-> >  {
-> > @@ -22,6 +23,9 @@ static int xfer_to_guest_mode_work(struc
-> >  		if (ti_work & _TIF_NOTIFY_RESUME)
-> >  			tracehook_notify_resume(NULL);
-> >  
-> > +		if (ti_work & _TIF_TASK_ISOL)
-> > +			task_isol_exit_to_user_mode();
-> > +
-> >  		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
-> >  		if (ret)
-> >  			return ret;
-> > 
-> > 
-> 
-> Do you need this?
 
-Yes, dropped it somehow, thanks.
 
-> 
-> diff --git a/include/linux/entry-kvm.h b/include/linux/entry-kvm.h
-> index 07c878d6e323..3588d6071caf 100644
-> --- a/include/linux/entry-kvm.h
-> +++ b/include/linux/entry-kvm.h
-> @@ -18,7 +18,7 @@
->  
->  #define XFER_TO_GUEST_MODE_WORK						\
->  	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL |	\
-> -	 _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
-> +	 _TIF_NOTIFY_RESUME | _TIF_TASK_ISOL | ARCH_XFER_TO_GUEST_MODE_WORK)
->  
->  struct kvm_vcpu;
->  
-> 
-> 
+> Am 10.03.2022 um 17:34 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+>=20
+>> Am 10.03.2022 um 17:28 schrieb Christoph Hellwig <hch@lst.de>:
+>>=20
+>> Please fix <asm/asm.h>.   The most trivial fix might be to only =
+defined
+>> END() under __ASSEMBLY__, although in the long run it probably wants =
+a
+>> better name as well.
+>=20
+> Well
+>=20
+> a) the bug (name conflict) does not occur in v5.16 or later
+> b) I am in no way responsible for either of the patches or subsystems
+>=20
+> So someone else has to either (partially?) backport
+>=20
+> commit 348332e000697 ("mm: don't include <linux/blk-cgroup.h> in =
+<linux/writeback.h>")
+>=20
+> to 5.17.y
+>=20
+> or write your proposed fix just for 5.17.y because it is not required =
+elsewhere.
+
+sorry, typo: just for v5.15.y
+
+>=20
+> BR and thanks,
+> Nikolaus
+>=20
 

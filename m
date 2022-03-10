@@ -2,135 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F61D4D54D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505E14D54D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344471AbiCJWu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
+        id S1343938AbiCJWuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343931AbiCJWuY (ORCPT
+        with ESMTP id S235842AbiCJWuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:50:24 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FC9CFB94
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:49:21 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id qa43so15201957ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:49:21 -0800 (PST)
+        Thu, 10 Mar 2022 17:50:15 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B42CA328
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:49:13 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id i5so7567469oih.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:49:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X/rtu54ntkVXnZ8WzhCGXP7Ng7Fgx6ahBoAiWoEdfPI=;
-        b=Tzc/GE6Ob61G7++79zVEuQGKO+ogy/3CB20AUrZdJUjo1sx41vjLvG+BMIGTdZoxB1
-         Erf7uWEqzMBZb2IoSJC/G2Ca4Xi/oPJKvDIWf7s8Py+FL6LIb2g/4VQuTDsFBgXF3n5H
-         4Z79gfx785IaI419QwidGq/mlIJ5ubUpuL8AKRkkokYS6pb/ku3dbtr5vK2CQxZwRBOy
-         aEZxnbOXpvp8N20npvalpFp89W8dhnrTqiCIxmLGZkimL27HeAmHQhRXuahcpJmUJ9sw
-         YPL+GFZ1uWa4nb1oFe0rtrUBQwChHvRd42wsy/ngQ+slNDpqK2d61m8R+Wqe6Il1JmwO
-         bqNA==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=t+I0qZwnh/1mtoTMKusuRdpi9FIYw05453lUFv86xBw=;
+        b=ObLOOlbk+7vQcmdDH+fbFFtMlvP8PZziEyXMiDrlItkhLE6UOcYb/aDodXzkD+rUni
+         NyrIxFcMT3p3r5kpPw5Hpq25f10/FTeen1oiMVPeGAQNEFHUKbfenYQyzdG/ukiURIin
+         v1c4yroN0n7fXvOZYwsyBVdn8bXUih4/LaWf0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X/rtu54ntkVXnZ8WzhCGXP7Ng7Fgx6ahBoAiWoEdfPI=;
-        b=Cz/Pn62z1ORe59BHJw68rvspmUG3pT9p1PArfC8AjJvXOFSsRdIIpMfgR4repHxyIf
-         dWh6Gezatdh/vLJKP7KpM54at5QZ54b8/kbRq6amrlWzL170mYeeh8ULhDUO6O5h26Xt
-         U+7EsiaKoU6LpkCZ1HcVz9E2jz3qU0rCXbKEfd60VM8+dF3LIYniI1IVsVkDkKWWiQF0
-         M7YUgDuQZIDOqSb4g2pvDoL8duoadO0GNdrzR5rpphLjz2gkew8p/R5Z6DGcy04nbGfQ
-         wP9cnvr6TVnD+T6ig9GoG7+yhIY4k4LCG2ixXeaRUUs8T/MBtDzgfMFEn8UMwuIIyTSO
-         rXaQ==
-X-Gm-Message-State: AOAM530bLZLxnwcy9rU43fYZ0idVU6WgXq9YADj3lQFZjrQ0b1/0Ue0O
-        Q4pUefgbDJoZyyBVpeVAPnpTup+EGhhepXLqadUb9Q==
-X-Google-Smtp-Source: ABdhPJwvPdPyuimNpDBevrBCyvPyfsYSzk8kAV9GyxvoX1Uv2iDYVHx2fKq2U6+k0Gl472gvzynfUgHXOpbiBgT0qT0=
-X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id
- ho43-20020a1709070eab00b006da8ec5d386mr6264799ejc.668.1646952560219; Thu, 10
- Mar 2022 14:49:20 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=t+I0qZwnh/1mtoTMKusuRdpi9FIYw05453lUFv86xBw=;
+        b=wDgVQEBCHL5tQwbwloE8pCyXlO5L7tyURVO/980ztS8Ef4QwIXPLMjclsdhYed0Mj/
+         Sa9TBAZzro/aEO0eBrQKMoSjiruJp07WLtXnukW/367p2ajZBwPDAKqhcPU+jIiCc5f0
+         tHWrXCfsac7c0O3+UpDbLTMbLaBi0lAxiV2YgDFKVI3BnsOMIGLnVM8DehnIs1CZnhiu
+         V7tEK7eXKwJ0X9Lx0r6gYEvqcu1c/XRKgjxwgel5lcKSGgv5uwsK/F1kOCEqKn4OHa7u
+         F4yH2YqQcc/mU9LwA4hvgLAp9T1ip0HWZDvU4JxFp30ZA/EeC4wjXiJfhNtZLtexHimN
+         WK1g==
+X-Gm-Message-State: AOAM533DZe/Xz9ZAGbUHhYZGBxkUI04UL7V2UdnWWxUtOY5NqvLrd00C
+        w8gc4ZzourFDDTiSI2ULISto79eFDyebD5VExj0E9g==
+X-Google-Smtp-Source: ABdhPJz8cpl0bmZv1sgEBHnzOQcNoOyYatjBQuzpvoQ5gSCJfJo0K9kmFneUkDZCjTSuYH0iWY6iHNzx7+9sPMgWZFA=
+X-Received: by 2002:a05:6808:220d:b0:2d4:99cb:3849 with SMTP id
+ bd13-20020a056808220d00b002d499cb3849mr4739228oib.63.1646952552659; Thu, 10
+ Mar 2022 14:49:12 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 10 Mar 2022 17:49:12 -0500
 MIME-Version: 1.0
-References: <20220310210210.2124637-1-brendanhiggins@google.com>
-In-Reply-To: <20220310210210.2124637-1-brendanhiggins@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 10 Mar 2022 17:49:08 -0500
-Message-ID: <CAFd5g46NmmNy5ueRjDnCkgjHy75KVUXA0xcTXtXjxLg7mgKJng@mail.gmail.com>
-Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
-To:     shuah <shuah@kernel.org>, David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Daniel Gutson <daniel.gutson@eclypsium.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org
+In-Reply-To: <20220308125044.1.I3e4a1a9c102d194698b68661e69efebafec8af1c@changeid>
+References: <20220308125044.1.I3e4a1a9c102d194698b68661e69efebafec8af1c@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 10 Mar 2022 17:49:12 -0500
+Message-ID: <CAE-0n52x8SVUJvaUJOo-D9ayWAOwLuZ0TAK-MRwMe6gTSE=shg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Delete herobrine-r0
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Jeremy Kerr - Just remembered that Jeremy is doing some work here and
-might be somewhat interested.
+Quoting Douglas Anderson (2022-03-08 12:52:35)
+> As talked about in commit 61a6262f95e0 ("arm64: dts: qcom: sc7280:
+> Move herobrine-r0 to its own dts"), herobrine evolved pretty
+> significantly after -r0 and newer revisions are pretty
+> different. Nobody needs the old boards to keep working, so let's
+> delete to avoid the maintenance burden.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-On Thu, Mar 10, 2022 at 4:02 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> Add support for a new kind of kunit_suite registration macro called
-> kunit_test_init_suite(); this new registration macro allows the
-> registration of kunit_suites that reference functions marked __init and
-> data marked __initdata.
->
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->
-> This patch is in response to a KUnit user issue[1] in which the user was
-> attempting to test some init functions; although this is a functional
-> solution as long as KUnit tests only run during the init phase, we will
-> need to do more work if we ever allow tests to run after the init phase
-> is over; it is for this reason that this patch adds a new registration
-> macro rather than simply modifying the existing macros.
->
-> [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
->
-> ---
->  include/kunit/test.h | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b26400731c02..1878e585f6d3 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -379,6 +379,27 @@ static inline int kunit_run_all_tests(void)
->
->  #define kunit_test_suite(suite)        kunit_test_suites(&suite)
->
-> +/**
-> + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-> + *                           containing init functions or init data.
-> + *
-> + * @__suites: a statically allocated list of &struct kunit_suite.
-> + *
-> + * This functions identically as &kunit_test_suites() except that it suppresses
-> + * modpost warnings for referencing functions marked __init or data marked
-> + * __initdata; this is OK because currently KUnit only runs tests upon boot
-> + * during the init phase or upon loading a module during the init phase.
-> + *
-> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-> + * tests must be excluded.
-> + */
-> +#define kunit_test_init_suites(__suites...)                            \
-> +       __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
-> +                           CONCATENATE(__UNIQUE_ID(suites), _probe),   \
-> +                           ##__suites)
-> +
-> +#define kunit_test_init_suite(suite)   kunit_test_init_suites(&suite)
-> +
->  #define kunit_suite_for_each_test_case(suite, test_case)               \
->         for (test_case = suite->test_cases; test_case->run_case; test_case++)
->
->
-> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> --
-> 2.35.1.723.g4982287a31-goog
->
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

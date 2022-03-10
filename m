@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286C34D450A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280FD4D450C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241418AbiCJKxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S241430AbiCJKxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241102AbiCJKxf (ORCPT
+        with ESMTP id S241398AbiCJKxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Mar 2022 05:53:35 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E0D62C4;
-        Thu, 10 Mar 2022 02:52:33 -0800 (PST)
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99C15B8B3;
+        Thu, 10 Mar 2022 02:52:35 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 6AC6C1F454C5
+        with ESMTPSA id B18281F454C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646909549;
-        bh=N4fl3qvUTmmfImneM6TYMxfbc131Zodk0cnqZ2UgY0s=;
+        s=mail; t=1646909553;
+        bh=ZuWzbcW5SBzcLegidyZSDC4r4SiuQWU/WO01Zs4oE2k=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iPmtWJrNwgUqLzVwFXEqQawHj4XRZWgoaTqyhqPR927Huz+S5f/A2WUVWq0MriyTI
-         tEdz6wee4AI0ZBq9uxzO7Yl2ef7IY649XopbAh1f7CBrJDaUo5wAsGx1jmT1g2P8Iv
-         vo6wskOclk2/ObiG7s23Fy9OjM750z4cCS8AEOmMpRik0cshQX/sD7KpIsFrMeYlrW
-         WAIzTAKhvxikjLhsmLJPGbOoE6mINyeqoNtQnXpzKg1fn9PNHGRdG4Oijh+ipdstay
-         ywXGC1SS3Kb4sVGzl1l4l2SmisFoHXgVDEorK2gOg4tZOopIDy7mDRkdeuCgN/aKb7
-         /NE+KYMlS0JZg==
-Message-ID: <81720566-0f99-536b-30c7-38ef99821d92@collabora.com>
-Date:   Thu, 10 Mar 2022 11:52:25 +0100
+        b=I3Rps/fsIu7d1mr3rhCDOZ/4fEQJVBhL7g3BK5ADv5/b6QOczc1Ncj0/LLjspJxJs
+         tHa8PgwOOs0q8HZsH7870XNBto9whyL/UTOc0Yb5z8039R/SaHPaihppgcd5XHC3Qe
+         2oekAW7j9oQR7OTuqww7ajPIiy6V8kGqBwK8kSSRqFYckdgS/+DOipnpQMwzGBSxDO
+         DlHGwAu5M5AL1Kslt4e2PVhCanrZZ4EcBv6HbvdBnqwgO9+YvKWmaC0TTk5o/iz2VP
+         L+E9+orTgEqOio/6r1TWLNOEjgu0Ezh33wlDoaAejdbxvagXfboN52wy62sCLn22bn
+         GstdLxBd9wZXg==
+Message-ID: <d0b3a4f3-b54d-b0bf-a3d8-6e6123788315@collabora.com>
+Date:   Thu, 10 Mar 2022 11:52:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH v14 03/22] dt-bindings: mediatek: add ethdr definition for
- mt8195
+Subject: Re: [PATCH v14 08/22] soc: mediatek: change the mutex defines and the
+ mutex_mod type
 Content-Language: en-US
 To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -54,10 +54,10 @@ Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         singo.chang@mediatek.com, srv_heupstream@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220310035515.16881-1-nancy.lin@mediatek.com>
- <20220310035515.16881-4-nancy.lin@mediatek.com>
+ <20220310035515.16881-9-nancy.lin@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220310035515.16881-4-nancy.lin@mediatek.com>
+In-Reply-To: <20220310035515.16881-9-nancy.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,16 +70,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/03/22 04:54, Nancy.Lin ha scritto:
-> Add vdosys1 ETHDR definition.
+Il 10/03/22 04:55, Nancy.Lin ha scritto:
+> This is a preparation for adding support for mt8195 vdosys1 mutex.
+> The vdosys1 path component contains ovl_adaptor, merge5,
+> and dp_intf1. Ovl_adaptor is composed of several sub-elements,
+> so change it to support multi-bit control.
 > 
 > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 > ---
->   .../display/mediatek/mediatek,ethdr.yaml      | 158 ++++++++++++++++++
->   1 file changed, 158 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+>   drivers/soc/mediatek/mtk-mutex.c | 264 +++++++++++++++----------------
+>   1 file changed, 132 insertions(+), 132 deletions(-)
 > 

@@ -2,134 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D8A4D5003
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106C14D5008
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 18:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243955AbiCJRPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 12:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S244380AbiCJRQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 12:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiCJRPl (ORCPT
+        with ESMTP id S230394AbiCJRQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:15:41 -0500
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D543182D85
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:14:40 -0800 (PST)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-2e2ca8d7812so4236087b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:14:40 -0800 (PST)
+        Thu, 10 Mar 2022 12:16:01 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530A6184602
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:15:00 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v4so5875051pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:15:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=oeXnfgK9BOKBTMDptF2I1vpIGSBc56TF64IaWy5xIn0=;
-        b=VOYDLLvylnkTA8J8uaILkF5NrclnhmkUUKYnqCDxPF1SO2iXi+0u2lThdABNuzNOPH
-         5BxjdpDHfAsYKoahy8NCUPqLuP4fHK+HZ3FqH878w2Gqm4TStaNB2aRFsFsxtUbSNFME
-         SxjFh/BLGlbMNWL2sjr7zjun6RCokxZy60xB3Zy8mqnmPbTu3KVFmG6VepnszOYLirQ0
-         0HYVX1yWWUUqbq80zBoGCZ9QBRE9x43Hs/jZXxZaNQKpFSXgI2wYVqOlKsk/fKuvpfKo
-         ePxyE4ZerSLlZG+rF7BVXCnK8IC/Wh0CIsvcYFfbBWlV7GTZXRYbYVK/e6CmOI8MXnHN
-         qt3A==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TPBQdtbwOmlVYwAm75BFwhcIX+dQ//6h0EnbuKsG+sU=;
+        b=Ur6lep8Ry6UQr79uHPM2mS0Y8zxWlv9paJGLd5Pz5xCuu3h3wbaj0DUdtxwLG01M3+
+         p5kGGkTH9GfXo11W9gNqUrUcTRtZmYbKGFrvyjaDIxCwgS0sGg4ZwS2QDd9xkcA+cK3k
+         2rXFZZHPmQy/rZ2fc3C/1A/v+f7kwVm67+8236LNjp1S79ig5HAdAfSsyZ/ZqO4URUUZ
+         2kg2/FZitlv+ObTsRkfpECA7d9/habQnCKgubwJIuHNNuHT8jxXNgrl53qzpSN3fncBu
+         4LBkRRdr7uYEs0wsz/X4C1H2NY9RrlEVixp5tmE0IVNImhcU7iqzxp6jhDRrlsDjSSbJ
+         vc8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=oeXnfgK9BOKBTMDptF2I1vpIGSBc56TF64IaWy5xIn0=;
-        b=o9GylZFRTYCrhQRWsfmL2y4kiHfahEAo4xwwX8L1yyw308UyO+tn+qSZLLnjrclvpp
-         PLZMEkmP07U4YXXgZR/2POEjyW9AtWbg7YgALnD65M1jQe7J3UIhu1BGBqDUERa0Dm1b
-         lImWKtGhZbZXfR0nFHqpfNZ7uVJ5qNcaTPhBX/mRJWmbS+W3qzcI4eUNIXrNPGDUdiJV
-         aB+p4CcrhDLH0nJC/qFWFBejPou1A9nrLKWaaePHJUT0kHElZQ7yX1IHOGzsVE7ZNwL+
-         3ax83l38HY4LFnUs7sbb3HuXpCHze8Ip5VALa5GncjnJnmacRkKLZQ/u1ClmUotkbCiS
-         8d/g==
-X-Gm-Message-State: AOAM533Trqt2VHWu37GVI5IRwhpF3yeil1uYZ/mHeODfh/890qdjvG7z
-        5RznIfhnNs4AYLLUE2e91ECetU1BDgY6WjwyIrA=
-X-Google-Smtp-Source: ABdhPJwRpHcWTJQcVuyYbZJEWcJ3RAaB5jzjlt7LgBHT8dqvQwr5crAymKpMHLzlm0dEFbJ0qCPwS+z8ZqHBf2ASANU=
-X-Received: by 2002:a81:9954:0:b0:2dc:973d:ec56 with SMTP id
- q81-20020a819954000000b002dc973dec56mr4990804ywg.270.1646932477190; Thu, 10
- Mar 2022 09:14:37 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TPBQdtbwOmlVYwAm75BFwhcIX+dQ//6h0EnbuKsG+sU=;
+        b=G7Fm3Ts/1gnGsl/e7zNlnIirkeBSqlG8+9JFqJCKbg9LUclWr6dQDfAiMaD9tVqbyS
+         0B+pXqKcJjQnNE56v+aSSVxBQCRY+tywmJVVt7/0W3QSn7qtKJ8r5i8bFTUF8zlYvGMo
+         FyZik/BB4sx7kCWFh8wxbKXjG0D4X6xxFW0RYKWjTMKyT12bi3vbT0/q8n9piWD70csQ
+         mwbX/2aVoGjzc9nNrYv2eE1l0GCLBZ9Qth2avoIdiSTafeOC6SYVYW12eyIoOUadoDVJ
+         5iuff/crSGGtDdZaMENzZRT3GvppEJM0tiOya7nh5y0IzWnQ4XWXkXGzEZuXb6+daqJr
+         ybXw==
+X-Gm-Message-State: AOAM531HbiKGcPSEK0Ra8XnLnw0kl6XnVL/IawxfQcIxb35IcOd4UkVr
+        t2Z4pt+nUml1oKSgjMhJoNOldA==
+X-Google-Smtp-Source: ABdhPJybOygWPx/LvPXMP9Xv/cIRttLOmJATcGvThhrinrYKNGRgYMqwH0Y07fNfO7GsJowtYBJIPA==
+X-Received: by 2002:a17:902:d888:b0:151:6fe8:6e68 with SMTP id b8-20020a170902d88800b001516fe86e68mr5897412plz.158.1646932499643;
+        Thu, 10 Mar 2022 09:14:59 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e18-20020a63d952000000b00372a1295210sm5907148pgj.51.2022.03.10.09.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 09:14:58 -0800 (PST)
+Date:   Thu, 10 Mar 2022 17:14:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhenzhong Duan <zhenzhong.duan@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org
+Subject: Re: [PATCH] KVM: x86: Remove redundant vm_entry_controls_clearbit()
+ call
+Message-ID: <YioyDu+9VoGmTWlD@google.com>
+References: <20220310111354.504565-1-zhenzhong.duan@intel.com>
 MIME-Version: 1.0
-Sender: mrselisabeth73peter@gmail.com
-Received: by 2002:a05:7110:5281:b0:16e:b1af:6354 with HTTP; Thu, 10 Mar 2022
- 09:14:36 -0800 (PST)
-From:   "Mrs.Joan Chen" <mrs.joan71chen@gmail.com>
-Date:   Thu, 10 Mar 2022 17:14:36 +0000
-X-Google-Sender-Auth: aGYOmASPYVfgyb-wpWGLNwGzzlU
-Message-ID: <CAHZyUciBvy4vDT1AvkO5Y5iHg93pVY7Gw5uwHc4uV0yDzoSDyQ@mail.gmail.com>
-Subject: Dear Child of God
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,HK_NAME_FM_MR_MRS,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1143 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrs.joan71chen[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 HK_NAME_FM_MR_MRS No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  3.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310111354.504565-1-zhenzhong.duan@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Child of God,
+On Thu, Mar 10, 2022, Zhenzhong Duan wrote:
+> When emulating exit from long mode, EFER_LMA is cleared which lead to
+> efer writing emulation, which will unset VM_ENTRY_IA32E_MODE control
+> bit as requested by SDM. So no need to unset VM_ENTRY_IA32E_MODE again
+> in exit_lmode() explicitly.
+> 
+> In fact benefited from shadow controls mechanism, this change doesn't
+> eliminate vmread or vmwrite.
+> 
+> Opportunistically remove unnecessory assignment to uret MSR data field
+> as vmx_setup_uret_msrs() will do the same thing.
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day and compliments of the
-seasons, i know this letter will definitely come to you as a huge
-surprise, but I implore you to take the time to go through it
-carefully as the decision you make will go off a long way to determine
-my future and continued existence. I am Mrs.Joan Chen aging widow of
-57 years old suffering from long time illness.I have some funds I
-inherited from my late husband, the sum of (21 Million Dollars) and I
-needed a very honest and God fearing who can withdraw this money then
-use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
-CHARITY WORKS. I found your email address from the internet after
-honest prayers to the LORD to bring me a helper and i decided to
-contact you if you may be willing and interested to handle these trust
-funds in good faith before anything happens to me.
+This needs to be a separate patch, it's much more subtle than "xyz will do the
+same thing".  update_transition_efer() doesn't unconditionally set uret->data,
+which on the surface makes this look suspect, but it's safe because uret->data
+is consumed if and only if uret->load_into_hardware is true, and it's (a) set to
+false if uret->data isn't updated and (b) uret->data is guaranteed to be updated
+before it's set to true.
 
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the SECURITY COMPANY issued
-to me as next of kin for immediate transfer of the money to your
-account in your country, to start the good work of God, I want you to
-use the 20/percent of the total amount to help yourself in doing the
-project. I am desperately in keen need of assistance and I have
-summoned up courage to contact you for this task, you must not fail me
-and the millions of the poor people in our todays WORLD. This is no
-stolen money and there are no dangers involved,100% RISK FREE with
-full legal proof. Please if you would be able to use the funds for the
-Charity works kindly let me know immediately.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-Please
-kindly respond quickly for further details.
+> In case EFER isn't supported by hardware, long mode isn't supported,
+> so this will no break.
+>
+> 
+> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index b730d799c26e..b04588dc7faa 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2878,14 +2878,11 @@ int vmx_set_efer(struct kvm_vcpu *vcpu, u64 efer)
+>  		return 0;
+>  
+>  	vcpu->arch.efer = efer;
+> -	if (efer & EFER_LMA) {
+> +	if (efer & EFER_LMA)
+>  		vm_entry_controls_setbit(to_vmx(vcpu), VM_ENTRY_IA32E_MODE);
+> -		msr->data = efer;
+> -	} else {
+> +	else
+>  		vm_entry_controls_clearbit(to_vmx(vcpu), VM_ENTRY_IA32E_MODE);
+>  
+> -		msr->data = efer & ~EFER_LME;
+> -	}
 
-Hoping to receive your response as soon as possible.
+While you're doing opportunistic cleanups, drop the local "msr" and use "vmx"
+directly instead of redoing to_vmx(), i.e. this
 
-Your urgently responses is needed
+int vmx_set_efer(struct kvm_vcpu *vcpu, u64 efer)
+{
+	struct vcpu_vmx *vmx = to_vmx(vcpu);
 
-Thanks and Remain blessed
-Mrs.Joan Chen
+	/* Nothing to do if hardware doesn't support EFER. */
+	if (!vmx_find_uret_msr(vmx, MSR_EFER))
+		return 0;
+
+	vcpu->arch.efer = efer;
+	if (efer & EFER_LMA)
+		vm_entry_controls_setbit(vmx, VM_ENTRY_IA32E_MODE);
+	else
+		vm_entry_controls_clearbit(vmx, VM_ENTRY_IA32E_MODE);
+
+	vmx_setup_uret_msrs(vmx);
+	return 0;
+}

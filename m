@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B464D4449
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFBF4D444D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 11:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241132AbiCJKJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 05:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S237088AbiCJKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 05:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiCJKI6 (ORCPT
+        with ESMTP id S231378AbiCJKKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 05:08:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862A91C93C;
-        Thu, 10 Mar 2022 02:07:56 -0800 (PST)
+        Thu, 10 Mar 2022 05:10:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E59E21835
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 02:09:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C9E2B8258D;
-        Thu, 10 Mar 2022 10:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1A2DC340F3;
-        Thu, 10 Mar 2022 10:07:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC34660AEB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 10:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC86AC340E8;
+        Thu, 10 Mar 2022 10:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646906873;
-        bh=DAXaxPhIHmB2MF8XpLLIhDWnZYiL+Px39F37xpKSkgA=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=e2gkrtlvGZxaRZ7LaGobNndXWLZbv48jZ6KFQEHajqwDhIoBY1Wj8DYgHjzbRRZLs
-         qCzvxa5/5teYQnQmSNwOjIC/3tIQGtIWxJ3RFIcnZc4Y+RJn0kvDLAq2mHnPiM8qMA
-         6s/afH0bF3XJNqCtnucZSZDOZR8grHZ5yVrOjbkchuC+5J2AaIqPffWiVUb6VNSYxu
-         Rk0n4m3G9SOiyoHmEfQl9PqAG6pSU1WXcYT3SPGyPFLRFUN+6oUCnEm8B6PPXuVHZS
-         d6BbrsCe604OvSj/mfLb6vjy3DnUNOUfVF/BRaZs5jhLt8NiD6tr9HATBikGX0yeMh
-         oULJ4ZtLjDqmg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Abhishek Kumar <kuabhs@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        ath10k <ath10k@lists.infradead.org>, kbuild-all@lists.01.org,
-        Rakesh Pillai <pillair@codeaurora.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] ath10k: search for default BDF name provided in DT
-References: <20220110231255.v2.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
-        <202201110851.5qAxfQJj-lkp@intel.com>
-        <CACTWRwtCjXbpxkixAyRrmK5gRjWW7fMv5==9j=YcsdN-mnYhJw@mail.gmail.com>
-        <87y23is7cp.fsf@kernel.org>
-        <CAD=FV=W-kJQwBPStsGpNu09dN+QHTEZOgb5sZwZYzWnn_Zhv4A@mail.gmail.com>
-Date:   Thu, 10 Mar 2022 12:07:49 +0200
-In-Reply-To: <CAD=FV=W-kJQwBPStsGpNu09dN+QHTEZOgb5sZwZYzWnn_Zhv4A@mail.gmail.com>
-        (Doug Anderson's message of "Mon, 7 Mar 2022 16:50:05 -0800")
-Message-ID: <87o82eqfwq.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        s=k20201202; t=1646906987;
+        bh=R21tkvkXVEDsRHSzA/IHpxcoqIDn9aXFI2wg0NNn9h0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hc6JU6mYEi/5cCoC08Y13/spvgxKu+b5uu/do5bHfT3NB1gnZ+X2B5B5+BqXqYpn7
+         IZgwDl0qaaBZKOECtxxvjeVYALR1S4PR6fqVd1OX4xGXG6yeDMwzv940dewjs6Bz1w
+         rwsdagPHPfUQPI/WuA3PEl+NhWi3UOp7cSxFa9fmKunmvXtdhNHiFpMkO2IyEeMepX
+         akQLsRdESg+74bWSxk3rfHnyo2j+NScvbhvEjPCBp595eWiuVEwUYwg1Utq9B/sSDb
+         ZJ6JbHsn7t6vttXR3OZdKaQGxSUrrGlxkg1WvLf7K5ezp0NgG+ay9gQ313Em6YnQQQ
+         GT0+TB0wUzbtg==
+Received: by pali.im (Postfix)
+        id 108617FC; Thu, 10 Mar 2022 11:09:43 +0100 (CET)
+Date:   Thu, 10 Mar 2022 11:09:43 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: dts: marvell: armada-37xx: Remap IO space to
+ bus address 0x0
+Message-ID: <20220310100943.m33wsynnvexw7dts@pali>
+References: <20220218212526.16021-1-pali@kernel.org>
+ <20220304163027.29357-1-pali@kernel.org>
+ <87k0d2i0mr.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87k0d2i0mr.fsf@BL-laptop>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,27 +63,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Doug Anderson <dianders@chromium.org> writes:
+On Thursday 10 March 2022 11:05:00 Gregory CLEMENT wrote:
+> Hello Pali,
+> 
+> > Legacy and old PCI I/O based cards do not support 32-bit I/O addressing.
+> >
+> > Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
+> > 'ranges' DT property") kernel can set different PCIe address on CPU and
+> > different on the bus for the one A37xx address mapping without any firmware
+> > support in case the bus address does not conflict with other A37xx mapping.
+> >
+> > So remap I/O space to the bus address 0x0 to enable support for old legacy
+> > I/O port based cards which have hardcoded I/O ports in low address space.
+> >
+> > Note that DDR on A37xx is mapped to bus address 0x0. And mapping of I/O
+> > space can be set to address 0x0 too because MEM space and I/O space are
+> > separate and so do not conflict.
+> >
+> > Remapping IO space on Turris Mox to different address is not possible to
+> > due bootloader bug.
+> >
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > Reported-by: Arnd Bergmann <arnd@arndb.de>
+> > Fixes: 76f6386b25cc ("arm64: dts: marvell: Add Aardvark PCIe support for Armada 3700")
+> > Cc: stable@vger.kernel.org # 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from 'ranges' DT property")
+> > Cc: stable@vger.kernel.org # 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
+> >
+> Cc: stable@vger.kernel.org # ???????????? ("arm64: dts: marvell: armada-37xx: Increase PCIe IO size from 64 KiB to 1 MiB")
+> 
+> This patch has been refused by Arnd so I removed it from the mvebu/fixes
+> branch so you should not apply anything on top of it.
 
-> On Fri, Jan 14, 2022 at 6:46 AM Kalle Valo <kvalo@kernel.org> wrote:
->>
->> Abhishek Kumar <kuabhs@chromium.org> writes:
->>
->> > On this patch I have a kernel bot warning, which I intend to fix along
->> > with all the comments and discussion and push out V3. So, any
->> > comments/next steps are appreciated.
->>
->> Please wait my comments before sending v3, I think this is something
->> which is also needed in ath11k and I need to look at it in detail.
->
-> I'm wondering if you have a timeframe for when you might post your
-> comments. We've landed this patch locally in the Chrome OS kernel
-> tree, but we are always also interested in it landing upstream. If you
-> have ideas for a path forward that'd be keen!
+Ok, so what is wrong with a change which increase size of IO space to 1 MB?
 
-You had a good comment on v1 so I replied to that one.
+> Actually I still try to first apply the old patch and then this one but
+> it still fail. And it is also failed when I applied this one on a
+> v5.17-rc1, so I wondered on which did create this patch.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Ok, at which branch / commit should I rebase it?
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Grégory
+> 
+> > ---
+> > Changes in v2:
+> > * Do not remap IO space on Turris Mox
+> > ---
+> >  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 7 ++++++-
+> >  arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 2 +-
+> >  2 files changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> > index 6581092c2c90..2838e3f65ada 100644
+> > --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> > +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> > @@ -150,17 +150,22 @@
+> >  	slot-power-limit = <10000>;
+> >  	/*
+> >  	 * U-Boot port for Turris Mox has a bug which always expects that "ranges" DT property
+> >  	 * contains exactly 2 ranges with 3 (child) address cells, 2 (parent) address cells and
+> > -	 * 2 size cells and also expects that the second range starts at 16 MB offset. If these
+> > +	 * 2 size cells and also expects that the second range starts at 16 MB offset. Also it
+> > +	 * expects that first range uses same address for PCI (child) and CPU (parent) cells (so
+> > +	 * no remapping) and that this address is the lowest from all specified ranges. If these
+> >  	 * conditions are not met then U-Boot crashes during loading kernel DTB file. PCIe address
+> >  	 * space is 128 MB long, so the best split between MEM and IO is to use fixed 16 MB window
+> >  	 * for IO and the rest 112 MB (64+32+16) for MEM. Controller supports 32-bit IO mapping.
+> >  	 * This bug is not present in U-Boot ports for other Armada 3700 devices and is fixed in
+> >  	 * U-Boot version 2021.07. See relevant U-Boot commits (the last one contains fix):
+> >  	 * https://source.denx.de/u-boot/u-boot/-/commit/cb2ddb291ee6fcbddd6d8f4ff49089dfe580f5d7
+> >  	 * https://source.denx.de/u-boot/u-boot/-/commit/c64ac3b3185aeb3846297ad7391fc6df8ecd73bf
+> >  	 * https://source.denx.de/u-boot/u-boot/-/commit/4a82fca8e330157081fc132a591ebd99ba02ee33
+> > +	 * Bug related to requirement of same child and parent addresses for first range is fixed
+> > +	 * in U-Boot version 2022.04 by following commit:
+> > +	 * https://source.denx.de/u-boot/u-boot/-/commit/1fd54253bca7d43d046bba4853fe5fafd034bc17
+> >  	 */
+> >  	#address-cells = <3>;
+> >  	#size-cells = <2>;
+> >  	ranges = <0x81000000 0 0xe8000000   0 0xe8000000   0 0x01000000   /* Port 0 IO */
+> > diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> > index 549c3f7c5b27..a099b7787429 100644
+> > --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> > +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> > @@ -514,9 +514,9 @@
+> >  			 * IO at the end and the remaining seven windows
+> >  			 * (totaling 127 MiB) for MEM.
+> >  			 */
+> >  			ranges = <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /* Port 0 MEM */
+> > -				  0x81000000 0 0xeff00000   0 0xeff00000   0 0x00100000>; /* Port 0 IO*/
+> > +				  0x81000000 0 0x00000000   0 0xeff00000   0 0x00100000>; /* Port 0 IO */
+> >  			interrupt-map-mask = <0 0 0 7>;
+> >  			interrupt-map = <0 0 0 1 &pcie_intc 0>,
+> >  					<0 0 0 2 &pcie_intc 1>,
+> >  					<0 0 0 3 &pcie_intc 2>,
+> > -- 
+> > 2.20.1
+> >
+> 
+> -- 
+> Gregory Clement, Bootlin
+> Embedded Linux and Kernel engineering
+> http://bootlin.com

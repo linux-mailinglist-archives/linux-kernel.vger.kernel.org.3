@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2AA4D54A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE134D54AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 23:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344366AbiCJWgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 17:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S1344371AbiCJWhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 17:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245380AbiCJWgA (ORCPT
+        with ESMTP id S240182AbiCJWhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:36:00 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAADEBDE55
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:34:58 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id t2so3640549pfj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 14:34:58 -0800 (PST)
+        Thu, 10 Mar 2022 17:37:39 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04544BE1E8;
+        Thu, 10 Mar 2022 14:36:37 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id h5so4784366plf.7;
+        Thu, 10 Mar 2022 14:36:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dm3qB2w2lQ7IFy1ipeKnHCOmhqitdfZXH/ycCypXYJA=;
-        b=XbtHN78KIecFW+02Yyb63lZj4KZ2A9h4133DWVgegrpcThbSKDbzoYlFJPUlH5aMKW
-         AjdapHStDHVE0xYa01ndPaYUTm8iT6/QuKTi2DPbu5LWDW8PSuM67v9LSoIYV99kPOyv
-         t2m27yiE+DisfL7G6lcgeyzawilqE1zNRz0bI=
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=33M5anzT4Ii+wzmo4FVpoDH/Pf5wsZ6Vn05tTCP4sGE=;
+        b=czaA9ofrpr/Dsn97afRKl/I12l0EZPvjBfVdKKOTrjttkrDz4tem3vs0eNnDeFCJc9
+         4hdq+bdmYGGYdUJorewfhxnMO8u5gAiF/bFFoRvPfLIFjWoQb3IaWpgJJTowfMP1F+bc
+         x0OeizMr+oEy2hINSS4LOcwBZY6yDcXzyR0LpqaiaXCcSr5CckcDF1FYdhwsRgSvUsSG
+         zb289SPwkTE828VxHiWzuM4+6Alr/JxiIbyuMc4P2I0Uj70OGEpTII85NXbp5yk0O7T/
+         flkt0zL6ErjT1FFGmpx2CZPzbblpHbdV2IlLT+XCODqHaLNZ1bMGZYnBV2Xqk0HeQY0O
+         Uerw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dm3qB2w2lQ7IFy1ipeKnHCOmhqitdfZXH/ycCypXYJA=;
-        b=d8kziF0gHx+d9tjewqD3w6wXDo/TKRXEc6PZBaCLQJ5BvDFM0juFdGw8ezlwUclFAp
-         +b9w0Hg4MgJi0OwMpTfsArCvZi83EL99D1DocrOZJEToe/s5/stOP4v4Bfs0I6fpMeTn
-         lTphJvCKSEIjonEo9NYyyWlQ7u0KEKDe/gAe2fQnui+bt+CMai+D9O6+Dnab0xI+HSHj
-         ONJ5UJoW3p87aTsCXbJteTxxwUkA3aop3K+WsCT+6doWaVpEiLllXR+ufuz+uluLxbQU
-         xAJR9xMmbVcbgsDnQWzuzuM3cR2KD18tffaEKsEprDYfsACB1WT7VO0N6PSH6HSHqzUT
-         nxQg==
-X-Gm-Message-State: AOAM533SgWcLXQ/vetI/AxQykNVMVSpPx78maDN1NJ/+X8cFCrC3BfSH
-        LP1awfsdyms5YEXXFz3e1oI8vW7SF051CA==
-X-Google-Smtp-Source: ABdhPJy1z6bn6NBQfuRdnkrdCb5mXCccJv1Spi5pKAOp4pz2vxeEh5T0s6tYVvmFaKZb0Eg8n9tp7g==
-X-Received: by 2002:a63:ad47:0:b0:373:4c14:35e2 with SMTP id y7-20020a63ad47000000b003734c1435e2mr5813069pgo.67.1646951698203;
-        Thu, 10 Mar 2022 14:34:58 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:60f0:9f89:56be:75e9])
-        by smtp.gmail.com with UTF8SMTPSA id d11-20020a056a0010cb00b004e1b76b09c0sm7991122pfu.74.2022.03.10.14.34.57
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=33M5anzT4Ii+wzmo4FVpoDH/Pf5wsZ6Vn05tTCP4sGE=;
+        b=SvLQ7nIiyKAneGALz9Sd3hIe543nIqzw0h47zmZhpkQQMl64klqIRTIhS5QTKFzxlB
+         dGMRbp3RGp4R/UJe1IDQsDBPTlMxM+uwEcGApeuFa1vduCZplAZTV6OnqKwns6955hmb
+         4Na5urz/FCTyk/Ev7OET6lEpM3d4K1cSJW/dRF9yG6nyafGv91CV2P9vLQnWpziQNuBI
+         heZ8xvr9D3hFIT4cpV/wjHwB/JUoiRnroDaHi8tyABylEGOZfpIBFhou8QNbowZlF8IP
+         gzPw30cjcDvGH3SlbB15AUBwDjzO/sB+//YemGuVcOCnCrgVZ8omYG9dPjDZye8ebpr9
+         O77w==
+X-Gm-Message-State: AOAM533/UF9eDFUd3eIP84ATyloCGRKF9Z3VheQvZjKqHxuRE6jUynRN
+        1UFjEPTe8Qj/7AcuLfqO3yE=
+X-Google-Smtp-Source: ABdhPJwTmQFYlAa8Pg3+y019BZ7d+Wf0NutKwC5DTu0vlHDp5nIh2JFJmXgfzorRwHBZZEGmJJLG6w==
+X-Received: by 2002:a17:902:bc83:b0:149:b26a:b9c8 with SMTP id bb3-20020a170902bc8300b00149b26ab9c8mr7234286plb.143.1646951796517;
+        Thu, 10 Mar 2022 14:36:36 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i11-20020a056a00004b00b004f6907b2cd3sm8087021pfk.122.2022.03.10.14.36.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 14:34:57 -0800 (PST)
-Date:   Thu, 10 Mar 2022 14:34:56 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280-herobrine: Fix PCIe regulator
- glitch at bootup
-Message-ID: <Yip9EE+gcyRcSydd@google.com>
-References: <20220310130429.1.Id41fda1d7f5d9230bc45c1b85b06b0fb0ddd29af@changeid>
+        Thu, 10 Mar 2022 14:36:35 -0800 (PST)
+Subject: Re: [PATCH 5.10 00/58] 5.10.105-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220310140812.869208747@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <242732a1-3fa2-8f8e-f25d-725464869426@gmail.com>
+Date:   Thu, 10 Mar 2022 14:36:26 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220310130429.1.Id41fda1d7f5d9230bc45c1b85b06b0fb0ddd29af@changeid>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 01:04:34PM -0800, Douglas Anderson wrote:
-> While scoping signals, we found that the PCIe signals weren't
-> compliant at bootup. Specifically, the bootloader was setting up PCIe
-> and leaving it configured, then jumping to the kernel. The kernel was
-> turning off the regulator while leaving the PCIe clock running, which
-> was a violation.
+On 3/10/22 6:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.105 release.
+> There are 58 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> In the regulator bindings (and the Linux kernel driver that uses
-> them), there's currently no way to specify that a GPIO-controlled
-> regulator should keep its state at bootup. You've got to pick either
-> "on" or "off". Let's switch it so that the PCIe regulator defaults to
-> "on" instead of "off". This should be a much safer way to go and
-> avoids the timing violation. The regulator will still be turned off
-> later if there are no users.
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.105-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

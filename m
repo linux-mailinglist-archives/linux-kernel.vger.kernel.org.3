@@ -2,100 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FBA4D4ACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E9D4D49E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243455AbiCJOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S243860AbiCJO14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244517AbiCJOTh (ORCPT
+        with ESMTP id S243591AbiCJOZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:19:37 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB5EC559B;
-        Thu, 10 Mar 2022 06:16:26 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id o22so4648505qta.8;
-        Thu, 10 Mar 2022 06:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2L8OR5koUh2CDVJY7FcCTDkGe8HG516p7zFzZPDOUYA=;
-        b=NnkiLgsEZB4dZyt1H8ltHuaieq6L4WSw2AG364q8ofxQwnVhizrC3MKo+CTq4HeWqI
-         PPXTdUf7CrJBMWocGLjt5un9QvOPxFqYsFYY3QZvMiVizagUCufylO97Diz1mQqnt1t3
-         UINlKk30iYZrlU2kDThBq4FbK+Eb2wQj2DITIdW/5k9i8i/ODbzsAcjvYynPbZt+W8aD
-         H/sG4JBdYeYQX4YXAJUsP8UujuxmYHhYFLCY6R1lpZdB4lhc0ezu2bxoTYDCLX6BDRUm
-         go5/DhjyXe5gYUyB+faVrBVqPu6JFfGJt2v42p3/4VHjXcNvR+85IRGNVEQONve4zlzC
-         t+vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2L8OR5koUh2CDVJY7FcCTDkGe8HG516p7zFzZPDOUYA=;
-        b=zYmJsX1G/dWzUn2EB7damWRj/08Bp4pYXYyMXhQniZV+60DJoKkRurFrFYqJJgvaD9
-         7+cQBgJqV9y1QWqzkiCWr+9Q2jmT7bhctj4arZhBcFDaIlFQ8/zA0fot6fw9zpWllG48
-         4xGOc6adZpxM9T1cUBEqwP1Us4rCjIiFrDPiDmiQaNKYJtWfJZzpD33Jji/q5jxyA6C/
-         4V5hmturRU7l+Fy3K13PwAy/tHTazRtixOJsgJ5qsWImCN+x7+dWE42xa2fIkFvP7mcT
-         YYacm8/0kRaOswjlNJZ4uT4AjLyjizZwzVkD6PEm78w9YSTkz49ny5TTWz/RPhZq3xNR
-         w6KA==
-X-Gm-Message-State: AOAM5310nahwiWsp+8NQhSSwFE9Bqv5J7g4LYT5TMbPk9ihmprLgfPTu
-        tb0z9kpsWA14mzts0XdQQdsLZLrKlR/gCtP0agI=
-X-Google-Smtp-Source: ABdhPJy0vcFKq3czcAkuCKChovxMM8akI73joMv8l5k6Zzq/zj/9f/Pyn2v7HMfvT8wBCVN4ICZVgzd3wKyaV7cJyn8=
-X-Received: by 2002:ac8:7f51:0:b0:2dd:dbca:1f40 with SMTP id
- g17-20020ac87f51000000b002dddbca1f40mr3924359qtk.463.1646921784722; Thu, 10
- Mar 2022 06:16:24 -0800 (PST)
+        Thu, 10 Mar 2022 09:25:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2A51617F5;
+        Thu, 10 Mar 2022 06:21:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 790F9B8254A;
+        Thu, 10 Mar 2022 14:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975C9C340F3;
+        Thu, 10 Mar 2022 14:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646922106;
+        bh=rkmLBM7nzDnRCXA27knWs8ea65zb6LJtanIaRfG92XE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OwPUeD9uvaEmJG7qUclXbFKwYbFDbxBZ+jnqg4UvhFefKH4quBXkh7p69DtyCSiEG
+         INoVVIb8m8FmDYcbLOFv3zXMYHeY/4ASnHC0TopZWzJFjli1o5UTv6YOBQ3HHbw5Dt
+         +bryLNaT1BEflxx+R6pxgnLY3C4aK1eBtDj4eX2E=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.14 00/31] 4.14.271-rc2 review
+Date:   Thu, 10 Mar 2022 15:18:13 +0100
+Message-Id: <20220310140807.524313448@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220310140542.7483-1-arinc.unal@arinc9.com>
-In-Reply-To: <20220310140542.7483-1-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 10 Mar 2022 15:16:13 +0100
-Message-ID: <CAMhs-H_+UXiYQdpE_WKAgEw0=1s5DA0ftQwD1w+W2vORQxFdKQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: rt2880: add missing pin groups and functions
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, erkin.bozoglu@xeront.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.271-rc2.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.14.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.14.271-rc2
+X-KernelTest-Deadline: 2022-03-12T14:08+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 3:06 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
-9.com> wrote:
->
-> Add the missing pin groups:
-> jtag, wdt
->
-> Add the missing functions:
-> i2s, jtag, pcie refclk, pcie rst, pcm, spdif2, spdif3, wdt refclk, wdt rs=
-t
->
-> Sort pin groups and functions in alphabetical order. Fix a typo.
->
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
-> I didn't know the order to put the missing groups and functions so I sort=
-ed
-> them in alphabetical order, let me know if it's not ok.
->
-> Ar=C4=B1n=C3=A7
->
-> ---
->  .../bindings/pinctrl/ralink,rt2880-pinmux.yaml        | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+This is the start of the stable review cycle for the 4.14.271 release.
+There are 31 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+Anything received after that time might be too late.
 
-Thanks,
-     Sergio Paracuellos
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.271-rc2.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.14.271-rc2
+
+Juergen Gross <jgross@suse.com>
+    xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
+
+Juergen Gross <jgross@suse.com>
+    xen/gnttab: fix gnttab_end_foreign_access() without page specified
+
+Juergen Gross <jgross@suse.com>
+    xen/9p: use alloc/free_pages_exact()
+
+Juergen Gross <jgross@suse.com>
+    xen: remove gnttab_query_foreign_access()
+
+Juergen Gross <jgross@suse.com>
+    xen/gntalloc: don't use gnttab_query_foreign_access()
+
+Juergen Gross <jgross@suse.com>
+    xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
+
+Juergen Gross <jgross@suse.com>
+    xen/netfront: don't use gnttab_query_foreign_access() for mapped status
+
+Juergen Gross <jgross@suse.com>
+    xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
+
+Juergen Gross <jgross@suse.com>
+    xen/grant-table: add gnttab_try_end_foreign_access()
+
+Juergen Gross <jgross@suse.com>
+    xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: fix build warning in proc-v7-bugs.c
+
+Nathan Chancellor <nathan@kernel.org>
+    ARM: Do not use NOCROSSREFS directive with ld.lld
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: fix co-processor register typo
+
+Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+    ARM: fix build error when BPF_SYSCALL is disabled
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: include unprivileged BPF status in Spectre V2 reporting
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: Spectre-BHB workaround
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: use LOADADDR() to get load address of sections
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: early traps initialisation
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    ARM: report Spectre v2 status through sysfs
+
+Mark Rutland <mark.rutland@arm.com>
+    arm/arm64: smccc/psci: add arm_smccc_1_1_get_conduit()
+
+Steven Price <steven.price@arm.com>
+    arm/arm64: Provide a wrapper for SMCCC 1.1 calls
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Warn about Spectre v2 LFENCE mitigation
+
+Kim Phillips <kim.phillips@amd.com>
+    x86/speculation: Update link to AMD speculation whitepaper
+
+Kim Phillips <kim.phillips@amd.com>
+    x86/speculation: Use generic retpoline by default on AMD
+
+Josh Poimboeuf <jpoimboe@redhat.com>
+    x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+
+Peter Zijlstra <peterz@infradead.org>
+    Documentation/hw-vuln: Update spectre doc
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/speculation: Add eIBRS + Retpoline options
+
+Peter Zijlstra (Intel) <peterz@infradead.org>
+    x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
+
+Peter Zijlstra <peterz@infradead.org>
+    x86,bugs: Unconditionally allow spectre_v2=retpoline,amd
+
+Borislav Petkov <bp@suse.de>
+    x86/speculation: Merge one test in spectre_v2_user_select_mitigation()
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/hw-vuln/spectre.rst   |  48 ++++--
+ Documentation/admin-guide/kernel-parameters.txt |   8 +-
+ Makefile                                        |   4 +-
+ arch/arm/include/asm/assembler.h                |  10 ++
+ arch/arm/include/asm/spectre.h                  |  32 ++++
+ arch/arm/kernel/Makefile                        |   2 +
+ arch/arm/kernel/entry-armv.S                    |  79 ++++++++-
+ arch/arm/kernel/entry-common.S                  |  24 +++
+ arch/arm/kernel/spectre.c                       |  71 ++++++++
+ arch/arm/kernel/traps.c                         |  65 ++++++-
+ arch/arm/kernel/vmlinux-xip.lds.S               |  45 +++--
+ arch/arm/kernel/vmlinux.lds.S                   |  45 +++--
+ arch/arm/mm/Kconfig                             |  11 ++
+ arch/arm/mm/proc-v7-bugs.c                      | 199 +++++++++++++++++++---
+ arch/x86/include/asm/cpufeatures.h              |   2 +-
+ arch/x86/include/asm/nospec-branch.h            |  16 +-
+ arch/x86/kernel/cpu/bugs.c                      | 214 +++++++++++++++++-------
+ drivers/block/xen-blkfront.c                    |  67 ++++----
+ drivers/firmware/psci.c                         |  15 ++
+ drivers/net/xen-netfront.c                      |  54 +++---
+ drivers/scsi/xen-scsifront.c                    |   3 +-
+ drivers/xen/gntalloc.c                          |  25 +--
+ drivers/xen/grant-table.c                       |  59 ++++---
+ drivers/xen/xenbus/xenbus_client.c              |  24 ++-
+ include/linux/arm-smccc.h                       |  74 ++++++++
+ include/linux/bpf.h                             |  11 ++
+ include/xen/grant_table.h                       |  19 ++-
+ kernel/sysctl.c                                 |   8 +
+ net/9p/trans_xen.c                              |  14 +-
+ tools/arch/x86/include/asm/cpufeatures.h        |   2 +-
+ 30 files changed, 986 insertions(+), 264 deletions(-)
+
+

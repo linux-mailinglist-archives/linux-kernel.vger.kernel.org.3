@@ -2,148 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9F74D5554
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501B64D554A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 00:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245250AbiCJX1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 18:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S1344655AbiCJX0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 18:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbiCJX05 (ORCPT
+        with ESMTP id S239276AbiCJX0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 18:26:57 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FEE19ABD5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:25:55 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id bc27so5990595pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ejJjmdbNGVk0Ojn9gs31SAw6IuTYvfqq7ug7NCCkkt4=;
-        b=onIx2e9X0TzzdYS9bDwjnzCQL6eZTBbf+XJonIjFE7H559YPkcY+EhmcsSUTYccP7P
-         SJhQkA9/eitkZ6RjDtU8Casbh0s5w49mbQFTWLMchOLcU7UVtTkD54CeHJL02skXriet
-         PElVeFd230TUHFlwda1A5LSJhaSTD+Bxgbibu/IKEXmZ3J+nggAKvfIS3QhoOtknOwKs
-         QKEIoTVTIi/ZmcjBt6AMvlUYOomvLKkOEmN2AJpl/yhf31HAVBpWthxNzm7juMSUt8dw
-         DXE48U7DiDyM87kNgix+yq6u8HeLPvQ6BLJxv/YvFub9TgJMoM1intVwQvSH9rQM+b2Q
-         9MVA==
+        Thu, 10 Mar 2022 18:26:46 -0500
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478561965D3;
+        Thu, 10 Mar 2022 15:25:45 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so8654125ooa.10;
+        Thu, 10 Mar 2022 15:25:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ejJjmdbNGVk0Ojn9gs31SAw6IuTYvfqq7ug7NCCkkt4=;
-        b=JeUlvMZnVAPVvsCbjF7XaTuB/Lyu78HeG+uWOlvZbPtX58sO5bT4E7uWXs+L5j7JSQ
-         5vLOzmTBCt2ylNtxcJ/HnUIt0h6oGTOvSlYoYgYVxOxZYQq3sx39g0vlwrrzB0t+UbyB
-         vjJijodMAWOx8TAzAv0NJDXJsrZGB1enTEh6cmI7mRcZhS2H6Xj72MGziwsZ7yrO/Wnc
-         L7i+Mm+1MaWXh7HnmcU3t13Ygf/qGHNUOrswiCShNAffikwXBp5SC5Z5q9B4iNjVJ9EJ
-         MFeJ5UV7cFu1UpLShvurbiLrdN466/WIwnezkYYthxFdEWMHjl5+Ajy6rNJzEcYnXFfq
-         ZDow==
-X-Gm-Message-State: AOAM531aS3iwMbgHC9qbN+8w65RC/0epoA+UmCGGWF0cnm4E/SNND/rH
-        vQUlHKA8kosdaPolPOiEkyMhmw==
-X-Google-Smtp-Source: ABdhPJzv6gLDrKCUJmstikLr5c12MnrtNWMmsWP1SNNEHRV+MGXn9BOQlivb1Lqc4nAFEDZ9B4Opyg==
-X-Received: by 2002:a05:6a02:10a:b0:37f:f691:b094 with SMTP id bg10-20020a056a02010a00b0037ff691b094mr5995278pgb.184.1646954755255;
-        Thu, 10 Mar 2022 15:25:55 -0800 (PST)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b001bf0d92e1c7sm6995703pjh.41.2022.03.10.15.25.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hnMk+HeuG2WdpJ1XdsdHKiHZ40w09is/u7uNCdvGXg4=;
+        b=PMaHBs5rWs3zptyQMDEv/fxgTFNlrtO7VCUbkChxae5t/7X65dCCFQW9bzpVRsbzxY
+         +TE72hLKXwJJnMIM9DLiRMeQsLRiJMFpACTw47hzxX0va74gF1IGI9mkBoAlGkiNbbDV
+         p7GHhbgfJ+lggT+qf1556MG67Btdhlqh4beGJctDijZy0maeAUEJLQP1r2vDdjHPV4RJ
+         uNx5w+QtpExkMFRWws9vZ+NHSX57ubp71/xrlILNdmFz1aL75xzBZo59f7e6O+vnF553
+         JyaO/dYuVZSSFM+/8cXWGvAfIRMB67IwMYAjaiwhn+gn7GjJj8+JAoMglYxmF2ZVdax9
+         bo/g==
+X-Gm-Message-State: AOAM530jo+yKT4PyoH0fvyJ6TlzoORcj0o/EBZeBQm8MToIlhG+hB2bq
+        UXMH3zdUaZthwc4DPvwI6yxT3JnEqQ==
+X-Google-Smtp-Source: ABdhPJx27IsnM2iW5/8HZIJxqUjmFNCYcj1jV07/oOlrSZfUy+aScCvZZP9Kl8eLxVFrE7M69AUWrw==
+X-Received: by 2002:a05:6870:32d5:b0:d2:c8c2:d8cd with SMTP id r21-20020a05687032d500b000d2c8c2d8cdmr10067242oac.86.1646954744639;
+        Thu, 10 Mar 2022 15:25:44 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 45-20020a9d08b0000000b005b2387fefb2sm2873871otf.78.2022.03.10.15.25.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 15:25:54 -0800 (PST)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     kuba@kernel.org
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-Subject: [PATCH v3] net: ipv6: fix skb_over_panic in __ip6_append_data
-Date:   Thu, 10 Mar 2022 15:25:38 -0800
-Message-Id: <20220310232538.1044947-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
-References: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
+        Thu, 10 Mar 2022 15:25:44 -0800 (PST)
+Received: (nullmailer pid 2292764 invoked by uid 1000);
+        Thu, 10 Mar 2022 23:25:42 -0000
+Date:   Thu, 10 Mar 2022 17:25:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: Re: [PATCH] dt-bindings: extcon: maxim,max77843: fix ports type
+Message-ID: <YiqI9vkjf8jM6/yB@robh.at.kernel.org>
+References: <20220310073258.24060-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310073258.24060-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found a kernel bug in the ipv6 stack:
-LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
-The reproducer triggers it by sending a crafted message via sendmmsg()
-call, which triggers skb_over_panic, and crashes the kernel:
+On Thu, 10 Mar 2022 08:32:58 +0100, Krzysztof Kozlowski wrote:
+> The "ports" property can contain multiple ports as name suggests, so it
+> should be using "ports" type from device graphs.
+> 
+> Reported-by: Rob Herring <robh@kernel.org>
+> Fixes: 9729cad0278b ("dt-bindings: extcon: maxim,max77843: Add MAX77843 bindings")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> ---
+> 
+> Hi Lee,
+> 
+> This is a fix for a commit in your next branch.
+> ---
+>  Documentation/devicetree/bindings/extcon/maxim,max77843.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
-head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
-dev:<NULL>
-
-Update the check that prevents an invalid packet with MTU equall to the
-fregment header size to eat up all the space for payload.
-
-The reproducer can be found here:
-LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
-
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
-
-Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
-v2: Instead of updating the alloclen add a check that prevents
-    an invalid packet with MTU equall to the fregment header size
-    to eat up all the space for payload.
-    Fix suggested by Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-
-v3: Update existing check outside of the while loop.
----
- net/ipv6/ip6_output.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 4788f6b37053..194832663d85 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1476,8 +1476,8 @@ static int __ip6_append_data(struct sock *sk,
- 		      sizeof(struct frag_hdr) : 0) +
- 		     rt->rt6i_nfheader_len;
- 
--	if (mtu < fragheaderlen ||
--	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
-+	if (mtu <= fragheaderlen ||
-+	    ((mtu - fragheaderlen) & ~7) + fragheaderlen <= sizeof(struct frag_hdr))
- 		goto emsgsize;
- 
- 	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
--- 
-2.35.1
-
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3FB4D4367
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085344D4368
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 10:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240754AbiCJJYI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 04:24:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S240756AbiCJJYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 04:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240726AbiCJJYH (ORCPT
+        with ESMTP id S234905AbiCJJYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:24:07 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02EA22D1E5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:23:03 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-189-Cn9pbkHFPAe5BCPpwhZIzg-1; Thu, 10 Mar 2022 09:23:00 +0000
-X-MC-Unique: Cn9pbkHFPAe5BCPpwhZIzg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 09:22:59 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Mar 2022 09:22:59 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH v4 00/45] x86: Kernel IBT
-Thread-Topic: [PATCH v4 00/45] x86: Kernel IBT
-Thread-Index: AQHYNF3uCfkzaUw3o020v7uo0T//Qqy4V9+w
-Date:   Thu, 10 Mar 2022 09:22:59 +0000
-Message-ID: <184d593713ca4e289ddbd7590819eddc@AcuMS.aculab.com>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
- <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 10 Mar 2022 04:24:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA1C41F9C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:23:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAAF561CE0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5D1C340F5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 09:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646904225;
+        bh=ghWIRBpDe2KEAVCmoHp7Q73RTvUTaZ4QY3GIe47sHG4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=r5h1dEGELer/PyJT2bmbIKs7FfKKt+fy6CgNWJMCCCUj79x7EJ3KDSAtpVQHEJlRJ
+         fTF4WSTHSHU1pOHqnEObNcxR321dTuydV2aqSDVnNKfp6IHzBxBsFeEOkq1X0c902F
+         PBYvhaBFv4QDsY4oe2IAXf17J+U/DBFq/3vd2rhtbIpCuS01u4+WvOtTH1IrvX2A45
+         hxJTLjbxekhBErPYXXXXeGoOBsgkSk8+ALg0WBoj6qhZ0h92SwRQcZ+KLQW9c2rwkj
+         l8URJKlFzGeHr5QRlfrR8AHtkI88QM81MCNYajvj09LPpDwAmVrWzFC0fRFsF8a+WK
+         w69srkpzvjFNg==
+Received: by mail-wm1-f49.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so2968249wmp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:23:45 -0800 (PST)
+X-Gm-Message-State: AOAM532N3vpgv7IcfQyfr7dH7Qg2BWXyilU+tp3zEc9h5x4PxM0jpH6X
+        GWI4lvqrtuPFn0nZW2EwN6MvTFQVHQHQbW0lZ6E=
+X-Google-Smtp-Source: ABdhPJy9fLy7k9/BDB1ORE6SEXrnrnjsiqkOQ++S0LDxTpeeZglK8bHJkNch3V5qLVb9KO3Iv15wwX5nmXcoq0mPksc=
+X-Received: by 2002:a7b:c746:0:b0:385:506e:7c8b with SMTP id
+ w6-20020a7bc746000000b00385506e7c8bmr2664089wmk.71.1646904223578; Thu, 10 Mar
+ 2022 01:23:43 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309144138.360482-1-arnd@kernel.org> <20220309144138.360482-2-arnd@kernel.org>
+ <27250b4e-cf04-0dab-d658-bb472face5ea@arm.com> <CAK8P3a20ccBbAwgVkq3n6tMehFH4YEyzquTkF3V=nJ46Tk4ePg@mail.gmail.com>
+ <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com>
+In-Reply-To: <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 10 Mar 2022 10:23:27 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
+Message-ID: <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: remove support for NOMMU ARMv4/v5
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 10 March 2022 09:05
-> 
-> On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
-> 
-> > I observed the following error when building with
-> > CONFIG_LTO_CLANG_FULL=y enabled:
+On Thu, Mar 10, 2022 at 2:22 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Wed, Mar 9, 2022 at 5:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > Robin
+> > > In that case, it would probably make sense to garbage-collect all the
+> > > configs, setup code and other stuff relating to older MMU-less CPU cores
+> > > like ARM1156, ARM940, etc. at the same time.
 > >
-> > ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
-> > already defined
-> >         ibt_selftest_ip:
-> >         ^
-> >
-> > Seems to come from
-> > commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
-> >
-> > Commenting out the label in the inline asm, I then observed:
-> > vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
-> > callable instruction with modified stack frame
-> > vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
-> > mismatch: cfa1=4+64 cfa2=4+8
-> > These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
-> > disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
-> > the ibt_selftest_ip label).
-> 
-> Urgh.. I'm thikning this is a clang bug :/
-> 
-> The code in question is:
-> 
-> 
-> void ibt_selftest_ip(void); /* code label defined in asm below */
-> 
-> DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> {
-> 	/* ... */
-> 
-> 	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
-> 		regs->ax = 0;
-> 		return;
-> 	}
-> 
-> 	/* ... */
-> }
-> 
-> bool ibt_selftest(void)
-> {
-> 	unsigned long ret;
-> 
-> 	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
-> 	     ANNOTATE_RETPOLINE_SAFE
-> 	     "	jmp *%%rax\n\t"
-> 	     "ibt_selftest_ip:\n\t"
-> 	     UNWIND_HINT_FUNC
-> 	     ANNOTATE_NOENDBR
-> 	     "	nop\n\t"
-> 
-> 	     : "=a" (ret) : : "memory");
-> 
-> 	return !ret;
-> }
-> 
-> There is only a single definition of that symbol, the one in the asm.
-> The other is a declaration, which is used in the exception handler to
-> compare against regs->ip.
+> > Right, good idea. These are only selected by CONFIG_ARCH_INTEGRATOR,
+> > but that in turn doesn't build for CONFIG_MMU=n because it depends on
+> > ARCH_MULTIPLATFORM. I'll send a patch for these.
+>
+> Just delete these, I do have these CPU tiles around but they are so obscure
+> and I never got around to even testing to boot them.
 
-LTO has probably inlined it twice.
+Right, of course you couldn't boot test them because it has been
+impossible to even select them in Kconfig for years. I've added
+a patch to completely remove the five v4/v5 NOMMU cores now,
+will send that later.
 
-	David
+There are five more cores that are only referenced by mach-integrator
+that are supposed to work (922T, 1020, 1020E, 1022, 1026). Have you
+ever tested those, or should we consider removing them as well?
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+At some point, there was a proposal to add an arm10 based SoC
+to mainline, but that never happened and I'm fairly sure it won't
+come back now.
 
+        Arnd

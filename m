@@ -2,193 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B3B4D4BEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 16:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E7E4D4ACC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 15:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343959AbiCJOqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 09:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S243604AbiCJOYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 09:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245125AbiCJOeO (ORCPT
+        with ESMTP id S245203AbiCJOUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:34:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AA2ECB03;
-        Thu, 10 Mar 2022 06:31:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AF7B61E2E;
-        Thu, 10 Mar 2022 14:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F598C340E8;
-        Thu, 10 Mar 2022 14:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646922701;
-        bh=ihSrCrT2ljGKJuA4dYV5fuywYgWpjdEt4ZClp5t5oKY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0I+cjAST48F0UEx29uwKBlQyaLoEoBCqF6f1XxfHgYTOYPpFcqD55huTH39lIfytE
-         Te6mHkL/VLqzfPN1SljtgXyd2RZ8grSso2cxELbjPBE3d2zNIfVcQ1BXij8rb2VHNk
-         0Xe9UBCBiy/DiR82MRyOCdNnD33+XP0/vW/5uPAc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.15 57/58] xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
-Date:   Thu, 10 Mar 2022 15:19:46 +0100
-Message-Id: <20220310140814.600852103@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-References: <20220310140812.983088611@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 10 Mar 2022 09:20:52 -0500
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9116A10D6;
+        Thu, 10 Mar 2022 06:19:51 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id l24-20020a4a8558000000b00320d5a1f938so6859142ooh.8;
+        Thu, 10 Mar 2022 06:19:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3W/Ki5qpGDEFWKMk7J7E8+Sx1qx4QiEdndntXWsLJJo=;
+        b=Ip0WAWLy+dn1sMctdsuJo5pDUkIl9qdZgYX38nAjIUWhur9Y1uGlNtmBSUlY9dbUGM
+         yb10n122GLmhFpCXq+hWNPe0TCtX8TNcmhkyD2F5lzBWTwtoaLWdSpH76nsnMY2paHvF
+         pHbPmpHhlT2QiqEbO4+eX2/5/N27A/hAZyj/C35dRxvxw2rP9Bq2PV3i3lP42WVN72uc
+         YJlYaBi3U8bgBvI0KeTNwh479d+bUOgz08EJarCfwLd3Wutn3L4hbVlFcTKQT0c9QQ74
+         rK7sREFgO8BeRrEzgt+hJ50VdX1VK7z/OpptoYBX9SI9bJ+9iooikTrb8hRMt+AS7w/h
+         TT9Q==
+X-Gm-Message-State: AOAM531xlm+JxmJc0dPjggMGm0X/hMYtlMzpEwF2qHfYn1kLj2P+rKRe
+        7nRkd/+11zJfOqp3QlEc5eIQngxFJg==
+X-Google-Smtp-Source: ABdhPJzLQb+1MVtYdE1o45AtniXUkVnyGAHMsHASWKW9w52BpjEdb/3jkpPrqvjFst6yafyQZQu4tw==
+X-Received: by 2002:a05:6870:796:b0:da:3d6a:101d with SMTP id en22-20020a056870079600b000da3d6a101dmr2781905oab.20.1646921990718;
+        Thu, 10 Mar 2022 06:19:50 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 68-20020a9d0a4a000000b005ad3287033csm2451415otg.44.2022.03.10.06.19.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 06:19:50 -0800 (PST)
+Received: (nullmailer pid 1611493 invoked by uid 1000);
+        Thu, 10 Mar 2022 14:19:49 -0000
+Date:   Thu, 10 Mar 2022 08:19:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Laszlo Ersek <lersek@redhat.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: arm: Convert QEMU fw-cfg to DT schema
+Message-ID: <YioJBWPxuE+T9g9g@robh.at.kernel.org>
+References: <20220310013552.549590-1-robh@kernel.org>
+ <9651bc36-3da0-4e2b-1d29-bb4b3ce1389d@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9651bc36-3da0-4e2b-1d29-bb4b3ce1389d@redhat.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+On Thu, Mar 10, 2022 at 10:05:04AM +0100, Laszlo Ersek wrote:
+> On 03/10/22 02:35, Rob Herring wrote:
+> > Convert the QEMU fw-cfg binding to DT schema format. As this binding is
+> > also used on Risc-V now, drop any architecture references and move to a
+> > common location. The fw-cfg interface has also gained some DMA support
+> > which is coherent, so add the missing 'dma-coherent'.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../devicetree/bindings/arm/fw-cfg.txt        | 38 -------------
+> >  .../bindings/firmware/qemu,fw-cfg-mmio.yaml   | 54 +++++++++++++++++++
+> >  2 files changed, 54 insertions(+), 38 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/arm/fw-cfg.txt
+> >  create mode 100644 Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/fw-cfg.txt b/Documentation/devicetree/bindings/arm/fw-cfg.txt
+> > deleted file mode 100644
+> > index fd54e1db2156..000000000000
+> > --- a/Documentation/devicetree/bindings/arm/fw-cfg.txt
+> > +++ /dev/null
+> > @@ -1,38 +0,0 @@
+> > -* QEMU Firmware Configuration bindings for ARM
+> > -
+> > -QEMU's arm-softmmu and aarch64-softmmu emulation / virtualization targets
+> > -provide the following Firmware Configuration interface on the "virt" machine
+> > -type:
+> > -
+> > -- A write-only, 16-bit wide selector (or control) register,
+> > -- a read-write, 64-bit wide data register.
+> > -
+> > -QEMU exposes the control and data register to ARM guests as memory mapped
+> > -registers; their location is communicated to the guest's UEFI firmware in the
+> > -DTB that QEMU places at the bottom of the guest's DRAM.
+> > -
+> > -The authoritative guest-side hardware interface documentation to the fw_cfg
+> > -device can be found in "docs/specs/fw_cfg.txt" in the QEMU source tree.
+> > -
+> > -
+> > -Required properties:
+> > -
+> > -- compatible: "qemu,fw-cfg-mmio".
+> > -
+> > -- reg: the MMIO region used by the device.
+> > -  * Bytes 0x0 to 0x7 cover the data register.
+> > -  * Bytes 0x8 to 0x9 cover the selector register.
+> > -  * Further registers may be appended to the region in case of future interface
+> > -    revisions / feature bits.
+> > -
+> > -Example:
+> > -
+> > -/ {
+> > -	#size-cells = <0x2>;
+> > -	#address-cells = <0x2>;
+> > -
+> > -	fw-cfg@9020000 {
+> > -		compatible = "qemu,fw-cfg-mmio";
+> > -		reg = <0x0 0x9020000 0x0 0xa>;
+> > -	};
+> > -};
+> > diff --git a/Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml b/Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml
+> > new file mode 100644
+> > index 000000000000..3aac9448e7f1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml
+> > @@ -0,0 +1,54 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/firmware/qemu,fw-cfg-mmio.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: QEMU Firmware Configuration bindings
+> > +
+> > +maintainers:
+> > +  - Laszlo Ersek <lersek@redhat.com>
+> 
+> Ugh :) I guess this is based on my authorship of historical commit
+> 53275a61bc7a ("devicetree: document ARM bindings for QEMU's Firmware
+> Config interface", 2015-01-13), and prehaps my R-b on commit
+> 92aed5d6ba90 ("devicetree: update documentation for fw_cfg ARM
+> bindings", 2016-02-09).
+> 
+> However -- I totally can't maintain this file. (I mean I've probably not
+> done anything related to it in the past seven years, so I guess it's
+> time to admit that fact!)
+> 
+> Rob, would you please consider taking it over?
 
-Commit 66e3531b33ee51dad17c463b4d9c9f52e341503d upstream.
+Yeah, no problem.
 
-When calling gnttab_end_foreign_access_ref() the returned value must
-be tested and the reaction to that value should be appropriate.
-
-In case of failure in xennet_get_responses() the reaction should not be
-to crash the system, but to disable the network device.
-
-The calls in setup_netfront() can be replaced by calls of
-gnttab_end_foreign_access(). While at it avoid double free of ring
-pages and grant references via xennet_disconnect_backend() in this case.
-
-This is CVE-2022-23042 / part of XSA-396.
-
-Reported-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/xen-netfront.c |   48 +++++++++++++++++++++++++++++----------------
- 1 file changed, 31 insertions(+), 17 deletions(-)
-
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -988,7 +988,6 @@ static int xennet_get_responses(struct n
- 	struct device *dev = &queue->info->netdev->dev;
- 	struct bpf_prog *xdp_prog;
- 	struct xdp_buff xdp;
--	unsigned long ret;
- 	int slots = 1;
- 	int err = 0;
- 	u32 verdict;
-@@ -1030,8 +1029,13 @@ static int xennet_get_responses(struct n
- 			goto next;
- 		}
- 
--		ret = gnttab_end_foreign_access_ref(ref, 0);
--		BUG_ON(!ret);
-+		if (!gnttab_end_foreign_access_ref(ref, 0)) {
-+			dev_alert(dev,
-+				  "Grant still in use by backend domain\n");
-+			queue->info->broken = true;
-+			dev_alert(dev, "Disabled for further use\n");
-+			return -EINVAL;
-+		}
- 
- 		gnttab_release_grant_reference(&queue->gref_rx_head, ref);
- 
-@@ -1252,6 +1256,10 @@ static int xennet_poll(struct napi_struc
- 					   &need_xdp_flush);
- 
- 		if (unlikely(err)) {
-+			if (queue->info->broken) {
-+				spin_unlock(&queue->rx_lock);
-+				return 0;
-+			}
- err:
- 			while ((skb = __skb_dequeue(&tmpq)))
- 				__skb_queue_tail(&errq, skb);
-@@ -1916,7 +1924,7 @@ static int setup_netfront(struct xenbus_
- 			struct netfront_queue *queue, unsigned int feature_split_evtchn)
- {
- 	struct xen_netif_tx_sring *txs;
--	struct xen_netif_rx_sring *rxs;
-+	struct xen_netif_rx_sring *rxs = NULL;
- 	grant_ref_t gref;
- 	int err;
- 
-@@ -1936,21 +1944,21 @@ static int setup_netfront(struct xenbus_
- 
- 	err = xenbus_grant_ring(dev, txs, 1, &gref);
- 	if (err < 0)
--		goto grant_tx_ring_fail;
-+		goto fail;
- 	queue->tx_ring_ref = gref;
- 
- 	rxs = (struct xen_netif_rx_sring *)get_zeroed_page(GFP_NOIO | __GFP_HIGH);
- 	if (!rxs) {
- 		err = -ENOMEM;
- 		xenbus_dev_fatal(dev, err, "allocating rx ring page");
--		goto alloc_rx_ring_fail;
-+		goto fail;
- 	}
- 	SHARED_RING_INIT(rxs);
- 	FRONT_RING_INIT(&queue->rx, rxs, XEN_PAGE_SIZE);
- 
- 	err = xenbus_grant_ring(dev, rxs, 1, &gref);
- 	if (err < 0)
--		goto grant_rx_ring_fail;
-+		goto fail;
- 	queue->rx_ring_ref = gref;
- 
- 	if (feature_split_evtchn)
-@@ -1963,22 +1971,28 @@ static int setup_netfront(struct xenbus_
- 		err = setup_netfront_single(queue);
- 
- 	if (err)
--		goto alloc_evtchn_fail;
-+		goto fail;
- 
- 	return 0;
- 
- 	/* If we fail to setup netfront, it is safe to just revoke access to
- 	 * granted pages because backend is not accessing it at this point.
- 	 */
--alloc_evtchn_fail:
--	gnttab_end_foreign_access_ref(queue->rx_ring_ref, 0);
--grant_rx_ring_fail:
--	free_page((unsigned long)rxs);
--alloc_rx_ring_fail:
--	gnttab_end_foreign_access_ref(queue->tx_ring_ref, 0);
--grant_tx_ring_fail:
--	free_page((unsigned long)txs);
--fail:
-+ fail:
-+	if (queue->rx_ring_ref != GRANT_INVALID_REF) {
-+		gnttab_end_foreign_access(queue->rx_ring_ref, 0,
-+					  (unsigned long)rxs);
-+		queue->rx_ring_ref = GRANT_INVALID_REF;
-+	} else {
-+		free_page((unsigned long)rxs);
-+	}
-+	if (queue->tx_ring_ref != GRANT_INVALID_REF) {
-+		gnttab_end_foreign_access(queue->tx_ring_ref, 0,
-+					  (unsigned long)txs);
-+		queue->tx_ring_ref = GRANT_INVALID_REF;
-+	} else {
-+		free_page((unsigned long)txs);
-+	}
- 	return err;
- }
- 
-
-
+> With my name+email replaced with yours:
+> 
+> Acked-by: Laszlo Ersek <lersek@redhat.com>
+> 
+> Thank you!
+> Laszlo

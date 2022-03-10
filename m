@@ -2,126 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929FF4D3F1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 02:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83F34D3F1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 03:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239151AbiCJB6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Mar 2022 20:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S239161AbiCJCBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Mar 2022 21:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239163AbiCJB6q (ORCPT
+        with ESMTP id S238005AbiCJCBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Mar 2022 20:58:46 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F86D2C643
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 17:57:45 -0800 (PST)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220310015743epoutp0286d036b852ad76a1f4640702f93a0d32~a4lPgaVdZ1921919219epoutp02P
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 01:57:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220310015743epoutp0286d036b852ad76a1f4640702f93a0d32~a4lPgaVdZ1921919219epoutp02P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646877463;
-        bh=5r8Zg/zS4DB8Mv0tU3jraWcXrgqJydLtj9j0Wc7geKM=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=DnVN6IVVCDqfBEP2dNHErzaXbFRJXvV8TgHEFSxsV+alkSR4Q+p0aLokXVbBVsFVf
-         R7N2CliRCx1A1uJW4npps8fhLW+LQGafMiVH6/Bhd2AcQHc233pHWTOd2cgFMUJDp1
-         Uyi3RfoaXAf8rVho/73OU6xrRk4wEbYHE0mvdtI8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220310015743epcas2p46a6dda3c8d452af6a65c6cab48fc1a2e~a4lPAceJI0792907929epcas2p4T;
-        Thu, 10 Mar 2022 01:57:43 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KDXJN2K4Fz4x9Pr; Thu, 10 Mar
-        2022 01:57:40 +0000 (GMT)
-X-AuditID: b6c32a47-81bff700000063c4-f3-62295b149435
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A9.64.25540.41B59226; Thu, 10 Mar 2022 10:57:40 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH 3/3] thermal: samsung: Update makefile for artpec8
-Reply-To: hypmean.kim@samsung.com
-Sender: Sang Min Kim <hypmean.kim@samsung.com>
-From:   Sang Min Kim <hypmean.kim@samsung.com>
-To:     "bzolnier@gmail.com" <bzolnier@gmail.com>,
-        "krzysztof.kozlowski@canonical.com" 
-        <krzysztof.kozlowski@canonical.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220310013140.127026-4-hypmean.kim@samsung.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220310015740epcms2p2cdbcbb6ee6065293c2d6064de1b8d87a@epcms2p2>
-Date:   Thu, 10 Mar 2022 10:57:40 +0900
-X-CMS-MailID: 20220310015740epcms2p2cdbcbb6ee6065293c2d6064de1b8d87a
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmha5ItGaSwfpTfBaH51dYfN9yncni
-        5SFNi3mfZS02vv3BZHF51xw2i8+9RxgtZpzfx2Qx98tUZosnD/vYHLg8ZjX0snnsnHWX3WPx
-        npdMHptWdbJ53Lm2h82jb8sqRo/Pm+QC2KOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwM
-        dQ0tLcyVFPISc1NtlVx8AnTdMnOAjlNSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTk
-        FJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGfc2HadveA/d8XhO1vZGhivc3cxcnJICJhILFm/
-        g7WLkYtDSGAHo8T2tuNMXYwcHLwCghJ/dwiD1AgLOEn86ljBBmILCShKvNyxnRkiridxc+Nn
-        dhCbTUBH4nHrfSaQOSICW5gkfky7ygqSYBY4yijRPCsVYhmvxIz2pywQtrTE9uVbGUFsTgE7
-        iZv/+tkh4hoSP5b1MkPYohI3V79lh7HfH5vPCGGLSLTeOwtVIyjx4OduqLikxKbD26HqqyVu
-        bVwO9piEQAOjROu3JmaQxyQE9CV2XDcGqeEV8JX4ee0f2D0sAqoSk3YtgOp1kZjWcp4R4n5t
-        iWULX4O1MgtoSqzfpQ8xRVniyC0WmK8aNv5mR2czC/BJdBz+CxffMe8JE4StKrFzUzf7BEbl
-        WYiAnoVk1yyEXQsYmVcxiqUWFOempxYbFRjD4zY5P3cTIziZarnvYJzx9oPeIUYmDsZDjBIc
-        zEoivE2hGklCvCmJlVWpRfnxRaU5qcWHGE2BvpzILCWanA9M53kl8YYmlgYmZmaG5kamBuZK
-        4rxeKRsShQTSE0tSs1NTC1KLYPqYODilGpjEbr7zvbgwWiXsa/ie9/33juX2zs7fc+7pv5/b
-        jFfPb/hQ6ul250bVNedZC3v9tF0iehT72EK2hD0pmJO8hcNeaEat54Q1T80v7bvE+cnv7YWV
-        5yLzWy+W6Mo8jI1w2b5OLvU9Y+GT+mSro9fXrL4zIyMj12PnwyOpcWV32W+l8fy6+Wrm6rcd
-        14P81/ium/5RXHw6W6ZVr4dPvohHuNoPW5P1W23dw71iLhmV8f72bUmfUKf7ncniFudlmYWC
-        vL09DilnnrR8yp0W3c0aKZPewVv5YFtpM2/NxCNfZN8JKlnvkpun9PDVpIfmkq9lWeYejOnI
-        mdi4NUHY5gib4aOkyWk7t8UIuYr8EvrTdV+JpTgj0VCLuag4EQDkCaC/LwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220310013131epcas3p15a109ec7208b1442676e3c50d5b4b936
-References: <20220310013140.127026-4-hypmean.kim@samsung.com>
-        <20220310013140.127026-1-hypmean.kim@samsung.com>
-        <CGME20220310013131epcas3p15a109ec7208b1442676e3c50d5b4b936@epcms2p2>
+        Wed, 9 Mar 2022 21:01:13 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2728447062
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Mar 2022 18:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646877613; x=1678413613;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gcuiOh3w0jgfxzs61NDSlw6c5iU4egtYNjZYoDO0J+4=;
+  b=XO26FxZWYpvcPZN7+odaCmHPTVr7fi8fXmP336IjtUBL2P9N6/V3L71c
+   xroKmDYJi2tiydc9RNFFgPssltOKfi6NU7t5fzsYPLpt2kW5gOnZ2fpt9
+   5AZ7aJ59faDfKkZko6G/Hkd0fs6MIXmTWap51cZb7bDb1+DcxmjCTpWsU
+   CZt50Qvz+ut8ongjY+vMUj9cfqSMX2EeR4x6bpjaD4Kd95F3kbQ0/Wpne
+   Wfk7g/t7sCAUxFJmdagIvHJZn0q8zGYBe9dU2+N65LRPEMwXTFgC4rmxj
+   JA5XfgTFQZUgvTv7MWCE1FxdoROlPZKHImqOJhGxvCS3PpSF1mhGvEnqb
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="341567073"
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="341567073"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 18:00:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,169,1643702400"; 
+   d="scan'208";a="632828349"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Mar 2022 18:00:11 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nS867-0004Ao-7v; Thu, 10 Mar 2022 02:00:11 +0000
+Date:   Thu, 10 Mar 2022 09:59:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: include/linux/kern_levels.h:5:25: warning: format '%u' expects a
+ matching 'unsigned int' argument
+Message-ID: <202203100927.zuVzlGY0-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C2=A0=0D=0AAdd=C2=A0makefile=C2=A0changes=C2=A0for=C2=A0axis=C2=A0artpec8=
-=C2=A0driver.=0D=0A=C2=A0=0D=0ASigned-off-by:=C2=A0sangmin=C2=A0kim=C2=A0<h=
-ypmean.kim=40samsung.com>=0D=0A---=0D=0A=C2=A0drivers/thermal/samsung/Makef=
-ile=C2=A0=7C=C2=A02=C2=A0+-=0D=0A=C2=A01=C2=A0file=C2=A0changed,=C2=A01=C2=
-=A0insertion(+),=C2=A01=C2=A0deletion(-)=0D=0A=C2=A0=0D=0Adiff=C2=A0--git=
-=C2=A0a/drivers/thermal/samsung/Makefile=C2=A0b/drivers/thermal/samsung/Mak=
-efile=0D=0Aindex=C2=A0f139407..c9e9a33=C2=A0100644=0D=0A---=C2=A0a/drivers/=
-thermal/samsung/Makefile=0D=0A+++=C2=A0b/drivers/thermal/samsung/Makefile=
-=0D=0A=40=40=C2=A0-3,4=C2=A0+3,4=C2=A0=40=40=0D=0A=C2=A0=23=C2=A0Samsung=C2=
-=A0thermal=C2=A0specific=C2=A0Makefile=0D=0A=C2=A0=23=0D=0A=C2=A0obj-=24(CO=
-NFIG_EXYNOS_THERMAL)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0+=3D=C2=A0exynos_thermal.o=0D=0A-exynos_thermal-y=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0:=3D=C2=A0exynos_tmu.o=0D=0A+exynos_therma=
-l-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0:=3D=C2=A0artpec8_tmu.o=C2=A0e=
-xynos_tmu.o=0D=0A--=C2=A0=0D=0A2.9.5=0D=0A=C2=A0=0D=0A=C2=A0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+commit: 9dd78194a3722fa6712192cdd4f7032d45112a9a ARM: report Spectre v2 status through sysfs
+date:   5 days ago
+config: arm-randconfig-r023-20220309 (https://download.01.org/0day-ci/archive/20220310/202203100927.zuVzlGY0-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9dd78194a3722fa6712192cdd4f7032d45112a9a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9dd78194a3722fa6712192cdd4f7032d45112a9a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/kernel.h:20,
+                    from arch/arm/mm/proc-v7-bugs.c:3:
+   arch/arm/mm/proc-v7-bugs.c: In function 'spectre_v2_install_workaround':
+>> include/linux/kern_levels.h:5:25: warning: format '%u' expects a matching 'unsigned int' argument [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:422:25: note: in definition of macro 'printk_index_wrap'
+     422 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:523:9: note: in expansion of macro 'printk'
+     523 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:14:25: note: in expansion of macro 'KERN_SOH'
+      14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
+         |                         ^~~~~~~~
+   include/linux/printk.h:523:16: note: in expansion of macro 'KERN_INFO'
+     523 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~
+   arch/arm/mm/proc-v7-bugs.c:111:9: note: in expansion of macro 'pr_info'
+     111 |         pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n");
+         |         ^~~~~~~
+   arch/arm/mm/proc-v7-bugs.c: At top level:
+   arch/arm/mm/proc-v7-bugs.c:205:6: warning: no previous prototype for 'cpu_v7_ca8_ibe' [-Wmissing-prototypes]
+     205 | void cpu_v7_ca8_ibe(void)
+         |      ^~~~~~~~~~~~~~
+   arch/arm/mm/proc-v7-bugs.c:211:6: warning: no previous prototype for 'cpu_v7_ca15_ibe' [-Wmissing-prototypes]
+     211 | void cpu_v7_ca15_ibe(void)
+         |      ^~~~~~~~~~~~~~~
+   arch/arm/mm/proc-v7-bugs.c:217:6: warning: no previous prototype for 'cpu_v7_bugs_init' [-Wmissing-prototypes]
+     217 | void cpu_v7_bugs_init(void)
+         |      ^~~~~~~~~~~~~~~~
+
+
+vim +5 include/linux/kern_levels.h
+
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+
+:::::: The code at line 5 was first introduced by commit
+:::::: 04d2c8c83d0e3ac5f78aeede51babb3236200112 printk: convert the format for KERN_<LEVEL> to a 2 byte pattern
+
+:::::: TO: Joe Perches <joe@perches.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

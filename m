@@ -2,244 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E294D4E57
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADA84D4E68
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Mar 2022 17:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241168AbiCJQPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 11:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S241296AbiCJQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 11:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241115AbiCJQPH (ORCPT
+        with ESMTP id S241260AbiCJQQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 11:15:07 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE2D1903EC
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:14:05 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id o6so8441057ljp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:14:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fjY0FTO8qXUt2RMKc1hm3MNTHQeOrTba2M9H2IVVHik=;
-        b=Oy3ccJoMPxQacrScaiK5fjgNyTCksoNYehSN8a7xTkU4LrdocSYlSjj+qQec4GbJq2
-         2gnjo5J3ep0KULECDMqgiiGz6BW8yy7Ae53z+AKZI0VW27wxBvObFjXYvCXJOTgwb6Y0
-         7oMPy7D47EOU/K1KqgD0wZWyVLkW8n+9UP96pczOnIDyVx0zBcc6SQMYR9ii1kd3vtoi
-         wkHgltU8G0C50AmhYNn07Oqt/wF7rbWbZ+kYnwQHSSmQtZdfL5EuwgQi5y7F0pOGlP9K
-         yQZNTU4E/K7ejs2geW0sxErlcVDtXi6JYTKQiPWX51r9boP86/hCq92CaRMVOlgoDYIY
-         mfPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fjY0FTO8qXUt2RMKc1hm3MNTHQeOrTba2M9H2IVVHik=;
-        b=dC4sMkuo6g67yJkKq4Y3J9clMDLvnoAXe9aVKhxmXS2eMKmzGiNswEX9vyD20LXVm0
-         z5aVF6I8WIpFh2AOx0KLNb66PSqI0R5eFcsCWXXWLaC//TzMcmQnLoyCvoX/pAKrq5z7
-         G+d0xfzb+LUn/oLZLr4zLyBlp/Vumvxc4M2cd0HdLRgTDFCKRq2qH6k/rbiu+MJL9Ys9
-         88JvUlj7sTbgDaDZcaF5tyyX6SsrtH9BsdQM+9+9SxdCKM6QtWH3g/yc5qtzcpnMsY2H
-         e2f6oG6lAy3cEdquLOZ0lMs/Xs7JgbzhAdhNaUlhvAL28lINGi+KE0FQA2mqOv6jhOnd
-         HAqg==
-X-Gm-Message-State: AOAM531hlkrhXeGacAu5iPE4pTwk1hd+aiRM2pMCP0S5psH1Dmlb9hII
-        2p2wCGLL0y1fd/IJnsi9XDiGaA==
-X-Google-Smtp-Source: ABdhPJxN53SGZK0v5U0SWyuDAcWgAXOXIqu2WNeZ9jnUL2HHsw4HNbhNJsR1vUlQ4A0+6xVh+GoizA==
-X-Received: by 2002:a2e:93cf:0:b0:247:e451:7175 with SMTP id p15-20020a2e93cf000000b00247e4517175mr3506629ljh.441.1646928843584;
-        Thu, 10 Mar 2022 08:14:03 -0800 (PST)
-Received: from [192.168.51.243] ([78.128.78.220])
-        by smtp.gmail.com with ESMTPSA id m22-20020a2e7116000000b0024805a43db1sm870556ljc.63.2022.03.10.08.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 08:14:03 -0800 (PST)
-Message-ID: <dc47275b-27f8-5de0-ae6e-e82013a03d1f@blackwall.org>
-Date:   Thu, 10 Mar 2022 18:14:01 +0200
+        Thu, 10 Mar 2022 11:16:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF4B0190B6A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 08:15:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646928906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZjMIkmSkSKNxxAK97GvGjCGudJAQ3QXr9JiQLk1+Op0=;
+        b=hxW5vKBUH3Va7URo13qSZn4HrW20MmkJRPd0SLkqfqCcRWRgYLXY9b1GgX5GfImFO1KcZV
+        euJwB60LDMAguO6NbD9ygPi2/o1jaIXZMhfzYYIa8EqVAcY03A04Wu368yXDmQmMXdIlSI
+        RPbsiGM+HpHpnSYdpQTXh+O1LUE7vPg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-EB-cpjySNlOtJ_NGiXKktQ-1; Thu, 10 Mar 2022 11:15:03 -0500
+X-MC-Unique: EB-cpjySNlOtJ_NGiXKktQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DFDE0180FD75;
+        Thu, 10 Mar 2022 16:15:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C39DF83585;
+        Thu, 10 Mar 2022 16:14:44 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v3 01/20] fscache: export fscache_end_operation()
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@redhat.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 10 Mar 2022 16:14:43 +0000
+Message-ID: <164692888334.2099075.5166283293894267365.stgit@warthog.procyon.org.uk>
+In-Reply-To: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
+References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net-next 1/3] net: bridge: add fdb flag to extent locked
- port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
- <20220310142320.611738-2-schultz.hans+netdev@gmail.com>
- <0eeaf59f-e7eb-7439-3c0a-17e7ac6741f0@blackwall.org>
- <86v8wles1g.fsf@gmail.com>
- <e3f57a64-4823-7cf3-0345-3777c44c2fe4@blackwall.org>
- <8635jp23ez.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <8635jp23ez.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2022 18:11, Hans Schultz wrote:
-> On tor, mar 10, 2022 at 17:57, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->> On 10/03/2022 17:38, Hans Schultz wrote:
->>> On tor, mar 10, 2022 at 16:42, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->>>> On 10/03/2022 16:23, Hans Schultz wrote:
->>>>> Add an intermediate state for clients behind a locked port to allow for
->>>>> possible opening of the port for said clients. This feature corresponds
->>>>> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
->>>>> latter defined by Cisco.
->>>>>
->>>>> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
->>>>> ---
->>>>>     include/uapi/linux/neighbour.h |  1 +
->>>>>     net/bridge/br_fdb.c            |  6 ++++++
->>>>>     net/bridge/br_input.c          | 11 ++++++++++-
->>>>>     net/bridge/br_private.h        |  3 ++-
->>>>>     4 files changed, 19 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
->>>>> index db05fb55055e..83115a592d58 100644
->>>>> --- a/include/uapi/linux/neighbour.h
->>>>> +++ b/include/uapi/linux/neighbour.h
->>>>> @@ -208,6 +208,7 @@ enum {
->>>>>     	NFEA_UNSPEC,
->>>>>     	NFEA_ACTIVITY_NOTIFY,
->>>>>     	NFEA_DONT_REFRESH,
->>>>> +	NFEA_LOCKED,
->>>>>     	__NFEA_MAX
->>>>>     };
->>>>
->>>> Hmm, can you use NDA_FLAGS_EXT instead ?
->>>> That should simplify things and reduce the nl size.
->>>>
->>>
->>> I am using NDA_FDB_EXT_ATTRS. NFEA_LOCKED is just the
->>> flag as the other flags section is full wrt the normal flags, but maybe it
->>> doesn't fit in that section?
->>>
->>
->> Actually wait a second, this is completely wrong use of NDA_FDB_EXT_ATTRS.
->> That is a nested attribute, so the code below is wrong. More below..
->>
->>> I will just note that iproute2 support for parsing nested attributes
->>> does not work, thus the BR_FDB_NOTIFY section (lines 150-165) are
->>> obsolete with respect to iproute2 as it is now. I cannot rule out that
->>> someone has some other tool that can handle this BR_FDB_NOTIFY, but I
->>> could not make iproute2 as it stands handle nested attributes. And of
->>> course there is no handling of NDA_FDB_EXT_ATTRS in iproute2 now.
->>>>>>     #define NFEA_MAX (__NFEA_MAX - 1)
->>>>> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
->>>>> index 6ccda68bd473..396dcf3084cf 100644
->>>>> --- a/net/bridge/br_fdb.c
->>>>> +++ b/net/bridge/br_fdb.c
->>>>> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
->>>>>     	struct nda_cacheinfo ci;
->>>>>     	struct nlmsghdr *nlh;
->>>>>     	struct ndmsg *ndm;
->>>>> +	u8 ext_flags = 0;
->>>>>     
->>>>>     	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
->>>>>     	if (nlh == NULL)
->>>>> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
->>>>>     		ndm->ndm_flags |= NTF_EXT_LEARNED;
->>>>>     	if (test_bit(BR_FDB_STICKY, &fdb->flags))
->>>>>     		ndm->ndm_flags |= NTF_STICKY;
->>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
->>>>> +		ext_flags |= 1 << NFEA_LOCKED;
->>>>>     
->>>>>     	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
->>>>>     		goto nla_put_failure;
->>>>>     	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
->>>>>     		goto nla_put_failure;
->>>>> +	if (nla_put_u8(skb, NDA_FDB_EXT_ATTRS, ext_flags))
->>>>> +		goto nla_put_failure;
->>>>> +
->>
->> This is wrong. NDA_FDB_EXT_ATTRS is a nested attribute, you can't use it as a u8.
->> You need to have this structure:
->>    [ NDA_FDB_EXT_ATTRS ]
->>     ` [ NFEA_LOCKED ]
->>
->> But that's why I asked if you could use the NDA_FLAGS_EXT attribute. You can see
->> the logic from the neigh code.
-> 
-> Ahh yes, NDA_FLAGS_EXT was not there in the 5.15.x kernel I have
-> originally being making the patches in.
-> 
-> I hope that the handling of nested attributes has been fixed in
-> iproute2. ;-)
-> 
+From: Jeffle Xu <jefflexu@linux.alibaba.com>
 
-It hasn't been broken, I'm guessing you're having issues with the nested bit being set.
-Check NLA_F_NESTED and NLA_TYPE_MASK.
+Export fscache_end_operation() to avoid code duplication.
 
->>
->> Also note that you need to account for the new attribute's size in fdb_nlmsg_size().
->>
->>
->>>>>     	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
->>>>>     	ci.ndm_confirmed = 0;
->>>>>     	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
->>>>> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
->>>>> index e0c13fcc50ed..897908484b18 100644
->>>>> --- a/net/bridge/br_input.c
->>>>> +++ b/net/bridge/br_input.c
->>>>> @@ -75,6 +75,7 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
->>>>>     	struct net_bridge_mcast *brmctx;
->>>>>     	struct net_bridge_vlan *vlan;
->>>>>     	struct net_bridge *br;
->>>>> +	unsigned long flags = 0;
->>>>
->>>> Please move this below...
->>>>
->>>>>     	u16 vid = 0;
->>>>>     	u8 state;
->>>>>     
->>>>> @@ -94,8 +95,16 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
->>>>>     			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
->>>>>     
->>>>>     		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
->>>>> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
->>>>> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags)) {
->>>>> +			if (!fdb_src) {
->>>>
->>>> ... here where it's only used.
->>>>
->>>
->>> Forgot that one. Shall do!
->>>
->>>>> +				set_bit(BR_FDB_ENTRY_LOCKED, &flags);
->>>>> +				br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);
->>>>> +			}
->>>>>     			goto drop;
->>>>> +		} else {
->>>>> +			if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags))
->>>>> +				goto drop;
->>>>> +		}
->>>>>     	}
->>>>>     
->>>>>     	nbp_switchdev_frame_mark(p, skb);
->>>>> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
->>>>> index 48bc61ebc211..f5a0b68c4857 100644
->>>>> --- a/net/bridge/br_private.h
->>>>> +++ b/net/bridge/br_private.h
->>>>> @@ -248,7 +248,8 @@ enum {
->>>>>     	BR_FDB_ADDED_BY_EXT_LEARN,
->>>>>     	BR_FDB_OFFLOADED,
->>>>>     	BR_FDB_NOTIFY,
->>>>> -	BR_FDB_NOTIFY_INACTIVE
->>>>> +	BR_FDB_NOTIFY_INACTIVE,
->>>>> +	BR_FDB_ENTRY_LOCKED,
->>>>>     };
->>>>>     
->>>>>     struct net_bridge_fdb_key {
+Besides, considering the paired fscache_begin_read_operation() is
+already exported, it shall make sense to also export
+fscache_end_operation().
+
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/20220302125134.131039-2-jefflexu@linux.alibaba.com/ # Jeffle's v4
+Link: https://lore.kernel.org/r/164622971432.3564931.12184135678781328146.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/164678190346.1200972.7453733431978569479.stgit@warthog.procyon.org.uk/ # v2
+---
+
+ fs/cifs/fscache.c       |    8 --------
+ fs/fscache/internal.h   |   11 -----------
+ fs/nfs/fscache.c        |    8 --------
+ include/linux/fscache.h |   14 ++++++++++++++
+ 4 files changed, 14 insertions(+), 27 deletions(-)
+
+diff --git a/fs/cifs/fscache.c b/fs/cifs/fscache.c
+index 33af72e0ac0c..b47c2011ce5b 100644
+--- a/fs/cifs/fscache.c
++++ b/fs/cifs/fscache.c
+@@ -134,14 +134,6 @@ void cifs_fscache_release_inode_cookie(struct inode *inode)
+ 	}
+ }
+ 
+-static inline void fscache_end_operation(struct netfs_cache_resources *cres)
+-{
+-	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+-
+-	if (ops)
+-		ops->end_operation(cres);
+-}
+-
+ /*
+  * Fallback page reading interface.
+  */
+diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
+index f121c21590dc..ed1c9ed737f2 100644
+--- a/fs/fscache/internal.h
++++ b/fs/fscache/internal.h
+@@ -70,17 +70,6 @@ static inline void fscache_see_cookie(struct fscache_cookie *cookie,
+ 			     where);
+ }
+ 
+-/*
+- * io.c
+- */
+-static inline void fscache_end_operation(struct netfs_cache_resources *cres)
+-{
+-	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+-
+-	if (ops)
+-		ops->end_operation(cres);
+-}
+-
+ /*
+  * main.c
+  */
+diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
+index cfe901650ab0..39654ca72d3d 100644
+--- a/fs/nfs/fscache.c
++++ b/fs/nfs/fscache.c
+@@ -249,14 +249,6 @@ void nfs_fscache_release_file(struct inode *inode, struct file *filp)
+ 	}
+ }
+ 
+-static inline void fscache_end_operation(struct netfs_cache_resources *cres)
+-{
+-	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+-
+-	if (ops)
+-		ops->end_operation(cres);
+-}
+-
+ /*
+  * Fallback page reading interface.
+  */
+diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+index 296c5f1d9f35..d2430da8aa67 100644
+--- a/include/linux/fscache.h
++++ b/include/linux/fscache.h
+@@ -456,6 +456,20 @@ int fscache_begin_read_operation(struct netfs_cache_resources *cres,
+ 	return -ENOBUFS;
+ }
+ 
++/**
++ * fscache_end_operation - End the read operation for the netfs lib
++ * @cres: The cache resources for the read operation
++ *
++ * Clean up the resources at the end of the read request.
++ */
++static inline void fscache_end_operation(struct netfs_cache_resources *cres)
++{
++	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
++
++	if (ops)
++		ops->end_operation(cres);
++}
++
+ /**
+  * fscache_read - Start a read from the cache.
+  * @cres: The cache resources to use
+
 

@@ -2,149 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7221D4D6574
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB614D6570
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348223AbiCKP6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S232361AbiCKP5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350265AbiCKP6Z (ORCPT
+        with ESMTP id S239828AbiCKP5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:58:25 -0500
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C63731451E6;
-        Fri, 11 Mar 2022 07:57:17 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app3 (Coremail) with SMTP id cC_KCgDHzzNHcStioxCZAA--.41247S2;
-        Fri, 11 Mar 2022 23:56:59 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net, ralf@linux-mips.org,
-        jreuter@yaina.de, thomas@osterried.de,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net V2 1/2] ax25: Fix refcount leaks caused by ax25_cb_del()
-Date:   Fri, 11 Mar 2022 23:55:50 +0800
-Message-Id: <20220311155550.102954-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgDHzzNHcStioxCZAA--.41247S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw1Uur4DKw15Cw18JF43Jrb_yoW5AF4rpF
-        WUtF4rJrZ7tFs5CrsxWryxWF1rZrWj9393Jr1Yva4Ik3s8JasYy34rtryUtry3JFZ8JF48
-        Xw17W3WxAF1kuF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
-        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkFAVZdtYnj3gAUsR
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 11 Mar 2022 10:57:32 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6297714A6E2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:56:11 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id j26so13619451wrb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:56:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yBab81rlsXVfIrb1h5ugmlXAnmE0dZk087QNoq8lEw4=;
+        b=usv/7QYbADl2R0gma2J6J5sYrjRw4TDBnKEeY2m5BrJxInoEh23dkuXQowKqQZwUi1
+         fVqYVr9Z//li8WbUkitTqPkn/gaJv6nhYvMmT7qz0ovfQeb4JJCjKxdHkPX4ea44XVl/
+         YqyoH8eyNpliPfG06CzQsl2zZKyOfoe/6lL7NbLo2gaAy0/md4nK3MJXE8mcE0GkO8Z/
+         LyY3KFqx/85OFkBU+Svo/0OIxh8wEOknlbdYWOr94y+CRto3VjCdPgc4oZkzgP31La6C
+         Og/51kAY3M1RIkN9ZoUJv3xB2OWzN6p7tXyAaiAI2damReBHdb6p9lGOCyyBarml2Tal
+         kvcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yBab81rlsXVfIrb1h5ugmlXAnmE0dZk087QNoq8lEw4=;
+        b=OcukiM/VVS6wDzQIgtqRE+qeWOhNqGxLLDLV3IPac5SBCYdomHvlpf4raYQJKrDYtP
+         LbxUBepOJxmNV+vBhqnQUOnsZBC+10fTLBK+jivKFcyXAKxcx3II9425g/aYEak8irwB
+         NwUz+kLc0tXuYt3ulk3pZjJyMXOrPKigkPxtFFUA8pp6xXfPST7bFxr5NTipw0gPnnYp
+         9GUT8W6OOk3+BJUPrRWPOorciRBIU2dTadO6rknbQ1gAPi2YvW7EMl0oe2vbOWX58Y7X
+         9c5pBqqFnTwxZTqJpgnfkOGluWNbEFsPbwYX0vfjVifKqGCTbLb+4DUz1R3NfVphj0lM
+         cmfw==
+X-Gm-Message-State: AOAM533PR80+TUiF77DH2wTSulVNUXe90soToycMbvvISHmkEHidyCUq
+        ht4G27lQaI82Corc1j/B8tf46IKAZoSmtM7DaAgiMQ==
+X-Google-Smtp-Source: ABdhPJyHRl575oJ/E1f/YImGvu+xA6j3CfpVKm2dTU3ZrtKOXYSGHQkH5/l443BVjYhYSzAzYaAurPGVf+bw/uab3is=
+X-Received: by 2002:a5d:4a8f:0:b0:1f0:4af2:4e29 with SMTP id
+ o15-20020a5d4a8f000000b001f04af24e29mr7798876wrq.519.1647014165262; Fri, 11
+ Mar 2022 07:56:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20220113091056.1297982-1-james.clark@arm.com> <20220113091056.1297982-2-james.clark@arm.com>
+ <b3545a88-4743-db95-4676-b0b193cbea78@arm.com> <CAJ9a7Vi584BcY49TaRn5CJT=wcpafMf-3cA0R+sZ54p6iUKmeQ@mail.gmail.com>
+ <7fae6630-fdec-3f95-9eac-3f7a5c789272@arm.com>
+In-Reply-To: <7fae6630-fdec-3f95-9eac-3f7a5c789272@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Fri, 11 Mar 2022 15:56:00 +0000
+Message-ID: <CAJ9a7VjTJ4E7=qdPgfTTVjoW01rCzd-f1mFYHjtA3BHk25saMA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] coresight: Add config flag to enable branch broadcast
+To:     James Clark <James.Clark@arm.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        mathieu.poirier@linaro.org, coresight@lists.linaro.org,
+        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev to
-avoid UAF bugs") and commit feef318c855a ("ax25: fix UAF bugs of
-net_device caused by rebinding operation") increase the refcounts of
-ax25_dev and net_device in ax25_bind() and decrease the matching refcounts
-in ax25_kill_by_device() in order to prevent UAF bugs, but there are
-reference count leaks.
+Hi James,
 
-The root cause of refcount leaks is shown below:
+On Fri, 11 Mar 2022 at 14:58, James Clark <james.clark@arm.com> wrote:
+>
+>
+>
+> On 02/02/2022 20:25, Mike Leach wrote:
+> > Hi James, Suzuki
+> >
+> > On Fri, 28 Jan 2022 at 11:19, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+> >>
+> >> On 13/01/2022 09:10, James Clark wrote:
+> >>> When enabled, all taken branch addresses are output, even if the branch
+> >>> was because of a direct branch instruction. This enables reconstruction
+> >>> of the program flow without having access to the memory image of the
+> >>> code being executed.
+> >>>
+> >>> Use bit 8 for the config option which would be the correct bit for
+> >>> programming ETMv3. Although branch broadcast can't be enabled on ETMv3
+> >>> because it's not in the define ETM3X_SUPPORTED_OPTIONS, using the
+> >>> correct bit might help prevent future collisions or allow it to be
+> >>> enabled if needed.
+> >>>
+> >>> Signed-off-by: James Clark <james.clark@arm.com>
+> >>> ---
+> >>>   drivers/hwtracing/coresight/coresight-etm-perf.c   |  2 ++
+> >>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
+> >>>   include/linux/coresight-pmu.h                      |  2 ++
+> >>>   3 files changed, 14 insertions(+)
+> >>>
+> >>> diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
+> >>> index c039b6ae206f..43bbd5dc3d3b 100644
+> >>> --- a/drivers/hwtracing/coresight/coresight-etm-perf.c
+> >>> +++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
+> >>> @@ -52,6 +52,7 @@ static DEFINE_PER_CPU(struct coresight_device *, csdev_src);
+> >>>    * The PMU formats were orignally for ETMv3.5/PTM's ETMCR 'config';
+> >>>    * now take them as general formats and apply on all ETMs.
+> >>>    */
+> >>> +PMU_FORMAT_ATTR(branch_broadcast, "config:"__stringify(ETM_OPT_BRANCH_BROADCAST));
+> >>>   PMU_FORMAT_ATTR(cycacc,             "config:" __stringify(ETM_OPT_CYCACC));
+> >>>   /* contextid1 enables tracing CONTEXTIDR_EL1 for ETMv4 */
+> >>>   PMU_FORMAT_ATTR(contextid1, "config:" __stringify(ETM_OPT_CTXTID));
+> >>> @@ -97,6 +98,7 @@ static struct attribute *etm_config_formats_attr[] = {
+> >>>       &format_attr_sinkid.attr,
+> >>>       &format_attr_preset.attr,
+> >>>       &format_attr_configid.attr,
+> >>> +     &format_attr_branch_broadcast.attr,
+> >>
+> >> Does it make sense to hide the option if the bb is not supported ? I
+> >> guess it will be tricky as we don't track the common feature set. So,
+> >> that said...
+> >>
+> >>>       NULL,
+> >>>   };
+> >>>
+> >>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> >>> index bf18128cf5de..04669ecc0efa 100644
+> >>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> >>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> >>> @@ -692,6 +692,16 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+> >>>               ret = cscfg_csdev_enable_active_config(csdev, cfg_hash, preset);
+> >>>       }
+> >>>
+> >>> +     /* branch broadcast - enable if selected and supported */
+> >>> +     if (attr->config & BIT(ETM_OPT_BRANCH_BROADCAST)) {
+> >>> +             if (!drvdata->trcbb) {
+> >>> +                     ret = -EINVAL;
+> >>
+> >> Should we fail here ? We could simply ignore this and generate the trace
+> >> normally. This would work on a big.LITTLE system with one set missing
+> >> the branch broadcast, while the others support.
+> >>
+> >> Mike,
+> >>
+> >> Does this affect the trace decoding ? As such the OpenCSD should be able
+> >> to decode the packets as they appear in the stream. Correct ?
+> >>
+> >
+> > Depends on what you mean by affect the trace decoding!
+> > From the simplest perspective - no - there is no issue as the packets
+> > will be decode as seen. THE decoder does not know that BB exists - nor
+> > if it is enabled.
+> >
+> > However, the reason that a user may engage BB is that the code is in
+> > some way self modifying - so that following the code static image and
+> > calculating addresses will result in a different path taken.
+> >
+> > e.g. imagine an opcode:-
+> >
+> > B <address0>
+> >
+> > Without BB, this will trace as a single E atom, the decoder will
+> > calculate address0 from the opcode in the static image and continue
+> > from there as the next trace address.
+> >
+> > Now look at the case where this is changed on the fly to
+> >
+> > B <address1>
+> >
+> > With BB, This will trace to
+> > E
+> > TGT_ADDR<address1>
+> >
+> > The decoder will initially  extract address0 from the static image,
+> > but the immediately following target address packet will alter the
+> > next address traced to address1
+> > This is why we have BB.
+> >
+> >  So if the user has a reason to engage BB - we should really fail if
+> > it is not present - as the outcome of the trace can be affected.
+>
+> Hi Mike,
+>
+> Now I'm starting to wonder if it's best to have some kind of non-binary
+> image mode for BB where you'd just get a list of addresses output by
+> perf script and it doesn't attempt to do any lookups.
 
-     (Thread 1)                      |      (Thread 2)
-ax25_bind()                          |
- ...                                 |
- ax25_addr_ax25dev()                 |
-  ax25_dev_hold()   //(1)            |
-  ...                                |
- dev_hold_track()   //(2)            |
- ...                                 | ax25_destroy_socket()
-                                     |  ax25_cb_del()
-                                     |   ...
-                                     |   hlist_del_init() //(3)
-                                     |
-                                     |
-     (thread 3)                      |
-ax25_kill_by_device()                |
- ...                                 |
- ax25_for_each(s, &ax25_list) {      |
-  if (s->ax25_dev == ax25_dev) //(4) |
-   ...                               |
+Not at all sure what you mean by this
 
-Firstly, we use ax25_bind() to increase the refcount of ax25_dev in
-position (1) and increase the refcount of net_device in position (2).
-Then, we use ax25_cb_del() invoked by ax25_destroy_socket() to delete
-ax25_cb in hlist in position (3) before calling ax25_kill_by_device().
-Finally, the decrements of refcounts in ax25_kill_by_device() will not
-be executed, because no s->ax25_dev equals to ax25_dev in position (4).
+Mike
 
-This patch adds decrements of refcounts in ax25_release() and use
-lock_sock() to do synchronization. If refcounts decrease in ax25_release(),
-the decrements of refcounts in ax25_kill_by_device() will not be
-executed and vice versa.
+>  Although I think
+> that would require a change in OpenCSD if it's not aware of the mode?
+>
+> I also need to go back to my JVM profiling test and see what's
+> going on again. But I think I understand your points a bit more now.
+>
+> Thanks
+> James
+>
+> >
+> >> Suzuki
+> >>
+> >>
+> >>> +                     goto out;
+> >>> +             } else {
+> >>> +                     config->cfg |= BIT(ETM4_CFG_BIT_BB);
+> >>> +             }
+> >>> +     }
+> >>> +
+> >>>   out:
+> >>>       return ret;
+> >>>   }
+> >>> diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
+> >>> index 4ac5c081af93..6c2fd6cc5a98 100644
+> >>> --- a/include/linux/coresight-pmu.h
+> >>> +++ b/include/linux/coresight-pmu.h
+> >>> @@ -18,6 +18,7 @@
+> >>>    * ETMv3.5/PTM doesn't define ETMCR config bits with prefix "ETM3_" and
+> >>>    * directly use below macros as config bits.
+> >>>    */
+> >>> +#define ETM_OPT_BRANCH_BROADCAST 8
+> >>>   #define ETM_OPT_CYCACC              12
+> >>>   #define ETM_OPT_CTXTID              14
+> >>>   #define ETM_OPT_CTXTID2             15
+> >>> @@ -25,6 +26,7 @@
+> >>>   #define ETM_OPT_RETSTK              29
+> >>>
+> >>>   /* ETMv4 CONFIGR programming bits for the ETM OPTs */
+> >>> +#define ETM4_CFG_BIT_BB         3
+> >>>   #define ETM4_CFG_BIT_CYCACC 4
+> >>>   #define ETM4_CFG_BIT_CTXTID 6
+> >>>   #define ETM4_CFG_BIT_VMID   7
+> >>
+> >
+> >
 
-Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
-Fixes: feef318c855a ("ax25: fix UAF bugs of net_device caused by rebinding operation")
-Reported-by: Thomas Osterried <thomas@osterried.de>
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in V2:
-  - Add decrements of refcounts in ax25_release().
 
- net/ax25/af_ax25.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index 6bd09718077..0886109421a 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -98,8 +98,10 @@ static void ax25_kill_by_device(struct net_device *dev)
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
- 			s->ax25_dev = NULL;
--			dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
--			ax25_dev_put(ax25_dev);
-+			if (sk->sk_wq) {
-+				dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
-+				ax25_dev_put(ax25_dev);
-+			}
- 			ax25_disconnect(s, ENETUNREACH);
- 			release_sock(sk);
- 			spin_lock_bh(&ax25_list_lock);
-@@ -979,14 +981,20 @@ static int ax25_release(struct socket *sock)
- {
- 	struct sock *sk = sock->sk;
- 	ax25_cb *ax25;
-+	ax25_dev *ax25_dev;
- 
- 	if (sk == NULL)
- 		return 0;
- 
- 	sock_hold(sk);
--	sock_orphan(sk);
- 	lock_sock(sk);
-+	sock_orphan(sk);
- 	ax25 = sk_to_ax25(sk);
-+	ax25_dev = ax25->ax25_dev;
-+	if (ax25_dev) {
-+		dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
-+		ax25_dev_put(ax25_dev);
-+	}
- 
- 	if (sk->sk_type == SOCK_SEQPACKET) {
- 		switch (ax25->state) {
 -- 
-2.17.1
-
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

@@ -2,231 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621D14D6A95
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9614D6A76
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiCKWrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 17:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S229677AbiCKWok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiCKWrh (ORCPT
+        with ESMTP id S229636AbiCKWoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:47:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A905298F33;
-        Fri, 11 Mar 2022 14:22:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 11 Mar 2022 17:44:30 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D782D277498;
+        Fri, 11 Mar 2022 14:20:03 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3A00B82D7E;
-        Fri, 11 Mar 2022 21:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1EAC340E9;
-        Fri, 11 Mar 2022 21:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647035186;
-        bh=iXp2TGfLwLiTBFPs1pvk41RMObc7ZpenPk6oFMs3zGo=;
-        h=Subject:From:To:Date:From;
-        b=KyPuszPcw09aw7u5sDlCpBl3H7Su2CmudLK+mrTbuYPUXf11fpQFjTRN7iVlf3oN+
-         0TlC9FvN8kK9TC1yd2rF5hC7/NYn/gcED6bkBO60bEDjRFAbwyXT2wCvN0aeSVkXRk
-         PqpAysjHEx6qyly6XaFatX+CiWzEXiZe31PsXHLu/bHWU6vz4GpK6XrxVVNRRQPDik
-         uljSF5Ob+4a8Xv3hmnsiytjR9gXBPIZEIU5+uEcB4pjO69po5PXlNaHayFs4pYs+7P
-         pI0q1krEQWTc94D0U8FzBrRSeoeSyqm4sqjEmbO7WUqwvNYjuLafxYmyX2RHH/WllK
-         KquAhIuKakmEA==
-Message-ID: <0af02f70d3a0b3653bb3079266878f13e6682a69.camel@kernel.org>
-Subject: [ANNOUNCE] 5.4.182-rt71
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <wagi@monom.org>,
-        Clark Williams <williams@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Date:   Fri, 11 Mar 2022 15:46:23 -0600
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 075505DB;
+        Fri, 11 Mar 2022 13:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1647035306;
+        bh=P5ZzCyWn8Nc/M66e9melDdZzKd2Hn269uTStfhzFeC8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SeBg6gzwol1DPY+p8aBXLrgBeFwTV/cLJNNB+CzisLZn5BmXq8SHYUi4BmZTI5U87
+         EwF40TMiZh3r0gEjiam4MJxKeWQSKEJyhstMlz6G6s6e5q1orIIbmJ+LmDI+adDj6J
+         dD4rHas3tEoq254WVvMBjHQvd6oLPDMmrV61sYro=
+Date:   Fri, 11 Mar 2022 13:48:22 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: Add power-efuse binding
+Message-ID: <YivDpkajrJk3KfBM@hatter.bewilderbeest.net>
+References: <20220308011811.10353-1-zev@bewilderbeest.net>
+ <20220308011811.10353-2-zev@bewilderbeest.net>
+ <YitpuR+SlDiKh4eq@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YitpuR+SlDiKh4eq@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT Folks!
+On Fri, Mar 11, 2022 at 07:24:41AM PST, Rob Herring wrote:
+>On Mon, Mar 07, 2022 at 05:18:09PM -0800, Zev Weiss wrote:
+>> This can be used to describe a power output supplied by a regulator
+>> device that the system controls.
+>>
+>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> ---
+>>  .../devicetree/bindings/misc/power-efuse.yaml | 49 +++++++++++++++++++
+>>  1 file changed, 49 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+>> new file mode 100644
+>> index 000000000000..5f8f0b21af0e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+>> @@ -0,0 +1,49 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Generic power efuse device
+>> +
+>> +maintainers:
+>> +  - Zev Weiss <zev@bewilderbeest.net>
+>> +
+>> +description: |
+>> +  This binding describes a physical power output supplied by a
+>> +  regulator providing efuse functionality (manual on/off control, and
+>> +  auto-shutoff if current, voltage, or thermal limits are exceeded).
+>> +
+>> +  These may be found on systems such as "smart" network PDUs, and
+>> +  typically supply power to devices entirely separate from the system
+>> +  described by the device-tree by way of an external connector such as
+>> +  an Open19 power cable:
+>> +
+>> +  https://www.open19.org/marketplace/coolpower-cable-assembly-8ru/
+>
+>Not really a helpful link...
+>
+>I still don't understand what the h/w looks like here. At least I now
+>understand we're talking a fuse on power rail, not efuses in an SoC
+>used as OTP bits or feature disables.
+>
 
-I'm pleased to announce the 5.4.182-rt71 stable release.
+The systems this would actually be used for would be things like these:
+  - https://www.open19.org/marketplace/delta-16kw-power-shelf/
+  - https://www.open19.org/marketplace/inspur-open19-power-shelf-ob19200l1/
 
-You can get this release via the git tree at:
+The rightmost pictures on those pages show the four black connectors 
+where the cable assembly linked in the patch plugs in, each of which 
+provides the outputs from 12 such efuses, on 12 pairs of ground and 
++12VDC pins.  (There are also two more single outputs off to the side.)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+It essentially just amounts to an external power output supplied by a 
+regulator, with the regulator providing an on/off switch, overcurrent 
+protection, etc.
 
-  branch: v5.4-rt
-  Head SHA1: 8f83fc7941f704f55939adaa778afd8ae76662e4
+And yes, the ambiguity of the "efuse" terminology is unfortunate (the 
+"power-" prefix was an attempt to clarify it slightly).  That's the term 
+used in the documentation for the hardware and hence is what I've called 
+it here, but I'd be open to using a different name if that would help.
 
-Or to build 5.4.182-rt71 directly, the following patches should be applied:
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: power-efuse
+>> +
+>> +  vout-supply:
+>> +    description:
+>> +      phandle to the regulator providing power for the efuse
+>
+>Vout is a supply to the efuse and not the rail being fused?
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.4.tar.xz
+Yeah, that was a fairly muddled description -- it's really the latter.  
+Perhaps:
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.4.182.xz
+   phandle to the regulator providing power for the output rail
+   controlled by the efuse
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/patch-5.4.182-rt71.patch.xz
+?
 
+>
+>Sorry, I know nothing about how an efuse is implemented so you are going
+>to have to explain or draw it.
+>
+>> +
+>> +  error-flags-cache-ttl-ms:
+>> +    description:
+>> +      The number of milliseconds the vout-supply regulator's error
+>> +      flags should be cached before re-fetching them.
+>
+>How does one fetch/read? the error flags?
+>
 
-You can also build from 5.4.182-rt70 by applying the incremental patch:
+In the specific case I'm dealing with, via PMBus STATUS_* commands, 
+though I was aiming to keep this more generic so it could potentially be 
+used to describe non-PMBus arrangements (in the Linux case, via whatever 
+mechanism the implementation of the regulator's .get_error_flags() 
+function uses).
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/incr/patch-5.4.182-rt70-rt71.patch.xz
-
-Enjoy!
-
-   Tom
-
-Changes from v5.4.182-rt70:
----
-
-Thomas Gleixner (1):
-      eventfd: Make signal recursion protection a task bit
-
-Tom Zanussi (1):
-      Linux 5.4.182-rt71
-
-Xie Yongji (1):
-      aio: Fix incorrect usage of eventfd_signal_allowed()
----
-fs/aio.c                |  2 +-
- fs/eventfd.c            | 12 +++++-------
- include/linux/eventfd.h | 11 +++++------
- include/linux/sched.h   | 12 ++++++++++++
- localversion-rt         |  2 +-
- 5 files changed, 24 insertions(+), 15 deletions(-)
----
-diff --git a/fs/aio.c b/fs/aio.c
-index fb92c32a6f1e..0bb9abf39065 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -1767,7 +1767,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 		list_del_init(&req->wait.entry);
- 		list_del(&iocb->ki_list);
- 		iocb->ki_res.res = mangle_poll(mask);
--		if (iocb->ki_eventfd && eventfd_signal_count()) {
-+		if (iocb->ki_eventfd && !eventfd_signal_allowed()) {
- 			iocb = NULL;
- 			INIT_WORK(&req->work, aio_poll_put_work);
- 			schedule_work(&req->work);
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index 78e41c7c3d05..661ccc45852b 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -24,8 +24,6 @@
- #include <linux/seq_file.h>
- #include <linux/idr.h>
- 
--DEFINE_PER_CPU(int, eventfd_wake_count);
--
- static DEFINE_IDA(eventfd_ida);
- 
- struct eventfd_ctx {
-@@ -66,21 +64,21 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n)
- 	 * Deadlock or stack overflow issues can happen if we recurse here
- 	 * through waitqueue wakeup handlers. If the caller users potentially
- 	 * nested waitqueues with custom wakeup handlers, then it should
--	 * check eventfd_signal_count() before calling this function. If
--	 * it returns true, the eventfd_signal() call should be deferred to a
-+	 * check eventfd_signal_allowed() before calling this function. If
-+	 * it returns false, the eventfd_signal() call should be deferred to a
- 	 * safe context.
- 	 */
--	if (WARN_ON_ONCE(this_cpu_read(eventfd_wake_count)))
-+	if (WARN_ON_ONCE(current->in_eventfd_signal))
- 		return 0;
- 
- 	spin_lock_irqsave(&ctx->wqh.lock, flags);
--	this_cpu_inc(eventfd_wake_count);
-+	current->in_eventfd_signal = 1;
- 	if (ULLONG_MAX - ctx->count < n)
- 		n = ULLONG_MAX - ctx->count;
- 	ctx->count += n;
- 	if (waitqueue_active(&ctx->wqh))
- 		wake_up_locked_poll(&ctx->wqh, EPOLLIN);
--	this_cpu_dec(eventfd_wake_count);
-+	current->in_eventfd_signal = 0;
- 	spin_unlock_irqrestore(&ctx->wqh.lock, flags);
- 
- 	return n;
-diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
-index dc4fd8a6644d..836b4c021a0a 100644
---- a/include/linux/eventfd.h
-+++ b/include/linux/eventfd.h
-@@ -14,6 +14,7 @@
- #include <linux/err.h>
- #include <linux/percpu-defs.h>
- #include <linux/percpu.h>
-+#include <linux/sched.h>
- 
- /*
-  * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
-@@ -42,11 +43,9 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n);
- int eventfd_ctx_remove_wait_queue(struct eventfd_ctx *ctx, wait_queue_entry_t *wait,
- 				  __u64 *cnt);
- 
--DECLARE_PER_CPU(int, eventfd_wake_count);
--
--static inline bool eventfd_signal_count(void)
-+static inline bool eventfd_signal_allowed(void)
- {
--	return this_cpu_read(eventfd_wake_count);
-+	return !current->in_eventfd_signal;
- }
- 
- #else /* CONFIG_EVENTFD */
-@@ -77,9 +76,9 @@ static inline int eventfd_ctx_remove_wait_queue(struct eventfd_ctx *ctx,
- 	return -ENOSYS;
- }
- 
--static inline bool eventfd_signal_count(void)
-+static inline bool eventfd_signal_allowed(void)
- {
--	return false;
-+	return true;
- }
- 
- #endif
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 79e34e98f812..e1dfb01f4623 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -802,6 +802,18 @@ struct task_struct {
- 	/* to be used once the psi infrastructure lands upstream. */
- 	unsigned			use_memdelay:1;
- #endif
-+#ifdef CONFIG_PSI
-+	/* Stalled due to lack of memory */
-+	unsigned			in_memstall:1;
-+#endif
-+#ifdef CONFIG_PAGE_OWNER
-+	/* Used by page_owner=on to detect recursion in page tracking. */
-+	unsigned			in_page_owner:1;
-+#endif
-+#ifdef CONFIG_EVENTFD
-+	/* Recursion prevention for eventfd_signal() */
-+	unsigned			in_eventfd_signal:1;
-+#endif
- 
- 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
- 
-diff --git a/localversion-rt b/localversion-rt
-index f36b5d418dd8..f38a3cc7f310 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt70
-+-rt71
-
+>> +
+>> +required:
+>> +  - compatible
+>> +  - vout-supply
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    efuse {
+>> +        compatible = "power-efuse";
+>> +        vout-supply = <&efuse_reg>;
+>> +        error-flags-cache-ttl-ms = <500>;
+>> +    };
+>> --
+>> 2.35.1
+>>
+>>

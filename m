@@ -2,42 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3127E4D5E58
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31AB4D5E60
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347452AbiCKJY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S1347469AbiCKJYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiCKJY2 (ORCPT
+        with ESMTP id S1347438AbiCKJY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 04:24:28 -0500
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B034850066
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:23:22 -0800 (PST)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 11 Mar
- 2022 17:23:11 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 11 Mar
- 2022 17:23:08 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <Larry.Finger@lwfinger.net>, <phil@philpotter.co.uk>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        "Haowen Bai" <baihaowen@meizu.com>
-Subject: [PATCH] staging: r8188eu: Directly return 0 instead of using local ret variable
-Date:   Fri, 11 Mar 2022 17:23:06 +0800
-Message-ID: <1646990586-14794-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1764ECD7;
+        Fri, 11 Mar 2022 01:23:25 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id x15so11908721wru.13;
+        Fri, 11 Mar 2022 01:23:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HkaluDRfIBgPKvM5VP2e7TcfJa7Yexe98WuSeo75eJA=;
+        b=DaWE3cu/q8wRuAqtUNOzekYduNr0G5Jyb5TxrwToZqMwFee3CIvShRJwRtjBDAtvvv
+         22BqTfxuIuA1u+KJyHjUdPCZBu6YIgf1ETepGcJA/gH2OxecAP5oEhS8QoGMDG8HYDkO
+         88a28RE9hjXbaMcDQKh7dFiu50F8/fFHLArZZfLj5WhcuQ44ui7bnfwMGEIzVd6b8OqA
+         yemfAMm+6fXNvend6MXbPWyOic9PBO5ydyPVHpx9XHHVx3HJZxGefkNZNV6n6kbxrcWA
+         5XhLxKWWusCNIG60V9YEH2V2lVDNXfPc1oSbSvTMVEpt459N7bymKUjRdHj29A+06vvF
+         wXMw==
+X-Gm-Message-State: AOAM533Hb39HM2ZM+AXNLwmPeHQValTTQPlwyKi7KpecmU/oFGLeVmIk
+        nGp4cR2q4F5YxxweEE9O6QMuHQ8SwOo=
+X-Google-Smtp-Source: ABdhPJx1LC3qeZRIdaAk2hWg0bJlaMqaXA1BdM2YRReg/Tc9LSJBwJm4W850U3kly9zm6Ad9zrpU+A==
+X-Received: by 2002:a5d:5606:0:b0:1f0:2d8b:2ff6 with SMTP id l6-20020a5d5606000000b001f02d8b2ff6mr6445208wrv.433.1646990604405;
+        Fri, 11 Mar 2022 01:23:24 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id u4-20020adfed44000000b0020373d356f8sm6133400wro.84.2022.03.11.01.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 01:23:23 -0800 (PST)
+Message-ID: <7bf43ee7-549e-c98c-1ca9-b5060124c94b@kernel.org>
+Date:   Fri, 11 Mar 2022 10:23:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/3] serial: 8250_fintek.c: Clean up set_termios() message
+Content-Language: en-US
+To:     Trevor Woerner <twoerner@gmail.com>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+References: <20220311070203.18159-3-twoerner@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220311070203.18159-3-twoerner@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,36 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fixes coccinelle warning:
-drivers/staging/r8188eu/hal/rtl8188eu_xmit.c:152:5-9: Unneeded variable: "pull". Return "0" on line 302
+On 11. 03. 22, 8:02, Trevor Woerner wrote:
+> Clean up the status message that is given in the case where a custom
+> termios() is not installed.
+> 
+> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+> ---
+>   drivers/tty/serial/8250/8250_fintek.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
+> index 03ad2354d808..dcab23d1965e 100644
+> --- a/drivers/tty/serial/8250/8250_fintek.c
+> +++ b/drivers/tty/serial/8250/8250_fintek.c
+> @@ -333,7 +333,7 @@ static void fintek_8250_set_termios(struct uart_port *port,
+>   	default:
+>   		/* Don't change clocksource with unknown PID */
+>   		dev_warn(port->dev,
+> -			"%s: pid: %x Not support. use default set_termios.\n",
+> +			"%s: chipID: %x not supported; using default set_termios.\n",
+>   			__func__, pdata->pid);
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+So the variable calls it PID, the comment calls it PID and you change 
+the report to chipID. Why?
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-index 293541d..6ab89f8 100644
---- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-@@ -149,7 +149,6 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
- 
- static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bagg_pkt)
- {
--	int	pull = 0;
- 	uint	qsel;
- 	u8 data_rate, pwr_status, offset;
- 	struct adapter		*adapt = pxmitframe->padapter;
-@@ -299,7 +298,8 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
- 	ODM_SetTxAntByTxInfo_88E(&haldata->odmpriv, pmem, pattrib->mac_id);
- 
- 	rtl8188eu_cal_txdesc_chksum(ptxdesc);
--	return pull;
-+
-+	return 0;
- }
- 
- /* for non-agg data frame or  management frame */
+thanks,
 -- 
-2.7.4
-
+js
+suse labs

@@ -2,196 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2074D6114
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745CD4D6118
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348412AbiCKL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S1348440AbiCKMAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348424AbiCKL5V (ORCPT
+        with ESMTP id S1348387AbiCKMA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:57:21 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B25B1C3D1F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:56:12 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id b24so10583290edu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:56:12 -0800 (PST)
+        Fri, 11 Mar 2022 07:00:28 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FFD1A9497
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:59:25 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 132so7286469pga.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:59:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6KOGVQhF6Egz+9fEXxCfdvhyFjVJMc2MkMjncsNH6FY=;
-        b=ZjR0WX7iatYsrjjBNG3xudpmqpCa87TT88mnirCe2wJwBR7bTEZGS/DMl6ngBgG5md
-         9ETRrW5uw21nHQqsaAIT8fOOpYE2rg1AIwGkKnGInLRtnfdjBJ+wCLWqxnDylxEPCCK9
-         3Kd9r18mjoTW015rjw445mY5xCyZBOH2lCHnyO6OK7OtMfwgax/SSWJm+cdLuomPVycd
-         aH63yCC9GJiYeBaQl1kIvPa0yHjz2Y+K0WTnV8o6joikseReV81eigOsceorEnc6nzep
-         3212R3MMZ3YkQIoLmU0xqNt2zFmUGO7fkR+g7Ee5E7PfYlmbz6K6XMejV8Jm041QLCBZ
-         aGjw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s+9J3fzeoHrpsTRQ13NQjokEARQep2qnKWa3WiCsX0Q=;
+        b=eJ8NsL3DUayA/69NGeIxF3/euLXDYC0g1D6K4rRyT2N32cAd6QMb6QKp9yYDffC/So
+         dcsMZS9unVMohlwtDD1VbLPlDVpY9LPUJA091tCGnynG0Hohn7iQ3IGXU04pJvkqNcIp
+         QCVL6AsjgHwgFM1/3ekoaHoX2CZYigbohvyT+dcwC7PONZ/NG9UvweSs/bnQPeUJPtHm
+         /S1pgRs0Od+hDFi+ngLRdpzxsZXl7moR2dQjcAfCaOGGSdOB4nC69ekWTNjq4TF1Ve3a
+         CqfIrUgcexHPM6z2Mf6P8M8r+knKr+ErcjDwbj9mrCCtdwxygxvgoRHygPkxXBqRKkQO
+         7y1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6KOGVQhF6Egz+9fEXxCfdvhyFjVJMc2MkMjncsNH6FY=;
-        b=ZWAybB6UgsI0QxUD6ZG9GLRPbkOrFQcDK5LGdhSM+LY8/Gud6rFGJPZ1F7OqOtrvEb
-         R3mNgD3ZeNmWSpRKCLMi+CQZ3/4wmsvhY/Utp7eTvSmRhNKd/T/EmPWr9VaNS/J2iirB
-         1iwtHlzepStcS0gsaVAuGcLvAK0s6Yv3sNGG9K/z9+UunOBxKzNxHFJ5+lEYHx0loOtw
-         sVM3XmX00Jn8gQoX25aW5khMMQc5dVwIoGNJ/rioAPV61Nf3z7eyhjBYWviHM+jgUAu3
-         j0C01NBlFyeAZ9jhnv7W1OXZX/w4/Qj5dGeJIonL2vj1wWDyp05XU10xvzD7H0UQZul0
-         kzxA==
-X-Gm-Message-State: AOAM533Z9tjw3uT3wwag0mD3HBgPm75fDJqLp6mz/+IlMSxifH90DkQa
-        UiEe0EBhzka7V/wiE4k/Krk=
-X-Google-Smtp-Source: ABdhPJyhKwKHXdrgcx+VP6v6R/hLiE3rrgLkmwTvpB5t09YXQIcSL8iR1eb1Ba0dij/oJWd4Dd2Fdg==
-X-Received: by 2002:aa7:c687:0:b0:415:eb43:8ff5 with SMTP id n7-20020aa7c687000000b00415eb438ff5mr8551105edq.74.1646999770590;
-        Fri, 11 Mar 2022 03:56:10 -0800 (PST)
-Received: from krava ([83.240.61.119])
-        by smtp.gmail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm2860274ejt.108.2022.03.11.03.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 03:56:10 -0800 (PST)
-Date:   Fri, 11 Mar 2022 12:56:07 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>, John Keeping <john@metanate.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
- with perf
-Message-ID: <Yis41ykyJq1fHYSx@krava>
-References: <20220310061909.20166-1-sedat.dilek@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s+9J3fzeoHrpsTRQ13NQjokEARQep2qnKWa3WiCsX0Q=;
+        b=RnoNmQEpJ4+E3y96/8SF648X7CkZ0lncew2B9GM3Nsyd/O3i2mhK9F5zBlOHLGGfCw
+         b8gUKfUXBNuPO4XLiKMx5PGzAWcDmbDseQKaAcFCSmHf1fr2pEqxrE0nxBQOMuH45xjb
+         MmhrTPK3HOQi47gh38w+iGAfzacRqFEHAQabFXf4ZTpjNK8O/WlNOtVuBU1zub+YVDax
+         RxHFamhDJkz6HEkkKRYMEAuKjju3bCgjviFdRhm+Te/NmKuAPxOjlT9gEAD14reJ2NE0
+         ra3pvwchafXSxHtZFPuuprRSiST5B1IEx8FLm9bRB3yiAQmOFGoSqEqbGzD1wOtqQOpJ
+         tWeQ==
+X-Gm-Message-State: AOAM533NFd2t6GxSwdBBIomyVZ6O+lDjIv0SL+UA7nf8RwcuRsfwTO4t
+        IV3y2K/jPSWVbnDlpGU3u2kqtMdcerTQ4g==
+X-Google-Smtp-Source: ABdhPJwZF2lkVGEdOHZ1KKa19VO7dejeeUca7CMbSQNoV1PAZnDTo86W4BcrQJ9d3eQtJ2wA/y5EmA==
+X-Received: by 2002:a05:6a00:2402:b0:4e1:3df2:5373 with SMTP id z2-20020a056a00240200b004e13df25373mr9553928pfh.40.1646999964639;
+        Fri, 11 Mar 2022 03:59:24 -0800 (PST)
+Received: from ?IPV6:2409:8a28:e6b:7130:ddd:2fc4:6858:5760? ([2409:8a28:e6b:7130:ddd:2fc4:6858:5760])
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f791d0115esm1871923pfk.171.2022.03.11.03.59.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 03:59:23 -0800 (PST)
+Message-ID: <791d2e92-cb88-aac9-67b4-e9d09448df0e@bytedance.com>
+Date:   Fri, 11 Mar 2022 19:59:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310061909.20166-1-sedat.dilek@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [External] Re: [PATCH v2] livepatch: Don't block removal of
+ patches that are safe to unload
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>, jpoimboe@redhat.com,
+        jikos@kernel.org, joe.lawrence@redhat.com,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220303105446.7152-1-zhouchengming@bytedance.com>
+ <YicnIIatfgLc2NN2@alley> <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
+ <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com> <Yionqn3d9OQF4UiT@alley>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <Yionqn3d9OQF4UiT@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 07:19:09AM +0100, Sedat Dilek wrote:
-> When trying to build perf with a LLVM/Clang toolchain people see errors
-> when testing for libperl feature.
+On 2022/3/11 12:30 上午, Petr Mladek wrote:
+> On Thu 2022-03-10 20:57:54, Chengming Zhou wrote:
+>> Hi,
+>>
+>> On 2022/3/9 1:49 上午, Miroslav Benes wrote:
+>>> On Tue, 8 Mar 2022, Petr Mladek wrote:
+>>>
+>>>> On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
+>>>>> module_put() is currently never called for a patch with forced flag, to block
+>>>>> the removal of that patch module that might still be in use after a forced
+>>>>> transition.
+>>>>>
+>>>>> But klp_force_transition() will set all patches on the list to be forced, since
+>>>>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
+>>>>> has removed stack ordering of the livepatches, it will cause all other patches can't
+>>>>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
+>>>>>
+>>>>> In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
+>>>>> transition. It can still be unloaded safely as long as it has passed through
+>>>>> the consistency model in KLP_UNPATCHED transition.
+>>>>
+>>>> It really looks safe. klp_check_stack_func() makes sure that @new_func
+>>>> is not on the stack when klp_target_state == KLP_UNPATCHED. As a
+>>>> result, the system should not be using code from the livepatch module
+>>>> when KLP_UNPATCHED transition cleanly finished.
+>>>>
+>>>>
+>>>>> But the exception is when force transition of an atomic replace patch, we
+>>>>> have to set all previous patches to forced, or they will be removed at
+>>>>> the end of klp_try_complete_transition().
+>>>>>
+>>>>> This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
+>>>>> case, and keep the old behavior when in atomic replace case.
+>>>>>
+>>>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>>>>> ---
+>>>>> v2: interact nicely with the atomic replace feature noted by Miroslav.
+>>>>> ---
+>>>>>  kernel/livepatch/transition.c | 8 ++++++--
+>>>>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+>>>>> index 5683ac0d2566..34ffb8c014ed 100644
+>>>>> --- a/kernel/livepatch/transition.c
+>>>>> +++ b/kernel/livepatch/transition.c
+>>>>> @@ -641,6 +641,10 @@ void klp_force_transition(void)
+>>>>>  	for_each_possible_cpu(cpu)
+>>>>>  		klp_update_patch_state(idle_task(cpu));
+>>>>>  
+>>>>> -	klp_for_each_patch(patch)
+>>>>> -		patch->forced = true;
+>>>>> +	if (klp_target_state == KLP_UNPATCHED)
+>>>>> +		klp_transition_patch->forced = true;
+>>>>> +	else if (klp_transition_patch->replace) {
+>>>>> +		klp_for_each_patch(patch)
+>>>>> +			patch->forced = true;
+>>>>
+>>>> This works only because there is should be only one patch when
+>>>> klp_target_state == KLP_UNPATCHED and
+>>>> klp_transition_patch->forced == true.
+>>>
+>>> I probably misunderstand, but the above is not generally true, is it? I 
+>>> mean, if the transition patch is forced during its disablement, it does 
+>>> not say anything about the amount of enabled patches.
+>>>
+>>>> But it is a bit tricky. I would do it the other way:
+>>>>
+>>>> 	if (klp_transition_patch->replace) {
+>>>> 		klp_for_each_patch(patch)
+>>>> 			patch->forced = true;
+>>>> 	} else if (klp_target_state == KLP_UNPATCHED) {
+>>>> 		klp_transition_patch->forced = true;
+>>>> 	}
+>>>>
+>>>> It looks more sane. And it makes it more clear
+>>>> that the special handling of KLP_UNPATCHED transition
+>>>> is done only when the atomic replace is not used.
+>>>
+>>> But it is not the same. ->replace being true only comes into play when a 
+>>> patch is enabled. If it is disabled, then it behaves like any other patch.
+>>>
+>>> So, if there is ->replace patch enabled (and it is the only patch present) 
+>>> and then more !->replace patches are loaded and then if ->replace patch is 
+>>> disabled and forced, your proposal would give a different result than what 
+>>> Chengming submitted, because in your case all the other patches will get 
+>>> ->forced set to true, while it is not the case in the original. It would 
+>>> be an unnecessary restriction if I am not missing something.
+>>
+>> At first glance, I thought both way is right. But after looking at the case
+>> you mentioned above, they are not the same indeed. The original patch
+>> treat ->replace and not ->replace patches the same in KLP_UNPATCHED transition,
+>> and only set all patches to forced in the atomic replace transition.
 > 
-> Jiri reports:
+> I see. OK, Chengming's code makes sense. But we should make the commit
+> message more clear. Something like:
 > 
-> > I'm getting some other lto related error:
-> >
-> >         $ cat test-libperl.make.output
-> >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-> >
+> <draft>
+> module_put() is not called for a patch with "forced" flag. It should
+> block the removal of the livepatch module when the code might still
+> be in use after forced transition.
 > 
-> The reason is PERL_EMBED_CCOPTS is defined in two places:
+> klp_force_transition() currently sets "force" flag for all patches on
+> the list.
 > 
-> tools/build/feature/Makefile
-> tools/perf/Makefile.config
+> In fact, any patch can be safely unloaded when it passed through
+> the consistency model in KLP_UNPATCHED transition.
 > 
-> As an result FLAGS_PERL_EMBED is set differently.
+> By other words, the "forced" flag must be set only for livepatches
+> that are being removed. In particular, set the "forced" flag:
 > 
-> For building perf '-ffat-lto-objects' is filtered-out:
+>   + only for klp_transition_patch when the transition to KLP_UNPATCHED
+>     state was forced.
 > 
-> $ git grep ffat-lto-objects tools/perf/
-> tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> 
-> Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
-> 
-> For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
-> 
-> Link: https://marc.info/?t=164646683300002&r=1&w=2
-> Reported-by: Jiri Olsa <olsajiri@gmail.com>
-> Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> ---
->  tools/build/feature/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> index 1480910c792e..869073cf8449 100644
-> --- a/tools/build/feature/Makefile
-> +++ b/tools/build/feature/Makefile
-> @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
->  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
->  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
->  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+>   + all replaced patches when the transition to KLP_PATCHED state was
+>     forced and the patch was replacing the existing patches.
+> </draft>
 
-it looks like this is not enough, at least on fedora 35
+Ok, I will update the commit message, this draft is more clear.
 
-I had to add changes below on top of your patch, it fixed the perl
-feature detection and perf build itself, but I'm still getting error
-with perf/python.so:
+> 
+> It means that we should could actually do:
+> 
+> 	if (klp_target_state == KLP_UNPATCHED) {
+> 		klp_transition_patch->forced = true;
+> 	} else if (klp_transition_patch->replace) {
+> 		klp_for_each_patch(patch) {
+> 			if (patch != klp_transition_patch)
+> 				patch->forced = true;
+> 		}
+> 	}
+> 
+> Huh, that is tricky ;-)
 
-	$ CC=clang make JOBS=1 
-	...
-	  GEN     python/perf.so
-	python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: file not recognized: file format not recognized
-	clang-13: error: linker command failed with exit code 1 (use -v to see invocation)
-	error: command 'clang' failed with exit status 1
-	cp: cannot stat 'python_ext_build/lib/perf*.so': No such file or directory
+Yes, and I found similar tricky code at the end of
+klp_try_complete_transition():
 
-with:
+	if (!patch->enabled)
+		klp_free_patch_async(patch);
+	else if (patch->replace)
+		klp_free_replaced_patches_async(patch);
 
-	$ file python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o
-	python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: LLVM IR bitcode
+Thanks.
 
-do you get clean compile with python lang enabled?
-
-jirka
-
-
----
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 869073cf8449..86df0fe11ee5 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -217,9 +217,9 @@ strip-libs = $(filter-out -l%,$(1))
- PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
- PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
- PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
--PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-+PERL_EMBED_CCOPTS := $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
- PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
--FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
-+FLAGS_PERL_EMBED  := $(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
- 
- $(OUTPUT)test-libperl.bin:
- 	$(BUILD) $(FLAGS_PERL_EMBED)
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 96ad944ca6a8..38b0b0e7a168 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -778,7 +778,7 @@ else
-   PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-   PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
-   PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
--  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-+  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS)) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
-   PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
-   FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
- 
-diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-index 483f05004e68..cfbb03babf63 100644
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -43,7 +43,7 @@ class install_lib(_install_lib):
- 
- cflags = getenv('CFLAGS', '').split()
- # switch off several checks (need to be at the end of cflags list)
--cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-DPYTHON_PERF' ]
-+cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-Wno-ignored-optimization-argument', '-DPYTHON_PERF' ]
- if not cc_is_clang:
-     cflags += ['-Wno-cast-function-type' ]
- 
+> 
+> Best Regards,
+> Petr

@@ -2,122 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8E54D6283
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3C64D6285
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348948AbiCKNjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S1348959AbiCKNj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348755AbiCKNjQ (ORCPT
+        with ESMTP id S1348755AbiCKNjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:39:16 -0500
-Received: from imap2.colo.codethink.co.uk (imap2.colo.codethink.co.uk [78.40.148.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568BD1C46B6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:38:12 -0800 (PST)
-Received: from [167.98.27.226] (helo=[172.16.103.108])
-        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nSfSn-0000Di-Kl; Fri, 11 Mar 2022 13:37:49 +0000
-Message-ID: <509d2b62-7d52-bf5c-7a6c-213a740a5c00@codethink.co.uk>
-Date:   Fri, 11 Mar 2022 13:37:48 +0000
+        Fri, 11 Mar 2022 08:39:25 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A6D182DA1;
+        Fri, 11 Mar 2022 05:38:20 -0800 (PST)
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MLiTI-1nkCK328Xo-00HflP; Fri, 11 Mar 2022 14:38:19 +0100
+Received: by mail-wr1-f42.google.com with SMTP id j17so13082467wrc.0;
+        Fri, 11 Mar 2022 05:38:19 -0800 (PST)
+X-Gm-Message-State: AOAM530NHWtfkC3DsO+FNOIJv8GVeP1ApOXHEZzVyzGNB0/Mz7LAVGKS
+        lBsMP1e9BeXwVie/TjoiWUBeXv8uEakk3KUE9xw=
+X-Google-Smtp-Source: ABdhPJyQyoYHZh+pVslr/vmoDVsDXk3gvhxbqLrROJJ+HWkN4Vk43usfrnZ6D257Ws7a0R12okqcFdfYA8OnpIhB5tk=
+X-Received: by 2002:adf:f606:0:b0:203:8dff:f4ac with SMTP id
+ t6-20020adff606000000b002038dfff4acmr5286812wrp.12.1647005899008; Fri, 11 Mar
+ 2022 05:38:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V7 13/20] riscv: compat: process: Add UXL_32 support in
- start_thread
-Content-Language: en-GB
-To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com> <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+In-Reply-To: <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 11 Mar 2022 14:38:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+Message-ID: <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+To:     Vladimir Zapolskiy <vz@mleia.com>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-References: <20220227162831.674483-1-guoren@kernel.org>
- <20220227162831.674483-14-guoren@kernel.org>
- <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:XSeFGmX/txJrCAHFVpLK2GhMis+7Wz2vLi//2rw/ykEeTfFNt6s
+ +yKd6PNt5632hZAVRy/SOJicjC+lqMvuxnkYlzbWj6PdYLVUJeg7xb0m//7tz/ajkO6+J92
+ /Fyk4XD3uUA8kYO4mvUtoVRPLWqMu0v2tQNgQLFpjVcxi9sEOjpoXbkQdRp7UEmKUeN6rqV
+ 6qdE2H0prqj0mm5+svZow==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7cgqlkgaSik=:okkbofmT9d5LcEAtASy0zM
+ /raw6y8zST89OXuDuGsybXgInABQRn+i7kYAzG4V74DjzyotTgKIEEhw8EmeXMtcP8HyhIUzi
+ co0ZOJCcfmQTLowZfIpu2s5XQeC5eYWXNSoIPzR3rCc1Vz8GcSIGPg7RZMeF1TeaeZ7snvbt2
+ KZEPOxHIvYNjVaK/U8BpB1CFe2NunmQlbALYNYlL+/sjMPVbeBm4HshWjdG/madCbL4UawvUR
+ v4CHC4Xw3M7pn81D+rpq1xWAFDHKMaPLZ1hMtVgnhktpdsKktfCUgqU9XqrsdrSat4sMQ0qfC
+ wiJVc/GYTdkkcdW2LuDsUXbAqgUoqBw8qAHpw8oQovGoTQNbH3q5dxhcxrA59B1Hy7YbTW1mV
+ qB640tSUJL6b5uxtvUCZQLUKBzPGPjPx8T/R5jhgr/jkP3YQDw42UW+pu3NdYkw9kvD8bIHx+
+ g7iFHUsWbegWvQCNr1xjIDOclexE7OS+4M0XnJBB6oVeUmSqmVDfUfhn4ws4x6AqV4CusCCgG
+ mP0ctm0Vci1A1KwXbUWr1KGz3v46EwPOaJ+TftmcaSo3dMgALoXQ7DYhItXv6RPDBTdY4jRB8
+ W4mkD/R2xARDUsrECFusYRcmdFGSiu1EruXvXvQOl2Qn6Av0Gcr13o8Pw6wfDwyVPWRZhVHjo
+ vo0Poxfycxj+v72g1uUnMkvRe6DID8IdQ3mWeBENvZb+q2uF0oVGogDKOYTN5jtTpQp/mY+MX
+ 8boSFX1DjFdBioNq3WQfV3hH0MjJ0b3HYukFEzNpvaDZuUnYOi48fMdxTqRFhLIXvaMTmVPjh
+ 7Q+MPnKcgkAqoQSgPwbzf3GKLYUxV2b3FogSVAWO+mGYJDWyTw=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 02:38, Guo Ren wrote:
-> Hi Arnd,
-> 
-> On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
->>
->> From: Guo Ren <guoren@linux.alibaba.com>
->>
->> If the current task is in COMPAT mode, set SR_UXL_32 in status for
->> returning userspace. We need CONFIG _COMPAT to prevent compiling
->> errors with rv32 defconfig.
->>
->> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> Signed-off-by: Guo Ren <guoren@kernel.org>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Palmer Dabbelt <palmer@dabbelt.com>
->> ---
->>   arch/riscv/kernel/process.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
->> index 03ac3aa611f5..54787ca9806a 100644
->> --- a/arch/riscv/kernel/process.c
->> +++ b/arch/riscv/kernel/process.c
->> @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
->>          }
->>          regs->epc = pc;
->>          regs->sp = sp;
->> +
-> FIxup:
-> 
-> + #ifdef CONFIG_COMPAT
->> +       if (is_compat_task())
->> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
->> +       else
->> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
-> + #endif
-> 
-> We still need "#ifdef CONFIG_COMPAT" here, because for rv32 we can't
-> set SR_UXL at all. SR_UXL is BIT[32, 33].
+On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>
+> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+> > PL022 binding require two clocks to be defined but lpc platform doesn't
+> > comply with bindings and define only one clock i.e apb_pclk.
+> >
+> > Update spi clocks and clocks-names property by adding appropriate clock
+> > reference to make it compliant with bindings.
+> >
+> > CC: Vladimir Zapolskiy <vz@mleia.com>
+> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> > ---
+> > v2:
+> > - New patch with similar changeset
+> > - Send to soc ML
+> >
+> >   arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+> >   1 file changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+> > index c87066d6c995..30958e02d5e2 100644
+> > --- a/arch/arm/boot/dts/lpc32xx.dtsi
+> > +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+> > @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+> >                               compatible = "arm,pl022", "arm,primecell";
+> >                               reg = <0x20084000 0x1000>;
+> >                               interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> > -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+> > -                             clock-names = "apb_pclk";
+> > +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+> > +                             clock-names = "sspclk", "apb_pclk";
+>
+> In fact I'm uncertain if it is the right change, could it happen that the commit
+> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+> schema pattern?
 
-would an if (IS_ENABLED(CONFIG_COMPAT)) { } around the lot be better
-than an #ifdef here?
+Good pointm this doesn't quite seem right: it is unlikely that the same clock
+is used for both the SPI bus and the APB bus.
 
->>   }
->>
->>   void flush_thread(void)
->> --
->> 2.25.1
->>
-> 
-> 
+> Apparently just one clock is wanted on all observed platforms and cases, this
+> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
+>
+>         pl022->clk = devm_clk_get(&adev->dev, NULL);
+>
+> So, I would vote to fix the device tree bindings schema.
 
+Isn't this just using the wrong name? The name of the macro
+LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
+rather than the APB clock, so we only need to change clock-names
+property here and leave it unchanged otherwise.
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+Looking at the driver, I also see that this refers to the clock as
+"SSP/SPI bus clock", and it reads the rate from that.
 
-https://www.codethink.co.uk/privacy.html
+In case of the LG platform, my impression is that the clocks listed
+in DT don't reflect the system at all, they all refer to the same
+fixed clock node at 198000000HZ, which is also used as for the
+UART and timer nodes. Changing the name on that one doesn't
+really make it correct, but should not hurt either.
+
+        Arnd

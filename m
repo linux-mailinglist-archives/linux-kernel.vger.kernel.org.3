@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8983F4D6AA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A3D4D6A25
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiCKWq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 17:46:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S229907AbiCKWta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiCKWqj (ORCPT
+        with ESMTP id S229745AbiCKWtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:46:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5363F187B82
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:21:54 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647037312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GUT/XyD1JmdUBh6NMIEZcouy3zdM2rhgSG8nRivlBD4=;
-        b=nJOnpcpBPWfS58FCKN34a+fkJWfXBpXHZ41n0ZpHMtFnx7awS25HQM/+sGx70DpJxBz4Vp
-        18EF1A1IJfUCHEDZdVH19DkTg3y1P5JVoJrhuyQmu63BqAarIUy8oe1S2Dbk5NO1mbnVdB
-        bfQiuumu4eJygp3dKY3C+eTwY+QSxlyelnF52qWJNF4YRCNmJXALDhH67LNBebcicpvWxO
-        c6zNWVqp+6VU389hqdyGar0WsNnF9lTs39k47Ltr9VPXrA+qhcbZcMKN/WBHFHsB3PRqcC
-        DVp400en0JJBuuDGI+5vC4t2Gl//EDy/8edvvzDQBnna24ieFaaFFihWbTDDAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647037312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GUT/XyD1JmdUBh6NMIEZcouy3zdM2rhgSG8nRivlBD4=;
-        b=E0GPIWBfLQAFFedY+cXguy4HoKZBdGIOyjCZI5Ppe3ZWNuDA3V8lwvfeMuYxXiB3LxpRfP
-        Bh0XxJlKwgvcUPCg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 11/13] printk: reimplement console_lock for
- proper kthread support
-In-Reply-To: <Yit2LN1nCaiUo5y4@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-12-john.ogness@linutronix.de>
- <YhYKP/UuSKENGwfj@alley> <87tuc7xma0.fsf@jogness.linutronix.de>
- <YioMcSe0P0Z7ksiW@alley> <87wnh14wp9.fsf@jogness.linutronix.de>
- <Yisj2PEtjZfHMe6N@alley> <87czisbotz.fsf@jogness.linutronix.de>
- <Yit2LN1nCaiUo5y4@alley>
-Date:   Fri, 11 Mar 2022 23:27:51 +0106
-Message-ID: <87tuc4yvsw.fsf@jogness.linutronix.de>
+        Fri, 11 Mar 2022 17:49:20 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C0F1587BF;
+        Fri, 11 Mar 2022 14:23:16 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id r11so11727895ioh.10;
+        Fri, 11 Mar 2022 14:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c1oesbnKmDcQXvY8yfzmiNzpMiDAOHp1ykwgmMM9nlA=;
+        b=iwTjtfvGojQ9KUq3c8HJ/wzYbGP8a7/Q5qUFesXx9rh96Q/IUb6knVDfAhWgIKOOZj
+         EykXMAr7pZKSKyL2yqW0e33Zt4QxbhU8vN5MCcWydDoUn2zuAJ4DKbHhN6cQE6lkyd+I
+         m93QcP7aAxT9Zjvn+iCiQB35YqHSNwMuprvXouukaGiwns8vKOrC8cN5Ai3HEFK9mGMG
+         7guuT8T3tNFNKY+brnd3DwrJyAU/s9eUb/12MTPQ0hcISikHC7fFdSJ3n+Q4UkZy6YXm
+         AuvwSu+To65uNZCioQlzvn9BSb4AbGotlELegsJx3oWVWkH648eaRgdpyf1Q1PIMgcS8
+         1C7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c1oesbnKmDcQXvY8yfzmiNzpMiDAOHp1ykwgmMM9nlA=;
+        b=d4VOIY3XVcygor5ePqjy0LsigTK0XZJBT7yTAYCeor45tRnkQDT7j2kQuNF8kQA7Q4
+         tJX68cAQcHz4rb51F55z8Bf17ZEa5EWkr1SX/VzdeX8s+qJgJ7teUzthOf8iDZKfhUV7
+         OeJpkoru51eLKAYRt+UhqwZOwOMymJeVy6ZZH7p5q1/VOMqQTSUluPddgbjoM5Tsh/Pr
+         oFAqu0yq6YXE/+aVbAAPCgX5vS+Ag30q7tzoVfnWuCV1vy+VH4h9cZskUegKFgFpga2T
+         2QuOpPrgt1YdwRL8Ii7+AV8i1VUMiqVCUFCal16evPwdSDKGKEPiST3Vrj1VwNKUCXcB
+         R2aA==
+X-Gm-Message-State: AOAM530pNmnVO5WIQby6/6J20fc6RPfWrft4Tbq7oal2f4RMqNptP387
+        DtsD+MzVLmEEFLNBhvDWAr7+oKwUvRJapAtU4Rc=
+X-Google-Smtp-Source: ABdhPJxkLN6itSSQGHJQzD9aspp0hOVSsIwmlG2LO+lBCNVlra1XsQGYdTFQvWXM6bMb8lIqj26JC8xgMJsNUQBtI/I=
+X-Received: by 2002:a05:6602:185a:b0:645:d914:35e9 with SMTP id
+ d26-20020a056602185a00b00645d91435e9mr9402831ioi.154.1647037395766; Fri, 11
+ Mar 2022 14:23:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220310082202.1229345-1-namhyung@kernel.org> <20220310082202.1229345-2-namhyung@kernel.org>
+In-Reply-To: <20220310082202.1229345-2-namhyung@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 11 Mar 2022 14:23:04 -0800
+Message-ID: <CAEf4BzZUEvCqz-zGdKAeyg3vywEEnFWuZ4Q446BrTGOsFqNqyQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] bpf/selftests: Test skipping stacktrace
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eugene Loh <eugene.loh@oracle.com>, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,168 +76,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Petr,
-
-I do not think the example below is showing what you think it does, but
-it does shed light on an important point.
-
-On 2022-03-11, Petr Mladek <pmladek@suse.com> wrote:
-> CPU0			CPU1			CPU2
+On Thu, Mar 10, 2022 at 12:22 AM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> printk()
->   // direct mode allowed
-
-OK, so @printk_direct is >= 1.
-
->   console_trylock()
->   console_unlock()
->     console_flush_all()
+> Add a test case for stacktrace with skip > 0 using a small sized
+> buffer.  It didn't support skipping entries greater than or equal to
+> the size of buffer and filled the skipped part with 0.
 >
-> 			printk_direct_enter()
-
-@printk_direct is now >= 2.
-
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  .../bpf/prog_tests/stacktrace_map_skip.c      | 72 ++++++++++++++++
+>  .../selftests/bpf/progs/stacktrace_map_skip.c | 82 +++++++++++++++++++
+>  2 files changed, 154 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
 >
->       allows_direct_printing() -> false;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
+> new file mode 100644
+> index 000000000000..bcb244aa3c78
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
+> @@ -0,0 +1,72 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "stacktrace_map_skip.skel.h"
+> +
+> +#define TEST_STACK_DEPTH  2
+> +
+> +void test_stacktrace_map_skip(void)
+> +{
+> +       struct stacktrace_map_skip *skel;
+> +       int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
+> +       int err, stack_trace_len;
+> +       __u32 key, val, duration = 0;
+> +
+> +       skel = stacktrace_map_skip__open_and_load();
+> +       if (CHECK(!skel, "skel_open_and_load", "skeleton open failed\n"))
+> +               return;
+> +
+> +       /* find map fds */
+> +       control_map_fd = bpf_map__fd(skel->maps.control_map);
+> +       if (CHECK_FAIL(control_map_fd < 0))
+> +               goto out;
+> +
+> +       stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
+> +       if (CHECK_FAIL(stackid_hmap_fd < 0))
+> +               goto out;
+> +
+> +       stackmap_fd = bpf_map__fd(skel->maps.stackmap);
+> +       if (CHECK_FAIL(stackmap_fd < 0))
+> +               goto out;
+> +
+> +       stack_amap_fd = bpf_map__fd(skel->maps.stack_amap);
+> +       if (CHECK_FAIL(stack_amap_fd < 0))
+> +               goto out;
+> +
+> +       err = stacktrace_map_skip__attach(skel);
+> +       if (CHECK(err, "skel_attach", "skeleton attach failed\n"))
+> +               goto out;
+> +
+> +       /* give some time for bpf program run */
+> +       sleep(1);
+> +
+> +       /* disable stack trace collection */
+> +       key = 0;
+> +       val = 1;
+> +       bpf_map_update_elem(control_map_fd, &key, &val, 0);
+> +
+> +       /* for every element in stackid_hmap, we can find a corresponding one
+> +        * in stackmap, and vise versa.
+> +        */
+> +       err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
+> +       if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
+> +                 "err %d errno %d\n", err, errno))
+> +               goto out;
+> +
+> +       err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
+> +       if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
+> +                 "err %d errno %d\n", err, errno))
+> +               goto out;
+> +
+> +       stack_trace_len = TEST_STACK_DEPTH * sizeof(__u64);
+> +       err = compare_stack_ips(stackmap_fd, stack_amap_fd, stack_trace_len);
+> +       if (CHECK(err, "compare_stack_ips stackmap vs. stack_amap",
+> +                 "err %d errno %d\n", err, errno))
+> +               goto out;
+> +
+> +       if (CHECK(skel->bss->failed, "check skip",
+> +                 "failed to skip some depth: %d", skel->bss->failed))
+> +               goto out;
+> +
+> +out:
+> +       stacktrace_map_skip__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c b/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
+> new file mode 100644
+> index 000000000000..323248b17ae4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#define TEST_STACK_DEPTH         2
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 1);
+> +       __type(key, __u32);
+> +       __type(value, __u32);
+> +} control_map SEC(".maps");
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_HASH);
+> +       __uint(max_entries, 16384);
+> +       __type(key, __u32);
+> +       __type(value, __u32);
+> +} stackid_hmap SEC(".maps");
+> +
+> +typedef __u64 stack_trace_t[TEST_STACK_DEPTH];
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_STACK_TRACE);
+> +       __uint(max_entries, 16384);
+> +       __type(key, __u32);
+> +       __type(value, stack_trace_t);
+> +} stackmap SEC(".maps");
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 16384);
+> +       __type(key, __u32);
+> +       __type(value, stack_trace_t);
+> +} stack_amap SEC(".maps");
+> +
+> +/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
+> +struct sched_switch_args {
+> +       unsigned long long pad;
+> +       char prev_comm[TASK_COMM_LEN];
+> +       int prev_pid;
+> +       int prev_prio;
+> +       long long prev_state;
+> +       char next_comm[TASK_COMM_LEN];
+> +       int next_pid;
+> +       int next_prio;
+> +};
+> +
+> +int failed = 0;
+> +
+> +SEC("tracepoint/sched/sched_switch")
+> +int oncpu(struct sched_switch_args *ctx)
+> +{
+> +       __u32 max_len = TEST_STACK_DEPTH * sizeof(__u64);
+> +       __u32 key = 0, val = 0, *value_p;
+> +       __u64 *stack_p;
+> +
 
-I do not understand why you say it returns false. @printk_direct is not
-zero. This returns _true_ and will print all records currently in the
-ringbuffer.
+please also add filtering by PID to avoid interference from other
+selftests when run in parallel mode
 
->       break;
+> +       value_p = bpf_map_lookup_elem(&control_map, &key);
+> +       if (value_p && *value_p)
+> +               return 0; /* skip if non-zero *value_p */
+> +
+> +       /* it should allow skipping whole buffer size entries */
+> +       key = bpf_get_stackid(ctx, &stackmap, TEST_STACK_DEPTH);
+> +       if ((int)key >= 0) {
+> +               /* The size of stackmap and stack_amap should be the same */
+> +               bpf_map_update_elem(&stackid_hmap, &key, &val, 0);
+> +               stack_p = bpf_map_lookup_elem(&stack_amap, &key);
+> +               if (stack_p) {
+> +                       bpf_get_stack(ctx, stack_p, max_len, TEST_STACK_DEPTH);
+> +                       /* it wrongly skipped all the entries and filled zero */
+> +                       if (stack_p[0] == 0)
+> +                               failed = 1;
+> +               }
+> +       } else if ((int)key == -14/*EFAULT*/) {
+> +               /* old kernel doesn't support skipping that many entries */
+> +               failed = 2;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.35.1.723.g4982287a31-goog
 >
->       __console_unlock()
->         wakeup_klogd()
-
-Note that all kthreads wake here. To keep it simple, let us assume there
-is only 1.
-
-> 						// woken printk_khread
-
-The kthread will only go into its printing loop if new records have
-appeared after the above __console_unlock(). If any did appear, _that_
-printk() will attempt to print them because direct printing is
-active. But let us assume that the kthread on CPU2 woke up before the
-new printk() context could attempt a console_lock() or
-console_trylock().
-
-> 						console_thread_printing_enter()
-
-@console_lock_count is now 1. Now console_lock() and console_trylock()
-will block or fail, respectively.
-
-> 			printk_direct_exit()
-
-@printk_direct is now >= 1.
-
->       console_trylock()
->         atomic_tryblock()
-> 	  //fails because thread active
-
-Correct. (Note that if CPU0 had been in a console_lock() context, it
-would _not_ fail because console_lock_reacquire() would wait for the
-active kthreads to finish their current record.)
-
->    return;
->
-> 			printk_direct_enter()
-
-@printk_direct is now >= 2.
-
-> 						console_thread_printing_exit()
-
-Note that CPU2 would have printed a single record.
-
-> 						// sleep because
-> 						atomic_read(&printk_direct) is not
-> 						zero
-
-No, the kthread does not sleep. It will continue printing until it is
-blocked via console_lock()/console_trylock() or until all the records
-are printed.
-
-> Result: nobody prints
-
-Sorry, but I have no idea how you came to that conclusion.
-
-> Note: The thread will actually not sleep because printk_should_wake()
->       does not check atomic_read(&printk_direct).
-
-Exactly.
-
->       But it is a bug. Active thread should check it and allow
->       entering direct mode.
-
-We are in direct mode this entire example. I do not understand what you
-mean by "allow entering direct mode". Perhaps you mean "allow
-console_trylock() to succeed".
-
-If that is what you mean, then you are suggesting that the
-console_trylock() spins until all the kthreads have finished their
-current record. This could be a new variant of console_trylock().
-
-And then rather than continuing their printing loop, the kthreads all
-stay asleep as long as @printk_direct is non-zero (in addition to the
-existing sleep conditions).
-
-This could work if the kthreads disable preemption for the
-console_thread_printing_enter()/_exit() window.
-
-Although it should be noted that this still will not help if a
-console_lock() context is scheduled out.
-
-> Note2: Even when one printk thread flushes the messages. There might
->        be other thread that will never get scheduled a nobody would
->        printk the messages on the related console.
-
-That is what atomic consoles are for. Until atomic consoles are
-available, that situation is covered by @oops_in_progress and
-console_flush_on_panic().
-
-> This is the race that I see with console_trylock(). IMHO, if we solve
-> this race then we do not need console_lock_reacquire().
-
-I do not understand why you continue to mix console_trylock() and
-console_lock_reacquire(). console_lock_reacquire() is only for the
-console_lock() context.
-
-> Well, I might be wrong. It is Friday evening. I still do not have
-> the entire picture. I probably should have waited for Monday.
-
-I believe that you sense a danger with direct printing and
-console_trylock(). It allows for scenarios like your example that end up
-relying on kthreads to finish the printing (if there is no
-panic). Mainline already has this issue because console_lock() can also
-be scheduled away and console_trylock() has no chance to print. This
-really is the same issue and ultimately relies on @oops_in_progress and
-console_flush_on_panic() to get the messages out.
-
-I believe you are hinting at the worst-case scenario: a kthread getting
-scheduled out while printing and never seeing a CPU again because the
-system is so busy. Assuming the system does not panic, no printing would
-be seen on that console anymore, even if direct printing is enabled.
-
-The only solution I see (aside from atomic consoles) is to disable
-preemption during printing. Perhaps for non-atomic consoles, this is
-what we need to do. That, together with a new console_trylock() variant,
-should avoid this concern. Do you agree? Do we want to go that route?
-
-Disabling preemption would be a problem moving forward for the fbcon
-because, for the future, I really would like fbcon to live in a
-sleepable context. I already have some new ideas about this. But that is
-not a topic for this series.
-
-John
-
-P.S. By "new console_trylock() variant" I mean something for the
-console_trylock() context like:
-
-1. grab @console_sem with down_trylock_console_sem()
-
-2. spin on atomic_tryblock()
-
-If console_thread_printing_enter() disables preemption, this should work
-about as well as the current owner/waiter logic for @console_sem. I can
-do some prototype testing to see if there is some detail I am missing.
-
-John

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C452D4D6885
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8744D6880
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350969AbiCKSiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S1350963AbiCKSir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350924AbiCKSic (ORCPT
+        with ESMTP id S1350925AbiCKSic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 13:38:32 -0500
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BFC123BDB
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:37:24 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id D23855C020E;
-        Fri, 11 Mar 2022 13:37:23 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09131E8B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:37:28 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5AC9F5C0270;
+        Fri, 11 Mar 2022 13:37:24 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 11 Mar 2022 13:37:23 -0500
+  by compute2.internal (MEProxy); Fri, 11 Mar 2022 13:37:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=e95vsXP8jrOyuF
-        run5UmlX0V2bedBHGJryguMu0faC4=; b=Aeu/f/mie3aIVmoHLJLu/tlQwDCvFY
-        dgFIDrQ3u3efDBP8d1yJFDb6Wr1haN+okgglNFCKK+8il1qJpEGp6UGl+b+lcTw2
-        ervx3bdd8lJbv4DrVFkSWJO47L/LDySOzOnHgq0eV9CBDkVSWw8bJM/RMzqu9oll
-        M0oM8dGkri/a7XxCG1DWDOJI5PyVI1kciHH63VBf1Njc34RvogGhJv7mydwW7XrQ
-        agENw2xGIEpPewdQaA2Ds10BJrE48guSK1sxkjhmf7ApOzz6KQzK1fK1iK3zeS8V
-        dH0OlB9AOcJtxKhc3U6ltRAJ8LXIBuB7oyW2PhJJYRRbmegYptpOso/w==
+        :reply-to:sender:subject:subject:to:to; s=fm3; bh=j1NPISH+l624H2
+        cG6MYTSkySP6eLhrxXfSj11vAvYwo=; b=V3vSXoaFybxo84Ee4yrWh3V5zGpdmL
+        AeVQsqJqkloux83Pa9wzI3sqii1Pam2/d1kKcKn75EQBtPPyCbdxV6QtH3WJn2pg
+        1VhBRwT3FylAn50qk5xAJeag6+Iwb+BvPta7dLhlHucnWkh0XknZNqFGiVhRGkZi
+        fVm8OlqdwHCjVivNTo0vX5arzzeCHjQx31eQDFfm4puq94nz8WMTZpUUm9QcRK0V
+        3iXzIn3Zw/8IGjYI2o9JxugM/lTsyx7Ecyh/oQsu+tQTt/D03gMRTEywvkIWXbsy
+        cYA43HydClVmi0hwFjAS0Mtb8yQum9pruTcNvP7SXJK6r2vkFJCMk1ZA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=e95vsXP8jrOyuFrun5UmlX0V2bedBHGJryguMu0faC4=; b=eGEV6CNW
-        JSiOrcEAknykSvmnNrnSa3nWPACWWOH//RfoelfIROxsGSKlnq3CBKgrPvZ3Zo5G
-        +QqBMgXHULRaClhLpIQEpvDfKUkG2OEYvJ7pafepuqteoDL7TsQtRhduvk7olpAF
-        DalsICTswRSjeKpHBYL/2q69VNsj1HfrI3rXW9h4sIPO2BY2GUBDS54CiLmqjFD9
-        H8sKXMgoEieYhtWb8EylL1YUxz5hXQenNwHFz7L0tbr8gJvAmYVnLpobkejLQr/t
-        8FLAaAwwcg12WgXEbKOGlpzuwRLg8pRM8/smlN4zAAK/t+xLw7nWtOX3oyPwmqg6
-        ZtZeKgSa/MAZ7Q==
-X-ME-Sender: <xms:45YrYv9TRJ2kxphcQRN8MmUrZ0Df78KFDseK2Pk-bZkFKDtHxTXESA>
-    <xme:45YrYrv5mDJbiiDxT--n8cA8NSXwGzFZJ36nwDd0kb4KwWhnlVVB5e2-NPWcPePBr
-    rAGBBt-GUp2GNYZMQ>
-X-ME-Received: <xmr:45YrYtCuRFXuKpX5oyHCTHI_7hrRUzxdLOkIZCkhlK9h6ed5ko8M-EdrAe-jzeuhMOFEIjtF>
+        fm2; bh=j1NPISH+l624H2cG6MYTSkySP6eLhrxXfSj11vAvYwo=; b=e9mb3dlK
+        uxl6FtHxHyD8ArjJvdc3+DWkr20woot6m2OkSgtUeg9N/vGCDGTtzAffFljcdxyr
+        +UFHhE5fxD5h3uq4lbBQ8r2Q0tJ6NcgBrYZddPWv2GJPbR/P/JT1aRSfAD0mAOJL
+        +OxNwPmKdCBGR8thF2HVT7U33uvdrUW+qGzHhqyYkVmdDo+BnWtFiDtE5fsAH+92
+        zWk8Iwe1Xqwcrnf2njM7Z7D1j9F86oYGP7D/CVbC+xg4ju9Bg8+GJGAaxpUQLmXQ
+        uwTN9f/Y2ydIycoCUF19M3XfKuvHh8cZfcVM4XYEgr0dXqnbQMCVyN3AAGaFGNRY
+        RG3rNOf4I7LC6w==
+X-ME-Sender: <xms:5JYrYr0JvtFT8X6pr5BXbZLYKsmIJZgkNeZ9nhexpnwtaed332Y-dg>
+    <xme:5JYrYqEP3DJpBwoGmReyEcoctnb9kVYE7J3wV9fCnk7jYKFo_pnN5HIzQbOZ6OJ76
+    MWIkV2S82q4WOropw>
+X-ME-Received: <xmr:5JYrYr6liVvPy_774szB04b55v_6dnkmMKu14RyRjUrZ4Rt71g82d-nhC4uN-cdw-5-sh0mN>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvvddgudduvdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefhvffufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
     jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeeije
     euvdeuudeuhfeghfehieeuvdetvdeugfeigeevteeuieeuhedtgeduheefleenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
+    shhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
     gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:45YrYre68M8Tp8W9XDso0-MY4iyiZTiUqlDfhIoWArnILYSN6Td1Zg>
-    <xmx:45YrYkOuN-C1QTeKCbIZ5-tVr2q-hfmfzME0GhCqltffwg3mjrPIXg>
-    <xmx:45YrYtkA8L4O2taBBMMnSmbdea3Nkfj2KjUd7GzvaMEaI8RRagz6nw>
-    <xmx:45YrYjr3lQUOYHmSVpqsJVJfONQdPhUfj5UWkQWJSz48ScuzOsAWEg>
+X-ME-Proxy: <xmx:5JYrYg2yj3hxwNOb6oEuummSx4XhFt4IDtICiyHdF6AySuBXmsDIOg>
+    <xmx:5JYrYuFBZhXdSXovR6ylx7q7-m9cZggRV22DE58IDVql1iu2i-psmQ>
+    <xmx:5JYrYh_PDFawYqypGs1T8QIIQNr7sbfyJ4XiCUYTYCcIuo3YHOWobA>
+    <xmx:5JYrYhBw2WZUzgR7SJzmZt13wAj_4OMNcEfVCWUT9_csn_QvhZVVfw>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
  11 Mar 2022 13:37:23 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
@@ -71,9 +71,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Oscar Salvador <osalvador@suse.de>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v7 4/5] mm: cma: use pageblock_order as the single alignment
-Date:   Fri, 11 Mar 2022 13:36:55 -0500
-Message-Id: <20220311183656.1911811-5-zi.yan@sent.com>
+Subject: [PATCH v7 5/5] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
+Date:   Fri, 11 Mar 2022 13:36:56 -0500
+Message-Id: <20220311183656.1911811-6-zi.yan@sent.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311183656.1911811-1-zi.yan@sent.com>
 References: <20220311183656.1911811-1-zi.yan@sent.com>
@@ -92,68 +92,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-Now alloc_contig_range() works at pageblock granularity. Change CMA
-allocation, which uses alloc_contig_range(), to use pageblock_order
-alignment.
+alloc_contig_range() now only needs to be aligned to pageblock_order,
+drop virtio_mem size requirement that it needs to be the max of
+pageblock_order and MAX_ORDER.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
 ---
- include/linux/cma.h    | 4 ++--
- include/linux/mmzone.h | 5 +----
- mm/page_alloc.c        | 4 ++--
- 3 files changed, 5 insertions(+), 8 deletions(-)
+ drivers/virtio/virtio_mem.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/cma.h b/include/linux/cma.h
-index a6f637342740..63873b93deaa 100644
---- a/include/linux/cma.h
-+++ b/include/linux/cma.h
-@@ -17,11 +17,11 @@
- #define CMA_MAX_NAME 64
+diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
+index e7d6b679596d..e07486f01999 100644
+--- a/drivers/virtio/virtio_mem.c
++++ b/drivers/virtio/virtio_mem.c
+@@ -2476,10 +2476,10 @@ static int virtio_mem_init_hotplug(struct virtio_me=
+m *vm)
+ 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
 =20
- /*
-- * TODO: once the buddy -- especially pageblock merging and alloc_contig_r=
-ange()
-+ *  the buddy -- especially pageblock merging and alloc_contig_range()
-  * -- can deal with only some pageblocks of a higher-order page being
-  *  MIGRATE_CMA, we can use pageblock_nr_pages.
-  */
--#define CMA_MIN_ALIGNMENT_PAGES MAX_ORDER_NR_PAGES
-+#define CMA_MIN_ALIGNMENT_PAGES pageblock_nr_pages
- #define CMA_MIN_ALIGNMENT_BYTES (PAGE_SIZE * CMA_MIN_ALIGNMENT_PAGES)
-=20
- struct cma;
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 962b14d403e8..0725c50ca0cb 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -54,10 +54,7 @@ enum migratetype {
- 	 *
- 	 * The way to use it is to change migratetype of a range of
- 	 * pageblocks to MIGRATE_CMA which can be done by
--	 * __free_pageblock_cma() function.  What is important though
--	 * is that a range of pageblocks must be aligned to
--	 * MAX_ORDER_NR_PAGES should biggest page be bigger than
--	 * a single pageblock.
-+	 * __free_pageblock_cma() function.
+ 	/*
+-	 * TODO: once alloc_contig_range() works reliably with pageblock
+-	 * granularity on ZONE_NORMAL, use pageblock_nr_pages instead.
++	 * alloc_contig_range() works reliably with pageblock
++	 * granularity on ZONE_NORMAL, use pageblock_nr_pages.
  	 */
- 	MIGRATE_CMA,
- #endif
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c2db271b874f..0f96bd57c258 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -9065,8 +9065,8 @@ int __alloc_contig_migrate_range(struct compact_contr=
-ol *cc,
-  *			be either of the two.
-  * @gfp_mask:	GFP mask to use during compaction
-  *
-- * The PFN range does not have to be pageblock or MAX_ORDER_NR_PAGES
-- * aligned.  The PFN range must belong to a single zone.
-+ * The PFN range does not have to be pageblock aligned. The PFN range must
-+ * belong to a single zone.
-  *
-  * The first thing this routine does is attempt to MIGRATE_ISOLATE all
-  * pageblocks in the range.  Once isolated, the pageblocks should not
+-	sb_size =3D PAGE_SIZE * MAX_ORDER_NR_PAGES;
++	sb_size =3D PAGE_SIZE * pageblock_nr_pages;
+ 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
+=20
+ 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
 --=20
 2.35.1
 

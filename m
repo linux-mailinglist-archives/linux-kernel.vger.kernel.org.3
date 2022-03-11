@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B094D6150
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CD14D615D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348548AbiCKMNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S1348555AbiCKMPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348322AbiCKMNV (ORCPT
+        with ESMTP id S1348533AbiCKMPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:13:21 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A618617927F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:12:18 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 208C91F38D;
-        Fri, 11 Mar 2022 12:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647000737; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GAIY4yuVMOLPaV3LWpBMeDIEu3zQzohlPZVsreJow7E=;
-        b=W7Y3UDk2g3Tesn+BOr/Tm78BANNrnR/uDoYHV6fW2Mb41YdRLn3Iv5GD/Nf49ANfoPm3w7
-        RCIRwIy0knPmCnnt72jhNdmfaeY3Jj+QhjOjhpgspqpNynH8G7CwOcDba00QUtLHpNryYJ
-        Z8hdaG1b7/iNHlpQkRbzAx5Sce0DI24=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E2847A3B97;
-        Fri, 11 Mar 2022 12:12:16 +0000 (UTC)
-Date:   Fri, 11 Mar 2022 13:12:16 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kthread: Make it clear that create_kthread() might be
- terminated by any fatal signal
-Message-ID: <Yis8oPagDlPNQM0y@alley>
-References: <20220310093455.15176-1-pmladek@suse.com>
- <871qz9brp7.fsf@email.froward.int.ebiederm.org>
+        Fri, 11 Mar 2022 07:15:38 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812AF186212;
+        Fri, 11 Mar 2022 04:14:34 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22B9kmH9007519;
+        Fri, 11 Mar 2022 13:14:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=EdcURazVt+c0nmYLTmhQVE6ArzEwbBcfE+iE4T18VC4=;
+ b=c3vrx9fNjx0k4xb8T8VUTbXxkKJGtXIhm1PK4yIxi5CV+dY16aiCLht8fjepJF3OZhbF
+ RowmcrTjjZBrHVtysJPjNd1TmXK5hf1MT/rpDQS4xLCkLABySRxlSMTVFfaPHLa+sNYH
+ K9zzqcLN0gSNjWb9OnaVgSnP/fWpOa3mRXdykU9MHy4PhtYHMdR18tyoFbJ0B2h1b/ls
+ kbDXCHuI5sI1AK5ZNTSbLZie1Ly5VaqlLnQZ9HkhqBALhJo2KJH5X/ZiXI23zoiLpKQr
+ z+0SLR04K2w3I/qds6e8Mbbd/iLZyR+GemXhfadZ4ZIPYgMZVUyjptdslBfiCWuu9YRS ig== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3eqx822xpc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 13:14:18 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 72E2710002A;
+        Fri, 11 Mar 2022 13:14:17 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6A2F921E69C;
+        Fri, 11 Mar 2022 13:14:17 +0100 (CET)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 11 Mar 2022 13:14:16
+ +0100
+From:   Fabien Dessenne <fabien.dessenne@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Fabien Dessenne <fabien.dessenne@foss.st.com>
+Subject: [PATCH] ARM: dts: stm32: fix pinctrl node name warnings (MPU soc)
+Date:   Fri, 11 Mar 2022 13:13:23 +0100
+Message-ID: <20220311121323.18125-1-fabien.dessenne@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871qz9brp7.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-11_05,2022-03-11_02,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-03-10 12:14:28, Eric W. Biederman wrote:
-> Petr Mladek <pmladek@suse.com> writes:
-> 
-> > The comments in kernel/kthread.c create a feeling that only SIGKILL
-> > is able to break create_kthread().
->                    ^^^^^^^^^^^^^^^^ __kthread_create_on_node
-> 
-> Signals can't affect create_kthread in any was as it is only called by
-> kthreadd.  It is __kthread_create_on_node which gets interrupted by
-> fatal signals.
+The recent addition pinctrl.yaml in commit c09acbc499e8 ("dt-bindings:
+pinctrl: use pinctrl.yaml") resulted in some node name warnings.
+Fix the node names to the preferred 'pinctrl'.
 
-Great catch! I wanted to use the public API. I missed that
-create_kthread() is used by the "kthreadd" side.
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp131.dtsi | 2 +-
+ arch/arm/boot/dts/stm32mp151.dtsi | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Heh, there actually is "kthread_create()" macro that substitutes
-kthread_create_on_node().
+diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+index 86126dc0d898..57a911cddebe 100644
+--- a/arch/arm/boot/dts/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/stm32mp131.dtsi
+@@ -164,7 +164,7 @@ ts_cal2: calib@5e {
+ 		 * Break node order to solve dependency probe issue between
+ 		 * pinctrl and exti.
+ 		 */
+-		pinctrl: pin-controller@50002000 {
++		pinctrl: pinctrl@50002000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp135-pinctrl";
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 1cfc2f011e70..489fb9979085 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1602,7 +1602,7 @@ tamp: tamp@5c00a000 {
+ 		 * Break node order to solve dependency probe issue between
+ 		 * pinctrl and exti.
+ 		 */
+-		pinctrl: pin-controller@50002000 {
++		pinctrl: pinctrl@50002000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp157-pinctrl";
+@@ -1733,7 +1733,7 @@ gpiok: gpio@5000c000 {
+ 			};
+ 		};
+ 
+-		pinctrl_z: pin-controller-z@54004000 {
++		pinctrl_z: pinctrl@54004000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp157-z-pinctrl";
+-- 
+2.25.1
 
-
-> > In reality, wait_for_completion_killable() might be killed by any
-> > fatal signal that does not have a custom handler:
-> >
-> > Update the comments in kernel/kthread.c to make this more obvious.
-> 
-> Except for the minor nit in the change description.
-> Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
-
-Thanks.
-
-I am going to send v2 next week to give time more potential
-reviewers.
-
-Best Regards,
-Petr

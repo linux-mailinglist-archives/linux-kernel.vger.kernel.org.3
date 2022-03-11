@@ -2,95 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A444D6A0F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7DE4D6AE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiCKW6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 17:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S229457AbiCKW3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiCKW6i (ORCPT
+        with ESMTP id S229447AbiCKW3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:58:38 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 53CB224F7B1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:48:23 -0800 (PST)
-Received: (qmail 1595351 invoked by uid 1000); 11 Mar 2022 16:01:40 -0500
-Date:   Fri, 11 Mar 2022 16:01:40 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
-        rob@robgreener.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] memory leak in usb_get_configuration
-Message-ID: <Yiu4tCONfHVH1Qfv@rowland.harvard.edu>
-References: <000000000000351b8605d9d1d1bf@google.com>
+        Fri, 11 Mar 2022 17:29:15 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B859C3D2337
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:18:26 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id q189so10890269oia.9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:18:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ouXKxtl+8G+GwtOSfWWV903AmhWVHKS99b2n31iKIp0=;
+        b=O1KTLBkViqTZcE4jO3SOzLYQ8Mei2Q0WFKGyWQ7q1Z8YSG0iZna9ofEhD8FI7UWF6z
+         tPER/jc5vn1cs81+THtmfmovsASEuu8cL32uJb60hesZuTGIhUY65eyZMFg2cc47Q73Q
+         FuhcV/gVHTTrsUcWIYK3CUEyun16UeMGBpUYAvy41TxF1qtIZaveH3q6GuDpVV7wiXnZ
+         i1dmjE90JWtGhYePMiyO51edeJlKCZz5Vea3iD7NHYxibiq//Ld9uhfyIyRWRQFWl/7P
+         tSq33q/j6F+ToeLOezKn+VNRlqO0s0NXR7GYYAyHhIcT6ZCffDol6e78+d61FdBJ6Ywf
+         VMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ouXKxtl+8G+GwtOSfWWV903AmhWVHKS99b2n31iKIp0=;
+        b=xHCROHdPg/Um69LRCBoyryliSoorrR9ddjEGsBTgJVJnTgFcsFjjTA300PcvO+uMAR
+         sJvgz8Ygavk4iex0eYaQaxU+V11gTBHN0yJ3ZzGZz0dRlwGNBY9mIiPgJ91uU3dn7BgA
+         wsN78WUnCsvonirpWrXGcYFC3vRLYTqgZ8dxhrMMV+zRuwNUWME3q0QFPc04X2/Esd8z
+         NAc4Inva7wrNXj1Rt818m0Xbq215SdWs/7hVypWJWg2RMAhyFxFaJVCTKWlgIkzTUMyJ
+         0iQkXU1nUBkQGW8S+eBkpWkKVU6oo8MRult0xBkNa4iNtMMY5jE1Ls8UyDTmTZzAHiRm
+         3MXg==
+X-Gm-Message-State: AOAM533fADhK2bAGNYzwKGCzKQYiVDWmjM2cARit0mgfP4F1xVIC4Z3z
+        v19EUxbQKNnApUkAVmi3s6a961+evtTPlg==
+X-Google-Smtp-Source: ABdhPJy5imBF8v+itpeZObmG9hNl+BNIFPxFEpa5iCCi6LwHq9hqq00WyZ3eP2YdWvG14iZkBA/VnA==
+X-Received: by 2002:a05:6870:b42a:b0:d4:fc95:35e8 with SMTP id x42-20020a056870b42a00b000d4fc9535e8mr11876861oap.4.1647032510568;
+        Fri, 11 Mar 2022 13:01:50 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id j10-20020a4ad2ca000000b0031c515672d0sm4112516oos.23.2022.03.11.13.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 13:01:50 -0800 (PST)
+Date:   Fri, 11 Mar 2022 15:01:48 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mathieu.poirier@linaro.org
+Subject: Re: [PATCH] remoteproc: Use unbounded/high priority workqueue for
+ recovery work
+Message-ID: <Yiu4vKuqWHQ5wfZ1@builder.lan>
+References: <1642620644-19297-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000351b8605d9d1d1bf@google.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1642620644-19297-1-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 03:54:24PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88810c0289e0 (size 32):
->   comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
->   hex dump (first 32 bytes):
->     09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
->     3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
->   backtrace:
->     [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
->     [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
->     [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
->     [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
->     [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
->     [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
->     [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
->     [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
->     [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
->     [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
->     [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
->     [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+On Wed 19 Jan 13:30 CST 2022, Mukesh Ojha wrote:
 
-The console log shows that this is connected to gspca_dev_probe.  Let's 
-see who's calling it...
+> There could be a scenario where there is too much load(n number
+> of tasks which is affined) on a core on which rproc recovery
+> is queued. Due to which, it takes number of seconds to complete
+> the recovery.
+> 
+> If we make this queue unbounded and move it to high priority worker
+> pool then this work can be attempted to finished in less time.
 
-Alan Stern
+I unfortunately find this reasoning for adding WQ_HIGHPRI rather
+speculative. Please describe a concrete case that warrants the new
+work queue to be high priority.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/  0014404f9c18
+What is "number of seconds", what is "less time" and why is it more
+important to recover some remote processor than whatever else the system
+is busy doing?
 
-Index: usb-devel/drivers/media/usb/gspca/gspca.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/gspca/gspca.c
-+++ usb-devel/drivers/media/usb/gspca/gspca.c
-@@ -1599,6 +1599,7 @@ int gspca_dev_probe(struct usb_interface
- 	if (dev->descriptor.bNumConfigurations != 1) {
- 		pr_err("%04x:%04x too many config\n",
- 		       id->idVendor, id->idProduct);
-+		dump_stack();
- 		return -ENODEV;
- 	}
- 
+Thanks,
+Bjorn
+
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 69f51ac..efb6316 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -59,6 +59,7 @@ static int rproc_release_carveout(struct rproc *rproc,
+>  
+>  /* Unique indices for remoteproc devices */
+>  static DEFINE_IDA(rproc_dev_index);
+> +static struct workqueue_struct *rproc_recovery_wq;
+>  
+>  static const char * const rproc_crash_names[] = {
+>  	[RPROC_MMUFAULT]	= "mmufault",
+> @@ -2752,8 +2753,10 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
+>  	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
+>  		rproc->name, rproc_crash_to_string(type));
+>  
+> -	/* Have a worker handle the error; ensure system is not suspended */
+> -	queue_work(system_freezable_wq, &rproc->crash_handler);
+> +	if (rproc_recovery_wq)
+> +		queue_work(rproc_recovery_wq, &rproc->crash_handler);
+> +	else
+> +		queue_work(system_freezable_wq, &rproc->crash_handler);
+>  }
+>  EXPORT_SYMBOL(rproc_report_crash);
+>  
+> @@ -2802,6 +2805,11 @@ static void __exit rproc_exit_panic(void)
+>  
+>  static int __init remoteproc_init(void)
+>  {
+> +	rproc_recovery_wq = alloc_workqueue("rproc_recovery_wq", WQ_UNBOUND |
+> +				WQ_HIGHPRI | WQ_FREEZABLE, 0);
+> +	if (!rproc_recovery_wq)
+> +		pr_err("remoteproc: creation of rproc_recovery_wq failed\n");
+> +
+>  	rproc_init_sysfs();
+>  	rproc_init_debugfs();
+>  	rproc_init_cdev();
+> @@ -2818,6 +2826,8 @@ static void __exit remoteproc_exit(void)
+>  	rproc_exit_panic();
+>  	rproc_exit_debugfs();
+>  	rproc_exit_sysfs();
+> +	if (rproc_recovery_wq)
+> +		destroy_workqueue(rproc_recovery_wq);
+>  }
+>  module_exit(remoteproc_exit);
+>  
+> -- 
+> 2.7.4
+> 

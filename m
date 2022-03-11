@@ -2,91 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE934D6222
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EDA4D620C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348799AbiCKNLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S1348754AbiCKNIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347958AbiCKNLh (ORCPT
+        with ESMTP id S245300AbiCKNIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:11:37 -0500
-X-Greylist: delayed 185 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 05:10:33 PST
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CECD1C232C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:10:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1647004231;
-        bh=+6S3oZhJXthUPbzYWd80fospAGyDMx5urCnGtN8Fuj4=;
-        h=From:To:Cc:Subject:Date;
-        b=qLMA3oQpr1qpLuveyck7eeDfOpAR0VFC8Ceis2lOFJGk+bmJ/Z9iVkcmtbXFMVFBF
-         nlgSW13So18u7M4ZX1vYX/bq2XT7ou85KsMiwj+8RrTTrMQvp9cmTwptNPyoz5hEb8
-         rczPoCqVduNq+R1Blw3M3FOkZjB1XL20LD1qkJAw=
-Received: from localhost.localdomain ([111.193.130.237])
-        by newxmesmtplogicsvrsza7.qq.com (NewEsmtp) with SMTP
-        id 1D0A74D3; Fri, 11 Mar 2022 21:07:16 +0800
-X-QQ-mid: xmsmtpt1647004036tazonpkur
-Message-ID: <tencent_B5D64530EB9C7DBB8D2C88A0C790F1489D0A@qq.com>
-X-QQ-XMAILINFO: NwFwz4tS/C+e9pALN+3gOw5wbLA8/rE6Q24PsFnaXIRlbH5x2WkoOxlvUATV65
-         gvv9TH6OGrtSRkWS1pEHG/gES0KULNpUeY/5lnUFbdBdJI9/c9P1bASbItuHS+B4DXkt/ot/pRE3
-         OAq1B0EKIsWfuUzX93eAOJor4nR44H6anUgGprjL1/JBvVe5grmInu7JZhjBWanoDIFKr6mBgTm1
-         327zIDpACdqS+WSK9JHT2JqUSyMAulKlAVHclyDGycqyNDBK/rjLTLyJX41mHeh/BmP4veascKYL
-         cgq2So/6t5WCO71slkwT2820EoHPf5sET/kc7Kn2kLYYJ/O+vY5F108bLEzLOPHsLgH8dywgXw7a
-         vyC8Sdu/UvK4D7kMwt9SmLOgvw9z9u49mUhAxZwYx4FTKmg1XvcG04RA8tjiKSm58XQpSGe7BZFU
-         OM7LkaVUoXRwVqq0yMWoTzdwxsvobxxeAEgT/IaT/NZgxmXEF2ay5+umMybeJz9aSV1TO1E0lsly
-         RSMc3rf5nUfGQKRRcg7UYZw3KMLslV8pxufSiaCm8Niqzv8sJ64RoCtkf1UkPcppoL0RSNi7KLlb
-         WYXZSwfaJwm+6Cacp+jkXyweuKSCk9GaJSvDlm+WhpZRsut0PC+ZiyNV3Icl9IWNdaIiV1Kf+S4Z
-         aOX3Cpy4AELxeRQPNE1uHBXKklnhCUOrytyQ8oVJWzuWetF+SJyn0k/cOgFQsDGK3kO9DWZGVDop
-         0MhdwxsyTB0bfF6aCcn4bFiSvWgteZlo+pnBTno/Ooq1qd8/Wgg2YBKHHziM/LWBQxQtjFYeQaBN
-         HKPKrV/oMU+uA/WeSsI95zjOgXP6tLXUsVNSaN2gwHOPpaUyNsyX6twS6gU1fybptcKlDiNHQn7J
-         liZklEUq89FmWZUPuvP+/LLXRylOePxeMy/RAbxsOp
-From:   Weiguo Li <liwg06@foxmail.com>
-To:     dave@stgolabs.net, dbueso@suse.de, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org
-Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf bench: Fix null check
-Date:   Fri, 11 Mar 2022 21:07:16 +0800
-X-OQ-MSGID: <20220311130716.257405-1-liwg06@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 11 Mar 2022 08:08:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF92A1C1ED1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:07:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93666B82BF2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 13:07:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D17C340E9;
+        Fri, 11 Mar 2022 13:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647004042;
+        bh=58ior3d6CroSXdJjh1+e5H+RH2gmDYHOSIAoeVBmSb8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uBqzrVJGdauHil1v0bp1o/bMsBHndzEP28TPFcfnXpoxPskDOWiq6dy18dLMKIPlU
+         HiBBYt+Z3tYPaNnrasMcRHO77H8BFFlCHA2qOB3Ujedcd59Hl1vIZaNejjyFlUWqgr
+         yaEQaT9Ymt9CjxlyM9m793t85XP7B1jY9gBwa/D0pp0h3bTwrYZ4EQS56wgAV6ohQA
+         wc2c/bY1ac06olXZukn88U63Rz+xYpArsxtiNyE346QEAmzByNQ6qwKOYl2c1tJfq1
+         Rrz2n4c/AOuRcxy7MJQ77JFkQEBb+rdfoEJbUz0C2N++lG8QTjHcWiWjSqnPKyr2vI
+         e3lLM0lkwnMnw==
+Date:   Fri, 11 Mar 2022 14:07:19 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Scenario TREE07 with CONFIG_PREEMPT_DYNAMIC=n?
+Message-ID: <20220311130719.GC96127@lothringen>
+References: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
+ <20220310224103.GA94994@lothringen>
+ <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We did a null check after "epollfdp = calloc(...)", but we checked
-"epollfd" instead of "epollfdp".
+On Thu, Mar 10, 2022 at 02:52:19PM -0800, Paul E. McKenney wrote:
+> On Thu, Mar 10, 2022 at 11:41:03PM +0100, Frederic Weisbecker wrote:
+> > On Thu, Mar 10, 2022 at 01:56:30PM -0800, Paul E. McKenney wrote:
+> > > Hello, Frederic,
+> > > 
+> > > I recently added CONFIG_PREEMPT_DYNAMIC=n to the TREE07 file, and since
+> > > then am getting roughly one RCU CPU stall warning (or silent hang)
+> > > per few tens of hours of rcutorture testing on dual-socket systems.
+> > > The stall warnings feature starvation of RCU grace-period kthread.
+> > > 
+> > > Any advice on debugging this?
+> > 
+> > Oh, I'm testing that!
+> 
+> Even better, thank you!  ;-)
 
-Signed-off-by: Weiguo Li <liwg06@foxmail.com>
+Here is what I'm testing below. If it happens to work though, it's still not
+the most optimized way of dealing with the UP on SMP situation as we still start
+an exp grace period when we could early return. But since we have a cookie
+to pass to poll_state_synchronize_rcu_expedited()...
+
+Oh but if we were to early check a positive rcu_blocking_is_gp() from
+start_poll_synchronize_rcu_expedited(),
+we could simply return the current value of rcu_state.expedited_sequence without
+doing an rcu_exp_gp_seq_snap() and then pass that to
+poll_state_synchronize_rcu_expedited() which should then immediately return.
+
+Now even if we do that, we still need the below in case the CPUs went offline
+in the middle of start_poll_synchronize_rcu_expedited() (again, assuming this
+fixes the issue. I'm running the test).
+
 ---
- tools/perf/bench/epoll-ctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From 3c9f5df000b9659edbcf38cb87136fea1f8ac682 Mon Sep 17 00:00:00 2001
+From: Frederic Weisbecker <frederic@kernel.org>
+Date: Fri, 11 Mar 2022 13:30:02 +0100
+Subject: [PATCH] rcu: Fix rcu exp polling
 
-diff --git a/tools/perf/bench/epoll-ctl.c b/tools/perf/bench/epoll-ctl.c
-index 740ae764537e..134612bde0cb 100644
---- a/tools/perf/bench/epoll-ctl.c
-+++ b/tools/perf/bench/epoll-ctl.c
-@@ -106,7 +106,7 @@ static void nest_epollfd(void)
- 	printinfo("Nesting level(s): %d\n", nested);
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+---
+ kernel/rcu/tree_exp.h | 52 ++++++++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 23 deletions(-)
+
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index d5f30085b0cf..69c4dcc9159a 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -794,27 +794,7 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
  
- 	epollfdp = calloc(nested, sizeof(int));
--	if (!epollfd)
-+	if (!epollfdp)
- 		err(EXIT_FAILURE, "calloc");
+ #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
  
- 	for (i = 0; i < nested; i++) {
+-/**
+- * synchronize_rcu_expedited - Brute-force RCU grace period
+- *
+- * Wait for an RCU grace period, but expedite it.  The basic idea is to
+- * IPI all non-idle non-nohz online CPUs.  The IPI handler checks whether
+- * the CPU is in an RCU critical section, and if so, it sets a flag that
+- * causes the outermost rcu_read_unlock() to report the quiescent state
+- * for RCU-preempt or asks the scheduler for help for RCU-sched.  On the
+- * other hand, if the CPU is not in an RCU read-side critical section,
+- * the IPI handler reports the quiescent state immediately.
+- *
+- * Although this is a great improvement over previous expedited
+- * implementations, it is still unfriendly to real-time workloads, so is
+- * thus not recommended for any sort of common-case code.  In fact, if
+- * you are using synchronize_rcu_expedited() in a loop, please restructure
+- * your code to batch your updates, and then use a single synchronize_rcu()
+- * instead.
+- *
+- * This has the same semantics as (but is more brutal than) synchronize_rcu().
+- */
+-void synchronize_rcu_expedited(void)
++static void __synchronize_rcu_expedited(bool polling)
+ {
+ 	bool boottime = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
+ 	struct rcu_exp_work rew;
+@@ -827,7 +807,7 @@ void synchronize_rcu_expedited(void)
+ 			 "Illegal synchronize_rcu_expedited() in RCU read-side critical section");
+ 
+ 	/* Is the state is such that the call is a grace period? */
+-	if (rcu_blocking_is_gp())
++	if (rcu_blocking_is_gp() && !polling)
+ 		return;
+ 
+ 	/* If expedited grace periods are prohibited, fall back to normal. */
+@@ -863,6 +843,32 @@ void synchronize_rcu_expedited(void)
+ 
+ 	if (likely(!boottime))
+ 		destroy_work_on_stack(&rew.rew_work);
++
++}
++
++/**
++ * synchronize_rcu_expedited - Brute-force RCU grace period
++ *
++ * Wait for an RCU grace period, but expedite it.  The basic idea is to
++ * IPI all non-idle non-nohz online CPUs.  The IPI handler checks whether
++ * the CPU is in an RCU critical section, and if so, it sets a flag that
++ * causes the outermost rcu_read_unlock() to report the quiescent state
++ * for RCU-preempt or asks the scheduler for help for RCU-sched.  On the
++ * other hand, if the CPU is not in an RCU read-side critical section,
++ * the IPI handler reports the quiescent state immediately.
++ *
++ * Although this is a great improvement over previous expedited
++ * implementations, it is still unfriendly to real-time workloads, so is
++ * thus not recommended for any sort of common-case code.  In fact, if
++ * you are using synchronize_rcu_expedited() in a loop, please restructure
++ * your code to batch your updates, and then use a single synchronize_rcu()
++ * instead.
++ *
++ * This has the same semantics as (but is more brutal than) synchronize_rcu().
++ */
++void synchronize_rcu_expedited(void)
++{
++	__synchronize_rcu_expedited(false);
+ }
+ EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
+ 
+@@ -903,7 +909,7 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
+ 	if (s & 0x1)
+ 		return;
+ 	while (!sync_exp_work_done(s))
+-		synchronize_rcu_expedited();
++		__synchronize_rcu_expedited(true);
+ 	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+ 	s = rnp->exp_seq_poll_rq;
+ 	if (!(s & 0x1) && !sync_exp_work_done(s))
 -- 
 2.25.1
-
 

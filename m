@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE144D58AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84E14D58B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345934AbiCKDHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 22:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
+        id S1345577AbiCKDME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 22:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238895AbiCKDHU (ORCPT
+        with ESMTP id S235944AbiCKDMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 22:07:20 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835DA19CCFB
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646967978; x=1678503978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1Lqyqm7Fm7LZ9Zgf9Nro6Ch9fX24HO/O/bFeTDIFbnc=;
-  b=ZyhttdVR0Njor2QOLCw4uiWQn2buQSAkFkdMcmcWEE8qMjE85kwE+TtX
-   ut3q48IptdXNJcP0u0yvHY/S/GtQ+ifMIfICqjQkARz6ktdyF0fv331yx
-   Ti+K3iWg5+zfmbcERC3nSuXuEgjnDb3YvKH0vik56AOLNo2OHzjhhQTIq
-   UH0J40UZ/Nr84e+TLo3sKGtESR5AbZclWQS/tqC/MUC1TMekP2CMVAYW9
-   DhU6S1XJQPnTTa5RUcRaXXDCZj3Q3tbeK25i1Hym3e5rhXcEem1wkxwxd
-   rIjO4+YPLpxnwnHYal9SnxiaAPQZFcOH37k6wPpOvnweAhiHnFMF+WIX5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="236090147"
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="236090147"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 19:06:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="688938790"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2022 19:06:16 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSVbc-0005kj-7u; Fri, 11 Mar 2022 03:06:16 +0000
-Date:   Fri, 11 Mar 2022 11:05:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
- expression
-Message-ID: <202203111015.NjLSlxCA-lkp@intel.com>
+        Thu, 10 Mar 2022 22:12:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF7D14006
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:10:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10F28B829B2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:10:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC34C340E8;
+        Fri, 11 Mar 2022 03:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646968254;
+        bh=zlGhTl9/YkiUSMl74eSzNJcDmU9fpb9Qv0PH5mitNac=;
+        h=Date:Subject:From:To:References:In-Reply-To:From;
+        b=NI0JTVBOsR8mkwEzChAHX9DF7OSp6G6powR5W6Txde4/5nJ5blAb6g0vB0fa45ucr
+         Q7xysFapfaeD+TrQpUsSft3xOf0dq8IlM2+wxsjnnk3xQws9N0VnITAQgqou57if7M
+         Kox5NObpSlTloQG0Zk/1QKxrYjL9NPSPGL01WKJkRZrfFw9DEzcqPXuk8Ot2In71Xp
+         M2nBjsB5uqSu1PbudsubPhZ8359aCr8O7g59/WDhCJOVPyRqKfuy38XShztaWPtzTZ
+         09Zl6TfcVDqAm4XP+tcFgCJMy05BwtKicuVi1V0UcSFLpEfciMeqwV8ER4N04X4iCE
+         6aFTFVQOhfAqQ==
+Message-ID: <a475c925-cfe4-abf7-f909-0d883df391a2@kernel.org>
+Date:   Fri, 11 Mar 2022 11:10:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: evict inode cache for frozen fs
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220309214834.3408741-1-jaegeuk@kernel.org>
+ <2a5564bb-463e-d163-0042-34fad42e2e46@kernel.org>
+In-Reply-To: <2a5564bb-463e-d163-0042-34fad42e2e46@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,109 +57,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
-commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
-date:   7 months ago
-config: arc-randconfig-s032-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111015.NjLSlxCA-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e188f3330a13df904d77003846eafd3edf99009d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/ fs/ kernel/ net/ipv4/
+Jaegeuk,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Could you please send v2 patch to mailing list? as I saw the revised
+one has been merged in dev branch.
 
+Otherwise, I've no idea where I should reply "Reviewed-by" tag to...
 
-sparse warnings: (new ones prefixed by >>)
-   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
-   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
-   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
-   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
-   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
-   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
-   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
-   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
-   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
-   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
->> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
->> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
---
-   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:350:17: sparse:     expected struct file **old_fds
-   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:351:17: sparse:     expected struct file **new_fds
-   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
-   fs/file.c:366:17: sparse:    struct file *
->> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
-   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
-   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
---
-   net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
-   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
-   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
->> net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
-   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
-   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
+Thanks,
 
-vim +279 arch/arc/kernel/smp.c
-
-41195d236e8445 Vineet Gupta    2013-01-18  261  
-ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
-41195d236e8445 Vineet Gupta    2013-01-18  263  {
-f2a4aa5646687f Vineet Gupta    2013-11-26 @264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
-41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
-41195d236e8445 Vineet Gupta    2013-01-18  267  
-f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
-f2a4aa5646687f Vineet Gupta    2013-11-26  269  
-41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
-41195d236e8445 Vineet Gupta    2013-01-18  271  
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
-6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
-d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
-41195d236e8445 Vineet Gupta    2013-01-18  280  
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
-82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
-d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
-ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
-41195d236e8445 Vineet Gupta    2013-01-18  291  
-41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
-41195d236e8445 Vineet Gupta    2013-01-18  293  }
-41195d236e8445 Vineet Gupta    2013-01-18  294  
-
-:::::: The code at line 279 was first introduced by commit
-:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
-
-:::::: TO: Vineet Gupta <vgupta@synopsys.com>
-:::::: CC: Vineet Gupta <vgupta@synopsys.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 2022/3/10 9:53, Chao Yu wrote:
+> On 2022/3/10 5:48, Jaegeuk Kim wrote:
+>> Let's purge inode cache in order to avoid the below deadlock.
+>>
+>> [freeze test]                         shrinkder
+>> freeze_super
+>>   - pwercpu_down_write(SB_FREEZE_FS)
+>>                                         - super_cache_scan
+>>                                           - down_read(&sb->s_umount)
+>>                                             - prune_icache_sb
+>>                                              - dispose_list
+>>                                               - evict
+>>                                                - f2fs_evict_inode
+>> thaw_super
+>>   - down_write(&sb->s_umount);
+>>                                                - __percpu_down_read(SB_FREEZE_FS)
+> 
+> Ah, finally we catch this. :)
+> 
+>>
+>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>> ---
+>>   fs/f2fs/debug.c | 1 +
+>>   fs/f2fs/f2fs.h  | 1 +
+>>   fs/f2fs/inode.c | 6 ++++--
+>>   fs/f2fs/super.c | 4 ++++
+>>   4 files changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+>> index 9a13902c7702..cba5eab24595 100644
+>> --- a/fs/f2fs/debug.c
+>> +++ b/fs/f2fs/debug.c
+>> @@ -338,6 +338,7 @@ static char *s_flag[] = {
+>>       [SBI_QUOTA_SKIP_FLUSH]    = " quota_skip_flush",
+>>       [SBI_QUOTA_NEED_REPAIR]    = " quota_need_repair",
+>>       [SBI_IS_RESIZEFS]    = " resizefs",
+>> +    [SBI_IS_FREEZING]    = " freezefs",
+> 
+> Could you please update description of "sb_status" entry in
+> Documentation/ABI/testing/sysfs-fs-f2fs as well?
+> 
+> Thanks,
+> 
+>>   };
+>>   static int stat_show(struct seq_file *s, void *v)
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index 68d791ec8b27..da729f53daa8 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -1293,6 +1293,7 @@ enum {
+>>       SBI_QUOTA_SKIP_FLUSH,            /* skip flushing quota in current CP */
+>>       SBI_QUOTA_NEED_REPAIR,            /* quota file may be corrupted */
+>>       SBI_IS_RESIZEFS,            /* resizefs is in process */
+>> +    SBI_IS_FREEZING,            /* freezefs is in process */
+>>   };
+>>   enum {
+>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>> index ab8e0c06c78c..71f232dcf3c2 100644
+>> --- a/fs/f2fs/inode.c
+>> +++ b/fs/f2fs/inode.c
+>> @@ -778,7 +778,8 @@ void f2fs_evict_inode(struct inode *inode)
+>>       f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
+>>       f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
+>> -    sb_start_intwrite(inode->i_sb);
+>> +    if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING))
+>> +        sb_start_intwrite(inode->i_sb);
+>>       set_inode_flag(inode, FI_NO_ALLOC);
+>>       i_size_write(inode, 0);
+>>   retry:
+>> @@ -809,7 +810,8 @@ void f2fs_evict_inode(struct inode *inode)
+>>           if (dquot_initialize_needed(inode))
+>>               set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
+>>       }
+>> -    sb_end_intwrite(inode->i_sb);
+>> +    if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING))
+>> +        sb_end_intwrite(inode->i_sb);
+>>   no_delete:
+>>       dquot_drop(inode);
+>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+>> index 8e3840973077..4b570b5c2674 100644
+>> --- a/fs/f2fs/super.c
+>> +++ b/fs/f2fs/super.c
+>> @@ -1663,11 +1663,15 @@ static int f2fs_freeze(struct super_block *sb)
+>>       /* ensure no checkpoint required */
+>>       if (!llist_empty(&F2FS_SB(sb)->cprc_info.issue_list))
+>>           return -EINVAL;
+>> +
+>> +    /* to avoid deadlock on f2fs_evict_inode->SB_FREEZE_FS */
+>> +    set_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
+>>       return 0;
+>>   }
+>>   static int f2fs_unfreeze(struct super_block *sb)
+>>   {
+>> +    clear_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
+>>       return 0;
+>>   }
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

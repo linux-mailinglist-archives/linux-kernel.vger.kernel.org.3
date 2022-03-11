@@ -2,144 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01D64D62CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9E34D62D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349047AbiCKOF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
+        id S1349050AbiCKOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349042AbiCKOFU (ORCPT
+        with ESMTP id S241882AbiCKOIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:05:20 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A748FCB43
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647007457; x=1678543457;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eZ0mjAN7vVx+UnkwEjoPi7KN1IG1d+D3MvRtVGuPSRM=;
-  b=nuw0lkLdJ2mO7BVGnYXhln2vaRjnXnX4tKHSG0Cm/lH4L1ZOiquR38vu
-   h5R2F+Jj+aCVUU12v6xx6cJpkAGNgZYt854cVd0LbgFou4WDz6GDfggbP
-   a0cH2eM51o4vvFL8Y85jUTQ2Q/34CrAd7lHG/NIhUDIckMS2jyZwLe15c
-   0zsXyQ1pvY89tBXaIavAZH+qvXsAkIXC8q8AV0Bu0fs9vfWV2+qY7HPgw
-   nPqPYkGdywHJ3PDQkcwbHMlO1tywPGoXo9Cas5uCVbse1Rfkh7L07YOk7
-   0wM/IazEwrftn1PYFVTY0MFKoKhlj0ZFF9uxoufK0yIriiXpk7ceIOuF/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="253138749"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="253138749"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 06:04:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="597116767"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Mar 2022 06:04:08 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSfsF-0006WD-Nh; Fri, 11 Mar 2022 14:04:07 +0000
-Date:   Fri, 11 Mar 2022 22:03:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [davidhildenbrand:cow_fixes_part_3 31/37]
- arch/powerpc/include/asm/book3s/64/pgtable.h:762:84: error: expected ')'
- before '}' token
-Message-ID: <202203112115.rlyxdAhi-lkp@intel.com>
+        Fri, 11 Mar 2022 09:08:06 -0500
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DBA1C57ED;
+        Fri, 11 Mar 2022 06:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647007621; bh=X7QPQb+htRz7ijlZAL5/j6af/llFgL+z+jlTnD4er04=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=kBKz9ja3yPteYgNxZud4I+jBYVWeHmLpYWX7faXPvY8ysYCgTW3HdxfoK6Ru26Ilp
+         S3T/OJCsZG6LU72Iwb2B6bZztPdVGwdLfnRrbgJMOjFVyp0HCoZJgu55vnzXkaKakf
+         fVz/G54FbP2iwqdVSH9e9C1kpJmGNqmjQ9J/ScAz9ygAhutzqN8DDrOdwOcFUs3G2N
+         /Zuyx5DhuN85emmNwT9dgBWl2d3qOgnqlNNLumCbfv1tWAtUogTcCAtQu5uf2MoPCJ
+         GC5yzsNRNFFPLwHDFcdn53ruuU7rPqOGc6DdHWnU3zRKbovRG1tpIgn+xJUF79Lqph
+         U6udsEk3xTeQA==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 993C339E985;
+        Fri, 11 Mar 2022 14:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647007621; bh=X7QPQb+htRz7ijlZAL5/j6af/llFgL+z+jlTnD4er04=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=kBKz9ja3yPteYgNxZud4I+jBYVWeHmLpYWX7faXPvY8ysYCgTW3HdxfoK6Ru26Ilp
+         S3T/OJCsZG6LU72Iwb2B6bZztPdVGwdLfnRrbgJMOjFVyp0HCoZJgu55vnzXkaKakf
+         fVz/G54FbP2iwqdVSH9e9C1kpJmGNqmjQ9J/ScAz9ygAhutzqN8DDrOdwOcFUs3G2N
+         /Zuyx5DhuN85emmNwT9dgBWl2d3qOgnqlNNLumCbfv1tWAtUogTcCAtQu5uf2MoPCJ
+         GC5yzsNRNFFPLwHDFcdn53ruuU7rPqOGc6DdHWnU3zRKbovRG1tpIgn+xJUF79Lqph
+         U6udsEk3xTeQA==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id 371DA39E948;
+        Fri, 11 Mar 2022 14:07:01 +0000 (UTC)
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+Date:   Fri, 11 Mar 2022 16:07:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220311_140701_650581_6E8DF4CB 
+X-CRM114-Status: GOOD (  29.83  )
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/davidhildenbrand/linux cow_fixes_part_3
-head:   1eea84efeea5e210bb4f92b7d64f4c1cc1aa761d
-commit: 43a8e5bbb3d2fe2cd131400b98cbac8f79ba5290 [31/37] powerpc/pgtable: remove _PAGE_BIT_SWAP_TYPE for book3s
-config: powerpc64-buildonly-randconfig-r003-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112115.rlyxdAhi-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/davidhildenbrand/linux/commit/43a8e5bbb3d2fe2cd131400b98cbac8f79ba5290
-        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
-        git fetch --no-tags davidhildenbrand cow_fixes_part_3
-        git checkout 43a8e5bbb3d2fe2cd131400b98cbac8f79ba5290
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash fs/proc/
+On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>>
+>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>> PL022 binding require two clocks to be defined but lpc platform doesn't
+>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>
+>>> Update spi clocks and clocks-names property by adding appropriate clock
+>>> reference to make it compliant with bindings.
+>>>
+>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>> ---
+>>> v2:
+>>> - New patch with similar changeset
+>>> - Send to soc ML
+>>>
+>>>    arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+>>> index c87066d6c995..30958e02d5e2 100644
+>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>                                compatible = "arm,pl022", "arm,primecell";
+>>>                                reg = <0x20084000 0x1000>;
+>>>                                interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>> -                             clock-names = "apb_pclk";
+>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+>>> +                             clock-names = "sspclk", "apb_pclk";
+>>
+>> In fact I'm uncertain if it is the right change, could it happen that the commit
+>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+>> schema pattern?
+> 
+> Good pointm this doesn't quite seem right: it is unlikely that the same clock
+> is used for both the SPI bus and the APB bus.
+> 
+>> Apparently just one clock is wanted on all observed platforms and cases, this
+>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
+>>
+>>          pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>
+>> So, I would vote to fix the device tree bindings schema.
+> 
+> Isn't this just using the wrong name? The name of the macro
+> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
+> rather than the APB clock, so we only need to change clock-names
+> property here and leave it unchanged otherwise.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, the name is wrong, here I'm ready to take the blame:
 
-All errors (new ones prefixed by >>):
+Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device nodes")
 
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                    from arch/powerpc/include/asm/book3s/64/mmu.h:38,
-                    from arch/powerpc/include/asm/mmu.h:405,
-                    from arch/powerpc/include/asm/lppaca.h:46,
-                    from arch/powerpc/include/asm/paca.h:17,
-                    from arch/powerpc/include/asm/current.h:13,
-                    from include/linux/thread_info.h:23,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:10,
-                    from include/linux/pagewalk.h:5,
-                    from fs/proc/task_mmu.c:2:
-   include/linux/swapops.h: In function 'swp_entry_to_pte':
->> arch/powerpc/include/asm/book3s/64/pgtable.h:762:84: error: expected ')' before '}' token
-     762 |                                 ((type) | (((offset) << PAGE_SHIFT) & PTE_RPN_MASK)})
-         |                                 ~                                                  ^
-   include/linux/swapops.h:94:22: note: in expansion of macro '__swp_entry'
-      94 |         arch_entry = __swp_entry(swp_type(entry), swp_offset(entry));
-         |                      ^~~~~~~~~~~
+Noteworthy the commit above presets the same clock name to other PrimeCell
+controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x (SD),
+plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in fact.
 
+On LPC32xx the bus clock source and function clock source for SSP is HCLK.
 
-vim +762 arch/powerpc/include/asm/book3s/64/pgtable.h
+My guess is that the misnamed "apb_pclk" migrated into the schema from
+the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
+firstly fix the schema by removing "apb_pclk" clock. It will leave just one
+clock, so "clock-names" property can be set as optional, and the drop
+the property from the lpc32xx.dtsi.
 
-   745	
-   746	/* Encode and de-code a swap entry */
-   747	#define MAX_SWAPFILES_CHECK() do { \
-   748		BUILD_BUG_ON(MAX_SWAPFILES_SHIFT > SWP_TYPE_BITS); \
-   749		/*							\
-   750		 * Don't have overlapping bits with _PAGE_HPTEFLAGS	\
-   751		 * We filter HPTEFLAGS on set_pte.			\
-   752		 */							\
-   753		BUILD_BUG_ON(_PAGE_HPTEFLAGS & SWP_TYPE_MASK); \
-   754		BUILD_BUG_ON(_PAGE_HPTEFLAGS & _PAGE_SWP_SOFT_DIRTY);	\
-   755		} while (0)
-   756	
-   757	#define SWP_TYPE_BITS 5
-   758	#define SWP_TYPE_MASK		((1UL << SWP_TYPE_BITS) - 1)
-   759	#define __swp_type(x)		((x).val & SWP_TYPE_MASK)
-   760	#define __swp_offset(x)		(((x).val & PTE_RPN_MASK) >> PAGE_SHIFT)
-   761	#define __swp_entry(type, offset)	((swp_entry_t) { \
- > 762					((type) | (((offset) << PAGE_SHIFT) & PTE_RPN_MASK)})
-   763	/*
-   764	 * swp_entry_t must be independent of pte bits. We build a swp_entry_t from
-   765	 * swap type and offset we get from swap and convert that to pte to find a
-   766	 * matching pte in linux page table.
-   767	 * Clear bits not found in swap entries here.
-   768	 */
-   769	#define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val((pte)) & ~_PAGE_PTE })
-   770	#define __swp_entry_to_pte(x)	__pte((x).val | _PAGE_PTE)
-   771	#define __pmd_to_swp_entry(pmd)	(__pte_to_swp_entry(pmd_pte(pmd)))
-   772	#define __swp_entry_to_pmd(x)	(pte_pmd(__swp_entry_to_pte(x)))
-   773	
+> Looking at the driver, I also see that this refers to the clock as
+> "SSP/SPI bus clock", and it reads the rate from that.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yes, that's correct, it's a SPI bus clock with an option to set a rate.
+
+> In case of the LG platform, my impression is that the clocks listed
+> in DT don't reflect the system at all, they all refer to the same
+> fixed clock node at 198000000HZ, which is also used as for the
+> UART and timer nodes. Changing the name on that one doesn't
+> really make it correct, but should not hurt either.
+> 
+>          Arnd
+> 
+
+--
+Best wishes,
+Vladimir

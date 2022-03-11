@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075F24D5D11
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63474D5D18
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiCKIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S231663AbiCKIP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiCKIMh (ORCPT
+        with ESMTP id S229669AbiCKIPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:12:37 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE041B8C95;
-        Fri, 11 Mar 2022 00:11:34 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KFJT157hMz9sdJ;
-        Fri, 11 Mar 2022 16:07:49 +0800 (CST)
-Received: from huawei.com (10.67.174.166) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 11 Mar
- 2022 16:11:32 +0800
-From:   z00314508 <zhengzucheng@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <len.brown@intel.com>
-CC:     <zhengzucheng@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH] cpufreq: fix cpufreq_get() can't get correct CPU frequency
-Date:   Fri, 11 Mar 2022 16:11:11 +0800
-Message-ID: <20220311081111.159639-1-zhengzucheng@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
+        Fri, 11 Mar 2022 03:15:25 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B852E1017DC
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:14:21 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id 9so7088362pll.6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vjht4VjT0qP1PrjcnyRToI5pLA60dRVnlKZQmWleY/U=;
+        b=oI4ar1HB51LBrLmbj/wtrBaWW6l4roM7ESsTGMRB9dhN2Hcp29WpYsyZY9rWS9EwxH
+         abeTHaIOijZcALiFhzhJ5F83AIFNnYHMsdRURSoj4fxWQAoGv6uxuLT+ac26072g9mhb
+         s0V8ep9BdbVbe4ESy0g5oO0jF/UarS3a4063M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vjht4VjT0qP1PrjcnyRToI5pLA60dRVnlKZQmWleY/U=;
+        b=SnK4eqqZxqKwJouE6qYXPvTxNOzyNqjLwC0fSJussYs3JbFfnBfD9avRl2XR4agNSe
+         HKy39HH2mU9DxKfrz7dAKyFDyICvAskyPuFHt29SjkS1iRzN33dM5IbV/VoTSSHGKqwj
+         +zu+LGtuZq+UBTQN4+GAfSdW/4omzbp1M+wnTsCP5T7p/nLfgiGB+5488KAFcggnP8b8
+         pBmtMWGjBFZbJQaQftKcOtYCa7255dKdiRwVaaxoc2VLK7+X0bnlq/IS9Ynt3hQhQ+uu
+         EaMOKyEmS5zXc7d+5clot79KU/J08rOEx3rTLM3OlnAcJYEEhNiBXVjJlSfliWB4tlAi
+         n3FA==
+X-Gm-Message-State: AOAM532mlyb788t14gwBXaZYIesrTXt2Y08EcZgt0plL4uwBzW1L1Nps
+        tuNS0NQ21cyG1pO2NOE57dvGdA==
+X-Google-Smtp-Source: ABdhPJz/saDmNql9Jq1CQ7il2FyVSQ7Bh16oUvFbLTU8pS5XMo0dn0zdMXb1+6ruIfhTQsBNccvZGA==
+X-Received: by 2002:a17:90a:e2cc:b0:1bf:711f:11e7 with SMTP id fr12-20020a17090ae2cc00b001bf711f11e7mr20407339pjb.40.1646986461176;
+        Fri, 11 Mar 2022 00:14:21 -0800 (PST)
+Received: from 5fcf59323384 ([203.221.136.13])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056a00248500b004f6b5ddcc65sm9862257pfv.199.2022.03.11.00.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 00:14:20 -0800 (PST)
+Date:   Fri, 11 Mar 2022 08:14:11 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.16 00/53] 5.16.14-rc2 review
+Message-ID: <20220311081411.GA7@5fcf59323384>
+References: <20220310140811.832630727@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.166]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140811.832630727@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zucheng Zheng <zhengzucheng@huawei.com>
+On Thu, Mar 10, 2022 at 03:09:05PM +0100, Greg Kroah-Hartman wrote:
+> Note, I'm sending all the patches again for all of the -rc2 releases as
+> there has been a lot of churn from what was in -rc1 to -rc2.
+> 
+> This is the start of the stable review cycle for the 5.16.14 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-On some specific platforms, the cpufreq driver does not define
-cpufreq_driver.get() routine (eg:x86 intel_pstate driver), as a
-result, the cpufreq_get() can't get the correct CPU frequency.
+Hi Greg,
 
-Modern x86 processors include the hardware needed to accurately
-calculate frequency over an interval -- APERF, MPERF and the TSC.
-Here we use arch_freq_get_on_cpu() in preference to any driver
-driver-specific cpufreq_driver.get() routine to get CPU frequency.
+5.16.14-rc2 tested.
 
-Fixes: f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
-Signed-off-by: Zucheng Zheng <zhengzucheng@huawei.com>
----
- drivers/cpufreq/cpufreq.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 80f535cc8a75..d777257b4454 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1806,10 +1806,14 @@ unsigned int cpufreq_get(unsigned int cpu)
- {
- 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
- 	unsigned int ret_freq = 0;
-+	unsigned int freq;
- 
- 	if (policy) {
- 		down_read(&policy->rwsem);
--		if (cpufreq_driver->get)
-+		freq = arch_freq_get_on_cpu(policy->cpu);
-+		if (freq)
-+			ret_freq = freq;
-+		else if (cpufreq_driver->get)
- 			ret_freq = __cpufreq_get(policy);
- 		up_read(&policy->rwsem);
- 
--- 
-2.18.0.huawei.25
+In addition - build tested on:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

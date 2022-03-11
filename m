@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554EA4D5B02
+	by mail.lfdr.de (Postfix) with ESMTP id A19924D5B03
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346822AbiCKF5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1347006AbiCKF5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346581AbiCKFxs (ORCPT
+        with ESMTP id S1346662AbiCKFxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:53:48 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD182E54
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:32 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id v4-20020a63f844000000b003745fd0919aso4211744pgj.20
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:32 -0800 (PST)
+        Fri, 11 Mar 2022 00:53:47 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1E7C66
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:34 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id x205-20020a627cd6000000b004f6e1b97b45so4590019pfc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=K0H87htZ43Oywx7CtDoyzUl7rJXnMPIXTzsnNX6ofLE=;
-        b=fW3+D0jYolbKcoGiJvlm5no3+9/vaS3U33WgjDwICgUXByOVIw3eCmDpYTwxLzPrr+
-         eQSVG7qe2QYimVW7aP1Ry+UYOotV4xbmj+D1lrHZvM/T8zjTuEZECSA3ytzW6XnoBR+t
-         YMqQKFBUoZnNwcBL7W3WLdUVnTplt5GnqvGcNyeH4MrHUB5Subltkah9/gvpuJTcNSg5
-         xNmFn8bCBvyvRlQ5odcoPCeGRGnmom4/6ARMm60LVqN46Z7DQjMAx0CpSzwa+myR4t55
-         aPqhlG+krnojLkTrQoSPdcJW4bbTlublpyyPBjZCYx10kdjvvyhoWxFuv9qFp7iL/Z+Z
-         kQ1g==
+        bh=e0XSYsFnw1sKQYkuuRvbhEksoxu4hcJVSS0NA+QiSNk=;
+        b=IlCA/LVGlypWW34yYUxnmARSZ6o3y157dD8URQlwXOwnlZ/OjeIdNw9xfGqiBDY1sj
+         ouWngEMAQXPf+dLbN1v+pOckQgnF1t9hb99uYZHCVwOdrMSR7E6vfCf2lePKUNsi/12s
+         rwA9puJE+dCbuBrFs7YZQlzXfOHcg7qsMM/uCX+6YpAdL6OiOIzOx4mVvaTuuGiAjP22
+         Zpc5h6Zy01wd475CMocPOPeW/gWsVv53IaQE8tY8qChRxvCJCUcvZde/rlDXnN87toNi
+         lkiC70X70sImfQ809R3+cznQgFf5+HI+qNhKcEqNLx8bMDLWbK5HQsTj2nKfLSuDYYe8
+         89gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=K0H87htZ43Oywx7CtDoyzUl7rJXnMPIXTzsnNX6ofLE=;
-        b=wUJPgDnH1UZAcqH8y+e8ahAHyoR6yUeKXcqQ/G2EPLMtLwE3b88GywmAeSXjWzIs9m
-         BvoJq0DgTEhYiJkY2TjvMSA/dFatS/xaY8PyvCf3miVO5SA9UoyFL1g3img1/Gp0J8KM
-         effFaepWZjI5v+1cklcuO/gsGGvHDcvYi5d4xI98SQtCt59d7LyCN6oIFrPdK0TlGz0N
-         0bKKzbKIoWlkZxY3lWRmBAVQmc68mAlVdhlFAhFNtBoB80IUNKqv7YUAXGtkXRoUT2IQ
-         sFbdrF5QNbhrFuir5HjIoBiQjawXV3MD2CbHFFRIOVM44x+GOOBG4Eq0LoMnWPcr87vz
-         N18g==
-X-Gm-Message-State: AOAM5322q6Ycx9CsW1yRdtotDa42roOSV+jyzNxDMjeNgoZ290JpcFFi
-        HlCcpQMCvUzXl50I4DQlOfJ70O03RklNaihLHx4PUAf9/feY8alHOLZAiGzUa1SWWnC0ojeqUCa
-        dT0ByWHEx1IHAzz0U76+EU0Jp5NecHxnnLLE4Mm5LNckbDuekmpiJfXggEwOePSCTsgV1Sw==
-X-Google-Smtp-Source: ABdhPJxgk+W3Q3sy51UA3F6OsO6tyR98RX1dV9ZarvoSPTqJXOytRF2F7LZmuHn0YPmevAQ0AXm/AErBvS4=
+        bh=e0XSYsFnw1sKQYkuuRvbhEksoxu4hcJVSS0NA+QiSNk=;
+        b=e1JVsUpx0Fa+EsArpIYCCo8cO2KslEjJeTTs1mZPS47FN8NqBIc9ZYqz2vgrCf6ctJ
+         KR2D+Tt4+a/dXNegAW/sgV9R1eDM5xjVOdYzLdtWDQEMHVB1XAQ2oRPyY2jhJaWeXLYM
+         qdHRywRmJcDS73LfSlzEaSsaN/1M5jTtlFsK482bN7peLAreKKBjbE7GpyFhVCW6aATw
+         rzNpOnTWhS4r2iVMcL6oJnzt+z283qOQK1hq+fL70ZnZigj8/Q8ee6o1h3el9N5Ye2a2
+         tB3HkPiphur4p6Yg39GBvX9MK5ikYhT5zTJxx85SihrtUBhISjJ6vLA/4REtWSB9RJUX
+         dI5g==
+X-Gm-Message-State: AOAM530VB4S5I+olQlESs4bbv6MFJy8M4ir3mbK1NMTEGIQXdUWPcpAK
+        N8C11LwsPedFncQFAFb5ms9od6/mXPymQV9L3dHGoT/BkQBd2Z3ivjF5ZBvp02RUqWxwbwj7ZZV
+        /8sXJfSV7yn7R8+QAQ5lc4hE8dr/lH/jlEYjvwY0Ez+g0e8Fweklj75R3kApsFB7JXov8wg==
+X-Google-Smtp-Source: ABdhPJwcnOysE1aEEi/3tYnwDeL2d3stWnhYb6nj9lfKtZKsFge3QHrjR0nl+XBrr4Ps9Mm1j4dppZ4AORA=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:7c58:0:b0:4f6:ebf1:e78d with SMTP id
- x85-20020a627c58000000b004f6ebf1e78dmr8893697pfc.18.1646977952022; Thu, 10
- Mar 2022 21:52:32 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:6903:b0:151:6781:9397 with SMTP id
+ j3-20020a170902690300b0015167819397mr9059514plk.137.1646977953618; Thu, 10
+ Mar 2022 21:52:33 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Mar 2022 05:50:02 +0000
+Date:   Fri, 11 Mar 2022 05:50:03 +0000
 In-Reply-To: <20220311055056.57265-1-seanjc@google.com>
-Message-Id: <20220311055056.57265-52-seanjc@google.com>
+Message-Id: <20220311055056.57265-53-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220311055056.57265-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [RFC PATCH 051/105] KVM: selftests: Convert vmx_close_while_nested_test
- away from VCPU_ID
+Subject: [RFC PATCH 052/105] KVM: selftests: Convert vmx_apic_access_test away
+ from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>
@@ -72,65 +72,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../kvm/x86_64/vmx_close_while_nested_test.c    | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ .../kvm/x86_64/vmx_apic_access_test.c          | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c b/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
-index edac8839e717..da0363076fba 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
-@@ -18,15 +18,10 @@
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_apic_access_test.c b/tools/testing/selftests/kvm/x86_64/vmx_apic_access_test.c
+index d438c4d3228a..10f9c86029e6 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_apic_access_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_apic_access_test.c
+@@ -28,11 +28,6 @@
  
  #include "kselftest.h"
  
--#define VCPU_ID		5
+-#define VCPU_ID		0
 -
- enum {
- 	PORT_L0_EXIT = 0x2000,
- };
- 
 -/* The virtual machine object. */
 -static struct kvm_vm *vm;
 -
  static void l2_guest_code(void)
  {
- 	/* Exit to L0 */
-@@ -53,20 +48,22 @@ static void l1_guest_code(struct vmx_pages *vmx_pages)
- int main(int argc, char *argv[])
- {
- 	vm_vaddr_t vmx_pages_gva;
+ 	/* Exit to L1 */
+@@ -84,9 +79,12 @@ int main(int argc, char *argv[])
+ 	struct vmx_pages *vmx;
+ 	bool done = false;
+ 
 +	struct kvm_vcpu *vcpu;
 +	struct kvm_vm *vm;
- 
++
  	nested_vmx_check_supported();
  
 -	vm = vm_create_default(VCPU_ID, 0, (void *) l1_guest_code);
 +	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
  
- 	/* Allocate VMX pages and shared descriptors (vmx_pages). */
- 	vcpu_alloc_vmx(vm, &vmx_pages_gva);
--	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
-+	vcpu_args_set(vm, vcpu->id, 1, vmx_pages_gva);
+ 	kvm_get_cpu_address_width(&paddr_width, &vaddr_width);
+ 	high_gpa = (1ul << paddr_width) - getpagesize();
+@@ -97,13 +95,13 @@ int main(int argc, char *argv[])
  
- 	for (;;) {
+ 	vmx = vcpu_alloc_vmx(vm, &vmx_pages_gva);
+ 	prepare_virtualize_apic_accesses(vmx, vm);
+-	vcpu_args_set(vm, VCPU_ID, 2, vmx_pages_gva, high_gpa);
++	vcpu_args_set(vm, vcpu->id, 2, vmx_pages_gva, high_gpa);
+ 
+ 	while (!done) {
 -		volatile struct kvm_run *run = vcpu_state(vm, VCPU_ID);
 +		volatile struct kvm_run *run = vcpu->run;
  		struct ucall uc;
  
 -		vcpu_run(vm, VCPU_ID);
 +		vcpu_run(vm, vcpu->id);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 			    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
+ 		if (apic_access_addr == high_gpa) {
+ 			TEST_ASSERT(run->exit_reason ==
+ 				    KVM_EXIT_INTERNAL_ERROR,
+@@ -121,7 +119,7 @@ int main(int argc, char *argv[])
  			    run->exit_reason,
-@@ -75,7 +72,7 @@ int main(int argc, char *argv[])
- 		if (run->io.port == PORT_L0_EXIT)
- 			break;
+ 			    exit_reason_str(run->exit_reason));
  
 -		switch (get_ucall(vm, VCPU_ID, &uc)) {
 +		switch (get_ucall(vm, vcpu->id, &uc)) {
  		case UCALL_ABORT:
- 			TEST_FAIL("%s", (const char *)uc.args[0]);
- 			/* NOT REACHED */
+ 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
+ 				  __FILE__, uc.args[1]);
 -- 
 2.35.1.723.g4982287a31-goog
 

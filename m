@@ -2,188 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E745B4D6017
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FA84D601F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345144AbiCKKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S1347769AbiCKKvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238713AbiCKKt4 (ORCPT
+        with ESMTP id S233033AbiCKKvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:49:56 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F412182BC0;
-        Fri, 11 Mar 2022 02:48:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646995732; x=1678531732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3q2RXnw3ENJ9hR2e3HJcmwGSdFSeyoDplqjI07wWEkE=;
-  b=EQY7RCxwaQog7FcOOxbg8aZEv8+Yt39ockNWxTPGLdZ5VNeREVHu/jz/
-   6Mr/ZDdOKTw/a5Afxa0IgUr4CJMh0DQ5JysUz7ME9DgMGk1rJ/U2XMVsq
-   uMTCKudBNhtuV+8jjDQqbPFCy2xMQOa8bAcfGNoY/RUtjAb4GMaqiG4/C
-   Sz/GY7UYIyKy/8zg2pQV4DG876iFOzcxtrcSS68Jb/cQraaTlyDuu5Awg
-   c9huEYq3U+JwfW7x3W6nhQvfIeGPGWFaOgl3WJUw7I1t6XlCie/EWH4tR
-   /aRgq9OE8L/Q9bW3r0JuK32yS4wGKlwyr4LwYvpkwjmGVOLvZ+VEBjR+/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237723039"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="237723039"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:48:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="579251273"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 02:48:49 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nScpE-0006Gx-A9; Fri, 11 Mar 2022 10:48:48 +0000
-Date:   Fri, 11 Mar 2022 18:48:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v33 01/29] integrity: disassociate ima_filter_rule from
- security_audit_rule
-Message-ID: <202203111810.oPf2VNfH-lkp@intel.com>
-References: <20220310234632.16194-2-casey@schaufler-ca.com>
+        Fri, 11 Mar 2022 05:51:52 -0500
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1721B0C4C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:50:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1646995847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AiRt42fRhEl1AlX/cCUYc0SGy1ZQxOYcHHZJYcVh7lQ=;
+        b=Sr+Q4qxm6f2TeWo5XJvlPEnlupNzmYx46pfuI3QlU3wlJLhy0g14o0Mxu0Le3BWpXFA7AM
+        qM1KGghfl51ztcscZaP+lomMKOa+ivv7UFrT27xoUvQ7lZaMb6kFCf7mTPT6K4lbwsjh/T
+        b2di9uiBbskNm2FZFrQtnG0b2QpMb1k=
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com
+ (mail-am5eur03lp2056.outbound.protection.outlook.com [104.47.8.56]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-25-32Ee6pqvMNWgssCWxoMaRg-1; Fri, 11 Mar 2022 11:50:46 +0100
+X-MC-Unique: 32Ee6pqvMNWgssCWxoMaRg-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oRHAk2D0ajsnTU5Gyy47om7++aHS2n5tayLZk4eWT5LPBrLUbe3a1GUbLOwtjOs78MDzcqiJjz0Mlw/AOgn1BN/MH8jjs6U+Bqvi2vstXQkudU9wP4leCvvhCEzGBxjdP0yYR394SieYq361pjUrupeSmBg7pSL2SgGgeJXH4puOdGh8ODJlcC1SuDBlXrPuIr5KPq0g6co69Mf2m0LvZ9F1zxQWBY/QiRU4L7wgvfrT09Mghh3jQ8fyz6erUIkrofKYtieQdxVxLAWQcXnba7SrsARBEzStVl1OmxK1kTW0U3c9hvgMCMrENBEqnb0fsyQQE7iT67jSfXr9qOe/fA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AiRt42fRhEl1AlX/cCUYc0SGy1ZQxOYcHHZJYcVh7lQ=;
+ b=HTcYsFcGTGvya5ImKU99FDi+KeuXo65KuIKuUGyGyT3OK0Cf+wmJW7+d1dXsnjSOthrbqDhh3P6s9XRy0bZXgQ/Z15cHEZMSbya4iWSkrStpwmO011GvSf/c/ztKSFjwU+0idUUYsXGX9iC7T+xyfyYUaR3UGOlyZp2PIJf4eoi02jWJv/dRIRm2LsClpTsbpg0hpWO5fmETvkxjkG/mpMtECb9J9ju7HGlmUX7Vs/7DtOIEir2bN4+GLtY7piwyrA89Hg9hV1BU9VMihpve4C3rbomZJPdhgp+Euuwu6vYUUg24C3AUvHfnkaOOrEvBs4/wx9QxkHxjPQrcvJKmwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB5600.eurprd04.prod.outlook.com (2603:10a6:803:e7::16)
+ by HE1PR04MB3242.eurprd04.prod.outlook.com (2603:10a6:7:1a::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.26; Fri, 11 Mar
+ 2022 10:50:43 +0000
+Received: from VI1PR04MB5600.eurprd04.prod.outlook.com
+ ([fe80::e8ce:db1c:5bb0:af0]) by VI1PR04MB5600.eurprd04.prod.outlook.com
+ ([fe80::e8ce:db1c:5bb0:af0%6]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
+ 10:50:43 +0000
+Message-ID: <d116558e-b13b-9091-8396-337f05db77bb@suse.com>
+Date:   Fri, 11 Mar 2022 11:50:40 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] xen/blkfront: speed up purge_persistent_grants()
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+        Jens Axboe <axboe@kernel.dk>, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220311103527.12931-1-jgross@suse.com>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <20220311103527.12931-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6P194CA0037.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:209:84::14) To VI1PR04MB5600.eurprd04.prod.outlook.com
+ (2603:10a6:803:e7::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310234632.16194-2-casey@schaufler-ca.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c18a5839-a88b-4067-f567-08da034cfd85
+X-MS-TrafficTypeDiagnostic: HE1PR04MB3242:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <HE1PR04MB3242358946F6362FBECC4C48B30C9@HE1PR04MB3242.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yeeDByY98DVJZ86ZhiNA6ZgHBkWVrXGK3uYX9KAVlfeiBdVGZMch7ggsHXtcDj0mIGxmzNpytTuE2a6geAwB1ySF8/SoiQ4e6zPNbEDzJkzh+bSRTt0z/W9VlDI3VHhN41HUZV5JfPnTmg5ecxFE+Bh12dce1wMdyL7c3FX9XtE1L5/0JQxXuz8RnC3Dwo8uJuSQ2sa2HV28FXNRJ+K3y49UkJtoazQvayBUT0m5zB78FHtpcneIx/7h1qO7IRhmCGrSoVPvWwtlsoPCZykNH15JFfYNQRdhXiuCfNAEn5oWWI4Qn4i2H+Bw7aM56xciP1MEKGyAlLvdOkyTBmXDa4OCZOHXgHkZa7rMF3bC/6eCpLawj7rOBc+lso2o7LyJ2TNqunKCXHdMqOFTsYRwVeML1g+u9hj4oioZ/hxflEkcVrfxfY9F8TULeUplZ6n8nQlXWI+ZiNu2jO2EaR9g+wBBAe8/zcghX4pgV10i/Ys75NV3cNR8GNv264qJW62spnrzsadjTQHWtCjW50EB/lwUzDgJvpLUQx++EWjoYTnO86TiGU3atEnujf9yyD6wIc1SVHHqBjJwKssXKhoGsDdDHvPRNkTxQn5DCEav37FX49HVbxNys0PmEqt09Rk4j8KGTySN751Qw8na8SRgL4LsWY0Lnv3hEDelsDA1LATKVV9wlrkJlXuoQaPD8bn7yMqJFuEeUfhutc3hU4swYpm1BvP/04uLW4Qx7vX5nNE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5600.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(53546011)(31696002)(37006003)(36756003)(316002)(31686004)(2906002)(38100700002)(6486002)(6862004)(66556008)(5660300002)(66946007)(66476007)(186003)(2616005)(508600001)(26005)(6512007)(6506007)(8936002)(8676002)(4326008)(86362001)(6636002)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WG1SNWQxTkFzSTljNWszRmNqNmdDR0J4dDZwWWRINDNSNG54YzUyenRDTTF0?=
+ =?utf-8?B?d1JTZXlMZ2hVN2pYazdadnV6aGE3QTI5M1JzRnZVT2NlaHhtY0FwVDBvaXdm?=
+ =?utf-8?B?Vm1OeHBGbFZDR0ZhQWNLTGhNVG1janltVXY1K3FBb0pmNER1UjFpN0ppem1E?=
+ =?utf-8?B?STBmMmpxUUw2em1uNE9YaXh5NFVoSXZnT3lhM29FZGppa3FKcm9wN0ZlbCtQ?=
+ =?utf-8?B?VzhXQVRZTEJUbHBmRDg2THQ1WEtqVk5sYkFnSnlJZ25hTUFhUEcvZEluZnNI?=
+ =?utf-8?B?b1Nzb3J2VE1JdW1la1Y0dTBTVjQ2RWVzV2hsWTZpZEUwakpmTi8ramtkNm9x?=
+ =?utf-8?B?SW9nMFNDblJsT282UWl6eFp1R3AxSEZ2TmJrYlBRb0dzM0UvenVCcUxEZDBT?=
+ =?utf-8?B?djJVRnJKRGVYdlNqV0xnM21UYVJiOUZOWWNsOE9FTURHbVFaaXkxN0pzcTU0?=
+ =?utf-8?B?TDJOcnRxcHNGRldQM08yRS9MSmwvUXYrV1V2b3BZekNzV2tXOUdHRytyMWtR?=
+ =?utf-8?B?M1psVUVLMm1GK0V5WnJlL2JQSnAzL1lnTFlYN0VxeXF2bUFxWVQvT0ZjUGh2?=
+ =?utf-8?B?RHlPTjZqUm5HSkMwMzV5SW40WC82NVNxb1Z6YW1TUXd0RnJsMm9vTzR0WnFK?=
+ =?utf-8?B?Qytoa1paR2NVZFNhaDdDT3phU3RvV0d5MGRUdllIdFN0OXZuZ2FmWlEwM3pK?=
+ =?utf-8?B?cWtGZ21NNHRiaXpJWkUrQ3ltdkg4OTBoQXJ0S1dwT2VyVmY2dUVib1NmdWpk?=
+ =?utf-8?B?U0ZOWElBeEpDbUlkVTNHNVBudlRNK3c4c2ZZUXV5dzZUNlhraTUraW54N1Vn?=
+ =?utf-8?B?Y1I5UGpLNWhuTytyVERDeVpLTThDcXU4OXUrRXhKVmdocnhCQWNyRGZrZHJ1?=
+ =?utf-8?B?QmFzTEY0WUlXcEF1ZUFxa29Nd21WYVBRa0tJekszdVFnYXY2ZW9xT3pnOSt0?=
+ =?utf-8?B?MjZVZThzVU9VTlBNQnB2QUlRdzFiODlVTGFrYlFlbXdPSTNqRStmcXJkeGJF?=
+ =?utf-8?B?YjVoNTRaTEYxUDNmMG1JRG9ybi9xOGVKd3Y1WnAwMmpmL3AxS1RxUUhPcTRO?=
+ =?utf-8?B?NGJlckY0NTVjc005VU5UdmlUM3M0MnZrYVFLRXc1R1lZeW1Hc1dHeFRxMTNu?=
+ =?utf-8?B?a3Fxb3lDbldSdThBMEExREpObVY0RG5oTi93aURsb2UxYUMyYTVjVS8vc3JY?=
+ =?utf-8?B?VExicTlUT0pLSitEYnNUTkQ0R09zRk5PU1N0c1FHQk91bldYbjdObXY4amNP?=
+ =?utf-8?B?Y0EreVYvSTJlbTl3WDFOM01Sb1Y3a2NnYlduK005OXV5bldhQTRIK2RMSnJ2?=
+ =?utf-8?B?WVRueFhibmFwYytXU3FDV09IajIydlNnMk1tVTF3Mk9nN1NoUm0zOG5ITTFp?=
+ =?utf-8?B?SndoeW1HZ3doMnh1ajJsSzU5ZVRaSUFKQUxpZ0g0aTJJV2QrNU44QmZkQVJ4?=
+ =?utf-8?B?Wm9QQ01uK0p5QjViOEhOdVlMdlA4U0xnRGN0K2RrZkNwUjh5TWNTN2VDZFhM?=
+ =?utf-8?B?OFNhYkVwWWNiVXZWeC82c2N2d2hpNkhwZ3pxSEZaSjlqZit5MnBIdWZSeGJI?=
+ =?utf-8?B?SFkvRjRiaFkvem5LejdSQ0dxWVhPMmtZdzVOaW9QWnRNbHZ4aE5HcG5tMkpG?=
+ =?utf-8?B?NkJhT1QzM0NpZ0czN3lwSkViMW5YVmtWUSsxVFRTTVl1dmc4M2JJREpIQTZB?=
+ =?utf-8?B?MERYR3VrVCsrTXJOc3VxUEdKUEtndmtlZU1WVHlrSUlWb1FFbU1OTXBaK3RB?=
+ =?utf-8?B?RFhISkVDTTNVaHZQck1rL055OFlKN0dDZEw5bG9YeUswZURMcWY0TzBBOVRh?=
+ =?utf-8?B?NHM4MkVMc0JsWUNNc3FuYThubDVOY0lqZnM5cjA2QlRiT0FSdzJzd1lJTWNz?=
+ =?utf-8?B?dUJaTmw2RFQwOG1md3liYXU0anJyS1RuLzBIc1JmaGtKbGhKVEMxQi9NNXk0?=
+ =?utf-8?B?aENrR1M4L2J1dU9vSTFWa05OQktmMUJkQzZnNjNwYlkrQ2RRYTFKWm9WeXRX?=
+ =?utf-8?B?Y1RnVkdWdWlRU0gxUWFsaVNPWmg5TVJkblgvSU1tZlJFMVJEczJrS25ndXEy?=
+ =?utf-8?B?V2hveGZhcEwwdmFibVZGSnFoQ3N0djZNamRVSjZJRTFTdnpIdjZQekhLNEF5?=
+ =?utf-8?B?Y1FMbWRYWk1keUxoajB1S3NHRytoRlFydWZsUWhLdG5ob0c3cWwzZGlEakxm?=
+ =?utf-8?Q?2sn7FBqJlyi35HK9SZpufpE=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c18a5839-a88b-4067-f567-08da034cfd85
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5600.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 10:50:43.3096
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NueNW4UvrgtXQQ/0qqCnx0v2KdLWBe0XKfzN2pdgn08fs1+cNfkwBgUSPxPuB6UgutblJqmt0nLaMdzilaEtHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB3242
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
+On 11.03.2022 11:35, Juergen Gross wrote:
+> purge_persistent_grants() is scanning the grants list for persistent
+> grants being no longer in use by the backend. When having found such a
+> grant, it will be set to "invalid" and pushed to the tail of the list.
+> 
+> Instead of pushing it directly to the end of the list, add it first to
+> a temporary list, avoiding to scan those entries again in the main
+> list traversal. After having finished the scan, append the temporary
+> list to the grant list.
+> 
+> Suggested-by: Jan Beulich <jbeulich@suse.com>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
-I love your patch! Yet something to improve:
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 
-[auto build test ERROR on pcmoore-audit/next]
-[also build test ERROR on pcmoore-selinux/next linus/master jmorris-security/next-testing v5.17-rc7 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-config: arc-buildonly-randconfig-r006-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111810.oPf2VNfH-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/2796a69611ebb559eacf03666a3ae2fbd48e0c12
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
-        git checkout 2796a69611ebb559eacf03666a3ae2fbd48e0c12
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   security/integrity/ima/ima_policy.c: In function 'ima_lsm_free_rule':
->> security/integrity/ima/ima_policy.c:360:17: error: implicit declaration of function 'ima_filter_rule_free'; did you mean 'ima_file_free'? [-Werror=implicit-function-declaration]
-     360 |                 ima_filter_rule_free(entry->lsm[i].rule);
-         |                 ^~~~~~~~~~~~~~~~~~~~
-         |                 ima_file_free
-   security/integrity/ima/ima_policy.c: In function 'ima_lsm_copy_rule':
->> security/integrity/ima/ima_policy.c:409:17: error: implicit declaration of function 'ima_filter_rule_init' [-Werror=implicit-function-declaration]
-     409 |                 ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
-         |                 ^~~~~~~~~~~~~~~~~~~~
-   security/integrity/ima/ima_policy.c: In function 'ima_match_rules':
->> security/integrity/ima/ima_policy.c:625:30: error: implicit declaration of function 'ima_filter_rule_match' [-Werror=implicit-function-declaration]
-     625 |                         rc = ima_filter_rule_match(osid, rule->lsm[i].type,
-         |                              ^~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +360 security/integrity/ima/ima_policy.c
-
-176377d97d6a3f Tyler Hicks      2020-08-11  354  
-b169424551930a Janne Karhunen   2019-06-14  355  static void ima_lsm_free_rule(struct ima_rule_entry *entry)
-b169424551930a Janne Karhunen   2019-06-14  356  {
-b169424551930a Janne Karhunen   2019-06-14  357  	int i;
-b169424551930a Janne Karhunen   2019-06-14  358  
-b169424551930a Janne Karhunen   2019-06-14  359  	for (i = 0; i < MAX_LSM_RULES; i++) {
-b8867eedcf76ca Tyler Hicks      2020-07-10 @360  		ima_filter_rule_free(entry->lsm[i].rule);
-b169424551930a Janne Karhunen   2019-06-14  361  		kfree(entry->lsm[i].args_p);
-b169424551930a Janne Karhunen   2019-06-14  362  	}
-465aee77aae857 Tyler Hicks      2020-07-09  363  }
-465aee77aae857 Tyler Hicks      2020-07-09  364  
-465aee77aae857 Tyler Hicks      2020-07-09  365  static void ima_free_rule(struct ima_rule_entry *entry)
-465aee77aae857 Tyler Hicks      2020-07-09  366  {
-465aee77aae857 Tyler Hicks      2020-07-09  367  	if (!entry)
-465aee77aae857 Tyler Hicks      2020-07-09  368  		return;
-465aee77aae857 Tyler Hicks      2020-07-09  369  
-465aee77aae857 Tyler Hicks      2020-07-09  370  	/*
-465aee77aae857 Tyler Hicks      2020-07-09  371  	 * entry->template->fields may be allocated in ima_parse_rule() but that
-465aee77aae857 Tyler Hicks      2020-07-09  372  	 * reference is owned by the corresponding ima_template_desc element in
-465aee77aae857 Tyler Hicks      2020-07-09  373  	 * the defined_templates list and cannot be freed here
-465aee77aae857 Tyler Hicks      2020-07-09  374  	 */
-465aee77aae857 Tyler Hicks      2020-07-09  375  	kfree(entry->fsname);
-176377d97d6a3f Tyler Hicks      2020-08-11  376  	ima_free_rule_opt_list(entry->keyrings);
-465aee77aae857 Tyler Hicks      2020-07-09  377  	ima_lsm_free_rule(entry);
-b169424551930a Janne Karhunen   2019-06-14  378  	kfree(entry);
-b169424551930a Janne Karhunen   2019-06-14  379  }
-b169424551930a Janne Karhunen   2019-06-14  380  
-b169424551930a Janne Karhunen   2019-06-14  381  static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-b169424551930a Janne Karhunen   2019-06-14  382  {
-b169424551930a Janne Karhunen   2019-06-14  383  	struct ima_rule_entry *nentry;
-483ec26eed42bf Janne Karhunen   2020-01-15  384  	int i;
-b169424551930a Janne Karhunen   2019-06-14  385  
-b169424551930a Janne Karhunen   2019-06-14  386  	/*
-b169424551930a Janne Karhunen   2019-06-14  387  	 * Immutable elements are copied over as pointers and data; only
-b169424551930a Janne Karhunen   2019-06-14  388  	 * lsm rules can change
-b169424551930a Janne Karhunen   2019-06-14  389  	 */
-f60c826d031817 Alex Dewar       2020-09-09  390  	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-f60c826d031817 Alex Dewar       2020-09-09  391  	if (!nentry)
-f60c826d031817 Alex Dewar       2020-09-09  392  		return NULL;
-f60c826d031817 Alex Dewar       2020-09-09  393  
-c593642c8be046 Pankaj Bharadiya 2019-12-09  394  	memset(nentry->lsm, 0, sizeof_field(struct ima_rule_entry, lsm));
-b169424551930a Janne Karhunen   2019-06-14  395  
-b169424551930a Janne Karhunen   2019-06-14  396  	for (i = 0; i < MAX_LSM_RULES; i++) {
-483ec26eed42bf Janne Karhunen   2020-01-15  397  		if (!entry->lsm[i].args_p)
-b169424551930a Janne Karhunen   2019-06-14  398  			continue;
-b169424551930a Janne Karhunen   2019-06-14  399  
-b169424551930a Janne Karhunen   2019-06-14  400  		nentry->lsm[i].type = entry->lsm[i].type;
-39e5993d0d452b Tyler Hicks      2020-07-09  401  		nentry->lsm[i].args_p = entry->lsm[i].args_p;
-39e5993d0d452b Tyler Hicks      2020-07-09  402  		/*
-39e5993d0d452b Tyler Hicks      2020-07-09  403  		 * Remove the reference from entry so that the associated
-39e5993d0d452b Tyler Hicks      2020-07-09  404  		 * memory will not be freed during a later call to
-39e5993d0d452b Tyler Hicks      2020-07-09  405  		 * ima_lsm_free_rule(entry).
-39e5993d0d452b Tyler Hicks      2020-07-09  406  		 */
-39e5993d0d452b Tyler Hicks      2020-07-09  407  		entry->lsm[i].args_p = NULL;
-b169424551930a Janne Karhunen   2019-06-14  408  
-b8867eedcf76ca Tyler Hicks      2020-07-10 @409  		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
-b169424551930a Janne Karhunen   2019-06-14  410  				     nentry->lsm[i].args_p,
-b169424551930a Janne Karhunen   2019-06-14  411  				     &nentry->lsm[i].rule);
-483ec26eed42bf Janne Karhunen   2020-01-15  412  		if (!nentry->lsm[i].rule)
-483ec26eed42bf Janne Karhunen   2020-01-15  413  			pr_warn("rule for LSM \'%s\' is undefined\n",
-aa0c0227d33171 Tyler Hicks      2020-07-09  414  				nentry->lsm[i].args_p);
-b169424551930a Janne Karhunen   2019-06-14  415  	}
-b169424551930a Janne Karhunen   2019-06-14  416  	return nentry;
-b169424551930a Janne Karhunen   2019-06-14  417  }
-b169424551930a Janne Karhunen   2019-06-14  418  
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

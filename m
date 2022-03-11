@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CA04D5C29
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D7D4D5C2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346800AbiCKHV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S1347072AbiCKHYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbiCKHV5 (ORCPT
+        with ESMTP id S235117AbiCKHYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:21:57 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7659A1B30A6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:20:55 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KFHLZ1bbmz9sYw;
-        Fri, 11 Mar 2022 15:17:10 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 11 Mar
- 2022 15:20:53 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <anshuman.khandual@arm.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH v2] mm: remove unneeded local variable follflags
-Date:   Fri, 11 Mar 2022 15:20:02 +0800
-Message-ID: <20220311072002.35575-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Fri, 11 Mar 2022 02:24:36 -0500
+Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23CD17ED95;
+        Thu, 10 Mar 2022 23:23:32 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="65931102"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643641200"; 
+   d="scan'208";a="65931102"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Mar 2022 16:23:30 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id A0C36531F2;
+        Fri, 11 Mar 2022 16:23:28 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 071EB14153;
+        Fri, 11 Mar 2022 16:23:27 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om4.fujitsu.com (Postfix) with ESMTP id BD70A401110B2;
+        Fri, 11 Mar 2022 16:23:26 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v5 0/6] selftests/resctrl: Add resctrl_tests into kselftest set
+Date:   Fri, 11 Mar 2022 16:21:41 +0900
+Message-Id: <20220311072147.3301525-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can pass FOLL_GET | FOLL_DUMP to follow_page directly to simplify
-the code a bit in add_page_for_migration and split_huge_pages_pid.
+Hello,
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
-v1->v2:
-  do similar instance in add_page_for_migration per Anshuman
-  collect Reviewed-by tag. Thanks Anshuman for review.
----
- mm/huge_memory.c | 4 +---
- mm/migrate.c     | 4 +---
- 2 files changed, 2 insertions(+), 6 deletions(-)
+The aim of this series is to make resctrl_tests run by using
+kselftest framework.
+- I modify resctrl_test Makefile and kselftest Makefile,
+  to enable build/run resctrl_tests by using kselftest framework.
+  Of course, users can also build/run resctrl_tests without
+  using framework as before.
+- I change the default limited time for resctrl_tests to 120 seconds, to
+  ensure the resctrl_tests finish in limited time on different
+environments.
+- When resctrl file system is not supported by environment or
+  resctrl_tests is not run as root, return skip code of kselftest
+framework.
+- If resctrl_tests does not finish in limited time, terminate it as
+  same as executing ctrl+c that kills parent process and child process.
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index f92791d3cb79..2fe38212e07c 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2840,7 +2840,6 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 	 */
- 	for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
- 		struct vm_area_struct *vma = find_vma(mm, addr);
--		unsigned int follflags;
- 		struct page *page;
- 
- 		if (!vma || addr < vma->vm_start)
-@@ -2853,8 +2852,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 		}
- 
- 		/* FOLL_DUMP to ignore special (like zero) pages */
--		follflags = FOLL_GET | FOLL_DUMP;
--		page = follow_page(vma, addr, follflags);
-+		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
- 
- 		if (IS_ERR(page))
- 			continue;
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 47d23d526e64..c1b58832d0f6 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1604,7 +1604,6 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
- {
- 	struct vm_area_struct *vma;
- 	struct page *page;
--	unsigned int follflags;
- 	int err;
- 
- 	mmap_read_lock(mm);
-@@ -1614,8 +1613,7 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
- 		goto out;
- 
- 	/* FOLL_DUMP to ignore special (like zero) pages */
--	follflags = FOLL_GET | FOLL_DUMP;
--	page = follow_page(vma, addr, follflags);
-+	page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
- 
- 	err = PTR_ERR(page);
- 	if (IS_ERR(page))
+Difference from v4:
+- Add comment for settings file. [PATCH v5 2/6]
+- Improved README of resctrl_tests and rewirte changelog. [PATCH v5 5/6]
+https://lore.kernel.org/lkml/20220304103834.486892-1-tan.shaopeng@jp.fujitsu.com/ [PATCH V4]
+
+This patch series is based on v5.17-rc7.
+
+Shaopeng Tan (6):
+  selftests/resctrl: Kill child process before parent process terminates
+    if SIGTERM is received
+  selftests/resctrl: Change the default limited time to 120 seconds
+  selftests/resctrl: Fix resctrl_tests' return code to work with
+    selftest framework
+  selftests/resctrl: Make resctrl_tests run using kselftest framework
+  selftests/resctrl: Update README about using kselftest framework to
+    build/run resctrl_tests
+  selftests/resctrl: Add missing SPDX license to Makefile
+
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/resctrl/Makefile      | 18 ++------
+ tools/testing/selftests/resctrl/README        | 43 +++++++++++++++----
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 +-
+ tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+ tools/testing/selftests/resctrl/settings      |  3 ++
+ 6 files changed, 45 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/resctrl/settings
+
 -- 
-2.23.0
+2.27.0
 

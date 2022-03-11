@@ -2,410 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401D94D590B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9F34D5918
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbiCKDba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 22:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S1345988AbiCKDdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 22:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346216AbiCKDbR (ORCPT
+        with ESMTP id S1346407AbiCKDdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 22:31:17 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54629F4625;
-        Thu, 10 Mar 2022 19:29:23 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id fs4-20020a17090af28400b001bf5624c0aaso7076303pjb.0;
-        Thu, 10 Mar 2022 19:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kzXua7/mIwL1di421j9Y5R0qOwnlDpFUrmcmsGR5YdA=;
-        b=QKR2qUKTvpqmeIqk3BY4P8X++aR3CBfet7yk12upUkq8OWZpqlcF9H1m8tBjf5Ga0K
-         2xuEu8kE/9luIPih7FV2QUIvwDLOERBXRXdzlYtiIi2bIzon8rywZrYFKkpGhjTawwPZ
-         E++b//QPFHQ75LZmAyMM4puLfZeBlL3D9E0u+NLTIO8HfX885hT3r9QBbGn3gV5h4LKG
-         aTr5LHp7sU/++WzCz4+ZEaEaUFDhheguUV0ti5Sy592eRG0WhfmZ08VjCRkFeLz9xaK3
-         cfdYduUAjJSPeAOGEmGJ6S7vnagDYwD5SPjM2egmpWFzuAXGJPP4r8qVSMbrmlnF8Kbq
-         KHYg==
+        Thu, 10 Mar 2022 22:33:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15403F68F9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:31:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646969474;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=J0OLr2mkUgo8W4yOelSoWk9dmjDH+khiCra/4OvgbRE=;
+        b=TPoofZQIN5w+GY76axxX9Zmt+6stqxTPDwFR6CC6aRocFLBPUD3BUC7E4cktvpPTtxE5MP
+        Q8aTVu1zVf41A5mtWX4o/E18CF3HU2MMbdG7bZytzfkZO5JOCog2QbN30aModuVn1sqgty
+        WfSalwD+9FR+542jcgxW1h/XTiSmHXk=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-211-KBFFiQL5MBG4FwnqGoVZnw-1; Thu, 10 Mar 2022 22:31:13 -0500
+X-MC-Unique: KBFFiQL5MBG4FwnqGoVZnw-1
+Received: by mail-lf1-f72.google.com with SMTP id b7-20020a056512218700b0044869874779so1131746lft.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:31:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kzXua7/mIwL1di421j9Y5R0qOwnlDpFUrmcmsGR5YdA=;
-        b=VQF1FbG4cSzDeT8US3ecQf/jaFuebX53x1UFZf05xrDvW+Of+DEtsxcMmZ/PH7lwuJ
-         QdAYMYoRHIhd314ya9f1gShbND8OC5C5YhxvFaffcmHF0xwhldwSGTcsSxCF+rZXTPgO
-         XhQozSH+dPuZaI+VJHb5Fp7IOB7kecnYDOcHGLgZ8pnGkhlIYzwfVHaXSaAGqDtPfBU8
-         WgaqCIOOVY/JwAfUfb7rdJEHdOvhzjZYjseVWAfuEA6kRRoWn0WoaxiU0houiQ06x2FD
-         ClKgLuTaevciO0CurPN1f9WEWL7kPA5r47OW4zs9VSNIMrxCccSvHLGLEEvlBWVj632b
-         SM+g==
-X-Gm-Message-State: AOAM531XoffZm+zFXCReIaB4xs/4LmfmO4vhpn65GR6vC3g6Dok0Kz09
-        4mN9zzzxrpQ+FiAbFvvVsqU=
-X-Google-Smtp-Source: ABdhPJzzZj0jCuYh01KoOIq/UDxpdKqHEszL3py38kU7JQPr+13I3dmToB6kSMQ/Y7hvTtCepOXM9g==
-X-Received: by 2002:a17:90a:930b:b0:1bf:ac1f:6585 with SMTP id p11-20020a17090a930b00b001bfac1f6585mr8530284pjo.88.1646969353606;
-        Thu, 10 Mar 2022 19:29:13 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.116])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a19d000b001c1c6b25cb2sm3140319pjj.26.2022.03.10.19.29.08
+        bh=J0OLr2mkUgo8W4yOelSoWk9dmjDH+khiCra/4OvgbRE=;
+        b=Mn7guVgDq8jXcyiOlTJeK5VKMCCd9fR+q+yKE4fZizJ8XyZxyPcUvVYzTqBKlosk3T
+         n1cZysSG07Tqpv3iOlV/rXKvRtpWtoyzyOAKI+1CH+LvfRHYvO+UJbLqj2YDZxHTASl3
+         VeToZK6YSJo/XQf9KPkHyGoZRlwxvJ8CuMXGoa9QCdQAYISJb1HgK6sHpohwtd4nNDIx
+         hE56GQftluCKn/2QXJwlkgMBjPKguJJDzHvR0JboOHX9iomln3FfKlHTsXnX0q0bRlcP
+         iCFXh/Pe3fHuaFH0cXqlvhKg2a/FzmIEm7vE7WANys8XBFiMyD921E5eP2fZ+PMcOG73
+         NPJA==
+X-Gm-Message-State: AOAM533ahhofdpMGvPCtqxbVikPik994RRCnteOZ4Gy09C5UJwXq1faB
+        TdE+1899g0dBsWJIeASwnTiE16Abmlxaf/MtPpLFnUn4mJiH0cbp8QdNDS6Ip6A2TZDb8/r7l5t
+        o5wC6dxZC0M7OpEqWAIJ3XNPLZ7K+p0i/LKyTAdxUjcsxtFCE5PDS0DlQbM0XpzxJHd/LfCB4ij
+        s=
+X-Received: by 2002:ac2:418c:0:b0:43e:8f98:98f0 with SMTP id z12-20020ac2418c000000b0043e8f9898f0mr5018275lfh.604.1646969471581;
+        Thu, 10 Mar 2022 19:31:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNNZCyTIcpfkdac1X8Afin/J2k3HiOknmksttd95PiayQnmesQwStiDBhOUm+oIs2H1NNosg==
+X-Received: by 2002:ac2:418c:0:b0:43e:8f98:98f0 with SMTP id z12-20020ac2418c000000b0043e8f9898f0mr5018258lfh.604.1646969471310;
+        Thu, 10 Mar 2022 19:31:11 -0800 (PST)
+Received: from localhost.localdomain (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
+        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004433b80c1d3sm1339700lfi.182.2022.03.10.19.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 19:29:12 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     dsahern@kernel.org, kuba@kernel.org
-Cc:     nhorman@tuxdriver.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        imagedong@tencent.com, edumazet@google.com, talalahmad@google.com,
-        keescook@chromium.org, alobakin@pm.me,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Mengen Sun <mengensun@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Subject: [PATCH] net: skb: move enum skb_drop_reason to uapi
-Date:   Fri, 11 Mar 2022 11:28:28 +0800
-Message-Id: <20220311032828.702392-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 10 Mar 2022 19:31:10 -0800 (PST)
+From:   mpenttil@redhat.com
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
+        jgg@ziepe.ca, vbabka@suse.cz,
+        =?UTF-8?q?Mika=20Penttil=C3=A4?= <mpenttil@redhat.com>
+Subject: [PATCH v2] mm/hmm/test: simplify hmm test code: use miscdevice instead of char dev
+Date:   Fri, 11 Mar 2022 05:30:50 +0200
+Message-Id: <20220311033050.22724-1-mpenttil@redhat.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+From: Mika Penttilä <mpenttil@redhat.com>
 
-Move the definition of 'enum skb_drop_reason' in 'skbuff.h' to the uapi
-header 'net_dropmon.h', therefore some users, such as eBPF program, can
-make use of it.
+HMM selftests use an in-kernel pseudo device to emulate device private
+memory. The pseudo device registers a major device range for two pseudo
+device instances. User space has a script that reads /proc/devices in
+order to find the assigned major number, and sends that to mknod(1),
+once for each node.
 
-Reviewed-by: Mengen Sun <mengensun@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+This duplicates a fair amount of boilerplate that misc device can do
+instead.
+
+Change this to use misc device, which makes the device node names appear
+for us. This also enables udev-like processing if desired.
+
+Delete the /proc/devices parsing from the user-space test script, now
+that it is unnecessary.
+
+v2:
+        - Cleanups per review comments from John Hubbard
+        - Added Tested-by and Ccs
+
+Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
+Tested-by: Alistair Popple <apopple@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Ralph Campbell <rcampbell@nvidia.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Vlastimil Babka <vbabka@suse.cz>
 ---
- include/linux/skbuff.h           | 141 +-----------------------------
- include/uapi/linux/net_dropmon.h | 142 ++++++++++++++++++++++++++++++-
- 2 files changed, 142 insertions(+), 141 deletions(-)
+ lib/test_hmm.c                         | 40 ++++++++++++--------------
+ tools/testing/selftests/vm/test_hmm.sh |  6 ----
+ 2 files changed, 19 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 26538ceb4b01..fcac87a4c917 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -39,6 +39,7 @@
- #include <linux/llist.h>
- #include <net/flow.h>
- #include <net/page_pool.h>
-+#include <linux/net_dropmon.h>
- #if IS_ENABLED(CONFIG_NF_CONNTRACK)
- #include <linux/netfilter/nf_conntrack_common.h>
- #endif
-@@ -307,146 +308,6 @@ struct sk_buff_head {
+diff --git a/lib/test_hmm.c b/lib/test_hmm.c
+index 767538089a62..0e1488e1bad8 100644
+--- a/lib/test_hmm.c
++++ b/lib/test_hmm.c
+@@ -10,7 +10,6 @@
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+-#include <linux/cdev.h>
+ #include <linux/device.h>
+ #include <linux/mutex.h>
+ #include <linux/rwsem.h>
+@@ -25,18 +24,24 @@
+ #include <linux/swapops.h>
+ #include <linux/sched/mm.h>
+ #include <linux/platform_device.h>
++#include <linux/miscdevice.h>
+ #include <linux/rmap.h>
  
- struct sk_buff;
+ #include "test_hmm_uapi.h"
  
--/* The reason of skb drop, which is used in kfree_skb_reason().
-- * en...maybe they should be splited by group?
-- *
-- * Each item here should also be in 'TRACE_SKB_DROP_REASON', which is
-- * used to translate the reason to string.
-- */
--enum skb_drop_reason {
--	SKB_NOT_DROPPED_YET = 0,
--	SKB_DROP_REASON_NOT_SPECIFIED,	/* drop reason is not specified */
--	SKB_DROP_REASON_NO_SOCKET,	/* socket not found */
--	SKB_DROP_REASON_PKT_TOO_SMALL,	/* packet size is too small */
--	SKB_DROP_REASON_TCP_CSUM,	/* TCP checksum error */
--	SKB_DROP_REASON_SOCKET_FILTER,	/* dropped by socket filter */
--	SKB_DROP_REASON_UDP_CSUM,	/* UDP checksum error */
--	SKB_DROP_REASON_NETFILTER_DROP,	/* dropped by netfilter */
--	SKB_DROP_REASON_OTHERHOST,	/* packet don't belong to current
--					 * host (interface is in promisc
--					 * mode)
--					 */
--	SKB_DROP_REASON_IP_CSUM,	/* IP checksum error */
--	SKB_DROP_REASON_IP_INHDR,	/* there is something wrong with
--					 * IP header (see
--					 * IPSTATS_MIB_INHDRERRORS)
--					 */
--	SKB_DROP_REASON_IP_RPFILTER,	/* IP rpfilter validate failed.
--					 * see the document for rp_filter
--					 * in ip-sysctl.rst for more
--					 * information
--					 */
--	SKB_DROP_REASON_UNICAST_IN_L2_MULTICAST, /* destination address of L2
--						  * is multicast, but L3 is
--						  * unicast.
--						  */
--	SKB_DROP_REASON_XFRM_POLICY,	/* xfrm policy check failed */
--	SKB_DROP_REASON_IP_NOPROTO,	/* no support for IP protocol */
--	SKB_DROP_REASON_SOCKET_RCVBUFF,	/* socket receive buff is full */
--	SKB_DROP_REASON_PROTO_MEM,	/* proto memory limition, such as
--					 * udp packet drop out of
--					 * udp_memory_allocated.
--					 */
--	SKB_DROP_REASON_TCP_MD5NOTFOUND,	/* no MD5 hash and one
--						 * expected, corresponding
--						 * to LINUX_MIB_TCPMD5NOTFOUND
--						 */
--	SKB_DROP_REASON_TCP_MD5UNEXPECTED,	/* MD5 hash and we're not
--						 * expecting one, corresponding
--						 * to LINUX_MIB_TCPMD5UNEXPECTED
--						 */
--	SKB_DROP_REASON_TCP_MD5FAILURE,	/* MD5 hash and its wrong,
--					 * corresponding to
--					 * LINUX_MIB_TCPMD5FAILURE
--					 */
--	SKB_DROP_REASON_SOCKET_BACKLOG,	/* failed to add skb to socket
--					 * backlog (see
--					 * LINUX_MIB_TCPBACKLOGDROP)
--					 */
--	SKB_DROP_REASON_TCP_FLAGS,	/* TCP flags invalid */
--	SKB_DROP_REASON_TCP_ZEROWINDOW,	/* TCP receive window size is zero,
--					 * see LINUX_MIB_TCPZEROWINDOWDROP
--					 */
--	SKB_DROP_REASON_TCP_OLD_DATA,	/* the TCP data reveived is already
--					 * received before (spurious retrans
--					 * may happened), see
--					 * LINUX_MIB_DELAYEDACKLOST
--					 */
--	SKB_DROP_REASON_TCP_OVERWINDOW,	/* the TCP data is out of window,
--					 * the seq of the first byte exceed
--					 * the right edges of receive
--					 * window
--					 */
--	SKB_DROP_REASON_TCP_OFOMERGE,	/* the data of skb is already in
--					 * the ofo queue, corresponding to
--					 * LINUX_MIB_TCPOFOMERGE
--					 */
--	SKB_DROP_REASON_IP_OUTNOROUTES,	/* route lookup failed */
--	SKB_DROP_REASON_BPF_CGROUP_EGRESS,	/* dropped by
--						 * BPF_PROG_TYPE_CGROUP_SKB
--						 * eBPF program
--						 */
--	SKB_DROP_REASON_IPV6DISABLED,	/* IPv6 is disabled on the device */
--	SKB_DROP_REASON_NEIGH_CREATEFAIL,	/* failed to create neigh
--						 * entry
--						 */
--	SKB_DROP_REASON_NEIGH_FAILED,	/* neigh entry in failed state */
--	SKB_DROP_REASON_NEIGH_QUEUEFULL,	/* arp_queue for neigh
--						 * entry is full
--						 */
--	SKB_DROP_REASON_NEIGH_DEAD,	/* neigh entry is dead */
--	SKB_DROP_REASON_TC_EGRESS,	/* dropped in TC egress HOOK */
--	SKB_DROP_REASON_QDISC_DROP,	/* dropped by qdisc when packet
--					 * outputting (failed to enqueue to
--					 * current qdisc)
--					 */
--	SKB_DROP_REASON_CPU_BACKLOG,	/* failed to enqueue the skb to
--					 * the per CPU backlog queue. This
--					 * can be caused by backlog queue
--					 * full (see netdev_max_backlog in
--					 * net.rst) or RPS flow limit
--					 */
--	SKB_DROP_REASON_XDP,		/* dropped by XDP in input path */
--	SKB_DROP_REASON_TC_INGRESS,	/* dropped in TC ingress HOOK */
--	SKB_DROP_REASON_PTYPE_ABSENT,	/* not packet_type found to handle
--					 * the skb. For an etner packet,
--					 * this means that L3 protocol is
--					 * not supported
--					 */
--	SKB_DROP_REASON_SKB_CSUM,	/* sk_buff checksum computation
--					 * error
--					 */
--	SKB_DROP_REASON_SKB_GSO_SEG,	/* gso segmentation error */
--	SKB_DROP_REASON_SKB_UCOPY_FAULT,	/* failed to copy data from
--						 * user space, e.g., via
--						 * zerocopy_sg_from_iter()
--						 * or skb_orphan_frags_rx()
--						 */
--	SKB_DROP_REASON_DEV_HDR,	/* device driver specific
--					 * header/metadata is invalid
--					 */
--	/* the device is not ready to xmit/recv due to any of its data
--	 * structure that is not up/ready/initialized, e.g., the IFF_UP is
--	 * not set, or driver specific tun->tfiles[txq] is not initialized
--	 */
--	SKB_DROP_REASON_DEV_READY,
--	SKB_DROP_REASON_FULL_RING,	/* ring buffer is full */
--	SKB_DROP_REASON_NOMEM,		/* error due to OOM */
--	SKB_DROP_REASON_HDR_TRUNC,      /* failed to trunc/extract the header
--					 * from networking data, e.g., failed
--					 * to pull the protocol header from
--					 * frags via pskb_may_pull()
--					 */
--	SKB_DROP_REASON_TAP_FILTER,     /* dropped by (ebpf) filter directly
--					 * attached to tun/tap, e.g., via
--					 * TUNSETFILTEREBPF
--					 */
--	SKB_DROP_REASON_TAP_TXFILTER,	/* dropped by tx filter implemented
--					 * at tun/tap, e.g., check_filter()
--					 */
--	SKB_DROP_REASON_MAX,
--};
--
- /* To allow 64K frame to be packed as single skb without frag_list we
-  * require 64K/PAGE_SIZE pages plus 1 additional page to allow for
-  * buffers which do not start on a page boundary.
-diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
-index 1bbea8f0681e..66092d1e1995 100644
---- a/include/uapi/linux/net_dropmon.h
-+++ b/include/uapi/linux/net_dropmon.h
-@@ -3,7 +3,7 @@
- #define __NET_DROPMON_H
+-#define DMIRROR_NDEVICES		2
+ #define DMIRROR_RANGE_FAULT_TIMEOUT	1000
+ #define DEVMEM_CHUNK_SIZE		(256 * 1024 * 1024U)
+ #define DEVMEM_CHUNKS_RESERVE		16
  
- #include <linux/types.h>
--#include <linux/netlink.h>
-+#include <uapi/linux/netlink.h>
- 
- struct net_dm_drop_point {
- 	__u8 pc[8];
-@@ -130,4 +130,144 @@ enum net_dm_origin {
- 	NET_DM_ORIGIN_HW,
- };
- 
-+/* The reason of skb drop, which is used in kfree_skb_reason().
-+ * en...maybe they should be splited by group?
-+ *
-+ * Each item here should also be in 'TRACE_SKB_DROP_REASON', which is
-+ * used to translate the reason to string.
-+ */
-+enum skb_drop_reason {
-+	SKB_NOT_DROPPED_YET = 0,
-+	SKB_DROP_REASON_NOT_SPECIFIED,	/* drop reason is not specified */
-+	SKB_DROP_REASON_NO_SOCKET,	/* socket not found */
-+	SKB_DROP_REASON_PKT_TOO_SMALL,	/* packet size is too small */
-+	SKB_DROP_REASON_TCP_CSUM,	/* TCP checksum error */
-+	SKB_DROP_REASON_SOCKET_FILTER,	/* dropped by socket filter */
-+	SKB_DROP_REASON_UDP_CSUM,	/* UDP checksum error */
-+	SKB_DROP_REASON_NETFILTER_DROP,	/* dropped by netfilter */
-+	SKB_DROP_REASON_OTHERHOST,	/* packet don't belong to current
-+					 * host (interface is in promisc
-+					 * mode)
-+					 */
-+	SKB_DROP_REASON_IP_CSUM,	/* IP checksum error */
-+	SKB_DROP_REASON_IP_INHDR,	/* there is something wrong with
-+					 * IP header (see
-+					 * IPSTATS_MIB_INHDRERRORS)
-+					 */
-+	SKB_DROP_REASON_IP_RPFILTER,	/* IP rpfilter validate failed.
-+					 * see the document for rp_filter
-+					 * in ip-sysctl.rst for more
-+					 * information
-+					 */
-+	SKB_DROP_REASON_UNICAST_IN_L2_MULTICAST, /* destination address of L2
-+						  * is multicast, but L3 is
-+						  * unicast.
-+						  */
-+	SKB_DROP_REASON_XFRM_POLICY,	/* xfrm policy check failed */
-+	SKB_DROP_REASON_IP_NOPROTO,	/* no support for IP protocol */
-+	SKB_DROP_REASON_SOCKET_RCVBUFF,	/* socket receive buff is full */
-+	SKB_DROP_REASON_PROTO_MEM,	/* proto memory limition, such as
-+					 * udp packet drop out of
-+					 * udp_memory_allocated.
-+					 */
-+	SKB_DROP_REASON_TCP_MD5NOTFOUND,	/* no MD5 hash and one
-+						 * expected, corresponding
-+						 * to LINUX_MIB_TCPMD5NOTFOUND
-+						 */
-+	SKB_DROP_REASON_TCP_MD5UNEXPECTED,	/* MD5 hash and we're not
-+						 * expecting one, corresponding
-+						 * to LINUX_MIB_TCPMD5UNEXPECTED
-+						 */
-+	SKB_DROP_REASON_TCP_MD5FAILURE,	/* MD5 hash and its wrong,
-+					 * corresponding to
-+					 * LINUX_MIB_TCPMD5FAILURE
-+					 */
-+	SKB_DROP_REASON_SOCKET_BACKLOG,	/* failed to add skb to socket
-+					 * backlog (see
-+					 * LINUX_MIB_TCPBACKLOGDROP)
-+					 */
-+	SKB_DROP_REASON_TCP_FLAGS,	/* TCP flags invalid */
-+	SKB_DROP_REASON_TCP_ZEROWINDOW,	/* TCP receive window size is zero,
-+					 * see LINUX_MIB_TCPZEROWINDOWDROP
-+					 */
-+	SKB_DROP_REASON_TCP_OLD_DATA,	/* the TCP data reveived is already
-+					 * received before (spurious retrans
-+					 * may happened), see
-+					 * LINUX_MIB_DELAYEDACKLOST
-+					 */
-+	SKB_DROP_REASON_TCP_OVERWINDOW,	/* the TCP data is out of window,
-+					 * the seq of the first byte exceed
-+					 * the right edges of receive
-+					 * window
-+					 */
-+	SKB_DROP_REASON_TCP_OFOMERGE,	/* the data of skb is already in
-+					 * the ofo queue, corresponding to
-+					 * LINUX_MIB_TCPOFOMERGE
-+					 */
-+	SKB_DROP_REASON_IP_OUTNOROUTES,	/* route lookup failed */
-+	SKB_DROP_REASON_BPF_CGROUP_EGRESS,	/* dropped by
-+						 * BPF_PROG_TYPE_CGROUP_SKB
-+						 * eBPF program
-+						 */
-+	SKB_DROP_REASON_IPV6DISABLED,	/* IPv6 is disabled on the device */
-+	SKB_DROP_REASON_NEIGH_CREATEFAIL,	/* failed to create neigh
-+						 * entry
-+						 */
-+	SKB_DROP_REASON_NEIGH_FAILED,	/* neigh entry in failed state */
-+	SKB_DROP_REASON_NEIGH_QUEUEFULL,	/* arp_queue for neigh
-+						 * entry is full
-+						 */
-+	SKB_DROP_REASON_NEIGH_DEAD,	/* neigh entry is dead */
-+	SKB_DROP_REASON_TC_EGRESS,	/* dropped in TC egress HOOK */
-+	SKB_DROP_REASON_QDISC_DROP,	/* dropped by qdisc when packet
-+					 * outputting (failed to enqueue to
-+					 * current qdisc)
-+					 */
-+	SKB_DROP_REASON_CPU_BACKLOG,	/* failed to enqueue the skb to
-+					 * the per CPU backlog queue. This
-+					 * can be caused by backlog queue
-+					 * full (see netdev_max_backlog in
-+					 * net.rst) or RPS flow limit
-+					 */
-+	SKB_DROP_REASON_XDP,		/* dropped by XDP in input path */
-+	SKB_DROP_REASON_TC_INGRESS,	/* dropped in TC ingress HOOK */
-+	SKB_DROP_REASON_PTYPE_ABSENT,	/* not packet_type found to handle
-+					 * the skb. For an etner packet,
-+					 * this means that L3 protocol is
-+					 * not supported
-+					 */
-+	SKB_DROP_REASON_SKB_CSUM,	/* sk_buff checksum computation
-+					 * error
-+					 */
-+	SKB_DROP_REASON_SKB_GSO_SEG,	/* gso segmentation error */
-+	SKB_DROP_REASON_SKB_UCOPY_FAULT,	/* failed to copy data from
-+						 * user space, e.g., via
-+						 * zerocopy_sg_from_iter()
-+						 * or skb_orphan_frags_rx()
-+						 */
-+	SKB_DROP_REASON_DEV_HDR,	/* device driver specific
-+					 * header/metadata is invalid
-+					 */
-+	/* the device is not ready to xmit/recv due to any of its data
-+	 * structure that is not up/ready/initialized, e.g., the IFF_UP is
-+	 * not set, or driver specific tun->tfiles[txq] is not initialized
-+	 */
-+	SKB_DROP_REASON_DEV_READY,
-+	SKB_DROP_REASON_FULL_RING,	/* ring buffer is full */
-+	SKB_DROP_REASON_NOMEM,		/* error due to OOM */
-+	SKB_DROP_REASON_HDR_TRUNC,	/* failed to trunc/extract the header
-+					 * from networking data, e.g., failed
-+					 * to pull the protocol header from
-+					 * frags via pskb_may_pull()
-+					 */
-+	SKB_DROP_REASON_TAP_FILTER,	/* dropped by (ebpf) filter directly
-+					 * attached to tun/tap, e.g., via
-+					 * TUNSETFILTEREBPF
-+					 */
-+	SKB_DROP_REASON_TAP_TXFILTER,	/* dropped by tx filter implemented
-+					 * at tun/tap, e.g., check_filter()
-+					 */
-+	SKB_DROP_REASON_MAX,
++static const char *dmirror_device_names[] = {
++	"hmm_dmirror0",
++	"hmm_dmirror1"
 +};
 +
- #endif
++#define DMIRROR_NDEVICES ARRAY_SIZE(dmirror_device_names)
++
+ static const struct dev_pagemap_ops dmirror_devmem_ops;
+ static const struct mmu_interval_notifier_ops dmirror_min_ops;
+-static dev_t dmirror_dev;
+ 
+ struct dmirror_device;
+ 
+@@ -82,7 +87,7 @@ struct dmirror_chunk {
+  * Per device data.
+  */
+ struct dmirror_device {
+-	struct cdev		cdevice;
++	struct miscdevice	miscdevice;
+ 	struct hmm_devmem	*devmem;
+ 
+ 	unsigned int		devmem_capacity;
+@@ -118,7 +123,6 @@ static void dmirror_bounce_fini(struct dmirror_bounce *bounce)
+ 
+ static int dmirror_fops_open(struct inode *inode, struct file *filp)
+ {
+-	struct cdev *cdev = inode->i_cdev;
+ 	struct dmirror *dmirror;
+ 	int ret;
+ 
+@@ -127,12 +131,13 @@ static int dmirror_fops_open(struct inode *inode, struct file *filp)
+ 	if (dmirror == NULL)
+ 		return -ENOMEM;
+ 
+-	dmirror->mdevice = container_of(cdev, struct dmirror_device, cdevice);
++	dmirror->mdevice = container_of(filp->private_data,
++					struct dmirror_device, miscdevice);
+ 	mutex_init(&dmirror->mutex);
+ 	xa_init(&dmirror->pt);
+ 
+ 	ret = mmu_interval_notifier_insert(&dmirror->notifier, current->mm,
+-				0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
++					0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
+ 	if (ret) {
+ 		kfree(dmirror);
+ 		return ret;
+@@ -1216,16 +1221,16 @@ static const struct dev_pagemap_ops dmirror_devmem_ops = {
+ 
+ static int dmirror_device_init(struct dmirror_device *mdevice, int id)
+ {
+-	dev_t dev;
+ 	int ret;
+ 
+-	dev = MKDEV(MAJOR(dmirror_dev), id);
+ 	mutex_init(&mdevice->devmem_lock);
+ 	spin_lock_init(&mdevice->lock);
+ 
+-	cdev_init(&mdevice->cdevice, &dmirror_fops);
+-	mdevice->cdevice.owner = THIS_MODULE;
+-	ret = cdev_add(&mdevice->cdevice, dev, 1);
++	mdevice->miscdevice.minor = MISC_DYNAMIC_MINOR;
++	mdevice->miscdevice.name = dmirror_device_names[id];
++	mdevice->miscdevice.fops = &dmirror_fops;
++
++	ret = misc_register(&mdevice->miscdevice);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1252,7 +1257,7 @@ static void dmirror_device_remove(struct dmirror_device *mdevice)
+ 		kfree(mdevice->devmem_chunks);
+ 	}
+ 
+-	cdev_del(&mdevice->cdevice);
++	misc_deregister(&mdevice->miscdevice);
+ }
+ 
+ static int __init hmm_dmirror_init(void)
+@@ -1260,11 +1265,6 @@ static int __init hmm_dmirror_init(void)
+ 	int ret;
+ 	int id;
+ 
+-	ret = alloc_chrdev_region(&dmirror_dev, 0, DMIRROR_NDEVICES,
+-				  "HMM_DMIRROR");
+-	if (ret)
+-		goto err_unreg;
+-
+ 	for (id = 0; id < DMIRROR_NDEVICES; id++) {
+ 		ret = dmirror_device_init(dmirror_devices + id, id);
+ 		if (ret)
+@@ -1277,8 +1277,7 @@ static int __init hmm_dmirror_init(void)
+ err_chrdev:
+ 	while (--id >= 0)
+ 		dmirror_device_remove(dmirror_devices + id);
+-	unregister_chrdev_region(dmirror_dev, DMIRROR_NDEVICES);
+-err_unreg:
++
+ 	return ret;
+ }
+ 
+@@ -1288,7 +1287,6 @@ static void __exit hmm_dmirror_exit(void)
+ 
+ 	for (id = 0; id < DMIRROR_NDEVICES; id++)
+ 		dmirror_device_remove(dmirror_devices + id);
+-	unregister_chrdev_region(dmirror_dev, DMIRROR_NDEVICES);
+ }
+ 
+ module_init(hmm_dmirror_init);
+diff --git a/tools/testing/selftests/vm/test_hmm.sh b/tools/testing/selftests/vm/test_hmm.sh
+index 0647b525a625..69f5889f8575 100755
+--- a/tools/testing/selftests/vm/test_hmm.sh
++++ b/tools/testing/selftests/vm/test_hmm.sh
+@@ -41,17 +41,11 @@ check_test_requirements()
+ load_driver()
+ {
+ 	modprobe $DRIVER > /dev/null 2>&1
+-	if [ $? == 0 ]; then
+-		major=$(awk "\$2==\"HMM_DMIRROR\" {print \$1}" /proc/devices)
+-		mknod /dev/hmm_dmirror0 c $major 0
+-		mknod /dev/hmm_dmirror1 c $major 1
+-	fi
+ }
+ 
+ unload_driver()
+ {
+ 	modprobe -r $DRIVER > /dev/null 2>&1
+-	rm -f /dev/hmm_dmirror?
+ }
+ 
+ run_smoke()
 -- 
-2.35.1
+2.17.1
 

@@ -2,167 +2,590 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DD54D62D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD874D62F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349060AbiCKOIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S1349153AbiCKOJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243047AbiCKOIc (ORCPT
+        with ESMTP id S1349067AbiCKOJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:08:32 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2048.outbound.protection.outlook.com [40.107.243.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FDA10C2;
-        Fri, 11 Mar 2022 06:07:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d5axo4VoTJjE5lJZwvb2jEaUhogZoQeTlnIeQ34c3bCE74hz5gd09Z1ThDk/aVI9EHqzW5Hhnktqv68OGHUkYKg6+DH/DZGuj3HScFmmo++M3Na19kQKutKhQCTUTwEwtqRgyDwmjcuv5vblkAkT5fEr1ct6CWyBn1HAN+he0t16HC0yxkgX7fmVTSRY9cBNt7FXUcSAoBmDYXj5Ae74h6vvbP0u6IeTwhmIqrj32YwWrvBSaUAw3OfBzpnS36ikOV72cDkN2OwLfa8VCItwWtylrAH8s8NK4LIyIYsAGiO+qImp3z2GT4UQ+rnWNSuvLbVwH/3DpvZBkMRFKRzZrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S678nBqKqfOTZhEN9q/6uQdkNJAFq4n32RmdzUyeg1w=;
- b=adAT501i/9XHFCNYzJBR29kVwlv4hRZjiHqfQtpq/dIUES6IdrfHH8c4RFlX8EYEZrCzUKqQZsKOf/F2dR+YWG2+maPWaCxNTUa8jc1kibxM0OBD205kJG7HGcDlz5duf/63I88JEWuYK9egc7QyGfgTuQDMmKmUAtEyOoVBwLbUqJ7aqwUZV56y5Lf5k9q954X0hXNu0UJlt6dWuJngk6EUDXARnWBeR268ihHPpeWuABhasUIvldSV28IEAsDTG+5mVRfrYzfQkl4gPiJcYqiOLpKHnLP6/Pgxguso8zeL+oLC6DQBkHHsX5CKdkrEPjJyN24837h00tF6XAdQTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S678nBqKqfOTZhEN9q/6uQdkNJAFq4n32RmdzUyeg1w=;
- b=t6SgrrvlHNQn+3gUK+/2ad6S/vXkuYKx5dAD6gjSswGF68KKkU6SRSrmeg7tNhhqf6PFGeEXI+QtclSUdhs/WnEwZEiSALuAUYweTaFKt5XiPhpXY1WYVQgX5uFVrq1Nhlj7+1qnf9H8W/GKtZD8Dw1NcH45/buYUGw5A5Wl5QY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by BN6PR12MB1300.namprd12.prod.outlook.com (2603:10b6:404:1a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Fri, 11 Mar
- 2022 14:07:25 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::8940:cfde:90ac:b008]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::8940:cfde:90ac:b008%6]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 14:07:25 +0000
-Message-ID: <18a5a49a-e68f-621e-f8ae-16e794a74905@amd.com>
-Date:   Fri, 11 Mar 2022 08:07:23 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] x86/mce: Cover grading of AMD machine error checks
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, yazen.ghannam@amd.com,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        bilbao@vt.edu
-References: <20220309174107.6113-1-carlos.bilbao@amd.com>
- <Yijz7dA1U0AMcYPZ@zn.tnic> <4a345de2-6a2c-fe26-c55c-34ce6ea431d4@amd.com>
- <Yip4EV69+lElCuPM@zn.tnic>
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <Yip4EV69+lElCuPM@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0257.namprd13.prod.outlook.com
- (2603:10b6:208:2ba::22) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+        Fri, 11 Mar 2022 09:09:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19FE673C8;
+        Fri, 11 Mar 2022 06:07:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E82A61EB2;
+        Fri, 11 Mar 2022 14:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B49C340FB;
+        Fri, 11 Mar 2022 14:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647007676;
+        bh=5cJF4zGe71Z13BaIcRWU12MMzz6/FmuS/leyIbj+2FQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TH930+LRxNLshQQnDyCGecrSO56f9nkTFukRDg1yfnk0YNnjKhrDDe1/+kUm+LQ4I
+         cd/o07a4S4dBpghHy8qTmQG8kLPrA7I1WfDJdTBmjCRI09WluF9MXGQSzCN5E8n7IH
+         bdFAz1bBhLq8bIGphiS8UpIPh+A7iAX2Pme3uGJNVYAYs4ULVqLOrCFiY9eneK43Qq
+         R3ropPvgfM1ZTS9QG7O4zKH/o2kR/0FzjnLHoeEmqpm2sYwxEN0qNswFoilwEHqgvB
+         nDZMAB4Rt0LQXoiui8znA8cKSyrivUAVvyAG+utG0LewfGfuRWkxuX9AwaE5Xz3LAW
+         /Ifa7wMnaKDwg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nSfvu-000lBA-3m; Fri, 11 Mar 2022 15:07:54 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Herman <herman.yim88@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Suresh Udipi <sudipi@jp.adit-jv.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 10/38] media: platform: place Renesas drivers on a separate dir
+Date:   Fri, 11 Mar 2022 15:07:23 +0100
+Message-Id: <b7e9058b5caac542eb06b5ae313d72218ff848e3.1647006877.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
+References: <cover.1647006877.git.mchehab@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9ec6d534-10cb-415f-15ae-08da036877fe
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1300:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1300EB62647D68E9E4EB6E47F80C9@BN6PR12MB1300.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vup2sihE9RFVtoCeWzXPcJzkTG2VIzIoY3U/9Q9M6KMc62Bl6r5WANH9YCJEU0QIj0JdMSAjL+Uc/1vCLZz/QwSEUvckdE/2PXyOjN1YEUCTI7eEVKjiIehojm5ncezQPoonE+KfxLk0EOkfxVRjmdlF6+EDFQrjSmiF40Wxo/qLqBKOaUtvOS5nS6a6KbFjpiuDprA6YHSWVLOefm/psMLhoMp5RcKKjToNmGaGKv9kXa2dl4zP1Sz/OGCsemRb+RuOVfNq2gom8e0AAgZd2gs7cGcT6meKalcJXIUHXarTLB2+IL9jYDWbzhxWUq23ugGtrSETeugPX6x/3PtGFTL9o9fJH29XMVWukzWFRDiNWJEkEH8kbXTk2nXD1QbpNj9mZpY4Mu8BF6hprBbY00HBwy+MZqT6sksrqHwTg3XQbobtHMHwo/+1PdtSC3osEhOQUfCAxmCuL3ef+4r00PVoIGu5cD6pK46sqz+hAX95emX81r7SOdpVMqhZnta985/f6kZelebl0NBRhfWTUVlo6nmYounJeUfGf5G1gfdpE7YvWW3tAXWWtInQhHnUo634X66HQlqFPF2+0nwb2k5cG8gW2k+KLaECNpW31ITdWZd50b05WYkNASCJewBXzA5apxqQvNKhZU+0XWYBVsNalEA1yQgfUYYaM6NMqWvjYMlL1WfhvwlcG66RucTkpVKOfSizhDvWHgh7ox8X1NDQ6NXQ/xY5g6dKwSLe31g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(31686004)(8936002)(6916009)(38100700002)(83380400001)(186003)(5660300002)(2906002)(26005)(66556008)(66946007)(44832011)(66476007)(8676002)(4326008)(2616005)(86362001)(508600001)(6486002)(53546011)(6506007)(6512007)(36756003)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cHBPY3FQN2s0RndQSnRpZzIxQjZsdFVMbWZUVzFxT0FTMjBnZ3ZDU2ZsMFor?=
- =?utf-8?B?Z25RMHVzSXUvSUw3WlJSNURCZmxUUHRyMjYzYjZ6MDhsVWlEQ3dIYTNUV1cv?=
- =?utf-8?B?ZytyL1hQLzFlOFdGVVBnMzBCZGhBaXlPREQxYUVzR1BzVkVKUlRCOUFmd3pD?=
- =?utf-8?B?WjZjSmFzZzFMZndEbUFDNSsxYW1CRC9mSVhkZURCd2lNSlBNMkFTZGJ0LzNy?=
- =?utf-8?B?WkFEM05MdE9VMWxkcU4rVFJjb3VpN045NlBONVZmR1IwRytYemRFWlFzbkpT?=
- =?utf-8?B?OE5USjVtMkJUeFgvdGZIL283bFV3cGJGVVEzOHVrb0NYNGVLVW5wcjlHckhE?=
- =?utf-8?B?TzRwMEh5RFY5V3A0SS9udldpWlU2dllCaVVkVUF0S0pLbEpTNkhYbGN0b3Rr?=
- =?utf-8?B?S21nd1gyMzN6c0VjYnNadHR0cjRhVytFKzJtd2hFSWFzZGNTQkc2L2hMUHBx?=
- =?utf-8?B?SXBRM25SNFhNbUVORWgzYkNRQVVPQ2FNSytmZngyZysxYk1RWkpCa2Z5Tm5R?=
- =?utf-8?B?d3Q2V1luL3Y5YlVNQmwwOXdMNDVRTXFVY0F1VXNTbmtoMXp4YUJkRkdxUmx6?=
- =?utf-8?B?bnUybVBUWnlvMmlzMGN5bTh4a3pUQU9weUFHTlhBWmhjMU90a1EwYTZ3V1N5?=
- =?utf-8?B?Y1VvU3ZOM1FqQjJNZFNxWEQwbk9kbEJTN2xhYThzbTNqS1hjWVJCb3BNMXcv?=
- =?utf-8?B?U3EwNU0zcEdCWSttSkxsSHoxT1UrTVk1alFUR015Vmg2OStzZ0RKcy9tdzYz?=
- =?utf-8?B?bDNsYnBLOWdvQWRGc1NpSTd6MjNPOUc1NE4wNkFvSUJBZS9YRTlMdjNQbjlz?=
- =?utf-8?B?dmZ0ZEt1TFN2M0JFeUx2MnVQOHcxVThJUG9kVG5tRm9YaWxvRktDeDhtK2Zl?=
- =?utf-8?B?eE9lMTNPbTJVdlpWQmNxTjAwS21QQjA0bEtpcXVxT2IySm9PNEVQYUpJekhy?=
- =?utf-8?B?VTNrcS9nUEdWUDZhRmU3WVh2UlFFVHYxNFpzTWF0S0ppWEZYWWh0Y29zMTh0?=
- =?utf-8?B?OXoyMlhOemFLS3FCbVE5RUhjdkFlM3N2RUhscno1OWR1VHNiNzBMRUhMM3Fy?=
- =?utf-8?B?bEJxM3VJbmtDZFZJeXJEN3ZFT3BtWGViRE8vSVhNR1BQM0NRWSt0WjZEV09Z?=
- =?utf-8?B?SjZla0tseWRRVzNGY3VhclJpSW1LVlExd0lKQ3kyUWV6Y3RkUnR0UGQ5Y2kx?=
- =?utf-8?B?RzRyTWl0ejd4S29jMXNUNzE3RnBtbnNUQVJSanpKNklJdkorMnROcUNucWtn?=
- =?utf-8?B?Z21pL3dqUU5KQ2Vxa3I5aGhqd0wzemV1U3NiaDhZa2k0SHlhR1E1WGl0V2NB?=
- =?utf-8?B?MzFhbzZzQ0NPbWMrQmk0Ui8vOC9HZnRZVTV1M0FJNHlKQXRuNlNGcmRhSnhY?=
- =?utf-8?B?NHhFdWlQQWdpd2JWT3lHbnQ5QlVCOG1TMHJMNjBPUFQzN0djL1MxSFFyWll3?=
- =?utf-8?B?eWZrZXRtaGJWUWVoTmo3alg5V3Z4WHQrbkdjalFKNUFHQ2doNDR1S3hJTGEz?=
- =?utf-8?B?UEdLVHR0Z2huMjRINktNZEhveDkwRjJKL1RlOW93YW15bmI0NmVJQ25MdzZI?=
- =?utf-8?B?NjQ5ZzZZcmg0Sk5pUzhleGZnbEYyQ3BrbHlkZzk4c3BxMFhXd3FwL3RVMlEv?=
- =?utf-8?B?OXNBS0R0MzRyVFp2UmtTUEdwTEFZZlM3TnZQVllzOHNpVEJFSWpkY2gzMjJT?=
- =?utf-8?B?WTJvaXFWV0Y0OWxiaHlKMS9RZnFzRmRUaXVKQklRVUxEU2dyWTZaVXRKWFJi?=
- =?utf-8?B?bnA5VTBjUjZJMExLVC80dCsvaFF1MnRNRzR4TGZzdkxZcEVQTzZMODlBNTJh?=
- =?utf-8?B?Zld5WFVtYXRUYUtZTm4yOWtIUXhUTmZCSzlwaHp3U2lvTE5VcXN3OTQrU3VK?=
- =?utf-8?B?NWFwdlErM0drSnZsNm9tWmYyTFcrUXBERE1nL2R1eTdhSHkvUkN1UlVDcHdV?=
- =?utf-8?B?SHc3b0hIWXN2N2lUclVKYXdieGpiOHNRZnZuUGthbTd3bm9KQ0lKSkRpNlV2?=
- =?utf-8?B?MHRJd2NvTUdtcDZWTEpaRlV2Vy95VVpQT0VIc2xHODl2RjhkeldzOTF6Y0Fm?=
- =?utf-8?B?SWE5ejZTQVVDSnlKRGc0K0RLc2VNSTRIMUxTbkVTQmdUTjhWU0FrS3Ywb3VX?=
- =?utf-8?B?SFByNVdvL0NQcEdxaVRpOXVGcXdLczBmVFRPSHZJdXlGNytlMFVUMllxeTZp?=
- =?utf-8?Q?bITFXXkkoFALIzAhQsQtoIE=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ec6d534-10cb-415f-15ae-08da036877fe
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 14:07:25.2531
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m9vRhYQ64e6uMXr7iM65scj8RNp0z2YZluWdOjlKKGuHc+dF55LVCwciq0fz+2Ro2s5g5uxQrq5KBqO2jWOBiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1300
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/2022 4:13 PM, Borislav Petkov wrote:
-> On Thu, Mar 10, 2022 at 12:24:08PM -0600, Carlos Bilbao wrote:
->> We will cover grading of MCEs like deferred memory scrub errors, attempts 
->> to access poisonous data, etc. I could list all new covered cases in the 
->> commit message if you think that'd be positive.
-> 
-> So no actual use case - you want to grade error severity for all types
-> of MCEs.
-> 
->> Hope that helps clarify,
-> 
-> Yes, it does a bit.
-> 
-> It sounds to me like you want to do at least two patches:
-> 
-> 1. Extend the severity grading function with the new types of errors
-> 
-> 2. Add string descriptions of the error types mce_severity_amd() looks
-> at, so that mce_panic() issues them.
-> 
-> I.e., you want to decode the fatal MCEs which panic the machine.
-> 
-> In general, what would help is if you think about what you're trying to
-> achieve and write it down first. How to achieve that we can figure out
-> later.
-> 
-> What happens now is you send me a patch and I'm trying to decipher from
-> the code why you're doing what you're doing. Which is kinda backwards if
-> you think about it...
-> 
+In order to cleanup the main platform media directory, move Renesas
+driver to its own directory.
 
-Glad we are on the same page now. I will prepare a pachset and include more
-informative commit messages.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-Thanks,
-Carlos
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
+
+ MAINTAINERS                                   |  16 +--
+ drivers/media/platform/Kconfig                | 113 +----------------
+ drivers/media/platform/Makefile               |   9 +-
+ drivers/media/platform/renesas/Kconfig        | 119 ++++++++++++++++++
+ drivers/media/platform/renesas/Makefile       |  14 +++
+ .../media/platform/{ => renesas}/rcar-fcp.c   |   0
+ .../media/platform/{ => renesas}/rcar-isp.c   |   0
+ .../platform/{ => renesas}/rcar-vin/Kconfig   |   0
+ .../platform/{ => renesas}/rcar-vin/Makefile  |   0
+ .../{ => renesas}/rcar-vin/rcar-core.c        |   0
+ .../{ => renesas}/rcar-vin/rcar-csi2.c        |   0
+ .../{ => renesas}/rcar-vin/rcar-dma.c         |   0
+ .../{ => renesas}/rcar-vin/rcar-v4l2.c        |   0
+ .../{ => renesas}/rcar-vin/rcar-vin.h         |   0
+ .../media/platform/{ => renesas}/rcar_drif.c  |   0
+ .../media/platform/{ => renesas}/rcar_fdp1.c  |   0
+ .../media/platform/{ => renesas}/rcar_jpu.c   |   0
+ .../platform/{ => renesas}/renesas-ceu.c      |   0
+ drivers/media/platform/{ => renesas}/sh_vou.c |   0
+ 19 files changed, 144 insertions(+), 127 deletions(-)
+ create mode 100644 drivers/media/platform/renesas/Kconfig
+ create mode 100644 drivers/media/platform/renesas/Makefile
+ rename drivers/media/platform/{ => renesas}/rcar-fcp.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-isp.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/Kconfig (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/Makefile (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-core.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-csi2.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-dma.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-v4l2.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-vin.h (100%)
+ rename drivers/media/platform/{ => renesas}/rcar_drif.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar_fdp1.c (100%)
+ rename drivers/media/platform/{ => renesas}/rcar_jpu.c (100%)
+ rename drivers/media/platform/{ => renesas}/renesas-ceu.c (100%)
+ rename drivers/media/platform/{ => renesas}/sh_vou.c (100%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 780ef2ef3362..5a5cc49e27a6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10322,7 +10322,7 @@ M:	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>
+ L:	linux-media@vger.kernel.org
+ L:	linux-renesas-soc@vger.kernel.org
+ S:	Maintained
+-F:	drivers/media/platform/rcar_jpu.c
++F:	drivers/media/platform/renesas/rcar_jpu.c
+ 
+ JSM Neo PCI based serial card
+ L:	linux-serial@vger.kernel.org
+@@ -11973,7 +11973,7 @@ L:	linux-renesas-soc@vger.kernel.org
+ S:	Supported
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/renesas,ceu.yaml
+-F:	drivers/media/platform/renesas-ceu.c
++F:	drivers/media/platform/renesas/renesas-ceu.c
+ F:	include/media/drv-intf/renesas-ceu.h
+ 
+ MEDIA DRIVERS FOR RENESAS - DRIF
+@@ -11983,7 +11983,7 @@ L:	linux-renesas-soc@vger.kernel.org
+ S:	Supported
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/renesas,drif.yaml
+-F:	drivers/media/platform/rcar_drif.c
++F:	drivers/media/platform/renesas/rcar_drif.c
+ 
+ MEDIA DRIVERS FOR RENESAS - FCP
+ M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+@@ -11992,7 +11992,7 @@ L:	linux-renesas-soc@vger.kernel.org
+ S:	Supported
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/renesas,fcp.yaml
+-F:	drivers/media/platform/rcar-fcp.c
++F:	drivers/media/platform/renesas/rcar-fcp.c
+ F:	include/media/rcar-fcp.h
+ 
+ MEDIA DRIVERS FOR RENESAS - FDP1
+@@ -12002,7 +12002,7 @@ L:	linux-renesas-soc@vger.kernel.org
+ S:	Supported
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/renesas,fdp1.yaml
+-F:	drivers/media/platform/rcar_fdp1.c
++F:	drivers/media/platform/renesas/rcar_fdp1.c
+ 
+ MEDIA DRIVERS FOR RENESAS - VIN
+ M:	Niklas Söderlund <niklas.soderlund@ragnatech.se>
+@@ -12013,8 +12013,8 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/renesas,csi2.yaml
+ F:	Documentation/devicetree/bindings/media/renesas,isp.yaml
+ F:	Documentation/devicetree/bindings/media/renesas,vin.yaml
+-F:	drivers/media/platform/rcar-isp.c
+-F:	drivers/media/platform/rcar-vin/
++F:	drivers/media/platform/renesas/rcar-isp.c
++F:	drivers/media/platform/renesas/rcar-vin/
+ 
+ MEDIA DRIVERS FOR RENESAS - VSP1
+ M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+@@ -17536,7 +17536,7 @@ F:	include/media/i2c/rj54n1cb0c.h
+ SH_VOU V4L2 OUTPUT DRIVER
+ L:	linux-media@vger.kernel.org
+ S:	Orphan
+-F:	drivers/media/platform/sh_vou.c
++F:	drivers/media/platform/renesas/sh_vou.c
+ F:	include/media/drv-intf/sh_vou.h
+ 
+ SI2157 MEDIA DRIVER
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index d6751282087a..87ef4fb68bdf 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -38,6 +38,8 @@ config V4L_MEM2MEM_DRIVERS
+ 
+ source "drivers/media/platform/nxp/Kconfig"
+ 
++source "drivers/media/platform/renesas/Kconfig"
++
+ # V4L platform drivers
+ 
+ source "drivers/media/platform/marvell-ccic/Kconfig"
+@@ -52,15 +54,6 @@ source "drivers/media/platform/omap/Kconfig"
+ 
+ source "drivers/media/platform/aspeed/Kconfig"
+ 
+-config VIDEO_SH_VOU
+-	tristate "SuperH VOU video output driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && I2C
+-	depends on ARCH_SHMOBILE || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	help
+-	  Support for the Video Output Unit (VOU) on SuperH SoCs.
+-
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+ 	depends on V4L_PLATFORM_DRIVERS
+@@ -137,16 +130,6 @@ config VIDEO_STM32_DCMI
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called stm32-dcmi.
+ 
+-config VIDEO_RENESAS_CEU
+-	tristate "Renesas Capture Engine Unit (CEU) driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on ARCH_SHMOBILE || ARCH_R7S72100 || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_FWNODE
+-	help
+-	  This is a v4l2 driver for the Renesas CEU Interface
+-
+ config VIDEO_ROCKCHIP_ISP1
+ 	tristate "Rockchip Image Signal Processing v1 Unit driver"
+ 	depends on V4L_PLATFORM_DRIVERS
+@@ -169,7 +152,6 @@ config VIDEO_ROCKCHIP_ISP1
+ source "drivers/media/platform/exynos4-is/Kconfig"
+ source "drivers/media/platform/am437x/Kconfig"
+ source "drivers/media/platform/xilinx/Kconfig"
+-source "drivers/media/platform/rcar-vin/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
+ source "drivers/media/platform/imx/Kconfig"
+@@ -200,22 +182,6 @@ config VIDEO_TI_CAL_MC
+ 	  default. Note that this behavior can be overridden via
+ 	  module parameter 'mc_api'.
+ 
+-config VIDEO_RCAR_ISP
+-	tristate "R-Car Image Signal Processor (ISP)"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_V4L2 && OF
+-	depends on ARCH_RENESAS || COMPILE_TEST
+-	select MEDIA_CONTROLLER
+-	select VIDEO_V4L2_SUBDEV_API
+-	select RESET_CONTROLLER
+-	select V4L2_FWNODE
+-	help
+-	  Support for Renesas R-Car Image Signal Processor (ISP).
+-	  Enable this to support the Renesas R-Car Image Signal
+-	  Processor (ISP).
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called rcar-isp.
+ 
+ # Mem2mem drivers
+ 
+@@ -488,64 +454,6 @@ config VIDEO_STM32_DMA2D
+ 	  The STM32 DMA2D is a memory-to-memory engine for pixel conversion
+ 	  and specialized DMA dedicated to image manipulation.
+ 
+-config VIDEO_RENESAS_FDP1
+-	tristate "Renesas Fine Display Processor"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on ARCH_RENESAS || COMPILE_TEST
+-	depends on (!ARM64 && !VIDEO_RENESAS_FCP) || VIDEO_RENESAS_FCP
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	  This is a V4L2 driver for the Renesas Fine Display Processor
+-	  providing colour space conversion, and de-interlacing features.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called rcar_fdp1.
+-
+-config VIDEO_RENESAS_JPU
+-	tristate "Renesas JPEG Processing Unit"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on ARCH_RENESAS || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	  This is a V4L2 driver for the Renesas JPEG Processing Unit.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called rcar_jpu.
+-
+-config VIDEO_RENESAS_FCP
+-	tristate "Renesas Frame Compression Processor"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on ARCH_RENESAS || COMPILE_TEST
+-	depends on OF
+-	help
+-	  This is a driver for the Renesas Frame Compression Processor (FCP).
+-	  The FCP is a companion module of video processing modules in the
+-	  Renesas R-Car Gen3 and RZ/G2 SoCs. It handles memory access for
+-	  the codec, VSP and FDP modules.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called rcar-fcp.
+-
+-config VIDEO_RENESAS_VSP1
+-	tristate "Renesas VSP1 Video Processing Engine"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_V4L2
+-	depends on ARCH_RENESAS || COMPILE_TEST
+-	depends on (!ARM64 && !VIDEO_RENESAS_FCP) || VIDEO_RENESAS_FCP
+-	select MEDIA_CONTROLLER
+-	select VIDEO_V4L2_SUBDEV_API
+-	select VIDEOBUF2_DMA_CONTIG
+-	select VIDEOBUF2_VMALLOC
+-	help
+-	  This is a V4L2 driver for the Renesas VSP1 video processing engine.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called vsp1.
+-
+ config VIDEO_ROCKCHIP_RGA
+ 	tristate "Rockchip Raster 2d Graphic Acceleration Unit"
+ 	depends on V4L_MEM2MEM_DRIVERS
+@@ -676,21 +584,4 @@ config VIDEO_TI_CSC
+ # DVB platform drivers
+ source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+ 
+-# SDR platform drivers
+-config VIDEO_RCAR_DRIF
+-	tristate "Renesas Digital Radio Interface (DRIF)"
+-	depends on SDR_PLATFORM_DRIVERS
+-	depends on VIDEO_V4L2
+-	depends on ARCH_RENESAS || COMPILE_TEST
+-	select VIDEOBUF2_VMALLOC
+-	select V4L2_ASYNC
+-	help
+-	  Say Y if you want to enable R-Car Gen3 DRIF support. DRIF is Digital
+-	  Radio Interface that interfaces with an RF front end chip. It is a
+-	  receiver of digital data which uses DMA to transfer received data to
+-	  a configured location for an application to use.
+-
+-	  To compile this driver as a module, choose M here; the module
+-	  will be called rcar_drif.
+-
+ endif #MEDIA_PLATFORM_DRIVERS
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 6783b374dc80..1a6c41e6e261 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -28,7 +28,7 @@ obj-y += omap/
+ obj-y += omap3isp/
+ obj-y += qcom/camss/
+ obj-y += qcom/venus/
+-obj-y += rcar-vin/
++obj-y += renesas/
+ obj-y += rockchip/rga/
+ obj-y += rockchip/rkisp1/
+ obj-y += s3c-camif/
+@@ -50,10 +50,3 @@ obj-y += xilinx/
+ # Please place here only ancillary drivers that aren't SoC-specific
+ obj-$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
+ obj-$(CONFIG_VIDEO_MUX)			+= video-mux.o
+-obj-$(CONFIG_VIDEO_RCAR_DRIF)		+= rcar_drif.o
+-obj-$(CONFIG_VIDEO_RCAR_ISP)		+= rcar-isp.o
+-obj-$(CONFIG_VIDEO_RENESAS_CEU)		+= renesas-ceu.o
+-obj-$(CONFIG_VIDEO_RENESAS_FCP)		+= rcar-fcp.o
+-obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
+-obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
+-obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+diff --git a/drivers/media/platform/renesas/Kconfig b/drivers/media/platform/renesas/Kconfig
+new file mode 100644
+index 000000000000..e1329a60d3fa
+--- /dev/null
++++ b/drivers/media/platform/renesas/Kconfig
+@@ -0,0 +1,119 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++# V4L drivers
++
++config VIDEO_RENESAS_CEU
++	tristate "Renesas Capture Engine Unit (CEU) driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_SHMOBILE || ARCH_R7S72100 || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_FWNODE
++	help
++	  This is a v4l2 driver for the Renesas CEU Interface
++
++config VIDEO_RCAR_ISP
++	tristate "R-Car Image Signal Processor (ISP)"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2 && OF
++	depends on ARCH_RENESAS || COMPILE_TEST
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	select RESET_CONTROLLER
++	select V4L2_FWNODE
++	help
++	  Support for Renesas R-Car Image Signal Processor (ISP).
++	  Enable this to support the Renesas R-Car Image Signal
++	  Processor (ISP).
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called rcar-isp.
++
++config VIDEO_SH_VOU
++	tristate "SuperH VOU video output driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV && I2C
++	depends on ARCH_SHMOBILE || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	help
++	  Support for the Video Output Unit (VOU) on SuperH SoCs.
++
++source "drivers/media/platform/renesas/rcar-vin/Kconfig"
++
++# Mem2mem drivers
++
++config VIDEO_RENESAS_FDP1
++	tristate "Renesas Fine Display Processor"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_RENESAS || COMPILE_TEST
++	depends on (!ARM64 && !VIDEO_RENESAS_FCP) || VIDEO_RENESAS_FCP
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  This is a V4L2 driver for the Renesas Fine Display Processor
++	  providing colour space conversion, and de-interlacing features.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called rcar_fdp1.
++
++config VIDEO_RENESAS_JPU
++	tristate "Renesas JPEG Processing Unit"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_RENESAS || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  This is a V4L2 driver for the Renesas JPEG Processing Unit.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called rcar_jpu.
++
++config VIDEO_RENESAS_FCP
++	tristate "Renesas Frame Compression Processor"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on ARCH_RENESAS || COMPILE_TEST
++	depends on OF
++	help
++	  This is a driver for the Renesas Frame Compression Processor (FCP).
++	  The FCP is a companion module of video processing modules in the
++	  Renesas R-Car Gen3 and RZ/G2 SoCs. It handles memory access for
++	  the codec, VSP and FDP modules.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called rcar-fcp.
++
++config VIDEO_RENESAS_VSP1
++	tristate "Renesas VSP1 Video Processing Engine"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_V4L2
++	depends on ARCH_RENESAS || COMPILE_TEST
++	depends on (!ARM64 && !VIDEO_RENESAS_FCP) || VIDEO_RENESAS_FCP
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	select VIDEOBUF2_DMA_CONTIG
++	select VIDEOBUF2_VMALLOC
++	help
++	  This is a V4L2 driver for the Renesas VSP1 video processing engine.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called vsp1.
++
++# SDR drivers
++
++config VIDEO_RCAR_DRIF
++	tristate "Renesas Digital Radio Interface (DRIF)"
++	depends on SDR_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2
++	depends on ARCH_RENESAS || COMPILE_TEST
++	select VIDEOBUF2_VMALLOC
++	select V4L2_ASYNC
++	help
++	  Say Y if you want to enable R-Car Gen3 DRIF support. DRIF is Digital
++	  Radio Interface that interfaces with an RF front end chip. It is a
++	  receiver of digital data which uses DMA to transfer received data to
++	  a configured location for an application to use.
++
++	  To compile this driver as a module, choose M here; the module
++	  will be called rcar_drif.
+diff --git a/drivers/media/platform/renesas/Makefile b/drivers/media/platform/renesas/Makefile
+new file mode 100644
+index 000000000000..fd2e0c5a8953
+--- /dev/null
++++ b/drivers/media/platform/renesas/Makefile
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for the Renesas capture/playback device drivers.
++#
++
++obj-y += rcar-vin/
++
++obj-$(CONFIG_VIDEO_RCAR_DRIF)		+= rcar_drif.o
++obj-$(CONFIG_VIDEO_RCAR_ISP)		+= rcar-isp.o
++obj-$(CONFIG_VIDEO_RENESAS_CEU)		+= renesas-ceu.o
++obj-$(CONFIG_VIDEO_RENESAS_FCP)		+= rcar-fcp.o
++obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
++obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
++obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+diff --git a/drivers/media/platform/rcar-fcp.c b/drivers/media/platform/renesas/rcar-fcp.c
+similarity index 100%
+rename from drivers/media/platform/rcar-fcp.c
+rename to drivers/media/platform/renesas/rcar-fcp.c
+diff --git a/drivers/media/platform/rcar-isp.c b/drivers/media/platform/renesas/rcar-isp.c
+similarity index 100%
+rename from drivers/media/platform/rcar-isp.c
+rename to drivers/media/platform/renesas/rcar-isp.c
+diff --git a/drivers/media/platform/rcar-vin/Kconfig b/drivers/media/platform/renesas/rcar-vin/Kconfig
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/Kconfig
+rename to drivers/media/platform/renesas/rcar-vin/Kconfig
+diff --git a/drivers/media/platform/rcar-vin/Makefile b/drivers/media/platform/renesas/rcar-vin/Makefile
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/Makefile
+rename to drivers/media/platform/renesas/rcar-vin/Makefile
+diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/rcar-core.c
+rename to drivers/media/platform/renesas/rcar-vin/rcar-core.c
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/rcar-csi2.c
+rename to drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/rcar-dma.c
+rename to drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/rcar-v4l2.c
+rename to drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
+similarity index 100%
+rename from drivers/media/platform/rcar-vin/rcar-vin.h
+rename to drivers/media/platform/renesas/rcar-vin/rcar-vin.h
+diff --git a/drivers/media/platform/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
+similarity index 100%
+rename from drivers/media/platform/rcar_drif.c
+rename to drivers/media/platform/renesas/rcar_drif.c
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/renesas/rcar_fdp1.c
+similarity index 100%
+rename from drivers/media/platform/rcar_fdp1.c
+rename to drivers/media/platform/renesas/rcar_fdp1.c
+diff --git a/drivers/media/platform/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
+similarity index 100%
+rename from drivers/media/platform/rcar_jpu.c
+rename to drivers/media/platform/renesas/rcar_jpu.c
+diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas/renesas-ceu.c
+similarity index 100%
+rename from drivers/media/platform/renesas-ceu.c
+rename to drivers/media/platform/renesas/renesas-ceu.c
+diff --git a/drivers/media/platform/sh_vou.c b/drivers/media/platform/renesas/sh_vou.c
+similarity index 100%
+rename from drivers/media/platform/sh_vou.c
+rename to drivers/media/platform/renesas/sh_vou.c
+-- 
+2.35.1
+

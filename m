@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BC84D599A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5E64D59A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346318AbiCKEdo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Mar 2022 23:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S234795AbiCKEhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241349AbiCKEdl (ORCPT
+        with ESMTP id S1346338AbiCKEgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:33:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B3E2A71C;
-        Thu, 10 Mar 2022 20:32:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94878B824C7;
-        Fri, 11 Mar 2022 04:32:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BFDC340EC;
-        Fri, 11 Mar 2022 04:32:35 +0000 (UTC)
-Date:   Thu, 10 Mar 2022 23:32:34 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 00/10] ext4: Improve FC trace events
-Message-ID: <20220310233234.4418186a@gandalf.local.home>
-In-Reply-To: <20220311031431.3sfbibwuthn4xkym@riteshh-domain>
-References: <cover.1646922487.git.riteshh@linux.ibm.com>
-        <20220310110553.431cc997@gandalf.local.home>
-        <20220310170731.hq6z6flycmgkhnaa@riteshh-domain>
-        <20220310193936.38ae7754@gandalf.local.home>
-        <20220311021931.d4oozgtefbalrcch@riteshh-domain>
-        <20220310213356.3948cfb7@gandalf.local.home>
-        <20220311031431.3sfbibwuthn4xkym@riteshh-domain>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 10 Mar 2022 23:36:37 -0500
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2891A635A;
+        Thu, 10 Mar 2022 20:35:33 -0800 (PST)
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 22B4ZAqd019685;
+        Fri, 11 Mar 2022 13:35:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 22B4ZAqd019685
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646973311;
+        bh=LjOGr0pIATee6R8ACoH57i1hpgApkEujUZuMS4lP7v8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rQcco8k5x7idvPaucbYhdy9OS4UGkaySWfHK/oPxSIKfKH9IkR/KCdlIbqE251Zjj
+         GUkAxnyBE/fDd4IPzxWx8odoVNMtti0u8tAPyGNbPSJpe50baxLlv3VgrxQt+Kct7c
+         thhiM2Z9tSZ4UZTWAkd12ToXtQcMlXWHdOc0beDnfR6n7flwGIeXMc+HpoJozxFkOJ
+         KzOy+dbS3AD0wO/8QsE580tgztKblTGu5ZI4Cyz0x0zcvWXzA5NfUENNSHnhp8itMX
+         z8okMuiUCokPndSTBRRkr3LKO9zQltOt+vrNB2iq8u6X30rXf8d0nnrumhnjPHFvM/
+         5RcYnD0JrfFag==
+X-Nifty-SrcIP: [209.85.214.177]
+Received: by mail-pl1-f177.google.com with SMTP id e2so6731238pls.10;
+        Thu, 10 Mar 2022 20:35:10 -0800 (PST)
+X-Gm-Message-State: AOAM533OJz2gN09FgpEXOn1Yg5EMosuB8EeL2yAOH3h2hfYyLrR0MXqD
+        MYmu1+DOjnRXu6JxDFHnPAMXE/+KWFnruY+AYs4=
+X-Google-Smtp-Source: ABdhPJyNCJkb3M7ukFi53zgoJUHhvSQ95COymbct3oUAAg6F4eHuljQlez2+7VK5S8Wkne54zlfb5/vEPBZyEYdE0jY=
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
+ s3-20020a170902b18300b0014fc26620d5mr8764545plr.136.1646973309837; Thu, 10
+ Mar 2022 20:35:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220310214450.676505-1-nayna@linux.ibm.com> <20220310214450.676505-4-nayna@linux.ibm.com>
+In-Reply-To: <20220310214450.676505-4-nayna@linux.ibm.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 11 Mar 2022 13:34:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQKqn1B=j2oeFb1r5oBrrcbJYrAQd0v2LqmqQT1F+1LLw@mail.gmail.com>
+Message-ID: <CAK7LNAQKqn1B=j2oeFb1r5oBrrcbJYrAQd0v2LqmqQT1F+1LLw@mail.gmail.com>
+Subject: Re: [PATCH v11 3/4] certs: conditionally build extract-cert if
+ platform keyring is enabled
+To:     Nayna Jain <nayna@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dimitri.ledkov@canonical.com, seth@forshee.me,
+        rnsastry@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 08:44:31 +0530
-Ritesh Harjani <riteshh@linux.ibm.com> wrote:
+On Fri, Mar 11, 2022 at 6:45 AM Nayna Jain <nayna@linux.ibm.com> wrote:
+>
+> extract-cert is used outside certs/ by INTEGRITY_PLATFORM_KEYRING.
+> Also build extract-cert if INTEGRITY_PLATFORM_KEYRING is enabled.
 
-> > I could update it to do so though.  
-> 
-> Please let me know if you have any patch for me to try.
+If really so, extract-cert should go back to scripts/ again.
+(i.e. revert 340a02535ee785c64c62a9c45706597a0139e972)
 
-Can you try this?
 
--- Steve
 
-From 392b91c598da2a8c5bbaebad08cd0410f4607bf4 Mon Sep 17 00:00:00 2001
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Date: Thu, 10 Mar 2022 23:27:38 -0500
-Subject: [PATCH] tracing: Have TRACE_DEFINE_ENUM affect trace event types as
- well
+>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> ---
+>  certs/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/certs/Makefile b/certs/Makefile
+> index b92b6ff339d5..dfb48e043cfe 100644
+> --- a/certs/Makefile
+> +++ b/certs/Makefile
+> @@ -88,7 +88,11 @@ $(obj)/x509_revocation_list: $(CONFIG_SYSTEM_REVOCATION_KEYS) $(obj)/extract-cer
+>
+>  targets += x509_revocation_list
+>
+> +ifeq ($(CONFIG_INTEGRITY_PLATFORM_KEYRING),y)
+> +hostprogs-always-y := extract-cert
+> +else
+>  hostprogs := extract-cert
+> +endif
+>
+>  HOSTCFLAGS_extract-cert.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+>  HOSTLDLIBS_extract-cert = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
+> --
+> 2.27.0
+>
 
-The macro TRACE_DEFINE_ENUM is used to convert enums in the kernel to
-their actual value when they are exported to user space via the trace
-event format file.
 
-Currently only the enums in the "print fmt" (TP_printk in the TRACE_EVENT
-macro) have the enums converted. But the enums can be used to denote array
-size:
-
-        field:unsigned int fc_ineligible_rc[EXT4_FC_REASON_MAX]; offset:12;      size:36;        signed:0;
-
-The EXT4_FC_REASON_MAX has no meaning to userspace but it needs to know
-that information to know how to parse the array.
-
-Have the array indexes also be parsed as well.
-
-Link: https://lore.kernel.org/all/cover.1646922487.git.riteshh@linux.ibm.com/
-
-Reported-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace_events.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 38afd66d80e3..ae9a3b8481f5 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2633,6 +2633,33 @@ static void update_event_printk(struct trace_event_call *call,
- 	}
- }
- 
-+static void update_event_fields(struct trace_event_call *call,
-+				struct trace_eval_map *map)
-+{
-+	struct ftrace_event_field *field;
-+	struct list_head *head;
-+	char *ptr;
-+	int len = strlen(map->eval_string);
-+
-+	head = trace_get_fields(call);
-+	list_for_each_entry(field, head, link) {
-+		ptr = strchr(field->type, '[');
-+		if (!ptr)
-+			continue;
-+		ptr++;
-+
-+		if (!isalpha(*ptr) && *ptr != '_')
-+			continue;
-+
-+		if (strncmp(map->eval_string, ptr, len) != 0)
-+			continue;
-+
-+		ptr = eval_replace(ptr, map, len);
-+		/* enum/sizeof string smaller than value */
-+		WARN_ON_ONCE(!ptr);
-+	}
-+}
-+
- void trace_event_eval_update(struct trace_eval_map **map, int len)
- {
- 	struct trace_event_call *call, *p;
-@@ -2668,6 +2695,7 @@ void trace_event_eval_update(struct trace_eval_map **map, int len)
- 					first = false;
- 				}
- 				update_event_printk(call, map[i]);
-+				update_event_fields(call, map[i]);
- 			}
- 		}
- 	}
--- 
-2.34.1
-
+--
+Best Regards
+Masahiro Yamada

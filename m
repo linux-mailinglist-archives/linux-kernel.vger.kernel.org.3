@@ -2,166 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682674D68A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416B44D6843
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350944AbiCKSqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S1350357AbiCKSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350959AbiCKSqk (ORCPT
+        with ESMTP id S239458AbiCKSGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:46:40 -0500
-X-Greylist: delayed 2499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 10:45:30 PST
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117771D3ACC
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:45:29 -0800 (PST)
-Received: from pps.filterd (m0122332.ppops.net [127.0.0.1])
-        by mx0a-00190b01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22BE4kqH005592;
-        Fri, 11 Mar 2022 18:03:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=4zUSLOEHIApF4getnC8JhdtY9QouuGFkZs+Hkia8hHQ=;
- b=X/O2KxK2oW4Y0PATfyw/fi8gPNBVdsVXoPC+VDwDr22BDDWSjgkwErGVysHatzJxCm6o
- 9Zy/aKWnyz9d1S3YqUZDONcK4Yf5JslbJR9vR8dJ4peF+ZSHBL1E8xEYnE+nOjIq7ijo
- o4HawdMvcsBZMS2YIDhcsxqae+wUhotWd86p+IXf39OtosSSx78KY7hkrqPUkuoils56
- yWkjXGVEEBKy6BRAhlUoA4rgrIh0dCJTuLDphHkQfwZuHlsoHQl7SwbQLU10UK/c06rG
- LSXUg25BMotdHCXlL3iCkiqxf3discLVeuiw3ZVqCtpCQPASAeF2HLquQVLfjnY7+O2g WA== 
-Received: from prod-mail-ppoint7 (a72-247-45-33.deploy.static.akamaitechnologies.com [72.247.45.33] (may be forged))
-        by mx0a-00190b01.pphosted.com (PPS) with ESMTPS id 3er3mqa1hn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 18:03:40 +0000
-Received: from pps.filterd (prod-mail-ppoint7.akamai.com [127.0.0.1])
-        by prod-mail-ppoint7.akamai.com (8.16.1.2/8.16.1.2) with SMTP id 22BHnAYv008913;
-        Fri, 11 Mar 2022 13:03:39 -0500
-Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
-        by prod-mail-ppoint7.akamai.com with ESMTP id 3em43442qy-1;
-        Fri, 11 Mar 2022 13:03:39 -0500
-Received: from [0.0.0.0] (prod-ssh-gw01.bos01.corp.akamai.com [172.27.119.138])
-        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id 5E5DA6009B;
-        Fri, 11 Mar 2022 18:03:38 +0000 (GMT)
-Message-ID: <07aba584-ce62-ed58-29b5-0a2df78b7f1d@akamai.com>
-Date:   Fri, 11 Mar 2022 13:03:37 -0500
+        Fri, 11 Mar 2022 13:06:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307E81B0BC0;
+        Fri, 11 Mar 2022 10:04:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5128B80EA4;
+        Fri, 11 Mar 2022 18:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDDAC340E9;
+        Fri, 11 Mar 2022 18:04:54 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 13:04:53 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [next] arm64: allmodconfig: kernel BUG at
+ include/linux/page-flags.h:509
+Message-ID: <20220311130453.54a4e0b2@gandalf.local.home>
+In-Reply-To: <20220311171123.GA1675@kbox>
+References: <CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com>
+        <20220311112426.7e3cf434@gandalf.local.home>
+        <20220311171123.GA1675@kbox>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/5] dyndbg: fix static_branch manipulation
-Content-Language: en-US
-To:     Jim Cromie <jim.cromie@gmail.com>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
-        linux@rasmusvillemoes.dk, joe@perches.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, vincent.whitchurch@axis.com
-References: <20220311044756.425777-1-jim.cromie@gmail.com>
- <20220311044756.425777-2-jim.cromie@gmail.com>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <20220311044756.425777-2-jim.cromie@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.816
- definitions=2022-03-11_07:2022-03-11,2022-03-11 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 adultscore=0 malwarescore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203110087
-X-Proofpoint-GUID: zPo83NQC2GhkaVrlXctmeZUqN0ex_B27
-X-Proofpoint-ORIG-GUID: zPo83NQC2GhkaVrlXctmeZUqN0ex_B27
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-11_07,2022-03-11_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 impostorscore=0
- mlxscore=0 priorityscore=1501 suspectscore=0 spamscore=0 mlxlogscore=999
- clxscore=1011 phishscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203110089
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 11 Mar 2022 09:11:23 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
+> Maybe I am mistaken, but I remember reading in the case of a kernel
+> allocated page shared with user space they must be reserved. It was
+> stated that the PTE may not know the PFN belongs to user or kernel.
+> 
+> If this is not the case, I don't see why we couldn't allocate zero'd
+> pages as you describe. We just need to make sure we don't crash user
+> processes touching the page if it does get paged out (and ideally not
+> slow down their execution).
 
-On 3/10/22 23:47, Jim Cromie wrote:
-> In https://urldefense.com/v3/__https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/__;!!GjvTz_vk!HGKKoni4RVdEBgv_V0zPSNSX428bpf02zkCy2WbeQkBdVtp1QJqGX-lJYlRDGg$ 
-> 
-> Vincent's patch commented on, and worked around, a bug toggling
-> static_branch's, when a 2nd PRINTK-ish flag was added.  The bug
-> results in a premature static_branch_disable when the 1st of 2 flags
-> was disabled.
-> 
-> The cited commit computed newflags, but then in the JUMP_LABEL block,
-> failed to use that result, instead using just one of the terms in it.
-> Using newflags instead made the code work properly.
-> 
-> This is Vincents test-case, reduced.  It needs the 2nd flag to work
-> properly, but it's explanatory here.
-> 
-> pt_test() {
->     echo 5 > /sys/module/dynamic_debug/verbose
-> 
->     site="module tcp" # just one callsite
->     echo " $site =_ " > /proc/dynamic_debug/control # clear it
-> 
->     # A B ~A ~B
->     for flg in +T +p "-T #broke here" -p; do
-> 	echo " $site $flg " > /proc/dynamic_debug/control
->     done;
-> 
->     # A B ~B ~A
->     for flg in +T +p "-p #broke here" -T; do
-> 	echo " $site $flg " > /proc/dynamic_debug/control
->     done
-> }
-> pt_test
-> 
-> Fixes: 84da83a6ffc0 dyndbg: combine flags & mask into a struct, simplify with it
-> CC: vincent.whitchurch@axis.com
-> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> 
-> --
-> .drop @stable, no exposed bug.
-> ---
->  lib/dynamic_debug.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-> index dd7f56af9aed..a56c1286ffa4 100644
-> --- a/lib/dynamic_debug.c
-> +++ b/lib/dynamic_debug.c
-> @@ -211,10 +211,11 @@ static int ddebug_change(const struct ddebug_query *query,
->  				continue;
->  #ifdef CONFIG_JUMP_LABEL
->  			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
-> -				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
-> +				if (!(newflags & _DPRINTK_FLAGS_PRINT))
->  					static_branch_disable(&dp->key.dd_key_true);
-> -			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
-> +			} else if (newflags & _DPRINTK_FLAGS_PRINT) {
->  				static_branch_enable(&dp->key.dd_key_true);
-> +			}
->  #endif
->  			dp->flags = newflags;
->  			v4pr_info("changed %s:%d [%s]%s =%s\n",
+Anything allocated by the kernel via alloc_page() will never be paged out.
+As the kernel may use it in any location (including NMIs). The ftrace ring
+buffer allocates its pages this way.
 
+Now if you were mapping some file system page, then that would be a
+different story.
 
-
-Hi Jim,
-
-If iiuc this is currently a bug but could be if we add a second 'print' bit
-such as for printing to the tracing logs. That said I agree that using 'newflags'
-here makes the code more straightforward/readable. So this one is fine with
-me.
-
-Acked-by: Jason Baron <jbaron@akamai.com>
-
-Thanks,
-
--Jason
+-- Steve

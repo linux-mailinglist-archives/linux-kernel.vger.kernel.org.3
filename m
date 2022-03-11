@@ -2,115 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658164D66F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CC54D66FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350497AbiCKRAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S1347356AbiCKRBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350488AbiCKRAK (ORCPT
+        with ESMTP id S237446AbiCKRBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:00:10 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E677A692A4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:59:03 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 19so5466069wmy.3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:59:03 -0800 (PST)
+        Fri, 11 Mar 2022 12:01:32 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7315266239
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:00:27 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id n2so8164844plf.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:00:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k+sAaPZ6B7SnVTAYchLFauNVj/7hDIru6DfQ96n92S4=;
-        b=Ji4/o3rF1hjtnWTA9Rd2MUj5r5t9XJSUwTJ2lMRuXkrxIgPXuh9KN6PElwI6dBLeod
-         zGcO5TxZqo8kIsVS8wN0x6qNHVcO11pPSFvbDvRZbauDLuvmZ3ND11IuGiPGHIifk/8s
-         B2MkGMgef35/jl9O7tcrdYxz5hFQ1/udTsOlNT5NtVZTevyHQ1z3gHVZq55ycERUNEhZ
-         hS3Eyj4p+V3CfQXLeBOYz5OHkUB6OGJL5bV1nTn7N4g3T6HfOaYzyYu7Iym3fFmtAESW
-         EzT+QXvK+l/7O0my9ejaL9pYFM8TXUEUd7JvsrXrml4p0ThyRBFu8sdgRpvUxkQHNtzQ
-         SdsQ==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uyogg3EITvNDbcMhB98sICz37uKoHpxrlJ00H656sok=;
+        b=1QTh1VVAysYbusZtQvZnvS1uPDJ6UlW/q2rXouJaFlj2LfOlJkQJmUXDkVwN+n91WR
+         fb5HQohWhJ4+39XTBP33I8eCdQChPnCjuKYkTJxqpDT9FHhMSXEUNM0LmFU9yjw3aLgy
+         wSfzU4U2yPAdn4DBO1OmkU6EmoO5yyZ4wLr526/wnaJAbhrHb39Bx7gbi2GJ5C5JD1Ey
+         4Ta6iD6aPT7DyE3No7DqzMX881T2uLkD+llW3FihXEFFNDH8bJwRBv481ocYkT4lf5m+
+         JWDDf6umfO3t59FLm0WJXX6JfbW6lzKRZz+9VK9XoR46HPLmGt3cbWwn+IfMoQ09sxlN
+         WGNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k+sAaPZ6B7SnVTAYchLFauNVj/7hDIru6DfQ96n92S4=;
-        b=pr6r3rj/1NXXZCWM+6TJwxlkBPf/79Q5WRP12IzRjvntldleABJq6EhxX315AKzNtf
-         Er+sIDS32Np9Mbi4v/ADjtK6vn0jaKvVgKiWJf4Fq+62RDel8wYuReSx4kBK1N0aPR7s
-         wr5KvL9MABTqF8i96FTVjHU8PDSjtl5PTpntZoNwGPJcpPUVes1xpYhZwsEdbsov79y+
-         t+Qu/eSPht374PT/kWWEg3hRi03He+mWPZ3gMDC7HOPrDBw39wAwfyxuckDjC+2mFx9R
-         g4KvEukY0Tti3weZJRybsfBGkjSCnbkkeNRcsRho+OYrikCI37Frg+gKb977r1+ds7ZN
-         xnig==
-X-Gm-Message-State: AOAM5321F79FtUYbt2begSs85uwsP5onzFCp2v/U5mRkIDBfqYSRytUj
-        nOd4QxUmfleIQUc5zWmPo4mAlrBt6g==
-X-Google-Smtp-Source: ABdhPJyVP6VGaQyGh30esA1uZYqyfmz014jsRc+0ay1k03iIbsMWl3+anVDMGkE9VeAAFxLkR2/JmQ==
-X-Received: by 2002:a7b:ce02:0:b0:381:2007:f75c with SMTP id m2-20020a7bce02000000b003812007f75cmr16619260wmc.6.1647017942448;
-        Fri, 11 Mar 2022 08:59:02 -0800 (PST)
-Received: from localhost.localdomain ([46.53.250.95])
-        by smtp.gmail.com with ESMTPSA id u25-20020a05600c211900b00389d4bdb3d2sm9142281wml.36.2022.03.11.08.59.01
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=uyogg3EITvNDbcMhB98sICz37uKoHpxrlJ00H656sok=;
+        b=VhMlycj51wnCOxrVdbP/1JVT09s0oRZwAOXLf4AEgcwXSdpNX0Vl4JcOkWT0PrTThB
+         PlkDGMgaeJneobhZMHyFt5kUA7EN+GMPZ8apkrrr6X5B9JvDBPUjfw1OhJvoTURMt6lT
+         mewQH3FPI6IdS4shCqbKxmPzOULH/aSzxIhFKbEL+7sZ0AYSixHLCJ8FlRbE9EYd7JhL
+         Gh3YgwRCGt5GHo8hDhMK+9U5Dupj30E8kvQLxPYyjSEqv6YOe8tV9RYvR4mVggOBw9LZ
+         fHwCy6ol1cnVs9P9gBtmo/L31z9tozfv09VGiHmMsmGTNuZ4OtAU1UTDyCiGJeCjzTL8
+         RXPA==
+X-Gm-Message-State: AOAM5318pVOr8YNRNuHGaE6BAh+bjW7+MAU3qNBpuOVn3UmftciUhsIV
+        DEz0jtp7XkfgxzeH0Juprr4dbw==
+X-Google-Smtp-Source: ABdhPJx9JM9P1TWOsem86I4wVFjtzG0TMU9JZaMNtnIWx4L8zMBicbk6CBIzFDaHi4fXzvW7syUBqw==
+X-Received: by 2002:a17:90b:1d84:b0:1bf:674d:2db5 with SMTP id pf4-20020a17090b1d8400b001bf674d2db5mr11706345pjb.8.1647018026779;
+        Fri, 11 Mar 2022 09:00:26 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id l4-20020a639844000000b003806f93fd57sm8988340pgo.42.2022.03.11.09.00.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 08:59:02 -0800 (PST)
-Date:   Fri, 11 Mar 2022 19:59:00 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] x86/unwind/orc: delete dead write in __orc_find()
-Message-ID: <Yit/1Ba5IIHl8eKt@localhost.localdomain>
-References: <20220311144312.88466-1-adobriyan@gmail.com>
- <20220311144312.88466-5-adobriyan@gmail.com>
- <6257b01104da4891af46eec530df1dcb@AcuMS.aculab.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6257b01104da4891af46eec530df1dcb@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 09:00:25 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:00:25 -0800 (PST)
+X-Google-Original-Date: Thu, 10 Mar 2022 20:45:07 PST (-0800)
+Subject:     Re: [PATCH] riscv: Fix auipc+jalr relocation range checks
+In-Reply-To: <20220223191257.143694-1-kernel@esmil.dk>
+CC:     linux-riscv@lists.infradead.org, kernel@esmil.dk,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, alex@ghiti.fr, jszhang@kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     kernel@esmil.dk
+Message-ID: <mhng-5e2f04e5-f721-4ef6-a51d-ddd4611bfa5f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 03:13:02PM +0000, David Laight wrote:
-> From: Alexey Dobriyan
-> > Sent: 11 March 2022 14:43
-> > 
-> > Also move "mid" variable to the innermost scope and delete useless
-> > parenthesis while I'm at it.
-> 
-> Hiding the definition of 'mid' in the inner scope is pointless.
+On Wed, 23 Feb 2022 11:12:57 PST (-0800), kernel@esmil.dk wrote:
+> RISC-V can do PC-relative jumps with a 32bit range using the following
+> two instructions:
+>
+> 	auipc	t0, imm20	; t0 = PC + imm20 * 2^12
+> 	jalr	ra, t0, imm12	; ra = PC + 4, PC = t0 + imm12
+>
+> Crucially both the 20bit immediate imm20 and the 12bit immediate imm12
+> are treated as two's-complement signed values. For this reason the
+> immediates are usually calculated like this:
+>
+> 	imm20 = (offset + 0x800) >> 12
+> 	imm12 = offset & 0xfff
+>
+> ..where offset is the signed offset from the auipc instruction. When
+> the 11th bit of offset is 0 the addition of 0x800 doesn't change the top
+> 20 bits and imm12 considered positive. When the 11th bit is 1 the carry
+> of the addition by 0x800 means imm20 is one higher, but since imm12 is
+> then considered negative the two's complement representation means it
+> all cancels out nicely.
+>
+> However, this addition by 0x800 (2^11) means an offset greater than or
+> equal to 2^31 - 2^11 would overflow so imm20 is considered negative and
+> result in a backwards jump. Similarly the lower range of offset is also
+> moved down by 2^11 and hence the true 32bit range is
+>
+> 	[-2^31 - 2^11, 2^31 - 2^11)
+>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> ---
+>  arch/riscv/kernel/module.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> index 68a9e3d1fe16..4a48287513c3 100644
+> --- a/arch/riscv/kernel/module.c
+> +++ b/arch/riscv/kernel/module.c
+> @@ -13,6 +13,19 @@
+>  #include <linux/pgtable.h>
+>  #include <asm/sections.h>
+>
+> +/*
+> + * The auipc+jalr instruction pair can reach any PC-relative offset
+> + * in the range [-2^31 - 2^11, 2^31 - 2^11)
+> + */
+> +static bool riscv_insn_valid_32bit_offset(ptrdiff_t val)
+> +{
+> +#ifdef CONFIG_32BIT
+> +	return true;
+> +#else
+> +	return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
+> +#endif
+> +}
+> +
+>  static int apply_r_riscv_32_rela(struct module *me, u32 *location, Elf_Addr v)
+>  {
+>  	if (v != (u32)v) {
+> @@ -95,7 +108,7 @@ static int apply_r_riscv_pcrel_hi20_rela(struct module *me, u32 *location,
+>  	ptrdiff_t offset = (void *)v - (void *)location;
+>  	s32 hi20;
+>
+> -	if (offset != (s32)offset) {
+> +	if (!riscv_insn_valid_32bit_offset(offset)) {
+>  		pr_err(
+>  		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
+>  		  me->name, (long long)v, location);
+> @@ -197,10 +210,9 @@ static int apply_r_riscv_call_plt_rela(struct module *me, u32 *location,
+>  				       Elf_Addr v)
+>  {
+>  	ptrdiff_t offset = (void *)v - (void *)location;
+> -	s32 fill_v = offset;
+>  	u32 hi20, lo12;
+>
+> -	if (offset != fill_v) {
+> +	if (!riscv_insn_valid_32bit_offset(offset)) {
+>  		/* Only emit the plt entry if offset over 32-bit range */
+>  		if (IS_ENABLED(CONFIG_MODULE_SECTIONS)) {
+>  			offset = module_emit_plt_entry(me, v);
+> @@ -224,10 +236,9 @@ static int apply_r_riscv_call_rela(struct module *me, u32 *location,
+>  				   Elf_Addr v)
+>  {
+>  	ptrdiff_t offset = (void *)v - (void *)location;
+> -	s32 fill_v = offset;
+>  	u32 hi20, lo12;
+>
+> -	if (offset != fill_v) {
+> +	if (!riscv_insn_valid_32bit_offset(offset)) {
+>  		pr_err(
+>  		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
+>  		  me->name, (long long)v, location);
 
-Not, it is not.
-
-> I'm also not 100% sure that 'found' is always set.
-
-"found" is left as-is by the patch.
-
-> Consider the ip < orc_ip(first) case.
-
-> > --- a/arch/x86/kernel/unwind_orc.c
-> > +++ b/arch/x86/kernel/unwind_orc.c
-> > @@ -35,7 +35,7 @@ static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
-> >  {
-> >  	int *first = ip_table;
-> >  	int *last = ip_table + num_entries - 1;
-> > -	int *mid = first, *found = first;
-> > +	int *found = first;
-> > 
-> >  	if (!num_entries)
-> >  		return NULL;
-> > @@ -47,7 +47,7 @@ static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
-> >  	 * ignored when they conflict with a real entry.
-> >  	 */
-> >  	while (first <= last) {
-> > -		mid = first + ((last - first) / 2);
-> > +		int *mid = first + (last - first) / 2;
-> > 
-> >  		if (orc_ip(mid) <= ip) {
-> >  			found = mid;
+Thanks, this is on fixes.

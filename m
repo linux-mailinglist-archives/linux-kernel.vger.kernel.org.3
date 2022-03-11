@@ -2,264 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08F4D635E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61C44D636C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349180AbiCKOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S1349272AbiCKO2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiCKOY1 (ORCPT
+        with ESMTP id S1349207AbiCKO2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:24:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD3121520;
-        Fri, 11 Mar 2022 06:23:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3F33B82A73;
-        Fri, 11 Mar 2022 14:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57673C340E9;
-        Fri, 11 Mar 2022 14:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647008600;
-        bh=1aN/i+7VUozNB0qC97c4ZeA4vReDaNrLMrM52MVDiqM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iWp63nefKqlwopNSOeQjJfPZS0jOgdS3OVqEuLh1QBg+B54WG7dbnHO4oiKB+dWeI
-         T09XmYXAyBoPti8b4AFAGqaAIKhi15UzCnEVqsJVaZ5P64HXgUC3GZ8FWZ2i0BewHv
-         /G0rJAH0LWNd2XHftMPhKzUNi0y1PYPGeWrcnaw2HKTAMj6n8X2a6U04J+Y7xgLKud
-         RrBplYiupBHYcKx2YhFyuHGFpeFaW9YwyBPypRNWNzP607oRAEJQeb6vR18k4N/iOu
-         B1IuzRr5+gaotbrWZZdmbnHpmXkjwo9Cwh2o5SBelBjGe3ccVNxWO9TyiWIY8DM7Zw
-         PpQrW8DpXtHyw==
-Message-ID: <66c1fc64b4ec8b25a1ed625a4b61721a00d2e090.camel@kernel.org>
-Subject: Re: [PATCH v3 00/20] netfs: Prep for write helpers
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
-Cc:     ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 11 Mar 2022 09:23:18 -0500
-In-Reply-To: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
-References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 11 Mar 2022 09:28:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E061C7EBF;
+        Fri, 11 Mar 2022 06:27:03 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BDK3OB021042;
+        Fri, 11 Mar 2022 14:27:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : reply-to : subject : to : cc : references : from :
+ in-reply-to : content-type : content-transfer-encoding; s=pp1;
+ bh=YHOoZuIhJIGUv6nvueS7vbShkSx6GnV2gdzqgAxu/N4=;
+ b=oBwHks/afpX7AHd703lqSFwssmM4M3O2/GXreTQrTSV9M5wiYzXZYmc8eHlwiu0OmgCS
+ GYCwus3LPeE9km1GqYP2VolzfmM5TqLu6Ve8C8NcHL162+JdJ5eou+lTSF5d9o9QYFT/
+ v4jeDXlCZ/+o5cz6KNECzHHXoGqwK8Vh2LYtQ1WhoFSEgK1wZ8aYJ9uAHgrCXZQXP1cS
+ MKXbLtWdx0iIS+9VXr2fWJUAHdA4vMyL7ezRIBazLJIrwHccGVw7VFnN/c6aOeaJj6ou
+ z0GuV//cB3OSJqf2OxDjPhicw5z8YbizSWkzbk5GWj8gq/p4IZn4dW2Ibhigrbt5peqK hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqs9289c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 14:27:01 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22BEKNux026331;
+        Fri, 11 Mar 2022 14:27:01 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqs9289bq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 14:27:01 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22BEDGXW026475;
+        Fri, 11 Mar 2022 14:27:00 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma04dal.us.ibm.com with ESMTP id 3epb9d1m99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 14:27:00 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22BEQwBs28049692
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 14:26:58 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B474BE058;
+        Fri, 11 Mar 2022 14:26:58 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6187FBE053;
+        Fri, 11 Mar 2022 14:26:57 +0000 (GMT)
+Received: from [9.65.72.149] (unknown [9.65.72.149])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 11 Mar 2022 14:26:57 +0000 (GMT)
+Message-ID: <fcce28f2-64f7-0946-3f33-3158b7909d6b@linux.ibm.com>
+Date:   Fri, 11 Mar 2022 09:26:25 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Reply-To: jjherne@linux.ibm.com
+Subject: Re: [PATCH v18 10/18] s390/vfio-ap: allow hot plug/unplug of AP
+ devices when assigned/unassigned
+Content-Language: en-US
+To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+ <20220215005040.52697-11-akrowiak@linux.ibm.com>
+From:   "Jason J. Herne" <jjherne@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <20220215005040.52697-11-akrowiak@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cmxpyDpTfjAQ5EnIkLLkLBcgvvXXQr8a
+X-Proofpoint-ORIG-GUID: CDbEbwXNSCzK9CIn_QTDmS9rqxgaL4fz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-11_06,2022-03-11_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
+ mlxscore=0 impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203110069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-10 at 16:13 +0000, David Howells wrote:
-> Having had a go at implementing write helpers and content encryption
-> support in netfslib, it seems that the netfs_read_{,sub}request structs and
-> the equivalent write request structs were almost the same and so should be
-> merged, thereby requiring only one set of alloc/get/put functions and a
-> common set of tracepoints.
+On 2/14/22 19:50, Tony Krowiak wrote:
+> Let's allow adapters, domains and control domains to be hot plugged
+> into and hot unplugged from a KVM guest using a matrix mdev when an
+> adapter, domain or control domain is assigned to or unassigned from
+> the matrix mdev.
 > 
-> Merging the structs also has the advantage that if a bounce buffer is added
-> to the request struct, a read operation can be performed to fill the bounce
-> buffer, the contents of the buffer can be modified and then a write
-> operation can be performed on it to send the data wherever it needs to go
-> using the same request structure all the way through.  The I/O handlers
-> would then transparently perform any required crypto.  This should make it
-> easy to perform RMW cycles if needed.
+> Whenever an assignment or unassignment of an adapter, domain or control
+> domain is performed, the AP configuration assigned to the matrix
+> mediated device will be filtered and assigned to the AP control block
+> (APCB) that supplies the AP configuration to the guest so that no
+> adapter, domain or control domain that is not in the host's AP
+> configuration nor any APQN that does not reference a queue device bound
+> to the vfio_ap device driver is assigned.
 > 
-> The potentially common functions and structs, however, by their names all
-> proclaim themselves to be associated with the read side of things.  The
-> bulk of these changes alter this in the following ways:
+> After updating the APCB, if the mdev is in use by a KVM guest, it is
+> hot plugged into the guest to dynamically provide access to the adapters,
+> domains and control domains provided via the newly refreshed APCB.
 > 
->  (1) Rename struct netfs_read_{,sub}request to netfs_io_{,sub}request.
+> Keep in mind that the matrix_dev->guests_lock must be taken outside of the
+> matrix_mdev->kvm->lock which in turn must be taken outside of the
+> matrix_dev->mdevs_lock in order to avoid circular lock dependencies (i.e.,
+> a lockdep splat).Consequently, the locking order for hot plugging the
+> guest's APCB must be:
 > 
->  (2) Rename some enums, members and flags to make them more appropriate.
+> matrix_dev->guests_lock => matrix_mdev->kvm->lock => matrix_dev->mdevs_lock
 > 
->  (3) Adjust some comments to match.
-> 
->  (4) Drop "read"/"rreq" from the names of common functions.  For instance,
->      netfs_get_read_request() becomes netfs_get_request().
-> 
->  (5) The ->init_rreq() and ->issue_op() methods become ->init_request() and
->      ->issue_read().  I've kept the latter as a read-specific function and
->      in another branch added an ->issue_write() method.
-> 
-> The driver source is then reorganised into a number of files:
-> 
-> 	fs/netfs/buffered_read.c	Create read reqs to the pagecache
-> 	fs/netfs/io.c			Dispatchers for read and write reqs
-> 	fs/netfs/main.c			Some general miscellaneous bits
-> 	fs/netfs/objects.c		Alloc, get and put functions
-> 	fs/netfs/stats.c		Optional procfs statistics.
-> 
-> and future development can be fitted into this scheme, e.g.:
-> 
-> 	fs/netfs/buffered_write.c	Modify the pagecache
-> 	fs/netfs/buffered_flush.c	Writeback from the pagecache
-> 	fs/netfs/direct_read.c		DIO read support
-> 	fs/netfs/direct_write.c		DIO write support
-> 	fs/netfs/unbuffered_write.c	Write modifications directly back
-> 
-> Beyond the above changes, there are also some changes that affect how
-> things work:
-> 
->  (1) Make fscache_end_operation() generally available.
-> 
->  (2) In the netfs tracing header, generate enums from the symbol -> string
->      mapping tables rather than manually coding them.
-> 
->  (3) Add a struct for filesystems that uses netfslib to put into their
->      inode wrapper structs to hold extra state that netfslib is interested
->      in, such as the fscache cookie.  This allows netfslib functions to be
->      set in filesystem operation tables and jumped to directly without
->      having to have a filesystem wrapper.
-> 
->  (4) Add a member to the struct added in (3) to track the remote inode
->      length as that may differ if local modifications are buffered.  We may
->      need to supply an appropriate EOF pointer when storing data (in AFS
->      for example).
-> 
->  (5) Pass extra information to netfs_alloc_request() so that the
->      ->init_request() hook can access it and retain information to indicate
->      the origin of the operation.
-> 
->  (6) Make the ->init_request() hook return an error, thereby allowing a
->      filesystem that isn't allowed to cache an inode (ceph or cifs, for
->      example) to skip readahead.
-> 
->  (7) Switch to using refcount_t for subrequests and add tracepoints to log
->      refcount changes for the request and subrequest structs.
-> 
->  (8) Add a function to consolidate dispatching a read request.  Similar
->      code is used in three places and another couple are likely to be added
->      in the future.
-> 
-> 
-> The patches can be found on this branch:
-> 
-> 	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
-> 
-> This is based on top of ceph's master branch as some of the patches
-> conflict.
-> 
-> David
+> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
 > ---
+>   drivers/s390/crypto/vfio_ap_ops.c | 198 +++++++++++++++++++-----------
+>   1 file changed, 125 insertions(+), 73 deletions(-)
 > 
-> Changes
-> =======
-> ver #3)
->  - Rebased one patch back on the ceph tree as the top patch got removed[4].
->  - Split out the bit to move ceph cap-getting on readahead out from the
->    patch adding an inode context[5].
->  - Made ceph_init_request() store the caps got in rreq->netfs_priv for
->    later freeing.
->  - Comment the need to keep the netfs inode context contiguous with the VFS
->    inode struct[6].
->  - Altered the traces to use 'R=' consistently to denote a request debug ID.
->  
-> ver #2)
->  - Changed kdoc references to renamed files[1].
->  - Switched the begin-read-function patch and the prepare-to-split patch as
->    fewer functions then need unstatic'ing.
->  - Fixed an uninitialised var in netfs_begin_read()[2][3].
->  - Fixed a refleak caused by an unremoved line when netfs_begin_read() was
->    introduced.
->  - Used "#if IS_ENABLED()" in netfs_i_cookie(), not "#ifdef".
->  - Implemented missing bit of ceph readahead through netfs_readahead().
->  - Rearranged the patch order to make the ceph readahead possible.
-> 
-> Link: https://lore.kernel.org/r/20220303202811.6a1d53a1@canb.auug.org.au/ [1]
-> Link: https://lore.kernel.org/r/20220303163826.1120936-1-nathan@kernel.org/ [2]
-> Link: https://lore.kernel.org/r/20220303235647.1297171-1-colin.i.king@gmail.com/ [3]
-> Link: https://lore.kernel.org/r/527234d849b0de18b326d6db0d59070b70d19b7e.camel@kernel.org/ [4]
-> Link: https://lore.kernel.org/r/8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org/ [5]
-> Link: https://lore.kernel.org/r/beaf4f6a6c2575ed489adb14b257253c868f9a5c.camel@kernel.org/ [6]
-> Link: https://lore.kernel.org/r/164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk/ # v2
-> 
-> ---
-> David Howells (19):
->       netfs: Generate enums from trace symbol mapping lists
->       netfs: Rename netfs_read_*request to netfs_io_*request
->       netfs: Finish off rename of netfs_read_request to netfs_io_request
->       netfs: Split netfs_io_* object handling out
->       netfs: Adjust the netfs_rreq tracepoint slightly
->       netfs: Trace refcounting on the netfs_io_request struct
->       netfs: Trace refcounting on the netfs_io_subrequest struct
->       netfs: Adjust the netfs_failure tracepoint to indicate non-subreq lines
->       netfs: Refactor arguments for netfs_alloc_read_request
->       netfs: Change ->init_request() to return an error code
->       ceph: Make ceph_init_request() check caps on readahead
->       netfs: Add a netfs inode context
->       netfs: Add a function to consolidate beginning a read
->       netfs: Prepare to split read_helper.c
->       netfs: Rename read_helper.c to io.c
->       netfs: Split fs/netfs/read_helper.c
->       netfs: Split some core bits out into their own file
->       netfs: Keep track of the actual remote file size
->       afs: Maintain netfs_i_context::remote_i_size
-> 
-> Jeffle Xu (1):
->       fscache: export fscache_end_operation()
-> 
-> 
->  Documentation/filesystems/netfs_library.rst |  140 ++-
->  fs/9p/cache.c                               |   10 +-
->  fs/9p/v9fs.c                                |    4 +-
->  fs/9p/v9fs.h                                |   13 +-
->  fs/9p/vfs_addr.c                            |   62 +-
->  fs/9p/vfs_inode.c                           |   13 +-
->  fs/afs/dynroot.c                            |    1 +
->  fs/afs/file.c                               |   41 +-
->  fs/afs/inode.c                              |   32 +-
->  fs/afs/internal.h                           |   23 +-
->  fs/afs/super.c                              |    4 +-
->  fs/afs/write.c                              |   10 +-
->  fs/cachefiles/io.c                          |   10 +-
->  fs/ceph/addr.c                              |  116 +-
->  fs/ceph/cache.c                             |   28 +-
->  fs/ceph/cache.h                             |   15 +-
->  fs/ceph/inode.c                             |    6 +-
->  fs/ceph/super.h                             |   17 +-
->  fs/cifs/cifsglob.h                          |   10 +-
->  fs/cifs/fscache.c                           |   19 +-
->  fs/cifs/fscache.h                           |    2 +-
->  fs/fscache/internal.h                       |   11 -
->  fs/netfs/Makefile                           |    8 +-
->  fs/netfs/buffered_read.c                    |  428 +++++++
->  fs/netfs/internal.h                         |   49 +-
->  fs/netfs/io.c                               |  657 ++++++++++
->  fs/netfs/main.c                             |   20 +
->  fs/netfs/objects.c                          |  160 +++
->  fs/netfs/read_helper.c                      | 1205 -------------------
->  fs/netfs/stats.c                            |    1 -
->  fs/nfs/fscache.c                            |    8 -
->  include/linux/fscache.h                     |   14 +
->  include/linux/netfs.h                       |  162 ++-
->  include/trace/events/cachefiles.h           |    6 +-
->  include/trace/events/netfs.h                |  190 ++-
->  35 files changed, 1867 insertions(+), 1628 deletions(-)
->  create mode 100644 fs/netfs/buffered_read.c
->  create mode 100644 fs/netfs/io.c
->  create mode 100644 fs/netfs/main.c
->  create mode 100644 fs/netfs/objects.c
->  delete mode 100644 fs/netfs/read_helper.c
-> 
-> 
+> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
+> index 623a4b38676d..4c382cd3afc7 100644
+> --- a/drivers/s390/crypto/vfio_ap_ops.c
+> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+> @@ -317,10 +317,25 @@ static void vfio_ap_matrix_init(struct ap_config_info *info,
+>   	matrix->adm_max = info->apxa ? info->Nd : 15;
+>   }
+>   
+> -static void vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev *matrix_mdev)
+> +static void vfio_ap_mdev_hotplug_apcb(struct ap_matrix_mdev *matrix_mdev)
+>   {
+> +	if (matrix_mdev->kvm)
+> +		kvm_arch_crypto_set_masks(matrix_mdev->kvm,
+> +					  matrix_mdev->shadow_apcb.apm,
+> +					  matrix_mdev->shadow_apcb.aqm,
+> +					  matrix_mdev->shadow_apcb.adm);
+> +}
 
-I ran this through xfstests on ceph, with fscache enabled and it seemed
-to do fine.
+This function updates a kvm guest's apcb. So let's rename it to
+vfio_ap_update_apcb(). You can also call this function in vfio_ap_mdev_set_kvm,
+instead of duplicating the code to call kvm_arch_crypto_set_masks().
 
-Tested-by: Jeff Layton <jlayton@kernel.org>
+
+
+> +static bool vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev *matrix_mdev)
+> +{
+> +	DECLARE_BITMAP(shadow_adm, AP_DOMAINS);
+> +
+> +	bitmap_copy(shadow_adm, matrix_mdev->shadow_apcb.adm, AP_DOMAINS);
+>   	bitmap_and(matrix_mdev->shadow_apcb.adm, matrix_mdev->matrix.adm,
+>   		   (unsigned long *)matrix_dev->info.adm, AP_DOMAINS);
+> +
+> +	return !bitmap_equal(shadow_adm, matrix_mdev->shadow_apcb.adm,
+> +			     AP_DOMAINS);
+>   }
+
+your variable, shadow_adm, should be named original_adm. Since it represents
+the original value before filtering. This makes the intent much more clear.
+Same goes for the vars in vfio_ap_mdev_filter_matrix().
+
+...
+> +/**
+> + * vfio_ap_mdev_get_locks - acquire the locks required to assign/unassign AP
+> + *			    adapters, domains and control domains for an mdev in
+> + *			    the proper locking order.
+> + *
+> + * @matrix_mdev: the matrix mediated device object
+> + */
+> +static void vfio_ap_mdev_get_locks(struct ap_matrix_mdev *matrix_mdev)
+> +{
+> +	/* Lock the mutex required to access the KVM guest's state */
+> +	mutex_lock(&matrix_dev->guests_lock);
+> +
+> +	/* If a KVM guest is running, lock the mutex required to plug/unplug the
+> +	 * AP devices passed through to the guest
+> +	 */
+> +	if (matrix_mdev->kvm)
+> +		mutex_lock(&matrix_mdev->kvm->lock);
+> +
+> +	/* The lock required to access the mdev's state */
+> +	mutex_lock(&matrix_dev->mdevs_lock);
+> +}
+
+Simplifying the cdoe, and removing duplication by moving the locking code to a
+function is probably a good thing. But I don't feel like this belongs to this
+particular patch. In general, a patch should only do one thing, and ideally that
+one thing should be as small as reasonably possible. This makes the patch easier
+to read and to review.
+
+I feel like, as much as possible, you should refactor the locking in a series
+of patches that are all kept together. Ideally, they would be a patch series
+completely separate from dynamic ap. After all, this series is already at 18
+patches. :)
+
+...
+>   /**
+>    * assign_adapter_store - parses the APID from @buf and sets the
+>    * corresponding bit in the mediated matrix device's APM
+> @@ -649,17 +723,9 @@ static ssize_t assign_adapter_store(struct device *dev,
+>   	int ret;
+>   	unsigned long apid;
+>   	DECLARE_BITMAP(apm, AP_DEVICES);
+> -
+>   	struct ap_matrix_mdev *matrix_mdev = dev_get_drvdata(dev);
+>   
+> -	mutex_lock(&matrix_dev->guests_lock);
+> -	mutex_lock(&matrix_dev->mdevs_lock);
+> -
+> -	/* If the KVM guest is running, disallow assignment of adapter */
+> -	if (matrix_mdev->kvm) {
+> -		ret = -EBUSY;
+> -		goto done;
+> -	}
+> +	vfio_ap_mdev_get_locks(matrix_mdev);
+>   
+>   	ret = kstrtoul(buf, 0, &apid);
+>   	if (ret)
+> @@ -671,8 +737,6 @@ static ssize_t assign_adapter_store(struct device *dev,
+>   	}
+>   
+>   	set_bit_inv(apid, matrix_mdev->matrix.apm);
+> -	memset(apm, 0, sizeof(apm));
+> -	set_bit_inv(apid, apm);
+>   
+>   	ret = vfio_ap_mdev_validate_masks(matrix_mdev);
+
+It looks like you moved the memset() and set_bit_inv() to be closer to where
+"apm" is used, namely, the call to vfio_ap_mdev_filter_matrix(). Any reason you
+cannot move it down under the call to vfio_ap_mdev_link_adapter()? That would
+get it even closer to where it is used.
+
+Also, I think renaming apm to apm_delta or apm_diff makes sense here. After all,
+it is the difference between the original apm, and the new apm. The new apm
+has an extra bit for the newly added adapter. Do I have that right? If so, I
+think renaming the variable will make the code clearer.
+
+Both of the above comments also apply to assign_domain_store().
+
+-- 
+-- Jason J. Herne (jjherne@linux.ibm.com)

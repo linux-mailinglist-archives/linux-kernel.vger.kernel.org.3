@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684264D65C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50984D65C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350140AbiCKQH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S1350148AbiCKQH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245714AbiCKQHY (ORCPT
+        with ESMTP id S1350144AbiCKQH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:07:24 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD641D087F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647014781; x=1678550781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8sd/osNdwpZjh8x9Ga7m3iWdLk1yyi5ow5D55whePkk=;
-  b=B345YMVjQWwhM4GUzrwJyfrhCBEc/Pb7pnnflGI9gWYbVvDbQ3VBQDCQ
-   +wXotgBxbXUaji6ClRVu8DwM5BwyIHBM76faAl+0zH2i1++q0sAFvFxrC
-   l6n9k3F0hkzeaU2cfqlt4/k0Un8DGCoWc9bcfygGRcmSavGPPN8JAk3iE
-   +T1eORA8E/6ZfiU9+HDDuWWeA9DGqeiMzwFafOuJHlEBksLZDFmd0bLuV
-   JvjCnR1Lhw4udwzaz8OjDSzf2wJc6wo4/hHz1D0WfJsbeIxsPz/px+M6O
-   AuBJAgwRP/DcP09a5sNEac7OYp4GtwWhE66I/zggOkleT1izWLvZHiLqh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="316320915"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="316320915"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 08:06:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="712887681"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2022 08:06:18 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nShmU-0006ha-0Q; Fri, 11 Mar 2022 16:06:18 +0000
-Date:   Sat, 12 Mar 2022 00:06:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 2/5] staging: vt6656: Remove unused rf_type in baseband.c
-Message-ID: <202203112347.5u5Hv6vj-lkp@intel.com>
-References: <77dcff8602084484532fcbd734aafd138087c5ee.1646935331.git.philipp.g.hortmann@gmail.com>
+        Fri, 11 Mar 2022 11:07:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6EF1D087F
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:06:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51C16CE294C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805BCC340E9;
+        Fri, 11 Mar 2022 16:06:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647014779;
+        bh=JKmQSCm2cILVgeaTRGQwTa0sMxjvqwVFRdyOBpjxV3Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=kx+e2TGN0we9QLXHRnTWucqUmQk5xnfPkjU8yhsjdHOId8lGPo5vF3oDCCX44oxmP
+         O3fL1jsCvxx+aepoH2QSPXKZ/rT/2E0SrOMV/avb1NQxxy5WpFWEf+op3mxqukO08x
+         CFbHxaSxtyswXwrVWg4+fsdBRekIT47E1C1GSbdBmoXoF+SaOfobYf/4PJW2ndOSJJ
+         B3MmsibX/SoEtnfVqPNDivUj7oJiF1kTeAn7ffGK1IoeXIuTwdGGOiQKaBwiFzgUIH
+         iUGRkPwFiiJS9mXO1MREYwdij/d1azJJybCRXmtpSoblOKgGbm49krZLeFmK1IEyaq
+         ysNL+mS1eLf1g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1F8205C023F; Fri, 11 Mar 2022 08:06:19 -0800 (PST)
+Date:   Fri, 11 Mar 2022 08:06:19 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Scenario TREE07 with CONFIG_PREEMPT_DYNAMIC=n?
+Message-ID: <20220311160619.GG4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
+ <20220310224103.GA94994@lothringen>
+ <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220311130719.GC96127@lothringen>
+ <20220311152148.GF4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220311154603.GC227945@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77dcff8602084484532fcbd734aafd138087c5ee.1646935331.git.philipp.g.hortmann@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220311154603.GC227945@lothringen>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,68 +61,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp,
+On Fri, Mar 11, 2022 at 04:46:03PM +0100, Frederic Weisbecker wrote:
+> On Fri, Mar 11, 2022 at 07:21:48AM -0800, Paul E. McKenney wrote:
+> > On Fri, Mar 11, 2022 at 02:07:19PM +0100, Frederic Weisbecker wrote:
+> > > On Thu, Mar 10, 2022 at 02:52:19PM -0800, Paul E. McKenney wrote:
+> > > > On Thu, Mar 10, 2022 at 11:41:03PM +0100, Frederic Weisbecker wrote:
+> > > > > On Thu, Mar 10, 2022 at 01:56:30PM -0800, Paul E. McKenney wrote:
+> > > > > > Hello, Frederic,
+> > > > > > 
+> > > > > > I recently added CONFIG_PREEMPT_DYNAMIC=n to the TREE07 file, and since
+> > > > > > then am getting roughly one RCU CPU stall warning (or silent hang)
+> > > > > > per few tens of hours of rcutorture testing on dual-socket systems.
+> > > > > > The stall warnings feature starvation of RCU grace-period kthread.
+> > > > > > 
+> > > > > > Any advice on debugging this?
+> > > > > 
+> > > > > Oh, I'm testing that!
+> > > > 
+> > > > Even better, thank you!  ;-)
+> > > 
+> > > Here is what I'm testing below. If it happens to work though, it's still not
+> > > the most optimized way of dealing with the UP on SMP situation as we still start
+> > > an exp grace period when we could early return. But since we have a cookie
+> > > to pass to poll_state_synchronize_rcu_expedited()...
+> > > 
+> > > Oh but if we were to early check a positive rcu_blocking_is_gp() from
+> > > start_poll_synchronize_rcu_expedited(),
+> > > we could simply return the current value of rcu_state.expedited_sequence without
+> > > doing an rcu_exp_gp_seq_snap() and then pass that to
+> > > poll_state_synchronize_rcu_expedited() which should then immediately return.
+> > > 
+> > > Now even if we do that, we still need the below in case the CPUs went offline
+> > > in the middle of start_poll_synchronize_rcu_expedited() (again, assuming this
+> > > fixes the issue. I'm running the test).
+> > 
+> > Color me slow and stupid!!!
+> > 
+> > So the reason that this works for CONFIG_PREEMPT_DYNAMIC=y is that
+> > the rcu_blocking_is_gp() was never updated to account for this.
+> > 
+> > The first "if" in rcu_blocking_is_gp() needs to become something like
+> > this:
+> > 
+> > 	if (!preemption_boot_enabled())
+> > 
+> > Where:
+> > 
+> > 	bool preemption_boot_enabled(void)
+> > 	{
+> > 	#ifdef CONFIG_PREEMPT_DYNAMIC
+> > 		return preempt_dynamic_mode == preempt_dynamic_full;
+> > 	#else
+> > 		return IS_ENABLED(CONFIG_PREEMPTION);
+> > 	#endif
+> > 	}
+> > 
+> > Or am I missing something here?
+> 
+> Oh right there is that too!
 
-Thank you for the patch! Perhaps something to improve:
+I am testing with that fastpath completely commented out, just to make
+sure that we were seeing the same failure.
 
-[auto build test WARNING on staging/staging-testing]
+> I think we need to apply this patch:
+> https://lore.kernel.org/lkml/20211110202448.4054153-3-valentin.schneider@arm.com/
+> and then your above change. I can cook a series with the below.
 
-url:    https://github.com/0day-ci/linux/commits/Philipp-Hortmann/staging-vt6656-Remove-unused-5GHz-support/20220311-025658
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git b25c7dc13fb8842e8634bd846a7a96f2176f0244
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203112347.5u5Hv6vj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/747c899152efe7f0dbbcdd5399f1b1de3a7ba51d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Philipp-Hortmann/staging-vt6656-Remove-unused-5GHz-support/20220311-025658
-        git checkout 747c899152efe7f0dbbcdd5399f1b1de3a7ba51d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bluetooth/ drivers/staging/vt6656/
+Agreed, Valentin's approach is better than my preemption_boot_enabled().
+But when will CONFIG_PREEMPT_RT be boot-time selectable?  (/me runs!)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Looking forward to your series!
 
-All warnings (new ones prefixed by >>):
+							Thanx, Paul
 
->> drivers/staging/vt6656/baseband.c:170:35: warning: unused variable 'vt3342_vnt_threshold' [-Wunused-const-variable]
-   static const struct vnt_threshold vt3342_vnt_threshold[] = {
-                                     ^
-   1 warning generated.
-
-
-vim +/vt3342_vnt_threshold +170 drivers/staging/vt6656/baseband.c
-
-69a809e1569312 Oscar Carter 2020-03-28  169  
-69a809e1569312 Oscar Carter 2020-03-28 @170  static const struct vnt_threshold vt3342_vnt_threshold[] = {
-69a809e1569312 Oscar Carter 2020-03-28  171  	{0, 0x00, 0x38},	/* Max sensitivity */
-69a809e1569312 Oscar Carter 2020-03-28  172  	{66, 0x00, 0x43},
-69a809e1569312 Oscar Carter 2020-03-28  173  	{65, 0x00, 0x52},
-69a809e1569312 Oscar Carter 2020-03-28  174  	{64, 0x00, 0x68},
-69a809e1569312 Oscar Carter 2020-03-28  175  	{63, 0x00, 0x80},
-69a809e1569312 Oscar Carter 2020-03-28  176  	{62, 0x00, 0x9c},
-69a809e1569312 Oscar Carter 2020-03-28  177  	{61, 0x00, 0xc0},
-69a809e1569312 Oscar Carter 2020-03-28  178  	{60, 0x00, 0xea},
-69a809e1569312 Oscar Carter 2020-03-28  179  	{59, 0x01, 0x30},
-69a809e1569312 Oscar Carter 2020-03-28  180  	{58, 0x01, 0x70},
-69a809e1569312 Oscar Carter 2020-03-28  181  	{57, 0x01, 0xb0},
-69a809e1569312 Oscar Carter 2020-03-28  182  	{56, 0x02, 0x30},
-69a809e1569312 Oscar Carter 2020-03-28  183  	{55, 0x02, 0xc0},
-69a809e1569312 Oscar Carter 2020-03-28  184  	{53, 0x04, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  185  	{51, 0x07, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  186  	{49, 0x0a, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  187  	{47, 0x11, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  188  	{45, 0x18, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  189  	{43, 0x26, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  190  	{42, 0x36, 0x00},
-69a809e1569312 Oscar Carter 2020-03-28  191  	{41, 0xff, 0x00}
-69a809e1569312 Oscar Carter 2020-03-28  192  };
-69a809e1569312 Oscar Carter 2020-03-28  193  
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > > ---
+> > > >From 3c9f5df000b9659edbcf38cb87136fea1f8ac682 Mon Sep 17 00:00:00 2001
+> > > From: Frederic Weisbecker <frederic@kernel.org>
+> > > Date: Fri, 11 Mar 2022 13:30:02 +0100
+> > > Subject: [PATCH] rcu: Fix rcu exp polling
+> > > 
+> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > ---
+> > >  kernel/rcu/tree_exp.h | 52 ++++++++++++++++++++++++-------------------
+> > >  1 file changed, 29 insertions(+), 23 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > > index d5f30085b0cf..69c4dcc9159a 100644
+> > > --- a/kernel/rcu/tree_exp.h
+> > > +++ b/kernel/rcu/tree_exp.h
+> > > @@ -794,27 +794,7 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+> > >  
+> > >  #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
+> > >  
+> > > -/**
+> > > - * synchronize_rcu_expedited - Brute-force RCU grace period
+> > > - *
+> > > - * Wait for an RCU grace period, but expedite it.  The basic idea is to
+> > > - * IPI all non-idle non-nohz online CPUs.  The IPI handler checks whether
+> > > - * the CPU is in an RCU critical section, and if so, it sets a flag that
+> > > - * causes the outermost rcu_read_unlock() to report the quiescent state
+> > > - * for RCU-preempt or asks the scheduler for help for RCU-sched.  On the
+> > > - * other hand, if the CPU is not in an RCU read-side critical section,
+> > > - * the IPI handler reports the quiescent state immediately.
+> > > - *
+> > > - * Although this is a great improvement over previous expedited
+> > > - * implementations, it is still unfriendly to real-time workloads, so is
+> > > - * thus not recommended for any sort of common-case code.  In fact, if
+> > > - * you are using synchronize_rcu_expedited() in a loop, please restructure
+> > > - * your code to batch your updates, and then use a single synchronize_rcu()
+> > > - * instead.
+> > > - *
+> > > - * This has the same semantics as (but is more brutal than) synchronize_rcu().
+> > > - */
+> > > -void synchronize_rcu_expedited(void)
+> > 
+> > We should have a header comment here.  Given that I missed the need for
+> > this, for example.  ;-)
+> > 
+> > But feel free to send a formal patch without it, and I can add it.
+> > 
+> > Otherwise, it looks good.
+> 
+> Ok, preparing this.
+> 
+> Thanks!

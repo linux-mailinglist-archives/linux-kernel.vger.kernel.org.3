@@ -2,168 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3954D5EB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8DF4D5ECD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347720AbiCKJql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S242027AbiCKJwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:52:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238116AbiCKJqc (ORCPT
+        with ESMTP id S232555AbiCKJwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:46:32 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE281BE4C9;
-        Fri, 11 Mar 2022 01:45:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1646991929;
-  x=1678527929;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QOMLzEesVg6HYaOAZ4KCgGOM/7fxz+rqf2h1kQQi9LY=;
-  b=BNklQVJb0nsShtPM3oe2hhSmq3alWsefd/ByhcFCKALmM6GV3CYDmS4l
-   HVVn47z4n7iRZ23+/k3sunyeBw9YMgSkBcNFL8Oo+YRirSRw52yYz3R51
-   mvZT3/GIRYtA/o9Xsv3OCdpkyoSj9K5mC+U3NUkz87qerkPPjU+L7Lw44
-   YlO/nncNZS4NsPNbhaBn6Dsq7yqmv5CTZpLypwmEGfv4ubPSOP0iUH+Rz
-   nlSN3jMv4GBrMCsDRbkPEmM4+hACTUptAqwnf/L/8z3NxhfHZT2xThWaN
-   tZHszSbEnikF6Aw5Mh8DVAIBEcs7Hj4OAzXuChhRgB6rBw3oFzbsoo+Gi
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <alim.akhtar@samsung.com>
-Subject: [PATCH v2 2/2] tty: serial: samsung: Add ARTPEC-8 support
-Date:   Fri, 11 Mar 2022 10:45:15 +0100
-Message-ID: <20220311094515.3223023-3-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
-References: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
+        Fri, 11 Mar 2022 04:52:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94C11B9899;
+        Fri, 11 Mar 2022 01:51:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FE75B82854;
+        Fri, 11 Mar 2022 09:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CC5C340E9;
+        Fri, 11 Mar 2022 09:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646992293;
+        bh=GgeVWzigsW0ZPmr8VdhWGO1YRsLbRV7QEtBKeJ2FhJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qKFkgRowKCjGVBPs2b4KkC6r3lzOa6nfChakVBU1Y/hcU22frFiF2m3UFF8CtAgMW
+         3VaLITCkVM5rKjf+nGpJeMBxusyJWWOTZz8ye/01nDL7ZOqlH1WNO1HiKHbRyVqeUC
+         9qySmTZ52iKBhtY9Zm6GzgK6Wc4ZLRbkHZl4otzDv0k5YIhkUoT8H3LxrK+yTbrhci
+         SWq4o0J2tLk7LwP6NAaxHyc4/dLITzyvHCDb8WnCSqKpahjY8xy4YWiNLYXUVvh+sR
+         p9JCIz8Iq/GZW1RxErnSeEZG0QrLmR1+LScbyFxmbYNh95lhbNNg/UDcYhjKujuBUb
+         WT387zltDl4EA==
+Date:   Fri, 11 Mar 2022 15:21:29 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Dave Jiang <dave.jiang@intel.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: idxd: Remove useless DMA-32 fallback
+ configuration
+Message-ID: <YisboSIXfVVfGOyN@matsya>
+References: <009c80294dba72858cd8a6ed2ed81041df1b1e82.1642231430.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <009c80294dba72858cd8a6ed2ed81041df1b1e82.1642231430.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the UART block on the ARTPEC-8 SoC.  This is closely
-related to the variants used on the Exynos chips.  The register layout
-is identical to Exynos850 et al but the fifo size is different (64 bytes
-in each direction for all instances).
+On 15-01-22, 08:24, Christophe JAILLET wrote:
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+> 
+> Simplify code and remove some dead code accordingly.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
+Applied, thanks
 
-Notes:
-    v2:
-    - Added Krzysztof's Reviewed-by.
-    - Expanded commit message
-    - Fixed fifo size
-    - Rebased on top of Krzysztof's "minor fixes/cleanups" series.  This needed a
-      couple of fixes for build errors.
-    
-    (I'm always unsure if Reviewed-by should be carried over or not if the fixes
-    are minor.  I apologize in advance if carring it over was the wrong thing to do
-    in this case.)
-
- drivers/tty/serial/Kconfig       |  2 +-
- drivers/tty/serial/samsung_tty.c | 37 ++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 0e5ccb25bdb1..bd46e35ded40 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -236,7 +236,7 @@ config SERIAL_CLPS711X_CONSOLE
- 
- config SERIAL_SAMSUNG
- 	tristate "Samsung SoC serial support"
--	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || ARCH_APPLE || COMPILE_TEST
-+	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || ARCH_APPLE || ARCH_ARTPEC || COMPILE_TEST
- 	select SERIAL_CORE
- 	help
- 	  Support for the on-chip UARTs on the Samsung
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 74d466cc4152..7d011d3fa3a6 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -2828,6 +2828,36 @@ static const struct s3c24xx_serial_drv_data s5l_serial_drv_data = {
- #define S5L_SERIAL_DRV_DATA NULL
- #endif
- 
-+#if defined(CONFIG_ARCH_ARTPEC)
-+static const struct s3c24xx_serial_drv_data artpec8_serial_drv_data = {
-+	.info = {
-+		.name		= "Axis ARTPEC-8 UART",
-+		.type		= TYPE_S3C6400,
-+		.port_type	= PORT_S3C6400,
-+		.fifosize	= 64,
-+		.has_divslot	= 1,
-+		.rx_fifomask	= S5PV210_UFSTAT_RXMASK,
-+		.rx_fifoshift	= S5PV210_UFSTAT_RXSHIFT,
-+		.rx_fifofull	= S5PV210_UFSTAT_RXFULL,
-+		.tx_fifofull	= S5PV210_UFSTAT_TXFULL,
-+		.tx_fifomask	= S5PV210_UFSTAT_TXMASK,
-+		.tx_fifoshift	= S5PV210_UFSTAT_TXSHIFT,
-+		.def_clk_sel	= S3C2410_UCON_CLKSEL0,
-+		.num_clks	= 1,
-+		.clksel_mask	= 0,
-+		.clksel_shift	= 0,
-+	},
-+	.def_cfg = {
-+		.ucon		= S5PV210_UCON_DEFAULT,
-+		.ufcon		= S5PV210_UFCON_DEFAULT,
-+		.has_fracval	= 1,
-+	}
-+};
-+#define ARTPEC8_SERIAL_DRV_DATA (&artpec8_serial_drv_data)
-+#else
-+#define ARTPEC8_SERIAL_DRV_DATA (NULL)
-+#endif
-+
- static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
- 	{
- 		.name		= "s3c2410-uart",
-@@ -2856,6 +2886,9 @@ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
- 	}, {
- 		.name		= "exynos850-uart",
- 		.driver_data	= (kernel_ulong_t)EXYNOS850_SERIAL_DRV_DATA,
-+	}, {
-+		.name		= "artpec8-uart",
-+		.driver_data	= (kernel_ulong_t)ARTPEC8_SERIAL_DRV_DATA,
- 	},
- 	{ },
- };
-@@ -2881,6 +2914,8 @@ static const struct of_device_id s3c24xx_uart_dt_match[] = {
- 		.data = S5L_SERIAL_DRV_DATA },
- 	{ .compatible = "samsung,exynos850-uart",
- 		.data = EXYNOS850_SERIAL_DRV_DATA },
-+	{ .compatible = "axis,artpec8-uart",
-+		.data = ARTPEC8_SERIAL_DRV_DATA },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, s3c24xx_uart_dt_match);
-@@ -3034,6 +3069,8 @@ OF_EARLYCON_DECLARE(s5pv210, "samsung,s5pv210-uart",
- 			s5pv210_early_console_setup);
- OF_EARLYCON_DECLARE(exynos4210, "samsung,exynos4210-uart",
- 			s5pv210_early_console_setup);
-+OF_EARLYCON_DECLARE(artpec8, "axis,artpec8-uart",
-+			s5pv210_early_console_setup);
- 
- /* Apple S5L */
- static int __init apple_s5l_early_console_setup(struct earlycon_device *device,
 -- 
-2.34.1
-
+~Vinod

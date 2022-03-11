@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AD24D63F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4404D63EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiCKOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
+        id S1349828AbiCKOms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344430AbiCKOm2 (ORCPT
+        with ESMTP id S1346607AbiCKOm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:42:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9261CE986;
-        Fri, 11 Mar 2022 06:40:57 -0800 (PST)
-Date:   Fri, 11 Mar 2022 14:40:55 -0000
+        Fri, 11 Mar 2022 09:42:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61E18CDBF;
+        Fri, 11 Mar 2022 06:40:58 -0800 (PST)
+Date:   Fri, 11 Mar 2022 14:40:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647009656;
+        s=2020; t=1647009657;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hegKktPR+oSJlZ7eMJINSbSES7bQHZfFFKSD96G5/LA=;
-        b=MzcljQCinP7twuiPsPW9gYtb+h6/YxFv1Rge2rl0hOeXY/H3/vyMTuhaoEt/NK+3JIm8fk
-        mwlTMfvvk8OeYE3AKkmRxLYop/1DpOS/M3GeCRyV5Z6Z+c4JIgzB21EFqhtlimuh2IMfHD
-        1FN6F2yK6mr6vfyzEFsxDPdxnpSvOPKj+Z+EhV7MOqZhhGUuHXMhHhCKtOr/HqR8TgtiIn
-        TZSfAIlGRVFt5KywHHLNZxxl8uABvW9LwJTqB2nMS1Xj0Urbt5BXbtViBS+VuAJnMJQCwF
-        ZRRrXdszCIRUSlnZsEpGrT43GMydsanBzfRQumYtAW43viWxNAEfJvLScgUjiQ==
+        bh=d31r8wTn8h3Sl16eJtem9/DzCXEnrJZYgsbgAyz5g0M=;
+        b=JqSJtnkgkbjOIO9yScpX07mC6JY6mRkfFHoCyFKdra20jradN1y2X14ysHd0gOcpP04lP+
+        QFdD4f8HCuSBB58LnJyJ5kBC+8+VYmD6B/fz1HB1aL0BNY9yUm+1kVZPSOKLHTnbnaT8nH
+        D5zXB02ATGmUYPGg0mIOF4U412vS5shMVADzX09ce2cyPjKOUyQLoAQwCJdeOX2AvwLFNm
+        aeSfLW/9EYdqrwyraBj6aGWP/ZbcHy0i7pRwqKUMZz7VX5H6ypW0VjRvK5KK17KWHvdwiv
+        ggyXxwyRYxpBcH4aQf0RAS0Ley1Y6Faw/UAVdgX7zWcGdJooJ8L5k81LMoASzw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647009656;
+        s=2020e; t=1647009657;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hegKktPR+oSJlZ7eMJINSbSES7bQHZfFFKSD96G5/LA=;
-        b=qy/1hBkvMQUckH55AU62qHWpu0LfLVlvuJxuKcj7tKjd7eZhE5L9iIuEJFtykiVVPNRY5C
-        jf3DVp+lpLl3GxBw==
+        bh=d31r8wTn8h3Sl16eJtem9/DzCXEnrJZYgsbgAyz5g0M=;
+        b=/1ewpK7i9vAF7LrR8bPHYqSvxcNmHm6GxTBwS5NImT7QHpC3NK0G3nrHZ0Dm+nGCLU9gYE
+        GN0ChRpjqUbia/Dw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86,ftrace: Fix modify_ftrace_direct()
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+Subject: [tip: x86/core] x86: Fix {int3,ibt}_selftest() vs LTO
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        David Laight <David.Laight@aculab.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
-References: <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+In-Reply-To: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
+References: <YinP49gEl2zUVekz@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <164700965551.16921.1526159512411364871.tip-bot2@tip-bot2>
+Message-ID: <164700965635.16921.2130693129403753558.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,43 +68,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     c841668784cc609e7ae103d91c3e03bf8939418d
-Gitweb:        https://git.kernel.org/tip/c841668784cc609e7ae103d91c3e03bf8939418d
+Commit-ID:     c7d90e15b8950009d0d4e8f3503b09b2ea6d527c
+Gitweb:        https://git.kernel.org/tip/c7d90e15b8950009d0d4e8f3503b09b2ea6d527c
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 11 Mar 2022 10:40:40 +01:00
+AuthorDate:    Thu, 10 Mar 2022 11:16:03 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 11 Mar 2022 13:05:08 +01:00
 
-x86,ftrace: Fix modify_ftrace_direct()
+x86: Fix {int3,ibt}_selftest() vs LTO
 
-Alexei reported that BPF direct trampolines are no longer working with
-IBT=y builds.
+Both these selftests define a symbol in inline asm which goes
+side-ways if the asm gets duplicated due to inlining. Nick actually
+saw this happen with a Clang LTO build.
 
-Make modify_ftrace_direct() consistent vs
-{,un}register_ftrace_direct(), such that they all agree on where the
-__fentry__ site lives.
+Mark the two selftests noinline to ensure this cannot happen, as
+suggestd by David.
 
-Fixes: ee1a8cf8dd0f ("x86/ibt,ftrace: Search for __fentry__ location")
-Reported-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+While there, update the comment for int3_selftest() and increase coding
+style consistency between the two.
+
+Fixes: 103c0093ceb6 ("x86/ibt: Add IBT feature, MSR and #CP handling")
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Suggested-by: David Laight <David.Laight@aculab.com>,
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com> # llvm build, non-IBT boot
+Link: https://lkml.kernel.org/r/YinP49gEl2zUVekz@hirez.programming.kicks-ass.net
 ---
- kernel/trace/ftrace.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/kernel/alternative.c | 8 ++++----
+ arch/x86/kernel/traps.c       | 7 ++++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index ae0d9f6..8e0509e 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5381,6 +5381,11 @@ int modify_ftrace_direct(unsigned long ip,
- 	mutex_lock(&direct_mutex);
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index d6c41f8..820c43a 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -781,7 +781,8 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
+ 	return NOTIFY_STOP;
+ }
  
- 	mutex_lock(&ftrace_lock);
-+
-+	ip = ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	entry = find_direct_entry(&ip, &rec);
- 	if (!entry)
- 		goto out_unlock;
+-static void __init int3_selftest(void)
++/* Must be noinline to ensure uniqueness of int3_selftest_ip. */
++static noinline void __init int3_selftest(void)
+ {
+ 	static __initdata struct notifier_block int3_exception_nb = {
+ 		.notifier_call	= int3_exception_notify,
+@@ -794,9 +795,8 @@ static void __init int3_selftest(void)
+ 	/*
+ 	 * Basically: int3_magic(&val); but really complicated :-)
+ 	 *
+-	 * Stick the address of the INT3 instruction into int3_selftest_ip,
+-	 * then trigger the INT3, padded with NOPs to match a CALL instruction
+-	 * length.
++	 * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
++	 * notifier above will emulate CALL for us.
+ 	 */
+ 	asm volatile ("int3_selftest_ip:\n\t"
+ 		      ANNOTATE_NOENDBR
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 89fb299..755c23b 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -213,7 +213,7 @@ DEFINE_IDTENTRY(exc_overflow)
+ 
+ static __ro_after_init bool ibt_fatal = true;
+ 
+-void ibt_selftest_ip(void); /* code label defined in asm below */
++extern void ibt_selftest_ip(void); /* code label defined in asm below */
+ 
+ enum cp_error_code {
+ 	CP_EC        = (1 << 15) - 1,
+@@ -237,7 +237,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+ 	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
+ 		return;
+ 
+-	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
++	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
+ 		regs->ax = 0;
+ 		return;
+ 	}
+@@ -251,7 +251,8 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+ 	BUG();
+ }
+ 
+-bool ibt_selftest(void)
++/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
++noinline bool ibt_selftest(void)
+ {
+ 	unsigned long ret;
+ 

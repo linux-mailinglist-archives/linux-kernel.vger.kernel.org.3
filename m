@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17E64D5988
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422434D5989
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346225AbiCKE1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S1346248AbiCKE2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbiCKE1t (ORCPT
+        with ESMTP id S236938AbiCKE2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:27:49 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CE31A41C0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:26:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KFCYv1GnHz4xcC;
-        Fri, 11 Mar 2022 15:26:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1646972804;
-        bh=kj3Y9rFdntioquAOckINO/fYRpiknqyh9JlE9pvUSLI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Vqdg28P7wEvdR0OsQnFjMnSgKWofZcoNHyHbXt0cZ7SR6tnO/hQW7oW3YF+ec5eGT
-         zca6xSirV7Bo549tLPW6tvMtbO92cD5kBEmrhUCeeVRCJ0UWJdkrbE1x2pMd1GdAn5
-         dlrGwS53BaUpvKIm7RMCAFWPU7XGk/66iIo899FRq685I2uDHEs8DDDKqOgsR23l2l
-         OrO8lkePGsmUXZcNq7KvouVFnn5Iunaa8q5+RNlY953xnFe2X1CmhDeOjlgNMs5pry
-         71qVg1KcR0r5Z9kuGD/cDNSdkPM3glbDcZWYiBujM8HfGC3P7uUFTb4sttCuFu75HE
-         tb9mg13cRZH+A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "alex@ghiti.fr" <alex@ghiti.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v8 00/14] Convert powerpc to default topdown mmap layout
- (v8)
-In-Reply-To: <ddfed61b-e387-4554-eb88-6654b391d1a4@csgroup.eu>
-References: <cover.1646847561.git.christophe.leroy@csgroup.eu>
- <ddfed61b-e387-4554-eb88-6654b391d1a4@csgroup.eu>
-Date:   Fri, 11 Mar 2022 15:26:42 +1100
-Message-ID: <877d91m7wd.fsf@mpe.ellerman.id.au>
+        Thu, 10 Mar 2022 23:28:05 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D11A41C4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:27:02 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id q19so6486844pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VuuZr/4c1UPKQEo4uOczu6/ksfM6S6wo/JNy4TAGNVk=;
+        b=UcivEOlB+uVR0KkOqADnu9jEIZf4COjV9eay8wpm68/HcpbolfpyHGoOTT+ewk5G63
+         zLfqdJpJAywpEkrHOvUIk/gP5eJt3cQS7NN5TcL1ILU4x65mqrubJRoH9+UDkywx71uG
+         SrPeV/+GEosd4nBp4fTXkcxxyYv6ZvoPVeCJkyfBCZS4nBo5vp2K1FdhXWaTc/wUO0QR
+         RNOSOTsqOA4SfSIxyO1V6rm002CgzoKASkmCKnQrlVGrVX/qDg2wERh+UGQsk9nzNtV1
+         n0FrDrp1JiRJpRR2gldDJJwNyFT423bwuU8Nl9ln/XqIBRiT+wM78qwglefvT5VT+B/S
+         hqgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VuuZr/4c1UPKQEo4uOczu6/ksfM6S6wo/JNy4TAGNVk=;
+        b=jF1OVeF2t/r7rPyYMirzACT07RFfQNAYBXSFKudyWGdHJQuyuhh6EhJYTCM8+UUwwJ
+         1mVShLPbk90jR9UqDl2sGoaG5jxxHnAA9tP+Huozy/jODbWedE+lIwBTTjwxdYSWr4CG
+         gm5LEfRcJnjaz9v2I+fvCPdoimdGJ+jm2KQwLF/1vav56Gl0AHsavgPiYEyJVc8WT12t
+         pe0QL0S9FFvoa7G5uw+ijqTtZ9E10ANSpTHGK04P7CLxrl8lTWt5/Uz0YGW0X5/uNEJ7
+         ZxdvWn2cV+pGTH0VQmXQrrlMPgw37YdK/8qzh6vkFrwPSvXB96GvRu1l8+tD5oVJO7sV
+         TICw==
+X-Gm-Message-State: AOAM532tPnbWpCsQUvRWcEHQHwnSiyvm07VUMhsaTEpy72i1rDWUD74m
+        ypZwCMzcETeWZwmILAh0ebritQ==
+X-Google-Smtp-Source: ABdhPJx5FpRKFn9VUkyyxuCm50rwhdULgerp/xvxMqeqGB1onNa8UkHlH3VDkc/rbdpOJ+WAC4mRhg==
+X-Received: by 2002:a62:cdcd:0:b0:4f6:f5c2:47d9 with SMTP id o196-20020a62cdcd000000b004f6f5c247d9mr8329402pfg.26.1646972822270;
+        Thu, 10 Mar 2022 20:27:02 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm8815641pfv.22.2022.03.10.20.27.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 20:27:01 -0800 (PST)
+Date:   Fri, 11 Mar 2022 04:26:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Chao Gao <chao.gao@intel.com>, Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
+Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+Message-ID: <YirPkr5efyylrD0x@google.com>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+ <20220225082223.18288-7-guang.zeng@intel.com>
+ <Yifg4bea6zYEz1BK@google.com>
+ <20220309052013.GA2915@gao-cwp>
+ <YihCtvDps/qJ2TOW@google.com>
+ <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Hi Michael, hi Andrew
->
-> Le 09/03/2022 =C3=A0 18:44, Christophe Leroy a =C3=A9crit=C2=A0:
->> Rebased on top of powerpc/next branch
->>=20
->> This series converts powerpc to default topdown mmap layout.
->>=20
->> powerpc requires its own arch_get_unmapped_area() only when
->> slices are needed, which is only for book3s/64. First part of
->> the series moves slices into book3s/64 specific directories
->> and cleans up other subarchitectures.
->>=20
->> Last part converts to default topdown mmap layout.
->>=20
->> A small modification is done to core mm to allow
->> powerpc to still provide its own arch_randomize_brk()
->>=20
->> Another modification is done to core mm to allow powerpc
->> to use generic versions of get_unmapped_area functions for Radix
->> while still providing its own implementation for Hash, the
->> selection between Radix and Hash being doing at runtime.
->>=20
->> Last modification to core mm is to give len and flags to
->> arch_get_mmap_end().
->>=20
->> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->
-> What's the way forward for this series ?
+On Wed, Mar 09, 2022, Maxim Levitsky wrote:
+> On Wed, 2022-03-09 at 06:01 +0000, Sean Christopherson wrote:
+> > > Could you share the links?
+> > 
+> > Doh, sorry (they're both in this one).
+> > 
+> > https://lore.kernel.org/all/20220301135526.136554-5-mlevitsk@redhat.com
+> > 
+> 
+> My opinion on this subject is very simple: we need to draw the line somewhere.
 
-It's a bit of a tricky series.
+...
 
-> Patches 1 has been merged in PCI tree.
+> I also understand your concerns - and I am not going to fight over this, a module
+> param for read only apic id, will work for me.
 
-That's fine I guess, it can go into v5.18, it's only patch 14 that
-depends on it.
+Sadly, I don't think a module param would actually help.  I was thinking it would
+avoid breakage by allowing for graceful fallback on migration failure, but that
+was wishful thinking.  An inhibit seems like the least awful idea if we don't end
+up making it unconditionally readonly.
 
-> Patches 2 to 5 are core mm, patch 5 being a fix.
+> All I wanted to do is to make KVM better by simplifying it - KVM is already
+> as complex as it can get, anything to make it simpler is welcome IMHO.
 
-A fix for arm64 even, just to complicate things :)
+I agree that simplifying KVM is a goal, and that we need to decide when enough is
+enough.  But we also can't break userspace or existing deployments, that's a very
+clearly drawn line in Linux.
 
-> Then patches 6 to 14 are powerpc.
+My biggest worry is that, unlike the KVM_SET_CPUID2 breakage, which was obvious
+and came relatively quick, this could cause breakage at the worst possible time
+(migration) months or years down the road.
 
-With a fairly sizable diffstat, ie. likely to conflict.
+Since the goal is to simplify KVM, can we try the inhibit route and see what the
+code looks like before making a decision?  I think it might actually yield a less
+awful KVM than the readonly approach, especially if the inhibit is "sticky", i.e.
+we don't try to remove the inhibit on subsequent changes.
 
-> What will be the merge strategy ? I guess it's a bit late to get it=20
-> through powerpc tree, so I was just wondering whether we could get=20
-> patches 2 to 5 in mm this cycle, and the powerpc ones next cycle ?
+Killing the VM, as proposed, is very user unfriendly as the user will have no idea
+why the VM was killed.  WARN is out of the question because this is user triggerable.
+Returning an emulation error would be ideal, but getting that result up through
+apic_mmio_write() could be annoying and end up being more complex.
 
-Yeah I didn't pick it up because the mm changes don't have many acks and
-I'm always nervous about carrying generic mm changes.
-
-It would be my preference if Andrew could take 2-5 through mm for v5.18,
-but it is quite late, so I'm not sure how he will feel about that.
-
-Arguably 2, 3, 4 do very little. It's only patch 5 that has much effect,
-and it has a reviewed-by from Catalin at least.
-
-cheers
+The touchpoints will all be the same, unless I'm missing something the difference
+should only be a call to set an inhibit instead killing the VM.

@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFF64D6255
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7997C4D6256
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240564AbiCKNYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S1348905AbiCKNY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiCKNYL (ORCPT
+        with ESMTP id S1345965AbiCKNYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:24:11 -0500
+        Fri, 11 Mar 2022 08:24:12 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D38C75E59
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:23:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A0C76E2F;
+        Fri, 11 Mar 2022 05:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647004987; x=1678540987;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fmmfOEuPSCivCd3V6SdzAigo3Bao/+X4L4gBOdq0JNE=;
-  b=gOw2FKPYTTdvdsGyjb59aJCx0/8OTLIVel3qS1+8yK+88vCkeQNgHqe4
-   IX+k1RP1NV41Ruu+GkcQLpqGjLRUS3YezpB40cIdfySAdihFYCY2nj4hL
-   w4mXJ/TePp83Az7q9QjvJQ8mdQXuFDU1SGCLGBihfbZO/c6KeFjZTY+xD
-   h0lfcYXj9waYk9nVos6Ks2Rz+Dc3rHDKwfmPGXfKreFDoeh1aCMWY5vmb
-   TEEcK4NLtxaNEd8bU/hTQN2OJ7odCOl3C5uE2kAYHSdL9fB55M8IN/dOD
-   IQsP4JJ1EpuZP3LQzpX/XFHqGiU1XOtE+bmS102kM/cEVVZwAlZ2ObVlI
+  t=1647004988; x=1678540988;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UXpw8xMUXXNMq602k1Jggox1J6ysJh5BAv361tPlTcw=;
+  b=KZEkNrHTIeAtqBK4mOqvbDsHCjg7dYekL3ojVUQwWmuJAYhfPMwg2Z0T
+   RcawHPKZXCCmQVjj3rcSYh+ZGbOCORdM9QHOrQf2bZL/xehOjn0Ql9XQv
+   SrN+drxYJhdJDZmPsDRnQYtJ0FcSUBszIFfW0gViCKs6jMihnFa61CuIZ
+   peI3gYeNql6Oqr54agAszoDlI+5XEARj0NdX8nk3cY9KqfdEqACalbR1z
+   bHOPrsVJ97OLvy0MLvK6EHV41GsosqqHTXl/Rtd+K4hh+L5kVFg0MLMLA
+   ykRkPm850ZSr4OYC51w2xMxT1DuN6uG01y1y4C4BBV4s5lZGZp4hk2VhS
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254398551"
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254398554"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="254398551"
+   d="scan'208";a="254398554"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:23:07 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:23:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="612153662"
+   d="scan'208";a="612153648"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
   by fmsmga004.fm.intel.com with ESMTP; 11 Mar 2022 05:23:05 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nSfEX-0006Sk-1X; Fri, 11 Mar 2022 13:23:05 +0000
-Date:   Fri, 11 Mar 2022 21:22:22 +0800
+        id 1nSfEX-0006Sh-18; Fri, 11 Mar 2022 13:23:05 +0000
+Date:   Fri, 11 Mar 2022 21:22:25 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Gow <davidgow@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: lib/list-test.c:662:45: warning: variable 'head' set but not used
-Message-ID: <202203112152.zpAjsGQF-lkp@intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     kbuild-all@lists.01.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH] tracing: Add snapshot at end of kernel boot up
+Message-ID: <202203112151.vHjFh9wP-lkp@intel.com>
+References: <20220310214133.0e58e321@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220310214133.0e58e321@gandalf.local.home>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -61,86 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
-head:   54ae283053c127aac4b946dffa0f31f9885dbb77
-commit: 32c7dc1050a5376225f79589948ac5a63cb75e5a list: test: Add a test for list_traverse
-date:   6 hours ago
-config: arc-randconfig-r043-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112152.zpAjsGQF-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
+Hi Steven,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on linux/master hnaz-mm/master linus/master v5.17-rc7 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: xtensa-buildonly-randconfig-r002-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112151.vHjFh9wP-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/32c7dc1050a5376225f79589948ac5a63cb75e5a
+        # https://github.com/0day-ci/linux/commit/60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220311-151720/Xiaomeng-Tong/list_for_each_entry-make-iterator-invisiable-outside-the-loop/20220301-160113
-        git checkout 32c7dc1050a5376225f79589948ac5a63cb75e5a
+        git fetch --no-tags linux-review Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
+        git checkout 60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash kernel/ lib/ mm/ net/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-   lib/list-test.c:15:9: error: expected specifier-qualifier-list before 'list_traversal_head'
-      15 |         list_traversal_head(struct list_test_struct, head, list);
-         |         ^~~~~~~~~~~~~~~~~~~
-   lib/list-test.c: In function 'list_test_list_traverse':
-   lib/list-test.c:665:29: error: 'struct list_test_struct' has no member named 'head'
-     665 |         INIT_LIST_HEAD(&head.head);
-         |                             ^
-   lib/list-test.c:669:54: error: 'struct list_test_struct' has no member named 'head'
-     669 |                 list_add_tail(&entries[i].list, &head.head);
-         |                                                      ^
-   lib/list-test.c:674:9: error: implicit declaration of function 'list_traverse' [-Werror=implicit-function-declaration]
-     674 |         list_traverse(cur, &head.head, list) {
-         |         ^~~~~~~~~~~~~
-   lib/list-test.c:674:23: error: 'cur' undeclared (first use in this function)
-     674 |         list_traverse(cur, &head.head, list) {
-         |                       ^~~
-   lib/list-test.c:674:23: note: each undeclared identifier is reported only once for each function it appears in
-   lib/list-test.c:674:33: error: 'struct list_test_struct' has no member named 'head'
-     674 |         list_traverse(cur, &head.head, list) {
-         |                                 ^
-   lib/list-test.c:674:40: error: 'list' undeclared (first use in this function)
-     674 |         list_traverse(cur, &head.head, list) {
-         |                                        ^~~~
-   lib/list-test.c:674:45: error: expected ';' before '{' token
-     674 |         list_traverse(cur, &head.head, list) {
-         |                                             ^~
-         |                                             ;
->> lib/list-test.c:662:45: warning: variable 'head' set but not used [-Wunused-but-set-variable]
-     662 |         struct list_test_struct entries[5], head;
-         |                                             ^~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/head +662 lib/list-test.c
-
-   659	
-   660	static void list_test_list_traverse(struct kunit *test)
-   661	{
- > 662		struct list_test_struct entries[5], head;
-   663		int i = 0;
-   664	
-   665		INIT_LIST_HEAD(&head.head);
-   666	
-   667		for (i = 0; i < 5; ++i) {
-   668			entries[i].data = i;
-   669			list_add_tail(&entries[i].list, &head.head);
-   670		}
-   671	
-   672		i = 0;
-   673	
-   674		list_traverse(cur, &head.head, list) {
-   675			KUNIT_EXPECT_EQ(test, cur->data, i);
-   676			i++;
-   677		}
-   678	
-   679		KUNIT_EXPECT_EQ(test, i, 5);
-   680	}
-   681	
+>> WARNING: modpost: vmlinux.o(.text+0x7c164): Section mismatch in reference from the function __se_sys_delete_module() to the function .init.text:ftrace_boot_snapshot()
+The function __se_sys_delete_module() references
+the function __init ftrace_boot_snapshot().
+This is often because __se_sys_delete_module lacks a __init
+annotation or the annotation of ftrace_boot_snapshot is wrong.
 
 ---
 0-DAY CI Kernel Test Service

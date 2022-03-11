@@ -2,121 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CAA4D6793
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B45B4D6794
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350744AbiCKR0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S1350756AbiCKR13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237215AbiCKR0p (ORCPT
+        with ESMTP id S1350003AbiCKR11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:26:45 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1578F1D0D51
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:25:42 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p17so8198945plo.9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:25:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QxcnJJvBNCY+bGfnFgLArG30Rx8eamlF+KA/wCgp2ak=;
-        b=sRCgtqRwTdMHtzhNI7YQxf++43csWqxxhxHiIWZUApUDmTYDJj6RFA3fKtOLrA6TRZ
-         us6iW/6dQnVO9b1lfj1tYw12dO15MDaYQE6sKJczkNASZFF9D4quSBe5hBiC9syF6uf8
-         2HV4UTD2g3FVMUTUeZWvo0Wtp0D2MsxbQTACr31G+le84FCm8bfgQLOHMy9SYT0YGysB
-         2iCxbNK47qhvPHQKQhKOr4b91cjsrKCQFsNzdTF1OQff4gEOnwDyMqeA/g4Kg0NkQsSW
-         87XI4DbRm5XxB7QmhHK3c7Gd9kSjw4M+inl8695FsRfLk3tAfEAegD2HG0+rziACkca2
-         /ktw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QxcnJJvBNCY+bGfnFgLArG30Rx8eamlF+KA/wCgp2ak=;
-        b=geNqIebbrzXTR9Da/6qeHHkpstYbKa2l/tGjKIGqTJ6CxyLgLHlv+P5Pf5AGzD6ECm
-         D22/bdXc0EOM6sNiUG24MGsMhvtXqrN3HQ4ZrDsaSurdoU96WgxPfkzqbj75wYEnqdjZ
-         BmQdf6BcBNPN88wCMbz1efRBtRixhMDKyUF6cLHw57p3bVahncmXMk43M7jhcW15VQwP
-         1NVq771hdWAPLewdGj9VL3Zf34bzDoRIOyAKamnW1lzo6KIcb5/3e+JGJDqC5vTnDa7u
-         y9HhIMZlqVr6T/X7uVjr+60UO6uriS3pKfGtM9mDr04qm5GrmcCcQ9qqWqMkgPQRvwhI
-         6ycA==
-X-Gm-Message-State: AOAM531y4UN8wx3tpdahKNTPt+OotCLDoInGnYiGaRkE+TwtRCgoVWOd
-        mvAr1Nyi8NviGpq8UnPzTYv26g==
-X-Google-Smtp-Source: ABdhPJzrbt6D2XQuVil7KpcYtFucz4BGvOQxIezfqXq84jqtbTpP4Bi8DbC26FKdK98HEcgNv8MtgA==
-X-Received: by 2002:a17:902:e5ca:b0:152:54c1:f87f with SMTP id u10-20020a170902e5ca00b0015254c1f87fmr11485758plf.59.1647019541529;
-        Fri, 11 Mar 2022 09:25:41 -0800 (PST)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id v14-20020a056a00148e00b004e1cee6f6b4sm12178835pfu.47.2022.03.11.09.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 09:25:41 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:25:38 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
-        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] hv_netvsc: Add check for kvmalloc_array
-Message-ID: <20220311092538.0cb478cf@hermes.local>
-In-Reply-To: <20220311032035.2037962-1-jiasheng@iscas.ac.cn>
-References: <20220311032035.2037962-1-jiasheng@iscas.ac.cn>
+        Fri, 11 Mar 2022 12:27:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F91D21E0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:26:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 799AD61B4A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 17:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 602C1C340E9;
+        Fri, 11 Mar 2022 17:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647019583;
+        bh=4Rc2G7Bf2wtSLLayL6+3/TOHRyUSOxjI9bDKZYIsqEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p49wM+pR/bGJ7mySZWeLuvJYZjkTUtiunRzzIULQLLym81KuXiNRTIYHS0fecdjlD
+         M+5wkYTp/CDN2cxpsV7OezNk4seb2iqcLFsLrPawZP30S5dQP6bB3Wh1CO0TRwOWbV
+         ba9hzSaTcjuxaS7ZNjDyuMWtmuFba6r9jOJneFqFyLqPLiDa/H22OGUOpu+m3ELhwV
+         nZG+5uZ7rqEL9VlsFae120TbD0PuoYHSFqeqQo2Mpo7T6wVEtwBBhk6caEP1tphHrq
+         67rLiwAb2ZsDNlo3gpInuskEG7j0KQgKZKmu62dOL/3Lj5xRAaTKTyoX+Lbk/+ZDm0
+         J6M0UEH5uxPeg==
+Date:   Fri, 11 Mar 2022 18:26:20 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Scenario TREE07 with CONFIG_PREEMPT_DYNAMIC=n?
+Message-ID: <20220311172620.GA229256@lothringen>
+References: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
+ <20220310224103.GA94994@lothringen>
+ <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220311130719.GC96127@lothringen>
+ <20220311152148.GF4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220311154603.GC227945@lothringen>
+ <20220311160619.GG4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220311164758.GA3574399@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311164758.GA3574399@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 11:20:35 +0800
-Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
-
-> As the potential failure of the kvmalloc_array(),
-> it should be better to check and restore the 'data'
-> if fails in order to avoid the dereference of the
-> NULL pointer.
+On Fri, Mar 11, 2022 at 08:47:58AM -0800, Paul E. McKenney wrote:
+> And there is one more issue with this code.  Someone invoking
+> get_state_synchronize_rcu_expedited() in one task might naively expect
+> that calls to synchronize_rcu_expedited() in some other task would cause
+> a later poll_state_synchronize_rcu_expedited() would return true.
 > 
-> Fixes: 6ae746711263 ("hv_netvsc: Add per-cpu ethtool stats for netvsc")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/hyperv/netvsc_drv.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Except that if CONFIG_PREEMPT_NONE=y and there is only one CPU, those
+> calls to synchronize_rcu_expedited() won't be helping at all.
 > 
-> diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-> index 3646469433b1..018c4a5f6f44 100644
-> --- a/drivers/net/hyperv/netvsc_drv.c
-> +++ b/drivers/net/hyperv/netvsc_drv.c
-> @@ -1587,6 +1587,12 @@ static void netvsc_get_ethtool_stats(struct net_device *dev,
->  	pcpu_sum = kvmalloc_array(num_possible_cpus(),
->  				  sizeof(struct netvsc_ethtool_pcpu_stats),
->  				  GFP_KERNEL);
-> +	if (!pcpu_sum) {
-> +		for (j = 0; j < i; j++)
-> +			data[j] = 0;
-> +		return;
-> +	}
+> I could imagine poll_state_synchronize_rcu_expedited() setting a
+> global flag if there is only one CPU, which could be checked by
+> __synchronize_rcu_expedited() and reset.
+> 
+> Is there a better way?
 
-I don't think you understood what my comment was.
-
-The zeroing here is not necessary. Just do:
-        if (!pcpu_sum)
-               return;
-
-The data pointer is to buffer allocated here:
-
-static int ethtool_get_stats(struct net_device *dev, void __user *useraddr)
-{
-...
-	if (n_stats) {
-		data = vzalloc(array_size(n_stats, sizeof(u64)));  <<<<< is already zeroed.
-		if (!data)
-			return -ENOMEM;
-		ops->get_ethtool_stats(dev, &stats, data);
+I would tend to think that in this case, it's the responsibility of the
+caller to make sure that the task supposed to start the exp GP has a chance
+to run (cond_resched(), etc...).

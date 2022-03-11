@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDD24D63B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3134D63E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349507AbiCKOiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S232194AbiCKOkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347893AbiCKOhh (ORCPT
+        with ESMTP id S1349574AbiCKOhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:37:37 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877891C8DAF;
-        Fri, 11 Mar 2022 06:36:29 -0800 (PST)
+        Fri, 11 Mar 2022 09:37:39 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A801C9455;
+        Fri, 11 Mar 2022 06:36:30 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CB64F240018;
-        Fri, 11 Mar 2022 14:36:26 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 50B90240004;
+        Fri, 11 Mar 2022 14:36:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647009388;
+        t=1647009389;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dQus7XQbf+fPVF49Vs3xuZQt/goLCAbN0lflmcEfzP4=;
-        b=bvZPTuX4+xw6VMy+lfNLNtI/DflUxLisl4Zkx127lYoYqOny+RP+V9HGrEQK0L57618Qr8
-        zAANHLWi4sLD5EQZ+4RiT/puhM/6JW2eSsOLkvhn3kt9HupdvRUm+ogHH1iUdBjuDx05Tf
-        5A/TjSZcnKm9fIpHmMRt57RPrr1fzS7BXVrDfu03p38PT4sAQ4q09H+8ZMedaZ26kJ0jKs
-        0/H3qbA6E3rLagxKUnvCTXgmM3o0Qxp4cRRIqBKxYsXlUC375+n7++383SngPG2f8EGRA4
-        srvHUrFp6Zu9XePD1BE7dL5J//L+qY/GGgZK4D6o2RN/AsQ0zOVSzrAfM4B/GA==
+        bh=iggvo2rKOQxtmuPw2qJyHa5S/fk0RafXxscwtfDj1dg=;
+        b=l9t27ymgioqxk7VMuWg/PvC3tPc7/UErsoxRubSz31jmRdbEC0qRkTI0l+7Yonz1Ba8MUz
+        VVKgEiwiGzKKZzK96DGmG9o/JFR2xhwQcjFYA677mnScynZ9MlRl77npkKBGQta/uouBpT
+        eRNdAxPFeeMv2LSX5GV2LPAcRfZCtJT+UwVcJ7BV95fecJ2JJS2x/XtRVoydAW81Zg7UyL
+        p/Rx39pi2Vwga2MUx4zewJD8Bas7j1ttgYhiiE3mPJI1JcNm/6BEorzAq3uAeFsv6pKWE2
+        9sxevk6fr/NG64ZB2LF+jzsalYlpbdWdZmxV40yRJYCfuMmkD1vaaVh+Qxm0ig==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,17 +42,16 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 25/46] media: sun6i-csi: Rework capture format management with helper
-Date:   Fri, 11 Mar 2022 15:35:11 +0100
-Message-Id: <20220311143532.265091-26-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 26/46] media: sun6i-csi: Remove custom format helper and rework configure
+Date:   Fri, 11 Mar 2022 15:35:12 +0100
+Message-Id: <20220311143532.265091-27-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
 References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,201 +59,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the need for local copies of the v4l2 format and add a common
-helper to prepare a format compatible with the driver, using the
-relevant v4l2 helper.
-
-Also cleanup the size bound defines while at it.
+Remove the custom sun6i_csi_get_bpp helper in favor of common v4l2
+infrastructure and rework the related window configuration code.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 109 +++++++++---------
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       |   5 +
- 2 files changed, 57 insertions(+), 57 deletions(-)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      | 49 -------------
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 70 +++++++++----------
+ 2 files changed, 35 insertions(+), 84 deletions(-)
 
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index 8a9586e02f73..21932aae3636 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -61,53 +61,4 @@ struct sun6i_csi_variant {
+ bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
+ 				   u32 pixformat, u32 mbus_code);
+ 
+-/* get bpp form v4l2 pixformat */
+-static inline int sun6i_csi_get_bpp(unsigned int pixformat)
+-{
+-	switch (pixformat) {
+-	case V4L2_PIX_FMT_SBGGR8:
+-	case V4L2_PIX_FMT_SGBRG8:
+-	case V4L2_PIX_FMT_SGRBG8:
+-	case V4L2_PIX_FMT_SRGGB8:
+-	case V4L2_PIX_FMT_JPEG:
+-		return 8;
+-	case V4L2_PIX_FMT_SBGGR10:
+-	case V4L2_PIX_FMT_SGBRG10:
+-	case V4L2_PIX_FMT_SGRBG10:
+-	case V4L2_PIX_FMT_SRGGB10:
+-		return 10;
+-	case V4L2_PIX_FMT_SBGGR12:
+-	case V4L2_PIX_FMT_SGBRG12:
+-	case V4L2_PIX_FMT_SGRBG12:
+-	case V4L2_PIX_FMT_SRGGB12:
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		return 12;
+-	case V4L2_PIX_FMT_YUYV:
+-	case V4L2_PIX_FMT_YVYU:
+-	case V4L2_PIX_FMT_UYVY:
+-	case V4L2_PIX_FMT_VYUY:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-	case V4L2_PIX_FMT_YUV422P:
+-	case V4L2_PIX_FMT_RGB565:
+-	case V4L2_PIX_FMT_RGB565X:
+-		return 16;
+-	case V4L2_PIX_FMT_RGB24:
+-	case V4L2_PIX_FMT_BGR24:
+-		return 24;
+-	case V4L2_PIX_FMT_RGB32:
+-	case V4L2_PIX_FMT_BGR32:
+-		return 32;
+-	default:
+-		WARN(1, "Unsupported pixformat: 0x%x\n", pixformat);
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+ #endif /* __SUN6I_CSI_H__ */
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index 23b13b26b580..9c8b33c7e59c 100644
+index 9c8b33c7e59c..f977b89dcea2 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -20,12 +20,6 @@
- #include "sun6i_csi_capture.h"
- #include "sun6i_csi_reg.h"
+@@ -483,68 +483,68 @@ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
  
--/* This is got from BSP sources. */
--#define MIN_WIDTH	(32)
--#define MIN_HEIGHT	(32)
--#define MAX_WIDTH	(4800)
--#define MAX_HEIGHT	(4800)
--
- /* Helpers */
+ static void sun6i_csi_capture_configure_window(struct sun6i_csi_device *csi_dev)
+ {
++	struct regmap *regmap = csi_dev->regmap;
++	const struct v4l2_format_info *info;
++	u32 hsize_len, vsize_len;
++	u32 luma_line, chroma_line = 0;
+ 	u32 pixelformat, field;
+ 	u32 width, height;
+-	u32 bytesperline_y;
+-	u32 bytesperline_c;
+-	u32 hor_len;
  
- void sun6i_csi_capture_dimensions(struct sun6i_csi_device *csi_dev,
-@@ -833,6 +827,46 @@ static const struct vb2_ops sun6i_csi_capture_queue_ops = {
+ 	sun6i_csi_capture_dimensions(csi_dev, &width, &height);
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
  
- /* V4L2 Device */
+-	hor_len = width;
++	hsize_len = width;
++	vsize_len = height;
  
-+static void sun6i_csi_capture_format_prepare(struct v4l2_format *format)
-+{
-+	struct v4l2_pix_format *pix_format = &format->fmt.pix;
-+	unsigned int width, height;
+ 	switch (pixelformat) {
+ 	case V4L2_PIX_FMT_YUYV:
+ 	case V4L2_PIX_FMT_YVYU:
+ 	case V4L2_PIX_FMT_UYVY:
+ 	case V4L2_PIX_FMT_VYUY:
+-		dev_dbg(csi_dev->dev,
+-			"Horizontal length should be 2 times of width for packed YUV formats!\n");
+-		hor_len = width * 2;
++		/*
++		 * Horizontal length should be 2 times of width for packed
++		 * YUV formats.
++		 */
++		hsize_len *= 2;
+ 		break;
+ 	default:
+ 		break;
+ 	}
+ 
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_HSIZE_REG,
+-		     SUN6I_CSI_CH_HSIZE_LEN(hor_len) |
++	regmap_write(regmap, SUN6I_CSI_CH_HSIZE_REG,
++		     SUN6I_CSI_CH_HSIZE_LEN(hsize_len) |
+ 		     SUN6I_CSI_CH_HSIZE_START(0));
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_VSIZE_REG,
+-		     SUN6I_CSI_CH_VSIZE_LEN(height) |
 +
-+	v4l_bound_align_image(&pix_format->width, SUN6I_CSI_CAPTURE_WIDTH_MIN,
-+			      SUN6I_CSI_CAPTURE_WIDTH_MAX, 1,
-+			      &pix_format->height, SUN6I_CSI_CAPTURE_HEIGHT_MIN,
-+			      SUN6I_CSI_CAPTURE_HEIGHT_MAX, 1, 0);
-+
-+	if (!sun6i_csi_capture_format_check(pix_format->pixelformat))
-+		pix_format->pixelformat = sun6i_csi_capture_formats[0];
-+
-+	width = pix_format->width;
-+	height = pix_format->height;
-+
-+	switch (pix_format->pixelformat) {
++	regmap_write(regmap, SUN6I_CSI_CH_VSIZE_REG,
++		     SUN6I_CSI_CH_VSIZE_LEN(vsize_len) |
+ 		     SUN6I_CSI_CH_VSIZE_START(0));
+ 
+ 	switch (pixelformat) {
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-		bytesperline_y = width;
+-		bytesperline_c = width;
++	case V4L2_PIX_FMT_RGB565X:
++		luma_line = width * 2;
+ 		break;
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		bytesperline_y = width;
+-		bytesperline_c = width / 2;
 +	case V4L2_PIX_FMT_NV12_16L16:
-+		pix_format->bytesperline = width * 12 / 8;
-+		pix_format->sizeimage = pix_format->bytesperline * height;
-+		break;
++		luma_line = width;
++		chroma_line = width;
+ 		break;
+-	case V4L2_PIX_FMT_YUV422P:
+-		bytesperline_y = width;
+-		bytesperline_c = width / 2;
 +	case V4L2_PIX_FMT_JPEG:
-+		pix_format->bytesperline = width;
-+		pix_format->sizeimage = pix_format->bytesperline * height;
-+		break;
++		luma_line = width;
+ 		break;
+-	default: /* raw */
+-		dev_dbg(csi_dev->dev,
+-			"Calculating pixelformat(0x%x)'s bytesperline as a packed format\n",
+-			pixelformat);
+-		bytesperline_y = (sun6i_csi_get_bpp(pixelformat) *
+-				  width) / 8;
+-		bytesperline_c = 0;
 +	default:
-+		v4l2_fill_pixfmt(pix_format, pix_format->pixelformat,
-+				 width, height);
-+		break;
-+	}
++		info = v4l2_format_info(pixelformat);
++		if (WARN_ON(!info))
++			return;
 +
-+	if (pix_format->field == V4L2_FIELD_ANY)
-+		pix_format->field = V4L2_FIELD_NONE;
++		luma_line = width * info->bpp[0];
 +
-+	pix_format->colorspace = V4L2_COLORSPACE_RAW;
-+	pix_format->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	pix_format->quantization = V4L2_QUANTIZATION_DEFAULT;
-+	pix_format->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+}
-+
- static int sun6i_csi_capture_querycap(struct file *file, void *private,
- 				      struct v4l2_capability *capability)
- {
-@@ -864,50 +898,8 @@ static int sun6i_csi_capture_g_fmt(struct file *file, void *private,
- 				   struct v4l2_format *format)
- {
- 	struct sun6i_csi_device *csi_dev = video_drvdata(file);
--	struct sun6i_csi_capture *capture = &csi_dev->capture;
++		if (info->comp_planes > 1)
++			chroma_line = width * info->bpp[1] / info->hdiv;
+ 		break;
+ 	}
  
--	*format = capture->format;
--
--	return 0;
--}
--
--static int sun6i_csi_capture_format_try(struct sun6i_csi_capture *capture,
--					struct v4l2_format *format)
--{
--	struct v4l2_pix_format *pix_format = &format->fmt.pix;
--	int bpp;
--
--	if (!sun6i_csi_capture_format_check(pix_format->pixelformat))
--		pix_format->pixelformat = sun6i_csi_capture_formats[0];
--
--	v4l_bound_align_image(&pix_format->width, MIN_WIDTH, MAX_WIDTH, 1,
--			      &pix_format->height, MIN_HEIGHT, MAX_WIDTH, 1, 1);
--
--	bpp = sun6i_csi_get_bpp(pix_format->pixelformat);
--	pix_format->bytesperline = (pix_format->width * bpp) >> 3;
--	pix_format->sizeimage = pix_format->bytesperline * pix_format->height;
--
--	if (pix_format->field == V4L2_FIELD_ANY)
--		pix_format->field = V4L2_FIELD_NONE;
--
--	pix_format->colorspace = V4L2_COLORSPACE_RAW;
--	pix_format->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
--	pix_format->quantization = V4L2_QUANTIZATION_DEFAULT;
--	pix_format->xfer_func = V4L2_XFER_FUNC_DEFAULT;
--
--	return 0;
--}
--
--static int sun6i_csi_capture_format_set(struct sun6i_csi_capture *capture,
--					struct v4l2_format *format)
--{
--	int ret;
--
--	ret = sun6i_csi_capture_format_try(capture, format);
--	if (ret)
--		return ret;
--
--	capture->format = *format;
-+	*format = csi_dev->capture.format;
- 
- 	return 0;
- }
-@@ -921,16 +913,19 @@ static int sun6i_csi_capture_s_fmt(struct file *file, void *private,
- 	if (vb2_is_busy(&capture->queue))
- 		return -EBUSY;
- 
--	return sun6i_csi_capture_format_set(capture, format);
-+	sun6i_csi_capture_format_prepare(format);
-+
-+	csi_dev->capture.format = *format;
-+
-+	return 0;
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_BUF_LEN_REG,
+-		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(bytesperline_c) |
+-		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(bytesperline_y));
++	regmap_write(regmap, SUN6I_CSI_CH_BUF_LEN_REG,
++		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(chroma_line) |
++		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(luma_line));
  }
  
- static int sun6i_csi_capture_try_fmt(struct file *file, void *private,
- 				     struct v4l2_format *format)
- {
--	struct sun6i_csi_device *csi_dev = video_drvdata(file);
--	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	sun6i_csi_capture_format_prepare(format);
- 
--	return sun6i_csi_capture_format_try(capture, format);
-+	return 0;
- }
- 
- static int sun6i_csi_capture_enum_input(struct file *file, void *private,
-@@ -1125,8 +1120,8 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
- 	struct video_device *video_dev = &capture->video_dev;
- 	struct vb2_queue *queue = &capture->queue;
- 	struct media_pad *pad = &capture->pad;
--	struct v4l2_format format = { 0 };
--	struct v4l2_pix_format *pix_format = &format.fmt.pix;
-+	struct v4l2_format *format = &csi_dev->capture.format;
-+	struct v4l2_pix_format *pix_format = &format->fmt.pix;
- 	int ret;
- 
- 	/* State */
-@@ -1169,13 +1164,13 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
- 
- 	/* V4L2 Format */
- 
--	format.type = queue->type;
-+	format->type = queue->type;
- 	pix_format->pixelformat = sun6i_csi_capture_formats[0];
- 	pix_format->width = 1280;
- 	pix_format->height = 720;
- 	pix_format->field = V4L2_FIELD_NONE;
- 
--	sun6i_csi_capture_format_set(capture, &format);
-+	sun6i_csi_capture_format_prepare(format);
- 
- 	/* Video Device */
- 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index 935f35b7049a..02bdf45f7ca5 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -11,6 +11,11 @@
- #include <media/v4l2-dev.h>
- #include <media/videobuf2-core.h>
- 
-+#define SUN6I_CSI_CAPTURE_WIDTH_MIN	32
-+#define SUN6I_CSI_CAPTURE_WIDTH_MAX	4800
-+#define SUN6I_CSI_CAPTURE_HEIGHT_MIN	32
-+#define SUN6I_CSI_CAPTURE_HEIGHT_MAX	4800
-+
- struct sun6i_csi_device;
- 
- #undef current
+ static void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev)
 -- 
 2.35.1
 

@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883E74D65F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED144D65FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350208AbiCKQWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:22:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S1350219AbiCKQX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237154AbiCKQV7 (ORCPT
+        with ESMTP id S233165AbiCKQXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:21:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80391D1782;
-        Fri, 11 Mar 2022 08:20:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2E94B827DC;
-        Fri, 11 Mar 2022 16:20:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 151FEC340E9;
-        Fri, 11 Mar 2022 16:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647015653;
-        bh=KNC521NAaMPjvKe7AFt0UDDQNR5Ego3Zh4NJj71IBEk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PDezsjcCoKYAprW61cNEeo1YPnFyqu0xwZ7lae5SnAbqDB/RboqC3aycU/p3xq1TA
-         FmoCuNklzjURmFDWGLMoRCan6J00DL1GzcZwcvZHdy+TbzyXpyRkNa/lPUMLjLrXuG
-         /ggGWLRrJ1f3DM6HBKSOl29Pvje1i1sGTqI+bU7PbLiAwq4Gy79KXc35gqT2M7SdL4
-         TuFYTZdJnxrmdIpfDKZe81VPXAPAIcQ1VpWaK6P4A251iZExlBjBeu/BhiYeoc1Y2x
-         +4DzyJ5JyXe8ZNV/yj7MFglvjHTYw8B0Ozh9sAEI0Xqu7GxTCGPAoQgFfJoNWh6FP5
-         criaNWbmhZc3Q==
-Date:   Fri, 11 Mar 2022 08:20:51 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     sebastian.hesselbarth@gmail.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH V2] net: mv643xx_eth: use platform_get_irq() instead of
- platform_get_resource()
-Message-ID: <20220311082051.783b7c0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220310062035.2084669-1-chi.minghao@zte.com.cn>
-References: <20220310062035.2084669-1-chi.minghao@zte.com.cn>
+        Fri, 11 Mar 2022 11:23:24 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACC81D17A3;
+        Fri, 11 Mar 2022 08:22:20 -0800 (PST)
+X-UUID: 94ce9022ee8d4ed5844060cefb30fbbf-20220312
+X-UUID: 94ce9022ee8d4ed5844060cefb30fbbf-20220312
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1884727560; Sat, 12 Mar 2022 00:22:16 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 12 Mar 2022 00:22:15 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 12 Mar
+ 2022 00:22:15 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 12 Mar 2022 00:22:14 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>
+CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [v4 0/2] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Date:   Sat, 12 Mar 2022 00:22:11 +0800
+Message-ID: <20220311162213.6942-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,21 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 06:20:35 +0000 cgel.zte@gmail.com wrote:
-> @@ -3189,9 +3188,10 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
->  	timer_setup(&mp->rx_oom, oom_timer_wrapper, 0);
->  
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> -	BUG_ON(!res);
-> -	dev->irq = res->start;
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (WARN_ON(irq < 0))
-> +		return irq;
+The series reuses mt8192-mt6359-rt10150rt5682.c for supporting machine
+driver with rt1015p speaker amplifier and rt5682s headset codec.
 
-You can't just return from here, there are operations that need 
-to be undone, look at the end of this function :/ Please follow 
-up with an incremental fix ASAP.
+Changes from v3:
+  - fix build error: too many arguments for format
+    [-Werror-format-extra-args]
 
-> +	dev->irq = irq;
->  
+Changes from v2:
+  - fix build warnings such as "data argument not used by format string"
+
+Changes from v1:
+  - uses the snd_soc_of_get_dai_link_codecs to complete the
+  configuration of dai_link's codecs
+  - uses definitions to simplifies card name and compatible name
+
+Jiaxin Yu (2):
+  ASoC: dt-bindings: mt8192-mt6359: add new compatible for using rt1015p
+    and rt5682
+  ASoC: mediatek: mt8192: support rt1015p_rt5682s
+
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |   1 +
+ sound/soc/mediatek/Kconfig                    |   1 +
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 204 +++++++++++-------
+ 3 files changed, 129 insertions(+), 77 deletions(-)
+
+-- 
+2.18.0
+

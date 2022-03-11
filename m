@@ -2,161 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEEC4D6AD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E5C4D6A59
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiCKWzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 17:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S229481AbiCKWqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiCKWyk (ORCPT
+        with ESMTP id S229711AbiCKWq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:54:40 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9442BE122
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:28:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SzKX99Cocy/lwgU3tnCH1Vt8ZkKR8jjaQaAMFI9xwxc=; b=nRWaKR4qwPKfFozcskyUoAynnV
-        jv/gIbaWr0G1z+JE77V8iiPRV4WKN1S/2xymJG5jcRHfRLh0T4A8ZwzHeWyOk2n35+GEh71diCwg5
-        izPd/42UPCFqErRfIqqh4r2DBmO+RZFwI3Aff8KbvJASbG2Nt/5RLYEkCtHUubuTyFL6iqDpqQWxa
-        m/XbgA9zah0cwIIsuevRuaOp0n8DvPWmwaWpdPpyTfpfx6x/Rz1LahjBDgObRj+5KZdKS1EZYABGF
-        peDL4T18VlLbtMm2XFEcPyDDKr9z5MwBNw2Kiu7AH1eX3vDM2iLu/s0aomnYK3GXY4qDeFA/YCtiY
-        VjyL3oUA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSmOp-001uVY-CC; Fri, 11 Mar 2022 21:02:11 +0000
-Date:   Fri, 11 Mar 2022 21:02:11 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH v1 10/15] mm/page-flags: reuse PG_slab as
- PG_anon_exclusive for PageAnon() pages
-Message-ID: <Yiu400H9JNtC03Co@casper.infradead.org>
-References: <20220308141437.144919-1-david@redhat.com>
- <20220308141437.144919-11-david@redhat.com>
- <a0bd6f52-7bb5-0c32-75c8-2c7c592c2d6d@redhat.com>
+        Fri, 11 Mar 2022 17:46:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869082E86F6;
+        Fri, 11 Mar 2022 14:37:18 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BJgiEv026670;
+        Fri, 11 Mar 2022 21:03:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=c4oKa8YHconhNmykPPJwtaqGobzI4xAAjjShykA4Yy4=;
+ b=P4fMWLfPd6F+D1ws06rfxwKmj76Hh5u47Nmtjykkn7GbNk4rKldp0Wtb/BoInpxFw7dE
+ TB9Cjmxd2a4ncFxSbAblt/yP5iPYXemyo3zBNSg34WgCbJO2cK0XZWDx8/AWgDse4vw5
+ O0eZ1t1WTHP+QGAKfTQw5So2uX5dQYo40OuWgbNUebN7idHJf+CKIBVjYdlEZrhru9r/
+ V5eHTGXnYQ3W99RzAgPX5dI8RT88dtg18iaMUYZKsRRfn2lW9z3N4l44eDyZFOaPvgiV
+ FGAf9Hc8pwNXI8fz77iEYdRYL2YG77/p9/WbNeAvjJfC6UtBfSfAmoQ8B8I0D4SokxRP xQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqtfgpa6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 21:03:20 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22BKpO7I020866;
+        Fri, 11 Mar 2022 21:03:19 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqtfgpa6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 21:03:19 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22BL3Gua024566;
+        Fri, 11 Mar 2022 21:03:18 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3emgamjwy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 21:03:18 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22BL3Gxx38994426
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 21:03:16 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB2B328059;
+        Fri, 11 Mar 2022 21:03:16 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 89C2B2805A;
+        Fri, 11 Mar 2022 21:03:13 +0000 (GMT)
+Received: from [9.211.110.168] (unknown [9.211.110.168])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 11 Mar 2022 21:03:13 +0000 (GMT)
+Message-ID: <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
+Date:   Fri, 11 Mar 2022 16:03:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v11 0/4] integrity: support including firmware ".platform"
+ keys at build time
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Nageswara Sastry <rnsastry@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Cc:     dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
+References: <20220310214450.676505-1-nayna@linux.ibm.com>
+ <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
+ <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Heow9UKywaWt9NTO6YuP7NDv5g_6SmDY
+X-Proofpoint-GUID: e7V-kq4jBh8gRnlsxn6EdPMwfBVMWcS8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0bd6f52-7bb5-0c32-75c8-2c7c592c2d6d@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-11_08,2022-03-11_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203110103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 07:46:39PM +0100, David Hildenbrand wrote:
-> I'm currently testing with the following. My tests so far with a swapfile on
-> all different kinds of weird filesystems (excluding networking fs, though)
-> revealed no surprises so far:
 
-I like this a lot better than reusing PG_swap.  Thanks!
+On 3/11/22 11:42, Jarkko Sakkinen wrote:
+> On Fri, 2022-03-11 at 10:11 +0530, Nageswara Sastry wrote:
+>>
+>> On 11/03/22 3:14 am, Nayna Jain wrote:
+>>> Some firmware support secure boot by embedding static keys to verify the
+>>> Linux kernel during boot. However, these firmware do not expose an
+>>> interface for the kernel to load firmware keys onto the ".platform"
+>>> keyring, preventing the kernel from verifying the kexec kernel image
+>>> signature.
+>>>
+>>> This patchset exports load_certificate_list() and defines a new function
+>>> load_builtin_platform_cert() to load compiled in certificates onto the
+>>> ".platform" keyring.
+>>>
+>>> Changelog:
+>>> v11:
+>>> * Added a new patch to conditionally build extract-cert if
+>>> PLATFORM_KEYRING is enabled.
+>>>
+>> Tested the following four patches with and with out setting
+>> CONFIG_INTEGRITY_PLATFORM_KEYS
+>>
+>> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+> OK, I added it:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
 
-I'm somewhat reluctant to introduce a new flag that can be set on tail
-pages.  Do we lose much if it's always set only on the head page?
+Thanks Jarkko. Masahiro Yamada would prefer to revert the original 
+commit 340a02535ee785c64c62a9c45706597a0139e972 i.e. move extract-cert 
+back to the scripts/ directory.
 
-> +++ b/include/linux/page-flags.h
-> @@ -142,6 +142,60 @@ enum pageflags {
->  
->  	PG_readahead = PG_reclaim,
->  
-> +	/*
-> +	 * Depending on the way an anonymous folio can be mapped into a page
-> +	 * table (e.g., single PMD/PUD/CONT of the head page vs. PTE-mapped
-> +	 * THP), PG_anon_exclusive may be set only for the head page or for
-> +	 * subpages of an anonymous folio.
-> +	 *
-> +	 * PG_anon_exclusive is *usually* only expressive in combination with a
-> +	 * page table entry. Depending on the page table entry type it might
-> +	 * store the following information:
-> +	 *
-> +	 *	Is what's mapped via this page table entry exclusive to the
-> +	 *	single process and can be mapped writable without further
-> +	 *	checks? If not, it might be shared and we might have to COW.
-> +	 *
-> +	 * For now, we only expect PTE-mapped THPs to make use of
-> +	 * PG_anon_exclusive in subpages. For other anonymous compound
-> +	 * folios (i.e., hugetlb), only the head page is logically mapped and
-> +	 * holds this information.
-> +	 *
-> +	 * For example, an exclusive, PMD-mapped THP only has PG_anon_exclusive
-> +	 * set on the head page. When replacing the PMD by a page table full
-> +	 * of PTEs, PG_anon_exclusive, if set on the head page, will be set on
-> +	 * all tail pages accordingly. Note that converting from a PTE-mapping
-> +	 * to a PMD mapping using the same compound page is currently not
-> +	 * possible and consequently doesn't require care.
-> +	 *
-> +	 * If GUP wants to take a reliable pin (FOLL_PIN) on an anonymous page,
-> +	 * it should only pin if the relevant PG_anon_bit is set. In that case,
-> +	 * the pin will be fully reliable and stay consistent with the pages
-> +	 * mapped into the page table, as the bit cannot get cleared (e.g., by
-> +	 * fork(), KSM) while the page is pinned. For anonymous pages that
-> +	 * are mapped R/W, PG_anon_exclusive can be assumed to always be set
-> +	 * because such pages cannot possibly be shared.
-> +	 *
-> +	 * The page table lock protecting the page table entry is the primary
-> +	 * synchronization mechanism for PG_anon_exclusive; GUP-fast that does
-> +	 * not take the PT lock needs special care when trying to clear the
-> +	 * flag.
-> +	 *
-> +	 * Page table entry types and PG_anon_exclusive:
-> +	 * * Present: PG_anon_exclusive applies.
-> +	 * * Swap: the information is lost. PG_anon_exclusive was cleared.
-> +	 * * Migration: the entry holds this information instead.
-> +	 *		PG_anon_exclusive was cleared.
-> +	 * * Device private: PG_anon_exclusive applies.
-> +	 * * Device exclusive: PG_anon_exclusive applies.
-> +	 * * HW Poison: PG_anon_exclusive is stale and not changed.
-> +	 *
-> +	 * If the page may be pinned (FOLL_PIN), clearing PG_anon_exclusive is
-> +	 * not allowed and the flag will stick around until the page is freed
-> +	 * and folio->mapping is cleared.
-> +	 */
+I am just posting v12 which includes Masahiro feedback. Nageswara has 
+already tested v12 version as well.
 
-... I also don't think this is the right place for this comment.  Not
-sure where it should go.
+I am fine either way 1.) Adding v11 and then separately handling of 
+reverting of the commit or 2.) Adding v12 version which includes the 
+revert. I leave the decision on you as to which one to upstream.
 
-> +static __always_inline void SetPageAnonExclusive(struct page *page)
-> +{
-> +	VM_BUG_ON_PGFLAGS(!PageAnon(page) || PageKsm(page), page);
+Thanks & Regards,
 
-hm.  seems to me like we should have a PageAnonNotKsm which just
-does
-	return ((unsigned long)page->mapping & PAGE_MAPPING_FLAGS) ==
-			PAGE_MAPPING_ANON;
-because that's "a bit" inefficient.  OK, that's just a VM_BUG_ON,
-but we have other users in real code:
-
-mm/migrate.c:   if (PageAnon(page) && !PageKsm(page))
-mm/page_idle.c: need_lock = !PageAnon(page) || PageKsm(page);
-mm/rmap.c:      if (!is_locked && (!PageAnon(page) || PageKsm(page))) {
+     - Nayna
 

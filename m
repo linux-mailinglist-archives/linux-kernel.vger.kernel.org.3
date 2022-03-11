@@ -2,149 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5161C4D6925
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743404D6929
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351152AbiCKTk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S1351158AbiCKTnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiCKTk2 (ORCPT
+        with ESMTP id S232941AbiCKTnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 14:40:28 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D2A172249;
-        Fri, 11 Mar 2022 11:39:23 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2dc28791ecbso104805227b3.4;
-        Fri, 11 Mar 2022 11:39:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mh7tQAL0n2bfKeDOiESqkHoSAFen1q88Q72P8o10M7A=;
-        b=W8yPWXikTd3d8CG7OAaTfCsJUv8lX0jtJk/K204unOsnjmJqY5TXkjQbvznknMk/i2
-         zslAJLXCzeIvSP5eYHxnbg0im1/T7xstqlhL5icnhxyXLFNT0yIZdR7te+P47YysSnZL
-         17GMjtE3UqI1QjHCld1TOzg1VWO5vZ8DLz8fWSp6iTrvCoA9H/Piy6qBaS0T0SB3cMFO
-         avasPngLRedqGgiXrJM1Y27Z2Kh63qZkbdRIF2jmWs0vlIugsGNZF+38iuv39CFwQNtb
-         7GWb7gXFPcr/pAHsuCFN/LAkeRSNH1ugN1K2YHkpFc9Ka8VbAwKLI1T0Lo+001BZktah
-         qMig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mh7tQAL0n2bfKeDOiESqkHoSAFen1q88Q72P8o10M7A=;
-        b=3uOoigvNKpNS2Tn2Exih6JIWV2zxj7MqxB1wdhMyLBInF9yB9Xg4o+l6EI5idawyvg
-         SzWkSmsm5IAUjMWMqL8lzX+W37O2LJc1D/Gskdrvv7rV4hvlaI1TUfM2Bl+Lt9bVZ8Z+
-         QffadWymENacELnugNtEePehEIISlZaz7+WL9MaB5R/sNsqdUp8e4BrrKYDki6+YKw79
-         SaFI0GlCGyyCaq0BTTQQJsd7CYsqyfamo2a7mOgMsIgGN+z7WFraIGYeYmy1lHilwi2V
-         GlTB8x7xpN1vtqV9EyjKF0aNt4EPYoDUtkonujmRSTKp50hqNnOYyZeboLTinuES2YrB
-         mPxg==
-X-Gm-Message-State: AOAM533PlrlxxwJJX2zauO7AE11+vVtxBFnmFr6nV4ojeuy9xOUvOd+g
-        r2JVmFR7nOHnf8N3TfhUp18OdEI/TUiAke/h8Zs+JgS+jbU=
-X-Google-Smtp-Source: ABdhPJwdPCDYT3XTqvaxrFf38dMJcyUvh98/yM+YN1EMw/AaIwHtCxJvZ6LmxyfTNN3Xmd84OjgIZJ8+FQUkanYZdVY=
-X-Received: by 2002:a0d:c645:0:b0:2db:9ed9:e6e5 with SMTP id
- i66-20020a0dc645000000b002db9ed9e6e5mr9835172ywd.292.1647027562199; Fri, 11
- Mar 2022 11:39:22 -0800 (PST)
+        Fri, 11 Mar 2022 14:43:09 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EC51A39CE
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:42:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647027726; x=1678563726;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=mQiNdXMDSm6S2pRJONnpTeru2KszX9Gpzb6dViTFnCk=;
+  b=dZPSAZMLEeZDXOK8xTUio//EH5Zn3J/OEszEIoSc94bjLNdk2+dD/VGM
+   eFcNxS9b9ZtwvkCsYzVccQe0PcqFaoXmcI/2UK7AY7ceT8AzDruVZhaMu
+   fYIFKEzQoUck5v0pd6JAo3Phh01aJqXnWLn8xZfmuLDwXiliaP4mBYUb2
+   +oRJI30BX468sYvKHynuDNJdNe5xrxuOyXsqqpF4Vb4ftzyjIqJiQg1+g
+   eCCbQfifX3se+Yu1uu8UW+2Hwv+79kIZbEuDwq4qyDtWN41vk20PxQFIN
+   XdfRW/VexOaJQtS1S0zgltr58Vm5Pixuk8+Vn1gVdM508YeKLSbjW9v7R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="280386875"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="280386875"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 11:42:05 -0800
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="645033254"
+Received: from cpeirce-mobl1.amr.corp.intel.com (HELO [10.212.128.243]) ([10.212.128.243])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 11:42:05 -0800
+Message-ID: <a2a43395-b848-a4f9-4065-109387680701@intel.com>
+Date:   Fri, 11 Mar 2022 11:41:58 -0800
 MIME-Version: 1.0
-References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <c5ea7235-8642-6a89-f4ce-bd0861b6e4aa@linaro.org> <CA+V-a8tkhERx+8zDae5aWkNQ9Oxd1AamRL=i4TDC2X8RGgAo0w@mail.gmail.com>
- <5e13c1ba-0bf5-e360-c350-e7a1a1402350@linaro.org> <CAL_Jsq+CWKvkHMNhAa3o_rSLy_+AoHi6wkB3MRM8O3jJ5sG_Wg@mail.gmail.com>
- <c3e75761-e554-d8b1-f41d-f7bed5a0cce7@linaro.org>
-In-Reply-To: <c3e75761-e554-d8b1-f41d-f7bed5a0cce7@linaro.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 11 Mar 2022 19:38:56 +0000
-Message-ID: <CA+V-a8vVMu2JteQ9AwvsP=QG6dme+FuFVX5tWgvuEzBffhd1oA@mail.gmail.com>
-Subject: Re: [PATCH] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the interrupt
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Nick Piggin <npiggin@gmail.com>, x86@kernel.org
+References: <20220311190749.338281-1-namit@vmware.com>
+ <20220311190749.338281-3-namit@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [RESEND PATCH v3 2/5] x86/mm: check exec permissions on fault
+In-Reply-To: <20220311190749.338281-3-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 2:59 PM Srinivas Kandagatla
-<srinivas.kandagatla@linaro.org> wrote:
->
->
->
-> On 10/03/2022 14:14, Rob Herring wrote:
-> > On Thu, Mar 10, 2022 at 4:42 AM Srinivas Kandagatla
-> > <srinivas.kandagatla@linaro.org> wrote:
-> >>
-> >>
-> >>
-> >> On 10/03/2022 10:23, Lad, Prabhakar wrote:
-> >>> On Thu, Mar 10, 2022 at 10:16 AM Srinivas Kandagatla
-> >>> <srinivas.kandagatla@linaro.org> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 24/12/2021 16:13, Lad Prabhakar wrote:
-> >>>>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> >>>>> allocation of IRQ resources in DT core code, this causes an issue
-> >>>>
-> >>>> Are you saying that we should not be using platform_get_resource(pdev,
-> >>>> IORESOURCE_IRQ, ...) on drivers that support DT?
-> >
-> > We should be using platform_get_irq(). (period, on all platform drivers)
-> >
->
-> Thanks, I see why is it preferred.
->
-> Code as of now will not prevent drivers from calling
-> platform_get_resource(..IORESOURCE_IRQ).
->
-> Are we planning to enforce this in any way?
->
-> >>>>> when using hierarchical interrupt domains using "interrupts" property
-> >>>>> in the node as this bypasses the hierarchical setup and messes up the
-> >>>>> irq chaining.
-> >>>>
-> >>>> Should this not be fixed in the DT core itself?
-> >>>>
-> >>> Yes the plan is to fix in the DT core itself (refer [0]).
-> >>>
-> >>> [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> >>>
-> >>>>>
-> >>>>> In preparation for removal of static setup of IRQ resource from DT core
-> >>>>> code use platform_get_irq().
-> >>>>
-> >>>> I would prefer this patch to be part of the series that removes IRQ
-> >>>> resource handling from DT core.
-> >>>>
-> >>> Since there are too many users (which are in different subsystems)
-> >>> getting this all in single series would be a pain. As a result it is
-> >>> split up into individual subsystems.
-> >> Am happy for this to be included in that series,
-> >> TBH, this patch make more sense along with that series than by itself.
-> >
-> > No it doesn't. This is no different than converting to devm_* variants
-> > or other cleanups to match current preferred styles.
-> >
-> > Treewide cross subsystem clean-ups are a huge pain to merge. Why would
-> > you ask for that when it is clearly not necessary?
->
-> Only reason for this ask was to understand how platform_get_resource()
-> will change moving forward, if this is something that you are planning
-> to include in your fix patches.
->
-> I can go ahead and apply the patch, if that helps.
->
-Yes please, that would be helpful.
+On 3/11/22 11:07, Nadav Amit wrote:
+> From: Nadav Amit <namit@vmware.com>
+> 
+> access_error() currently does not check for execution permission
+> violation. As a result, spurious page-faults due to execution permission
+> violation cause SIGSEGV.
 
-Cheers,
-Prabhakar
+This is a bit muddy on the problem statement.  I get that spurious
+faults can theoretically cause this, but *do* they in practice on
+current kernels?
+
+> It appears not to be an issue so far, but the next patches avoid TLB
+> flushes on permission promotion, which can lead to this scenario. nodejs
+> for instance crashes when TLB flush is avoided on permission promotion.
+
+By "it appears not to be an issue", do you mean that this suboptimal
+behavior can not be triggered, period?  Or, it can be triggered but
+folks seem not to care that it can be triggered?
+
+I *think* these can be triggered today.  I think it takes two threads
+that do something like:
+
+	Thread 1			Thread 2
+	========			========
+	ptr = malloc();
+	memcpy(ptr, &code, len);
+	exec_now = 1;
+					while (!exec_now);
+					call(ptr);		
+					// fault	
+	mprotect(ptr, PROT_EXEC, len);
+					// fault sees VM_EXEC
+
+
+But that has a bug: exec_now is set before the mprotect().  It's not
+sane code.
+
+Can any sane code trigger this?
+
+> Add a check to prevent access_error() from returning mistakenly that
+> spurious page-faults due to instruction fetch are a reason for an access
+> error.
+> 
+> It is assumed that error code bits of "instruction fetch" and "write" in
+> the hardware error code are mutual exclusive, and the change assumes so.
+> However, to be on the safe side, especially if hypervisors misbehave,
+> assert this is the case and warn otherwise.
+> 
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Andrew Cooper <andrew.cooper3@citrix.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Nick Piggin <npiggin@gmail.com>
+> Cc: x86@kernel.org
+> Signed-off-by: Nadav Amit <namit@vmware.com>
+> ---
+>  arch/x86/mm/fault.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index d0074c6ed31a..ad0ef0a6087a 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1107,10 +1107,28 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
+>  				       (error_code & X86_PF_INSTR), foreign))
+>  		return 1;
+>  
+> -	if (error_code & X86_PF_WRITE) {
+> +	if (error_code & (X86_PF_WRITE | X86_PF_INSTR)) {
+> +		/*
+> +		 * CPUs are not expected to set the two error code bits
+> +		 * together, but to ensure that hypervisors do not misbehave,
+> +		 * run an additional sanity check.
+> +		 */
+> +		if ((error_code & (X86_PF_WRITE|X86_PF_INSTR)) ==
+> +					(X86_PF_WRITE|X86_PF_INSTR)) {
+> +			WARN_ON_ONCE(1);
+> +			return 1;
+> +		}
+
+access_error() is only used on the do_user_addr_fault() side of things.
+ Can we stick this check somewhere that also works for kernel address
+faults?  This is a generic sanity check.  It can also be in a separate
+patch.
+
+Also, we should *probably* stop talking about CPUs here.  If there's
+ever something wonky with error code bits, I'd put my money on a weird
+hypervisor before any kind of CPU issue.
+
+>  		/* write, present and write, not present: */
+> -		if (unlikely(!(vma->vm_flags & VM_WRITE)))
+> +		if ((error_code & X86_PF_WRITE) &&
+> +		    unlikely(!(vma->vm_flags & VM_WRITE)))
+> +			return 1;
+> +
+> +		/* exec, present and exec, not present: */
+> +		if ((error_code & X86_PF_INSTR) &&
+> +		    unlikely(!(vma->vm_flags & VM_EXEC)))
+>  			return 1;
+> +
+>  		return 0;
+>  	}
+
+This is getting really ugly.  I think we've gone over this before, but
+it escapes me.  Why do we need a common (X86_PF_WRITE | X86_PF_INSTR)
+block of code?  Why can't we just add a simple X86_PF_INSN if() that
+mirrors the current X86_PF_WRITE one?
+
+
+        if (error_code & X86_PF_INSN) {
+                /* present and not exec: */
+                if (unlikely(!(vma->vm_flags & VM_EXEC)))
+                        return 1;
+                return 0;
+        }
+
+

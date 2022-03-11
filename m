@@ -2,96 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD72A4D5B5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB504D5B46
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346739AbiCKGEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 01:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S1343852AbiCKGJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 01:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347397AbiCKGEY (ORCPT
+        with ESMTP id S1346918AbiCKGIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 01:04:24 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307CD120184
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:03:20 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KFFjH53D7z4xMW;
-        Fri, 11 Mar 2022 17:03:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1646978595;
-        bh=l8rfE/4he409H4tnIdMHNxvTLyIXMhcrObPfkOpkI5A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TlXNk45ZElB+oSHUVOD+1i3ACy5nIrj73xl4zWQlm2mcBAu5Pai+jgXRATSLnfQH+
-         MRKFwsm6GT4rXJX+sAcQS0gYHOAbPoBgmL41u9SFyHJx1YeBFM6Q/D1GgGMU4KqZaD
-         JvlHifjm8CqtjzHnZA65ivoHsRCT8Ajw6MQv6Ip2N9io5X/ENpm+zXrIfQlu6g8naa
-         3w8OUaQiub766YK7FYi2slEMhk/of9n6lKupbNDv+N5rDmBxyHLfPRrqUWk12ZhV6V
-         NGWhaGRmyGzdZmizvytrvtqcMFpkEByALffVKVQ/2QKJzxljdPDtclUJfp0S9a/zjS
-         Xx6+oXlHtrAEg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.17-6 tag
-Date:   Fri, 11 Mar 2022 17:03:15 +1100
-Message-ID: <874k45m3fg.fsf@mpe.ellerman.id.au>
+        Fri, 11 Mar 2022 01:08:09 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D326136865;
+        Thu, 10 Mar 2022 22:07:07 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id t2so4382534pfj.10;
+        Thu, 10 Mar 2022 22:07:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RF+1tKIxbhkbd34MY/Kw4KvXJeW1v+//VaSxu1I3Lhk=;
+        b=V0Vs0zBR5bTpIAaUvJUXdbdzUAp7JRSAjJchtICTtgYndVY5902rZDq52S0C7BZUAm
+         x60M/7i4olYZ2GRarmA6QQfovTQkSB4G+67eM5sverIoCGe/Ay3hCRhyR8/tOjpUIuVV
+         1KLSFyOzr/vfqUrO1T4APIvQewzVtq1ii/e2FdXebpjIqwkh1bxdKti2+2eJRBzNACON
+         hObFNKm5HebFX0P4rjw6bo1W/FbPZTic/drxSCCCn+LAlKnuCs5SJoznB4EwK7kl5Ag9
+         iM6L/093qc9ywcVoRPmcuE7UazpA08bHgSoU+VFLd1u5slHBM7dEfrMHRt06Ldpd4RMk
+         9hDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=RF+1tKIxbhkbd34MY/Kw4KvXJeW1v+//VaSxu1I3Lhk=;
+        b=znJ5xM6z0/jHmYRq6R9xvxu1KfZxpOCHzQtKrFrA0zea3nZUrVUYLU+zpThk5+RTzH
+         a5D2lCZ9x6bsSWFuSD/B/gyzvdkFuIsVASdlnwjJ3U8fzlxtPlT/TZuOs1E1/zPF6pWj
+         8qcUjmlo5Lk1mj+4QoxdY35+WNTfVJ3xYxwrSSCVAanEcTwFAL4GsQjGa8c8TmZVnziu
+         I8se816paaf6SPajG08M3gZZobYsXnXQ02qdAf/xT88XSXO7/D2dm2iMhY9nbRy6hEmS
+         jKGBwSuIb0z+aeSLnQPyu2FobqmbfFh1JS62GFWZ3VB5iecSmoMFAhBmS0Wx3AraPUr4
+         MEGA==
+X-Gm-Message-State: AOAM533GPUj8r0ysVJxajLkEVKwmHjLxdRalw/jDTwLcBmIm2cgj4Q7c
+        FOmWgzApRmGnTmRJTnJABas=
+X-Google-Smtp-Source: ABdhPJytw1xfznFnj8eieAnQFG5ifIX7JlP/jIPxQejT1MknDD0OLYl+7TFNogBzhPuwm9e6SpZIlQ==
+X-Received: by 2002:a63:74d:0:b0:380:ea8f:5d28 with SMTP id 74-20020a63074d000000b00380ea8f5d28mr4913647pgh.19.1646978826458;
+        Thu, 10 Mar 2022 22:07:06 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:6133:9635:732f:1e6b])
+        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b001bf0d92e1c7sm7801014pjh.41.2022.03.10.22.07.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 22:07:05 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eugene Loh <eugene.loh@oracle.com>, Hao Luo <haoluo@google.com>
+Subject: [PATCH v2 1/2] bpf: Adjust BPF stack helper functions to accommodate skip > 0
+Date:   Thu, 10 Mar 2022 22:07:02 -0800
+Message-Id: <20220311060703.1856509-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Let's say that the caller has storage for num_elem stack frames.  Then,
+the BPF stack helper functions walk the stack for only num_elem frames.
+This means that if skip > 0, one keeps only 'num_elem - skip' frames.
 
-Hi Linus,
+This is because it sets init_nr in the perf_callchain_entry to the end
+of the buffer to save num_elem entries only.  I believe it was because
+the perf callchain code unwound the stack frames until it reached the
+global max size (sysctl_perf_event_max_stack).
 
-Please pull one more powerpc fix for 5.17:
+However it now has perf_callchain_entry_ctx.max_stack to limit the
+iteration locally.  This simplifies the code to handle init_nr in the
+BPF callstack entries and removes the confusion with the perf_event's
+__PERF_SAMPLE_CALLCHAIN_EARLY which sets init_nr to 0.
 
-The following changes since commit 58dbe9b373df2828d873b1c0e5afc77485b2f376:
+Also change the comment on bpf_get_stack() in the header file to be
+more explicit what the return value means.
 
-  powerpc/64s: Fix build failure when CONFIG_PPC_64S_HASH_MMU is not set (2022-03-05 20:42:21 +1100)
+Link: https://lore.kernel.org/bpf/30a7b5d5-6726-1cc2-eaee-8da2828a9a9c@oracle.com
 
-are available in the git repository at:
+Fixes: c195651e565a ("bpf: add bpf_get_stack helper")
+Based-on-patch-by: Eugene Loh <eugene.loh@oracle.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ include/uapi/linux/bpf.h |  8 +++---
+ kernel/bpf/stackmap.c    | 56 +++++++++++++++++-----------------------
+ 2 files changed, 28 insertions(+), 36 deletions(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-6
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b0383d371b9a..f09f20845904 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2975,8 +2975,8 @@ union bpf_attr {
+  *
+  * 			# sysctl kernel.perf_event_max_stack=<new value>
+  * 	Return
+- * 		A non-negative value equal to or less than *size* on success,
+- * 		or a negative error in case of failure.
++ * 		The non-negative copied *buf* length equal to or less than
++ * 		*size* on success, or a negative error in case of failure.
+  *
+  * long bpf_skb_load_bytes_relative(const void *skb, u32 offset, void *to, u32 len, u32 start_header)
+  * 	Description
+@@ -4279,8 +4279,8 @@ union bpf_attr {
+  *
+  *			# sysctl kernel.perf_event_max_stack=<new value>
+  *	Return
+- *		A non-negative value equal to or less than *size* on success,
+- *		or a negative error in case of failure.
++ * 		The non-negative copied *buf* length equal to or less than
++ * 		*size* on success, or a negative error in case of failure.
+  *
+  * long bpf_load_hdr_opt(struct bpf_sock_ops *skops, void *searchby_res, u32 len, u64 flags)
+  *	Description
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 22c8ae94e4c1..2823dcefae10 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -166,7 +166,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ }
+ 
+ static struct perf_callchain_entry *
+-get_callchain_entry_for_task(struct task_struct *task, u32 init_nr)
++get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
+ {
+ #ifdef CONFIG_STACKTRACE
+ 	struct perf_callchain_entry *entry;
+@@ -177,9 +177,8 @@ get_callchain_entry_for_task(struct task_struct *task, u32 init_nr)
+ 	if (!entry)
+ 		return NULL;
+ 
+-	entry->nr = init_nr +
+-		stack_trace_save_tsk(task, (unsigned long *)(entry->ip + init_nr),
+-				     sysctl_perf_event_max_stack - init_nr, 0);
++	entry->nr = stack_trace_save_tsk(task, (unsigned long *)entry->ip,
++					 max_depth, 0);
+ 
+ 	/* stack_trace_save_tsk() works on unsigned long array, while
+ 	 * perf_callchain_entry uses u64 array. For 32-bit systems, it is
+@@ -191,7 +190,7 @@ get_callchain_entry_for_task(struct task_struct *task, u32 init_nr)
+ 		int i;
+ 
+ 		/* copy data from the end to avoid using extra buffer */
+-		for (i = entry->nr - 1; i >= (int)init_nr; i--)
++		for (i = entry->nr - 1; i >= 0; i--)
+ 			to[i] = (u64)(from[i]);
+ 	}
+ 
+@@ -208,27 +207,19 @@ static long __bpf_get_stackid(struct bpf_map *map,
+ {
+ 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
+ 	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
+-	u32 max_depth = map->value_size / stack_map_data_size(map);
+-	/* stack_map_alloc() checks that max_depth <= sysctl_perf_event_max_stack */
+-	u32 init_nr = sysctl_perf_event_max_stack - max_depth;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	u32 hash, id, trace_nr, trace_len;
+ 	bool user = flags & BPF_F_USER_STACK;
+ 	u64 *ips;
+ 	bool hash_matches;
+ 
+-	/* get_perf_callchain() guarantees that trace->nr >= init_nr
+-	 * and trace-nr <= sysctl_perf_event_max_stack, so trace_nr <= max_depth
+-	 */
+-	trace_nr = trace->nr - init_nr;
+-
+-	if (trace_nr <= skip)
++	if (trace->nr <= skip)
+ 		/* skipping more than usable stack trace */
+ 		return -EFAULT;
+ 
+-	trace_nr -= skip;
++	trace_nr = trace->nr - skip;
+ 	trace_len = trace_nr * sizeof(u64);
+-	ips = trace->ip + skip + init_nr;
++	ips = trace->ip + skip;
+ 	hash = jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
+ 	id = hash & (smap->n_buckets - 1);
+ 	bucket = READ_ONCE(smap->buckets[id]);
+@@ -285,8 +276,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 	   u64, flags)
+ {
+ 	u32 max_depth = map->value_size / stack_map_data_size(map);
+-	/* stack_map_alloc() checks that max_depth <= sysctl_perf_event_max_stack */
+-	u32 init_nr = sysctl_perf_event_max_stack - max_depth;
++	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	bool user = flags & BPF_F_USER_STACK;
+ 	struct perf_callchain_entry *trace;
+ 	bool kernel = !user;
+@@ -295,8 +285,12 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+ 		return -EINVAL;
+ 
+-	trace = get_perf_callchain(regs, init_nr, kernel, user,
+-				   sysctl_perf_event_max_stack, false, false);
++	max_depth += skip;
++	if (max_depth > sysctl_perf_event_max_stack)
++		max_depth = sysctl_perf_event_max_stack;
++
++	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
++				   false, false);
+ 
+ 	if (unlikely(!trace))
+ 		/* couldn't fetch the stack trace */
+@@ -387,7 +381,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 			    struct perf_callchain_entry *trace_in,
+ 			    void *buf, u32 size, u64 flags)
+ {
+-	u32 init_nr, trace_nr, copy_len, elem_size, num_elem;
++	u32 trace_nr, copy_len, elem_size, num_elem, max_depth;
+ 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	bool user = flags & BPF_F_USER_STACK;
+@@ -412,30 +406,28 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 		goto err_fault;
+ 
+ 	num_elem = size / elem_size;
+-	if (sysctl_perf_event_max_stack < num_elem)
+-		init_nr = 0;
+-	else
+-		init_nr = sysctl_perf_event_max_stack - num_elem;
++	max_depth = num_elem + skip;
++	if (sysctl_perf_event_max_stack < max_depth)
++		max_depth = sysctl_perf_event_max_stack;
+ 
+ 	if (trace_in)
+ 		trace = trace_in;
+ 	else if (kernel && task)
+-		trace = get_callchain_entry_for_task(task, init_nr);
++		trace = get_callchain_entry_for_task(task, max_depth);
+ 	else
+-		trace = get_perf_callchain(regs, init_nr, kernel, user,
+-					   sysctl_perf_event_max_stack,
++		trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
+ 					   false, false);
+ 	if (unlikely(!trace))
+ 		goto err_fault;
+ 
+-	trace_nr = trace->nr - init_nr;
+-	if (trace_nr < skip)
++	if (trace->nr < skip)
+ 		goto err_fault;
+ 
+-	trace_nr -= skip;
++	trace_nr = trace->nr - skip;
+ 	trace_nr = (trace_nr <= num_elem) ? trace_nr : num_elem;
+ 	copy_len = trace_nr * elem_size;
+-	ips = trace->ip + skip + init_nr;
++
++	ips = trace->ip + skip;
+ 	if (user && user_build_id)
+ 		stack_map_get_build_id_offset(buf, ips, trace_nr, user);
+ 	else
+-- 
+2.35.1.723.g4982287a31-goog
 
-for you to fetch changes up to 48015b632f770c401f3816f144499a39f2884677:
-
-  powerpc: Fix STACKTRACE=n build (2022-03-07 10:26:20 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 5.17 #6
-
-Fix STACKTRACE=n build, in particular for skiroot_defconfig.
-
-- ------------------------------------------------------------------
-Michael Ellerman (1):
-      powerpc: Fix STACKTRACE=n build
-
-
- arch/powerpc/include/asm/nmi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmIq5cAACgkQUevqPMjh
-pYAJhw//WqcG+Qv+W5YD9KMiH78CTDm9bsLejRJOy3x/Rbn5Fs2/KKdcYPcpe5gE
-nJ87W2w2li2YpEBe3ClbAXFQCNswH8cnj3++HLaGFp4bmM3F96JCEuh1GghlvQ4v
-e6EUD0qYEmlFRAvey7bfu5MsNLGadpXob4f+xMoffRHr9rhzsShV4b7pAblUggIi
-/ajO+GEvIk7kSB7DCGEq8swfoT0mWb0bD2wAhNoz4nbOENaGp7O26Va6vt/l+qHn
-aXFESbaYKKBxYTicuLywQWKqL5j/XaHDz19KkKOljYElsLTZ78i4y1mvIHLRJtHA
-NxSAPXBZgOyw7/mQJEYP+ABr0ki+QIpykTLeDxL+XSOtOVYEJW8eQiBHbzxrqSCs
-7UEyunNG9Y2WfLPpE+lo4QEEeOp+QiJsla3iJjQAMJjI2M8x6QtWkDJlZ+LSfUa0
-mNPnHDt8mlAj1R7zpXLNt0gokgPub4lSBb1V2tEu816gEUVJVgqq63GGynB+ET9K
-O/3UlU7jFaQzASw4TUgq1HBE8Zs3NC09GbkUzDoo2cqeZDOPDbb0ieJcy+VzDNiq
-bAcRwjXB7LKir59G38Mdo2lMALJUXr+jtz10a+zTnA48KAVbf5ZgEwXHejR0Y/nv
-af8B1MyWLjeUWAY2CDSSoOres2qE1phjBVZ4eBSk9VLqd+KtXf8=
-=KPHf
------END PGP SIGNATURE-----

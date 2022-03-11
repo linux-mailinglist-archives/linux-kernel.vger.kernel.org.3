@@ -2,68 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860B24D5CED
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704D34D5CF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347357AbiCKIDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S234221AbiCKIGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237155AbiCKID0 (ORCPT
+        with ESMTP id S229654AbiCKIGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:03:26 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880231B84FA;
-        Fri, 11 Mar 2022 00:02:23 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id e6so6863500pgn.2;
-        Fri, 11 Mar 2022 00:02:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FQQzdTx4AXRc0UqtDWCC5ACivflzrCQnePi6OUu3CnY=;
-        b=oXuBGb1ekwEcPik1Skv2Fud4W+/BLF+UgdNx8W3TV0XH00cT/oJnY2jDp4Xo38CwZE
-         RxW1FtQYYKqOr9IXiaEDFEkz6w55QEvrSf27A7ug65Gxn7m7850A+cigFBtZkBg/0vin
-         KdJW71wQbmknr/t5zatXElITjF/xbj+qIwlz+lQhfjQqt9aM2+PlQa2kq0kwwIKEsJSF
-         q2DlzXLdvl7B0VB5rt4UtdCRwsZJvQATmJCXexMG8QNCFuREixR+9jeFYd4Ca86G9iPZ
-         jmYEDFC+1j1F6SexGZinW9BVlV5H60GtrEG9wKxz3a1ubHO9NvCnfezcpjK3LbnesmUV
-         UjWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FQQzdTx4AXRc0UqtDWCC5ACivflzrCQnePi6OUu3CnY=;
-        b=4BkqjcrHxcOo3nvpPRZFr9O36zxHQjI0IFXaSto8K8lU70uJdDlmf9BdppBiWX2r5I
-         HLg60r7IAo4NNl85iMHOvB3EVTVDcHB8TQSFiF7g6jW6OGTnFdJ8JtMpZN8IxDtwg96o
-         Agxo7CG3ynv+d3WjxKXjIbCRFbzovNaMqOxB9mKuBTbEVGWc4a4iBxEF23SpCacSJS1o
-         NJqxncqdfLEqSe3YCIg5hv6umBBOZM+YesA3XZDyf91cKfk2dkZv4SqV2wmsUZjhIcgH
-         Ne7PXHDgn7cBnQNBmUFpGuAuF1WyHMcYrZymQgEMBMtTBROIsX83yfJ6WY4qSaxckHsw
-         tPQg==
-X-Gm-Message-State: AOAM532TCobGjAbBIA9d3vKBxKWenkDSAw0/ozbjJCQ0nV2FrbMDSYkR
-        7m2Aq91nDv/1ZA7yS9aVtcw=
-X-Google-Smtp-Source: ABdhPJxpdkaTnc5mX0kbOkSmB598KHBiETpwSD98+GxI2nb8FzlGSPxE1F+GVG/dsKobhveVBZmwvg==
-X-Received: by 2002:a63:90c7:0:b0:37c:7a8c:c2d3 with SMTP id a190-20020a6390c7000000b0037c7a8cc2d3mr7476395pge.473.1646985743045;
-        Fri, 11 Mar 2022 00:02:23 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004f1111c66afsm10660741pfl.148.2022.03.11.00.02.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 00:02:22 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr,
-        stefan.maetje@esd.eu, paskripkin@gmail.com,
-        remigiusz.kollataj@mobica.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] can: mcba_usb: fix possible double dev_kfree_skb in mcba_usb_start_xmit
-Date:   Fri, 11 Mar 2022 16:02:08 +0800
-Message-Id: <20220311080208.45047-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Fri, 11 Mar 2022 03:06:14 -0500
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52297666C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:05:11 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V6t9Q36_1646985908;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V6t9Q36_1646985908)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 11 Mar 2022 16:05:08 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     rostedt@goodmis.org, mingo@redhat.com, akpm@linux-foundation.org
+Cc:     baolin.wang@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: compaction: Cleanup the compaction trace events
+Date:   Fri, 11 Mar 2022 16:04:55 +0800
+Message-Id: <4cd393b4d57f8f01ed72c001509b28e3a3b1a8c1.1646985115.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +37,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
-can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
-skb.
+As Steven suggested [1], we should access the pointers from the
+trace event to avoid dereferencing them to the tracepoint function
+when the tracepoint is disabled.
 
-Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+[1] https://lkml.org/lkml/2021/11/3/409
+
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- drivers/net/can/usb/mcba_usb.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/trace/events/compaction.h | 26 +++++++++++++-------------
+ mm/compaction.c                   |  9 +++------
+ 2 files changed, 16 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-index 77bddff86252..7c198eb5bc9c 100644
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -364,7 +364,6 @@ static netdev_tx_t mcba_usb_start_xmit(struct sk_buff *skb,
- xmit_failed:
- 	can_free_echo_skb(priv->netdev, ctx->ndx, NULL);
- 	mcba_usb_free_ctx(ctx);
--	dev_kfree_skb(skb);
- 	stats->tx_dropped++;
+diff --git a/include/trace/events/compaction.h b/include/trace/events/compaction.h
+index 7d48e70..c6d5d70 100644
+--- a/include/trace/events/compaction.h
++++ b/include/trace/events/compaction.h
+@@ -67,10 +67,10 @@
+ #ifdef CONFIG_COMPACTION
+ TRACE_EVENT(mm_compaction_migratepages,
  
- 	return NETDEV_TX_OK;
+-	TP_PROTO(unsigned long nr_all,
++	TP_PROTO(struct compact_control *cc,
+ 		unsigned int nr_succeeded),
+ 
+-	TP_ARGS(nr_all, nr_succeeded),
++	TP_ARGS(cc, nr_succeeded),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(unsigned long, nr_migrated)
+@@ -79,7 +79,7 @@
+ 
+ 	TP_fast_assign(
+ 		__entry->nr_migrated = nr_succeeded;
+-		__entry->nr_failed = nr_all - nr_succeeded;
++		__entry->nr_failed = cc->nr_migratepages - nr_succeeded;
+ 	),
+ 
+ 	TP_printk("nr_migrated=%lu nr_failed=%lu",
+@@ -88,10 +88,10 @@
+ );
+ 
+ TRACE_EVENT(mm_compaction_begin,
+-	TP_PROTO(unsigned long zone_start, unsigned long migrate_pfn,
+-		unsigned long free_pfn, unsigned long zone_end, bool sync),
++	TP_PROTO(struct compact_control *cc, unsigned long zone_start,
++		unsigned long zone_end, bool sync),
+ 
+-	TP_ARGS(zone_start, migrate_pfn, free_pfn, zone_end, sync),
++	TP_ARGS(cc, zone_start, zone_end, sync),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(unsigned long, zone_start)
+@@ -103,8 +103,8 @@
+ 
+ 	TP_fast_assign(
+ 		__entry->zone_start = zone_start;
+-		__entry->migrate_pfn = migrate_pfn;
+-		__entry->free_pfn = free_pfn;
++		__entry->migrate_pfn = cc->migrate_pfn;
++		__entry->free_pfn = cc->free_pfn;
+ 		__entry->zone_end = zone_end;
+ 		__entry->sync = sync;
+ 	),
+@@ -118,11 +118,11 @@
+ );
+ 
+ TRACE_EVENT(mm_compaction_end,
+-	TP_PROTO(unsigned long zone_start, unsigned long migrate_pfn,
+-		unsigned long free_pfn, unsigned long zone_end, bool sync,
++	TP_PROTO(struct compact_control *cc, unsigned long zone_start,
++		unsigned long zone_end, bool sync,
+ 		int status),
+ 
+-	TP_ARGS(zone_start, migrate_pfn, free_pfn, zone_end, sync, status),
++	TP_ARGS(cc, zone_start, zone_end, sync, status),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(unsigned long, zone_start)
+@@ -135,8 +135,8 @@
+ 
+ 	TP_fast_assign(
+ 		__entry->zone_start = zone_start;
+-		__entry->migrate_pfn = migrate_pfn;
+-		__entry->free_pfn = free_pfn;
++		__entry->migrate_pfn = cc->migrate_pfn;
++		__entry->free_pfn = cc->free_pfn;
+ 		__entry->zone_end = zone_end;
+ 		__entry->sync = sync;
+ 		__entry->status = status;
+diff --git a/mm/compaction.c b/mm/compaction.c
+index b72fb9d..c3e37aa 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -2387,8 +2387,7 @@ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+ 	update_cached = !sync &&
+ 		cc->zone->compact_cached_migrate_pfn[0] == cc->zone->compact_cached_migrate_pfn[1];
+ 
+-	trace_mm_compaction_begin(start_pfn, cc->migrate_pfn,
+-				cc->free_pfn, end_pfn, sync);
++	trace_mm_compaction_begin(cc, start_pfn, end_pfn, sync);
+ 
+ 	/* lru_add_drain_all could be expensive with involving other CPUs */
+ 	lru_add_drain();
+@@ -2438,8 +2437,7 @@ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+ 				compaction_free, (unsigned long)cc, cc->mode,
+ 				MR_COMPACTION, &nr_succeeded);
+ 
+-		trace_mm_compaction_migratepages(cc->nr_migratepages,
+-						 nr_succeeded);
++		trace_mm_compaction_migratepages(cc, nr_succeeded);
+ 
+ 		/* All pages were either migrated or will be released */
+ 		cc->nr_migratepages = 0;
+@@ -2515,8 +2513,7 @@ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+ 	count_compact_events(COMPACTMIGRATE_SCANNED, cc->total_migrate_scanned);
+ 	count_compact_events(COMPACTFREE_SCANNED, cc->total_free_scanned);
+ 
+-	trace_mm_compaction_end(start_pfn, cc->migrate_pfn,
+-				cc->free_pfn, end_pfn, sync, ret);
++	trace_mm_compaction_end(cc, start_pfn, end_pfn, sync, ret);
+ 
+ 	return ret;
+ }
 -- 
-2.25.1
+1.8.3.1
 

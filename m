@@ -2,137 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63484D603E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8614D6042
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348026AbiCKK7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S1348130AbiCKK75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346129AbiCKK65 (ORCPT
+        with ESMTP id S1346129AbiCKK7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:58:57 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A692BFBA77;
-        Fri, 11 Mar 2022 02:57:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646996274; x=1678532274;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3DJWRY8DxKyOlSga9F41zew51/GuSj1jE3Ph1MQJt8Y=;
-  b=o7ebj9CS08+koP150V/bvVKSFP17oPq1gXb293SgV4/TUDZlWXAMefqd
-   QjeOpVFkWUB/xWbd1ARKC7gKbA3nVUvOK1Rd7KWbiPv3PYpOdfJ0s+qP5
-   4kW6m/UaqrqTJDRDU3Udz8HHMu+P/d1MwPjJjNvmxUkR59vAOsM5dTjQH
-   eJoh6aKxtfMUxgiI6h19G+R3kLaiUj+O25Au5hw+StDIBceMZQHj2zs9G
-   c6IU2hy+nc50RG1cldYeF428ytfW6139h9byu9iSxhbojLXetYEy20s0b
-   +G8rZwRgJ6yHm8cQxneg5/Tpb30tvjnvuiXXzE9Uv5CoWOuzGkSSPy+ri
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,173,1643670000"; 
-   d="scan'208";a="22608829"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 11 Mar 2022 11:57:51 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 11 Mar 2022 11:57:51 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 11 Mar 2022 11:57:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646996271; x=1678532271;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3DJWRY8DxKyOlSga9F41zew51/GuSj1jE3Ph1MQJt8Y=;
-  b=YNN0iYzRCHmLitYGgTinhhK1M5AwB2Nrb78y5oKbHqwYImogY2X9CX6l
-   7pLf7XLFEGrValAEsaaQtAs36mIhtQEaPOUsbKyAcvrSWRFNPUAtuK6wV
-   9nrBm52Blrzu+KpCH0bzh/47vzeVzo/q98E03eV0ZK43JA1dULMZ7S2on
-   HtT3enQv48RBQWF56TRFLL4vsS0adUD7O4JfjajefAU8OgGjzKnt2E4We
-   8+vEWYDo41K5G0ET2Ch/bt6eGrbv57UI016ZGD4bfW8iwEeWpIZnBQclQ
-   i31DGCDORaTi5Spx6mtnCiyHBQHUcLBE7Lp9DZ7O9RJZ3PLVbVoJunF4b
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,173,1643670000"; 
-   d="scan'208";a="22608828"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 11 Mar 2022 11:57:51 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id CB1F2280065;
-        Fri, 11 Mar 2022 11:57:50 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Alifer Moraes <alifer.m@variscite.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        eran.m@variscite.com, festevam@gmail.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, linux@rempel-privat.de,
-        pierluigi.p@variscite.com, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, gaopan <b54642@freescale.com>,
-        Fugang Duan <B38611@freescale.com>,
-        Vipul Kumar <vipul_kumar@mentor.com>
-Subject: Re: (EXT) [PATCH] i2c: imx: add irqf_no_suspend
-Date:   Fri, 11 Mar 2022 11:57:48 +0100
-Message-ID: <3676803.kQq0lBPeGt@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220307143630.28697-1-alifer.m@variscite.com>
-References: <20220307143630.28697-1-alifer.m@variscite.com>
+        Fri, 11 Mar 2022 05:59:54 -0500
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A9813C39F;
+        Fri, 11 Mar 2022 02:58:50 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 2683C5FD03;
+        Fri, 11 Mar 2022 13:58:48 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1646996328;
+        bh=WyQa/Gu+vWVCPA15DPgEI2x5TX1alJGD8E5F+CE4TPE=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=LWFMqCacZCmAYwL9jnJ1qoHMCKSQ2Ov1UF0/5/3U3sVUr08UEsdiUUta3GCIHmdh6
+         +C11Q+nms9NSIO2Jd10gXbphwuFn8NFJH1RhDcL8uw9+cWdyvndMyY02s8ie5xw7u7
+         /q5vKWeHzsv/qGcALZ0Kr0aeN1Cuq2qpKUbCSVWjFhaoJyhIQmLTlBzHw63LaRK1q4
+         9+MZfpVCKNlTbcwDZH2x6+4MdD1Rxs1t4zHNTrLe+61qPXXuIcOt6oOOi8XVDwiyg/
+         aSkPGfN1lYeXxawti09Y59wKlo5FLK7oxb4ZcFE0CFPMP1a9nDztahrG+/G5gm+kmo
+         r+ijCfwu/zamA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 11 Mar 2022 13:58:48 +0300 (MSK)
+From:   Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
+        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
+        Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v1 3/3] af_vsock: SOCK_SEQPACKET broken buffer test
+Thread-Topic: [RFC PATCH v1 3/3] af_vsock: SOCK_SEQPACKET broken buffer test
+Thread-Index: AQHYNTbvjWQnm44js0u5mxZaYZpaaQ==
+Date:   Fri, 11 Mar 2022 10:58:32 +0000
+Message-ID: <bc309cf9-5bcf-b645-577f-8e5b0cf6f220@sberdevices.ru>
+In-Reply-To: <1bb5ce91-da53-7de9-49ba-f49f76f45512@sberdevices.ru>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <067E1A7C5BB85447BE521D93922C4087@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/11 07:23:00 #18938550
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo,
-
-Am Montag, 7. M=E4rz 2022, 15:36:30 CET schrieb Alifer Moraes:
-> From: gaopan <b54642@freescale.com>
->=20
-> The i2c irq is masked when pcie starts a i2c transfer process
-> during noirq suspend stage. As a result, i2c transfer fails.
-> To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
->=20
-> Signed-off-by: Gao Pan <b54642@freescale.com>
-> Signed-off-by: Fugang Duan <B38611@freescale.com>
-> Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 27f969b3dc07..fcc09a1e7f44 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1478,7 +1478,8 @@ static int i2c_imx_probe(struct platform_device *pd=
-ev)
-> goto rpm_disable;
->=20
->  	/* Request IRQ */
-> -	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
-> +	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL,
-> +				   IRQF_SHARED | IRQF_NO_SUSPEND,
->  				   pdev->name, i2c_imx);
->  	if (ret) {
->  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
-
-
-I stumbled across Documentation/power/suspend-and-interrupts.rst which stat=
-es:
-> For this reason, using IRQF_NO_SUSPEND and IRQF_SHARED at the
-> same time should be avoided.
-Given this IMHO at least a comment should be inserted why this is fine. I d=
-ont=20
-have a full picture about the situation, but to me it seems there is a=20
-reference missing, or why/how does some PCIe start some I2C transfer when t=
-he
-controller is suspended already? Do I miss something?
-
-Best regards,
-Alexander
-
-
-
+QWRkIHRlc3Qgd2hlcmUgc2VuZGVyIHNlbmRzIHR3byBtZXNzYWdlLCBlYWNoIHdpdGggb3duDQpk
+YXRhIHBhdHRlcm4uIFJlYWRlciB0cmllcyB0byByZWFkIGZpcnN0IHRvIGJyb2tlbiBidWZmZXI6
+DQppdCBoYXMgdGhyZWUgcGFnZXMgc2l6ZSwgYnV0IG1pZGRsZSBwYWdlIGlzIHVubWFwcGVkLiBU
+aGVuLA0KcmVhZGVyIHRyaWVzIHRvIHJlYWQgc2Vjb25kIG1lc3NhZ2UgdG8gdmFsaWQgYnVmZmVy
+LiBUZXN0DQpjaGVja3MsIHRoYXQgdW5jb3BpZWQgcGFydCBvZiBmaXJzdCBtZXNzYWdlIHdhcyBk
+cm9wcGVkDQphbmQgdGh1cyBub3QgY29waWVkIGFzIHBhcnQgb2Ygc2Vjb25kIG1lc3NhZ2UuDQoN
+ClNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1
+Pg0KLS0tDQogdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgfCAxMjEgKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCAxMjEgaW5zZXJ0aW9ucygr
+KQ0KDQpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgYi90b29s
+cy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYw0KaW5kZXggYWEyZGUyN2QwZjc3Li42ODZhZjcx
+MmI0YWQgMTAwNjQ0DQotLS0gYS90b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYw0KKysr
+IGIvdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMNCkBAIC0xNiw2ICsxNiw3IEBADQog
+I2luY2x1ZGUgPGxpbnV4L2tlcm5lbC5oPg0KICNpbmNsdWRlIDxzeXMvdHlwZXMuaD4NCiAjaW5j
+bHVkZSA8c3lzL3NvY2tldC5oPg0KKyNpbmNsdWRlIDxzeXMvbW1hbi5oPg0KIA0KICNpbmNsdWRl
+ICJ0aW1lb3V0LmgiDQogI2luY2x1ZGUgImNvbnRyb2wuaCINCkBAIC00MzUsNiArNDM2LDEyMSBA
+QCBzdGF0aWMgdm9pZCB0ZXN0X3NlcXBhY2tldF90aW1lb3V0X3NlcnZlcihjb25zdCBzdHJ1Y3Qg
+dGVzdF9vcHRzICpvcHRzKQ0KIAljbG9zZShmZCk7DQogfQ0KIA0KKyNkZWZpbmUgQlVGX1BBVFRF
+Uk5fMSAnYScNCisjZGVmaW5lIEJVRl9QQVRURVJOXzIgJ2InDQorDQorc3RhdGljIHZvaWQgdGVz
+dF9zZXFwYWNrZXRfaW52YWxpZF9yZWNfYnVmZmVyX2NsaWVudChjb25zdCBzdHJ1Y3QgdGVzdF9v
+cHRzICpvcHRzKQ0KK3sNCisJaW50IGZkOw0KKwl1bnNpZ25lZCBjaGFyICpidWYxOw0KKwl1bnNp
+Z25lZCBjaGFyICpidWYyOw0KKwlpbnQgYnVmX3NpemUgPSBnZXRwYWdlc2l6ZSgpICogMzsNCisN
+CisJZmQgPSB2c29ja19zZXFwYWNrZXRfY29ubmVjdChvcHRzLT5wZWVyX2NpZCwgMTIzNCk7DQor
+CWlmIChmZCA8IDApIHsNCisJCXBlcnJvcigiY29ubmVjdCIpOw0KKwkJZXhpdChFWElUX0ZBSUxV
+UkUpOw0KKwl9DQorDQorCWJ1ZjEgPSBtYWxsb2MoYnVmX3NpemUpOw0KKwlpZiAoYnVmMSA9PSBO
+VUxMKSB7DQorCQlwZXJyb3IoIidtYWxsb2MoKScgZm9yICdidWYxJyIpOw0KKwkJZXhpdChFWElU
+X0ZBSUxVUkUpOw0KKwl9DQorDQorCWJ1ZjIgPSBtYWxsb2MoYnVmX3NpemUpOw0KKwlpZiAoYnVm
+MiA9PSBOVUxMKSB7DQorCQlwZXJyb3IoIidtYWxsb2MoKScgZm9yICdidWYyJyIpOw0KKwkJZXhp
+dChFWElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCW1lbXNldChidWYxLCBCVUZfUEFUVEVSTl8xLCBi
+dWZfc2l6ZSk7DQorCW1lbXNldChidWYyLCBCVUZfUEFUVEVSTl8yLCBidWZfc2l6ZSk7DQorDQor
+CWlmIChzZW5kKGZkLCBidWYxLCBidWZfc2l6ZSwgMCkgIT0gYnVmX3NpemUpIHsNCisJCXBlcnJv
+cigic2VuZCBmYWlsZWQiKTsNCisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0KKwlpZiAo
+c2VuZChmZCwgYnVmMiwgYnVmX3NpemUsIDApICE9IGJ1Zl9zaXplKSB7DQorCQlwZXJyb3IoInNl
+bmQgZmFpbGVkIik7DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7DQorCX0NCisNCisJY2xvc2UoZmQp
+Ow0KK30NCisNCitzdGF0aWMgdm9pZCB0ZXN0X3NlcXBhY2tldF9pbnZhbGlkX3JlY19idWZmZXJf
+c2VydmVyKGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMgKm9wdHMpDQorew0KKwlpbnQgZmQ7DQorCXVu
+c2lnbmVkIGNoYXIgKmJyb2tlbl9idWY7DQorCXVuc2lnbmVkIGNoYXIgKnZhbGlkX2J1ZjsNCisJ
+aW50IHBhZ2Vfc2l6ZSA9IGdldHBhZ2VzaXplKCk7DQorCWludCBidWZfc2l6ZSA9IHBhZ2Vfc2l6
+ZSAqIDM7DQorCXNzaXplX3QgcmVzOw0KKwlpbnQgcHJvdCA9IFBST1RfUkVBRCB8IFBST1RfV1JJ
+VEU7DQorCWludCBmbGFncyA9IE1BUF9QUklWQVRFIHwgTUFQX0FOT05ZTU9VUzsNCisJaW50IGk7
+DQorDQorCWZkID0gdnNvY2tfc2VxcGFja2V0X2FjY2VwdChWTUFERFJfQ0lEX0FOWSwgMTIzNCwg
+TlVMTCk7DQorCWlmIChmZCA8IDApIHsNCisJCXBlcnJvcigiYWNjZXB0Iik7DQorCQlleGl0KEVY
+SVRfRkFJTFVSRSk7DQorCX0NCisNCisJLyogU2V0dXAgZmlyc3QgYnVmZmVyLiAqLw0KKwlicm9r
+ZW5fYnVmID0gbW1hcChOVUxMLCBidWZfc2l6ZSwgcHJvdCwgZmxhZ3MsIC0xLCAwKTsNCisJaWYg
+KGJyb2tlbl9idWYgPT0gTUFQX0ZBSUxFRCkgew0KKwkJcGVycm9yKCJtbWFwIGZvciAnYnJva2Vu
+X2J1ZiciKTsNCisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0KKwkvKiBVbm1hcCAiaG9s
+ZSIgaW4gYnVmZmVyLiAqLw0KKwlpZiAobXVubWFwKGJyb2tlbl9idWYgKyBwYWdlX3NpemUsIHBh
+Z2Vfc2l6ZSkpIHsNCisJCXBlcnJvcigiJ2Jyb2tlbl9idWYnIHNldHVwIik7DQorCQlleGl0KEVY
+SVRfRkFJTFVSRSk7DQorCX0NCisNCisJdmFsaWRfYnVmID0gbW1hcChOVUxMLCBidWZfc2l6ZSwg
+cHJvdCwgZmxhZ3MsIC0xLCAwKTsNCisJaWYgKHZhbGlkX2J1ZiA9PSBNQVBfRkFJTEVEKSB7DQor
+CQlwZXJyb3IoIm1tYXAgZm9yICd2YWxpZF9idWYnIik7DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7
+DQorCX0NCisNCisJLyogVHJ5IHRvIGZpbGwgYnVmZmVyIHdpdGggdW5tYXBwZWQgbWlkZGxlLiAq
+Lw0KKwlyZXMgPSByZWFkKGZkLCBicm9rZW5fYnVmLCBidWZfc2l6ZSk7DQorCWlmIChyZXMgIT0g
+LTEpIHsNCisJCXBlcnJvcigiaW52YWxpZCByZWFkIHJlc3VsdCBvZiAnYnJva2VuX2J1ZiciKTsN
+CisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0KKwlpZiAoZXJybm8gIT0gRU5PTUVNKSB7
+DQorCQlwZXJyb3IoImludmFsaWQgZXJybm8gb2YgJ2Jyb2tlbl9idWYnIik7DQorCQlleGl0KEVY
+SVRfRkFJTFVSRSk7DQorCX0NCisNCisJLyogVHJ5IHRvIGZpbGwgdmFsaWQgYnVmZmVyLiAqLw0K
+KwlyZXMgPSByZWFkKGZkLCB2YWxpZF9idWYsIGJ1Zl9zaXplKTsNCisJaWYgKHJlcyAhPSBidWZf
+c2l6ZSkgew0KKwkJcGVycm9yKCJpbnZhbGlkIHJlYWQgcmVzdWx0IG9mICd2YWxpZF9idWYnIik7
+DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7DQorCX0NCisNCisJZm9yIChpID0gMDsgaSA8IGJ1Zl9z
+aXplOyBpKyspIHsNCisJCWlmICh2YWxpZF9idWZbaV0gIT0gQlVGX1BBVFRFUk5fMikgew0KKwkJ
+CXBlcnJvcigiaW52YWxpZCBwYXR0ZXJuIGZvciB2YWxpZCBidWYiKTsNCisJCQlleGl0KEVYSVRf
+RkFJTFVSRSk7DQorCQl9DQorCX0NCisNCisNCisJLyogVW5tYXAgYnVmZmVycy4gKi8NCisJbXVu
+bWFwKGJyb2tlbl9idWYsIHBhZ2Vfc2l6ZSk7DQorCW11bm1hcChicm9rZW5fYnVmICsgcGFnZV9z
+aXplICogMiwgcGFnZV9zaXplKTsNCisJbXVubWFwKHZhbGlkX2J1ZiwgYnVmX3NpemUpOw0KKwlj
+bG9zZShmZCk7DQorfQ0KKw0KIHN0YXRpYyBzdHJ1Y3QgdGVzdF9jYXNlIHRlc3RfY2FzZXNbXSA9
+IHsNCiAJew0KIAkJLm5hbWUgPSAiU09DS19TVFJFQU0gY29ubmVjdGlvbiByZXNldCIsDQpAQCAt
+NDgwLDYgKzU5NiwxMSBAQCBzdGF0aWMgc3RydWN0IHRlc3RfY2FzZSB0ZXN0X2Nhc2VzW10gPSB7
+DQogCQkucnVuX2NsaWVudCA9IHRlc3Rfc2VxcGFja2V0X3RpbWVvdXRfY2xpZW50LA0KIAkJLnJ1
+bl9zZXJ2ZXIgPSB0ZXN0X3NlcXBhY2tldF90aW1lb3V0X3NlcnZlciwNCiAJfSwNCisJew0KKwkJ
+Lm5hbWUgPSAiU09DS19TRVFQQUNLRVQgaW52YWxpZCByZWNlaXZlIGJ1ZmZlciIsDQorCQkucnVu
+X2NsaWVudCA9IHRlc3Rfc2VxcGFja2V0X2ludmFsaWRfcmVjX2J1ZmZlcl9jbGllbnQsDQorCQku
+cnVuX3NlcnZlciA9IHRlc3Rfc2VxcGFja2V0X2ludmFsaWRfcmVjX2J1ZmZlcl9zZXJ2ZXIsDQor
+CX0sDQogCXt9LA0KIH07DQogDQotLSANCjIuMjUuMQ0K

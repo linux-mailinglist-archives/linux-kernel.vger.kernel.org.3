@@ -2,71 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416B44D6843
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8024D684C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350357AbiCKSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S1350731AbiCKSIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239458AbiCKSGC (ORCPT
+        with ESMTP id S232941AbiCKSIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:06:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307E81B0BC0;
-        Fri, 11 Mar 2022 10:04:58 -0800 (PST)
+        Fri, 11 Mar 2022 13:08:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAF1BA17B;
+        Fri, 11 Mar 2022 10:07:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5128B80EA4;
-        Fri, 11 Mar 2022 18:04:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDDAC340E9;
-        Fri, 11 Mar 2022 18:04:54 +0000 (UTC)
-Date:   Fri, 11 Mar 2022 13:04:53 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [next] arm64: allmodconfig: kernel BUG at
- include/linux/page-flags.h:509
-Message-ID: <20220311130453.54a4e0b2@gandalf.local.home>
-In-Reply-To: <20220311171123.GA1675@kbox>
-References: <CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com>
-        <20220311112426.7e3cf434@gandalf.local.home>
-        <20220311171123.GA1675@kbox>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 178EB61E70;
+        Fri, 11 Mar 2022 18:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AEBC340E9;
+        Fri, 11 Mar 2022 18:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647022021;
+        bh=FbqNvOscYJ7Bfr/Vx00UgkhPaUqUnhlZCF+USYAVP7s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vOMJW+v9J+BqQYR/PnmJ698oQuG3E+dq1i4rfVycrdqD+cso8RQTZa5pT2Yo4F9LD
+         1xtdIuzSSBeZcdQ96Kbk9RN5+OYHpfdue+UzoY3aB6SU5fKqE1TQlTGFMJygCFc1EP
+         pFK3kzS7x2d1SfpMUz5b+96BnjndaCnL3HRyaSVI2TFYBQToCgbIz0lSWd9CWrq8bG
+         LVLkcTRBT+tWtgdRhTNsce+EUu/l7QLK7ZlZFGRCDcw+jPkopTFWyLAE5KrPS6espp
+         J/DSeNVhR/jDSNkGi6xHavFIrUTqc4sN119HRZv1mFz+qnkc2xwSt8J5xD6WvekkeU
+         gzrqZFrmzJR1w==
+Date:   Fri, 11 Mar 2022 18:06:54 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        shuah@kernel.org, brendanhiggins@google.com,
+        linux-kselftest@vger.kernel.org, jic23@kernel.org,
+        linux-iio@vger.kernel.org, lgirdwood@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org
+Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
+Message-ID: <YiuPvkQroV/WdFpx@sirena.org.uk>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+ <20220311162445.346685-10-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MolxjZU9V35M/+dw"
+Content-Disposition: inline
+In-Reply-To: <20220311162445.346685-10-vincent.whitchurch@axis.com>
+X-Cookie: A fool and his money are soon popular.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 09:11:23 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-> Maybe I am mistaken, but I remember reading in the case of a kernel
-> allocated page shared with user space they must be reserved. It was
-> stated that the PTE may not know the PFN belongs to user or kernel.
-> 
-> If this is not the case, I don't see why we couldn't allocate zero'd
-> pages as you describe. We just need to make sure we don't crash user
-> processes touching the page if it does get paged out (and ideally not
-> slow down their execution).
+--MolxjZU9V35M/+dw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Anything allocated by the kernel via alloc_page() will never be paged out.
-As the kernel may use it in any location (including NMIs). The ftrace ring
-buffer allocates its pages this way.
+On Fri, Mar 11, 2022 at 05:24:44PM +0100, Vincent Whitchurch wrote:
 
-Now if you were mapping some file system page, then that would be a
-different story.
+This looks like it could be useful, modulo the general concerns with
+mocking stuff.  I've not looked at the broader framework stuff in any
+meanigful way.
 
--- Steve
+> +    @classmethod
+> +    def setUpClass(cls) -> None:
+> +        insmod("tps6286x-regulator")
+
+Shouldn't this get figured out when the device gets created in DT (if it
+doesn't I guess the tests found a bug...)?
+
+> +    def setUp(self) -> None:
+> +        self.driver = I2CDriver("tps6286x")
+> +        self.hw = Hardware("i2c")
+> +        self.hw.load_model(TPS62864)
+
+This feels like there could be some syntactic sugar to say "create this
+I2C device" in one call?  In general a lot of the frameworkish stuff
+feels verbose.
+
+> +    def test_voltage(self) -> None:
+> +        with (
+> +            self.driver.bind(self.dts["normal"]),
+> +            PlatformDriver("reg-virt-consumer").bind(
+> +                "tps62864_normal_consumer"
+> +            ) as consumerdev,
+> +        ):
+> +            maxfile = consumerdev.path / "max_microvolts"
+> +            minfile = consumerdev.path / "min_microvolts"
+> +
+> +            write_int(maxfile, 1675000)
+> +            write_int(minfile, 800000)
+> +
+> +            mock = self.hw.update_mock()
+> +            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 5)
+> +            mock.assert_reg_write_once(self, REG_VOUT1, 0x50)
+> +            mock.reset_mock()
+
+Some comments about the assertations here would seem to be in order.
+It's not altogether clear what this is testing - it looks to be
+verifying that the regulator is enabled with the voltage set to 800mV
+mapping to 0x50 in VOUT1 but I'm not sure that the idle reader would
+pick that up.
+
+> +            mV = 1000
+> +            data = [
+> +                (400 * mV, 0x00),
+> +                (900 * mV, 0x64),
+> +                (1675 * mV, 0xFF),
+> +            ]
+> +
+> +            for voltage, val in data:
+> +                write_int(minfile, voltage)
+> +                mock = self.hw.update_mock()
+> +                mock.assert_reg_write_once(self, REG_VOUT1, val)
+> +                mock.reset_mock()
+
+For covering regulators in general (especially those like this that use
+the generic helpers) I'd be inclined to go through every single voltage
+that can be set which isn't so interesting for this driver with it's
+linear voltage control but more interesting for something that's not
+continuous.  I'd also put a cross check in that the voltage and enable
+state that's reported via the read interface in sysfs is the one that we
+think we've just set, that'd validate that the framework's model of
+what's going on matches both what the driver did to the "hardware" and
+what the running kernel thinks is going on so we're joined up top to
+bottom (for the regulator framework the read values come from the
+driver so it is actually covering the driver).
+
+This all feels like it could readily be factored out into a generic
+helper, much as the actual drivers are especially when they're more data
+driven.  Ideally with the ability to override the default I/O operations
+for things with sequences that need to be followed instead of just a
+bitfield to update.  Callbacks to validate enable state, voltage, mode
+and so on in the hardware.  If we did that then rather than open coding
+every single test for every single device we could approach things at
+the framework level and give people working on a given device a pile of
+off the shelf tests which are more likely to catch things that an
+individual driver author might've missed, it also avoids the test
+coverage being more laborious than writing the actual driver.
+
+This does raise the questions I mentioned about how useful the testing
+really is of course, even more so when someone works out how to generate
+the data tables for the test and the driver from the same source, but
+that's just generally an issue for mocked tests at the conceptual level
+and clearly it's an approach that's fairly widely used and people get
+value from.
+
+--MolxjZU9V35M/+dw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrj70ACgkQJNaLcl1U
+h9D1Rgf9Ftqa1fE0HqpChhmXg9bevuB0hQF8ey0T0Ypw/UorQPenedWbtt0/waZY
+K8rGaxJFPJbpC26PeXga6PnVPe7rm+uJtKQe7kICGvkvdCzVfqEH6uNxUfMwPki3
+zD2nhS1EvX7bB4NUDP8a3BgrFu8KWh6Npx2yj1cUKUoKFAPBhktCFs/wP5xfhvDV
+16sVYMN3QInL8IERk5F+lJSZHHOqfyt0lu7hgW70d+GoAlix/NwXL67ezPMykft/
+iyATJkFPB6KoBG2IChUzCFOzMN8KVfjXMCcl5JxOgSpER4jqMeDIbjTsv4uilzFf
+LUaSWbjwsd5iJoc7O2UJ+5I6S6vUDA==
+=X5TK
+-----END PGP SIGNATURE-----
+
+--MolxjZU9V35M/+dw--

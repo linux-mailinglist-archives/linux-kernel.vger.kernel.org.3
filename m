@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773BE4D669A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2674D66A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350124AbiCKQnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S1350438AbiCKQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:46:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiCKQns (ORCPT
+        with ESMTP id S236353AbiCKQqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:43:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDFF1FA4E;
-        Fri, 11 Mar 2022 08:42:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 18F33CE295C;
-        Fri, 11 Mar 2022 16:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B39DC340EE;
-        Fri, 11 Mar 2022 16:42:39 +0000 (UTC)
-Date:   Fri, 11 Mar 2022 11:42:37 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 00/10] ext4: Improve FC trace events
-Message-ID: <20220311114237.51a2ed29@gandalf.local.home>
-In-Reply-To: <20220311150357.x6wpvzthsimb26m6@riteshh-domain>
-References: <cover.1646922487.git.riteshh@linux.ibm.com>
-        <20220310110553.431cc997@gandalf.local.home>
-        <20220310170731.hq6z6flycmgkhnaa@riteshh-domain>
-        <20220310193936.38ae7754@gandalf.local.home>
-        <20220311021931.d4oozgtefbalrcch@riteshh-domain>
-        <20220310213356.3948cfb7@gandalf.local.home>
-        <20220311031431.3sfbibwuthn4xkym@riteshh-domain>
-        <20220310233234.4418186a@gandalf.local.home>
-        <20220311051249.ltgqbjjothbrkbno@riteshh-domain>
-        <20220311094524.1fa2d98f@gandalf.local.home>
-        <20220311150357.x6wpvzthsimb26m6@riteshh-domain>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 11 Mar 2022 11:46:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724171BA17B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:45:06 -0800 (PST)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647017104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=D5m+mY7LjFu1LZHLdb3mluOsfB8pNaI1pal4+RRYv2E=;
+        b=SWeeXMJSQ28tX1elR/DuG9YXTi0cCnZolwU6BmPEI8dnrcvIgCG13Lxo8iCaFQqcZVcM90
+        XLnhvDTOoZ4FyZC7xWy7gUx3COVtY6UdIIO57Z/m2EDLp5rTlI+L/iVXlwx5nzOIGGfpXG
+        hLkhUNKeGNJuTd+18IXbkMM5GIDG2dYYCUUS1gBcMMMoAIokep6++2BtmWuUJMLd7m8zE+
+        oKFkDMYWnW8dM+BJe+Pjs31Qzv0oJ8ddgdU+bCq2+uSy/k/XwXoSP6Ciq0itzKi2F6tO8N
+        ZWt/BcPheKPoVkbpa6p8B72jqtU61YTQAaEDsnHhFHiLqYQYR0Y0QeifkqnxCA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647017104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=D5m+mY7LjFu1LZHLdb3mluOsfB8pNaI1pal4+RRYv2E=;
+        b=2GOsxnk1cvK2asBFPv6XI1LCJAvudDUEaDO2dKp0pcj8H1NxTy7eylQ2SPSmml3Eq6VUPo
+        RRSQ84ro8jnEKICg==
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH] locking/lockdep: Remove lockdep_init_map_crosslock.
+Date:   Fri, 11 Mar 2022 17:44:57 +0100
+Message-Id: <20220311164457.46461-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 20:33:57 +0530
-Ritesh Harjani <riteshh@linux.ibm.com> wrote:
+The cross-release bits have been removed, lockdep_init_map_crosslock() is
+a leftover.
 
-> On 22/03/11 09:45AM, Steven Rostedt wrote:
-> > On Fri, 11 Mar 2022 10:42:49 +0530
-> > Ritesh Harjani <riteshh@linux.ibm.com> wrote:
-> >  
-> > > You may add below, if you like:-
-> > >
-> > > Reported-and-tested-by: Ritesh Harjani <riteshh@linux.ibm.com>  
-> >
-> > Will do. Thanks for testing.
-> >
-> > I'll be adding this for the next merge window. I don't think this is
-> > something that needs to be added to this rc release nor stable. Do you
-> > agree?  
-> 
-> If using an enum in TP_STRUCT__entry's __array field doesn't cause any side
-> effect other than it just can't be decoded by userspace perf record / trace-cmd,
-> then I guess it should be ok.
+Remove lockdep_init_map_crosslock.
 
-Right. It only causes trace-cmd and perf to not be able to parse the field.
-But that's not really a regression, as it never was able to parse an enum
-defining an array size.
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ include/linux/lockdep.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-> 
-> But for this PATCH 2/10 "ext4: Fix ext4_fc_stats trace point", will be
-> needed to be Cc'd to stable tree as discussed before, as it tries to
-> dereference some sbi pointer from the tracing ring buffer. Then hopefully the
-> only problem with previous kernel version would be that ext4_fc_stats(), won't
-> show proper values for array entries in older kernel version where this patch
-> of trace_events is not found.
-> But cat /sys/kernel/debug/tracing/trace_pipe should be able to show the right values.
-> 
-> 
-> >From my side, I will send a v3 of this patch series with just EXT4_FC_REASON_MAX  
-> defined using TRACE_DEFINE_ENUM.
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 467b94257105e..3d948f001f182 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -431,7 +431,6 @@ enum xhlock_context_t {
+ 	XHLOCK_CTX_NR,
+ };
+=20
+-#define lockdep_init_map_crosslock(m, n, k, s) do {} while (0)
+ /*
+  * To initialize a lockdep_map statically use this macro.
+  * Note that _name must not be NULL.
+--=20
+2.35.1
 
-OK, I'll just add this for the next merge window. If people complain about
-the parser not being able to parse this from user space, then we can either
-backport it, or add a plugin that parses it manually in libtraceevent.
-
-> 
-> Thanks again for your help :)
-> 
-
-No problem. Thanks for the report.
-
--- Steve

@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C8D4D5FCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409F44D5FE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348131AbiCKKib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
+        id S1346438AbiCKKjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348060AbiCKKiY (ORCPT
+        with ESMTP id S238656AbiCKKjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:38:24 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036C1C1AF2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fAl9Fpwe3hBpzZjYhYE3T3tApQIlsu2mrNCudRtI24A=; b=pbKdbcjp6Rv6g/ODfY6BaNs3sv
-        6xJ8Jec6a5G/6IUuibQApJj8uJUk+tpJ7LaZ/lD55lGi/bOnv7f+a51Q2NcjDGNm4MheQfwTOyqPe
-        MyCP2ksPra8jQA3znEiATfoIGOP50QMYv9ONS61XXP/EMGyVFhd6KkYHPvoOCLX0pMtOoseBGvY92
-        7GJ6eRmd7HR2OfD+HrM6lMrlzEYFVZCZCKF74os6/GekIiRvM7YmMgQnDZnWcq7350Ig4GQ0YGdPZ
-        Vw6mv+k9AjfMXmUdFPu1Ldk97IBIxcpREhi918ibPX9GWLiGk/IJ3efenia0uSlUENHuZLfhi8nIf
-        hx+Rf3+g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57788)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nSce6-0002RB-51; Fri, 11 Mar 2022 10:37:18 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nSce4-0001Wp-LD; Fri, 11 Mar 2022 10:37:16 +0000
-Date:   Fri, 11 Mar 2022 10:37:16 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        andreyknvl@gmail.com, anshuman.khandual@arm.com, ardb@kernel.org,
-        dvyukov@google.com, geert+renesas@glider.be, glider@google.com,
-        kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        lukas.bulwahn@gmail.com, mark.rutland@arm.com,
-        masahiroy@kernel.org, matthias.bgg@gmail.com,
-        ryabinin.a.a@gmail.com, yj.chiang@mediatek.com
-Subject: Re: [PATCH v3 0/2] arm: kasan: support CONFIG_KASAN_VMALLOC
-Message-ID: <YismXDtUZ2cPtVnN@shell.armlinux.org.uk>
-References: <20220227134726.27584-1-lecopzer.chen@mediatek.com>
- <CACRpkdasAGFDth-=eKgUFo+4c-638uo2RMbaUap6ent5mmBXbw@mail.gmail.com>
+        Fri, 11 Mar 2022 05:39:51 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560F91B0C72
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:38:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646995128; x=1678531128;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ERoDqGPLZcDRwDdhAPlR9WKCdT1GPrd63rNG7I71OYY=;
+  b=dyZg81u2DAMVzQWWAQuEExy6latdkQSGvIdUEX/euXWdMRTzT8LXV2sW
+   FPV4X194+qSwvbJdxl0cHXu/rXRvvg8jnyLXcddXNlblNLmXG6GIWCGDU
+   zHogBxo4aqAnsE96UjmUj0mbw4EmjVYf8ECVwn/7/51KjVsHWexqFB4t7
+   mWnA0Ggs2k+SyUKrf5c/g/v3zR6XOdUHjDy66Wbbr3wxCn40aVt7MJUVH
+   s48BpsTb+UWaR6Ivtkl63cMhM0TW85skOptVSQmILt7We2BVfBIk831UD
+   P+n9DeD5p0Mtbz8Xlw1EY469xjW8O6liKB3W7F6mwoWQkUO7h//U9hwd9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="316269639"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="316269639"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:38:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="644893929"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 02:38:46 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nScfV-0006G3-Bz; Fri, 11 Mar 2022 10:38:45 +0000
+Date:   Fri, 11 Mar 2022 18:38:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 123/346]
+ fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected identifier or '('
+Message-ID: <202203111813.2n44ZvrR-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdasAGFDth-=eKgUFo+4c-638uo2RMbaUap6ent5mmBXbw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 12:08:52AM +0100, Linus Walleij wrote:
-> On Sun, Feb 27, 2022 at 2:48 PM Lecopzer Chen
-> <lecopzer.chen@mediatek.com> wrote:
-> 
-> > Since the framework of KASAN_VMALLOC is well-developed,
-> > It's easy to support for ARM that simply not to map shadow of VMALLOC
-> > area on kasan_init.
-> >
-> > Since the virtual address of vmalloc for Arm is also between
-> > MODULE_VADDR and 0x100000000 (ZONE_HIGHMEM), which means the shadow
-> > address has already included between KASAN_SHADOW_START and
-> > KASAN_SHADOW_END.
-> > Thus we need to change nothing for memory map of Arm.
-> >
-> > This can fix ARM_MODULE_PLTS with KASan, support KASan for higmem
-> > and provide the first step to support CONFIG_VMAP_STACK with Arm.
-> >
-> >
-> > Test on
-> > 1. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping.
-> > 2. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping + LPAE.
-> > 3. Qemu with memory 2G and vmalloc=500M for 2G/2G mapping.
-> >
-> > v3:
-> >     rebase on 5.17-rc5.
-> >     Add simple doc for "arm: kasan: support CONFIG_KASAN_VMALLOC"
-> >     Tweak commit message.
-> 
-> Ater testing this with my kernel-in-vmalloc patches and some hacks, I got
-> the kernel booting in the VMALLOC area with KASan enabled!
-> See:
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.17-rc1
-> 
-> That's a pretty serious stress test. So:
-> Tested-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> for the series.
-> 
-> I suppose you could put this into Russell's patch tracker, it's gonna be
-> for kernel v5.19 by now but why stress. It seems I can fix up
-> kernel-in-vmalloc on top and submit that for v5.19 as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   38ef7fcbbc5b33107155955dcd6ed6c92f4ceb91
+commit: e0be8b1f630bd6eda5845896af660c5cc1b43831 [123/346] xfs: hook live rmap operations during a repair operation
+config: hexagon-randconfig-r025-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111813.2n44ZvrR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=e0be8b1f630bd6eda5845896af660c5cc1b43831
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout e0be8b1f630bd6eda5845896af660c5cc1b43831
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
 
-Ard's series already adds vmap stack support (which we've been doing
-some last minute panic-debugging on to get it ready for this merge
-window), but the above description makes it sound like this series is
-a pre-requisit for that.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Is it? Will Ard's work cause further regressions because this series
-isn't merged.
+All errors (new ones prefixed by >>):
 
-Please clarify - and urgently, there is not much time left before the
-merge window opens.
+>> fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected identifier or '('
+   XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
+   ^
+   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
+   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
+                                             ^
+>> fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected ')'
+   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
+   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
+                                             ^
+   fs/xfs/libxfs/xfs_rmap.c:783:1: note: to match this '('
+   fs/xfs/xfs_mount.h:78:41: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
+   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
+                                            ^
+>> fs/xfs/libxfs/xfs_rmap.c:783:1: error: expected ')'
+   XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
+   ^
+   fs/xfs/xfs_mount.h:78:47: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
+   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
+                                                  ^
+   fs/xfs/libxfs/xfs_rmap.c:783:1: note: to match this '('
+   fs/xfs/xfs_mount.h:78:40: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
+   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
+                                           ^
+   3 errors generated.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP_GPMC
+   Depends on MEMORY && OF_ADDRESS
+   Selected by
+   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST && HAS_IOMEM
+
+
+vim +783 fs/xfs/libxfs/xfs_rmap.c
+
+   781	
+   782	#ifdef CONFIG_XFS_LIVE_HOOKS
+ > 783	XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
+   784	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

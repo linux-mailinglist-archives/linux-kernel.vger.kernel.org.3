@@ -2,710 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C22C4D6ACE
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9708E4D6ACC
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiCKXHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S229818AbiCKXNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 18:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiCKXHl (ORCPT
+        with ESMTP id S229448AbiCKXNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:07:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A402B11B5ED
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:06:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647039991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gOkZnMw4EFXXNBGRHrbUgXL0qyiQdxtkcu4QKfjCv+g=;
-        b=Y4X5BRAvKmaTrfCZiUYv45ybfRTJ56GQf/h0ZoG9N2iyP8hA5wRcD7i/Cg1uvGwTtYVjfz
-        QoMcNdlLQII/m9cWUtjGnLxmtQakQv5ggJFArw6EdNeGR5ctcQvxetpFSr7k9uMfz+eLAW
-        duPb9fcgZJrQq+1Haa8i4JI5/OX3ZMQ=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-EZTdcjy0OTitQJX4FL27vQ-1; Fri, 11 Mar 2022 18:06:30 -0500
-X-MC-Unique: EZTdcjy0OTitQJX4FL27vQ-1
-Received: by mail-il1-f197.google.com with SMTP id s17-20020a056e0210d100b002c618c396b0so6448255ilj.15
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:06:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=gOkZnMw4EFXXNBGRHrbUgXL0qyiQdxtkcu4QKfjCv+g=;
-        b=j9TR2ezEylTg5pSPjDU+R0ZUwMR4HNbYLvI7gTZjdutm+ekBMxHY0SD1PfnBAu6TzK
-         w5ijbv49LYo+FTwg563fisyoOAZo3TWDjlPt3LsU4tEfFRtBqpENwaqxPs6BW06scW0L
-         7VZacWQAyey5yNQyaua1QLRv23MzfXmmvp90XD/F5Ez6WG9OrjQZcYO3t5tShhOJOuDp
-         H6ZkYFZXywFhcyBelPB4zJe5NVniZ2cXUgPS6UiYPEJrdXs5/bxP/rgXOCYEu205bFbb
-         zqfZHso5R2enhSVsViEXwREvlb1suvE0M0oigLoACpskMJLEKlIhCkf+/QrFxSczO/Ym
-         1e3A==
-X-Gm-Message-State: AOAM532bOzPhRc7HF6IhIh2tjNx5mItvoPEPA751kvuNsEVbLHL/ceta
-        zlk7TF2gnaQF19VI9NNpoerkxTZz6ZmjRYgEMbbqqkRu5tgQPM1pFQtgG6sQB87VXVJB3UeShnk
-        FUl/DADjs/LtJVSFC44hjJ4LF
-X-Received: by 2002:a05:6e02:15c6:b0:2c2:5ab0:948 with SMTP id q6-20020a056e0215c600b002c25ab00948mr9720011ilu.171.1647039989535;
-        Fri, 11 Mar 2022 15:06:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxhArWUoNW80l6HL/eIDHMs+R3e/tESmR05/T5/uO6nTve8pJSLnJGKOStok9dfJW5L+EoZZQ==
-X-Received: by 2002:a05:6e02:15c6:b0:2c2:5ab0:948 with SMTP id q6-20020a056e0215c600b002c25ab00948mr9719975ilu.171.1647039988887;
-        Fri, 11 Mar 2022 15:06:28 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id t3-20020a922c03000000b002c6509399c4sm5082888ile.26.2022.03.11.15.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 15:06:28 -0800 (PST)
-Date:   Fri, 11 Mar 2022 16:06:27 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     kvm@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 5/5] vfio/pci: add the support for PCI D3cold
- state
-Message-ID: <20220311160627.6ec569a9.alex.williamson@redhat.com>
-In-Reply-To: <a6c73b9e-577b-4a18-63a2-79f0b3fa1185@nvidia.com>
-References: <20220124181726.19174-1-abhsahu@nvidia.com>
-        <20220124181726.19174-6-abhsahu@nvidia.com>
-        <20220309102642.251aff25.alex.williamson@redhat.com>
-        <a6c73b9e-577b-4a18-63a2-79f0b3fa1185@nvidia.com>
-Organization: Red Hat
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 11 Mar 2022 18:13:31 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D5FDD94F;
+        Fri, 11 Mar 2022 15:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647040347; x=1678576347;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=9JOOwkJUvNPPY/HZRHX3CCdsj898wOO3lw5ekwhsVAo=;
+  b=CUSXCMKhAT2JkNVuRkXjlRqjZuW+/bkPJvddF4hhiWfLIsITifvpXDAA
+   mwJB6YzzcWd5BeBIpDrYSYsiSJ4OcnRq01DPkOe3e5MQhJP18rc5Cp2NX
+   QX9HyqOXXg2TxLuHeN7CMJKpt7t7YbKkkba2FbmHG8R9AFB6XRXZs9A2W
+   qkEVC0Tck7g9rojUWq1aTC8AjeBPMI4RyMRds5WeyodnReoeWdzv7WfT0
+   q5omtxWbfEbFTN0bMB0ZATDv17XpToyMMHz9L9UYV5gNBnLhgUFMEeADa
+   epRKus01UivBFEESbqbJABGxF97kxd32SnQMqw2S1XuXz0V2K3kcaS8pH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237842035"
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="237842035"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 15:12:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="579445727"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 15:12:27 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 11 Mar 2022 15:12:26 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Fri, 11 Mar 2022 15:12:26 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Fri, 11 Mar 2022 15:12:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z0DDbk83CoS4mJUqD1PMuIGy+zW5S47abzl9cgylNF4j7dVGdOU2PQImMtKqjcEh0+hjdHGXWGh1hcQrg84Tf7c6DVOA1QPich3YxGwiEpgdKe1FaCbFEHwTXttWUBACCTMQI9RyrJwCRUQ0leDAjfnzoc7PL02OQN3BPR8Hd2/2e0GCXd77UuqWRy5reo1m9BN1B+lTye1PWf7L2k5nhzgi/nb2GWW0WpOq2DC2MjKfcYerAnh26uFytbYPDpeHa5K2a8lJvaBO5NJv+mG1y/NEWdKh1UV8XSAAn6tMuSJsxYs3T60RL0TUtmP3v5cY8ABq1ao5UNu6cBNdxhndjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/oOvB59BwZBt+6gIVgs2xX1qfqDXCEnPhTQL44C3HbI=;
+ b=bOX/PBZEy3cJ/XJB2LJYz6r82GzP23LfV/RRW2VS5gFSfOnrMLVuL3yvuByoSoM3ZN7XO4ofbGIwMaNG421cR0sf3c0jEyZAg1tizHBxeWKWrSI40bBx2soltLQex2fgtU62KC9hN+50bdyw3NeEF2b9KTKz5hKZ4fMKq+m0Zei5RIHkR8mOaJFxY6vSHkf1dbU01PfbO02wkY05Lx6lWWeAmk5EfPMKHT/mNkRx6qhbwaDnBQrl6myKGbL4sajpYarSgzJW+zNAAzuszqA9pSfArrdS7acSdJBdjx0nr8lv8dZ4Aj6sSwadfFmfWhcFH5hQoDR/ZDVjbBYgCJx4Ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH0PR11MB5740.namprd11.prod.outlook.com (2603:10b6:610:101::7)
+ by CO1PR11MB4945.namprd11.prod.outlook.com (2603:10b6:303:9c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.29; Fri, 11 Mar
+ 2022 23:12:25 +0000
+Received: from CH0PR11MB5740.namprd11.prod.outlook.com
+ ([fe80::b432:16ba:2819:d702]) by CH0PR11MB5740.namprd11.prod.outlook.com
+ ([fe80::b432:16ba:2819:d702%5]) with mapi id 15.20.5061.025; Fri, 11 Mar 2022
+ 23:12:24 +0000
+Message-ID: <73ad2b2f-a07c-d78b-cf1f-002e6a983c6d@intel.com>
+Date:   Fri, 11 Mar 2022 15:12:20 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [PATCH v5 1/6] selftests/resctrl: Kill child process before
+ parent process terminates if SIGTERM is received
+Content-Language: en-US
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        "Shuah Khan" <skhan@linuxfoundation.org>
+References: <20220311072147.3301525-1-tan.shaopeng@jp.fujitsu.com>
+ <20220311072147.3301525-2-tan.shaopeng@jp.fujitsu.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20220311072147.3301525-2-tan.shaopeng@jp.fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR19CA0085.namprd19.prod.outlook.com
+ (2603:10b6:320:1f::23) To CH0PR11MB5740.namprd11.prod.outlook.com
+ (2603:10b6:610:101::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4d9be124-206d-4f66-cd62-08da03b499a7
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4945:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <CO1PR11MB49459D05BDD01CF9C14B8477F80C9@CO1PR11MB4945.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PIo0THm8ov4YUohrfQ79dN6+qQ9qDoEvxERShDR7BZvLHYcTk++CSauUUvnEKK9fCuAL5QUgAxodaCIV3CcewYtMEKYAKAkAbFlpggkmPnmmiPo9AWroflJhZVPyDi4LldP7OO3T9UndUpYRCPmAqQ/6fbJisebhTdkQkRosFIp4qSmSCNDlAAukKShh1xJaIWACqrtNScXQeDY+qzuZ4EHRYaKDcI59v9Kiej95N3JFFM5WNS+kXOIt1nU8bsPfPIIaHPPRwCh+BGC/Yks9csElK+ONt7j3u+1cSTu01nufrqBBRmp1TtasfMaCgXbiBysPN4/Rx++yoKDv4pp+wN6kI2F/LxYId38paltemctnUqKNRpEkkcMMD9NVh1EcH/GKt2N5fN7rInpdi0kEXc3FVuJ/uvd1eVLpbHdOqWJ45LI+ucLAI6TwPWVNW4j/Y14ChlK2+Ca9AmlpvCNgwMuKCWQp51dmL0CpUss3uHRwiVKzm6w0GMDL/g0Q5OXwBnEI+iwFgyle8AkCoXJ1X467GVDIRaxuNVqKQxd37UutnM7CxpmboKE4G9/F0rJJ3oF7g1kP2QdyE5Ev40J5padB9UQ7PTSGTCOb9H8tOsDtxRxQ2t+Gho1cUBHLoTuVBvIxmeFbUrrG6Jneiq2aF2C3Pp/w4l3O+b3jfh4acnIfpyrIpiq3QCRD0rm/19SqArBq4l8vsHWWVKyjEQo4BTildPvDLtwtNcvcxBLylAEpB+FF4iRbg9uNids5GjKM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5740.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(26005)(186003)(8936002)(5660300002)(44832011)(6512007)(2616005)(8676002)(66476007)(66556008)(4326008)(53546011)(6506007)(508600001)(6486002)(82960400001)(38100700002)(31686004)(36756003)(110136005)(86362001)(31696002)(316002)(6666004)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkswUHlYM0Zaek11UktWRXVOaFhLZkdpdUhHdmZLV2pVWktIMlAvN3c3MThE?=
+ =?utf-8?B?eFdkbm50UnlwenRKcjlJeXVFVDhqbURvSnBQbC9vQ2RtNWdkMVhZSkRjQk04?=
+ =?utf-8?B?NDcyK2xUMzFmMGxseTVYNW82S1MvaFdOaklTMmF5K3p0SStyK1NMOFVCckZZ?=
+ =?utf-8?B?M0ZGZytuSjJEUkttL29UejcrZjMvTW94ZG84b09EUVd2aFNwUW1RZEFSMktV?=
+ =?utf-8?B?NjM5LytuYjVlQUxYTEI1dVVMdGJrQTdzQk1CU0dhbmdmT2NqQXMrQnNhQnNq?=
+ =?utf-8?B?VHJjbU01cjV1Wmo2TkRqTWl2N1Q0dDRtMmo5d0ZOb2EwZ2E1VGt3VzZhOUJS?=
+ =?utf-8?B?UnZja3ZKV3VEYTdpb3lBZ2NyWHR1NC90TjNlN1JCRWJzektQK2FJUHdsTmpX?=
+ =?utf-8?B?ejdnSmJJTU1pWkhIYWJnUXpHMUk1V0NWcmpZS1NDV1RTYmNENXNZeEhhdXBk?=
+ =?utf-8?B?dzR6ZTJ1YUxpODdyUjVab2JCa1ZmUHU0Z2hnWWhMOGxaQlVQQXVDeFI2TlZl?=
+ =?utf-8?B?cFB0TXduYU4yN0xtOXdZeWRHQnRQdmhzZ2U5Y0E5NEtZRkQ4TDAxK0svMXY0?=
+ =?utf-8?B?VW1DZHI4YU41UnBjaFlvdW1mQ3VPR2RobDgzWEQzeDJYUy93ZGdOSEdBNW5B?=
+ =?utf-8?B?Z3c4TTloSEpBbkczZHU0bDFtTGM4cFZhdTB2a0pqQWFRanZkV3Foc2hGbUpJ?=
+ =?utf-8?B?dVhNNlFyZnJlTlNHanVzUk1hQUg4U0hIR1VKOUw3Rm5vNEdJOUprcUxLUGE3?=
+ =?utf-8?B?aWZacjdUOEE0QURsZjlFWkE0QnNRcU1GazZqRDVJTDcrM0psWlRybFZRaUd5?=
+ =?utf-8?B?cEhIWHpGbysrMzlScEJ4eU5YamxmY3VIbEl4eFlGVkNpRkpmczJndlVRdnZX?=
+ =?utf-8?B?VVkySHVpbVBMVHQwamZoOEpxUWcyS2lwVUQwSzd3RzNCSlhUd213UEk2MUJB?=
+ =?utf-8?B?am5wN0FadUNOblhPZ2pEZDRPZlZ4ZEhHVWdMU1pPQkVNSkM1ZVBOVEdHWE1H?=
+ =?utf-8?B?RWhwQVRuNFFDMnZMeC9sYmkxTVhGVEI5L00rV0RQOE9WaE9SVUR0ek9DdUVP?=
+ =?utf-8?B?MjhGRm5wZmloaGlaL3E5RE84Z2haYTRPY3lwQ3hoUkJoRTYzZzEzY0hPbm5B?=
+ =?utf-8?B?OS9ESklUeWxlNURlOE1aWmI5NDRuTXVFOWY3Vlp2TDYzMklFOVcyRklZQmYy?=
+ =?utf-8?B?aW9BMXg1OEJ6WGZ2eGM4Ty9oZ3R1L1VTWnRINmtYZmQ2aWRMTWUyQUY1aW05?=
+ =?utf-8?B?amxZZTk5VXV0R05jMkFiZWdkM0VEdW5OZ2lOUzc5eFF4d0tjdWI5ZW8yV3o5?=
+ =?utf-8?B?b0JLejJzdzBiUzZteWppL2E1aHNtM01RYkJZZ2crZVJxOVlNR29YU3NlNGJX?=
+ =?utf-8?B?UFFHOEhPTVRQSUxjYXQrcXhTRVhyOUlBamEwSHdXKzlaRmhPSkx4cUlTelNm?=
+ =?utf-8?B?Vm5VejZJellBOWxtNU8rT2wrcmdTV3NDNkthYkFlbGxuZWVZckg0dXVYWHZl?=
+ =?utf-8?B?UjdKZnZWUDVxL3U4d202TUlOYTF1R3JFdHNtbTZjWkpkTm5ERjR2bWlMaHZN?=
+ =?utf-8?B?ZnY0aFNXbkZrN012ZmhqQ29IUDBIODFCd1JVVEdsZTdaOVNleDJZTS9EcW1K?=
+ =?utf-8?B?MjhjbjhkZTF4NjUzRysyeDBzWmxmRlZmUFgxYkEvN0ZWaVdHSzNOUmkzRG1S?=
+ =?utf-8?B?bnRPVjlMV09MSTlqQUY2UGN2V3VQYTZrYys5bGMyTnZmK0tKdWM1Rm9KMExD?=
+ =?utf-8?B?UlgzZEgvNUxjamY4RnBqaXFTT3kyeEZYU1NydmxxS1pNdVJxWlR4WmJUeTdu?=
+ =?utf-8?B?M24vdkR3OUNqcUV5Q01zQ3FTRlBnZXNGdzBRQ1dzY2crNVYxeHh5cWZDSGtw?=
+ =?utf-8?B?V0RzWktsZUFVUXNQZG1lZk0zWnFRdFIwRG50aTMxazBHT3FockxMalNzTmV1?=
+ =?utf-8?B?K0hMVlpFRUd4VVRWdXpQMXV3TG5qSlNuSGFPdGR0cWNlSDhSMzc5b3QyM3FF?=
+ =?utf-8?B?M0tUUWF3azc1SVhNQ0xrak50blNVbEJNa1ZWYkJEcHE0WUppdEVadXpoaFFK?=
+ =?utf-8?B?Z1ViNFpFWFRGRTJXOFRPcWdxcmhuSUhlc3h4bnJFeXVmOXljZTFiU0p3K3lJ?=
+ =?utf-8?B?Y2F1SnRYcW9Fc1d1Q2dqODBIUnN1RHcwRmFxVmVJZFVueVBYaXRDamZ4Zzk2?=
+ =?utf-8?B?MGJLMUhVR20zVWNiYjlCR1BYRjJGTWFVWHJVajV1S2daUjcyYnVSVTROYWFr?=
+ =?utf-8?Q?WwuIXKAoCyW+UsixNJvZMtIi9v9GrRCs46ky1WBKQE=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d9be124-206d-4f66-cd62-08da03b499a7
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5740.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 23:12:24.7640
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ze9S2KlvRNmBOnWOZNEnFDUUt/Bh9JY2rrlO9IhAywqYYXyASvTMJxSaYFJ02IjyXOWaQngRVpq5LajJdWHKigQDTtnkl/Op6dL2hh/iv64=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4945
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 21:15:38 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+Hi Shaopeng Tan,
 
-> On 3/9/2022 10:56 PM, Alex Williamson wrote:
-> > On Mon, 24 Jan 2022 23:47:26 +0530
-> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
-> >   
-> >> Currently, if the runtime power management is enabled for vfio-pci
-> >> device in the guest OS, then guest OS will do the register write for
-> >> PCI_PM_CTRL register. This write request will be handled in
-> >> vfio_pm_config_write() where it will do the actual register write
-> >> of PCI_PM_CTRL register. With this, the maximum D3hot state can be
-> >> achieved for low power. If we can use the runtime PM framework,
-> >> then we can achieve the D3cold state which will help in saving
-> >> maximum power.
-> >>
-> >> 1. Since D3cold state can't be achieved by writing PCI standard
-> >>    PM config registers, so this patch adds a new IOCTL which change the
-> >>    PCI device from D3hot to D3cold state and then D3cold to D0 state.
-> >>
-> >> 2. The hypervisors can implement virtual ACPI methods. For
-> >>    example, in guest linux OS if PCI device ACPI node has _PR3 and _PR0
-> >>    power resources with _ON/_OFF method, then guest linux OS makes the
-> >>    _OFF call during D3cold transition and then _ON during D0 transition.
-> >>    The hypervisor can tap these virtual ACPI calls and then do the D3cold
-> >>    related IOCTL in the vfio driver.
-> >>
-> >> 3. The vfio driver uses runtime PM framework to achieve the
-> >>    D3cold state. For the D3cold transition, decrement the usage count and
-> >>    during D0 transition increment the usage count.
-> >>
-> >> 4. For D3cold, the device current power state should be D3hot.
-> >>    Then during runtime suspend, the pci_platform_power_transition() is
-> >>    required for D3cold state. If the D3cold state is not supported, then
-> >>    the device will still be in D3hot state. But with the runtime PM, the
-> >>    root port can now also go into suspended state.
-> >>
-> >> 5. For most of the systems, the D3cold is supported at the root
-> >>    port level. So, when root port will transition to D3cold state, then
-> >>    the vfio PCI device will go from D3hot to D3cold state during its
-> >>    runtime suspend. If root port does not support D3cold, then the root
-> >>    will go into D3hot state.
-> >>
-> >> 6. The runtime suspend callback can now happen for 2 cases: there
-> >>    is no user of vfio device and the case where user has initiated
-> >>    D3cold. The 'runtime_suspend_pending' flag can help to distinguish
-> >>    this case.
-> >>
-> >> 7. There are cases where guest has put PCI device into D3cold
-> >>    state and then on the host side, user has run lspci or any other
-> >>    command which requires access of the PCI config register. In this case,
-> >>    the kernel runtime PM framework will resume the PCI device internally,
-> >>    read the config space and put the device into D3cold state again. Some
-> >>    PCI device needs the SW involvement before going into D3cold state.
-> >>    For the first D3cold state, the driver running in guest side does the SW
-> >>    side steps. But the second D3cold transition will be without guest
-> >>    driver involvement. So, prevent this second d3cold transition by
-> >>    incrementing the device usage count. This will make the device
-> >>    unnecessary in D0 but it's better than failure. In future, we can some
-> >>    mechanism by which we can forward these wake-up request to guest and
-> >>    then the mentioned case can be handled also.
-> >>
-> >> 8. In D3cold, all kind of BAR related access needs to be disabled
-> >>    like D3hot. Additionally, the config space will also be disabled in
-> >>    D3cold state. To prevent access of config space in the D3cold state,
-> >>    increment the runtime PM usage count before doing any config space
-> >>    access. Also, most of the IOCTLs do the config space access, so
-> >>    maintain one safe list and skip the resume only for these safe IOCTLs
-> >>    alone. For other IOCTLs, the runtime PM usage count will be
-> >>    incremented first.
-> >>
-> >> 9. Now, runtime suspend/resume callbacks need to get the vdev
-> >>    reference which can be obtained by dev_get_drvdata(). Currently, the
-> >>    dev_set_drvdata() is being set after returning from
-> >>    vfio_pci_core_register_device(). The runtime callbacks can come
-> >>    anytime after enabling runtime PM so dev_set_drvdata() must happen
-> >>    before that. We can move dev_set_drvdata() inside
-> >>    vfio_pci_core_register_device() itself.
-> >>
-> >> 10. The vfio device user can close the device after putting
-> >>     the device into runtime suspended state so inside
-> >>     vfio_pci_core_disable(), increment the runtime PM usage count.
-> >>
-> >> 11. Runtime PM will be possible only if CONFIG_PM is enabled on
-> >>     the host. So, the IOCTL related code can be put under CONFIG_PM
-> >>     Kconfig.
-> >>
-> >> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >> ---
-> >>  drivers/vfio/pci/vfio_pci.c        |   1 -
-> >>  drivers/vfio/pci/vfio_pci_config.c |  11 +-
-> >>  drivers/vfio/pci/vfio_pci_core.c   | 186 +++++++++++++++++++++++++++--
-> >>  include/linux/vfio_pci_core.h      |   1 +
-> >>  include/uapi/linux/vfio.h          |  21 ++++
-> >>  5 files changed, 211 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
-> >> index c8695baf3b54..4ac3338c8fc7 100644
-> >> --- a/drivers/vfio/pci/vfio_pci.c
-> >> +++ b/drivers/vfio/pci/vfio_pci.c
-> >> @@ -153,7 +153,6 @@ static int vfio_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >>       ret = vfio_pci_core_register_device(vdev);
-> >>       if (ret)
-> >>               goto out_free;
-> >> -     dev_set_drvdata(&pdev->dev, vdev);  
-> > 
-> > Relocating the setting of drvdata should be proposed separately rather
-> > than buried in this patch.  The driver owns drvdata, the driver is the
-> > only consumer of drvdata, so pushing this into the core to impose a
-> > standard for drvdata across all vfio-pci variants doesn't seem like a
-> > good idea to me.
-> >   
->  
->  I will check regarding this part.
->  Mainly drvdata is needed for the runtime PM callbacks which are added
->  inside core layer and we need to get vdev from struct device.
+On 3/10/2022 11:21 PM, Shaopeng Tan wrote:
+> In kselftest framework, a sub test is run using the timeout utility
+> and it will send SIGTERM to the test upon timeout.
 > 
-> >>       return 0;
-> >>
-> >>  out_free:
-> >> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-> >> index dd9ed211ba6f..d20420657959 100644
-> >> --- a/drivers/vfio/pci/vfio_pci_config.c
-> >> +++ b/drivers/vfio/pci/vfio_pci_config.c
-> >> @@ -25,6 +25,7 @@
-> >>  #include <linux/uaccess.h>
-> >>  #include <linux/vfio.h>
-> >>  #include <linux/slab.h>
-> >> +#include <linux/pm_runtime.h>
-> >>
-> >>  #include <linux/vfio_pci_core.h>
-> >>
-> >> @@ -1919,16 +1920,23 @@ static ssize_t vfio_config_do_rw(struct vfio_pci_core_device *vdev, char __user
-> >>  ssize_t vfio_pci_config_rw(struct vfio_pci_core_device *vdev, char __user *buf,
-> >>                          size_t count, loff_t *ppos, bool iswrite)
-> >>  {
-> >> +     struct device *dev = &vdev->pdev->dev;
-> >>       size_t done = 0;
-> >>       int ret = 0;
-> >>       loff_t pos = *ppos;
-> >>
-> >>       pos &= VFIO_PCI_OFFSET_MASK;
-> >>
-> >> +     ret = pm_runtime_resume_and_get(dev);
-> >> +     if (ret < 0)
-> >> +             return ret;
-> >> +
-> >>       while (count) {
-> >>               ret = vfio_config_do_rw(vdev, buf, count, &pos, iswrite);
-> >> -             if (ret < 0)
-> >> +             if (ret < 0) {
-> >> +                     pm_runtime_put(dev);
-> >>                       return ret;
-> >> +             }
-> >>
-> >>               count -= ret;
-> >>               done += ret;
-> >> @@ -1936,6 +1944,7 @@ ssize_t vfio_pci_config_rw(struct vfio_pci_core_device *vdev, char __user *buf,
-> >>               pos += ret;
-> >>       }
-> >>
-> >> +     pm_runtime_put(dev);  
-> > 
-> > What about other config accesses, ex. shared INTx?  We need to
-> > interact with the device command and status register on an incoming
-> > interrupt to test if our device sent an interrupt and to mask it.  The
-> > unmask eventfd can also trigger config space accesses.  Seems
-> > incomplete relative to config space.
-> >   
+> In resctrl_tests, a child process is created by fork() to
+> run benchmark but SIGTERM is not set in sigaction().
+> If SIGTERM signal is received, the parent process will be killed,
+> but the child process still exists.
 > 
->  I will check this path thoroughly.
->  But from initial analysis, it seems we have 2 path here:
+> kill child process before parent process terminates
+> if SIGTERM signal is received.
 > 
->  Most of the mentioned functions are being called from
->  vfio_pci_set_irqs_ioctl() and pm_runtime_resume_and_get()
->  should be called for this ioctl also in this patch.
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> ---
+>  tools/testing/selftests/resctrl/resctrl_val.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->  Second path is when we are inside IRQ handler. For that, we need some
->  other mechanism which I explained below.
->  
-> >>       *ppos += done;
-> >>
-> >>       return done;
-> >> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> >> index 38440d48973f..b70bb4fd940d 100644
-> >> --- a/drivers/vfio/pci/vfio_pci_core.c
-> >> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> >> @@ -371,12 +371,23 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
-> >>       lockdep_assert_held(&vdev->vdev.dev_set->lock);
-> >>
-> >>       /*
-> >> -      * If disable has been called while the power state is other than D0,
-> >> -      * then set the power state in vfio driver to D0. It will help
-> >> -      * in running the logic needed for D0 power state. The subsequent
-> >> -      * runtime PM API's will put the device into the low power state again.
-> >> +      * The vfio device user can close the device after putting the device
-> >> +      * into runtime suspended state so wake up the device first in
-> >> +      * this case.
-> >>        */
-> >> -     vfio_pci_set_power_state_locked(vdev, PCI_D0);
-> >> +     if (vdev->runtime_suspend_pending) {
-> >> +             vdev->runtime_suspend_pending = false;
-> >> +             pm_runtime_resume_and_get(&pdev->dev);  
-> > 
-> > Doesn't vdev->power_state become unsynchronized from the actual device
-> > state here and maybe elsewhere in this patch?  (I see below that maybe
-> > the resume handler accounts for this)
-> >   
-> 
->  Yes. Inside runtime resume handler, it is being changed back to D0.
-> 
-> >> +     } else {
-> >> +             /*
-> >> +              * If disable has been called while the power state is other
-> >> +              * than D0, then set the power state in vfio driver to D0. It
-> >> +              * will help in running the logic needed for D0 power state.
-> >> +              * The subsequent runtime PM API's will put the device into
-> >> +              * the low power state again.
-> >> +              */
-> >> +             vfio_pci_set_power_state_locked(vdev, PCI_D0);
-> >> +     }
-> >>
-> >>       /* Stop the device from further DMA */
-> >>       pci_clear_master(pdev);
-> >> @@ -693,8 +704,8 @@ int vfio_pci_register_dev_region(struct vfio_pci_core_device *vdev,
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(vfio_pci_register_dev_region);
-> >>
-> >> -long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
-> >> -             unsigned long arg)
-> >> +static long vfio_pci_core_ioctl_internal(struct vfio_device *core_vdev,
-> >> +                                      unsigned int cmd, unsigned long arg)
-> >>  {
-> >>       struct vfio_pci_core_device *vdev =
-> >>               container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> >> @@ -1241,10 +1252,119 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
-> >>               default:
-> >>                       return -ENOTTY;
-> >>               }
-> >> +#ifdef CONFIG_PM
-> >> +     } else if (cmd == VFIO_DEVICE_POWER_MANAGEMENT) {  
-> > 
-> > I'd suggest using a DEVICE_FEATURE ioctl for this.  This ioctl doesn't
-> > follow the vfio standard of argsz/flags and doesn't seem to do anything
-> > special that we couldn't achieve with a DEVICE_FEATURE ioctl.
-> >   
-> 
->  Sure. DEVICE_FEATURE can help for this.
-> 
-> >> +             struct vfio_power_management vfio_pm;
-> >> +             struct pci_dev *pdev = vdev->pdev;
-> >> +             bool request_idle = false, request_resume = false;
-> >> +             int ret = 0;
-> >> +
-> >> +             if (copy_from_user(&vfio_pm, (void __user *)arg, sizeof(vfio_pm)))
-> >> +                     return -EFAULT;
-> >> +
-> >> +             /*
-> >> +              * The vdev power related fields are protected with memory_lock
-> >> +              * semaphore.
-> >> +              */
-> >> +             down_write(&vdev->memory_lock);
-> >> +             switch (vfio_pm.d3cold_state) {
-> >> +             case VFIO_DEVICE_D3COLD_STATE_ENTER:
-> >> +                     /*
-> >> +                      * For D3cold, the device should already in D3hot
-> >> +                      * state.
-> >> +                      */
-> >> +                     if (vdev->power_state < PCI_D3hot) {
-> >> +                             ret = EINVAL;
-> >> +                             break;
-> >> +                     }
-> >> +
-> >> +                     if (!vdev->runtime_suspend_pending) {
-> >> +                             vdev->runtime_suspend_pending = true;
-> >> +                             pm_runtime_put_noidle(&pdev->dev);
-> >> +                             request_idle = true;
-> >> +                     }  
-> > 
-> > If I call this multiple times, runtime_suspend_pending prevents it from
-> > doing anything, but what should the return value be in that case?  Same
-> > question for exit.
-> >   
-> 
->  For entry, the user should not call moving the device to D3cold, if it has
->  already requested. So, we can return error in this case. For exit,
->  currently, in this patch, I am clearing runtime_suspend_pending if the
->  wake-up is triggered from the host side (with lspci or some other command).
->  In that case, the exit should not return error. Should we add code to 
->  detect multiple calling of these and ensure only one
->  VFIO_DEVICE_D3COLD_STATE_ENTER/VFIO_DEVICE_D3COLD_STATE_EXIT can be called.
+> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+> index 95224345c78e..b32b96356ec7 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_val.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+> @@ -678,6 +678,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+>  	sigemptyset(&sigact.sa_mask);
+>  	sigact.sa_flags = SA_SIGINFO;
+>  	if (sigaction(SIGINT, &sigact, NULL) ||
+> +	    sigaction(SIGTERM, &sigact, NULL) ||
+>  	    sigaction(SIGHUP, &sigact, NULL)) {
+>  		perror("# sigaction");
+>  		ret = errno;
 
-AIUI, the argument is that we can't re-enter d3cold w/o guest driver
-support, so if an lspci which was unknown to have occurred by the
-device user were to wake the device, it seems the user would see
-arbitrarily different results attempting to put the device to sleep
-again.
+Thank you.
 
-> >> +
-> >> +                     break;
-> >> +
-> >> +             case VFIO_DEVICE_D3COLD_STATE_EXIT:
-> >> +                     /*
-> >> +                      * If the runtime resume has already been run, then
-> >> +                      * the device will be already in D0 state.
-> >> +                      */
-> >> +                     if (vdev->runtime_suspend_pending) {
-> >> +                             vdev->runtime_suspend_pending = false;
-> >> +                             pm_runtime_get_noresume(&pdev->dev);
-> >> +                             request_resume = true;
-> >> +                     }
-> >> +
-> >> +                     break;
-> >> +
-> >> +             default:
-> >> +                     ret = EINVAL;
-> >> +                     break;
-> >> +             }
-> >> +
-> >> +             up_write(&vdev->memory_lock);
-> >> +
-> >> +             /*
-> >> +              * Call the runtime PM API's without any lock. Inside vfio driver
-> >> +              * runtime suspend/resume, the locks can be acquired again.
-> >> +              */
-> >> +             if (request_idle)
-> >> +                     pm_request_idle(&pdev->dev);
-> >> +
-> >> +             if (request_resume)
-> >> +                     pm_runtime_resume(&pdev->dev);
-> >> +
-> >> +             return ret;
-> >> +#endif
-> >>       }
-> >>
-> >>       return -ENOTTY;
-> >>  }
-> >> +
-> >> +long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
-> >> +                      unsigned long arg)
-> >> +{
-> >> +#ifdef CONFIG_PM
-> >> +     struct vfio_pci_core_device *vdev =
-> >> +             container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> >> +     struct device *dev = &vdev->pdev->dev;
-> >> +     bool skip_runtime_resume = false;
-> >> +     long ret;
-> >> +
-> >> +     /*
-> >> +      * The list of commands which are safe to execute when the PCI device
-> >> +      * is in D3cold state. In D3cold state, the PCI config or any other IO
-> >> +      * access won't work.
-> >> +      */
-> >> +     switch (cmd) {
-> >> +     case VFIO_DEVICE_POWER_MANAGEMENT:
-> >> +     case VFIO_DEVICE_GET_INFO:
-> >> +     case VFIO_DEVICE_FEATURE:
-> >> +             skip_runtime_resume = true;
-> >> +             break;  
-> > 
-> > How can we know that there won't be DEVICE_FEATURE calls that touch the
-> > device, the recently added migration via DEVICE_FEATURE does already.
-> > DEVICE_GET_INFO seems equally as prone to breaking via capabilities
-> > that could touch the device.  It seems easier to maintain and more
-> > consistent to the user interface if we simply define that any device
-> > access will resume the device.  
-> 
->  In that case, we can resume the device for all case without
->  maintaining the safe list.
-> 
-> > We need to do something about interrupts though. > Maybe we could error the user ioctl to set d3cold
-> > for devices running in INTx mode, but we also have numerous ways that
-> > the device could be resumed under the user, which might start
-> > triggering MSI/X interrupts?
-> >   
-> 
->  All the resuming we are mainly to prevent any malicious sequence.
->  If we see from normal OS side, then once the guest kernel has moved
->  the device into D3cold, then it should not do any config space
->  access. Similarly, from hypervisor, it should not invoke any
->  ioctl other than moving the device into D0 again when the device
->  is in D3cold. But, preventing the device to go into D3cold when
->  any other ioctl or config space access is happening is not easy,
->  so incrementing usage count before these access will ensure that
->  the device won't go into D3cold. 
-> 
->  For interrupts, can the interrupt happen (Both INTx and MSI/x)
->  if the device is in D3cold?
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
-The device itself shouldn't be generating interrupts and we don't share
-MSI interrupts between devices (afaik), but we do share INTx interrupts.
-
->  In D3cold, the PME events are possible
->  and these events will anyway resume the device first. If the
->  interrupts are not possible then can we disable all the interrupts
->  somehow before going calling runtime PM API's to move the device into D3cold
->  and enable it again during runtime resume. We can wait for all existing
->  Interrupt to be finished first. I am not sure if this is possible. 
-
-In the case of shared INTx, it's not just inflight interrupts.
-Personally I wouldn't have an issue if we increment the usage counter
-when INTx is in use to simply avoid the issue, but does that invalidate
-the use case you're trying to enable?  Otherwise I think we'd need to
-remove and re-add the handler around d3cold.
-
->  Returning error for user ioctl to set d3cold while interrupts are
->  happening needs some synchronization at both interrupt handler and
->  ioctl code and using runtime resume inside interrupt handler
->  may not be safe.
-
-It's not a race condition to synchronize, it's simply that a shared
-INTX interrupt can occur any time and we need to make sure we don't
-touch the device when that occurs, either by preventing d3cold and INTx
-in combination, removing the handler, or maybe adding a test in the
-handler to not touch the device - either of the latter we need to be
-sure we're not risking introducing interrupts storms by being out of
-sync with the device state.
-
-> >> +
-> >> +     default:
-> >> +             break;
-> >> +     }
-> >> +
-> >> +     if (!skip_runtime_resume) {
-> >> +             ret = pm_runtime_resume_and_get(dev);
-> >> +             if (ret < 0)
-> >> +                     return ret;
-> >> +     }
-> >> +
-> >> +     ret = vfio_pci_core_ioctl_internal(core_vdev, cmd, arg);
-> >> +  
-> > 
-> > I'm not a fan of wrapping the main ioctl interface for power management
-> > like this.
-> >   
-> 
->  We need to increment the usage count at entry and decrement it
->  again at exit. Currently, from lot of places directly, we are
->  calling 'return' instead of going at function end. If we need to
->  get rid of wrapper function, then I need to replace all return with
->  'goto' for going at the function end and return after decrementing
->  the usage count. Will this be fine ?
-
-
-Yes, I think that would be preferable.
- 
- 
-> >> +     if (!skip_runtime_resume)
-> >> +             pm_runtime_put(dev);
-> >> +
-> >> +     return ret;
-> >> +#else
-> >> +     return vfio_pci_core_ioctl_internal(core_vdev, cmd, arg);
-> >> +#endif
-> >> +}
-> >>  EXPORT_SYMBOL_GPL(vfio_pci_core_ioctl);
-> >>
-> >>  static ssize_t vfio_pci_rw(struct vfio_pci_core_device *vdev, char __user *buf,
-> >> @@ -1897,6 +2017,7 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
-> >>               return -EBUSY;
-> >>       }
-> >>
-> >> +     dev_set_drvdata(&pdev->dev, vdev);
-> >>       if (pci_is_root_bus(pdev->bus)) {
-> >>               ret = vfio_assign_device_set(&vdev->vdev, vdev);
-> >>       } else if (!pci_probe_reset_slot(pdev->slot)) {
-> >> @@ -1966,6 +2087,7 @@ void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
-> >>               pm_runtime_get_noresume(&pdev->dev);
-> >>
-> >>       pm_runtime_forbid(&pdev->dev);
-> >> +     dev_set_drvdata(&pdev->dev, NULL);
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_device);
-> >>
-> >> @@ -2219,11 +2341,61 @@ static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
-> >>  #ifdef CONFIG_PM
-> >>  static int vfio_pci_core_runtime_suspend(struct device *dev)
-> >>  {
-> >> +     struct pci_dev *pdev = to_pci_dev(dev);
-> >> +     struct vfio_pci_core_device *vdev = dev_get_drvdata(dev);
-> >> +
-> >> +     down_read(&vdev->memory_lock);
-> >> +
-> >> +     /*
-> >> +      * runtime_suspend_pending won't be set if there is no user of vfio pci
-> >> +      * device. In that case, return early and PCI core will take care of
-> >> +      * putting the device in the low power state.
-> >> +      */
-> >> +     if (!vdev->runtime_suspend_pending) {
-> >> +             up_read(&vdev->memory_lock);
-> >> +             return 0;
-> >> +     }  
-> > 
-> > Doesn't this also mean that idle, unused devices can at best sit in
-> > d3hot rather than d3cold?
-> >   
-> 
->  Sorry. I didn't get this point.
-> 
->  For unused devices, the PCI core will move the device into D3cold directly.
-
-Could you point out what path triggers that?  I inferred that this
-function would be called any time the usage count allows transition to
-d3cold and the above test would prevent the device entering d3cold
-unless the user requested it.
-
->  For the used devices, the config space write is happening first before
->  this ioctl is called and the config space write is moving the device
->  into D3hot so we need to do some manual thing here.
-
-Why is it that a user owned device cannot re-enter d3cold without
-driver support, but and idle device does?  Simply because we expect to
-reset the device before returning it back to the host or exposing it to
-a user?  I'd expect that after d3cold->d0 we're essentially at a
-power-on state, which ideally would be similar to a post-reset state,
-so I don't follow how driver support factors in to re-entering d3cold.
-
-> >> +
-> >> +     /*
-> >> +      * The runtime suspend will be called only if device is already at
-> >> +      * D3hot state. Now, change the device state from D3hot to D3cold by
-> >> +      * using platform power management. If setting of D3cold is not
-> >> +      * supported for the PCI device, then the device state will still be
-> >> +      * in D3hot state. The PCI core expects to save the PCI state, if
-> >> +      * driver runtime routine handles the power state management.
-> >> +      */
-> >> +     pci_save_state(pdev);
-> >> +     pci_platform_power_transition(pdev, PCI_D3cold);
-> >> +     up_read(&vdev->memory_lock);
-> >> +
-> >>       return 0;
-> >>  }
-> >>
-> >>  static int vfio_pci_core_runtime_resume(struct device *dev)
-> >>  {
-> >> +     struct pci_dev *pdev = to_pci_dev(dev);
-> >> +     struct vfio_pci_core_device *vdev = dev_get_drvdata(dev);
-> >> +
-> >> +     down_write(&vdev->memory_lock);
-> >> +
-> >> +     /*
-> >> +      * The PCI core will move the device to D0 state before calling the
-> >> +      * driver runtime resume.
-> >> +      */
-> >> +     vfio_pci_set_power_state_locked(vdev, PCI_D0);  
-> > 
-> > Maybe this is where vdev->power_state is kept synchronized?
-> >   
->  
->  Yes. vdev->power_state will be changed here.
-> 
-> >> +
-> >> +     /*
-> >> +      * Some PCI device needs the SW involvement before going to D3cold
-> >> +      * state again. So if there is any wake-up which is not triggered
-> >> +      * by the guest, then increase the usage count to prevent the
-> >> +      * second runtime suspend.
-> >> +      */  
-> > 
-> > Can you give examples of devices that need this and the reason they
-> > need this?  The interface is not terribly deterministic if a random
-> > unprivileged lspci on the host can move devices back to d3hot.   
-> 
->  I am not sure about other device but this is happening for
->  the nvidia GPU itself. 
->  
->  For nvidia GPU, during runtime suspend, we keep the GPU video memory
->  in self-refresh mode for high video memory usage. Each video memory
->  self refesh entry before D3cold requires nvidia SW involvement.
->  Without SW self-refresh sequnece involvement, it won't work. 
-
-
-So we're exposing acpi power interfaces to turn a device off, which
-don't really turn the device off, but leaves it in some sort of
-low-power memory refresh state, rather than a fully off state as I had
-assumed above.  Does this suggest the host firmware ACPI has knowledge
-of the device and does different things?
-
->  Details regarding runtime suspend with self-refresh can be found in
-> 
->  https://download.nvidia.com/XFree86/Linux-x86_64/495.46/README/dynamicpowermanagement.html#VidMemThreshold
-> 
->  But, if GPU video memory usage is low, then we turnoff video memory
->  and save all the allocation in system memory. In this case, SW involvement 
->  is not required. 
-
-Ok, so there's some heuristically determined vram usage where the
-driver favors suspend latency versus power savings and somehow keeps
-the device in this low-power, refresh state versus a fully off state.
-How unique is this behavior to NVIDIA devices?  It seems like we're
-trying to add d3cold, but special case it based on a device that might
-have a rather quirky d3cold behavior.  Is there something we can test
-about the state of the device to know which mode it's using?  Is there
-something we can virtualize on the device to force the driver to use
-the higher latency, lower power d3cold mode that results in fewer
-restrictions?  Or maybe this is just common practice?
-
-> > How useful is this implementation if a notice to the guest of a resumed
-> > device is TBD?  Thanks,
-> > 
-> > Alex
-> >   
-> 
->  I have prototyped this earlier by using eventfd_ctx for pme and whenever we get
->  a resume triggered by host, then it will forward the same to hypervisor.
->  Then in the hypervisor, it can write into virtual root port PME related registers
->  and send PME event which will wake-up the PCI device in the guest side.
->  It will help in handling PME events related wake-up also which are currently
->  disabled in PATCH 2 of this patch series.
-
-But then what does the guest do with the device?  For example, if we
-have a VM with an assigned GPU running an idle desktop where the
-monitor has gone into power save, does running lspci on the host
-randomly wake the desktop and monitor?  I'd like to understand how
-unique the return to d3cold behavior is to this device and whether we
-can restrict that in some way.  An option that's now at our disposal
-would be to create an NVIDIA GPU variant of vfio-pci that has
-sufficient device knowledge to perhaps retrigger the vram refresh
-d3cold state rather than lose vram data going into a standard d3cold
-state.  Thanks,
-
-Alex
-
+Reinette

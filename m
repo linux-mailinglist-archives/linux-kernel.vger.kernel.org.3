@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B284D5E44
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484184D5E45
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347418AbiCKJVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
+        id S1347428AbiCKJVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347391AbiCKJVm (ORCPT
+        with ESMTP id S233886AbiCKJVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:21:42 -0500
+        Fri, 11 Mar 2022 04:21:43 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA0A1BD05E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:39 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:20:36 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5393D1BD051
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:40 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:20:37 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1646990438;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t6zT+CcrwmWPLH8yAbGKwWbIdN/E0nMlaJLrkNb+1l0=;
-        b=rOtfXIt5KFwbvcz6exquAmfkzvHILNxa4xsdUXmZECro8YWL2LC6DBte0zY4XyrZQshrEm
-        0Fdu88IuZXgS7zaKGEQqwvKqfFPqoVz2Uow4qI/3X4hGI0BdlqmgQFn5zS3j5cEi65biGH
-        JNFIvzeXqX/5SgrUy4Rf9wcOGWZpW+vwQUk+ZqQk9/KWojp5oVfGbiVlw+8lx1G7wK0h76
-        VTgNcVrKQIP8vYSJOODbwmAD8FnS3JZ1ZSESwAfkPH97wwGip09JFc5qJaNzS37VxklBfA
-        hmb60vIh8tDEOfj4rQUihjskZbmuj151BbX82LgQdXVtUWn/mk+nv4Znq23YUA==
+        bh=vXp/BwMGaXuQDTZ+03zLkKk4vdPZ/zvYpldZ5HRG09E=;
+        b=HJA8k4Vj1HHzbVh/H8mXLSg3x8VHYHJ+YVv/5qaouSf2jqYNjA5hmAlrRyM9A/YJbZQ5jc
+        b8x9oC932F3s4g1D5f+W1nFkcVPuw/0LHPDG1WQWflc9QHiFecvevGGR8nIAUqK7kJM9IV
+        SwlnnM7ZLnlFFb0s1eErXo72NQ/84b9h9GQe+dK1CvX0gL0yKrcCfL4rEMlk785hXsN4S0
+        HHFtY51DD1wTYAj+arb+2Pu6zWwQXLWoDn3I/G3MXyxZnb6THb9w1njKy3nIiDU59PyqQ2
+        BLQycUiXFJSSh7WlErBDFa5hpDru8QqxBGJqJ5BYjhuNqmJTC/FW172RKcd3yg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1646990438;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t6zT+CcrwmWPLH8yAbGKwWbIdN/E0nMlaJLrkNb+1l0=;
-        b=/S8W5quMFtu1ihZZwqsVID2gEPCuZ/5TchwAdU6Mqrh/jVoY+BMtyZC72+c6fpxSoTf+UN
-        VuxXLZCE/NJxb9Dw==
+        bh=vXp/BwMGaXuQDTZ+03zLkKk4vdPZ/zvYpldZ5HRG09E=;
+        b=5y8PyynJ1+2KBuFlsCRYVn/PZh6aXZnkDV9cBIRj7Ho7JCyy6LFhi7mPevtVZv+sztcNBo
+        x46ltUsFL1y8L3Dw==
 From:   "irqchip-bot for Hector Martin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Dynamically compute
- register offsets
+Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Switch to
+ irq_domain_create_tree and sparse hwirqs
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         tglx@linutronix.de
-In-Reply-To: <20220309192123.152028-6-marcan@marcan.st>
-References: <20220309192123.152028-6-marcan@marcan.st>
+In-Reply-To: <20220309192123.152028-5-marcan@marcan.st>
+References: <20220309192123.152028-5-marcan@marcan.st>
 MIME-Version: 1.0
-Message-ID: <164699043651.16921.6383157549558863615.tip-bot2@tip-bot2>
+Message-ID: <164699043776.16921.13619935458323408850.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,208 +67,244 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     dc97fd6fec009957e81026055fc99a03877ff3b8
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/dc97fd6fec009957e81026055fc99a03877ff3b8
+Commit-ID:     7c841f5f6fa3f991cb76b96cd2378337a74011b3
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/7c841f5f6fa3f991cb76b96cd2378337a74011b3
 Author:        Hector Martin <marcan@marcan.st>
-AuthorDate:    Thu, 10 Mar 2022 04:21:21 +09:00
+AuthorDate:    Thu, 10 Mar 2022 04:21:20 +09:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Fri, 11 Mar 2022 08:59:46 
 
-irqchip/apple-aic: Dynamically compute register offsets
+irqchip/apple-aic: Switch to irq_domain_create_tree and sparse hwirqs
 
-This allows us to support AIC variants with different numbers of IRQs
-based on capability registers.
+This allows us to directly use the hardware event number as the hwirq
+number. Since IRQ events have bit 16 set (type=1), FIQs now move to
+starting at hwirq number 0.
+
+This will become more important once multi-die support is introduced in
+a later commit.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220309192123.152028-6-marcan@marcan.st
+Link: https://lore.kernel.org/r/20220309192123.152028-5-marcan@marcan.st
 ---
- drivers/irqchip/irq-apple-aic.c | 72 ++++++++++++++++++++++++--------
- 1 file changed, 55 insertions(+), 17 deletions(-)
+ drivers/irqchip/irq-apple-aic.c | 71 +++++++++++++++++---------------
+ 1 file changed, 39 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 9648038..4b1ba73 100644
+index 613e0eb..9648038 100644
 --- a/drivers/irqchip/irq-apple-aic.c
 +++ b/drivers/irqchip/irq-apple-aic.c
-@@ -64,7 +64,7 @@
- #include <dt-bindings/interrupt-controller/apple-aic.h>
- 
- /*
-- * AIC registers (MMIO)
-+ * AIC v1 registers (MMIO)
+@@ -68,7 +68,7 @@
   */
  
  #define AIC_INFO		0x0004
-@@ -94,16 +94,14 @@
- #define AIC_IPI_SELF		BIT(31)
+-#define AIC_INFO_NR_HW		GENMASK(15, 0)
++#define AIC_INFO_NR_IRQ		GENMASK(15, 0)
  
- #define AIC_TARGET_CPU		0x3000
--#define AIC_SW_SET		0x4000
--#define AIC_SW_CLR		0x4080
--#define AIC_MASK_SET		0x4100
--#define AIC_MASK_CLR		0x4180
+ #define AIC_CONFIG		0x0010
  
- #define AIC_CPU_IPI_SET(cpu)	(0x5008 + ((cpu) << 7))
- #define AIC_CPU_IPI_CLR(cpu)	(0x500c + ((cpu) << 7))
- #define AIC_CPU_IPI_MASK_SET(cpu) (0x5024 + ((cpu) << 7))
- #define AIC_CPU_IPI_MASK_CLR(cpu) (0x5028 + ((cpu) << 7))
+@@ -77,7 +77,8 @@
+ #define AIC_EVENT_TYPE		GENMASK(31, 16)
+ #define AIC_EVENT_NUM		GENMASK(15, 0)
  
-+#define AIC_MAX_IRQ		0x400
-+
- #define MASK_REG(x)		(4 * ((x) >> 5))
- #define MASK_BIT(x)		BIT((x) & GENMASK(4, 0))
+-#define AIC_EVENT_TYPE_HW	1
++#define AIC_EVENT_TYPE_FIQ	0 /* Software use */
++#define AIC_EVENT_TYPE_IRQ	1
+ #define AIC_EVENT_TYPE_IPI	4
+ #define AIC_EVENT_IPI_OTHER	1
+ #define AIC_EVENT_IPI_SELF	2
+@@ -160,6 +161,11 @@
+ #define MPIDR_CPU(x)			MPIDR_AFFINITY_LEVEL(x, 0)
+ #define MPIDR_CLUSTER(x)		MPIDR_AFFINITY_LEVEL(x, 1)
  
-@@ -189,17 +187,31 @@ DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
- struct aic_info {
- 	int version;
++#define AIC_IRQ_HWIRQ(x)	(FIELD_PREP(AIC_EVENT_TYPE, AIC_EVENT_TYPE_IRQ) | \
++				 FIELD_PREP(AIC_EVENT_NUM, x))
++#define AIC_FIQ_HWIRQ(x)	(FIELD_PREP(AIC_EVENT_TYPE, AIC_EVENT_TYPE_FIQ) | \
++				 FIELD_PREP(AIC_EVENT_NUM, x))
++#define AIC_HWIRQ_IRQ(x)	FIELD_GET(AIC_EVENT_NUM, x)
+ #define AIC_NR_FIQ		4
+ #define AIC_NR_SWIPI		32
  
-+	/* Register offsets */
-+	u32 event;
-+	u32 target_cpu;
-+	u32 sw_set;
-+	u32 sw_clr;
-+	u32 mask_set;
-+	u32 mask_clr;
-+
- 	/* Features */
- 	bool fast_ipi;
- };
- 
- static const struct aic_info aic1_info = {
- 	.version	= 1,
-+
-+	.event		= AIC_EVENT,
-+	.target_cpu	= AIC_TARGET_CPU,
- };
- 
- static const struct aic_info aic1_fipi_info = {
- 	.version	= 1,
- 
-+	.event		= AIC_EVENT,
-+	.target_cpu	= AIC_TARGET_CPU,
-+
- 	.fast_ipi	= true,
- };
- 
-@@ -219,7 +231,9 @@ struct aic_irq_chip {
+@@ -213,7 +219,7 @@ struct aic_irq_chip {
  	void __iomem *base;
  	struct irq_domain *hw_domain;
  	struct irq_domain *ipi_domain;
-+
- 	int nr_irq;
-+	int max_irq;
+-	int nr_hw;
++	int nr_irq;
  
  	struct aic_info info;
  };
-@@ -254,7 +268,7 @@ static void aic_irq_mask(struct irq_data *d)
+@@ -243,18 +249,22 @@ static void aic_ic_write(struct aic_irq_chip *ic, u32 reg, u32 val)
  
- 	u32 irq = AIC_HWIRQ_IRQ(hwirq);
+ static void aic_irq_mask(struct irq_data *d)
+ {
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
+ 	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
  
--	aic_ic_write(ic, AIC_MASK_SET + MASK_REG(irq), MASK_BIT(irq));
-+	aic_ic_write(ic, ic->info.mask_set + MASK_REG(irq), MASK_BIT(irq));
+-	aic_ic_write(ic, AIC_MASK_SET + MASK_REG(irqd_to_hwirq(d)),
+-		     MASK_BIT(irqd_to_hwirq(d)));
++	u32 irq = AIC_HWIRQ_IRQ(hwirq);
++
++	aic_ic_write(ic, AIC_MASK_SET + MASK_REG(irq), MASK_BIT(irq));
  }
  
  static void aic_irq_unmask(struct irq_data *d)
-@@ -264,7 +278,7 @@ static void aic_irq_unmask(struct irq_data *d)
+ {
++	irq_hw_number_t hwirq = irqd_to_hwirq(d);
+ 	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
  
- 	u32 irq = AIC_HWIRQ_IRQ(hwirq);
- 
--	aic_ic_write(ic, AIC_MASK_CLR + MASK_REG(irq), MASK_BIT(irq));
-+	aic_ic_write(ic, ic->info.mask_clr + MASK_REG(irq), MASK_BIT(irq));
+-	aic_ic_write(ic, AIC_MASK_CLR + MASK_REG(d->hwirq),
+-		     MASK_BIT(irqd_to_hwirq(d)));
++	u32 irq = AIC_HWIRQ_IRQ(hwirq);
++
++	aic_ic_write(ic, AIC_MASK_CLR + MASK_REG(irq), MASK_BIT(irq));
  }
  
  static void aic_irq_eoi(struct irq_data *d)
-@@ -287,7 +301,7 @@ static void __exception_irq_entry aic_handle_irq(struct pt_regs *regs)
- 		 * We cannot use a relaxed read here, as reads from DMA buffers
- 		 * need to be ordered after the IRQ fires.
- 		 */
--		event = readl(ic->base + AIC_EVENT);
-+		event = readl(ic->base + ic->info.event);
+@@ -281,8 +291,8 @@ static void __exception_irq_entry aic_handle_irq(struct pt_regs *regs)
  		type = FIELD_GET(AIC_EVENT_TYPE, event);
  		irq = FIELD_GET(AIC_EVENT_NUM, event);
  
-@@ -319,12 +333,14 @@ static int aic_irq_set_affinity(struct irq_data *d,
- 	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
- 	int cpu;
- 
-+	BUG_ON(!ic->info.target_cpu);
-+
- 	if (force)
- 		cpu = cpumask_first(mask_val);
+-		if (type == AIC_EVENT_TYPE_HW)
+-			generic_handle_domain_irq(aic_irqc->hw_domain, irq);
++		if (type == AIC_EVENT_TYPE_IRQ)
++			generic_handle_domain_irq(aic_irqc->hw_domain, event);
+ 		else if (type == AIC_EVENT_TYPE_IPI && irq == 1)
+ 			aic_handle_ipi(regs);
+ 		else if (event != 0)
+@@ -314,7 +324,7 @@ static int aic_irq_set_affinity(struct irq_data *d,
  	else
  		cpu = cpumask_any_and(mask_val, cpu_online_mask);
  
--	aic_ic_write(ic, AIC_TARGET_CPU + AIC_HWIRQ_IRQ(hwirq) * 4, BIT(cpu));
-+	aic_ic_write(ic, ic->info.target_cpu + AIC_HWIRQ_IRQ(hwirq) * 4, BIT(cpu));
+-	aic_ic_write(ic, AIC_TARGET_CPU + hwirq * 4, BIT(cpu));
++	aic_ic_write(ic, AIC_TARGET_CPU + AIC_HWIRQ_IRQ(hwirq) * 4, BIT(cpu));
  	irq_data_update_effective_affinity(d, cpumask_of(cpu));
  
  	return IRQ_SET_MASK_OK;
-@@ -884,8 +900,8 @@ static struct gic_kvm_info vgic_info __initdata = {
- static int __init aic_of_ic_init(struct device_node *node, struct device_node *parent)
+@@ -344,9 +354,7 @@ static struct irq_chip aic_chip = {
+ 
+ static unsigned long aic_fiq_get_idx(struct irq_data *d)
  {
- 	int i;
-+	u32 off;
- 	void __iomem *regs;
--	u32 info;
- 	struct aic_irq_chip *irqc;
- 	const struct of_device_id *match;
+-	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
+-
+-	return irqd_to_hwirq(d) - ic->nr_hw;
++	return AIC_HWIRQ_IRQ(irqd_to_hwirq(d));
+ }
  
-@@ -907,8 +923,30 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ static void aic_fiq_set_mask(struct irq_data *d)
+@@ -434,11 +442,11 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
  
+ 	if (TIMER_FIRING(read_sysreg(cntp_ctl_el0)))
+ 		generic_handle_domain_irq(aic_irqc->hw_domain,
+-					  aic_irqc->nr_hw + AIC_TMR_EL0_PHYS);
++					  AIC_FIQ_HWIRQ(AIC_TMR_EL0_PHYS));
+ 
+ 	if (TIMER_FIRING(read_sysreg(cntv_ctl_el0)))
+ 		generic_handle_domain_irq(aic_irqc->hw_domain,
+-					  aic_irqc->nr_hw + AIC_TMR_EL0_VIRT);
++					  AIC_FIQ_HWIRQ(AIC_TMR_EL0_VIRT));
+ 
+ 	if (is_kernel_in_hyp_mode()) {
+ 		uint64_t enabled = read_sysreg_s(SYS_IMP_APL_VM_TMR_FIQ_ENA_EL2);
+@@ -446,12 +454,12 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+ 		if ((enabled & VM_TMR_FIQ_ENABLE_P) &&
+ 		    TIMER_FIRING(read_sysreg_s(SYS_CNTP_CTL_EL02)))
+ 			generic_handle_domain_irq(aic_irqc->hw_domain,
+-						  aic_irqc->nr_hw + AIC_TMR_EL02_PHYS);
++						  AIC_FIQ_HWIRQ(AIC_TMR_EL02_PHYS));
+ 
+ 		if ((enabled & VM_TMR_FIQ_ENABLE_V) &&
+ 		    TIMER_FIRING(read_sysreg_s(SYS_CNTV_CTL_EL02)))
+ 			generic_handle_domain_irq(aic_irqc->hw_domain,
+-						  aic_irqc->nr_hw + AIC_TMR_EL02_VIRT);
++						  AIC_FIQ_HWIRQ(AIC_TMR_EL02_VIRT));
+ 	}
+ 
+ 	if ((read_sysreg_s(SYS_IMP_APL_PMCR0_EL1) & (PMCR0_IMODE | PMCR0_IACT)) ==
+@@ -496,9 +504,9 @@ static struct irq_chip fiq_chip = {
+ static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
+ 			      irq_hw_number_t hw)
+ {
+-	struct aic_irq_chip *ic = id->host_data;
++	u32 type = FIELD_GET(AIC_EVENT_TYPE, hw);
+ 
+-	if (hw < ic->nr_hw) {
++	if (type == AIC_EVENT_TYPE_IRQ) {
+ 		irq_domain_set_info(id, irq, hw, &aic_chip, id->host_data,
+ 				    handle_fasteoi_irq, NULL, NULL);
+ 		irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(irq)));
+@@ -523,14 +531,14 @@ static int aic_irq_domain_translate(struct irq_domain *id,
+ 
+ 	switch (fwspec->param[0]) {
+ 	case AIC_IRQ:
+-		if (fwspec->param[1] >= ic->nr_hw)
++		if (fwspec->param[1] >= ic->nr_irq)
+ 			return -EINVAL;
+-		*hwirq = fwspec->param[1];
++		*hwirq = AIC_IRQ_HWIRQ(fwspec->param[1]);
+ 		break;
+ 	case AIC_FIQ:
+ 		if (fwspec->param[1] >= AIC_NR_FIQ)
+ 			return -EINVAL;
+-		*hwirq = ic->nr_hw + fwspec->param[1];
++		*hwirq = AIC_FIQ_HWIRQ(fwspec->param[1]);
+ 
+ 		/*
+ 		 * In EL1 the non-redirected registers are the guest's,
+@@ -539,10 +547,10 @@ static int aic_irq_domain_translate(struct irq_domain *id,
+ 		if (!is_kernel_in_hyp_mode()) {
+ 			switch (fwspec->param[1]) {
+ 			case AIC_TMR_GUEST_PHYS:
+-				*hwirq = ic->nr_hw + AIC_TMR_EL0_PHYS;
++				*hwirq = AIC_FIQ_HWIRQ(AIC_TMR_EL0_PHYS);
+ 				break;
+ 			case AIC_TMR_GUEST_VIRT:
+-				*hwirq = ic->nr_hw + AIC_TMR_EL0_VIRT;
++				*hwirq = AIC_FIQ_HWIRQ(AIC_TMR_EL0_VIRT);
+ 				break;
+ 			case AIC_TMR_HV_PHYS:
+ 			case AIC_TMR_HV_VIRT:
+@@ -900,16 +908,15 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
  	aic_irqc = irqc;
  
--	info = aic_ic_read(irqc, AIC_INFO);
--	irqc->nr_irq = FIELD_GET(AIC_INFO_NR_IRQ, info);
-+	switch (irqc->info.version) {
-+	case 1: {
-+		u32 info;
-+
-+		info = aic_ic_read(irqc, AIC_INFO);
-+		irqc->nr_irq = FIELD_GET(AIC_INFO_NR_IRQ, info);
-+		irqc->max_irq = AIC_MAX_IRQ;
-+
-+		off = irqc->info.target_cpu;
-+		off += sizeof(u32) * irqc->max_irq; /* TARGET_CPU */
-+
-+		break;
-+	}
-+	}
-+
-+	irqc->info.sw_set = off;
-+	off += sizeof(u32) * (irqc->max_irq >> 5); /* SW_SET */
-+	irqc->info.sw_clr = off;
-+	off += sizeof(u32) * (irqc->max_irq >> 5); /* SW_CLR */
-+	irqc->info.mask_set = off;
-+	off += sizeof(u32) * (irqc->max_irq >> 5); /* MASK_SET */
-+	irqc->info.mask_clr = off;
-+	off += sizeof(u32) * (irqc->max_irq >> 5); /* MASK_CLR */
-+	off += sizeof(u32) * (irqc->max_irq >> 5); /* HW_STATE */
+ 	info = aic_ic_read(irqc, AIC_INFO);
+-	irqc->nr_hw = FIELD_GET(AIC_INFO_NR_HW, info);
++	irqc->nr_irq = FIELD_GET(AIC_INFO_NR_IRQ, info);
  
  	if (irqc->info.fast_ipi)
  		static_branch_enable(&use_fast_ipi);
-@@ -936,11 +974,11 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 	else
+ 		static_branch_disable(&use_fast_ipi);
+ 
+-	irqc->hw_domain = irq_domain_create_linear(of_node_to_fwnode(node),
+-						   irqc->nr_hw + AIC_NR_FIQ,
+-						   &aic_irq_domain_ops, irqc);
++	irqc->hw_domain = irq_domain_create_tree(of_node_to_fwnode(node),
++						 &aic_irq_domain_ops, irqc);
+ 	if (WARN_ON(!irqc->hw_domain)) {
+ 		iounmap(irqc->base);
+ 		kfree(irqc);
+@@ -928,11 +935,11 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 	set_handle_irq(aic_handle_irq);
  	set_handle_fiq(aic_handle_fiq);
  
- 	for (i = 0; i < BITS_TO_U32(irqc->nr_irq); i++)
--		aic_ic_write(irqc, AIC_MASK_SET + i * 4, U32_MAX);
-+		aic_ic_write(irqc, irqc->info.mask_set + i * 4, U32_MAX);
- 	for (i = 0; i < BITS_TO_U32(irqc->nr_irq); i++)
--		aic_ic_write(irqc, AIC_SW_CLR + i * 4, U32_MAX);
-+		aic_ic_write(irqc, irqc->info.sw_clr + i * 4, U32_MAX);
- 	for (i = 0; i < irqc->nr_irq; i++)
--		aic_ic_write(irqc, AIC_TARGET_CPU + i * 4, 1);
-+		aic_ic_write(irqc, irqc->info.target_cpu + i * 4, 1);
+-	for (i = 0; i < BITS_TO_U32(irqc->nr_hw); i++)
++	for (i = 0; i < BITS_TO_U32(irqc->nr_irq); i++)
+ 		aic_ic_write(irqc, AIC_MASK_SET + i * 4, U32_MAX);
+-	for (i = 0; i < BITS_TO_U32(irqc->nr_hw); i++)
++	for (i = 0; i < BITS_TO_U32(irqc->nr_irq); i++)
+ 		aic_ic_write(irqc, AIC_SW_CLR + i * 4, U32_MAX);
+-	for (i = 0; i < irqc->nr_hw; i++)
++	for (i = 0; i < irqc->nr_irq; i++)
+ 		aic_ic_write(irqc, AIC_TARGET_CPU + i * 4, 1);
  
  	if (!is_kernel_in_hyp_mode())
- 		pr_info("Kernel running in EL1, mapping interrupts");
-@@ -954,8 +992,8 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 
+@@ -948,7 +955,7 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
  	vgic_set_kvm_info(&vgic_info);
  
--	pr_info("Initialized with %d IRQs, %d FIQs, %d vIPIs\n",
--		irqc->nr_irq, AIC_NR_FIQ, AIC_NR_SWIPI);
-+	pr_info("Initialized with %d/%d IRQs, %d FIQs, %d vIPIs",
-+		irqc->nr_irq, irqc->max_irq, AIC_NR_FIQ, AIC_NR_SWIPI);
+ 	pr_info("Initialized with %d IRQs, %d FIQs, %d vIPIs\n",
+-		irqc->nr_hw, AIC_NR_FIQ, AIC_NR_SWIPI);
++		irqc->nr_irq, AIC_NR_FIQ, AIC_NR_SWIPI);
  
  	return 0;
  }

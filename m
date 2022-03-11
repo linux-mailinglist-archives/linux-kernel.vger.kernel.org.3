@@ -2,106 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5BF4D62F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA114D62F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349147AbiCKOJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S237999AbiCKOJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349063AbiCKOJC (ORCPT
+        with ESMTP id S1349070AbiCKOJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:09:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3833466AD6;
-        Fri, 11 Mar 2022 06:07:58 -0800 (PST)
+        Fri, 11 Mar 2022 09:09:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD716D4DA;
+        Fri, 11 Mar 2022 06:07:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA19A61EB0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95A4BB82C0E;
         Fri, 11 Mar 2022 14:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B1DC340F5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4023C340EE;
         Fri, 11 Mar 2022 14:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647007676;
-        bh=oxhEMvElWODt6u9CQYS0TOzkW9ZRnJdY8HwZrc0XbnA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=I1IWazuBan229oTPyXer46CT9bijBRhJJ438WpPXOCKnJHuH3LeSiHJtETgwak7Cp
-         RriKkP6rtuas2UOOhvuwjNOEDgPJfjFZhnKcr8zG6zQViko9vb21SdMBmnSKh1PQSc
-         Qy0JIkMVupausOA+J7sYzH1JLhewlQtAO6NFu5t6x5zXy7qvKJh0SGW3PPVYsP8HRT
-         LGlj/1X9iqZK64iYH49dD+0mM5TFOxCzC9kS/v92w1KYH4o34oP4eI8wkIF2V70jO5
-         6TShJ2I2kNzNWoacqVs4hAwAQiDPtgn4VVvEsv3RJ2XfrO2bKsDhF2zGb3FOd1oouB
-         xG+udw2dDr8EA==
+        bh=4zDhC/rLto0/b3Kci/oZa7j+cAMSPBa2M2LMHEQv/uw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=k+9M8W4SoSXQkg39eXGUFHXhZrvzq8brERzF06NLWVXlYsKY41urBNquHIiijSOyK
+         Vu5Rq0Qu3KYKDTT3Rw7K7vuLlkGBWnBnWOHBBS2elXDI5lW2ZtAgVg1wv3OWvcVlzd
+         9l7u1cIf/V/9yZBX7+DL7sEWTZKFwJ0ahMYcKQPPJONifEgiX1Ex8zWFoB8Nt3KOe0
+         5LArH9fvSAVrhrFhvPMHSs57gy/U4uejYuvYhP9bzvT1zIt4tFhHuScxq3/9rPciEN
+         dQQuyuqerxnLS40N37g/wuTW0Jz5SljeeLLbPXnEEAS20xZ3BsxEj0wAU/SYFkvw/n
+         tyhu0de3RcNnw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfvt-000lAX-Ey; Fri, 11 Mar 2022 15:07:53 +0100
+        id 1nSfvt-000lAa-GP; Fri, 11 Mar 2022 15:07:53 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Andy Gross <agross@kernel.org>,
         Andy Walls <awalls@md.metrocast.net>,
-        Benoit Parrot <bparrot@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Dafna Hirschfeld <dafna@fastmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Fabio Estevam <festevam@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Jacob Chen <jacob-chen@iotwrt.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Leon Romanovsky <leon@kernel.org>,
         Michael Krufky <mkrufky@linuxtv.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Shijie Qin <shijie.qin@nxp.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Todor Tomov <todor.too@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Yong Deng <yong.deng@magewell.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, openbmc@lists.ozlabs.org
-Subject: [PATCH v2 00/38] Sort Makefiles and platform/Kconfig
-Date:   Fri, 11 Mar 2022 15:07:13 +0100
-Message-Id: <cover.1647006877.git.mchehab@kernel.org>
+        Scott K Logan <logans@cottsay.net>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 01/38] media: xc2028: rename the driver from tuner-xc2028
+Date:   Fri, 11 Mar 2022 15:07:14 +0100
+Message-Id: <b0fed7364a4aa503bcf6bd6693bb047f5da4335f.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
+References: <cover.1647006877.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -115,261 +62,420 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Entries at Makefiles and Kconfig files end being merged on random order. 
+This is the only tuner driver that has "tuner-" on its name.
 
-Sort Makefile entries in alphabetical order. 
+Rename it, in order to match all the other tuner drivers.
 
-Sorting Kconfig is harder. So, for now, do it only for platform/Kconfig.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-On platform/Kconfig, there is a mix of:
-	- two ancillary drivers;
-	- per-SoC drivers whose Kconfig/Makefile is on separate files;
-	- per-SoC drivers whose Makefile is on separate files, but the
-	  driver is at platform/Makefile;
-	- per-SoC drivers that are specified inside platform/Makefile and
-	  platform/Kconfig.
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
-Give some order by ensuring that all non-generic drivers will be on
-subdirectories.
-
-The end goal is to have one directory below platform per manufacturer,
-This series prepare for that.
-
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
--
-
-v2:
-  - removed some renames at DVB frontend;
-  - added patches for platform/Kconfig sort.
-
-Mauro Carvalho Chehab (38):
-  media: xc2028: rename the driver from tuner-xc2028
-  media: Makefiles: remove extra spaces
-  media: Makefiles: sort entries where it fits
-  media: platform: Makefile: reorganize its contents
-  media: platform: move platform menu dependencies to drivers
-  media: platform: place Aspeed driver on a separate dir
-  media: platform: place NXP drivers on a separate dir
-  media: platform: place Intel drivers on a separate dir
-  media: platform: place Via drivers on a separate dir
-  media: platform: place Renesas drivers on a separate dir
-  media: platform: allegro-dvt: move config to its own file
-  media: platform: amphion: move config to its own file
-  media: platform: coda: move config to its own file
-  media: platform: exynos-gsc: move config to its own file
-  media: platform: ge2d: move config to its own file
-  media: platform: mtk-jpeg: move config to its own file
-  media: platform: mtk-mdp: move config to its own file
-  media: platform: mtk-vcodec: move config to its own file
-  media: platform: mtk-vpu: move config to its own file
-  media: platform: omap3isp: move config to its own file
-  media: platform: camss: move config to its own file
-  media: platform: venus: move config to its own file
-  media: platform: rga: move config to its own file
-  media: platform: s3c-camif: move config to its own file
-  media: platform: s5p-g2d: move config to its own file
-  media: platform: hva: move config to its own file
-  media: platform: stm32: move config to its own file
-  media: platform: sun8i-di: move config to its own file
-  media: platform: sun8i-rotate: move config to its own file
-  media: platform: vde: move config to its own file
-  media: platform: ti-vpe: move config to its own file
-  media: platform: rkisp1: move config to its own file
-  media: platform: delta: move config to its own file
-  media: platform: bdisp: move config to its own file
-  media: platform: s5p-mfc: move config to its own file
-  media: platform: s5p-jpeg: move config to its own file
-  media: platform: Kconfig: sort entries
-  drivers: media: platform: move some manufacturer entries
-
- .../admin-guide/media/i2c-cardlist.rst        |   2 +-
- MAINTAINERS                                   |  22 +-
- drivers/media/Makefile                        |   4 +-
- drivers/media/cec/platform/Makefile           |  16 +-
- drivers/media/common/Makefile                 |   4 +-
- drivers/media/common/videobuf2/Makefile       |   6 +-
- drivers/media/dvb-frontends/Makefile          | 192 ++---
- drivers/media/firewire/Makefile               |   2 +-
- drivers/media/i2c/Makefile                    |  92 +--
- drivers/media/pci/Makefile                    |  18 +-
- drivers/media/pci/cx18/cx18-driver.c          |   2 +-
- drivers/media/pci/cx18/cx18-dvb.c             |   2 +-
- drivers/media/pci/cx18/cx18-gpio.c            |   2 +-
- drivers/media/pci/cx23885/cx23885-cards.c     |   2 +-
- drivers/media/pci/cx23885/cx23885-dvb.c       |   2 +-
- drivers/media/pci/cx23885/cx23885-video.c     |   2 +-
- drivers/media/pci/cx88/cx88.h                 |   2 +-
- drivers/media/pci/ivtv/ivtv-driver.c          |   2 +-
- drivers/media/pci/ivtv/ivtv-gpio.c            |   2 +-
- drivers/media/pci/saa7134/saa7134-cards.c     |   2 +-
- drivers/media/pci/saa7134/saa7134-dvb.c       |   2 +-
- drivers/media/platform/Kconfig                | 755 ++----------------
- drivers/media/platform/Makefile               | 132 +--
- drivers/media/platform/allegro-dvt/Kconfig    |  16 +
- drivers/media/platform/am437x/Kconfig         |   1 +
- drivers/media/platform/amphion/Kconfig        |  20 +
- drivers/media/platform/aspeed/Kconfig         |  10 +
- drivers/media/platform/aspeed/Makefile        |   1 +
- .../platform/{ => aspeed}/aspeed-video.c      |   0
- drivers/media/platform/atmel/Kconfig          |   4 +
- drivers/media/platform/cadence/Kconfig        |   1 +
- drivers/media/platform/coda/Kconfig           |  17 +
- drivers/media/platform/davinci/Kconfig        |   6 +
- drivers/media/platform/exynos-gsc/Kconfig     |  10 +
- drivers/media/platform/exynos4-is/Kconfig     |   1 +
- drivers/media/platform/imx-jpeg/Kconfig       |   1 +
- drivers/media/platform/imx/Kconfig            |   1 +
- drivers/media/platform/intel/Kconfig          |  11 +
- drivers/media/platform/intel/Makefile         |   1 +
- .../media/platform/{ => intel}/pxa_camera.c   |   0
- drivers/media/platform/marvell-ccic/Kconfig   |   2 +
- drivers/media/platform/meson/ge2d/Kconfig     |  14 +
- drivers/media/platform/mtk-jpeg/Kconfig       |  16 +
- drivers/media/platform/mtk-mdp/Kconfig        |  17 +
- drivers/media/platform/mtk-vcodec/Kconfig     |  36 +
- drivers/media/platform/mtk-vpu/Kconfig        |  15 +
- drivers/media/platform/nxp/Kconfig            |  40 +
- drivers/media/platform/nxp/Makefile           |   5 +
- drivers/media/platform/{ => nxp}/fsl-viu.c    |   0
- drivers/media/platform/{ => nxp}/imx-pxp.c    |   0
- drivers/media/platform/{ => nxp}/imx-pxp.h    |   0
- .../media/platform/{ => nxp}/mx2_emmaprp.c    |   0
- drivers/media/platform/omap/Kconfig           |   1 +
- drivers/media/platform/omap3isp/Kconfig       |  21 +
- drivers/media/platform/qcom/Kconfig           |   3 +
- drivers/media/platform/qcom/camss/Kconfig     |   9 +
- drivers/media/platform/qcom/venus/Kconfig     |  14 +
- drivers/media/platform/renesas/Kconfig        | 119 +++
- drivers/media/platform/renesas/Makefile       |  14 +
- .../media/platform/{ => renesas}/rcar-fcp.c   |   0
- .../media/platform/{ => renesas}/rcar-isp.c   |   0
- .../platform/{ => renesas}/rcar-vin/Kconfig   |   2 +
- .../platform/{ => renesas}/rcar-vin/Makefile  |   0
- .../{ => renesas}/rcar-vin/rcar-core.c        |   0
- .../{ => renesas}/rcar-vin/rcar-csi2.c        |   0
- .../{ => renesas}/rcar-vin/rcar-dma.c         |   0
- .../{ => renesas}/rcar-vin/rcar-v4l2.c        |   0
- .../{ => renesas}/rcar-vin/rcar-vin.h         |   0
- .../media/platform/{ => renesas}/rcar_drif.c  |   0
- .../media/platform/{ => renesas}/rcar_fdp1.c  |   0
- .../media/platform/{ => renesas}/rcar_jpu.c   |   0
- .../platform/{ => renesas}/renesas-ceu.c      |   0
- drivers/media/platform/{ => renesas}/sh_vou.c |   0
- drivers/media/platform/rockchip/Kconfig       |   3 +
- drivers/media/platform/rockchip/rga/Kconfig   |  14 +
- .../media/platform/rockchip/rkisp1/Kconfig    |  19 +
- drivers/media/platform/s3c-camif/Kconfig      |  15 +
- drivers/media/platform/s5p-g2d/Kconfig        |  11 +
- drivers/media/platform/s5p-jpeg/Kconfig       |  12 +
- drivers/media/platform/s5p-mfc/Kconfig        |   9 +
- drivers/media/platform/sti/Kconfig            |   5 +
- drivers/media/platform/sti/bdisp/Kconfig      |  10 +
- drivers/media/platform/sti/c8sectpfe/Kconfig  |   1 +
- drivers/media/platform/sti/delta/Kconfig      |  36 +
- drivers/media/platform/sti/hva/Kconfig        |  26 +
- drivers/media/platform/stm32/Kconfig          |  31 +
- drivers/media/platform/sunxi/Kconfig          |   2 +
- .../media/platform/sunxi/sun4i-csi/Kconfig    |   1 +
- .../media/platform/sunxi/sun6i-csi/Kconfig    |   1 +
- drivers/media/platform/sunxi/sun8i-di/Kconfig |  14 +
- .../media/platform/sunxi/sun8i-rotate/Kconfig |  14 +
- drivers/media/platform/tegra/vde/Kconfig      |  17 +
- drivers/media/platform/ti-vpe/Kconfig         |  62 ++
- drivers/media/platform/via/Kconfig            |  11 +
- drivers/media/platform/via/Makefile           |   1 +
- drivers/media/platform/{ => via}/via-camera.c |   0
- drivers/media/platform/{ => via}/via-camera.h |   0
- drivers/media/platform/xilinx/Kconfig         |   1 +
- drivers/media/radio/Makefile                  |  42 +-
- drivers/media/rc/Makefile                     |  45 +-
- drivers/media/rc/keymaps/Makefile             |  33 +-
- drivers/media/spi/Makefile                    |   5 +-
- drivers/media/test-drivers/Makefile           |  13 +-
- drivers/media/tuners/Makefile                 |  66 +-
- drivers/media/tuners/tuner-types.c            |   2 +-
- .../{tuner-xc2028-types.h => xc2028-types.h}  |   6 +-
- .../media/tuners/{tuner-xc2028.c => xc2028.c} |   6 +-
- .../media/tuners/{tuner-xc2028.h => xc2028.h} |   2 +-
- drivers/media/tuners/xc4000.c                 |   2 +-
- drivers/media/usb/Makefile                    |  25 +-
- drivers/media/usb/dvb-usb/cxusb.c             |   2 +-
- drivers/media/usb/dvb-usb/dib0700_devices.c   |   2 +-
- drivers/media/usb/em28xx/em28xx-i2c.c         |   2 +-
- drivers/media/usb/em28xx/em28xx.h             |   2 +-
- drivers/media/usb/gspca/Makefile              |  88 +-
- drivers/media/usb/tm6000/tm6000-cards.c       |   2 +-
- drivers/media/usb/tm6000/tm6000-dvb.c         |   2 +-
- drivers/media/usb/tm6000/tm6000-i2c.c         |   2 +-
- drivers/media/v4l2-core/Makefile              |  29 +-
- drivers/media/v4l2-core/tuner-core.c          |   2 +-
- 120 files changed, 1248 insertions(+), 1144 deletions(-)
- create mode 100644 drivers/media/platform/allegro-dvt/Kconfig
- create mode 100644 drivers/media/platform/amphion/Kconfig
- create mode 100644 drivers/media/platform/aspeed/Kconfig
- create mode 100644 drivers/media/platform/aspeed/Makefile
- rename drivers/media/platform/{ => aspeed}/aspeed-video.c (100%)
- create mode 100644 drivers/media/platform/coda/Kconfig
- create mode 100644 drivers/media/platform/exynos-gsc/Kconfig
- create mode 100644 drivers/media/platform/intel/Kconfig
- create mode 100644 drivers/media/platform/intel/Makefile
- rename drivers/media/platform/{ => intel}/pxa_camera.c (100%)
- create mode 100644 drivers/media/platform/meson/ge2d/Kconfig
- create mode 100644 drivers/media/platform/mtk-jpeg/Kconfig
- create mode 100644 drivers/media/platform/mtk-mdp/Kconfig
- create mode 100644 drivers/media/platform/mtk-vcodec/Kconfig
- create mode 100644 drivers/media/platform/mtk-vpu/Kconfig
- create mode 100644 drivers/media/platform/nxp/Kconfig
- create mode 100644 drivers/media/platform/nxp/Makefile
- rename drivers/media/platform/{ => nxp}/fsl-viu.c (100%)
- rename drivers/media/platform/{ => nxp}/imx-pxp.c (100%)
- rename drivers/media/platform/{ => nxp}/imx-pxp.h (100%)
- rename drivers/media/platform/{ => nxp}/mx2_emmaprp.c (100%)
- create mode 100644 drivers/media/platform/omap3isp/Kconfig
- create mode 100644 drivers/media/platform/qcom/Kconfig
- create mode 100644 drivers/media/platform/qcom/camss/Kconfig
- create mode 100644 drivers/media/platform/qcom/venus/Kconfig
- create mode 100644 drivers/media/platform/renesas/Kconfig
- create mode 100644 drivers/media/platform/renesas/Makefile
- rename drivers/media/platform/{ => renesas}/rcar-fcp.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar-isp.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/Kconfig (93%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/Makefile (100%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-core.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-csi2.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-dma.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-v4l2.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar-vin/rcar-vin.h (100%)
- rename drivers/media/platform/{ => renesas}/rcar_drif.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar_fdp1.c (100%)
- rename drivers/media/platform/{ => renesas}/rcar_jpu.c (100%)
- rename drivers/media/platform/{ => renesas}/renesas-ceu.c (100%)
- rename drivers/media/platform/{ => renesas}/sh_vou.c (100%)
- create mode 100644 drivers/media/platform/rockchip/Kconfig
- create mode 100644 drivers/media/platform/rockchip/rga/Kconfig
- create mode 100644 drivers/media/platform/rockchip/rkisp1/Kconfig
- create mode 100644 drivers/media/platform/s3c-camif/Kconfig
- create mode 100644 drivers/media/platform/s5p-g2d/Kconfig
- create mode 100644 drivers/media/platform/s5p-jpeg/Kconfig
- create mode 100644 drivers/media/platform/s5p-mfc/Kconfig
- create mode 100644 drivers/media/platform/sti/Kconfig
- create mode 100644 drivers/media/platform/sti/bdisp/Kconfig
- create mode 100644 drivers/media/platform/sti/delta/Kconfig
- create mode 100644 drivers/media/platform/sti/hva/Kconfig
- create mode 100644 drivers/media/platform/stm32/Kconfig
- create mode 100644 drivers/media/platform/sunxi/sun8i-di/Kconfig
- create mode 100644 drivers/media/platform/sunxi/sun8i-rotate/Kconfig
- create mode 100644 drivers/media/platform/tegra/vde/Kconfig
- create mode 100644 drivers/media/platform/ti-vpe/Kconfig
- create mode 100644 drivers/media/platform/via/Kconfig
- create mode 100644 drivers/media/platform/via/Makefile
- rename drivers/media/platform/{ => via}/via-camera.c (100%)
- rename drivers/media/platform/{ => via}/via-camera.h (100%)
+ Documentation/admin-guide/media/i2c-cardlist.rst            | 2 +-
+ MAINTAINERS                                                 | 2 +-
+ drivers/media/pci/cx18/cx18-driver.c                        | 2 +-
+ drivers/media/pci/cx18/cx18-dvb.c                           | 2 +-
+ drivers/media/pci/cx18/cx18-gpio.c                          | 2 +-
+ drivers/media/pci/cx23885/cx23885-cards.c                   | 2 +-
+ drivers/media/pci/cx23885/cx23885-dvb.c                     | 2 +-
+ drivers/media/pci/cx23885/cx23885-video.c                   | 2 +-
+ drivers/media/pci/cx88/cx88.h                               | 2 +-
+ drivers/media/pci/ivtv/ivtv-driver.c                        | 2 +-
+ drivers/media/pci/ivtv/ivtv-gpio.c                          | 2 +-
+ drivers/media/pci/saa7134/saa7134-cards.c                   | 2 +-
+ drivers/media/pci/saa7134/saa7134-dvb.c                     | 2 +-
+ drivers/media/tuners/Makefile                               | 2 +-
+ drivers/media/tuners/tuner-types.c                          | 2 +-
+ .../media/tuners/{tuner-xc2028-types.h => xc2028-types.h}   | 6 +++---
+ drivers/media/tuners/{tuner-xc2028.c => xc2028.c}           | 6 +++---
+ drivers/media/tuners/{tuner-xc2028.h => xc2028.h}           | 2 +-
+ drivers/media/tuners/xc4000.c                               | 2 +-
+ drivers/media/usb/dvb-usb/cxusb.c                           | 2 +-
+ drivers/media/usb/dvb-usb/dib0700_devices.c                 | 2 +-
+ drivers/media/usb/em28xx/em28xx-i2c.c                       | 2 +-
+ drivers/media/usb/em28xx/em28xx.h                           | 2 +-
+ drivers/media/usb/tm6000/tm6000-cards.c                     | 2 +-
+ drivers/media/usb/tm6000/tm6000-dvb.c                       | 2 +-
+ drivers/media/usb/tm6000/tm6000-i2c.c                       | 2 +-
+ drivers/media/v4l2-core/tuner-core.c                        | 2 +-
+ 27 files changed, 31 insertions(+), 31 deletions(-)
  rename drivers/media/tuners/{tuner-xc2028-types.h => xc2028-types.h} (96%)
  rename drivers/media/tuners/{tuner-xc2028.c => xc2028.c} (99%)
  rename drivers/media/tuners/{tuner-xc2028.h => xc2028.h} (99%)
 
+diff --git a/Documentation/admin-guide/media/i2c-cardlist.rst b/Documentation/admin-guide/media/i2c-cardlist.rst
+index db17f39b56cf..ef3b5fff3b01 100644
+--- a/Documentation/admin-guide/media/i2c-cardlist.rst
++++ b/Documentation/admin-guide/media/i2c-cardlist.rst
+@@ -284,7 +284,7 @@ tda9887       TDA 9885/6/7 analog IF demodulator
+ tea5761       TEA 5761 radio tuner
+ tea5767       TEA 5767 radio tuner
+ tua9001       Infineon TUA9001 silicon tuner
+-tuner-xc2028  XCeive xc2028/xc3028 tuners
++xc2028        XCeive xc2028/xc3028 tuners
+ xc4000        Xceive XC4000 silicon tuner
+ xc5000        Xceive XC5000 silicon tuner
+ ============  ==================================================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ae55cd558d95..1a9fb0615925 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21049,7 +21049,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/tuners/tuner-xc2028.*
++F:	drivers/media/tuners/xc2028.*
+ 
+ XDP (eXpress Data Path)
+ M:	Alexei Starovoitov <ast@kernel.org>
+diff --git a/drivers/media/pci/cx18/cx18-driver.c b/drivers/media/pci/cx18/cx18-driver.c
+index 1be9672ae9d4..84260972c343 100644
+--- a/drivers/media/pci/cx18/cx18-driver.c
++++ b/drivers/media/pci/cx18/cx18-driver.c
+@@ -23,7 +23,7 @@
+ #include "cx18-mailbox.h"
+ #include "cx18-ioctl.h"
+ #include "cx18-controls.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include <linux/dma-mapping.h>
+ #include <media/tveeprom.h>
+ 
+diff --git a/drivers/media/pci/cx18/cx18-dvb.c b/drivers/media/pci/cx18/cx18-dvb.c
+index 4c57a294b9fa..33e5a5b5fab4 100644
+--- a/drivers/media/pci/cx18/cx18-dvb.c
++++ b/drivers/media/pci/cx18/cx18-dvb.c
+@@ -22,7 +22,7 @@
+ #include <linux/firmware.h>
+ #include "mt352.h"
+ #include "mt352_priv.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ 
+ DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+ 
+diff --git a/drivers/media/pci/cx18/cx18-gpio.c b/drivers/media/pci/cx18/cx18-gpio.c
+index cf7cfda94107..160c8377e352 100644
+--- a/drivers/media/pci/cx18/cx18-gpio.c
++++ b/drivers/media/pci/cx18/cx18-gpio.c
+@@ -12,7 +12,7 @@
+ #include "cx18-io.h"
+ #include "cx18-cards.h"
+ #include "cx18-gpio.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ 
+ /********************* GPIO stuffs *********************/
+ 
+diff --git a/drivers/media/pci/cx23885/cx23885-cards.c b/drivers/media/pci/cx23885/cx23885-cards.c
+index 0160f909f38c..9244b4320558 100644
+--- a/drivers/media/pci/cx23885/cx23885-cards.c
++++ b/drivers/media/pci/cx23885/cx23885-cards.c
+@@ -15,7 +15,7 @@
+ #include <linux/firmware.h>
+ #include <misc/altera.h>
+ 
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "netup-eeprom.h"
+ #include "netup-init.h"
+ #include "altera-ci.h"
+diff --git a/drivers/media/pci/cx23885/cx23885-dvb.c b/drivers/media/pci/cx23885/cx23885-dvb.c
+index 45c2f4afceb8..8fd5b6ef2428 100644
+--- a/drivers/media/pci/cx23885/cx23885-dvb.c
++++ b/drivers/media/pci/cx23885/cx23885-dvb.c
+@@ -28,7 +28,7 @@
+ #include "xc5000.h"
+ #include "max2165.h"
+ #include "tda10048.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "tuner-simple.h"
+ #include "dib7000p.h"
+ #include "dib0070.h"
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index a380e0920a21..3d03f5e95786 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -24,7 +24,7 @@
+ #include <media/v4l2-ioctl.h>
+ #include <media/v4l2-event.h>
+ #include "cx23885-ioctl.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ 
+ #include <media/drv-intf/cx25840.h>
+ 
+diff --git a/drivers/media/pci/cx88/cx88.h b/drivers/media/pci/cx88/cx88.h
+index ce4acf6de6aa..2ff3226a52ec 100644
+--- a/drivers/media/pci/cx88/cx88.h
++++ b/drivers/media/pci/cx88/cx88.h
+@@ -28,7 +28,7 @@
+ #include <media/i2c/wm8775.h>
+ 
+ #include "cx88-reg.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ 
+ #include <linux/mutex.h>
+ 
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
+index 57d4d5485d7a..f5846c22c799 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.c
++++ b/drivers/media/pci/ivtv/ivtv-driver.c
+@@ -57,7 +57,7 @@
+ #include <linux/dma-mapping.h>
+ #include <media/tveeprom.h>
+ #include <media/i2c/saa7115.h>
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include <uapi/linux/sched/types.h>
+ 
+ /* If you have already X v4l cards, then set this to X. This way
+diff --git a/drivers/media/pci/ivtv/ivtv-gpio.c b/drivers/media/pci/ivtv/ivtv-gpio.c
+index 856e7ab7f33e..6434c0d03a6d 100644
+--- a/drivers/media/pci/ivtv/ivtv-gpio.c
++++ b/drivers/media/pci/ivtv/ivtv-gpio.c
+@@ -10,7 +10,7 @@
+ #include "ivtv-driver.h"
+ #include "ivtv-cards.h"
+ #include "ivtv-gpio.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include <media/tuner.h>
+ #include <media/v4l2-ctrls.h>
+ 
+diff --git a/drivers/media/pci/saa7134/saa7134-cards.c b/drivers/media/pci/saa7134/saa7134-cards.c
+index 0d82a4b27d5b..99be59af3560 100644
+--- a/drivers/media/pci/saa7134/saa7134-cards.c
++++ b/drivers/media/pci/saa7134/saa7134-cards.c
+@@ -15,7 +15,7 @@
+ #include <linux/i2c.h>
+ #include <linux/i2c-algo-bit.h>
+ 
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include <media/v4l2-common.h>
+ #include <media/tveeprom.h>
+ #include "tea5767.h"
+diff --git a/drivers/media/pci/saa7134/saa7134-dvb.c b/drivers/media/pci/saa7134/saa7134-dvb.c
+index d17a1b15faee..9c6cfef03331 100644
+--- a/drivers/media/pci/saa7134/saa7134-dvb.c
++++ b/drivers/media/pci/saa7134/saa7134-dvb.c
+@@ -26,7 +26,7 @@
+ #include "mt352_priv.h" /* FIXME */
+ #include "tda1004x.h"
+ #include "nxt200x.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "xc5000.h"
+ 
+ #include "tda10086.h"
+diff --git a/drivers/media/tuners/Makefile b/drivers/media/tuners/Makefile
+index 7b4f8423501e..abcad519a4f9 100644
+--- a/drivers/media/tuners/Makefile
++++ b/drivers/media/tuners/Makefile
+@@ -5,7 +5,7 @@
+ 
+ tda18271-objs := tda18271-maps.o tda18271-common.o tda18271-fe.o
+ 
+-obj-$(CONFIG_MEDIA_TUNER_XC2028) += tuner-xc2028.o
++obj-$(CONFIG_MEDIA_TUNER_XC2028) += xc2028.o
+ obj-$(CONFIG_MEDIA_TUNER_SIMPLE) += tuner-simple.o
+ # tuner-types will be merged into tuner-simple, in the future
+ obj-$(CONFIG_MEDIA_TUNER_SIMPLE) += tuner-types.o
+diff --git a/drivers/media/tuners/tuner-types.c b/drivers/media/tuners/tuner-types.c
+index 0ed2c5bc082e..ff5a6c0acdd4 100644
+--- a/drivers/media/tuners/tuner-types.c
++++ b/drivers/media/tuners/tuner-types.c
+@@ -1831,7 +1831,7 @@ struct tunertype tuners[] = {
+ 	},
+ 	[TUNER_XC2028] = { /* Xceive 2028 */
+ 		.name   = "Xceive xc2028/xc3028 tuner",
+-		/* see tuner-xc2028.c for details */
++		/* see xc2028.c for details */
+ 	},
+ 	[TUNER_THOMSON_FE6600] = { /* Thomson PAL / DVB-T */
+ 		.name   = "Thomson FE6600",
+diff --git a/drivers/media/tuners/tuner-xc2028-types.h b/drivers/media/tuners/xc2028-types.h
+similarity index 96%
+rename from drivers/media/tuners/tuner-xc2028-types.h
+rename to drivers/media/tuners/xc2028-types.h
+index fcca39d3e006..63a03de1e97b 100644
+--- a/drivers/media/tuners/tuner-xc2028-types.h
++++ b/drivers/media/tuners/xc2028-types.h
+@@ -1,9 +1,9 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * tuner-xc2028_types
++ * xc2028_types
+  *
+- * This file includes internal tipes to be used inside tuner-xc2028.
+- * Shouldn't be included outside tuner-xc2028
++ * This file includes internal tipes to be used inside xc2028.
++ * Shouldn't be included outside xc2028
+  *
+  * Copyright (c) 2007-2008 Mauro Carvalho Chehab <mchehab@kernel.org>
+  */
+diff --git a/drivers/media/tuners/tuner-xc2028.c b/drivers/media/tuners/xc2028.c
+similarity index 99%
+rename from drivers/media/tuners/tuner-xc2028.c
+rename to drivers/media/tuners/xc2028.c
+index 574c3bb135d7..69c2e1b99bf1 100644
+--- a/drivers/media/tuners/tuner-xc2028.c
++++ b/drivers/media/tuners/xc2028.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-// tuner-xc2028
++// xc2028
+ //
+ // Copyright (c) 2007-2008 Mauro Carvalho Chehab <mchehab@kernel.org>
+ //
+@@ -16,8 +16,8 @@
+ #include <linux/slab.h>
+ #include <asm/unaligned.h>
+ #include "tuner-i2c.h"
+-#include "tuner-xc2028.h"
+-#include "tuner-xc2028-types.h"
++#include "xc2028.h"
++#include "xc2028-types.h"
+ 
+ #include <linux/dvb/frontend.h>
+ #include <media/dvb_frontend.h>
+diff --git a/drivers/media/tuners/tuner-xc2028.h b/drivers/media/tuners/xc2028.h
+similarity index 99%
+rename from drivers/media/tuners/tuner-xc2028.h
+rename to drivers/media/tuners/xc2028.h
+index 2dd45d0765d7..072faae7a954 100644
+--- a/drivers/media/tuners/tuner-xc2028.h
++++ b/drivers/media/tuners/xc2028.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * tuner-xc2028
++ * xc2028
+  *
+  * Copyright (c) 2007-2008 Mauro Carvalho Chehab <mchehab@kernel.org>
+  */
+diff --git a/drivers/media/tuners/xc4000.c b/drivers/media/tuners/xc4000.c
+index d9606738ce43..a04dfd5799f7 100644
+--- a/drivers/media/tuners/xc4000.c
++++ b/drivers/media/tuners/xc4000.c
+@@ -22,7 +22,7 @@
+ 
+ #include "xc4000.h"
+ #include "tuner-i2c.h"
+-#include "tuner-xc2028-types.h"
++#include "xc2028-types.h"
+ 
+ static int debug;
+ module_param(debug, int, 0644);
+diff --git a/drivers/media/usb/dvb-usb/cxusb.c b/drivers/media/usb/dvb-usb/cxusb.c
+index 7707de7bae7c..265b960db499 100644
+--- a/drivers/media/usb/dvb-usb/cxusb.c
++++ b/drivers/media/usb/dvb-usb/cxusb.c
+@@ -35,7 +35,7 @@
+ #include "mt352.h"
+ #include "mt352_priv.h"
+ #include "zl10353.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "tuner-simple.h"
+ #include "mxl5005s.h"
+ #include "max2165.h"
+diff --git a/drivers/media/usb/dvb-usb/dib0700_devices.c b/drivers/media/usb/dvb-usb/dib0700_devices.c
+index 710c1afe3e85..08fcf120daf1 100644
+--- a/drivers/media/usb/dvb-usb/dib0700_devices.c
++++ b/drivers/media/usb/dvb-usb/dib0700_devices.c
+@@ -12,7 +12,7 @@
+ #include "dib9000.h"
+ #include "mt2060.h"
+ #include "mt2266.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "xc5000.h"
+ #include "xc4000.h"
+ #include "s5h1411.h"
+diff --git a/drivers/media/usb/em28xx/em28xx-i2c.c b/drivers/media/usb/em28xx/em28xx-i2c.c
+index 255395959255..b9a8d3fbad1a 100644
+--- a/drivers/media/usb/em28xx/em28xx-i2c.c
++++ b/drivers/media/usb/em28xx/em28xx-i2c.c
+@@ -26,7 +26,7 @@
+ #include <linux/i2c.h>
+ #include <linux/jiffies.h>
+ 
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include <media/v4l2-common.h>
+ #include <media/tuner.h>
+ 
+diff --git a/drivers/media/usb/em28xx/em28xx.h b/drivers/media/usb/em28xx/em28xx.h
+index ab167cd1f400..7fc0b68a4a22 100644
+--- a/drivers/media/usb/em28xx/em28xx.h
++++ b/drivers/media/usb/em28xx/em28xx.h
+@@ -41,7 +41,7 @@
+ #include <media/v4l2-fh.h>
+ #include <media/i2c/ir-kbd-i2c.h>
+ #include <media/rc-core.h>
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "xc5000.h"
+ #include "em28xx-reg.h"
+ 
+diff --git a/drivers/media/usb/tm6000/tm6000-cards.c b/drivers/media/usb/tm6000/tm6000-cards.c
+index 5358cd8c4603..98f4a63adc2a 100644
+--- a/drivers/media/usb/tm6000/tm6000-cards.c
++++ b/drivers/media/usb/tm6000/tm6000-cards.c
+@@ -17,7 +17,7 @@
+ 
+ #include "tm6000.h"
+ #include "tm6000-regs.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "xc5000.h"
+ 
+ #define TM6000_BOARD_UNKNOWN			0
+diff --git a/drivers/media/usb/tm6000/tm6000-dvb.c b/drivers/media/usb/tm6000/tm6000-dvb.c
+index 4990fa886d7a..8c2725e4105b 100644
+--- a/drivers/media/usb/tm6000/tm6000-dvb.c
++++ b/drivers/media/usb/tm6000/tm6000-dvb.c
+@@ -16,7 +16,7 @@
+ 
+ #include <media/tuner.h>
+ 
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "xc5000.h"
+ 
+ MODULE_DESCRIPTION("DVB driver extension module for tm5600/6000/6010 based TV cards");
+diff --git a/drivers/media/usb/tm6000/tm6000-i2c.c b/drivers/media/usb/tm6000/tm6000-i2c.c
+index b37782d6f79c..7554b93b82e6 100644
+--- a/drivers/media/usb/tm6000/tm6000-i2c.c
++++ b/drivers/media/usb/tm6000/tm6000-i2c.c
+@@ -15,7 +15,7 @@
+ #include "tm6000-regs.h"
+ #include <media/v4l2-common.h>
+ #include <media/tuner.h>
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ 
+ 
+ /* ----------------------------------------------------------- */
+diff --git a/drivers/media/v4l2-core/tuner-core.c b/drivers/media/v4l2-core/tuner-core.c
+index 12d1e0c33c3c..ad9224a18853 100644
+--- a/drivers/media/v4l2-core/tuner-core.c
++++ b/drivers/media/v4l2-core/tuner-core.c
+@@ -35,7 +35,7 @@
+ #include "tda8290.h"
+ #include "tea5761.h"
+ #include "tea5767.h"
+-#include "tuner-xc2028.h"
++#include "xc2028.h"
+ #include "tuner-simple.h"
+ #include "tda9887.h"
+ #include "xc5000.h"
 -- 
 2.35.1
-
 

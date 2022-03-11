@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEBA4D6718
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757344D671A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350571AbiCKRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S238918AbiCKRE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350527AbiCKREF (ORCPT
+        with ESMTP id S1350517AbiCKREH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:04:05 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163B6B7161;
-        Fri, 11 Mar 2022 09:03:01 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id l1-20020a05600c4f0100b00389645443d2so5721620wmq.2;
-        Fri, 11 Mar 2022 09:03:01 -0800 (PST)
+        Fri, 11 Mar 2022 12:04:07 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E9CBD7C2;
+        Fri, 11 Mar 2022 09:03:03 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id j17so13959751wrc.0;
+        Fri, 11 Mar 2022 09:03:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EWRM1iehW2QlFjJ6a/GsqHD5P7ZNjnnWjj5xp2LrO+s=;
-        b=PyxkmLhaoUJG+GF28xJ09tBWVOW5AlsWmnLN9aqdKMmbnnhrl/iafrrzhvkOIdiaL5
-         9tWpHMyEdKcUWOOBQ51moLSFL5EdcPNev+8jJnXpg9qDn5H2NS78g6rJlaFrnm4AolOS
-         jEmDfsZvCjm39ejSuM1i9i1BsAPlPSLsM+/ARblSOWqu0HbHbsis76zhSsZHIzVQOo3C
-         57oy47uEb+AvY/JsMd1qearc4jqI/hRXVdVDoc+WzwjY5Nx2K1QxCG6fU9F+O9lVTxHM
-         JVvrdBVHY20+Lx4NAvWfvYv974Rq/pym1KJD6wnvtAZ4TfiSX9LgYFXAoGnEhGHQdyZz
-         5lew==
+        bh=iwsLrQT6c+k88K9ITqU2zLknOaYZbpaIvD8leAUiegA=;
+        b=DNvHgYYlkL+pKnnv8hzc0Q+oE5OOGcOD8j7/py2oJBZY/TQyGMwl3PHMAaocTTQPBB
+         xeOlW7qBfgoS7PYJr9bVbg9s6cNVuEvAzEdVTd4OrBy7Npe+SM7H+LgXjkOgBFBfwKID
+         CI6dIVeJqUIm7qyLaDGadFQNRJ/I7cVqOUVdY/JWAKPThF2fm9ZW1XvABrGPhkBJ8jkV
+         Elg618lD+Pkn5zmdFR3jh8BkGmsj+SeDXvBiwWV51WBLFceCl1E6KK664XdqvdZXtrbZ
+         OgWweurUsodV9JAJRa4MP2+0skqMy0Wke4oVd3rb3nj+Sxprcf4oSzMDWAgtB2v61uNt
+         RwjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EWRM1iehW2QlFjJ6a/GsqHD5P7ZNjnnWjj5xp2LrO+s=;
-        b=riiGvpYD3+JWpmGATs2zDeGxIDCKkSYfD3bJN5dmEev7j9GTovny0c9jXLjJTx3BKP
-         FX5h1uKQ+E2MU9y+NBG7FDbbCN2qBrEk21Yl/CYM27tiCheU4EM2+YaoDdexqShXk63v
-         +idD2soTWkA3OmLrAHiC7LRfp3tQDaykkLmwI9AJFwK0SeK1Pbs95zdPl9k24A43/fuq
-         BfFBI1gOnT4NNp30Qhb1kxxqbepgib4z1fF+fbU9T64Ye8CDigzEmDzMTupGVEvTD1F7
-         bh3VEft47w7dKn6MLU3wPLmcEjuVESqLHyFG1Y6pEqRqN6Bw5lqEhS3A6Hey+pUrb+e/
-         Ya4Q==
-X-Gm-Message-State: AOAM533/FwlgmM8RUX6pxlGEN7zjD1eFWeCUCaBkFayJYzgxxZSu8+y8
-        XXLJBDlNR9+pShw7RfpD2vk=
-X-Google-Smtp-Source: ABdhPJwwW/VP6Is9PefkeQrM5gWlqGCg/pMrJuJoiNMwrRTeXp0o+ITHOAh2/7RB7gR5uDXChEMtEg==
-X-Received: by 2002:a05:600c:34c4:b0:389:a4c3:c4b1 with SMTP id d4-20020a05600c34c400b00389a4c3c4b1mr8082440wmq.65.1647018179649;
-        Fri, 11 Mar 2022 09:02:59 -0800 (PST)
+        bh=iwsLrQT6c+k88K9ITqU2zLknOaYZbpaIvD8leAUiegA=;
+        b=PcDsZGxB7iQ5VjHulgvfvqk2khZaJBgithKaUSgtA86S9WFusdBnxfWmZPZbTu1up8
+         LOxBUCZl6Mmba8pOeC9744Ic12nFs/xtB37jsSFoQ7XOkLO6U61vXDpFGmEvlfonaXQE
+         R2P86QAhOe8+b8n8v0+TShBBEHerLqGHsj3jR061G9QnJONXjOuObqMUciYi5MFMZ08j
+         9qf6Jy/qgrAb9E8ij9V3GYyzgM7BihJ3j3o4bHqdkQF4VIKRLXJ9LBBQdG0lWRrJdfb/
+         /H2g2zjklgvfjETokyJVgAQiGcI25nJ1prBg5M11hZX3AVkAfBA0HzcqLE2rdWRvfZtU
+         3REA==
+X-Gm-Message-State: AOAM531dkqzK8MWyBfTmwUnOx4OYjG5DXN2v6S7Gz9k60GVJ1pkbNwls
+        1BCON+oKD+g765dtsnAWD1Q=
+X-Google-Smtp-Source: ABdhPJyvqTvSUrmLkj0DzlrVmQ5Jc2Hg5r5yfUjHfqN3lCBGmYwfQDZIjqPDTkJIWkodCizdeo4Q2w==
+X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id i14-20020adf908e000000b001e7bea73486mr7809967wri.401.1647018181847;
+        Fri, 11 Mar 2022 09:03:01 -0800 (PST)
 Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037bb8df81a2sm14067733wmp.13.2022.03.11.09.02.58
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037bb8df81a2sm14067733wmp.13.2022.03.11.09.03.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 09:02:59 -0800 (PST)
+        Fri, 11 Mar 2022 09:03:01 -0800 (PST)
 From:   Christophe Branchereau <cbranchereau@gmail.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         David Airlie <airlied@linux.ie>,
@@ -57,9 +57,9 @@ To:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: [PATCH v4 3/4] drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and .disable
-Date:   Fri, 11 Mar 2022 18:02:39 +0100
-Message-Id: <20220311170240.173846-4-cbranchereau@gmail.com>
+Subject: [PATCH v4 4/4] dt-bindings: display/panel: Add Leadtek ltk035c5444t
+Date:   Fri, 11 Mar 2022 18:02:40 +0100
+Message-Id: <20220311170240.173846-5-cbranchereau@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311170240.173846-1-cbranchereau@gmail.com>
 References: <20220311170240.173846-1-cbranchereau@gmail.com>
@@ -75,130 +75,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the introduction of bridge_atomic_enable in the ingenic
-drm driver, the crtc is enabled between .prepare and .enable, if
-it exists.
+Add binding for the leadtek ltk035c5444t, which is a 640x480
+mipi-dbi over spi / 24-bit RGB panel based on the newvision
+NV03052C chipset.
 
-Add it so the backlight is only enabled after the crtc is, to avoid
-graphical issues.
+It is found in the Anbernic RG350M mips handheld.
 
 Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
 ---
- drivers/gpu/drm/panel/panel-abt-y030xx067a.c  | 23 ++++++++++++--
- drivers/gpu/drm/panel/panel-innolux-ej030na.c | 31 ++++++++++++++++---
- 2 files changed, 48 insertions(+), 6 deletions(-)
+ .../display/panel/leadtek,ltk035c5444t.yaml   | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
 
-diff --git a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-index f043b484055b..b5736344e3ec 100644
---- a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-+++ b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-@@ -183,8 +183,6 @@ static int y030xx067a_prepare(struct drm_panel *panel)
- 		goto err_disable_regulator;
- 	}
- 
--	msleep(120);
--
- 	return 0;
- 
- err_disable_regulator:
-@@ -202,6 +200,25 @@ static int y030xx067a_unprepare(struct drm_panel *panel)
- 	return 0;
- }
- 
-+static int y030xx067a_enable(struct drm_panel *panel)
-+{
-+	if (panel->backlight) {
-+		/* Wait for the picture to be ready before enabling backlight */
-+		msleep(120);
-+	}
+diff --git a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
+new file mode 100644
+index 000000000000..817a9bed7d5a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/panel/leadtek,ltk035c5444t.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	return 0;
-+}
++title: Leadtek ltk035c5444t 3.5" (640x480 pixels) 24-bit IPS LCD panel
 +
-+static int y030xx067a_disable(struct drm_panel *panel)
-+{
-+	struct y030xx067a *priv = to_y030xx067a(panel);
++maintainers:
++  - Paul Cercueil <paul@crapouillou.net>
++  - Christophe Branchereau <cbranchereau@gmail.com>
 +
-+	regmap_clear_bits(priv->map, 0x06, REG06_XPSAVE);
++allOf:
++  - $ref: panel-common.yaml#
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
 +
-+	return 0;
-+}
++properties:
++  compatible:
++    const: leadtek,ltk035c5444t
 +
- static int y030xx067a_get_modes(struct drm_panel *panel,
- 				struct drm_connector *connector)
- {
-@@ -239,6 +256,8 @@ static int y030xx067a_get_modes(struct drm_panel *panel,
- static const struct drm_panel_funcs y030xx067a_funcs = {
- 	.prepare	= y030xx067a_prepare,
- 	.unprepare	= y030xx067a_unprepare,
-+	.enable		= y030xx067a_enable,
-+	.disable	= y030xx067a_disable,
- 	.get_modes	= y030xx067a_get_modes,
- };
- 
-diff --git a/drivers/gpu/drm/panel/panel-innolux-ej030na.c b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-index c558de3f99be..6de7370185cd 100644
---- a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-+++ b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-@@ -80,8 +80,6 @@ static const struct reg_sequence ej030na_init_sequence[] = {
- 	{ 0x47, 0x08 },
- 	{ 0x48, 0x0f },
- 	{ 0x49, 0x0f },
--
--	{ 0x2b, 0x01 },
- };
- 
- static int ej030na_prepare(struct drm_panel *panel)
-@@ -109,8 +107,6 @@ static int ej030na_prepare(struct drm_panel *panel)
- 		goto err_disable_regulator;
- 	}
- 
--	msleep(120);
--
- 	return 0;
- 
- err_disable_regulator:
-@@ -128,6 +124,31 @@ static int ej030na_unprepare(struct drm_panel *panel)
- 	return 0;
- }
- 
-+static int ej030na_enable(struct drm_panel *panel)
-+{
-+	struct ej030na *priv = to_ej030na(panel);
++  backlight: true
++  port: true
++  power-supply: true
++  reg: true
++  reset-gpios: true
 +
-+	/* standby off */
-+	regmap_write(priv->map, 0x2b, 0x01);
++required:
++  - compatible
++  - power-supply
++  - reset-gpios
 +
-+	if (panel->backlight) {
-+		/* Wait for the picture to be ready before enabling backlight */
-+		msleep(120);
-+	}
++unevaluatedProperties: false
 +
-+	return 0;
-+}
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
 +
-+static int ej030na_disable(struct drm_panel *panel)
-+{
-+	struct ej030na *priv = to_ej030na(panel);
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        panel@0 {
++            compatible = "leadtek,ltk035c5444t";
++            reg = <0>;
 +
-+	/* standby on */
-+	regmap_write(priv->map, 0x2b, 0x00);
++            spi-3wire;
++            spi-max-frequency = <3125000>;
 +
-+	return 0;
-+}
++            reset-gpios = <&gpe 2 GPIO_ACTIVE_LOW>;
 +
- static int ej030na_get_modes(struct drm_panel *panel,
- 			     struct drm_connector *connector)
- {
-@@ -165,6 +186,8 @@ static int ej030na_get_modes(struct drm_panel *panel,
- static const struct drm_panel_funcs ej030na_funcs = {
- 	.prepare	= ej030na_prepare,
- 	.unprepare	= ej030na_unprepare,
-+	.enable		= ej030na_enable,
-+	.disable	= ej030na_disable,
- 	.get_modes	= ej030na_get_modes,
- };
- 
++            backlight = <&backlight>;
++            power-supply = <&vcc>;
++
++            port {
++                panel_input: endpoint {
++                    remote-endpoint = <&panel_output>;
++                };
++            };
++        };
++    };
 -- 
 2.35.1
 

@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A53E4D5EA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408254D5EAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347582AbiCKJog convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Mar 2022 04:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S1347657AbiCKJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbiCKJob (ORCPT
+        with ESMTP id S243478AbiCKJor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:44:31 -0500
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C452E17BC7B;
-        Fri, 11 Mar 2022 01:43:28 -0800 (PST)
-Received: by mail-qv1-f44.google.com with SMTP id e22so6569064qvf.9;
-        Fri, 11 Mar 2022 01:43:28 -0800 (PST)
+        Fri, 11 Mar 2022 04:44:47 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C76B18CC0F
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:43:44 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id h126so16131029ybc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=TIFu/VHHMOB76DBH3VmekrMNPHjC046YZKBlr3Q42S0=;
+        b=yDo/kVojw5JfXILQOZb+2d0iyVAYnJKaRjlTcR3HrYYs523exps6sBTQU0iiynF/Ex
+         fFSHZQS8K8E5JeW26GPi0dPcDi0GKiPab1PuZCjBARn6gNuo2xR6nebgQlGe8UfAJTvR
+         CTVe9ksRUqHUF3nMtQRSqx5LtAkmMERp58MRCOdGot7Jq9EMgtXdfjuvnz5LH2SJemVN
+         fugj6+4p8KWzHCn3e0dE7lDsngCKjxnCB+gEEAerXqz226CsDQhd36CBygZLKVQGpngw
+         UqQiPIZ5WoBTKCPC6YuTcZujHoFblApvAmzNWAkyDv3+6P3qL0blAE8IKPKgVMtVS7ch
+         dLmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/HUxs0nSCg7GyOeJqVRb99UMJe6feL25jT8YqOq9aIM=;
-        b=TaulkoaRGnfOpc3pYJij4XV+EY700eGijGuLtrS9iZFw9dQF20Bb36FxqjhYh7XceN
-         H/iVb+y+ztMdqnUFBAxyqyzWyYO3adClUYzAn6/KWWwSoAx/JYEGUUy2Y10jNHZnXnTe
-         /dZdWhItYxwZv3H5yYXhqWBm8TVUaemPrh2BH9gA/aOPyksg4x1GpMRN6dUfutXwjm8g
-         V6VO8nOjm5tdp9yb7GZi4ZuO7vkkmfD1PkJ3tEOR8jDLUeEr8bVxuHU/pC8HFr59EAZG
-         wUzcR/2RfdomTi3XG1PGwtNIvgkW4I5hy4p0Tz05zqhKxhOr8EXFFcw2977BGx6Uc8Kh
-         86Fw==
-X-Gm-Message-State: AOAM531TKKJWOhz8W6AF7L8Xz0VD2EWfz0UDmlwEhI2Pz0RpKPNZAB+E
-        FvVCNLHxPkulHlr57YANptoWY1Zi172Sjw==
-X-Google-Smtp-Source: ABdhPJy+azsOCUhGIXJN6LVj8KHHwHkZ13Mimr3eppMxmGxZQzntyq+Gir/70aByE9RT6LKQkD0QBw==
-X-Received: by 2002:a05:6214:19c6:b0:433:82b:b900 with SMTP id j6-20020a05621419c600b00433082bb900mr6903303qvc.7.1646991807532;
-        Fri, 11 Mar 2022 01:43:27 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id g21-20020ac85815000000b002e06e2623a7sm4978511qtg.0.2022.03.11.01.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 01:43:26 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id x200so16087443ybe.6;
-        Fri, 11 Mar 2022 01:43:25 -0800 (PST)
-X-Received: by 2002:a25:c54a:0:b0:628:9d7f:866a with SMTP id
- v71-20020a25c54a000000b006289d7f866amr7431768ybe.546.1646991804635; Fri, 11
- Mar 2022 01:43:24 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=TIFu/VHHMOB76DBH3VmekrMNPHjC046YZKBlr3Q42S0=;
+        b=SnsItfbXxjBCFSUa1PN4ev/vXvzOTrYoDqQr1wakC9Oj3M+hEvo7M6FVl3WbV0vQ+U
+         zIRVOqAkCmLRExBmVboc1qbZ4MGRLNCzDL6dbGk2CoqH1ClSXdAKRSpCVsxSAXed0QBt
+         bi78dxc+meCiFhPXOr/V3HpuauiZQkIsX+CEX4fQFZaiDCultoaRJrDNxTVX1CyqJ7K4
+         klMLaIxrrroJHW3VZWnCbzPqKAkn1EEzU9tJq0wSV9pHLW6RTagD7PvwlW++K3gX1+NH
+         hsOviYd4G8ZvqLEZiLNTwlHEAcnO7XiVu8C9bigSBdmobxxBglA4Ejmg9VJyX7DeSCsB
+         PonQ==
+X-Gm-Message-State: AOAM532U1l5M8mIT+2wRnDJHYggy51WXtayXgZbc9fo6yiyyCoEqa35q
+        Mt5oHI/3Wx2+LjyxBWEhOycX6/nY+CF1l3rAfWElN83ZGsQY0kRg
+X-Google-Smtp-Source: ABdhPJybv6BjNreR3Rcq9Uuz3MSOw2t7DM4faUzpVS5N9Jka0gwWccLB0/3djh4fLXQXr+8oysqkC3TNPpXprHy8F4s=
+X-Received: by 2002:a25:ad07:0:b0:628:78df:ff24 with SMTP id
+ y7-20020a25ad07000000b0062878dfff24mr7314699ybi.233.1646991823539; Fri, 11
+ Mar 2022 01:43:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220311093233.10012-1-zajec5@gmail.com>
-In-Reply-To: <20220311093233.10012-1-zajec5@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 11 Mar 2022 10:43:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWjOa7Mv_=HChjqPjSQ2T-b7Z9ZGEAT35q39x_Uy3zeLQ@mail.gmail.com>
-Message-ID: <CAMuHMdWjOa7Mv_=HChjqPjSQ2T-b7Z9ZGEAT35q39x_Uy3zeLQ@mail.gmail.com>
-Subject: Re: [PATCH V3] tty: serial: bcm63xx: use more precise Kconfig symbol
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 11 Mar 2022 10:43:32 +0100
+Message-ID: <CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com>
+Subject: [next] arm64: allmodconfig: kernel BUG at include/linux/page-flags.h:509
+To:     beaub@linux.microsoft.com, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafał,
+Hi,
 
-On Fri, Mar 11, 2022 at 10:32 AM Rafał Miłecki <zajec5@gmail.com> wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
->
-> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
-> documentation change regarding "depends" usage. Adjust Kconfig entry to
-> match current guidelines. Make this symbol available for relevant
-> architectures only.
->
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
-> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform dependency practises")
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Use precise "depends" (exact platforms)
-> V3: Don't default y for COMPILE_TEST
+I'm building and running an arm64 allmodconfig kernel on next.
+Reacently I've seen this error below, for full log see [1].
 
-Thanks for the update!
+[   56.000810][    T1] ------------[ cut here ]------------
+[   56.003178][    T1] kernel BUG at include/linux/page-flags.h:509!
+[   56.006291][    T1] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[   56.008921][    T1] Modules linked in:
+[   56.010600][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G
+        T 5.17.0-rc6-next-20220304 #1
+ff4358f1e97b9d4d3a7966961f455fb8cb5c735d
+[   56.015962][    T1] Hardware name: linux,dummy-virt (DT)
+[   56.018189][    T1] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT
+-SSBS BTYPE=--)
+[   56.021355][    T1] pc : set_page_reservations+0xf8/0x3b8
+[   56.023655][    T1] lr : set_page_reservations+0xec/0x3b8
+[   56.025976][    T1] sp : ffff80000eb37c20
+[   56.027699][    T1] x29: ffff80000eb37c20 x28: ffff0000079d8050
+x27: 0000000000000001
+[   56.031030][    T1] x26: ffff80000a2c6140 x25: ffff80000e240380
+x24: ffff80000b780f70
+[   56.034381][    T1] x23: fffffc0000000000 x22: 000000000028b100
+x21: fffffc000028b100
+[   56.037728][    T1] x20: ffff80000e23ffe0 x19: ffff80000e23ffe0
+x18: 0000000000000000
+[   56.041039][    T1] x17: 0000000000000000 x16: 0000000000000000
+x15: 0000000000000000
+[   56.044323][    T1] x14: 0000000000000000 x13: fffffffffffe34f0
+x12: fffffffffffe3498
+[   56.047644][    T1] x11: 0000000000000000 x10: 0000000000000000 x9
+: 0000000000000000
+[   56.050941][    T1] x8 : 0000000000000000 x7 : 0000000000000000 x6
+: 0000000000000000
+[   56.054258][    T1] x5 : 0000000000000000 x4 : 0000000000000000 x3
+: 0000000000000000
+[   56.057729][    T1] x2 : 0000000000000000 x1 : 0000000000000000 x0
+: 0000000000000001
+[   56.061075][    T1] Call trace:
+[   56.062436][    T1]  set_page_reservations+0xf8/0x3b8
+[   56.064709][    T1]  trace_events_user_init+0x1bc/0x3f8
+[   56.067110][    T1]  do_one_initcall+0x2ac/0x6c0
+[   56.069267][    T1]  do_initcalls+0x17c/0x244
+[   56.071269][    T1]  kernel_init_freeable+0x2a0/0x344
+[   56.073587][    T1]  kernel_init+0x34/0x180
+[   56.075614][    T1]  ret_from_fork+0x10/0x20
+[   56.077655][    T1] Code: 97937293 f9401a80 91000400 f9001a80 (d4210000)
+[   56.080828][    T1] ---[ end trace 0000000000000000 ]---
+[   56.083250][    T1] Kernel panic - not syncing: Oops - BUG: Fatal exception
+[   56.086279][    T1] ---[ end Kernel panic - not syncing: Oops -
+BUG: Fatal exception ]---
 
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
->  config SERIAL_BCM63XX
->         tristate "Broadcom BCM63xx/BCM33xx UART support"
->         select SERIAL_CORE
-> -       depends on COMMON_CLK
-> +       depends on ARCH_BCM4908 || ARCH_BCM_63XX || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
-> +       default ARCH_BCM4908 || ARCH_BCM_63XX || BCM63XX || BMIPS_GENERIC
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
 
-I'm still not convinced about the default, as it wasn't there before,
-hence all existing config files must already have it.
-But if the BCM people think it's good to have, I'll shut up ;-)
+Any idea what happens?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
->         help
->           This enables the driver for the onchip UART core found on
->           the following chipsets:
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Anders
+[1] http://ix.io/3Rkj

@@ -2,535 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9924D663F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FD84D6623
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350319AbiCKQ3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S1350295AbiCKQ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350386AbiCKQ0r (ORCPT
+        with ESMTP id S1350345AbiCKQ0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:26:47 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B3E1D21E0;
-        Fri, 11 Mar 2022 08:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1647015914;
-  x=1678551914;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mFUerXsYecLMbfF90aqK9kLZr/AsxHAsijhoN1YRpYE=;
-  b=lQRk4LfR5AFqN9FEs7wrHk5cH5T9+y25qVLXzvBvAFYLBPTgRsjD1Yqh
-   D2BB7TQBH8uN8bFQAZndlaN4Hj0QSlVPi7YuVlnEQzq7cFtz1tJ0G1F0N
-   iim2PI/3jeCKvDVbVCa5gMFaQoMW0pfNcobauE8P1Q2CajDrQWsmsdCNz
-   2/1is0aMahXVPp6RQd2NPCBPAFkAx3q4uF1YXfCt0Y1p66ENX7//EakTL
-   jzB8nQwB/wx6LXXn8fZaZEftxV+oYE44Xt83uFkmteszNsuBTv/sS9Lg1
-   XI1BEwDCGs3z+soJJ7z4sq02aLv1guD+2iG48gfEwTQT39ZJuBwgfIxn+
-   A==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
-        <shuah@kernel.org>, <brendanhiggins@google.com>,
-        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
-        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
-        <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-Subject: [RFC v1 10/10] rtc: pcf8563: add roadtest
-Date:   Fri, 11 Mar 2022 17:24:45 +0100
-Message-ID: <20220311162445.346685-11-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220311162445.346685-1-vincent.whitchurch@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+        Fri, 11 Mar 2022 11:26:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163D01BA17F;
+        Fri, 11 Mar 2022 08:25:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74FBB61BDF;
+        Fri, 11 Mar 2022 16:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C1CC340F9;
+        Fri, 11 Mar 2022 16:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647015900;
+        bh=aeMzJEZ9sFNCdhritR/EtuJ7IxGKXNGHHq3QcZWtA7Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=E6eHbcUTeiM6GjK/GG2GVEFfaaNefS9Ukh65vGoMYE/f7esyLLb1aF7QuKdlKfmys
+         D+9Kj5SNr0ULXP+YxEmus4//yoE8HLmOqLeFEolcGSReXSToMphFquMW30JDt1KT+8
+         jt0nS+MSKybnCwLwZE4D9odaQSjEjMjr9nTRfB5Vtb/0ckYupweM582QHUw+bUUsgD
+         3Tc13TpqhuF1RDDSIfHnGpmz9/y12iTVDbn3ObtfKASNQWHOGcLXB16xH3Gq8cCo9B
+         L5VA3QIiq3DbmVXThX+ILr66wcNYphWC2E80hAitsTZXTjcwIXoU5F/43I5ErilDZ8
+         eeA4tkA2cyaag==
+Date:   Fri, 11 Mar 2022 10:24:59 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, wse@tuxedocomputers.com,
+        Matt Hansen <2lprbe78@duck.com>
+Subject: Re: [PATCH 3/3] x86/PCI: Preserve host bridge windows completely
+ covered by E820
+Message-ID: <20220311162459.GA304957@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <03675c75-ee6f-5da3-099c-2b82a1865455@redhat.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a roadtest for the PCF8563 RTC driver, testing many of the features
-including alarm and invalid time handling.  Since it's the first
-roadtest for RTC, some helper code for handling the ABI is included.
+[+cc Matt]
 
-The following fixes were posted for problems identified during
-development of these tests:
+On Fri, Mar 11, 2022 at 08:52:31AM +0100, Hans de Goede wrote:
+> On 3/10/22 13:28, Hans de Goede wrote:
+> > On 3/9/22 19:15, Bjorn Helgaas wrote:
+> >> On Sat, Mar 05, 2022 at 11:37:23AM +0100, Hans de Goede wrote:
+> >>> On 3/4/22 16:46, Hans de Goede wrote:
+> >>>> On 3/4/22 16:32, Bjorn Helgaas wrote:
+> >>>>> On Fri, Mar 04, 2022 at 03:16:42PM +0100, Hans de Goede wrote:
+> >>>>>> On 3/4/22 04:51, Bjorn Helgaas wrote:
+> >>>>>>> From: Bjorn Helgaas <bhelgaas@google.com>
+> >>>>>>>
+> >>>>>>> Many folks have reported PCI devices not working.  It could affect any
+> >>>>>>> device, but most reports are for Thunderbolt controllers on Lenovo Yoga and
+> >>>>>>> Clevo Barebone laptops and the touchpad on Lenovo IdeaPads.
+> >>>>>>> ...
+> >>
+> >>>>>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+> >>>>>>> index 7378ea146976..405f0af53e3d 100644
+> >>>>>>> --- a/arch/x86/kernel/resource.c
+> >>>>>>> +++ b/arch/x86/kernel/resource.c
+> >>>>>>> @@ -39,6 +39,17 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
+> >>>>>>>  		e820_start = entry->addr;
+> >>>>>>>  		e820_end = entry->addr + entry->size - 1;
+> >>>>>>>  
+> >>>>>>> +		/*
+> >>>>>>> +		 * If an E820 entry covers just part of the resource, we
+> >>>>>>> +		 * assume E820 is telling us about something like host
+> >>>>>>> +		 * bridge register space that is unavailable for PCI
+> >>>>>>> +		 * devices.  But if it covers the *entire* resource, it's
+> >>>>>>> +		 * more likely just telling us that this is MMIO space, and
+> >>>>>>> +		 * that doesn't need to be removed.
+> >>>>>>> +		 */
+> >>>>>>> +		if (e820_start <= avail->start && avail->end <= e820_end)
+> >>>>>>> +			continue;
+> >>>>>>> +
+> >>>>>>
+> >>>>>> IMHO it would be good to add some logging here, since hitting this is
+> >>>>>> somewhat of a special case. For the Fedora test kernels I did I changed
+> >>>>>> this to:
+> >>>>>>
+> >>>>>> 		if (e820_start <= avail->start && avail->end <= e820_end) {
+> >>>>>> 			dev_info(dev, "resource %pR fully covered by e820 entry [mem %#010Lx-%#010Lx]\n",
+> >>>>>> 				 avail, e820_start, e820_end);
+> >>>>>> 			continue;
+> >>>>>> 		}
+> >>>>>>
+> >>>>>> And I expect/hope to see this new info message on the ideapad with the
+> >>>>>> touchpad issue.
+> >>
+> >> I added this logging.
+> >>
+> >>> So I just got the first report back from the Fedora test 5.16.12 kernel
+> >>> with this series added. Good news on the ideapad this wotks fine to
+> >>> fix the touchpad issue (as expected).
+> >>
+> >> Any "Tested-by" I could add?  If we can, I'd really like to give some
+> >> credit to the folks who suffered through this and helped resolve it.
+> > 
+> > Good point, the reporter of:
+> > https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+> > 
+> > has done most of the ideapad with touchpad issues testing for me
+> > and has been very helpful. I agree he deserves credit for this.
+> > 
+> > I've asked him if he is ok with adding a Tested-by tag and if yes,
+> > which email we should use.
+> 
+> If you can add the following tag that would be great:
+> 
+> Tested-by: Matt Hansen <2lprbe78@duck.com>
 
- - rtc: fix use-after-free on device removal
-   https://lore.kernel.org/lkml/20211210160951.7718-1-vincent.whitchurch@axis.com/
-
- - rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
-   https://lore.kernel.org/lkml/20220301131220.4011810-1-vincent.whitchurch@axis.com/
-
- - rtc: pcf8523: fix alarm interrupt disabling
-   https://lore.kernel.org/lkml/20211103152253.22844-1-vincent.whitchurch@axis.com/
-   (not the same hardware/driver, but this was the original target for
-    test development)
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- .../roadtest/roadtest/tests/rtc/__init__.py   |   0
- .../roadtest/roadtest/tests/rtc/config        |   1 +
- .../roadtest/roadtest/tests/rtc/rtc.py        |  73 ++++
- .../roadtest/tests/rtc/test_pcf8563.py        | 348 ++++++++++++++++++
- 4 files changed, 422 insertions(+)
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
-
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/__init__.py b/tools/testing/roadtest/roadtest/tests/rtc/__init__.py
-new file mode 100644
-index 000000000000..e69de29bb2d1
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/config b/tools/testing/roadtest/roadtest/tests/rtc/config
-new file mode 100644
-index 000000000000..f3654f9d7c19
---- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/rtc/config
-@@ -0,0 +1 @@
-+CONFIG_RTC_DRV_PCF8563=m
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/rtc.py b/tools/testing/roadtest/roadtest/tests/rtc/rtc.py
-new file mode 100644
-index 000000000000..1a2855bfc195
---- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/rtc/rtc.py
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright Axis Communications AB
-+
-+import contextlib
-+import fcntl
-+import struct
-+import typing
-+from pathlib import Path
-+from typing import Any, cast
-+
-+RTC_RD_TIME = 0x80247009
-+RTC_SET_TIME = 0x4024700A
-+RTC_WKALM_SET = 0x4028700F
-+RTC_VL_READ = 0x80047013
-+
-+RTC_IRQF = 0x80
-+RTC_AF = 0x20
-+
-+RTC_VL_DATA_INVALID = 1 << 0
-+
-+
-+class RTCTime(typing.NamedTuple):
-+    tm_sec: int
-+    tm_min: int
-+    tm_hour: int
-+    tm_mday: int
-+    tm_mon: int
-+    tm_year: int
-+    tm_wday: int
-+    tm_yday: int
-+    tm_isdst: int
-+
-+
-+class RTC(contextlib.AbstractContextManager):
-+    def __init__(self, devpath: Path) -> None:
-+        rtc = next(devpath.glob("rtc/rtc*")).name
-+        self.filename = f"/dev/{rtc}"
-+
-+    def __enter__(self) -> "RTC":
-+        self.file = open(self.filename, "rb")
-+        return self
-+
-+    def __exit__(self, *_: Any) -> None:
-+        self.file.close()
-+
-+    def read_time(self) -> RTCTime:
-+        s = struct.Struct("9i")
-+        buf = bytearray(s.size)
-+        fcntl.ioctl(self.file.fileno(), RTC_RD_TIME, buf)
-+        return RTCTime._make(s.unpack(buf))
-+
-+    def set_time(self, tm: RTCTime) -> int:
-+        s = struct.Struct("9i")
-+        buf = bytearray(s.size)
-+        s.pack_into(buf, 0, *tm)
-+        return fcntl.ioctl(self.file.fileno(), RTC_SET_TIME, buf)
-+
-+    def set_wake_alarm(self, enabled: bool, time: RTCTime) -> int:
-+        s = struct.Struct("2B9i")
-+        buf = bytearray(s.size)
-+        s.pack_into(buf, 0, enabled, False, *time)
-+        return fcntl.ioctl(self.file.fileno(), RTC_WKALM_SET, buf)
-+
-+    def read(self) -> int:
-+        s = struct.Struct("L")
-+        buf = self.file.read(s.size)
-+        return cast(int, s.unpack(buf)[0])
-+
-+    def read_vl(self) -> int:
-+        s = struct.Struct("I")
-+        buf = bytearray(s.size)
-+        fcntl.ioctl(self.file.fileno(), RTC_VL_READ, buf)
-+        return cast(int, s.unpack(buf)[0])
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py b/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
-new file mode 100644
-index 000000000000..a9f4c6d92762
---- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
-@@ -0,0 +1,348 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright Axis Communications AB
-+
-+import errno
-+import logging
-+from typing import Any, Final, Optional
-+
-+from roadtest.backend.i2c import I2CModel
-+from roadtest.core.devicetree import DtFragment, DtVar
-+from roadtest.core.hardware import Hardware
-+from roadtest.core.modules import insmod
-+from roadtest.core.suite import UMLTestCase
-+from roadtest.core.sysfs import I2CDriver
-+
-+from . import rtc
-+
-+logger = logging.getLogger(__name__)
-+
-+REG_CONTROL_STATUS_1: Final = 0x00
-+REG_CONTROL_STATUS_2: Final = 0x01
-+REG_VL_SECONDS: Final = 0x02
-+REG_VL_MINUTES: Final = 0x03
-+REG_VL_HOURS: Final = 0x04
-+REG_VL_DAYS: Final = 0x05
-+REG_VL_WEEKDAYS: Final = 0x06
-+REG_VL_CENTURY_MONTHS: Final = 0x07
-+REG_VL_YEARS: Final = 0x08
-+REG_VL_MINUTE_ALARM: Final = 0x09
-+REG_VL_HOUR_ALARM: Final = 0x0A
-+REG_VL_DAY_ALARM: Final = 0x0B
-+REG_VL_WEEKDAY_ALARM: Final = 0x0C
-+REG_CLKOUT_CONTROL: Final = 0x0D
-+REG_TIMER_CONTROL: Final = 0x0E
-+REG_TIMER: Final = 0x0F
-+
-+REG_CONTROL_STATUS_2_AIE: Final = 1 << 1
-+REG_CONTROL_STATUS_2_AF: Final = 1 << 3
-+
-+REG_VL_CENTURY_MONTHS_C: Final = 1 << 7
-+
-+REG_VL_ALARM_AE: Final = 1 << 7
-+
-+
-+class PCF8563(I2CModel):
-+    def __init__(self, int: Optional[int] = None, **kwargs: Any) -> None:
-+        super().__init__(**kwargs)
-+        self.int = int
-+        self._set_int(False)
-+
-+        self.reg_addr = 0
-+        # Reset values from Table 27 in datasheet, with X and - bits set to 0
-+        self.regs = {
-+            REG_CONTROL_STATUS_1: 0b_0000_1000,
-+            REG_CONTROL_STATUS_2: 0b_0000_0000,
-+            REG_VL_SECONDS: 0b_1000_0000,
-+            REG_VL_MINUTES: 0b_0000_0000,
-+            REG_VL_HOURS: 0b_0000_0000,
-+            REG_VL_DAYS: 0b_0000_0000,
-+            REG_VL_WEEKDAYS: 0b_0000_0000,
-+            REG_VL_CENTURY_MONTHS: 0b_0000_0000,
-+            REG_VL_YEARS: 0b_0000_0000,
-+            REG_VL_MINUTE_ALARM: 0b_1000_0000,
-+            REG_VL_HOUR_ALARM: 0b_1000_0000,
-+            REG_VL_DAY_ALARM: 0b_1000_0000,
-+            REG_VL_WEEKDAY_ALARM: 0b_1000_0000,
-+            REG_CLKOUT_CONTROL: 0b_1000_0000,
-+            REG_TIMER_CONTROL: 0b_0000_0011,
-+            REG_TIMER: 0b_0000_0000,
-+        }
-+
-+    def _set_int(self, active: int) -> None:
-+        # Active-low
-+        self.backend.gpio.set(self.int, not active)
-+
-+    def _check_alarm(self, addr: int) -> None:
-+        alarmregs = [
-+            REG_VL_MINUTE_ALARM,
-+            REG_VL_HOUR_ALARM,
-+            REG_VL_DAY_ALARM,
-+            REG_VL_WEEKDAY_ALARM,
-+        ]
-+        timeregs = [
-+            REG_VL_MINUTES,
-+            REG_VL_HOURS,
-+            REG_VL_DAYS,
-+            REG_VL_WEEKDAYS,
-+        ]
-+
-+        if addr not in alarmregs + timeregs:
-+            return
-+
-+        af = all(
-+            self.regs[a] == self.regs[b]
-+            for a, b in zip(alarmregs, timeregs)
-+            if not self.regs[a] & REG_VL_ALARM_AE
-+        )
-+        self.reg_write(REG_CONTROL_STATUS_2, self.regs[REG_CONTROL_STATUS_2] | af << 3)
-+
-+    def _update_irq(self) -> None:
-+        aie = self.regs[REG_CONTROL_STATUS_2] & REG_CONTROL_STATUS_2_AIE
-+        af = self.regs[REG_CONTROL_STATUS_2] & REG_CONTROL_STATUS_2_AF
-+
-+        logger.debug(f"{aie=} {af=}")
-+        self._set_int(aie and af)
-+
-+    def reg_read(self, addr: int) -> int:
-+        val = self.regs[addr]
-+        return val
-+
-+    def reg_write(self, addr: int, val: int) -> None:
-+        assert addr in self.regs
-+        self.regs[addr] = val
-+        logger.debug(f"{addr=:x} {val=:x}")
-+        self._check_alarm(addr)
-+        self._update_irq()
-+
-+    def read(self, len: int) -> bytes:
-+        data = bytearray(len)
-+
-+        for i in range(len):
-+            data[i] = self.reg_read(self.reg_addr)
-+            self.reg_addr = self.reg_addr + 1
-+
-+        return bytes(data)
-+
-+    def write(self, data: bytes) -> None:
-+        self.reg_addr = data[0]
-+
-+        for i, byte in enumerate(data[1:]):
-+            addr = self.reg_addr + i
-+            self.backend.mock.reg_write(addr, byte)
-+            self.reg_write(addr, byte)
-+
-+
-+class TestPCF8563(UMLTestCase):
-+    dts = DtFragment(
-+        src="""
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&i2c {
-+    rtc@$addr$ {
-+        compatible = "nxp,pcf8563";
-+        reg = <0x$addr$>;
-+    };
-+
-+    rtc@$irqaddr$ {
-+        compatible = "nxp,pcf8563";
-+        reg = <0x$irqaddr$>;
-+        interrupt-parent = <&gpio>;
-+        interrupts = <$gpio$ IRQ_TYPE_LEVEL_LOW>;
-+    };
-+};
-+        """,
-+        variables={
-+            "addr": DtVar.I2C_ADDR,
-+            "irqaddr": DtVar.I2C_ADDR,
-+            "gpio": DtVar.GPIO_PIN,
-+        },
-+    )
-+
-+    @classmethod
-+    def setUpClass(cls) -> None:
-+        insmod("rtc-pcf8563")
-+
-+    @classmethod
-+    def tearDownClass(cls) -> None:
-+        # Can't rmmod since alarmtimer holds permanent reference
-+        pass
-+
-+    def setUp(self) -> None:
-+        self.driver = I2CDriver("rtc-pcf8563")
-+        self.hw = Hardware("i2c")
-+        self.hw.load_model(PCF8563, int=self.dts["gpio"])
-+
-+    def tearDown(self) -> None:
-+        self.hw.close()
-+
-+    def test_read_time_invalid(self) -> None:
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            self.assertEqual(rtcdev.read_vl(), rtc.RTC_VL_DATA_INVALID)
-+
-+            with self.assertRaises(OSError) as cm:
-+                rtcdev.read_time()
-+            self.assertEqual(cm.exception.errno, errno.EINVAL)
-+
-+    def test_no_alarm_support(self) -> None:
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            # Make sure the times are valid so we don't get -EINVAL due to
-+            # that.
-+            tm = rtc.RTCTime(
-+                tm_sec=10,
-+                tm_min=1,
-+                tm_hour=1,
-+                tm_mday=1,
-+                tm_mon=0,
-+                tm_year=121,
-+                tm_wday=0,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+            rtcdev.set_time(tm)
-+
-+            alarmtm = tm._replace(tm_sec=0, tm_min=2)
-+            with self.assertRaises(OSError) as cm:
-+                rtcdev.set_wake_alarm(True, alarmtm)
-+            self.assertEqual(cm.exception.errno, errno.EINVAL)
-+
-+    def test_alarm(self) -> None:
-+        addr = self.dts["irqaddr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            tm = rtc.RTCTime(
-+                tm_sec=10,
-+                tm_min=1,
-+                tm_hour=1,
-+                tm_mday=1,
-+                tm_mon=0,
-+                tm_year=121,
-+                tm_wday=5,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+            rtcdev.set_time(tm)
-+
-+            alarmtm = tm._replace(tm_sec=0, tm_min=2)
-+            rtcdev.set_wake_alarm(True, alarmtm)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_last_reg_write(self, REG_VL_MINUTE_ALARM, 0x02)
-+            mock.assert_last_reg_write(self, REG_VL_HOUR_ALARM, 0x01)
-+            mock.assert_last_reg_write(self, REG_VL_DAY_ALARM, 0x01)
-+            mock.assert_last_reg_write(self, REG_VL_WEEKDAY_ALARM, 5)
-+            mock.assert_last_reg_write(
-+                self, REG_CONTROL_STATUS_2, REG_CONTROL_STATUS_2_AIE
-+            )
-+            mock.reset_mock()
-+
-+            self.hw.reg_write(REG_VL_MINUTES, 0x02)
-+            self.hw.kick()
-+
-+            # This waits for the interrupt
-+            self.assertEqual(rtcdev.read() & 0xFF, rtc.RTC_IRQF | rtc.RTC_AF)
-+
-+            alarmtm = tm._replace(tm_sec=0, tm_min=3)
-+            rtcdev.set_wake_alarm(False, alarmtm)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_last_reg_write(self, REG_CONTROL_STATUS_2, 0)
-+
-+    def test_read_time_valid(self) -> None:
-+        self.hw.reg_write(REG_VL_SECONDS, 0x37)
-+        self.hw.reg_write(REG_VL_MINUTES, 0x10)
-+        self.hw.reg_write(REG_VL_HOURS, 0x11)
-+        self.hw.reg_write(REG_VL_DAYS, 0x25)
-+        self.hw.reg_write(REG_VL_WEEKDAYS, 0x00)
-+        self.hw.reg_write(REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12)
-+        self.hw.reg_write(REG_VL_YEARS, 0x21)
-+
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            tm = rtcdev.read_time()
-+            self.assertEqual(
-+                tm,
-+                rtc.RTCTime(
-+                    tm_sec=37,
-+                    tm_min=10,
-+                    tm_hour=11,
-+                    tm_mday=25,
-+                    tm_mon=11,
-+                    tm_year=121,
-+                    tm_wday=0,
-+                    tm_yday=0,
-+                    tm_isdst=0,
-+                ),
-+            )
-+
-+    def test_set_time_after_invalid(self) -> None:
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            self.assertEqual(rtcdev.read_vl(), rtc.RTC_VL_DATA_INVALID)
-+
-+            tm = rtc.RTCTime(
-+                tm_sec=37,
-+                tm_min=10,
-+                tm_hour=11,
-+                tm_mday=25,
-+                tm_mon=11,
-+                tm_year=121,
-+                tm_wday=0,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+
-+            rtcdev.set_time(tm)
-+            tm2 = rtcdev.read_time()
-+            self.assertEqual(tm, tm2)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_VL_SECONDS, 0x37)
-+            mock.assert_reg_write_once(self, REG_VL_MINUTES, 0x10)
-+            mock.assert_reg_write_once(self, REG_VL_HOURS, 0x11)
-+            mock.assert_reg_write_once(self, REG_VL_DAYS, 0x25)
-+            mock.assert_reg_write_once(self, REG_VL_WEEKDAYS, 0x00)
-+            # The driver uses the wrong polarity of the Century bit
-+            # if the time was invalid.  This probably doesn't matter(?).
-+            mock.assert_reg_write_once(self, REG_VL_CENTURY_MONTHS, 0 << 7 | 0x12)
-+            mock.assert_reg_write_once(self, REG_VL_YEARS, 0x21)
-+
-+            self.assertEqual(rtcdev.read_vl(), 0)
-+
-+    def test_set_time_after_valid(self) -> None:
-+        self.hw.reg_write(REG_VL_SECONDS, 0x37)
-+        self.hw.reg_write(REG_VL_MINUTES, 0x10)
-+        self.hw.reg_write(REG_VL_HOURS, 0x11)
-+        self.hw.reg_write(REG_VL_DAYS, 0x25)
-+        self.hw.reg_write(REG_VL_WEEKDAYS, 0x00)
-+        self.hw.reg_write(REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12)
-+        self.hw.reg_write(REG_VL_YEARS, 0x21)
-+
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            tm = rtc.RTCTime(
-+                tm_sec=37,
-+                tm_min=10,
-+                tm_hour=11,
-+                tm_mday=25,
-+                tm_mon=11,
-+                tm_year=121,
-+                tm_wday=0,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+
-+            rtcdev.set_time(tm)
-+            tm2 = rtcdev.read_time()
-+            self.assertEqual(tm, tm2)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_VL_SECONDS, 0x37)
-+            mock.assert_reg_write_once(self, REG_VL_MINUTES, 0x10)
-+            mock.assert_reg_write_once(self, REG_VL_HOURS, 0x11)
-+            mock.assert_reg_write_once(self, REG_VL_DAYS, 0x25)
-+            mock.assert_reg_write_once(self, REG_VL_WEEKDAYS, 0x00)
-+            mock.assert_reg_write_once(
-+                self, REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12
-+            )
-+            mock.assert_reg_write_once(self, REG_VL_YEARS, 0x21)
--- 
-2.34.1
-
+Done, thank you very much, Matt!  Many people will benefit from your
+work.

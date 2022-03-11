@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBF34D5DDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BACE4D5DE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241909AbiCKIvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S242500AbiCKIve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238171AbiCKIv2 (ORCPT
+        with ESMTP id S234599AbiCKIv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 03:51:28 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443F8574AD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB51B754E
         for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:50:24 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nSayY-0004dr-AU; Fri, 11 Mar 2022 09:50:18 +0100
+        id 1nSayY-0004ds-AX; Fri, 11 Mar 2022 09:50:18 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nSayV-00552v-Nv; Fri, 11 Mar 2022 09:50:15 +0100
+        id 1nSayV-005534-Oq; Fri, 11 Mar 2022 09:50:15 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
@@ -31,9 +31,9 @@ To:     "David S. Miller" <davem@davemloft.net>,
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org, paskripkin@gmail.com
-Subject: [PATCH net-next v2 3/4] net: usb: asix: make use of mdiobus_get_phy and phy_connect_direct
-Date:   Fri, 11 Mar 2022 09:50:13 +0100
-Message-Id: <20220311085014.1210963-3-o.rempel@pengutronix.de>
+Subject: [PATCH net-next v2 4/4] net: usb: asix: suspend embedded PHY if external is used
+Date:   Fri, 11 Mar 2022 09:50:14 +0100
+Message-Id: <20220311085014.1210963-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220311085014.1210963-1-o.rempel@pengutronix.de>
 References: <20220311085014.1210963-1-o.rempel@pengutronix.de>
@@ -52,57 +52,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In most cases we use own mdio bus, there is no need to create and store
-string for the PHY address.
+In case external PHY is used, we need to take care of embedded PHY.
+Since there are no methods to disable this PHY from the MAC side and
+keeping RMII reference clock, we need to suspend it.
+
+This patch will reduce electrical noise (PHY is continuing to send FLPs)
+and power consumption by 0,22W.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/net/usb/asix.h         |  1 -
- drivers/net/usb/asix_devices.c | 19 ++++++++++---------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+changes v2:
+- rename internal to embedded PHY
+- add note about refclock dependency
+---
+ drivers/net/usb/asix.h         |  3 +++
+ drivers/net/usb/asix_devices.c | 18 +++++++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-index 691f37f45238..072760d76a72 100644
+index 072760d76a72..2c81236c6c7c 100644
 --- a/drivers/net/usb/asix.h
 +++ b/drivers/net/usb/asix.h
-@@ -184,7 +184,6 @@ struct asix_common_private {
+@@ -158,6 +158,8 @@
+ #define AX_EEPROM_MAGIC		0xdeadbeef
+ #define AX_EEPROM_LEN		0x200
+ 
++#define AX_EMBD_PHY_ADDR	0x10
++
+ /* This structure cannot exceed sizeof(unsigned long [5]) AKA 20 bytes */
+ struct asix_data {
+ 	u8 multi_filter[AX_MCAST_FILTER_SIZE];
+@@ -183,6 +185,7 @@ struct asix_common_private {
+ 	struct asix_rx_fixup_info rx_fixup_info;
  	struct mii_bus *mdio;
  	struct phy_device *phydev;
++	struct phy_device *phydev_int;
  	u16 phy_addr;
--	char phy_name[20];
  	bool embd_phy;
  	u8 chipcode;
- };
 diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index a0c02cd53472..40046d23d986 100644
+index 40046d23d986..4241852f392b 100644
 --- a/drivers/net/usb/asix_devices.c
 +++ b/drivers/net/usb/asix_devices.c
-@@ -661,15 +661,16 @@ static int ax88772_init_phy(struct usbnet *dev)
- 	struct asix_common_private *priv = dev->driver_priv;
- 	int ret;
+@@ -679,6 +679,22 @@ static int ax88772_init_phy(struct usbnet *dev)
  
--	snprintf(priv->phy_name, sizeof(priv->phy_name), PHY_ID_FMT,
--		 priv->mdio->id, priv->phy_addr);
--
--	priv->phydev = phy_connect(dev->net, priv->phy_name, &asix_adjust_link,
--				   PHY_INTERFACE_MODE_INTERNAL);
--	if (IS_ERR(priv->phydev)) {
--		netdev_err(dev->net, "Could not connect to PHY device %s\n",
--			   priv->phy_name);
--		ret = PTR_ERR(priv->phydev);
-+	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
-+	if (!priv->phydev) {
-+		netdev_err(dev->net, "Could not find PHY\n");
+ 	phy_attached_info(priv->phydev);
+ 
++	if (priv->embd_phy)
++		return 0;
++
++	/* In case main PHY is not the embedded PHY and MAC is RMII clock
++	 * provider, we need to suspend embedded PHY by keeping PLL enabled
++	 * (AX_SWRESET_IPPD == 0).
++	 */
++	priv->phydev_int = mdiobus_get_phy(priv->mdio, AX_EMBD_PHY_ADDR);
++	if (!priv->phydev_int) {
++		netdev_err(dev->net, "Could not find internal PHY\n");
 +		return -ENODEV;
 +	}
 +
-+	ret = phy_connect_direct(dev->net, priv->phydev, &asix_adjust_link,
-+				 PHY_INTERFACE_MODE_INTERNAL);
-+	if (ret) {
-+		netdev_err(dev->net, "Could not connect PHY\n");
- 		return ret;
- 	}
++	priv->phydev_int->mac_managed_pm = 1;
++	phy_suspend(priv->phydev_int);
++
+ 	return 0;
+ }
  
+@@ -734,7 +750,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 		return ret;
+ 
+ 	priv->phy_addr = ret;
+-	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
++	priv->embd_phy = ((priv->phy_addr & 0x1f) == AX_EMBD_PHY_ADDR);
+ 
+ 	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1,
+ 			    &priv->chipcode, 0);
 -- 
 2.30.2
 

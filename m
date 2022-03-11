@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B8F4D5FED
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3CA4D6001
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiCKKn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        id S240795AbiCKKqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiCKKnz (ORCPT
+        with ESMTP id S233132AbiCKKqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:43:55 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894866929C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:42:52 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 39B143F30F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646995371;
-        bh=x4TvzHF8QuKQ3/zOGOuqHkYTzalnGKY2B97/GSUfpsM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=wKY4ijq178WgQSNw1eeE0nkeDM3zj7C5WU4Z4yRwb0qCIaD1FVcGcjC18vwATPhw+
-         VN+tNKKNjslf6OZ1LqfEXQ25w85F4M2T9RprutHcmXZ+44gzJpgxcRPTREHgpNTkL3
-         EHOpAGr0mNAQwQEqClu5Y73hztZZLq/sl2UdrDAKjHfyydiA6/sf+ZznUkbWCaOADh
-         3Bdamcmx5yujKhoUaY3YpghflcahiFeFDofFlMHNC4sNtktKwKbkyIrphn/Yrra5LB
-         yhUo/hbvwd4ZGUn/YUG8o4bkEeiiG6Z3YzqaMQ4OR5c1e4dRfUub+016lLi/6dH+/A
-         O88Z6tkjMSpbg==
-Received: by mail-ed1-f69.google.com with SMTP id n11-20020aa7c68b000000b0041641550e11so4678583edq.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:42:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x4TvzHF8QuKQ3/zOGOuqHkYTzalnGKY2B97/GSUfpsM=;
-        b=2jbCo/7wf/GUnrLM8gh9UdYOoG+0QnAxbGZN7+pwrz190NpsXVileHEDBfHDYtA1Li
-         ErtUAwAqqtZ5k3Ij16bjg3I7hHdVi2tUKgmF2DebHernbT4/Ly12fMsyZCjuTs6cLrh8
-         DswM0gZPiYEg2KLlemgsIRqIlTxLT1h6gJELmckfVKFhFMTSn8357VSuC84/9V01kp/C
-         ijNDdtxZBqgNCt4aysagP3kgCqgZktg45GnBm+a2M1pePUXaYGWr7Czbm3CzJ7VHoxoX
-         oi0+n7aD6xCmHxjGv5cxP5Mn50ICPktqEkM8ESATO4dBw/9FyHJ2pYGPYqG6PP0bOnPG
-         bqHQ==
-X-Gm-Message-State: AOAM531CxfhCPks2/+01H4Ic0E1CUXX6un0pBCVU0lP+JanOSTvGMLmD
-        pluCmFQibZGLTUkRY+72AP3DOHsYiPaFisAAGJkyA2C3s0b2XYDwiZ/9DzL1+d1vnEszF1b23wF
-        Xv9RlJOTdF7hWpvonwkvahldcLIHqyvYAG2kMsD5xew==
-X-Received: by 2002:a05:6402:4301:b0:415:b73f:1b48 with SMTP id m1-20020a056402430100b00415b73f1b48mr8164298edc.39.1646995370723;
-        Fri, 11 Mar 2022 02:42:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5gHHbbJP79tXVqgVSmziJdzb2BPwQmpwOBIR/Tn9dJGGxL7wDFb7JWGH8AKhMGqStoPQB7g==
-X-Received: by 2002:a05:6402:4301:b0:415:b73f:1b48 with SMTP id m1-20020a056402430100b00415b73f1b48mr8164284edc.39.1646995370567;
-        Fri, 11 Mar 2022 02:42:50 -0800 (PST)
-Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056402278a00b00415b20902a6sm3272872ede.27.2022.03.11.02.42.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 02:42:49 -0800 (PST)
-Message-ID: <ad94136d-f651-7e6e-b3ec-94553c4c6d3b@canonical.com>
-Date:   Fri, 11 Mar 2022 11:42:49 +0100
+        Fri, 11 Mar 2022 05:46:05 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5A914EF65
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:45:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646995501; x=1678531501;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=rHS7CYDdSDyF1yFLX+HLnjkYA6AhNc6C0NyOCdwp6uk=;
+  b=g9duaCiGKUws8QKv9wVt7SQeBJQU94E+Ha0cd9zoPlwcAAsk84M7SAvH
+   iuUH64kNaW4FqzVt4JfzOtBSnsnppR5V2MkMS2/wpzwfi2TCW8J/3MvNk
+   pZXarOk1bHhlD/k3SQ81cTMa97xh/KOcaOF8QS+nnYksj57zBkQvaxK3U
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Mar 2022 02:45:01 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:45:00 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Mar 2022 02:45:00 -0800
+Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Mar 2022 02:44:55 -0800
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+To:     <akpm@linux-foundation.org>, <hughd@google.com>,
+        <markhemm@googlemail.com>, <vbabka@suse.cz>, <rientjes@google.com>,
+        <mhocko@suse.com>, <surenb@google.com>, <shakeelb@google.com>,
+        <willy@infradead.org>, <hannes@cmpxchg.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>
+Subject: [PATCH V5,0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for shmem files
+Date:   Fri, 11 Mar 2022 16:13:50 +0530
+Message-ID: <cover.1646987674.git.quic_charante@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] tty: serial: samsung: Add ARTPEC-8 support
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        alim.akhtar@samsung.com
-References: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
- <20220311094515.3223023-3-vincent.whitchurch@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220311094515.3223023-3-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 10:45, Vincent Whitchurch wrote:
-> Add support for the UART block on the ARTPEC-8 SoC.  This is closely
-> related to the variants used on the Exynos chips.  The register layout
-> is identical to Exynos850 et al but the fifo size is different (64 bytes
-> in each direction for all instances).
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
-> 
-> Notes:
->     v2:
->     - Added Krzysztof's Reviewed-by.
->     - Expanded commit message
->     - Fixed fifo size
->     - Rebased on top of Krzysztof's "minor fixes/cleanups" series.  This needed a
->       couple of fixes for build errors.
->     
->     (I'm always unsure if Reviewed-by should be carried over or not if the fixes
->     are minor.  I apologize in advance if carring it over was the wrong thing to do
->     in this case.)
+This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+advices to shmem files which can be helpful for the drivers who may want
+to manage the pages of shmem files on their own, like, that are created
+through shmem_file_setup[_with_mnt]().
 
-For minor fixes, usually we carry Rb tag over. It's fine.
+Changes in V5:
+ -- Moved the 'endbyte' calculations to a header function for use by shmem_fadvise().
+ -- Addressed comments from suren.
 
-LGTM
+Changes in V4:
+  -- Changed the code to use reclaim_pages() to writeout the shmem pages to swap and then reclaim.
+  -- Addressed comments from Mark Hemment and Matthew.
+  -- fadvise() on shmem file may even unmap a page.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1644572051-24091-1-git-send-email-quic_charante@quicinc.com/
 
-Best regards,
-Krzysztof
+Changes in V3:
+  -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified by Matthew.
+  -- xarray used properly, as identified by Matthew.
+  -- Excluded mapped pages as it requires unmapping and the man pages of fadvise don't talk about them.
+  -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865-1-git-send-email-quic_charante@quicinc.com/
+
+Changes in V2:
+  -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
+  -- Addressed the comments from Suren.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-1-git-send-email-quic_charante@quicinc.com/
+
+changes in V1:
+  -- Created the interface for fadvise(2) to work on shmem files.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
+
+Charan Teja Kalla (2):
+  mm: fadvise: move 'endbyte' calculations to helper function
+  mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
+
+ mm/fadvise.c  |  11 +-----
+ mm/internal.h |  21 ++++++++++
+ mm/shmem.c    | 123 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 145 insertions(+), 10 deletions(-)
+
+-- 
+2.7.4
+

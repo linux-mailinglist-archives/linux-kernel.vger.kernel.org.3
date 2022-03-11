@@ -2,137 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422434D5989
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877064D598B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346248AbiCKE2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:28:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S1346242AbiCKEak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbiCKE2F (ORCPT
+        with ESMTP id S235632AbiCKEag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:28:05 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D11A41C4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:27:02 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id q19so6486844pgm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:27:02 -0800 (PST)
+        Thu, 10 Mar 2022 23:30:36 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B76175820
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:29:32 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id w4so6702989ply.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:29:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VuuZr/4c1UPKQEo4uOczu6/ksfM6S6wo/JNy4TAGNVk=;
-        b=UcivEOlB+uVR0KkOqADnu9jEIZf4COjV9eay8wpm68/HcpbolfpyHGoOTT+ewk5G63
-         zLfqdJpJAywpEkrHOvUIk/gP5eJt3cQS7NN5TcL1ILU4x65mqrubJRoH9+UDkywx71uG
-         SrPeV/+GEosd4nBp4fTXkcxxyYv6ZvoPVeCJkyfBCZS4nBo5vp2K1FdhXWaTc/wUO0QR
-         RNOSOTsqOA4SfSIxyO1V6rm002CgzoKASkmCKnQrlVGrVX/qDg2wERh+UGQsk9nzNtV1
-         n0FrDrp1JiRJpRR2gldDJJwNyFT423bwuU8Nl9ln/XqIBRiT+wM78qwglefvT5VT+B/S
-         hqgw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zrOypvYSBV/aO1CQ4KPF0DXRvckOSNU+3tRTfGLgwBc=;
+        b=jZOmkQuMI6RuFhKg8NvmaxRDGtTrt81dOEQyqYgjW74rFBLVRanGjb2i0VmOH9c8u0
+         oDsFgE/gVtj/2zwlvuY0m7sMnt25p8cZESvHeYZKU6UxlTf3LiXQGvf9y05sQUZy/mcr
+         Dr8j3zAT3wY6PzxPiHYPWjvztkeGKv96NtDwPXTKw3ISsyEnKMXvAdQt9sMGbtR0iN6N
+         TZvP3DmwgA1Cz8ich7sgblV8Qbrp6EsLHqsjutBsl7gVa9xK44gyoLLNmwE944wRFo+L
+         PACWqwc2BT29y68XXByp9nq5NJgFhlF3NR5FHie7p51WEURn/FdO7pEhT4jnszHnxKVm
+         pXVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VuuZr/4c1UPKQEo4uOczu6/ksfM6S6wo/JNy4TAGNVk=;
-        b=jF1OVeF2t/r7rPyYMirzACT07RFfQNAYBXSFKudyWGdHJQuyuhh6EhJYTCM8+UUwwJ
-         1mVShLPbk90jR9UqDl2sGoaG5jxxHnAA9tP+Huozy/jODbWedE+lIwBTTjwxdYSWr4CG
-         gm5LEfRcJnjaz9v2I+fvCPdoimdGJ+jm2KQwLF/1vav56Gl0AHsavgPiYEyJVc8WT12t
-         pe0QL0S9FFvoa7G5uw+ijqTtZ9E10ANSpTHGK04P7CLxrl8lTWt5/Uz0YGW0X5/uNEJ7
-         ZxdvWn2cV+pGTH0VQmXQrrlMPgw37YdK/8qzh6vkFrwPSvXB96GvRu1l8+tD5oVJO7sV
-         TICw==
-X-Gm-Message-State: AOAM532tPnbWpCsQUvRWcEHQHwnSiyvm07VUMhsaTEpy72i1rDWUD74m
-        ypZwCMzcETeWZwmILAh0ebritQ==
-X-Google-Smtp-Source: ABdhPJx5FpRKFn9VUkyyxuCm50rwhdULgerp/xvxMqeqGB1onNa8UkHlH3VDkc/rbdpOJ+WAC4mRhg==
-X-Received: by 2002:a62:cdcd:0:b0:4f6:f5c2:47d9 with SMTP id o196-20020a62cdcd000000b004f6f5c247d9mr8329402pfg.26.1646972822270;
-        Thu, 10 Mar 2022 20:27:02 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm8815641pfv.22.2022.03.10.20.27.01
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=zrOypvYSBV/aO1CQ4KPF0DXRvckOSNU+3tRTfGLgwBc=;
+        b=jpOtwQ8xESu4NMPAE6KBJHWmdCWBIoU37vbTZQR68t6BsEeKfyOv5v/1SAasQTeEh1
+         XAuOiLwrqaeLl2T/dX7LDIsSU7z0W8LUSAoBzlEfrSonE/r6CG4MU4UMtPGkIz0QRCkq
+         Ew8BFsx1jH3x+mVJnZ/H4kdw3H7iZG7J82fJ+VhPlBvHphlIkZIlh1f5v11J8Vnd7Qeq
+         3RSyDfp4GwkoaS8Wn8C5/KW8mFqQVbXy3Ktj3VvfcVfXDsgU6DJPOr9z3wnB3qNtx+D8
+         bbpJyAUmrHJ7vYcw5RKDw+E1Z455tNjKubjCAX+HCedeW+MK7i1Cbof10Zj3Ma2iDFtu
+         5yKA==
+X-Gm-Message-State: AOAM531w3Mj6GcCPm/C7RqLsxHTs23D3mccdOg1o5yKqTMxCm+v9DwRA
+        Uy2+oxLHCuvsqfZOv9WArCGuCg==
+X-Google-Smtp-Source: ABdhPJwpxDR3gGioaEv9ojhLroxIx+LBfNQORccewdv7C3h8rx4tg3f/4LAKta2pms042VRbyIeHMQ==
+X-Received: by 2002:a17:902:f682:b0:151:a262:ad4a with SMTP id l2-20020a170902f68200b00151a262ad4amr8932436plg.84.1646972972298;
+        Thu, 10 Mar 2022 20:29:32 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id o65-20020a17090a0a4700b001bef5cffea7sm11864363pjo.0.2022.03.10.20.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 20:27:01 -0800 (PST)
-Date:   Fri, 11 Mar 2022 04:26:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Chao Gao <chao.gao@intel.com>, Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
-Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
- unconditionally
-Message-ID: <YirPkr5efyylrD0x@google.com>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
- <20220225082223.18288-7-guang.zeng@intel.com>
- <Yifg4bea6zYEz1BK@google.com>
- <20220309052013.GA2915@gao-cwp>
- <YihCtvDps/qJ2TOW@google.com>
- <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 20:29:31 -0800 (PST)
+Date:   Thu, 10 Mar 2022 20:29:31 -0800 (PST)
+X-Google-Original-Date: Thu, 10 Mar 2022 20:28:45 PST (-0800)
+Subject:     Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
+In-Reply-To: <b10e777c-1511-519b-20bb-a682a6119132@MichaelKloos.com>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Michael@MichaelKloos.com
+Message-ID: <mhng-97bc7422-36da-436a-a326-1705ef6fcace@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-03-09 at 06:01 +0000, Sean Christopherson wrote:
-> > > Could you share the links?
-> > 
-> > Doh, sorry (they're both in this one).
-> > 
-> > https://lore.kernel.org/all/20220301135526.136554-5-mlevitsk@redhat.com
-> > 
-> 
-> My opinion on this subject is very simple: we need to draw the line somewhere.
+On Thu, 10 Mar 2022 05:37:27 PST (-0800), Michael@MichaelKloos.com wrote:
+> Is there something I can do that would help alleviate your concerns or
+> apprehension?
 
-...
+IMO this is one of those cases where having hardware is required.
 
-> I also understand your concerns - and I am not going to fight over this, a module
-> param for read only apic id, will work for me.
+I can understand the goal of providing a Linux port for the minimal 
+RISC-V compatible system, but IIUC the minimal RISC-V compatible system 
+is any object associated with a member of the RISC-V foundation that 
+said member attests is a RISC-V system.  There's really no way to 
+implement Linux on all such systems so we have to set the bar somewhere, 
+and bar is generally set at "more time will be spent using this than 
+maintaining it".  Systems without M have generally not met that bar, and 
+I don't see anything changing now.
 
-Sadly, I don't think a module param would actually help.  I was thinking it would
-avoid breakage by allowing for graceful fallback on migration failure, but that
-was wishful thinking.  An inhibit seems like the least awful idea if we don't end
-up making it unconditionally readonly.
+If you have users then I'm happy to reconsider, the goal here is to make 
+real systems work.  That said: we've already got enough trouble trying 
+to make actual shipping hardware function correctly, we're all going to 
+lose our minds trying to chase around everything that could in theory be 
+a RISC-V system but doesn't actually exist.
 
-> All I wanted to do is to make KVM better by simplifying it - KVM is already
-> as complex as it can get, anything to make it simpler is welcome IMHO.
-
-I agree that simplifying KVM is a goal, and that we need to decide when enough is
-enough.  But we also can't break userspace or existing deployments, that's a very
-clearly drawn line in Linux.
-
-My biggest worry is that, unlike the KVM_SET_CPUID2 breakage, which was obvious
-and came relatively quick, this could cause breakage at the worst possible time
-(migration) months or years down the road.
-
-Since the goal is to simplify KVM, can we try the inhibit route and see what the
-code looks like before making a decision?  I think it might actually yield a less
-awful KVM than the readonly approach, especially if the inhibit is "sticky", i.e.
-we don't try to remove the inhibit on subsequent changes.
-
-Killing the VM, as proposed, is very user unfriendly as the user will have no idea
-why the VM was killed.  WARN is out of the question because this is user triggerable.
-Returning an emulation error would be ideal, but getting that result up through
-apic_mmio_write() could be annoying and end up being more complex.
-
-The touchpoints will all be the same, unless I'm missing something the difference
-should only be a call to set an inhibit instead killing the VM.
+>
+> On 3/10/2022 8:22 AM, Michael T. Kloos wrote:
+>
+>> Some other thoughts:
+>> It sounds like I am not the first person to want this feature and I
+>> probably won't be the last.  I created the change for my own reasons, the
+>> same as any other contributor.  I think we all know that I can not pull
+>> out some chart and say, "This many people want this and here is why."  I
+>> live in central Ohio and have been doing this as a hobby.  I don't even
+>> know anyone else who knows about systems and operating system development.
+>> If the justification that you are looking for is that I as some
+>> hypothetical developer at a major tech company is about to release a new
+>> RISC-V chip without M support but we want it to run Linux, I can not
+>> provide that answer.  It sounds a bit like some software or hardware,
+>> chicken or the egg anyway.  Trying to maintain my own fork if people
+>> start contributing patches with incompatible assembly scares me.
+>>      Michael

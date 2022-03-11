@@ -2,132 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFE44D6819
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A92AD4D6838
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349942AbiCKR5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S1350612AbiCKSBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233755AbiCKR5i (ORCPT
+        with ESMTP id S1344592AbiCKSBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:57:38 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2DB1C1ED6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:56:34 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id r29so2651111edc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:56:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6uqrZCjfvTCf0vt8DbhYIoNyBdrnrfGnyWV6ShUB2vU=;
-        b=Np8v8rOaTexwZ9CowsixK98xvDVR/E2HeNEE9G8HenWAgLG2yemAxpgvVci5J5M9E/
-         ww2D8EpkdwkrLH/I0vWWh9u7qyWvZ4VZaOSsPpHkxHjzl2SNgKnjo/HqG83j30EfsRFV
-         PD3gWWPF3jC2guzLSofGcoOW71gHVlrFct9bgSM6bGnCNsPr1FSNzwngi/ElmXVsS9AG
-         JQq1PLSXqweRV+CbnOgPPQllnqthJEE3BHdv4zqiCfrzRk7z2K5hyu6MUYHRMoNNXeqe
-         XdUc3gi649tmmAnRsMMVQzCJvADluc2wizuISjw8kNhajMhuJQpWa9hsWmwVPWyAC0p0
-         4m/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6uqrZCjfvTCf0vt8DbhYIoNyBdrnrfGnyWV6ShUB2vU=;
-        b=19i787BwJeEQFgc5Ws5TVOcCDApDLHE0rusXFilHE71kmXTzCe9KdyPWafBmj8fZXH
-         G+BBgVRDgnITp7cDXU9lURq+S/An7AAAWbTrY0EXK5YOuybkAmyQUjCgsPJAfhyJTezY
-         8krGK2w7z8rENwwbG0g+8DkMGShsgJBN4Ex03prpjEBZ1ml162LjRUflXsSn5MPjFwFC
-         G439lk7tzzE/ogEp9mqTQBzG1xi111djrGZb8GtahkBd0iFs+wT5kUzfeSo0j1RhRNIq
-         Ej4Q+EXxS0Jay5ozW52CzacDINQuibAwqJ9eiuRY4goJAap5G2KbZsnswbPJX2v3PtmW
-         4gvw==
-X-Gm-Message-State: AOAM531Vmji0ZJHN0sly/KFaG0W8suLpIbFwsQue7mPgZH3hlfgD3Dw9
-        xYVKZ7LkBpZ/VQyEyublfw0xB8NbMLAflgDUeSH2FQ==
-X-Google-Smtp-Source: ABdhPJwYY3OG4OM3NNI/L0bMert1EmCD8hdhav4/Wgf4KNE3snW+GGxbN3UYDTLUSIImyQRJ8LcMXpAFS/L8po/gON4=
-X-Received: by 2002:a05:6402:3490:b0:416:8b97:b1f7 with SMTP id
- v16-20020a056402349000b004168b97b1f7mr9808627edc.36.1647021392341; Fri, 11
- Mar 2022 09:56:32 -0800 (PST)
+        Fri, 11 Mar 2022 13:01:17 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F351D3068;
+        Fri, 11 Mar 2022 10:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9Fsxced+cP/JAU6qIJzXyFDQ+HLcljGI9FeqA2TwMJo=; b=KIDm4YiGuH+nwsiNGJW1PBi3GW
+        7nzmByTGtnRb9hV3Fwwu30Ih39CCBejNxk+AezmWDSt0QlL+Y8SuLt48mjpA75/B/GQiF0YeHedJa
+        fUxDGUv3V72Wl6hb5hjku6ieBi2KPta1cHgg9UxgBTnCI0+TdT4WA8E5v16pLOrr9Gegb9TIPpDlQ
+        xIgY5hMrl653Vez8uUhG+kfes/oHxFrSkNDLgd2eTxiaQuWMKy9D1DSQXbnmR5QWZbbvo7P0Q4YeY
+        hU52+7VnJKmUwG6Hz5lMxGHotXoiM/p9AIeVphA7GXyH9tjxHyBMMZS0DINuQJE22BYLiAmJXHC3B
+        fopZVllA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSjYb-00HZXL-Na; Fri, 11 Mar 2022 18:00:05 +0000
+Date:   Fri, 11 Mar 2022 10:00:05 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Aaron Tomlin <atomlin@redhat.com>, christophe.leroy@csgroup.eu,
+        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com, hch@infradead.org
+Subject: Re: [PATCH v11 13/14] module: Move kdb module related code out of
+ main kdb code
+Message-ID: <YiuOJclTu3/C9Olo@bombadil.infradead.org>
+References: <20220310102413.3438665-1-atomlin@redhat.com>
+ <20220310102625.3441888-1-atomlin@redhat.com>
+ <20220310102625.3441888-2-atomlin@redhat.com>
+ <20220311161736.2i53cjovg3plbiqu@maple.lan>
 MIME-Version: 1.0
-References: <20220310210210.2124637-1-brendanhiggins@google.com>
- <Yirz/hbo4K9zN9Ht@google.com> <CAFmMkTFa9xVt314WEGd0nNx+ovc=aGB_yN1LorP7WrBga9quxw@mail.gmail.com>
-In-Reply-To: <CAFmMkTFa9xVt314WEGd0nNx+ovc=aGB_yN1LorP7WrBga9quxw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 11 Mar 2022 11:56:20 -0600
-Message-ID: <CAGS_qxqHhGEYS_4C-gTmPt_d3Fm==VOTEzQGggWh6MWppTHtZQ@mail.gmail.com>
-Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
-To:     Daniel Gutson <daniel.gutson@eclypsium.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
-        Martin Fernandez <martin.fernandez@eclypsium.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311161736.2i53cjovg3plbiqu@maple.lan>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 4:14 AM Daniel Gutson
-<daniel.gutson@eclypsium.com> wrote:
->
->
->
-> El vie., 11 mar. 2022 4:02 a. m., David Gow <davidgow@google.com> escribi=
-=C3=B3:
->>
->> On Thu, Mar 10, 2022 at 01:02:10PM -0800, Brendan Higgins wrote:
->> > Add support for a new kind of kunit_suite registration macro called
->> > kunit_test_init_suite(); this new registration macro allows the
->> > registration of kunit_suites that reference functions marked __init an=
-d
->> > data marked __initdata.
->> >
->> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
->> > ---
->> >
->> > This patch is in response to a KUnit user issue[1] in which the user w=
-as
->> > attempting to test some init functions; although this is a functional
->> > solution as long as KUnit tests only run during the init phase, we wil=
-l
->> > need to do more work if we ever allow tests to run after the init phas=
-e
->> > is over; it is for this reason that this patch adds a new registration
->> > macro rather than simply modifying the existing macros.
->> >
->> > [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
->> >
->> > ---
->>
->> I'm a little concerned that this is just removing the warnings, but do
->> agree that this is safe enough for the moment. At least the information
->> about which tests need __init is preserved by the use of a different
->> macro.
->>
->> I guess one day we'll need a second list of 'init' tests or something...
->
->
-> Hi, could you please detail about this? Why a second list?
->
+On Fri, Mar 11, 2022 at 04:17:36PM +0000, Daniel Thompson wrote:
+> On Thu, Mar 10, 2022 at 10:26:24AM +0000, Aaron Tomlin wrote:
+> > No functional change.
+> > 
+> > This patch migrates the kdb 'lsmod' command support out of main
+> > kdb code into its own file under kernel/module. In addition to
+> > the above, a minor style warning i.e. missing a blank line after
+> > declarations, was resolved too. The new file was added to
+> > MAINTAINERS. Finally we remove linux/module.h as it is entirely
+> > redundant.
+> > 
+> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> 
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+> 
+> Likewise w.r.t. to landing this via the modules tree, that's fine:
+> Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-I assume this is referring to a future where we want to run tests
-_after_ the init phase.
-In that case, we'd need to be able to separately register tests that
-run during and those that run after.
-(Or we could have one list and just tag each suite as init/post-init.
-If we ever had >2 "phases" where we run tests, this might be the more
-scalable option)
+Groovy thanks, this won't go in for the upcoming merge window, it will
+wait until the next kernel release as we have tons of testing to do
+still.
 
-Is it likely we'd have tests run after?
-Not in the near future, I don't think. But it could be asked for.
+Thanks!
 
-For context, here's where built-in KUnit tests currently run:
-https://elixir.bootlin.com/linux/v5.17-rc7/source/init/main.c#L1615
-That'd probably become kunit_run_init_tests() and then we'd have
-another kunit_run_post_init_tests() called later, or something.
+  Luis

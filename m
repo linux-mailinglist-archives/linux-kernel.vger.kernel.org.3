@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182C44D644F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B654D6456
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348478AbiCKPJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S1348511AbiCKPKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbiCKPJt (ORCPT
+        with ESMTP id S234275AbiCKPKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:09:49 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DE71B45FA;
-        Fri, 11 Mar 2022 07:08:46 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id b8so8374941pjb.4;
-        Fri, 11 Mar 2022 07:08:46 -0800 (PST)
+        Fri, 11 Mar 2022 10:10:52 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819FE1C232A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:09:48 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id n19so15497926lfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:09:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2a8WcB1kxQavj2Zya8qxv0wQWFb2RBvuEHqZVDHIJgs=;
-        b=QmEdrS9XzWAA5NF5Qa/qDnI2MXBixfUb9FxuhNvljZ03i3uddZHZGN8x+rcljV0OVX
-         4zPrtqqFfvwIrpIXOhUAJ81ZyKrWG9Jg+v0DMxSmdXyfdGSOceReNiy7BTEnmlZikT+C
-         fSrtLTXAHbD4fa3QDw3HVEH7eBYA3bpquQDpW/RsAJ0PD+BImDY2IlFB9faNGKXgkSFQ
-         X7ZVK/74zMABQm8klkldFVyqwcJKstncsrX6f//g9rTlJwiW030f9lW10gZhKxTTlf/g
-         IoXW63/ltD4eExJ61U1YBtAMnVVh788Fz4X9QtrFVVRI24BdUf9LyL9TVHLGQ4nc2423
-         +LwQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qqY71AUzATHTLGKyAzwvSw6q4/NroX39pMmuicUc9QM=;
+        b=lNYnqjfB2ONnlK2OT+blK4EuYRqEDUuqvPBFjmbTehTX9zN0zNGdAMbmGFjuz2ju3d
+         pYM0kM2QuWs1T361dlk5ChZN+7gljju/RfsrwfymsUScdXysvOFcF5KIEJFOe6MjfSUS
+         lwxonnSHL7D/TeeRoMSDmUnTPw4LtToaAgb7aRtkJ5j82jznc1nlFK1Q5mdEbRLJ+A9J
+         paMeQNbenMSVJSYv/KQrBP67rWb/B2jpUpwo0hx/13ob9tveOqe7PMDzpcswEh0LIVOA
+         WC7ou0vQqRGSupaTU76Zj4l+zhWHobs5QiDR0XEgkT3fq4G6pwOj07nu5K5wQB0mlTxq
+         5hiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2a8WcB1kxQavj2Zya8qxv0wQWFb2RBvuEHqZVDHIJgs=;
-        b=A66b43K3yiWC3EfOggUPyzVFQvHk9IZZGC7l6NNkP6t6QaqtY/zAiMJS/2w4AhOu4m
-         ipbhv0eTdhtWLhnbLawj7b5dNuncKc4Ibx2sFupe0JfEIdHH8IPMx47pGURyJJOmNkZj
-         D6kK0BXGq1FXd5ZTh9aLPOd6BN6vzzrra2YpF9nSf740mTzPN/onScFkDdLNQN3+bBg0
-         CpOUbkGqiCutqw0cl9rvSgs0jM1wfPVXA9wlabLazY7Ebg71tUByJI9UE0+Gl8xVo232
-         iLXAQp+CR7bN6GnPki8p9Q6ibreqbLQGgnRFDvQ6Jc4SURqf6m6+orB4oMo2eI0eyi+x
-         9VdQ==
-X-Gm-Message-State: AOAM531BN9GFtLBl7u7d89iQfzYBPB/plIwnr7ZJQ9gOwvdb2yihyq/+
-        cjF9k97Bv+f7UIpgKbEKuiQ=
-X-Google-Smtp-Source: ABdhPJxwYBOHL2eqwyqNjDc+Y0PZpxVIDu+w2GlTC32rFOcD1f5ZcrDJK748qv1Z+cgqdloUL8JD/Q==
-X-Received: by 2002:a17:903:11c6:b0:151:a247:31eb with SMTP id q6-20020a17090311c600b00151a24731ebmr11005899plh.91.1647011325566;
-        Fri, 11 Mar 2022 07:08:45 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id s30-20020a056a001c5e00b004f75773f3fcsm10554840pfw.119.2022.03.11.07.08.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qqY71AUzATHTLGKyAzwvSw6q4/NroX39pMmuicUc9QM=;
+        b=jAPiNtV2UPEgIQzc8aglwEh0OdazMOB7tnQXjigvofB2euhQBNtosGlT6g5L9/gJ6Z
+         sRHbLRKMXnwWJrIF/n6cbbaHa65QoFcVj9HUpvTLopnagFANlzS4LkoHlstasVRfzhjZ
+         m2ELuc6qt13/6ZQxhOwEuaUVF3Q9wkhlLqXTShpiNiWX2BgM5wXrQ5G8Y/0qjm4NKwLL
+         6t5RWncAu5MrdyjoB9HBfvkP9ONPemzv3RVTNwq5nIJ4zlTuZLdgTe9qZfo9+0wGpFg1
+         SMtMPD1cYXLjgj8DF0FDuc5V9Rsq5FVmhXXK3C+BzJWXipaidVglj27F6kyRxkGGn6pe
+         BPVw==
+X-Gm-Message-State: AOAM530ORiCG87l21mV9RoywDHLBb1Ik9pbSQ22cWWGeZbSWGixgqa5m
+        mE0GL95C9P9agniZWbWRraiSxnooGLPV3Q==
+X-Google-Smtp-Source: ABdhPJyP7Hm372/ApUE3c0lGEDB1sgUok3CVvp4PMBVGtAi8hCEmi+cS9QBaZtP14ItjK+kQCbA3gw==
+X-Received: by 2002:ac2:4145:0:b0:448:273a:7697 with SMTP id c5-20020ac24145000000b00448273a7697mr6370536lfi.601.1647011386742;
+        Fri, 11 Mar 2022 07:09:46 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
+        by smtp.gmail.com with ESMTPSA id 16-20020ac25f10000000b00443890bd84asm1663988lfq.114.2022.03.11.07.09.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:08:45 -0800 (PST)
-Date:   Fri, 11 Mar 2022 07:08:42 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, Divya.Koppera@microchip.com,
-        netdev@vger.kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <20220311150842.GC7817@hoboy.vegasvil.org>
-References: <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YidgHT8CLWrmhbTW@lunn.ch>
- <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
- <YiecBKGhVui1Gtb/@lunn.ch>
- <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
- <YifoltDp4/Fs+9op@lunn.ch>
- <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
- <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
- <20220309195252.GB9663@hoboy.vegasvil.org>
- <20220311142814.z3h5nystnrkvbzek@soft-dev3-1.localhost>
+        Fri, 11 Mar 2022 07:09:45 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v5.17-rc8
+Date:   Fri, 11 Mar 2022 16:09:45 +0100
+Message-Id: <20220311150945.84262-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311142814.z3h5nystnrkvbzek@soft-dev3-1.localhost>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 03:28:14PM +0100, Horatiu Vultur wrote:
+Hi Linus,
 
-> What about adding only some sane values in the driver like here [1].
-> And the allow the user to use linuxptp to fine tune all this.
+Here's a PR with a couple of MMC fixes intended for v5.17-rc8. Details about the
+highlights are as usual found in the signed tag.
 
-I mean, that is the point.  Users will surely have to tune it
-themselves, second guessing the driver in any case.  So having hard
-coded constants in the driver is useless.
+Please pull this in!
 
-Probably even the tuned values will differ by link speed, so having
-the per-link speed constants in the driver doesn't help either.
+Kind regards
+Ulf Hansson
 
-(And yes, linuxptp should offer configuration variables per link
-speed, monitor actual link speed, and switch automatically.  So far no
-one is demanding that loudly)
 
-Thanks,
-Richard
+The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+
+  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.17-rc6
+
+for you to fetch changes up to 1760fdb6fe9f796fbdb9b4106b3e0bbacc16b55c:
+
+  mmc: core: Restore (almost) the busy polling for MMC_SEND_OP_COND (2022-03-07 11:47:39 +0100)
+
+----------------------------------------------------------------
+MMC core:
+ - Restore (almost) the busy polling for MMC_SEND_OP_COND
+
+MMC host:
+ - meson-gx: Fix DMA usage of meson_mmc_post_req()
+
+----------------------------------------------------------------
+Rong Chen (1):
+      mmc: meson: Fix usage of meson_mmc_post_req()
+
+Ulf Hansson (1):
+      mmc: core: Restore (almost) the busy polling for MMC_SEND_OP_COND
+
+ drivers/mmc/core/block.c        |  2 +-
+ drivers/mmc/core/mmc.c          |  2 +-
+ drivers/mmc/core/mmc_ops.c      | 13 +++++++++----
+ drivers/mmc/core/mmc_ops.h      |  3 ++-
+ drivers/mmc/core/sd.c           |  2 +-
+ drivers/mmc/host/meson-gx-mmc.c | 15 ++++++++-------
+ 6 files changed, 22 insertions(+), 15 deletions(-)

@@ -2,94 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E234D6B18
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4D14D6B32
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiCKXsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S229975AbiCKXtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 18:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiCKXsk (ORCPT
+        with ESMTP id S229606AbiCKXtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:48:40 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD8CCC6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:47:36 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id g17so17715846lfh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wVfBYCR//sUPC/N8rtB6DbRqDvT5IMG4uBLF1VOm8zo=;
-        b=cAbTBBPlJJ/7AzXk1OoklY8uNM71JSDbohwoInQlXciQI1dum0jpSWlLJFKfk5exao
-         ApQPRfQ4M+fpaGM/Co1A3oeDWW1PNVf3JueYnuneNx/vHML5rn1q8wFyjetAh6loowGS
-         6bJ2n5r5DcGI5IORwQ9dH4vsK72CesWtTPuyo=
+        Fri, 11 Mar 2022 18:49:21 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE642E0;
+        Fri, 11 Mar 2022 15:48:17 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id j83so11118148oih.6;
+        Fri, 11 Mar 2022 15:48:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wVfBYCR//sUPC/N8rtB6DbRqDvT5IMG4uBLF1VOm8zo=;
-        b=rBwhY6UIgsjox/j/Ilo5aL2tRdrNzvnctJN6Frs990c/4SSQALcSWUb0MaGxczl6yI
-         ZeVKFxxbmYLY7indsD0SlGGyj8DmT/OurwOUiaGp1u4yTkBjO1qjm6qL7T2iyf49cxWq
-         X4S9Hr5Jh7GC/vaWbJZzCKltLVfJplD6jmEEgXeQ/iZNEpMPCrnMGveLC6vWfb56HRZJ
-         A631LgrFspRYOrO4KfZsNqA5Fl0iMqHhtC2ApgjXdkU6JioO/drj5v/MNFZTmEfTmg3G
-         tJlkfxd4DipkhbGlTaLGAEfag52kQvgcIUh8zwA+R1LkjsACFMy8mhrkGly0t5ZIBzBC
-         ouAQ==
-X-Gm-Message-State: AOAM530/xKArJso4zrs1jY5kIXsfp2ifFb8dp4+DiWf1QrD4WfX3KhnE
-        7OIpOA6el3nSS53Nc57GTQOJOhFRmpBylV34PCo=
-X-Google-Smtp-Source: ABdhPJwtMvyxvJjU2oNf6l2fqKGCe4J1SiSDZoDXEZ7sMYt+6i5Cmi8dTZmewI8W3qYhkoe7KyeMXg==
-X-Received: by 2002:a05:6512:3f05:b0:443:bf88:aeba with SMTP id y5-20020a0565123f0500b00443bf88aebamr7314336lfa.561.1647042454543;
-        Fri, 11 Mar 2022 15:47:34 -0800 (PST)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id v1-20020a2e6101000000b002480c4f33d5sm1423115ljb.132.2022.03.11.15.47.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 15:47:34 -0800 (PST)
-Received: by mail-lj1-f171.google.com with SMTP id l12so14104598ljh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:47:33 -0800 (PST)
-X-Received: by 2002:a2e:924d:0:b0:246:370c:5618 with SMTP id
- v13-20020a2e924d000000b00246370c5618mr7279855ljg.358.1647042453752; Fri, 11
- Mar 2022 15:47:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x6lwOUs0d65LCqBi3QipuhYyxDJ9eIewRF/1SecNNVk=;
+        b=yffyoz8VzCntSreC5fdhKB/KhtzaN3vp3KJDDSQVe1EJlWtKF0liID182gW2Mg0H7h
+         GT6m8U9FmUUZm1kWhrr3esZODmRauWH9NERPQkfwhDy7V6n7bOPZQ0mKps0LMDMcnoNH
+         9Tm2CMmtw1ZXLd+F1wrwqEMOBot/6CAiXX/pPlyjLmb4NUCxX5dDZ5cFX5epVosRe2rX
+         1RGgXpDX9qUhmT4jVQ/BCpALhGtl9JsdtMHPZelyL/K+sJ42gwF4t6EoNnVkstQaFGq+
+         Haf9o+d08O6EyONCCLlrKt+tJ+qHod5Lc+dq8+Lg2cK99pC18WvF2ZjHct0fDzCrTvnB
+         2Ypg==
+X-Gm-Message-State: AOAM531VtS2Lh6zAmJOj1zzmHZp/c1X3exqVqjay2IMPJ5UPJQG58ORh
+        zB3PPD21MVX1RYy/daVIo94XPibe+Q==
+X-Google-Smtp-Source: ABdhPJyvZ0r+1P93joNo0ptbuIsXbm7FYq3d7tYAdY68/bzI93gYnyJbwvMNDQDUCKsJKaNoyhXoNg==
+X-Received: by 2002:a05:6808:2013:b0:2d9:dbed:6999 with SMTP id q19-20020a056808201300b002d9dbed6999mr14493688oiw.30.1647042496534;
+        Fri, 11 Mar 2022 15:48:16 -0800 (PST)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id o21-20020a056870e81500b000d9b2ba714asm3942423oan.21.2022.03.11.15.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 15:48:15 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: dt-bindings: Fix patternProperties with fixed strings
+Date:   Fri, 11 Mar 2022 17:48:01 -0600
+Message-Id: <20220311234802.417610-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220311013238.3387227-1-pobrn@protonmail.com>
- <20220311013238.3387227-2-pobrn@protonmail.com> <CAHk-=wjkqz42CNjDgWA9U3uNWa9GriqaCqqKciqm0sZUYjfLQg@mail.gmail.com>
- <CAHk-=wjF4d_v5t=ht_vCOHxNDoPvsBuK-2jiEBus-__oPZuPFQ@mail.gmail.com>
- <wKlkWvCGvBrBjshT6gHT23JY9kWImhFPmTKfZWtN5Bkv_OtIFHTy7thr5SAEL6sYDthMDth-rvFETX-gCZPPCb9t2bO1zilj0Q-OTTSbe00=@protonmail.com>
- <CAHk-=wg6PtRx9nBHVnrQkQkczGjXjO0E-oHXPPgPK_H+Nm=Czg@mail.gmail.com>
- <1D4riYxukWActDG6uXJOjvSq0GvTWaO4KZGVfqmX5RG_HGGjzgBb3srCUNRZqyPOzzNzVIrKRw0ktupkVs0DWQGTiZ1cSuWEcu5z3O1Pk4Y=@protonmail.com>
- <CAHk-=wioAxtdJJejq08N3J3t=Qe47Tnii4H0fiYdgDwc8fpZHg@mail.gmail.com>
-In-Reply-To: <CAHk-=wioAxtdJJejq08N3J3t=Qe47Tnii4H0fiYdgDwc8fpZHg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 11 Mar 2022 15:47:17 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whTbE6noPBJhYyU4DcGqi07kreatv86fcOfNX8KKbfo4Q@mail.gmail.com>
-Message-ID: <CAHk-=whTbE6noPBJhYyU4DcGqi07kreatv86fcOfNX8KKbfo4Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 1/2] list: add type-safer list_head wrapper
-To:     =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 3:45 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Yeah, not with the limitation that it only works on global list heads. [..]
+The simple-audio-card and renesas,rsnd bindings used 'patternProperties'
+with fixed strings to work-around a dtschema meta-schema limitation. This
+is now fixed and the schemas can be fixed to use 'properties' instead.
 
-"global" is the wrong word. Obviously it works on static list heads in
-file - or even function - scope etc too. But you get what I'm saying..
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/sound/renesas,rsnd.yaml          | 16 ++++---
+ .../bindings/sound/simple-card.yaml           | 42 +++++++++----------
+ 2 files changed, 28 insertions(+), 30 deletions(-)
 
-            Linus
+diff --git a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
+index c2930d65728e..e17c0245f77a 100644
+--- a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
++++ b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
+@@ -123,9 +123,7 @@ properties:
+     $ref: audio-graph-port.yaml#
+     unevaluatedProperties: false
+ 
+-# use patternProperties to avoid naming "xxx,yyy" issue
+-patternProperties:
+-  "^rcar_sound,dvc$":
++  rcar_sound,dvc:
+     description: DVC subnode.
+     type: object
+     patternProperties:
+@@ -141,7 +139,7 @@ patternProperties:
+           - dma-names
+     additionalProperties: false
+ 
+-  "^rcar_sound,mix$":
++  rcar_sound,mix:
+     description: MIX subnode.
+     type: object
+     patternProperties:
+@@ -150,7 +148,7 @@ patternProperties:
+         # no properties
+     additionalProperties: false
+ 
+-  "^rcar_sound,ctu$":
++  rcar_sound,ctu:
+     description: CTU subnode.
+     type: object
+     patternProperties:
+@@ -159,7 +157,7 @@ patternProperties:
+         # no properties
+     additionalProperties: false
+ 
+-  "^rcar_sound,src$":
++  rcar_sound,src:
+     description: SRC subnode.
+     type: object
+     patternProperties:
+@@ -182,7 +180,7 @@ patternProperties:
+           - dma-names
+     additionalProperties: false
+ 
+-  "^rcar_sound,ssiu$":
++  rcar_sound,ssiu:
+     description: SSIU subnode.
+     type: object
+     patternProperties:
+@@ -202,7 +200,7 @@ patternProperties:
+           - dma-names
+     additionalProperties: false
+ 
+-  "^rcar_sound,ssi$":
++  rcar_sound,ssi:
+     description: SSI subnode.
+     type: object
+     patternProperties:
+@@ -239,7 +237,7 @@ patternProperties:
+     additionalProperties: false
+ 
+   # For DAI base
+-  "^rcar_sound,dai$":
++  rcar_sound,dai:
+     description: DAI subnode.
+     type: object
+     patternProperties:
+diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
+index 45fd9fd9eb54..103044bd32eb 100644
+--- a/Documentation/devicetree/bindings/sound/simple-card.yaml
++++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
+@@ -156,45 +156,45 @@ properties:
+     description: User specified audio sound card name.
+     $ref: /schemas/types.yaml#/definitions/string
+ 
+-# use patternProperties to avoid naming "xxx,yyy" issue
+-patternProperties:
+-  "^simple-audio-card,widgets$":
++  simple-audio-card,widgets:
+     $ref: "#/definitions/widgets"
+-  "^simple-audio-card,routing$":
++  simple-audio-card,routing:
+     $ref: "#/definitions/routing"
+-  "^simple-audio-card,cpu(@[0-9a-f]+)?":
+-    $ref: "#/definitions/dai"
+-  "^simple-audio-card,codec(@[0-9a-f]+)?":
+-    $ref: "#/definitions/dai"
+ 
+   # common properties
+-  "^simple-audio-card,frame-master$":
++  simple-audio-card,frame-master:
+     $ref: "#/definitions/frame-master"
+-  "^simple-audio-card,bitclock-master$":
++  simple-audio-card,bitclock-master:
+     $ref: "#/definitions/bitclock-master"
+-  "^simple-audio-card,frame-inversion$":
++  simple-audio-card,frame-inversion:
+     $ref: "#/definitions/frame-inversion"
+-  "^simple-audio-card,bitclock-inversion$":
++  simple-audio-card,bitclock-inversion:
+     $ref: "#/definitions/bitclock-inversion"
+-  "^simple-audio-card,format$":
++  simple-audio-card,format:
+     $ref: "#/definitions/format"
+-  "^simple-audio-card,mclk-fs$":
++  simple-audio-card,mclk-fs:
+     $ref: "#/definitions/mclk-fs"
+-  "^simple-audio-card,aux-devs$":
++  simple-audio-card,aux-devs:
+     $ref: "#/definitions/aux-devs"
+-  "^simple-audio-card,convert-rate$":
++  simple-audio-card,convert-rate:
+     $ref: "#/definitions/convert-rate"
+-  "^simple-audio-card,convert-channels$":
++  simple-audio-card,convert-channels:
+     $ref: "#/definitions/convert-channels"
+-  "^simple-audio-card,prefix$":
++  simple-audio-card,prefix:
+     $ref: "#/definitions/prefix"
+-  "^simple-audio-card,pin-switches$":
++  simple-audio-card,pin-switches:
+     $ref: "#/definitions/pin-switches"
+-  "^simple-audio-card,hp-det-gpio$":
++  simple-audio-card,hp-det-gpio:
+     maxItems: 1
+-  "^simple-audio-card,mic-det-gpio$":
++  simple-audio-card,mic-det-gpio:
+     maxItems: 1
+ 
++patternProperties:
++  "^simple-audio-card,cpu(@[0-9a-f]+)?$":
++    $ref: "#/definitions/dai"
++  "^simple-audio-card,codec(@[0-9a-f]+)?$":
++    $ref: "#/definitions/dai"
++
+   "^simple-audio-card,dai-link(@[0-9a-f]+)?$":
+     description: |
+       Container for dai-link level properties and the CPU and CODEC sub-nodes.
+-- 
+2.32.0
+

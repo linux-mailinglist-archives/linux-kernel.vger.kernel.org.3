@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CECD4D5E69
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BAA4D5E6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344824AbiCKJ2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S1347469AbiCKJaX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Mar 2022 04:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235453AbiCKJ2r (ORCPT
+        with ESMTP id S232599AbiCKJaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:28:47 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC5EB7CB
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646990864; x=1678526864;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XK/3Vbkegr98tnNmM9a3loe1RZVP6tyIvUV7gAuPdk4=;
-  b=iaygd3wQ/nTExO78Zz6b/NUevFiodNTNiBjo8psP78HWD72tP9sw6NSd
-   LbHVOP+fxczWDVSBsCx8bxYSSy+sifEGO8fJwie5Rqz6xU6C/NJEvhAKD
-   /VahvD936ZUm6PNNdVkCZCl6KndU10oqo+O9OCtinSR7kF+LXE7TxCmlq
-   smDOwH35drg89FhqGdKvWzwwtGEgSR5niyE+MUlgEvT/0bscDpcjsYFYg
-   4CObRH+FqM2WjQtct/HVzg/wax8eoUgGq85x4CJuuSBgR0BUK7xDbsExm
-   712HSw/PSdIb4Pyjt08EYIfTiFf9GCWaPEiKqudiH3vlbBkk93W4CmpVt
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254365159"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="254365159"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 01:27:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="644877489"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 01:27:41 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSbYi-0006Aw-FG; Fri, 11 Mar 2022 09:27:40 +0000
-Date:   Fri, 11 Mar 2022 17:26:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 95/346] fs/xfs/xfs_inode.c:952:1:
- error: expected identifier or '('
-Message-ID: <202203111719.V8By8dfs-lkp@intel.com>
+        Fri, 11 Mar 2022 04:30:21 -0500
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69181BE0C8;
+        Fri, 11 Mar 2022 01:29:18 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id p8so6532882qvg.12;
+        Fri, 11 Mar 2022 01:29:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ttJJ0M7nwthX5OY+c4KyfOxHE7Mzj3zYgXoHBRNpMKo=;
+        b=kHNAjjRQ9w/95fQGc5Z0W1bYYssi06+2MwxSk1Fk816LHWZkuWXGJPZWb/ykudM6Pd
+         opUXYygWjgtc9xUqh8sIoKRGXnYu3/Rgh8dy/yBBzVysBn1LGLaLvXC+Y4oO/gDh05dH
+         D2Ee3BjZno45KlFuEg8hnor1Qr0nPpdZ6OgaUS1oV8dN4t9X0N41b+n6wZvG6l6RYOkZ
+         Ydg7JlqdPFKF13yGEfNjcFmSHdUPKyiU9fkiWy9VKesxSaoCSxAm1pd+TjQrRKkvwwdz
+         mgwxKRSMK9/jC0hg943vrAsQxyOdElq9YsswUO3HwYeMl+XuSQGub+Pyy4gsTQ++CKtL
+         uE+w==
+X-Gm-Message-State: AOAM5301V+Gv4/msGc7OjQEMFF2jvdHskqt7eSIzLGkPUpjZTA3dLOhO
+        q36Ji8EMdGq+/e9Q/d405EMDmCDDlIuL5A==
+X-Google-Smtp-Source: ABdhPJyGWZPUy1k1zWXOeYUZxcGGbgqTA18Lg6ztFwf3mC/xI8FQ5g6gLq92tjVULyV42QVEeOjixQ==
+X-Received: by 2002:a0c:be89:0:b0:42c:38b2:9d17 with SMTP id n9-20020a0cbe89000000b0042c38b29d17mr7030610qvi.50.1646990957363;
+        Fri, 11 Mar 2022 01:29:17 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id h17-20020ac87d51000000b002de919e3187sm5168588qtb.28.2022.03.11.01.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 01:29:17 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2dbc48104beso86633217b3.5;
+        Fri, 11 Mar 2022 01:29:16 -0800 (PST)
+X-Received: by 2002:a81:6dd1:0:b0:2dc:56d1:1dae with SMTP id
+ i200-20020a816dd1000000b002dc56d11daemr7246044ywc.479.1646990956518; Fri, 11
+ Mar 2022 01:29:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310221246.10009-1-zajec5@gmail.com>
+In-Reply-To: <20220310221246.10009-1-zajec5@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Mar 2022 10:29:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXej1-BdCsOMJF9EU9RHJ+o3dhN1Wt1=Dg-0ib=NiicgQ@mail.gmail.com>
+Message-ID: <CAMuHMdXej1-BdCsOMJF9EU9RHJ+o3dhN1Wt1=Dg-0ib=NiicgQ@mail.gmail.com>
+Subject: Re: [PATCH V2] tty: serial: bcm63xx: use more precise Kconfig symbol
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   38ef7fcbbc5b33107155955dcd6ed6c92f4ceb91
-commit: af5ea75e919d339b63fdbac6de44242559497a78 [95/346] xfs: track file link count updates during live nlinks fsck
-config: hexagon-randconfig-r025-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111719.V8By8dfs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=af5ea75e919d339b63fdbac6de44242559497a78
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout af5ea75e919d339b63fdbac6de44242559497a78
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
+Hi Rafał,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Mar 10, 2022 at 11:13 PM Rafał Miłecki <zajec5@gmail.com> wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+>
+> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
+> documentation change regarding "depends" usage. Adjust Kconfig entry to
+> match current guidelines. Make this symbol available for relevant
+> architectures only.
+>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
+> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform dependency practises")
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Use precise "depends" (exact platforms)
 
-All errors (new ones prefixed by >>):
+Thanks for the update!
 
->> fs/xfs/xfs_inode.c:952:1: error: expected identifier or '('
-   XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   ^
-   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                             ^
->> fs/xfs/xfs_inode.c:952:1: error: expected ')'
-   fs/xfs/xfs_mount.h:78:42: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                             ^
-   fs/xfs/xfs_inode.c:952:1: note: to match this '('
-   fs/xfs/xfs_mount.h:78:41: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                            ^
->> fs/xfs/xfs_inode.c:952:1: error: expected ')'
-   XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   ^
-   fs/xfs/xfs_mount.h:78:47: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                                  ^
-   fs/xfs/xfs_inode.c:952:1: note: to match this '('
-   fs/xfs/xfs_mount.h:78:40: note: expanded from macro 'XFS_HOOKS_SWITCH_DEFINE'
-   # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-                                           ^
-   3 errors generated.
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
+>  config SERIAL_BCM63XX
+>         tristate "Broadcom BCM63xx/BCM33xx UART support"
+>         select SERIAL_CORE
+> -       depends on COMMON_CLK
+> +       depends on ARCH_BCM4908 || ARCH_BCM_63XX || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
+> +       default y
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP_GPMC
-   Depends on MEMORY && OF_ADDRESS
-   Selected by
-   - MTD_NAND_OMAP2 && MTD && MTD_RAW_NAND && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST && HAS_IOMEM
+Merely enabling COMPILE_TEST should not enable additional drivers.
 
+>         help
+>           This enables the driver for the onchip UART core found on
+>           the following chipsets:
 
-vim +952 fs/xfs/xfs_inode.c
+Gr{oetje,eeting}s,
 
-   950	
-   951	#ifdef CONFIG_XFS_LIVE_HOOKS
- > 952	XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   953	
+                        Geert
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

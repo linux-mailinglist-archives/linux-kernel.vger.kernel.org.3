@@ -2,192 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC19E4D6142
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B094D6150
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241839AbiCKMMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S1348548AbiCKMNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239673AbiCKMMN (ORCPT
+        with ESMTP id S1348322AbiCKMNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:12:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB3119F14;
-        Fri, 11 Mar 2022 04:11:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 11 Mar 2022 07:13:21 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A618617927F
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:12:18 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 208C91F38D;
+        Fri, 11 Mar 2022 12:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647000737; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GAIY4yuVMOLPaV3LWpBMeDIEu3zQzohlPZVsreJow7E=;
+        b=W7Y3UDk2g3Tesn+BOr/Tm78BANNrnR/uDoYHV6fW2Mb41YdRLn3Iv5GD/Nf49ANfoPm3w7
+        RCIRwIy0knPmCnnt72jhNdmfaeY3Jj+QhjOjhpgspqpNynH8G7CwOcDba00QUtLHpNryYJ
+        Z8hdaG1b7/iNHlpQkRbzAx5Sce0DI24=
+Received: from suse.cz (unknown [10.100.216.66])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 243B6B82BEB;
-        Fri, 11 Mar 2022 12:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 866E9C340E9;
-        Fri, 11 Mar 2022 12:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647000665;
-        bh=O89ScCFBuspgUWddx0ttaCHWVam7dsgvZ77m4faLqt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sw3AuBCbdamTmM2i1PmRwyH29G+wXBiUGt/ZAMzGGnCeJth+Rr0A9oqta4xzZyaCJ
-         rko0mYWNshkTwlPnk1uN1RiBJ9nMqQ8tWf5CXcOiSb+N0iERSCa70SKsvlhYli23IJ
-         HbWQ4KR8JHuXwH7M5KM4ozEYjvvd9eSoyBGODtrh12gtrPxDPChbhb03HY5juOdLHK
-         rVAeEvvn8XOeHF2lmpWU7QmwNsPPg0mBXAtpDn0bssIZTmD3M0WhMJ+iYBIzkgze0S
-         bYoBPwlh4oLLw9hoj7250ZuMiVVQllQim4AkLIS5xn4gkh7sqEhcX1kY+GFyxLJVgw
-         bEb9YfRtrl+yg==
-Date:   Fri, 11 Mar 2022 14:10:21 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>
-Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <Yis8LV99mORcLYs6@iki.fi>
-References: <cover.1644274683.git.reinette.chatre@intel.com>
- <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com>
- <YhLhoMFPyOFZ2fsX@iki.fi>
- <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <YimWaAqEnXHbLdjh@iki.fi>
- <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
+        by relay2.suse.de (Postfix) with ESMTPS id E2847A3B97;
+        Fri, 11 Mar 2022 12:12:16 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 13:12:16 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kthread: Make it clear that create_kthread() might be
+ terminated by any fatal signal
+Message-ID: <Yis8oPagDlPNQM0y@alley>
+References: <20220310093455.15176-1-pmladek@suse.com>
+ <871qz9brp7.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <871qz9brp7.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 12:33:20PM -0600, Haitao Huang wrote:
-> Hi Jarkko
+On Thu 2022-03-10 12:14:28, Eric W. Biederman wrote:
+> Petr Mladek <pmladek@suse.com> writes:
 > 
-> I have some trouble understanding the sequences below.
+> > The comments in kernel/kthread.c create a feeling that only SIGKILL
+> > is able to break create_kthread().
+>                    ^^^^^^^^^^^^^^^^ __kthread_create_on_node
 > 
-> On Thu, 10 Mar 2022 00:10:48 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> wrote:
+> Signals can't affect create_kthread in any was as it is only called by
+> kthreadd.  It is __kthread_create_on_node which gets interrupted by
+> fatal signals.
+
+Great catch! I wanted to use the public API. I missed that
+create_kthread() is used by the "kthreadd" side.
+
+Heh, there actually is "kthread_create()" macro that substitutes
+kthread_create_on_node().
+
+
+> > In reality, wait_for_completion_killable() might be killed by any
+> > fatal signal that does not have a custom handler:
+> >
+> > Update the comments in kernel/kthread.c to make this more obvious.
 > 
-> > On Wed, Feb 23, 2022 at 07:21:50PM +0000, Dhanraj, Vijay wrote:
-> > > Hi All,
-> > > 
-> > > Regarding the recent update of splitting the page permissions change
-> > > request into two IOCTLS (RELAX and RESTRICT), can we combine them into
-> > > one? That is, revert to how it was done in the v1 version?
-> > > 
-> > > Why? Currently in Gramine (a library OS for unmodified applications,
-> > > https://gramineproject.io/) with the new proposed change, one needs to
-> > > store the page permission for each page or range of pages. And for every
-> > > request of `mmap` or `mprotect`, Gramine would have to do a lookup
-> > > of the
-> > > page permissions for the request range and then call the respective
-> > > IOCTL
-> > > either RESTRICT or RELAX. This seems a little overwhelming.
-> > > 
-> > > Request: Instead, can we do `MODPE`,  call `RESTRICT` IOCTL, and then do
-> > > an `EACCEPT` irrespective of RELAX or RESTRICT page permission request?
-> > > With this approach, we can avoid storing  page permissions and simplify
-> > > the implementation.
-> > > 
-> > > I understand RESTRICT IOCTL would do a `MODPR` and trigger `ETRACK`
-> > > flows
-> > > to do TLB shootdowns which might not be needed for RELAX IOCTL but I am
-> > > not sure what will be the performance impact. Is there any data point to
-> > > see the performance impact?
-> > > 
-> > > Thanks,
-> > > -Vijay
-> > 
-> > This should get better in the next versuin. "relax" is gone. And for
-> > dynamic EAUG'd pages only VMA and EPCM permissions matter, i.e.
-> > internal vm_max_prot_bits is set to RWX.
-> > 
-> > I patched the existing series eno
-> > 
-> > For Enarx I'm using the following patterns.
-> > 
-> > Shim mmap() handler:
-> > 1. Ask host for mmap() syscall.
-> > 2. Construct secinfo matching the protection bits.
-> > 3. For each page in the address range: EACCEPTCOPY with a
-> >    zero page.
-> 
-> For EACCEPTCOPY to work, I believe PTE.RW is required for the target page.
-> So this only works for mmap(..., RW) or mmap(...,RWX).
+> Except for the minor nit in the change description.
+> Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-I use it only with EAUG.
+Thanks.
 
-> So that gives you pages with RW/RWX.
-> 
-> To change permissions of any of those pages from RW/RWX to R/RX , you need
-> call ENCLAVE_RESTRICT_PERMISSIONS ioctl with R or with PROT_NONE. you can't
-> just do EMODPE.
-> 
-> so for RW->R, you either:
-> 
-> 1)EMODPR(EPCM.NONE)
-> 2)EACCEPT(EPCM.NONE)
-> 3)EMODPE(R) -- not sure this would work as spec says EMODPE requires "Read
-> access permitted by enclave"
-> 
-> or:
-> 
-> 1)EMODPR(EPCM.PROT_R)
-> 2)EACCEPT(EPCM.PROT_R)
+I am going to send v2 next week to give time more potential
+reviewers.
 
-I checked from SDM and you're correct.
-
-Then the appropriate thing is to reset to R.
-
-> > Shim mprotect() handler:
-> > 1. Ask host for mprotect() syscall.
-> > 2. For each page in the address range: EACCEPT with PROT_NONE
-> >    secinfo and EMODPE with the secinfo having the prot bits.
-> 
-> EACCEPT requires PTE.R. And EAUG'd pages will always initialized with
-> EPCM.RW,
-> so EACCEPT(EPCM.PROT_NONE) will fail with SGX_PAGE_ATTRIBUTES_MISMATCH.
-
-Ditto.
-
-> > Backend mprotect() handler:
-> > 1. Invoke ENCLAVE_RESTRICT_PERMISSIONS ioctl for the address
-> >    range with PROT_NONE.
-> > 2. Invoke real mprotect() syscall.
-> > 
-> Note #1 can only be done after EACCEPT. MODPR is not allowed for pending
-> pages.
-
-Yes, and that's what I'm doing. After that shim does EACCEPT's in a loop.
-
-Reinette, the ioctl should already check that either R or W is set in
-secinfo and return -EACCES.
-
-I.e.
-
-(* Check for misconfigured SECINFO flags*)
-IF ( (SCRATCH_SECINFO reserved fields are not zero ) or
-(SCRATCH_SECINFO.FLAGS.R is 0 and SCRATCH_SECINFO.FLAGS.W is not 0) )
-THEN #GP(0); FI;
-
-I was testing this and wondering why my enclave #GP's, and then I checked
-SDM after reading Haitao's response. So clearly check in kernel side is
-needed.
-
-BR, Jarkko
+Best Regards,
+Petr

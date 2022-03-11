@@ -2,187 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249F04D665D
+	by mail.lfdr.de (Postfix) with ESMTP id 707D44D665E
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344342AbiCKQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S1344292AbiCKQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345185AbiCKQcx (ORCPT
+        with ESMTP id S1350380AbiCKQdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:32:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770591AD976
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:31:49 -0800 (PST)
+        Fri, 11 Mar 2022 11:33:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311D91C65C5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:31:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1065A61C0D
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63396C340E9;
-        Fri, 11 Mar 2022 16:31:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647016308;
-        bh=zZYK+aZkPSFlvOSU6TMUdz/2r2Ym7F/rak/o3ntO1Kw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DsT5G4AwPGYZggMhMinXiAQxRQLkviiEPW/oixIIkQUgglQ6S2dyNtUpOz6PLI9wC
-         V8CxUNAugBoZupYKqyY+Hsruv8P0CPfXYpQOCx4Rzkb4LZge4RXZLxDSWO1rvX0Ol9
-         T/5vfLZ0vQce5XgG0lTNBuY5unZw6XWMApfPVBvnrTPGmvxTgbL5l0WHhj3Lxcp2j/
-         PysvciDiFFlHDJ8/ZY/jjeENE4tHKhTENxaYIg80GtYY/P9Vb0BsJVBAOXluSBidMD
-         F9MPJMcrLnjUKP8fmwpr9KR0niAkSsn5JccMhFTTkPBg0WiKwv3d6/CQlX4Mmfe9ja
-         G3qE3VBgQ/YSg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id ED0195C0140; Fri, 11 Mar 2022 08:31:47 -0800 (PST)
-Date:   Fri, 11 Mar 2022 08:31:47 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: Re: [PATCH] x86/cpu: use smp_call_function_many() in
- arch_freq_prepare_all()
-Message-ID: <20220311163147.GI4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220311011715.2440601-1-eric.dumazet@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B3061C0D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73738C340E9;
+        Fri, 11 Mar 2022 16:31:55 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 11:31:53 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     <mingo@redhat.com>, <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>
+Subject: Re: [PATCH] tracing: make tracer_init_tracefs initcall asynchronous
+Message-ID: <20220311113153.2d627800@gandalf.local.home>
+In-Reply-To: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
+References: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311011715.2440601-1-eric.dumazet@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 05:17:15PM -0800, Eric Dumazet wrote:
-> From: Eric Dumazet <edumazet@google.com>
-> 
-> Opening /proc/cpuinfo can have a big latency on hosts with many cpus,
-> mostly because it is essentially doing:
-> 
->    for_each_online_cpu(cpu)
->     smp_call_function_single(cpu, aperfmperf_snapshot_khz, ...)
-> 
-> smp_call_function_single() is reusing a common csd, meaning that
-> each invocation needs to wait for completion of the prior one.
-> 
-> Paul recent patches have lowered number of cpus receiving the IPI,
-> but there are still cases where the latency of the above loop can
-> reach 10 ms, then an extra msleep(10) is performed, for a total of 20ms.
-> 
-> Using smp_call_function_many() allows for full parallelism,
-> and latency is down to ~80 usec, on a host with 256 cpus.
-> 
-> Signed-off-by: Eric Dumazet <edumazet@google.com>
+On Fri, 11 Mar 2022 19:26:56 +0800
+Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
 
-Nice!!!
+> tracer_init_tracefs() is slow especially when there are
+> lots of trace events.
+> Create a kthread to do tracer_init_tracefs() asynchronously
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+When making comments like this, please provide the benchmarks you used,
+with the numbers before and after.
 
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: <x86@kernel.org>
+> to speed up the initialization of kernel and move the
+> related functions and variables out of init section.
+
+Thus we sacrifice memory for boot time. I'd like to also see how much
+memory is freed from init before and after this patch.
+
+> 
+> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 > ---
->  arch/x86/kernel/cpu/aperfmperf.c | 32 +++++++++++++++++++++++---------
->  1 file changed, 23 insertions(+), 9 deletions(-)
+>  fs/tracefs/inode.c          |  8 ++++----
+>  kernel/trace/ftrace.c       | 12 ++++++------
+>  kernel/trace/trace.c        | 21 ++++++++++++++++-----
+>  kernel/trace/trace_events.c |  2 +-
+>  4 files changed, 27 insertions(+), 16 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> index 22911deacb6e441ad60ddb57190ef3772afb3cf0..a305310ceb44784a0ad9be7c196061d98fa1adbc 100644
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -67,7 +67,8 @@ static void aperfmperf_snapshot_khz(void *dummy)
->  	atomic_set_release(&s->scfpending, 0);
->  }
->  
-> -static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
-> +static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait,
-> +				    struct cpumask *mask)
+> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+> index de7252715b12..9a713d6bcb7e 100644
+> --- a/fs/tracefs/inode.c
+> +++ b/fs/tracefs/inode.c
+> @@ -561,10 +561,10 @@ struct dentry *tracefs_create_dir(const char *name, struct dentry *parent)
+>   *
+>   * Returns the dentry of the instances directory.
+>   */
+> -__init struct dentry *tracefs_create_instance_dir(const char *name,
+> -					  struct dentry *parent,
+> -					  int (*mkdir)(const char *name),
+> -					  int (*rmdir)(const char *name))
+> +struct dentry *tracefs_create_instance_dir(const char *name,
+> +					   struct dentry *parent,
+> +					   int (*mkdir)(const char *name),
+> +					   int (*rmdir)(const char *name))
 >  {
->  	s64 time_delta = ktime_ms_delta(now, per_cpu(samples.time, cpu));
->  	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
-> @@ -76,9 +77,13 @@ static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
->  	if (time_delta < APERFMPERF_CACHE_THRESHOLD_MS)
->  		return true;
+>  	struct dentry *dentry;
 >  
-> -	if (!atomic_xchg(&s->scfpending, 1) || wait)
-> -		smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, wait);
-> -
-> +	if (!atomic_xchg(&s->scfpending, 1) || wait) {
-> +		if (mask)
-> +			__cpumask_set_cpu(cpu, mask);
-> +		else
-> +			smp_call_function_single(cpu, aperfmperf_snapshot_khz,
-> +						 NULL, wait);
-> +	}
->  	/* Return false if the previous iteration was too long ago. */
->  	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
->  }
-> @@ -97,13 +102,14 @@ unsigned int aperfmperf_get_khz(int cpu)
->  	if (rcu_is_idle_cpu(cpu))
->  		return 0; /* Idle CPUs are completely uninteresting. */
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index a4b462b6f944..197630cbd5dd 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -940,7 +940,7 @@ static const struct file_operations ftrace_profile_fops = {
+>  };
 >  
-> -	aperfmperf_snapshot_cpu(cpu, ktime_get(), true);
-> +	aperfmperf_snapshot_cpu(cpu, ktime_get(), true, NULL);
->  	return per_cpu(samples.khz, cpu);
->  }
+>  /* used to initialize the real stat files */
+> -static struct tracer_stat function_stats __initdata = {
+> +static struct tracer_stat function_stats = {
+>  	.name		= "functions",
+>  	.stat_start	= function_stat_start,
+>  	.stat_next	= function_stat_next,
+> @@ -949,7 +949,7 @@ static struct tracer_stat function_stats __initdata = {
+>  	.stat_show	= function_stat_show
+>  };
 >  
->  void arch_freq_prepare_all(void)
+> -static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
+> +static void ftrace_profile_tracefs(struct dentry *d_tracer)
 >  {
->  	ktime_t now = ktime_get();
-> +	cpumask_var_t mask;
->  	bool wait = false;
->  	int cpu;
->  
-> @@ -113,17 +119,25 @@ void arch_freq_prepare_all(void)
->  	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
->  		return;
->  
-> +	if (!zalloc_cpumask_var(&mask, GFP_KERNEL))
-> +		return;
-> +
-> +	cpus_read_lock();
->  	for_each_online_cpu(cpu) {
->  		if (!housekeeping_cpu(cpu, HK_FLAG_MISC))
->  			continue;
->  		if (rcu_is_idle_cpu(cpu))
->  			continue; /* Idle CPUs are completely uninteresting. */
-> -		if (!aperfmperf_snapshot_cpu(cpu, now, false))
-> +		if (!aperfmperf_snapshot_cpu(cpu, now, false, mask))
->  			wait = true;
->  	}
->  
-> -	if (wait)
-> -		msleep(APERFMPERF_REFRESH_DELAY_MS);
-> +	preempt_disable();
-> +	smp_call_function_many(mask, aperfmperf_snapshot_khz, NULL, wait);
-> +	preempt_enable();
-> +	cpus_read_unlock();
-> +
-> +	free_cpumask_var(mask);
+>  	struct ftrace_profile_stat *stat;
+>  	struct dentry *entry;
+> @@ -991,7 +991,7 @@ static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
 >  }
 >  
->  unsigned int arch_freq_get_on_cpu(int cpu)
-> @@ -139,7 +153,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
->  	if (!housekeeping_cpu(cpu, HK_FLAG_MISC))
->  		return 0;
+>  #else /* CONFIG_FUNCTION_PROFILER */
+> -static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
+> +static void ftrace_profile_tracefs(struct dentry *d_tracer)
+>  {
+>  }
+>  #endif /* CONFIG_FUNCTION_PROFILER */
+> @@ -6359,7 +6359,7 @@ void ftrace_destroy_filter_files(struct ftrace_ops *ops)
+>  	mutex_unlock(&ftrace_lock);
+>  }
 >  
-> -	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
-> +	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true, NULL))
->  		return per_cpu(samples.khz, cpu);
+> -static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+> +static int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+>  {
 >  
->  	msleep(APERFMPERF_REFRESH_DELAY_MS);
-> -- 
-> 2.35.1.723.g4982287a31-goog
-> 
+>  	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+> @@ -7754,8 +7754,8 @@ void ftrace_init_tracefs(struct trace_array *tr, struct dentry *d_tracer)
+>  			  d_tracer, tr, &ftrace_no_pid_fops);
+>  }
+>  
+> -void __init ftrace_init_tracefs_toplevel(struct trace_array *tr,
+> -					 struct dentry *d_tracer)
+> +void ftrace_init_tracefs_toplevel(struct trace_array *tr,
+> +				  struct dentry *d_tracer)
+>  {
+>  	/* Only the top level directory has the dyn_tracefs and profile */
+>  	WARN_ON(!(tr->flags & TRACE_ARRAY_FL_GLOBAL));
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index eb44418574f9..f55da82060e2 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -9562,10 +9562,10 @@ int tracing_init_dentry(void)
+>  extern struct trace_eval_map *__start_ftrace_eval_maps[];
+>  extern struct trace_eval_map *__stop_ftrace_eval_maps[];
+>  
+> -static struct workqueue_struct *eval_map_wq __initdata;
+> -static struct work_struct eval_map_work __initdata;
+> +static struct workqueue_struct *eval_map_wq;
+> +static struct work_struct eval_map_work;
+>  
+> -static void __init eval_map_work_func(struct work_struct *work)
+> +static void eval_map_work_func(struct work_struct *work)
+>  {
+>  	int len;
+>  
+> @@ -9573,7 +9573,7 @@ static void __init eval_map_work_func(struct work_struct *work)
+>  	trace_insert_eval_map(NULL, __start_ftrace_eval_maps, len);
+>  }
+>  
+> -static int __init trace_eval_init(void)
+> +static int trace_eval_init(void)
+>  {
+>  	INIT_WORK(&eval_map_work, eval_map_work_func);
+>  
+> @@ -9671,7 +9671,7 @@ static struct notifier_block trace_module_nb = {
+>  };
+>  #endif /* CONFIG_MODULES */
+>  
+> -static __init int tracer_init_tracefs(void)
+> +static int tracefs_init(void *data)
+>  {
+>  	int ret;
+>  
+> @@ -9721,6 +9721,17 @@ static __init int tracer_init_tracefs(void)
+>  	return 0;
+>  }
+>  
+> +static __init int tracer_init_tracefs(void)
+> +{
+> +	struct task_struct *thread;
+> +
+> +	thread = kthread_run(tracefs_init, NULL, "tracefs_init");
+> +	if (IS_ERR(thread))
+> +		return PTR_ERR(thread);
+> +
+> +	return 0;
+> +}
+> +
+>  fs_initcall(tracer_init_tracefs);
+>  
+>  static int trace_panic_handler(struct notifier_block *this,
+> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+> index 3147614c1812..fe055bef1e8f 100644
+> --- a/kernel/trace/trace_events.c
+> +++ b/kernel/trace/trace_events.c
+> @@ -3687,7 +3687,7 @@ static __init int event_trace_init_fields(void)
+>  	return 0;
+>  }
+>  
+> -__init int event_trace_init(void)
+> +int event_trace_init(void)
+>  {
+>  	struct trace_array *tr;
+>  	struct dentry *entry;
+
+Hmm, this calls early_event_tracer() which is also in __init. Looks like
+there's going to be a ripple effect due to this change.
+
+If we want to go this route, then first a change must be made to remove the
+needed functions from init, and then see if we can consolidate it. As there
+are some init functions that are duplicated for init purposes.
+
+-- Steve

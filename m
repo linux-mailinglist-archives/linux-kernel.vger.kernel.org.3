@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31874D5B1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7684B4D5B23
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347865AbiCKGAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 01:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S234392AbiCKGAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 01:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346704AbiCKFyb (ORCPT
+        with ESMTP id S1346682AbiCKFyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:54:31 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CE4A9A5F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:53:25 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id d14-20020a170902654e00b001518cc774d3so4020912pln.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:53:25 -0800 (PST)
+        Fri, 11 Mar 2022 00:54:35 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED8DFBA40
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:53:27 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dbd2b5e180so60958177b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:53:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=ioX6wfUpsndkJitzTAba4Po2XVWDeKDX7eMlmBuk4/U=;
-        b=hWaiXpifwkAbjvK2QfpoZjFDqWEDdchT0SsvW7lNrok4lVkY1JoVKus+/k90+iaUri
-         JvM0qM9gcn99UuRPUxs1WegGGxw7+xTXbKfs1f1k1t0svyIUTW+sHkCFPf738XBP7K95
-         9NTi+HAPXgsLY3rbU1drz5OPDIVjWv5Z6ex2kNZaFjt7I57KpGt4BKdqiJH9xIJdXwVk
-         TU0tD1F7YzqvBRQpZ4K0j6lotXlqjbLf59gCsAqZ9qfE8EOSADkz9bIZnKqcQWi7o6vH
-         JblyMRXPLNMSFBAR3YClvQ4FgNGqRgCmrjPBRHLGQ8t/QvPE3hGlTq9PRtDAtuapL1+V
-         xJKw==
+        bh=QNnRoJhZKEQyM/+E7bB1cN1LmMxMwC2JWJu27WTAeTM=;
+        b=Ry+dEZKN+MH4zff16isFV3FfMvQ+BCkZ32pitHXN2VEamd2AJiR9FphyjNg88P9VuP
+         8nvTXjSCfBCvopww/LlHrgabXXcLMSCZ84lxQIJ6oQLWjF/RmSIDl10AyoJgUKzKri03
+         NAzEUV0PPow9po5JjaMnFg24lGgc7WpD7RsC36w8ULy6EHpxBYL2vmSjklcvAPX26+Xy
+         vy4aGAQWQYjxGA0QK+lexwp6iIX/PQkgwX85YSxdGO0XBzeXIz/N6P65kCesqfXSOox/
+         Lq3vq9Q4A5UpyHZa4BxHaRiuJizQLI1VpY5FYxDbzle+cn0PAWFTClDHVxAU2YoSPXCO
+         u9Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=ioX6wfUpsndkJitzTAba4Po2XVWDeKDX7eMlmBuk4/U=;
-        b=53QeHmPAukrS8WcXXjgjXpRPjS4Cksm+iiZAybxAyPfTTDHlNc3WLiPR02bNA8Xcmu
-         +1MUEYBKV02gcQ1tIdI+oOdNxkJO1ahACSkSiZYOClhGVU0x4BzzV5DF/CE5dVaXy/Sa
-         N7FqeYSu3etUTbwRyOb9W4FxkVPruKqAFMYbo5ip3MQIcpssdG7TO4eljBWyGRVghGPE
-         XnRdgVdQx+HLmmmPr1Is9fSrJSSfxQ3NaMFLPHMzfA3N4Z+zN5aoeveJexB6Q6JjzsI8
-         wfnta7/kdx+9nbI/h5R21elgjctYZe2rIkOUBWmF3XhXChVPE2ub9YpMIBF5lz+8iT1R
-         8KbQ==
-X-Gm-Message-State: AOAM530mIil1vzw1dV1n8knvbxG+Uxph0W4634HOm7xWNOyEzukSYkTq
-        8lidiY83SJjZZAd353qOck7W8RBXVNbMwqfI07zdXVTbuT0/gku9s+yX++e45Gd97fyW4naLxQt
-        pegHWhLvfN5RrEcmdiHAmXdu1qMK/I6YzDBzaZa1Yb1fCaTGNC3BlD8ONIfYv1DLf+VdRrw==
-X-Google-Smtp-Source: ABdhPJxPazRvto6tq3PYS/5Jcbouuu+cpUD0PwviXHFqAeZkuzTKYldRniByqYim1DnqqYfYXGLaRJeRMoc=
+        bh=QNnRoJhZKEQyM/+E7bB1cN1LmMxMwC2JWJu27WTAeTM=;
+        b=4clJFHclZEMiZ6CORHnGmqMJblFz/nbGfr/46RR54mGKQJ3C5N0Uo2XhQJFJKpyAdW
+         uPjkHNjNenVUmQYAc7SDPZqwznDMkhdhTVQ7gZl9vPdSxqFoSP076JC5LL5bvUnB898B
+         6L8lCJ0w7Aq8ZB+Na99Aq77R0meM37Xh8TNJesepi9R/FF4CXv3agaJi0iK0ERTuzHL3
+         jNG0l0EKvjEDxeXyg8irgkUOk9SB7YKVP5yhUNdRaww/tEWVJxzV21MNZZ+6pnK8FdyF
+         GdiJHfSl4hzxYOuPimbFPlSOQau6Tz9ezg1Pao0Q56/ILDFRPLIScUQWUmQRoUySuHT/
+         43vg==
+X-Gm-Message-State: AOAM530FEbtPbvgL0MgzSadj3Of6jWPWWChL5juiFcUk88tyqW8LCzVp
+        ZA/l17SlmuJ6WxaTuCpRqulL2J20HbT2ybCbTgrEDVaAMVTc4rstJYrCFINs/tzPZjwK/J25shC
+        mZOWN4YcdyRPI+UKzhAqsSe7sxwd/k/Jg5GShYl/ex8Jr3Z+/7bVK8jmtcQIzYiJJRO2/jw==
+X-Google-Smtp-Source: ABdhPJyyEB4J3/QUI+gHEPET1+jXWCa7sRxei7S9luq6Lzr95phlO6T30+GGBVDQpCwT4yY23CoEf61XufU=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:d501:b0:1bf:381a:c851 with SMTP id
- t1-20020a17090ad50100b001bf381ac851mr19912416pju.124.1646978005095; Thu, 10
- Mar 2022 21:53:25 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6902:108:b0:621:165e:5c1e with SMTP id
+ o8-20020a056902010800b00621165e5c1emr6589152ybh.204.1646978006526; Thu, 10
+ Mar 2022 21:53:26 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Mar 2022 05:50:33 +0000
+Date:   Fri, 11 Mar 2022 05:50:34 +0000
 In-Reply-To: <20220311055056.57265-1-seanjc@google.com>
-Message-Id: <20220311055056.57265-83-seanjc@google.com>
+Message-Id: <20220311055056.57265-84-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220311055056.57265-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [RFC PATCH 082/105] KVM: selftests: Convert psci_cpu_on_test away
- from VCPU_ID
+Subject: [RFC PATCH 083/105] KVM: selftests: Convert hardware_disable_test
+ away from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>
@@ -72,68 +72,74 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/aarch64/psci_cpu_on_test.c  | 20 +++++++++----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ .../selftests/kvm/hardware_disable_test.c     | 25 ++++++-------------
+ 1 file changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/aarch64/psci_cpu_on_test.c b/tools/testing/selftests/kvm/aarch64/psci_cpu_on_test.c
-index 3677cb2df19c..226603597917 100644
---- a/tools/testing/selftests/kvm/aarch64/psci_cpu_on_test.c
-+++ b/tools/testing/selftests/kvm/aarch64/psci_cpu_on_test.c
-@@ -17,9 +17,6 @@
- #include "processor.h"
- #include "test_util.h"
+diff --git a/tools/testing/selftests/kvm/hardware_disable_test.c b/tools/testing/selftests/kvm/hardware_disable_test.c
+index c31af07fae97..70cd22485357 100644
+--- a/tools/testing/selftests/kvm/hardware_disable_test.c
++++ b/tools/testing/selftests/kvm/hardware_disable_test.c
+@@ -27,12 +27,6 @@
  
--#define VCPU_ID_SOURCE 0
--#define VCPU_ID_TARGET 1
+ sem_t *sem;
+ 
+-/* Arguments for the pthreads */
+-struct payload {
+-	struct kvm_vm *vm;
+-	uint32_t index;
+-};
 -
- #define CPU_ON_ENTRY_ADDR 0xfeedf00dul
- #define CPU_ON_CONTEXT_ID 0xdeadc0deul
- 
-@@ -72,6 +69,7 @@ static void guest_main(uint64_t target_cpu)
- int main(void)
+ static void guest_code(void)
  {
- 	uint64_t target_mpidr, obs_pc, obs_x0;
-+	struct kvm_vcpu *vcpu0, *vcpu1;
- 	struct kvm_vcpu_init init;
+ 	for (;;)
+@@ -42,14 +36,14 @@ static void guest_code(void)
+ 
+ static void *run_vcpu(void *arg)
+ {
+-	struct payload *payload = (struct payload *)arg;
+-	struct kvm_run *state = vcpu_state(payload->vm, payload->index);
++	struct kvm_vcpu *vcpu = arg;
++	struct kvm_run *run = vcpu->run;
+ 
+-	vcpu_run(payload->vm, payload->index);
++	vcpu_run(vcpu->vm, vcpu->id);
+ 
+ 	TEST_ASSERT(false, "%s: exited with reason %d: %s\n",
+-		    __func__, state->exit_reason,
+-		    exit_reason_str(state->exit_reason));
++		    __func__, run->exit_reason,
++		    exit_reason_str(run->exit_reason));
+ 	pthread_exit(NULL);
+ }
+ 
+@@ -92,11 +86,11 @@ static inline void check_join(pthread_t thread, void **retval)
+ 
+ static void run_test(uint32_t run)
+ {
++	struct kvm_vcpu *vcpu;
  	struct kvm_vm *vm;
- 	struct ucall uc;
-@@ -83,19 +81,19 @@ int main(void)
- 	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
- 	init.features[0] |= (1 << KVM_ARM_VCPU_PSCI_0_2);
+ 	cpu_set_t cpu_set;
+ 	pthread_t threads[VCPU_NUM];
+ 	pthread_t throw_away;
+-	struct payload payloads[VCPU_NUM];
+ 	void *b;
+ 	uint32_t i, j;
  
--	aarch64_vcpu_add(vm, VCPU_ID_SOURCE, &init, guest_main);
-+	vcpu0 = aarch64_vcpu_add(vm, 0, &init, guest_main);
+@@ -110,12 +104,9 @@ static void run_test(uint32_t run)
  
- 	/*
- 	 * make sure the target is already off when executing the test.
- 	 */
- 	init.features[0] |= (1 << KVM_ARM_VCPU_POWER_OFF);
--	aarch64_vcpu_add(vm, VCPU_ID_TARGET, &init, guest_main);
-+	vcpu1 = aarch64_vcpu_add(vm, 1, &init, guest_main);
+ 	pr_debug("%s: [%d] start vcpus\n", __func__, run);
+ 	for (i = 0; i < VCPU_NUM; ++i) {
+-		vm_vcpu_add(vm, i, guest_code);
+-		payloads[i].vm = vm;
+-		payloads[i].index = i;
++		vcpu = vm_vcpu_add(vm, i, guest_code);
  
--	get_reg(vm, VCPU_ID_TARGET, KVM_ARM64_SYS_REG(SYS_MPIDR_EL1), &target_mpidr);
--	vcpu_args_set(vm, VCPU_ID_SOURCE, 1, target_mpidr & MPIDR_HWID_BITMASK);
--	vcpu_run(vm, VCPU_ID_SOURCE);
-+	get_reg(vm, vcpu1->id, KVM_ARM64_SYS_REG(SYS_MPIDR_EL1), &target_mpidr);
-+	vcpu_args_set(vm, vcpu0->id, 1, target_mpidr & MPIDR_HWID_BITMASK);
-+	vcpu_run(vm, vcpu0->id);
+-		check_create_thread(&threads[i], NULL, run_vcpu,
+-				    (void *)&payloads[i]);
++		check_create_thread(&threads[i], NULL, run_vcpu, vcpu);
+ 		check_set_affinity(threads[i], &cpu_set);
  
--	switch (get_ucall(vm, VCPU_ID_SOURCE, &uc)) {
-+	switch (get_ucall(vm, vcpu0->id, &uc)) {
- 	case UCALL_DONE:
- 		break;
- 	case UCALL_ABORT:
-@@ -106,8 +104,8 @@ int main(void)
- 		TEST_FAIL("Unhandled ucall: %lu", uc.cmd);
- 	}
- 
--	get_reg(vm, VCPU_ID_TARGET, ARM64_CORE_REG(regs.pc), &obs_pc);
--	get_reg(vm, VCPU_ID_TARGET, ARM64_CORE_REG(regs.regs[0]), &obs_x0);
-+	get_reg(vm, vcpu1->id, ARM64_CORE_REG(regs.pc), &obs_pc);
-+	get_reg(vm, vcpu1->id, ARM64_CORE_REG(regs.regs[0]), &obs_x0);
- 
- 	TEST_ASSERT(obs_pc == CPU_ON_ENTRY_ADDR,
- 		    "unexpected target cpu pc: %lx (expected: %lx)",
+ 		for (j = 0; j < SLEEPING_THREAD_NUM; ++j) {
 -- 
 2.35.1.723.g4982287a31-goog
 

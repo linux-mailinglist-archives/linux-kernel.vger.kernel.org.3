@@ -2,120 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0684D6765
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5E24D6767
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350677AbiCKRSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S1350687AbiCKRTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350669AbiCKRSK (ORCPT
+        with ESMTP id S1350669AbiCKRTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:18:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C0F1C65C8;
-        Fri, 11 Mar 2022 09:17:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6FE5B82854;
-        Fri, 11 Mar 2022 17:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3049DC340F4;
-        Fri, 11 Mar 2022 17:17:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647019023;
-        bh=443SiYGJGUDaMgpUN+vix0hHpSMSvx4CLDcgACriZt0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uu5+tGzYAjUd7aKyPyz734orEl9bVHujIe/+7Bo9jR0kAOE27Kl2UJRQk8Ld24pRF
-         ej8rmZOZzlHI58r1gyCGmlRH10ITP6M+gIZN0yujTAg9GcdP0C/dYsqN3g8+cPTASs
-         rJKnGVycgSVxaV2JJMjDiaO24qZlvQ2vxkJNVWRDyay6u+0zr1fRS3/FAsaUmNEE1w
-         7a9ynvFrgKpHqDsZidhlTtEhSMSWybAjMaoCoHLQeTcFPi6wUMEV2HdOpU9JufGlt6
-         d5p2LR0Mk1UdCanpOlclbk1qSbGMDwZXysxKCKDTrVxanATa9xTFslNthHcHs6wcDZ
-         h8/o//sAF+VWw==
-Date:   Fri, 11 Mar 2022 17:16:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alifer Moraes <alifer.m@variscite.com>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, eran.m@variscite.com,
-        festevam@gmail.com, lgirdwood@gmail.com,
-        linuxppc-dev@lists.ozlabs.org, nicoleotsuka@gmail.com,
-        patches@opensource.cirrus.com, perex@perex.cz,
-        pierluigi.p@variscite.com, robh+dt@kernel.org,
-        shengjiu.wang@gmail.com, tiwai@suse.com, Xiubo.Lee@gmail.com
-Subject: Re: [PATCH 1/4] ASoC: fsl-asoc-card: add WM8904 support
-Message-ID: <YiuECMoS3S54dfeF@sirena.org.uk>
-References: <20220307141041.27538-1-alifer.m@variscite.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b8SEATCHD1iXnOvu"
-Content-Disposition: inline
-In-Reply-To: <20220307141041.27538-1-alifer.m@variscite.com>
-X-Cookie: PIZZA!!
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 12:19:16 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E776ED31F9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:18:12 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id p8so8374025pfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:18:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:cc:from:to:message-id;
+        bh=/vAMVQ4S4rG50aDrpEZgzM1DrWkgQMPidGWj+MF7bA4=;
+        b=ldXEpgleUADdcyKGiAURlNlkwwL/8MDZLJ8RxYVwdoB3ipWBEYxgGC+oDApYJe1giz
+         WhptnF633qvGSRwsPogNwQcfvNiLz77Ba7ImzxEb9Qz/t6e5+3aPfMrcWOpxXKD0pzp5
+         jwPMY0qWYb8e4M/+AkQCGU6/CG8XBAHZ1OtqDGm8Mg8MryqAyTyaWtBa+FYzJED+J9q5
+         1pzY8SC/NGSfNY1GhXhubWfqUi3fpqVj1rx80FT2xOPglEZdjeVeLzEmkhAzYYK938Qv
+         acuy8/WuUB4NV2v10hZG1EpW+p6Ss1dsc24xvlbimnDq8lr7BSYtrwpU0xxdDJWuS33q
+         nhlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:cc:from:to:message-id;
+        bh=/vAMVQ4S4rG50aDrpEZgzM1DrWkgQMPidGWj+MF7bA4=;
+        b=sdcbvXCmlUhp20ULq7kWeZFWLbMex/BrENEV05osnww8oy831K+qmZGoPv7RAy86vH
+         rZG/mjDl/NaURsrpYCLFjjvKHcymTh7QFnIVU6DrtSbYTdnlDMZ+rDUgNGSeEPoDhARs
+         O15uEj+0nwTQF/HVWz0ksrnqSmA4qs7G9KT0pbAzxt6SMfjtvPwh3JnVQ2HxrzEsN0Fs
+         L8MaFieKtPIKqZ1ciBDui8tzCk07kTXs/Jk6X/rlSFmN2gfTQUZZsDwx5I9HQonCZBt9
+         HdhyNPjG4cbOVSo9EeThl7cbo2B9qfMaCgd1TtLKoKCXrjCRcG0CwUN6mgZnnoWttjLL
+         2DRQ==
+X-Gm-Message-State: AOAM532kGFV9g3QTgSiORYNaUedsfthcU8JwWcOuRsn2O+CR5KISL6ZS
+        vgIyW02EjKq4UtjglARJamBaIb+rsg3Htw==
+X-Google-Smtp-Source: ABdhPJyU9YbKB8/oleGqNbhXYfvTE58OeXWtoh7DpJIPNpXHhCOBSo5+IZAgxcuSScJzJw0Yy+o+eA==
+X-Received: by 2002:aa7:88d5:0:b0:4f7:1b6a:8673 with SMTP id k21-20020aa788d5000000b004f71b6a8673mr11236281pff.5.1647019092209;
+        Fri, 11 Mar 2022 09:18:12 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm11202260pfu.62.2022.03.11.09.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 09:18:12 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:18:12 -0800 (PST)
+X-Google-Original-Date: Fri, 11 Mar 2022 08:59:17 PST (-0800)
+Subject: [GIT PULL] RISC-V Fixes for 5.17-rc8
+CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-1484f557-fd58-4fe3-afce-a630fac5c8b3@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 74583f1b92cb3bbba1a3741cea237545c56f506c:
 
---b8SEATCHD1iXnOvu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  riscv: dts: k210: fix broken IRQs on hart1 (2022-03-03 20:04:21 -0800)
 
-On Mon, Mar 07, 2022 at 11:10:38AM -0300, Alifer Moraes wrote:
-> From: Pierluigi Passaro <pierluigi.p@variscite.com>
->=20
-> The codec WM8904 can use internal FLL as PLL source.
-> Whenever the PLL source is not an external MCLK, this source
-> must be setup during hw_params callback otherwise the BCLK
-> could be wrongly evaluated.
-> The SND_SOC_BIAS_PREPARE event is raised after the hw_params
-> callback, so there is no need to set again PLL and SYSCLK and
-> actually there's no need at all the set_bias_level function.
-> Also, when esai is used, a dedicated snd_soc_dai_set_tdm_slot
+are available in the Git repository at:
 
-> Signed-off by: Alifer Moraes <alifer.m@variscite.com>
->=20
-> Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-rc8
 
-When you're sending a mail your signoff should come at the end of the
-chain of signoffs - see submitting-patches.rst for details.
+for you to fetch changes up to 0966d385830de3470b7131db8e86c0c5bc9c52dc:
 
-This breaks an arm64 defconfig build:
+  riscv: Fix auipc+jalr relocation range checks (2022-03-10 20:37:44 -0800)
 
-/mnt/kernel/sound/soc/fsl/fsl-asoc-card.c: In function 'fsl_asoc_card_hw_fr=
-ee':
-/mnt/kernel/sound/soc/fsl/fsl-asoc-card.c:265:37: error: 'struct snd_soc_pc=
-m_runtime' has no member named 'cpu_dai'
-  265 |   ret =3D snd_soc_dai_set_tdm_slot(rtd->cpu_dai, 0, 0, 2,
-      |                                     ^~
-/mnt/kernel/sound/soc/fsl/fsl-asoc-card.c:266:35: error: 'params' undeclare=
-d (first use in this function); did you mean 'parameq'?
-  266 |             params_physical_width(params));
-      |                                   ^~~~~~
-      |                                   parameq
-/mnt/kernel/sound/soc/fsl/fsl-asoc-card.c:266:35: note: each undeclared ide=
-ntifier is reported only once for each function it appears in
+----------------------------------------------------------------
+RISC-V Fixes for 5.17-rc8
 
+* A fix to prevent users from enabling the alternatives framework (and
+  thus errata handling) on XIP kernels, where runtime code patching does
+  not function correctly.
+* A fix to properly detect offset overflow for AUIPC-based relocations
+  in modules.  This may manifest as modules calling arbitrary invalid
+  addresses, depending on the address allocated when a module is loaded.
 
---b8SEATCHD1iXnOvu
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+I know it's pretty late, so no big deal if these don't make it for 5.17.
 
------BEGIN PGP SIGNATURE-----
+The module issue is particularly ugly: itcould manifest for the majority of
+users, and depends on a bunch of long-term runtime behavior so won't get caught
+by simple tests.  The bug has been around forever, though, and it'll likely get
+backported either way -- figured there's no reason to wait, though.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrhAcACgkQJNaLcl1U
-h9CnVgf/Wr9SUVAFGV9OWF89sPv7dvpJRJTpALOk5PGWPIvkKsyMl54WVqeNMbb5
-aRfcFiNedP7SPyS9WJlGAt7MOa3mSG9qaFM1EkPJhLcQ5Bx1MGOEmAPt+lIuXTMz
-janQOk3NRv6wUBzS+RtQET2qCcjHkhLXJl24gvWoEQUX/qChPB3+Es3UBOkbIHWC
-Zxx/O6wQZVPqsYzoqUoDQAXlXrIrvYSwEsJXFNptivsOxr/ZkmZQWEIZ12FsnRQF
-wW1RquHMD1cr2Fx4CC9Yq8i9lgzJWFzd+k3+74c70kiHQXUJpXwdHVfIjZAvaAjk
-Shq9tKOFh/8wv7exJK4Dd+n/1PZPkg==
-=UvIJ
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Emil Renner Berthing (1):
+      riscv: Fix auipc+jalr relocation range checks
 
---b8SEATCHD1iXnOvu--
+Jisheng Zhang (1):
+      riscv: alternative only works on !XIP_KERNEL
+
+ arch/riscv/Kconfig.erratas |  1 +
+ arch/riscv/Kconfig.socs    |  4 ++--
+ arch/riscv/kernel/module.c | 21 ++++++++++++++++-----
+ 3 files changed, 19 insertions(+), 7 deletions(-)

@@ -2,58 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FDF4D66F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658164D66F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350479AbiCKRAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S1350497AbiCKRAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350441AbiCKQ7y (ORCPT
+        with ESMTP id S1350488AbiCKRAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:59:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D7E673DC;
-        Fri, 11 Mar 2022 08:58:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8400FB82C20;
-        Fri, 11 Mar 2022 16:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB580C340E9;
-        Fri, 11 Mar 2022 16:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647017928;
-        bh=OG0J3GojgmzIoNZPBok++aiZW+CyroBNvFpFTQVCZXA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=X7F+/9epy+hJ4kGnQUwkPj8TVU5IFVZly1jBpzHAfBq4aEFsMmZvEsADN86iHN8sM
-         sK9mTrmzjVGnuiIV4deFKbIPZhCpI17XVz3apKJctv0OHWdiq3rfUZOTNPzNgQuIko
-         HvPuL1R1Z9c2Uum9fRpRyPQ4LQgEobayFYlPB2Yi/E+4fYGnpppQ+He6dGcDNmPxKo
-         6DVxfPgBqkLXQu+9OYVEGQIZuyyGXXGNBR65zMqk3GdE+xsoqGnRsVdyvII+F4muhB
-         G32xX7aPwFizSGUYaJUuFjzG2TObanmerouHSrJR6jeodVH4NX8hp2IyFnGlf8H8bQ
-         zqhHIShglvKQg==
-Message-ID: <b0ef55ef-234f-63a4-7cc3-fd4acde2f011@kernel.org>
-Date:   Fri, 11 Mar 2022 09:58:46 -0700
+        Fri, 11 Mar 2022 12:00:10 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E677A692A4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:59:03 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 19so5466069wmy.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k+sAaPZ6B7SnVTAYchLFauNVj/7hDIru6DfQ96n92S4=;
+        b=Ji4/o3rF1hjtnWTA9Rd2MUj5r5t9XJSUwTJ2lMRuXkrxIgPXuh9KN6PElwI6dBLeod
+         zGcO5TxZqo8kIsVS8wN0x6qNHVcO11pPSFvbDvRZbauDLuvmZ3ND11IuGiPGHIifk/8s
+         B2MkGMgef35/jl9O7tcrdYxz5hFQ1/udTsOlNT5NtVZTevyHQ1z3gHVZq55ycERUNEhZ
+         hS3Eyj4p+V3CfQXLeBOYz5OHkUB6OGJL5bV1nTn7N4g3T6HfOaYzyYu7Iym3fFmtAESW
+         EzT+QXvK+l/7O0my9ejaL9pYFM8TXUEUd7JvsrXrml4p0ThyRBFu8sdgRpvUxkQHNtzQ
+         SdsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k+sAaPZ6B7SnVTAYchLFauNVj/7hDIru6DfQ96n92S4=;
+        b=pr6r3rj/1NXXZCWM+6TJwxlkBPf/79Q5WRP12IzRjvntldleABJq6EhxX315AKzNtf
+         Er+sIDS32Np9Mbi4v/ADjtK6vn0jaKvVgKiWJf4Fq+62RDel8wYuReSx4kBK1N0aPR7s
+         wr5KvL9MABTqF8i96FTVjHU8PDSjtl5PTpntZoNwGPJcpPUVes1xpYhZwsEdbsov79y+
+         t+Qu/eSPht374PT/kWWEg3hRi03He+mWPZ3gMDC7HOPrDBw39wAwfyxuckDjC+2mFx9R
+         g4KvEukY0Tti3weZJRybsfBGkjSCnbkkeNRcsRho+OYrikCI37Frg+gKb977r1+ds7ZN
+         xnig==
+X-Gm-Message-State: AOAM5321F79FtUYbt2begSs85uwsP5onzFCp2v/U5mRkIDBfqYSRytUj
+        nOd4QxUmfleIQUc5zWmPo4mAlrBt6g==
+X-Google-Smtp-Source: ABdhPJyVP6VGaQyGh30esA1uZYqyfmz014jsRc+0ay1k03iIbsMWl3+anVDMGkE9VeAAFxLkR2/JmQ==
+X-Received: by 2002:a7b:ce02:0:b0:381:2007:f75c with SMTP id m2-20020a7bce02000000b003812007f75cmr16619260wmc.6.1647017942448;
+        Fri, 11 Mar 2022 08:59:02 -0800 (PST)
+Received: from localhost.localdomain ([46.53.250.95])
+        by smtp.gmail.com with ESMTPSA id u25-20020a05600c211900b00389d4bdb3d2sm9142281wml.36.2022.03.11.08.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 08:59:02 -0800 (PST)
+Date:   Fri, 11 Mar 2022 19:59:00 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/5] x86/unwind/orc: delete dead write in __orc_find()
+Message-ID: <Yit/1Ba5IIHl8eKt@localhost.localdomain>
+References: <20220311144312.88466-1-adobriyan@gmail.com>
+ <20220311144312.88466-5-adobriyan@gmail.com>
+ <6257b01104da4891af46eec530df1dcb@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH 1/3] net:ipv6:Add ndisc_bond_send_na to support sending na
- by slave directly
-Content-Language: en-US
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org, yoshfuji@linux-ipv6.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyd12@chinatelecom.cn
-References: <20220311024958.7458-1-sunshouxin@chinatelecom.cn>
- <20220311024958.7458-2-sunshouxin@chinatelecom.cn>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220311024958.7458-2-sunshouxin@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6257b01104da4891af46eec530df1dcb@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,80 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 7:49 PM, Sun Shouxin wrote:
-> diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
-> index fcb288b0ae13..c59a110e9b10 100644
-> --- a/net/ipv6/ndisc.c
-> +++ b/net/ipv6/ndisc.c
-> @@ -572,6 +572,67 @@ void ndisc_send_na(struct net_device *dev, const struct in6_addr *daddr,
->  	ndisc_send_skb(skb, daddr, src_addr);
->  }
->  
-> +void ndisc_bond_send_na(struct net_device *dev, const struct in6_addr *daddr,
+On Fri, Mar 11, 2022 at 03:13:02PM +0000, David Laight wrote:
+> From: Alexey Dobriyan
+> > Sent: 11 March 2022 14:43
+> > 
+> > Also move "mid" variable to the innermost scope and delete useless
+> > parenthesis while I'm at it.
+> 
+> Hiding the definition of 'mid' in the inner scope is pointless.
 
-This ipv6 code, not bond code
+Not, it is not.
 
+> I'm also not 100% sure that 'found' is always set.
 
-> +			const struct in6_addr *solicited_addr,
-> +			bool router, bool solicited, bool override,
-> +			bool inc_opt, unsigned short vlan_id,
-> +			const void *mac_dst, const void *mac_src)
-> +{
-> +	struct sk_buff *skb;
-> +	const struct in6_addr *src_addr;
-> +	struct nd_msg *msg;
-> +	struct net *net = dev_net(dev);
-> +	struct sock *sk = net->ipv6.ndisc_sk;
-> +	int optlen = 0;
-> +	int ret;
-> +
-> +	src_addr = solicited_addr;
-> +	if (!dev->addr_len)
-> +		inc_opt = false;
-> +	if (inc_opt)
-> +		optlen += ndisc_opt_addr_space(dev,
-> +					       NDISC_NEIGHBOUR_ADVERTISEMENT);
-> +
-> +	skb = ndisc_alloc_skb(dev, sizeof(*msg) + optlen);
-> +	if (!skb)
-> +		return;
-> +
-> +	msg = skb_put(skb, sizeof(*msg));
-> +	*msg = (struct nd_msg) {
-> +		.icmph = {
-> +			.icmp6_type = NDISC_NEIGHBOUR_ADVERTISEMENT,
-> +			.icmp6_router = router,
-> +			.icmp6_solicited = solicited,
-> +			.icmp6_override = override,
-> +		},
-> +		.target = *solicited_addr,
-> +	};
-> +
-> +	if (inc_opt)
-> +		ndisc_fill_addr_option(skb, ND_OPT_TARGET_LL_ADDR,
-> +				       dev->dev_addr,
-> +				       NDISC_NEIGHBOUR_ADVERTISEMENT);
-> +
-> +	if (vlan_id)
-> +		__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
-> +				       vlan_id);
-> +
-> +	msg->icmph.icmp6_cksum = csum_ipv6_magic(src_addr, daddr, skb->len,
-> +						 IPPROTO_ICMPV6,
-> +						 csum_partial(&msg->icmph,
-> +							      skb->len, 0));
-> +
-> +	ip6_nd_hdr(skb, src_addr, daddr, inet6_sk(sk)->hop_limit, skb->len);
-> +
-> +	skb->protocol = htons(ETH_P_IPV6);
-> +	skb->dev = dev;
-> +	if (dev_hard_header(skb, dev, ETH_P_IPV6, mac_dst, mac_src, skb->len) < 0)
-> +		return;
-> +
-> +	ret = dev_queue_xmit(skb);
-> +}
-> +EXPORT_SYMBOL(ndisc_bond_send_na);
+"found" is left as-is by the patch.
 
-It would be better to refactor ndisc_send_na and extract what you think
-you need into a new helper that gets exported for bond.
+> Consider the ip < orc_ip(first) case.
 
+> > --- a/arch/x86/kernel/unwind_orc.c
+> > +++ b/arch/x86/kernel/unwind_orc.c
+> > @@ -35,7 +35,7 @@ static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
+> >  {
+> >  	int *first = ip_table;
+> >  	int *last = ip_table + num_entries - 1;
+> > -	int *mid = first, *found = first;
+> > +	int *found = first;
+> > 
+> >  	if (!num_entries)
+> >  		return NULL;
+> > @@ -47,7 +47,7 @@ static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
+> >  	 * ignored when they conflict with a real entry.
+> >  	 */
+> >  	while (first <= last) {
+> > -		mid = first + ((last - first) / 2);
+> > +		int *mid = first + (last - first) / 2;
+> > 
+> >  		if (orc_ip(mid) <= ip) {
+> >  			found = mid;

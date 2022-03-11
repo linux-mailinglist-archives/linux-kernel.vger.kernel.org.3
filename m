@@ -2,115 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36634D5D99
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83954D5D9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiCKIkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S234784AbiCKIlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiCKIkP (ORCPT
+        with ESMTP id S235377AbiCKIk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:40:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60F61B98A2;
-        Fri, 11 Mar 2022 00:39:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D7AA61DF7;
-        Fri, 11 Mar 2022 08:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A644C340E9;
-        Fri, 11 Mar 2022 08:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646987951;
-        bh=VR65Ts15rZoinOtKMC5nZR3huGHCng96LOJ+iodA26M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y8h9eVCjKRRo53CER8Rxrj6wSw5A0E+3gFPJ/3JsFJs7i7WERXFk27+CyA6gu16mP
-         To0aHOvPYC4wiCxsMbHO/WE0oxoilhTUHhQ4zXFDujR5zywHMlaydAq07Ei3CO4c8l
-         XaRgs20lJ3gb9iYLOBGNpa8HDPzsCsJHi3jDBBW0=
-Date:   Fri, 11 Mar 2022 09:39:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: Re: [PATCH 5.16 29/37] arm64: entry: Add vectors that have the bhb
- mitigation sequences
-Message-ID: <YisKrFY6yBDmUu6b@kroah.com>
-References: <20220309155859.086952723@linuxfoundation.org>
- <20220309155859.932269331@linuxfoundation.org>
- <20220310232729.GA16308@amd>
- <YisFJPSqqWy8GABY@kroah.com>
+        Fri, 11 Mar 2022 03:40:59 -0500
+Received: from smtp.tom.com (smtprz01.163.net [106.3.154.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 314D51B98B6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:39:56 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by vip-app02.163.net (Postfix) with ESMTP id AD0F044018B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:39:54 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646987994; bh=yYffQcBKLRbGtRWbyWPUTkTs+t8t9AmrQpNgV1htlDc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GZjSzy0zP24OwZ+qpi7pjb4aWf7F87a9LUjOpyNvuP/KdBZ2Y/nmtGYisC20ux6Zp
+         0ZPPgUGgPsdS3Gocu7AsP7ysX7iBFNU9XgzmC7l0jg4ju0tQAvrxUJ1nUhObi0Mizg
+         OqGI4DY3HIq+AVBFXO9i5vUIt1nCM7nvKNUx9z3I=
+Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
+          by localhost (TOM SMTP Server) with SMTP ID -1071510655
+          for <linux-kernel@vger.kernel.org>;
+          Fri, 11 Mar 2022 16:39:54 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646987994; bh=yYffQcBKLRbGtRWbyWPUTkTs+t8t9AmrQpNgV1htlDc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GZjSzy0zP24OwZ+qpi7pjb4aWf7F87a9LUjOpyNvuP/KdBZ2Y/nmtGYisC20ux6Zp
+         0ZPPgUGgPsdS3Gocu7AsP7ysX7iBFNU9XgzmC7l0jg4ju0tQAvrxUJ1nUhObi0Mizg
+         OqGI4DY3HIq+AVBFXO9i5vUIt1nCM7nvKNUx9z3I=
+Received: from localhost (unknown [101.93.196.13])
+        by antispamvip.163.net (Postfix) with ESMTPA id 8D22615414F8;
+        Fri, 11 Mar 2022 16:39:49 +0800 (CST)
+Date:   Fri, 11 Mar 2022 16:39:48 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH 1/3] tcp: export symbol tcp_set_congestion_control
+Message-ID: <20220311163948.000064d4@tom.com>
+In-Reply-To: <20220311071319.GA18222@lst.de>
+References: <20220311030113.73384-1-sunmingbao@tom.com>
+        <20220311030113.73384-2-sunmingbao@tom.com>
+        <20220311071319.GA18222@lst.de>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YisFJPSqqWy8GABY@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 09:15:32AM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Mar 11, 2022 at 12:27:29AM +0100, Pavel Machek wrote:
-> > Hi!
-> > 
-> > > From: James Morse <james.morse@arm.com>
-> > > 
-> > > commit ba2689234be92024e5635d30fe744f4853ad97db upstream.
-> > > 
-> > > Some CPUs affected by Spectre-BHB need a sequence of branches, or a
-> > > firmware call to be run before any indirect branch. This needs to go
-> > > in the vectors. No CPU needs both.
-> > > 
-> > > While this can be patched in, it would run on all CPUs as there is a
-> > > single set of vectors. If only one part of a big/little combination is
-> > > affected, the unaffected CPUs have to run the mitigation too.
-> > 
-> > This adds build error. Same problem is in 5.10.
-> > 
-> > > --- /dev/null
-> > > +++ b/arch/arm64/include/asm/vectors.h
-> > > @@ -0,0 +1,34 @@
-> > ...
-> > > +/*
-> > > + * Note: the order of this enum corresponds to two arrays in entry.S:
-> > > + * tramp_vecs and __bp_harden_el1_vectors. By default the canonical
-> > > + * 'full fat' vectors are used directly.
-> > > + */
-> > > +enum arm64_bp_harden_el1_vectors {
-> > > +#ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
-> > > +	/*
-> > > +	 * Perform the BHB loop mitigation, before branching to the canonical
-> > > +	 * vectors.
-> > > +	 */
-> > > +	EL1_VECTOR_BHB_LOOP,
-> > > +
-> > > +	/*
-> > > +	 * Make the SMC call for firmware mitigation, before branching to the
-> > > +	 * canonical vectors.
-> > > +	 */
-> > > +	EL1_VECTOR_BHB_FW,
-> > > +#endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
-> > > +
-> > > +	/*
-> > > +	 * Remap the kernel before branching to the canonical vectors.
-> > > +	 */
-> > > +	EL1_VECTOR_KPTI,
-> > > ++};
-> > > +
-> > 
-> > 
-> > Note "++". Following patch fixes this up, but it is still a trap for
-> > people trying to bisect.
+On Fri, 11 Mar 2022 08:13:19 +0100
+Christoph Hellwig <hch@lst.de> wrote:
+
+> Maybe add a kerneldoc comment now that this is an exported API?
 > 
-> Ick, ok, will try to fix up, thanks for finding this.
+> Otherwise this looks fine to me:
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Now fixed up for 5.16.y, 5.15.y, and 5.10.y, thanks.
+accept.
 
-greg k-h
+will add it in the next version.
+and will notice user "Must be called on a locked sock".

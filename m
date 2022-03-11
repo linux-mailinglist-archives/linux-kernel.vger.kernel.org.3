@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F68F4D5EB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA624D5EB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbiCKJqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S1347698AbiCKJqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241803AbiCKJq2 (ORCPT
+        with ESMTP id S1347649AbiCKJq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 04:46:28 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDC51BE4DB;
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7141BE4D8;
         Fri, 11 Mar 2022 01:45:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=axis.com; q=dns/txt; s=axis-central1; t=1646991924;
   x=1678527924;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jeowJQyOgKZ6cqeMbAKF3JC/lNT1RzSMTT/8wHCaDkk=;
-  b=S03M0fhRJ4Tvi/6pdKjjoPz7oGAQB81kq8mXEjsFCPvLJVkNMpJ6frd9
-   KRgCqQLd+NoKejQZU4mWOXigY92hO8CyKqKQ7fDPKIg5Nu7Lq0Ue1i1LP
-   0RYPPyVMFPlV/jc8wuXC0qbdvbPHTva1c0hJjULRoHsEobB7imQQjj5HO
-   YY3DfTBnYcCpb5rm9w7J4TIZHR7bM9UfK7w5woDIxykF4FiDdnVxliSwe
-   qJ8QAScwnBtag2/Fsw6QIyjSEU+2n3jCDTlDui3X1oUVw1l8kVOzMCgZ/
-   WHO+/YrM/InQuBgPLa5nJqkp193c3WTxDlrIwGHkICyYW2JA/nAx+iIbF
-   w==;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HGte/zaS5mfJUA4/Q4DGs8r+NCytaCeHNe8LA2QiASY=;
+  b=m9KCbxlJCv+udCdeH0UTFeus96wzYIUKN9pTop2RX5Fd+luLE2vDpFCS
+   75nIXFKQ1aPgEzniLjIJjyhyL6Hr2C+mIVHCoV3dUx6IpXj2l3TWI8nxm
+   06H2TpVMb9BB4rP/QTku4d/wjowePuoO/LognOsU1hBP84UyCYFsQKyKx
+   Feu0D9aleBLCk6wu444hdJZWndQk30LuazgSt60DE7oBGYbSEvpeuaEWE
+   kv36kzXpL+QeK9vwLEoyFXnzwrrzfVl8t26hDeZGTH3IN9wUNuBkxPPHO
+   ek7EH92HaYfi5fw2CMuE/r98uiEc+dtaYDhYadJQn0BswtPjWzBoDnBlG
+   g==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
         <krzysztof.kozlowski@canonical.com>
@@ -38,51 +38,61 @@ CC:     <kernel@axis.com>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
         <alim.akhtar@samsung.com>
-Subject: [PATCH v2 0/2] Add support for ARTPEC-8 UART
-Date:   Fri, 11 Mar 2022 10:45:13 +0100
-Message-ID: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
+Subject: [PATCH v2 1/2] dt-bindings: serial: samsung: Add ARTPEC-8 UART
+Date:   Fri, 11 Mar 2022 10:45:14 +0100
+Message-ID: <20220311094515.3223023-2-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
+References: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for the UART hardware on the ARTPEC-8 chip.  This
-block is already supported by an existing driver so only a small patch to
-describe the properties of the variant is required.
+Add a compatible for the UART on the ARTPEC-8 SoC.  This hardware block
+is closely related to the variants used on the Exynos chips.  The
+register layout is identical to Exynos850 et al but the fifo size is
+different (64 bytes in each direction for all instances).
 
-v2:
-- This version is based on top of Krzysztof's "minor fixes/cleanups" series
-  since they will conflict otherwise.
-- Expand commit messages
-- Define required clocks in binding
-- Fix FIFO size
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
 
-Cc: linux-kernel@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-serial@vger.kernel.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: robh+dt@kernel.org
-Cc: alim.akhtar@samsung.com
+Notes:
+    v2:
+    - Expand commit message.
+    - Define required clocks.
 
-Vincent Whitchurch (2):
-  dt-bindings: serial: samsung: Add ARTPEC-8 UART
-  tty: serial: samsung: Add ARTPEC-8 support
+ Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../bindings/serial/samsung_uart.yaml         |  2 +
- drivers/tty/serial/Kconfig                    |  2 +-
- drivers/tty/serial/samsung_tty.c              | 37 +++++++++++++++++++
- 3 files changed, 40 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+index 2940afb874b3..c2423144a4d6 100644
+--- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
++++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+@@ -20,6 +20,7 @@ properties:
+     items:
+       - enum:
+           - apple,s5l-uart
++          - axis,artpec8-uart
+           - samsung,s3c2410-uart
+           - samsung,s3c2412-uart
+           - samsung,s3c2440-uart
+@@ -110,6 +111,7 @@ allOf:
+           contains:
+             enum:
+               - apple,s5l-uart
++              - axis,artpec8-uart
+               - samsung,exynos4210-uart
+     then:
+       properties:
 -- 
 2.34.1
 

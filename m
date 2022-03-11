@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3314D6244
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5F44D6246
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348856AbiCKNWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S1348865AbiCKNWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239206AbiCKNWD (ORCPT
+        with ESMTP id S1348862AbiCKNWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:22:03 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722151C2D97;
-        Fri, 11 Mar 2022 05:21:00 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id y22so10914792eds.2;
-        Fri, 11 Mar 2022 05:21:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=KeIcFi3Rr2zXYQr6fLEKbqt/2PwXApn2VhoSkP/Ntyc=;
-        b=jkyAQPSP/xz+inFQxVFY0mppDO9MzYQLQeOd8v14TimD8JzQhX/JidRRqqZ0OWKxGv
-         g1/khMtqk+7ZUFDvfh/oW8w8YCifaIKwqVewNuy3v6rZ/BXuX5tsI5avxWJVKxLbcpaT
-         nkJwKbI6B7s+bswHpbWkRo0SFhYem9Boj/Tx5t90dgDjDx1Lr5a+iICusDlGH4KK22A1
-         qmNtCi5kADJ5ETV0BQtaNZVraQV1qYnIhiueBBBjhMZZmRKjgykSpagzpt+J5VAQnnga
-         N/x6/ml5uL3utQoVAzkvJZSshTI2Oy99aMVh+2ftyXpfwjybDmSkFaSpjowP6OLsyg68
-         FLvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=KeIcFi3Rr2zXYQr6fLEKbqt/2PwXApn2VhoSkP/Ntyc=;
-        b=Vm8JUV8zsXmNmw6qaQUIuJgwqy//0jGzxWvd7M7cFJqQUauvWQzH6r+S4dPCoj0fhp
-         zDWn4r+ODSO/n47JEMuz4pkrYsJ5Zl7IESEvPTWHsXYBQ4rsTni6Yz2SdZBgKMS3uYw+
-         RvwyaoTc5BA2Ra2J5X9hcXmjT/u/ES92eyhcN0NSzZo/EYszN40r7XFtAf8gs07OIj3H
-         aA8X+CFNUQSNToZvjAJnHprc1dhwftQ9iG+V5h8lMR8OP9w/f8HYlVSzgnPwSJLxIrS1
-         4xdpqpf7MTOAcl4pku0zayAPC5Ju+UfXPXK3vsqV52k0niRc0+tcjisYN75aOC+EimGR
-         k0Sg==
-X-Gm-Message-State: AOAM533B9bhTMaaR1ZxVv954D9EcsZxcQmT87DjEAYnE5xpeMPcsKBjy
-        6hFJ/JObPWYFm8DI3dK9l4U=
-X-Google-Smtp-Source: ABdhPJwVXUzZB5cpKF2x75RtFG3YEMTiKoforB885AlXxaBQxm2RTqSxA2WUUMN/51rejK5FcxSHGA==
-X-Received: by 2002:a05:6402:4414:b0:408:4dc0:3ee9 with SMTP id y20-20020a056402441400b004084dc03ee9mr8686736eda.203.1647004858571;
-        Fri, 11 Mar 2022 05:20:58 -0800 (PST)
-Received: from felia.fritz.box (200116b826a9a900147fc2a0771e144b.dip.versatel-1u1.de. [2001:16b8:26a9:a900:147f:c2a0:771e:144b])
-        by smtp.gmail.com with ESMTPSA id u9-20020a170906124900b006ce88a505a1sm3027146eja.179.2022.03.11.05.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 05:20:58 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for ARM/CORTINA SYSTEMS GEMINI ARM ARCHITECTURE
-Date:   Fri, 11 Mar 2022 14:20:16 +0100
-Message-Id: <20220311132016.24090-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 11 Mar 2022 08:22:16 -0500
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4DF1C3D11
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647004842; bh=J7/vKcyix+nji45hqGrcjszxF1kSDnocg442Y//BGKo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=tOhHJisO0eoVBxXAyJJVaphOYMMSeBqvEeikezoAsTuQxuXP/DrQ/jRcRmrk3F1v5
+         S0PPiGSE7VOj6V778ZCTCqxgsFWcb6Dfp14kJOZsRDKIYe/8SP5vnlUXNPc6QY3Fip
+         cCSpCjcyhDXrCINmTirV/w3AyWfvAe1U2kSm13yo2S3m2XlTc2A0fSCK76NffTgmyR
+         F1n1tMZnOzuY5SHDKuFymCG9lCh06Z+NmDuY/NjoSiwW2KTZDQhU8fo7MoNfMwba33
+         zx76vIdgTDlmZ+c/BYTDigElSyh3SZud/P5+zbnxDMZpkzwjOnHfw4W+XWzZgPDTwc
+         WeM/PBJLVyPmA==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 138F439E948;
+        Fri, 11 Mar 2022 13:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647004842; bh=J7/vKcyix+nji45hqGrcjszxF1kSDnocg442Y//BGKo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=tOhHJisO0eoVBxXAyJJVaphOYMMSeBqvEeikezoAsTuQxuXP/DrQ/jRcRmrk3F1v5
+         S0PPiGSE7VOj6V778ZCTCqxgsFWcb6Dfp14kJOZsRDKIYe/8SP5vnlUXNPc6QY3Fip
+         cCSpCjcyhDXrCINmTirV/w3AyWfvAe1U2kSm13yo2S3m2XlTc2A0fSCK76NffTgmyR
+         F1n1tMZnOzuY5SHDKuFymCG9lCh06Z+NmDuY/NjoSiwW2KTZDQhU8fo7MoNfMwba33
+         zx76vIdgTDlmZ+c/BYTDigElSyh3SZud/P5+zbnxDMZpkzwjOnHfw4W+XWzZgPDTwc
+         WeM/PBJLVyPmA==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id AA1DF39E937;
+        Fri, 11 Mar 2022 13:20:41 +0000 (UTC)
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+Date:   Fri, 11 Mar 2022 15:20:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220311_132042_108857_54C47694 
+X-CRM114-Status: GOOD (  20.88  )
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 208b65f7b5cc ("dt-bindings: net: convert net/cortina,gemini-ethernet
-to yaml") converts cortina,gemini-ethernet.txt to yaml, but missed to
-adjust its reference in MAINTAINERS.
+On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+> PL022 binding require two clocks to be defined but lpc platform doesn't
+> comply with bindings and define only one clock i.e apb_pclk.
+> 
+> Update spi clocks and clocks-names property by adding appropriate clock
+> reference to make it compliant with bindings.
+> 
+> CC: Vladimir Zapolskiy <vz@mleia.com>
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+> v2:
+> - New patch with similar changeset
+> - Send to soc ML
+> 
+>   arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+> index c87066d6c995..30958e02d5e2 100644
+> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>   				compatible = "arm,pl022", "arm,primecell";
+>   				reg = <0x20084000 0x1000>;
+>   				interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk LPC32XX_CLK_SSP0>;
+> -				clock-names = "apb_pclk";
+> +				clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+> +				clock-names = "sspclk", "apb_pclk";
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+In fact I'm uncertain if it is the right change, could it happen that the commit
+cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+schema pattern?
 
-Repair this file reference in ARM/CORTINA SYSTEMS GEMINI ARM ARCHITECTURE.
+Apparently just one clock is wanted on all observed platforms and cases, this
+is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Rob, please pick this minor non-urgent cleanup patch in your -next tree on
-top of the commit above.
+	pl022->clk = devm_clk_get(&adev->dev, NULL);
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So, I would vote to fix the device tree bindings schema.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d0a17fcf264b..80e5867b2afa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2004,7 +2004,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- T:	git git://github.com/ulli-kroll/linux.git
- F:	Documentation/devicetree/bindings/arm/gemini.yaml
--F:	Documentation/devicetree/bindings/net/cortina,gemini-ethernet.txt
-+F:	Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
- F:	Documentation/devicetree/bindings/pinctrl/cortina,gemini-pinctrl.txt
- F:	Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
- F:	arch/arm/boot/dts/gemini*
--- 
-2.17.1
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+>   				status = "disabled";
+> @@ -202,8 +202,8 @@ ssp1: spi@2008c000 {
+>   				compatible = "arm,pl022", "arm,primecell";
+>   				reg = <0x2008c000 0x1000>;
+>   				interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk LPC32XX_CLK_SSP1>;
+> -				clock-names = "apb_pclk";
+> +				clocks = <&clk LPC32XX_CLK_SSP1>, <&clk LPC32XX_CLK_SSP1>;
+> +				clock-names = "sspclk", "apb_pclk";
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+>   				status = "disabled";
+> 
 
+--
+Best wishes,
+Vladimir

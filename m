@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FC44D665B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249F04D665D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241088AbiCKQbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S1344342AbiCKQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiCKQb2 (ORCPT
+        with ESMTP id S1345185AbiCKQcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:31:28 -0500
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383F51C65C5;
-        Fri, 11 Mar 2022 08:30:24 -0800 (PST)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1nSi9Z-0000nv-Cq; Fri, 11 Mar 2022 17:30:09 +0100
-Message-ID: <d04e096a-b12e-91e2-204e-b3643a62d705@maciej.szmigiero.name>
-Date:   Fri, 11 Mar 2022 17:30:03 +0100
+        Fri, 11 Mar 2022 11:32:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770591AD976
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:31:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1065A61C0D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63396C340E9;
+        Fri, 11 Mar 2022 16:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647016308;
+        bh=zZYK+aZkPSFlvOSU6TMUdz/2r2Ym7F/rak/o3ntO1Kw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DsT5G4AwPGYZggMhMinXiAQxRQLkviiEPW/oixIIkQUgglQ6S2dyNtUpOz6PLI9wC
+         V8CxUNAugBoZupYKqyY+Hsruv8P0CPfXYpQOCx4Rzkb4LZge4RXZLxDSWO1rvX0Ol9
+         T/5vfLZ0vQce5XgG0lTNBuY5unZw6XWMApfPVBvnrTPGmvxTgbL5l0WHhj3Lxcp2j/
+         PysvciDiFFlHDJ8/ZY/jjeENE4tHKhTENxaYIg80GtYY/P9Vb0BsJVBAOXluSBidMD
+         F9MPJMcrLnjUKP8fmwpr9KR0niAkSsn5JccMhFTTkPBg0WiKwv3d6/CQlX4Mmfe9ja
+         G3qE3VBgQ/YSg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id ED0195C0140; Fri, 11 Mar 2022 08:31:47 -0800 (PST)
+Date:   Fri, 11 Mar 2022 08:31:47 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Subject: Re: [PATCH] x86/cpu: use smp_call_function_many() in
+ arch_freq_prepare_all()
+Message-ID: <20220311163147.GI4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220311011715.2440601-1-eric.dumazet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220311032801.3467418-1-seanjc@google.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 00/21] KVM: x86: Event/exception fixes and cleanups
-In-Reply-To: <20220311032801.3467418-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311011715.2440601-1-eric.dumazet@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,32 +62,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Sean,
-
-On 11.03.2022 04:27, Sean Christopherson wrote:
-> The main goal of this series is to fix KVM's longstanding bug of not
-> honoring L1's exception intercepts wants when handling an exception that
-> occurs during delivery of a different exception.  E.g. if L0 and L1 are
-> using shadow paging, and L2 hits a #PF, and then hits another #PF while
-> vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
-> KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
-> so that the #PF is routed to L1, not injected into L2 as a #DF.
+On Thu, Mar 10, 2022 at 05:17:15PM -0800, Eric Dumazet wrote:
+> From: Eric Dumazet <edumazet@google.com>
 > 
-> nVMX has hacked around the bug for years by overriding the #PF injector
-> for shadow paging to go straight to VM-Exit, and nSVM has started doing
-> the same.  The hacks mostly work, but they're incomplete, confusing, and
-> lead to other hacky code, e.g. bailing from the emulator because #PF
-> injection forced a VM-Exit and suddenly KVM is back in L1.
+> Opening /proc/cpuinfo can have a big latency on hosts with many cpus,
+> mostly because it is essentially doing:
+> 
+>    for_each_online_cpu(cpu)
+>     smp_call_function_single(cpu, aperfmperf_snapshot_khz, ...)
+> 
+> smp_call_function_single() is reusing a common csd, meaning that
+> each invocation needs to wait for completion of the prior one.
+> 
+> Paul recent patches have lowered number of cpus receiving the IPI,
+> but there are still cases where the latency of the above loop can
+> reach 10 ms, then an extra msleep(10) is performed, for a total of 20ms.
+> 
+> Using smp_call_function_many() allows for full parallelism,
+> and latency is down to ~80 usec, on a host with 256 cpus.
+> 
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
 
-Looks like we were working on similar KVM area recently [1].
+Nice!!!
 
-It look like parts of our patch sets touch the same code.
-Since your patch set is much bigger and comprehensive I will base mine on
-top of yours once there are no more incoming review comments for your
-patch set (in other words, once it is in its final form).
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-Thanks,
-Maciej
-
-[1]: https://lore.kernel.org/kvm/cover.1646944472.git.maciej.szmigiero@oracle.com/
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: <x86@kernel.org>
+> ---
+>  arch/x86/kernel/cpu/aperfmperf.c | 32 +++++++++++++++++++++++---------
+>  1 file changed, 23 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
+> index 22911deacb6e441ad60ddb57190ef3772afb3cf0..a305310ceb44784a0ad9be7c196061d98fa1adbc 100644
+> --- a/arch/x86/kernel/cpu/aperfmperf.c
+> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> @@ -67,7 +67,8 @@ static void aperfmperf_snapshot_khz(void *dummy)
+>  	atomic_set_release(&s->scfpending, 0);
+>  }
+>  
+> -static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
+> +static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait,
+> +				    struct cpumask *mask)
+>  {
+>  	s64 time_delta = ktime_ms_delta(now, per_cpu(samples.time, cpu));
+>  	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
+> @@ -76,9 +77,13 @@ static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
+>  	if (time_delta < APERFMPERF_CACHE_THRESHOLD_MS)
+>  		return true;
+>  
+> -	if (!atomic_xchg(&s->scfpending, 1) || wait)
+> -		smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, wait);
+> -
+> +	if (!atomic_xchg(&s->scfpending, 1) || wait) {
+> +		if (mask)
+> +			__cpumask_set_cpu(cpu, mask);
+> +		else
+> +			smp_call_function_single(cpu, aperfmperf_snapshot_khz,
+> +						 NULL, wait);
+> +	}
+>  	/* Return false if the previous iteration was too long ago. */
+>  	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
+>  }
+> @@ -97,13 +102,14 @@ unsigned int aperfmperf_get_khz(int cpu)
+>  	if (rcu_is_idle_cpu(cpu))
+>  		return 0; /* Idle CPUs are completely uninteresting. */
+>  
+> -	aperfmperf_snapshot_cpu(cpu, ktime_get(), true);
+> +	aperfmperf_snapshot_cpu(cpu, ktime_get(), true, NULL);
+>  	return per_cpu(samples.khz, cpu);
+>  }
+>  
+>  void arch_freq_prepare_all(void)
+>  {
+>  	ktime_t now = ktime_get();
+> +	cpumask_var_t mask;
+>  	bool wait = false;
+>  	int cpu;
+>  
+> @@ -113,17 +119,25 @@ void arch_freq_prepare_all(void)
+>  	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+>  		return;
+>  
+> +	if (!zalloc_cpumask_var(&mask, GFP_KERNEL))
+> +		return;
+> +
+> +	cpus_read_lock();
+>  	for_each_online_cpu(cpu) {
+>  		if (!housekeeping_cpu(cpu, HK_FLAG_MISC))
+>  			continue;
+>  		if (rcu_is_idle_cpu(cpu))
+>  			continue; /* Idle CPUs are completely uninteresting. */
+> -		if (!aperfmperf_snapshot_cpu(cpu, now, false))
+> +		if (!aperfmperf_snapshot_cpu(cpu, now, false, mask))
+>  			wait = true;
+>  	}
+>  
+> -	if (wait)
+> -		msleep(APERFMPERF_REFRESH_DELAY_MS);
+> +	preempt_disable();
+> +	smp_call_function_many(mask, aperfmperf_snapshot_khz, NULL, wait);
+> +	preempt_enable();
+> +	cpus_read_unlock();
+> +
+> +	free_cpumask_var(mask);
+>  }
+>  
+>  unsigned int arch_freq_get_on_cpu(int cpu)
+> @@ -139,7 +153,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
+>  	if (!housekeeping_cpu(cpu, HK_FLAG_MISC))
+>  		return 0;
+>  
+> -	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
+> +	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true, NULL))
+>  		return per_cpu(samples.khz, cpu);
+>  
+>  	msleep(APERFMPERF_REFRESH_DELAY_MS);
+> -- 
+> 2.35.1.723.g4982287a31-goog
+> 

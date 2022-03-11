@@ -2,77 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AFD4D56BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 01:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBDE4D56BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 01:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244487AbiCKA3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 19:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
+        id S1344974AbiCKAaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 19:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345279AbiCKA3Z (ORCPT
+        with ESMTP id S236618AbiCKAaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 19:29:25 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2621A363D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:28:13 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id kt27so15878389ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:28:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KJotzhJGvWm+YufqU6PpQz3ArjHus4r0EIp+aEcC2NQ=;
-        b=oU2DYJ9ubZ08kyUFNEx64k2K9ZSCSnvY0QqZ0Ba5UuSoVuPchLbVNNS2cdlTIFV6Q9
-         7DYZEpM/tvSuXQlWZw3A7X9peM2zKTIBtbvLMzymLGZoBym4VM9RwpYhC11Ameeb7HAK
-         YApwdT56YOWvIUz5M040GJaZ0RzQa2zxjqWzE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KJotzhJGvWm+YufqU6PpQz3ArjHus4r0EIp+aEcC2NQ=;
-        b=gKJPJsDDuy47FGFn3zl36ILqzNLPSSOlxTk7wXZQE3rsevd6YoJYV6ueWc7vSXblg9
-         GvQXA5DeqRGEId6nGyF2iBGZzFzYcxJ3muKrNIJeuLFhvbLdsyErcvZ4ta2HkV/YSwXO
-         bCr9Aj5EIQ1WDOQrcxqIf850gX8cBi9GbxUapnat8RuORA6b9uLjvBL845WQQgGOriFs
-         o4i0pVBKO6pM82gtbw3aApo2bIka+RHHkX6xOgWe3smPzGashmXQC4uB1zRaw8r7qUZO
-         kGHqsjrhJId+zUX7nPF2yIkcbpN+5CgqC5UCWE7t2pRBBONc4ecNTwSptkf/rNE0Ezrx
-         09rw==
-X-Gm-Message-State: AOAM530OxdQhCnuL65Fu7hRDzWJ4GYAk7+esDPkIzSBrJR6AO/9CRfUW
-        jRCiHk7kbkX98bhyWgo9OPVqUn5FYYu54h8cPrw=
-X-Google-Smtp-Source: ABdhPJxzxV/Rs2l1e7zAW5QpLKxejblz0Q+LQ/PUe1sPENtPPUh24DxV/ovC3xecmPCyWrZ9TtbKhA==
-X-Received: by 2002:a17:906:7f02:b0:6cf:86d8:c31c with SMTP id d2-20020a1709067f0200b006cf86d8c31cmr6689338ejr.518.1646958491612;
-        Thu, 10 Mar 2022 16:28:11 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170906780400b006ce69ff6050sm2328617ejm.69.2022.03.10.16.28.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 16:28:10 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id h15so10597915wrc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:28:10 -0800 (PST)
-X-Received: by 2002:a5d:490f:0:b0:1f0:6791:a215 with SMTP id
- x15-20020a5d490f000000b001f06791a215mr5446099wrq.422.1646958490250; Thu, 10
- Mar 2022 16:28:10 -0800 (PST)
+        Thu, 10 Mar 2022 19:30:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDF81A272C;
+        Thu, 10 Mar 2022 16:29:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85226B82963;
+        Fri, 11 Mar 2022 00:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED59FC340F3;
+        Fri, 11 Mar 2022 00:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646958553;
+        bh=+f145bq0y4Y908dr0xQoAoOcCOlLzUF/zwjJSj93Rlk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jm7TbzLBsZSnHozd5X7FbWQMsc7laXZb+pm1UalYgBVeOQXkrRG3xVG+sG6YPRe7q
+         hJvVJ1vJAgHBBRtA9J3jSwosP9cMXQ9cGwXcoTGPf7CVi844ZMosXTSsLz/F61KcFy
+         /gOP6TSPyQH+55NbyLknzzqxwoFFAEmKKCY/ho39mzS/6UWULuPObLNDpzZlGNZ+IQ
+         Cg4UxbyyUY2Ke9vnjJk/uC9PCMLaEasOeOQ9HQIruuDLQQfTmh5zrzpq0xk7HSaYtA
+         74E0KvyGyd4/+M2WigkvXNYXdETL2pGmLnwtTxsGRA+G9p6TR7mkY0UuYkTckrIwh2
+         984c6WuRgu5og==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 5.17-rc8
+Date:   Thu, 10 Mar 2022 16:29:12 -0800
+Message-Id: <20220311002912.437871-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220107200417.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
- <CAD=FV=W5fHP8K-PcoYWxYHiDWnPUVQQzOzw=REbuJSSqGeVVfg@mail.gmail.com> <87sfrqqfzy.fsf@kernel.org>
-In-Reply-To: <87sfrqqfzy.fsf@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 10 Mar 2022 16:27:56 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=U0Qw-OnKJg8SWk9=e=B0qgqnaTHpuR0cRA0WCmSHSJYQ@mail.gmail.com>
-Message-ID: <CAD=FV=U0Qw-OnKJg8SWk9=e=B0qgqnaTHpuR0cRA0WCmSHSJYQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ath10k: search for default BDF name provided in DT
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Abhishek Kumar <kuabhs@chromium.org>,
-        Rakesh Pillai <pillair@codeaurora.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        ath10k <ath10k@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,107 +53,271 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Linus!
 
-On Thu, Mar 10, 2022 at 2:06 AM Kalle Valo <kvalo@kernel.org> wrote:
->
-> Doug Anderson <dianders@chromium.org> writes:
->
-> > Hi,
-> >
-> > On Fri, Jan 7, 2022 at 12:05 PM Abhishek Kumar <kuabhs@chromium.org> wrote:
-> >>
-> >> There can be cases where the board-2.bin does not contain
-> >> any BDF matching the chip-id+board-id+variant combination.
-> >> This causes the wlan probe to fail and renders wifi unusable.
-> >> For e.g. if the board-2.bin has default BDF as:
-> >> bus=snoc,qmi-board-id=67 but for some reason the board-id
-> >> on the wlan chip is not programmed and read 0xff as the
-> >> default value. In such cases there won't be any matching BDF
-> >> because the board-2.bin will be searched with following:
-> >> bus=snoc,qmi-board-id=ff
->
-> I just checked, in ath10k-firmware WCN3990/hw1.0/board-2.bin we have
-> that entry:
->
-> BoardNames[1]: 'bus=snoc,qmi-board-id=ff'
->
-> >> To address these scenarios, there can be an option to provide
-> >> fallback default BDF name in the device tree. If none of the
-> >> BDF names match then the board-2.bin file can be searched with
-> >> default BDF names assigned in the device tree.
-> >>
-> >> The default BDF name can be set as:
-> >> wifi@a000000 {
-> >>         status = "okay";
-> >>         qcom,ath10k-default-bdf = "bus=snoc,qmi-board-id=67";
-> >
-> > Rather than add a new device tree property, wouldn't it be good enough
-> > to leverage the existing variant?
->
-> I'm not thrilled either adding this to Device Tree, we should keep the
-> bindings as simple as possible.
->
-> > Right now I think that the board file contains:
-> >
-> > 'bus=snoc,qmi-board-id=67.bin'
-> > 'bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_LAZOR.bin'
-> > 'bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_POMPOM.bin'
-> > 'bus=snoc,qmi-board-id=67,qmi-chip-id=4320,variant=GO_LAZOR.bin'
-> > 'bus=snoc,qmi-board-id=67,qmi-chip-id=4320,variant=GO_POMPOM.bin'
-> >
-> > ...and, on lazor for instance, we have:
-> >
-> > qcom,ath10k-calibration-variant = "GO_LAZOR";
-> >
-> > The problem you're trying to solve is that on some early lazor
-> > prototype hardware we didn't have the "board-id" programmed we could
-> > get back 0xff from the hardware. As I understand it 0xff always means
-> > "unprogrammed".
-> >
-> > It feels like you could just have a special case such that if the
-> > hardware reports board ID of 0xff and you don't get a "match" that you
-> > could just treat 0xff as a wildcard. That means that you'd see the
-> > "variant" in the device tree and pick one of the "GO_LAZOR" entries.
-> >
-> > Anyway, I guess it's up to the people who spend more time in this file
-> > which they'd prefer, but that seems like it'd be simple and wouldn't
-> > require a bindings addition...
->
-> In ath11k we need something similar for that I have been thinking like
-> this:
->
-> 'bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_LAZOR'
->
-> 'bus=snoc,qmi-board-id=67,qmi-chip-id=320'
->
-> 'bus=snoc,qmi-board-id=67'
->
-> 'bus=snoc'
->
-> Ie. we drop one attribute at a time and try to find a suitable board
-> file. Though I'm not sure if it's possible to find a board file which
-> works with many different hardware, but the principle would be at least
-> that. Would something like that work in your case?
+A little late this week due to dentistry.
 
-I'll leave it for Abhishek to comment for sure since he's been the one
-actively involved in keeping track of our board-2.bin file. As far as
-I know:
+The only 5.17 regression I'm aware of is the bnx2x firmware
+loading thing. I can send a patch or respin the PR to include
+the revert but I'd rather leave bandaging it up to people who
+have the HW. The bad commits are in stable since v5.16.4, I'm
+worried someone out there has initramfs with just the new FW
+present.
 
-* Mostly we need this for pre-production hardware that developers
-inside Google and Qualcomm still have sitting around on their desks. I
-guess some people are even still using this pre-production hardware to
-surf the web?
+The following changes since commit b949c21fc23ecaccef89582f251e6281cad1f81e:
 
-* In the ideal world, we think that the best calibration would be to
-use the board-specific one in these cases. AKA if board_id is 0xff
-(unprogrammed) and variant is "GO_LAZOR" then the best solution would
-be to use the settings for board id 0x67 and variant "GO_LAZOR". This
-_ought_ to be better settings than the default 0xff settings without
-the "GO_LAZOR".
+  Merge tag 'net-5.17-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-03-03 11:10:56 -0800)
 
-* In reality, we're probably OK as long as _some_ reasonable settings
-get picked. WiFi might not be super range optimized but at least it
-will still come up and work.
+are available in the Git repository at:
 
--Doug
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc8
+
+for you to fetch changes up to e0ae713023a9d09d6e1b454bdc8e8c1dd32c586e:
+
+  xdp: xdp_mem_allocator can be NULL in trace_mem_connect(). (2022-03-10 16:09:29 -0800)
+
+----------------------------------------------------------------
+Networking fixes for 5.17-rc8/final, including fixes from bluetooth,
+and ipsec.
+
+Current release - regressions:
+
+ - Bluetooth: fix unbalanced unlock in set_device_flags()
+
+ - Bluetooth: fix not processing all entries on cmd_sync_work,
+   make connect with qualcomm and intel adapters reliable
+
+ - Revert "xfrm: state and policy should fail if XFRMA_IF_ID 0"
+
+ - xdp: xdp_mem_allocator can be NULL in trace_mem_connect()
+
+ - eth: ice: fix race condition and deadlock during interface enslave
+
+Current release - new code bugs:
+
+ - tipc: fix incorrect order of state message data sanity check
+
+Previous releases - regressions:
+
+ - esp: fix possible buffer overflow in ESP transformation
+
+ - dsa: unlock the rtnl_mutex when dsa_master_setup() fails
+
+ - phy: meson-gxl: fix interrupt handling in forced mode
+
+ - smsc95xx: ignore -ENODEV errors when device is unplugged
+
+Previous releases - always broken:
+
+ - xfrm: fix tunnel mode fragmentation behavior
+
+ - esp: fix inter address family tunneling on GSO
+
+ - tipc: fix null-deref due to race when enabling bearer
+
+ - sctp: fix kernel-infoleak for SCTP sockets
+
+ - eth: macb: fix lost RX packet wakeup race in NAPI receive
+
+ - eth: intel stop disabling VFs due to PF error responses
+
+ - eth: bcmgenet: don't claim WOL when its not available
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (1):
+      net: lantiq_xrx200: fix use after free bug
+
+Alexey Khoroshilov (1):
+      mISDN: Fix memory leak in dsp_pipeline_build()
+
+Ben Ben-Ishay (1):
+      net/mlx5e: SHAMPO, reduce TIR indication
+
+Christophe JAILLET (1):
+      ice: Don't use GFP_KERNEL in atomic context
+
+Clément Léger (1):
+      net: phy: DP83822: clear MISR2 register to disable interrupts
+
+Colin Foster (1):
+      net: phy: correct spelling error of media in documentation
+
+Dave Ertman (1):
+      ice: Fix error with handling of bonding MTU
+
+David S. Miller (2):
+      Merge branch '40GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+      Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec
+
+Dima Chumak (1):
+      net/mlx5: Fix offloading with ESWITCH_IPV4_TTL_MODIFY_ENABLE
+
+Duoming Zhou (1):
+      ax25: Fix NULL pointer dereference in ax25_kill_by_device
+
+Eric Dumazet (1):
+      sctp: fix kernel-infoleak for SCTP sockets
+
+Fabio Estevam (1):
+      smsc95xx: Ignore -ENODEV errors when device is unplugged
+
+Guillaume Nault (2):
+      selftests: pmtu.sh: Kill tcpdump processes launched by subshell.
+      selftests: pmtu.sh: Kill nettest processes launched in subshell.
+
+Hans de Goede (1):
+      Bluetooth: hci_core: Fix unbalanced unlock in set_device_flags()
+
+Heiner Kallweit (2):
+      net: phy: meson-gxl: fix interrupt handling in forced mode
+      net: phy: meson-gxl: improve link-up behavior
+
+Ivan Vecera (1):
+      ice: Fix race condition during interface enslave
+
+Jacob Keller (2):
+      i40e: stop disabling VFs due to PF error responses
+      ice: stop disabling VFs due to PF error responses
+
+Jakub Kicinski (3):
+      Merge tag 'for-net-2022-03-03' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
+      Merge branch 'selftests-pmtu-sh-fix-cleanup-of-processes-launched-in-subshell'
+      Merge tag 'mlx5-fixes-2022-03-09' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
+
+Jedrzej Jagielski (1):
+      ice: Fix curr_link_speed advertised speed
+
+Jeremy Linton (1):
+      net: bcmgenet: Don't claim WOL when its not available
+
+Jia-Ju Bai (2):
+      isdn: hfcpci: check the return value of dma_set_mask() in setup_hw()
+      net: qlogic: check the return value of dma_alloc_coherent() in qed_vf_hw_prepare()
+
+Jianglei Nie (1):
+      net: arc_emac: Fix use after free in arc_mdio_probe()
+
+Jiasheng Jiang (2):
+      net: ethernet: ti: cpts: Handle error for clk_enable
+      net: ethernet: lpc_eth: Handle error for clk_enable
+
+Kai Lueke (1):
+      Revert "xfrm: state and policy should fail if XFRMA_IF_ID 0"
+
+Lina Wang (1):
+      xfrm: fix tunnel model fragmentation behavior
+
+Luiz Augusto von Dentz (1):
+      Bluetooth: hci_sync: Fix not processing all entries on cmd_sync_work
+
+Miaoqian Lin (3):
+      ethernet: Fix error handling in xemaclite_of_probe
+      net: marvell: prestera: Add missing of_node_put() in prestera_switch_set_base_mac_addr
+      gianfar: ethtool: Fix refcount leak in gfar_get_ts_info
+
+Michal Maloszewski (2):
+      iavf: Fix handling of vlan strip virtual channel messages
+      iavf: Fix adopting new combined setting
+
+Minghao Chi (CGEL ZTE) (1):
+      net:mcf8390: Use platform_get_irq() to get the interrupt
+
+Mohammad Kabat (1):
+      net/mlx5: Fix size field in bufferx_reg struct
+
+Moshe Shemesh (1):
+      net/mlx5: Fix a race on command flush flow
+
+Pavel Skripkin (1):
+      NFC: port100: fix use-after-free in port100_send_complete
+
+Robert Hancock (1):
+      net: macb: Fix lost RX packet wakeup race in NAPI receive
+
+Roi Dayan (1):
+      net/mlx5e: Lag, Only handle events from highest priority multipath entry
+
+Russell King (Oracle) (1):
+      net: dsa: mt7530: fix incorrect test in mt753x_phylink_validate()
+
+Sebastian Andrzej Siewior (1):
+      xdp: xdp_mem_allocator can be NULL in trace_mem_connect().
+
+Steffen Klassert (3):
+      esp: Fix possible buffer overflow in ESP transformation
+      esp: Fix BEET mode inter address family tunneling on GSO
+      net: Fix esp GSO on inter address family tunnels.
+
+Tom Rix (1):
+      qed: return status of qed_iov_get_link
+
+Tung Nguyen (2):
+      tipc: fix kernel panic when enabling bearer
+      tipc: fix incorrect order of state message data sanity check
+
+Vladimir Oltean (1):
+      net: dsa: unlock the rtnl_mutex when dsa_master_setup() fails
+
+Zheyu Ma (1):
+      ethernet: sun: Free the coherent when failing in probing
+
+ drivers/isdn/hardware/mISDN/hfcpci.c               |  6 ++-
+ drivers/isdn/mISDN/dsp_pipeline.c                  |  6 +--
+ drivers/net/dsa/mt7530.c                           |  2 +-
+ drivers/net/ethernet/8390/mcf8390.c                | 10 ++--
+ drivers/net/ethernet/arc/emac_mdio.c               |  5 +-
+ drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c |  7 +++
+ drivers/net/ethernet/cadence/macb_main.c           | 25 +++++++++-
+ drivers/net/ethernet/freescale/gianfar_ethtool.c   |  1 +
+ drivers/net/ethernet/intel/i40e/i40e_debugfs.c     |  6 +--
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c | 57 +++-------------------
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.h |  5 --
+ drivers/net/ethernet/intel/iavf/iavf.h             |  1 +
+ drivers/net/ethernet/intel/iavf/iavf_main.c        | 13 +++--
+ drivers/net/ethernet/intel/iavf/iavf_virtchnl.c    | 40 +++++++++++++++
+ drivers/net/ethernet/intel/ice/ice.h               | 12 ++++-
+ drivers/net/ethernet/intel/ice/ice_ethtool.c       |  2 +-
+ drivers/net/ethernet/intel/ice/ice_main.c          | 43 +++++++++-------
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c   | 18 -------
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.h   |  3 --
+ drivers/net/ethernet/lantiq_xrx200.c               |  2 +-
+ .../net/ethernet/marvell/prestera/prestera_main.c  |  1 +
+ drivers/net/ethernet/mellanox/mlx5/core/cmd.c      | 15 +++---
+ drivers/net/ethernet/mellanox/mlx5/core/en/tir.c   |  3 --
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |  3 +-
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c   | 11 +++--
+ .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |  3 --
+ drivers/net/ethernet/nxp/lpc_eth.c                 |  5 +-
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c        | 18 ++++---
+ drivers/net/ethernet/qlogic/qed/qed_vf.c           |  7 +++
+ drivers/net/ethernet/sun/sunhme.c                  |  6 ++-
+ drivers/net/ethernet/ti/cpts.c                     |  4 +-
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c      |  4 +-
+ drivers/net/phy/dp83822.c                          |  2 +-
+ drivers/net/phy/meson-gxl.c                        | 31 +++++++-----
+ drivers/net/usb/smsc95xx.c                         | 28 ++++++++---
+ drivers/nfc/port100.c                              |  2 +
+ include/linux/mlx5/mlx5_ifc.h                      |  5 +-
+ include/linux/netdevice.h                          |  2 +
+ include/linux/phy.h                                |  4 +-
+ include/net/esp.h                                  |  2 +
+ net/ax25/af_ax25.c                                 |  7 +++
+ net/bluetooth/hci_sync.c                           | 49 +++++++++----------
+ net/bluetooth/mgmt.c                               |  2 +-
+ net/core/gro.c                                     | 25 ++++++++++
+ net/core/xdp.c                                     |  3 +-
+ net/dsa/dsa2.c                                     |  6 +--
+ net/ipv4/esp4.c                                    |  5 ++
+ net/ipv4/esp4_offload.c                            |  6 ++-
+ net/ipv6/esp6.c                                    |  5 ++
+ net/ipv6/esp6_offload.c                            |  6 ++-
+ net/ipv6/xfrm6_output.c                            | 16 ++++++
+ net/sctp/diag.c                                    |  9 ++--
+ net/tipc/bearer.c                                  | 12 +++--
+ net/tipc/link.c                                    |  9 ++--
+ net/xfrm/xfrm_interface.c                          |  5 +-
+ net/xfrm/xfrm_user.c                               | 21 ++------
+ tools/testing/selftests/net/pmtu.sh                | 21 ++++++--
+ 57 files changed, 383 insertions(+), 244 deletions(-)

@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F0B4D5C0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9414D5C13
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbiCKHNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S1346172AbiCKHOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiCKHNj (ORCPT
+        with ESMTP id S1345209AbiCKHOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:13:39 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D6F74DF1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646982755; x=1678518755;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FArHK96lOgBTp19FO7q4eMEsc13Qclytkv0jFOwy49M=;
-  b=UMSrRgI3Pmque7me5LMI+9q0nfVoY18PrUDRDqY461kUmz4ia4CqrMBY
-   6ybiC4xVOnlrml/tvRsNVEfS00lM2g+nMJB4c1pSnS2uKBWcMicFtcToh
-   +4S06ek3ZPfZxlF3eK6R+LCYSY7fycU4uvItugyjRTgot/0JQNOfpRFno
-   CVUd16sF8/g7M8PjD874606PBez5MByPuX3EC9TazQ+hHYHqrCSSbFsZ/
-   MWyMEDHGDeXnodAOvNk0+tgN2fMD1A84Y5FIUIqQu22m99SaPi1u8bAre
-   J819gMgnzibijaOayor3WlgaBEt+nbWLX5V09OWj16SHLfUDPqwwUn93l
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="318740823"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="318740823"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 23:12:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="579201420"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2022 23:12:34 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSZRx-00060w-Ca; Fri, 11 Mar 2022 07:12:33 +0000
-Date:   Fri, 11 Mar 2022 15:11:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 95/346] fs/xfs/xfs_mount.h:78:43:
- error: expected identifier or '(' before 'void'
-Message-ID: <202203111528.SKeFyJjX-lkp@intel.com>
+        Fri, 11 Mar 2022 02:14:51 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFCF115963
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:13:47 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id q13so6973643plk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3Xe/TObzCyIpMz+gsrdFN4FAYpTVbp6ttT/yAt6pqXM=;
+        b=WYBrp34ZMpvN3EqOVtxjQPlFUSwiquPN+sa04OJ/pXjQBR65wj651cRBi1+ffL4KWV
+         sJPiV/Be/MOEkOsZHVRF/OLpO0C/mQDVZ8REsfucG7lBIukeRY3P78OkjAvKkwuqgVhx
+         pkMOcEwvpyNy5BS48CilZUN52WT97Cf9YERJPKaLydgzq5/Ar06Qni9Zl2kkbD1lnelX
+         HgSmifYb9DQ27tCiq97eao3hMrpoawRtKAGMMyVr9Z5wfhjYbExF4ynn9IOmkKCfZJrF
+         7T575iMvtSl0MUGAj8Nv7zEipoJgG8fjWSfMTDuWLQf1acpyVX2dL9I7b6udtnRlha5U
+         3N5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3Xe/TObzCyIpMz+gsrdFN4FAYpTVbp6ttT/yAt6pqXM=;
+        b=wd0T8OMdEvyTo8WNEOrOki7UrxnJ6Y/Z0yD/lQVjX1ZWSRvDxnq0MbgUXUgbSyZypH
+         GKT6+/DDDobMK4csU10sTLCq9aLMcMd3z+KC+kKW7HwO7e+zpJHHrIcwDcB0dlrgJSwA
+         +wCen9tl+iHXZ02oUlZ6zJbpnysFrg2qWCvLR4dIfcyNvUXSqvEFolQMqc6O6FyN7SJ5
+         7QR1/xjR1wVinWDx/nIovuMqm36h58gVZYKkniLLWdXdQK/2gZ71MlvqKqtg07bGAy40
+         kjWIwAxVV01Sl0OqrsN7VIublSqxTznSeghKUQDZsi8bddmU9p9pE8gQU8W0kaRzn9Bt
+         xDBg==
+X-Gm-Message-State: AOAM531DXUvYe6BTZhzuxlQnNwJDYRWlSIyTdK/sxzPWqWgdzYjbyiOy
+        E9bP62pXH3B+oZxEVOyP0k4=
+X-Google-Smtp-Source: ABdhPJzeqNVd2RpiWv8lFamefHdENq7LaJXmZHk/a7AlhSCshyhMDvRPfvchcD6409XA9sVL4cqPfg==
+X-Received: by 2002:a17:90b:1811:b0:1bf:582e:443c with SMTP id lw17-20020a17090b181100b001bf582e443cmr20459312pjb.0.1646982827181;
+        Thu, 10 Mar 2022 23:13:47 -0800 (PST)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm7381854pgr.37.2022.03.10.23.13.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 10 Mar 2022 23:13:46 -0800 (PST)
+Date:   Fri, 11 Mar 2022 15:12:32 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com,
+        huyue2@coolpad.com
+Subject: Re: [PATCH 1/2] erofs: clean up z_erofs_extent_lookback
+Message-ID: <20220311151232.00003619.zbestahu@gmail.com>
+In-Reply-To: <20220310182743.102365-1-hsiangkao@linux.alibaba.com>
+References: <20220310182743.102365-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,76 +72,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   38ef7fcbbc5b33107155955dcd6ed6c92f4ceb91
-commit: af5ea75e919d339b63fdbac6de44242559497a78 [95/346] xfs: track file link count updates during live nlinks fsck
-config: csky-randconfig-r036-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111528.SKeFyJjX-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=af5ea75e919d339b63fdbac6de44242559497a78
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout af5ea75e919d339b63fdbac6de44242559497a78
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash fs/
+On Fri, 11 Mar 2022 02:27:42 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Avoid the unnecessary tail recursion since it can be converted into
+> a loop directly in order to prevent potential stack overflow.
+> 
+> It's a pretty straightforward conversion.
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> ---
+>  fs/erofs/zmap.c | 67 ++++++++++++++++++++++++-------------------------
+>  1 file changed, 33 insertions(+), 34 deletions(-)
+> 
+> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> index b4059b9c3bac..572f0b8151ba 100644
+> --- a/fs/erofs/zmap.c
+> +++ b/fs/erofs/zmap.c
+> @@ -431,48 +431,47 @@ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
+>  				   unsigned int lookback_distance)
+>  {
+>  	struct erofs_inode *const vi = EROFS_I(m->inode);
+> -	struct erofs_map_blocks *const map = m->map;
+>  	const unsigned int lclusterbits = vi->z_logical_clusterbits;
+> -	unsigned long lcn = m->lcn;
+> -	int err;
+>  
+> -	if (lcn < lookback_distance) {
+> -		erofs_err(m->inode->i_sb,
+> -			  "bogus lookback distance @ nid %llu", vi->nid);
+> -		DBG_BUGON(1);
+> -		return -EFSCORRUPTED;
+> -	}
+> +	while (m->lcn >= lookback_distance) {
+> +		unsigned long lcn = m->lcn - lookback_distance;
+> +		int err;
 
-All errors (new ones prefixed by >>):
+may better to declare variable 'lclusterbits' in loop just like 'err' usage?
 
-   In file included from fs/xfs/xfs_inode.c:14:
->> fs/xfs/xfs_mount.h:78:43: error: expected identifier or '(' before 'void'
-      78 | # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-         |                                           ^~~~
-   fs/xfs/xfs_inode.c:952:1: note: in expansion of macro 'XFS_HOOKS_SWITCH_DEFINE'
-     952 | XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> fs/xfs/xfs_mount.h:78:48: error: expected ')' before numeric constant
-      78 | # define XFS_HOOKS_SWITCH_DEFINE(name)  ((void)0)
-         |                                                ^
-   fs/xfs/xfs_inode.c:952:1: note: in expansion of macro 'XFS_HOOKS_SWITCH_DEFINE'
-     952 | XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +78 fs/xfs/xfs_mount.h
-
-f5548336fb5444 Darrick J. Wong 2022-01-06  64  
-f5548336fb5444 Darrick J. Wong 2022-01-06  65  /*
-f5548336fb5444 Darrick J. Wong 2022-01-06  66   * If hooks and jump labels are enabled, we use jump labels (aka patching of
-f5548336fb5444 Darrick J. Wong 2022-01-06  67   * the code segment) to avoid the minute overhead of calling an empty notifier
-f5548336fb5444 Darrick J. Wong 2022-01-06  68   * chain when we know there are no callers.  If hooks are enabled without jump
-f5548336fb5444 Darrick J. Wong 2022-01-06  69   * labels, hardwire the predicate to true because calling an empty srcu
-f5548336fb5444 Darrick J. Wong 2022-01-06  70   * notifier chain isn't so expensive.
-f5548336fb5444 Darrick J. Wong 2022-01-06  71   */
-f5548336fb5444 Darrick J. Wong 2022-01-06  72  #if defined(CONFIG_JUMP_LABEL) && defined(CONFIG_XFS_LIVE_HOOKS)
-f5548336fb5444 Darrick J. Wong 2022-01-06  73  # define XFS_HOOKS_SWITCH_DEFINE(name)	DEFINE_STATIC_KEY_FALSE(name)
-f5548336fb5444 Darrick J. Wong 2022-01-06  74  # define xfs_hooks_switch_on(name)	static_branch_inc(name)
-f5548336fb5444 Darrick J. Wong 2022-01-06  75  # define xfs_hooks_switch_off(name)	static_branch_dec(name)
-f5548336fb5444 Darrick J. Wong 2022-01-06  76  # define xfs_hooks_switched_on(name)	static_branch_unlikely(name)
-f5548336fb5444 Darrick J. Wong 2022-01-06  77  #elif defined(CONFIG_XFS_LIVE_HOOKS)
-f5548336fb5444 Darrick J. Wong 2022-01-06 @78  # define XFS_HOOKS_SWITCH_DEFINE(name)	((void)0)
-f5548336fb5444 Darrick J. Wong 2022-01-06  79  # define xfs_hooks_switch_on(name)	((void)0)
-f5548336fb5444 Darrick J. Wong 2022-01-06  80  # define xfs_hooks_switch_off(name)	((void)0)
-f5548336fb5444 Darrick J. Wong 2022-01-06  81  # define xfs_hooks_switched_on(name)	(true)
-f5548336fb5444 Darrick J. Wong 2022-01-06  82  #else
-f5548336fb5444 Darrick J. Wong 2022-01-06  83  # define XFS_HOOKS_SWITCH_DEFINE(name)	((void)0)
-f5548336fb5444 Darrick J. Wong 2022-01-06  84  # define xfs_hooks_switch_on(name)	((void)0)
-f5548336fb5444 Darrick J. Wong 2022-01-06  85  # define xfs_hooks_switch_off(name)	((void)0)
-f5548336fb5444 Darrick J. Wong 2022-01-06  86  # define xfs_hooks_switched_on(name)	(false)
-f5548336fb5444 Darrick J. Wong 2022-01-06  87  #endif /* JUMP_LABEL && XFS_LIVE_HOOKS */
-f5548336fb5444 Darrick J. Wong 2022-01-06  88  
-
-:::::: The code at line 78 was first introduced by commit
-:::::: f5548336fb5444559e7759a30e560ecf7cdbc03d xfs: allow scrub to hook metadata updates in other writers
-
-:::::: TO: Darrick J. Wong <djwong@kernel.org>
-:::::: CC: Darrick J. Wong <djwong@kernel.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  
+> -	/* load extent head logical cluster if needed */
+> -	lcn -= lookback_distance;
+> -	err = z_erofs_load_cluster_from_disk(m, lcn, false);
+> -	if (err)
+> -		return err;
+> +		/* load extent head logical cluster if needed */
+> +		err = z_erofs_load_cluster_from_disk(m, lcn, false);
+> +		if (err)
+> +			return err;
+>  
+> -	switch (m->type) {
+> -	case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
+> -		if (!m->delta[0]) {
+> +		switch (m->type) {
+> +		case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
+> +			if (!m->delta[0]) {
+> +				erofs_err(m->inode->i_sb,
+> +					  "invalid lookback distance 0 @ nid %llu",
+> +					  vi->nid);
+> +				DBG_BUGON(1);
+> +				return -EFSCORRUPTED;
+> +			}
+> +			lookback_distance = m->delta[0];
+> +			continue;
+> +		case Z_EROFS_VLE_CLUSTER_TYPE_PLAIN:
+> +		case Z_EROFS_VLE_CLUSTER_TYPE_HEAD1:
+> +		case Z_EROFS_VLE_CLUSTER_TYPE_HEAD2:
+> +			m->headtype = m->type;
+> +			m->map->m_la = (lcn << lclusterbits) | m->clusterofs;
+> +			return 0;
+> +		default:
+>  			erofs_err(m->inode->i_sb,
+> -				  "invalid lookback distance 0 @ nid %llu",
+> -				  vi->nid);
+> +				  "unknown type %u @ lcn %lu of nid %llu",
+> +				  m->type, lcn, vi->nid);
+>  			DBG_BUGON(1);
+> -			return -EFSCORRUPTED;
+> +			return -EOPNOTSUPP;
+>  		}
+> -		return z_erofs_extent_lookback(m, m->delta[0]);
+> -	case Z_EROFS_VLE_CLUSTER_TYPE_PLAIN:
+> -	case Z_EROFS_VLE_CLUSTER_TYPE_HEAD1:
+> -	case Z_EROFS_VLE_CLUSTER_TYPE_HEAD2:
+> -		m->headtype = m->type;
+> -		map->m_la = (lcn << lclusterbits) | m->clusterofs;
+> -		break;
+> -	default:
+> -		erofs_err(m->inode->i_sb,
+> -			  "unknown type %u @ lcn %lu of nid %llu",
+> -			  m->type, lcn, vi->nid);
+> -		DBG_BUGON(1);
+> -		return -EOPNOTSUPP;
+>  	}
+> -	return 0;
+> +
+> +	erofs_err(m->inode->i_sb, "bogus lookback distance @ nid %llu",
+> +		  vi->nid);
+> +	DBG_BUGON(1);
+> +	return -EFSCORRUPTED;
+>  }
+>  
+>  static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,

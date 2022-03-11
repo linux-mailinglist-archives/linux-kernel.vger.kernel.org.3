@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC0A4D5D96
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36634D5D99
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbiCKIhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S232974AbiCKIkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiCKIha (ORCPT
+        with ESMTP id S229518AbiCKIkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:37:30 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CB2E1BA14D
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:36:26 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowACnx5gBCitimT5sAg--.54677S2;
-        Fri, 11 Mar 2022 16:36:18 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rpeterso@redhat.com, agruenba@redhat.com
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] gfs2: Add check for mempool_alloc
-Date:   Fri, 11 Mar 2022 16:36:16 +0800
-Message-Id: <20220311083616.2213689-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 11 Mar 2022 03:40:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60F61B98A2;
+        Fri, 11 Mar 2022 00:39:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D7AA61DF7;
+        Fri, 11 Mar 2022 08:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A644C340E9;
+        Fri, 11 Mar 2022 08:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646987951;
+        bh=VR65Ts15rZoinOtKMC5nZR3huGHCng96LOJ+iodA26M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y8h9eVCjKRRo53CER8Rxrj6wSw5A0E+3gFPJ/3JsFJs7i7WERXFk27+CyA6gu16mP
+         To0aHOvPYC4wiCxsMbHO/WE0oxoilhTUHhQ4zXFDujR5zywHMlaydAq07Ei3CO4c8l
+         XaRgs20lJ3gb9iYLOBGNpa8HDPzsCsJHi3jDBBW0=
+Date:   Fri, 11 Mar 2022 09:39:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: Re: [PATCH 5.16 29/37] arm64: entry: Add vectors that have the bhb
+ mitigation sequences
+Message-ID: <YisKrFY6yBDmUu6b@kroah.com>
+References: <20220309155859.086952723@linuxfoundation.org>
+ <20220309155859.932269331@linuxfoundation.org>
+ <20220310232729.GA16308@amd>
+ <YisFJPSqqWy8GABY@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACnx5gBCitimT5sAg--.54677S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur4rZr4fJF13Ar4fGF1kAFb_yoWxKwc_Ca
-        n7ZFsxCw45JF9YkF18A3yIyrnYk3y5uF1fWFs3K3sxGas5ta47J34jkw15Ar4DGFZ0grnx
-        G34qya9xZ3WxWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YisFJPSqqWy8GABY@kroah.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,32 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of mempool_alloc(),
-it could return NULL pointer.
-Therefore, it should be better to check it
-in order to avoid the dereference of the NULL
-pointer.
+On Fri, Mar 11, 2022 at 09:15:32AM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Mar 11, 2022 at 12:27:29AM +0100, Pavel Machek wrote:
+> > Hi!
+> > 
+> > > From: James Morse <james.morse@arm.com>
+> > > 
+> > > commit ba2689234be92024e5635d30fe744f4853ad97db upstream.
+> > > 
+> > > Some CPUs affected by Spectre-BHB need a sequence of branches, or a
+> > > firmware call to be run before any indirect branch. This needs to go
+> > > in the vectors. No CPU needs both.
+> > > 
+> > > While this can be patched in, it would run on all CPUs as there is a
+> > > single set of vectors. If only one part of a big/little combination is
+> > > affected, the unaffected CPUs have to run the mitigation too.
+> > 
+> > This adds build error. Same problem is in 5.10.
+> > 
+> > > --- /dev/null
+> > > +++ b/arch/arm64/include/asm/vectors.h
+> > > @@ -0,0 +1,34 @@
+> > ...
+> > > +/*
+> > > + * Note: the order of this enum corresponds to two arrays in entry.S:
+> > > + * tramp_vecs and __bp_harden_el1_vectors. By default the canonical
+> > > + * 'full fat' vectors are used directly.
+> > > + */
+> > > +enum arm64_bp_harden_el1_vectors {
+> > > +#ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
+> > > +	/*
+> > > +	 * Perform the BHB loop mitigation, before branching to the canonical
+> > > +	 * vectors.
+> > > +	 */
+> > > +	EL1_VECTOR_BHB_LOOP,
+> > > +
+> > > +	/*
+> > > +	 * Make the SMC call for firmware mitigation, before branching to the
+> > > +	 * canonical vectors.
+> > > +	 */
+> > > +	EL1_VECTOR_BHB_FW,
+> > > +#endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
+> > > +
+> > > +	/*
+> > > +	 * Remap the kernel before branching to the canonical vectors.
+> > > +	 */
+> > > +	EL1_VECTOR_KPTI,
+> > > ++};
+> > > +
+> > 
+> > 
+> > Note "++". Following patch fixes this up, but it is still a trap for
+> > people trying to bisect.
+> 
+> Ick, ok, will try to fix up, thanks for finding this.
 
-Fixes: e8c92ed76900 ("GFS2: Clean up log write code path")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- fs/gfs2/log.c | 3 +++
- 1 file changed, 3 insertions(+)
+Now fixed up for 5.16.y, 5.15.y, and 5.10.y, thanks.
 
-diff --git a/fs/gfs2/log.c b/fs/gfs2/log.c
-index f0ee3ff6f9a8..10dd09e9b0e4 100644
---- a/fs/gfs2/log.c
-+++ b/fs/gfs2/log.c
-@@ -837,6 +837,9 @@ void gfs2_write_log_header(struct gfs2_sbd *sdp, struct gfs2_jdesc *jd,
- 		return;
- 
- 	page = mempool_alloc(gfs2_page_pool, GFP_NOIO);
-+	if (!page)
-+		return;
-+
- 	lh = page_address(page);
- 	clear_page(lh);
- 
--- 
-2.25.1
-
+greg k-h

@@ -2,63 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427334D6480
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D625D4D6484
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349047AbiCKPZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S1349103AbiCKP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiCKPZr (ORCPT
+        with ESMTP id S1348909AbiCKP0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:25:47 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA661B65E2;
-        Fri, 11 Mar 2022 07:24:44 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id n7so9658969oif.5;
-        Fri, 11 Mar 2022 07:24:44 -0800 (PST)
+        Fri, 11 Mar 2022 10:26:17 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6E11C027B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:25:09 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id t1so11114579edc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zwx2dquPgXqVb9I6BHmiQ+yT5s0mktYKdstbqhp11lo=;
+        b=LZw05L5Lr1SXFIo6n9NicjBiQs9xio5ncAzPl86VwNojgxdv5FPbVwMMXuEcJz2S20
+         ot3tgRK3A5u9pbBVwcgTi2rS4v13JgC5uYbnVZmyUnMWKjqhW5TNSobrzT5CLci/ll6v
+         VKRbsmHUHjxAMKGUnVtLcdXXgpKMegfNZ1Xz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wj8G09tyyau5yMZxls0yIJBXoGqCQIhnO/G1icNodFU=;
-        b=dQzcaKSHwxCf38e73Xc5fEA62HPy5u2Ofw0f3oetRWPwRkcRr8xKFB3CcxWlJDdV0D
-         mCLSPxhLVk7h2zTZvZbsWmMi58O9UqnQV7QLtDtNWECOkwoL/qIRRTy8BLS7Dr6udlTh
-         WSifpb7vgf3+n6hlfsFRTtgluki0waB7SExGjtUn35MBs4Gbtx5M5uq3itjmEzObZdV6
-         sJPmRtu+J22qa1YgamaL0U55lnvENEZy7hC7EkgAqiaqanF9kqzdWkygIOU9K9ZNY41s
-         eMLAvzCEdnSu8+Pzid4A5qpifHouIhqPhXHrERBSikKH+5NfSNqBtSxHKSVS7IusQkE2
-         827g==
-X-Gm-Message-State: AOAM530Zo5fc56Qk3qssdT6avMwSbkO/CQ6NSFPCSE2mBFpWYhGTe8yB
-        gSYghPaZMEr/IhnxsYsWMw==
-X-Google-Smtp-Source: ABdhPJzzQzQLbkCyppMXDo/APn8Hm72RdGKl9lKuHngLjJNbvlPq/mreKAsrBqheGl31MgPNNCLJMA==
-X-Received: by 2002:a05:6808:2122:b0:2da:3444:9908 with SMTP id r34-20020a056808212200b002da34449908mr7203108oiw.207.1647012283302;
-        Fri, 11 Mar 2022 07:24:43 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p21-20020a4a2f15000000b00320fca09b74sm3765248oop.1.2022.03.11.07.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:24:42 -0800 (PST)
-Received: (nullmailer pid 3824535 invoked by uid 1000);
-        Fri, 11 Mar 2022 15:24:41 -0000
-Date:   Fri, 11 Mar 2022 09:24:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: Add power-efuse binding
-Message-ID: <YitpuR+SlDiKh4eq@robh.at.kernel.org>
-References: <20220308011811.10353-1-zev@bewilderbeest.net>
- <20220308011811.10353-2-zev@bewilderbeest.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zwx2dquPgXqVb9I6BHmiQ+yT5s0mktYKdstbqhp11lo=;
+        b=4MUfFXSxcIfwp8R4qECnfs4Yux73a0pUNWNwpc323KgirJ9hA4Zt/hdalFNGrWcDS3
+         csSm9/Vk0garYTKI4Lt1K9F34a8lJ/MgjUQRywFwHnSJQ/m2gYfSYdL4v0xFofvE+tOs
+         6zvV7g6bApaQvZuntZTXyps1McHao9WL8Xr/ajcfBTIlloyPMPixHeaHvxmghPoTQhfH
+         5OL7G/h5PzYjGrz4LEoGm8Jh79rYPEglFecHgALyt1N5zaCt6o3ysHY58vzTwl10d9Pg
+         LuEUzV4DMGe1EGxTWEhg3eYSIw8JiB/Y7nTiFp6OZH7k58sRCJ7pPuSR2GqicBbliufl
+         M0fg==
+X-Gm-Message-State: AOAM532iPTSRAHF5B8P2+GGVLzKUm9U4LY4QE4dfgrYHfa/p+LqMUE9S
+        ODvuF/pojHwp9+PJ0HwWH8v3olnavifyAup+3LU=
+X-Google-Smtp-Source: ABdhPJxFvbA78NbLUyxP3pZ3SALzNDUkR/X24Q/MRFSLm8UZAK1K5LEwJJAKmOKVQFKBMtiQ4xEplA==
+X-Received: by 2002:a05:6402:4315:b0:416:9c6f:f724 with SMTP id m21-20020a056402431500b004169c6ff724mr9312737edc.400.1647012307906;
+        Fri, 11 Mar 2022 07:25:07 -0800 (PST)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056402424100b00416c6cbfa4csm1512223edb.54.2022.03.11.07.25.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 07:25:06 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso5545713wmr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:25:05 -0800 (PST)
+X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
+ o24-20020a1c7518000000b0037c07ebf255mr15836065wmc.29.1647012305467; Fri, 11
+ Mar 2022 07:25:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308011811.10353-2-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220310152227.2122960-1-kieran.bingham+renesas@ideasonboard.com>
+ <20220310152227.2122960-4-kieran.bingham+renesas@ideasonboard.com>
+ <CAD=FV=UqTh-FLDyXvH=ED-4cbJ6ggDLsTGqhTeqNMsKDphbzYA@mail.gmail.com> <164697764297.2392702.10094603553189733655@Monstersaurus>
+In-Reply-To: <164697764297.2392702.10094603553189733655@Monstersaurus>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 11 Mar 2022 07:24:52 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U6+VdLL0UM_j++fc5Wu7akm9LyJ_Ac19VCqbgPZiw3ZA@mail.gmail.com>
+Message-ID: <CAD=FV=U6+VdLL0UM_j++fc5Wu7akm9LyJ_Ac19VCqbgPZiw3ZA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] drm/bridge: ti-sn65dsi86: Support hotplug detection
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,88 +86,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:18:09PM -0800, Zev Weiss wrote:
-> This can be used to describe a power output supplied by a regulator
-> device that the system controls.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  .../devicetree/bindings/misc/power-efuse.yaml | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
-> new file mode 100644
-> index 000000000000..5f8f0b21af0e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic power efuse device
-> +
-> +maintainers:
-> +  - Zev Weiss <zev@bewilderbeest.net>
-> +
-> +description: |
-> +  This binding describes a physical power output supplied by a
-> +  regulator providing efuse functionality (manual on/off control, and
-> +  auto-shutoff if current, voltage, or thermal limits are exceeded).
-> +
-> +  These may be found on systems such as "smart" network PDUs, and
-> +  typically supply power to devices entirely separate from the system
-> +  described by the device-tree by way of an external connector such as
-> +  an Open19 power cable:
-> +
-> +  https://www.open19.org/marketplace/coolpower-cable-assembly-8ru/
+Hi,
 
-Not really a helpful link...
+On Thu, Mar 10, 2022 at 9:47 PM Kieran Bingham
+<kieran.bingham+renesas@ideasonboard.com> wrote:
+>
+> > > +static void ti_sn_bridge_hpd_disable(struct drm_bridge *bridge)
+> > > +{
+> > > +       struct ti_sn65dsi86 *pdata = bridge_to_ti_sn65dsi86(bridge);
+> > > +
+> > > +       regmap_write(pdata->regmap, SN_IRQ_HPD_REG, 0);
+> > > +       pm_runtime_put_autosuspend(pdata->dev);
+> >
+> > Before doing the pm_runtime_put_autosuspend() it feels like you should
+> > ensure that the interrupt has finished. Otherwise we could be midway
+> > through processing an interrupt and the pm_runtime reference could go
+> > away, right? Maybe we just disable the irq which I think will wait for
+> > anything outstanding to finish?
+>
+> Should the IRQ handler also call pm_runtime_get/put then?
 
-I still don't understand what the h/w looks like here. At least I now 
-understand we're talking a fuse on power rail, not efuses in an SoC 
-used as OTP bits or feature disables.
+I thought about that, but I suspect it's cleaner to disable the IRQ
+handler (and block waiting for it to finish if it was running). That
+will ensure that the core isn't notified about HPD after HPD was
+disabled.  Once you do that then there's no need to get/put in the irq
+handler since we always hold a pm_runtime reference when the IRQ
+handler is enabled.
 
-> +
-> +properties:
-> +  compatible:
-> +    const: power-efuse
-> +
-> +  vout-supply:
-> +    description:
-> +      phandle to the regulator providing power for the efuse
 
-Vout is a supply to the efuse and not the rail being fused? 
+> > > @@ -1247,9 +1342,29 @@ static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+> > >         pdata->bridge.type = pdata->next_bridge->type == DRM_MODE_CONNECTOR_DisplayPort
+> > >                            ? DRM_MODE_CONNECTOR_DisplayPort : DRM_MODE_CONNECTOR_eDP;
+> > >
+> > > -       if (pdata->bridge.type == DRM_MODE_CONNECTOR_DisplayPort)
+> > > +       if (pdata->bridge.type == DRM_MODE_CONNECTOR_DisplayPort) {
+> > >                 pdata->bridge.ops = DRM_BRIDGE_OP_EDID;
+> > >
+> > > +               if (!pdata->no_hpd)
+> > > +                       pdata->bridge.ops |= DRM_BRIDGE_OP_DETECT;
+> > > +       }
+> > > +
+> > > +       if (!pdata->no_hpd && pdata->irq > 0) {
+> > > +               dev_err(pdata->dev, "registering IRQ %d\n", pdata->irq);
+> > > +
+> > > +               ret = devm_request_threaded_irq(pdata->dev, pdata->irq, NULL,
+> > > +                                               ti_sn65dsi86_irq_handler,
+> > > +                                               IRQF_ONESHOT, "sn65dsi86-irq",
+> > > +                                               pdata);
+> > > +               if (ret)
+> > > +                       return dev_err_probe(pdata->dev, ret,
+> > > +                                            "Failed to register DP interrupt\n");
+> > > +
+> > > +               /* Enable IRQ based HPD */
+> > > +               regmap_write(pdata->regmap, SN_IRQ_EN_REG, IRQ_EN);
+> >
+> > Why not put the above regmap_write() in the ti_sn_bridge_hpd_enable() call?
+>
+> I assumed the IRQ handler may get used by other non-HPD events. Which is
+> also why it was originally registered in the main probe(). HPD is just
+> one feature of the interrupts. Of course it's only used for HPD now
+> though. I guess I could have solved the bridge dependency by splitting
+> the IRQ handler to have a dedicated HPD handler function which would
+> return if the bridge wasn't initialised, but went with the deferred
+> registration of the handler.
+>
+> I can move this and then leave it to anyone else implementing further
+> IRQ features to refactor if needed.
 
-Sorry, I know nothing about how an efuse is implemented so you are going 
-to have to explain or draw it.
-
-> +
-> +  error-flags-cache-ttl-ms:
-> +    description:
-> +      The number of milliseconds the vout-supply regulator's error
-> +      flags should be cached before re-fetching them.
-
-How does one fetch/read? the error flags?
-
-> +
-> +required:
-> +  - compatible
-> +  - vout-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    efuse {
-> +        compatible = "power-efuse";
-> +        vout-supply = <&efuse_reg>;
-> +        error-flags-cache-ttl-ms = <500>;
-> +    };
-> -- 
-> 2.35.1
-> 
-> 
+Sounds good. In general the pm_runtime_get reference need to go with
+the IRQ enabling, so if someone else finds a non-HPD need then they'll
+have to move that too.

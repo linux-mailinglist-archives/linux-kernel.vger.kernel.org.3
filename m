@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B53F24D5CBF
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2C94D5CBE
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240208AbiCKHxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S1347263AbiCKHxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347080AbiCKHxf (ORCPT
+        with ESMTP id S1346780AbiCKHxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:53:35 -0500
+        Fri, 11 Mar 2022 02:53:38 -0500
 Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2087.outbound.protection.outlook.com [40.107.22.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7EB6B08D;
-        Thu, 10 Mar 2022 23:52:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE4231DD0;
+        Thu, 10 Mar 2022 23:52:34 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gnPQI+UEJhdh/tb0KBuRqmyVB6EaGk5oKGCpqrUwHW47I8FlVqB8A1IoEU8At3i8Y9s6fI/qSiprWbaBalrvx8ZlPc/CoLIYI+rzCEB/DzTEYNAoNgbeC34koXSzgtIXfI2/i5WQuGtHEbMvYYXAypbUh2knGCdY7PB/EnipBSdDBk2atB3+zmHtR4tElNFUh+CWh/ZoKesAYSS/UoIvpMVzNjbcFXeFTp90gkgkBmI6/4M5U19e71cVmWCXrT2VkXzdi5goJH6c6OcQx9fl9xxWTqcTBV/XudX1Qd+zBvroX/L7CYG2nFQ/vfNBjLeQJMaPGjZGTEA90iuNN+f5mw==
+ b=GqqsjVK28CfMfzRUQh86mLAsRHATIVXXSPsDZmYiZFf0fRYohIp9eVBnTC2eSZTpWBvMRq7ub+1WoAMYgkwOjLqzhl/pcVA5HojLdZPDKZq0/jtvaILXaPgcydbK26AinVA2VFZDZao73AOCj95pCR6NojCApMGzSwiqPOSzbAxiq99k7ur02S4HCsCgIIczbzY7fz3HlIO/3lIEfmGgPYakydAJtF7hWODZosQNFewW9yXQlcRHt+EEATsQeOHQvnz3cu1vShEX2DBAqG2BoUwOuxVUIeXxZ1mxmDIFu/NnRUf7ynR9GksjhNLKMXkfzM9l8PqoABEBGgJKHCEfqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X7hcNMneOC9xJkl/Wtf0wJPxGaqpQjEMuKLCGvH/sRI=;
- b=aY9dfsMqi/5MR/u/ITqMj2Zsu1frkUVbowJBJowRTkYPBWwrEHGsoZvP7uLThBuuRfNk5FHlKActle2l6SrfApt/4Mbk5ZBzcQU+TinXCAfLKeyMZschY3QybwbB1nn0qNGvT/8XKZLgY7g2NC6CQlaeogjd69Xjm2YG7EUFzAmf75qURkR6cQM8xb3SrV3cCQ0ziVX8j4iWHubFkNLX/yftqbCevEOPRG09yY3Q0ON0RMPvEOCDQrpOKN8h4M8mr06SVJJszpxntX9NPfSyuIt345fRoR2f/UYbAEnm1MVQWXPj33ws6edaMH886hfRMqCPnib/bggKU13PPwtzpQ==
+ bh=VE9QcKGDoUZhfJe4o47yAi9yM9BKIcAXhlDwk+vQ/74=;
+ b=hc4kelUFIYgdcRIeCXyCkNNdmUwnkIJCoWSf/vbMDv+UVxw9knVwHXf3LOg2zYq+afi0IhbQF9SSObQ46aMg3lGOXtq2AeXvHNsABsuLX6tUHynOhbUhYt06ucxrxcJY/9s6qzAa2fVD1S/A8YUPwNRm4DKHFddWeNBUToX6xlro3gSKvqOSX95sbT0n6zT53vsJVAZbQKdPa6y8z2nsjxn6VEwWn4b/S60kgkFxKGgmK9j+UBcAxdDO9RTTdu+J8os0LqbCc0X7W/HKq77+0qkMgM8i/uLqKQ6KnhzaMkM9PD/4Y5jf5v5YMpGQkgfeSD+OKx8g2PGtk/dgmwLB7A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X7hcNMneOC9xJkl/Wtf0wJPxGaqpQjEMuKLCGvH/sRI=;
- b=Q2+4PeiRSRH2bYQPFCNMDbQ0PS8ns36SndqN6SyXYGfATMtoFk7SP7TFuXkjVZ2mpvou2xJzDpMirlvWKzfs4/5Xv4QtKvVMAGougui2vsKZfhgCkCM9eCiyBup1xnldgAHrusY7wJFYu+a3nOKL3Is9S2cya2O5ikcl42ClkPo=
+ bh=VE9QcKGDoUZhfJe4o47yAi9yM9BKIcAXhlDwk+vQ/74=;
+ b=q729wGKZXwOSzoV74M1+sjgoVESnsyA0j17PtzGY3hvgaTlcToNxdSLovrDdYBfoc0Ofd21y0pJ9z+hlDkrd3Wl6rmgV86B39tw0OwWo1DZ09JGZI7x0Qk0qKR+aoFU9cOsYynhf6kgdRb4o9coAi0GQ+uiHbzBXMsQ5ihJ2Eqg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by DB7PR04MB4443.eurprd04.prod.outlook.com (2603:10a6:5:32::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 11 Mar
- 2022 07:52:27 +0000
+ 2022 07:52:31 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 07:52:27 +0000
+ 07:52:31 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         mirela.rabulea@oss.nxp.com
@@ -47,9 +47,9 @@ Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 1/5] media: imx-jpeg: Refactor function mxc_jpeg_parse
-Date:   Fri, 11 Mar 2022 15:51:43 +0800
-Message-Id: <73ea0dba34b5bf02104517fce3f66ef2e6d96a16.1646983646.git.ming.qian@nxp.com>
+Subject: [PATCH 2/5] media: imx-jpeg: Identify and handle precision correctly
+Date:   Fri, 11 Mar 2022 15:51:44 +0800
+Message-Id: <a46042733a6a65d84b488cb2c9f7f7cd494e0ef5.1646983646.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1646983646.git.ming.qian@nxp.com>
 References: <cover.1646983646.git.ming.qian@nxp.com>
@@ -59,53 +59,53 @@ X-ClientProxiedBy: SGXP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::27)
  To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 11317b55-abf6-4ba8-9740-08da0334166b
+X-MS-Office365-Filtering-Correlation-Id: b88abc27-3188-4735-4e1f-08da033418b1
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4443:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR04MB4443E809E669A0F35ABFE692E70C9@DB7PR04MB4443.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DB7PR04MB444366C2469863A0A316C6D8E70C9@DB7PR04MB4443.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eWIIn3dVgvz5oQ0aAQoCZcEJyS4KgMWIGx4WYIPRKhkUBRAJ5zifsQerjuaaix0BjMMN4m/UP91xIdR/1qFWh7fgYYWO5eGty7FDQRhPOsTXaWJUY3Kf7d1hnP+6f8mlEHzwMyL8fkds+4JjEhaZV6qKe+vfQH4xgFVtSmFHShHkISSliHBY9zocftSESdMFrdFwX1W5b099RAOrBAruSXk7JvdkoaCjFM+7MLBG+/7dnyl9qqEJEFhae/XwoZgA3J9DcAfqaZPTJFGPdAOodngeq+KDU/gp4Eslx6e6daK2txzGq9xmYeoxx3QZaT9nAfJAeVwesAv3OwZZn4E0BxRRmmHxq6X41vMRxC0l4PUT4IwKeCvalCUgIkQcaotu7gsZnbQNMErWkMrC7Xna4Jh6bxLn31/7JGXRKrnFVqIFFpWbvw1xj7Sp4vUKUoM6pMZnjZD4taWJeVlvUhyApFui4RwQsAHRxsQPLZn4OxJhSqyC79b1SNq/mVT9abEb+AHyQ04fLVezIfZL2pdkTqxr5o/Hucw8aLfzMb4dL7cxDAHY0DNf1KpkGq9RE0BmL+thG5pmB1TzykXBYXt+kRSfFe2gzNLTNjMaMruTdKNllRk8HJg1JJu9dSXWWap8WJtA0JF7vFnoeFjYCXnlOF2tlwrValN1EXgUQRdbj+la+67eaing5YVsAExjcnXqpB0bobWG8jXGCeSWm/MBAg==
+X-Microsoft-Antispam-Message-Info: 1m9purfkm2vOqhSdvNO68oya4rtVBFVyXfZgLGEL9KA27NseaRMgGmfY+41POQ2Okrn2qwSh7G/ElYPHNQ1FsTVwCsOV4NnNSbYUibTXYEmNz4mXKh+Tv5lVC4u6UHVlcg53zZuad3QTvpBUmTdXnUa91TdxptrKJ/95WY+8XT8vtbaf1UwocHpqCvxNsezNzyCSdWKE4aldqjlEIhZ5WdZsCA8FlARqhYMDSZ9Bln0Px0CIdXQd2SQXmXFlrZQBpksFsaA89H+HzDDsi4131yJoLcE3kUNbYANdoupSkp6DPLsCkNebC9ebivCW4WF/eoo6uMOPZW6iFZ2rlpX4LchmrHkNZ4MazzXIMWTh2XLcf5h6AIktSsdbLeKaZRLq30haKXPN2wYbJmwuc9idzbpIcov6HOXSp0hFBSw001H16uGth7NRBhpYD8Tpk2ptXf0Kj4lAUcTxzVBaYqgGbTU040i13sxC8S6oNt7/UJYok0Je7Eotd5meoHtx69V1jA83hgq7Q8EPscZEF5fUCkNfA0lQi9gv5o3QX+KM7u9/8xItVaXp1fsxKaQ9Rus3PbuINGsOy8Uq23cr5RbgoJSgv6EjKd3WA61k2kRr6rv2EiesB+xD2dQpzOf60iPtH5vuRULBChK7ZsLqavZ5VrvtEPE9KesPD4teFZjL/3aHst3D9FnyzZc+YxNZ98T8V3/6l4N75Op+fSpxq0HNdA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(8936002)(26005)(52116002)(44832011)(2906002)(8676002)(6486002)(2616005)(508600001)(86362001)(4326008)(186003)(66946007)(6512007)(6506007)(5660300002)(66556008)(38350700002)(6666004)(38100700002)(66476007)(316002)(83380400001)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0hiZ06YDnZHHvWPuVouM+ZobIAQ7MjSakku7dDO1p94aBd8NHPbO4IA2rbqn?=
- =?us-ascii?Q?gJ/qO2ZxAVllJfiEJvps+Y/TC7o9Bvu/qZm4pfdCBmHXdLIzxuV2kz9XBqc/?=
- =?us-ascii?Q?0iq4Fx7PDbMw8QKuVdm21jsYcMvfSNxowLlEr8hfCkRZD3hrkRMrJtHj1tLQ?=
- =?us-ascii?Q?c8TYR8Qee8Io0j2TTnzQ7CVbby5Z/qS5hepG9YvVzH3/4HAMHomEVkyucW4w?=
- =?us-ascii?Q?oh1CDn9GUntJuWlD/PbS3cop9byCHvxQojPIShMQvnD+AHnTUO4Oohxw8rdD?=
- =?us-ascii?Q?UHpWJnRRuON2Wh1Sr2wV3e52+AglBu2Q9MCQWrvcR6lL2zNnPebfHtDMy7Lf?=
- =?us-ascii?Q?8pcCCU3SJTE/SB5gI7H3VU+DvQ0SV7ZTbFBX8NIBimlouQPGEAf+Ob/O7EbS?=
- =?us-ascii?Q?TvfwOkEnaJRs/sNfOh6jGXlWLe+7X/BtuhTm8Cx8OWrlKhuc09rz3sImMUqo?=
- =?us-ascii?Q?U3b2AmUBWDbVjtd2+cR1kSPMoXk/AaKYsnMPdx6741Mdy5CNzX6H46q6xoQN?=
- =?us-ascii?Q?g6NK2De9NDntCj/rZY7+WQT/zgcd7LUmXwYajIHN8DSXj2ZaS4UKortclPKa?=
- =?us-ascii?Q?blZeFQFuoCz6eklhdrvfd8nE4PYt7FYV1lT6nPF0blAO+1+3qJcF9wpgHplZ?=
- =?us-ascii?Q?7RJe4LjUc+iZx0dXyJSUL1ea8uqkBjHJ0YRoBtWcHdfUAJoZbCpX4WXVLEoo?=
- =?us-ascii?Q?9K2KzRKUoajaH1AOh93JcaJW2mNYWLsoStEi7HsU6wKs7/tafP3tHk5LYkOW?=
- =?us-ascii?Q?bG0ojWNGM6X/NwEjDLdmwQD62TmwQ91adjqKimkSpHczq1UUOTikei9NUyvr?=
- =?us-ascii?Q?GuJN5oWIeyb9yrzxXqieLCVwVFMmtSU7nThdD+dB5twPaT3c04nS0BwfGP02?=
- =?us-ascii?Q?e0sSMhkGKWDVYwYk96t31wdU1fyeimEHVVK6MYZvS35bkGBVutbGaFLNxc7A?=
- =?us-ascii?Q?l3keqxN6Vlya7IiOQGUKXp8SLK0ag3XWSxpSzfxsGm9aFlUJ059NbOOXmodi?=
- =?us-ascii?Q?yp+CQ+xYQUxjwFm70VeUCIs5TZ2MfYjxkwdcvItXBn8nnNSDOowfR0M6RYz/?=
- =?us-ascii?Q?oKSUuQ8XEXzovWRlkx8SuMkN+CpUSCyNRvm/YQbIZBXf6mFsPGlrPGHOuDzJ?=
- =?us-ascii?Q?z3DKU84IiMRaAsGLQxKg4KO0kt5YHeUEY9nsL5KEGJKp0wVXhlP0N2ban94G?=
- =?us-ascii?Q?ZTu6b+4m3fjZU/HCaxn0Yd9v3NplUX5n3LXQ4jEfR5b+LPx0IlBAAHZMZ8AV?=
- =?us-ascii?Q?aW9uQ5uuSg8/ljgL88rxKV9ujNtzcX3qmcYpRVl6v94X+n8FH/Lme7sfbu2u?=
- =?us-ascii?Q?6/0GKPpusKUh6Olp6MZPAmFJjSw241M4UaSde3FIq0tSWNHxgy1flOEr49GZ?=
- =?us-ascii?Q?OziEmXNMgJGKyIxULjCoLPVexoa0UDJ/AdHS3dHuj8nK1Q5ebKyCljrOU9tq?=
- =?us-ascii?Q?F5uWykVyh688VPJBE5WDuoNJUQuxJAa1R3Ecm4nVG+DMcFyzduae3l/8QKWb?=
- =?us-ascii?Q?kE7Xre3b10PUDjGz4JsxX3l56mRw1eXDtMCYRK6HmG2UJal9G89wsVDI9OBq?=
- =?us-ascii?Q?N4jS4SdNswJdh8x0BjnBdCKodZlyNHLGB2z7IenHw5g4sJI/Gfe+l1THO06m?=
- =?us-ascii?Q?4rPGZd+KWbdFLe6Y/cQdvzY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s2tVwOUIQznyeevss/SAUXbElkGAFHbjm+YyxPPI4Vn17GhwkvOkX6MsgYqe?=
+ =?us-ascii?Q?MiYawpcwJAL1jtJyUf7LYQ+R2Y+sYFR8/N6F9tL+PATGDsda97MGF+JG4mxk?=
+ =?us-ascii?Q?f5Sb7MRMY5MbbB4BvJA6aAQUJoUNSIo5wEbnlGRLvCV3s3vsf18r69UBpkRn?=
+ =?us-ascii?Q?9FGBvrcxX2Ay3hhvZavNvovhRnFvzPD3tsEzZsv0k6WvFx3uMot3BNZaDZG5?=
+ =?us-ascii?Q?H6WKfNQsZjU4KYOF3hGdewzkYm54OeZrN9asI0Cm3H66ifdoSGYGQKQHbJN+?=
+ =?us-ascii?Q?JTloncKRzW9AK/EhdKyKydVbW8Pbipw2dGZWfI+Kguxqcydsi/nE9S9QQGWH?=
+ =?us-ascii?Q?R8WG8AAisNmYvTO8TSTKcZXdUvrlqqH+FCoQnZKIaQE8ZV3ihpgmXJ6RMonQ?=
+ =?us-ascii?Q?+lXeEzfmZGqwdMkUohUWQ2OPLo8trwrDjcjbtNo3CL51G0RmGBy12lKdEpkh?=
+ =?us-ascii?Q?b4Ha8g7KX/9IWvHVF59wzHRITHWZUM8n7jeFAVA40XEMRJayvYS5Z3uihHEF?=
+ =?us-ascii?Q?yL6ALDMCeuKHSA0UC+1PbzaoCUZX0DcfJ2TwvkawmYxZk2eyYxphopjB+HC/?=
+ =?us-ascii?Q?RcxoXph2aLJNNQRzu1N8IMlGOUM8cu8w0ETEPI9tjCtKAS75wkU/oXAba+0G?=
+ =?us-ascii?Q?nsJHoixWTau0SHt6iPgl4gcx34mpEpOdhEiuoW742IV9zqyGMh21xi/xbzob?=
+ =?us-ascii?Q?Jpj4cKhIzJB/waeJzB9FviG9tXe92zXy37uGZg5xAchcL6LItPhhAGwHwgoN?=
+ =?us-ascii?Q?j2jii9L4AbZz2Dqy3pmyY6Bj4u/zWA6+nfTImFP3fTLfeDOdy6cujNzkRYIe?=
+ =?us-ascii?Q?u78mlFpX7FcuoYy7NLipFDURn71DB1p4rz2pQMtjht7Nfuk7jVgb4iTaHT9f?=
+ =?us-ascii?Q?ndxkykwFjyOWUfTvLE6smNZhAxoRDakNfvD+ev8eBNnzYQGjxrtWcg8KzYjl?=
+ =?us-ascii?Q?NTSpZ2bkJOhSShodszhSpU6qOwDgY/IPFxF6CfJwAosiQhMRcx3NiWaRbEin?=
+ =?us-ascii?Q?hI8czqHdlP+0PRzins9DEjcerarcblvZxHlmzTe+qFjJdjhw4GP/PanNPqcg?=
+ =?us-ascii?Q?6vIBEzDY4k+3UdWX933Js2gNvzEhIC4+fR9XQGXzoo1gi8ywqzCR8SXOAFul?=
+ =?us-ascii?Q?RPw6H8mlfMkyCBtcVetJDnyihZT2yAgTv31od7w1GqPnoXsdVM/7ftxVZtEY?=
+ =?us-ascii?Q?WgRWKg5Ee+EdpCzee5FrGKcSKSnaM8cNMAJlRy2yE7QMcIkjdTtUzXG5oICV?=
+ =?us-ascii?Q?MuhYoP+6LH/dXYdMQ8CtGVBM9zcL8UaHhEQW36VvZS+dTNeAafFkx8rasRfG?=
+ =?us-ascii?Q?/iik7vcrpsNuxx/hs8y7e1OVwJtcsnmLqzLQSOdr8YTEnriIsyo2xS3AULM6?=
+ =?us-ascii?Q?YJjoyrjRwdghTDOrCUJ5/EEQt5b3zcl7EcBtikSWkKLUJYmScZARWWO5kMFG?=
+ =?us-ascii?Q?0qlqGG2BmNhQ2s1yRYYJgfpJ+4ueNL4LQNsGOzWYvWVJhCDQD2sZSenduwMr?=
+ =?us-ascii?Q?OlOc+/0zzCR6Pe4WiYF2HIV9HrwOUjCXzEIod+zndyXS+kvVXya6HgdDZWpT?=
+ =?us-ascii?Q?JNfKnSWPhgYcROYv/J8/zElxWOR2MvRm3hNoMshQAQUPgLzulPatMpwNVDyG?=
+ =?us-ascii?Q?skH6Z0QR5KQ2L5D9KwSs36I=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11317b55-abf6-4ba8-9740-08da0334166b
+X-MS-Exchange-CrossTenant-Network-Message-Id: b88abc27-3188-4735-4e1f-08da033418b1
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 07:52:27.7710
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 07:52:31.5364
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JId3ZNfD/y2qNkYRfh5r4cp+UJRWv3TQ+4Wfp1wAeNOOyurgL4daSrSG4FjZkPqV+kJ8+ht8R7W/zZjEPVblCQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: xZXK1wC0UGnSNHHR9C/qVzIe/Y3VBfRGvpegw45uJazzQ/E7tfDIujyBZ7ZzujCh6kZfiGL6bVkppVz1nrNHDQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4443
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -117,58 +117,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refine code to support dynamic resolution change
+The decoder will save the precision that was detected from jpeg header
+and use it later, when choosing the pixel format and also calculate
+bytesperline according to precision.
+
+The 12bit jpeg is not supported yet,
+but driver shouldn't led to serious problem if user enqueue a 12 bit jpeg.
+And the 12bit jpeg is supported by hardware, driver may support it later.
 
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
- drivers/media/platform/imx-jpeg/mxc-jpeg.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c | 37 +++++++++++++++-------
+ drivers/media/platform/imx-jpeg/mxc-jpeg.h |  1 +
+ 2 files changed, 26 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-index 1de0400750aa..d8d24c19f423 100644
+index d8d24c19f423..82b9b4630d9c 100644
 --- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
 +++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-@@ -1245,8 +1245,7 @@ static void mxc_jpeg_sizeimage(struct mxc_jpeg_q_data *q)
+@@ -82,6 +82,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
+ 	},
+ 	{
+ 		.name		= "ARGB", /* ARGBARGB packed format */
+@@ -93,6 +94,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
+ 	},
+ 	{
+ 		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
+@@ -104,6 +106,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.h_align	= 4,
+ 		.v_align	= 4,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
+ 	},
+ 	{
+ 		.name		= "YUV422", /* YUYV */
+@@ -115,6 +118,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.h_align	= 4,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
+ 	},
+ 	{
+ 		.name		= "YUV444", /* YUVYUV */
+@@ -126,6 +130,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
+ 	},
+ 	{
+ 		.name		= "Gray", /* Gray (Y8/Y12) or Single Comp */
+@@ -137,6 +142,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
+ 	},
+ };
+ 
+@@ -1175,14 +1181,17 @@ static u32 mxc_jpeg_get_image_format(struct device *dev,
+ 
+ 	for (i = 0; i < MXC_JPEG_NUM_FORMATS; i++)
+ 		if (mxc_formats[i].subsampling == header->frame.subsampling &&
+-		    mxc_formats[i].nc == header->frame.num_components) {
++		    mxc_formats[i].nc == header->frame.num_components &&
++		    mxc_formats[i].precision == header->frame.precision) {
+ 			fourcc = mxc_formats[i].fourcc;
+ 			break;
+ 		}
+ 	if (fourcc == 0) {
+-		dev_err(dev, "Could not identify image format nc=%d, subsampling=%d\n",
++		dev_err(dev,
++			"Could not identify image format nc=%d, subsampling=%d, precision=%d\n",
+ 			header->frame.num_components,
+-			header->frame.subsampling);
++			header->frame.subsampling,
++			header->frame.precision);
+ 		return fourcc;
+ 	}
+ 	/*
+@@ -1208,18 +1217,22 @@ static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q,
+ 		/* bytesperline unused for compressed formats */
+ 		q->bytesperline[0] = 0;
+ 		q->bytesperline[1] = 0;
+-	} else if (q->fmt->fourcc == V4L2_PIX_FMT_NV12M) {
++	} else if (q->fmt->subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_420) {
+ 		/* When the image format is planar the bytesperline value
+ 		 * applies to the first plane and is divided by the same factor
+ 		 * as the width field for the other planes
+ 		 */
+-		q->bytesperline[0] = q->w * (precision / 8) *
+-				     (q->fmt->depth / 8);
++		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8);
+ 		q->bytesperline[1] = q->bytesperline[0];
++	} else if (q->fmt->subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_422) {
++		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8) * 2;
++		q->bytesperline[1] = 0;
++	} else if (q->fmt->subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_444) {
++		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8) * q->fmt->nc;
++		q->bytesperline[1] = 0;
+ 	} else {
+-		/* single plane formats */
+-		q->bytesperline[0] = q->w * (precision / 8) *
+-				     (q->fmt->depth / 8);
++		/* grayscale */
++		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8);
+ 		q->bytesperline[1] = 0;
  	}
  }
+@@ -1353,7 +1366,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ 		(fourcc >> 24) & 0xff);
  
--static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
--			  u8 *src_addr, u32 size, bool *dht_needed)
-+static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
- {
- 	struct device *dev = ctx->mxc_jpeg->dev;
- 	struct mxc_jpeg_q_data *q_data_out, *q_data_cap;
-@@ -1256,6 +1255,9 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
- 	struct v4l2_jpeg_header header;
- 	struct mxc_jpeg_sof *psof = NULL;
- 	struct mxc_jpeg_sos *psos = NULL;
-+	struct mxc_jpeg_src_buf *jpeg_src_buf = vb2_to_mxc_buf(vb);
-+	u8 *src_addr = (u8 *)vb2_plane_vaddr(vb, 0);
-+	u32 size = vb2_get_plane_payload(vb, 0);
- 	int ret;
+ 	/* setup bytesperline/sizeimage for capture queue */
+-	mxc_jpeg_bytesperline(q_data_cap, header.frame.precision);
++	mxc_jpeg_bytesperline(q_data_cap, q_data_cap->fmt->precision);
+ 	mxc_jpeg_sizeimage(q_data_cap);
  
- 	memset(&header, 0, sizeof(header));
-@@ -1266,7 +1268,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx,
+ 	/*
+@@ -1509,7 +1522,7 @@ static void mxc_jpeg_set_default_params(struct mxc_jpeg_ctx *ctx)
+ 		q[i]->h = MXC_JPEG_DEFAULT_HEIGHT;
+ 		q[i]->w_adjusted = MXC_JPEG_DEFAULT_WIDTH;
+ 		q[i]->h_adjusted = MXC_JPEG_DEFAULT_HEIGHT;
+-		mxc_jpeg_bytesperline(q[i], 8);
++		mxc_jpeg_bytesperline(q[i], q[i]->fmt->precision);
+ 		mxc_jpeg_sizeimage(q[i]);
+ 	}
+ }
+@@ -1651,7 +1664,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fm
  	}
  
- 	/* if DHT marker present, no need to inject default one */
--	*dht_needed = (header.num_dht == 0);
-+	jpeg_src_buf->dht_needed = (header.num_dht == 0);
+ 	/* calculate bytesperline & sizeimage into the tmp_q */
+-	mxc_jpeg_bytesperline(&tmp_q, 8);
++	mxc_jpeg_bytesperline(&tmp_q, fmt->precision);
+ 	mxc_jpeg_sizeimage(&tmp_q);
  
- 	q_data_out = mxc_jpeg_get_q_data(ctx,
- 					 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-@@ -1381,10 +1383,7 @@ static void mxc_jpeg_buf_queue(struct vb2_buffer *vb)
+ 	/* adjust user format according to our calculations */
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+index f53f004ba851..82b38cc2dfab 100644
+--- a/drivers/media/platform/imx-jpeg/mxc-jpeg.h
++++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+@@ -60,6 +60,7 @@ struct mxc_jpeg_fmt {
+ 	int					h_align;
+ 	int					v_align;
+ 	u32					flags;
++	u8					precision;
+ };
  
- 	jpeg_src_buf = vb2_to_mxc_buf(vb);
- 	jpeg_src_buf->jpeg_parse_error = false;
--	ret = mxc_jpeg_parse(ctx,
--			     (u8 *)vb2_plane_vaddr(vb, 0),
--			     vb2_get_plane_payload(vb, 0),
--			     &jpeg_src_buf->dht_needed);
-+	ret = mxc_jpeg_parse(ctx, vb);
- 	if (ret)
- 		jpeg_src_buf->jpeg_parse_error = true;
- 
+ struct mxc_jpeg_desc {
 -- 
 2.33.0
 

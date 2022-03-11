@@ -2,161 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1704D57EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DADBD4D57F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345554AbiCKCPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 21:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S1345596AbiCKCQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 21:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiCKCPo (ORCPT
+        with ESMTP id S1345579AbiCKCQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 21:15:44 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0C8C5DA9;
-        Thu, 10 Mar 2022 18:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646964883; x=1678500883;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Dv5GNx9VK3y1DpDwUXAucqtut9NvxauOUvgUnuU3e1w=;
-  b=EYtDVx1lbhYHY6uz750EBobkU1fo0j6iwMG8FC4w+tHDrVUR2nRfnxW/
-   XOMacHwf62YV2drKae9vwIeINwbe2H76CZiA3QDMQBkG6oj4XrZEPGWSV
-   7VtkYVmOf0Wy/MZglERq4dbpQaPmZ7BzuP1XjhTsr25jHcbGgG8ZfwI2u
-   0Iq3z5xdHkwH2ub6QxWpHMMJRjoTXP7kmetM7tRwVDD5kzEA0F1+EdEdi
-   JrIEAvC5PcTew/ZhLLu70POxb+ezHxl7mBRylD9QUZeqLqEORsy8MakPL
-   gaqQ6L07FM+MT71sES3aHL0kDv9cYPJ+nbHN8NUKF+wQSA76vHILgnxj8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255667100"
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="255667100"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 18:14:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="548318297"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Mar 2022 18:14:38 -0800
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v3] fpga: dfl: check feature type before parse irq info
-Date:   Thu, 10 Mar 2022 21:11:21 -0500
-Message-Id: <20220311021121.1504442-1-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
+        Thu, 10 Mar 2022 21:16:23 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494DD10240C;
+        Thu, 10 Mar 2022 18:15:21 -0800 (PST)
+X-UUID: c3ff8d614a35446e8f6ac851d2fa3467-20220311
+X-UUID: c3ff8d614a35446e8f6ac851d2fa3467-20220311
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 333112247; Fri, 11 Mar 2022 10:15:12 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 11 Mar 2022 10:15:11 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 11 Mar 2022 10:15:10 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>
+CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
+Subject: [v3 0/2] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Date:   Fri, 11 Mar 2022 10:15:07 +0800
+Message-ID: <20220311021509.31669-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The feature ID of "Port User Interrupt" and the
-"PMCI Subsystem" are identical, 0x12, but one is for FME,
-other is for Port. It should check the feature type While
-parsing the irq info in parse_feature_irqs().
+From: Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
 
----
-v3: Remove "Fixes" in commit log with Hao's comment, this is a
-    extension not a bug fix.
+The series reuses mt8192-mt6359-rt10150rt5682.c for supporting machine
+driver with rt1015p speaker amplifier and rt5682s headset codec.
 
-v2: add DFL Feature ID Registry in documentation.
+Changes from v2:
+  - fix build warnings such as "data argument not used by format string"
 
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
----
- Documentation/fpga/dfl.rst | 11 +++++++++++
- drivers/fpga/dfl.c         | 38 ++++++++++++++++++++++----------------
- 2 files changed, 33 insertions(+), 16 deletions(-)
+Changes from v1:
+  - uses the snd_soc_of_get_dai_link_codecs to complete the
+  configuration of dai_link's codecs
+  - uses definitions to simplifies card name and compatible name
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index ef9eec71f6f3..14f342bb85e4 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -502,6 +502,17 @@ Developer only needs to provide a sub feature driver with matched feature id.
- FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
- could be a reference.
- 
-+Individual DFL drivers are bound DFL devices based on Feature Type and Feature ID.
-+The definition of Feature Type and Feature ID can be found:
-+
-+https://github.com/OPAE/linux-dfl-feature-id/blob/master/dfl-feature-ids.rst
-+
-+If you want to add a new feature ID for FPGA DFL feature device, we recommend that
-+use a pull request to reserve a feature ID for DFL. Here is the DFL Feature ID
-+Registry:
-+
-+https://github.com/OPAE/linux-dfl-feature-id
-+
- Location of DFLs on a PCI Device
- ================================
- The original method for finding a DFL on a PCI device assumed the start of the
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 599bb21d86af..6bff39ff21a0 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -940,9 +940,12 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
- {
- 	void __iomem *base = binfo->ioaddr + ofst;
- 	unsigned int i, ibase, inr = 0;
-+	enum dfl_id_type type;
- 	int virq;
- 	u64 v;
- 
-+	type = feature_dev_id_type(binfo->feature_dev);
-+
- 	/*
- 	 * Ideally DFL framework should only read info from DFL header, but
- 	 * current version DFL only provides mmio resources information for
-@@ -957,22 +960,25 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
- 	 * code will be added. But in order to be compatible to old version
- 	 * DFL, the driver may still fall back to these quirks.
- 	 */
--	switch (fid) {
--	case PORT_FEATURE_ID_UINT:
--		v = readq(base + PORT_UINT_CAP);
--		ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
--		inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
--		break;
--	case PORT_FEATURE_ID_ERROR:
--		v = readq(base + PORT_ERROR_CAP);
--		ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
--		inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
--		break;
--	case FME_FEATURE_ID_GLOBAL_ERR:
--		v = readq(base + FME_ERROR_CAP);
--		ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
--		inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
--		break;
-+	if (type == PORT_ID) {
-+		switch (fid) {
-+		case PORT_FEATURE_ID_UINT:
-+			v = readq(base + PORT_UINT_CAP);
-+			ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-+			inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-+			break;
-+		case PORT_FEATURE_ID_ERROR:
-+			v = readq(base + PORT_ERROR_CAP);
-+			ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-+			inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-+			break;
-+		}
-+	} else if (type == FME_ID) {
-+		if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
-+			v = readq(base + FME_ERROR_CAP);
-+			ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-+			inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-+		}
- 	}
- 
- 	if (!inr) {
+Jiaxin Yu (2):
+  ASoC: dt-bindings: mt8192-mt6359: add new compatible for using rt1015p
+    and rt5682
+  ASoC: mediatek: mt8192: support rt1015p_rt5682s
+
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |   1 +
+ sound/soc/mediatek/Kconfig                    |   1 +
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 204 +++++++++++-------
+ 3 files changed, 129 insertions(+), 77 deletions(-)
+
 -- 
-2.26.2
+2.18.0
 

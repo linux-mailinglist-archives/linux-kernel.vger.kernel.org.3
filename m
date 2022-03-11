@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718604D64EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AB74D6508
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347030AbiCKPuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S1349795AbiCKPvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344675AbiCKPuf (ORCPT
+        with ESMTP id S1349697AbiCKPvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:50:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C25628EB51
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:31 -0800 (PST)
+        Fri, 11 Mar 2022 10:51:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25B4E1CABD1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:50:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647013771;
+        s=mimecast20190719; t=1647013804;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=D2pmc0xLyfbXJv4H5Su2IjuCtdgSulAIgXXCBsJ28QE=;
-        b=ffyI2r7cHoMyoQ7CVsrxu2JwH0aeNSrYqo9z8MERn3MdWH48m/hLw2oDDqIEl+Fsb3TE/D
-        BaWhNa55D+q0IUyzlefR9TYNxt5aNgsjHnoNR/0erVfJj9trS2frgT7bMXGAVUSTeqnI1L
-        et+wvrMIBkIbirq13zj0OJGiDDjUelM=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8gDwUidIwqdJttGlcdrWpuSeGlEE0r2bY8JHq9AKfxA=;
+        b=GZAru+dyWHDavnOTtwhIpzGyfIQzgl19m/i5P9GVNgm0kC31FeBuARd40bOOTjKsan4bS8
+        OgVtAGhJnvyhzCmvIPGiO93wp/ZSqQ25zKh6kdsdGL92OFRuyDsIoYrRfHX7WXa/igL7eQ
+        AVMEZg2RhGgjghFPypnJ3znySl6sg+M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-zVBycbBdNH2fqlXWdMYBXQ-1; Fri, 11 Mar 2022 10:49:29 -0500
-X-MC-Unique: zVBycbBdNH2fqlXWdMYBXQ-1
-Received: by mail-qv1-f71.google.com with SMTP id x16-20020a0ce250000000b00432ec6eaf85so7887615qvl.15
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D2pmc0xLyfbXJv4H5Su2IjuCtdgSulAIgXXCBsJ28QE=;
-        b=p6GitnCKqMTb9U1kLxH7pdq8yRW8Xvkh4Rb7Wm51z+xVTjElcpknMRqmHDQvCA+oH3
-         SoxFI34g/tj4PF+z1dXG52XRYEu3Qffvp0z4AX7xpkx1GydAdq3Hrncbve5EEwWQppq8
-         kgG9SMBSHlcvZmXiOK91PjMOh4Mkawp0Oc0J3UBiBylZFknSVKYFAXpG+StUiSmcAjqK
-         YZgn85mEOu4VcdPXmblByfH+oR1taVIr2VbMbBBZ8pILGbOigyBHgUhBofhjo+tcFhql
-         +Do6FSuTIULLUDkC0zdBbJd36e5HIvDRJ6m0zGmJP/Dl9bjWmhZfBHLuB9oE+j1O1fM1
-         TvsQ==
-X-Gm-Message-State: AOAM5307kAjAzGlyESRTmpWkyhwZP6y9hNTkKe7DQOREcNznv9dh4OqD
-        bAOvMeDuC9RZjnRr/jIz/TPvaCo1rCc+4hEtWJAV9i0elc9HZq2c5IYOLG2RiEnV+rKUi/68vkf
-        iCIz1FYDt6R1U331fM7anmqPX
-X-Received: by 2002:a05:622a:550:b0:2e0:7422:a1d5 with SMTP id m16-20020a05622a055000b002e07422a1d5mr8888176qtx.444.1647013769071;
-        Fri, 11 Mar 2022 07:49:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJycKl9MtiYetzeS9duFZfYrf1qfeHF2oqbyGQqrK2X38v2Q/P9G/k00aKlaQClsoPQJAlwqsA==
-X-Received: by 2002:a05:622a:550:b0:2e0:7422:a1d5 with SMTP id m16-20020a05622a055000b002e07422a1d5mr8888165qtx.444.1647013768866;
-        Fri, 11 Mar 2022 07:49:28 -0800 (PST)
-Received: from xps13.. (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id z6-20020ae9c106000000b0067d3b9ef387sm3602719qki.28.2022.03.11.07.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:49:28 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     bjorn.andersson@linaro.org
-Cc:     mani@kernel.org, dianders@chromium.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 0/2] ARM: qcom_defconfig: add crypto and debugfs support
-Date:   Fri, 11 Mar 2022 10:49:17 -0500
-Message-Id: <20220311154919.1797920-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.34.1
+ us-mta-497-Jc-1ZeiYOpilPD9DiF4GeQ-1; Fri, 11 Mar 2022 10:50:03 -0500
+X-MC-Unique: Jc-1ZeiYOpilPD9DiF4GeQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2DE791091DA1;
+        Fri, 11 Mar 2022 15:50:02 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A9FD7785FD;
+        Fri, 11 Mar 2022 15:49:59 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 05/31] KVM: x86: Prepare kvm_hv_flush_tlb() to handle L2's GPAs
+Date:   Fri, 11 Mar 2022 16:49:17 +0100
+Message-Id: <20220311154943.2299191-6-vkuznets@redhat.com>
+In-Reply-To: <20220311154943.2299191-1-vkuznets@redhat.com>
+References: <20220311154943.2299191-1-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's two minor additions to the defconfig for the Qualcomm random
-number generator and debug fs.
+To handle Direct TLB flush requests from L2, KVM needs to translate the
+specified L2 GPA to L1 GPA to read hypercall arguments from there.
 
-Note that the DTS for the Qualcomm prng is already present in the
-upstream tree for the msm8974.
+No fucntional change as KVM doesn't handle VMCALL/VMMCALL from L2 yet.
 
-Brian Masney (2):
-  ARM: qcom_defconfig: enable options for Qualcomm random number
-    generator
-  ARM: qcom_defconfig: enable debug fs support
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/hyperv.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- arch/arm/configs/qcom_defconfig | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index f619acccbb6d..53eb9540494b 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -23,6 +23,7 @@
+ #include "ioapic.h"
+ #include "cpuid.h"
+ #include "hyperv.h"
++#include "mmu.h"
+ #include "xen.h"
+ 
+ #include <linux/cpu.h>
+@@ -1969,6 +1970,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	 */
+ 	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64);
+ 
++	if (!hc->fast && is_guest_mode(vcpu)) {
++		hc->ingpa = translate_nested_gpa(vcpu, hc->ingpa, 0, NULL);
++		if (unlikely(hc->ingpa == UNMAPPED_GVA))
++			return HV_STATUS_INVALID_HYPERCALL_INPUT;
++	}
++
+ 	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
+ 	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE) {
+ 		if (hc->fast) {
 -- 
-2.34.1
+2.35.1
 

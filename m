@@ -2,94 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B513A4D59BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E874D5A10
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346392AbiCKEnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S1346445AbiCKEtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346433AbiCKEnA (ORCPT
+        with ESMTP id S1346391AbiCKEtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:43:00 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E26B1A907A;
-        Thu, 10 Mar 2022 20:41:58 -0800 (PST)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22B4SD8w006855;
-        Fri, 11 Mar 2022 04:41:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=1La54FmIqIbZzewnmTDVKyzNOZ4KlniNQIRdC9L4pTw=;
- b=ln9zUlB5Wx3D72w9Io3Vz0b95Ndvlcy2bkSkNk4KCAWNaKf70X6DIESiLXiUIwwcDZGQ
- voY6D9bZECOTWwDqPRnFplW7WKABKaJB5MXbUzrEObjfUW34lNBeLC2Cvod+L6qJ9gSk
- rIXxS4PWXF8s+nh2meHcxH5qPrMZg6jQrdYcyXRgYUUlTFQr3XMMd8VpK2ScZNr81CN7
- 1UDSgonAkJpgU23JT+uGwX/NybTkPyKyJEbO/mlJ3JwGqVeIi0p6g2cjRat+0SGjzF+x
- kh0oxjwS/3H8e5nel77XZk2Vlmw3jRcvmiajSlkPxbgPow+fuc4Vh5+LFSg7gVYuCjQS 1Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eqrrdq2fs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 04:41:53 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22B4aSbj004503;
-        Fri, 11 Mar 2022 04:41:53 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eqrrdq2fc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 04:41:52 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22B4blDr022254;
-        Fri, 11 Mar 2022 04:41:51 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3eqqf08pss-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 04:41:51 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22B4fl5Y36897178
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 04:41:47 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AF1CCAE04D;
-        Fri, 11 Mar 2022 04:41:47 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 312B5AE045;
-        Fri, 11 Mar 2022 04:41:45 +0000 (GMT)
-Received: from [9.43.5.3] (unknown [9.43.5.3])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 11 Mar 2022 04:41:44 +0000 (GMT)
-Message-ID: <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
-Date:   Fri, 11 Mar 2022 10:11:43 +0530
+        Thu, 10 Mar 2022 23:49:25 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BE2BF53B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:48:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646974102; x=1678510102;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BWXJeyZK2lkkYrAYdNarq23XQsh3kpjYfKD7o3c+Yh4=;
+  b=VaIf2daCUd99qkZReu+uLqzz1rxo7LnovEyw4T0OGIzC/Yozs91o7AqA
+   2nFLjglRJMxKTFcZpqbm2JRHewrwgPzM3AEbc7nRAn4YzHaTEEox/bS8S
+   EabSK+/cmfARDYCi7uePDFYpC/6VQdhtZtJ7Q6LdW0XCc9R/EXvybbflc
+   9rVopEoyvIYeeJYqthsvAEld+yj7d0GIzzSHLDT3dUrGHkCW4J77RXZYc
+   o3IxU2jWM7k7D097gWdoEa/vFHIUsaGCowf+nM9Y3DT8sC3cQuOw3QU18
+   K8CKbFp64vFT3qMbcV1KvIxTgLkMFkCorPajTIsaQjHgBmrbon5KlVMb1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="236102373"
+X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
+   d="scan'208";a="236102373"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 20:48:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
+   d="scan'208";a="514375263"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2022 20:48:20 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSXCN-0005qY-CF; Fri, 11 Mar 2022 04:48:19 +0000
+Date:   Fri, 11 Mar 2022 12:47:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
+ expression
+Message-ID: <202203111242.ymso1aTK-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH v11 0/4] integrity: support including firmware ".platform"
- keys at build time
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
-References: <20220310214450.676505-1-nayna@linux.ibm.com>
-From:   Nageswara Sastry <rnsastry@linux.ibm.com>
-In-Reply-To: <20220310214450.676505-1-nayna@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xINTBg14ZqSpZh-yay9uoKnMPzWX3n5y
-X-Proofpoint-GUID: xseay6-Ax7BOXKVK0qR6OTHXLoou4EEd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-10_09,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203110020
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,81 +62,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dda64ead7e82caa47fafe0edc36067ee64df2203
+commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
+date:   7 months ago
+config: arc-randconfig-s032-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111242.ymso1aTK-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e188f3330a13df904d77003846eafd3edf99009d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/ fs/ kernel/ net/ipv4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On 11/03/22 3:14 am, Nayna Jain wrote:
-> Some firmware support secure boot by embedding static keys to verify the
-> Linux kernel during boot. However, these firmware do not expose an
-> interface for the kernel to load firmware keys onto the ".platform"
-> keyring, preventing the kernel from verifying the kexec kernel image
-> signature.
-> 
-> This patchset exports load_certificate_list() and defines a new function
-> load_builtin_platform_cert() to load compiled in certificates onto the
-> ".platform" keyring.
-> 
-> Changelog:
-> v11:
-> * Added a new patch to conditionally build extract-cert if
-> PLATFORM_KEYRING is enabled.
-> 
+sparse warnings: (new ones prefixed by >>)
+   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
+   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
+   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
+   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
+   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
+   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
+   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
+   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
+   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
+   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
+--
+   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
+   fs/file.c:350:17: sparse:     expected struct file **old_fds
+   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
+   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
+   fs/file.c:351:17: sparse:     expected struct file **new_fds
+   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
+   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
+   fs/file.c:366:17: sparse:    struct file *
+>> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
+   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
+   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
+--
+   net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
+   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
+   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
+>> net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
+   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
+   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
 
-Tested the following four patches with and with out setting 
-CONFIG_INTEGRITY_PLATFORM_KEYS
+vim +279 arch/arc/kernel/smp.c
 
-Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+41195d236e8445 Vineet Gupta    2013-01-18  261  
+ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
+41195d236e8445 Vineet Gupta    2013-01-18  263  {
+f2a4aa5646687f Vineet Gupta    2013-11-26 @264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
+41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
+41195d236e8445 Vineet Gupta    2013-01-18  267  
+f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
+f2a4aa5646687f Vineet Gupta    2013-11-26  269  
+41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  271  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
+6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
+d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
+41195d236e8445 Vineet Gupta    2013-01-18  280  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
+82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
+ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
+41195d236e8445 Vineet Gupta    2013-01-18  291  
+41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  293  }
+41195d236e8445 Vineet Gupta    2013-01-18  294  
 
+:::::: The code at line 279 was first introduced by commit
+:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
 
-1. With set CONFIG_INTEGRITY_PLATFORM_KEYS
+:::::: TO: Vineet Gupta <vgupta@synopsys.com>
+:::::: CC: Vineet Gupta <vgupta@synopsys.com>
 
-# grep pem .config
-CONFIG_INTEGRITY_PLATFORM_KEYS="certs/kernel.pem"
-CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
-CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"
-
-# grep 
-"CONFIG_INTEGRITY_PLATFORM_KEYS\|INTEGRITY_PLATFORM_KEYRING\|SYSTEM_REVOCATION_LIST" 
-.config
-CONFIG_INTEGRITY_PLATFORM_KEYRING=y
-CONFIG_INTEGRITY_PLATFORM_KEYS="certs/kernel.pem"
-# CONFIG_SYSTEM_REVOCATION_LIST is not set
-
-# cat /proc/keys | grep platform
-0e60c88d I------     1 perm 1f0b0000     0     0 keyring   .platform: 1
-
-# keyctl show %keyring:.platform
-Keyring
-  241223821 ---lswrv      0     0  keyring: .platform
-  308815460 ---lswrv      0     0   \_ asymmetric: IBM Corporation: 
-Guest Secure Boot Imprint Kernel Signing Key: 
-a0cf9069c30875320cb10a77325d4fa7012f8d12
-
-
-2. With out set CONFIG_INTEGRITY_PLATFORM_KEYS
-
-# grep pem .config
-CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
-CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"
-
-# grep 
-"CONFIG_INTEGRITY_PLATFORM_KEYS\|INTEGRITY_PLATFORM_KEYRING\|SYSTEM_REVOCATION_LIST" 
-.config
-CONFIG_INTEGRITY_PLATFORM_KEYRING=y
-CONFIG_INTEGRITY_PLATFORM_KEYS=""
-# CONFIG_SYSTEM_REVOCATION_LIST is not set
-
-# cat /proc/keys | grep platform
-12a5f301 I------     1 perm 1f0b0000     0     0 keyring   .platform: empty
-
-# keyctl show %keyring:.platform
-Keyring
-  312865537 ---lswrv      0     0  keyring: .platform
-
-
-> 
-> 
-> base-commit: fb5abce6b2bb5cb3d628aaa63fa821da8c4600f9
-
--- 
-Thanks and Regards
-R.Nageswara Sastry
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

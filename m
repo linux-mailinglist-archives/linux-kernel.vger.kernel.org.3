@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A7E4D604F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEA94D604E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348138AbiCKLCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S1348146AbiCKLCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241160AbiCKLCL (ORCPT
+        with ESMTP id S241160AbiCKLCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:02:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CB41B2AE2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:01:06 -0800 (PST)
+        Fri, 11 Mar 2022 06:02:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC5B1B2AE2;
+        Fri, 11 Mar 2022 03:01:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70D461B4B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D680FC340E9;
-        Fri, 11 Mar 2022 11:01:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 428C761B2F;
+        Fri, 11 Mar 2022 11:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9CDC340E9;
+        Fri, 11 Mar 2022 11:01:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646996465;
-        bh=JZ58Y8Mrlbc3C3YvnSSB2HJn2wQXjyBudT9bS4WB1fE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BQV6X6WZXeHzRJKx/4zoVZnHjOwseH6GKLrA9pWebweoGizo4iG0VJO9Ev5BLcYmK
-         l/+FMcO+MlFss7oPJ7n3nDEtdJ0U9DgGxBqObn9YgPWt0jm5E3f1XMsOT27X15qBqD
-         iym0/BZyrl2dluH7iZzC9c4BSbWjHumub1zq2wWE=
-Date:   Fri, 11 Mar 2022 12:01:01 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Yusuf Khan <yusisamerican@gmail.com>, linux-kernel@vger.kernel.org,
-        jasowang@redhat.com, mikelley@microsoft.com, mst@redhat.com,
-        javier@javigon.com, arnd@arndb.de, will@kernel.org, axboe@kernel.dk
-Subject: Re: [PATCH v7] drivers: ddcci: upstream DDCCI driver
-Message-ID: <Yisr7WH+EfEhMbVY@kroah.com>
-References: <20220311074413.14644-1-yusisamerican@gmail.com>
- <YisE6jjbzJyytqB8@kroah.com>
- <15e453381279ee9f607936d3b8d77806b58d9678.camel@perches.com>
+        s=korg; t=1646996487;
+        bh=WiS8TFyl/W92NuxiVeODXrPccKzqss0V2XRtmVhD8TE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QIxqBIALnpDhZVBYU0mf8I7yQctxSclEcQezLH5iOKwrEjTn4KekASdmXhZQV+W52
+         p4t6gUMCFlvhL/pbKsw860/qwzVRl5eqdyXO62F4bRanJWo9UXvTkv+UJAaGyhnMwz
+         +TUqzoruIsnEFdThg8tPiaU/9aPY8466r+dtEG4Y=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.4.184
+Date:   Fri, 11 Mar 2022 12:01:23 +0100
+Message-Id: <16469964833629@kroah.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15e453381279ee9f607936d3b8d77806b58d9678.camel@perches.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,40 +50,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 02:45:01AM -0800, Joe Perches wrote:
-> On Fri, 2022-03-11 at 09:14 +0100, Greg KH wrote:
-> > On Thu, Mar 10, 2022 at 11:44:13PM -0800, Yusuf Khan wrote:
-> > > This patch upstreams the DDCCI driver by Christoph Grenz into
-> > > the kernel. The original gitlab page is loacted at https://gitlab
-> > > .com/ddcci-driver-linux/ddcci-driver-linux/-/tree/master.
-> []
-> > > diff --git a/drivers/char/ddcci.c b/drivers/char/ddcci.c
-> []
-> > > @@ -0,0 +1,1887 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + *  DDC/CI sub-bus driver
-> > > + *
-> > > + *  Copyright (c) 2015 Christoph Grenz
-> > > + */
-> > > +
-> > > +/*
-> > > + * This program is free software; you can redistribute it and/or modify it
-> > > + * under the terms of the GNU General Public License as published by the Free
-> > > + * Software Foundation; either version 2 of the License, or (at your option)
-> > > + * any later version.
-> > 
-> > This does not match the SPDX line.  Please fix up first before going any
-> > further.
-> 
-> Which means fix up the SPDX line above to use the actual
-> license of the code.
-> 
-> // SPDX-License-Identifier: GPL-2.0-or-later
+I'm announcing the release of the 5.4.184 kernel.
 
-If that is the intent, it depends on the original author, I have not
-seen the source for where this came from, have you?
+All users of the 5.4 kernel series must upgrade.
+
+The updated 5.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
 thanks,
 
 greg k-h
+
+------------
+
+ Documentation/admin-guide/hw-vuln/spectre.rst   |   48 +++--
+ Documentation/admin-guide/kernel-parameters.txt |    8 
+ Makefile                                        |    2 
+ arch/arm/include/asm/assembler.h                |   10 +
+ arch/arm/include/asm/spectre.h                  |   32 +++
+ arch/arm/kernel/Makefile                        |    2 
+ arch/arm/kernel/entry-armv.S                    |   79 ++++++++
+ arch/arm/kernel/entry-common.S                  |   24 ++
+ arch/arm/kernel/spectre.c                       |   71 +++++++
+ arch/arm/kernel/traps.c                         |   65 ++++++-
+ arch/arm/kernel/vmlinux.lds.h                   |   43 +++-
+ arch/arm/mm/Kconfig                             |   11 +
+ arch/arm/mm/proc-v7-bugs.c                      |  200 +++++++++++++++++++---
+ arch/x86/include/asm/cpufeatures.h              |    2 
+ arch/x86/include/asm/nospec-branch.h            |   16 +
+ arch/x86/kernel/cpu/bugs.c                      |  216 +++++++++++++++++-------
+ drivers/acpi/ec.c                               |   10 -
+ drivers/acpi/sleep.c                            |   14 +
+ drivers/block/xen-blkfront.c                    |   63 ++++---
+ drivers/firmware/psci/psci.c                    |   15 +
+ drivers/net/xen-netfront.c                      |   54 +++---
+ drivers/scsi/xen-scsifront.c                    |    3 
+ drivers/xen/gntalloc.c                          |   25 --
+ drivers/xen/grant-table.c                       |   71 ++++---
+ drivers/xen/pvcalls-front.c                     |    8 
+ drivers/xen/xenbus/xenbus_client.c              |   24 +-
+ include/linux/arm-smccc.h                       |   74 ++++++++
+ include/linux/bpf.h                             |   12 +
+ include/xen/grant_table.h                       |   19 +-
+ kernel/sysctl.c                                 |    8 
+ net/9p/trans_xen.c                              |   14 -
+ tools/arch/x86/include/asm/cpufeatures.h        |    2 
+ 32 files changed, 969 insertions(+), 276 deletions(-)
+
+Borislav Petkov (1):
+      x86/speculation: Merge one test in spectre_v2_user_select_mitigation()
+
+Emmanuel Gil Peyrot (1):
+      ARM: fix build error when BPF_SYSCALL is disabled
+
+Greg Kroah-Hartman (2):
+      Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
+      Linux 5.4.184
+
+Josh Poimboeuf (3):
+      x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+      x86/speculation: Warn about Spectre v2 LFENCE mitigation
+      x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
+
+Juergen Gross (11):
+      xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
+      xen/grant-table: add gnttab_try_end_foreign_access()
+      xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
+      xen/netfront: don't use gnttab_query_foreign_access() for mapped status
+      xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
+      xen/gntalloc: don't use gnttab_query_foreign_access()
+      xen: remove gnttab_query_foreign_access()
+      xen/9p: use alloc/free_pages_exact()
+      xen/pvcalls: use alloc/free_pages_exact()
+      xen/gnttab: fix gnttab_end_foreign_access() without page specified
+      xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
+
+Kim Phillips (2):
+      x86/speculation: Use generic retpoline by default on AMD
+      x86/speculation: Update link to AMD speculation whitepaper
+
+Mark Rutland (1):
+      arm/arm64: smccc/psci: add arm_smccc_1_1_get_conduit()
+
+Nathan Chancellor (1):
+      ARM: Do not use NOCROSSREFS directive with ld.lld
+
+Peter Zijlstra (3):
+      x86,bugs: Unconditionally allow spectre_v2=retpoline,amd
+      x86/speculation: Add eIBRS + Retpoline options
+      Documentation/hw-vuln: Update spectre doc
+
+Peter Zijlstra (Intel) (1):
+      x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
+
+Russell King (Oracle) (7):
+      ARM: report Spectre v2 status through sysfs
+      ARM: early traps initialisation
+      ARM: use LOADADDR() to get load address of sections
+      ARM: Spectre-BHB workaround
+      ARM: include unprivileged BPF status in Spectre V2 reporting
+      ARM: fix co-processor register typo
+      ARM: fix build warning in proc-v7-bugs.c
+
+Steven Price (1):
+      arm/arm64: Provide a wrapper for SMCCC 1.1 calls
+

@@ -2,104 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E24D6767
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF5C4D6770
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350687AbiCKRTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S1350731AbiCKRT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350669AbiCKRTQ (ORCPT
+        with ESMTP id S1350711AbiCKRTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:19:16 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E776ED31F9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:18:12 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id p8so8374025pfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:18:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:cc:from:to:message-id;
-        bh=/vAMVQ4S4rG50aDrpEZgzM1DrWkgQMPidGWj+MF7bA4=;
-        b=ldXEpgleUADdcyKGiAURlNlkwwL/8MDZLJ8RxYVwdoB3ipWBEYxgGC+oDApYJe1giz
-         WhptnF633qvGSRwsPogNwQcfvNiLz77Ba7ImzxEb9Qz/t6e5+3aPfMrcWOpxXKD0pzp5
-         jwPMY0qWYb8e4M/+AkQCGU6/CG8XBAHZ1OtqDGm8Mg8MryqAyTyaWtBa+FYzJED+J9q5
-         1pzY8SC/NGSfNY1GhXhubWfqUi3fpqVj1rx80FT2xOPglEZdjeVeLzEmkhAzYYK938Qv
-         acuy8/WuUB4NV2v10hZG1EpW+p6Ss1dsc24xvlbimnDq8lr7BSYtrwpU0xxdDJWuS33q
-         nhlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:cc:from:to:message-id;
-        bh=/vAMVQ4S4rG50aDrpEZgzM1DrWkgQMPidGWj+MF7bA4=;
-        b=sdcbvXCmlUhp20ULq7kWeZFWLbMex/BrENEV05osnww8oy831K+qmZGoPv7RAy86vH
-         rZG/mjDl/NaURsrpYCLFjjvKHcymTh7QFnIVU6DrtSbYTdnlDMZ+rDUgNGSeEPoDhARs
-         O15uEj+0nwTQF/HVWz0ksrnqSmA4qs7G9KT0pbAzxt6SMfjtvPwh3JnVQ2HxrzEsN0Fs
-         L8MaFieKtPIKqZ1ciBDui8tzCk07kTXs/Jk6X/rlSFmN2gfTQUZZsDwx5I9HQonCZBt9
-         HdhyNPjG4cbOVSo9EeThl7cbo2B9qfMaCgd1TtLKoKCXrjCRcG0CwUN6mgZnnoWttjLL
-         2DRQ==
-X-Gm-Message-State: AOAM532kGFV9g3QTgSiORYNaUedsfthcU8JwWcOuRsn2O+CR5KISL6ZS
-        vgIyW02EjKq4UtjglARJamBaIb+rsg3Htw==
-X-Google-Smtp-Source: ABdhPJyU9YbKB8/oleGqNbhXYfvTE58OeXWtoh7DpJIPNpXHhCOBSo5+IZAgxcuSScJzJw0Yy+o+eA==
-X-Received: by 2002:aa7:88d5:0:b0:4f7:1b6a:8673 with SMTP id k21-20020aa788d5000000b004f71b6a8673mr11236281pff.5.1647019092209;
-        Fri, 11 Mar 2022 09:18:12 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm11202260pfu.62.2022.03.11.09.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 09:18:12 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:18:12 -0800 (PST)
-X-Google-Original-Date: Fri, 11 Mar 2022 08:59:17 PST (-0800)
-Subject: [GIT PULL] RISC-V Fixes for 5.17-rc8
-CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-1484f557-fd58-4fe3-afce-a630fac5c8b3@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 12:19:41 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A15E61F9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:18:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647019117; x=1678555117;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PxS7x+AuHC3Av3QB9AykfsPjmUja5dgEY8E3OQd2mmc=;
+  b=ENycImBkzwa6lRsP+CBXayGJ3EKxPDXwtgrL8MYEK6d18nHsv1J3hwnC
+   7YvkhHGBQ5eVvoQPyjuY8PKHax40QuWz4S6O3wRMcxI38qttC8rLgW1MS
+   oBkplMRaMheRmvcvhGSyPDAG4/lAxjhlCJdBocgU/srE8gxdCf4FongWd
+   UDpV6Zi094jMVGrYshIaqISg5fxTuskAr1Du2MfSfHmHts5/ku+VsaNUM
+   hoRColpbvI6Xd9Hxrh29zjzw2Sug/pOOHebvqFxVH4kSHtZiPfj9s9b8o
+   grYYwOexUmmZupu8ba39toxTlhBlzg1oRTypBJDo0c/b5gMAThJk4sem/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="236216031"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="236216031"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:18:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="712907140"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2022 09:18:30 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 40F42132; Fri, 11 Mar 2022 19:18:49 +0200 (EET)
+Date:   Fri, 11 Mar 2022 20:18:48 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 11/30] x86/tdx: Handle in-kernel MMIO
+Message-ID: <20220311171848.g5wobw3rmi4e2zkd@black.fi.intel.com>
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-12-kirill.shutemov@linux.intel.com>
+ <81a7ad6d-6bd9-7674-3229-67a5cd2e485a@intel.com>
+ <20220310005145.hzv2lzxgs7uxblfr@black.fi.intel.com>
+ <da0056e8-58cf-2c95-fe66-4dad1ae9c4da@intel.com>
+ <20220310164839.erpjijvxwuzjql5x@black.fi.intel.com>
+ <9b2836ce-5267-8342-65eb-1084ba7e0cdf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b2836ce-5267-8342-65eb-1084ba7e0cdf@intel.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 74583f1b92cb3bbba1a3741cea237545c56f506c:
+On Thu, Mar 10, 2022 at 09:53:01AM -0800, Dave Hansen wrote:
+> On 3/10/22 08:48, Kirill A. Shutemov wrote:
+> I think this is good enough:
+> 
+>    - All guest code is expected to be in TD-private memory.  Being
+>      private to the TD, VMMs have no way to access TD-private memory and
+>      no way to read the instruction to decode and emulate it.
 
-  riscv: dts: k210: fix broken IRQs on hart1 (2022-03-03 20:04:21 -0800)
+Looks good.
 
-are available in the Git repository at:
+One remark: executing from shared memory (or walking page tables in shared
+memory) triggers #PF.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-rc8
+> 
+> We don't have to rehash what private memory is or how it is implemented.
+> 
+> >> This problem was laid out as having three cases:
+> >> 1. virtio
+> >> 2. x86-specific drivers
+> >> 3. random drivers (everything else)
+> >>
+> >> #1 could be done with paravirt
+> >> #2 is unspecified and unknown
+> >> #3 use doesn't as far as I know exist in TDX guests today
+> > 
+> > #2 doesn't matter from performance point of view and there is no
+> > convenient place where they can be intercepted as they are scattered
+> > across the tree. Patching them doesn't bring any benefit, only pain.
+> 
+> I'd feel a lot better if this was slightly better specified.  Even
+> booting with a:
+> 
+> 	printf("rip: %lx\n", regs->rip);
+> 
+> in the #VE handler would give some hard data about these.  This still
+> feels to me like something that Sean got booting two years ago and
+> nobody has really reconsidered.
 
-for you to fetch changes up to 0966d385830de3470b7131db8e86c0c5bc9c52dc:
+Here the list I see on boot. It highly depends on QEMU setup. Any form of
+device filtering will cut the further.
 
-  riscv: Fix auipc+jalr relocation range checks (2022-03-10 20:37:44 -0800)
+MMIO: ahci_enable_ahci
+MMIO: ahci_freeze
+MMIO: ahci_init_controller
+MMIO: ahci_port_resume
+MMIO: ahci_postreset
+MMIO: ahci_reset_controller
+MMIO: ahci_save_initial_config
+MMIO: ahci_scr_read
+MMIO: ahci_scr_write
+MMIO: ahci_set_em_messages
+MMIO: ahci_start_engine
+MMIO: ahci_stop_engine
+MMIO: ahci_thaw
+MMIO: ioapic_set_affinity
+MMIO: ioread16
+MMIO: ioread32
+MMIO: ioread8
+MMIO: iowrite16
+MMIO: iowrite32
+MMIO: iowrite8
+MMIO: mask_ioapic_irq
+MMIO: mp_irqdomain_activate
+MMIO: mp_irqdomain_deactivate
+MMIO: native_io_apic_read
+MMIO: __pci_enable_msix_range
+MMIO: pci_mmcfg_read
+MMIO: pci_msi_mask_irq
+MMIO: pci_msi_unmask_irq
+MMIO: __pci_write_msi_msg
+MMIO: restore_ioapic_entries
+MMIO: startup_ioapic_irq
+MMIO: update_no_reboot_bit_mem
 
-----------------------------------------------------------------
-RISC-V Fixes for 5.17-rc8
+ioread*/iowrite* comes from virtio.
 
-* A fix to prevent users from enabling the alternatives framework (and
-  thus errata handling) on XIP kernels, where runtime code patching does
-  not function correctly.
-* A fix to properly detect offset overflow for AUIPC-based relocations
-  in modules.  This may manifest as modules calling arbitrary invalid
-  addresses, depending on the address allocated when a module is loaded.
+> > #3 some customers already declared that they will use device passthough
+> > (yes, it is not safe). CSP may want to emulate random device, depending on
+> > setup. Like, a power button or something.
+> 
+> I'm not sure I'm totally on board with that.
+> 
+> But, let's try to make a coherent changelog out of that mess.
+> 
+> 	This approach is bad for performance.  But, it has (virtually)
+> 	no impact on the size of the kernel image and will work for a
+> 	wide variety of drivers.  This allows TDX deployments to use
+> 	arbitrary devices and device drivers, including virtio.  TDX
+> 	customers have asked for the capability to use random devices in
+> 	their deployments.
+> 
+> 	In other words, even if all of the work was done to
+> 	paravirtualize all x86 MMIO users and virtio, this approach
+> 	would still be needed.  There is essentially no way to get rid
+> 	of this code.
+> 
+> 	This approach is functional for all in-kernel MMIO users current
+> 	and future and does so with a minimal amount of code and kernel
+> 	image bloat.
+> 
+> Does that summarize it?
 
-----------------------------------------------------------------
-I know it's pretty late, so no big deal if these don't make it for 5.17.
+I will integrate it in the commit message.
 
-The module issue is particularly ugly: itcould manifest for the majority of
-users, and depends on a bunch of long-term runtime behavior so won't get caught
-by simple tests.  The bug has been around forever, though, and it'll likely get
-backported either way -- figured there's no reason to wait, though.
+> But, I'd like to see one of two things:
+> 1. Change the BUG()s to WARN()s.
+> 2. Make it utterly clear that handle_mmio() is for handling kernel MMIO
+>    only.  Definitely change the naming, possibly add a check for
+>    user_mode().  In other words, make it even _less_ generic.
+> 
+> None of that should be hard.
 
-----------------------------------------------------------------
-Emil Renner Berthing (1):
-      riscv: Fix auipc+jalr relocation range checks
+Okay, I will downgrade BUG() to WARN() and return false for user_mode()
+with warning.
 
-Jisheng Zhang (1):
-      riscv: alternative only works on !XIP_KERNEL
+> BTW, the BUG()s made me think about how the gp_try_fixup_and_notify()
+> code would work for MMIO.  For instance, are there any places where
+> fixup might be done for MMIO?  If so, an earlier BUG() wouldn't allow
+> the fixup to occur.
 
- arch/riscv/Kconfig.erratas |  1 +
- arch/riscv/Kconfig.socs    |  4 ++--
- arch/riscv/kernel/module.c | 21 ++++++++++++++++-----
- 3 files changed, 19 insertions(+), 7 deletions(-)
+I can be wrong, but I don't think we do fixups for MMIO.
+
+> Do we *WANT* #VE's to be exposed to the #GP fixup machinery?
+
+We need the fixup at least for MSRs.
+
+-- 
+ Kirill A. Shutemov

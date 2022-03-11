@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE7E4D6423
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2384D641D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349686AbiCKOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S1347903AbiCKOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349439AbiCKOx5 (ORCPT
+        with ESMTP id S243203AbiCKOxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:53:57 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E67B19BE63;
-        Fri, 11 Mar 2022 06:52:53 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id u1so13292774wrg.11;
-        Fri, 11 Mar 2022 06:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=zXbQhDsb4KeIHJF68pqLMN1JbVnR3P47zU5x8xmbukY=;
-        b=BSANDLIqhwKqPBrb7Qys22MwnO6tUlv/4n97D6C6X5Xo7C0ubhSTuXrHjbCMsBJEm8
-         vmPhN2Koys66YJNxCfSmp+wBXlE+eJuOg6kODRnr6pMIoth0zpdaqu1ilC64Fj0yKH38
-         RthvqcRt3yNJAR9BT1UzW04Ux/o89D7N86AEIm7yZxKDtgFjLn4lzGWY8VLmAN/Bga+B
-         pZsS9dpYySIl/qfRzxYPYGJifxR9SDNeBc5s8yJnJGVegL7LHXyPDgnQnOq0tH91dFW4
-         8Evma8cK5v5z1t1ppjbgDxvCCen/LmKduf4oXjcfhNsNzMZ5mwu4BccW4yFxlUQ+zVk+
-         dsUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zXbQhDsb4KeIHJF68pqLMN1JbVnR3P47zU5x8xmbukY=;
-        b=FQpnxvQBqOGaidusiacIIH3+ws05K35pFlr7cfVLo39samG0QUV8089ly1gEyCefUe
-         F2Rt6Gnbsqf+CkGbIodvzXfGw6ha5Nyctvd8XTiYCSHS14HhCA37Qinc5SvPmkqYu7GR
-         /lJyMLVXRQiz9ZmpDhQFxqVHvxS3Q7enTQqXxNBgIhH/mz6ILiNwxmSF37TqAuQ0nRfV
-         1WZCFnltcR3/ZLsL1vAmafkkoPe73yxBBHxiffg4osXXsEx01YD9GKmQWbxcEQo82alx
-         7TQIzV+J4vzvpIhN+dmldZHs9GXWfSS4LO2ASTfwHpe+bimi/cDIx8XpMSOhZCDl8qH0
-         CnYQ==
-X-Gm-Message-State: AOAM530xFMZiKvA3TIwABDMmIrGCP8XNOCgt8+3LCjwoSUCzPIy2Juxr
-        WFLgQkuO++IttE7rQpTrGYU=
-X-Google-Smtp-Source: ABdhPJzHH8NgnMxZ4xQfDUIJUUso04P4Zd8QBxBCn/z6kuDzIy8sTogfhut+UHhuw2kIN85qtVoNrQ==
-X-Received: by 2002:adf:fbd0:0:b0:1e6:8ec3:570 with SMTP id d16-20020adffbd0000000b001e68ec30570mr8040941wrs.396.1647010371688;
-        Fri, 11 Mar 2022 06:52:51 -0800 (PST)
-Received: from felia.fritz.box (200116b826a9a900147fc2a0771e144b.dip.versatel-1u1.de. [2001:16b8:26a9:a900:147f:c2a0:771e:144b])
-        by smtp.gmail.com with ESMTPSA id n8-20020adf8b08000000b001f046cc8891sm7037812wra.24.2022.03.11.06.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 06:52:51 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] mfd: ab8500: clean up definitions in header after debugfs removal
-Date:   Fri, 11 Mar 2022 15:52:09 +0100
-Message-Id: <20220311145209.17346-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Fri, 11 Mar 2022 09:53:40 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3381EA9958;
+        Fri, 11 Mar 2022 06:52:35 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 888CD175A;
+        Fri, 11 Mar 2022 06:52:34 -0800 (PST)
+Received: from [10.57.43.254] (unknown [10.57.43.254])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 673393F7F5;
+        Fri, 11 Mar 2022 06:52:32 -0800 (PST)
+Message-ID: <292386ee-cfa8-d849-57ce-156c76680e12@arm.com>
+Date:   Fri, 11 Mar 2022 14:52:30 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/6] coresight: Fail to open with return stacks if they
+ are unavailable
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        mathieu.poirier@linaro.org, coresight@lists.linaro.org,
+        leo.yan@linaro.com, mike.leach@linaro.org
+Cc:     Leo Yan <leo.yan@linaro.org>, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220113091056.1297982-1-james.clark@arm.com>
+ <20220113091056.1297982-3-james.clark@arm.com>
+ <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,75 +56,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3d4d1266597c ("mfd: ab8500: Drop debugfs module") removes the config
-AB8500_DEBUG in drivers/mfd/Kconfig, but missed a reference to this config
-in include/linux/mfd/abx500/ab8500.h.
 
-The functions ab8500_dump_all_banks() and ab8500_debug_register_interrupt()
-in the ab8500 header, previously with definitions conditioned on
-AB8500_DEBUG, are now completely needless to define and handle at all.
 
-The function ab8500_debug_register_interrupt() is not used at all and can
-just be removed.
+On 28/01/2022 11:24, Suzuki K Poulose wrote:
+> Hi James
+> 
+> On 13/01/2022 09:10, James Clark wrote:
+>> Maintain consistency with the other options by failing to open when they
+>> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
+>> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
+>> requested but not supported by hardware.
+> 
+> Looking at this again (with similar comment to the Branch Broadcast),
+> won't it disable using retstack on all CPUs, even when some of them
+> support it ?
+> 
+> i.e., CPU0 - supports retstack, CPU1 - doesn't
+> 
+> A perf run with retstack will fail, as CPU1 doesn't support it (even
+> though we advertise it, unconditionally).
+> 
+> So, if we ignore the failure, this would still allow CPU0 to use
+> the feature and as long as the OpenCSD is able to decode the trace
+> we should ignore the failure ?
+> 
+> I think we may also need to tune the etm4x_enable_hw() to skip
+> updating the TRCCONFIGR with features not supported by the ETM
+> 
 
-The function ab8500_dump_all_banks() is just registered in the abx500_ops
-struct in the dump_all_banks field, but this is then not further referenced
-anywhere else at all. So, safely drop the dump_all_banks field from
-abx500_ops and delete the ab8500_dump_all_banks() definition.
+Hi Suzuki,
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Linus, Lee, please pick this clean-up on top of the commit above.
+I'm picking up this branch broadcast change again after the haitus.
 
- drivers/mfd/ab8500-core.c         | 3 +--
- include/linux/mfd/abx500.h        | 1 -
- include/linux/mfd/abx500/ab8500.h | 9 ---------
- 3 files changed, 1 insertion(+), 12 deletions(-)
+For this point, do you think it would be worth distinguishing between "no
+known CPUs that support the feature" vs "not currently running on a
+CPU that supports it but there are others that do"?
 
-diff --git a/drivers/mfd/ab8500-core.c b/drivers/mfd/ab8500-core.c
-index 6a059270acdc..9049030a0c82 100644
---- a/drivers/mfd/ab8500-core.c
-+++ b/drivers/mfd/ab8500-core.c
-@@ -328,8 +328,7 @@ static struct abx500_ops ab8500_ops = {
- 	.set_register_page = NULL,
- 	.mask_and_set_register = ab8500_mask_and_set_register,
- 	.event_registers_startup_state_get = NULL,
--	.startup_irq_enabled = NULL,
--	.dump_all_banks = ab8500_dump_all_banks,
-+	.startup_irq_enabled = NULL
- };
- 
- static void ab8500_irq_lock(struct irq_data *data)
-diff --git a/include/linux/mfd/abx500.h b/include/linux/mfd/abx500.h
-index 7f07cfe44753..507e3d2f062f 100644
---- a/include/linux/mfd/abx500.h
-+++ b/include/linux/mfd/abx500.h
-@@ -63,7 +63,6 @@ struct abx500_ops {
- 	int (*mask_and_set_register) (struct device *, u8, u8, u8, u8);
- 	int (*event_registers_startup_state_get) (struct device *, u8 *);
- 	int (*startup_irq_enabled) (struct device *, unsigned int);
--	void (*dump_all_banks) (struct device *);
- };
- 
- int abx500_register_ops(struct device *core_dev, struct abx500_ops *ops);
-diff --git a/include/linux/mfd/abx500/ab8500.h b/include/linux/mfd/abx500/ab8500.h
-index 302a330c5c84..42fd5da7d8a7 100644
---- a/include/linux/mfd/abx500/ab8500.h
-+++ b/include/linux/mfd/abx500/ab8500.h
-@@ -503,13 +503,4 @@ static inline int is_ab9540_2p0_or_earlier(struct ab8500 *ab)
- 
- void ab8500_override_turn_on_stat(u8 mask, u8 set);
- 
--#ifdef CONFIG_AB8500_DEBUG
--extern int prcmu_abb_read(u8 slave, u8 reg, u8 *value, u8 size);
--void ab8500_dump_all_banks(struct device *dev);
--void ab8500_debug_register_interrupt(int line);
--#else
--static inline void ab8500_dump_all_banks(struct device *dev) {}
--static inline void ab8500_debug_register_interrupt(int line) {}
--#endif
--
- #endif /* MFD_AB8500_H */
--- 
-2.17.1
+Also would we want to distinguish between per-CPU or per-process events?
+For the former it actually is possible to fail to open because all of
+the information is known.
 
+I'm just thinking of the case where someone asks for a load of flags
+and thinks that they're getting them but get no feedback that they won't.
+But I understand having some complicated solution like I'm suggesting
+might be even more surprising to users.
+
+Maybe the cleanest solution is to ask users to supply a config that
+can work on anywhere the event could possibly be scheduled. It doesn't
+really make sense to have retstack on a per-process event on big-little
+and then getting half of one type of data and half of another. It would
+make more sense to fail to open in that case and they have the choice of
+either doing per-CPU events or disabling retstacks altogether.
+
+This seems like a similar problem to the issue causing the Coresight self
+test failure where a certain sink was picked that couldn't be reached and
+the test failed.
+
+In that case the change we made doesn't quite match up to my suggestion here:
+
+ * Per-cpu but an unreachable sink -> fail
+ * Per-process and potentially reachable sink in the future -> pass
+
+Maybe it would have been better to say that the sink always has to be
+reachable otherwise is the outcome predicatable?
+
+James
+
+> Suzuki
+> 
+> 
+>>
+>> The consequence of not doing this is that the user may not be
+>> aware that they are not enabling the feature as it is silently disabled.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
+>>   1 file changed, 9 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> index 04669ecc0efa..a93c1a5fe045 100644
+>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+>>       }
+>>         /* return stack - enable if selected and supported */
+>> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
+>> -        /* bit[12], Return stack enable bit */
+>> -        config->cfg |= BIT(12);
+>> -
+>> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
+>> +        if (!drvdata->retstack) {
+>> +            ret = -EINVAL;
+>> +            goto out;
+>> +        } else {
+>> +            /* bit[12], Return stack enable bit */
+>> +            config->cfg |= BIT(12);
+>> +        }
+>> +    }
+>>       /*
+>>        * Set any selected configuration and preset.
+>>        *
+> 

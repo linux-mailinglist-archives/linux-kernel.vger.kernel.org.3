@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900F94D6981
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8E64D6986
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351203AbiCKUfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 15:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S232635AbiCKUg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 15:36:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236514AbiCKUfP (ORCPT
+        with ESMTP id S229613AbiCKUgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 15:35:15 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845411CBA83;
-        Fri, 11 Mar 2022 12:34:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647030851; x=1678566851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VNO9aR6ZlUQ1VivRTLNBPxlOoJygXM0cpiuy5f1w6pA=;
-  b=hA4PIB6c4h8PtGY15F7+muULWpRKsER/3CtNvJAgdzuDHNq3lEKp6hB7
-   +/shU6S9ZYhOCxrGEg1YZvNdcAdqtAPDLCE4X2iNQs55xS6OdZYn2Vzk9
-   O/luiqjpt7uSeA8GYw+tx5Gz4o6iPlnZcCJgtooQfDgc4DPaaAq9H60UT
-   N9/NaUItkX3dE3fyBj8LL8StAnV0X/53NU74+ZagD36mvBlHPW/IA4AqC
-   5zZ0Jd8ic0dHtijPSwMziY/dOGoh+31cjagsJvYGoHX1FVZNpcZD9m0X0
-   bSHxXs83IJliZSfBJDyYQZx7OtobuylM6fOoYT3ckV0MsxB4ODtCX+1mc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="280394715"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="280394715"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 12:34:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="579408523"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 12:34:05 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSlxc-000737-VD; Fri, 11 Mar 2022 20:34:04 +0000
-Date:   Sat, 12 Mar 2022 04:34:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     menglong8.dong@gmail.com, dsahern@kernel.org, kuba@kernel.org
-Cc:     kbuild-all@lists.01.org, nhorman@tuxdriver.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, davem@davemloft.net, imagedong@tencent.com,
-        edumazet@google.com, talalahmad@google.com, keescook@chromium.org,
-        alobakin@pm.me, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Mengen Sun <mengensun@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Subject: Re: [PATCH] net: skb: move enum skb_drop_reason to uapi
-Message-ID: <202203120451.wHvod29d-lkp@intel.com>
-References: <20220311032828.702392-1-imagedong@tencent.com>
+        Fri, 11 Mar 2022 15:36:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4201CD7E5;
+        Fri, 11 Mar 2022 12:35:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB165B80E97;
+        Fri, 11 Mar 2022 20:35:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CABC340E9;
+        Fri, 11 Mar 2022 20:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647030947;
+        bh=YP9SzrgQyjOQZskM7I0k1hU6CTv2m60VmTGJYg+FQNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MTmQn9kYhV2vDgtP9ZbrZTDgz3ww0WANjipJ9cNFF+MoGIsJ1leq1/4UrDwYkuREx
+         qCZrxi4PVxz1rixel+Jjq7JGSbPQbsE8tHy15vcPUxtEz99jK9/dmEnIK/uFeajruM
+         tAPiHKtePtmTOYdsglDRt5UQsiEbqsMYpgb3ABqvD0fZQHfvbKPG1BkSwp1sXsR8YY
+         FM8eaQlREpHiH523xHHItfNaJRznXQSSdL9gRO/D1+rSCjnzQwWPixXHMQQCvOpgbe
+         1pkQMrZv36CCVtGXE6SiSndrgnAP+G1s0dxMFTsPI/sTDNadAJ5zGOFZTegsuSOmXP
+         mVz4RYoNDlH3Q==
+Date:   Fri, 11 Mar 2022 21:35:43 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Qii Wang <wii.wang@mediatek.com>
+Subject: Re: [PATCH v2] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
+Message-ID: <Yiuyn4269G/hXunT@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Qii Wang <wii.wang@mediatek.com>
+References: <20220303091547.17522-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iM51bsSenGYDG0Ia"
 Content-Disposition: inline
-In-Reply-To: <20220311032828.702392-1-imagedong@tencent.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220303091547.17522-1-angelogioacchino.delregno@collabora.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Thank you for the patch! Yet something to improve:
+--iM51bsSenGYDG0Ia
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on next-20220310]
-[cannot apply to linus/master v5.17-rc7 v5.17-rc6 v5.17-rc5 v5.17-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Thu, Mar 03, 2022 at 10:15:47AM +0100, AngeloGioacchino Del Regno wrote:
+> Since depending on the SoC or specific bus functionality some clocks
+> may be optional, we cannot get the benefit of using devm_clk_bulk_get()
+> but, by migrating to clk-bulk, we are able to remove the custom functions
+> mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing common
+> APIs usage, hence (lightly) decreasing kernel footprint.
+>=20
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> Reviewed-by: Qii Wang <wii.wang@mediatek.com>
 
-url:    https://github.com/0day-ci/linux/commits/menglong8-dong-gmail-com/net-skb-move-enum-skb_drop_reason-to-uapi/20220311-113243
-base:    71941773e143369a73c9c4a3b62fbb60736a1182
-config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20220312/202203120451.wHvod29d-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/94a9a43cb9a6ba2e57d73b63226cbda08d24f6a2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review menglong8-dong-gmail-com/net-skb-move-enum-skb_drop_reason-to-uapi/20220311-113243
-        git checkout 94a9a43cb9a6ba2e57d73b63226cbda08d24f6a2
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Applied to for-next with the typo fixed, thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+--iM51bsSenGYDG0Ia
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   In file included from <command-line>:32:
->> ./usr/include/linux/net_dropmon.h:6:10: fatal error: uapi/linux/netlink.h: No such file or directory
-       6 | #include <uapi/linux/netlink.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
+-----BEGIN PGP SIGNATURE-----
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIrsp8ACgkQFA3kzBSg
+KbYVhA/9Fdk1lLIyW+tXH7zNHFJt6bDQCScxVKi/bTuMFCDG4CXIDWa7vy2KZbkK
+6jDhklB8Okkyd8O15z1Sm4Qi6xUNpS8tTDtctbYo34ydjl2TcCGZu88HZguCtI21
+yXOvW4Yi0J4F0/+w/ENfwX2i8g7esPcP967YWsIpAhWv+VI7CYhigrIspCJ/DahW
+IaI3m3l9XP1+QLoFHF2QFqpHhcUlrFty6cs1YTaK3iQgzqBhyxMlkwSvBlldpxsV
+pHkK8BfIEPf3kshDbRma1N0nwZEdkaZwjX7XPzUGgvBrY1YaFIXLUzTwy+/kI2lJ
+lcJs4ypUkJaQMXjt3s+hYWRHuTqpBDiVEvubpn2uxiEE1w6T2OHkpnvYLdIP5sxZ
+1G09p348JoaC4zFlezEpORn6WV/O+E7qjebKyJ9sGX6/iDEjPH5941+sBp7sQ69A
+deUJ0s/1l8nSscTw5YcsRmdhuPfbDE/GfkKCkqV32syiojZXHKtogdlOstpjc9My
+D532FqE+L/hwOiUzmZ1C9AHoqluTU+SeVq97iHk2KZAftkr3NsarhQsZyiImrEOr
+jFbS8SaTZNBbv+9paHK2TZQUqrKS4X4V5VNRFFOp+WmgRV/PoPXa655mTNWMNAUf
+DtA1j/GIjSNBE1Vlo3t4Zaiu3YqFmGA+MISD5N+k9oyH65K24q8=
+=+Dxs
+-----END PGP SIGNATURE-----
+
+--iM51bsSenGYDG0Ia--

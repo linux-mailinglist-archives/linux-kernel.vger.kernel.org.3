@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D964D60B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6D64D60B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346457AbiCKLgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S1348289AbiCKLhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiCKLgN (ORCPT
+        with ESMTP id S237792AbiCKLhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:36:13 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E78BBBE3A;
-        Fri, 11 Mar 2022 03:35:10 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id r6so12071421wrr.2;
-        Fri, 11 Mar 2022 03:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=yT3jf9RBEJOs3f1I3rnsDV7tbDnh8r70Kh/g9ixsU6Y=;
-        b=K3mhzB837x7wmCOQT8J4Yl14zAbAbrS5i9Z5h0yHlOqqUVc0WuFgqkHM+0W1kvqJM+
-         GM6x3MMZrAzwfmX7Prnk47ojVGCdlVpT7hSBW3VMORSpLUlx6y5lFEXmYHVxA3xb/4C7
-         LBEa9yVYRZ32fuNeGqSGfr95hsuAT7+/9Tpeq5pUl5LeZnx3TJOMiuDFFsyXaEgcuJoB
-         FW6ujvwfpYI9kE7i6wCI7UEI5SbOkrCOo6/nr2clAjFEwqtSYxlLH9DY3boC+06woWMk
-         P/RiA2a1rNk/IWK1j05b/ZqFnUj4ZR7ZDy3HUvzNwjPPHAp4qZwNU3tvTXVZ0sV6+ojt
-         HZMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=yT3jf9RBEJOs3f1I3rnsDV7tbDnh8r70Kh/g9ixsU6Y=;
-        b=jrrVcHnww1qx6OBkpk5Gg7w9VaJu2ZRldy4t7c5NauUx9VdyRdnkVdyy+mQCT5bbIX
-         KVnabTm2XZQiwv4sCEtsttnkmVVXXOiN8YS/yJggvXWWnENkFndwdww8cECHBBfXFaJ1
-         EHxFrjpTX8Yxfmuv2hJCzdNmTigi+kRvd5QUrwrZpgUcjonib2/ArAwON0L0PXVTPvP4
-         J/QYDKy54L+hFzFlawLqsEEdXhmjhV949ZWfNMwX+pPLkF/UT/SDHqi4BwmUiTLZaU9a
-         Ih5T7twKQA1hoAyaVIOanhCoSUCFDojiIk9sVyP30XZvuIRPJKsgCU29EFxrwNMHPe1U
-         1/Mw==
-X-Gm-Message-State: AOAM530MI/iTOMAxjsfYI40Vyh+4WSxEryESnfa9tJTFE8P59ffLES1D
-        X4hSJKhZz2Z0eHaIGBGt8sHCrDK57woA7A==
-X-Google-Smtp-Source: ABdhPJy4xQ0qvffO6+HEXcuPdxA4GTJO1BgBTQTEjLQps5aytTPbgI4psmuxEvgexw8dtSIeNHXGiA==
-X-Received: by 2002:adf:ea0c:0:b0:1f0:657f:1d7d with SMTP id q12-20020adfea0c000000b001f0657f1d7dmr6943452wrm.717.1646998508491;
-        Fri, 11 Mar 2022 03:35:08 -0800 (PST)
-Received: from [10.10.10.81] ([102.64.136.243])
-        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b00389a5735c59sm7683971wms.13.2022.03.11.03.35.03
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Fri, 11 Mar 2022 03:35:07 -0800 (PST)
-Message-ID: <622b33eb.1c69fb81.934ac.ef8d@mx.google.com>
-From:   David Cliff <hovokokou@gmail.com>
-X-Google-Original-From: David Cliff
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 11 Mar 2022 06:37:19 -0500
+Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590AD1C0251
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:36:15 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx1.smtp.larsendata.com (Halon) with ESMTPS
+        id 75b78978-a12f-11ec-9faa-0050568c148b;
+        Fri, 11 Mar 2022 11:36:15 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 6F2BC194B58;
+        Fri, 11 Mar 2022 12:36:13 +0100 (CET)
+Date:   Fri, 11 Mar 2022 12:36:09 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, qwen@analogixsemi.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mliu@analogixsemi.com, hsinyi@chromium.org, bliang@analogixsemi.com
+Subject: Re: [PATCH v2] drm/bridge: anx7625: Fix not correct get property
+ counts
+Message-ID: <Yis0KXVqZokrkoP7@ravnborg.org>
+References: <20220311103525.1431890-1-xji@analogixsemi.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Hi
-To:     Recipients <David@vger.kernel.org>
-Date:   Fri, 11 Mar 2022 11:35:49 +0000
-Reply-To: davidcliff396@gmail.com
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        TO_MALFORMED,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311103525.1431890-1-xji@analogixsemi.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello dear. i have view your profile and i wish to say your very beautiful =
-and charming, nice and gentle. i would like to know you better. I will tell=
- you more about myself when i get your reply, here is my email: davidcliff3=
-96@gmail.com, I wait for your reply. =
+Hi Xin.
 
-Thanks =
+On Fri, Mar 11, 2022 at 06:35:25PM +0800, Xin Ji wrote:
+> The property length which returns from "of_get_property", it means array
+> bytes count if the property has prefix as "/bits/ 8". The driver should
+> call function "of_property_read_u8_array" to get correct array value.
+> 
+> Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> 
+> ---
+> V1 -> V2: Fix Sam comment, use of_property_read_u8_array to get array
+> value
+> ---
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+>  drivers/gpu/drm/bridge/analogix/anx7625.h | 4 ++--
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index c6a9a02ed762..628cbf769141 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -1598,8 +1598,8 @@ static int anx7625_get_swing_setting(struct device *dev,
+>  			num_regs = DP_TX_SWING_REG_CNT;
+>  
+>  		pdata->dp_lane0_swing_reg_cnt = num_regs;
+> -		of_property_read_u32_array(dev->of_node, "analogix,lane0-swing",
+> -					   pdata->lane0_reg_data, num_regs);
+> +		of_property_read_u8_array(dev->of_node, "analogix,lane0-swing",
+> +					  pdata->lane0_reg_data, num_regs);
 
-David
+The current implementation do a two step approach. First is find the
+number of elements and then read the elements.
+The number of elements is only used to limit what is read.
+
+I suggest to use:
+
+of_property_read_u8_array(dev->of_node, "analogix,lane0-swing",
+			  pdata->lane0_reg_data, DP_TX_SWING_REG_CNT);
+
+Then you a guaranteed to read at maximum DP_TX_SWING_REG_CNT entries.
+And as the number of elements is not stored anywhere that should be fine.
+
+This looks simpler and matches what we for example do in
+drivers/gpu/drm/arm/malidp_drv.c - the only user in gpu/ of
+of_property_read_u8_array().
+
+
+	Sam

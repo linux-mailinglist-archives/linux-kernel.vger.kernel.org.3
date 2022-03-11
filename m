@@ -2,74 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1C84D5E91
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C624D5E93
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347363AbiCKJiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S1347603AbiCKJip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiCKJiT (ORCPT
+        with ESMTP id S1347502AbiCKJim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:38:19 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE01BE0F8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:37:16 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KFLLb05kqzbbfy;
-        Fri, 11 Mar 2022 17:32:23 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 11 Mar
- 2022 17:37:14 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <kosaki.motohiro@jp.fujitsu.com>, <mgorman@suse.de>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] mm/mempolicy: fix potential mpol_new leak in shared_policy_replace
-Date:   Fri, 11 Mar 2022 17:36:24 +0800
-Message-ID: <20220311093624.39546-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Fri, 11 Mar 2022 04:38:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D9649C85;
+        Fri, 11 Mar 2022 01:37:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 804F6612C8;
+        Fri, 11 Mar 2022 09:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CD4C340EC;
+        Fri, 11 Mar 2022 09:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646991457;
+        bh=h9t5ker/pif0mihscztts2EzVeCJ38jCD40jobk+fb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i0eVLg+GLapWdKbgtyDupNGQaR92Wiyq2wU1c4CUFf7g4xxv7DHJrkw39tAYGaOXj
+         fMXSxlkzhDDNlvYnrvkK3285+1Oq2u2JmQzKYViUgCoZktAxGUBu8Msyuwk0PRWrd2
+         LfQfRT0HsFZg3kS1E4GJ2a9UMZdmeIWKUUVDMPyLRFQIaNS1GpBE1OnlO9Oi4dq1Oy
+         hTGP5J5kuUVf6eA8+yhnJl4HHa66KcXwcMhM6n259C4HlwscebPLGs8wiUpkAMfboU
+         K8wtc9hvRH75joMfzOwVdmbS0HtGRxGCfO8nhOfo3dOnlk2y4TZ+StklVqm1GnpsRr
+         XTLB9nLovO4zw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nSbiG-0001wS-LU; Fri, 11 Mar 2022 10:37:32 +0100
+Date:   Fri, 11 Mar 2022 10:37:32 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Joel Stanley <joel@jms.id.au>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
+Message-ID: <YisYXEnzOfC7Qsx6@hovoldconsulting.com>
+References: <20220301224446.21236-1-eajames@linux.ibm.com>
+ <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
+ <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
+ <YiCHPuNkMuO4uARu@hovoldconsulting.com>
+ <CACPK8XfUCyVgwVYLt_99CgQWuoFTw7O9d2NiuzMzGPa1VFVUyg@mail.gmail.com>
+ <YiCN+x2XPiawaweY@hovoldconsulting.com>
+ <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
+ <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
+ <b1ec9ab3-d621-fa66-0fae-f966242f3f7f@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1ec9ab3-d621-fa66-0fae-f966242f3f7f@linux.ibm.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If mpol_new is allocated but not used in restart loop, mpol_new will be
-freed via mpol_put before returning to the caller. But refcnt is not
-initialized yet, so mpol_put could not do the right things and might
-leak the unused mpol_new.
+On Thu, Mar 03, 2022 at 03:48:37PM -0600, Eddie James wrote:
 
-Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- mm/mempolicy.c | 1 +
- 1 file changed, 1 insertion(+)
+> It's a pretty generic pl2303 device and doesn't have to be used for UPS, 
+> but that is our use-case. Here is a page with some detail about the 
+> device: 
+> https://www.ibm.com/docs/en/power9/9009-22A?topic=power-uninterruptible-supply
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 34d2b29c96ad..f19f19d3558b 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
- 	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
- 	if (!mpol_new)
- 		goto err_out;
-+	refcount_set(&mpol_new->refcnt, 1);
- 	goto restart;
- }
- 
--- 
-2.23.0
+Could you please also post the output of "lsusb -v" for this device to
+this thread for completeness? This may be needed to improve the current
+type detection for newer pl2303 devices.
 
+Do you know which type of PL2303 you use?
+
+Thanks!
+
+Johan

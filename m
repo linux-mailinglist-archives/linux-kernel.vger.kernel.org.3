@@ -2,162 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A6A4D5B72
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01CA4D5B73
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236879AbiCKGQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 01:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        id S240189AbiCKGQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 01:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237589AbiCKGP6 (ORCPT
+        with ESMTP id S237681AbiCKGQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 01:15:58 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E66A141E27;
-        Thu, 10 Mar 2022 22:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646979293; x=1678515293;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=VgZcOcG/Fc2vhHfrW4iv0v7+QQ6vM6fHA6AKRfk0dfM=;
-  b=ZKJe7GYrdFQh8fTGlghyjPht/YNipT3scOUkuXQchAJqk5zFQnAUbZdz
-   aM9T9zd4Oliqa6Bxzc8m/9GYkfRm7ZAOnEoseoC4j2BtzNweBGGCTUa2s
-   jOC5vitgVLSy0FgwRzZtNlMk/KIaHFotzODX8iOj2D22YmcuYQEFRc+U8
-   udHGIXOIdJbuoj6ftxH3WUKpEZll2zIL0+wXCh6bgMfSh902kOraJ+++U
-   MqDwfP/OPyAX8SerKmdyx0Sk+73Ab2LX+YTfCbsSrfO0c2Px85Ypv6NZL
-   NBk9CqXywJakPZmsgNPi49npA5ADF2TCafDSdO8uOFkat4s6gIIBVkFRb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255699727"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="255699727"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 22:14:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="514395608"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2022 22:14:38 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 22:14:37 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Thu, 10 Mar 2022 22:14:37 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Thu, 10 Mar 2022 22:14:37 -0800
+        Fri, 11 Mar 2022 01:16:20 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2061a.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::61a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951E4188877
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:15:10 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b/2Uy/bcira4ZZZDjqTROCoAf66si/Z0f1HXKw44AUR2YlrQgM1th78nHOoTR/EvULCeWUFodpWsRGlAr+nvRAnkeqYxZo3Tfq0cKCoOfAfm1r+JQcC/ABnZpMdRXS3Y85uJT4+NpeNX+3Vq+FSiQyT+OobOthzHu5wVdCbyxUfD/ukSCZBiTb2eufiHDD8/sAn2U2VOhJzlk1ivghI6TFpxN5rrpUNaqg33xKq2OkX4EoNHk37w7lbMPfnSy9JUH0q1Zow+euMKwM7im8u2YkNpHRsQQaNCOpV3dJZZACrxql0O5IEAOfVkBlYXxdDvo3Y6on3q8t10mAxvC8cK5w==
+ b=QGMIz0twX67uaEBuu1YVJ+yWGiRZn3qHIk8KXELPXs4CTYnB5HlJUgpUp6LdrEDEamp5gSa4e599C0pg9b4kkdzr1syEr433RuK8QxrWH/2hw1VIfq2HEDztYglU9Tv1zaO8AwhOeHjnO9CK3JViIpWHA4RLYjwV3m970MH9sMdjTU4O6L4chrIFMZCqLg+pSwh/d7/ReT+XnNYhk+HycHfcVp580tESsqdYwWhhAuxB+aLmSW51R9wNAUJ1YSiZsj2EocmVeVzRATXxu8R8wx89ylB3X02bkxfPcHuYiMW22IVyvpfcQ48tngR/tjVapV6nfA7VY106Q/bXwuDOrg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VgZcOcG/Fc2vhHfrW4iv0v7+QQ6vM6fHA6AKRfk0dfM=;
- b=RHwp/L/22dL2PW+7i/rZmzyR+QgOJ7TCYXGkR7LiQjYUy29QjNo6YHhTHeKI3FazNjd0APjnM/OZe9N/IcJv9mNjC5GAlxb+tV9119i1KtLku6JNe6fiHbrLru0S2ow7ugHlf0eijXT95cLhsUCK2IS0j8oduNYgS8uQKIhrATQK+1a8+2RGjKA1Nu3azco6OlHbbGr5SVciCZe1EPMkmf0aWend7EQRu61UUwMgilEqUrmUelsVpA4JX67CMgxfkblLPTgAyC3GiGBEq2ekdt0t+JxQqwwtBef/TAwdHOE1Lax3+ZT393g2UMlS1QKrH+sLPjWAeMK18NWjd0Sbgg==
+ bh=uy91tNzl7qK7wg3+wr+KGLiRhjtiyiYAQC53XG7YJzw=;
+ b=ddKYrtY6TAWzOmJZM9+w4cB4AyYelVbsmQasLYF2y6nnwpQh0QXBjKJAw630fNi1Laygql5xmC+wPzRFmK69iYTFHZwha6jX2VTiC5YDYfDnsrU00vTknalCA27rk4d3mhL5xfkv9wFq2I3ZDuuoaPWTlbfv2TeZ2So1OCG7ap44N2/xa91NN1j/mtt9ZP/DLP4789OY4fM5k0EWrb64Ee2SGVfqYlHVwM8ak541VBX1iTyZ8I72IX2bLvFoTZ7KOoV8CDXVKYM3XZ5e65CbjWr6INrQtd9DtN9ZDV0W3TiN2vGJYgAL/75KIHvk+Z14M2ilSXX4+ENSrUsNoOQzjA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3544.namprd11.prod.outlook.com (2603:10b6:a03:b5::29)
- by DM6PR11MB2617.namprd11.prod.outlook.com (2603:10b6:5:ce::31) with
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uy91tNzl7qK7wg3+wr+KGLiRhjtiyiYAQC53XG7YJzw=;
+ b=L8l9zLcx1cSOVgSQSA8bm3tQqdS1KzwtXhoKEtcUZ2uAN6DcNzkVHbvmc47ayAsC9r5Lvf9XmK+IeKQWPYZegjOuTplzydvvGeFrlsuggfRXLAKxoeZ2eRY2xAj3CuGUseHomk/ct0Nf4JWihd0OHCF+4Jggtc0Aa+BqNbiZJWS5y5MgJ49uAdvn58Dn9/p60wBo3CFIVzTZnRUg+c83pQkI7h23umWqaWPjubn0zn33Qj3oCodZDPmsiE9aHk7SyKesZQZUV1NZIO1ay4+0Gs2g8LUMSFTg1R7uULFjoJTyY9T+MkYm7cYphraJoo9ruMAmj7iUMSixp60P2ppaTQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by CY4PR12MB1256.namprd12.prod.outlook.com (2603:10b6:903:3d::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Fri, 11 Mar
- 2022 06:14:27 +0000
-Received: from BYAPR11MB3544.namprd11.prod.outlook.com
- ([fe80::bdb7:b2dc:389c:3e7e]) by BYAPR11MB3544.namprd11.prod.outlook.com
- ([fe80::bdb7:b2dc:389c:3e7e%7]) with mapi id 15.20.5038.027; Fri, 11 Mar 2022
- 06:14:26 +0000
-From:   "Huang, Yonghua" <yonghua.huang@intel.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Wang, Yu1" <yu1.wang@intel.com>, "Li, Fei1" <fei1.li@intel.com>,
-        "Huang, Yonghua" <yonghua.huang@intel.com>
-Subject: RE: [PATCH] virt: acrn: obtain pa from VMA with PFNMAP flag
-Thread-Topic: [PATCH] virt: acrn: obtain pa from VMA with PFNMAP flag
-Thread-Index: AQHYLEfg4LGJm4nTXkWIyXm40QwGzKy5xa1w
-Date:   Fri, 11 Mar 2022 06:14:26 +0000
-Message-ID: <BYAPR11MB354489435A1AE48DB753B2B0F70C9@BYAPR11MB3544.namprd11.prod.outlook.com>
-References: <20220228022212.419406-1-yonghua.huang@intel.com>
-In-Reply-To: <20220228022212.419406-1-yonghua.huang@intel.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Fri, 11 Mar
+ 2022 06:15:07 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::b4d2:1b8:7a7b:fdcb]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::b4d2:1b8:7a7b:fdcb%9]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
+ 06:15:07 +0000
+Message-ID: <179e3540-b9bf-5fd2-cfa4-f7274b6c33d1@nvidia.com>
+Date:   Thu, 10 Mar 2022 22:15:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] mm/hmm/test: simplify hmm test code: use miscdevice
+ instead of char dev
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-dlp-product: dlpe-windows
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 83db8966-bca8-4c9f-de4e-08da032664f5
-x-ms-traffictypediagnostic: DM6PR11MB2617:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <DM6PR11MB2617F64BFC302C2A2CA2AC7FF70C9@DM6PR11MB2617.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AeYCoJIGiGL7fkNP2glOOustnusfrfM1seaJohfkvK8IW3hfprcPCjCrT9T7INNyOvsgA4+oiuVkBjP2nvTbLSnhnvqn7hUhkVDaveUN6QrNVPeuIqgoMOX3cofJnebxDNLxj/rxX5uPIOCF9EfuMw855QNXHFcATQVmPfOAthnDcbEhPpIfVSeXiBiSxd7GKSX5DunkDSUFATq2L7vmSiIaiL2WEJ5+MmIwX6LRRaGcmU51HnddEWWoIZOyj33B85dBNlhnFfK0OMic4ZXfXfg8FT9sm1ogqmNnETMSNph77nMiiikhf+WZ/aMEZVJuDQsT4Ls/310U3ihiWxYjyH/jGowlB1lGwnelsuQMWyjx7jjJxQ1Hotv1V/vF2CwkhXQ8i6srKImv4/EnvpOkO6VDD2cXREKkH09nikCddywSMTTp//xQ/07aU4sC/mR1jXURZJH/prvUWsrT13mxunvQHn914tPnKJ2JtMHqlqm6xluTwOSx6wJsB1xwjtgjbnkqx8HYtUWph15fFe6++AlOK3sEi4B85HLhbKmSch+BDc+3ZyIGtkShs12g2SLuobIVfGsc1OVnrt4DtGatg6APVyNOnZ4KENGzyVSU+6QQDjy+ByVAMHSJ9C+Gr0Sa6yJAHPe0YQcZ1V9wk+E9AcLgNrz0WKec6HR/9/neIq8D9dlwACIH1ggPmsqDBvD6d/EXV2AUY4HtTVgj/4F0iQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3544.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(66946007)(7696005)(33656002)(26005)(38100700002)(122000001)(9686003)(83380400001)(6506007)(5660300002)(508600001)(2906002)(71200400001)(316002)(52536014)(8936002)(66556008)(66446008)(66476007)(8676002)(186003)(64756008)(76116006)(38070700005)(55016003)(82960400001)(107886003)(4326008)(54906003)(6916009)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dWpVYzFiMUdCWklBMk1OcVRrSEIrdTliWkt1aE5aOVVoRTE4ZUp2Sm13S1Mr?=
- =?utf-8?B?TU1uaCtLNzRDVERLdEZ5NVhSa2tSd3BlcW9MZ21Zb1puNXlQbnZPMDFnKzlx?=
- =?utf-8?B?REhTTnlDUkpEMTlCYklFRTNRNzQ1SVFrZlN4N2NEcStxWFFaY1VxQ1pndXA1?=
- =?utf-8?B?WUk5b2ZoWjRKWEdkaU5hSHgrUzlXbUxRbHRKeC9QMnU3R0U0aDFNMGU4eHRQ?=
- =?utf-8?B?VEFqQ2NDQ0ptMXFhT3R6Q3BaYk5vTTZKUW1lZlRTUjRBT1Y3QXNCZXJ6U3Js?=
- =?utf-8?B?YUNHeUJqdnUwQWc5ZXhlbXR2dVMzQmRaS2pjdk9kZ2xxK0hIb0Iwc3MreTVU?=
- =?utf-8?B?YlcwTVlnN3dvL0dvcUIvemJyZkZvR3F2enk4Qno3Qm95NktDaitFUjVmMXNO?=
- =?utf-8?B?cGxVYUtYTmlmT0dMUFFnWDMrd1Q4Q2pKU2xBQ0tiZUdFQUl5V1dZUFhwazFG?=
- =?utf-8?B?YTNJU1J0SU5zZlhybUViYXk5Y0s4ZFBlWnptcFBkMXUxTGxwTGMrbkk4V1pr?=
- =?utf-8?B?MG52cUp4MVdIYXJBVVBaR1Vvd05ISDQ1UXJJT25tM2o1N2xreWE1dUpYOWNv?=
- =?utf-8?B?NXRQUGtXUldxaXhvdmJncHdwT0tMUWVtMGp5MXd1QXVyNXFOSUdONzVRZzU1?=
- =?utf-8?B?ajBUOVZWdHVLMDNjdDJ4bm04MDJHczFXbW1TNjBnUHU3UzhUUlBMNkdRaG00?=
- =?utf-8?B?eU1uWW5iRWlzOGJUeUhvL1BOcllSMll0Y21CS3M4amtyY3lVOGlac0JNbDVH?=
- =?utf-8?B?Q3MzaXlMYnlyZTdTZ2Q1MWZtZE4xQ1AvcXc2ZW1YRnk4ZVVHdGZaMmVoNWIv?=
- =?utf-8?B?cHNDaXpFWWt2RElLcDZzOVlmZ2xqTElFRTd6aHRQQklxMmt0d0p5bzhHbjR4?=
- =?utf-8?B?VUl3dHZpNTRSVjBiZkhUVmI4RkdLQVVQNkgxSmU2ZUdieUxLekMyOWY2U0E5?=
- =?utf-8?B?M2VndUhTOEVNc2hYei9OcTNqUy9TSUJFWEt3WmZkM0NaVkFOK3Nvd3hmaUhv?=
- =?utf-8?B?YmtkM3ZoVVpxVDBIMXRqNUxWSkJDc09sZ1R2WTR0Sks2YlljR1crMEtqVExz?=
- =?utf-8?B?ZVpOQVVvd04xZ05ySWdzK29uZlF6ak9EL0hvRTVUQm9iTmhtNzZ3WEluZFdS?=
- =?utf-8?B?Y3JXY3VDMWk4SEVPK2p2L2k2UkxIVmxGTWtaci9INFAzUG9DRFc4TDdkSU5R?=
- =?utf-8?B?bHVGdnpVTC9qQ0xRUWVEUG5hMWQ0VkRHRzh1NktiZEZzNnRpREw3TEgxVTZZ?=
- =?utf-8?B?R29nWElTK283dTM0NmtMcUFxSzJaOFVBZUNRTEdtVW9TblpzYUE3cTZoTm41?=
- =?utf-8?B?OTRUeVYzV25wWGNSL2d2VWNsaFBKU01JR0NnaDhYc0tzeGFGUzNFTmw0Vk1W?=
- =?utf-8?B?MlQ3S09PblRqMC8vMHhMdVkySjROalZON3gySHhUVDlWUDRaTkJ1NC9lMmdU?=
- =?utf-8?B?Sm1ycUplSGVtQTdkY0x1YWdCTkg1Wi84aURrTmJTcVNQNGRKUGYzNktpVVRo?=
- =?utf-8?B?VHptU3BtT0NNdW9yZmVsSE1RejBTTlVBNGxTbHBTUGtsTHhSY1VYc1BBcVRF?=
- =?utf-8?B?ZGlkSFNyWFdMVGdVcE1KR2xvV0wvK3l2aDhXdTlRTXhQZVp2Kzg4WndSbDNC?=
- =?utf-8?B?MVU2QTE5ck1yeDRjdFZZRjFLYkFYOW5abTV2SDUycHkxRndLb3V5MVBTRHpC?=
- =?utf-8?B?NTJ2U3lpa0FKOFRUTXYyN2Q1SVZSUWZDVHJhR0lKdnBkK0dUTjNjMzQ0V0Ux?=
- =?utf-8?B?ZkdNd2JtazMreGk1TTdFTmFSRk1mckRrRGh5Wk5wQUYxZWFsUlZHQkUzM0oz?=
- =?utf-8?B?WGM2NGtXOEpoM0g1QVFDMTJNYi9hVjRiM0ttS1o2Kys3WHRVVWtmMENWeDJQ?=
- =?utf-8?B?QkRKVnJyZTBqV3AraG56ZjZyWkRIaDRWaTJvOWFIcVorRUQ5dWZ3MXU5NGp6?=
- =?utf-8?B?S1hjakxyQmRIQmZyMXV6SWJMT0pvcThPQks5d3EyTWlLWEhMY0k2R3BGWEZv?=
- =?utf-8?B?YWJoRWY3bmxydkpac0JOU2o0MHRHb1B0QThFS0lsTGV0YUZqRFRqQUpyMmVG?=
- =?utf-8?B?MkNKYVpVU1lsUVhrV3paUEk5a0RZWHNMb2JZdjd2bW9MZHlBWFlvcklIQUZp?=
- =?utf-8?B?MExyY2JWK1g3VDkvOVFKNG9EU2NJT1F5WUdHMU5ZMmFzWWVpQkdCanBKcVBD?=
- =?utf-8?B?R0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+To:     mpenttil@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     apopple@nvidia.com, rcampbell@nvidia.com, jgg@ziepe.ca,
+        vbabka@suse.cz
+References: <20220311033050.22724-1-mpenttil@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220311033050.22724-1-mpenttil@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BY5PR03CA0018.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::28) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 37443d88-bdc0-48bc-2d58-08da03267d20
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1256:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB12569CBAB6966641DAAB99B1A80C9@CY4PR12MB1256.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XxvTFQVoYlqZ9LISOtitcWI/YPYBpaLLDdUiBrLgQ7j2i1OLx8UkPPArLZeYwVRZQUG7pdQMn/fIsy74qr5ZFpIMS699s2FZHUcRzjmcMmR5WD8rXvQAIT7b9CnSudCk6fZYSH/znUsbT0sq9H/iYwGIM40ENJThO/CqtDaE5M5kbhTz0H5G7eKul1lfeG45YDfGpSTRKIzhnqJZ4goHcaNDzVb8kKX8KtHKO4xVxyMcxZ0eh/WbklYcplwwxTpLjnS6sAV9dPoVxkVo/lljWIhuUddiszOBjYEt8TJOe0Bj0jNoTCm9xkscroYGyI3ebtSp2UDfuYSGyYT6VhYfxAyIRjyF8eC/q6ieTT3oIPKdEqrNqYIDu/SIJb2QDdZ4gbMzlLCv3hiegkgoM4JgpqYk57pwJ2nWjNtUOiAHyXbc45TqlZFHVLTRdY79TSZskTA8BcAItwUP7/rNxGCzr6itaa9cPt6y9lVWrzCflt70WgUiHasaqRnUSYm13rBf4wp7NAICelZ9jRK65ocw70HxmfrAkVgq3OdEhSXjoka4Z5V4wKqzYutP3yy2AOFftvJoW9afIrJe63tsv+TescizYyrq88gi1HrTAySz9+WqvjCl/kg4QV9kRilaT4nP8T3LMf8atXhYohqUkdmE6k5wZvsWjjeUayBEyR6skJalzwgb3IXH5xmuVluiHrNwy3VXTfMXoawKzRHugUCm9c86f4H9bWXNeV0XIJiRRkFbsxm2mGKq/a18Iw2uwNuR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(8936002)(86362001)(26005)(31696002)(186003)(83380400001)(31686004)(316002)(5660300002)(38100700002)(2616005)(6506007)(508600001)(6666004)(2906002)(53546011)(4326008)(6486002)(6512007)(66476007)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1lPY2lKMHNPTHpiYURLdGtScFZlQmxGR2J2SWpoaUVaQ1RUdjl1UlFkb0JP?=
+ =?utf-8?B?ZlJnZFhEcE5MaEp0SzJOWVBXTXFsaEFSSWI4eHV0SzZhaFdqRG16NVFtNWJT?=
+ =?utf-8?B?MnhDckx5UjFiVVBCcGdsb2MrTVJJQlVwc3hHemYyWjYwLytJS1h5bzVjbUlC?=
+ =?utf-8?B?TW1IaDBodGdTTTBBdnlqaUZNT3BoREt5cVg3T0NGSkZkSElNaUQzYUtETjUx?=
+ =?utf-8?B?ZUl6c0hRdUZJTUplSThQbWx3ZmtCb0lQSnp1OUFjYldmWEFFeUJ2OXhRbkZk?=
+ =?utf-8?B?SGszVlNkVmE1WGxJbzZFU3BuakhXaHB6VHZVTTQydzR6TG9ReFN0NDBoWnBJ?=
+ =?utf-8?B?bEtHbEh0Y1paMEJqYUF4QUdiMll1cjg1NFV3dGJQVE5QYzJpM3BJTUsyUzI0?=
+ =?utf-8?B?cjJKSmlNWHFFMUNXanFhdjZFZ2ZmUXBQeDVtS2FWSXhzOGRLR0NRSlR6K3dR?=
+ =?utf-8?B?cFlaSWJoZWJVakpBSjAwYkd4N0JWS3N3Wk9FTzFZVjl6b3dVVVBGV05LTit0?=
+ =?utf-8?B?ZDFRS1d3cXdCbXlIUEw1emVJZ3hiaTVMWDUrOUplcS9kaG95U1o2MDJLWU4r?=
+ =?utf-8?B?VUU4WHZpWGQ5b1ozaW9VYU1oNTltc2lZeUhVQXpNbThYdGI1L3c0aUFiVi9i?=
+ =?utf-8?B?MHkxb2ZEQ0d5SVhvUFB3amtxWEkxZ1Y3Z1N2RUFRVGRXb2s3RVJQZkZ2cThs?=
+ =?utf-8?B?ZGdsQWo1NUVKNlJRTjBXT0phV28yUjZhQXpNd21vR2Y4QWNObHJUa2RBaFQx?=
+ =?utf-8?B?UFNSSmRkSHlIQlY2UERoaFJtc250T2Q4ZXdFZmRLamwwbmlIWWRncUlwQk5M?=
+ =?utf-8?B?UE5FeG9QT0N2L0lmaG40SUQxeStiSHJvcy80d0NvTDlWRVlmeVRqZk9uNy9R?=
+ =?utf-8?B?ZDhNaHVjK0paSTREN3lEMzl4UWVNcGk3Sjl6dXc0YlZUTVcwcUFsaHA0cWdT?=
+ =?utf-8?B?cjBlcndnR2k3dEphR3Q3QkZIcnN4dk5OSCtlYUxUKzd0MWVKdWR1bmJWcGFN?=
+ =?utf-8?B?WWZVK0NmVDN6SWZWdHkyUlhHQWoyMkVYd1JtWTlrYXJuQzNZYkxEWGZQNHc1?=
+ =?utf-8?B?SG8xYU1jc3dXRFlzTzhucVpvbEMydTQ1L00vdC9qamMrdGlUVjE3aCtmK1RC?=
+ =?utf-8?B?alNtNGdZMG42bXVlNTBTWlhMeFVXU3hNRUpaWGk2THpqS3lHaGZWM0hXdWJp?=
+ =?utf-8?B?dFVWUXNtOGhncWpJdTRObW5BN1JZQy9OZDhuMk00SEtLV2N6YmU4RlFRNWxk?=
+ =?utf-8?B?MHVJajd5ZlB6ekdHZ29xK3cweituUmdkMExTU3FvU1FNNTRZT1FCcHc5ZVdL?=
+ =?utf-8?B?MFE3ODRTdzlDalIySXNzVlQ0ZkJkNWV4bEVZWUIyZXhmbGJsOWh3WEhsNm9m?=
+ =?utf-8?B?YmlhSjVOYnVNY0tHUkErSjU2SmE4blBIVnphblVTeHc5TXFhZjM2RGU1L052?=
+ =?utf-8?B?bEkrY1ZJV2Y5MDJlWHNJSjBISjR5c29iVjhIeHltUHVXQ09waE9UeWF1dmF2?=
+ =?utf-8?B?UlBObzRtYmdiVkg4UkN6M04xUkhjZ3VhbHJkaE5rT1RFV25Kc1J0OFpCL1p0?=
+ =?utf-8?B?eC9tTkFISW10YUFvbE1RTmhrS2JtOFhwOW9rRjBOeE0yUWIwbDRNNUN4SGRK?=
+ =?utf-8?B?VE1INUc2Q2Q2UUZGSnZuK053L293MEF4TGM5TmRKMDdpUGdwNDZzeDR4Y1lr?=
+ =?utf-8?B?WjFVZytYT0d3SU85bk5JY1VDZE8vM1gveWdjbUdwdE9JVERrdVU4M0JESDRD?=
+ =?utf-8?B?MWdrZ2xpS29PaW1RZ01la1JqazNwTGJZem50MGxudU5tWmc0NUVuMitEanlU?=
+ =?utf-8?B?OE04LzBZTHJRWXo5YUxuS1ljL0VEQkVqVlo0MmhybjQycGgrWVVlUXJBZ1Ex?=
+ =?utf-8?B?TmlGOCtzaUY4a0RTS3poMXVNVE5kbGRXdnlXcncvZjRxRjJlazQ4elBWSnJT?=
+ =?utf-8?B?RWdwa0tsSlFTVUhjem9SUFVjdEo3dnBvcTAzMWNIdDlxbzBWVG9MdzFsVE9Q?=
+ =?utf-8?B?M01ZZXRrQThobUtkbGtnLzlMUnJGL3lzOHFlWDE4LzNyUk5KSDZwTkhGcDNs?=
+ =?utf-8?B?MlE2NjRWdjlMUitCczQ2Vnl3dzJCY1BJNnRKQXlGbDVRYVo1b0lLdWtlWmZp?=
+ =?utf-8?B?UzVVZU9sRllKU1RxdHdRQ050dTJ1d01KeFZRSk5YaWZodUhNbE1tdjhUSFpE?=
+ =?utf-8?Q?RbDBbFwkbldsdZMZBYUIZzw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37443d88-bdc0-48bc-2d58-08da03267d20
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3544.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83db8966-bca8-4c9f-de4e-08da032664f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 06:14:26.2415
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 06:15:07.5027
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kQsOje9Lb17tcEkaVQLZA35AiR3mYv6sNXdcZcJZ9uhM1+5NoTg78+u+vVvydbvYZs6nIHv5LCkjhH/rmOsl4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2617
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9T0lVXlIKJ4akGC50yy7yY0KptTvo4BMRpu5YzbRyW57zVZABhm//mbJe6DqvFT70yOIOBnDnmxteSd0ElMsJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1256
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,49 +129,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gR3JlZywNCg0KICAgQ2FuIHlvdSBraW5kbHkgaGVscCByZXZpZXcgdGhpcyBwYXRjaD8g
-VGhhbmsgeW918J+Yig0KDQoNCi1Zb25naHVhDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4gRnJvbTogSHVhbmcsIFlvbmdodWEgPHlvbmdodWEuaHVhbmdAaW50ZWwuY29tPg0KPiBT
-ZW50OiBNb25kYXksIEZlYnJ1YXJ5IDI4LCAyMDIyIDEwOjIyDQo+IFRvOiBncmVna2hAbGludXhm
-b3VuZGF0aW9uLm9yZw0KPiBDYzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgc3RhYmxl
-QHZnZXIua2VybmVsLm9yZzsgQ2hhdHJlLCBSZWluZXR0ZQ0KPiA8cmVpbmV0dGUuY2hhdHJlQGlu
-dGVsLmNvbT47IFdhbmcsIFpoaSBBIDx6aGkuYS53YW5nQGludGVsLmNvbT47IFdhbmcsDQo+IFl1
-MSA8eXUxLndhbmdAaW50ZWwuY29tPjsgTGksIEZlaTEgPGZlaTEubGlAaW50ZWwuY29tPjsgSHVh
-bmcsIFlvbmdodWENCj4gPHlvbmdodWEuaHVhbmdAaW50ZWwuY29tPjsgTGksIEZlaTEgPGZlaTEu
-bGlAaW50ZWwuY29tPg0KPiBTdWJqZWN0OiBbUEFUQ0hdIHZpcnQ6IGFjcm46IG9idGFpbiBwYSBm
-cm9tIFZNQSB3aXRoIFBGTk1BUCBmbGFnDQo+IA0KPiAgYWNybl92bV9yYW1fbWFwIGNhbid0IHBp
-biB0aGUgdXNlciBwYWdlcyB3aXRoIFZNX1BGTk1BUCBmbGFnICBieQ0KPiBjYWxsaW5nIGdldF91
-c2VyX3BhZ2VzX2Zhc3QoKSwgdGhlIFBBKHBoeXNpY2FsIHBhZ2VzKSAgbWF5IGJlIG1hcHBlZCBi
-eQ0KPiBrZXJuZWwgZHJpdmVyIGFuZCBzZXQgUEZOTUFQIGZsYWcuDQo+IA0KPiAgVGhpcyBwYXRj
-aCBmaXhlcyBsb2dpYyB0byBzZXR1cCBFUFQgbWFwcGluZyBmb3IgUEZOIG1hcHBlZCBSQU0gcmVn
-aW9uICBieQ0KPiBjaGVja2luZyB0aGUgbWVtb3J5IGF0dHJpYnV0ZSBiZWZvcmUgYWRkaW5nIEVQ
-VCBtYXBwaW5nIGZvciB0aGVtLg0KPiANCj4gRml4ZXM6IDg4ZjUzN2Q1ZThkZCAoInZpcnQ6IGFj
-cm46IEludHJvZHVjZSBFUFQgbWFwcGluZyBtYW5hZ2VtZW50IikNCj4gU2lnbmVkLW9mZi1ieTog
-WW9uZ2h1YSBIdWFuZyA8eW9uZ2h1YS5odWFuZ0BpbnRlbC5jb20+DQo+IFNpZ25lZC1vZmYtYnk6
-IEZlaSBMaSA8ZmVpMS5saUBpbnRlbC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy92aXJ0L2Fjcm4v
-bW0uYyB8IDI0ICsrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDI0
-IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpcnQvYWNybi9tbS5j
-IGIvZHJpdmVycy92aXJ0L2Fjcm4vbW0uYyBpbmRleA0KPiBjNGYyZTE1YzhhMmIuLjNiMWIxZTdh
-ODQ0YiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy92aXJ0L2Fjcm4vbW0uYw0KPiArKysgYi9kcml2
-ZXJzL3ZpcnQvYWNybi9tbS5jDQo+IEBAIC0xNjIsMTAgKzE2MiwzNCBAQCBpbnQgYWNybl92bV9y
-YW1fbWFwKHN0cnVjdCBhY3JuX3ZtICp2bSwgc3RydWN0DQo+IGFjcm5fdm1fbWVtbWFwICptZW1t
-YXApDQo+ICAJdm9pZCAqcmVtYXBfdmFkZHI7DQo+ICAJaW50IHJldCwgcGlubmVkOw0KPiAgCXU2
-NCB1c2VyX3ZtX3BhOw0KPiArCXVuc2lnbmVkIGxvbmcgcGZuOw0KPiArCXN0cnVjdCB2bV9hcmVh
-X3N0cnVjdCAqdm1hOw0KPiANCj4gIAlpZiAoIXZtIHx8ICFtZW1tYXApDQo+ICAJCXJldHVybiAt
-RUlOVkFMOw0KPiANCj4gKwltbWFwX3JlYWRfbG9jayhjdXJyZW50LT5tbSk7DQo+ICsJdm1hID0g
-dm1hX2xvb2t1cChjdXJyZW50LT5tbSwgbWVtbWFwLT52bWFfYmFzZSk7DQo+ICsJaWYgKHZtYSAm
-JiAoKHZtYS0+dm1fZmxhZ3MgJiBWTV9QRk5NQVApICE9IDApKSB7DQo+ICsJCWlmICgobWVtbWFw
-LT52bWFfYmFzZSArIG1lbW1hcC0+bGVuKSA+IHZtYS0+dm1fZW5kKQ0KPiB7DQo+ICsJCQltbWFw
-X3JlYWRfdW5sb2NrKGN1cnJlbnQtPm1tKTsNCj4gKwkJCXJldHVybiAtRUlOVkFMOw0KPiArCQl9
-DQo+ICsNCj4gKwkJcmV0ID0gZm9sbG93X3Bmbih2bWEsIG1lbW1hcC0+dm1hX2Jhc2UsICZwZm4p
-Ow0KPiArCQltbWFwX3JlYWRfdW5sb2NrKGN1cnJlbnQtPm1tKTsNCj4gKwkJaWYgKHJldCA8IDAp
-IHsNCj4gKwkJCWRldl9kYmcoYWNybl9kZXYudGhpc19kZXZpY2UsDQo+ICsJCQkJIkZhaWxlZCB0
-byBsb29rdXAgUEZOIGF0IFZNQTolcEsuXG4iLCAodm9pZA0KPiAqKW1lbW1hcC0+dm1hX2Jhc2Up
-Ow0KPiArCQkJcmV0dXJuIHJldDsNCj4gKwkJfQ0KPiArDQo+ICsJCXJldHVybiBhY3JuX21tX3Jl
-Z2lvbl9hZGQodm0sIG1lbW1hcC0+dXNlcl92bV9wYSwNCj4gKwkJCSBQRk5fUEhZUyhwZm4pLCBt
-ZW1tYXAtPmxlbiwNCj4gKwkJCSBBQ1JOX01FTV9UWVBFX1dCLCBtZW1tYXAtPmF0dHIpOw0KPiAr
-CX0NCj4gKwltbWFwX3JlYWRfdW5sb2NrKGN1cnJlbnQtPm1tKTsNCj4gKw0KPiAgCS8qIEdldCB0
-aGUgcGFnZSBudW1iZXIgb2YgdGhlIG1hcCByZWdpb24gKi8NCj4gIAlucl9wYWdlcyA9IG1lbW1h
-cC0+bGVuID4+IFBBR0VfU0hJRlQ7DQo+ICAJcGFnZXMgPSB2emFsbG9jKG5yX3BhZ2VzICogc2l6
-ZW9mKHN0cnVjdCBwYWdlICopKTsNCj4gDQo+IGJhc2UtY29tbWl0OiA3Mzg3OGU1ZWIxYmQzYzk2
-NTY2ODVjYTYwYmMzYTQ5ZDE3MzExZTBjDQo+IC0tDQo+IDIuMjUuMQ0KDQo=
+On 3/10/22 19:30, mpenttil@redhat.com wrote:
+> From: Mika Penttilä <mpenttil@redhat.com>
+> 
+> HMM selftests use an in-kernel pseudo device to emulate device private
+> memory. The pseudo device registers a major device range for two pseudo
+> device instances. User space has a script that reads /proc/devices in
+> order to find the assigned major number, and sends that to mknod(1),
+> once for each node.
+> 
+> This duplicates a fair amount of boilerplate that misc device can do
+> instead.
+> 
+> Change this to use misc device, which makes the device node names appear
+> for us. This also enables udev-like processing if desired.
+> 
+> Delete the /proc/devices parsing from the user-space test script, now
+> that it is unnecessary.
+> 
+> v2:
+>          - Cleanups per review comments from John Hubbard
+>          - Added Tested-by and Ccs
+
+The three lines above, starting with "v2:", belong after the "---". That
+way, they are not included in the commit log. That's the convention.
+
+I think Andrew can fix it up for you, no need to spin a new patch for
+that.
+
+Anyway, this looks good now, so please feel free to add:
+
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+> 
+> Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
+> Tested-by: Alistair Popple <apopple@nvidia.com>
+> Cc: John Hubbard <jhubbard@nvidia.com>
+> Cc: Ralph Campbell <rcampbell@nvidia.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>   lib/test_hmm.c                         | 40 ++++++++++++--------------
+>   tools/testing/selftests/vm/test_hmm.sh |  6 ----
+>   2 files changed, 19 insertions(+), 27 deletions(-)
+> 
+> diff --git a/lib/test_hmm.c b/lib/test_hmm.c
+> index 767538089a62..0e1488e1bad8 100644
+> --- a/lib/test_hmm.c
+> +++ b/lib/test_hmm.c
+> @@ -10,7 +10,6 @@
+>   #include <linux/mm.h>
+>   #include <linux/module.h>
+>   #include <linux/kernel.h>
+> -#include <linux/cdev.h>
+>   #include <linux/device.h>
+>   #include <linux/mutex.h>
+>   #include <linux/rwsem.h>
+> @@ -25,18 +24,24 @@
+>   #include <linux/swapops.h>
+>   #include <linux/sched/mm.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/miscdevice.h>
+>   #include <linux/rmap.h>
+>   
+>   #include "test_hmm_uapi.h"
+>   
+> -#define DMIRROR_NDEVICES		2
+>   #define DMIRROR_RANGE_FAULT_TIMEOUT	1000
+>   #define DEVMEM_CHUNK_SIZE		(256 * 1024 * 1024U)
+>   #define DEVMEM_CHUNKS_RESERVE		16
+>   
+> +static const char *dmirror_device_names[] = {
+> +	"hmm_dmirror0",
+> +	"hmm_dmirror1"
+> +};
+> +
+> +#define DMIRROR_NDEVICES ARRAY_SIZE(dmirror_device_names)
+> +
+>   static const struct dev_pagemap_ops dmirror_devmem_ops;
+>   static const struct mmu_interval_notifier_ops dmirror_min_ops;
+> -static dev_t dmirror_dev;
+>   
+>   struct dmirror_device;
+>   
+> @@ -82,7 +87,7 @@ struct dmirror_chunk {
+>    * Per device data.
+>    */
+>   struct dmirror_device {
+> -	struct cdev		cdevice;
+> +	struct miscdevice	miscdevice;
+>   	struct hmm_devmem	*devmem;
+>   
+>   	unsigned int		devmem_capacity;
+> @@ -118,7 +123,6 @@ static void dmirror_bounce_fini(struct dmirror_bounce *bounce)
+>   
+>   static int dmirror_fops_open(struct inode *inode, struct file *filp)
+>   {
+> -	struct cdev *cdev = inode->i_cdev;
+>   	struct dmirror *dmirror;
+>   	int ret;
+>   
+> @@ -127,12 +131,13 @@ static int dmirror_fops_open(struct inode *inode, struct file *filp)
+>   	if (dmirror == NULL)
+>   		return -ENOMEM;
+>   
+> -	dmirror->mdevice = container_of(cdev, struct dmirror_device, cdevice);
+> +	dmirror->mdevice = container_of(filp->private_data,
+> +					struct dmirror_device, miscdevice);
+>   	mutex_init(&dmirror->mutex);
+>   	xa_init(&dmirror->pt);
+>   
+>   	ret = mmu_interval_notifier_insert(&dmirror->notifier, current->mm,
+> -				0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
+> +					0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
+>   	if (ret) {
+>   		kfree(dmirror);
+>   		return ret;
+> @@ -1216,16 +1221,16 @@ static const struct dev_pagemap_ops dmirror_devmem_ops = {
+>   
+>   static int dmirror_device_init(struct dmirror_device *mdevice, int id)
+>   {
+> -	dev_t dev;
+>   	int ret;
+>   
+> -	dev = MKDEV(MAJOR(dmirror_dev), id);
+>   	mutex_init(&mdevice->devmem_lock);
+>   	spin_lock_init(&mdevice->lock);
+>   
+> -	cdev_init(&mdevice->cdevice, &dmirror_fops);
+> -	mdevice->cdevice.owner = THIS_MODULE;
+> -	ret = cdev_add(&mdevice->cdevice, dev, 1);
+> +	mdevice->miscdevice.minor = MISC_DYNAMIC_MINOR;
+> +	mdevice->miscdevice.name = dmirror_device_names[id];
+> +	mdevice->miscdevice.fops = &dmirror_fops;
+> +
+> +	ret = misc_register(&mdevice->miscdevice);
+>   	if (ret)
+>   		return ret;
+>   
+> @@ -1252,7 +1257,7 @@ static void dmirror_device_remove(struct dmirror_device *mdevice)
+>   		kfree(mdevice->devmem_chunks);
+>   	}
+>   
+> -	cdev_del(&mdevice->cdevice);
+> +	misc_deregister(&mdevice->miscdevice);
+>   }
+>   
+>   static int __init hmm_dmirror_init(void)
+> @@ -1260,11 +1265,6 @@ static int __init hmm_dmirror_init(void)
+>   	int ret;
+>   	int id;
+>   
+> -	ret = alloc_chrdev_region(&dmirror_dev, 0, DMIRROR_NDEVICES,
+> -				  "HMM_DMIRROR");
+> -	if (ret)
+> -		goto err_unreg;
+> -
+>   	for (id = 0; id < DMIRROR_NDEVICES; id++) {
+>   		ret = dmirror_device_init(dmirror_devices + id, id);
+>   		if (ret)
+> @@ -1277,8 +1277,7 @@ static int __init hmm_dmirror_init(void)
+>   err_chrdev:
+>   	while (--id >= 0)
+>   		dmirror_device_remove(dmirror_devices + id);
+> -	unregister_chrdev_region(dmirror_dev, DMIRROR_NDEVICES);
+> -err_unreg:
+> +
+>   	return ret;
+>   }
+>   
+> @@ -1288,7 +1287,6 @@ static void __exit hmm_dmirror_exit(void)
+>   
+>   	for (id = 0; id < DMIRROR_NDEVICES; id++)
+>   		dmirror_device_remove(dmirror_devices + id);
+> -	unregister_chrdev_region(dmirror_dev, DMIRROR_NDEVICES);
+>   }
+>   
+>   module_init(hmm_dmirror_init);
+> diff --git a/tools/testing/selftests/vm/test_hmm.sh b/tools/testing/selftests/vm/test_hmm.sh
+> index 0647b525a625..69f5889f8575 100755
+> --- a/tools/testing/selftests/vm/test_hmm.sh
+> +++ b/tools/testing/selftests/vm/test_hmm.sh
+> @@ -41,17 +41,11 @@ check_test_requirements()
+>   load_driver()
+>   {
+>   	modprobe $DRIVER > /dev/null 2>&1
+> -	if [ $? == 0 ]; then
+> -		major=$(awk "\$2==\"HMM_DMIRROR\" {print \$1}" /proc/devices)
+> -		mknod /dev/hmm_dmirror0 c $major 0
+> -		mknod /dev/hmm_dmirror1 c $major 1
+> -	fi
+>   }
+>   
+>   unload_driver()
+>   {
+>   	modprobe -r $DRIVER > /dev/null 2>&1
+> -	rm -f /dev/hmm_dmirror?
+>   }
+>   
+>   run_smoke()

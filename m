@@ -2,174 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B494D6510
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DC34D64ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349888AbiCKPvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S1349487AbiCKPum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349745AbiCKPvS (ORCPT
+        with ESMTP id S1348161AbiCKPug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:51:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9679E1CBA9C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:50:11 -0800 (PST)
+        Fri, 11 Mar 2022 10:50:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F4D0954A1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647013810;
+        s=mimecast20190719; t=1647013772;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rlVYgUkdWRyYsMOIFcOnRDf5aAd17ft9dtYdjY2xq6w=;
-        b=VjKH0w9KzLl/1KNVGkCmpX6rw6yTgSx/q4JPRmbDSlXU4V6J7ycM7NBhntOO9iIUfhqOoG
-        Ne+sGOy01OAoLKI/7gFWUUzHzQqaw1UqR6BDopYvvhdhuGYThEVwdM2lNrU9ftI8MIjNFt
-        QtqYpzImzi+qP8AOOA6IzGNcCL246mw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=qTfEf7yr9paJUlzwxSKVIzpRbR+ggiBcztvNLiAH+tY=;
+        b=Chdir7Llre8Lys4KPWjRsF6ur6tSx7G4HZ3+qsCOZlyqaZL1rFd4SDBsg8ABNy+LQVSYLR
+        Ri8YkgCSFYZEH9zn0J9he/kr3PXX4Edb6sdRrY/3eHwW4cKpX0DvEHetYPB7V248ukjiWI
+        bJ7BIZFmwKEGQXHBlWVhF2nbkd8KCiI=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-261-kIFTeHXrNACzbZIpYcbKiQ-1; Fri, 11 Mar 2022 10:50:09 -0500
-X-MC-Unique: kIFTeHXrNACzbZIpYcbKiQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5EA51091DA0;
-        Fri, 11 Mar 2022 15:50:07 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 51745785FD;
-        Fri, 11 Mar 2022 15:50:05 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 07/31] KVM: x86: hyper-v: Create a separate ring for Direct TLB flush
-Date:   Fri, 11 Mar 2022 16:49:19 +0100
-Message-Id: <20220311154943.2299191-8-vkuznets@redhat.com>
-In-Reply-To: <20220311154943.2299191-1-vkuznets@redhat.com>
-References: <20220311154943.2299191-1-vkuznets@redhat.com>
+ us-mta-78-GvlbbILfM3-n_KpSA-D7ow-1; Fri, 11 Mar 2022 10:49:31 -0500
+X-MC-Unique: GvlbbILfM3-n_KpSA-D7ow-1
+Received: by mail-qk1-f200.google.com with SMTP id a66-20020ae9e845000000b0067b308a9f56so6390734qkg.21
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qTfEf7yr9paJUlzwxSKVIzpRbR+ggiBcztvNLiAH+tY=;
+        b=ivxxkbKCgKfZ+1HAAaSp2kwqetPb18TGgXiuyE8Gn8FUfFeCeU7GrGQ4xOw44tia1+
+         6fT/lu936CRkoN8dCP2/zBPgtbRqCUnwC/gdJeIVecRxApnNlhP0FA+AO8lDBjcxGUrS
+         dxW6Gx5DBk9GyvDPbuRl/Sqm1lJWJNuiOWfcaRTUFITftBZfnRw6VpQdkX5wK1/zYWb8
+         jL7m4wrz1D56mfn4kFsqfa6qEX4FChxVAaERQ2csVIHp5MPwCN/iJ43C6jrA7V59Jaed
+         u/6/ene8b/kKHBVL9wLcVKiF6tnWcP2l/W4OQeGBkI2584TTyWR271N1CcyC6Id28Xns
+         cjMA==
+X-Gm-Message-State: AOAM5338gu3A8UzjsSEHG48Km3daPXkSu8ERpb8FZDZIiOZNpbHxdd6q
+        1iWH3L+kCZPAQFhyLwoQpmspHQv0aKheGqRWwwWrAiPHoQLRKiWpfVVioDAjYA8sukzON3eYeH3
+        K6+MmSUCciDB/nAnm7WcqoWrB
+X-Received: by 2002:a05:6214:5290:b0:435:208a:5fd with SMTP id kj16-20020a056214529000b00435208a05fdmr8244511qvb.66.1647013770721;
+        Fri, 11 Mar 2022 07:49:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzWg01x03AaRegxM1Hv5DU8L2U/TjmBjwQz2DtkoLyKiBE5QG0qlg6M5cwrZ/osbrpgVxDXBw==
+X-Received: by 2002:a05:6214:5290:b0:435:208a:5fd with SMTP id kj16-20020a056214529000b00435208a05fdmr8244493qvb.66.1647013770479;
+        Fri, 11 Mar 2022 07:49:30 -0800 (PST)
+Received: from xps13.. (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id z6-20020ae9c106000000b0067d3b9ef387sm3602719qki.28.2022.03.11.07.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 07:49:30 -0800 (PST)
+From:   Brian Masney <bmasney@redhat.com>
+To:     bjorn.andersson@linaro.org
+Cc:     mani@kernel.org, dianders@chromium.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 2/2] ARM: qcom_defconfig: enable debug fs support
+Date:   Fri, 11 Mar 2022 10:49:19 -0500
+Message-Id: <20220311154919.1797920-3-bmasney@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220311154919.1797920-1-bmasney@redhat.com>
+References: <20220311154919.1797920-1-bmasney@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To handle Direct TLB flush requests from L2 KVM needs to use a
-separate ring from regular Hyper-V TLB flush requests: e.g. when a
-request to flush something in L2 is made, the target vCPU can
-transition from L2 to L1, receive a request to flush a GVA for L1 and
-then try to enter L2 back. The first request needs to be processed
-then. Similarly, requests to flush GVAs in L1 must wait until L2
-exits to L1.
+Enable CONFIG_DEBUG_FS since this is useful to have around.
 
-No functional change yet as KVM doesn't handle Direct TLB flush
-requests from L2 yet.
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- arch/x86/include/asm/kvm_host.h |  3 ++-
- arch/x86/kvm/hyperv.c           |  7 ++++---
- arch/x86/kvm/hyperv.h           | 17 ++++++++++++++---
- 3 files changed, 20 insertions(+), 7 deletions(-)
+ arch/arm/configs/qcom_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 299f73d06680..750ac4055d0c 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -613,7 +613,8 @@ struct kvm_vcpu_hv {
- 		u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
- 	} cpuid_cache;
- 
--	struct kvm_vcpu_hv_tlbflush_ring tlb_flush_ring;
-+	/* Two rings for regular Hyper-V TLB flush and Direct TLB flush */
-+	struct kvm_vcpu_hv_tlbflush_ring tlb_flush_ring[2];
- };
- 
- /* Xen HVM per vcpu emulation context */
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 7efa34fb15ef..9dfc122d5eca 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -946,7 +946,8 @@ static int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
- 
- 	hv_vcpu->vp_index = vcpu->vcpu_idx;
- 
--	spin_lock_init(&hv_vcpu->tlb_flush_ring.write_lock);
-+	spin_lock_init(&hv_vcpu->tlb_flush_ring[0].write_lock);
-+	spin_lock_init(&hv_vcpu->tlb_flush_ring[1].write_lock);
- 
- 	return 0;
- }
-@@ -1874,7 +1875,7 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu, bool flush_all,
- 	if (!hv_vcpu)
- 		return;
- 
--	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
-+	tlb_flush_ring = &hv_vcpu->tlb_flush_ring[0];
- 
- 	spin_lock_irqsave(&tlb_flush_ring->write_lock, flags);
- 
-@@ -1934,7 +1935,7 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
- 		return;
- 	}
- 
--	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
-+	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
- 	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
- 	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
- 
-diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-index 83960d1bdb1f..137f906eb8c3 100644
---- a/arch/x86/kvm/hyperv.h
-+++ b/arch/x86/kvm/hyperv.h
-@@ -22,6 +22,7 @@
- #define __ARCH_X86_KVM_HYPERV_H__
- 
- #include <linux/kvm_host.h>
-+#include "x86.h"
- 
- /*
-  * The #defines related to the synthetic debugger are required by KDNet, but
-@@ -147,15 +148,25 @@ int kvm_vm_ioctl_hv_eventfd(struct kvm *kvm, struct kvm_hyperv_eventfd *args);
- int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 		     struct kvm_cpuid_entry2 __user *entries);
- 
-+static inline struct kvm_vcpu_hv_tlbflush_ring *kvm_hv_get_tlb_flush_ring(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-+
-+	if (!is_guest_mode(vcpu))
-+		return &hv_vcpu->tlb_flush_ring[0];
-+
-+	return &hv_vcpu->tlb_flush_ring[1];
-+}
- 
- static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
- {
--	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-+	struct kvm_vcpu_hv_tlbflush_ring *tlb_flush_ring;
- 
--	if (!hv_vcpu)
-+	if (!to_hv_vcpu(vcpu))
- 		return;
- 
--	hv_vcpu->tlb_flush_ring.read_idx = hv_vcpu->tlb_flush_ring.write_idx;
-+	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
-+	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
- }
- void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
- 
+diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+index 50e28a74c361..5cd935ee148a 100644
+--- a/arch/arm/configs/qcom_defconfig
++++ b/arch/arm/configs/qcom_defconfig
+@@ -308,6 +308,7 @@ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+ CONFIG_DEBUG_INFO=y
+ CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_WATCHDOG=y
+ CONFIG_QCOM_WDT=y
 -- 
-2.35.1
+2.34.1
 

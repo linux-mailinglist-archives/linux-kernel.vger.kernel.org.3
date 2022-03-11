@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357A74D5E48
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F8C4D5E4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237418AbiCKJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S1347411AbiCKJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347394AbiCKJVo (ORCPT
+        with ESMTP id S1347396AbiCKJVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:21:44 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2411BD05A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:41 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:20:38 -0000
+        Fri, 11 Mar 2022 04:21:45 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FFC1BD05D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:42 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:20:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646990439;
+        s=2020; t=1646990440;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CyorxRkzoeZ3wohXQIFi8MaZOrCtKqVla5E67Di7TJE=;
-        b=D+vQo2++E266JJ7GWSe7B+rBlzwSGYbW0mN/gnodEIDA//rpjH/jhVYZxbywzD60FQbkHZ
-        e++X+C5paOYqr73U7MoxSeSPhkIGr3/5/9DnoQJcp96AgifV7YFabqmPwKBR59yf3OWVxE
-        RH6fLGuJxqAf0yGb9MgE1g/FaIjOGuVq1pnaWKlfll7F22Xk0OLrxLt9Z3VacVjBWKfsYJ
-        oYktO8mV0hp/UGIG1nACaXQ23VcLH7KC0sKfk5Yc77OWSCnhG3+gsedemiWTG5V7HfHdK+
-        V5cIl7dZyFSUlbaxeZuhcFa1BZFnUQ4n4H8k+TFIazxG+HZ/7Qd5X+5tC5V/qA==
+        bh=VTBxIhlZUfsoX4c6mMezxGSXt9jd9PN3MbMHTLVSixE=;
+        b=H7AjKYlzEkKdUYOkfT5yLH78lmMNK7h9RHeLqg4Qr2xk4vXDF7iJujGHSWyolTjEhNKx+5
+        UR9ObYCV0buNb1W9dLGlD8jjq3RacC31wwY6rpHAdENn3VobIIqaSV+bxN9cDTadxDIQmd
+        LCUUNbh5uXFIhPcNvfK4yHg2vFI0JfwbVWK9xZ2UoKhgsHB3RN6Y88JIyIBz5wsfiX2bS/
+        sCzYBUs4MQ+g8EnWNVZExze6VnyfLXHkWxWPtpUZqujq4XyPBsqo0SPUlGIPgeXjuIlJFU
+        YI4YmAlVR1+zNfbuNDNUl4WFZKpNcFciRfPNTpffwHViAV6z2FPi9X1TaEYBBw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646990439;
+        s=2020e; t=1646990440;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CyorxRkzoeZ3wohXQIFi8MaZOrCtKqVla5E67Di7TJE=;
-        b=WvxIGhDd62vx+2MA2c13+dhHAugUUlCLvO8mfle6JcXR55PyeoCkCCYySIdDut45O0PK/5
-        upRUgf+b+lPBL8AA==
+        bh=VTBxIhlZUfsoX4c6mMezxGSXt9jd9PN3MbMHTLVSixE=;
+        b=KfLUIl3igAULIEeGlGc33934MEjgjLaKQvu03V3pqQDon9dTLDAOgxjpXLxwhbZMutTT8C
+        zLh67jCNOPoeGEDA==
 From:   "irqchip-bot for Hector Martin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Add Fast IPI support
-Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: <20220309192123.152028-4-marcan@marcan.st>
-References: <20220309192123.152028-4-marcan@marcan.st>
+Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller:
+ apple,aic2: New binding for AICv2
+Cc:     Rob Herring <robh@kernel.org>, Hector Martin <marcan@marcan.st>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220309192123.152028-3-marcan@marcan.st>
+References: <20220309192123.152028-3-marcan@marcan.st>
 MIME-Version: 1.0
-Message-ID: <164699043863.16921.10704813887293708703.tip-bot2@tip-bot2>
+Message-ID: <164699043956.16921.5388075787173970256.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,274 +67,150 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     2cf68211664acd2e4bdd1fb66697137b30901981
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/2cf68211664acd2e4bdd1fb66697137b30901981
+Commit-ID:     ab1fd5abb75001d37e1fef5f310951b56f41ad58
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/ab1fd5abb75001d37e1fef5f310951b56f41ad58
 Author:        Hector Martin <marcan@marcan.st>
-AuthorDate:    Thu, 10 Mar 2022 04:21:19 +09:00
+AuthorDate:    Thu, 10 Mar 2022 04:21:18 +09:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 11 Mar 2022 08:59:46 
+CommitterDate: Fri, 11 Mar 2022 08:59:00 
 
-irqchip/apple-aic: Add Fast IPI support
+dt-bindings: interrupt-controller: apple,aic2: New binding for AICv2
 
-The newer AICv2 present in t600x SoCs does not have legacy IPI support
-at all. Since t8103 also supports Fast IPIs, implement support for this
-first. The legacy IPI code is left as a fallback, so it can be
-potentially used by older SoCs in the future.
+This new incompatible revision of the AIC peripheral introduces
+multi-die support. This binding is based on apple,aic, but
+changes interrupt-cells to add a new die argument.
 
-The vIPI code is shared; only the IPI firing/acking bits change for Fast
-IPIs.
+Also adds a second reg entry to specify the offset of the event
+register. Inexplicably, the capability registers allow us to compute
+other register offsets, but not this one. This allows us to keep
+forward-compatibility with future SoCs that will likely implement
+different die counts, thus shifting the event register. Apple also
+specify the offset explicitly in their device tree...
 
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220309192123.152028-4-marcan@marcan.st
+Link: https://lore.kernel.org/r/20220309192123.152028-3-marcan@marcan.st
 ---
- drivers/irqchip/irq-apple-aic.c | 122 +++++++++++++++++++++++++++----
- 1 file changed, 109 insertions(+), 13 deletions(-)
+ Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml | 98 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ MAINTAINERS                                                            |  2 +-
+ 2 files changed, 99 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
 
-diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 38091eb..613e0eb 100644
---- a/drivers/irqchip/irq-apple-aic.c
-+++ b/drivers/irqchip/irq-apple-aic.c
-@@ -24,7 +24,7 @@
-  * - Default "this CPU" register view and explicit per-CPU views
-  *
-  * In addition, this driver also handles FIQs, as these are routed to the same
-- * IRQ vector. These are used for Fast IPIs (TODO), the ARMv8 timer IRQs, and
-+ * IRQ vector. These are used for Fast IPIs, the ARMv8 timer IRQs, and
-  * performance counters (TODO).
-  *
-  * Implementation notes:
-@@ -52,9 +52,11 @@
- #include <linux/irqchip.h>
- #include <linux/irqchip/arm-vgic-info.h>
- #include <linux/irqdomain.h>
-+#include <linux/jump_label.h>
- #include <linux/limits.h>
- #include <linux/of_address.h>
- #include <linux/slab.h>
-+#include <asm/cputype.h>
- #include <asm/exception.h>
- #include <asm/sysreg.h>
- #include <asm/virt.h>
-@@ -106,7 +108,6 @@
- 
- /*
-  * IMP-DEF sysregs that control FIQ sources
-- * Note: sysreg-based IPIs are not supported yet.
-  */
- 
- /* Core PMC control register */
-@@ -155,6 +156,10 @@
- #define SYS_IMP_APL_UPMSR_EL1		sys_reg(3, 7, 15, 6, 4)
- #define UPMSR_IACT			BIT(0)
- 
-+/* MPIDR fields */
-+#define MPIDR_CPU(x)			MPIDR_AFFINITY_LEVEL(x, 0)
-+#define MPIDR_CLUSTER(x)		MPIDR_AFFINITY_LEVEL(x, 1)
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
+new file mode 100644
+index 0000000..47a78a1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
+@@ -0,0 +1,98 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/apple,aic2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- #define AIC_NR_FIQ		4
- #define AIC_NR_SWIPI		32
- 
-@@ -173,11 +178,44 @@
- #define AIC_TMR_EL02_PHYS	AIC_TMR_GUEST_PHYS
- #define AIC_TMR_EL02_VIRT	AIC_TMR_GUEST_VIRT
- 
-+DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
++title: Apple Interrupt Controller 2
 +
-+struct aic_info {
-+	int version;
++maintainers:
++  - Hector Martin <marcan@marcan.st>
 +
-+	/* Features */
-+	bool fast_ipi;
-+};
++description: |
++  The Apple Interrupt Controller 2 is a simple interrupt controller present on
++  Apple ARM SoC platforms starting with t600x (M1 Pro and Max).
 +
-+static const struct aic_info aic1_info = {
-+	.version	= 1,
-+};
++  It provides the following features:
 +
-+static const struct aic_info aic1_fipi_info = {
-+	.version	= 1,
++  - Level-triggered hardware IRQs wired to SoC blocks
++    - Single mask bit per IRQ
++    - Automatic masking on event delivery (auto-ack)
++    - Software triggering (ORed with hw line)
++  - Automatic prioritization (single event/ack register per CPU, lower IRQs =
++    higher priority)
++  - Automatic masking on ack
++  - Support for multiple dies
 +
-+	.fast_ipi	= true,
-+};
++  This device also represents the FIQ interrupt sources on platforms using AIC,
++  which do not go through a discrete interrupt controller. It also handles
++  FIQ-based Fast IPIs.
 +
-+static const struct of_device_id aic_info_match[] = {
-+	{
-+		.compatible = "apple,t8103-aic",
-+		.data = &aic1_fipi_info,
-+	},
-+	{
-+		.compatible = "apple,aic",
-+		.data = &aic1_info,
-+	},
-+	{}
-+};
++properties:
++  compatible:
++    items:
++      - const: apple,t6000-aic
++      - const: apple,aic2
 +
- struct aic_irq_chip {
- 	void __iomem *base;
- 	struct irq_domain *hw_domain;
- 	struct irq_domain *ipi_domain;
- 	int nr_hw;
++  interrupt-controller: true
 +
-+	struct aic_info info;
- };
- 
- static DEFINE_PER_CPU(uint32_t, aic_fiq_unmasked);
-@@ -386,8 +424,12 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
- 	 */
- 
- 	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
--		pr_err_ratelimited("Fast IPI fired. Acking.\n");
--		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-+		if (static_branch_likely(&use_fast_ipi)) {
-+			aic_handle_ipi(regs);
-+		} else {
-+			pr_err_ratelimited("Fast IPI fired. Acking.\n");
-+			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-+		}
- 	}
- 
- 	if (TIMER_FIRING(read_sysreg(cntp_ctl_el0)))
-@@ -563,6 +605,22 @@ static const struct irq_domain_ops aic_irq_domain_ops = {
-  * IPI irqchip
-  */
- 
-+static void aic_ipi_send_fast(int cpu)
-+{
-+	u64 mpidr = cpu_logical_map(cpu);
-+	u64 my_mpidr = read_cpuid_mpidr();
-+	u64 cluster = MPIDR_CLUSTER(mpidr);
-+	u64 idx = MPIDR_CPU(mpidr);
++  '#interrupt-cells':
++    const: 4
++    description: |
++      The 1st cell contains the interrupt type:
++        - 0: Hardware IRQ
++        - 1: FIQ
 +
-+	if (MPIDR_CLUSTER(my_mpidr) == cluster)
-+		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx),
-+			       SYS_IMP_APL_IPI_RR_LOCAL_EL1);
-+	else
-+		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx) | FIELD_PREP(IPI_RR_CLUSTER, cluster),
-+			       SYS_IMP_APL_IPI_RR_GLOBAL_EL1);
-+	isb();
-+}
++      The 2nd cell contains the die ID.
 +
- static void aic_ipi_mask(struct irq_data *d)
- {
- 	u32 irq_bit = BIT(irqd_to_hwirq(d));
-@@ -588,8 +646,12 @@ static void aic_ipi_unmask(struct irq_data *d)
- 	 * If a pending vIPI was unmasked, raise a HW IPI to ourselves.
- 	 * No barriers needed here since this is a self-IPI.
- 	 */
--	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit)
--		aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
-+	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
-+		if (static_branch_likely(&use_fast_ipi))
-+			aic_ipi_send_fast(smp_processor_id());
-+		else
-+			aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
-+	}
- }
- 
- static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
-@@ -617,8 +679,12 @@ static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
- 		smp_mb__after_atomic();
- 
- 		if (!(pending & irq_bit) &&
--		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit))
--			send |= AIC_IPI_SEND_CPU(cpu);
-+		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
-+			if (static_branch_likely(&use_fast_ipi))
-+				aic_ipi_send_fast(cpu);
-+			else
-+				send |= AIC_IPI_SEND_CPU(cpu);
-+		}
- 	}
- 
- 	/*
-@@ -650,8 +716,16 @@ static void aic_handle_ipi(struct pt_regs *regs)
- 	/*
- 	 * Ack the IPI. We need to order this after the AIC event read, but
- 	 * that is enforced by normal MMIO ordering guarantees.
-+	 *
-+	 * For the Fast IPI case, this needs to be ordered before the vIPI
-+	 * handling below, so we need to isb();
- 	 */
--	aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
-+	if (static_branch_likely(&use_fast_ipi)) {
-+		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-+		isb();
-+	} else {
-+		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
-+	}
- 
- 	/*
- 	 * The mask read does not need to be ordered. Only we can change
-@@ -679,7 +753,8 @@ static void aic_handle_ipi(struct pt_regs *regs)
- 	 * No ordering needed here; at worst this just changes the timing of
- 	 * when the next IPI will be delivered.
- 	 */
--	aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
-+	if (!static_branch_likely(&use_fast_ipi))
-+		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
- }
- 
- static int aic_ipi_alloc(struct irq_domain *d, unsigned int virq,
-@@ -776,10 +851,15 @@ static int aic_init_cpu(unsigned int cpu)
- 	/*
- 	 * Always keep IPIs unmasked at the hardware level (except auto-masking
- 	 * by AIC during processing). We manage masks at the vIPI level.
-+	 * These registers only exist on AICv1, AICv2 always uses fast IPIs.
- 	 */
- 	aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
--	aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
--	aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
-+	if (static_branch_likely(&use_fast_ipi)) {
-+		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
-+	} else {
-+		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
-+		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
-+	}
- 
- 	/* Initialize the local mask state */
- 	__this_cpu_write(aic_fiq_unmasked, 0);
-@@ -799,6 +879,7 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 	void __iomem *regs;
- 	u32 info;
- 	struct aic_irq_chip *irqc;
-+	const struct of_device_id *match;
- 
- 	regs = of_iomap(node, 0);
- 	if (WARN_ON(!regs))
-@@ -808,12 +889,24 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 	if (!irqc)
- 		return -ENOMEM;
- 
--	aic_irqc = irqc;
- 	irqc->base = regs;
- 
-+	match = of_match_node(aic_info_match, node);
-+	if (!match)
-+		return -ENODEV;
++      The next cell contains the interrupt number.
++        - HW IRQs: interrupt number
++        - FIQs:
++          - 0: physical HV timer
++          - 1: virtual HV timer
++          - 2: physical guest timer
++          - 3: virtual guest timer
 +
-+	irqc->info = *(struct aic_info *)match->data;
++      The last cell contains the interrupt flags. This is normally
++      IRQ_TYPE_LEVEL_HIGH (4).
 +
-+	aic_irqc = irqc;
++  reg:
++    items:
++      - description: Address and size of the main AIC2 registers.
++      - description: Address and size of the AIC2 Event register.
 +
- 	info = aic_ic_read(irqc, AIC_INFO);
- 	irqc->nr_hw = FIELD_GET(AIC_INFO_NR_HW, info);
- 
-+	if (irqc->info.fast_ipi)
-+		static_branch_enable(&use_fast_ipi);
-+	else
-+		static_branch_disable(&use_fast_ipi);
++  reg-names:
++    items:
++      - const: core
++      - const: event
 +
- 	irqc->hw_domain = irq_domain_create_linear(of_node_to_fwnode(node),
- 						   irqc->nr_hw + AIC_NR_FIQ,
- 						   &aic_irq_domain_ops, irqc);
-@@ -845,6 +938,9 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 	if (!is_kernel_in_hyp_mode())
- 		pr_info("Kernel running in EL1, mapping interrupts");
- 
-+	if (static_branch_likely(&use_fast_ipi))
-+		pr_info("Using Fast IPIs");
++  power-domains:
++    maxItems: 1
 +
- 	cpuhp_setup_state(CPUHP_AP_IRQ_APPLE_AIC_STARTING,
- 			  "irqchip/apple-aic/ipi:starting",
- 			  aic_init_cpu, NULL);
++required:
++  - compatible
++  - '#interrupt-cells'
++  - interrupt-controller
++  - reg
++  - reg-names
++
++additionalProperties: false
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++examples:
++  - |
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        aic: interrupt-controller@28e100000 {
++            compatible = "apple,t6000-aic", "apple,aic2";
++            #interrupt-cells = <4>;
++            interrupt-controller;
++            reg = <0x2 0x8e100000 0x0 0xc000>,
++                  <0x2 0x8e10c000 0x0 0x4>;
++            reg-names = "core", "event";
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 69a2935..7a920a2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1767,7 +1767,7 @@ T:	git https://github.com/AsahiLinux/linux.git
+ F:	Documentation/devicetree/bindings/arm/apple.yaml
+ F:	Documentation/devicetree/bindings/arm/apple/*
+ F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+-F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
++F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+ F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml

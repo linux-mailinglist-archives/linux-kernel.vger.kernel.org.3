@@ -2,143 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1314D5D50
+	by mail.lfdr.de (Postfix) with ESMTP id 96D134D5D51
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiCKIbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S238232AbiCKIb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbiCKIbp (ORCPT
+        with ESMTP id S238598AbiCKIby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:31:45 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A5F1B98BF;
-        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id q29so5928343pgn.7;
-        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
-        b=GNLK00oLX064vIX+r2kYl2hpm4t94e+rXiqn1qZ9hWMFVkY6aHlbSH8BEbBAsY0Ldy
-         KB7UpyqDEx+aEAnMxJl6Nl3E9H4wxWU1Knh/dmR4kXxg9JgjkKp2s5gTO7PazmLZm4F5
-         ug9oi8DNyH2TidnPshxULWDwMziBs1Mm74UGEhni4KCZZ1F/pvAGs2QLTee/o+NXCoPx
-         e1Q8+zNhSL0HH2j5cNAHuMhmyya2h5bpdxFqEFGQOT0lbo0Qt4U+F3IZQRIZLr+ufMzv
-         YFN8l03fX2C2ydQiW4D5SBwzqbWJs2F18393kuDS6aObl/l9t9Qp8YIQQ+TU6u5Jq1RJ
-         PRtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
-        b=ROxHzxYKwUG7U1MvD9CVgnLhrtel81QgBS4TdwZ8MvfHR8oK1V46peJmfqlt/DZ94j
-         3HPNHd1+SaQRXfS6J9FgrJ2ul6TWrViFnyFnMUxbx/36wAPeyI0JIQ2f0L7OpTP9fUeM
-         E0bJXtxmqHKPrGIaj655/timaGnNio/jKn9JmQEtGLmy2ceDCHARMmizcXFCsZnLL+YX
-         03PWXX6+iGr6Doo9aMnbviTRb/d9GzPbcOLc0fLRkhBSWqEsat+COFKYjKFtE9VPb7i9
-         blgztyJjk2LSsmOq2V7ABMZ/7+/3jSaimSYne/aBuBEvt+8JHIYhLQLUiTVRTWAhhEz6
-         IN4g==
-X-Gm-Message-State: AOAM531aPtMVaw6VcDmEeRCku4sUZdthJHoR7vVGBVhntFTcCX24Rc9u
-        tJqRIJxWv7AdP0RdVquCVcXolPjoMvGpCaG4
-X-Google-Smtp-Source: ABdhPJwvPShUx/fd22EZnsmFZ7/fjy+OpgeoE43Ls+h/GXbhsRJW42jHfLYkBse6whh+7z/UG3sqSQ==
-X-Received: by 2002:a63:5451:0:b0:378:6b6c:ed83 with SMTP id e17-20020a635451000000b003786b6ced83mr7469585pgm.446.1646987441896;
-        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
-Received: from localhost.localdomain (114-24-95-63.dynamic-ip.hinet.net. [114.24.95.63])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056a00150800b004f7948d14e7sm785465pfu.191.2022.03.11.00.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
-From:   Wei Ming Chen <jj251510319013@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
-Subject: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep address available
-Date:   Fri, 11 Mar 2022 16:29:45 +0800
-Message-Id: <20220311082944.4881-1-jj251510319013@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
-References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
-MIME-Version: 1.0
+        Fri, 11 Mar 2022 03:31:54 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A741B8FF7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:30:51 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2B7E41F441;
+        Fri, 11 Mar 2022 08:30:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646987450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dzGcwM7v+f34q9OHR146SuStt4YJu5AWHYm6yTSEKbU=;
+        b=VN+qHiXECN9MeWHI6qSXge+yel8gPdwl2Vp8yAg/VuNjvwOdqDdSepXjm9VAgjlgEg2/XV
+        whFUy28AcFcgi8Or3j1P/VBicHdar4zDrEq2C+nE/8YkdNTcpYtNGfMI2QQVEcR3+Jfl19
+        nMS23lpKQCBdCI9JHkkBcSv99h1E4VA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646987450;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dzGcwM7v+f34q9OHR146SuStt4YJu5AWHYm6yTSEKbU=;
+        b=hYQytmMrUrlQ/l8hINoIKeISYAqXeTfzMjJZc1EwUnqwjrKQOgjSwI/p46vgpzEUcSdlzM
+        8113T2KyKJ4nRXBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 77DECA3B93;
+        Fri, 11 Mar 2022 08:30:49 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 09:30:49 +0100
+Message-ID: <s5ho82cevra.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "huangwenhui" <huangwenhuia@uniontech.com>
+Cc:     "perex" <perex@perex.cz>, "tiwai" <tiwai@suse.com>,
+        "jeremy.szu" <jeremy.szu@canonical.com>,
+        "hui.wang" <hui.wang@canonical.com>,
+        "wse" <wse@tuxedocomputers.com>, "cam" <cam@neo-zeon.de>,
+        "kailang" <kailang@realtek.com>,
+        "tanureal" <tanureal@opensource.cirrus.com>,
+        "sami" <sami@loone.fi>, "alsa-devel" <alsa-devel@alsa-project.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+In-Reply-To: <tencent_080B040F1CE2D7D83D6FD0C8@qq.com>
+References: <tencent_080B040F1CE2D7D83D6FD0C8@qq.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
-only support from ep1-ep4 for both in and out direction, it will return
--EBUSY originally.
+On Fri, 11 Mar 2022 02:20:42 +0100,
+huangwenhui wrote:
+> 
+> Hi  Takashi,
+> 
+> if adjusting the mixer element or replugging the headset, the headphone would
+> be unmuted.
+> But most users hope that the default state is unmuted.
+> Should this unconditional unmute be required?
 
-I think it will be more intuitive if we return -EINVAL, because -EBUSY
-sounds like ep5in is not available now, but might be available in the
-future.
+It's the standard behavior for most of ALSA drivers.
 
-Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
----
+The initial mute state is rather controlled via alsactl, restoring the
+previous state.  Also, the sound server like PulseAudio or pipewire
+does unmute automatically.  If this doesn't work as expected, that's a
+more problem to diagnose.
 
-Changes in v2:
-- Rename variable from ep_num_matched to ep_props_matched
-- Incorporate the patch from Andrey Konovalov that cover
-  the foloowing cases:
-    1. If there are no endpoints that match the provided descriptor, return
-       EINVAL.
-    2. If there are matching endpoints, but they are all already enabled,
-       return EBUSY.
 
- drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+Takashi
 
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index d86c3a36441e..e5707626c4d4 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
- 	unsigned long flags;
- 	struct usb_endpoint_descriptor *desc;
- 	struct raw_ep *ep;
-+	bool ep_props_matched = false;
- 
- 	desc = memdup_user((void __user *)value, sizeof(*desc));
- 	if (IS_ERR(desc))
-@@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
- 
- 	for (i = 0; i < dev->eps_num; i++) {
- 		ep = &dev->eps[i];
--		if (ep->state != STATE_EP_DISABLED)
--			continue;
- 		if (ep->addr != usb_endpoint_num(desc) &&
- 				ep->addr != USB_RAW_EP_ADDR_ANY)
- 			continue;
- 		if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
- 			continue;
-+		ep_props_matched = true;
-+		if (ep->state != STATE_EP_DISABLED)
-+			continue;
- 		ep->ep->desc = desc;
- 		ret = usb_ep_enable(ep->ep);
- 		if (ret < 0) {
-@@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
- 		goto out_unlock;
- 	}
- 
--	dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
--	ret = -EBUSY;
-+	if (!ep_props_matched) {
-+		dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
-+		ret = -EINVAL;
-+	} else {
-+		dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
-+		ret = -EBUSY;
-+	}
- 
- out_free:
- 	kfree(desc);
--- 
-2.25.1
-
+> 
+> Thanks.
+> 
+> ------------------ Original ------------------
+> From:  "Takashi Iwai"<tiwai@suse.de>;
+> Date:  Thu, Mar 10, 2022 10:03 PM
+> To:  "黄文辉"<huangwenhuia@uniontech.com>;
+> Cc:  "perex"<perex@perex.cz>; "tiwai"<tiwai@suse.com>; "jeremy.szu"
+> <jeremy.szu@canonical.com>; "hui.wang"<hui.wang@canonical.com>; "wse"
+> <wse@tuxedocomputers.com>; "cam"<cam@neo-zeon.de>; "kailang"
+> <kailang@realtek.com>; "tanureal"<tanureal@opensource.cirrus.com>; "sami"
+> <sami@loone.fi>; "alsa-devel"<alsa-devel@alsa-project.org>; "linux-kernel"
+> <linux-kernel@vger.kernel.org>;
+> Subject:  Re: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP
+> machine with alc671
+>  
+> On Thu, 10 Mar 2022 14:58:36 +0100,
+> huangwenhui wrote:
+> >
+> > Hi  Takashi,
+> >
+> > Thank you for your reply.
+> >
+> > When booting with plugged headset, the headphone will be muted.
+> 
+> The muted state is the default behavior.  Wouldn't it be unmuted if
+> you adjust the corresponding mixer element?
+> 
+> Takashi
+> 
+> >
+> > Thanks.
+> > 
+> > ------------------ Original ------------------
+> > From:  "Takashi Iwai"<tiwai@suse.de>;
+> > Date:  Thu, Mar 10, 2022 09:29 PM
+> > To:  "huangwenhui"<huangwenhuia@uniontech.com>;
+> > Cc:  "perex"<perex@perex.cz>; "tiwai"<tiwai@suse.com>; "jeremy.szu"
+> > <jeremy.szu@canonical.com>; "hui.wang"<hui.wang@canonical.com>; "wse"
+> > <wse@tuxedocomputers.com>; "cam"<cam@neo-zeon.de>; "kailang"
+> > <kailang@realtek.com>; "tanureal"<tanureal@opensource.cirrus.com>; "sami"
+> > <sami@loone.fi>; "alsa-devel"<alsa-devel@alsa-project.org>; "linux-kernel"
+> > <linux-kernel@vger.kernel.org>;
+> > Subject:  Re: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP
+> > machine with alc671
+> > 
+> > On Thu, 10 Mar 2022 14:03:01 +0100,
+> > huangwenhui wrote:
+> > >
+> > > On a HP 288 Pro G8, the front Mic could not be detected.
+> > >
+> > > Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+> >
+> > Thanks for the patch.  Most of the changes look OK, but one thing I
+> > still don't get:
+> >
+> > > + case HDA_FIXUP_ACT_INIT:
+> > > + alc_write_coef_idx(codec, 0x19, 0xa054);
+> > > + msleep(80);
+> > > + snd_hda_codec_write(codec, hp_pin, 0,
+> > > +     AC_VERB_SET_AMP_GAIN_MUTE, AMP_OUT_UNMUTE);
+> >
+> > Why this unconditional unmute is required for fixing the mic problem?
+> >
+> > Takashi
+> >
+> >
+> 
+> 

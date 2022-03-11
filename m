@@ -2,137 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAE54D688B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DB34D6891
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350973AbiCKSjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S242878AbiCKSlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240230AbiCKSjs (ORCPT
+        with ESMTP id S234936AbiCKSly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:39:48 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05C45F8EB;
-        Fri, 11 Mar 2022 10:38:42 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id b16so11146388ioz.3;
-        Fri, 11 Mar 2022 10:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WFI9p5E2R1wq2NWvgYHqRIb+Zo5MSuZDRoBWnSp8cC0=;
-        b=Hz3qF2Jc/oDqlPTyODeX6aJQMsymr4mAoQa/4iAsl+s+AcF7H76WTBaUcvqqHezecW
-         Caq83ucTlRONEvHL6A75juWpGkNRjv+7NosLvVgx1Nl2iORThEFQxIN7kKR9QEvz60WL
-         ogrT0hc9l+uc2i7OIhyA/mZqv2G9Ztpk9n/ru+8TXm8uFCkk58VYqlVaeNRh0DVdX0ep
-         79Gg+qviEwPZHp3ezLtIZSDB+6qicFDbmpHraRxEprWl8R9pCxayyL8Z8ie67DYsxMjh
-         O16+Gi5uMiQc5BGr2z06DFg60HsziOkdOvgXL582mcqkh4XZ2o2IWgKYB/4uD5nOInfC
-         5Z7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WFI9p5E2R1wq2NWvgYHqRIb+Zo5MSuZDRoBWnSp8cC0=;
-        b=rDjWE3tbitOA6MIH8sjY6329LnnEjGqoyDz6neGHZ9AxUHeT80/uKlIf+bjhBhohp7
-         0UwFalgu6cQMzq8f02WgMGtIXr3WSVY8PkCwaWMJ3J5iY7iWPFuWPuYGGOW8uUghdjq7
-         GUZRlumQ0ZM+XvyLiZO5PVPZ6n/aBB2dByt9Bi4car6qMfEgLAco5covyW+vzup6MoTY
-         oc1B0eaYSRKq/CgoSozpVCwnLfAyA/L1JNWWybBgoW8aeJXymJrzQXilFYng2YjKO5mk
-         v6b8mo7IWjn725VXIo+rTOVn3rIreQ58azHqzXUWqUveRsEY/oxLqd+WyykKuTI35yXw
-         ZerA==
-X-Gm-Message-State: AOAM532S/mLYJWgWRr4UViaUCWMvf2Y3u8DZANRYWY30wwJFr9OtBuiW
-        5g7Ug0C00TlZUwGXOh/iTyf3Xs92uwlzJ+ovfrs=
-X-Google-Smtp-Source: ABdhPJwbmX1TybktyboJLuwffG7A5SMbgfzBhvnTrqO+0vKlPqtv7HOCxy6lefykP99jsDVGZTzRSIQr9pZc5Ok9EDY=
-X-Received: by 2002:a02:c00e:0:b0:317:c548:97c with SMTP id
- y14-20020a02c00e000000b00317c548097cmr9696778jai.234.1647023922364; Fri, 11
- Mar 2022 10:38:42 -0800 (PST)
+        Fri, 11 Mar 2022 13:41:54 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2072.outbound.protection.outlook.com [40.107.223.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90848A186
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:40:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=crriZzd8U9g+It4QhcOikAkUpTZTzLYX8iB72aPKlldBo6NzKmCTCxfRSQIZpbw8R8Pjbf4wT44zR4DjCIn/LgfxZ5gMX53l6DIkWh/+XqqUFcLgxVvq+RedbwH/IDoPBOx4l8GH+jKIeI9qv9PFio8xsKXsLetGIiBr0VAa1TV7/gDufMtpERuwxcWXS+1iXjAUOv408li2HIK8dYrj8bpGn+fUxlDG5n7TG8GW42oBrnVEfKgP5kf6iU99Z7VqkIQ+AznQxxD4B32XCE4Dw/C0rxkJPnU6ciRpvDPoCZrmnPKKCwLfpHWTNvejT0kFOZjDqaVu4ot4nE7DNtVnfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V+Yg4gEthFzvVhzItoRl/1s8SsQ+cQ18NtfEAyT9xYc=;
+ b=RZtzCbZrjVuFk0KxAEM+k7stS/iQJh7+F6Ju7Pl0qld2epiU3fxXmYmzJJBmMuLJwFxzjaOgJ3oIeyNdG3urJDQC0XTZkadaXAH1AVy+kPVoOrLdNUtZBAUAWfCs4/hX77jNai2EqllqsYE7v/xfSDTA2NNdHPiqqe4gUz0sqvwWAKeYQWidRNAoewf3am4moi/LDNLLQ5f/VjbChQMsBvPn/eHp+AvxC7lbDcWwAgJBhHH72Tbv3fzNXYPi92L9dz5G5yJBjR87T4bALiesPNKxCUx9/KLGw2nK4ed4bDSRrbwj1Wg31hKsbeZjN6Ztqo7ADwgC5O5WOQ2T6Y61FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V+Yg4gEthFzvVhzItoRl/1s8SsQ+cQ18NtfEAyT9xYc=;
+ b=pycv2Zx96sR/05uZECuvLzop9wdK0QO0I5FCMeJXt1PEAkBZvAYV3/srbTsX/WD5AmMMcNtYXnuWw0sWPtRbO5pYJRB79iT2pR6EFUJySOgBoCnyBKQhDeHXUzMUI6mv56/SrOaFae1SIp85lzOktY6HHbmYNE2kiP/v/czmA5U=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by BLAPR05MB7265.namprd05.prod.outlook.com (2603:10b6:208:286::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.7; Fri, 11 Mar
+ 2022 18:40:48 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::6061:706:1081:df8b]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::6061:706:1081:df8b%5]) with mapi id 15.20.5081.007; Fri, 11 Mar 2022
+ 18:40:48 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 0/5] mm/mprotect: avoid unnecessary TLB flushes
+Thread-Topic: [PATCH v3 0/5] mm/mprotect: avoid unnecessary TLB flushes
+Thread-Index: AQHYM2uKrnc5RsxkI0qTSHUzdQzkKqy3ldQAgALyYIA=
+Date:   Fri, 11 Mar 2022 18:40:48 +0000
+Message-ID: <FA3620A4-8633-4AAC-B35F-F0040477613F@vmware.com>
+References: <20220309041043.302261-1-namit@vmware.com>
+ <20220309134046.31a0751523acb9babb55b9de@linux-foundation.org>
+In-Reply-To: <20220309134046.31a0751523acb9babb55b9de@linux-foundation.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3693.60.0.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 43d6c1a9-cf6f-4dd1-e5df-08da038ea943
+x-ms-traffictypediagnostic: BLAPR05MB7265:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <BLAPR05MB7265CEC589B7765CFA2CE70DD00C9@BLAPR05MB7265.namprd05.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: l46fA3HPdfacA16lpamp233XnNGXh+ZDf5eiBjzo1fY3SoWjdpx3DmvcrGPmKuKKA/MM6KWHydEG8RuIb6ULDUhMsl14KfNZz6OK1BW9n8oGTVG6pZZJjXObEhkCT1xudH7KgNKJRnGL7azbBlF6V203injJItfUILARwj+rLATa6znJHNeNPZLUZbi2tg4wyoIYOTImz0qum9v5e7YRoNQV7CUtaFyP24P8Etxz8KbZ8QJEwyPYAWI3bQ8d+t+6nmOCcyLxYbfk81ysenlrvKdo4eij+U6SmIlIJThC7A/NGtCczHc/hHgNiGfzen6D2QnznUXoKQgVoHGkG+xzcHZpvBinGjqEIWis8aHRuy65KK6eBuzGt3CAuFtYiZZYTDmvCdhPHOBrFu+8jsrVEFVZjccaPY/NR6gNYGqMql8EbFIR+evJrJ296pkX3L6V+XorpCvOJr9EQMwvBXbRZcEKeGNSHS67VbFCg9NE+GRz+OnSExzTE9TxXvF8XmK1q9z4dXupmbz4P9ORXhFQcSMzwYTKULoDOX8jnMDg4qcTEFoFKp4fIjuu2WqH1E0w0HHGTyveThsg1OROcC8nTvwFPRjeBlKXHsxTpc5ELYd77TtmQmEhUyzW4+b8j5TXsN2JbYznBAiTgDPf61MOgDDlYpyOIVR3Qo9ZRAhWPkdBKwKvufEt9UhwFmXl6R6torZ9izEMk+FRbNwDOTZxKCuDTyGhVvr/obRf7quXuPfFinSlbFujbFJqYAQrp0NB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(6486002)(6916009)(71200400001)(316002)(33656002)(508600001)(8676002)(66946007)(66476007)(64756008)(66556008)(66446008)(122000001)(76116006)(4326008)(54906003)(7416002)(6506007)(4744005)(5660300002)(2616005)(186003)(26005)(53546011)(38100700002)(83380400001)(6512007)(36756003)(86362001)(2906002)(8936002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nxTi5FDR909JwoUguhSJ+i1xxLx2GzsPmo6HTVZ7vUGIwkxfGszzMc+eGpK6?=
+ =?us-ascii?Q?f+O/cd1XTfNHFrMmDECdPL7T4hCY4kRmWmgFjeMkdH2So0EbGonFt9OK8J97?=
+ =?us-ascii?Q?heSWizpUrSiDYziTPx1OxROrqmQrnekX0XqLDKEhBAfuMBMkpBXEHOjRfmOA?=
+ =?us-ascii?Q?QdlQQNXrydE2tzjzCphnASZRs3T9hAqqoPPsB4KT76SmVPe9buC5m9SRAzKn?=
+ =?us-ascii?Q?MOEmksdEA+zW28ezwevVuEutbVyR1bXYOWVJZmZqUXva1RnWeyaOG4nFU62Z?=
+ =?us-ascii?Q?WJnGgnnQPjTJmQW+MlPMamFodHhkmm7Fm4PgqOrNZKTp+P0N6U6BUV9yCZ6X?=
+ =?us-ascii?Q?r005xWWTo6Z5jKdwen20xFmEyE7++QIHd87G49+kC8KU0tdQzOUK0S9YZYhE?=
+ =?us-ascii?Q?WkqFvPgnz9Hyr5xwMRY7MxlLF5Q2fKtzA+o0cAHxF6DoDFCtrFwTbR06wHCU?=
+ =?us-ascii?Q?dGoz18AA9m30FrBzHY6N3Dtn0sD95xuH4PASafGirv399EwgM275ATFHuEGU?=
+ =?us-ascii?Q?JacyNVdrO7GcmEv84mcr23IA3VZWF+SWr6WnXtg0GT/ehFa4Tes7cKznEHDz?=
+ =?us-ascii?Q?IHPIqIZMZ3EgAz/uNuvepl0r80s4w7atybcoaEiaOdveOjsnmf8TBlKpXLtC?=
+ =?us-ascii?Q?6cprpHptjlE/1N2CAZOSFc7dtTNuwMMR/wmIksaY+ILlLW3tXKBlhiScLga8?=
+ =?us-ascii?Q?SRgu/V44zObPUHOmKxUuWoVoY/+QX8nfBNcyPj3FZfDOF1xPod5BikYeJaEv?=
+ =?us-ascii?Q?Qyby9RxCfguwAGh/tKeAfu80UFu/OlD9vIRdWgiq6wP9F/rzs7UxUshNSnLm?=
+ =?us-ascii?Q?y2IvuPRucn8Gm4mw9KQKE1L/ksD6yS4V4AiYyXOghmZfJP1u19782xJvS+N+?=
+ =?us-ascii?Q?zZBS8LykIzd5eveSQ0ppO5hHYSdsN8E3LPeUsGvG6NqEyrYj11MCUa0g1ZhB?=
+ =?us-ascii?Q?pz51QJiA127EUxveZJiZP4NSoqHLVWM5kLyp/+MtC5mBuqsmPOWdlFk8nzg5?=
+ =?us-ascii?Q?6VeXFTfv8gOpBqErFeFUNpQr0b/x461CVBU3dnObQ8GNyabda1DKfGWtlfiY?=
+ =?us-ascii?Q?InCC9Hff+vBh2dsoDja7nZVftZY1zE5a1sMEyGrcyczDu5dy0cgWg+gRAcZB?=
+ =?us-ascii?Q?fyfAGpHaF7ShMx+CSlYQ5JvBuzIehOQiSu51UggIdiBG9fmz+583m/hPuXyJ?=
+ =?us-ascii?Q?x9tD9Ad24DLtDqfc5XX8hq7DpzzkiegrKNQ5h0440Uvxggntyqll78DjVGhB?=
+ =?us-ascii?Q?EJUdsbABbEQCpo5RengMNf+0OnejOeSjclRVHAD6VFDIgoW91Iw9wknX0eMK?=
+ =?us-ascii?Q?kDDJpqlDRCg5JmZoa6PDGeho0S4BExNXHrJvPOa0eAw+hqqX+UBLv5tscpTL?=
+ =?us-ascii?Q?0SxGI48h3r/06Nwm/iJvrl/ZMFPKZnyxjtQkzc0pBDR3adLK35JJFe6WUqBg?=
+ =?us-ascii?Q?YqsPwK7567H3V9TaKqCD5ibfcIc4uLoB?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <FB4BFF33ECFCEA4782F86B1275446A95@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net> <20220309033518.1743-1-guozhengkui@vivo.com>
-In-Reply-To: <20220309033518.1743-1-guozhengkui@vivo.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 11 Mar 2022 10:38:31 -0800
-Message-ID: <CAEf4BzY0F3g8oH7+u14DTs707STVSCi8j=A5_S=hn6VRXHzzXg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Yucong Sun <sunyucong@gmail.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Christy Lee <christylee@fb.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43d6c1a9-cf6f-4dd1-e5df-08da038ea943
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 18:40:48.5291
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IRHLLKHRoXcDkiDkJbjEWz4phWi0isKHwmERETr/jmDgrXQlNS9p8bhHDvzgjLIjxK0i19nSPZCT+RhLHBunmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR05MB7265
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 7:36 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
->
-> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
->
-> Use `ARRAY_SIZE(arr)` in bpf_util.h instead of forms like
-> `sizeof(arr)/sizeof(arr[0])`.
->
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> ---
->  .../selftests/bpf/prog_tests/cgroup_attach_autodetach.c     | 2 +-
->  .../testing/selftests/bpf/prog_tests/cgroup_attach_multi.c  | 2 +-
->  .../selftests/bpf/prog_tests/cgroup_attach_override.c       | 2 +-
->  tools/testing/selftests/bpf/prog_tests/global_data.c        | 6 +++---
->  tools/testing/selftests/bpf/prog_tests/obj_name.c           | 2 +-
->  tools/testing/selftests/bpf/progs/syscall.c                 | 3 ++-
->  tools/testing/selftests/bpf/progs/test_rdonly_maps.c        | 3 ++-
->  tools/testing/selftests/bpf/test_cgroup_storage.c           | 2 +-
->  tools/testing/selftests/bpf/test_lru_map.c                  | 4 ++--
->  tools/testing/selftests/bpf/test_sock_addr.c                | 6 +++---
->  tools/testing/selftests/bpf/test_sockmap.c                  | 4 ++--
->  11 files changed, 19 insertions(+), 17 deletions(-)
->
 
-[...]
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
-> index fc8e8a34a3db..a500f2c15970 100644
-> --- a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
-> +++ b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
-> @@ -3,6 +3,7 @@
->
->  #include <linux/ptrace.h>
->  #include <linux/bpf.h>
-> +#include <bpf_util.h>
+> On Mar 9, 2022, at 1:40 PM, Andrew Morton <akpm@linux-foundation.org> wro=
+te:
+>=20
+> On Tue,  8 Mar 2022 20:10:38 -0800 Nadav Amit <nadav.amit@gmail.com> wrot=
+e:
+>=20
+>> This patch-set is intended to remove unnecessary TLB flushes during
+>> mprotect() syscalls. Once this patch-set make it through, similar
+>> and further optimizations for MADV_COLD and userfaultfd would be
+>> possible.
+>=20
+> Thanks.  I'll save this away for consideration after the -rc1 release.=20
+> Which gives others plenty of time for review (hint) (request).
+>=20
 
-bpf_util.h isn't supposed to be included from BPF source code side. Is
-this ARRAY_SIZE() use so important for BPF programs? Maybe just leave
-existing code under progs/*.c as is?
+I see that some patches did not make it through to the mailing list.
 
->  #include <bpf/bpf_helpers.h>
->
->  const struct {
-> @@ -64,7 +65,7 @@ int full_loop(struct pt_regs *ctx)
->  {
->         /* prevent compiler to optimize everything out */
->         unsigned * volatile p = (void *)&rdonly_values.a;
-> -       int i = sizeof(rdonly_values.a) / sizeof(rdonly_values.a[0]);
-> +       int i = ARRAY_SIZE(rdonly_values.a);
->         unsigned iters = 0, sum = 0;
->
->         /* validate verifier can allow full loop as well */
-
-[...]
+I will resend later today.=

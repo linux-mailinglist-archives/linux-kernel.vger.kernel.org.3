@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B614D69A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EC04D69A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiCKUpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 15:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S229891AbiCKUr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 15:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiCKUpt (ORCPT
+        with ESMTP id S229535AbiCKUr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 15:45:49 -0500
+        Fri, 11 Mar 2022 15:47:27 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9901EC26F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:44:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650541F1DF9;
+        Fri, 11 Mar 2022 12:46:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EF9A61F92
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 20:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFB45C340EC;
-        Fri, 11 Mar 2022 20:44:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEE2A61F72;
+        Fri, 11 Mar 2022 20:46:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5CEC340E9;
+        Fri, 11 Mar 2022 20:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647031482;
-        bh=vDi2M9xuuoKAX94Xgn0xlD2AOH2r3dG2kCNUybD8kIY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=QsC5USRG3VhfOPcwsr/WNBv/Uhyeyw2skf3/wMHhZ3q+HTq84x5G8pT36T+TqR2Sr
-         npC2BVHiMv3/IeSWj/aEnQh+kdfpeCaIwYPPEsaM2jDCVN9k8TmLBM6U2HvRG2uq1h
-         wCei+9hqGdwoV/t6gQT8riqc+JtIOEypMeD4a99TP1fJFdwB2L5KUedI42KYKCAfyb
-         nbVouqscYJ3srpnSrkyWpbRzrl8xZiqswwD4TiUEuKvhblGSwbL5W1vlQcoAHhcl2E
-         /W2Nn2WcLhSCMlR/Cc4NI6Rx/ygEd+lGwXanaLhSSsVRI/bzzGnLcE7XMTlw0V0OYV
-         HwJ63waqIcITg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB828E8DD5B;
-        Fri, 11 Mar 2022 20:44:42 +0000 (UTC)
-Subject: Re: [GIT PULL] RISC-V Fixes for 5.17-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <mhng-1484f557-fd58-4fe3-afce-a630fac5c8b3@palmer-ri-x1c9>
-References: <mhng-1484f557-fd58-4fe3-afce-a630fac5c8b3@palmer-ri-x1c9>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <mhng-1484f557-fd58-4fe3-afce-a630fac5c8b3@palmer-ri-x1c9>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-rc8
-X-PR-Tracked-Commit-Id: 0966d385830de3470b7131db8e86c0c5bc9c52dc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 77fe1ba90241c2af6f14d53988bf0cd6b9586699
-Message-Id: <164703148283.12993.8501085816446276759.pr-tracker-bot@kernel.org>
-Date:   Fri, 11 Mar 2022 20:44:42 +0000
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+        s=k20201202; t=1647031580;
+        bh=1d7yFHm3wcaPcd69G2dLtOCFfYzo29gsXMR8bTpWgSA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jqp4Cfdwk6bmZlNxsmtXcA4SDJBULul7QJ+0uGowFEvIOxGFagg08I0jomB4ylGer
+         brXXjLtcS+8AiIhR4C/MWI3RT12XrhTNveWBmpWu1S2naZ8O1tDVfJvj13oGtivvIj
+         X4ZYY3j7C+BRkaQ/iabBpYb8UjioUiyNZZR/rcljk+dvt8jfO3wqvn0vr7/lrMSnA4
+         MeT8qI+Fid53s/AD+PTfzFBXuF4FchntamTawHNS/Y0ooTf6b9Ql0npy47zEqIk/zV
+         jShw6uobxPJiw47JK2HPOsqrwuWEIJkrXl/bm34cV4Ku/Hw0Ofnvi5aT2Q7H5tRxt1
+         QFuNNlyWIGz3w==
+Date:   Fri, 11 Mar 2022 21:46:16 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     bleung@chromium.org, groeck@chromium.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Fix syntax errors in comments
+Message-ID: <Yiu1GLEOUNHnqKxP@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Xiang wangx <wangxiang@cdjrlc.com>, bleung@chromium.org,
+        groeck@chromium.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211205162752.14066-1-wangxiang@cdjrlc.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MKx/StZgcm1EYHev"
+Content-Disposition: inline
+In-Reply-To: <20211205162752.14066-1-wangxiang@cdjrlc.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,15 +59,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 11 Mar 2022 09:18:12 -0800 (PST):
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-rc8
+--MKx/StZgcm1EYHev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/77fe1ba90241c2af6f14d53988bf0cd6b9586699
+On Mon, Dec 06, 2021 at 12:27:52AM +0800, Xiang wangx wrote:
+> Delete the redundant word 'to'
+>=20
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 
-Thank you!
+Applied to for-next, thanks!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+--MKx/StZgcm1EYHev
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIrtRgACgkQFA3kzBSg
+KbZYHA//e8ZXtH5u8y9n3Z6p0DvR9q2JoN3W/EK50Hy1rF4He9EThxhq4XytxplO
+LS3JlT9SDg4Gf+6yCVB8dD0pwSZSJ1B0X+loIdhQruDCSJ37wudpW700VMO8ZHL8
+7vPxftqxnMGBPEIiVYXlyKjev0j9t/JdoyEfS9JcdVlVsOISC6Z5ezIHMdzalj8w
+5muYLOzki2vxi127o61lv68UNAk8HbjaQtEaeUrpVr/umSwlGsn6HqZrkYvbgb3Q
+pe8wa/rJS5FlVzTaAnFybm7Y3+/ComPrk/hPHOsus+PqybaVzgz21W+Bw0qXUZ1X
+eRpK7DNTWD9I+8ZT2nVsVaUf1d6eqze5+3m02QMRCVxFHmGNZh3zkyyIH7CKD/3h
+KzmKZei16psbiSD0Z0ORqHWAaU33ciBy6XCufOKj2XijQCRLzbYSJtyFC89sjFbc
+qxDWcahkFwbL+hupfxvnfJRE+K+nzhdvy+wjgPnId/3Vw1R0GLbKhB1VBG6/v2l+
+zMMlrh97hOcqivSczimAGth4cuIsJK2c+Vi88Mj7W/tWjyPmyB2i1LlCDU6YE1jw
+FN/VvctQrEmF9/k1Zqnr+oiiQLc+zU+nOEzEos4Vos2/+xZF9VXg1JjCYul88Eru
+6YP5/0+5T4irbdXOpQ6OO+2uY7ZUQNYrAaCyjgP8kqsBxj/G77Y=
+=6UPT
+-----END PGP SIGNATURE-----
+
+--MKx/StZgcm1EYHev--

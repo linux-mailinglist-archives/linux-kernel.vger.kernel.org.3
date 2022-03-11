@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A584D60E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 230774D60C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348471AbiCKLpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S1348244AbiCKLnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348400AbiCKLoc (ORCPT
+        with ESMTP id S232676AbiCKLnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:44:32 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5503DF954B;
-        Fri, 11 Mar 2022 03:43:24 -0800 (PST)
-X-UUID: c9b0d629f5dc4b6788b236dd64c03b38-20220311
-X-UUID: c9b0d629f5dc4b6788b236dd64c03b38-20220311
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 576709032; Fri, 11 Mar 2022 19:43:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 11 Mar 2022 19:43:18 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Mar 2022 19:43:18 +0800
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Subject: [PATCH v3 12/15] clk: mediatek: Add MT8186 vencsys clock support
-Date:   Fri, 11 Mar 2022 19:42:26 +0800
-Message-ID: <20220311114229.32504-13-chun-jie.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220311114229.32504-1-chun-jie.chen@mediatek.com>
-References: <20220311114229.32504-1-chun-jie.chen@mediatek.com>
+        Fri, 11 Mar 2022 06:43:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C46BDE89;
+        Fri, 11 Mar 2022 03:42:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE32261C5E;
+        Fri, 11 Mar 2022 11:42:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90BC7C340E9;
+        Fri, 11 Mar 2022 11:42:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646998950;
+        bh=5CvOYnGLJwEtyKF2QV/xv7ZYt39LVP/J1z80OCjr3NQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oGehODKlzAIsI2hTz5UUgswcyU2KhqGXevN+De2Cr1JcSjDobAWgm0hLDnakGgcdG
+         H344G/Y4BR/DloUgC/gBHmq5VuW2jA+UV92yZ/Zb5gify9nLXG1q0uwi5G/xBADZ1y
+         icGMaEdnq+J/0d40jLbUBB/IAgh7Na+kLIYmmXQ0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.15.28
+Date:   Fri, 11 Mar 2022 12:42:26 +0100
+Message-Id: <1646998946149237@kroah.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,87 +50,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MT8186 vencsys clock controller which provide clock gate
-control for video encoder.
+I'm announcing the release of the 5.15.28 kernel.
 
-Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/Makefile          |  2 +-
- drivers/clk/mediatek/clk-mt8186-venc.c | 51 ++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/mediatek/clk-mt8186-venc.c
+All users of the 5.15 kernel series must upgrade.
 
-diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 7b0238847881..28aefad8042e 100644
---- a/drivers/clk/mediatek/Makefile
-+++ b/drivers/clk/mediatek/Makefile
-@@ -74,7 +74,7 @@ obj-$(CONFIG_COMMON_CLK_MT8183_VENCSYS) += clk-mt8183-venc.o
- obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o clk-mt8186-topckgen.o clk-mt8186-infra_ao.o \
- 				   clk-mt8186-apmixedsys.o clk-mt8186-imp_iic_wrap.o \
- 				   clk-mt8186-mfg.o clk-mt8186-mm.o clk-mt8186-wpe.o \
--				   clk-mt8186-img.o clk-mt8186-vdec.o
-+				   clk-mt8186-img.o clk-mt8186-vdec.o clk-mt8186-venc.o
- obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
- obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
- obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
-diff --git a/drivers/clk/mediatek/clk-mt8186-venc.c b/drivers/clk/mediatek/clk-mt8186-venc.c
-new file mode 100644
-index 000000000000..2ae9bcfb35de
---- /dev/null
-+++ b/drivers/clk/mediatek/clk-mt8186-venc.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Copyright (c) 2022 MediaTek Inc.
-+// Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-+
-+#include "clk-gate.h"
-+#include "clk-mtk.h"
-+
-+#include <dt-bindings/clock/mt8186-clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/platform_device.h>
-+
-+static const struct mtk_gate_regs venc_cg_regs = {
-+	.set_ofs = 0x4,
-+	.clr_ofs = 0x8,
-+	.sta_ofs = 0x0,
-+};
-+
-+#define GATE_VENC(_id, _name, _parent, _shift)			\
-+	GATE_MTK(_id, _name, _parent, &venc_cg_regs, _shift, &mtk_clk_gate_ops_setclr_inv)
-+
-+static const struct mtk_gate venc_clks[] = {
-+	GATE_VENC(CLK_VENC_CKE0_LARB, "venc_cke0_larb", "top_venc", 0),
-+	GATE_VENC(CLK_VENC_CKE1_VENC, "venc_cke1_venc", "top_venc", 4),
-+	GATE_VENC(CLK_VENC_CKE2_JPGENC, "venc_cke2_jpgenc", "top_venc", 8),
-+	GATE_VENC(CLK_VENC_CKE5_GALS, "venc_cke5_gals", "top_venc", 28),
-+};
-+
-+static const struct mtk_clk_desc venc_desc = {
-+	.clks = venc_clks,
-+	.num_clks = ARRAY_SIZE(venc_clks),
-+};
-+
-+static const struct of_device_id of_match_clk_mt8186_venc[] = {
-+	{
-+		.compatible = "mediatek,mt8186-vencsys",
-+		.data = &venc_desc,
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+
-+static struct platform_driver clk_mt8186_venc_drv = {
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
-+	.driver = {
-+		.name = "clk-mt8186-venc",
-+		.of_match_table = of_match_clk_mt8186_venc,
-+	},
-+};
-+builtin_platform_driver(clk_mt8186_venc_drv);
--- 
-2.18.0
+The updated 5.15.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/admin-guide/hw-vuln/spectre.rst   |   48 +-
+ Documentation/admin-guide/kernel-parameters.txt |    8 
+ Documentation/arm64/cpu-feature-registers.rst   |   29 +
+ Documentation/arm64/elf_hwcaps.rst              |   12 
+ Makefile                                        |    2 
+ arch/arm/include/asm/assembler.h                |   10 
+ arch/arm/include/asm/spectre.h                  |   32 +
+ arch/arm/include/asm/vmlinux.lds.h              |   43 ++
+ arch/arm/kernel/Makefile                        |    2 
+ arch/arm/kernel/entry-armv.S                    |   79 ++++
+ arch/arm/kernel/entry-common.S                  |   24 +
+ arch/arm/kernel/spectre.c                       |   71 ++++
+ arch/arm/kernel/traps.c                         |   65 +++
+ arch/arm/mm/Kconfig                             |   11 
+ arch/arm/mm/proc-v7-bugs.c                      |  208 ++++++++++--
+ arch/arm64/Kconfig                              |    9 
+ arch/arm64/include/asm/assembler.h              |   53 +++
+ arch/arm64/include/asm/cpu.h                    |    1 
+ arch/arm64/include/asm/cpufeature.h             |   29 +
+ arch/arm64/include/asm/cputype.h                |   14 
+ arch/arm64/include/asm/fixmap.h                 |    6 
+ arch/arm64/include/asm/hwcap.h                  |    3 
+ arch/arm64/include/asm/insn.h                   |    1 
+ arch/arm64/include/asm/kvm_host.h               |    5 
+ arch/arm64/include/asm/rwonce.h                 |    4 
+ arch/arm64/include/asm/sections.h               |    5 
+ arch/arm64/include/asm/spectre.h                |    4 
+ arch/arm64/include/asm/sysreg.h                 |   18 +
+ arch/arm64/include/asm/vectors.h                |   73 ++++
+ arch/arm64/include/uapi/asm/hwcap.h             |    3 
+ arch/arm64/include/uapi/asm/kvm.h               |    5 
+ arch/arm64/kernel/cpu_errata.c                  |    7 
+ arch/arm64/kernel/cpufeature.c                  |   28 +
+ arch/arm64/kernel/cpuinfo.c                     |    4 
+ arch/arm64/kernel/entry.S                       |  214 +++++++++----
+ arch/arm64/kernel/image-vars.h                  |    4 
+ arch/arm64/kernel/proton-pack.c                 |  391 +++++++++++++++++++++++-
+ arch/arm64/kernel/vmlinux.lds.S                 |    2 
+ arch/arm64/kvm/arm.c                            |    5 
+ arch/arm64/kvm/hyp/hyp-entry.S                  |    9 
+ arch/arm64/kvm/hyp/nvhe/mm.c                    |    4 
+ arch/arm64/kvm/hyp/vhe/switch.c                 |    9 
+ arch/arm64/kvm/hypercalls.c                     |   12 
+ arch/arm64/kvm/psci.c                           |   18 +
+ arch/arm64/kvm/sys_regs.c                       |    2 
+ arch/arm64/mm/mmu.c                             |   12 
+ arch/arm64/tools/cpucaps                        |    1 
+ arch/x86/include/asm/cpufeatures.h              |    2 
+ arch/x86/include/asm/nospec-branch.h            |   16 
+ arch/x86/kernel/cpu/bugs.c                      |  205 +++++++++---
+ arch/x86/lib/retpoline.S                        |    2 
+ drivers/acpi/ec.c                               |   10 
+ drivers/acpi/sleep.c                            |   14 
+ drivers/block/xen-blkfront.c                    |   63 ++-
+ drivers/net/slip/slip.h                         |    2 
+ drivers/net/xen-netfront.c                      |   54 ++-
+ drivers/scsi/xen-scsifront.c                    |    3 
+ drivers/xen/gntalloc.c                          |   25 -
+ drivers/xen/grant-table.c                       |   71 ++--
+ drivers/xen/pvcalls-front.c                     |    8 
+ drivers/xen/xenbus/xenbus_client.c              |   24 -
+ include/linux/arm-smccc.h                       |    5 
+ include/linux/bpf.h                             |   12 
+ include/xen/grant_table.h                       |   19 +
+ kernel/sysctl.c                                 |    7 
+ net/9p/trans_xen.c                              |   14 
+ tools/arch/x86/include/asm/cpufeatures.h        |    2 
+ 67 files changed, 1799 insertions(+), 358 deletions(-)
+
+Anshuman Khandual (1):
+      arm64: Add Cortex-X2 CPU part definition
+
+Emmanuel Gil Peyrot (1):
+      ARM: fix build error when BPF_SYSCALL is disabled
+
+Greg Kroah-Hartman (2):
+      Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
+      Linux 5.15.28
+
+Huang Pei (1):
+      slip: fix macro redefine warning
+
+James Morse (20):
+      arm64: entry.S: Add ventry overflow sanity checks
+      arm64: spectre: Rename spectre_v4_patch_fw_mitigation_conduit
+      KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
+      arm64: entry: Make the trampoline cleanup optional
+      arm64: entry: Free up another register on kpti's tramp_exit path
+      arm64: entry: Move the trampoline data page before the text page
+      arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
+      arm64: entry: Don't assume tramp_vectors is the start of the vectors
+      arm64: entry: Move trampoline macros out of ifdef'd section
+      arm64: entry: Make the kpti trampoline's kpti sequence optional
+      arm64: entry: Allow the trampoline text to occupy multiple pages
+      arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
+      arm64: entry: Add vectors that have the bhb mitigation sequences
+      arm64: entry: Add macro for reading symbol addresses from the trampoline
+      arm64: Add percpu vectors for EL1
+      arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
+      arm64: Mitigate spectre style branch history side channels
+      KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
+      arm64: Use the clearbhb instruction in mitigations
+      arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+
+Joey Gouly (3):
+      arm64: add ID_AA64ISAR2_EL1 sys register
+      arm64: cpufeature: add HWCAP for FEAT_AFP
+      arm64: cpufeature: add HWCAP for FEAT_RPRES
+
+Josh Poimboeuf (3):
+      x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+      x86/speculation: Warn about Spectre v2 LFENCE mitigation
+      x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
+
+Juergen Gross (11):
+      xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
+      xen/grant-table: add gnttab_try_end_foreign_access()
+      xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
+      xen/netfront: don't use gnttab_query_foreign_access() for mapped status
+      xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
+      xen/gntalloc: don't use gnttab_query_foreign_access()
+      xen: remove gnttab_query_foreign_access()
+      xen/9p: use alloc/free_pages_exact()
+      xen/pvcalls: use alloc/free_pages_exact()
+      xen/gnttab: fix gnttab_end_foreign_access() without page specified
+      xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
+
+Kim Phillips (2):
+      x86/speculation: Use generic retpoline by default on AMD
+      x86/speculation: Update link to AMD speculation whitepaper
+
+Marc Zyngier (1):
+      arm64: Add HWCAP for self-synchronising virtual counter
+
+Nathan Chancellor (2):
+      ARM: Do not use NOCROSSREFS directive with ld.lld
+      arm64: Do not include __READ_ONCE() block in assembly files
+
+Peter Zijlstra (3):
+      x86,bugs: Unconditionally allow spectre_v2=retpoline,amd
+      x86/speculation: Add eIBRS + Retpoline options
+      Documentation/hw-vuln: Update spectre doc
+
+Peter Zijlstra (Intel) (1):
+      x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
+
+Russell King (Oracle) (7):
+      ARM: report Spectre v2 status through sysfs
+      ARM: early traps initialisation
+      ARM: use LOADADDR() to get load address of sections
+      ARM: Spectre-BHB workaround
+      ARM: include unprivileged BPF status in Spectre V2 reporting
+      ARM: fix co-processor register typo
+      ARM: fix build warning in proc-v7-bugs.c
+
+Suzuki K Poulose (1):
+      arm64: Add Neoverse-N2, Cortex-A710 CPU part definition
 

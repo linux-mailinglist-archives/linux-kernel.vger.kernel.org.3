@@ -2,111 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0374D613B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48314D6140
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbiCKMIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S241191AbiCKMLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbiCKMIJ (ORCPT
+        with ESMTP id S238418AbiCKMLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:08:09 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8461B124E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=P9CckRWFX9nuVoHNgZ4r3Zf8OiO94SzMZDbZRwU+9Fg=; b=lpu61ZeCEFFnDww2NqtykEn/Qt
-        Wlqcrw3bu18X0kcFiCk8xEahxdq7msRrxaUDBmO2iGLsf9eBDnwmv4JHKEFU0EDPUuCWO20DsWJD2
-        /j548vMfOJCqKCq00ErBazDfx1ay8SnWnNoyICEgSsAncMki7RJFlwkgl2Cegfm5loRI9uz8hkzug
-        DRPzeyacMzWsMjHYdA2DHUupFbPp+gbd4KVZqtWTp/SE6YLvoHmk9gZ6AUdwgZ8UT/3YT+fkBsfvm
-        vmmQv21M6icZRGzARyVcJTYPS3tOaZYPuHPLPc8QQ06gTOAVh18haU0nRglmVIr9LaAj/df0WqrXI
-        7ZONLQ2g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57792)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nSe2x-0002XR-Vu; Fri, 11 Mar 2022 12:07:05 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nSe2x-0001a9-Mf; Fri, 11 Mar 2022 12:07:03 +0000
-Date:   Fri, 11 Mar 2022 12:07:03 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     patches@arm.linux.org.uk, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: decompressor: do not copy source files while
- building
-Message-ID: <Yis7Z90qvPz+EcTk@shell.armlinux.org.uk>
-References: <20211030175258.1716178-1-masahiroy@kernel.org>
+        Fri, 11 Mar 2022 07:11:07 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F68105A85
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647000603; x=1678536603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n2K56dej/Wn14HY5B3MUed47jvCOE6FkOsivhbZ/lcQ=;
+  b=g8mPj+lOB5/mNnxUu3Bds3XICUWZgJ3D8HumlWOJEbgW4W1m3sYFBiBB
+   2Sp4hsfitBMB1cGMnZTPlYedhJhu1CUBpwWPJCfrKX3uud3A4HpHL3Lvw
+   E/3ay+EM9KgOeWVcmJVHKPmdsRd8gUtT8vpIs97teIgGg4GuvqhoEWgUf
+   xR96athgKHaM1u69Zns7E7vRDJOdG+u0Ia8Q1BXWw4fAEAFtsMYLjID9/
+   +EGEoekGux42G67vrgCmn1uWfsMd2UxpNeStmlZEaHjTjfHfX8P/DNjQK
+   ZQ5R96a7dRm70ysGgMASOrGiIpO6g6fWPV4dKN2zzjh0FIMMn0ZLXnh3S
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="316282679"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="316282679"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 04:10:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="496748695"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 04:10:02 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSe5p-0006Mq-I6; Fri, 11 Mar 2022 12:10:01 +0000
+Date:   Fri, 11 Mar 2022 20:09:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: [toke:xdp-queueing-03 7/9] net/core/filter.c:9727:5: warning: no
+ previous prototype for 'dequeue_btf_struct_access'
+Message-ID: <202203112035.kNSbLE5J-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211030175258.1716178-1-masahiroy@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 31, 2021 at 02:52:58AM +0900, Masahiro Yamada wrote:
-> As commit 7ae4a78daacf ("ARM: 8969/1: decompressor: simplify libfdt
-> builds") stated, copying source files during the build time may not
-> end up with as clean code as expected.
-> 
-> Do similar for the other library files for further cleanups of the
-> Makefile and .gitignore.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
+head:   91c92d46077f70b03fd162128dd3373663d529d4
+commit: 9bae1dad48ccbee1a035d242a407ea54a29ae2c9 [7/9] bpf: Enable direct packet access for dequeue packets
+config: arc-buildonly-randconfig-r002-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112035.kNSbLE5J-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=9bae1dad48ccbee1a035d242a407ea54a29ae2c9
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-03
+        git checkout 9bae1dad48ccbee1a035d242a407ea54a29ae2c9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash net/core/
 
-Hi,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I am now seeing the following every time I run a build:
+All warnings (new ones prefixed by >>):
 
-  GEN     Makefile
-  CALL    .../linux-rmk/scripts/atomic/check-atomics.sh
-  CALL    .../linux-rmk/scripts/checksyscalls.sh
-  CHK     include/generated/compile.h
-  Kernel: arch/arm/boot/Image is ready
-  AS      arch/arm/boot/compressed/lib1funcs.o
-  AS      arch/arm/boot/compressed/ashldi3.o
-  AS      arch/arm/boot/compressed/bswapsdi2.o
-  LD      arch/arm/boot/compressed/vmlinux
-  OBJCOPY arch/arm/boot/zImage
-  Kernel: arch/arm/boot/zImage is ready
+>> net/core/filter.c:9727:5: warning: no previous prototype for 'dequeue_btf_struct_access' [-Wmissing-prototypes]
+    9727 | int dequeue_btf_struct_access(struct bpf_verifier_log *log,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c: In function 'dequeue_btf_struct_access':
+   net/core/filter.c:9736:14: error: implicit declaration of function 'bpf_get_btf_vmlinux' [-Werror=implicit-function-declaration]
+    9736 |         if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
+         |              ^~~~~~~~~~~~~~~~~~~
+>> net/core/filter.c:9736:43: warning: comparison between pointer and integer
+    9736 |         if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
+         |                                           ^~
+>> net/core/filter.c:9744:35: warning: passing argument 1 of 'btf_type_by_id' makes pointer from integer without a cast [-Wint-conversion]
+    9744 |         pkt_type = btf_type_by_id(bpf_get_btf_vmlinux(), xdp_md_btf_ids[0]);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+         |                                   |
+         |                                   int
+   In file included from net/core/filter.c:50:
+   include/linux/btf.h:348:71: note: expected 'const struct btf *' but argument is of type 'int'
+     348 | static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
+         |                                                     ~~~~~~~~~~~~~~~~~~^~~
+   net/core/filter.c:9748:24: error: implicit declaration of function 'btf_struct_access'; did you mean 'dequeue_btf_struct_access'? [-Werror=implicit-function-declaration]
+    9748 |                 return btf_struct_access(log, btf, t, off, size, atype,
+         |                        ^~~~~~~~~~~~~~~~~
+         |                        dequeue_btf_struct_access
+   net/core/filter.c: In function 'dequeue_get_convert_ctx_access':
+   net/core/filter.c:9861:43: warning: comparison between pointer and integer
+    9861 |         if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
+         |                                           ^~
+   cc1: some warnings being treated as errors
 
-In other words, those three objects are always rebuilt even though
-they haven't changed.
 
-I've tried removing the arch/arm/boot/compressed directory in the
-build tree, but that doesn't make any difference.
+vim +/dequeue_btf_struct_access +9727 net/core/filter.c
 
-Running with V=2 shows:
+  9726	
+> 9727	int dequeue_btf_struct_access(struct bpf_verifier_log *log,
+  9728				      const struct btf *btf,
+  9729				      const struct btf_type *t, int off, int size,
+  9730				      enum bpf_access_type atype,
+  9731				      u32 *next_btf_id, enum bpf_type_flag *flag)
+  9732	{
+  9733		const struct btf_type *pkt_type;
+  9734		enum bpf_reg_type reg_type;
+  9735	
+> 9736		if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
+  9737			return -EINVAL;
+  9738	
+  9739		if (atype != BPF_READ) {
+  9740			bpf_log(log, "only read is supported\n");
+  9741			return -EACCES;
+  9742		}
+  9743	
+> 9744		pkt_type = btf_type_by_id(bpf_get_btf_vmlinux(), xdp_md_btf_ids[0]);
+  9745		if (!pkt_type)
+  9746			return -EINVAL;
+  9747		if (t != pkt_type)
+  9748			return btf_struct_access(log, btf, t, off, size, atype,
+  9749						 next_btf_id, flag);
+  9750	
+  9751		switch (off) {
+  9752		case offsetof(struct xdp_md, data):
+  9753			reg_type = PTR_TO_PACKET;
+  9754			break;
+  9755		case offsetof(struct xdp_md, data_meta):
+  9756			reg_type = PTR_TO_PACKET_META;
+  9757			break;
+  9758		case offsetof(struct xdp_md, data_end):
+  9759			reg_type = PTR_TO_PACKET_END;
+  9760			break;
+  9761		default:
+  9762			bpf_log(log, "only access to data, data_meta, and data_end allowed for xdp_md\n");
+  9763			return -EACCES;
+  9764		}
+  9765	
+  9766		if (!__is_valid_xdp_access(off, size)) {
+  9767			bpf_log(log, "invalid xdp_md access off=%d size=%d\n", off, size);
+  9768			return -EINVAL;
+  9769		}
+  9770		return reg_type;
+  9771	}
+  9772	
 
-  AS      arch/arm/boot/compressed/lib1funcs.o - due to lib1funcs.o not in $(tar
-gets)
-  AS      arch/arm/boot/compressed/ashldi3.o - due to ashldi3.o not in $(targets)
-  AS      arch/arm/boot/compressed/bswapsdi2.o - due to bswapsdi2.o not in $(targets)
-
-It looks to me like:
-OBJS    += lib1funcs.o ashldi3.o bswapsdi2.o
-
-in your patch should have been added before:
-
-targets       := vmlinux vmlinux.lds piggy_data piggy.o \
-                 head.o $(OBJS)
-
-Please confirm.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

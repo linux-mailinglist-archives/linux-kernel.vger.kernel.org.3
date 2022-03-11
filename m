@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484184D5E45
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357A74D5E48
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347428AbiCKJVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S237418AbiCKJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbiCKJVn (ORCPT
+        with ESMTP id S1347394AbiCKJVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:21:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5393D1BD051
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:40 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:20:37 -0000
+        Fri, 11 Mar 2022 04:21:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2411BD05A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:41 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:20:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646990438;
+        s=2020; t=1646990439;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vXp/BwMGaXuQDTZ+03zLkKk4vdPZ/zvYpldZ5HRG09E=;
-        b=HJA8k4Vj1HHzbVh/H8mXLSg3x8VHYHJ+YVv/5qaouSf2jqYNjA5hmAlrRyM9A/YJbZQ5jc
-        b8x9oC932F3s4g1D5f+W1nFkcVPuw/0LHPDG1WQWflc9QHiFecvevGGR8nIAUqK7kJM9IV
-        SwlnnM7ZLnlFFb0s1eErXo72NQ/84b9h9GQe+dK1CvX0gL0yKrcCfL4rEMlk785hXsN4S0
-        HHFtY51DD1wTYAj+arb+2Pu6zWwQXLWoDn3I/G3MXyxZnb6THb9w1njKy3nIiDU59PyqQ2
-        BLQycUiXFJSSh7WlErBDFa5hpDru8QqxBGJqJ5BYjhuNqmJTC/FW172RKcd3yg==
+        bh=CyorxRkzoeZ3wohXQIFi8MaZOrCtKqVla5E67Di7TJE=;
+        b=D+vQo2++E266JJ7GWSe7B+rBlzwSGYbW0mN/gnodEIDA//rpjH/jhVYZxbywzD60FQbkHZ
+        e++X+C5paOYqr73U7MoxSeSPhkIGr3/5/9DnoQJcp96AgifV7YFabqmPwKBR59yf3OWVxE
+        RH6fLGuJxqAf0yGb9MgE1g/FaIjOGuVq1pnaWKlfll7F22Xk0OLrxLt9Z3VacVjBWKfsYJ
+        oYktO8mV0hp/UGIG1nACaXQ23VcLH7KC0sKfk5Yc77OWSCnhG3+gsedemiWTG5V7HfHdK+
+        V5cIl7dZyFSUlbaxeZuhcFa1BZFnUQ4n4H8k+TFIazxG+HZ/7Qd5X+5tC5V/qA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646990438;
+        s=2020e; t=1646990439;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vXp/BwMGaXuQDTZ+03zLkKk4vdPZ/zvYpldZ5HRG09E=;
-        b=5y8PyynJ1+2KBuFlsCRYVn/PZh6aXZnkDV9cBIRj7Ho7JCyy6LFhi7mPevtVZv+sztcNBo
-        x46ltUsFL1y8L3Dw==
+        bh=CyorxRkzoeZ3wohXQIFi8MaZOrCtKqVla5E67Di7TJE=;
+        b=WvxIGhDd62vx+2MA2c13+dhHAugUUlCLvO8mfle6JcXR55PyeoCkCCYySIdDut45O0PK/5
+        upRUgf+b+lPBL8AA==
 From:   "irqchip-bot for Hector Martin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Switch to
- irq_domain_create_tree and sparse hwirqs
+Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Add Fast IPI support
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         tglx@linutronix.de
-In-Reply-To: <20220309192123.152028-5-marcan@marcan.st>
-References: <20220309192123.152028-5-marcan@marcan.st>
+In-Reply-To: <20220309192123.152028-4-marcan@marcan.st>
+References: <20220309192123.152028-4-marcan@marcan.st>
 MIME-Version: 1.0
-Message-ID: <164699043776.16921.13619935458323408850.tip-bot2@tip-bot2>
+Message-ID: <164699043863.16921.10704813887293708703.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,244 +66,274 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     7c841f5f6fa3f991cb76b96cd2378337a74011b3
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/7c841f5f6fa3f991cb76b96cd2378337a74011b3
+Commit-ID:     2cf68211664acd2e4bdd1fb66697137b30901981
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/2cf68211664acd2e4bdd1fb66697137b30901981
 Author:        Hector Martin <marcan@marcan.st>
-AuthorDate:    Thu, 10 Mar 2022 04:21:20 +09:00
+AuthorDate:    Thu, 10 Mar 2022 04:21:19 +09:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Fri, 11 Mar 2022 08:59:46 
 
-irqchip/apple-aic: Switch to irq_domain_create_tree and sparse hwirqs
+irqchip/apple-aic: Add Fast IPI support
 
-This allows us to directly use the hardware event number as the hwirq
-number. Since IRQ events have bit 16 set (type=1), FIQs now move to
-starting at hwirq number 0.
+The newer AICv2 present in t600x SoCs does not have legacy IPI support
+at all. Since t8103 also supports Fast IPIs, implement support for this
+first. The legacy IPI code is left as a fallback, so it can be
+potentially used by older SoCs in the future.
 
-This will become more important once multi-die support is introduced in
-a later commit.
+The vIPI code is shared; only the IPI firing/acking bits change for Fast
+IPIs.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220309192123.152028-5-marcan@marcan.st
+Link: https://lore.kernel.org/r/20220309192123.152028-4-marcan@marcan.st
 ---
- drivers/irqchip/irq-apple-aic.c | 71 +++++++++++++++++---------------
- 1 file changed, 39 insertions(+), 32 deletions(-)
+ drivers/irqchip/irq-apple-aic.c | 122 +++++++++++++++++++++++++++----
+ 1 file changed, 109 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 613e0eb..9648038 100644
+index 38091eb..613e0eb 100644
 --- a/drivers/irqchip/irq-apple-aic.c
 +++ b/drivers/irqchip/irq-apple-aic.c
-@@ -68,7 +68,7 @@
+@@ -24,7 +24,7 @@
+  * - Default "this CPU" register view and explicit per-CPU views
+  *
+  * In addition, this driver also handles FIQs, as these are routed to the same
+- * IRQ vector. These are used for Fast IPIs (TODO), the ARMv8 timer IRQs, and
++ * IRQ vector. These are used for Fast IPIs, the ARMv8 timer IRQs, and
+  * performance counters (TODO).
+  *
+  * Implementation notes:
+@@ -52,9 +52,11 @@
+ #include <linux/irqchip.h>
+ #include <linux/irqchip/arm-vgic-info.h>
+ #include <linux/irqdomain.h>
++#include <linux/jump_label.h>
+ #include <linux/limits.h>
+ #include <linux/of_address.h>
+ #include <linux/slab.h>
++#include <asm/cputype.h>
+ #include <asm/exception.h>
+ #include <asm/sysreg.h>
+ #include <asm/virt.h>
+@@ -106,7 +108,6 @@
+ 
+ /*
+  * IMP-DEF sysregs that control FIQ sources
+- * Note: sysreg-based IPIs are not supported yet.
   */
  
- #define AIC_INFO		0x0004
--#define AIC_INFO_NR_HW		GENMASK(15, 0)
-+#define AIC_INFO_NR_IRQ		GENMASK(15, 0)
+ /* Core PMC control register */
+@@ -155,6 +156,10 @@
+ #define SYS_IMP_APL_UPMSR_EL1		sys_reg(3, 7, 15, 6, 4)
+ #define UPMSR_IACT			BIT(0)
  
- #define AIC_CONFIG		0x0010
- 
-@@ -77,7 +77,8 @@
- #define AIC_EVENT_TYPE		GENMASK(31, 16)
- #define AIC_EVENT_NUM		GENMASK(15, 0)
- 
--#define AIC_EVENT_TYPE_HW	1
-+#define AIC_EVENT_TYPE_FIQ	0 /* Software use */
-+#define AIC_EVENT_TYPE_IRQ	1
- #define AIC_EVENT_TYPE_IPI	4
- #define AIC_EVENT_IPI_OTHER	1
- #define AIC_EVENT_IPI_SELF	2
-@@ -160,6 +161,11 @@
- #define MPIDR_CPU(x)			MPIDR_AFFINITY_LEVEL(x, 0)
- #define MPIDR_CLUSTER(x)		MPIDR_AFFINITY_LEVEL(x, 1)
- 
-+#define AIC_IRQ_HWIRQ(x)	(FIELD_PREP(AIC_EVENT_TYPE, AIC_EVENT_TYPE_IRQ) | \
-+				 FIELD_PREP(AIC_EVENT_NUM, x))
-+#define AIC_FIQ_HWIRQ(x)	(FIELD_PREP(AIC_EVENT_TYPE, AIC_EVENT_TYPE_FIQ) | \
-+				 FIELD_PREP(AIC_EVENT_NUM, x))
-+#define AIC_HWIRQ_IRQ(x)	FIELD_GET(AIC_EVENT_NUM, x)
++/* MPIDR fields */
++#define MPIDR_CPU(x)			MPIDR_AFFINITY_LEVEL(x, 0)
++#define MPIDR_CLUSTER(x)		MPIDR_AFFINITY_LEVEL(x, 1)
++
  #define AIC_NR_FIQ		4
  #define AIC_NR_SWIPI		32
  
-@@ -213,7 +219,7 @@ struct aic_irq_chip {
+@@ -173,11 +178,44 @@
+ #define AIC_TMR_EL02_PHYS	AIC_TMR_GUEST_PHYS
+ #define AIC_TMR_EL02_VIRT	AIC_TMR_GUEST_VIRT
+ 
++DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
++
++struct aic_info {
++	int version;
++
++	/* Features */
++	bool fast_ipi;
++};
++
++static const struct aic_info aic1_info = {
++	.version	= 1,
++};
++
++static const struct aic_info aic1_fipi_info = {
++	.version	= 1,
++
++	.fast_ipi	= true,
++};
++
++static const struct of_device_id aic_info_match[] = {
++	{
++		.compatible = "apple,t8103-aic",
++		.data = &aic1_fipi_info,
++	},
++	{
++		.compatible = "apple,aic",
++		.data = &aic1_info,
++	},
++	{}
++};
++
+ struct aic_irq_chip {
  	void __iomem *base;
  	struct irq_domain *hw_domain;
  	struct irq_domain *ipi_domain;
--	int nr_hw;
-+	int nr_irq;
- 
- 	struct aic_info info;
+ 	int nr_hw;
++
++	struct aic_info info;
  };
-@@ -243,18 +249,22 @@ static void aic_ic_write(struct aic_irq_chip *ic, u32 reg, u32 val)
  
- static void aic_irq_mask(struct irq_data *d)
- {
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
- 	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
+ static DEFINE_PER_CPU(uint32_t, aic_fiq_unmasked);
+@@ -386,8 +424,12 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+ 	 */
  
--	aic_ic_write(ic, AIC_MASK_SET + MASK_REG(irqd_to_hwirq(d)),
--		     MASK_BIT(irqd_to_hwirq(d)));
-+	u32 irq = AIC_HWIRQ_IRQ(hwirq);
-+
-+	aic_ic_write(ic, AIC_MASK_SET + MASK_REG(irq), MASK_BIT(irq));
- }
- 
- static void aic_irq_unmask(struct irq_data *d)
- {
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
- 	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
- 
--	aic_ic_write(ic, AIC_MASK_CLR + MASK_REG(d->hwirq),
--		     MASK_BIT(irqd_to_hwirq(d)));
-+	u32 irq = AIC_HWIRQ_IRQ(hwirq);
-+
-+	aic_ic_write(ic, AIC_MASK_CLR + MASK_REG(irq), MASK_BIT(irq));
- }
- 
- static void aic_irq_eoi(struct irq_data *d)
-@@ -281,8 +291,8 @@ static void __exception_irq_entry aic_handle_irq(struct pt_regs *regs)
- 		type = FIELD_GET(AIC_EVENT_TYPE, event);
- 		irq = FIELD_GET(AIC_EVENT_NUM, event);
- 
--		if (type == AIC_EVENT_TYPE_HW)
--			generic_handle_domain_irq(aic_irqc->hw_domain, irq);
-+		if (type == AIC_EVENT_TYPE_IRQ)
-+			generic_handle_domain_irq(aic_irqc->hw_domain, event);
- 		else if (type == AIC_EVENT_TYPE_IPI && irq == 1)
- 			aic_handle_ipi(regs);
- 		else if (event != 0)
-@@ -314,7 +324,7 @@ static int aic_irq_set_affinity(struct irq_data *d,
- 	else
- 		cpu = cpumask_any_and(mask_val, cpu_online_mask);
- 
--	aic_ic_write(ic, AIC_TARGET_CPU + hwirq * 4, BIT(cpu));
-+	aic_ic_write(ic, AIC_TARGET_CPU + AIC_HWIRQ_IRQ(hwirq) * 4, BIT(cpu));
- 	irq_data_update_effective_affinity(d, cpumask_of(cpu));
- 
- 	return IRQ_SET_MASK_OK;
-@@ -344,9 +354,7 @@ static struct irq_chip aic_chip = {
- 
- static unsigned long aic_fiq_get_idx(struct irq_data *d)
- {
--	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
--
--	return irqd_to_hwirq(d) - ic->nr_hw;
-+	return AIC_HWIRQ_IRQ(irqd_to_hwirq(d));
- }
- 
- static void aic_fiq_set_mask(struct irq_data *d)
-@@ -434,11 +442,11 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
- 
- 	if (TIMER_FIRING(read_sysreg(cntp_ctl_el0)))
- 		generic_handle_domain_irq(aic_irqc->hw_domain,
--					  aic_irqc->nr_hw + AIC_TMR_EL0_PHYS);
-+					  AIC_FIQ_HWIRQ(AIC_TMR_EL0_PHYS));
- 
- 	if (TIMER_FIRING(read_sysreg(cntv_ctl_el0)))
- 		generic_handle_domain_irq(aic_irqc->hw_domain,
--					  aic_irqc->nr_hw + AIC_TMR_EL0_VIRT);
-+					  AIC_FIQ_HWIRQ(AIC_TMR_EL0_VIRT));
- 
- 	if (is_kernel_in_hyp_mode()) {
- 		uint64_t enabled = read_sysreg_s(SYS_IMP_APL_VM_TMR_FIQ_ENA_EL2);
-@@ -446,12 +454,12 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
- 		if ((enabled & VM_TMR_FIQ_ENABLE_P) &&
- 		    TIMER_FIRING(read_sysreg_s(SYS_CNTP_CTL_EL02)))
- 			generic_handle_domain_irq(aic_irqc->hw_domain,
--						  aic_irqc->nr_hw + AIC_TMR_EL02_PHYS);
-+						  AIC_FIQ_HWIRQ(AIC_TMR_EL02_PHYS));
- 
- 		if ((enabled & VM_TMR_FIQ_ENABLE_V) &&
- 		    TIMER_FIRING(read_sysreg_s(SYS_CNTV_CTL_EL02)))
- 			generic_handle_domain_irq(aic_irqc->hw_domain,
--						  aic_irqc->nr_hw + AIC_TMR_EL02_VIRT);
-+						  AIC_FIQ_HWIRQ(AIC_TMR_EL02_VIRT));
+ 	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+-		pr_err_ratelimited("Fast IPI fired. Acking.\n");
+-		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
++		if (static_branch_likely(&use_fast_ipi)) {
++			aic_handle_ipi(regs);
++		} else {
++			pr_err_ratelimited("Fast IPI fired. Acking.\n");
++			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
++		}
  	}
  
- 	if ((read_sysreg_s(SYS_IMP_APL_PMCR0_EL1) & (PMCR0_IMODE | PMCR0_IACT)) ==
-@@ -496,9 +504,9 @@ static struct irq_chip fiq_chip = {
- static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
- 			      irq_hw_number_t hw)
+ 	if (TIMER_FIRING(read_sysreg(cntp_ctl_el0)))
+@@ -563,6 +605,22 @@ static const struct irq_domain_ops aic_irq_domain_ops = {
+  * IPI irqchip
+  */
+ 
++static void aic_ipi_send_fast(int cpu)
++{
++	u64 mpidr = cpu_logical_map(cpu);
++	u64 my_mpidr = read_cpuid_mpidr();
++	u64 cluster = MPIDR_CLUSTER(mpidr);
++	u64 idx = MPIDR_CPU(mpidr);
++
++	if (MPIDR_CLUSTER(my_mpidr) == cluster)
++		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx),
++			       SYS_IMP_APL_IPI_RR_LOCAL_EL1);
++	else
++		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx) | FIELD_PREP(IPI_RR_CLUSTER, cluster),
++			       SYS_IMP_APL_IPI_RR_GLOBAL_EL1);
++	isb();
++}
++
+ static void aic_ipi_mask(struct irq_data *d)
  {
--	struct aic_irq_chip *ic = id->host_data;
-+	u32 type = FIELD_GET(AIC_EVENT_TYPE, hw);
- 
--	if (hw < ic->nr_hw) {
-+	if (type == AIC_EVENT_TYPE_IRQ) {
- 		irq_domain_set_info(id, irq, hw, &aic_chip, id->host_data,
- 				    handle_fasteoi_irq, NULL, NULL);
- 		irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(irq)));
-@@ -523,14 +531,14 @@ static int aic_irq_domain_translate(struct irq_domain *id,
- 
- 	switch (fwspec->param[0]) {
- 	case AIC_IRQ:
--		if (fwspec->param[1] >= ic->nr_hw)
-+		if (fwspec->param[1] >= ic->nr_irq)
- 			return -EINVAL;
--		*hwirq = fwspec->param[1];
-+		*hwirq = AIC_IRQ_HWIRQ(fwspec->param[1]);
- 		break;
- 	case AIC_FIQ:
- 		if (fwspec->param[1] >= AIC_NR_FIQ)
- 			return -EINVAL;
--		*hwirq = ic->nr_hw + fwspec->param[1];
-+		*hwirq = AIC_FIQ_HWIRQ(fwspec->param[1]);
- 
- 		/*
- 		 * In EL1 the non-redirected registers are the guest's,
-@@ -539,10 +547,10 @@ static int aic_irq_domain_translate(struct irq_domain *id,
- 		if (!is_kernel_in_hyp_mode()) {
- 			switch (fwspec->param[1]) {
- 			case AIC_TMR_GUEST_PHYS:
--				*hwirq = ic->nr_hw + AIC_TMR_EL0_PHYS;
-+				*hwirq = AIC_FIQ_HWIRQ(AIC_TMR_EL0_PHYS);
- 				break;
- 			case AIC_TMR_GUEST_VIRT:
--				*hwirq = ic->nr_hw + AIC_TMR_EL0_VIRT;
-+				*hwirq = AIC_FIQ_HWIRQ(AIC_TMR_EL0_VIRT);
- 				break;
- 			case AIC_TMR_HV_PHYS:
- 			case AIC_TMR_HV_VIRT:
-@@ -900,16 +908,15 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 	aic_irqc = irqc;
- 
- 	info = aic_ic_read(irqc, AIC_INFO);
--	irqc->nr_hw = FIELD_GET(AIC_INFO_NR_HW, info);
-+	irqc->nr_irq = FIELD_GET(AIC_INFO_NR_IRQ, info);
- 
- 	if (irqc->info.fast_ipi)
- 		static_branch_enable(&use_fast_ipi);
- 	else
- 		static_branch_disable(&use_fast_ipi);
- 
--	irqc->hw_domain = irq_domain_create_linear(of_node_to_fwnode(node),
--						   irqc->nr_hw + AIC_NR_FIQ,
--						   &aic_irq_domain_ops, irqc);
-+	irqc->hw_domain = irq_domain_create_tree(of_node_to_fwnode(node),
-+						 &aic_irq_domain_ops, irqc);
- 	if (WARN_ON(!irqc->hw_domain)) {
- 		iounmap(irqc->base);
- 		kfree(irqc);
-@@ -928,11 +935,11 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 	set_handle_irq(aic_handle_irq);
- 	set_handle_fiq(aic_handle_fiq);
- 
--	for (i = 0; i < BITS_TO_U32(irqc->nr_hw); i++)
-+	for (i = 0; i < BITS_TO_U32(irqc->nr_irq); i++)
- 		aic_ic_write(irqc, AIC_MASK_SET + i * 4, U32_MAX);
--	for (i = 0; i < BITS_TO_U32(irqc->nr_hw); i++)
-+	for (i = 0; i < BITS_TO_U32(irqc->nr_irq); i++)
- 		aic_ic_write(irqc, AIC_SW_CLR + i * 4, U32_MAX);
--	for (i = 0; i < irqc->nr_hw; i++)
-+	for (i = 0; i < irqc->nr_irq; i++)
- 		aic_ic_write(irqc, AIC_TARGET_CPU + i * 4, 1);
- 
- 	if (!is_kernel_in_hyp_mode())
-@@ -948,7 +955,7 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
- 	vgic_set_kvm_info(&vgic_info);
- 
- 	pr_info("Initialized with %d IRQs, %d FIQs, %d vIPIs\n",
--		irqc->nr_hw, AIC_NR_FIQ, AIC_NR_SWIPI);
-+		irqc->nr_irq, AIC_NR_FIQ, AIC_NR_SWIPI);
- 
- 	return 0;
+ 	u32 irq_bit = BIT(irqd_to_hwirq(d));
+@@ -588,8 +646,12 @@ static void aic_ipi_unmask(struct irq_data *d)
+ 	 * If a pending vIPI was unmasked, raise a HW IPI to ourselves.
+ 	 * No barriers needed here since this is a self-IPI.
+ 	 */
+-	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit)
+-		aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
++	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
++		if (static_branch_likely(&use_fast_ipi))
++			aic_ipi_send_fast(smp_processor_id());
++		else
++			aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
++	}
  }
+ 
+ static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+@@ -617,8 +679,12 @@ static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+ 		smp_mb__after_atomic();
+ 
+ 		if (!(pending & irq_bit) &&
+-		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit))
+-			send |= AIC_IPI_SEND_CPU(cpu);
++		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
++			if (static_branch_likely(&use_fast_ipi))
++				aic_ipi_send_fast(cpu);
++			else
++				send |= AIC_IPI_SEND_CPU(cpu);
++		}
+ 	}
+ 
+ 	/*
+@@ -650,8 +716,16 @@ static void aic_handle_ipi(struct pt_regs *regs)
+ 	/*
+ 	 * Ack the IPI. We need to order this after the AIC event read, but
+ 	 * that is enforced by normal MMIO ordering guarantees.
++	 *
++	 * For the Fast IPI case, this needs to be ordered before the vIPI
++	 * handling below, so we need to isb();
+ 	 */
+-	aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
++	if (static_branch_likely(&use_fast_ipi)) {
++		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
++		isb();
++	} else {
++		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
++	}
+ 
+ 	/*
+ 	 * The mask read does not need to be ordered. Only we can change
+@@ -679,7 +753,8 @@ static void aic_handle_ipi(struct pt_regs *regs)
+ 	 * No ordering needed here; at worst this just changes the timing of
+ 	 * when the next IPI will be delivered.
+ 	 */
+-	aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
++	if (!static_branch_likely(&use_fast_ipi))
++		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
+ }
+ 
+ static int aic_ipi_alloc(struct irq_domain *d, unsigned int virq,
+@@ -776,10 +851,15 @@ static int aic_init_cpu(unsigned int cpu)
+ 	/*
+ 	 * Always keep IPIs unmasked at the hardware level (except auto-masking
+ 	 * by AIC during processing). We manage masks at the vIPI level.
++	 * These registers only exist on AICv1, AICv2 always uses fast IPIs.
+ 	 */
+ 	aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
+-	aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
+-	aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
++	if (static_branch_likely(&use_fast_ipi)) {
++		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
++	} else {
++		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
++		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
++	}
+ 
+ 	/* Initialize the local mask state */
+ 	__this_cpu_write(aic_fiq_unmasked, 0);
+@@ -799,6 +879,7 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 	void __iomem *regs;
+ 	u32 info;
+ 	struct aic_irq_chip *irqc;
++	const struct of_device_id *match;
+ 
+ 	regs = of_iomap(node, 0);
+ 	if (WARN_ON(!regs))
+@@ -808,12 +889,24 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 	if (!irqc)
+ 		return -ENOMEM;
+ 
+-	aic_irqc = irqc;
+ 	irqc->base = regs;
+ 
++	match = of_match_node(aic_info_match, node);
++	if (!match)
++		return -ENODEV;
++
++	irqc->info = *(struct aic_info *)match->data;
++
++	aic_irqc = irqc;
++
+ 	info = aic_ic_read(irqc, AIC_INFO);
+ 	irqc->nr_hw = FIELD_GET(AIC_INFO_NR_HW, info);
+ 
++	if (irqc->info.fast_ipi)
++		static_branch_enable(&use_fast_ipi);
++	else
++		static_branch_disable(&use_fast_ipi);
++
+ 	irqc->hw_domain = irq_domain_create_linear(of_node_to_fwnode(node),
+ 						   irqc->nr_hw + AIC_NR_FIQ,
+ 						   &aic_irq_domain_ops, irqc);
+@@ -845,6 +938,9 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 	if (!is_kernel_in_hyp_mode())
+ 		pr_info("Kernel running in EL1, mapping interrupts");
+ 
++	if (static_branch_likely(&use_fast_ipi))
++		pr_info("Using Fast IPIs");
++
+ 	cpuhp_setup_state(CPUHP_AP_IRQ_APPLE_AIC_STARTING,
+ 			  "irqchip/apple-aic/ipi:starting",
+ 			  aic_init_cpu, NULL);

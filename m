@@ -2,227 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC81B4D6B0F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B854D6B2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiCKXcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S229658AbiCKXez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 18:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiCKXcl (ORCPT
+        with ESMTP id S229616AbiCKXex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:32:41 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044901BB72D
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:31:33 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id d62so11861833iog.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=Crfg5p3u8iOjVMjNQSoRE5tSoR+VziHj4ctmIY8Vq5Y=;
-        b=OFv3TefVhiVY/87I7RmhlHM9WNvjDUVHqD2l7pOU+AOp4Eiq7vZYluTW8Z2exjLlht
-         /jFRA3c/ExxJXiFVZGeDHhVa8ULbUCj1KZ6R2q6LnoUG9FbkARoZVErbKfvdo6rBiCib
-         vOiwv6K5k4KSKLp18hLgwS/AW8LJspgsZY9YgJ23zF5DQHuvq9uLYQsa5eHH6wpeYeEq
-         z95A6Zrr0ysM9dWENLCDlTmrzdolg0jregmDNn074G+4dJeB4v6QEKQ7ma+DFy3Pvr6W
-         8t8IFr45/nOOFvKkiuu9H8ugcH7roeEGDkVx5C+ymy67xV3nAu6N7X+HNhDihzg3AANP
-         6xtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=Crfg5p3u8iOjVMjNQSoRE5tSoR+VziHj4ctmIY8Vq5Y=;
-        b=VdaEQD2y9EfDatxkisrYxZyEAIuuk/4HDkFjsaQ22HG+nY18b6FftVKqvwoEWqyk3V
-         k0LolCHUfqXkTiXYxHDd2VwqBzonZwGWahMq5bdwIIa1DhxZSkkyA/4FTXGuK9iQM2Rc
-         tuo+vKYkA2mlpkxqfS+s5USrdSE0eBhcn6YsqscLtfNI+Zv5BHuc092zbeMmj0QJcaZo
-         hscw/G082tNLsoK3p5zyq8huloMRMUBhAgNfXy2gLVRt3I2DiWXaVn7vTIFR+I9fSJv8
-         Yzhu3o8G0DjmmhA3f3pJ6NPXbGG3nQS+1qqKvjrbdgg4hHg9cvoIhr95Ly844KSoAcbT
-         FJcw==
-X-Gm-Message-State: AOAM531Lcj5je/JuWcBM5rXOkZaUm+tKlherWeZE8GZuPf8Fe9VurS8Z
-        gUZh/9nHsz5zZ526y7X3lRZ9ZIUlD/Zqx4vr+v4=
-X-Google-Smtp-Source: ABdhPJw2dTC/Q+jNz8Q1iPs7I5wa9Y9NLalzPXgZnBmVEV5rYgKugqoxoH82xz+H6yi5k+S3SrapbwqsFcQkvUnj9K8=
-X-Received: by 2002:a05:6638:204:b0:319:1b34:1c57 with SMTP id
- e4-20020a056638020400b003191b341c57mr10420432jaq.80.1647041492205; Fri, 11
- Mar 2022 15:31:32 -0800 (PST)
+        Fri, 11 Mar 2022 18:34:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F1D17F6B0;
+        Fri, 11 Mar 2022 15:33:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD48160EED;
+        Fri, 11 Mar 2022 23:33:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A910C340E9;
+        Fri, 11 Mar 2022 23:33:45 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 18:33:43 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     mhiramat@kernel.org, anders.roxell@linaro.org,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] user_events: Use alloc_pages instead of kzalloc for
+ register pages
+Message-ID: <20220311183343.4d8c94a5@gandalf.local.home>
+In-Reply-To: <20220311223028.1865-1-beaub@linux.microsoft.com>
+References: <20220311223028.1865-1-beaub@linux.microsoft.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220310061909.20166-1-sedat.dilek@gmail.com> <Yis41ykyJq1fHYSx@krava>
-In-Reply-To: <Yis41ykyJq1fHYSx@krava>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 12 Mar 2022 00:30:56 +0100
-Message-ID: <CA+icZUVzQwGSS9hcMMP-HeOAFYxrMH9oCRbxLEdcEUwEJ8Wa3Q@mail.gmail.com>
-Subject: Re: [PATCH] tools: feature/test-libperl.c: Sync PERL_EMBED_CCOPTS
- with perf
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>, John Keeping <john@metanate.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 12:56 PM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Thu, Mar 10, 2022 at 07:19:09AM +0100, Sedat Dilek wrote:
-> > When trying to build perf with a LLVM/Clang toolchain people see errors
-> > when testing for libperl feature.
-> >
-> > Jiri reports:
-> >
-> > > I'm getting some other lto related error:
-> > >
-> > >         $ cat test-libperl.make.output
-> > >         clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-> > >
-> >
-> > The reason is PERL_EMBED_CCOPTS is defined in two places:
-> >
-> > tools/build/feature/Makefile
-> > tools/perf/Makefile.config
-> >
-> > As an result FLAGS_PERL_EMBED is set differently.
-> >
-> > For building perf '-ffat-lto-objects' is filtered-out:
-> >
-> > $ git grep ffat-lto-objects tools/perf/
-> > tools/perf/Makefile.config:  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> >
-> > Sync PERL_EMBED_CCOPTS in tools/build/feature/Makefile to fix this.
-> >
-> > For a minimal fix for Linux v5.17 this here was preferred by Arnaldo.
-> >
-> > Link: https://marc.info/?t=164646683300002&r=1&w=2
-> > Reported-by: Jiri Olsa <olsajiri@gmail.com>
-> > Reported-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> > Tested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> > Suggested-by: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> > Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > ---
-> >  tools/build/feature/Makefile | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > index 1480910c792e..869073cf8449 100644
-> > --- a/tools/build/feature/Makefile
-> > +++ b/tools/build/feature/Makefile
-> > @@ -218,6 +218,7 @@ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
-> >  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
-> >  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-> >  PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> > +PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
->
-> it looks like this is not enough, at least on fedora 35
->
-> I had to add changes below on top of your patch, it fixed the perl
-> feature detection and perf build itself, but I'm still getting error
-> with perf/python.so:
->
+On Fri, 11 Mar 2022 14:30:28 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-Correct. This patch simply fixes the perl feature detection.
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 2b5e9fdb63a0..59c900789757 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1587,16 +1587,20 @@ static void set_page_reservations(bool set)
+>  static int __init trace_events_user_init(void)
+>  {
+>  	int ret;
+> +	struct page *register_pages;
 
->         $ CC=clang make JOBS=1
->         ...
->           GEN     python/perf.so
->         python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: file not recognized: file format not recognized
->         clang-13: error: linker command failed with exit code 1 (use -v to see invocation)
->         error: command 'clang' failed with exit status 1
->         cp: cannot stat 'python_ext_build/lib/perf*.so': No such file or directory
->
-> with:
->
->         $ file python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o
->         python_ext_build/tmp/home/jolsa/kernel/linux-perf/tools/perf/util/python.o: LLVM IR bitcode
->
-> do you get clean compile with python lang enabled?
->
-> jirka
->
->
-> ---
-> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> index 869073cf8449..86df0fe11ee5 100644
-> --- a/tools/build/feature/Makefile
-> +++ b/tools/build/feature/Makefile
-> @@ -217,9 +217,9 @@ strip-libs = $(filter-out -l%,$(1))
->  PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
->  PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
->  PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
-> -PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
-> +PERL_EMBED_CCOPTS := $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
->  PERL_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> -FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
-> +FLAGS_PERL_EMBED  := $(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
->
->  $(OUTPUT)test-libperl.bin:
->         $(BUILD) $(FLAGS_PERL_EMBED)
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 96ad944ca6a8..38b0b0e7a168 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -778,7 +778,7 @@ else
->    PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
->    PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
->    PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
-> -  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
-> +  PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects, $(PERL_EMBED_CCOPTS)) -Wno-unused-command-line-argument -Wno-compound-token-split-by-macro
->    PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
->    FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
->
+The int ret should come last.
 
-I fixed that differently by (see [1]),
+>  
+>  	/* Zero all bits beside 0 (which is reserved for failures) */
+>  	bitmap_zero(page_bitmap, MAX_EVENTS);
+>  	set_bit(0, page_bitmap);
+>  
+> -	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
+> +	register_pages = alloc_pages(GFP_KERNEL | __GFP_ZERO,
+> +				     get_order(MAX_EVENTS));
+>  
+> -	if (!register_page_data)
+> +	if (!register_pages)
+>  		return -ENOMEM;
+>  
+> +	register_page_data = page_address(register_pages);
+> +
+>  	set_page_reservations(true);
+>  
+>  	ret = create_user_tracefs();
+> @@ -1604,7 +1608,7 @@ static int __init trace_events_user_init(void)
+>  	if (ret) {
+>  		pr_warn("user_events could not register with tracefs\n");
+>  		set_page_reservations(false);
+> -		kfree(register_page_data);
+> +		__free_pages(register_pages, get_order(MAX_EVENTS));
+>  		return ret;
+>  	}
+>  
 
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -213,7 +213,7 @@ endif
+I tried it slightly differently. Why waist bits if MAX_EVENTS is greater
+than the order. That is, make MAX_EVENTS depend on the order, not the other
+way around.
 
-# Treat warnings as errors unless directed not to
-ifneq ($(WERROR),0)
--  CORE_CFLAGS += -Werror
-+  CORE_CFLAGS += -Werror -Wno-compound-token-split-by-macro
-  CXXFLAGS += -Werror
-  HOSTCFLAGS += -Werror
-endif
+-- Steve
 
-This was sufficient here to build perf successfully.
-And maybe ifdef-ed for clang?
-
-But all this is a follow-up?
-
-[1] https://lore.kernel.org/lkml/CA+icZUUCO+gOPLZumu_rTOJz1_v7gRRYVzzEZ+RZPOZBmkqCQg@mail.gmail.com/
-
-> diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-> index 483f05004e68..cfbb03babf63 100644
-> --- a/tools/perf/util/setup.py
-> +++ b/tools/perf/util/setup.py
-> @@ -43,7 +43,7 @@ class install_lib(_install_lib):
->
->  cflags = getenv('CFLAGS', '').split()
->  # switch off several checks (need to be at the end of cflags list)
-> -cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-DPYTHON_PERF' ]
-> +cflags += ['-fno-strict-aliasing', '-Wno-write-strings', '-Wno-unused-parameter', '-Wno-redundant-decls', '-Wno-ignored-optimization-argument', '-DPYTHON_PERF' ]
->  if not cc_is_clang:
->      cflags += ['-Wno-cast-function-type' ]
->
-
-Cannot say much to that.
-
-Do we want to fix perf building with LLVM/Clang for Linux v5.17 final or later?
-Arnaldo?
-
-- Sedat -
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index 4febc1d6ae72..6941d0794347 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -30,9 +30,10 @@
+ 
+ /*
+  * Limits how many trace_event calls user processes can create:
+- * Must be multiple of PAGE_SIZE.
++ * Must be a power of two of PAGE_SIZE.
+  */
+-#define MAX_PAGES 1
++#define MAX_PAGE_ORDER 0
++#define MAX_PAGES (1 << MAX_PAGE_ORDER)
+ #define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
+ 
+ /* Limit how long of an event name plus args within the subsystem. */
+@@ -1606,41 +1607,25 @@ static int create_user_tracefs(void)
+ 	return -ENODEV;
+ }
+ 
+-static void set_page_reservations(bool set)
+-{
+-	int page;
+-
+-	for (page = 0; page < MAX_PAGES; ++page) {
+-		void *addr = register_page_data + (PAGE_SIZE * page);
+-
+-		if (set)
+-			SetPageReserved(virt_to_page(addr));
+-		else
+-			ClearPageReserved(virt_to_page(addr));
+-	}
+-}
+-
+ static int __init trace_events_user_init(void)
+ {
++	struct page pages;
+ 	int ret;
+ 
+ 	/* Zero all bits beside 0 (which is reserved for failures) */
+ 	bitmap_zero(page_bitmap, MAX_EVENTS);
+ 	set_bit(0, page_bitmap);
+ 
+-	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
+-
+-	if (!register_page_data)
++	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
++	if (!pages)
+ 		return -ENOMEM;
+-
+-	set_page_reservations(true);
++	register_page_data = page_address(pages);
+ 
+ 	ret = create_user_tracefs();
+ 
+ 	if (ret) {
+ 		pr_warn("user_events could not register with tracefs\n");
+-		set_page_reservations(false);
+-		kfree(register_page_data);
++		free_page((unsigned long)register_page_data);
+ 		return ret;
+ 	}
+ 

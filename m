@@ -2,236 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7574D6569
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E824D656E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiCKPzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S1349966AbiCKP4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350013AbiCKPzW (ORCPT
+        with ESMTP id S1350119AbiCKP4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:55:22 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6972B151696
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:53:47 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j26so13609420wrb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:53:47 -0800 (PST)
+        Fri, 11 Mar 2022 10:56:34 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133E14A6E2;
+        Fri, 11 Mar 2022 07:54:43 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BFp6Yr031164;
+        Fri, 11 Mar 2022 15:54:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=6HIG7rNoQrih35D4U3E44J0jVh4DptJLHecmpDFx3kA=;
+ b=DWj0EK2HGBqwG4VSHpTlrGRD2xBdqMMxhA6xAfz2fB2wbFWd3smm7tHujYYwXNhxXc4P
+ 4g3M9Q3vXn2fUPr0gBbtleX9Tm7sBzUElTdOjqT+LbE24Of40k7WFjmv+TEjMxxAkJ2p
+ SOXB9KKYOlKYm0QFEvIapkCvOGgmqP2fCQKdTGV6KRRgzf84hyCy6elZCpeabzsO8GtS
+ l7i7dpugPyk6tvZy/t2B9CTmlbpuCHBkdtw3sXkxyQC72+zW2QZtvFqPv3zvhSSDGa/2
+ c0UyD5H3whB39JqDpr2eQkGnomBCVRj1nbhbcOFjPu/d83lmH0uIdM37b0D6be3kYhBK PQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxn2ska0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 15:54:42 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BFjkYM056316;
+        Fri, 11 Mar 2022 15:54:41 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+        by aserp3030.oracle.com with ESMTP id 3ekwwe5yvu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 15:54:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JWW73lq7OcDxyKHz5Hqfb0sGDGUG4deuTg/TJyd5To47V0J8qp5BxKNngpTOhk1x9TBThPOhJ6HSxX5u5/Mo1Vh/54ISoQK+vVntK+CJjolBF31JE/qRxxzc2r0O/LmpEp2+EagIEZUeD4laPvbDXkETdHMPEBBfePoSwBCDcFqu/9zpBoDMRgRRD52Yk1ZcXiM3LIlC4DlzT74dMkvne5K9o8uLjjisO1EKkANogXl5vlEU6I82QI3q+raBpVGLIXnyCE+g8K1EWY0VUt4q0Sii99yRGh5BBDPcrhDKoDh39svoQiXFq0keToRYt7GWr5bN/Dz/8gJzQsW0BP25BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6HIG7rNoQrih35D4U3E44J0jVh4DptJLHecmpDFx3kA=;
+ b=Uu2xokAyyYPCD0oDfD5i9IXPuxhFBVmzQIHRbvpS7g+C1pxaJkzlULCkwmA1hg+/Fb9O3tnzqe74pzwpELHimqi6llKFKNU+ZilUYyBeY5jreQ9ob7HwXqHvQsSyuktKTb82qBCrxPmPViSvmJsm6rHBoIrXrtAtzQyVpkFe2xaW/oJKX7ViJJ51CiDf1Q4De7AC1VOteG8kB6MuqO3VFZVk5100nmE3SpefIARl/nQhZLTjzpKiVH/qhvjlg6t042UvBqvQesHc+2SwVQSQg2XR4hNuC0lw9F67ZTDWV11bzKARJ51JIutY6w38xwAkjpK+pdhPCGbGqHW9y3Ux3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t/+HHt1c39G7ywBZBGDd9qnAziedqgoDMlKoB6IGpeA=;
-        b=Nmim9p+XStxDNEaAN2FZW4KcwpMbcvvn1QwY/w4Aq1UMFUvc2CXbAeK9pAjDvTZjLr
-         U2Fi3+LTIeGd1AI6eyYr/UdIJN9P4TrMddw/wo0AofryrnTNa8SP0Cu1dHkZIoC0RP8w
-         ctaBGADjWmKJPz5pRxDl8kXK5zOS8CTjKfPtPLAbONBQIv+hSFeuc88KZ49pn8tGn6C/
-         hVGRFNrvVcHqUGeOz6tcHkx69ycpl8HBNhoZYGNrCSIFzz2h3ksKQepD74eH04iNUy9R
-         ewMueU7+0BL+LoxE98tG+eTHhCUCERkNTr5cgzJiJyDXboi/u6bpCTu+u4kAMHzSxITO
-         nCpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t/+HHt1c39G7ywBZBGDd9qnAziedqgoDMlKoB6IGpeA=;
-        b=aBENrAsmaqSAz3g/soIAzp4d0SWVzX4oSaFaEj081c96mbvJD8o8Vzd5GFfy2v42xL
-         kLBa+9qHLjrFxeg7LtoR7Y0xU1dvtcU0HC7cQOPCNHXfd9+2le2DcivZK8s50o+GVjd5
-         LlaQvKRMxUpFeR2GHzPRgFrZodpG63Y5cQf9Q5ih567R69a3moPsQk8+/xFFNMy+2IdY
-         6HLxX5W/8JLS0jt6V8GQIPeDdl9phqsN/5fVzZksiZ8ThO/b538vuwlU9Bv/pe2g5mus
-         lEanxG/YCpa1roUK/0DeMhGyn3UMHGElVEbgM6SmNeereVPmyl/FYGFRxUasPSc40LyH
-         265g==
-X-Gm-Message-State: AOAM532k6meMN1OpfDOHTec9w6Q2F82D9xGhueizOeXHrEPIBg0NybZj
-        z2r5DAX1HvYGjB2i/xbBzN27Q5RH8F0sGWm9JKXjjg==
-X-Google-Smtp-Source: ABdhPJzHdL8dpugKSarloUyddBzEwPBmBD6XrTKj9A429IAY747PSW744PUT05MeeLe5m+lw7jp+8qBYsHYD7XtjO6Y=
-X-Received: by 2002:adf:e108:0:b0:1ef:97ad:5372 with SMTP id
- t8-20020adfe108000000b001ef97ad5372mr7705296wrz.658.1647014025860; Fri, 11
- Mar 2022 07:53:45 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6HIG7rNoQrih35D4U3E44J0jVh4DptJLHecmpDFx3kA=;
+ b=VvC0dIwGbDZPI8LD14s3xTM/GcjrOi0qkayOCwZr2eSew4mXWvNRwr4FuNoO8XW+Zlu8mU5hYMc4XAHQaHSZsCDIxpKHIno6IfLnQ9V7pcyYlGhc1NMWNmrMo4bNmKxmyfKWIyr0cWfIjPhB+O+mAULkEaG/Pwt+w69lAHTfj1c=
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com (2603:10b6:5:3a1::23)
+ by MWHPR10MB1677.namprd10.prod.outlook.com (2603:10b6:301:a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.23; Fri, 11 Mar
+ 2022 15:54:39 +0000
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::1422:288c:c410:93bb]) by DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::1422:288c:c410:93bb%3]) with mapi id 15.20.5061.025; Fri, 11 Mar 2022
+ 15:54:39 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] remove reference to the removed config NFSD_V3
+Thread-Topic: [PATCH] remove reference to the removed config NFSD_V3
+Thread-Index: AQHYNVv43IyubEb7xESELjAt08Pu/qy6VecA
+Date:   Fri, 11 Mar 2022 15:54:39 +0000
+Message-ID: <54AB09CE-9345-4C8C-84F8-FA5C8D9F9EB9@oracle.com>
+References: <20220311143941.9628-1-lukas.bulwahn@gmail.com>
+ <9A70DCDF-2F9D-4020-B936-380D919421D4@oracle.com>
+In-Reply-To: <9A70DCDF-2F9D-4020-B936-380D919421D4@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.120.0.1.13)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ef7385ad-78ce-4891-b839-08da03777309
+x-ms-traffictypediagnostic: MWHPR10MB1677:EE_
+x-microsoft-antispam-prvs: <MWHPR10MB1677623D931525EBC2F7D91A930C9@MWHPR10MB1677.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ScLbG7apisz2GHV596rFoUtnP/s+7RP7ezoEDLAvSrJv/WkE0NQKPH7Nc1xE01sTDnOHg2vZnBnKOGqfqoM6dO0MApHzDOIl9HUGhdz0j8GBl7kBoN1fbK1M6R5IG9vhCyctX770KDJxPVxceS9UWTflqne/eYhJzIezA8mkZJaal20Huy1rALj2m8qMcIuSLg7lChD4JMEKeaUPUy92LwfAmo2JTAopBmZVDesqNpGj9rebfQPELGePOXXSXUgUgjZrCG7tOy4XmiiqSDVBqcgZBgGaoUMCRa78emL+mGeq7qSO/9jvg928RvOMgvJHwLstLgFEvF67Ov6EdavTv47l52xscpud+QazCbBG7LzGDNqk2OmxGp6bicj/CbGVAaRBvYJwKYOhNRKnLH8JDWR3yK4rnw2F3fO9zCIWGLboP2Y9gnamcYQLIj5IUKEZVL78xKaF3qO3HfrILrS9UC8D8t0tFXmGuf2PKuVl8gJ2N39QLSO9rW3TDRr1TpI3o6YyEmY8/rRGdoQJGA02d0wZ633AXZ4eNlpMOLLiX2V8omiNN6ixOkPSRHbEFb3L6uKfDOKv0gVxYSbgSRZ9IHcJdmfx3oN4a5cfjBXNRoXPhAOERxMtArlbFYNcxvEqxy9pJbV8TGeK+wvOmZiztIci9DAxO7fR9t/J+vOGbfzQpSrnZziGQs46ajKW3DR+iPAYZunk7sneAho8HqAiOCKgm/Dns11DuuwBBQE6GtYIkZDA2F9+5RJX5C2YGb5w
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5134.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66556008)(66446008)(66946007)(4326008)(6486002)(91956017)(8676002)(76116006)(33656002)(5660300002)(38070700005)(8936002)(508600001)(86362001)(71200400001)(2616005)(64756008)(6512007)(36756003)(316002)(122000001)(54906003)(6916009)(53546011)(83380400001)(6506007)(2906002)(38100700002)(26005)(186003)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?01L/6RMCw79U0wA+SmkMo7hswWlPfDSVRZAps0AU1v9wN2CCjYlbUOisPZKe?=
+ =?us-ascii?Q?aM1dQ0HTtyZ8FVgiwVuys23u0SiQHm04IEErGMGJsPatAjnrFXpGtl6THhsJ?=
+ =?us-ascii?Q?qC8mGyr3jpeDVapPJzIrIn26w9hP6A/E6shzxgqgZ359E8iPS2jzl8Fvpp/Y?=
+ =?us-ascii?Q?Y0nuTa0Qt0z5ZE+PJC3AigIBZOj4fQ+OURXxxNjiHdtchMA0WaIfK8t3H/Kd?=
+ =?us-ascii?Q?3XkmiMcbqB/RJENz2+4gUCXHH9bXZE8mh8Ttn+PT9p60dgUCZtEShHPHW7nW?=
+ =?us-ascii?Q?3tVsD1kL4orvgV8ZILLPNhi0GR9/CmrNXlU3fyrk6oMWAroQYZZ8YOzJc/69?=
+ =?us-ascii?Q?XCCsI+2ccKZb68eTIOi7qCIX+A5x4kjO9BDWNtlY9vwBaO3ZYadpavvJKduA?=
+ =?us-ascii?Q?0AV0fRbVd+dN+rosXJNmZnaAk9RJrkMYMSnXKaN8Z0K/rwMg4E/knZ7WNanp?=
+ =?us-ascii?Q?tiKxsMTX41EaiCzu13MKI8KnPg6QpYKHT7XRu/paZJ6OsHPNEO63mvdF0jVc?=
+ =?us-ascii?Q?ftcQhu5pdqKzSDvKojYl0lK72Y2e8H/qjSFZdwv82ZP9WdsAUKu1HWlXiYeS?=
+ =?us-ascii?Q?+oiEamwOy8JZwZUG8yX+VbPHlS8XQDiC951lqtj+HZtKSJbtqfRU8fYFXDEE?=
+ =?us-ascii?Q?QfbPHr8RBtEhNCQ7ND13D04nDewTnqbbUSSoAd+b1Sthxzknmz5KMS64kcl6?=
+ =?us-ascii?Q?C01QRktnhO7myMgxB9eRTXuMPFiH70ka9O/scFYP/vA1GUZbrfjVjsEmnhX1?=
+ =?us-ascii?Q?eoy8zzjmRvycdSv9YEriLAE/QTQQnohediDgX7M5NIMgNG9gVkwVODPD59+q?=
+ =?us-ascii?Q?nmNYxlcV2rrNXJcHwY45Qlx5xC4DpDv9Q6B2hxCywUQomWGGPANvLrrbBMEN?=
+ =?us-ascii?Q?1l0mUxqER6lqCE52voU3erb9f1DEI51cNRo00v9/1WbyOFZRxn4AX3uw0CPf?=
+ =?us-ascii?Q?JRQhu/Tl5MU0AZqsDOuhZiS3DKJ1sTVuLwoKFy0VhGhZ3Js5ot6W5Yj3D5KL?=
+ =?us-ascii?Q?wJXzDThY43TMnvRO3+BIVNMIEKCKzP4NjnI/2RKv9YkUFokTc9cwqtnsQeMf?=
+ =?us-ascii?Q?o7tKvQ+4W/UJSOu2oqUzPZtiXzOFtEHA17Uu3qobKoZuQbNzCI6kDAVZzefb?=
+ =?us-ascii?Q?Mx63yQx1ZaA7IoxcGkBbk1lt1kj3Vp+Wawf39kUlWU7i0yL6T2dkySw3srji?=
+ =?us-ascii?Q?fhKGYeWstLPbzBKb0uwWAq7UImT0D7kO3rkwOkOhXchBDpq0GUs1Xq1OB/X4?=
+ =?us-ascii?Q?AMNfGwmaZ+H9iwS5wrcWNNhiiHAAT013ZxkgtF/DpTSUjwHykIsQu9qzSkOU?=
+ =?us-ascii?Q?PWFo+nqESUzcxwVDLPr+rBEmMzk7hjYqD6eMpS/j4JzpSIBwa/ANC0FLxIEm?=
+ =?us-ascii?Q?gqMn8mtluPgFDRfbV6vT9eYO5LIWScu6xLlxS6N78rgnvr2TisSXU03bNgMM?=
+ =?us-ascii?Q?DEH/3d3EvaZI+kwpUCx8rPVnsM4NbpmaUJUbICFmeMxFURK3ymfNbA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7CAE6DBF132D7D40BF865402525C9E30@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220113091056.1297982-1-james.clark@arm.com> <20220113091056.1297982-3-james.clark@arm.com>
- <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com> <292386ee-cfa8-d849-57ce-156c76680e12@arm.com>
-In-Reply-To: <292386ee-cfa8-d849-57ce-156c76680e12@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Fri, 11 Mar 2022 15:53:41 +0000
-Message-ID: <CAJ9a7VjiYrnQKUBkcQPs-iJomxFUAJ9Wmq0A+JwN4O_bbqhX1A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] coresight: Fail to open with return stacks if they
- are unavailable
-To:     James Clark <James.Clark@arm.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5134.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef7385ad-78ce-4891-b839-08da03777309
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 15:54:39.1573
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qK43Y66Sj07mFz898/dy0tmXA7CwTkdnJGAKubjXwrGDuZGOqwxgnC9EYYQiGlGYypjIB9GPREqoK8nfrQC7Vw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1677
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10282 signatures=692556
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203110078
+X-Proofpoint-ORIG-GUID: LvBPGt-D3kIi_ygPuCi4L6_7MIjJfufW
+X-Proofpoint-GUID: LvBPGt-D3kIi_ygPuCi4L6_7MIjJfufW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
 
-On Fri, 11 Mar 2022 at 14:52, James Clark <james.clark@arm.com> wrote:
->
->
->
-> On 28/01/2022 11:24, Suzuki K Poulose wrote:
-> > Hi James
-> >
-> > On 13/01/2022 09:10, James Clark wrote:
-> >> Maintain consistency with the other options by failing to open when they
-> >> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
-> >> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
-> >> requested but not supported by hardware.
-> >
-> > Looking at this again (with similar comment to the Branch Broadcast),
-> > won't it disable using retstack on all CPUs, even when some of them
-> > support it ?
-> >
-> > i.e., CPU0 - supports retstack, CPU1 - doesn't
-> >
-> > A perf run with retstack will fail, as CPU1 doesn't support it (even
-> > though we advertise it, unconditionally).
-> >
-> > So, if we ignore the failure, this would still allow CPU0 to use
-> > the feature and as long as the OpenCSD is able to decode the trace
-> > we should ignore the failure ?
-> >
-> > I think we may also need to tune the etm4x_enable_hw() to skip
-> > updating the TRCCONFIGR with features not supported by the ETM
-> >
->
-> Hi Suzuki,
->
-> I'm picking up this branch broadcast change again after the haitus.
->
-> For this point, do you think it would be worth distinguishing between "no
-> known CPUs that support the feature" vs "not currently running on a
-> CPU that supports it but there are others that do"?
->
-> Also would we want to distinguish between per-CPU or per-process events?
-> For the former it actually is possible to fail to open because all of
-> the information is known.
->
-> I'm just thinking of the case where someone asks for a load of flags
-> and thinks that they're getting them but get no feedback that they won't.
-> But I understand having some complicated solution like I'm suggesting
-> might be even more surprising to users.
->
-> Maybe the cleanest solution is to ask users to supply a config that
-> can work on anywhere the event could possibly be scheduled. It doesn't
-> really make sense to have retstack on a per-process event on big-little
-> and then getting half of one type of data and half of another. It would
-> make more sense to fail to open in that case and they have the choice of
-> either doing per-CPU events or disabling retstacks altogether.
->
+> On Mar 11, 2022, at 10:23 AM, Chuck Lever III <chuck.lever@oracle.com> wr=
+ote:
+>=20
+>=20
+>=20
+>> On Mar 11, 2022, at 9:39 AM, Lukas Bulwahn <lukas.bulwahn@gmail.com> wro=
+te:
+>>=20
+>> Commit 6a687e69a54e ("NFSD: Remove CONFIG_NFSD_V3") removes the config
+>> NFSD_V3, but misses one reference in fs/Kconfig.
+>>=20
+>> Remove this remaining reference to the removed config symbol.
+>>=20
+>> This issue was discovered with ./scripts/checkkconfigsymbols.py.
+>>=20
+>> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>> ---
+>> Chuck, please pick this quick fix to your commit in linux-next.
+>>=20
+>> fs/Kconfig | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/fs/Kconfig b/fs/Kconfig
+>> index 7f2455e8e18a..ec2cf8ccd170 100644
+>> --- a/fs/Kconfig
+>> +++ b/fs/Kconfig
+>> @@ -344,7 +344,7 @@ config LOCKD
+>>=20
+>> config LOCKD_V4
+>> 	bool
+>> -	depends on NFSD_V3 || NFS_V3
+>> +	depends on NFS_V3
+>=20
+> Actually, I think:
+>=20
+> 	depends on NFSD || NFS_V3
+>=20
+> is more correct. LOCKD_V4 now needs to be enabled whenever
+> the server is enabled, since NFSv3 support in the server is
+> now always enabled.
 
-return stack has no effect on the decoder output whatsoever. The only
-effect is to reduce the amount of traced addresses at the input
-(leaving more space for other trace),
-so it is irrelevant if CPU0 supports it but CPU1 doesn't.
+I've squashed this change into "NFSD: Remove CONFIG_NFSD_V3".
+Thanks for reporting it, Lukas!
 
-sequence:
 
-BL r0 (return stack is used only on link instructions)
-...
-RET
+>> 	depends on FILE_LOCKING
+>> 	default y
+>>=20
+>> --=20
+>> 2.17.1
+>>=20
+>=20
+> --
+> Chuck Lever
 
-will output trace:-
-ATOM E (BL r0)
-...
-ADDR_ELEM <ret addr>
-ATOM E (RET)
-
-for no return stack,
-
-ATOM E (BL r0)
-...
-ATOM E (RET)
-
-fior return stack.
-
-In both cases the decoder will push the address after BL r0 onto its
-return stack.
-
-In the first case the decoder will use the supplied address, in the
-second will pop the top of its return stack.
-
-The decode output in both cases will be "branched to r0, ran code,
-returned via link register"
-
-The outcome is identical for the client. So the case for not tracing
-on a core that does not have return stack if specified is weak.
-
-Perhaps a warning will be sufficient?
-
-Mike
+--
+Chuck Lever
 
 
 
-> This seems like a similar problem to the issue causing the Coresight self
-> test failure where a certain sink was picked that couldn't be reached and
-> the test failed.
->
-> In that case the change we made doesn't quite match up to my suggestion here:
->
->  * Per-cpu but an unreachable sink -> fail
->  * Per-process and potentially reachable sink in the future -> pass
->
-> Maybe it would have been better to say that the sink always has to be
-> reachable otherwise is the outcome predicatable?
->
-> James
->
-> > Suzuki
-> >
-> >
-> >>
-> >> The consequence of not doing this is that the user may not be
-> >> aware that they are not enabling the feature as it is silently disabled.
-> >>
-> >> Signed-off-by: James Clark <james.clark@arm.com>
-> >> ---
-> >>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
-> >>   1 file changed, 9 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> index 04669ecc0efa..a93c1a5fe045 100644
-> >> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
-> >>       }
-> >>         /* return stack - enable if selected and supported */
-> >> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
-> >> -        /* bit[12], Return stack enable bit */
-> >> -        config->cfg |= BIT(12);
-> >> -
-> >> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
-> >> +        if (!drvdata->retstack) {
-> >> +            ret = -EINVAL;
-> >> +            goto out;
-> >> +        } else {
-> >> +            /* bit[12], Return stack enable bit */
-> >> +            config->cfg |= BIT(12);
-> >> +        }
-> >> +    }
-> >>       /*
-> >>        * Set any selected configuration and preset.
-> >>        *
-> >
-
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK

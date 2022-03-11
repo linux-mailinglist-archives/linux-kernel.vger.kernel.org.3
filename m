@@ -2,225 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7A14D602E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70C94D6034
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348072AbiCKKzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S1348091AbiCKK4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiCKKzc (ORCPT
+        with ESMTP id S231485AbiCKK4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:55:32 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA761B5105;
-        Fri, 11 Mar 2022 02:54:28 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BAokT8005963;
-        Fri, 11 Mar 2022 10:54:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=IcY6uXCp3/+iW0CzyQbMpAKcNLHHMfWleig6SiaZscg=;
- b=JekMgv5ivfNWkgs+K8jORjucb0Hty0aY2P6wGnpv94P83Y5hTlWq2Q9UswRB8m55H1HM
- tZxr+6j8+JKXJdkNih8jlP1bJJuk5blJWi3tc3Mwpiwb5/cIhiuy8Vn7PQi4VcoeoLb0
- Js5PZI63UziEabH1eoFBVg30fVRpoTOOkUE44bnE7SzQwoijxSVJCk9y15u3EQT0MEg+
- p69lNEmwyfgblbJdI95y3dFh2GZ/pMzGwT4YkoCFYNY9n/noeT8a9CPJV22klXFyAH+e
- 4y1lh0UAu+frayc42xgI0W+AefsH+BSnCq1PTaekqx8MoSjPvCYMOIbgRVjIDaunKKL/ vg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyrayk0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 10:54:10 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BApJJY123665;
-        Fri, 11 Mar 2022 10:54:09 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
-        by aserp3020.oracle.com with ESMTP id 3ekyp468sw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 10:54:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kAMmP9qBSy8nnE0NFTF/lXGiu2IAMKrK0i+AkUmTeSkDPTEBJF1T3OrCm0LXB211Vu/2mTUE7Ylo00g+6mPvVSyqtCUlFMxCK/ElrCivFlOLMutnFg5EwGTMuhsktAiUygTvbmEhC10xTCOegz/aosCZq8w9kXfIcGnzgNodBkNqXaH3s5pqoKoAOXDH7ZQAzN/fF5qh4kL4KEiOFGUOyE8Y2e9Oz6BBPXeg2c7DsRcjQ9jib3M8gwbjO8/Pzb/5V4D3AuVGfUz5tPX4cZKQdEHQKMfTVxAA0lJGLuUTAdUhBAg3yUlrkL6GwS21NlnerTk8exEuL5QoQdp6zP0VGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IcY6uXCp3/+iW0CzyQbMpAKcNLHHMfWleig6SiaZscg=;
- b=hYybU3z4hkvHbClk/fJ2dwykR21BoBH9QuG+Cw9jUzwG36SPMLfnr89rPqcVG0+Qk+M9XVPk+HJQtsgI+HDbGzKG2VWXa08UjlArFSM7K3ABXO4ml/4P0kgoBoxIcqcjWM3fs2AWYsOJL8U8s//Hx37PRTlqFpn6HdHEwW/S+9CpQ0VulEHKngMcj4f3dot+vABsLjWJOSSVCEM9ZqLoGZnP58KZwsbh3EPgdJiABOTFIXyUMJHmjjl38o+BJ2CY+OSsJx5LLoW55fLzCipTSFKA6VL0iUhYR7BL8UvOwQSHw+Vwaf43efb0nii/BwUvBSad3upEAXy+W8Sx4J5KVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 11 Mar 2022 05:56:34 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243B81B510C;
+        Fri, 11 Mar 2022 02:55:31 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d07ae0b1c4so88330117b3.11;
+        Fri, 11 Mar 2022 02:55:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IcY6uXCp3/+iW0CzyQbMpAKcNLHHMfWleig6SiaZscg=;
- b=iLYZWfFt1MFbqijTsNzJ9yeNtQrYlyZXl5oAbkjh6QhGW6pMvp5xcVIO8Fyzpo2/wGDWzB32tXWzae4pgQddTixzPnGYtQzkgRzkCVz67pc/dUaya+QlyBBdz+BBXp2CPXmCylJp7B265FRdNoEKA2NrO6yZmwrvdnHi1nYugLs=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN6PR10MB1620.namprd10.prod.outlook.com
- (2603:10b6:405:7::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16; Fri, 11 Mar
- 2022 10:54:06 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 10:54:06 +0000
-Date:   Fri, 11 Mar 2022 13:53:44 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jreuter@yaina.de, kuba@kernel.org,
-        davem@davemloft.net, ralf@linux-mips.org, thomas@osterried.de
-Subject: Re: [PATCH V3] ax25: Fix refcount leaks caused by ax25_cb_del()
-Message-ID: <20220311105344.GI3293@kadam>
-References: <20220311014624.51117-1-duoming@zju.edu.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311014624.51117-1-duoming@zju.edu.cn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0163.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:1::26) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qlwCyDk8qlleYrAYeX+7n1Ivn6nloAFSh4xt8Gq150o=;
+        b=oaYU4zv7z2lQ1xabpxAZyjYx0RA1wJsVPblkE5xVDqUf7Z10PTPs6cEpwKyIXaEZLp
+         OR7FHaerSmPEUm9vpiREI5PHgfQIUR3LNKbaTrJ59BzycE9q6bxoG23jcyuHsza1KufN
+         EQuoGUhNP4ua9p4MDDqkY+Hi1KIDssycuBolb6ZYVVVVJHBAHd4uoSOkZaAo2ZmSqaHi
+         IpLg/FGBIvKw5JoL6Pgz+YTfcBHOi3war4xtv5GFc9k+2vDi+KNJx9qTZqgOdMCUymG2
+         602cuilghZfUlapRNuKVU6exzuh6x5ooe3mnoP70gdJq9Ojs0rAhGMKT0SOjjlPu4NfP
+         5tAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qlwCyDk8qlleYrAYeX+7n1Ivn6nloAFSh4xt8Gq150o=;
+        b=LtmB0q4THveFr5dTMjzWBmosn9j58EuQRNmxsvhwdfiJjmMAiDg7CwNccvvdBJXNhu
+         ZKiyfN9Oe7e08iQ0abW2a4uBxUuA8opGcmNDlOPwiWHx/YnUY8u5cQvtNEzjHhY/zwaO
+         J2TMvSRYFSavCSAf9vaFmrFVvT3CRmsgK9fthyq7rm/XwA6uVsaZ6ihlyPqzB8AvVT1z
+         WH6CgXdixGWiImnP+T13cioYU2HDC5+2S2D3GgI46F8WbEPKjjQW94LzY7Tj29SRz7EM
+         8zPoK5szQ+QpY/60r1CJyTAm40FCYO5HspI+dzjIhpcqUiS1i5lyJWkdnBCEgNQsLoP7
+         0fuw==
+X-Gm-Message-State: AOAM532X3trf0O5CGwcTpPTcL0T33DfY7xIs1rSbUFSoLrcDZRZxZ/AN
+        jp1bVNzTD9h2sUyl3zGREXYB8Ng0rF2mQrouKnU=
+X-Google-Smtp-Source: ABdhPJxW4CPn/wNnPf2NhXuDc0qbrCNkJ5zhS0YrB60/r/3wkqcqNNWHHLNWpmFub9ERdIkvwy2HwUOOIS4OoJKLLp8=
+X-Received: by 2002:a81:19c3:0:b0:2dc:2686:14e3 with SMTP id
+ 186-20020a8119c3000000b002dc268614e3mr7479905ywz.515.1646996130236; Fri, 11
+ Mar 2022 02:55:30 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ab1ff1b8-6879-499f-ee9e-08da034d7691
-X-MS-TrafficTypeDiagnostic: BN6PR10MB1620:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR10MB1620179921409415EC30EA288E0C9@BN6PR10MB1620.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yqwHpytemXV50SsFlba9YANYGN/bBMx9xxDjZuOHwQ34yy1pA3cgO9cw7lbDivcXwNPNto0VFVPdQYcaBudOIIFJ3a4ER4lG25mXQWP/7ZP/Fod0rNX0/RGENEpNJQZbWl8uiIwaAMyB73PBULEUK/4JrqG3c6v5LmsQwA7h3T8xkZslQHvsPoKsKr4JUScM51mwXxgLVT3bqRi98C4xaLGvPAtc+LetMzDkFOZdl6qj6qUREeSXLwVqkq3vtBIb0V3Uto/enR0szHml4qZFnnrWY3sFrWfc/q2r+Z67lgl0pwz5PPkHw8gc1HVukK1nDFq9Hct1pOcJjjlj0xyairXt3IJehS/n878cUWdd4Rgsm6A139XszSXGXWJsmXZd1xs8DUhyy0tPiJ+OvEY08tKQi3F3q75Pip7P3n9JzyDMhFVHMF8Ehaf7Y2J9ionK7JlJPd8VnaZIVMVmi5Um69VqB6Kfw8vHYk09XxK0GxztSqTqa31JZOBPrGLk2fZ9gA4i0LmeAPhtmfGaQKIfZ1FUWRRWEq7U8Jt9HBHpkL9AjdG99nSSXcwQ3cnNPuEU71lMCZMgjI+1b0TCU25nBHZjDJA74KzTKfRacVuxxdAjR3t79OOXU0Hsn7khROoBp8N1kWZXpdYMOHNncsEJARBEwmADPDX35bMdZfc2lhwEsBmMxKfJf4VMj1PD+Jxj4CBSDt4MOtZy/3sMsF8JXw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(9686003)(52116002)(6666004)(6512007)(6506007)(508600001)(8936002)(66946007)(66556008)(66476007)(5660300002)(8676002)(33716001)(44832011)(6486002)(4326008)(33656002)(2906002)(316002)(86362001)(6916009)(83380400001)(38350700002)(38100700002)(1076003)(186003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UuAknb4Pm02zh2EmzDjkpB3FNskiKbXSGnD7AzgAL7Cl7cxOwAjJX2ShwsC7?=
- =?us-ascii?Q?cYPqw2XJDZgny+XP8y+9wmz2G803CRsp2geFDN1J7VvFz3ZJka5QywhbFk3y?=
- =?us-ascii?Q?BTfw4bphY70/BfAr6dZss0oEvB5TiNC62bXW3ljNzn4gL1kk33KAXLqNJTGY?=
- =?us-ascii?Q?8ukLKKUbLTeJWnqb9RHrosGIqrKBd60zgfBrDrsh6PG6pF+Ne3//QHBDYXSk?=
- =?us-ascii?Q?osNtVjllqLDNLIh//VOGPAIyXE9uBrGaMr9AB208Df1rEryzd+huUKQ0F0PH?=
- =?us-ascii?Q?7jeS/pY284LqsDk8fko3OwjJbgKCJSCEcTB/ZeZADY6yWQ8L5KRh/WKtnP+1?=
- =?us-ascii?Q?JNQ+bChQPWoZrWDJal2HeTENg48OM50Qmo6LirBotxLkhaK80Sw8GN0Annpe?=
- =?us-ascii?Q?8igGrZzBQZxxxge2wRCsqpY9imNYOgKhQga7kqqwFMQxi+XItvMaAJI9per6?=
- =?us-ascii?Q?erzLZ3rpCL+Jq/wdtJRGylRAO5zvmDWLcpeLPJ2JLN9KNBXmC0/N5BADmD7M?=
- =?us-ascii?Q?vc/e+YDm53jTQYDfIoQMEAn+x7tAxDWbrB3cIN1wjaAAwGJwXdBJ0s791DjS?=
- =?us-ascii?Q?JwnyQs+YLiOqFXYjR8lJapOg90raVX4c30vfw8nZ3H3owxQRPq3XFXvGX0dG?=
- =?us-ascii?Q?2sBxDbqQ5xKHmyYyICznuW4D4BQioCK/A6lCjVADM4REZpZS0aUUFeVus4Ap?=
- =?us-ascii?Q?AG+Swr/sq77ofbrWFSBeBDEH+hduJZcP2olW6j0S/FO08QggqMvRQf6xEiy9?=
- =?us-ascii?Q?BjjJRYxE98ZVVOpr6qScfUPsJiwqLGTz6dCv0VvnVHGWvnaZrCLzDgKQapAL?=
- =?us-ascii?Q?l+T+NE/ZRvtQ8rA91PAKZvabiTOSWld7VCrJqt09vINRrM2z4vLy4oXKmdfb?=
- =?us-ascii?Q?2KezPdbqzx3X8PM86dvpfUGdfroMA06dhhW/rUn0g8TKrVtj1Jo7rVya9K8D?=
- =?us-ascii?Q?bluvrkDA3qk4jrlZeVvLu4G4T9VFXAMN2xSqHrBx32mXytHxqf+Q32TSA5Qv?=
- =?us-ascii?Q?cVcjQRwJoCI7Vh7AF/UTnoKUPg4JhCOmAqI+WTYuET9OYuhwfXFRK0+r895y?=
- =?us-ascii?Q?XcZaaK6ZyRNcJ3NVrqq/s3+jX5nG8vei7S4s6Kvo7xDa6shoZVkGoGqWK36n?=
- =?us-ascii?Q?nJlGjDxZNeachc2Qz7DjupZ61zjiDt2YVPNE3+sJAQaREXtmGu6/HbRuW+m4?=
- =?us-ascii?Q?SLaq0whbJr0nKXS9Pb39eCTIngAncjHGfO6vbzG1GODlvBhiHlJDByf9V1TJ?=
- =?us-ascii?Q?okTE6LWWw1yNOhSCOyaBoWflTqZEjlakvaxmSpnuSucp9mw6/tOOF/d9Stq+?=
- =?us-ascii?Q?jQy2wPU0c0xNRp2NCvTcsIAcmaKEhmvLku7iPff/EtKYm79/l2nrGHx2//EW?=
- =?us-ascii?Q?0nmbDlteYzBj1gbOXUXw9k0uEGgtmn8/TwAcNuVoduwo6oNZiQfylvh3+r/J?=
- =?us-ascii?Q?oR/eS5AcBqYJUAokxcqyYsXhvxhQ9UfM+DmhoxRF4Cshfp6dIbNjJYsKOOtz?=
- =?us-ascii?Q?gjmeIgM+tM8VNzipTIVStNwwbDEDrMBCDKL3482S+Ra0FNZIBp33/zZTAxYl?=
- =?us-ascii?Q?SmTIcYqtcTw+YyHO8ewrieeH1FaHLA8bUHW9pqDNsOMgaB8rzZ1tzb/Jst5W?=
- =?us-ascii?Q?frIU0c8kGf3RQxbSCt8kbeL/CwWUGxErti6DZvO4jjuXymt9+ZqWjls3nUjC?=
- =?us-ascii?Q?UjzhZw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab1ff1b8-6879-499f-ee9e-08da034d7691
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 10:54:06.7049
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kgOW842GphL47NHqbgEO1Id7eqtgWhCHERLPs1PK0x+2fHn78Hn8b00+p5Uciik7HFMYVDUoLAjvoNCfMLZmhNyBglh6lCiDeGZgh+PWKS0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1620
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10282 signatures=692556
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
- bulkscore=0 mlxlogscore=855 spamscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203110052
-X-Proofpoint-GUID: YvQWDhbymeqNcLkoqRCpC-U6jShowyVC
-X-Proofpoint-ORIG-GUID: YvQWDhbymeqNcLkoqRCpC-U6jShowyVC
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-2-yuzhao@google.com>
+In-Reply-To: <20220309021230.721028-2-yuzhao@google.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 11 Mar 2022 23:55:19 +1300
+Message-ID: <CAGsJ_4yt_q4=pPW1M6fHN9HrV5JuTo9_9GQ0wv4-VT7tivU1+Q@mail.gmail.com>
+Subject: Re: [PATCH v9 01/14] mm: x86, arm64: add arch_has_hw_pte_young()
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, page-reclaim@google.com,
+        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 09:46:24AM +0800, Duoming Zhou wrote:
-> This patch adds a flag in ax25_dev in order to prevent reference count
-> leaks. If the above condition happens, the "test_bit" condition check
-> in ax25_kill_by_device() could pass and the refcounts could be
-> decreased properly.
+On Wed, Mar 9, 2022 at 3:47 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> Some architectures automatically set the accessed bit in PTEs, e.g.,
+> x86 and arm64 v8.2. On architectures that do not have this capability,
+> clearing the accessed bit in a PTE usually triggers a page fault
+> following the TLB miss of this PTE (to emulate the accessed bit).
+>
+> Being aware of this capability can help make better decisions, e.g.,
+> whether to spread the work out over a period of time to reduce bursty
+> page faults when trying to clear the accessed bit in many PTEs.
+>
+> Note that theoretically this capability can be unreliable, e.g.,
+> hotplugged CPUs might be different from builtin ones. Therefore it
+> should not be used in architecture-independent code that involves
+> correctness, e.g., to determine whether TLB flushes are required (in
+> combination with the accessed bit).
+>
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> Acked-by: Brian Geffon <bgeffon@google.com>
+> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Acked-by: Steven Barrett <steven@liquorix.net>
+> Acked-by: Suleiman Souhlal <suleiman@google.com>
+> Acked-by: Will Deacon <will@kernel.org>
+> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
+> Tested-by: Donald Carr <d@chaos-reins.com>
+> Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
+> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
+> Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> ---
+
+Reviewed-by: Barry Song <baohua@kernel.org>
+
+i guess arch_has_hw_pte_young() isn't called that often in either
+mm/memory.c or mm/vmscan.c.
+Otherwise, moving to a static key might help. Is it?
+
+
+>  arch/arm64/include/asm/pgtable.h | 14 ++------------
+>  arch/x86/include/asm/pgtable.h   |  6 +++---
+>  include/linux/pgtable.h          | 13 +++++++++++++
+>  mm/memory.c                      | 14 +-------------
+>  4 files changed, 19 insertions(+), 28 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pg=
+table.h
+> index c4ba047a82d2..990358eca359 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -999,23 +999,13 @@ static inline void update_mmu_cache(struct vm_area_=
+struct *vma,
+>   * page after fork() + CoW for pfn mappings. We don't always have a
+>   * hardware-managed access flag on arm64.
+>   */
+> -static inline bool arch_faults_on_old_pte(void)
+> -{
+> -       WARN_ON(preemptible());
+> -
+> -       return !cpu_has_hw_af();
+> -}
+> -#define arch_faults_on_old_pte         arch_faults_on_old_pte
+> +#define arch_has_hw_pte_young          cpu_has_hw_af
+>
+>  /*
+>   * Experimentally, it's cheap to set the access flag in hardware and we
+>   * benefit from prefaulting mappings as 'old' to start with.
+>   */
+> -static inline bool arch_wants_old_prefaulted_pte(void)
+> -{
+> -       return !arch_faults_on_old_pte();
+> -}
+> -#define arch_wants_old_prefaulted_pte  arch_wants_old_prefaulted_pte
+> +#define arch_wants_old_prefaulted_pte  cpu_has_hw_af
+>
+>  static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
+>  {
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtabl=
+e.h
+> index 8a9432fb3802..60b6ce45c2e3 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1423,10 +1423,10 @@ static inline bool arch_has_pfn_modify_check(void=
+)
+>         return boot_cpu_has_bug(X86_BUG_L1TF);
+>  }
+>
+> -#define arch_faults_on_old_pte arch_faults_on_old_pte
+> -static inline bool arch_faults_on_old_pte(void)
+> +#define arch_has_hw_pte_young arch_has_hw_pte_young
+> +static inline bool arch_has_hw_pte_young(void)
+>  {
+> -       return false;
+> +       return true;
+>  }
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index f4f4077b97aa..79f64dcff07d 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -259,6 +259,19 @@ static inline int pmdp_clear_flush_young(struct vm_a=
+rea_struct *vma,
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>  #endif
+>
+> +#ifndef arch_has_hw_pte_young
+> +/*
+> + * Return whether the accessed bit is supported on the local CPU.
+> + *
+> + * This stub assumes accessing through an old PTE triggers a page fault.
+> + * Architectures that automatically set the access bit should overwrite =
+it.
+> + */
+> +static inline bool arch_has_hw_pte_young(void)
+> +{
+> +       return false;
+> +}
+> +#endif
+> +
+>  #ifndef __HAVE_ARCH_PTEP_CLEAR
+>  static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+>                               pte_t *ptep)
+> diff --git a/mm/memory.c b/mm/memory.c
+> index c125c4969913..a7379196a47e 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -122,18 +122,6 @@ int randomize_va_space __read_mostly =3D
+>                                         2;
+>  #endif
+>
+> -#ifndef arch_faults_on_old_pte
+> -static inline bool arch_faults_on_old_pte(void)
+> -{
+> -       /*
+> -        * Those arches which don't have hw access flag feature need to
+> -        * implement their own helper. By default, "true" means pagefault
+> -        * will be hit on old pte.
+> -        */
+> -       return true;
+> -}
+> -#endif
+> -
+>  #ifndef arch_wants_old_prefaulted_pte
+>  static inline bool arch_wants_old_prefaulted_pte(void)
+>  {
+> @@ -2778,7 +2766,7 @@ static inline bool cow_user_page(struct page *dst, =
+struct page *src,
+>          * On architectures with software "accessed" bits, we would
+>          * take a double page fault, so mark it accessed here.
+>          */
+> -       if (arch_faults_on_old_pte() && !pte_young(vmf->orig_pte)) {
+> +       if (!arch_has_hw_pte_young() && !pte_young(vmf->orig_pte)) {
+>                 pte_t entry;
+>
+>                 vmf->pte =3D pte_offset_map_lock(mm, vmf->pmd, addr, &vmf=
+->ptl);
+> --
+> 2.35.1.616.g0bdcbb4464-goog
 >
 
-Why are you using test_bit()?  Just use booleans.
-
-I am not a networking person but this whole thing feel like adding on
-layers of cruft.  If refcounting needs a lot of additional tracking
-information then probably the reference counts are not being done in
-the correct location.
-
-> diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-> index 6bd09718077..fc564b87acc 100644
-> --- a/net/ax25/af_ax25.c
-> +++ b/net/ax25/af_ax25.c
-> @@ -86,6 +86,7 @@ static void ax25_kill_by_device(struct net_device *dev)
->  again:
->  	ax25_for_each(s, &ax25_list) {
->  		if (s->ax25_dev == ax25_dev) {
-> +			set_bit(AX25_DEV_KILL, &ax25_dev->flag);
->  			sk = s->sk;
->  			if (!sk) {
->  				spin_unlock_bh(&ax25_list_lock);
-
-Why can this not be a local variable.
-
-	bool found = false;
-
-	ax25_for_each(s, &ax25_list) {
-		if (s->ax25_dev == ax25_dev) {
-			found = true;
-			...
-
-> @@ -115,6 +116,10 @@ static void ax25_kill_by_device(struct net_device *dev)
->  		}
->  	}
->  	spin_unlock_bh(&ax25_list_lock);
-> +	if (!test_bit(AX25_DEV_KILL, &ax25_dev->flag) && test_bit(AX25_DEV_BIND, &ax25_dev->flag)) {
-
-The comments for ax25_kill_by_device() say:
-
-/*
- *      Kill all bound sockets on a dropped device.
- */
-
-So how can test_bit(AX25_DEV_BIND, &ax25_dev->flag) ever be false at
-this location?
-
-	if (!found) {
-		dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
-		ax25_dev_put(ax25_dev);
-	}
-
-But even here, my instinct is that if the refcounting is were done in
-the correct place we would not need any additional variables.  Is there
-no simpler solution?
-
-> diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
-> index d2a244e1c26..9b04d74a1be 100644
-> --- a/net/ax25/ax25_dev.c
-> +++ b/net/ax25/ax25_dev.c
-> @@ -77,6 +77,7 @@ void ax25_dev_device_up(struct net_device *dev)
->  	ax25_dev->values[AX25_VALUES_PACLEN]	= AX25_DEF_PACLEN;
->  	ax25_dev->values[AX25_VALUES_PROTOCOL]  = AX25_DEF_PROTOCOL;
->  	ax25_dev->values[AX25_VALUES_DS_TIMEOUT]= AX25_DEF_DS_TIMEOUT;
-> +	ax25_dev->flag = AX25_DEV_INIT;
-
-There is no need for this, it's allocated with kzalloc().
-
->  
->  #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
->  	ax25_ds_setup_timer(ax25_dev);
-
-regards,
-dan carpenter
+Thanks
+Barry

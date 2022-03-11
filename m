@@ -2,237 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9A64D6475
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5F44D6479
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348905AbiCKPXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S244938AbiCKPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348849AbiCKPXJ (ORCPT
+        with ESMTP id S233886AbiCKPYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:23:09 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE441C6654;
-        Fri, 11 Mar 2022 07:22:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647012124; x=1678548124;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZF6xSQ0Ne11LUHG74GsvqkUs+YD/1xsUdfc52UUOosU=;
-  b=xvLmJNTLeojsoN6y6gwwbIyCzMR10uXtcQZew27XTTJsUxISfsWkNTbB
-   uYS/EyEQf9A5WhCVGSl2WDY49GwwTcjr5kGp2skLzDLmq8IGzjU7wb+a1
-   bYzkPMXEumC85AbJIJ+XTMswqa4ZvnWU+uzaTrY7rPFNgFwtQd4hY7U1H
-   sUPURw+Cb+MvgdQF4DwZl+Hfj87s7O9LSZ5CUeCks83xkrbBayd28SIFP
-   HSjYuqxaYo5HgdipzMCcLDrrYmfyLAIz+UUVJuDwLWgVB4On2+YssNpbu
-   o6T1dLvFDvs4Ide9nLuBoe+87S9iQw7PK8nmBUxQeQE/Eg13CAqlF6qB2
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,174,1643698800"; 
-   d="scan'208";a="156130114"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2022 08:22:03 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 11 Mar 2022 08:22:02 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Fri, 11 Mar 2022 08:22:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a25TNUgaHmNEXuk5ySGKe57WWJugW+wTBNbU8Pns+2TvdGqj+9p6GVYW/L/LC+Zq7MqX5Wz8RL+oc6g4DKfVf+3yFFwLCHDDRRM7SPD12oi2C/FHXLrHbxmDT86Iq11tr3GrdOO/HD7DKIoxslYpqumm27ipFHqPWxKyKJ67E0+Rv0i6+uQzlPJvsy9MoEPFdqxbLEaS01+h7whpL95vgWsWt9qnT0FsXU4OYgnRagCVe1t9DgqtnKhdZMw7NmkFGiR2OjcYdu1GVmnpCegc5EsAjbe7jjXrKuQWEGI4pPsC8aKTv3tAKmLtgjB03fQMWYv5DXGggKwsrpXzThShJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OS4MVks8RdFVeI+S0OvhYNgJiBilbRQE2C8/trc4a4g=;
- b=duSN8vNp7Wb6M1gCy7XUXnxUdtHSv1/c1ijuCQ65WyXEQpo9/OZKWnhWSxTJ7vkcJhvdy1SFUAUEShsz6BzoDfmbEyhJorD2gh6N6pGIOsLRzAS1mI4JZ5xVinVeKMOePTua8t9SOb021iUjypkDF17MG4FkiEfjjXKYF3gP6+bOwUVj3hbWV7VUskieSU10kDO+1gc7vhpLnx1h6qngL+/Cv1kuW2y1wU+GKcpBi9QJMRvLhu0OMYWMjtLHVidVzp1/U39a4N16m1CjsV5TXBzfjZDEBhSdWpBnd9aPhzQBdk1+vn6nFW5UhjQ6heMnZ00FVAtSWD9XBnHccHrNzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OS4MVks8RdFVeI+S0OvhYNgJiBilbRQE2C8/trc4a4g=;
- b=EqOv5a8I91JbLMvLFRPpBYYU7sSnUOh71GIs28C7BKnNsAwvW6WwAPYW3EeNavIwPFjn3fSpbFs4beELgRsbVNyDU1BpSIPb/KyTkgd82F01HZSjE16UZNg+Y4BGWcZtvHN/K6nA+q3r5GrC0YmtmfCp+0ra6ckyHyUALxgBZGA=
-Received: from BL0PR11MB2913.namprd11.prod.outlook.com (2603:10b6:208:79::29)
- by DM4PR11MB5970.namprd11.prod.outlook.com (2603:10b6:8:5d::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5061.22; Fri, 11 Mar 2022 15:21:58 +0000
-Received: from BL0PR11MB2913.namprd11.prod.outlook.com
- ([fe80::a5f2:c2d5:c0e4:2ba9]) by BL0PR11MB2913.namprd11.prod.outlook.com
- ([fe80::a5f2:c2d5:c0e4:2ba9%3]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 15:21:58 +0000
-From:   <Woojung.Huh@microchip.com>
-To:     <richardcochran@gmail.com>, <linux@armlinux.org.uk>
-CC:     <Horatiu.Vultur@microchip.com>, <andrew@lunn.ch>,
-        <Divya.Koppera@microchip.com>, <netdev@vger.kernel.org>,
-        <hkallweit1@gmail.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <Madhuri.Sripada@microchip.com>, <Manohar.Puri@microchip.com>
-Subject: RE: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Thread-Topic: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Thread-Index: AQHYL6td/B/51zd2r06SOlPtjL8tgKyvLZmAgAQuDgCAAI3yAIABXwsAgABAHoCAAB5+gIAAKOoAgABEIwCAABclAIAA50qAgAAZdICAAFL/AIAC09Vw
-Date:   Fri, 11 Mar 2022 15:21:58 +0000
-Message-ID: <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
-References: <CO1PR11MB4771237FE3F53EBE43B614F6E2089@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YiYD2kAFq5EZhU+q@lunn.ch>
- <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YidgHT8CLWrmhbTW@lunn.ch>
- <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
- <YiecBKGhVui1Gtb/@lunn.ch>
- <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
- <YifoltDp4/Fs+9op@lunn.ch>
- <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
- <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
- <20220309195252.GB9663@hoboy.vegasvil.org>
-In-Reply-To: <20220309195252.GB9663@hoboy.vegasvil.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bec42bcd-ab6c-4177-f608-08da0372e239
-x-ms-traffictypediagnostic: DM4PR11MB5970:EE_
-x-microsoft-antispam-prvs: <DM4PR11MB59703E6EF244F0BBC9BCCF68E70C9@DM4PR11MB5970.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Hvnc13VzwU/rqsrO+yOgOtOIENZoi2/u6vZislIqm1zzgip8rEDUx7FCkZBhNUK4vnmVivC3x5QBtrqU2OZKi2QWvis28/wlfZLHyOkZ1Sxs0/MzaNWS0mbVUm03V9nTmGWxyOXiL65+ZEFXzZzfevV9uXxMAVxbK8JouL0NR4E9QFBK+vDdODCfLRo/GZSvZMJyqPbVTYQYZZeew8jPDylma/j2HCt+GDj+y9lFOU5g2h2SN5VbLoo68QTnmF8uQilaM5vmXZICdyF+xlAdjy/UJg5b34DYpoJa1dQ3iWTk/eRVjy4+p4oKmbJyVMscjv/NZTUS8DLvGBOLQK/MH0lyB6yhMMDtnX9xYIZe1uPi4hvwiAyd2qvgEIhHdlQy9StNkSv+b4HeAmYkUIlKzWNsDTczyHf3cyHuLOp2AKKYb1sL6Tcs/UxaAKmwIWIPFTtmbUNUytyMDMkhzc+CWTe20mU8dzOoqxe/+q3R4u7Ycb+NJXirDyKgbn8Q+ANWOszItxAbHLW87eZm2PYqe9B2sTxRSrAK7KRJ81c7/srdAR9InjIG9fCDxrmy5Wh1Tm8OYpMnEBjTaKbM36lF50ytnckYB5VrvY/B2LThZcHXgxr20FRxEQ4Sa3JxladDzbBmmy2QVycNBi4dqxpI2Bxq+bI+X8Yb5f+6Q2pr58SmGwEfOK7IZ9y3NFuiw6Ptsr4CANL+F9Aw2KyJ+Ppv0+50I3dZdR4lakbPEhkv0I20e39pzQFaxKGXNf/IuGYt54vLyLdWgP38kRPZyHwQA7jQqMqANrTHGcxO0VhcTyQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB2913.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(33656002)(38100700002)(38070700005)(122000001)(316002)(5660300002)(966005)(110136005)(54906003)(2906002)(8936002)(7416002)(4326008)(66946007)(66476007)(66556008)(66446008)(76116006)(64756008)(8676002)(52536014)(83380400001)(55016003)(107886003)(9686003)(508600001)(6506007)(7696005)(71200400001)(186003)(26005)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uv0BsD4kXssgeyAIVYY1tQgN24XpS/GLRcCO9HZymUoo2iwKxFOnTXkC7Xm2?=
- =?us-ascii?Q?RTIfvsu8E53ILl38lskxFIfZ6AXHyF7kZbut7YQ4A4F68mFikVFfQTQTRwAX?=
- =?us-ascii?Q?rLRfb1C7tbj8eIYsbm3VgsL5W+gvfmhoHMjx67Z/E9eSNuVKbAxRisVb6SxK?=
- =?us-ascii?Q?LAKS8wzFPIowqbGdcIpFFyTQbCGFRwxogThIFPvUf/qLfn+oIznObnqKUT3M?=
- =?us-ascii?Q?HQv1VNZiP/zyLXtMYehgkGHJ7fDUgnnHp+pG32iMxh0PRRaaTJpak/VnVoYU?=
- =?us-ascii?Q?iNtphuW29Srl6s0vIeb9rDA3AixfHH5g6Tk8fY0J/C5NMRlZ1iZdQMdc4YNg?=
- =?us-ascii?Q?J0M+BT/subV5GlCbQs+36uQY61l4aWAsPJxu3IZJqvSDXHSWuGp9TgJpG+aA?=
- =?us-ascii?Q?4wx5zWFlkTjQvyz8uXVHMG0XcI2bJugSf64/T6uUpjzteKXu5wC6TUFyiapC?=
- =?us-ascii?Q?Be/tJ9wwzPja6DDd7CoRvhx/wupK6Y989ZFmrL/wN9mIArDBwgIsoh12PX/W?=
- =?us-ascii?Q?evXsWAY0iAN3eY0IJNYk+0rsZFR1cs46I5SX9rU7lE6oDtjiEC0i0vZH3jO7?=
- =?us-ascii?Q?Mt5kkmHcY65PzoTWsnUX9vgD3wE0cIHSx9+IiFrkvnQwfxRSk0SL+hydAcUE?=
- =?us-ascii?Q?9HXCoj/Cmt0pBWqkqJsLmveWObABDaRpTtwRV6HRMAXCDeMB3bbCespr0y2v?=
- =?us-ascii?Q?GB37plbQRwuwvxE/IxK9J/2Y2mrfQ76ewbA5VtmSjCIr9rNCAZBqoXzQ/f8B?=
- =?us-ascii?Q?gvlGA5oOpJgC6vz5K2vV3PSplLUxqndOnaCLBbz2cuxkzGRLX0GY0GfSSwSF?=
- =?us-ascii?Q?AqxqxH0MqWGKdjFSfSR72DQDAeb7ihrv7PeAafzYbC+8SwUaS8F6hvWZDkA7?=
- =?us-ascii?Q?yahkVVX6ydUP6fKmvX8tcyUQdeT6UQgyl472xK0GE9MsGIOb556sPOTBpSUU?=
- =?us-ascii?Q?R0Vyl8Fw+imwq/PbQAE1SrVLqv/rNPr3mC6QoEneSSySV2DocXKPdCTlg4GP?=
- =?us-ascii?Q?kZg8xKfeeV7BlsHtUHhNh8mk/JB9cjJsJqfOX29+2eo0sHnIyo+mfaZbiSvl?=
- =?us-ascii?Q?VBq5eGsVSUjaUSpAiO5XaqcbmkgyHioYaWEGX8V68V4xd31R6vr1tLvZFkvQ?=
- =?us-ascii?Q?QTUgn9PxTHnspj/J5B3mRvChUt1qA9RntKVXQMXdEi4DAH3rSCkcI84eEuWJ?=
- =?us-ascii?Q?ZaKbAHVenvd+OozS+oHRH2o/xNSX8Fp0jatV9AKxym2xxCSF5u9hzxKQNbHn?=
- =?us-ascii?Q?5hzQzBudBzTLOwv9m5GZDwTwVZCUJu7W5+3FiBuut1Bs7xj+PfBwZWPvc65J?=
- =?us-ascii?Q?GpWMSkKyw2yX4altpkkLDwCfZ8N5fSo4MSeaG5/PwHsp6ehHI9Ir7VlXLDjE?=
- =?us-ascii?Q?vkHYtrWdm4PeNEpgwr2V8IjlTmEu6OPs3fELxl1dJbfSqtKJXpLlHJg+69gO?=
- =?us-ascii?Q?HrWsveaHZl5N62HRIucr9dFBHgMXgUZ6usO7DuO8kXhhvHrj5Wx5SQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 11 Mar 2022 10:24:37 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1AA16FDE2;
+        Fri, 11 Mar 2022 07:23:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NjruXzuQDBa25iXAh8/mEaW7ZKoV0M6wDo7rHCp8Dyo=; b=ijaIGmrQPDAw1W7FSWpwXR8uoF
+        YQuBaRffUYgOIIwfwZABBn6MehvhV3D+zCMmuwMxRZhW2VAvxAJmJ0ztzTuwDVSPdjh5EHo1lT8Gg
+        V5Y06e8v/EX3P3DEex1jTEl+VsxpVVkU3Z7uJWV8gPAYI+C/ctbP4AeaRMZ6jXU8/zZ0ijEpJhR0T
+        Soe4Bmn4+3gdW57lUYF5D7uK6ilaERDC+hb2KySCRISAvnbp6WWJMmJlhFup1fvwoG53DH/OQ15y8
+        0Eqiklv7Oe0A9TjgItdGKFkU0H+ik63i192SvxpBlGFEv5iFh6YfRgySI3SdzMrtKHpjE+kZ4YOYk
+        Z+3AJHsA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSh6d-00HTxp-Tg; Fri, 11 Mar 2022 15:23:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 390093000E6;
+        Fri, 11 Mar 2022 16:23:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0B8EA2BCABC06; Fri, 11 Mar 2022 16:23:01 +0100 (CET)
+Date:   Fri, 11 Mar 2022 16:23:00 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
+        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, mhiramat@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <YitpVCIllFrnakpL@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
+ <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+ <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <20220310093731.78a6a8d5@gandalf.local.home>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB2913.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bec42bcd-ab6c-4177-f608-08da0372e239
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 15:21:58.2325
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +ugtCJUQyqhDe4PshY6qoCtTPGUfdPdmJ5crGoV1CdimIQ2JDvQZpH1SL9DsbuWTh3G+i+WIWUkFReUSgzjUkmP2mVY4Xy3gNKHSKpqvPLY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5970
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310093731.78a6a8d5@gandalf.local.home>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
+On Thu, Mar 10, 2022 at 09:37:31AM -0500, Steven Rostedt wrote:
+> On Thu, 10 Mar 2022 14:47:18 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> > index acb50fb7ed2d..2d86d3c09d64 100644
+> > --- a/kernel/trace/ftrace.c
+> > +++ b/kernel/trace/ftrace.c
+> > @@ -5354,6 +5381,11 @@ int modify_ftrace_direct(unsigned long ip,
+> >  	mutex_lock(&direct_mutex);
+> >  
+> >  	mutex_lock(&ftrace_lock);
+> > +
+> > +	ip = ftrace_location(ip);
+> > +	if (!ip)
+> > +		goto out_unlock;
+> > +
+> 
+> Perhaps this should go into find_direct_entry() instead, as I think you are
+> adding it before all the find_direct_entry() callers.
 
-Not sure that it is good idea to reply on not-the-latest thread.
+Something like so then?
 
-> -----Original Message-----
-> From: Richard Cochran <richardcochran@gmail.com>
-> Sent: Wednesday, March 9, 2022 2:53 PM
-> To: Russell King (Oracle) <linux@armlinux.org.uk>
-> Cc: Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>; Andrew Lunn
-> <andrew@lunn.ch>; Divya Koppera - I30481
-> <Divya.Koppera@microchip.com>; netdev@vger.kernel.org;
-> hkallweit1@gmail.com; davem@davemloft.net; kuba@kernel.org;
-> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org; UNGLinuxDriver
-> <UNGLinuxDriver@microchip.com>; Madhuri Sripada - I34878
-> <Madhuri.Sripada@microchip.com>; Manohar Puri - I30488
-> <Manohar.Puri@microchip.com>
-> Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure lat=
-ency
-> values and timestamping check for LAN8814 phy
->=20
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> On Wed, Mar 09, 2022 at 02:55:49PM +0000, Russell King (Oracle) wrote:
->=20
-> > I think we understand this, and compensating for the delay in the PHY
-> > is quite reasonable, which surely will be a fixed amount irrespective
-> > of the board.
->=20
-> The PHY delays are not fixed.  They can be variable, even packet to packe=
-t.
->=20
-> https://www.researchgate.net/publication/260434179_Measurement_of_e
-> gress_and_ingress_delays_of_PTP_clocks
->=20
-> https://www.researchgate.net/publication/265731050_Experimental_verific
-> ation_of_the_egress_and_ingress_latency_correction_in_PTP_clocks
->=20
-> Some PHYs are well behaved.  Some are not.
->=20
-> In any case, the linuxptp user space stack supports the standardized
-> method of correcting a system's delay asymmetry.  IMO it makes no
-> sense to even try to let kernel device drivers correct these delays.
-> Driver authors will get it wrong, and indeed they have already tried
-> and failed.  And when the magic numbers change from one kernel release
-> to another, it only makes the end user's job harder, because they will
-> have to update their scripts to correct the bogus numbers.
->=20
-
-If you are referring to the delayAsymmetry of ptp4l, I think that is differ=
-ent from this latency value.
-delayAsymmetry of ptp4l says "The time difference in nanoseconds of the tra=
-nsmit and receive  paths.=20
-This value should be positive when the master-to-slave propagation time is =
-longer and negative
-when the slave-to-master time is longer. The default is 0 nanoseconds."
-In my understanding, master-to-slave uses reference timestamp which is defi=
-ned in IEEE specs.
-   <egressTimestamp> =3D <egressProvidedTimestamp> + <egressLatency>
-   <ingressTimestamp> =3D <ingressProvidedTimestamp> - <ingressLatency>
-
-These latency is egreeLatency or ingressLatency to get accurate timestamp a=
-t reference point from=20
-timestamp of clock in MAC or PHY.
-So, this latency should (hopefully) be not-much-change in the same board af=
-ter manufactured.=20
-But, value can be different from design to design and port to port if some =
-path (PHY to RJ45) is longer than others.
-
-This doesn't cover any latency from cable length and/or asymmetry which may=
- come from RJ45-to-RJ45.
-But, delayAsymmetry may care cable type/length in application point of view=
-.
-
-Of cause, all values may be small enough to ignore though.
-Do I miss something here?
-
-Thanks.
-Woojung
+Index: linux-2.6/kernel/trace/ftrace.c
+===================================================================
+--- linux-2.6.orig/kernel/trace/ftrace.c
++++ linux-2.6/kernel/trace/ftrace.c
+@@ -1575,7 +1575,7 @@ unsigned long ftrace_location_range(unsi
+  * If @ip matches sym+0, return sym's ftrace location.
+  * Otherwise, return 0.
+  */
+-unsigned long ftrace_location(unsigned long ip)
++unsigned long __ftrace_location(unsigned long ip, struct dyn_ftrace **recp)
+ {
+ 	struct dyn_ftrace *rec;
+ 	unsigned long offset;
+@@ -1591,13 +1591,22 @@ unsigned long ftrace_location(unsigned l
+ 			rec = lookup_rec(ip, ip + size - 1);
+ 	}
+ 
+-	if (rec)
++	if (rec) {
++		if (recp)
++			*recp = rec;
++
+ 		return rec->ip;
++	}
+ 
+ out:
+ 	return 0;
+ }
+ 
++unsigned long ftrace_location(unsigned long ip)
++{
++	return __ftrace_location(ip, NULL);
++}
++
+ /**
+  * ftrace_text_reserved - return true if range contains an ftrace location
+  * @start: start of range to search
+@@ -2392,6 +2401,30 @@ static struct ftrace_hash *direct_functi
+ static DEFINE_MUTEX(direct_mutex);
+ int ftrace_direct_func_count;
+ 
++static struct ftrace_func_entry *
++find_direct_entry(unsigned long *ip, struct dyn_ftrace **recp, bool warn)
++{
++	struct ftrace_func_entry *entry;
++	struct dyn_ftrace *rec = NULL;
++
++	*ip = __ftrace_location(*ip, &rec);
++	if (!*ip)
++		return NULL;
++
++	if (recp)
++		*recp = rec;
++
++	entry = __ftrace_lookup_ip(direct_functions, *ip);
++	if (!entry) {
++		WARN_ON(rec->flags & FTRACE_FL_DIRECT);
++		return NULL;
++	}
++
++	WARN_ON(warn && !(rec->flags & FTRACE_FL_DIRECT));
++
++	return entry;
++}
++
+ /*
+  * Search the direct_functions hash to see if the given instruction pointer
+  * has a direct caller attached to it.
+@@ -2400,7 +2433,7 @@ unsigned long ftrace_find_rec_direct(uns
+ {
+ 	struct ftrace_func_entry *entry;
+ 
+-	entry = __ftrace_lookup_ip(direct_functions, ip);
++	entry = find_direct_entry(&ip, NULL, false);
+ 	if (!entry)
+ 		return 0;
+ 
+@@ -5127,40 +5160,19 @@ int register_ftrace_direct(unsigned long
+ 	struct ftrace_direct_func *direct;
+ 	struct ftrace_func_entry *entry;
+ 	struct ftrace_hash *free_hash = NULL;
+-	struct dyn_ftrace *rec;
++	struct dyn_ftrace *rec = NULL;
+ 	int ret = -ENODEV;
+ 
+ 	mutex_lock(&direct_mutex);
+ 
+-	ip = ftrace_location(ip);
+-	if (!ip)
++	entry = find_direct_entry(&ip, &rec, true);
++	if (!ip || !rec)
+ 		goto out_unlock;
+ 
+-	/* See if there's a direct function at @ip already */
+ 	ret = -EBUSY;
+-	if (ftrace_find_rec_direct(ip))
+-		goto out_unlock;
+-
+-	ret = -ENODEV;
+-	rec = lookup_rec(ip, ip);
+-	if (!rec)
++	if (entry && entry->direct)
+ 		goto out_unlock;
+ 
+-	/*
+-	 * Check if the rec says it has a direct call but we didn't
+-	 * find one earlier?
+-	 */
+-	if (WARN_ON(rec->flags & FTRACE_FL_DIRECT))
+-		goto out_unlock;
+-
+-	/* Make sure the ip points to the exact record */
+-	if (ip != rec->ip) {
+-		ip = rec->ip;
+-		/* Need to check this ip for a direct. */
+-		if (ftrace_find_rec_direct(ip))
+-			goto out_unlock;
+-	}
+-
+ 	ret = -ENOMEM;
+ 	direct = ftrace_find_direct_func(addr);
+ 	if (!direct) {
+@@ -5209,33 +5221,6 @@ int register_ftrace_direct(unsigned long
+ }
+ EXPORT_SYMBOL_GPL(register_ftrace_direct);
+ 
+-static struct ftrace_func_entry *find_direct_entry(unsigned long *ip,
+-						   struct dyn_ftrace **recp)
+-{
+-	struct ftrace_func_entry *entry;
+-	struct dyn_ftrace *rec;
+-
+-	rec = lookup_rec(*ip, *ip);
+-	if (!rec)
+-		return NULL;
+-
+-	entry = __ftrace_lookup_ip(direct_functions, rec->ip);
+-	if (!entry) {
+-		WARN_ON(rec->flags & FTRACE_FL_DIRECT);
+-		return NULL;
+-	}
+-
+-	WARN_ON(!(rec->flags & FTRACE_FL_DIRECT));
+-
+-	/* Passed in ip just needs to be on the call site */
+-	*ip = rec->ip;
+-
+-	if (recp)
+-		*recp = rec;
+-
+-	return entry;
+-}
+-
+ int unregister_ftrace_direct(unsigned long ip, unsigned long addr)
+ {
+ 	struct ftrace_direct_func *direct;
+@@ -5245,11 +5230,7 @@ int unregister_ftrace_direct(unsigned lo
+ 
+ 	mutex_lock(&direct_mutex);
+ 
+-	ip = ftrace_location(ip);
+-	if (!ip)
+-		goto out_unlock;
+-
+-	entry = find_direct_entry(&ip, NULL);
++	entry = find_direct_entry(&ip, NULL, true);
+ 	if (!entry)
+ 		goto out_unlock;
+ 
+@@ -5382,11 +5363,7 @@ int modify_ftrace_direct(unsigned long i
+ 
+ 	mutex_lock(&ftrace_lock);
+ 
+-	ip = ftrace_location(ip);
+-	if (!ip)
+-		goto out_unlock;
+-
+-	entry = find_direct_entry(&ip, &rec);
++	entry = find_direct_entry(&ip, &rec, true);
+ 	if (!entry)
+ 		goto out_unlock;
+ 

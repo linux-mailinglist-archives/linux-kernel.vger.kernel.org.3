@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FE44D5F7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094DC4D5F7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347903AbiCKK34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347875AbiCKK3w (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1347882AbiCKK3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 11 Mar 2022 05:29:52 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D42182BCA
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:28:48 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239701AbiCKK3u (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 11 Mar 2022 05:29:50 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8956717F6BE
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:28:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646994528; x=1678530528;
+  t=1646994527; x=1678530527;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KU8T3d1tCOYJhZF3cQC5jUqiVgCi8RwxRrN2NC0C5fA=;
-  b=BTGpmemM1Muu5FXmRdHe/F4tL6qteQjl1DWtXliTyUgwwRvh+gG27Eb2
-   SckSPNFqVwAblfewegPW3QdUUgfsYVYxBNrOKM5qR5j012zpzxGunQXn5
-   eEhy7lBx3y+hlUDsZEvAU3ufXQHfyCdHuTr4VgeCdzEcjr+rGM2M/Hb7A
-   YPuLzIzUnAnOh6axX6WRQMMhCOOWseP9Qj0o1beDQVuGhpN3bpUxvf285
-   gRiK5ZPQ887AdI6XMqMAUbdiF3KkXW6S5gcwAJbvsHaaDXQb3jCpr3/cw
-   OJiioykUFJSd2t1rTFG5MP80l/oBMJQ313rxwioZK6OK84dRARqUEkZoV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="341975824"
+  bh=NhfIPSzwJXId8+VZdMKuXhPcehF31c0r3OdEixOdLnk=;
+  b=Pp/DZhoRQlRKyQMxPFymk9FJ1AmkMGU0/IIznwWmemY1moKjRmF1vrhm
+   8T3WnTUTxy5mxKCjOni1UIgaNoNB+Z5ws4hm/1r+bNh/+veiBWTpG5w3P
+   qwt7abqvXrihhkLHc7vkesGZRsqbJO6xJhCwvjDTP9z3QEPmrspJEPkv9
+   MJE8ZvvC5f4pSIwidGeCV1GIoWUiwClXKx8u7JG80GgVN3OHhuKPgos4U
+   1JrXgIbxAQM+ud2aD9MmMSC+gtBfr87u0zwBo2ljtBQx2mXtp/h9p/1n0
+   vcYJPA52a6Kx/ux72eGaYrHUmr8cQjv+xxhvq1zAbJFG+eKc64igph0ek
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254375394"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="341975824"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:28:47 -0800
+   d="scan'208";a="254375394"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:28:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="514462473"
+   d="scan'208";a="644891900"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2022 02:28:45 -0800
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 02:28:45 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nScVo-0006FV-Tq; Fri, 11 Mar 2022 10:28:44 +0000
-Date:   Fri, 11 Mar 2022 18:27:59 +0800
+        id 1nScVo-0006FX-W1; Fri, 11 Mar 2022 10:28:44 +0000
+Date:   Fri, 11 Mar 2022 18:28:02 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 42/54]
- fs/netfs/objects.c:49:9: error: implicit declaration of function
- 'netfs_proc_add_writeback'; did you mean 'netfs_proc_add_rreq'?
-Message-ID: <202203111832.1JtRzMeS-lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.17-rc1 8/8]
+ include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of
+ type 'unsigned int', but argument 2 has type 'long unsigned int'
+Message-ID: <202203111841.1Q9NXFVF-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,123 +62,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   4a98a2518c638d046f6f9c41060f78c349c4c6de
-commit: 6903280c13bfacd00ddd06fda523ecce6ee8db34 [42/54] netfs: Add a procfile to list in-progress requests
-config: openrisc-buildonly-randconfig-r004-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111832.1JtRzMeS-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.17-rc1
+head:   66e9038ef48dc66c07b12443b73e2d1f3f12cbab
+commit: 66e9038ef48dc66c07b12443b73e2d1f3f12cbab [8/8] KASAN horror
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203111841.1Q9NXFVF-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/6903280c13bfacd00ddd06fda523ecce6ee8db34
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout 6903280c13bfacd00ddd06fda523ecce6ee8db34
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=66e9038ef48dc66c07b12443b73e2d1f3f12cbab
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.17-rc1
+        git checkout 66e9038ef48dc66c07b12443b73e2d1f3f12cbab
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   fs/netfs/objects.c: In function 'netfs_alloc_request':
->> fs/netfs/objects.c:49:9: error: implicit declaration of function 'netfs_proc_add_writeback'; did you mean 'netfs_proc_add_rreq'? [-Werror=implicit-function-declaration]
-      49 |         netfs_proc_add_writeback(rreq);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-         |         netfs_proc_add_rreq
-   fs/netfs/objects.c: In function 'netfs_free_request':
->> fs/netfs/objects.c:81:9: error: implicit declaration of function 'netfs_proc_del_writeback'; did you mean 'netfs_proc_del_rreq'? [-Werror=implicit-function-declaration]
-      81 |         netfs_proc_del_writeback(rreq);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-         |         netfs_proc_del_rreq
-   cc1: some warnings being treated as errors
+   In file included from include/asm-generic/bug.h:22,
+                    from arch/arm/include/asm/bug.h:60,
+                    from include/linux/bug.h:5,
+                    from include/linux/kasan.h:5,
+                    from arch/arm/mm/kasan_init.c:11:
+   arch/arm/mm/kasan_init.c: In function 'kasan_init':
+>> include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type 'long unsigned int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
+     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:14:25: note: in expansion of macro 'KERN_SOH'
+      14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
+         |                         ^~~~~~~~
+   include/linux/printk.h:519:16: note: in expansion of macro 'KERN_INFO'
+     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~
+   arch/arm/mm/kasan_init.c:237:9: note: in expansion of macro 'pr_info'
+     237 |         pr_info("clearing PGDs from %08x-%08x\n", KASAN_SHADOW_START, KASAN_SHADOW_END);
+         |         ^~~~~~~
+   include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
+     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:14:25: note: in expansion of macro 'KERN_SOH'
+      14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
+         |                         ^~~~~~~~
+   include/linux/printk.h:519:16: note: in expansion of macro 'KERN_INFO'
+     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~
+   arch/arm/mm/kasan_init.c:237:9: note: in expansion of macro 'pr_info'
+     237 |         pr_info("clearing PGDs from %08x-%08x\n", KASAN_SHADOW_START, KASAN_SHADOW_END);
+         |         ^~~~~~~
 
 
-vim +49 fs/netfs/objects.c
+vim +5 include/linux/kern_levels.h
 
-    10	
-    11	/*
-    12	 * Allocate an I/O request and initialise it.
-    13	 */
-    14	struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
-    15						     struct file *file,
-    16						     loff_t start, size_t len,
-    17						     enum netfs_io_origin origin)
-    18	{
-    19		static atomic_t debug_ids;
-    20		struct inode *inode = file ? file_inode(file) : mapping->host;
-    21		struct netfs_i_context *ctx = netfs_i_context(inode);
-    22		struct netfs_io_request *rreq;
-    23		int ret;
-    24	
-    25		rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
-    26		if (!rreq)
-    27			return ERR_PTR(-ENOMEM);
-    28	
-    29		rreq->start	= start;
-    30		rreq->len	= len;
-    31		rreq->origin	= origin;
-    32		rreq->netfs_ops	= ctx->ops;
-    33		rreq->mapping	= mapping;
-    34		rreq->inode	= inode;
-    35		rreq->i_size	= i_size_read(inode);
-    36		rreq->debug_id	= atomic_inc_return(&debug_ids);
-    37		INIT_LIST_HEAD(&rreq->subrequests);
-    38		INIT_WORK(&rreq->work, NULL);
-    39		refcount_set(&rreq->ref, 1);
-    40		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
-    41		if (rreq->netfs_ops->init_request) {
-    42			ret = rreq->netfs_ops->init_request(rreq, file);
-    43			if (ret < 0) {
-    44				kfree(rreq);
-    45				return ERR_PTR(ret);
-    46			}
-    47		}
-    48	
-  > 49		netfs_proc_add_writeback(rreq);
-    50		netfs_stat(&netfs_n_rh_rreq);
-    51		return rreq;
-    52	}
-    53	
-    54	void netfs_get_request(struct netfs_io_request *rreq, enum netfs_rreq_ref_trace what)
-    55	{
-    56		int r;
-    57	
-    58		__refcount_inc(&rreq->ref, &r);
-    59		trace_netfs_rreq_ref(rreq->debug_id, r + 1, what);
-    60	}
-    61	
-    62	void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
-    63	{
-    64		struct netfs_io_subrequest *subreq;
-    65	
-    66		while (!list_empty(&rreq->subrequests)) {
-    67			subreq = list_first_entry(&rreq->subrequests,
-    68						  struct netfs_io_subrequest, rreq_link);
-    69			list_del(&subreq->rreq_link);
-    70			netfs_put_subrequest(subreq, was_async,
-    71					     netfs_sreq_trace_put_clear);
-    72		}
-    73	}
-    74	
-    75	static void netfs_free_request(struct work_struct *work)
-    76	{
-    77		struct netfs_io_request *rreq =
-    78			container_of(work, struct netfs_io_request, work);
-    79	
-    80		trace_netfs_rreq(rreq, netfs_rreq_trace_free);
-  > 81		netfs_proc_del_writeback(rreq);
-    82		netfs_clear_subrequests(rreq, false);
-    83		if (rreq->netfs_ops->free_request)
-    84			rreq->netfs_ops->free_request(rreq);
-    85		if (rreq->cache_resources.ops)
-    86			rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
-    87		kfree_rcu(rreq, rcu);
-    88		netfs_stat_d(&netfs_n_rh_rreq);
-    89	}
-    90	
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+
+:::::: The code at line 5 was first introduced by commit
+:::::: 04d2c8c83d0e3ac5f78aeede51babb3236200112 printk: convert the format for KERN_<LEVEL> to a 2 byte pattern
+
+:::::: TO: Joe Perches <joe@perches.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 ---
 0-DAY CI Kernel Test Service

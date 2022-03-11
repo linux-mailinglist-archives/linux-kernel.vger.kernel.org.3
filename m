@@ -2,194 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC504D625E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D873B4D6262
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348852AbiCKN3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S1348893AbiCKN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiCKN3s (ORCPT
+        with ESMTP id S1348876AbiCKN3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:29:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B62D5C646
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:28:43 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647005321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8b3QE+2Y//YI4P+mljHaBD8D8T+OxSZZ+Uwuw/8XGvY=;
-        b=AV2oT3KyFK+ccwT+qVs6o/cV3q8FZUL7xruM+BswA0iR4+Jm7Vqhd91b+G+ZDtsfaWo8HN
-        a4huzFHL0ypPB9UHx3QMR4jXxQRMB6E/KxNAsTMvtgw+CDt15pUDEJ9ZGa1AsEo6TVGCRk
-        LKjo7WdYJyFxRCb6UBfB7tIjvniSEKlpLfNUY+8YRukKqo9XnyLHtCBQJNpTmUbjeJHPLi
-        Yela1DTuX9B/h0ZSy9AT41NxnqLwGhmjkN+yFUIos4eXQ2x1H+t/HyVacl2G4S4VRDztKF
-        nZQABXfGhyp28RrZB6jKF0wqjU1SuZl5/PjYLL+GWtAnSrTx/iqjZFzVmK418w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647005321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8b3QE+2Y//YI4P+mljHaBD8D8T+OxSZZ+Uwuw/8XGvY=;
-        b=UNzhiAhvENYbRzJL8c6NiuJec65ZJb32An6tEXj2tofrpbwgngxPVkR3mJXG9wajA5f3AC
-        8BFB9kLTyrLcuaCw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 11/13] printk: reimplement console_lock for
- proper kthread support
-In-Reply-To: <Yisj2PEtjZfHMe6N@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-12-john.ogness@linutronix.de>
- <YhYKP/UuSKENGwfj@alley> <87tuc7xma0.fsf@jogness.linutronix.de>
- <YioMcSe0P0Z7ksiW@alley> <87wnh14wp9.fsf@jogness.linutronix.de>
- <Yisj2PEtjZfHMe6N@alley>
-Date:   Fri, 11 Mar 2022 14:34:40 +0106
-Message-ID: <87czisbotz.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 08:29:53 -0500
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B405D5E1;
+        Fri, 11 Mar 2022 05:28:48 -0800 (PST)
+Received: by mail-ot1-f41.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so6251315otl.6;
+        Fri, 11 Mar 2022 05:28:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=DqWgVz4mscQx7VQZPkY837R3TSNSLttxQeZWV9I4qb4=;
+        b=tI1D7Djk9/hipqQSZZhI5yR0TSGDEDK/6gDK02Mg6DDYkBBxzt5m/9N2UgG3Mrtou7
+         OW90wZVr+FWmdYHxX+Pwrby7QsVwH1+Ahci7bJkoGajQpHADvYJsnUvdAuH8/dVxCppv
+         ITs1Ev05yKzwYt5OZG30NOyf8jrxuJjLO/ZtbawliqH8am6zjn+F+8osoUQ7qpWmkCYz
+         aXum3g3ZiuLREmMIL5T8pZz+A0AEEnqC6zAwJ+UXyydzwPKsPOhXl/PJ224BPBtnZGQd
+         pMjdSjP/fOx5LBZCEO6T/Wxne7w9FgAtN9SrGJvqS60GZNu+a4aLEJSNsVPYb86LPArF
+         +/iw==
+X-Gm-Message-State: AOAM531u9cY1wMhV2ve6091KWC7GW15dCWiBKBqvJm76FMwHEbSLzlV8
+        rq6OaYq0VYJ/WtHmmL56sg==
+X-Google-Smtp-Source: ABdhPJyW3etsHadVks+qdx/NCSOI597tN0DpxS5HBRpw1Cqr6gc/YxuiIbex7hKaXujqBfrqa3jSPw==
+X-Received: by 2002:a05:6830:438d:b0:5c4:f0f:70ac with SMTP id s13-20020a056830438d00b005c40f0f70acmr4240041otv.111.1647005327910;
+        Fri, 11 Mar 2022 05:28:47 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm3613104oth.56.2022.03.11.05.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 05:28:47 -0800 (PST)
+Received: (nullmailer pid 3638165 invoked by uid 1000);
+        Fri, 11 Mar 2022 13:28:45 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     tony.luck@intel.com, KWLIU@nuvoton.com, devicetree@vger.kernel.org,
+        james.morse@arm.com, ctcchien@nuvoton.com, tali.perry1@gmail.com,
+        robh+dt@kernel.org, JJLIU0@nuvoton.com, venture@google.com,
+        mchehab@kernel.org, tmaimon77@gmail.com, yuenn@google.com,
+        benjaminfair@google.com, avifishman70@gmail.com,
+        linux-edac@vger.kernel.org, KFTING@nuvoton.com,
+        linux-kernel@vger.kernel.org, bp@alien8.de, YSCHU@nuvoton.com,
+        rric@kernel.org, openbmc@lists.ozlabs.org
+In-Reply-To: <20220311014245.4612-3-ctcchien@nuvoton.com>
+References: <20220311014245.4612-1-ctcchien@nuvoton.com> <20220311014245.4612-3-ctcchien@nuvoton.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: edac: nuvoton,npcm-memory-controller.yaml
+Date:   Fri, 11 Mar 2022 07:28:45 -0600
+Message-Id: <1647005325.599595.3638164.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-11, Petr Mladek <pmladek@suse.com> wrote:
->>     console_unlock()
->>     {
->>  	  [...]
->>  	  if (may_schedule)
->>  	      retry = console_lock_reacquire();
->>  	  else
->>  	      retry = console_trylock();
->>     }
->> 
+On Fri, 11 Mar 2022 09:42:44 +0800, Medad CChien wrote:
+> Add device tree bindings for NPCM memory controller.
+> 
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> ---
+>  .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> 
 
-[...]
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> OK, it means that the main problem here _is not_ the scheduling context,
-> console_lock() vs. console_trylock(). The main problem _is_ the direct
-> printing vs. the offload to kthreads.
->
-> Of course, the context is important. It affects how we could re-take
-> the lock. But the main problem is the printing mode. We must make sure
-> that:
->
->     1. someone is printing pending messages when the direct mode is needed
+yamllint warnings/errors:
 
-console_trylock() causes difficulties here because it will fail if any
-kthread is active. It is an example of direct mode failure. But is that
-really any different than current mainline console_trylock() failing
-because a console_lock() context is active (and possibly not scheduled
-on a CPU)?
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
 
->     2. kthreads are woken and can enter the printing mode when the direct
->        mode is disabled.
+doc reference errors (make refcheckdocs):
 
-This happens at the end of vprintk_emit() and within __console_unlock(),
-regardless if the printk() was running in direct mode or not.
+See https://patchwork.ozlabs.org/patch/1604217
 
-> Will console_lock_reacquire() really help here?
->
-> The API theoretically helps in direct mode when the lock was taken
-> via console_lock().
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-console_lock_reacquire() only exists for the console_lock() case.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> But it does not help when the lock was taken
-> via console_trylock() from printk(). It might mean that
-> the forward progress might not be guaranteed in the direct mode
-> (early boot, panic, ...).
+pip3 install dtschema --upgrade
 
-How is the console_trylock() case different from current mainline now?
-As I mentioned above, the kthreads can block console_trylock(), but so
-can a console_lock() currently in mainline.
+Please check and re-submit.
 
-> Hmm, the forward progress seems to be guaranteed in the direct
-> mode most of the time. console_trylock() can take over
-> the atomic counter because console kthreads are not allowed
-> to enter the printing mode in this case.
->
-> I used "most of the time" because there might be races when
-> the mode is switched. "printk_direct" is an atomic variable.
-> CON_DIRECT is set under con->mutex but console_trylock()
-> does not take the mutex...
-
-You are mixing issues here. If CON_DIRECT is set, there is already a
-console_lock() in progress, so console_trylock() fails on @console_sem.
-
-> There are also races when the offload to consoles kthreads
-> is allowed. For example, console_trylock() might block
-> console_kthread_printing_tryenter().
-
-I do not see how that is a problem. If any context has the console lock
-(no matter how it got that lock) then the kthreads are blocked.
-
-If direct printing is enabled (from @printk_direct or @oops_in_progress
-or @system_state != SYSTEM_RUNNING), the task with the console lock will
-print out *all* the remaining records.
-
-If direct printing is not enabled, the kthreads are woken in
-__console_unlock().
-
-> Sigh, I am afraid that we have non-trivial problems
-> to guarantee that all messages will be printed:
->
->      + races when switching between direct mode
->        and offload to kthreads. It might cause
->        stall in both modes.
-
-Scheduable contexts holding locks can cause stalls. We have that same
-problem with console_lock() in mainline now. The kernel provides
-mechanisms to avoid such stalls (niceness, priorities, policies,
-priority inheritance), but this is all problem-specific and must be
-fine-tuned by the user if they are running workloads that are causing
-problems. kthreads are not solving the reliability problem (and they
-never will).
-
->      + console_trylock() races with
->        console_kthread_printing_tryenter().
->        It might put kthread into a sleep even when
->        it is supposed to print the message.
-
-kthread is never _supposed_ to print a message. It is there to offload
-direct printing. If console_trylock() (direct printing) wins, then that
-is the context that does the printing.
-
-> IMHO, console_lock_reacquire() does not help much here.
-> We need to solve console_trylock() path anyway.
-
-It preserves a consistent locking scenario for the console_lock()
-path. That is all it is intended to do.
-
-> I think that the solution might be:
->
->    + make sure that the state of "printk_direct" atomic variable
->      is enough to distinguish about the mode.
-
-The printk subsystem does not have absolute control over which
-task/context is doing the actual printing. Currently in mainline there
-are printers that handoff to waiters and even some that do not print at
-all because there is already waiters. Adding kthreads introduces a new
-task that can print. But there still is no real control about who
-prints. The important thing is that there is some context or runnable
-task that is running the printing code (whether scheduled or not).
-
->    + always wakeup() console kthreads after console_trylock()
->      to handle the possible race with
->      console_kthread_printing_tryenter()
-
-I do not understand. If console_trylock() wins, it already wakes the
-kthreads on __console_unlock(). If console_trylock() loses, the kthreads
-are already running.
-
-John

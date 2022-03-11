@@ -2,54 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774574D691B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467994D6922
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351137AbiCKTdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        id S1351140AbiCKTgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347291AbiCKTdO (ORCPT
+        with ESMTP id S234259AbiCKTgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 14:33:14 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775271C7EA2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:32:10 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id a2-20020a056e020e0200b002c6344a01c9so6200618ilk.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:32:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fnI34CRBlt/cYs2HqCdqD2Q5/sTaoJ/46Ee7fY9DqIA=;
-        b=t0JfdCpIoqAHJ0klJyq/Zi9up+Ha/SZlXos08FbkTJ3FYySEqX6vfTj870PICnCFg+
-         HWv9h1liytCl93J47b8i47rTHbmoumhPLzcqoFsaHfc7ajDAGv9XZ0svfXvMywt+JPN8
-         MAdsUntfikm5FqZLUAA+U+0XJ4frC77UuVXZcoMO1z/9ofJ1Wu1lYeJYJGuxPOgZBbbS
-         Qzw5dexrVc+y3mBVzYhORtjHGP26q1vfV4RGLoJ9veMmgXmbBGlXvQeCBy83C2952FL5
-         EmVa030ySMEG8LpNAfXuhrFH/zGn9vqUEbXX/m8+KUvknMWyd3rCX4mnTJ1gUomRY6LU
-         o9mA==
-X-Gm-Message-State: AOAM533XCqkVouRIPfb+bmVhMjf0i6lsm8dp5VPB5mdHSYftkqffvBns
-        T7YaFNkJRFg2nUCmA/zp7GgQEn50IIFe8wH4LKeNc0qfRwN8
-X-Google-Smtp-Source: ABdhPJw9T42RKvrkWCkabpsnnC9z6AV1gNOg+HSbu964zhQGXxGSiJfYq8qOwb4OWNusJ5OGpWx1PWi96+bxr4WWjM9OPQ71M1Vt
+        Fri, 11 Mar 2022 14:36:41 -0500
+Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E21F68C0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:35:33 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 2A131206FFD9
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH v2] platform: finally disallow IRQ0 in platform_get_irq() and
+ its ilk
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Marc Zyngier <maz@kernel.org>
+Organization: Open Mobile Platform
+Message-ID: <025679e1-1f0a-ae4b-4369-01164f691511@omp.ru>
+Date:   Fri, 11 Mar 2022 22:35:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c9c4:0:b0:2c6:2b1a:c869 with SMTP id
- k4-20020a92c9c4000000b002c62b1ac869mr8663830ilq.120.1647027129866; Fri, 11
- Mar 2022 11:32:09 -0800 (PST)
-Date:   Fri, 11 Mar 2022 11:32:09 -0800
-In-Reply-To: <04e38a81-f159-2764-0b6b-34b8180ee87b@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000002e20d05d9f663c6@google.com>
-Subject: Re: [syzbot] INFO: task hung in port100_probe
-From:   syzbot <syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, krzysztof.kozlowski@canonical.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        paskripkin@gmail.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,19 +47,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
+invalid") only calls WARN() when IRQ0 is about to be returned, however
+using IRQ0 is considered invalid (according to Linus) outside the arch/
+code where it's used by the i8253 drivers. Many driver subsystems treat
+0 specially (e.g. as an indication of the polling mode by libata), so
+the users of platform_get_irq[_byname]() in them would have to filter
+out IRQ0 explicitly and this (quite obviously) doesn't scale...
+Let's finally get this straight and return -EINVAL instead of IRQ0!
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-Reported-and-tested-by: syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com
+---
+The patch is against the 'driver-core-next' branch of Greg Kroah-Hartman's
+'driver-core.git' repo.
 
-Tested on:
+Changes in version 2:
+- added Marc's ACK.
 
-commit:         3bf7edc8 Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=16438642a37fea1
-dashboard link: https://syzkaller.appspot.com/bug?extid=abd2e0dafb481b621869
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+ drivers/base/platform.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+Index: driver-core/drivers/base/platform.c
+===================================================================
+--- driver-core.orig/drivers/base/platform.c
++++ driver-core/drivers/base/platform.c
+@@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
+ out_not_found:
+ 	ret = -ENXIO;
+ out:
+-	WARN(ret == 0, "0 is an invalid IRQ number\n");
++	if (WARN(!ret, "0 is an invalid IRQ number\n"))
++		return -EINVAL;
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(platform_get_irq_optional);
+@@ -446,7 +447,8 @@ static int __platform_get_irq_byname(str
+ 
+ 	r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
+ 	if (r) {
+-		WARN(r->start == 0, "0 is an invalid IRQ number\n");
++		if (WARN(!r->start, "0 is an invalid IRQ number\n"))
++			return -EINVAL;
+ 		return r->start;
+ 	}
+ 

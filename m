@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8AD4D68FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ADE4D6901
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244797AbiCKTMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S242098AbiCKTN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiCKTM2 (ORCPT
+        with ESMTP id S239581AbiCKTN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 14:12:28 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CBF1B8FF2;
-        Fri, 11 Mar 2022 11:11:25 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id b14so6650643ilf.6;
-        Fri, 11 Mar 2022 11:11:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qZ4G1abLpX1+7FOiIPFq4p8zwTFy2fU8JzBB043JMrU=;
-        b=WCKzDTLSv5sImvRmJ5fYFhGVQ7cxKmL6C4Ca7BUKJsOjSoxLYYCmovQmdJd1i7TJma
-         tmdzE+NuUN4rreBhoswlO+sGDsN9eG+kxxScRQK4Jz9zPqIZBl4HlnFIEzUgeAFBvxx7
-         9WFthOB4dbTGLx3XZoFFCJZvkUnaE1EyRgWnqdyZ3bRjZctuBStydqAlM4qqavMDgtMd
-         ge69m5DYx1fdi+gm3wNC3eWpOkS9farucoZDgVqoBe0uq54FXH1WxQxTNYbizlvWb6J6
-         v7XibIjbPyNrFz1E3eHmv8UiwzzF2DQZ1KKlP11zjMSPoOPKauCjhSVySPUN4YsotS3v
-         6zyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qZ4G1abLpX1+7FOiIPFq4p8zwTFy2fU8JzBB043JMrU=;
-        b=6b2PbSbVhrjRBfnhm14DvNkpWM2gHQgtjjrjeCpffkdggHk1Wrhq91Yd1hMf/wcyra
-         cHqNP2eypfyYTLZdI2CMY9JBbHU6lLBo+XCG551kRNj38azQz6JZdi6vIL4PkoGfT7ZD
-         z6yrf8txPydaB55ipst+GU8AoN8/uPyjph7ClosY7Vz9D3JMY/dJS0QP8poL8zhDQLS+
-         ptBfoabf5FkUaGrhM9C8H9FPl15tGir6lyw2QSX/pRPnrR7IwNoflUDhG8Raj1HCdY5w
-         2irLIuUlpEUHbuIgEZhU5gXO3DYEc0uSX8zFNTLobw5XZ109OxYZXFVPlx9Bt0z2SqDr
-         Q1ag==
-X-Gm-Message-State: AOAM5331hXFhyKxqUFPnYO80zWcsE9oXzMJO3Ks7w81wAvTz18bj9NyZ
-        AwTPm0Ti2TOzOe9FpIFBsFiLtxf71UZjZJEih3s=
-X-Google-Smtp-Source: ABdhPJzaunPVLCWbbdAT3/2L20Il8HLCeB/vZKDv2c9sbUYwJkO14EyW5dX6GeYXtBUuP4PBknPxTgcRjuwTsEY8JI0=
-X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
- y6-20020a926406000000b002bbf1dee13emr8885290ilb.305.1647025884602; Fri, 11
- Mar 2022 11:11:24 -0800 (PST)
+        Fri, 11 Mar 2022 14:13:56 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D87E45AC6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:12:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647025972; x=1678561972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=avT+4TnON8uQFynhMWL9RnsVIOvaVLLk/mGKUdy8nA4=;
+  b=ClQh7SKl4nCJzqjimRvrvzp6xY8jMSM6Hc/Creefom4TaDjHbLgO2xmW
+   BeBUPccs37ZwfJwq0U1jJpftmk3wkW4Xc+WPJmoe9fCGMyfYXyTdTSA4w
+   5Nezmp9HdsBKVHrDaBf6o8/ENqcweaHpjTkcx6yRrUoLZl2Faui9muUhJ
+   OFsjvBMJVHE7AL9CyYYHd88AYD7GcKqcElZzALcKpMGm44skgjFI9YoqV
+   drtHYXozQ2+iJHRdy/S6SrUZcJ36HpXxkkx7ayxNTlmJBD2KsY/jOU2px
+   MJQ381GhWOoXi7K95qx7CV/khWdpsNPBnzfAJjBNi70kha5+ZM2NC0DkA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="253198460"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="253198460"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 11:12:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="511476030"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 11 Mar 2022 11:12:49 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSkgy-0006yN-Aa; Fri, 11 Mar 2022 19:12:48 +0000
+Date:   Sat, 12 Mar 2022 03:12:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>, rostedt@goodmis.org,
+        mingo@redhat.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, mark-pk.tsai@mediatek.com,
+        yj.chiang@mediatek.com
+Subject: Re: [PATCH] tracing: make tracer_init_tracefs initcall asynchronous
+Message-ID: <202203120304.sJ9EJI90-lkp@intel.com>
+References: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
 MIME-Version: 1.0
-References: <20220224000531.1265030-1-haoluo@google.com> <a7f26f93-c5f8-2abc-e186-5d179706ae8e@soleen.com>
- <CA+khW7hwT0PSiToAJcdX1Te9QwhWL671sMX+92VS+V6Zsp+0Vg@mail.gmail.com>
-In-Reply-To: <CA+khW7hwT0PSiToAJcdX1Te9QwhWL671sMX+92VS+V6Zsp+0Vg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 11 Mar 2022 11:11:13 -0800
-Message-ID: <CAEf4BzYa1o5FYWGY3tt6O_7LK5h+NmiFzM9QhnKA5n3w-3=p7Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
-To:     Hao Luo <haoluo@google.com>
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,49 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 5:16 PM Hao Luo <haoluo@google.com> wrote:
->
-> On Fri, Feb 25, 2022 at 12:43 PM Pasha Tatashin
-> <pasha.tatashin@soleen.com> wrote:
-> >
-> > On 2/23/22 19:05, Hao Luo wrote:
-> > > For binaries that are statically linked, consecutive stack frames are
-> > > likely to be in the same VMA and therefore have the same build id.
-> > > As an optimization for this case, we can cache the previous frame's
-> > > VMA, if the new frame has the same VMA as the previous one, reuse the
-> > > previous one's build id. We are holding the MM locks as reader across
-> > > the entire loop, so we don't need to worry about VMA going away.
-> > >
-> > > Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
-> > > test_progs.
-> > >
-> > > Suggested-by: Greg Thelen <gthelen@google.com>
-> > > Signed-off-by: Hao Luo <haoluo@google.com>
-> >
-> > Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> >
->
-> An update with performance numbers. Thanks to Blake Jones for
-> collecting the stats:
->
-> In a production workload, with BPF probes sampling stack trace, we see
-> the following changes:
->
->  - stack_map_get_build_id_offset() is taking 70% of the time of
-> __bpf_get_stackid(); it was 80% before.
+Hi Mark-PK,
 
-Great, thanks for following up with updated numbers!
+I love your patch! Perhaps something to improve:
 
->
->  - find_get_page() and find_vma() together are taking 75% of the time
-> of stack_map_get_build_id_offset(); it was 83% before.
->
-> Note the call chain is
->
-> __bpf_get_stackid()
->   -> stack_map_get_build_id_offset()
->     -> find_get_page()
->     -> find_vma()
->
-> > Thanks,
-> > Pasha
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on v5.17-rc7 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Mark-PK-Tsai/tracing-make-tracer_init_tracefs-initcall-asynchronous/20220311-192857
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: riscv-randconfig-r042-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120304.sJ9EJI90-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/134c5fb991a16bf28b500e8e52296447013b5b01
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Mark-PK-Tsai/tracing-make-tracer_init_tracefs-initcall-asynchronous/20220311-192857
+        git checkout 134c5fb991a16bf28b500e8e52296447013b5b01
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0xa792a): Section mismatch in reference from the function tracefs_init() to the function .init.text:create_trace_instances()
+The function tracefs_init() references
+the function __init create_trace_instances().
+This is often because tracefs_init lacks a __init
+annotation or the annotation of create_trace_instances is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0xade5e): Section mismatch in reference from the function event_trace_init() to the function .init.text:early_event_add_tracer()
+The function event_trace_init() references
+the function __init early_event_add_tracer().
+This is often because event_trace_init lacks a __init
+annotation or the annotation of early_event_add_tracer is wrong.
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

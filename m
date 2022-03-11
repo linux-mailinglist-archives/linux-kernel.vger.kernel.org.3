@@ -2,141 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FD84D6623
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6C24D663D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350295AbiCKQ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S238619AbiCKQ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350345AbiCKQ0g (ORCPT
+        with ESMTP id S1350797AbiCKQ2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:26:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163D01BA17F;
-        Fri, 11 Mar 2022 08:25:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74FBB61BDF;
-        Fri, 11 Mar 2022 16:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C1CC340F9;
-        Fri, 11 Mar 2022 16:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647015900;
-        bh=aeMzJEZ9sFNCdhritR/EtuJ7IxGKXNGHHq3QcZWtA7Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=E6eHbcUTeiM6GjK/GG2GVEFfaaNefS9Ukh65vGoMYE/f7esyLLb1aF7QuKdlKfmys
-         D+9Kj5SNr0ULXP+YxEmus4//yoE8HLmOqLeFEolcGSReXSToMphFquMW30JDt1KT+8
-         jt0nS+MSKybnCwLwZE4D9odaQSjEjMjr9nTRfB5Vtb/0ckYupweM582QHUw+bUUsgD
-         3Tc13TpqhuF1RDDSIfHnGpmz9/y12iTVDbn3ObtfKASNQWHOGcLXB16xH3Gq8cCo9B
-         L5VA3QIiq3DbmVXThX+ILr66wcNYphWC2E80hAitsTZXTjcwIXoU5F/43I5ErilDZ8
-         eeA4tkA2cyaag==
-Date:   Fri, 11 Mar 2022 10:24:59 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, wse@tuxedocomputers.com,
-        Matt Hansen <2lprbe78@duck.com>
-Subject: Re: [PATCH 3/3] x86/PCI: Preserve host bridge windows completely
- covered by E820
-Message-ID: <20220311162459.GA304957@bhelgaas>
+        Fri, 11 Mar 2022 11:28:30 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DD610DA4D;
+        Fri, 11 Mar 2022 08:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647016045; x=1678552045;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nRlFhJ+PIU5XoBZQ7PKvZSY+ABJ08XeIWijk9GDqH4k=;
+  b=HYFJwa09oiwPhZ97RvOJNteoNS8oZwo4+JSN7z5F+0jkoezPAdhbh3Nm
+   gBkYSx/t038FYMFCUr6zCL9wXYbiWzMI00MLIvWp/DeN8Ry7aZGa9YV++
+   iJadlYrBMULmxESPuwK7eweugtwyPuJN8DhBEY5J1Hr+k40/+6BfFiC6j
+   DHjH6hCespWGOFzJpUfUnKrykW8TO9wEZIDN8dWZbcSHqWNGDi6AYhej3
+   gdPjaxnzENSogPMXhcBRsxiiR2fEA6AlOUBtAzIiTjv/CRW/BWneAUeU8
+   rOzIFDp6z+hjTxCOen1zxPv2pVKTwpqY5gL2Wi7uzvfsPxxiul8Q0SvUz
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="280348336"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="280348336"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 08:27:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="597157659"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Mar 2022 08:27:22 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSi6r-0006kG-R5; Fri, 11 Mar 2022 16:27:21 +0000
+Date:   Sat, 12 Mar 2022 00:27:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH] tracing: Add snapshot at end of kernel boot up
+Message-ID: <202203120019.Oteoj0K7-lkp@intel.com>
+References: <20220310214133.0e58e321@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <03675c75-ee6f-5da3-099c-2b82a1865455@redhat.com>
+In-Reply-To: <20220310214133.0e58e321@gandalf.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Matt]
+Hi Steven,
 
-On Fri, Mar 11, 2022 at 08:52:31AM +0100, Hans de Goede wrote:
-> On 3/10/22 13:28, Hans de Goede wrote:
-> > On 3/9/22 19:15, Bjorn Helgaas wrote:
-> >> On Sat, Mar 05, 2022 at 11:37:23AM +0100, Hans de Goede wrote:
-> >>> On 3/4/22 16:46, Hans de Goede wrote:
-> >>>> On 3/4/22 16:32, Bjorn Helgaas wrote:
-> >>>>> On Fri, Mar 04, 2022 at 03:16:42PM +0100, Hans de Goede wrote:
-> >>>>>> On 3/4/22 04:51, Bjorn Helgaas wrote:
-> >>>>>>> From: Bjorn Helgaas <bhelgaas@google.com>
-> >>>>>>>
-> >>>>>>> Many folks have reported PCI devices not working.  It could affect any
-> >>>>>>> device, but most reports are for Thunderbolt controllers on Lenovo Yoga and
-> >>>>>>> Clevo Barebone laptops and the touchpad on Lenovo IdeaPads.
-> >>>>>>> ...
-> >>
-> >>>>>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
-> >>>>>>> index 7378ea146976..405f0af53e3d 100644
-> >>>>>>> --- a/arch/x86/kernel/resource.c
-> >>>>>>> +++ b/arch/x86/kernel/resource.c
-> >>>>>>> @@ -39,6 +39,17 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
-> >>>>>>>  		e820_start = entry->addr;
-> >>>>>>>  		e820_end = entry->addr + entry->size - 1;
-> >>>>>>>  
-> >>>>>>> +		/*
-> >>>>>>> +		 * If an E820 entry covers just part of the resource, we
-> >>>>>>> +		 * assume E820 is telling us about something like host
-> >>>>>>> +		 * bridge register space that is unavailable for PCI
-> >>>>>>> +		 * devices.  But if it covers the *entire* resource, it's
-> >>>>>>> +		 * more likely just telling us that this is MMIO space, and
-> >>>>>>> +		 * that doesn't need to be removed.
-> >>>>>>> +		 */
-> >>>>>>> +		if (e820_start <= avail->start && avail->end <= e820_end)
-> >>>>>>> +			continue;
-> >>>>>>> +
-> >>>>>>
-> >>>>>> IMHO it would be good to add some logging here, since hitting this is
-> >>>>>> somewhat of a special case. For the Fedora test kernels I did I changed
-> >>>>>> this to:
-> >>>>>>
-> >>>>>> 		if (e820_start <= avail->start && avail->end <= e820_end) {
-> >>>>>> 			dev_info(dev, "resource %pR fully covered by e820 entry [mem %#010Lx-%#010Lx]\n",
-> >>>>>> 				 avail, e820_start, e820_end);
-> >>>>>> 			continue;
-> >>>>>> 		}
-> >>>>>>
-> >>>>>> And I expect/hope to see this new info message on the ideapad with the
-> >>>>>> touchpad issue.
-> >>
-> >> I added this logging.
-> >>
-> >>> So I just got the first report back from the Fedora test 5.16.12 kernel
-> >>> with this series added. Good news on the ideapad this wotks fine to
-> >>> fix the touchpad issue (as expected).
-> >>
-> >> Any "Tested-by" I could add?  If we can, I'd really like to give some
-> >> credit to the folks who suffered through this and helped resolve it.
-> > 
-> > Good point, the reporter of:
-> > https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> > 
-> > has done most of the ideapad with touchpad issues testing for me
-> > and has been very helpful. I agree he deserves credit for this.
-> > 
-> > I've asked him if he is ok with adding a Tested-by tag and if yes,
-> > which email we should use.
-> 
-> If you can add the following tag that would be great:
-> 
-> Tested-by: Matt Hansen <2lprbe78@duck.com>
+Thank you for the patch! Perhaps something to improve:
 
-Done, thank you very much, Matt!  Many people will benefit from your
-work.
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on linux/master hnaz-mm/master linus/master v5.17-rc7 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220312/202203120019.Oteoj0K7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
+        git checkout 60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0x179120): Section mismatch in reference from the function do_init_module() to the function .init.text:ftrace_boot_snapshot()
+The function do_init_module() references
+the function __init ftrace_boot_snapshot().
+This is often because do_init_module lacks a __init
+annotation or the annotation of ftrace_boot_snapshot is wrong.
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

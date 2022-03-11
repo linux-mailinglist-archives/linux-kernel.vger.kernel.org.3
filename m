@@ -2,125 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFC24D60AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3154D60AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348244AbiCKLeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S1348245AbiCKLeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348281AbiCKLeF (ORCPT
+        with ESMTP id S1348283AbiCKLeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 06:34:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098BA1BFDD4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:33:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3B5F61C0C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC71C340E9;
-        Fri, 11 Mar 2022 11:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646998379;
-        bh=uSZVRIEZmmAI50rSDOLQVVMX+nrIiVbr3OGKRDJH6/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KdgodhClckzNLV4qaZqt7BV+YrSBb+4zCmLUQqygGAH4TMFmnD6mm6dehkTjnmsoe
-         56QONzPS1JRFxlFO89VnHfcBJJE9/WVKr9QgcgtjuIeVX3z/ihx8J1IMaqmjxoUYUj
-         Z5fGNh/APkPuuoak+5PHgCxihQAH/IkVtHYZnzZRN7UdjBHkpY6IRwdVWVCP65mHra
-         B55U4tAqr14VvtccnSOASwMUEhOsTcUa02q0mklVaX9uz2VZH70E7UvWSGPLD5z2dc
-         ykgfCsb04bWjBvRM5uMd5R/vhQQltkrG4uBrLE70+9P/4bswdIsC0mHV0FroM2NnNU
-         RN34ANnEnQhdw==
-Date:   Fri, 11 Mar 2022 12:32:56 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Scenario TREE07 with CONFIG_PREEMPT_DYNAMIC=n?
-Message-ID: <20220311113256.GB96127@lothringen>
-References: <20220310215630.GA3490034@paulmck-ThinkPad-P17-Gen-1>
- <20220310224103.GA94994@lothringen>
- <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1171BFDDC;
+        Fri, 11 Mar 2022 03:33:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kTVC2a+uAGzc7Ia3+Ha88nkdfooICKq7BFxERkEH6aQQq5I7ruu61zd2xF5EKiBNVktRUqd8iezAIQ9o8u4thbyChkAoTWWCr7EZMeKFpodeZNlD7Me93gLG23zmvSR6FNRsVJfyHYjpogVKP8WIe6+TQBttu2rpV1wl8r7fdbAKCNmELNP+XqjGWmZ2P4/oWhfMSPoCn1NjcmshAiHA18UMqsmaBQGsdAZVebBgds8X9kMLQ6mzsg4br+lxFRpUsBuYxHYjvR2lEmz3peeC/IkImnIgbL9JjuLByQpICRuAGE+SMM8jZDWEyryUaJNfJ/dhsqCxT+GusZbvg75DOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+C2Tss/6wZume397eZQhFejgiFSZm6pSlGtu+9VINOs=;
+ b=QjCDo6RKo52xuPMHhtc/L7hVtJ9vbq0ZWfkNy8Hbm0iTuz4bbndzgwEooT0lyRnxDytwO+FeMRFeYZ/R2y/CVz2zWbtlAakc/qD/WppVILjGSZIt/bXIPu0ylhLemAjbqfMX549u0SfEKYI+L3275uoV0yfFK2ROu0hV2U7HcD/6BwZrmYKqVdSc7qxarojkFRBibhzoLDRrINvqiXBDonnduMIxWdxm1Jl8RaPJZpJ4vj1+3z6ZjfeBTttlnaN5AbM7reRVGXCOsYyftFqhQm45K2nnly7Qx7MGq6vV726iuf9e4pTSdqIiG5kg7EwqMZeU+NJ8aTVh+ET28D8inA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+C2Tss/6wZume397eZQhFejgiFSZm6pSlGtu+9VINOs=;
+ b=A/cXQCIg5omj1VFTo8VLPCNlIgndxowwJBpxAQoVV6tq4uvvBZWM7kz4nenSARQLujBiww+ArsMTwnsDlCfzU6PevIpyG+zyt4xh589JwqHbferzspGYHaS1QvWE2vIBbgrR4pC+EtoWiwCS0HXwHrYNg+xnAx7LVeHpj2ga8CQ=
+Received: from BN0PR02MB7933.namprd02.prod.outlook.com (2603:10b6:408:161::20)
+ by PH0PR02MB8796.namprd02.prod.outlook.com (2603:10b6:510:f3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.26; Fri, 11 Mar
+ 2022 11:32:57 +0000
+Received: from BN0PR02MB7933.namprd02.prod.outlook.com
+ ([fe80::344c:1ba0:2b3f:d4e1]) by BN0PR02MB7933.namprd02.prod.outlook.com
+ ([fe80::344c:1ba0:2b3f:d4e1%7]) with mapi id 15.20.5038.029; Fri, 11 Mar 2022
+ 11:32:57 +0000
+From:   Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>, Michal Simek <michals@xilinx.com>
+Subject: RE: [PATCH 2/2] spi: spi-cadence: Fix kernel-doc format for
+ resume/suspend
+Thread-Topic: [PATCH 2/2] spi: spi-cadence: Fix kernel-doc format for
+ resume/suspend
+Thread-Index: AQHYNJ3hCfH2XLgqfU2OFBNnQ254pKy49R0AgADId4A=
+Date:   Fri, 11 Mar 2022 11:32:57 +0000
+Message-ID: <BN0PR02MB7933108D2F4C657D850CE131BA0C9@BN0PR02MB7933.namprd02.prod.outlook.com>
+References: <20220310164235.32230-1-amit.kumar-mahapatra@xilinx.com>
+ <20220310164235.32230-3-amit.kumar-mahapatra@xilinx.com>
+ <YipHjjg/sLRqQVX6@sirena.org.uk>
+In-Reply-To: <YipHjjg/sLRqQVX6@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 98f021b3-2bdb-40ff-8449-08da0352e448
+x-ms-traffictypediagnostic: PH0PR02MB8796:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <PH0PR02MB87964BB5B4F2D1250FDF651CBA0C9@PH0PR02MB8796.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vPB+/kQYYgpE9vxZshZPhF3Y287uueQXAeI3sGr635Zejwm2Co1I646ZCczcYjWPlr93OMyeGigMuXr7kV539PxJl83PyUnFc64i3KGuWQqiFtTL9pCW5yYIeqO8kDyVuk0StLjJxK/v1l0BE9qM0YuuEDrLs6lbcg/JHNR9Q4VyPL+1B8q3vfc8WXg/uYb7J9qohWdSBKAC0UBMNrAdVASYtkMxZC5NhyxkJEryxhb5USk+pIbZ8z5keFteDf1JK8uH6tcy3VT+uNrpWVHZ2hxf3NubyZPkd0o7em66ZG+ehHJWXUOK4cNGSs8aPirdsEO9BjRuxGiZcmthZ2xl5KzcYX4RJDd1NRWK4HLFdQCdpH9OowvUvPPzLU3Ojalfc6fbYJLQJ6KpDBMOzVlZEpspegEApUCsW/zXcYN7GTEKGK14tKg4KsoXq2lss8GO8TrxKrZvrNca7Z4gH+7KZuLBC7K8xtBle05rceK8VJrmdGOD4/xfzgpTNn0am732cI9AAbZw5ve4lIkp0by8k7X5OD3Tt7uXj1Pg/3DXMycsRe9yJT5Oh/pqZ2gkrokAU/YgW/WzTnFXxvduNIHjro3PDcDHF7EMZLmKC3cmUzXyRjkIKTJIPVS2Kw2igFTx+SOKCLNj6bJRyQqhyZvSy7T/HTgkdDoeF4SD0XKKjusNjD/HeXEEP+m0XxZkD63AyID6rx/nJ7beuUux9Y8Kv7HCg7T0uY/nkzRZae6YNBE21Jl1SVM6uEPblWAqAyXyDmMbyPgMFbbvU9k09CVN0b7PEX2aKRzIWoJUmw4CQYw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR02MB7933.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(15650500001)(6506007)(71200400001)(122000001)(38100700002)(66446008)(52536014)(33656002)(26005)(8936002)(2906002)(86362001)(53546011)(7696005)(54906003)(66946007)(64756008)(966005)(76116006)(66476007)(9686003)(66556008)(508600001)(5660300002)(8676002)(38070700005)(4326008)(107886003)(83380400001)(55016003)(6916009)(316002)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E8xSVIV2E7qph8eaeXjBq0YQ/XwNOux0XPCdcwCwlVVGjcreavvSrZ4VIBqt?=
+ =?us-ascii?Q?yBRAWUwSPu52a+eoasvt66lMc3XMX6cJVsvDHi0v/OljWZJQaZRZo+lIvUzs?=
+ =?us-ascii?Q?nZjwTups7eCWXB1u2VzUApeSbR/+oSx5tGU0pE4NCq+hNzaULBQE67JdaUV6?=
+ =?us-ascii?Q?0soXdh82dDQ0c8KBTVkYVr+VL5orqobIG+H3YOrU4PXA8G7mCS0A90k9beCM?=
+ =?us-ascii?Q?FaJe0iOQ883L9oltRAfRJdZwImTVktPNYgqeKVQ8ujlDHPKrrjMgYknMgXcF?=
+ =?us-ascii?Q?kNKU9OuHlW8FFevJ3G7KaxWap2esCKYQ190XgjZkABPo3o/RomOoaD9VVAN3?=
+ =?us-ascii?Q?W9NUVS9CUEJFUPVCxZxHfZAzgKE59gZ6RE75tehScZeYhmxR1p2bBR1ZH5Z4?=
+ =?us-ascii?Q?cA5HUWIyUjNoQao5z4SkEJNIMODRAnEPN+FMUf64goRBlr+Q6YVAuQ9D978M?=
+ =?us-ascii?Q?cnZCnm33pIr0syIWQLJtUD2NI4VQAbJf9kLs+CxWtJrMQxgdBLNRMEC4SBVT?=
+ =?us-ascii?Q?dn/KZsIkbV6EYA050G5GWbXh/DHk5cwfu2zeniTe/dvjXwKsP3bB1h65ou2r?=
+ =?us-ascii?Q?8vgvucG02eDZo6E21EHiPFgeVG+ArqnuR1k/MEBUrjOczFpSVwA3my7uAfHk?=
+ =?us-ascii?Q?Gk54cN1N23qr0TcO8NAaLHjl71o0O6LF6mvbTt/blHx3rYL6KH3fBagwYjYv?=
+ =?us-ascii?Q?JGdvDIDPCabFBAXC8fcVoVh73okbYh+lJTI5RvnXYGMe1ojSJjz2TjU/fPXr?=
+ =?us-ascii?Q?rCVR5pVBpGI4g75BI5M7Gt8lENH7eP4DG5DTU83192kDFHzzWqkYoawfJcVD?=
+ =?us-ascii?Q?ig5XAk1w+KS8E9DG1Myfh/URQLDDxsMimEZJlqqZRcGMzIPa40+LKWuoT9yR?=
+ =?us-ascii?Q?/9Do30bwkt7F2OQ1jTKlUoqqoNG2rpNWhILdkcWn85/98KhXvED9Q3PoAIg/?=
+ =?us-ascii?Q?hc9/c79RRMGoHQFVJFyl5SM8Z6RZAQ67bzh5AzfaME/6v6Yj9ji3CQD3MqRc?=
+ =?us-ascii?Q?7lgSGrv0QgwSO3xtnzbIadzMvsYVPcLmj2OwWTqwI5coWoZ7dFsyfY+jLRN6?=
+ =?us-ascii?Q?MrTRCqkWCSmvliT2SCwAxjBtHBOEOEET0CJn1L+1z/5Nss3eBCSpAGWJwIlB?=
+ =?us-ascii?Q?ZrYnJNhlBhUMkOQD8EypBA5DVL9AxnwP21a1wKIStG5PM2M95TZZMZh9SqWh?=
+ =?us-ascii?Q?KpKObyaVyHsAjC+bLvryw8yROGznz4KwUvFPCo12IX3Auu1Y2ejsKQ5mB82g?=
+ =?us-ascii?Q?aaL9mIn0ya6KJyWY7msibi/BIf1/HBLs3asPtxqxtrNp3APlEO0q1h75zdWJ?=
+ =?us-ascii?Q?AvakLiWF5cHweDuusygjpIfdmlyZ5ndrFG6EVsWCMClXja9Ry8h4WpOMuvPO?=
+ =?us-ascii?Q?9uZ7GeKhcx9I3HbI2ZWZZpfPG2w1VcDIiQlDAlHxfGZn8Th7eO/2sdm1YUwT?=
+ =?us-ascii?Q?ALrB5S3fqhA7WPe9YeUmWWVA/eu2YivFsQlms9nG+MW1K277JcTMQsbfh90b?=
+ =?us-ascii?Q?D+OiksY/M7qewH8aURSMfkz2KB9ozfQEElRcGxj1Y8bZ9qgsJPk6TEo3nruI?=
+ =?us-ascii?Q?SLa0yvjDGSCm5WeJ1jXMcOuwBwJUx8hIcyBZTUOJHEWkQREdAwfbKFWq/gzq?=
+ =?us-ascii?Q?a4NW31oWAXflXUChM6esCiU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310225219.GE4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR02MB7933.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98f021b3-2bdb-40ff-8449-08da0352e448
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 11:32:57.8037
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CjV55zOPzQUiZJyBp2hUgMKDGfjfh1SlA2ff4bV0P5Ewp5Q4MAHmq7xMKpJaFM6zEDo3W9rsMoyMrmYwcYxSdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8796
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 02:52:19PM -0800, Paul E. McKenney wrote:
-> On Thu, Mar 10, 2022 at 11:41:03PM +0100, Frederic Weisbecker wrote:
-> > On Thu, Mar 10, 2022 at 01:56:30PM -0800, Paul E. McKenney wrote:
-> > > Hello, Frederic,
-> > > 
-> > > I recently added CONFIG_PREEMPT_DYNAMIC=n to the TREE07 file, and since
-> > > then am getting roughly one RCU CPU stall warning (or silent hang)
-> > > per few tens of hours of rcutorture testing on dual-socket systems.
-> > > The stall warnings feature starvation of RCU grace-period kthread.
-> > > 
-> > > Any advice on debugging this?
-> > 
-> > Oh, I'm testing that!
-> 
-> Even better, thank you!  ;-)
+Hello Mark,
 
-One possibly interesting detail: the stalling CPU is stuck on
-sync_rcu_do_polled_gp(), which is launched by the recent start_poll_synchronize_rcu_expedited():
+> -----Original Message-----
+> From: Mark Brown <broonie@kernel.org>
+> Sent: Friday, March 11, 2022 12:17 AM
+> To: Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>
+> Cc: linux-spi@vger.kernel.org; linux-kernel@vger.kernel.org; git
+> <git@xilinx.com>; Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>;
+> Michal Simek <michals@xilinx.com>
+> Subject: Re: [PATCH 2/2] spi: spi-cadence: Fix kernel-doc format for
+> resume/suspend
+>=20
+> On Thu, Mar 10, 2022 at 10:12:35PM +0530, Amit Kumar Mahapatra wrote:
+> > From: Michal Simek <michal.simek@xilinx.com>
+> >
+> > Kernel function name don't match with function name.
+> >
+> > Error log:
+> > drivers/spi/spi-cadence.c:662: warning: expecting prototype for
+> > cdns_spi_runtime_resume(). Prototype was for cnds_runtime_resume()
+> > instead
+> > drivers/spi/spi-cadence.c:691: warning: expecting prototype for
+> > cdns_spi_runtime_suspend(). Prototype was for cnds_runtime_suspend()
+> > instead
+>=20
+> These errors are introduced by the prior patch in the series, that patch
+> should be fixed to just not introduce these errors in the first place.
 
-[  463.518410]  <IRQ>
-[  463.518691]  dump_stack_lvl+0x33/0x42
-[  463.519182]  nmi_cpu_backtrace+0xc0/0xe0
-[  463.519706]  ? lapic_can_unplug_cpu+0x90/0x90
-[  463.522188]  nmi_trigger_cpumask_backtrace+0x82/0xc0
-[  463.522863]  rcu_dump_cpu_stacks+0xc0/0xf0
-[  463.523410]  rcu_sched_clock_irq+0x6e3/0xa30
-[  463.523982]  ? tick_sched_handle.isra.21+0x40/0x40
-[  463.524628]  update_process_times+0x87/0xb0
-[  463.525183]  tick_sched_handle.isra.21+0x2b/0x40
-[  463.525795]  tick_sched_timer+0x5e/0x70
-[  463.526306]  __hrtimer_run_queues+0x108/0x240
-[  463.526886]  hrtimer_interrupt+0xe0/0x240
-[  463.527419]  __sysvec_apic_timer_interrupt+0x55/0xf0
-[  463.528436]  sysvec_apic_timer_interrupt+0x43/0x80
-[  463.529074]  </IRQ>
-[  463.529366]  <TASK>
-[  463.529656]  asm_sysvec_apic_timer_interrupt+0x12/0x20
-[  463.530333] RIP: 0010:synchronize_rcu_expedited+0x0/0x3f0
-[  463.531042] Code: 89 65 48 48 89 ef e8 8f 03 af 00 48 8b 85 80 00 00 00 48 85 c0 0f 84 70 ff ff ff 4c 8b 65 68 48 89 c5 eb b6 66 0f 1f 44 00 00 <41> 54 55 53 48 81 ec 90 00 00 00 44 8b 25 3a 10 7a 01 65 48 8b 04
-[  463.533454] RSP: 0018:ffffb2e94045be88 EFLAGS: 00000287
-[  463.534141] RAX: 000000000001300c RBX: 0000000000013010 RCX: ffff98941f2298e8
-[  463.535078] RDX: 0000000000013011 RSI: 0000000000000286 RDI: ffffffff9bb3ba9c
-[  463.536007] RBP: ffffffff9bb3baa8 R08: 000070675f756372 R09: 8080808080808080
-[  463.536948] R10: ffffb2e940077d48 R11: fefefefefefefeff R12: ffffffff9bb3ba9c
-[  463.537878] R13: 0000000000000000 R14: ffff98941f2298c0 R15: ffff98941f22e005
-[  463.538810]  sync_rcu_do_polled_gp+0x39/0xc0
-[  463.539382]  process_one_work+0x1ec/0x3b0
-[  463.539917]  worker_thread+0x25/0x390
-[  463.548472]  ? process_one_work+0x3b0/0x3b0
-[  463.549193]  kthread+0xbd/0xe0
-[  463.549730]  ? kthread_complete_and_exit+0x20/0x20
-[  463.550548]  ret_from_fork+0x22/0x30
-[  463.551167]  </TASK>
+https://github.com/torvalds/linux/commit/d36ccd9f7ea41f343391a15677b8a85837=
+6e1107
+The above patch introduced two issues. as mentioned below
+1) Runtime suspend/resume API had "cnds" prefix, unlike all other driver AP=
+Is=20
+that has "cdns" prefix
+2) kernel-doc warnings in runtime suspend/resume APIs.=20
 
+So, the runtime suspend/resume kernel-doc warnings  were present prior to t=
+his=20
+patch series and were not introduced in the 1/2 patch of this series.
 
-Could be this:
+1/2 patch of this series aligns the runtime suspend/resume API prefix with =
+the=20
+rest of the functions by changing it from "cnds" to "cdns".
+2/2 patch of this series fixes the kernel-doc warning in runtime suspend/re=
+sume=20
+APIs.=20
 
-	while (!sync_exp_work_done(s))
-		synchronize_rcu_expedited();
-
-And if synchronize_rcu_expedited() -> rcu_blocking_is_gp() is true, then we
-may run in a long loop withing the workqueue without a chance to report a QS,
-expecially if we are running a non-preemptible kernel. This could be the cause
-of the stalling grace period kthread.
-
-rcu_blocking_is_gp() could be true if all other CPUs but the current one are
-offline.
-
-It's just a potential scenario, lemme check...
+Regards,
+Amit

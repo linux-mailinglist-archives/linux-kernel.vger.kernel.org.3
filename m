@@ -2,89 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3454D5BB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652DE4D5BBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346798AbiCKGo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 01:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S1345209AbiCKGrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 01:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiCKGo5 (ORCPT
+        with ESMTP id S232738AbiCKGre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 01:44:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EE319CCCA;
-        Thu, 10 Mar 2022 22:43:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3534FB8299A;
-        Fri, 11 Mar 2022 06:43:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8722C340EC;
-        Fri, 11 Mar 2022 06:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646981032;
-        bh=TAmKSWfM8MT8+nWEF/VhEG/ZJrPdgq10gXaV9KWbhGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o+LTthpBiwXFgN2AXoXR3dkBllQINaKMB1MVLJ9fNYGsc33egvUleMos9C/Ers5Xy
-         0aEsi7MyMo1LTO9pReh2ngHcWv3tBkSMJs7arcNj5FfwvhZHpBeAcF2ucLoONOjTwm
-         lzB2WbNkenxYx1bvG4vVTVW8w6wx1VAlmaBnFX58=
-Date:   Fri, 11 Mar 2022 07:43:48 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     stephen@networkplumber.org, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, kpsingh@kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] hv_netvsc: Add check for kvmalloc_array
-Message-ID: <YirvpH4+KTyH2xTe@kroah.com>
-References: <20220311032035.2037962-1-jiasheng@iscas.ac.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311032035.2037962-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 01:47:34 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC33A19D617
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:46:32 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id q13so6928505plk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:46:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=MDO98zfNryitJLRORLTZ+LkzoKAWivGOSBuxXfv/2ck=;
+        b=Locg1LNIe+YyIJbh8hZviuYWEecJYbAU8GbggY1FbPSptu4HwbL6H9enLJNtiy4O9y
+         qsKWLexxG9XFotNKrLDpP4FIvP9bpGLdb3ceaBzDXRzLqD7DLbV4nvcXVlYIVEUc+84m
+         OZL6vugdjH3FQ4dJaDxLDHfsZW24d/K4aHOE24FKIJqK8RKKotfPSB/D8ygA7ULReAr3
+         h2Y0xrOTYCf0otNALKf7umXd0+uGP6ws7LIenhkFLTLMxiyO++hSwrXPRSKuuwfLAogD
+         B2u1/BQfCkeCXIfIqqRrZ0/bEz9hlIqaGgTZjyUZrB4Z/OAc+0+YewT5zVgjRgtCVOH3
+         ZODA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MDO98zfNryitJLRORLTZ+LkzoKAWivGOSBuxXfv/2ck=;
+        b=ssMaPhmPqNX8VXQuE74TCCb/O8BNqH9YUI25GTzTYhu+IVwF+dnv05bUl2xcX1a/jU
+         OmyLkxFFqD0FHz+BLaG/3OMvUUdmJsXZOgKBx1baNIExvjKrwoPrQY8oRxSP+3veCmJK
+         O6bk8god27e7OU62L7/m2S9NJk85s9BVPoGdd2kAJZ2n9CUSsBMh/aQRhcgUyd3BKUzU
+         NJvRKFh9zMb62SZplZF6dt7yTz/Bd32cdhCPmcclo2zaV4fb6jKUnIGR3hFH9yLr/0SJ
+         dAXB1gOw920di2B1BVxjcQHWDuGmx1zZvwdWACN5QUjDFKVJjMeksClRiFsN7ZimtgEF
+         YSNg==
+X-Gm-Message-State: AOAM533UIRMrcebWQmWImmZ+QLNwD4pNXhZOshbdY+T1JFoAeJvnzj6N
+        MZtyhPadtPuRm97PfbMMqxWPSy3HsQ==
+X-Google-Smtp-Source: ABdhPJzOqAUc50SCwJ9tg96bi/j3yvTpUoNqVLebYB0d5O3nzLVV4Eewfk/P4/q+NKO2fbpcs22R7w==
+X-Received: by 2002:a17:903:291:b0:150:4197:7cf2 with SMTP id j17-20020a170903029100b0015041977cf2mr8726281plr.173.1646981192234;
+        Thu, 10 Mar 2022 22:46:32 -0800 (PST)
+Received: from sh08423pcu1.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id e16-20020aa78c50000000b004f76c255e92sm5085738pfd.101.2022.03.10.22.46.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Mar 2022 22:46:31 -0800 (PST)
+From:   Bruce Chen <brucechen251@gmail.com>
+To:     bruce.chen@unisoc.com, rogerq@kernel.org, myungjoo.ham@samsung.com,
+        cw00.choi@samsung.com, linux-kernel@vger.kernel.org
+Cc:     orsonzhai@gmail.com, gengcixi@gmail.com, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com
+Subject: [PATCH RESEND V2] extcon: usb-gpio: Remove disable irq operation in system sleep.
+Date:   Fri, 11 Mar 2022 14:45:03 +0800
+Message-Id: <1646981103-30050-1-git-send-email-brucechen251@gmail.com>
+X-Mailer: git-send-email 1.9.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 11:20:35AM +0800, Jiasheng Jiang wrote:
-> As the potential failure of the kvmalloc_array(),
-> it should be better to check and restore the 'data'
-> if fails in order to avoid the dereference of the
-> NULL pointer.
-> 
-> Fixes: 6ae746711263 ("hv_netvsc: Add per-cpu ethtool stats for netvsc")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/hyperv/netvsc_drv.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-> index 3646469433b1..018c4a5f6f44 100644
-> --- a/drivers/net/hyperv/netvsc_drv.c
-> +++ b/drivers/net/hyperv/netvsc_drv.c
-> @@ -1587,6 +1587,12 @@ static void netvsc_get_ethtool_stats(struct net_device *dev,
->  	pcpu_sum = kvmalloc_array(num_possible_cpus(),
->  				  sizeof(struct netvsc_ethtool_pcpu_stats),
->  				  GFP_KERNEL);
-> +	if (!pcpu_sum) {
-> +		for (j = 0; j < i; j++)
-> +			data[j] = 0;
-> +		return;
-> +	}
+From: Bruce Chen <bruce.chen@unisoc.com>
 
-How did you test this to verify it is correct?
+If disable vbus/id irq, it will lead to wakeup system fail
+in unisoc platform. In unisoc platform, Irq enable and irq
+wakeup are the same interrupt line. So remove disable vbus/id
+irq operation is a way to solve the issue.
 
-thanks,
+Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
+Acked-by: Roger Quadros <rogerq@kernel.org>
+---
+ drivers/extcon/extcon-usb-gpio.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-greg k-h
+diff --git a/drivers/extcon/extcon-usb-gpio.c b/drivers/extcon/extcon-usb-gpio.c
+index f2b65d9..40d967a 100644
+--- a/drivers/extcon/extcon-usb-gpio.c
++++ b/drivers/extcon/extcon-usb-gpio.c
+@@ -226,16 +226,6 @@ static int usb_extcon_suspend(struct device *dev)
+ 		}
+ 	}
+ 
+-	/*
+-	 * We don't want to process any IRQs after this point
+-	 * as GPIOs used behind I2C subsystem might not be
+-	 * accessible until resume completes. So disable IRQ.
+-	 */
+-	if (info->id_gpiod)
+-		disable_irq(info->id_irq);
+-	if (info->vbus_gpiod)
+-		disable_irq(info->vbus_irq);
+-
+ 	if (!device_may_wakeup(dev))
+ 		pinctrl_pm_select_sleep_state(dev);
+ 
+@@ -267,11 +257,6 @@ static int usb_extcon_resume(struct device *dev)
+ 		}
+ 	}
+ 
+-	if (info->id_gpiod)
+-		enable_irq(info->id_irq);
+-	if (info->vbus_gpiod)
+-		enable_irq(info->vbus_irq);
+-
+ 	queue_delayed_work(system_power_efficient_wq,
+ 			   &info->wq_detcable, 0);
+ 
+-- 
+1.9.1
+

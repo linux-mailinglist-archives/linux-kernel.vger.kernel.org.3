@@ -2,74 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607CC4D5DE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C414D5DEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242959AbiCKIwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S244408AbiCKIxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238027AbiCKIv4 (ORCPT
+        with ESMTP id S241847AbiCKIxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:51:56 -0500
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354141BA93A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:50:52 -0800 (PST)
-Received: from IT-EXMB-1-123.meizu.com (172.16.1.123) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 11 Mar
- 2022 16:50:52 +0800
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by
- IT-EXMB-1-123.meizu.com (172.16.1.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 11 Mar 2022 16:50:49 +0800
-Received: from IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575]) by
- IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575%3]) with mapi id
- 15.01.2308.014; Fri, 11 Mar 2022 16:50:49 +0800
-From:   =?gb2312?B?sNe6xs7E?= <baihaowen@meizu.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "vireshk@kernel.org" <vireshk@kernel.org>,
-        "johan@kernel.org" <johan@kernel.org>,
-        "elder@kernel.org" <elder@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBzdGFnaW5nOiBncmV5YnVzOiBGaXggcG90ZW50aWFs?=
- =?gb2312?Q?_NULL_dereference?=
-Thread-Topic: [PATCH] staging: greybus: Fix potential NULL dereference
-Thread-Index: AQHYNSL4iVqrOrm/80ClDX0ZeDDii6y5VuSAgACIFEY=
-Date:   Fri, 11 Mar 2022 08:50:49 +0000
-Message-ID: <0a6d02d1b6374cf0bddd0f4e7fbc475a@meizu.com>
-References: <1646987730-7597-1-git-send-email-baihaowen@meizu.com>,<20220311084019.w45kfluiamgosivu@vireshk-i7>
-In-Reply-To: <20220311084019.w45kfluiamgosivu@vireshk-i7>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.137.70]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Fri, 11 Mar 2022 03:53:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A66C205C8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:52:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646988745;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/479Pk+vprXDZIn8pdu3Nkd2rq1k38blx/MzMekbdF8=;
+        b=T39PWe7SkUFEp3MckipvC+fynfD2Cl0jXujfzMwISpratwujQXsLu9LNt2FTuXwr8WWn4k
+        Nj7fPCW+H/B3R8NqHR3ZSjbVYMPLZthLlrhdazKUBCRy/RAATIYYd9p/vIytK5ofw+3Man
+        PbZC/hBShT79MinbqNruWNX0XZhbQP4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-68-0SfKBHKbMTqm_PjtgjAZ2Q-1; Fri, 11 Mar 2022 03:52:19 -0500
+X-MC-Unique: 0SfKBHKbMTqm_PjtgjAZ2Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 786A5801DDC;
+        Fri, 11 Mar 2022 08:52:17 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7987D7369C;
+        Fri, 11 Mar 2022 08:52:06 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
+        Xu Zaibo <xuzaibo@huawei.com>
+Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+In-Reply-To: <20220310134954.0df4bb12.alex.williamson@redhat.com>
+Organization: Red Hat GmbH
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+ <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
+ <20220304205720.GE219866@nvidia.com>
+ <20220307120513.74743f17.alex.williamson@redhat.com>
+ <aac9a26dc27140d9a1ce56ebdec393a6@huawei.com>
+ <20220307125239.7261c97d.alex.williamson@redhat.com>
+ <BN9PR11MB5276EBE887402EBE22630BAB8C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220308123312.1f4ba768.alex.williamson@redhat.com>
+ <BN9PR11MB527634CCF86829E0680E5E678C0A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220310134954.0df4bb12.alex.williamson@redhat.com>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Fri, 11 Mar 2022 09:52:05 +0100
+Message-ID: <87tuc4hnwq.fsf@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T2gsIG15IGNhcmVsZXNzIHRvIGNoZWNrIGNvZGUuIFRoYW5rIHlvdSBmb3IgeW91ciBraW5kbHkg
-cmVtaW5kZXIuDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQq3orz+
-yMs6IFZpcmVzaCBLdW1hciA8dmlyZXNoLmt1bWFyQGxpbmFyby5vcmc+DQq3osvNyrG85DogMjAy
-MsTqM9TCMTHI1SAxNjo0MDoxOQ0KytW8/sjLOiCw17rGzsQNCrOty806IHZpcmVzaGtAa2VybmVs
-Lm9yZzsgam9oYW5Aa2VybmVsLm9yZzsgZWxkZXJAa2VybmVsLm9yZzsgZ3JlZ2toQGxpbnV4Zm91
-bmRhdGlvbi5vcmc7IGxpbnV4LXN0YWdpbmdAbGlzdHMubGludXguZGV2OyBsaW51eC1rZXJuZWxA
-dmdlci5rZXJuZWwub3JnDQrW98ziOiBSZTogW1BBVENIXSBzdGFnaW5nOiBncmV5YnVzOiBGaXgg
-cG90ZW50aWFsIE5VTEwgZGVyZWZlcmVuY2UNCg0KT24gMTEtMDMtMjIsIDE2OjM1LCBIYW93ZW4g
-QmFpIHdyb3RlOg0KPiBGaXggZm9sbG93aW5nIGNvY2NpY2hlY2sgd2FybmluZzoNCj4gZHJpdmVy
-cy9zdGFnaW5nL2dyZXlidXMvYm9vdHJvbS5jOjMwMTozNS0zOTogRVJST1I6IGZ3IGlzIE5VTEwg
-YnV0IGRlcmVmZXJlbmNlZC4NCj4NCj4gV2hlbiBnb3RvIHF1ZXVlX3dvcmsgYnV0IGRlcmVmZXJl
-bmNlIFVuaW5pdGlhbGl6ZWQgZncgd2lsbCB0cmlnZ2VyIGEgTlVMTA0KPiBkZXJlZmVyZW5jZS4N
-Cg0KUGxlYXNlIGhhdmUgYSBsb29rIGF0IGVhcmxpZXIgYXR0ZW1wdHMgbGlrZSB0aGlzOg0KDQpo
-dHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAxNTA5OS54VnY0OFZ6Tml0QGxpbnV4LmxvY2Fs
-Lw0KDQotLQ0KdmlyZXNoDQo=
+On Thu, Mar 10 2022, Alex Williamson <alex.williamson@redhat.com> wrote:
+
+> Do you think we should go so far as to formalize this via a MAINTAINERS
+> entry, for example:
+>
+> diff --git a/Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst b/Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst
+> new file mode 100644
+> index 000000000000..54ebafcdd735
+> --- /dev/null
+> +++ b/Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst
+> @@ -0,0 +1,35 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Acceptance criteria for vfio-pci device specific driver variants
+> +================================================================
+> +
+> +Overview
+> +--------
+> +The vfio-pci driver exists as a device agnostic driver using the
+> +system IOMMU and relying on the robustness of platform fault
+> +handling to provide isolated device access to userspace.  While the
+> +vfio-pci driver does include some device specific support, further
+> +extensions for yet more advanced device specific features are not
+> +sustainable.  The vfio-pci driver has therefore split out
+> +vfio-pci-core as a library that may be reused to implement features
+> +requiring device specific knowledge, ex. saving and loading device
+> +state for the purposes of supporting migration.
+> +
+> +In support of such features, it's expected that some device specific
+> +variants may interact with parent devices (ex. SR-IOV PF in support of
+> +a user assigned VF) or other extensions that may not be otherwise
+> +accessible via the vfio-pci base driver.  Authors of such drivers
+> +should be diligent not to create exploitable interfaces via such
+> +interactions or allow unchecked userspace data to have an effect
+> +beyond the scope of the assigned device.
+> +
+> +New driver submissions are therefore requested to have approval via
+> +Sign-off for any interactions with parent drivers.  Additionally,
+> +drivers should make an attempt to provide sufficient documentation
+> +for reviewers to understand the device specific extensions, for
+> +example in the case of migration data, how is the device state
+> +composed and consumed, which portions are not otherwise available to
+> +the user via vfio-pci, what safeguards exist to validate the data,
+> +etc.  To that extent, authors should additionally expect to require
+> +reviews from at least one of the listed reviewers, in addition to the
+> +overall vfio maintainer.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4322b5321891..4f7d26f9aac6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20314,6 +20314,13 @@ F:	drivers/vfio/mdev/
+>  F:	include/linux/mdev.h
+>  F:	samples/vfio-mdev/
+>  
+> +VFIO PCI VENDOR DRIVERS
+> +R:	Your Name <your.name@here.com>
+> +L:	kvm@vger.kernel.org
+> +S:	Maintained
+> +P:	Documentation/vfio/vfio-pci-vendor-driver-acceptance.rst
+> +F:	drivers/vfio/pci/*/
+
+This works as long as the only subdirectories are for vendor drivers;
+should something else come up, we'd need to add an exclude statement, so
+no biggie.
+
+> +
+>  VFIO PLATFORM DRIVER
+>  M:	Eric Auger <eric.auger@redhat.com>
+>  L:	kvm@vger.kernel.org
+>
+> Ideally we'd have at least Yishai, Shameer, Jason, and yourself listed
+> as reviewers (Connie and I are included via the higher level entry).
+> Thoughts from anyone?  Volunteers for reviewers if we want to press
+> forward with this as formal acceptance criteria?  Thanks,
+>
+> Alex
+
+I like having this formalized. More eyeballs are good (especially as
+getting good review is one of the worst bottlenecks), and I'd trust
+people having worked on other vendor drivers having a better grip on
+issues that have not been my priority.
+

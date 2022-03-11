@@ -2,277 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5F44D6479
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844694D647D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244938AbiCKPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S1348959AbiCKPYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbiCKPYh (ORCPT
+        with ESMTP id S243998AbiCKPYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:24:37 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1AA16FDE2;
-        Fri, 11 Mar 2022 07:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NjruXzuQDBa25iXAh8/mEaW7ZKoV0M6wDo7rHCp8Dyo=; b=ijaIGmrQPDAw1W7FSWpwXR8uoF
-        YQuBaRffUYgOIIwfwZABBn6MehvhV3D+zCMmuwMxRZhW2VAvxAJmJ0ztzTuwDVSPdjh5EHo1lT8Gg
-        V5Y06e8v/EX3P3DEex1jTEl+VsxpVVkU3Z7uJWV8gPAYI+C/ctbP4AeaRMZ6jXU8/zZ0ijEpJhR0T
-        Soe4Bmn4+3gdW57lUYF5D7uK6ilaERDC+hb2KySCRISAvnbp6WWJMmJlhFup1fvwoG53DH/OQ15y8
-        0Eqiklv7Oe0A9TjgItdGKFkU0H+ik63i192SvxpBlGFEv5iFh6YfRgySI3SdzMrtKHpjE+kZ4YOYk
-        Z+3AJHsA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSh6d-00HTxp-Tg; Fri, 11 Mar 2022 15:23:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 390093000E6;
-        Fri, 11 Mar 2022 16:23:01 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0B8EA2BCABC06; Fri, 11 Mar 2022 16:23:01 +0100 (CET)
-Date:   Fri, 11 Mar 2022 16:23:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
-        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, mhiramat@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <YitpVCIllFrnakpL@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
- <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
- <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
- <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
- <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
- <20220310093731.78a6a8d5@gandalf.local.home>
+        Fri, 11 Mar 2022 10:24:40 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED8216FDE2;
+        Fri, 11 Mar 2022 07:23:37 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BFEZ9b019569;
+        Fri, 11 Mar 2022 15:23:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=bfaOQyjDHPY/9uF/sK07kFxz4h/OLP9T2BByYY7cr9o=;
+ b=U52m1GyPNtGPTJOGwkuO/7/I4bvq677og6qZBw6jvILv2OVNdLZKU0BdZhZIvVdEdG4p
+ vxmgtsYv79kF3HSxNaJPTQ4tEHpY4fqyADuiJxfnx6xwRSyjJUC0RDIVsHeTJPcQIR0g
+ gv8XZv3ESr/aIOoGzf9gZpCQqCFYWQK0t9jyBiwzZHEMqcXrpBbmPK9jhKYOFtb7MqLo
+ YUniEOJj9Ye9e8q9Xam/Hig4OEzgaYwS3AHaYQDNBcKGNiaEQ6tKSzRi9pXCW6Aakc7J
+ Sm5oXaZdu/vnCO/lvm//Cr1Quj7loNnaea8VJJ1Ke7f8r6GDSa9+BzXEj5WVWd4cBrzO nw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxf1129u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 15:23:35 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BFFKY1054651;
+        Fri, 11 Mar 2022 15:23:34 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+        by aserp3020.oracle.com with ESMTP id 3ekyp4a8tb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 15:23:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ghmxhWpnV6skTcZuLMhSpKRjSubWPu6wzVzHRxJXHnbiCiktcobM76x2S8mJ84yz078EquRJsHaHjaez3Dft/9klLc7YEVyeYqM4ULnC6eaIIgdq62b8x4lH2+mUARsxiCtxJle8BBVGMjlBK8nOMEWuWTE7oBbu89C8PS+3YShj6wetWRz3PDux0hgk74C7WeMAiXyFCSYKq4T06HUcBpB27xDsoyT8o1LSgOG7knWmAZ9s7WkSS0dCaLkWVwZJQ+PfnP+LwQC+o6bFLLqYSPce9kKwuiOFmJjQqVKppnMQgtWx14QfzFWHQIYoe27k7Ma5gRnGelyuVRjXLgJ3bA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bfaOQyjDHPY/9uF/sK07kFxz4h/OLP9T2BByYY7cr9o=;
+ b=MZ54DNHhHidwq3RjQXLL8EuKismweY/n12lQBezmbyPHrJhFLXAWlsXrW3gB+gnF5KMKr40QDKuGbPmp1d+8ShYGUBYvJ+v0+HHkE4u1JDyQvL271KMQ19UnB6EG8jelWU8M7HaM2ksSSYkGzfsO1kjqLGueZcEEUUPcStMVzJzMdDHNkQn/zboDzXBcZtvsusnyE7sJr3nBoz+zmE0a2i4vIGbPSzz+L/mD3BtCUf6CzE2lsgjPXLtkHnKcMjzr7R4W76V2047zihQ4hVEhhhDivRVGqMJxEhZegHGrDb2qMuQ+pn86G6WRaiHEenxu98cM2wn24tCVG8odcR3Piw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bfaOQyjDHPY/9uF/sK07kFxz4h/OLP9T2BByYY7cr9o=;
+ b=bcVcBkHQ/4hjvW+A0H4m0mBtom1hZ+UqapjuJVM8ejNm8aPojct8raTWXmyfdq2O9Opr2djNdisEz7pjHXDqpXvQXQ2ymo7S2zccNZADo9PEQc5d5PydrBqFcW6pDmxeWnrnakSDkmtX9EjDeLmMZbGe4clsZ8s0OVtsJYzFnsc=
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com (2603:10b6:5:3a1::23)
+ by MWHPR1001MB2109.namprd10.prod.outlook.com (2603:10b6:301:2b::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.24; Fri, 11 Mar
+ 2022 15:23:32 +0000
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::1422:288c:c410:93bb]) by DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::1422:288c:c410:93bb%3]) with mapi id 15.20.5061.025; Fri, 11 Mar 2022
+ 15:23:32 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] remove reference to the removed config NFSD_V3
+Thread-Topic: [PATCH] remove reference to the removed config NFSD_V3
+Thread-Index: AQHYNVv3/sqQFsths0SJM9c/P9d3yw==
+Date:   Fri, 11 Mar 2022 15:23:32 +0000
+Message-ID: <9A70DCDF-2F9D-4020-B936-380D919421D4@oracle.com>
+References: <20220311143941.9628-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220311143941.9628-1-lukas.bulwahn@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.120.0.1.13)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 158a7e0b-83c8-47a8-fcc3-08da03731a57
+x-ms-traffictypediagnostic: MWHPR1001MB2109:EE_
+x-microsoft-antispam-prvs: <MWHPR1001MB2109605CC106A7FA07AA61C0930C9@MWHPR1001MB2109.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mMKREvGnJngNEQVQWajCfW7ryfYsHnW08bqeN1UdUJ8HGTXfHr6WnCvvn/kXUsWpraQgrynbKKoaLPG0Mb58LkxFGSUKWqaGGZdmg0kNRQXD+zxOkIV1BvnXO1sAaPFL6W1HMtvwawWWlAFBP3k/wIF3OWcQnE2uD0/ZbIVz8HILSh8yBEPbxNxBKbGRCQ2EHd4F1jYgakn/5UrNeIiD5jGMyC1pq5LTfQj02OZsZxVwciyvi7yaRExwSzXh4dNM7E4WXRHoMgwGr+m6m434NHiLqpGUShAlDzF2RWfPXtPWSkmX11JcjrHaf3sVqUQhB0cyliJ+T2rdaA/v3w7wUpXkPEOY610TMt+ZNMIYZ2LZECchcC1vnCj2w0IQBtO8lZ3Xr7sfdZmFtvbjkF4BCxQND6N9xWs1CKPqrxp2vm0CWaAJyHli2Aj3jwmS1QR5byXyrevhCGxtdavskkYG2B50xxxkUursWSocNovwM9EVZfNuKV9Ie5zJeHSdXLWc/bwLphvE7kQqneo1zE363scxE2YHMhinRG977HrIShsCvCoi8a3Hp3dh84UVQPPoDPOvqLbVf6/hHeIj3MSlc3GsG6GgTXIWZI3UTrVH6h3HM3px/sgau6/hu+QKJ0OuIUKgL1rjTLzCN9CgtZhz9xXZMYazZVTI6NTVqr5RFc/DejsmniUz01v6J/nCMdGfRh1p1fbhoAwi0iDQxtXkiZrWoG/6AIkAz2Yfmikrzjo61iwA1OpGcDC+cDyrryCP
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5134.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(38070700005)(71200400001)(2616005)(26005)(54906003)(122000001)(6486002)(186003)(38100700002)(36756003)(4326008)(86362001)(2906002)(53546011)(6916009)(6506007)(316002)(6512007)(64756008)(91956017)(76116006)(66446008)(66476007)(66556008)(66946007)(5660300002)(33656002)(83380400001)(8676002)(8936002)(4744005)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?A9inMHM7udx3OfgETNS8KN2XSskcjjht1+w759fgVWXMc+C7Y7PCZ+3sgnOG?=
+ =?us-ascii?Q?SC1YxsX0TmSA74bOzjMNWND4aErKyOw4Odx4QpqaHx4APXiEHBH/b18Di0wz?=
+ =?us-ascii?Q?wsRkkMkbnTWWhl6O8HqFDO7sGdvw2V1EdHmu49OOm5XYcSbDjeun3g+YLYio?=
+ =?us-ascii?Q?dg+hWP2whqYsTgSWIw1GQk+Gt+WBPBKd8E2Z84E6vAgNiXHEAxhf8M3TnSf1?=
+ =?us-ascii?Q?TuFXpzQsmIS79BDqNkwOG71ftDQMNc+h0aMwqChfLoMZ/adyoZB9ypfbNk/G?=
+ =?us-ascii?Q?EkYMKxzVDPZYQ3Fz1A/kAwxltwPRB99LHIhFkeqePaLRvhE+dKzJFUTf6x+q?=
+ =?us-ascii?Q?iCzPaLBow2zZQatjO0aeshGHLYcSd6kPLtxppl20UPWpSB9nXqjbtrLyjtmT?=
+ =?us-ascii?Q?6sKmMkX9N6hHAEypCUiTUGl2v9Q+y7Y+15h1sVEXjyQdg9p4EM1Am8mUeh2u?=
+ =?us-ascii?Q?Env0YEkPOYu0sDwfxz8hisqdZvVwlFrFH5gdtaeW8CWOi88jOyG4sD/bmZNc?=
+ =?us-ascii?Q?R2oUMNNJrDqJypvXwBO7Q0TohrsC41va08C64RZD4vm/bekfifFKbgVgnlR1?=
+ =?us-ascii?Q?MeRLo0tIV3T1c+a+uW0tAl1AHVItnrG2ORiZoDuom81EAPP5XWHxCOU5+QZu?=
+ =?us-ascii?Q?KS94hSO1sFhMnvgeI8KHT8CyiDhJjuVx450GJYxJyafpQDIvk+D678IRNcu8?=
+ =?us-ascii?Q?km6kD//Ej5viGazKwcUhJJg2156DDcjPnx7ES6S9WFg20OWVZHMmJ/unNFde?=
+ =?us-ascii?Q?+4sKEV9vyq2RffslyniHU0rERhYT2hMi0/2n7p/rK6qMWnEeVzHfGR0yN/Wt?=
+ =?us-ascii?Q?RU3FMNbcUBpjNkZtqyY6ZA9gFEBDurtVkRu808FLQhdjlD+9VD7TwT65vJr1?=
+ =?us-ascii?Q?j2IYUEr6wN5fOYr/8/idh/HFa19/G7YnTeJ38ipKVWl2YJdd6D4uC2sFiTLE?=
+ =?us-ascii?Q?01YYxQviq8kemlMrdWKzohbmoC57NIKqZ2Hj08Xum/NyCnVBm5Qg+VXsLzO4?=
+ =?us-ascii?Q?R4sqokjxewpmARaaIS7rBcNe6i9jTWolJcBVRDRvwdQoC9lrEZv/iGoI82TH?=
+ =?us-ascii?Q?q8GoYaDqBGTqWwf1NpDfrQTwOSKRJ6egmpjowzsRcXViWcg7OBzAt1eqF6Y6?=
+ =?us-ascii?Q?dCSIOnNBG+tAlnTKt6i1LI7Kj1xqnbIe6ML1NuWMK7155HAeXwhEjPPkstOv?=
+ =?us-ascii?Q?OUwpK42xGoWVpVpldkq6D874Pot6StXPwMnWPCdi0X4Wdpg8eT27Ov0WJHAr?=
+ =?us-ascii?Q?S2ckxieJ2BbjFeZ6fA1ZtlxcKvDmJOMU33Jr3jhCDxtBzvBUjLOATawFW/3M?=
+ =?us-ascii?Q?8QYZkfDPR23pCPENbuy9Vf7rjcM6E1hfDldByiFSaFkoIPkV42QOsgaFX4XT?=
+ =?us-ascii?Q?Me2PAcevbRhIQYqMWz5bFowEZwkbJV270eM3W7Lc6WXTSlJXDuIs1Sh3rO72?=
+ =?us-ascii?Q?ZYNIq6cGeQxcarXym0sKKSOcAJFof+To9I/cZEFzNYQOtZHJ+I7xoA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BFC1D09BAD49AB4F930EC45A47D60804@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310093731.78a6a8d5@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5134.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 158a7e0b-83c8-47a8-fcc3-08da03731a57
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 15:23:32.3661
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YQ5ooBG4AzVsc5fM1I3U25LSvT1yg08VeDiTeDaXDknnssp/qJFjudk5fo981BD/PJ7HDETxaE5DlQYDrUDDow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2109
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10282 signatures=692556
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203110076
+X-Proofpoint-ORIG-GUID: pmPaTVGf_TZGrKAr_k3rbbgS_ocu-zte
+X-Proofpoint-GUID: pmPaTVGf_TZGrKAr_k3rbbgS_ocu-zte
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 09:37:31AM -0500, Steven Rostedt wrote:
-> On Thu, 10 Mar 2022 14:47:18 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> > index acb50fb7ed2d..2d86d3c09d64 100644
-> > --- a/kernel/trace/ftrace.c
-> > +++ b/kernel/trace/ftrace.c
-> > @@ -5354,6 +5381,11 @@ int modify_ftrace_direct(unsigned long ip,
-> >  	mutex_lock(&direct_mutex);
-> >  
-> >  	mutex_lock(&ftrace_lock);
-> > +
-> > +	ip = ftrace_location(ip);
-> > +	if (!ip)
-> > +		goto out_unlock;
-> > +
-> 
-> Perhaps this should go into find_direct_entry() instead, as I think you are
-> adding it before all the find_direct_entry() callers.
 
-Something like so then?
 
-Index: linux-2.6/kernel/trace/ftrace.c
-===================================================================
---- linux-2.6.orig/kernel/trace/ftrace.c
-+++ linux-2.6/kernel/trace/ftrace.c
-@@ -1575,7 +1575,7 @@ unsigned long ftrace_location_range(unsi
-  * If @ip matches sym+0, return sym's ftrace location.
-  * Otherwise, return 0.
-  */
--unsigned long ftrace_location(unsigned long ip)
-+unsigned long __ftrace_location(unsigned long ip, struct dyn_ftrace **recp)
- {
- 	struct dyn_ftrace *rec;
- 	unsigned long offset;
-@@ -1591,13 +1591,22 @@ unsigned long ftrace_location(unsigned l
- 			rec = lookup_rec(ip, ip + size - 1);
- 	}
- 
--	if (rec)
-+	if (rec) {
-+		if (recp)
-+			*recp = rec;
-+
- 		return rec->ip;
-+	}
- 
- out:
- 	return 0;
- }
- 
-+unsigned long ftrace_location(unsigned long ip)
-+{
-+	return __ftrace_location(ip, NULL);
-+}
-+
- /**
-  * ftrace_text_reserved - return true if range contains an ftrace location
-  * @start: start of range to search
-@@ -2392,6 +2401,30 @@ static struct ftrace_hash *direct_functi
- static DEFINE_MUTEX(direct_mutex);
- int ftrace_direct_func_count;
- 
-+static struct ftrace_func_entry *
-+find_direct_entry(unsigned long *ip, struct dyn_ftrace **recp, bool warn)
-+{
-+	struct ftrace_func_entry *entry;
-+	struct dyn_ftrace *rec = NULL;
-+
-+	*ip = __ftrace_location(*ip, &rec);
-+	if (!*ip)
-+		return NULL;
-+
-+	if (recp)
-+		*recp = rec;
-+
-+	entry = __ftrace_lookup_ip(direct_functions, *ip);
-+	if (!entry) {
-+		WARN_ON(rec->flags & FTRACE_FL_DIRECT);
-+		return NULL;
-+	}
-+
-+	WARN_ON(warn && !(rec->flags & FTRACE_FL_DIRECT));
-+
-+	return entry;
-+}
-+
- /*
-  * Search the direct_functions hash to see if the given instruction pointer
-  * has a direct caller attached to it.
-@@ -2400,7 +2433,7 @@ unsigned long ftrace_find_rec_direct(uns
- {
- 	struct ftrace_func_entry *entry;
- 
--	entry = __ftrace_lookup_ip(direct_functions, ip);
-+	entry = find_direct_entry(&ip, NULL, false);
- 	if (!entry)
- 		return 0;
- 
-@@ -5127,40 +5160,19 @@ int register_ftrace_direct(unsigned long
- 	struct ftrace_direct_func *direct;
- 	struct ftrace_func_entry *entry;
- 	struct ftrace_hash *free_hash = NULL;
--	struct dyn_ftrace *rec;
-+	struct dyn_ftrace *rec = NULL;
- 	int ret = -ENODEV;
- 
- 	mutex_lock(&direct_mutex);
- 
--	ip = ftrace_location(ip);
--	if (!ip)
-+	entry = find_direct_entry(&ip, &rec, true);
-+	if (!ip || !rec)
- 		goto out_unlock;
- 
--	/* See if there's a direct function at @ip already */
- 	ret = -EBUSY;
--	if (ftrace_find_rec_direct(ip))
--		goto out_unlock;
--
--	ret = -ENODEV;
--	rec = lookup_rec(ip, ip);
--	if (!rec)
-+	if (entry && entry->direct)
- 		goto out_unlock;
- 
--	/*
--	 * Check if the rec says it has a direct call but we didn't
--	 * find one earlier?
--	 */
--	if (WARN_ON(rec->flags & FTRACE_FL_DIRECT))
--		goto out_unlock;
--
--	/* Make sure the ip points to the exact record */
--	if (ip != rec->ip) {
--		ip = rec->ip;
--		/* Need to check this ip for a direct. */
--		if (ftrace_find_rec_direct(ip))
--			goto out_unlock;
--	}
--
- 	ret = -ENOMEM;
- 	direct = ftrace_find_direct_func(addr);
- 	if (!direct) {
-@@ -5209,33 +5221,6 @@ int register_ftrace_direct(unsigned long
- }
- EXPORT_SYMBOL_GPL(register_ftrace_direct);
- 
--static struct ftrace_func_entry *find_direct_entry(unsigned long *ip,
--						   struct dyn_ftrace **recp)
--{
--	struct ftrace_func_entry *entry;
--	struct dyn_ftrace *rec;
--
--	rec = lookup_rec(*ip, *ip);
--	if (!rec)
--		return NULL;
--
--	entry = __ftrace_lookup_ip(direct_functions, rec->ip);
--	if (!entry) {
--		WARN_ON(rec->flags & FTRACE_FL_DIRECT);
--		return NULL;
--	}
--
--	WARN_ON(!(rec->flags & FTRACE_FL_DIRECT));
--
--	/* Passed in ip just needs to be on the call site */
--	*ip = rec->ip;
--
--	if (recp)
--		*recp = rec;
--
--	return entry;
--}
--
- int unregister_ftrace_direct(unsigned long ip, unsigned long addr)
- {
- 	struct ftrace_direct_func *direct;
-@@ -5245,11 +5230,7 @@ int unregister_ftrace_direct(unsigned lo
- 
- 	mutex_lock(&direct_mutex);
- 
--	ip = ftrace_location(ip);
--	if (!ip)
--		goto out_unlock;
--
--	entry = find_direct_entry(&ip, NULL);
-+	entry = find_direct_entry(&ip, NULL, true);
- 	if (!entry)
- 		goto out_unlock;
- 
-@@ -5382,11 +5363,7 @@ int modify_ftrace_direct(unsigned long i
- 
- 	mutex_lock(&ftrace_lock);
- 
--	ip = ftrace_location(ip);
--	if (!ip)
--		goto out_unlock;
--
--	entry = find_direct_entry(&ip, &rec);
-+	entry = find_direct_entry(&ip, &rec, true);
- 	if (!entry)
- 		goto out_unlock;
- 
+> On Mar 11, 2022, at 9:39 AM, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrot=
+e:
+>=20
+> Commit 6a687e69a54e ("NFSD: Remove CONFIG_NFSD_V3") removes the config
+> NFSD_V3, but misses one reference in fs/Kconfig.
+>=20
+> Remove this remaining reference to the removed config symbol.
+>=20
+> This issue was discovered with ./scripts/checkkconfigsymbols.py.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Chuck, please pick this quick fix to your commit in linux-next.
+>=20
+> fs/Kconfig | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/fs/Kconfig b/fs/Kconfig
+> index 7f2455e8e18a..ec2cf8ccd170 100644
+> --- a/fs/Kconfig
+> +++ b/fs/Kconfig
+> @@ -344,7 +344,7 @@ config LOCKD
+>=20
+> config LOCKD_V4
+> 	bool
+> -	depends on NFSD_V3 || NFS_V3
+> +	depends on NFS_V3
+
+Actually, I think:
+
+	depends on NFSD || NFS_V3
+
+is more correct. LOCKD_V4 now needs to be enabled whenever
+the server is enabled, since NFSv3 support in the server is
+now always enabled.
+
+
+> 	depends on FILE_LOCKING
+> 	default y
+>=20
+> --=20
+> 2.17.1
+>=20
+
+--
+Chuck Lever
+
+
+

@@ -2,69 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF41A4D5E9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3294D5EA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347634AbiCKJjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S1347582AbiCKJkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347638AbiCKJjV (ORCPT
+        with ESMTP id S230379AbiCKJkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:39:21 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6F7C1150;
-        Fri, 11 Mar 2022 01:38:17 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id t2so4737219pfj.10;
-        Fri, 11 Mar 2022 01:38:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jav/fi0zl69Rvu23rBiGYix2mFrzEsj77NIMSen2XaI=;
-        b=VjXQZHqxoLRyLX7F5aLPCv15b6AqvVlWnJmiQAdhuWRn0KwoNJkh+SWWcsI7FnZmf3
-         QVV+IwB8MxlMtI49THKmoI7J0WQnla7zXbAdsVn+/pQN4uWe3YzlZhCOTwprUtGSA9XM
-         j87N6Mzm+a9aIKfdVMwABIi+Tumyo9DCxLGi/W8umPpCpjiRk6uaykb/Vk/kicwzAqBs
-         oVfxU0QmdMG/uXMPNAbr3NPpQhSdiKggcJ7ZZLU5G70a0lOMD0JTj4QcTiVRXltqGhho
-         DBBCDqYlv5Q+E0o3yJ5X7LhZ28W0WOtjzCMLKaHNqVZ8Oh6KORLUUC0gZUViKMcGiV7G
-         jRCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jav/fi0zl69Rvu23rBiGYix2mFrzEsj77NIMSen2XaI=;
-        b=GXpTf0wF+kOaWHeo1pr4DzpYZnSg9UOA/63f9aYXYD2lU+PVPIlpnYlkXjXrepTdXj
-         Ml0PQKe1U9pv4FHKCVf026EFd4B875OYF9piLDtpb3wq0luIjSmB21Ce80qLaWoAPfe4
-         EVuh26qRAyEgga1zlmpETIZ1/++ZRUXiiAsi9CfRWsoXpStRukDKc7Hg9yQNLGNpb1nR
-         tsl1jbs16RbiEKCVGQvk79OABkptgPs+8lYmD8ywatRXjJ9gi9f3Cj6tLRwHasycGlMr
-         5oJ/D/hlYFHHHqReMEa2H8BsN3ra3hdI/5WxNhvG7pHK8E6FvzbCU+mVZV/PpXOBB3JH
-         ll1w==
-X-Gm-Message-State: AOAM533bJgxjeQbxnYNE2g54QIF/ANhzqHYkGu6O1SY5WLhe85wxBQU1
-        +nvAP5SxAq5ipqAAKxvt96w=
-X-Google-Smtp-Source: ABdhPJwjrAfYTZPyQMA6MOU0MwTXYXZdKqKf5YBttfZnCBljGWbZ5bAoYsy7+x/Yzo4rposTNrmpUA==
-X-Received: by 2002:a65:6c0c:0:b0:378:d9d6:cd0a with SMTP id y12-20020a656c0c000000b00378d9d6cd0amr7526184pgu.117.1646991496787;
-        Fri, 11 Mar 2022 01:38:16 -0800 (PST)
-Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm9011011pfk.26.2022.03.11.01.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 01:38:16 -0800 (PST)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Vladimir Zapolskiy <vz@mleia.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-Date:   Fri, 11 Mar 2022 15:08:00 +0530
-Message-Id: <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+        Fri, 11 Mar 2022 04:40:20 -0500
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513901BE11D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:39:13 -0800 (PST)
+X-QQ-mid: bizesmtp81t1646991522tb6643rv
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 11 Mar 2022 17:38:40 +0800 (CST)
+X-QQ-SSF: 01400000002000B0D000B00A0000000
+X-QQ-FEAT: ke64Y+R1JM0aRKmhfsATp+SpcW+C3sJEpa+9URKRwGCpAxHHze9JKVhTICDV/
+        MyElnTQUgPve11JsBaJGkjfPYeVWoy+ZRt7Nnf2A3MMbAcx22x6uBIt4y1vPAnTf1f8XhoT
+        jmqzadsc4qYt3XKgojg60+exdq9BNk6jK4cZuyDEpkZhBh/HwGMDQYt+cpwSgsajSRH1TCA
+        2KeoSMZBqTXR2iJeIeHCN44lmmAzn/GhOAUXfMnTnyM0HanrwUQ308aWzZrCKwY28vEOmrf
+        lC6qOxJ8bhJnAD92B3hWs3/co136Cdlo0fuzGeSura+CPHNP5qH2mrb/2Qt6KyndQYRmzar
+        9XYNqXNMeO6rttvxJc=
+X-QQ-GoodBg: 2
+From:   huangwenhui <huangwenhuia@uniontech.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     jeremy.szu@canonical.com, hui.wang@canonical.com,
+        wse@tuxedocomputers.com, cam@neo-zeon.de, kailang@realtek.com,
+        tanureal@opensource.cirrus.com, sami@loone.fi,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        huangwenhui <huangwenhuia@uniontech.com>
+Subject: [PATCH] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+Date:   Fri, 11 Mar 2022 17:38:36 +0800
+Message-Id: <20220311093836.20754-1-huangwenhuia@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,48 +52,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PL022 binding require two clocks to be defined but lpc platform doesn't
-comply with bindings and define only one clock i.e apb_pclk.
+On a HP 288 Pro G8, the front mic could not be detected.In order to
+get it working, the pin configuration needs to be set correctly, and
+the ALC671_FIXUP_HP_HEADSET_MIC2 fixup needs to be applied.
 
-Update spi clocks and clocks-names property by adding appropriate clock
-reference to make it compliant with bindings.
-
-CC: Vladimir Zapolskiy <vz@mleia.com>
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
 ---
-v2:
-- New patch with similar changeset
-- Send to soc ML
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
-index c87066d6c995..30958e02d5e2 100644
---- a/arch/arm/boot/dts/lpc32xx.dtsi
-+++ b/arch/arm/boot/dts/lpc32xx.dtsi
-@@ -178,8 +178,8 @@ ssp0: spi@20084000 {
- 				compatible = "arm,pl022", "arm,primecell";
- 				reg = <0x20084000 0x1000>;
- 				interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
--				clocks = <&clk LPC32XX_CLK_SSP0>;
--				clock-names = "apb_pclk";
-+				clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
-+				clock-names = "sspclk", "apb_pclk";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -202,8 +202,8 @@ ssp1: spi@2008c000 {
- 				compatible = "arm,pl022", "arm,primecell";
- 				reg = <0x2008c000 0x1000>;
- 				interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
--				clocks = <&clk LPC32XX_CLK_SSP1>;
--				clock-names = "apb_pclk";
-+				clocks = <&clk LPC32XX_CLK_SSP1>, <&clk LPC32XX_CLK_SSP1>;
-+				clock-names = "sspclk", "apb_pclk";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 3a42457984e9..e9c9b1d1bf0d 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -11067,6 +11067,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1028, 0x069f, "Dell", ALC668_FIXUP_DELL_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x103c, 0x1632, "HP RP5800", ALC662_FIXUP_HP_RP5800),
+ 	SND_PCI_QUIRK(0x103c, 0x873e, "HP", ALC671_FIXUP_HP_HEADSET_MIC2),
++	SND_PCI_QUIRK(0x103c, 0x885f, "HP 288 Pro G8", ALC671_FIXUP_HP_HEADSET_MIC2),
+ 	SND_PCI_QUIRK(0x1043, 0x1080, "Asus UX501VW", ALC668_FIXUP_HEADSET_MODE),
+ 	SND_PCI_QUIRK(0x1043, 0x11cd, "Asus N550", ALC662_FIXUP_ASUS_Nx50),
+ 	SND_PCI_QUIRK(0x1043, 0x129d, "Asus N750", ALC662_FIXUP_ASUS_Nx50),
 -- 
-2.25.1
+2.20.1
+
+
 

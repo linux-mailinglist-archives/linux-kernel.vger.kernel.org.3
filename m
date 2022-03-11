@@ -2,139 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8452D4D6AD4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79BC4D6A0C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiCKXOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S229719AbiCKWsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiCKXOG (ORCPT
+        with ESMTP id S229711AbiCKWsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:14:06 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F016D199
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:13:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647040382; x=1678576382;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JGaHSx3huI9NcVx9BFM/d5oU7KU8dTn8atKVk+lwT4w=;
-  b=TaaEU3UDIg0Lu+L3XXZJfApc19MzzdGsZ+07Ro1EJb0ez57VmgvteMYQ
-   muU8qEy/G+gaiEZiwh6xwWuIvn8nvzYfMZNA3mdsG+0AF26uy/89CyxBU
-   8HcP0p52x+5yPElpwYU6S811PmnA0c8QZzXxVPHqEQoNq2jxx4N9c1oWi
-   AlEKshXlP+bfENlwlp/iXWHo2Mw0F912HmbYRXRSapHhjQRuURst+rPKZ
-   j02K1EuGKMXMiQiypB5Q7ueTixzV44jBScPydbmDuOnR/B+QRLiJ+5GGq
-   5CtgEDDMkIroU4EncuMY8zAQhwGLwftwZL4J42rWqo6Fru91A0bZFK66y
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="318880028"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="318880028"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 13:25:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="539141775"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 11 Mar 2022 13:25:08 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSml1-00077U-NK; Fri, 11 Mar 2022 21:25:07 +0000
-Date:   Sat, 12 Mar 2022 05:24:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kanchan Joshi <joshi.k@samsung.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Anuj Gupta <anuj20.g@samsung.com>
-Subject: [mcgrof-next:20220311-io-uring-cmd 16/17] fs/io_uring.c:4215:31:
- warning: cast to pointer from integer of different size
-Message-ID: <202203120559.66PKUxNh-lkp@intel.com>
+        Fri, 11 Mar 2022 17:48:42 -0500
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C3325ECB4;
+        Fri, 11 Mar 2022 14:23:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647034001; bh=7WkCBki01o3cgWpYVtHrHq4muPjNKx9mmNTlevvNUDM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Xi29xZzNV8VdAfnPq3bwoIDchffnvxI7Czcpvx1uMa9qcPtCItKCDtsGHx3aq4z2v
+         NjyewKqy/TT9vzHd1E/bpvL1vkOHnzUqLImJLNKi/u4FepwOyHd2rcQIiAokmb9mwN
+         AE7ayxffj0ZOieR0TVmuPLnjZqgR3YxJTy56HLlknEv2/dA+qUO9JtmBVegc/89y9O
+         FTVOYDQdy20xjiXNo+m/aZsJI40OZD5fDyKMeomqh/gxU2UUGjybB54TnhqxKPz1Po
+         SQ/4OfXnHNrB0mqydQcS0Z48Amg7kSqN4ExVAseV8RCYFK6nF3D7ixUaz7V62Qwe+A
+         1B/WNWgTNx+Zg==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 5B80E39EB7A;
+        Fri, 11 Mar 2022 21:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647034001; bh=7WkCBki01o3cgWpYVtHrHq4muPjNKx9mmNTlevvNUDM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Xi29xZzNV8VdAfnPq3bwoIDchffnvxI7Czcpvx1uMa9qcPtCItKCDtsGHx3aq4z2v
+         NjyewKqy/TT9vzHd1E/bpvL1vkOHnzUqLImJLNKi/u4FepwOyHd2rcQIiAokmb9mwN
+         AE7ayxffj0ZOieR0TVmuPLnjZqgR3YxJTy56HLlknEv2/dA+qUO9JtmBVegc/89y9O
+         FTVOYDQdy20xjiXNo+m/aZsJI40OZD5fDyKMeomqh/gxU2UUGjybB54TnhqxKPz1Po
+         SQ/4OfXnHNrB0mqydQcS0Z48Amg7kSqN4ExVAseV8RCYFK6nF3D7ixUaz7V62Qwe+A
+         1B/WNWgTNx+Zg==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id E338D39EB79;
+        Fri, 11 Mar 2022 21:26:40 +0000 (UTC)
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+ <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <9f4e3cdc-f5e2-7102-949e-7b3032118e63@mleia.com>
+Date:   Fri, 11 Mar 2022 23:26:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220311_212641_399648_0507643B 
+X-CRM114-Status: GOOD (  20.91  )
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20220311-io-uring-cmd
-head:   abe791464a630c1cc3821258e002a0a623dc9b5a
-commit: d7b1a5fd9fdbe454f93795f46e040951a4510d2e [16/17] io_uring: add support for non-inline uring-cmd
-config: arm-buildonly-randconfig-r006-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120559.66PKUxNh-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=d7b1a5fd9fdbe454f93795f46e040951a4510d2e
-        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-        git fetch --no-tags mcgrof-next 20220311-io-uring-cmd
-        git checkout d7b1a5fd9fdbe454f93795f46e040951a4510d2e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On 3/11/22 4:33 PM, Krzysztof Kozlowski wrote:
+> On 11/03/2022 15:07, Vladimir Zapolskiy wrote:
+>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>>>>
+>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>>>> PL022 binding require two clocks to be defined but lpc platform doesn't
+>>>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>>>
+>>>>> Update spi clocks and clocks-names property by adding appropriate clock
+>>>>> reference to make it compliant with bindings.
+>>>>>
+>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>>>> ---
+>>>>> v2:
+>>>>> - New patch with similar changeset
+>>>>> - Send to soc ML
+>>>>>
+>>>>>     arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>> index c87066d6c995..30958e02d5e2 100644
+>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>>>                                 compatible = "arm,pl022", "arm,primecell";
+>>>>>                                 reg = <0x20084000 0x1000>;
+>>>>>                                 interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>>>> -                             clock-names = "apb_pclk";
+>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+>>>>> +                             clock-names = "sspclk", "apb_pclk";
+>>>>
+>>>> In fact I'm uncertain if it is the right change, could it happen that the commit
+>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+>>>> schema pattern?
+>>>
+>>> Good pointm this doesn't quite seem right: it is unlikely that the same clock
+>>> is used for both the SPI bus and the APB bus.
+>>>
+>>>> Apparently just one clock is wanted on all observed platforms and cases, this
+>>>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
+>>>>
+>>>>           pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>>>
+>>>> So, I would vote to fix the device tree bindings schema.
+> 
+> Drivers do not describe the hardware. Bindings should not be modeled on
+> drivers, but on actual hardware, so the example is not convincing.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My concern is that fixing the bindings can break the driver and all its users,
+is it clear enough how it can happen in assumption that the driver uses just
+one clock at the moment?
 
-All warnings (new ones prefixed by >>):
-
-   fs/io_uring.c: In function '__io_submit_flush_completions':
-   fs/io_uring.c:2562:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    2562 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   fs/io_uring.c: In function 'io_uring_cmd_prep':
->> fs/io_uring.c:4215:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    4215 |                 ioucmd->cmd = (void *) sqe->cmd;
-         |                               ^
-
-
-vim +4215 fs/io_uring.c
-
-  4186	
-  4187	static int io_uring_cmd_prep(struct io_kiocb *req,
-  4188				     const struct io_uring_sqe *sqe)
-  4189	{
-  4190		struct io_ring_ctx *ctx = req->ctx;
-  4191		struct io_uring_cmd *ioucmd = &req->uring_cmd;
-  4192		u32 ucmd_flags = READ_ONCE(sqe->uring_cmd_flags);
-  4193	
-  4194		if (!req->file->f_op->async_cmd)
-  4195			return -EOPNOTSUPP;
-  4196		if (!(req->ctx->flags & IORING_SETUP_SQE128) &&
-  4197				!(ucmd_flags & IORING_URING_CMD_INDIRECT))
-  4198			return -EOPNOTSUPP;
-  4199		if (req->ctx->flags & IORING_SETUP_IOPOLL) {
-  4200			ioucmd->flags = IO_URING_F_UCMD_POLLED;
-  4201			ioucmd->bio = NULL;
-  4202			req->iopoll_completed = 0;
-  4203		} else {
-  4204			ioucmd->flags = 0;
-  4205		}
-  4206		if (req->opcode == IORING_OP_URING_CMD_FIXED) {
-  4207			req->imu = NULL;
-  4208			io_req_set_rsrc_node(req, ctx);
-  4209			req->buf_index = READ_ONCE(sqe->buf_index);
-  4210			ioucmd->flags |= IO_URING_F_UCMD_FIXEDBUFS;
-  4211		}
-  4212	
-  4213		if (ucmd_flags & IORING_URING_CMD_INDIRECT) {
-  4214			ioucmd->flags |= IO_URING_F_UCMD_INDIRECT;
-> 4215			ioucmd->cmd = (void *) sqe->cmd;
-  4216		} else {
-  4217			ioucmd->cmd = (void *) &sqe->cmd;
-  4218		}
-  4219		ioucmd->cmd_op = READ_ONCE(sqe->cmd_op);
-  4220		ioucmd->cmd_len = READ_ONCE(sqe->cmd_len);
-  4221		return 0;
-  4222	}
-  4223	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--
+Best wishes,
+Vladimir

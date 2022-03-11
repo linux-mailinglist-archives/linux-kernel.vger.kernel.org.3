@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5A24D5DB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C304D5E08
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240340AbiCKIrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S244592AbiCKJCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCKIrW (ORCPT
+        with ESMTP id S245586AbiCKJCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:47:22 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61841BA927;
-        Fri, 11 Mar 2022 00:46:19 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KFKHn44rbzfYtt;
-        Fri, 11 Mar 2022 16:44:53 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 11 Mar 2022 16:46:17 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next 2/2] net: macvlan: add net device refcount tracker
-Date:   Fri, 11 Mar 2022 17:04:03 +0800
-Message-ID: <c9cc41c3f234c86e8d185f590c22463871c80578.1646989143.git.william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1646989143.git.william.xuanziyang@huawei.com>
-References: <cover.1646989143.git.william.xuanziyang@huawei.com>
+        Fri, 11 Mar 2022 04:02:35 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F0C51BB73A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:01:30 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.2.5.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx7xPgDytiQD0HAA--.2826S2;
+        Fri, 11 Mar 2022 17:01:20 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/khugepaged: sched to numa node when collapse huge page
+Date:   Fri, 11 Mar 2022 04:01:19 -0500
+Message-Id: <20220311090119.2412738-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dx7xPgDytiQD0HAA--.2826S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47ZFW8uw1UXFW8GFWxZwb_yoW8CryUpF
+        WUtw4UGrWUJr1vgr1Iqan8AryFqr1kJFWktw1fAas7t3s0qr4FgFy5Za15A34UJFWkGFW3
+        ArWavrn09r48J3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add net device refcount tracker to macvlan.
+collapse huge page is slow, specially when khugepaged daemon runs
+on different numa node with that of huge page. It suffers from
+huge page copying across nodes, also cache is not used for target
+node. With this patch, khugepaged daemon switches to the same numa
+node with huge page. It saves copying time and makes use of local
+cache better.
 
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 ---
- drivers/net/macvlan.c      | 4 ++--
- include/linux/if_macvlan.h | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ mm/khugepaged.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
-index d36af413e372..d6241ad66c0c 100644
---- a/drivers/net/macvlan.c
-+++ b/drivers/net/macvlan.c
-@@ -912,7 +912,7 @@ static int macvlan_init(struct net_device *dev)
- 	port->count += 1;
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 131492fd1148..460c285dc974 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -116,6 +116,7 @@ struct khugepaged_scan {
+ 	struct list_head mm_head;
+ 	struct mm_slot *mm_slot;
+ 	unsigned long address;
++	int node;
+ };
  
- 	/* Get macvlan's reference to lowerdev */
--	dev_hold(lowerdev);
-+	dev_hold_track(lowerdev, &vlan->dev_tracker, GFP_KERNEL);
+ static struct khugepaged_scan khugepaged_scan = {
+@@ -1066,6 +1067,7 @@ static void collapse_huge_page(struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	struct mmu_notifier_range range;
+ 	gfp_t gfp;
++	const struct cpumask *cpumask;
  
- 	return 0;
- }
-@@ -1181,7 +1181,7 @@ static void macvlan_dev_free(struct net_device *dev)
- 	struct macvlan_dev *vlan = netdev_priv(dev);
+ 	VM_BUG_ON(address & ~HPAGE_PMD_MASK);
  
- 	/* Get rid of the macvlan's reference to lowerdev */
--	dev_put(vlan->lowerdev);
-+	dev_put_track(vlan->lowerdev, &vlan->dev_tracker);
- }
- 
- void macvlan_common_setup(struct net_device *dev)
-diff --git a/include/linux/if_macvlan.h b/include/linux/if_macvlan.h
-index 10c94a3936ca..b42294739063 100644
---- a/include/linux/if_macvlan.h
-+++ b/include/linux/if_macvlan.h
-@@ -21,6 +21,7 @@ struct macvlan_dev {
- 	struct hlist_node	hlist;
- 	struct macvlan_port	*port;
- 	struct net_device	*lowerdev;
-+	netdevice_tracker	dev_tracker;
- 	void			*accel_priv;
- 	struct vlan_pcpu_stats __percpu *pcpu_stats;
- 
+@@ -1079,6 +1081,13 @@ static void collapse_huge_page(struct mm_struct *mm,
+ 	 * that. We will recheck the vma after taking it again in write mode.
+ 	 */
+ 	mmap_read_unlock(mm);
++
++	/* sched to specified node before huage page memory copy */
++	cpumask = cpumask_of_node(node);
++	if ((khugepaged_scan.node != node) && !cpumask_empty(cpumask)) {
++		set_cpus_allowed_ptr(current, cpumask);
++		khugepaged_scan.node = node;
++	}
+ 	new_page = khugepaged_alloc_page(hpage, gfp, node);
+ 	if (!new_page) {
+ 		result = SCAN_ALLOC_HUGE_PAGE_FAIL;
+@@ -2380,6 +2389,7 @@ int start_stop_khugepaged(void)
+ 		kthread_stop(khugepaged_thread);
+ 		khugepaged_thread = NULL;
+ 	}
++	khugepaged_scan.node = NUMA_NO_NODE;
+ 	set_recommended_min_free_kbytes();
+ fail:
+ 	mutex_unlock(&khugepaged_mutex);
 -- 
-2.25.1
+2.31.1
 

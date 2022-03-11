@@ -2,120 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60824D64E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5EA4D64F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349364AbiCKPsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        id S1349575AbiCKPvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347030AbiCKPsf (ORCPT
+        with ESMTP id S1349524AbiCKPu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:48:35 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE83FFE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:47:27 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id i66so5328555wma.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6vhOIIdJvfX6cOrm/Hp75giDPzX5k6IkKRc2Ldr4x1g=;
-        b=Bj6+61b8ssmOb5ECuJge2OAspgv/M7zGpi7BjzO4bu1W3koRCvckm1lQtfNmVEYrrZ
-         ScnrRgEe1/NzaUSlcRWvEcGQM46tzCw0vFRAi2x3igvX2oGZy29BH6uFGjSH1nsD4Xdk
-         lwwpqqu7fpE3SvuVwlmZKl4+Tt8CKYLBYl70mo3T8wTO3QCu3qhmKYt1prHpKvXwDeMY
-         tT1Y339mai2MYxrPUMxvRDwzvdcRzGdPcj7+vaYm+2nR4gLa9n4bDL1QjO32mLk/xeFl
-         pcqthmf5Yl03svTr/kiL6KL0ihzrFf+eASqmjABAjnKdpOwa5/laN+sS4NhcNE27F9Ib
-         8+6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6vhOIIdJvfX6cOrm/Hp75giDPzX5k6IkKRc2Ldr4x1g=;
-        b=Q9MhJ51lt/Vk+44fLIWKtg+yCwMLo37feMmcZBQeKh2+eYWQ7uZDaI8TNMs6CB8XJj
-         XAn/UXg15r/iAM3xIGYwiMhQBzfWCspSjzzEpzq9/5HaInLNYTNxvxRX0JvayJ+6YRbO
-         V1LKSun+iESmu870Ss79yOOT4Co1O7SXghcP8htlz/zJLB16OnjdOZmvwLqzWd9rUt6B
-         l3ItlA5h3CZGj3S95yzUjw7XCT5LgOV++ekmMDyhH59ahZWDRk+QdT+Z4H1So0FuGeEk
-         wl5raZ7ibxnCZ7CwrUA6Td61KChPL+QL4e6kN5zxmAAEe6SB5Z3QcxGvBiDARcWhZoBu
-         NyXA==
-X-Gm-Message-State: AOAM5328R/ZvwYejD1QAroJYyyAkGgBxgIpe0uj7F7gScbaNeUvcUX3V
-        9pXtPT/HkLg7j6bBWC78OIdSAd2wqw6jEF5E
-X-Google-Smtp-Source: ABdhPJyNFd+WeXNqTNfnthvORZ2Sgedf9Lvk4w/MuHRm6084TXCr0E0apu6+WCLgKaxk/lm41FdE2g==
-X-Received: by 2002:a05:600c:4ecb:b0:389:e765:b4cb with SMTP id g11-20020a05600c4ecb00b00389e765b4cbmr5836985wmq.160.1647013646216;
-        Fri, 11 Mar 2022 07:47:26 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id j17-20020a05600c191100b00389a1a68b95sm20113957wmq.27.2022.03.11.07.47.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:47:25 -0800 (PST)
-Date:   Fri, 11 Mar 2022 15:47:23 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, christophe.leroy@csgroup.eu,
-        hch@infradead.org, cl@linux.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
-        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, pmladek@suse.com
-Subject: Re: [PATCH] kdb: Remove redundant module related references
-Message-ID: <20220311154723.ezo3wvgg4puu2zk7@maple.lan>
-References: <20220307174741.2889588-1-atomlin@redhat.com>
- <20220308105203.2981099-1-atomlin@redhat.com>
- <20220309120640.uumh46n2l37jaddf@maple.lan>
- <YiporeSIrkFg/YS8@bombadil.infradead.org>
+        Fri, 11 Mar 2022 10:50:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 196A91C65E7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647013792;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TLKVUzf5prrCo+BWdLLoS9CndOmOZ6emWbQjAHJaifo=;
+        b=PD9OWruUjkkTQwtq+b4jYEYaX4TShDA4sq+FzACqfGbSfgowt3MIgYfH+06vKSkuPy/D4h
+        BD+s95ehIA7BV06IIXG8/Q3Sd/qB8+TqIASEPnMAh8lDW1VJ5q4ApIxP7DgOyISFMu4Tqo
+        Ou+Ip/+/d8GDp0b9bkptpbaP6zmImBo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-370-aWU8IK2gOleYP1HucngJiQ-1; Fri, 11 Mar 2022 10:49:49 -0500
+X-MC-Unique: aWU8IK2gOleYP1HucngJiQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C2BD1091DA0;
+        Fri, 11 Mar 2022 15:49:47 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B73FF866CB;
+        Fri, 11 Mar 2022 15:49:44 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/31] KVM: x86: hyper-v: Fine-grained TLB flush + Direct TLB flush feature
+Date:   Fri, 11 Mar 2022 16:49:12 +0100
+Message-Id: <20220311154943.2299191-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiporeSIrkFg/YS8@bombadil.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 01:07:57PM -0800, Luis Chamberlain wrote:
-> On Wed, Mar 09, 2022 at 12:06:40PM +0000, Daniel Thompson wrote:
-> > On Tue, Mar 08, 2022 at 10:52:03AM +0000, Aaron Tomlin wrote:
-> > > Hi Luis, Christoph, Daniel,
-> > > 
-> > > Is this patch ok or would you rather another iteration of the series?
-> > > Either way is fine for me. Thanks.
-> > 
-> > Another iteration makes more sense to me.
-> 
-> Iteration yes, but separating the patches no into another series no.
-> 
-> > The removal of kdb_modules is semantically part of your module clean
-> > up patch set and should certainly be included in it.
-> > 
-> > The removal of the spurious #include's in other kdb files is a
-> > good change but it is fully independent of the module rework. AFAICT
-> > those fixes are good with or without your changes. This suggests
-> > these changes can be separate from the main patch set.
-> 
-> Small fixes get piled in first on the series. But this is not a fix.
-> This effort will not be merged separately too. This won't go into the
-> next merge window either, because:
-> 
-> 1) There is no rush
-> 2) It is too late as all this needs proper testing and
->    its too late to claim enough testing
-> 
-> So given this is all related to the move I see no reason to treat
-> this as a separate series. Your review of the v11 would be nice.
+Changes since RFCv1:
+- Tests! Brand new hyperv_ipi/hyperv_tlb_flush tests as well as Direct TLB
+ flush tests added to evmcs_test/hyperv_svm_test.
+- Michael's R-b tag added to "x86/hyperv: Fix 'struct hv_enlightened_vmcs'
+ definition".
+- Use HV_VMX_ENLIGHTENED_CLEAN_FIELD_ENLIGHTENMENTSCONTROL to avoid updating
+ hv_vm_id/hv_vp_id/partition_assist_page every VMLAUNCH/VMRESUME.
 
-The reason to suggest separation was that the changes to the other
-files in kernel/debug/ are entirely independent of the module rework
-and would usually be landed via a different tree.
+Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
+by flushing the whole VPID and this is sub-optimal. This series introduces
+the required mechanism to make handling of these requests more 
+fine-grained by flushing individual GVAs only (when requested). On this
+foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The 
+feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
+L0 without the need to reflect the exit to L1. This has at least two
+benefits: reflecting vmexit and the consequent vmenter are avoided + L0
+has precise information whether the target vCPU is actually running (and
+thus requires a kick).
 
-On the whole it doesn't really matter much... but landing the
-independent parts via the normal route for kgdb code reduces what I
-have to remember acking.
+Vitaly Kuznetsov (31):
+  KVM: x86: hyper-v: Resurrect dedicated KVM_REQ_HV_TLB_FLUSH flag
+  KVM: x86: hyper-v: Introduce TLB flush ring
+  KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls
+    gently
+  KVM: x86: hyper-v: Expose support for extended gva ranges for flush
+    hypercalls
+  KVM: x86: Prepare kvm_hv_flush_tlb() to handle L2's GPAs
+  KVM: x86: hyper-v: Don't use sparse_set_to_vcpu_mask() in
+    kvm_hv_send_ipi()
+  KVM: x86: hyper-v: Create a separate ring for Direct TLB flush
+  KVM: x86: hyper-v: Use preallocated buffer in 'struct kvm_vcpu_hv'
+    instead of on-stack 'sparse_banks'
+  KVM: nVMX: Keep track of hv_vm_id/hv_vp_id when eVMCS is in use
+  KVM: nSVM: Keep track of Hyper-V hv_vm_id/hv_vp_id
+  KVM: x86: Introduce .post_hv_direct_flush() nested hook
+  KVM: x86: hyper-v: Introduce kvm_hv_is_tlb_flush_hcall()
+  KVM: x86: hyper-v: Direct TLB flush
+  KVM: x86: hyper-v: Introduce fast kvm_hv_direct_tlb_flush_exposed()
+    check
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  KVM: nVMX: hyper-v: Direct TLB flush
+  KVM: x86: KVM_REQ_TLB_FLUSH_CURRENT is a superset of
+    KVM_REQ_HV_TLB_FLUSH too
+  KVM: nSVM: hyper-v: Direct TLB flush
+  KVM: x86: Expose Hyper-V Direct TLB flush feature
+  KVM: selftests: Add hyperv_svm_test to .gitignore
+  KVM: selftests: Better XMM read/write helpers
+  KVM: selftests: Hyper-V PV IPI selftest
+  KVM: selftests: Make it possible to replace PTEs with __virt_pg_map()
+  KVM: selftests: Hyper-V PV TLB flush selftest
+  KVM: selftests: Sync 'struct hv_enlightened_vmcs' definition with
+    hyperv-tlfs.h
+  KVM: selftests: nVMX: Allocate Hyper-V partition assist page
+  KVM: selftests: nSVM: Allocate Hyper-V partition assist and VP assist
+    pages
+  KVM: selftests: Sync 'struct hv_vp_assist_page' definition with
+    hyperv-tlfs.h
+  KVM: selftests: evmcs_test: Direct TLB flush test
+  KVM: selftests: Move Hyper-V VP assist page enablement out of evmcs.h
+  KVM: selftests: hyperv_svm_test: Add Direct TLB flush test
 
+ arch/x86/include/asm/hyperv-tlfs.h            |   6 +-
+ arch/x86/include/asm/kvm_host.h               |  30 +
+ arch/x86/kvm/Makefile                         |   3 +-
+ arch/x86/kvm/hyperv.c                         | 305 ++++++++-
+ arch/x86/kvm/hyperv.h                         |  55 ++
+ arch/x86/kvm/svm/hyperv.c                     |  18 +
+ arch/x86/kvm/svm/hyperv.h                     |  37 +
+ arch/x86/kvm/svm/nested.c                     |  25 +-
+ arch/x86/kvm/trace.h                          |  21 +-
+ arch/x86/kvm/vmx/evmcs.c                      |  24 +
+ arch/x86/kvm/vmx/evmcs.h                      |   4 +
+ arch/x86/kvm/vmx/nested.c                     |  29 +
+ arch/x86/kvm/x86.c                            |  15 +-
+ arch/x86/kvm/x86.h                            |   1 +
+ tools/testing/selftests/kvm/.gitignore        |   3 +
+ tools/testing/selftests/kvm/Makefile          |   4 +-
+ .../selftests/kvm/include/x86_64/evmcs.h      |  40 +-
+ .../selftests/kvm/include/x86_64/hyperv.h     |  35 +
+ .../selftests/kvm/include/x86_64/processor.h  |  72 +-
+ .../selftests/kvm/include/x86_64/svm_util.h   |  10 +
+ .../selftests/kvm/include/x86_64/vmx.h        |   4 +
+ .../testing/selftests/kvm/lib/x86_64/hyperv.c |  21 +
+ .../selftests/kvm/lib/x86_64/processor.c      |   6 +-
+ tools/testing/selftests/kvm/lib/x86_64/svm.c  |  10 +
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |   7 +
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  53 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |   5 +-
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c | 362 ++++++++++
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  60 +-
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 647 ++++++++++++++++++
+ .../selftests/kvm/x86_64/mmu_role_test.c      |   2 +-
+ 31 files changed, 1793 insertions(+), 121 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/hyperv.c
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/hyperv.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_ipi.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_tlb_flush.c
 
-Daniel.
+-- 
+2.35.1
+

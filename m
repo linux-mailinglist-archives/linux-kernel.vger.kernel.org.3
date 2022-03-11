@@ -2,125 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA1C4D6895
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A704D6896
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344292AbiCKSmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S1350261AbiCKSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236217AbiCKSmc (ORCPT
+        with ESMTP id S1346684AbiCKSnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:42:32 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDAAE2350
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:41:28 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id z26so13194727lji.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:41:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=grwJQHpTejzQ9PPbrhyRjQ3f2c8M8MaXreOB3JRCzH4=;
-        b=XHp3iURq9OeJVvf+OfCRzT7E/cMt2KAuZNAwrYLyP/pzLenBGQ8uLEBnp3WmTUS8nh
-         xRLufqDVNmGWux/1S1hgA4vH49obaGQ9jwyXIaQ1y0Zy8eIP792BUl2Cewf+liru22iE
-         i3hJ3p85HmBfcmjySUXC47mkMZJ5BchuXf6Xk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=grwJQHpTejzQ9PPbrhyRjQ3f2c8M8MaXreOB3JRCzH4=;
-        b=tdVebKnAo3eyBxoared6Us/czQHwI+fvt7NxCaFyiadO0/c/MwzcUSRa+fHiViq5RF
-         hXjMPrZ7C725XxD3TC4HL1CACCMwjrWuuwTYNZdpvdLoQlrAPNQSu++RR4+ZkDChdDv8
-         Z6GjJQgg9rdQM7zDdpD4KfY9VdBRuPo9vFXPUZD+vyn9hfD/GiB/bWtuBhBy28EbxtEW
-         iL3NfrAH7wXkGJYfZHAjzHopDPTcllz5VV9F//O1pb6cEV50mDNZJUBJxoDIyzhIYsi8
-         9btjP3gTuraJ8f8MYHXK4EpuibMg9aH65bbSAY4hFv9X/SQpHBgKgLibqBxLrZqHzcuw
-         nxvQ==
-X-Gm-Message-State: AOAM530tCDjnCfI63+a5aqKUqxOKxCA1bNKs3uJphsNS0O8Rs81MGHeQ
-        DW6pOQKCCQ+BvD7je7DXwH44ldyG8I4blkGaZM0=
-X-Google-Smtp-Source: ABdhPJzN3G0ZmTn3eXpTlv7ZGpNhmCtzCqWUzvOST9YAAw7Z5hKCTqtU17B889lCpxk3E3BYgvM8nQ==
-X-Received: by 2002:a05:651c:11ca:b0:247:f32e:10ba with SMTP id z10-20020a05651c11ca00b00247f32e10bamr6937694ljo.208.1647024086467;
-        Fri, 11 Mar 2022 10:41:26 -0800 (PST)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id h6-20020ac25d66000000b0044315401373sm1746550lft.29.2022.03.11.10.41.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 10:41:23 -0800 (PST)
-Received: by mail-lf1-f45.google.com with SMTP id bu29so16655343lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:41:23 -0800 (PST)
-X-Received: by 2002:a05:6512:3a83:b0:447:da72:43f1 with SMTP id
- q3-20020a0565123a8300b00447da7243f1mr6931391lfu.542.1647024082921; Fri, 11
- Mar 2022 10:41:22 -0800 (PST)
+        Fri, 11 Mar 2022 13:43:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F021CCB02
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:41:58 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 340D11F441;
+        Fri, 11 Mar 2022 18:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647024117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Snz3Pghhpg/aTzJa41kgOJ79VKteKDYBod2RKuprxc=;
+        b=feE5lKc1Hj3RBoV2uBlQq/EFjlJYnK4xV8ifc0XwsvZ9FcCLRGc1uRknbfsRIw07U9OHkX
+        BfbmYAb86Y9xbECGwXHxTNtEM+j32y3mNFz7iVWP/EJf+zajZiqyd9SeXZvkLLq9jBNomi
+        AtFCm+cStWgb0v098IZF7ozQLziV3KE=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E2CC6A3B81;
+        Fri, 11 Mar 2022 18:41:56 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 19:41:54 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 11/13] printk: reimplement console_lock for
+ proper kthread support
+Message-ID: <YiuX8rFkuGpn7gqv@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-12-john.ogness@linutronix.de>
+ <YhYKP/UuSKENGwfj@alley>
+ <87tuc7xma0.fsf@jogness.linutronix.de>
+ <YioMcSe0P0Z7ksiW@alley>
+ <87wnh14wp9.fsf@jogness.linutronix.de>
+ <Yisj2PEtjZfHMe6N@alley>
+ <87czisbotz.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
- <20220304025109.15501-1-xiam0nd.tong@gmail.com> <CAHk-=wjesxw9U6JvTw34FREFAsayEE196Fi=VHtJXL8_9wgi=A@mail.gmail.com>
- <CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com> <20220311142754.a3jnnjqxpok75qgp@maple.lan>
-In-Reply-To: <20220311142754.a3jnnjqxpok75qgp@maple.lan>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 11 Mar 2022 10:41:06 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi58pvQhMX2sRt7nKqwHAFAmn27MrJg3XbeJgio6ONgdA@mail.gmail.com>
-Message-ID: <CAHk-=wi58pvQhMX2sRt7nKqwHAFAmn27MrJg3XbeJgio6ONgdA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
- outside the loop
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87czisbotz.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 6:27 AM Daniel Thompson
-<daniel.thompson@linaro.org> wrote:
->
-> It is possible simply to use spelling to help uncover errors in
-> list_traverse()?
+On Fri 2022-03-11 14:34:40, John Ogness wrote:
+> On 2022-03-11, Petr Mladek <pmladek@suse.com> wrote:
+> >>     console_unlock()
+> >>     {
+> >>  	  [...]
+> >>  	  if (may_schedule)
+> >>  	      retry = console_lock_reacquire();
+> >>  	  else
+> >>  	      retry = console_trylock();
+> >>     }
+> >> 
+> 
+> [...]
+> 
+> > OK, it means that the main problem here _is not_ the scheduling context,
+> > console_lock() vs. console_trylock(). The main problem _is_ the direct
+> > printing vs. the offload to kthreads.
+> >
+> > Of course, the context is important. It affects how we could re-take
+> > the lock. But the main problem is the printing mode. We must make sure
+> > that:
+> >
+> >     1. someone is printing pending messages when the direct mode is needed
+> 
+> console_trylock() causes difficulties here because it will fail if any
+> kthread is active. It is an example of direct mode failure. But is that
+> really any different than current mainline console_trylock() failing
+> because a console_lock() context is active (and possibly not scheduled
+> on a CPU)?
 
-I'd love to, and thought that would be a lovely idea, but in another
-thread ("") Barnab=C3=A1s P=C5=91cze pointed out that we actually have a fa=
-ir
-number of cases where the list member entries are embedded in internal
-structures and have a '.' in them:
+I see. Well, console_lock() does not mean that we are in direct mode.
+Yes, it stops kthreads. But it might be called by register_console()
+or tty driver. console_unlock() might do nothing when
+allow_direct_printing() returns false in console_flush_all().
 
-  https://lore.kernel.org/all/wKlkWvCGvBrBjshT6gHT23JY9kWImhFPmTKfZWtN5Bkv_=
-OtIFHTy7thr5SAEL6sYDthMDth-rvFETX-gCZPPCb9t2bO1zilj0Q-OTTSbe00=3D@protonmai=
-l.com/
 
-which means that you can't actually append the target_member name
-except in the simplest cases, because it wouldn't result in one single
-identifier.
+> >     2. kthreads are woken and can enter the printing mode when the direct
+> >        mode is disabled.
+> 
+> This happens at the end of vprintk_emit() and within __console_unlock(),
+> regardless if the printk() was running in direct mode or not.
+> 
+> > Will console_lock_reacquire() really help here?
+> >
+> > The API theoretically helps in direct mode when the lock was taken
+> > via console_lock().
+> 
+> console_lock_reacquire() only exists for the console_lock() case.
+> 
+> > But it does not help when the lock was taken
+> > via console_trylock() from printk(). It might mean that
+> > the forward progress might not be guaranteed in the direct mode
+> > (early boot, panic, ...).
+> 
+> How is the console_trylock() case different from current mainline now?
+> As I mentioned above, the kthreads can block console_trylock(), but so
+> can a console_lock() currently in mainline.
 
-Otherwise it would be a lovely idea.
+It is very different. Failing console_trylock() in the current mainline
+means that someone else is responsible for printing all the pending
+messages. All should be on the safe side.
 
-> For architectures without HAVE_LD_DEAD_CODE_DATA_ELIMINATION then the
-> "obvious" extension of list_traversal_head() ends up occupying bss
-> space. Even replacing the pointer with a zero length array is still
-> provoking gcc-11 (arm64) to allocate a byte from bss (often with a lot
-> of padding added).
+Failing console_trylock() in this patch means that some printk
+kthread is active but nothing else. The kthread might handle one
+message and then go into sleep because someone requested the
+direct mode using atomic_inc(). Other kthreads might be sleeping
+and ignore everything. The failing console_trylock() will mean
+that nobody will handle the rest of the messages. The race
+is described in the other reply.
 
-I think compilers give objects at least one byte of space, so that two
-different objects get different addresses, and don't compare equal.
+Honestly, handling console_trylock() case looks more important to me
+because it is used by printk(). It is the main usecase. While
+console_lock() code path should be used rarely, during
+console registration. Well, it is used also by tty code but
+I am not sure how often it is really called there.
 
-That said, I'm not seeing your issue. list_traversal_head() is a
-union, and always has that 'struct list_head' in it, and that's the
-biggest part of the union.
+> > Hmm, the forward progress seems to be guaranteed in the direct
+> > mode most of the time. console_trylock() can take over
+> > the atomic counter because console kthreads are not allowed
+> > to enter the printing mode in this case.
+> >
+> > I used "most of the time" because there might be races when
+> > the mode is switched. "printk_direct" is an atomic variable.
+> > CON_DIRECT is set under con->mutex but console_trylock()
+> > does not take the mutex...
+> 
+> You are mixing issues here. If CON_DIRECT is set, there is already a
+> console_lock() in progress, so console_trylock() fails on @console_sem.
 
-IOW, the other parts are (a) never used for anything but their type
-and (b) will not take up any new space that isn't already used by the
-list_head itself.
+Yes, I am sorry for the confusion. I forgot the meaning of the flag.
+I thought that it was set when the direct mode was requested.
+But it is not true. It only means that console_lock is taken
+and it could do the direct printing.
 
-                  Linus
+It would make sense to rename it. It might be part of all the
+confusion here. The name creates false feeling about that
+the direct mode is requested. I think that I have actually
+suggested renaming the flag in an earlier mail.
+
+Best Regards,
+Petr

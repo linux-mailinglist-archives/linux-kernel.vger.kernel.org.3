@@ -2,76 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2101F4D6568
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE14C4D6560
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349916AbiCKPzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S1349528AbiCKPz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350285AbiCKPxw (ORCPT
+        with ESMTP id S1350566AbiCKPyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:53:52 -0500
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16B51CD9D7;
-        Fri, 11 Mar 2022 07:51:52 -0800 (PST)
-Received: by mail-oi1-f176.google.com with SMTP id w2so1686125oie.2;
-        Fri, 11 Mar 2022 07:51:52 -0800 (PST)
+        Fri, 11 Mar 2022 10:54:15 -0500
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58D9ECC57;
+        Fri, 11 Mar 2022 07:53:11 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id l2so17819717ybe.8;
+        Fri, 11 Mar 2022 07:53:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aFQmY8Q3Xcs50vqeMZuNuMuDo4MjkwmEEkUJ4NeBy6w=;
-        b=bsQFtUu11nacc7Cv0yQLN2cLXRQeUo57ZUQmugMBB7HjIWYAuZ71sTPS9BlEp2h6IQ
-         Ar/xpTbSm4gePcgZIBMOI0y0NizOYto9mCMjbXqanS1iLg03NWIwJ9YC4Q3dO272Xjxt
-         2nmde3gwFDJ1l9nrn6bwHAMj4GyS0rw45HDiAABFvZuYZjqjomZiS6rYDX8J8gWl/yFk
-         p0aD2xJwZrZMa43/bWcWbfc5cHPJlctiWHgLQXwv2HZf9o0wZza1rHOOprquPMFc9GLp
-         RFL4AkWBEj2YsBQLOXTPp3gl5XKFg7HGtRGZSVcNz2TT0dAj+08f6z5f64PHdgR+ukgE
-         f1fw==
-X-Gm-Message-State: AOAM531w1g+ptjMY8OwiYkmbmiPxLt2eUFp/jfVqQaOmc9zsPr7As7F9
-        37S4BzB3lrZmi5h0Yp4U9w==
-X-Google-Smtp-Source: ABdhPJxOckzuMfoeKLRh2uMhfA7547OHTQ+38S+0GQ+35G6dShSqk8U+eYRPpxG5WGYqgKkP1XXYIg==
-X-Received: by 2002:a05:6808:218b:b0:2da:5fd1:a85b with SMTP id be11-20020a056808218b00b002da5fd1a85bmr5388120oib.71.1647013902733;
-        Fri, 11 Mar 2022 07:51:42 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r21-20020a05683002f500b005b249ffa43fsm3856004ote.22.2022.03.11.07.51.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:51:42 -0800 (PST)
-Received: (nullmailer pid 3868935 invoked by uid 1000);
-        Fri, 11 Mar 2022 15:51:41 -0000
-Date:   Fri, 11 Mar 2022 09:51:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Steve Lee <steve.lee.analog@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, broonie@kernel.org,
-        lgirdwood@gmail.com, ryans.lee@maximintegrated.com,
-        alsa-devel@alsa-project.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [V2 2/2] ASoC: dt-bindings: max98390: add reset gpio bindings
-Message-ID: <YitwDaQcXUApGKW4@robh.at.kernel.org>
-References: <20220311132906.32292-1-steve.lee.analog@gmail.com>
- <20220311132906.32292-2-steve.lee.analog@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FEtrVBpJ9DBkNlbjxVJR5SHVgIP3hXEvRRRjSXbn5+4=;
+        b=N4HcMhA1dOsjtmB6aWz1HIPAMT3s+zwJ0qkHV9mZA1fcHOO9GIi3NRu2iUOsb+OnD8
+         zq2vkKL6ALVTFFBfmSkizHvGeLyjl79p0MOJGCPi49dh9jPXtcrZZMbkgktEC2zYStAY
+         DJbWsxs1zxTf2EPYATHgu2Zsejynkb8JQ7TurJ2lPnDUBMpTjuC+1saDNvRkMP02xgJs
+         WApW8JgWmk3BrH8IENLUfbKRt2MDpluSW1SuKYPyppP66rYk9xs6Tf6j0lMrS0X/uoH4
+         HOGSZJR6065KTiZijC9U+uWMqSEiFyllikMmZBDM7JfZ36oX6TP7mAllJpei49SXsndx
+         VguQ==
+X-Gm-Message-State: AOAM530b6mTLt5TJlIAJRW/WZxMq7cFM5MUskPkYuw5RDh3kSCDUjDGC
+        +45FwwGEIZ5COpjt6g/wjVW+q6Arq/WaJ0dUrLs=
+X-Google-Smtp-Source: ABdhPJxU3SRPSOiwueLKQjDEtPITtq/dfRJ1NV9l2AVmzq8xiqXtHR1a4E/0K4VPjjN0/g7BtgqFri/2EM9XXP4vgnw=
+X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
+ o185-20020a25d7c2000000b006289d06457bmr8462316ybg.137.1647013990912; Fri, 11
+ Mar 2022 07:53:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311132906.32292-2-steve.lee.analog@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220311081111.159639-1-zhengzucheng@huawei.com>
+In-Reply-To: <20220311081111.159639-1-zhengzucheng@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 11 Mar 2022 16:52:59 +0100
+Message-ID: <CAJZ5v0jponp=ijVx6W=eNEGrfTKh0KbGmOQG_V0P-Mq366559g@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix cpufreq_get() can't get correct CPU frequency
+To:     z00314508 <zhengzucheng@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 22:29:06 +0900, Steve Lee wrote:
->  This adds support for the reset gpio binding.
-> 
-> Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
-> ---
->  Documentation/devicetree/bindings/sound/maxim,max98390.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+On Fri, Mar 11, 2022 at 9:11 AM z00314508 <zhengzucheng@huawei.com> wrote:
+>
+> From: Zucheng Zheng <zhengzucheng@huawei.com>
+>
+> On some specific platforms, the cpufreq driver does not define
+> cpufreq_driver.get() routine (eg:x86 intel_pstate driver), as a
 
-Acked-by: Rob Herring <robh@kernel.org>
+I guess you mean the cpufreq driver ->get callback.
+
+No, intel_pstate doesn't implement it, because it cannot reliably
+return the current CPU frequency.
+
+> result, the cpufreq_get() can't get the correct CPU frequency.
+
+No, it can't, if intel_pstate is the driver, but what's the problem?
+This function is only called in one place in the kernel and not on x8
+even.
+
+> Modern x86 processors include the hardware needed to accurately
+> calculate frequency over an interval -- APERF, MPERF and the TSC.
+
+You can compute the average frequency over an interval, but ->get is
+expected to return the actual current frequency at the time call time.
+
+> Here we use arch_freq_get_on_cpu() in preference to any driver
+> driver-specific cpufreq_driver.get() routine to get CPU frequency.
+>
+> Fixes: f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
+
+No kidding.
+
+> Signed-off-by: Zucheng Zheng <zhengzucheng@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 80f535cc8a75..d777257b4454 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1806,10 +1806,14 @@ unsigned int cpufreq_get(unsigned int cpu)
+>  {
+>         struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+>         unsigned int ret_freq = 0;
+> +       unsigned int freq;
+>
+>         if (policy) {
+>                 down_read(&policy->rwsem);
+> -               if (cpufreq_driver->get)
+> +               freq = arch_freq_get_on_cpu(policy->cpu);
+> +               if (freq)
+> +                       ret_freq = freq;
+> +               else if (cpufreq_driver->get)
+
+Again, what problem exactly does this address?
+
+>                         ret_freq = __cpufreq_get(policy);
+>                 up_read(&policy->rwsem);
+>
+> --

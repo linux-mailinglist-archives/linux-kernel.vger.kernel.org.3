@@ -2,337 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7755A4D5F74
+	by mail.lfdr.de (Postfix) with ESMTP id C33D54D5F75
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347838AbiCKK1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S1347889AbiCKK1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239127AbiCKK1f (ORCPT
+        with ESMTP id S1347865AbiCKK1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:27:35 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82437563C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:26:31 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id g26so16235986ybj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=H8XdOIjhEBVBtYM19xrN0/Jeg2YN1zi6ncYoMB8TK6I=;
-        b=g3BDUA3YRUbB4GhwoN+slHSSCdnPAmSdoIbF0co4/GCmv5Po01qmF4Ppoty50bqkvN
-         m1F652f6t8CnVqIkshI98p5kITAWTzXvzDxdRX5XLNmHif3Peow5PVmgaB4lelqk39cg
-         iiIvbLrbuHPdk0bRUCk2TBI/VotMjTiIhFDjlg7btiaiAT+z1/AHnsoKJdH26j+PcRzp
-         qMAq1XTTlumfNM+Yude7IjuVj7EYi8yU4Jh6IVg96BuZA2LRtnktMLjx9/X7AbcZPz4R
-         pdyY8vMOScSoBwuGgBu8/uPSZ8rzZqLEXMvOoEnFVdBA5eFuXXZn+5twJA0IZC2x8cjZ
-         syUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=H8XdOIjhEBVBtYM19xrN0/Jeg2YN1zi6ncYoMB8TK6I=;
-        b=gBkaGhxhcAMvHZ/EzavePHRTv7jrVuzbrIgGuRwrtiNHIm5CQ78jbCell/dj50HfV5
-         /u1CZVvyPRFvE9inwNXdIiMhws9y1SWOSsx4flwBSdFb26GttDYi4Al2vrWVSjQ0Mp/u
-         udZJU37VMlLl2jQzM84gjewkiTIcnE9yQKS8o0F/ToBpFNPNif/yTepyFTGrMHajHEKW
-         Uhe+8FZzSDhoWy6vVtoBY1DhAY7RYS2mQe9cIrUd1Lyu2hHVJhlMpsFia4I5SXVZe8v6
-         we7fLuvlPhZQ1s3MjAFOhKo7aO5IbAeIS8KqSjMVJbg5WpQPt96UZQTUKca5XX0uvkaO
-         XQLg==
-X-Gm-Message-State: AOAM530qJR5lSjU7Zj3IfpWHYeEegqf31eTvNjbHiowJIQsAl+ehHmPJ
-        foyAgjn+tU3kATyKeVzngRSZfWQcpHB2rkD8hLiQqg==
-X-Google-Smtp-Source: ABdhPJw5h9L0QdMK5g2+2AO15wqxTQHD937yG/rMQ+lYyTlFNqlH8FOvrpfP5PAOBABc956jySGWK7/Jg520AHVn4NE=
-X-Received: by 2002:a25:f505:0:b0:624:f6f9:7bf3 with SMTP id
- a5-20020a25f505000000b00624f6f97bf3mr7133067ybe.465.1646994390982; Fri, 11
- Mar 2022 02:26:30 -0800 (PST)
+        Fri, 11 Mar 2022 05:27:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2167C792
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:26:37 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id F0A521F38D;
+        Fri, 11 Mar 2022 10:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646994395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iDHlRfevwYuO53uWfkV+3+6vj5gqnO1eqvyOtlQyFUg=;
+        b=IjA2cc+VwQHHyl5Izis9qUmfgpFP18q2zzaMlOqmSs4L8tvMLjUE7mf6BUNiMD1sPyL34L
+        HTtI+XuU0sZu+GNEzo7ITyxbrC1zH4qRIxcR8sEjGMcaMnABHlwq3M568gsQsxjqlxIWQF
+        UMMyIlO6Uo7kSzyo/Rp1SQQMmYatG1Y=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AE63BA3B88;
+        Fri, 11 Mar 2022 10:26:35 +0000 (UTC)
+Date:   Fri, 11 Mar 2022 11:26:32 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 11/13] printk: reimplement console_lock for
+ proper kthread support
+Message-ID: <Yisj2PEtjZfHMe6N@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-12-john.ogness@linutronix.de>
+ <YhYKP/UuSKENGwfj@alley>
+ <87tuc7xma0.fsf@jogness.linutronix.de>
+ <YioMcSe0P0Z7ksiW@alley>
+ <87wnh14wp9.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20220310140812.983088611@linuxfoundation.org>
-In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 11 Mar 2022 11:26:20 +0100
-Message-ID: <CADYN=9K=QZ81nTZk7fCEb1Chh8y6H1ZOtTW8AJ-VvnTqhmO2RQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/58] 5.15.28-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wnh14wp9.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 at 15:29, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu 2022-03-10 17:14:18, John Ogness wrote:
+> On 2022-03-10, Petr Mladek <pmladek@suse.com> wrote:
+> >    console_unlock()
+> >    {
+> > 	  [...]
+> > 	  if (may_schedule)
+> > 	      retry = console_trylock_sched();
+> > 	  else
+> > 	      retry = console_trylock();
+> >    }
+> 
+> I believe the main confusion comes from the function name I chose and
+> the poor function description. Using your above code idea and changing
+> to a more fitting name, I would suggest:
+> 
+>     console_unlock()
+>     {
+>  	  [...]
+>  	  if (may_schedule)
+>  	      retry = console_lock_reacquire();
+>  	  else
+>  	      retry = console_trylock();
+>     }
+> 
+> This console_lock_reacquire() acquires the console lock the same way
+> that console_lock() does it. The only reason we don't just use
+> console_lock() is because we want to perform a try on @console_sem. But
+> if we are successful, in the end, we have re-taken the console lock
+> exactly as console_lock() did before: @console_sem locked, kthreads
+> blocked by mutex.
+> 
+> You say this creates deadlock potential, but I do not see how that could
+> be. We are in the same context and locking the same way we did before.
+
+Yeah, it looks safe when using to re-acquire the lock in console_unlock().
+
+I thought about it as a generic API. If it exists, it might be used
+anywhere. And it has pretty special behavior that one has to keep
+in mind.
+
+
+> But my primary concern is not the naming or workarounds or confusing
+> APIs. So we should not let ourselves be diverted by that aspect.
+> 
+> My primary concern is the technical difference when a schedulable
+> context reacquires via atomic counter (which fails if any kthread is
+> active) vs. reacquiring via mutex (which never fails).
+> 
+> The reason for the reacquire is because (during direct printing) we see
+> that a new record appeared and we need to make sure it gets printed
+> (because other direct printers may have aborted, expecting us to print
+> it).
+
+I see. I missed this POV.
+
+
+> This scenario is only interesting if kthread printers exist because
+> otherwise @console_sem is enough to handle the direct printing.
+> 
+> So the questions are:
+> 
+> 1. Is it OK to assume the new record will be printed if any kthread is
+> active? If yes, then it is enough to use the atomic counter.
+> 
+> 2. Or, since we are responsible for direct printing, do we want to be
+> certain that the record is printed by printing it ourselves? If yes,
+> then we must block all the kthreads and perform the printing directly to
+> all the consoles. This requires the mutex approach.
 >
-> This is the start of the stable review cycle for the 5.15.28 release.
-> There are 58 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.28-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+> IMHO #1 will relies heavily on kthreads waking up and printing (even
+> though the printk caller requested direct printing), whereas #2 will
+> cause direct printers to more actively print (possibly printing more
+> than was requested).
 
-Results from Linaro=E2=80=99s test farm.
-No test regressions on arm64, arm, x86_64, and i386.
+OK, it means that the main problem here _is not_ the scheduling context,
+console_lock() vs. console_trylock(). The main problem _is_ the direct
+printing vs. the offload to kthreads.
 
-But we found following kernel crash [1] on rpi-4 while running LTP controll=
-ers
-tests we are in process to reproduce and bisect the issue.
+Of course, the context is important. It affects how we could re-take
+the lock. But the main problem is the printing mode. We must make sure
+that:
 
+    1. someone is printing pending messages when the direct mode is needed
 
-cgroup_fj_stress_cpuset_4_4_one 1 TINFO: Subsystem cpuset is mounted
-at /sys/fs/cgroup/cpuset
-cgroup_fj_stress_cpuset_4_4_one 1 TINFO: Creating subgroups ...
-[  311.726342] Unhandled fault at 0xffff800014cfba10
-[  311.731137] Mem abort info:
-[  311.733968]   ESR =3D 0x96000070
-[  311.737065]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-[  311.742454]   SET =3D 0, FnV =3D 0
-[  311.745549]   EA =3D 0, S1PTW =3D 0
-[  311.748733]   FSC =3D 0x30: TLB conflict abort
-[  311.753062] Data abort info:
-[  311.755979]   ISV =3D 0, ISS =3D 0x00000070
-[  311.759866]   CM =3D 0, WnR =3D 1
-[  311.762872] swapper pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000001e940=
-00
-[  311.769673] [ffff800014cfba10] pgd=3D10000000fbfff003,
-p4d=3D10000000fbfff003, pud=3D10000000fbffe003, pmd=3D100000004c6ee003,
-pte=3D0068000049a2b703
-[  311.782405] Internal error: TLB conflict abort: 96000070 [#1] PREEMPT SM=
-P
-[  311.789294] Modules linked in: btrfs blake2b_generic libcrc32c xor
-xor_neon zstd_compress raid6_pq brcmfmac brcmutil xhci_pci
-xhci_pci_renesas snd_soc_hdmi_codec raspberrypi_cpufreq hci_uart btqca
-btbcm cfg80211 bluetooth bcm2711_thermal reset_raspberrypi
-clk_raspberrypi vc4 iproc_rng200 raspberrypi_hwmon rng_core cec rfkill
-drm_kms_helper pwm_bcm2835 i2c_bcm2835 drm pcie_brcmstb crct10dif_ce
-fuse
-[  311.825153] CPU: 0 PID: 8326 Comm: cgroup_fj_stres Not tainted 5.15.28-r=
-c2 #1
-[  311.832396] Hardware name: Raspberry Pi 4 Model B (DT)
-[  311.837608] pstate: 200003c5 (nzCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=
-=3D--)
-[  311.844675] pc : el1h_64_sync+0x0/0x7c
-[  311.848485] lr : charge_memcg+0xa0/0xe0
-[  311.852384] sp : ffff800014cfba10
-[  311.855742] x29: ffff800014cfbb60 x28: ffff000041dfcd80 x27: 00000000000=
-00002
-[  311.862995] x26: ffff000040d24068 x25: ffff000040d24000 x24: 000000000a2=
-ee000
-[  311.870246] x23: ffff000040d24000 x22: ffff000042a05300 x21: 00000000000=
-00001
-[  311.877497] x20: fffffc00017942c0 x19: ffff0000401aa000 x18: 00000000000=
-00000
-[  311.884745] x17: 00000001506d3517 x16: 000000000a2eef60 x15: 000000000a2=
-eefc0
-[  311.891994] x14: 0000000000000000 x13: 0000000000000031 x12: 00000000000=
-00000
-[  311.899244] x11: 0054434552524f43 x10: 5f594c5849534f50 x9 : ffff8000082=
-f75ac
-[  311.906494] x8 : 0000000000000000 x7 : 0054434552524f43 x6 : 00000000000=
-00000
-[  311.913743] x5 : 0000000000000001 x4 : 0000000000000001 x3 : 00000000000=
-778d4
-[  311.920992] x2 : ffff800009ea06f0 x1 : 0000000000077859 x0 : ffff8000ed9=
-06000
-[  311.928242] Call trace:
-[  311.930718]  el1h_64_sync+0x0/0x7c
-[  311.934170]  __mem_cgroup_charge+0x44/0x8c
-[  311.938326]  wp_page_copy+0xcc/0x890
-[  311.941955]  do_wp_page+0xa0/0x470
-[  311.945405]  __handle_mm_fault+0x694/0xf90
-[  311.949561]  handle_mm_fault+0x100/0x2a4
-[  311.953540]  do_page_fault+0x178/0x4a0
-[  311.957349]  do_mem_abort+0x4c/0xc0
-[  311.960891]  el0_da+0x3c/0x90
-[  311.963904]  el0t_64_sync_handler+0xe8/0x130
-[  311.968239]  el0t_64_sync+0x1a0/0x1a4
-[  311.971960] Code: d503201f 910003e0 9449917e 140003c9 (a90007e0)
-[  311.978146] ---[ end trace 973edfaca15d48cf ]---
-[  423.848645] audit: type=3D1701 audit(1618432859.639:3):
-auid=3D4294967295 uid=3D993 gid=3D990 ses=3D4294967295 pid=3D247
-comm=3D\"systemd-network\" exe=3D\"/lib/systemd/systemd-networkd\" sig=3D6
-res=3D1
+    2. kthreads are woken and can enter the printing mode when the direct
+       mode is disabled.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Will console_trylock_sched()/console_trylock_reacquire() really
+help here?
+
+The API theoretically helps in direct mode when the lock was taken
+via console_lock(). But it does not help when the lock was taken
+via console_trylock() from printk(). It might mean that
+the forward progress might not be guaranteed in the direct mode
+(early boot, panic, ...).
+
+Hmm, the forward progress seems to be guaranteed in the direct
+mode most of the time. console_trylock() can take over
+the atomic counter because console kthreads are not allowed
+to enter the printing mode in this case.
+
+I used "most of the time" because there might be races when
+the mode is switched. "printk_direct" is an atomic variable.
+CON_DIRECT is set under con->mutex but console_trylock()
+does not take the mutex...
+
+There are also races when the offload to consoles kthreads
+is allowed. For example, console_trylock() might block
+console_kthread_printing_tryenter().
 
 
-## Build
-* kernel: 5.15.28-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: 733316a3fd593d01eef349f96da2ba8f870f6245
-* git describe: v5.15.27-59-g733316a3fd59
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.27-59-g733316a3fd59
+Sigh, I am afraid that we have non-trivial problems
+to guarantee that all messages will be printed:
 
-## Test Regressions (compared to v5.15.27-41-g5ad72e40dcac)
-No test regressions found.
+     + races when switching between direct mode
+       and offload to kthreads. It might cause
+       stall in both modes.
+
+     + console_trylock() races with
+       console_kthread_printing_tryenter().
+       It might put kthread into a sleep even when
+       it is supposed to print the message.
 
 
-## Metric Regressions (compared to v5.15.27-41-g5ad72e40dcac)
-No metric regressions found.
+IMHO, console_trylock_sched() does not help much here.
+We need to solve console_trylock() path anyway.
 
-## Test Fixes (compared to v5.15.27-41-g5ad72e40dcac)
-No test fixes found.
+I think that the solution might be:
 
-## Metric Fixes (compared to v5.15.27-41-g5ad72e40dcac)
-No metric fixes found.
+   + make sure that the state of "printk_direct" atomic variable
+     is enough to distinguish about the mode.
 
-## Test result summary
-total: 111202, pass: 94014, fail: 1081, skip: 14902, xfail: 1205
+   + always wakeup() console kthreads after console_trylock()
+     to handle the possible race with
+     console_kthread_printing_tryenter()
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 47 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 45 total, 41 passed, 4 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 41 total, 37 passed, 4 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 50 passed, 15 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
+I have to think more about it.
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+Does it make any sense, please?
 
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://lkft.validation.linaro.org/scheduler/job/4698750#L7563
+Best Regards,
+Petr

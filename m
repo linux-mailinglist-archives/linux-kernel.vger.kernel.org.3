@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F5D4D63FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF374D6401
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243011AbiCKOot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S1349642AbiCKOpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350341AbiCKOof (ORCPT
+        with ESMTP id S1350348AbiCKOof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 09:44:35 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE6D13C39D
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:43:29 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j17so13355137wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:43:29 -0800 (PST)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897C21451DD
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:43:30 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id k24so13280058wrd.7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:43:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mDiWp0YZhxRCTSM6iyT6AyMHl1Ys6xIr0uetO8EavSM=;
-        b=BAoXfju0z2oxw/nRANCXQFXTU0BUto8RnqRYE+fPGznHy+rs8VmnLXUNDEu79qqrYA
-         kBSH9xoEyU+gnXzzrX2o92DA3AmHfV6alKCWzix7Eh+7w49XEwcb+j1l3ABeZzqQRZwy
-         GpNfjlOvw8k+GGYjK/zjUbhTCmFIzCVFnc4GIRJxWy1OtD2zLUyv9BmxoEUsp3ltQ1iY
-         ko+MqNTMgQpuKJWLlDo1mfz/2YibMYyaLL8x6Dz1gVZO+Bs/hZ26JtISumoQOX3aCrwI
-         y7MqxdD0GUhkSJsKfoGEB4Wqqpc3MX2OW6XmcENGiAtY5+HxiV87D8WU6GxMR7j9W2Jw
-         lQCw==
+        bh=dFJ+CZCDxyaZL6W/Y9PfyyEI45qJ81fWzaE92oPrWkQ=;
+        b=qhC1b3AG7xUe4mER3/ocnTDCkgiTlqkNOkKb0PCrSErlu0F2OqV/WUuS2SG5oiq6+i
+         9cyRxydqKrP/uE2mBg6f9QlBxrJcqIJlWh3d1zLOnTvG3AaQ1vKoSFg6/xE6pO79Xl7i
+         tfi57QZEjX4ij17U5xISsBB44vKVYcR25KWyd/b6wA5Lo/cYq8RBWEqxJrZpHHPNSezf
+         pT+09nuTl2/5+IBzdCwQIw+mWlMEmSITKA3kCeGlZwVtbb+adLgoeROWUV+P+ZGLANWb
+         tb+MqG7L6eavEWmd0csKOzCOcXD3Odqv4qCQd2dd/jdHg3sT3FjEuR+bA9Kz1nESvNzO
+         1skg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mDiWp0YZhxRCTSM6iyT6AyMHl1Ys6xIr0uetO8EavSM=;
-        b=Sa5we5DRUQN0jk10iMj3e4+2ynRFYQd4pmP89WmjBAIP4k5NugovJAla9IsRXvb9TQ
-         2K7Y7P2Z5hYrLfleq6lceAiTlhhFEArsf1OE0FW/NADJbg5C0tRiERRbXZhgJ226qVDa
-         jwC6GCYce3Esv7NCCnq1S19HbBYH9a9ANRr2C0tyvowP6DddM7NobC25dELstwrp12h3
-         RWKbGrW75pU/c9Ef+e+xpjY14K1XRRL1BUS8dzrIqZD25tFg6AfSvG/5/Jaua28eAugo
-         Jyxg6xwtE22W1emSXAzggiqGv55RByUXinZhxtEcVWbX5noTq6igd9Iegx4WREvTdBe0
-         BbtA==
-X-Gm-Message-State: AOAM532u7L5LtnP7sd3sdFpaqq7oKzL8bI2Yd76JCCkNPa5Y/FM0MWh2
-        t8nWRgjCMAOrU8Ync5Eftg==
-X-Google-Smtp-Source: ABdhPJwKOvBHeoA+WmReXPzZ2Gn9TgkH04wGwJtTJY5USmPvijtMbIDoiP9FU7LkqYePiXroEddu5g==
-X-Received: by 2002:a5d:5104:0:b0:203:855d:c41c with SMTP id s4-20020a5d5104000000b00203855dc41cmr6862911wrt.128.1647009808405;
-        Fri, 11 Mar 2022 06:43:28 -0800 (PST)
+        bh=dFJ+CZCDxyaZL6W/Y9PfyyEI45qJ81fWzaE92oPrWkQ=;
+        b=WlU2nG5TdCYs2V14BAtwXsDntDMNwNLyNXssBaBTRlnk4OQug9xVkGMAmK+4CYJrSG
+         Z1FLUmcjIHW4grjJKgr3unpqR6T5fc/qzQYl0ODLJNPg/hGKy/HcEoFR9gYpb4LjwLws
+         DXkaucNoch4by49SFeZr3dASy4ix17sisM0mrgboT20Dj0a1fkkIt48lRPVUbCXSPcS8
+         1bQZbkNSFrQ7AGxG+BxtoT7ZnfS66+V+WKulUgxG0A6naU52jpUEsMO+kdaVidufKCm0
+         5cKBu+LGbxyekL50O0xgJ4tOaLIshRzJWekQrR6vG4efexiS3mKXAWErnZ+r248rqdZ0
+         NmJw==
+X-Gm-Message-State: AOAM530bZ0OZQXFlWGFmp1P2FZ/slyUSNr5wlsuXmLA3CpG7nTqnEGT8
+        Hlld2azFjo9pIAaLzifIwA==
+X-Google-Smtp-Source: ABdhPJyGpeO31IyjnE+UM1X4n1r8VX/rwlB/CwtgDaOd9hGMFvx/Q7uFxzu5ev+HymOdyqQHlXLmUg==
+X-Received: by 2002:a05:6000:178c:b0:203:8449:20ea with SMTP id e12-20020a056000178c00b00203844920eamr7592920wrg.460.1647009809156;
+        Fri, 11 Mar 2022 06:43:29 -0800 (PST)
 Received: from localhost.localdomain ([46.53.250.95])
-        by smtp.gmail.com with ESMTPSA id e20-20020adfa454000000b001f01a14dce8sm6877637wra.97.2022.03.11.06.43.27
+        by smtp.gmail.com with ESMTPSA id e20-20020adfa454000000b001f01a14dce8sm6877637wra.97.2022.03.11.06.43.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 11 Mar 2022 06:43:28 -0800 (PST)
 From:   Alexey Dobriyan <adobriyan@gmail.com>
@@ -53,9 +53,9 @@ To:     x86@kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org, adobriyan@gmail.com
-Subject: [PATCH 4/5] x86/alternative: make .altinstr_replacement section non-executable
-Date:   Fri, 11 Mar 2022 17:43:11 +0300
-Message-Id: <20220311144312.88466-4-adobriyan@gmail.com>
+Subject: [PATCH 5/5] x86/unwind/orc: delete dead write in __orc_find()
+Date:   Fri, 11 Mar 2022 17:43:12 +0300
+Message-Id: <20220311144312.88466-5-adobriyan@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220311144312.88466-1-adobriyan@gmail.com>
 References: <20220311144312.88466-1-adobriyan@gmail.com>
@@ -71,78 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instructions in .altinstr_replacement section aren't meant to be
-executed by CPU directly, only after being copied to the real
-instruction stream in .text/.init_text.
+Also move "mid" variable to the innermost scope and delete useless
+parenthesis while I'm at it.
 
 Signed-off-by: Alexey Dobriyan (CloudLinux) <adobriyan@gmail.com>
 ---
- arch/x86/include/asm/alternative.h | 10 +++++-----
- tools/objtool/check.c              |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/kernel/unwind_orc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index cf7722a106b3..d754a18edc99 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -165,7 +165,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
- 	ALTINSTR_ENTRY(feature, 1)					\
- 	".popsection\n"							\
--	".pushsection .altinstr_replacement, \"ax\"\n"			\
-+	".pushsection .altinstr_replacement, \"a\"\n"			\
- 	ALTINSTR_REPLACEMENT(newinstr, 1)				\
- 	".popsection\n"
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 2de3c8c5eba9..d38125ea1bf6 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -35,7 +35,7 @@ static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
+ {
+ 	int *first = ip_table;
+ 	int *last = ip_table + num_entries - 1;
+-	int *mid = first, *found = first;
++	int *found = first;
  
-@@ -175,7 +175,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 	ALTINSTR_ENTRY(feature1, 1)					\
- 	ALTINSTR_ENTRY(feature2, 2)					\
- 	".popsection\n"							\
--	".pushsection .altinstr_replacement, \"ax\"\n"			\
-+	".pushsection .altinstr_replacement, \"a\"\n"			\
- 	ALTINSTR_REPLACEMENT(newinstr1, 1)				\
- 	ALTINSTR_REPLACEMENT(newinstr2, 2)				\
- 	".popsection\n"
-@@ -192,7 +192,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 	ALTINSTR_ENTRY(feat2, 2)						\
- 	ALTINSTR_ENTRY(feat3, 3)						\
- 	".popsection\n"								\
--	".pushsection .altinstr_replacement, \"ax\"\n"				\
-+	".pushsection .altinstr_replacement, \"a\"\n"				\
- 	ALTINSTR_REPLACEMENT(newinsn1, 1)					\
- 	ALTINSTR_REPLACEMENT(newinsn2, 2)					\
- 	ALTINSTR_REPLACEMENT(newinsn3, 3)					\
-@@ -338,7 +338,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 	altinstruction_entry 140b,143f,\feature,142b-140b,144f-143f
- 	.popsection
+ 	if (!num_entries)
+ 		return NULL;
+@@ -47,7 +47,7 @@ static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
+ 	 * ignored when they conflict with a real entry.
+ 	 */
+ 	while (first <= last) {
+-		mid = first + ((last - first) / 2);
++		int *mid = first + (last - first) / 2;
  
--	.pushsection .altinstr_replacement,"ax"
-+	.pushsection .altinstr_replacement,"a"
- 143:
- 	\newinstr
- 144:
-@@ -376,7 +376,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 	altinstruction_entry 140b,144f,\feature2,142b-140b,145f-144f
- 	.popsection
- 
--	.pushsection .altinstr_replacement,"ax"
-+	.pushsection .altinstr_replacement,"a"
- 143:
- 	\newinstr1
- 144:
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7c33ec67c4a9..18c32035f41c 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -359,7 +359,7 @@ static int decode_instructions(struct objtool_file *file)
- 
- 	for_each_sec(file, sec) {
- 
--		if (!(sec->sh.sh_flags & SHF_EXECINSTR))
-+		if (!(sec->sh.sh_flags & SHF_EXECINSTR) && strcmp(sec->name, ".altinstr_replacement"))
- 			continue;
- 
- 		if (strcmp(sec->name, ".altinstr_replacement") &&
+ 		if (orc_ip(mid) <= ip) {
+ 			found = mid;
 -- 
 2.34.1
 

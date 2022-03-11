@@ -2,84 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9E04D6A68
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451344D6A84
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiCKWrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 17:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S230194AbiCKWzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiCKWqq (ORCPT
+        with ESMTP id S230176AbiCKWzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:46:46 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4941F2DAF4F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:37:03 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2e2ca8d7812so47786517b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:37:03 -0800 (PST)
+        Fri, 11 Mar 2022 17:55:24 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B616254A84
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:41:49 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id s42so9112783pfg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:41:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DREXPNc2JSl0V5RZY2vCdvrUUa88K+pQUjqT8ymWxMk=;
-        b=O5Q8bxA/KkmDCq6uqRmKbEj/kc8mUESHJC5dAzxPo/3xd3SdDKMrP2QVqRMCCgr3TH
-         MocubDdpCRCus/XBr2Ilzqbxokz5l8MQJdMGCOleXY7keRw5WHYICMvC770ECBYk43MN
-         jBs9nx1C5E3cOPY8PUqY1eacT+koo1SGbBuuY=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ahqlChR4R/wAxZuLbVyGpPDOrLLpoD2GWFAgzdSRBio=;
+        b=IoAw069B2W4wIr7xE+LDXabaoa+2tWXedXk/rq6DZFB8IcxmAaWTTW/pBRkvOn7FVC
+         +MFMKZyLWIlTANF5Gqi9nD2rsmSG+BtOHVVFdSFdLPHXzJuKRor/a+tb/Ex1COmpfoUa
+         CtHR8VLYvXi3kpB3lD69QCKRR+i6byWsp2NzolQjYj5uLyudCkocSjetC7vTwXLfKEr1
+         +y1Sj8kpOMM22wwZ1X7TypiPJEyvMh44YrnzznfjehIpm+H1lL6KmmEqGffUmOYav5sV
+         Y7KSPE5zJ0fLeth3SxUapx/QT4P/9N0QziscnXZmyEjBIJxUSfwJSi6WgY3ms/S+mjTL
+         frGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DREXPNc2JSl0V5RZY2vCdvrUUa88K+pQUjqT8ymWxMk=;
-        b=BGH2nEbc3nijxB+TJCf3tN8ccdMk+sQ23Tigf23LhZG4Cv5fghpHMDaX0OH3EmhLBT
-         tCLqyVn7or8nNviDDvy4hpLmJuPL1pENTp9q2igtDAPVjZWiqAzucHr2iwAppUTG5mWj
-         NgWvXToByGQlweEqBvRvp4QpfQXw2H01fKcr4mszJSFEgs+1kwISy+BMshpF0SGukgYN
-         7AiwvYbc6LgaUCM+k1U6b8RbjbxtugycpCQweEEgJgawh17+MQuhxOdZf9mDCoeBuUJR
-         3BoDQI4LiwP3dOyjoLp3KlUEgnZUvuH9bd8a7VEey3otNvxcTfKzgiN6XDEgCzgX5gNx
-         NeDQ==
-X-Gm-Message-State: AOAM531HnhsbBjGyXdomvoQCA9/NwZ5CPIe2i47hj7o4f2fsqx9iqiT0
-        jNiJGRAyPEKUC8kbuMZgAYwFM24RjvqUTAje/79KiQ==
-X-Google-Smtp-Source: ABdhPJxD9C+lmjCFUuGqD3d+t0UpXnibKp2g1hAFOkt/GuhNL0o7REY2rjJEqu0+69tDgnz526pRiNrNgibT2VMGHTc=
-X-Received: by 2002:a81:74d4:0:b0:2dc:5a9f:c830 with SMTP id
- p203-20020a8174d4000000b002dc5a9fc830mr10697375ywc.32.1647038222492; Fri, 11
- Mar 2022 14:37:02 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ahqlChR4R/wAxZuLbVyGpPDOrLLpoD2GWFAgzdSRBio=;
+        b=SybkywX8yLRmxNysocC22l76H1Q5fJbxvifAIssyYZUM/zvQ8cFc137j9bbw8U9HUE
+         INBkZbWf2We353kFOc0YmfKevruV4Np5jtHda0qJUeaI7dACTxvoDWV2Hbd1UV4WCVSJ
+         3Vbak38w/Mo/PNlPRDusfQOwIMz8096khEF+HlEIP1bowlrHGwZgR3QZXHtr4zC16Xp+
+         8JEduRGVjX1N16OxvTxNsClH2f96A9R3xpCTAUAo5pSb85UO1+rafZMxhAbgt6p3HxtQ
+         sjNnxhkJ6kJukheTZvnEa65bjucORfB1pbMlsP7h8HM4bxtVdBU7VTIEX1wzXdp+uS2I
+         jEow==
+X-Gm-Message-State: AOAM533KXGt+7MNIMUJDxcy9e/E0U+boez5G47xxEW3PYqpP3jouz+9z
+        37Ceax7WqN3p1Z/BrPrXKMo=
+X-Google-Smtp-Source: ABdhPJzcMneJKmqDp7c/GtxCPZtgbRZPV12HGejFy7ed9Jh/5L0eg3ehHhaIedcFBVm2GPz2gyoaEA==
+X-Received: by 2002:a63:2250:0:b0:372:c564:621b with SMTP id t16-20020a632250000000b00372c564621bmr10402978pgm.601.1647038508797;
+        Fri, 11 Mar 2022 14:41:48 -0800 (PST)
+Received: from [192.168.43.69] ([182.2.70.192])
+        by smtp.gmail.com with ESMTPSA id e10-20020a056a00162a00b004f6fc39c081sm10736172pfc.211.2022.03.11.14.41.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 14:41:48 -0800 (PST)
+Message-ID: <7ea1ca0f-804c-bde8-6c75-5822f260531b@gmail.com>
+Date:   Sat, 12 Mar 2022 05:41:42 +0700
 MIME-Version: 1.0
-References: <CABWYdi2a=Tc3dRfQ+037PG0GHKvZd5SEXJxBBbNspsrHK1zNpQ@mail.gmail.com>
- <CAOUHufb=GQaX_2Bp2YfY4ntBZj8iwb8z9mvxUFXw+KkySRu+KA@mail.gmail.com>
-In-Reply-To: <CAOUHufb=GQaX_2Bp2YfY4ntBZj8iwb8z9mvxUFXw+KkySRu+KA@mail.gmail.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Fri, 11 Mar 2022 14:36:51 -0800
-Message-ID: <CABWYdi3iJ45pSgj-OrxATVXR7-MHb3DZ-UkERPvo9L=h_qtzgA@mail.gmail.com>
-Subject: Re: zram corruption due to uninitialized do_swap_page fault
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [ammarfaizi2-block:broonie/sound/for-5.18 33/171]
+ sound/soc/sof/compress.c:54 snd_sof_compr_fragment_elapsed() warn: variable
+ dereferenced before check 'cstream' (see line 48)
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        Daniel Baluta <daniel.baluta@nxp.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <202203120019.KjXsD7LN-lkp@intel.com>
+From:   Ammar Faizi <ammarfaizi2@gmail.com>
+In-Reply-To: <202203120019.KjXsD7LN-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 2:30 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Fri, Mar 11, 2022 at 12:52 PM Ivan Babrou <ivan@cloudflare.com> wrote:
-> >
-> > Hello,
-> >
-> > We're looking into using zram, but unfortunately we ran into some
-> > corruption issues.
->
-> Kernel version(s) please?
+On 3/12/22 1:59 AM, Dan Carpenter wrote:
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> New smatch warnings:
+> sound/soc/sof/compress.c:54 snd_sof_compr_fragment_elapsed() warn: variable dereferenced before check 'cstream' (see line 48)
+> 
+> vim +/cstream +54 sound/soc/sof/compress.c
+> 
+> 858f7a5c45cacb Daniel Baluta 2021-10-04  46  void snd_sof_compr_fragment_elapsed(struct snd_compr_stream *cstream)
+> 858f7a5c45cacb Daniel Baluta 2021-10-04  47  {
+> 6324cf901e14c6 Daniel Baluta 2022-01-20 @48  	struct snd_soc_pcm_runtime *rtd = cstream->private_data;
+>                                                                                    ^^^^^^^^^^^^^^^^^^^^^^
+> 6324cf901e14c6 Daniel Baluta 2022-01-20  49  	struct snd_compr_runtime *crtd = cstream->runtime;
+>                                                                                   ^^^^^^^^^^^^^^^^^
+> Dereference
+> 
+> 858f7a5c45cacb Daniel Baluta 2021-10-04  50  	struct snd_soc_component *component;
+> 6324cf901e14c6 Daniel Baluta 2022-01-20  51  	struct snd_compr_tstamp *tstamp;
+> 858f7a5c45cacb Daniel Baluta 2021-10-04  52  	struct snd_sof_pcm *spcm;
+> 858f7a5c45cacb Daniel Baluta 2021-10-04  53
+> 858f7a5c45cacb Daniel Baluta 2021-10-04 @54  	if (!cstream)
+>                                                      ^^^^^^^^
+> Checked too late
 
-You can see 5.16 in dmesg output. I've also replicated on 5.17-rc7 and
-5.15.26. The latter is the LTS version we use in production, where
-coredumps and rocksdb corruptions were observed.
+Hi Dan,
+
+Thanks for reporting, it has already been fixed in commit
+    
+   7e4bfcf10a03981 ("ASoC: SOF: compress: fix null check after dereference")
+
+   Link: https://git.kernel.org/broonie/sound/c/7e4bfcf10a03981
+
+Regards,
+-- 
+Ammar Faizi

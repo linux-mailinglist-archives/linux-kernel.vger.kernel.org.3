@@ -2,71 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297C94D5CB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678724D5CB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346927AbiCKHug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S1347139AbiCKHxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245098AbiCKHuc (ORCPT
+        with ESMTP id S1346780AbiCKHxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:50:32 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCBA6E8FF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:49:29 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id r12so7052229pla.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:49:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UzP5nyGsG5GcBeZpseFrZjEpwCJXFyPvLwGQvRUfnNo=;
-        b=I+MNjb3CDGdWqP0vN8lxP24xDaRT2FsDjXqHEF8anMTchEqnJESHsAJ5VSU3coSSh+
-         UZTErUAkeAAjATqg/sexMBi4kvDDB3kcFgReh8VQTfrL0lRESjd2BykhwR3FJOA1yNhO
-         wlNDdrP78dFszJNYudc8oOTvgCfj1r6NOtjNYyjbX7DY22XC9+62V6xgbiYbZVYlzq/S
-         PxcHJBvwZfy9iWVhodI/6rsEKS+xDy/lsu0v3uGeJHXr9ozgn9FSGdCjRVcrfg2We15x
-         w9hxuSnTMiECb92PKg2M9mpJiNpZUtDvBeU+ING2wAgQuFPPRo9QN5Haa4YP1vKpxX/W
-         PbFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UzP5nyGsG5GcBeZpseFrZjEpwCJXFyPvLwGQvRUfnNo=;
-        b=2BKARYrSXSJ2pMAdfhQX33GeFLt8ybHaYmJ9wAWMZ1clPEeDaS9gABmPjWfH/tq/RI
-         s+cx6RODjU/QFcS0+PlAHQAOYJN9Sk2p9suuK4r5OCOV8TmmnDDBqc8KdKCAFo8RrfoZ
-         uq8IhtC5iZsM34RxPTtwF6yGpQ6OFtOww+vNDBp5NtTURwMUjpfyJU58zSfgt4hbc8uB
-         Az29k+Tf0CcUaRTJDjDekiidNkinPrapjKksy7K41D56E+mydo+AiXQrIQ3cT2i/ydDF
-         LuA5wew8SReWkEgd+U+fkRHI1El6S6td5ydNkuZ/6DSUgftbChDspksFcy2bpnQP8hG/
-         Adeg==
-X-Gm-Message-State: AOAM532YrVcsRYcxGYlQbKmAqJexELpAns4jQSYq6QAfSCgWENNVj2Yu
-        CyA9Nsfx3zbWlCObEjW7QBI=
-X-Google-Smtp-Source: ABdhPJzsmRHcxa6IQeOpJXmKQsO67zzYMTHhIWp68vwt20iA/12obEHLhxXGb0uvrIXs5xnkDLJreA==
-X-Received: by 2002:a17:90b:3ec8:b0:1bf:ddf:92f0 with SMTP id rm8-20020a17090b3ec800b001bf0ddf92f0mr9324478pjb.161.1646984969050;
-        Thu, 10 Mar 2022 23:49:29 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id mu1-20020a17090b388100b001bf861ef154sm12668948pjb.55.2022.03.10.23.49.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 10 Mar 2022 23:49:28 -0800 (PST)
-Date:   Fri, 11 Mar 2022 15:48:16 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        huyue2@coolpad.com, zhangwen@coolpad.com
-Subject: Re: [PATCH 1/2] erofs: clean up z_erofs_extent_lookback
-Message-ID: <20220311154816.00004d23.zbestahu@gmail.com>
-In-Reply-To: <Yir8lBR2gyN1CJ8D@B-P7TQMD6M-0146.local>
-References: <20220310182743.102365-1-hsiangkao@linux.alibaba.com>
-        <20220311151232.00003619.zbestahu@gmail.com>
-        <Yir6HNsdYFdLVwEN@B-P7TQMD6M-0146.local>
-        <Yir8lBR2gyN1CJ8D@B-P7TQMD6M-0146.local>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        Fri, 11 Mar 2022 02:53:32 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2087.outbound.protection.outlook.com [40.107.22.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2BC13DD4;
+        Thu, 10 Mar 2022 23:52:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O50dgFTW0pUvVPOpWr1N7PjjnR2TFmkYu0NEIlU9qmDwCS6I/GYrYRyLiOFDif++jDPd2lUiHsF1T7KSc3vo0YRvs6Olu3btef6taHpMIeVSdh0rhX23FPrShUYYvEepKsxAgcs0ocn8PRRDW4SLl6pZIeqSxPJOpDxf5YqSgAAO5drFGQNjK8LGXtkScCkhH9tcKUgptr4PD52bcJCB+zAIXf6vItXoltKeQbrZYRU40cu7jWxVxiv02G/esG33Lr3lXSbfhJiMft0FfHtwUhPdpek4RBRgL1HK47w9Jw4GqurvXkqVQnnXSFgafOgdm7vbmwumJR9Jj7laIGJRRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/lawJqNZ6hdwDYs9c7BvLscNDPHGUczrKIhcGXLn5cI=;
+ b=JHVIaZevdrE9XBSRcYtYOm0WudtocTxBH6QG6kqqddG/VSfyeXPCJ55MXCbEIEPS4vGv+nYSBqAcrc5njlNgYth5vD9eST1l3dpC+9ES3Do/33bZwx7qKVRR2m4l9i9He5nZQORF2zHFeJYgPJsU5s5sv8m8ygml2VEBHAGEx4gStyHs2ZmdGwLHTR8zLjncrysroDLvyjGYc3QuTaWevUku8sXOqpcC0fJGh5cAWaopwNRf3KEimcz1piq2Zw2kDnclAulrMmScNw8zN1mEcyOSUHzbG4dJEPx0kJlhhvVN3cKcleNm4uv1CvqQ/R/SeI1bcZwPUzWSc09kaY8z2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/lawJqNZ6hdwDYs9c7BvLscNDPHGUczrKIhcGXLn5cI=;
+ b=mQ/I+N3mt8vfiF2uLF0KS8eKgnuHQxbrVLg4PXZ9PLF4tVUi7y/ktE9mIcX91gId62mMyEhGVyBUxb1/EE2/6lmD1ZIGrDO2CdoHFfjeFoAMjmLmEwI00bHrpS+G5RfdGwMrAA6ERohBSG+Pgcqr3/XvA0Yrgezw8TrCBhbngvY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by DB7PR04MB4443.eurprd04.prod.outlook.com (2603:10a6:5:32::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 11 Mar
+ 2022 07:52:24 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
+ 07:52:24 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        mirela.rabulea@oss.nxp.com
+Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/5] imx-jpeg: Support dynamic resolution change
+Date:   Fri, 11 Mar 2022 15:51:42 +0800
+Message-Id: <cover.1646983646.git.ming.qian@nxp.com>
+X-Mailer: git-send-email 2.33.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGXP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::27)
+ To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e67075cb-7ab7-429a-a68a-08da0334140b
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4443:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR04MB4443DDDBD6DC5D913775B304E70C9@DB7PR04MB4443.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: he3yYK0gWvH0s0acYHtvM+vSrDI7U4HM//i48SGUx7eAIracn7INaMXMI2xyZ7JIgw8eLJuh+nvg0daPL5XVe0iMViipIKQsGohtZ/+X8uRCYbnxBm2/FC88kUMVlUl1JMzP2/tHzqqmQex7r75eH73IY973VrK4Atxr89xmj++kFcCg04NwvnbZlRVy5MKxwAeovxOFE6qeEpPPZ65aDf1pLRZs8sk+Ky6fFjpZ+leedp95W+VHvMR6yKOAMXyGddvq53EYvxvPl51IdriMHNEAcZ2IW0z1vtjI6PJlwLYwEGvJ8UIuJ6aqfL3ZAS92RBHIbL5xdIcdpsdAaX9XkHMIyrjx89Hrl08I/QaQ+LAs8jFe/Q3myabOakzhFbMhJJ7YMirjnTeg0OigotPiRNHt6GnbLtZnpjHxjHbi33KrMvDxClRrEerX6dGcYdYGrkZ/oD35gnadxPo3UtB5c4yvljPK0k98Wjaf4GM1l8yui2LEPB5dnUqRjoW7A2hhv3RQitYNDaKTlwASq7idjnFJHFOJQHOi6UYOv4zq63gHgA44HHoMbg2dJnLSwm0caDrl8NcQVSCQ9EOKC3VY8UoTFLlIpmRxxLR4T8uaawIx98ubQM3YE7s85qvoGIBQDnjBhlilDMSJ7kd4kqlcib4IudzXJWweq+hsc0abXVAPSgwVLu3POWlTGJY+SH/f+FMtDlYB3vuio2f3qaMUIA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(7416002)(8936002)(26005)(52116002)(44832011)(2906002)(8676002)(6486002)(2616005)(508600001)(86362001)(4326008)(186003)(66946007)(6512007)(6506007)(5660300002)(66556008)(38350700002)(6666004)(38100700002)(66476007)(316002)(83380400001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4lf1vtrFPs4sYzmUyZR9YGC2IIY2G9N5Zal3pu0orXBd3XA8kZT13DeyOVJd?=
+ =?us-ascii?Q?WhQOpf5TJGvM3weXXmSoSGlRMcpOs9gYrEIR6jYM3dqNCqQODa6frgr6OPTe?=
+ =?us-ascii?Q?JQ6CXfNE7eGYJA2belLMCoTAmQgSV2WC2I1SgCadZGJCMndpWKHrRvI7SImX?=
+ =?us-ascii?Q?uS67Yixw5Srvx1KO7EOy8Ufmw4L20+zNCR+zY8nFy7KkACra+1K0mq1+eS3Y?=
+ =?us-ascii?Q?404o+b9q74NfX/uuNh+ccKlfCDtq8+zMbee3DuZWLSO4x+h8Uc62lzr1xmk2?=
+ =?us-ascii?Q?nhxtKMhiCmLVX6tX8blKTBcQuakm84Sr9f0LkRO0zsGwhqU4gq9H3XfusEys?=
+ =?us-ascii?Q?nXy3aBBSURDumJiqfGV8BdfxxyWt6jSBa8S2tVg41xSBITlxAN1kxCmzK+y2?=
+ =?us-ascii?Q?2jZgtdVrQr9dGk7V9K8SLUPpPHJPW87Y/ZMKwQQfqcRigxRJ6benenXQawS5?=
+ =?us-ascii?Q?tyvEufMSeERLuv4WpOwX4bDXo+x5c1PpchT8Zy/AnI68F/0bgGECwb2XjBik?=
+ =?us-ascii?Q?UCIE3z/ZUCHmlfrZuLFCPaCRemZ3eTiWyUmM4iPAwn+EoZ4y2dPrOB2uK1/7?=
+ =?us-ascii?Q?qb7b0GkpUdZL8Y62TQKqtQB4hcUcPdoRYu7M5OL1AEn7EA8Suct5Y19jA3Ef?=
+ =?us-ascii?Q?h+9PazdTWeYSMUgH8ftzGZMxFZ/1sHSBN4GXyit2yS0cCEkWexx77VVaU86t?=
+ =?us-ascii?Q?rcDRBHlgswLK+75oRM+jM4LTFbbSzseDPWp24HFx8BoQISI7ciLZItC9Gew8?=
+ =?us-ascii?Q?b46mqkE0FP/OrLgjyA3ZQjmP/l9Zbe2C+qLSCLaBfvL5RMMv4zaE5SQLNG8l?=
+ =?us-ascii?Q?uJYw7RFFgmCOdG2QwTjJO8PuBXex0CsQqA/EDSLTRah5VD5d8S+e/FzX822x?=
+ =?us-ascii?Q?yQb+YxflAzBu1RPXyUKb4N1gRJC0+LYCA+2RdUxvn/uJ0eDOX2ZwiztjVX7O?=
+ =?us-ascii?Q?rVRTtweVw8xJBqW7cInNFFDC7lv2fTDiRynz8ovo/hGhqCqo9tQZ+rSxOc6O?=
+ =?us-ascii?Q?nhr+Br8rrc/+lRI1ZDy9rfOVOko2+KyY6jvmMlaTI5jsob6lXSxHwOpdksD7?=
+ =?us-ascii?Q?b0Wcy11Neg8FQYEShHbStmu7rFINEPbnUxTD2ygTS5EEZUi+rthvTgXPpEF+?=
+ =?us-ascii?Q?DmcaLykUOFaAiSNN1HdzKEdGifQu/fAAbgBoD+ZxHzPJnpV/RK/ySMBxwFxy?=
+ =?us-ascii?Q?yR++pi/XVtXEXjJkvoHShBWRAjfHugt2zcrApybqWRaN8+6Zma4iZmZq0UXe?=
+ =?us-ascii?Q?YIcGeedsk3JMfOAysH5aZqaisJOypVUAQEm8NmNYto4CJyhfwFMicIHoL9c1?=
+ =?us-ascii?Q?PyO+7gRiiUc6CfvCraf1i5xpnz/mY7No26pFUooP3+IyYVIe6D2doMXSOLl0?=
+ =?us-ascii?Q?13ca4lNpzdEm+GNReb0mub+7mdglb3zN81pcfm9KeABNMRVF+5B3MQUVSfR8?=
+ =?us-ascii?Q?7MJ4xaYw3gsHXqrUAUNP0WEKavVbOBmIP7V8sAw7chfiSoVUon/f8LhD59JD?=
+ =?us-ascii?Q?4acqKRw+X3fMj7NBq5kLP+EK+rMPPwy/LUI+wwD7usdpKdOfC+Mv3L9a7caz?=
+ =?us-ascii?Q?ZiOd/CazZLvdovYF9c28Gu4ywqQVrKxxC5SX1W03JuzcZx82yTLKEwYgQHoG?=
+ =?us-ascii?Q?YPdWsbQ6e/TwxOw0nHLYV6g=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e67075cb-7ab7-429a-a68a-08da0334140b
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 07:52:23.9274
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N+P4xKCspROiGpe691KXciLIDx+b5MnVcHJlkirCGCc1LkB44WVQbbCkncCxqyZzDiBZeRTjT1Zcs9BBMFHNYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4443
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,64 +115,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 15:39:00 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+These patchset are to support dynamic resolution change.
+Avoid decoding error or even kernel panic.
+Otherwise, the Gstreamer v4l2videodec will fail to decode jpeg
+who is not decoded to yuyv.
 
-> On Fri, Mar 11, 2022 at 03:28:28PM +0800, Gao Xiang wrote:
-> > On Fri, Mar 11, 2022 at 03:12:32PM +0800, Yue Hu wrote:  
-> > > On Fri, 11 Mar 2022 02:27:42 +0800
-> > > Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
-> > >   
-> > > > Avoid the unnecessary tail recursion since it can be converted into
-> > > > a loop directly in order to prevent potential stack overflow.
-> > > > 
-> > > > It's a pretty straightforward conversion.
-> > > > 
-> > > > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> > > > ---
-> > > >  fs/erofs/zmap.c | 67 ++++++++++++++++++++++++-------------------------
-> > > >  1 file changed, 33 insertions(+), 34 deletions(-)
-> > > > 
-> > > > diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-> > > > index b4059b9c3bac..572f0b8151ba 100644
-> > > > --- a/fs/erofs/zmap.c
-> > > > +++ b/fs/erofs/zmap.c
-> > > > @@ -431,48 +431,47 @@ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
-> > > >  				   unsigned int lookback_distance)
-> > > >  {
-> > > >  	struct erofs_inode *const vi = EROFS_I(m->inode);
-> > > > -	struct erofs_map_blocks *const map = m->map;
-> > > >  	const unsigned int lclusterbits = vi->z_logical_clusterbits;
-> > > > -	unsigned long lcn = m->lcn;
-> > > > -	int err;
-> > > >  
-> > > > -	if (lcn < lookback_distance) {
-> > > > -		erofs_err(m->inode->i_sb,
-> > > > -			  "bogus lookback distance @ nid %llu", vi->nid);
-> > > > -		DBG_BUGON(1);
-> > > > -		return -EFSCORRUPTED;
-> > > > -	}
-> > > > +	while (m->lcn >= lookback_distance) {
-> > > > +		unsigned long lcn = m->lcn - lookback_distance;
-> > > > +		int err;  
-> > > 
-> > > may better to declare variable 'lclusterbits' in loop just like 'err' usage?  
-> > 
-> > I'm fine with either way. Ok, will post the next version later.  
-> 
-> Oh, I just noticed that you mean `lclusterbits', I think it won't
-> change in this function, so I don't tend to move it into the inner
-> loop.
+Ming Qian (5):
+  media: imx-jpeg: Refactor function mxc_jpeg_parse
+  media: imx-jpeg: Identify and handle precision correctly
+  media: imx-jpeg: Propagate the output frame size to the capture side
+  media: imx-jpeg: Handle source change in a function
+  media: imx-jpeg: Support dynamic resolution change
 
-Ok, looks good to me.
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c | 244 ++++++++++++++-------
+ drivers/media/platform/imx-jpeg/mxc-jpeg.h |   3 +
+ 2 files changed, 169 insertions(+), 78 deletions(-)
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-
-> 
-> Thanks,
-> Gao Xiang
-> 
-> > 
-> > Thanks,
-> > Gao Xiang  
+-- 
+2.33.0
 

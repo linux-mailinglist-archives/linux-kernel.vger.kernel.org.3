@@ -2,249 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB4C4D6102
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937144D610B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244394AbiCKLxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S1347449AbiCKLzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiCKLxt (ORCPT
+        with ESMTP id S230512AbiCKLzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:53:49 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F82051329
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:52:45 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id e186so16620369ybc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vcfCQf2ipBXym0WGWa/TPLq262jF+MOIdkhc8cIElBc=;
-        b=qT6Ctf9FHvk5UXjURmdbs62M1JDay7M+EVARQ2dkMVVf+RhXGnyAClPHGmYONCKgow
-         INFKIBS3t7CwxZsdD/OeaAinCjIdI9blsmY/P5ICQv3iQaCppBePlntLQlpJNwjVGddz
-         Pi32uihRrfaFX6oxskxTdjd1f6+nJHG67qwGL4g3/xbfPn7sCZ2EeXmFLjg2xeB3Vj0p
-         QSjouGtbY9EYf7pU3UveTOT7zcaotD5rK7zgiVv+dYk9oTQtcaKEakM6MvUJxoKTS2S7
-         UDpZQSws0lcYUrYNO17coAtjXj2nFB6O+D6sqV1RhifF5q72MDMNArDfGDq7WM2bkiVB
-         oPbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vcfCQf2ipBXym0WGWa/TPLq262jF+MOIdkhc8cIElBc=;
-        b=LxI8x/9mJUaWOWw6hAssqddqimBgjikB+15eeXP2hsihMqgOiETDBv/tgrnhlgJWku
-         +23PWmYudROHbeSgrvf7wfx7bd1kYpoEfpVlCzxtkYo8ixgwUO7R4AAUvVwQZJDASodS
-         iv8zKD36GPc6SabJlGi2/XSZNthaThd2VVB7m/gMzubUYXN9VN1LsnlZ098S5MNb+YLo
-         21JUT/yYtja6gYJvD5oCcBMCwB8KyYpOf4ryqqqs5FogQIAnwOTaGW1K8nK5NfR3jR10
-         y/jl3DV+3cKRMvwMzMp293Qci8UEoaG8fLvv0Ay4qzyanE3oyqRQGfl7K5L+qO281DMT
-         PI0A==
-X-Gm-Message-State: AOAM532PC7diPouC4YgHCfSPe1pJsxgPkSi2iLCbl18i9WE1r/QAocIJ
-        UcBsLnRckEltf6X+eR3R1ixwbEKOIh++o8kQjR3wMA==
-X-Google-Smtp-Source: ABdhPJz/cuI5oGeD+7slacIT8yD/BzgUoTMLR5eYU9e7xyrQS31gC2q8RtTsPCwh4VJ0sXH2N3uPpHsFU23FwhMiVVs=
-X-Received: by 2002:a25:da91:0:b0:628:aa84:f69e with SMTP id
- n139-20020a25da91000000b00628aa84f69emr8246947ybf.603.1646999564536; Fri, 11
- Mar 2022 03:52:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20220310140812.869208747@linuxfoundation.org>
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 11 Mar 2022 17:22:33 +0530
-Message-ID: <CA+G9fYsV1RA=jfBqG88NsZhdouCsB7=xg2Oq78AAL5_vUhObjw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/58] 5.10.105-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+        Fri, 11 Mar 2022 06:55:06 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7667D4339D;
+        Fri, 11 Mar 2022 03:54:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=QKQNUb8gG1815bo0+LJAzephXsrFMrZXGrmPtBwOo6c=;
+        t=1646999643; x=1648209243; b=alHnBgDIHy9y0RUCRwwm0He8FSk4xcPUW9/EkiSAih21DFM
+        8yjhuigiX6tbzgl3M08NcjD5KiTxv9w+CXmUJX/aSYqJ1AyInOYuNm4901RQFfmqFnR6CYZlwuEc3
+        Hj4/kj489RxcTwk35q/BGf44Di9sAq1qrrCZFCQeK90/PGycpLm0Ntu8xqZMeNuznVFTvihU6g9Xc
+        W3aRh+VZ+JOzxzwDMvOdb5ItDjw3PNVKrMwz596BzdCUE6CR2P2wZmHzQ7pNByEtQb1dOfGczHFbY
+        GK9v93vvNdHsHZ6ecXRO1xFbNvE1vE7ATVeZ47RQc+3yw57RdaLI55lmMyaftxkw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nSdqI-00BtPi-Dc;
+        Fri, 11 Mar 2022 12:53:58 +0100
+Message-ID: <564672530e489da8872bdf1d8cdee7ce071d6a19.camel@sipsolutions.net>
+Subject: Re: [PATCH] devcoredump: increase the device delete timeout to 10
+ mins
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Rob Clark <robdclark@gmail.com>,
+        David Laight <David.Laight@aculab.com>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "khsieh@codeaurora.org" <khsieh@codeaurora.org>,
+        "nganji@codeaurora.org" <nganji@codeaurora.org>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "aravindh@codeaurora.org" <aravindh@codeaurora.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>
+Date:   Fri, 11 Mar 2022 12:53:57 +0100
+In-Reply-To: <CAF6AEGtNGJanJ9f2pkjst50yPSWGJPo5nDkcZZgq=BkRWMq4yg@mail.gmail.com>
+References: <1644349472-31077-1-git-send-email-quic_abhinavk@quicinc.com>
+         <YgZD8vPqB7ISpRpZ@kroah.com>
+         <654d620b-9e14-c47f-b48c-762dc0bd32a1@quicinc.com>
+         <Ygdb63FrorUsX/Hg@kroah.com>
+         <b9156bde-137c-2fac-19e0-b205ab4d6016@quicinc.com>
+         <7db7d01fcf5a3edce61161769c0e6eb1541237bf.camel@sipsolutions.net>
+         <2add9ba7-7bc8-bd1d-1963-61e8154b0e3c@quicinc.com>
+         <989efb15-cc5e-8f6d-c313-118f01498e33@quicinc.com>
+         <8fa2f879e33e4e42b76e21c6fbdcb023@AcuMS.aculab.com>
+         <CAF6AEGtNGJanJ9f2pkjst50yPSWGJPo5nDkcZZgq=BkRWMq4yg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 at 19:54, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.105 release.
-> There are 58 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.105-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, 2022-03-01 at 09:45 -0800, Rob Clark wrote:
+> On Mon, Feb 28, 2022 at 10:49 PM David Laight <David.Laight@aculab.com> wrote:
+> > 
+> > From: Abhinav Kumar
+> > > Sent: 28 February 2022 21:38
+> > ...
+> > > We also did some profiling around how much increasing the block size
+> > > helps and here is the data:
+> > > 
+> > > Block size    cost
+> > > 
+> > > 4KB           229s
+> > > 8KB            86s
+> > 
+> > You must have an O(n^2) operation in there - find it.
+> 
+> The problem is how the devcoredump/sysfs interface works, which
+> results in "re-rendering" the output for each block.. it's fine for
+> moderate size sysfs files, but scales quite badly once you get into
+> couple MB size sysfs files.
+> 
+> It could be fixed by having some way to keep state across successive
+> read callbacks.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I'm not sure that's true? Perhaps for dev_coredumpm(), but only if you
+implemented read() badly.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+If you have e.g. dev_coredumpsg() or dev_coredumpv() that's just a
+simple read from the existing buffer.
 
-## Build
-* kernel: 5.10.105-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 222eae85893657f02832253fe1c164f7d0b2c88c
-* git describe: v5.10.104-59-g222eae858936
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.104-59-g222eae858936
-
-## Test Regressions (compared to v5.10.104-43-ge5e4a8f0fb6e)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.104-43-ge5e4a8f0fb6e)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.104-43-ge5e4a8f0fb6e)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.104-43-ge5e4a8f0fb6e)
-No metric fixes found.
-
-## Test result summary
-total: 103231, pass: 87446, fail: 919, skip: 13751, xfail: 1115
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 46 passed, 14 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+johannes

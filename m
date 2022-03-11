@@ -2,258 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AE24D5811
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2AAC4D580A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345622AbiCKCVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 21:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S1345614AbiCKCUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 21:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiCKCVE (ORCPT
+        with ESMTP id S244602AbiCKCUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 21:21:04 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152DBE7295;
-        Thu, 10 Mar 2022 18:20:02 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22B0qq4l006454;
-        Fri, 11 Mar 2022 02:19:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=37tZB/h1OGXntK7cKdvA6HUgfzgD4TtLCAM+x/8ESjs=;
- b=LpwGS4u0S74V+KPcgLji1eaf3Z3KYgDt11Bw63jJKTOJ+O0jRbdCEvoJJbG8guE5Z3uN
- TxC004odY6NIafhylBZByaCVZPO6z9t1AsnBQGAY5Ru3yGBC1Y3OVOW+BXDyCTxggdD7
- EqNbxybZt8ZJ1qUWlAlXN6kD+RuShGUonG1NSEBwSIGIEpWa6b0TjFxDPbju8BcUinWS
- t/FMkrCkMJy1j7OsshPGbCjBekMEjVM6Ojn5irTtR7W2s57hT6hC7mf4fNOjHu1bIdL1
- hbOYLHz6atqcEbtXZnx94KEIzVRp3zilVfnoEvswce0Ul6XS+Uyomdit40xLWb3U26O5 Ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqs91vgaa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 02:19:39 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22B28VHi030412;
-        Fri, 11 Mar 2022 02:19:38 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqs91vg9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 02:19:38 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22B29Chm022642;
-        Fri, 11 Mar 2022 02:19:35 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 3enpk2ycrt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 02:19:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22B2JX6o46727508
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 02:19:33 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23B354C046;
-        Fri, 11 Mar 2022 02:19:33 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A85484C040;
-        Fri, 11 Mar 2022 02:19:32 +0000 (GMT)
-Received: from localhost (unknown [9.43.36.239])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Mar 2022 02:19:32 +0000 (GMT)
-Date:   Fri, 11 Mar 2022 07:49:31 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 00/10] ext4: Improve FC trace events
-Message-ID: <20220311021931.d4oozgtefbalrcch@riteshh-domain>
-References: <cover.1646922487.git.riteshh@linux.ibm.com>
- <20220310110553.431cc997@gandalf.local.home>
- <20220310170731.hq6z6flycmgkhnaa@riteshh-domain>
- <20220310193936.38ae7754@gandalf.local.home>
+        Thu, 10 Mar 2022 21:20:39 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7DE6D99
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:19:37 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id bc27so6277269pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:19:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RryUuol3Ylo4uqhnnPi8mUdUlrjxjJpVahPqVRRMRrc=;
+        b=BcPBYZyZprDcx+IbcqYMhON72+fH6zR3XH526BzNCXAXytQh20KAPR4p5fYrKTc9vs
+         uO+0TFZc6iKrP4NFkAbJv53WJCoJvFTeE5pDI2VJRXOyG6SecZvQ4PV/g4DqsxzCEznK
+         gDK2Qgx23qcHSmcqAk7XWwH+sC38AibZg1p36hGKBDIZIEJhQNq+1fNY+Dm3mcHd0PV7
+         cF9YVj4Mxd0F4NsHdIBE+/unKMg+sfZbvwCUT+SKzUZTX6L5rPQQDyZDOwTyt0qOp7Kg
+         202wy7Eug99PsrXAFGVEwTd88Gco2RUY2wu2fV9Jv1N+/lFIGL7PRyEtEqI+N7DW5iM9
+         Ff+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RryUuol3Ylo4uqhnnPi8mUdUlrjxjJpVahPqVRRMRrc=;
+        b=4ByiiIk12f5QhqlcWIdt8I0dtUGNJltGnUIaezIkZ0EL2hSSlMbCXR/bKsfSZxW/ti
+         ZQRZXc3RSuMeBvvjHjGpZnGyFa4hwyzByF7Ar3KbaAzWpuBKPvFAXWborsFXTsHXlNge
+         JFnW0isFfzaa+AovXesbpl3HgKqHBk74AFxWrFKIgfbBiJnx/e9HKezS+Tb6yCmhfnnB
+         aA2607l9Z6cZlyxdKw1qxUj9G+SmzoPbwBznK9fjQSEW3/fFiaddoPK1nrGNMLshQdqu
+         sZMvO7oVIchQcJDOIwNwd0oh7Ad/pUhU/DuZUFZVo/qKuH4J70cHPUSqDgoYkbiXBK5T
+         QM+w==
+X-Gm-Message-State: AOAM530e535S03KuLPuuCZLYroL940yVs2SonSo2hAK3gqyLEsOdm1Q6
+        Rkh2MYYmMYV4u8jNYyuCBobcKw==
+X-Google-Smtp-Source: ABdhPJwlYb8ABr9x+ddIrRLA23skw7Ni1f9WWTKFKNjJO9rhDZfuN1KpcKEnzeP5T8aNDhnXHTQ/nQ==
+X-Received: by 2002:a05:6a00:218d:b0:4f7:439b:64f1 with SMTP id h13-20020a056a00218d00b004f7439b64f1mr7775354pfi.8.1646965176279;
+        Thu, 10 Mar 2022 18:19:36 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e6-20020a056a001a8600b004f78e446ff5sm74838pfv.15.2022.03.10.18.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 18:19:35 -0800 (PST)
+Date:   Fri, 11 Mar 2022 02:19:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH 00/13] KVM: x86: Add a cap to disable NX hugepages on a VM
+Message-ID: <YiqxtIz+T1LGE1Ju@google.com>
+References: <20220310164532.1821490-1-bgardon@google.com>
+ <Yio8QtuMd6COcnEw@google.com>
+ <CANgfPd9xr5ev7fEiwBVUi89iHkuywq-Ba9zOeCMSTFmLkO243w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220310193936.38ae7754@gandalf.local.home>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: P9n4uAWT-Ekz8KYE67bBpD3aHkMTXOUT
-X-Proofpoint-ORIG-GUID: q3pE0Pm_7TEAECMoa4QEXUqZLoSod8TD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-10_09,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 adultscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
- mlxscore=0 impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203110010
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CANgfPd9xr5ev7fEiwBVUi89iHkuywq-Ba9zOeCMSTFmLkO243w@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/10 07:39PM, Steven Rostedt wrote:
-> On Thu, 10 Mar 2022 22:37:31 +0530
-> Ritesh Harjani <riteshh@linux.ibm.com> wrote:
->
-> > On 22/03/10 11:05AM, Steven Rostedt wrote:
-> > > On Thu, 10 Mar 2022 21:28:54 +0530
-> > > Ritesh Harjani <riteshh@linux.ibm.com> wrote:
-> > >
-> > > > Note:- I still couldn't figure out how to expose EXT4_FC_REASON_MAX=
- in patch-2
-> > > > which (I think) might be (only) needed by trace-cmd or perf record =
-for trace_ext4_fc_stats.
-> > > > But it seems "cat /sys/kernel/debug/tracing/trace_pipe" gives the r=
-ight output
-> > > > for ext4_fc_stats trace event (as shown below).
-> > > >
-> > > > So with above reasoning, do you think we should take these patches =
-in?
-> > > > And we can later see how to provide EXT4_FC_REASON_MAX definition a=
-vailable to
-> > > > libtraceevent?
-> > >
-> > > I don't see EXT4_FC_REASON_MAX being used in the TP_printk(). If it i=
-sn't
-> > > used there, it doesn't need to be exposed. Or did I miss something?
-> >
-> > I was mentioning about EXT4_FC_REASON_MAX used in TP_STRUCT__entry.
-> > When I hard code EXT4_FC_REASON_MAX to 9 in TP_STRUCT__entry, I could
-> > see proper values using trace-cmd. Otherwise I see all 0 (when using tr=
-ace-cmd
-> > or perf record).
-> >
-> > +	TP_STRUCT__entry(
-> > +		__field(dev_t, dev)
-> > +		__array(unsigned int, fc_ineligible_rc, EXT4_FC_REASON_MAX)
->
-> Ah, I bet it's showing up in the format portion and not the print fmt part
-> of the format file.
->
-> Just to confirm, can you do the following:
->
-> # cat /sys/kernel/tracing/events/ext4/ext4_fc_commit_stop/format
+On Thu, Mar 10, 2022, Ben Gardon wrote:
+> Those patches are a lot of churn, but at least to me, they make the
+> code much more readable. Currently there are many functions which just
+> pass along 0 for the memslot, and often have multiple other numerical
+> arguments, which makes it hard to understand what the function is
+> doing.
 
-I think you meant ext4_fc_stats.
+Yeah, my solution for that was to rip out all the params.  E.g. the most used
+function I ended up with is
 
->
-> and show me what it outputs.
+  static inline struct kvm_vm *vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
+						     void *guest_code)
+  {
+	return __vm_create_with_one_vcpu(vcpu, 0, guest_code);
+  }
 
-root@qemu:/home/qemu# cat /sys/kernel/tracing/events/ext4/ext4_fc_stats/for=
-mat
-name: ext4_fc_stats
-ID: 986
-format:
-        field:unsigned short common_type;       offset:0;       size:2; sig=
-ned:0;
-        field:unsigned char common_flags;       offset:2;       size:1; sig=
-ned:0;
-        field:unsigned char common_preempt_count;       offset:3;       siz=
-e:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
+and then the usage is
 
-        field:dev_t dev;        offset:8;       size:4; signed:0;
-        field:unsigned int fc_ineligible_rc[EXT4_FC_REASON_MAX];        off=
-set:12;      size:36;        signed:0;
-        field:unsigned long fc_commits; offset:48;      size:8; signed:0;
-        field:unsigned long fc_ineligible_commits;      offset:56;      siz=
-e:8; signed:0;
-        field:unsigned long fc_numblks; offset:64;      size:8; signed:0;
+	vm = vm_create_with_one_vcpu(&vcpu, guest_main);
 
-print fmt: "dev %d,%d fc ineligible reasons:
-%s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u num_commits:%=
-lu, ineligible: %lu, numblks: %lu", ((unsigned int) ((REC->dev) >> 20)), ((=
-unsigned int) ((REC->dev) & ((1U << 20) - 1))), __print_symbolic(0, { 0, "X=
-ATTR"}, { 1, "CROSS_RENAME"}, { 2, "JOURNAL_FLAG_CHANGE"}, { 3, "NO_MEM"}, =
-{ 4, "SWAP_BOOT"}, { 5, "RESIZE"}, { 6, "RENAME_DIR"}, { 7, "FALLOC_RANGE"}=
-, { 8, "INODE_JOURNAL_DATA"}), REC->fc_ineligible_rc[0], __print_symbolic(1=
-, { 0, "XATTR"}, { 1, "CROSS_RENAME"}, { 2, "JOURNAL_FLAG_CHANGE"}, { 3, "N=
-O_MEM"}, { 4, "SWAP_BOOT"}, { 5, "RESIZE"}, { 6, "RENAME_DIR"}, { 7, "FALLO=
-C_RANGE"}, { 8, "INODE_JOURNAL_DATA"}), REC->fc_ineligible_rc[1], __print_s=
-ymbolic(2, { 0, "XATTR"}, { 1, "CROSS_RENAME"}, { 2, "JOURNAL_FLAG_CHANGE"}=
-, { 3, "NO_MEM"}, { 4, "SWAP_BOOT"}, { 5, "RESIZE"}, { 6, "RENAME_DIR"}, { =
-7, "FALLOC_RANGE"}, { 8, "INODE_JOURNAL_DATA"}), REC->fc_ineligible_rc[2], =
-__print_symbolic(3, { 0, "XATTR"}, { 1, "CROSS_RENAME"}, { 2, "JOURNAL_FLAG=
-_CHANGE"}, { 3, "NO_MEM"}, { 4, "SWAP_BOOT"}, { 5, "RESIZE"}, { 6, "RENAME_=
-DIR"}, { 7, "FALLOC_RANGE"}, { 8, "INODE_JOURNAL_DATA"}), REC->fc_ineligibl=
-e_rc[3], __print_symbolic(4, { 0, "XATTR"}, { 1, "CROSS_RENAME"}, { 2, "JOU=
-RNAL_FLAG_CHANGE"}, { 3, "NO_MEM"}, { 4, "SWAP_BOOT"}, { 5, "RESIZE"}, { 6,=
- "RENAME_DIR"}, { 7, "FALLOC_RANGE"}, { 8, "INODE_JOURNAL_DATA"}), REC->fc_=
-ineligible_rc[4], __print_symbolic(5, { 0, "XATTR"}, { 1, "CROSS_RENAME"}, =
-{ 2, "JOURNAL_FLAG_CHANGE"}, { 3, "NO_MEM"}, { 4, "SWAP_BOOT"}, { 5, "RESIZ=
-E"}, { 6, "RENAME_DIR"}, { 7, "FALLOC_RANGE"}, { 8, "INODE_JOURNAL_DATA"}),=
- REC->fc_ineligible_rc[5], __print_symbolic(6, { 0, "XATTR"}, { 1, "CROSS_R=
-ENAME"}, { 2, "JOURNAL_FLAG_CHANGE"}, { 3, "NO_MEM"}, { 4, "SWAP_BOOT"}, { =
-5, "RESIZE"}, { 6, "RENAME_DIR"}, { 7, "FALLOC_RANGE"}, { 8, "INODE_JOURNAL=
-_DATA"}), REC->fc_ineligible_rc[6], __print_symbolic(7, { 0, "XATTR"}, { 1,=
- "CROSS_RENAME"}, { 2, "JOURNAL_FLAG_CHANGE"}, { 3, "NO_MEM"}, { 4, "SWAP_B=
-OOT"}, { 5, "RESIZE"}, { 6, "RENAME_DIR"}, { 7, "FALLOC_RANGE"}, { 8, "INOD=
-E_JOURNAL_DATA"}), REC->fc_ineligible_rc[7], __print_symbolic(8, { 0, "XATT=
-R"}, { 1, "CROSS_RENAME"}, { 2, "JOURNAL_FLAG_CHANGE"}, { 3, "NO_MEM"}, { 4=
-, "SWAP_BOOT"}, { 5, "RESIZE"}, { 6, "RENAME_DIR"}, { 7, "FALLOC_RANGE"}, {=
- 8, "INODE_JOURNAL_DATA"}), REC->fc_ineligible_rc[8], REC->fc_commits, REC-=
->fc_ineligible_commits, REC->fc_numblks
+	supp_cpuid = kvm_get_supported_cpuid();
+	cpuid2 = vcpu_get_cpuid(vcpu);
 
+My overarching complaint with the selftests is that they make the hard things hard,
+and the easy things harder.  If a test wants to be backed by hugepages, it shouldn't
+have to manually specify a memslot.
 
-output of ext4_fc_stats (FALLOC_RANGE:0 v/s FALLOC_RANGE:13)
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-<perf-report or trace-cmd report>
-          xfs_io  8336 [003] 42950.923784:        ext4:ext4_fc_stats: dev 7=
-,2 fc ineligible reasons:
-XATTR:0, CROSS_RENAME:0, JOURNAL_FLAG_CHANGE:0, NO_MEM:0, SWAP_BOOT:0, RESI=
-ZE:0, RENAME_DIR:0, FALLOC_RANGE:0, INODE_JOURNAL_DATA:0 num_commits:22, in=
-eligible: 12, numblks: 22
-
-
-
-<cat /sys/kernel/debug/tracing/trace_pipe>
-          xfs_io-8336    [003] ..... 42951.224155: ext4_fc_stats: dev 7,2 f=
-c ineligible reasons:
-XATTR:0, CROSS_RENAME:0, JOURNAL_FLAG_CHANGE:0, NO_MEM:0, SWAP_BOOT:0, RESI=
-ZE:0, RENAME_DIR:0, FALLOC_RANGE:13, INODE_JOURNAL_DATA:0 num_commits:22, i=
-neligible: 12, numblks: 22
-
-
-Thanks
--ritesh
-
-
->
-> Thanks,
->
-> -- Steve
->
->
-> >
-> > Should we anyway hard code this to 9. Since we are anyway printing all =
-the
-> > 9 elements of array values individually.
-> >
-> > +	TP_printk("dev %d,%d fc ineligible reasons:\n"
-> > +		  "%s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u "
-> > +		  "num_commits:%lu, ineligible: %lu, numblks: %lu",
-> > +		  MAJOR(__entry->dev), MINOR(__entry->dev),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
-> > +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
-> > +		  __entry->fc_commits, __entry->fc_ineligible_commits,
-> > +		  __entry->fc_numblks)
-> >
-> >
-> > Thanks
-> > -ritesh
->
+Let me post my selftests rework as RFC (_very_ RFC at this point).  I was hoping to
+do more than compile test before posting anything, but it's going to be multiple
+weeks before I'll get back to it.  Hopefully it'll start a discussion on actually
+rewriting the framework so that writing new tests is less painful, and so that every
+new thing that comes along doesn't require poking at 50 different tests.

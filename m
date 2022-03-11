@@ -2,213 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245A24D619A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6F24D619E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348602AbiCKMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S1346282AbiCKMd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347473AbiCKMcQ (ORCPT
+        with ESMTP id S237797AbiCKMdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:32:16 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201FD1AA05E;
-        Fri, 11 Mar 2022 04:31:08 -0800 (PST)
-X-UUID: aae9f25b3a22478aa5e36f7a10b54ad3-20220311
-X-UUID: aae9f25b3a22478aa5e36f7a10b54ad3-20220311
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1129108910; Fri, 11 Mar 2022 20:31:01 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 11 Mar 2022 20:30:59 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Mar 2022 20:30:59 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: [PATCH v2] remoteproc: mediatek: fix side effect of mt8195 sram power on
-Date:   Fri, 11 Mar 2022 20:30:56 +0800
-Message-ID: <20220311123056.32689-1-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.15.GIT
+        Fri, 11 Mar 2022 07:33:54 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB131B4033
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:32:51 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e2ca8d7812so29811797b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:32:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5hFuaglE4yJS/5oL7Fadm33x6yDTEgxO3NGLZmSMlas=;
+        b=eaeVIobJoYGtx7gbe7lEOsjNsTbSONKWDj49lPvnUK+1ZXlWRunUYLO3kMXFu6bFcg
+         rSB3N88d9y2dEINu/eUR4PysWbp8/mtVHMU8wRL46fZD2Pz4SLRXihe8in5lGYUp1KmR
+         e/71qXb/3iQ47/sy2vVHsApp7W0SuxmmAZWQre13LKrqLdq0Eh43oPVGQgamvDP1Y7YZ
+         If+PRe5lx50nB7H3RAPaeXlzzQueVCZmIFv/6MQ0/nX47gXF/dZXytISCZShqW5MpYmk
+         YJGHU8ahLLyKRiz6j5yRpI10hUVwhmlcYiNb4MZncrVhe3Gd2lvnbyGabuLe385aOO1/
+         IGZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5hFuaglE4yJS/5oL7Fadm33x6yDTEgxO3NGLZmSMlas=;
+        b=rss9qrmuLZqAzjr1dVVnwUZtLzZvoHolpxLXGS2LJWl8N64zQFXuQuP4K2GFLCvrRY
+         5Wf5r68CqFfZO6O1W97r6uWPOOn/mOPZgCchOu5HgVnqceIQ6YfvSjprYBqhfTAC59qT
+         feRcfZrrkfFsYlmh9v2j7nnxFS3nza97TEmFD8ZZEkmZAEDoNrFP/rIZUWVjEfKmrQje
+         H6XpsgCnerrp8hA63dnh/G6DDf8Rrg3HaYS2rilIbI5I2h4pJBnkbTaWATuc4ur0pP94
+         1D9+njW8AsNJ391ZgBYdyl4AErjkT0Js34pWuhfM0s4fvGKMD/rBTYdW7ljrvl8pXk/o
+         Mp2g==
+X-Gm-Message-State: AOAM531kN6LcLg9QBmd4i9SGwubtS6bkcG7Wv/Dq7KLUsYyM1QuCvok/
+        hzJFyVLH6tgfg7suYnYBm3kTTJJVIn+TWEw+DGx42w==
+X-Google-Smtp-Source: ABdhPJwG4dl8qdGejVZv6hE+k7iCsMBcP8Ux1BkyXocAMe8OxyGXlE2FuxQ6s+lF7MrZA2iqzPjIHH4I3lYLqwrP6Hw=
+X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
+ d12-20020a81e90c000000b002dbd63e56ffmr8227231ywm.60.1647001969840; Fri, 11
+ Mar 2022 04:32:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220310140807.749164737@linuxfoundation.org>
+In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 11 Mar 2022 18:02:38 +0530
+Message-ID: <CA+G9fYta+cTAe=tMHJ65tpNoWx2QKVWh3=pafuSRe-h6gwEp0Q@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/33] 4.19.234-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
+On Thu, 10 Mar 2022 at 19:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.234 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.234-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
-These bits have to be powered on to allow EMI access for SCP.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Bits[7:4] also affect audio DSP because audio DSP and SCP are
-placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
-blocked too.
+## Build
+* kernel: 4.19.234-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: 7603caa5cc1196665ba06ded1f0a6f615eeaebf5
+* git describe: v4.19.233-34-g7603caa5cc11
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.233-34-g7603caa5cc11
 
-L1TCM_SRAM_PDN bits[31:8] are not used.
+## Test Regressions (compared to v4.19.233-19-g83f8068e02bc)
+No test regressions found.
 
-This fix removes modification of bits[7:4] when power on/off mt8195 SCP
-L1TCM. It's because the modification introduces a short period of time
-blocking audio DSP to access EMI. This was not a problem until we have
-to load both SCP module and audio DSP module. audio DSP needs to access
-EMI because it has source/data on DRAM. Audio DSP will have unexpected
-behavior when it accesses EMI and the SCP driver blocks the EMI path at
-the same time.
+## Metric Regressions (compared to v4.19.233-19-g83f8068e02bc)
+No metric regressions found.
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
----
- drivers/remoteproc/mtk_common.h |  2 +
- drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++--------
- 2 files changed, 53 insertions(+), 16 deletions(-)
+## Test Fixes (compared to v4.19.233-19-g83f8068e02bc)
+No test fixes found.
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 5ff3867c72f3..ff954a06637c 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -51,6 +51,8 @@
- #define MT8192_CORE0_WDT_IRQ		0x10030
- #define MT8192_CORE0_WDT_CFG		0x10034
- 
-+#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
-+
- #define SCP_FW_VER_LEN			32
- #define SCP_SHARE_BUFFER_SIZE		288
- 
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index dcddb33e9997..086cf8263f6c 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -365,22 +365,22 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
- 	return 0;
- }
- 
--static void mt8192_power_on_sram(void __iomem *addr)
-+static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
- {
- 	int i;
- 
- 	for (i = 31; i >= 0; i--)
--		writel(GENMASK(i, 0), addr);
-+		writel(GENMASK(i, 0) & ~reserved_mask, addr);
- 	writel(0, addr);
- }
- 
--static void mt8192_power_off_sram(void __iomem *addr)
-+static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
- {
- 	int i;
- 
- 	writel(0, addr);
- 	for (i = 0; i < 32; i++)
--		writel(GENMASK(i, 0), addr);
-+		writel(GENMASK(i, 0) & ~reserved_mask, addr);
- }
- 
- static int mt8192_scp_before_load(struct mtk_scp *scp)
-@@ -391,11 +391,32 @@ static int mt8192_scp_before_load(struct mtk_scp *scp)
- 	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
- 
- 	/* enable SRAM clock */
--	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
--	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
--	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
--	mt8192_power_on_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
--	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-+
-+	/* enable MPU for all memory regions */
-+	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-+
-+	return 0;
-+}
-+
-+static int mt8195_scp_before_load(struct mtk_scp *scp)
-+{
-+	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-+	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
-+
-+	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-+
-+	/* enable SRAM clock */
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-+			  MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
-+	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
- 
- 	/* enable MPU for all memory regions */
- 	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-@@ -551,11 +572,25 @@ static void mt8183_scp_stop(struct mtk_scp *scp)
- static void mt8192_scp_stop(struct mtk_scp *scp)
- {
- 	/* Disable SRAM clock */
--	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
--	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
--	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
--	mt8192_power_off_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
--	mt8192_power_off_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-+
-+	/* Disable SCP watchdog */
-+	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-+}
-+
-+static void mt8195_scp_stop(struct mtk_scp *scp)
-+{
-+	/* Disable SRAM clock */
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-+	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-+			   MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
-+	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
- 
- 	/* Disable SCP watchdog */
- 	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-@@ -888,11 +923,11 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- 
- static const struct mtk_scp_of_data mt8195_of_data = {
- 	.scp_clk_get = mt8195_scp_clk_get,
--	.scp_before_load = mt8192_scp_before_load,
-+	.scp_before_load = mt8195_scp_before_load,
- 	.scp_irq_handler = mt8192_scp_irq_handler,
- 	.scp_reset_assert = mt8192_scp_reset_assert,
- 	.scp_reset_deassert = mt8192_scp_reset_deassert,
--	.scp_stop = mt8192_scp_stop,
-+	.scp_stop = mt8195_scp_stop,
- 	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
--- 
-2.18.0
+## Metric Fixes (compared to v4.19.233-19-g83f8068e02bc)
+No metric fixes found.
 
+## Test result summary
+total: 84857, pass: 68636, fail: 1023, skip: 13321, xfail: 1877
+
+## Build Summary
+* arm: 281 total, 275 passed, 6 failed
+* arm64: 39 total, 39 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 27 total, 27 passed, 0 failed
+* powerpc: 60 total, 49 passed, 11 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 38 total, 38 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

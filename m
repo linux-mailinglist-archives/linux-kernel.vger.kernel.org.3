@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF424D684E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C354D6850
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350789AbiCKSJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S1350814AbiCKSL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiCKSJJ (ORCPT
+        with ESMTP id S232941AbiCKSLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:09:09 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C16443AF3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:08:05 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id z8so10214634oix.3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:08:05 -0800 (PST)
+        Fri, 11 Mar 2022 13:11:25 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E506E1D3AFC;
+        Fri, 11 Mar 2022 10:10:20 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id x26-20020a4a621a000000b00320d7d4af22so11401648ooc.4;
+        Fri, 11 Mar 2022 10:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T6tAfBDIbeqr2rX5cz/+B+v+oAUesU8ImGhC1rDQ7lA=;
-        b=Z23fpFSaOFDv2bKo6jNWklXN739Cp5FIq+rKAF+f2uye3T6qd45lxtGWLM/KHr1A+w
-         0jpfmf4dCqsY0o9ZAn03Un97WioX6gA2ouqXcnilV+2DhZkw2rX6Fa4dZgrhLAKEWl2L
-         mfC0SSPKQ/sn/zxCCusOjW8hXykq3TE1MP3WS5Msq5AjKy5H/MaP7JjEbAwBOwt3Rjyq
-         S9+m1Mbqptwe7EUvJIWFT5NDCI3aHF7c0EaAaryPQHMlF70HJCb8lzo9BX6eI3/D1ut/
-         6s4ZO9WFX0sMAHFvYv7ZMIz6JC6lpjE+qwwCALoBPNdI36phi3oV9I+w5wq1/Gkz0qfi
-         /M4w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IiXxyHsgfTOlGSBUBDet/+QfpWGHIGkaOs4O67rqF3M=;
+        b=b91012sJtY7KuSmcUXg8KKm7RlHqbOU8tfkEkcbx+9FEZX4EIj9BrubwmW6hkWhjhf
+         ZyaUPkv8QbXKFbW23ATHEJmCBP9V5zUt4BEgBJdrjeM5FucuaRusNeQ2BgkEFBknZBeI
+         awuG4zzfXB975rpus0R+/RN9Ws5MCklOI7zRzqq5hvv7VIuuvdTQl1xkSqUAJlRIT9sn
+         +ulJQkPjRyJQFiorMTsdnn9lmB6kKuLRKNkNYaulNY+IctlyQBxlr3NO+xukPdPwnJpe
+         N5VM65FKjbUft74bX4D6H5KDwuBEyjDOZtgEZc0BPtvXUxHgCGN/eDTBjcwdNci4vzx0
+         w8+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T6tAfBDIbeqr2rX5cz/+B+v+oAUesU8ImGhC1rDQ7lA=;
-        b=vWhMraJC3zBA5d0bygafWAuzrnw21LSVN+SAZSNYtBF1vjODuzMTuh9eVd8gS7c5Ws
-         59NvtwOWIPVccteddvBKKcsYWPMtu6PU+bmJdGmjw+6UlCgO7D0FJRrEWgPzpwAk5Iwt
-         lV/aIrRkXCOY+eeaMfAKZFuaBGzx+Vduhf9iibvH0/lZKoyOkqoEWndBr2XC19lAhUPQ
-         grkY0VEp84Eru0ONqN7zgeRmrk14f7AFFDG3Uvusz1MrRnTNql4+WBgH0rByRk93WCqr
-         Nz3wirZ/gJuelJGGQWfWKea0UmGC4InHHt2ebWW54J1KQpByUp4Vyg7P4aI9S9hanA/7
-         IZcw==
-X-Gm-Message-State: AOAM531kceT6r1rmJvMVuCrF+Ko+iPkVbWVZpztAAwhtysJ9BQd0UJrg
-        BjjZx8KGgvn9tiX+W4vzcIdw4w==
-X-Google-Smtp-Source: ABdhPJzVOnqSRL/7lmpX9k7aXHuUAUBSzyGrOLOd3DPralQG3Til5oHsTJ3SVVxCCZ+IxCKYIg4WMw==
-X-Received: by 2002:a05:6808:8ce:b0:2ec:a7ff:4925 with SMTP id k14-20020a05680808ce00b002eca7ff4925mr863487oij.122.1647022084653;
-        Fri, 11 Mar 2022 10:08:04 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id h11-20020a9d6f8b000000b005b230ab0461sm3851009otq.64.2022.03.11.10.08.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IiXxyHsgfTOlGSBUBDet/+QfpWGHIGkaOs4O67rqF3M=;
+        b=fwYn6qpPYqE2AAGHAep+do1DkRHFdVrMYi4ehSebBiBz8Zn0nPF2sbETzEG2+xMPD3
+         xP/UxYTzVpj77syOhF4xInllmgaWxJ5GF25oI5Z9QZZI0KPBBqleNaLolYgdtF98kbkG
+         1CsXZrEcQQtgLz5P+98AakCKFyj4cJv3g9D2HgfMo2X6iFgmfL8xJ3L7Gwz9AQdEFFal
+         Cl+7l9eEPW1eivrnhLf7j4ZrsYaia9K7KN+A9tlZl07YSP7FeYzF0MDu7a8eCddfUjgI
+         azMSw0UQkJE97vHVc11mKKseK44ywxwFBsJDlFoAzbDlhFH9oUOub5HP4xSIgNtUAYKd
+         nnRA==
+X-Gm-Message-State: AOAM533Hy/h+xdMhR+HfHRWhuKq/vFqOIHK0vO4zy0YlgZGWzDJAKEk0
+        nBWJmejfxwqEZSonuJiWQvI=
+X-Google-Smtp-Source: ABdhPJzMyariRy8rQjTfsq0Ik6o8MYOaMiQZDQen9AtoKXvvNrfz9qRad3dE3XqwMqtDbkP0u9b+yg==
+X-Received: by 2002:a05:6870:3113:b0:d3:473b:3f1d with SMTP id v19-20020a056870311300b000d3473b3f1dmr6061237oaa.116.1647022220168;
+        Fri, 11 Mar 2022 10:10:20 -0800 (PST)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
+        by smtp.gmail.com with ESMTPSA id s24-20020a056808209800b002da3b9bf8e0sm3600917oiw.32.2022.03.11.10.10.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 10:08:03 -0800 (PST)
-Date:   Fri, 11 Mar 2022 12:08:02 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Drew Fustini <dfustini@baylibre.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suman Anna <s-anna@ti.com>, Dave Gerlach <d-gerlach@ti.com>
-Subject: Re: [PATCH] remoteproc: move rproc_da_to_va declaration to
- remoteproc.h
-Message-ID: <YiuQAvnbBIdWhy2l@builder.lan>
-References: <20220308172515.29556-1-dfustini@baylibre.com>
- <YiedlvZWpHd8HP40@ripper>
- <YijeDirNSJ6bpRMj@x1>
+        Fri, 11 Mar 2022 10:10:19 -0800 (PST)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+Date:   Fri, 11 Mar 2022 18:10:14 +0000
+Message-Id: <20220311181014.3448936-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YijeDirNSJ6bpRMj@x1>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 09 Mar 11:04 CST 2022, Drew Fustini wrote:
+Add a clear_faults write-only debugfs entry for the ibm-cffps device
+driver.
 
-> On Tue, Mar 08, 2022 at 10:16:54AM -0800, Bjorn Andersson wrote:
-> > On Tue 08 Mar 09:25 PST 2022, Drew Fustini wrote:
-> > 
-> > > From: Suman Anna <s-anna@ti.com>
-> > > 
-> > > The rproc_da_to_va() API is an exported function, so move its
-> > > declaration from the remoteproc local remoteproc_internal.h
-> > > to the public remoteproc.h file.
-> > > 
-> > > This will allow drivers outside of the remoteproc folder to be
-> > > able to use this API.
-> > > 
-> > 
-> > Can you explain why drivers outside of the remoteproc folder should be
-> > able to poke straight into the memory of the remoteproc?
-> > 
-> > Your reasoning makes sense, but we've on purpose kept it out of
-> > remoteproc.h because no one has had a proper reason for it and I sense
-> > that we might open the door for some new creative solutions...
-> 
-> rproc_da_to_va() is used in a patch for drivers/soc/ti/wkup_m3_ipc.c
-> that adds support for i2c voltage scaling [1].
-> 
-> wkup_m3_copy_aux_data() will copy auxiliary data to special region of
-> the Cortex M3 memory. It calls rproc_da_to_va() to get aux_data_addr
-> which is then used as a memcpy destination.
-> 
+Certain IBM power supplies require clearing some latched faults in order
+to indicate that the fault has indeed been observed/noticed.
 
-So in essence it's an essential part for the "communication protocol"
-used to communicate with the remoteproc...
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+---
+V1 -> V2: Explain why this change is needed
 
-> Does that seem like a reasonable way to do it?
-> 
+ drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-I have a concern about the life cycle of the pointer acquired by this
-"independent" driver. But this is an extension of my existing concern
-where the wkup driver uses the remoteproc core as a "firmware loader",
-but it's not a standalone remoteproc driver.
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index e3294a1a54bb..3f02dde02a4b 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -67,6 +67,7 @@ enum {
+ 	CFFPS_DEBUGFS_CCIN,
+ 	CFFPS_DEBUGFS_FW,
+ 	CFFPS_DEBUGFS_ON_OFF_CONFIG,
++	CFFPS_DEBUGFS_CLEAR_FAULTS,
+ 	CFFPS_DEBUGFS_NUM_ENTRIES
+ };
+ 
+@@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+ 		if (rc)
+ 			return rc;
+ 
++		rc = 1;
++		break;
++	case CFFPS_DEBUGFS_CLEAR_FAULTS:
++		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
++		if (rc < 0)
++			return rc;
++
+ 		rc = 1;
+ 		break;
+ 	default:
+@@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+ 	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+ 			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+ 			    &ibm_cffps_fops);
++	debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
++			    &ibm_cffps_fops);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
-I think it would have been nicer to model the remoteproc driver as the
-parent of the wkup device, so we probe/remove the wkup device based on
-the state of the remoteproc.
-
-This would remove concerns about races between the remoteproc
-starting/stopping/restarting and the other driver and it would help
-clarify that the life cycle of the pointer returned by rproc_da_to_va()
-lives from start to stop of the remoteproc.
-
-
-This does however not change the need for exporting the symbol, so I'm
-merging this patch.
-
-Regards,
-Bjorn
-
-> I was going to submit the i2c voltage scaling patches later. However,
-> I could combine them into a series with this remoteproc patch if that
-> helps to justify the remoteproc.h change.
-> 
-> Thanks,
-> Drew
-> 
-> [1] https://lore.kernel.org/linux-omap/20220219215328.485660-9-dfustini@baylibre.com/

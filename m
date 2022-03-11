@@ -2,115 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FD24D5D54
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1314D5D50
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238035AbiCKIb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S235662AbiCKIbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236694AbiCKIbU (ORCPT
+        with ESMTP id S240221AbiCKIbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:31:20 -0500
+        Fri, 11 Mar 2022 03:31:45 -0500
 Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156E31B45FD;
-        Fri, 11 Mar 2022 00:30:18 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id o23so6871494pgk.13;
-        Fri, 11 Mar 2022 00:30:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A5F1B98BF;
+        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q29so5928343pgn.7;
+        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EV0wmNwRVxX8NQcoop+BEUS5js89FYD4nmxPHK49pWQ=;
-        b=RrVI3XYBW4Johmu7rVRoRIRMELwbIMEQGU6gIqjMpTGdMT8ebwN8sRXICZNvCvvu5j
-         l/hb2+A5ZXJ5vqw3gXP4MwbmhAA4HGSZr+0IJH7DGxTVBjqkbrLeqhzE9fv6UzIx+QNj
-         xj3JpteEUBMII006M1xmgqcp4q2G2hem5fEMpyzal58kW/U6ZXQCN/AvAn9m39qbuN2U
-         P41237l1RVwxdvtfJ2ZOh7rIvBwrOe3JwfG3sEe9+jLU140EJ/F3C6z5i4JfddZikt7p
-         bCHCoPSISq/ePfh8UIoEjfabIAP9g5i1bPIB41eWaVqAIMHS8U2gA8rJn7GxyoAYlNS5
-         kcog==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
+        b=GNLK00oLX064vIX+r2kYl2hpm4t94e+rXiqn1qZ9hWMFVkY6aHlbSH8BEbBAsY0Ldy
+         KB7UpyqDEx+aEAnMxJl6Nl3E9H4wxWU1Knh/dmR4kXxg9JgjkKp2s5gTO7PazmLZm4F5
+         ug9oi8DNyH2TidnPshxULWDwMziBs1Mm74UGEhni4KCZZ1F/pvAGs2QLTee/o+NXCoPx
+         e1Q8+zNhSL0HH2j5cNAHuMhmyya2h5bpdxFqEFGQOT0lbo0Qt4U+F3IZQRIZLr+ufMzv
+         YFN8l03fX2C2ydQiW4D5SBwzqbWJs2F18393kuDS6aObl/l9t9Qp8YIQQ+TU6u5Jq1RJ
+         PRtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EV0wmNwRVxX8NQcoop+BEUS5js89FYD4nmxPHK49pWQ=;
-        b=yMR1fynUYq9YPX9QI19wAzpPpvHPHy0PCy+t853xja9xSrf0NpSrIoDs/Zaz47ToUk
-         IkaivxMT91tr2pXJUamu4gIyyPLh/0ki+mnyzt8PQHI+5KIeC3nEpzDmZsGVPg42EZ83
-         8MFYdM8HzDuULe3/UIiKJhiqRsF945We5QcXVvV6gVWQ/0sAdyPDl6ii8lacIBXHCMhh
-         7azUvAHAc6N8oiDNLxlnWPVhH7tCAdY76Q5OFkKU4tgefV4Wrad2XYP6t8Wfe4Q14MWJ
-         hM3QpDOya9srRylqGb/4Zb+LcgI2F3U3OKdkR9Bx+vnNx+0ndggOE+FsJpLKDiFMM7Ie
-         FdKg==
-X-Gm-Message-State: AOAM531ZRxEKsKrYs+E2jBtyEfirVitXSu3OjrbxynEg0rVlw/g7//UU
-        DiPghfryqsI2v64fDQe+MJJGmE1BsFs=
-X-Google-Smtp-Source: ABdhPJzlNsy3e1ptcNA1gVdmyGzeVVvFjO+vtZKTXz+mMFFivnXYL8Q+yd6xL5Xp3kOTB5m7PdGErg==
-X-Received: by 2002:a63:82c2:0:b0:37c:942b:96db with SMTP id w185-20020a6382c2000000b0037c942b96dbmr7422065pgd.286.1646987417357;
-        Fri, 11 Mar 2022 00:30:17 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.111])
-        by smtp.googlemail.com with ESMTPSA id l1-20020a17090aec0100b001bfa1bafeadsm9090576pjy.53.2022.03.11.00.30.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 11 Mar 2022 00:30:17 -0800 (PST)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH 5/5] KVM: X86: Expose PREEMT_COUNT CPUID feature bit to guest
-Date:   Fri, 11 Mar 2022 00:29:14 -0800
-Message-Id: <1646987354-28644-6-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646987354-28644-1-git-send-email-wanpengli@tencent.com>
-References: <1646987354-28644-1-git-send-email-wanpengli@tencent.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+         :references:mime-version:content-transfer-encoding;
+        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
+        b=ROxHzxYKwUG7U1MvD9CVgnLhrtel81QgBS4TdwZ8MvfHR8oK1V46peJmfqlt/DZ94j
+         3HPNHd1+SaQRXfS6J9FgrJ2ul6TWrViFnyFnMUxbx/36wAPeyI0JIQ2f0L7OpTP9fUeM
+         E0bJXtxmqHKPrGIaj655/timaGnNio/jKn9JmQEtGLmy2ceDCHARMmizcXFCsZnLL+YX
+         03PWXX6+iGr6Doo9aMnbviTRb/d9GzPbcOLc0fLRkhBSWqEsat+COFKYjKFtE9VPb7i9
+         blgztyJjk2LSsmOq2V7ABMZ/7+/3jSaimSYne/aBuBEvt+8JHIYhLQLUiTVRTWAhhEz6
+         IN4g==
+X-Gm-Message-State: AOAM531aPtMVaw6VcDmEeRCku4sUZdthJHoR7vVGBVhntFTcCX24Rc9u
+        tJqRIJxWv7AdP0RdVquCVcXolPjoMvGpCaG4
+X-Google-Smtp-Source: ABdhPJwvPShUx/fd22EZnsmFZ7/fjy+OpgeoE43Ls+h/GXbhsRJW42jHfLYkBse6whh+7z/UG3sqSQ==
+X-Received: by 2002:a63:5451:0:b0:378:6b6c:ed83 with SMTP id e17-20020a635451000000b003786b6ced83mr7469585pgm.446.1646987441896;
+        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
+Received: from localhost.localdomain (114-24-95-63.dynamic-ip.hinet.net. [114.24.95.63])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056a00150800b004f7948d14e7sm785465pfu.191.2022.03.11.00.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep address available
+Date:   Fri, 11 Mar 2022 16:29:45 +0800
+Message-Id: <20220311082944.4881-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+only support from ep1-ep4 for both in and out direction, it will return
+-EBUSY originally.
 
-Expose the PREEMPT_COUNT feature bit to the guest, the guest can check this
-feature bit before using MSR_KVM_PREEMPT_COUNT.
+I think it will be more intuitive if we return -EINVAL, because -EBUSY
+sounds like ep5in is not available now, but might be available in the
+future.
 
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 ---
- Documentation/virt/kvm/cpuid.rst | 3 +++
- arch/x86/kvm/cpuid.c             | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/virt/kvm/cpuid.rst b/Documentation/virt/kvm/cpuid.rst
-index bda3e3e737d7..c45158af98a7 100644
---- a/Documentation/virt/kvm/cpuid.rst
-+++ b/Documentation/virt/kvm/cpuid.rst
-@@ -103,6 +103,9 @@ KVM_FEATURE_HC_MAP_GPA_RANGE       16          guest checks this feature bit bef
- KVM_FEATURE_MIGRATION_CONTROL      17          guest checks this feature bit before
-                                                using MSR_KVM_MIGRATION_CONTROL
+Changes in v2:
+- Rename variable from ep_num_matched to ep_props_matched
+- Incorporate the patch from Andrey Konovalov that cover
+  the foloowing cases:
+    1. If there are no endpoints that match the provided descriptor, return
+       EINVAL.
+    2. If there are matching endpoints, but they are all already enabled,
+       return EBUSY.
+
+ drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index d86c3a36441e..e5707626c4d4 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 	unsigned long flags;
+ 	struct usb_endpoint_descriptor *desc;
+ 	struct raw_ep *ep;
++	bool ep_props_matched = false;
  
-+KVM_FEATURE_PREEMPT_COUNT          18          guest checks this feature bit before
-+                                               using MSR_KVM_PREEMPT_COUNT
-+
- KVM_FEATURE_CLOCKSOURCE_STABLE_BIT 24          host will warn if no guest-side
-                                                per-cpu warps are expected in
-                                                kvmclock
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 58b0b4e0263c..4785f5a63d8d 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -1071,7 +1071,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			     (1 << KVM_FEATURE_PV_SEND_IPI) |
- 			     (1 << KVM_FEATURE_POLL_CONTROL) |
- 			     (1 << KVM_FEATURE_PV_SCHED_YIELD) |
--			     (1 << KVM_FEATURE_ASYNC_PF_INT);
-+			     (1 << KVM_FEATURE_ASYNC_PF_INT) |
-+			     (1 << KVM_FEATURE_PREEMPT_COUNT);
+ 	desc = memdup_user((void __user *)value, sizeof(*desc));
+ 	if (IS_ERR(desc))
+@@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
  
- 		if (sched_info_on())
- 			entry->eax |= (1 << KVM_FEATURE_STEAL_TIME);
+ 	for (i = 0; i < dev->eps_num; i++) {
+ 		ep = &dev->eps[i];
+-		if (ep->state != STATE_EP_DISABLED)
+-			continue;
+ 		if (ep->addr != usb_endpoint_num(desc) &&
+ 				ep->addr != USB_RAW_EP_ADDR_ANY)
+ 			continue;
+ 		if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+ 			continue;
++		ep_props_matched = true;
++		if (ep->state != STATE_EP_DISABLED)
++			continue;
+ 		ep->ep->desc = desc;
+ 		ret = usb_ep_enable(ep->ep);
+ 		if (ret < 0) {
+@@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 		goto out_unlock;
+ 	}
+ 
+-	dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+-	ret = -EBUSY;
++	if (!ep_props_matched) {
++		dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
++		ret = -EINVAL;
++	} else {
++		dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
++		ret = -EBUSY;
++	}
+ 
+ out_free:
+ 	kfree(desc);
 -- 
 2.25.1
 

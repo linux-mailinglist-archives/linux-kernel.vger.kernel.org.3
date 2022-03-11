@@ -2,246 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCFD4D5AC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF714D5ADC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346509AbiCKFsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S1346539AbiCKFwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240044AbiCKFsp (ORCPT
+        with ESMTP id S235070AbiCKFwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:48:45 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D572BF6;
-        Thu, 10 Mar 2022 21:47:26 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2FE6F488;
-        Fri, 11 Mar 2022 06:47:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646977645;
-        bh=oockvR1LA+v9n302HI7aC2gMooUZaYtMOy6sArIIR2I=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=DHFCOygtdIWYDOa312BgpS/tKmOtVfjrUwPBlAjBDNa8Dku1KLiq4c2nL217+FDpI
-         asDffEq0T0LvXow4y7D/ESM6SMGACt2+ghp5a59VfUYhFyPu0MUiTka6sY5IdhzjfT
-         ttCRAF4JC0ihIbgIoE9i9m/u0UI+icDdw5BB2YaY=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAD=FV=UqTh-FLDyXvH=ED-4cbJ6ggDLsTGqhTeqNMsKDphbzYA@mail.gmail.com>
-References: <20220310152227.2122960-1-kieran.bingham+renesas@ideasonboard.com> <20220310152227.2122960-4-kieran.bingham+renesas@ideasonboard.com> <CAD=FV=UqTh-FLDyXvH=ED-4cbJ6ggDLsTGqhTeqNMsKDphbzYA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] drm/bridge: ti-sn65dsi86: Support hotplug detection
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-To:     Doug Anderson <dianders@chromium.org>
-Date:   Fri, 11 Mar 2022 05:47:22 +0000
-Message-ID: <164697764297.2392702.10094603553189733655@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 00:52:13 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3B0ECC63
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:51:07 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id f21-20020a633815000000b0038105768c61so1015074pga.21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=m+zrLQV2v8uq4zkPfu5p9jArDq+18jogCFTcPpgzke0=;
+        b=mZWR4TO+ja4MFPPNRURqpOZdF7XcXrtvbin/1TevsX3LItGyhGgZyR306GBtZ52E5S
+         /t7rw+jA34ALr8095C5Zi6DiSek6dlgcAkHCKMtVVW15bi/oQlKRk1UqdAGOsEVDAyPZ
+         I3Fhbg0WUVRs9Q4QQc0ERsEzCGLri0ZrBdiOHENQTQlKSt3Nc55o18xy1mmTiT2QpApi
+         tU6SbWmRspwYNBNyo+6RSMUfUsQ0w2RmM7HL8ZGxNStap1QZsph/iVTg3MJeeNY5Tr39
+         sAHTowS8ZF5DkkCid7FGricgmQcHq7gA6S8k2qyK66lq+7bRMfnBJwxapLOGTJs+vJGB
+         9D6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=m+zrLQV2v8uq4zkPfu5p9jArDq+18jogCFTcPpgzke0=;
+        b=n6QPaDOJMC4WH4rwDtf9+Ka0hvRDz/1pRSCX+0fZPzdDDA+uRWw+dbQTMm+BAmecPm
+         0U1qAmyPGlcXWvw3Mf4Ut18ezbBMh+BkDy+91UbNSf2BztDbl9kh3+C4W+2nwwgaoYMD
+         xHv3b/qCfRS0tLiPx4jOhx92x/zP0RbYSLR7wQV77jF3t+TZVsgG7vb2Jq4HcryKXobb
+         Gw9ZM1ogTtepZ8SSOmdoidi9Ef4dbpE7DSAUcdqv/fgX4IUWrf5cvsS2lTj7r+5bDiIe
+         Wed7mb1mLWHry6Z75S94OIL94WgSQID8i6drHaHkG3iAfp1p1d2/ICQBYUfhrOlc7c9C
+         1YXQ==
+X-Gm-Message-State: AOAM5309hM3m+58Or2sWlIKE9yszJi6oyV+OXIdTnm/5pHiByTsmW9Pd
+        ZQWM8DJ/6N6TtUejFFHX8gYJiFYMoURa3PWy08oNuZ3NGDVD6YQ4ZPwqrqeIo+plBFQVGaEmAlD
+        ocG6n4H4gc5Im2e/yIlu5A1EH006EAPjVXVk1a0VKigJO+1bL/Y6ESX4oyKNnM2EOJX2ayw==
+X-Google-Smtp-Source: ABdhPJzMm/MchNZwY6Kh+sUy0nC2hWwRDYwa5hqbN8fgd4iwJarAnq353gwGILMqB/C9EK8uGP+bce4qGJI=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:7608:b0:153:32d3:f721 with SMTP id
+ k8-20020a170902760800b0015332d3f721mr2415202pll.168.1646977867070; Thu, 10
+ Mar 2022 21:51:07 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 11 Mar 2022 05:49:11 +0000
+Message-Id: <20220311055056.57265-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [RFC PATCH 000/105] KVM: selftests: Overhaul APIs, purge VCPU_ID
+From:   Sean Christopherson <seanjc@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug,
+First off, hopefully I didn't just spam you with 106 emails.  In theory,
+unless you're subscribed to LKML, you should see only the cover letter
+and everything else should be on lore if you want to pull down the mbox
+(instead of saying "LOL, 105 patches!?!?", or maybe after you say that).
 
-Quoting Doug Anderson (2022-03-10 23:10:12)
-> Hi,
->=20
-> On Thu, Mar 10, 2022 at 7:22 AM Kieran Bingham
-> <kieran.bingham+renesas@ideasonboard.com> wrote:
-> >
-> > @@ -1135,6 +1161,36 @@ static void ti_sn_bridge_atomic_post_disable(str=
-uct drm_bridge *bridge,
-> >         pm_runtime_put_sync(pdata->dev);
-> >  }
-> >
-> > +static enum drm_connector_status ti_sn_bridge_detect(struct drm_bridge=
- *bridge)
-> > +{
-> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
-> > +       int val;
-> > +
-> > +       regmap_read(pdata->regmap, SN_HPD_DISABLE_REG, &val);
->=20
-> Don't you need a pm_runtime_get_sync() before this and a
-> put_autosuspend() after? The "detect" will be used in the yes-HPD but
-> no-IRQ case, right? In that case there's nobody holding the pm_runtime
-> reference.
+This is a (very) early RFC for overhauling KVM's selftests APIs.  It's
+compile tested only (maybe), there are no changelogs, etc...
 
-Hrm ... I'll have to dig on this a bit. The polling is done by the DRM
-core, so indeed I suspect it could be done outside of a context that
-holds the pm runtime reference.
+My end goal with an overhaul is to get to a state where adding new
+features and writing tests is less painful/disgusting (I feel dirty every
+time I copy+paste VCPU_ID).  I opted to directly send only the cover
+letter because most of the individual patches aren't all that interesting,
+there's still 46 patches even if the per-test conversions are omitted, and
+it's the final state that I really care about and want to discuss.
 
-Equally a get and put on the reference doesn't hurt even if it's already
-taken, so perhaps it's best to add it, but I'll try to confirm it's
-requirement first.
+The overarching theme of my take on where to go with selftests is to stop
+treating tests like second class citizens.  Stop hiding vcpu, kvm_vm, etc...
+There's no sensitive data/constructs, and the encapsulation has led to
+really, really bad and difficult to maintain code.  E.g. Want to call a
+vCPU ioctl()?  Hope you have the VM...
+
+The other theme in the rework is to deduplicate code and try to set us
+up for success in the future.  E.g. provide macros/helpers instead of
+spamming CTRL-C => CTRL-V (see the -700 LoC).
+
+I was hoping to get this into a less shabby state before posting, but I'm
+I'm going to be OOO for the next few weeks and want to get the ball rolling
+instead of waiting another month or so.
+
+Based on an older version of kvm/queue.  The full thing is also on github:
+
+  https://github.com/sean-jc/linux.git x86/selftests_overhaul
+
+Cc: kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Wanpeng Li <wanpengli@tencent.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Andrew Jones <drjones@redhat.com>
+Cc: Thomas Huth <thuth@redhat.com>
+Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: David Matlack <dmatlack@google.com>
+Cc: Ben Gardon <bgardon@google.com>
+Cc: Oliver Upton <oupton@google.com>
+
+Sean Christopherson (105):
+  KVM: selftests: Fix buggy check in test_v3_new_redist_regions()
+  KVM: selftests: Always open VM file descriptors with O_RDWR
+  KVM: selftest: Add another underscore to inner ioctl helpers
+  KVM: selftests: Make vcpu_ioctl() a wrapper to pretty print ioctl name
+  KVM: selftests: Drop @mode from common vm_create() helper
+  KVM: selftests: Split vcpu_set_nested_state() into two helpers
+  KVM: selftests: Add hyperv_svm_test test binary to .gitignore
+  KVM: sefltests: Use vcpu_ioctl() and __vcpu_ioctl() helpers
+  KVM: selftests: Add __vcpu_run() helper
+  KVM: selftests: Use vcpu_access_device_attr() in arm64 code
+  KVM: selftests: Remove vcpu_get_fd()
+  KVM: selftests: Add vcpu_get() to retrieve and assert on vCPU
+    existence
+  KVM: selftests: Make vm_ioctl() a wrapper to pretty print ioctl name
+  KVM: sefltests: Use vm_ioctl() and __vm_ioctl() helpers
+  KVM: selftests: Make kvm_ioctl() a wrapper to pretty print ioctl name
+  KVM: selftests: Use kvm_ioctl() helpers
+  KVM: selftests: Make x86-64's register dump helpers static
+  KVM: selftests: Get rid of kvm_util_internal.h
+  KVM: selftests: Use KVM_IOCTL_ERROR() for one-off arm64 ioctls
+  KVM: selftests: Drop @test param from kvm_create_device()
+  KVM: selftests: Move KVM_CREATE_DEVICE_TEST code to separate helper
+  KVM: selftests: Multiplex return code and fd in __kvm_create_device()
+  KVM: selftests: Rename KVM_HAS_DEVICE_ATTR helpers for consistency
+  KVM: selftests: Drop 'int' return from asserting *_device_has_attr()
+  KVM: selftests: Split get/set device_attr helpers
+  KVM: selftests: Add a VM backpointer to 'struct vcpu'
+  KVM: selftests: Add vm_create_*() variants to expose/return 'struct
+    vcpu'
+  KVM: selftests: Rename vcpu.state => vcpu.run
+  KVM: selftests: Rename 'struct vcpu' to 'struct kvm_vcpu'
+  KVM: selftests: Return the created vCPU from vm_vcpu_add()
+  KVM: selftests: Convert memslot_perf_test away from VCPU_ID
+  KVM: selftests: Convert rseq_test away from VCPU_ID
+  KVM: selftests: Convert xss_msr_test away from VCPU_ID
+  KVM: selftests: Convert vmx_preemption_timer_test away from VCPU_ID
+  KVM: selftests: Convert vmx_pmu_msrs_test away from VCPU_ID
+  KVM: selftests: Convert vmx_set_nested_state_test away from VCPU_ID
+  KVM: selftests: Convert vmx_tsc_adjust_test away from VCPU_ID
+  KVM: selftests: Convert mmu_role_test away from VCPU_ID
+  KVM: selftests: Convert pmu_event_filter_test away from VCPU_ID
+  KVM: selftests: Convert smm_test away from VCPU_ID
+  KVM: selftests: Convert state_test away from VCPU_ID
+  KVM: selftests: Convert svm_int_ctl_test away from VCPU_ID
+  KVM: selftests: Convert svm_vmcall_test away from VCPU_ID
+  KVM: selftests: Convert sync_regs_test away from VCPU_ID
+  KVM: selftests: Convert hyperv_cpuid away from VCPU_ID
+  KVM: selftests: Convert kvm_pv_test away from VCPU_ID
+  KVM: selftests: Convert platform_info_test away from VCPU_ID
+  KVM: selftests: Convert vmx_nested_tsc_scaling_test away from VCPU_ID
+  KVM: selftests: Convert set_sregs_test away from VCPU_ID
+  KVM: selftests: Convert vmx_dirty_log_test away from VCPU_ID
+  KVM: selftests: Convert vmx_close_while_nested_test away from VCPU_ID
+  KVM: selftests: Convert vmx_apic_access_test away from VCPU_ID
+  KVM: selftests: Convert userspace_msr_exit_test away from VCPU_ID
+  KVM: selftests: Convert vmx_exception_with_invalid_guest_state away
+    from VCPU_ID
+  KVM: selftests: Convert tsc_msrs_test away from VCPU_ID
+  KVM: selftests: Convert kvm_clock_test away from VCPU_ID
+  KVM: selftests: Convert hyperv_svm_test away from VCPU_ID
+  KVM: selftests: Convert hyperv_features away from VCPU_ID
+  KVM: selftests: Convert hyperv_clock away from VCPU_ID
+  KVM: selftests: Convert evmcs_test away from VCPU_ID
+  KVM: selftests: Convert emulator_error_test away from VCPU_ID
+  KVM: selftests: Convert debug_regs away from VCPU_ID
+  KVM: selftests: Add proper helper for advancing RIP in debug_regs
+  KVM: selftests: Convert amx_test away from VCPU_ID
+  KVM: selftests: Convert cr4_cpuid_sync_test away from VCPU_ID
+  KVM: selftests: Convert cpuid_test away from VCPU_ID
+  KVM: selftests: Convert userspace_io_test away from VCPU_ID
+  KVM: selftests: Convert vmx_invalid_nested_guest_state away from
+    VCPU_ID
+  KVM: selftests: Convert xen_vmcall_test away from VCPU_ID
+  KVM: selftests: Convert xen_shinfo_test away from VCPU_ID
+  KVM: selftests: Convert dirty_log_test away from VCPU_ID
+  KVM: selftests: Convert set_memory_region_test away from VCPU_ID
+  KVM: selftests: Convert system_counter_offset_test away from VCPU_ID
+  KVM: selftests: Convert debug-exceptions away from VCPU_ID
+  KVM: selftests: Convert vgic_irq.c include/aarch64/vgic.h
+    lib/aarch64/vgic away from VCPU_ID
+  KVM: selftests: Make arm64's guest_get_vcpuid() declaration arm64-only
+  KVM: selftests: Move vm_is_unrestricted_guest() to x86-64
+  KVM: selftests: Add "arch" to common utils that have arch
+    implementations
+  KVM: selftests: Return created vcpu from vm_vcpu_add_default()
+  KVM: selftests: Rename vm_vcpu_add* helpers to better show
+    relationships
+  KVM: selftests: Convert set_boot_cpu_id away from VCPU_ID
+  KVM: selftests: Convert psci_cpu_on_test away from VCPU_ID
+  KVM: selftests: Convert hardware_disable_test away from VCPU_ID
+  KVM: selftests: Add VM creation helper that "returns" vCPUs
+  KVM: selftests: Convert steal_time away from VCPU_ID
+  KVM: selftests: Convert arch_timer away from VCPU_ID
+  KVM: selftests: Fix typo in vgic_init test
+  KVM: selftests: Convert vgic_init away from
+    vm_create_default_with_vcpus()
+  KVM: selftests: Convert xapic_ipi_test away from *_VCPU_ID
+  KVM: selftests: Convert sync_regs_test away from VCPU_ID
+  KVM: selftests: Convert resets away from VCPU_ID
+  KVM: selftests: Convert memop away from VCPU_ID
+  KVM: selftests: Convert s390x/diag318_test_handler away from VCPU_ID
+  KVM: selftests: Drop vm_create_default* helpers
+  KVM: selftests: Drop vcpuids param from VM creators
+  KVM: selftests: Convert kvm_page_table_test away from reliance on
+    vcpu_id
+  KVM: selftests: Convert kvm_binary_stats_test away from VCPU_ID
+  KVM: selftests: Convert get-reg-list away from VCPU_ID
+  KVM: selftests: Stop conflating vCPU index and ID in perf tests
+  KVM: selftests: Remove vcpu_get() usage from dirty_log_test
+  KVM: selftests: Require vCPU output array when creating VM with vCPUs
+  KVM: selftest: Purge vm+vcpu_id == vcpu silliness
+  KVM: selftests: Drop vcpu_get(), rename vcpu_find() => vcpu_exists()
+  KVM: selftests: Remove vcpu_state() helper
+  KVM: selftests: Open code and drop kvm_vm accessors
+
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ .../selftests/kvm/aarch64/arch_timer.c        |  68 +-
+ .../selftests/kvm/aarch64/debug-exceptions.c  |  17 +-
+ .../selftests/kvm/aarch64/get-reg-list.c      |  19 +-
+ .../selftests/kvm/aarch64/psci_cpu_on_test.c  |  22 +-
+ .../testing/selftests/kvm/aarch64/vgic_init.c | 369 +++----
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |  30 +-
+ .../selftests/kvm/access_tracking_perf_test.c |  81 +-
+ .../selftests/kvm/demand_paging_test.c        |  39 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  42 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |  80 +-
+ .../selftests/kvm/hardware_disable_test.c     |  27 +-
+ .../selftests/kvm/include/aarch64/processor.h |  20 +-
+ .../selftests/kvm/include/aarch64/vgic.h      |   6 +-
+ .../selftests/kvm/include/kvm_util_base.h     | 677 ++++++++----
+ .../selftests/kvm/include/perf_test_util.h    |   5 +-
+ .../selftests/kvm/include/riscv/processor.h   |   8 +-
+ .../selftests/kvm/include/ucall_common.h      |   2 +-
+ .../selftests/kvm/include/x86_64/evmcs.h      |   2 +-
+ .../selftests/kvm/include/x86_64/processor.h  |  52 +-
+ .../selftests/kvm/kvm_binary_stats_test.c     |  27 +-
+ .../selftests/kvm/kvm_create_max_vcpus.c      |   4 +-
+ .../selftests/kvm/kvm_page_table_test.c       |  66 +-
+ .../selftests/kvm/lib/aarch64/processor.c     |  79 +-
+ .../testing/selftests/kvm/lib/aarch64/ucall.c |   9 +-
+ .../testing/selftests/kvm/lib/aarch64/vgic.c  |  44 +-
+ tools/testing/selftests/kvm/lib/elf.c         |   1 -
+ tools/testing/selftests/kvm/lib/guest_modes.c |   6 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 981 +++---------------
+ .../selftests/kvm/lib/kvm_util_internal.h     | 128 ---
+ .../selftests/kvm/lib/perf_test_util.c        |  84 +-
+ .../selftests/kvm/lib/riscv/processor.c       | 110 +-
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |   7 +-
+ .../kvm/lib/s390x/diag318_test_handler.c      |   9 +-
+ .../selftests/kvm/lib/s390x/processor.c       |  44 +-
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |   8 +-
+ .../selftests/kvm/lib/x86_64/processor.c      | 311 ++----
+ tools/testing/selftests/kvm/lib/x86_64/svm.c  |   1 -
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |  10 +-
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |   5 +-
+ .../kvm/memslot_modification_stress_test.c    |  13 +-
+ .../testing/selftests/kvm/memslot_perf_test.c |  28 +-
+ tools/testing/selftests/kvm/rseq_test.c       |   9 +-
+ tools/testing/selftests/kvm/s390x/memop.c     |  31 +-
+ tools/testing/selftests/kvm/s390x/resets.c    | 137 +--
+ .../selftests/kvm/s390x/sync_regs_test.c      |  37 +-
+ .../selftests/kvm/set_memory_region_test.c    |  45 +-
+ tools/testing/selftests/kvm/steal_time.c      | 120 +--
+ .../kvm/system_counter_offset_test.c          |  29 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |  33 +-
+ .../testing/selftests/kvm/x86_64/cpuid_test.c |  29 +-
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |  17 +-
+ .../testing/selftests/kvm/x86_64/debug_regs.c |  72 +-
+ .../kvm/x86_64/emulator_error_test.c          |  65 +-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  51 +-
+ .../kvm/x86_64/get_msr_index_features.c       |  16 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |  25 +-
+ .../selftests/kvm/x86_64/hyperv_cpuid.c       |  25 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |  51 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  14 +-
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |  23 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |  25 +-
+ .../selftests/kvm/x86_64/mmio_warning_test.c  |   6 +-
+ .../selftests/kvm/x86_64/mmu_role_test.c      |  20 +-
+ .../selftests/kvm/x86_64/platform_info_test.c |  34 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |  60 +-
+ .../selftests/kvm/x86_64/set_boot_cpu_id.c    |  87 +-
+ .../selftests/kvm/x86_64/set_sregs_test.c     |  47 +-
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  |  17 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |  37 +-
+ .../testing/selftests/kvm/x86_64/state_test.c |  29 +-
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  21 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    |  16 +-
+ .../selftests/kvm/x86_64/sync_regs_test.c     |  52 +-
+ .../selftests/kvm/x86_64/tsc_msrs_test.c      |  35 +-
+ .../selftests/kvm/x86_64/userspace_io_test.c  |  18 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      | 165 ++-
+ .../kvm/x86_64/vmx_apic_access_test.c         |  18 +-
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |  17 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  13 +-
+ .../vmx_exception_with_invalid_guest_state.c  |  62 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |  18 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  19 +-
+ .../selftests/kvm/x86_64/vmx_pmu_msrs_test.c  |  25 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |  30 +-
+ .../kvm/x86_64/vmx_set_nested_state_test.c    |  86 +-
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |  12 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |  48 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |  35 +-
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    |  17 +-
+ .../selftests/kvm/x86_64/xss_msr_test.c       |  10 +-
+ 91 files changed, 2363 insertions(+), 3087 deletions(-)
+ delete mode 100644 tools/testing/selftests/kvm/lib/kvm_util_internal.h
 
 
-> Also, a nit that it'd be great if you error checked the regmap_read().
-> I know this driver isn't very good about it, but it's probably
-> something to get better. i2c transactions can fail. I guess another
-> alternative would be to init "val" to 0...
+base-commit: f6ae04ddb347f526b4620d1053690ecf1f87d77f
+-- 
+2.35.1.723.g4982287a31-goog
 
-It's a good point indeed. If we can't read the device we should return
-disconnected.
-
->=20
->=20
-> > +       return val & HPD_DEBOUNCED_STATE ? connector_status_connected
-> > +                                        : connector_status_disconnecte=
-d;
-> > +}
-> > +
-> > +static void ti_sn_bridge_hpd_enable(struct drm_bridge *bridge)
-> > +{
-> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
-> > +
-> > +       /* The device must remain active for HPD to function */
-> > +       pm_runtime_get_sync(pdata->dev);
-> > +       regmap_write(pdata->regmap, SN_IRQ_HPD_REG,
-> > +                    IRQ_HPD_EN | IRQ_HPD_INSERTION_EN |
-> > +                    IRQ_HPD_REMOVAL_EN | IRQ_HPD_REPLUG_EN);
-> > +}
-> > +
-> > +static void ti_sn_bridge_hpd_disable(struct drm_bridge *bridge)
-> > +{
-> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
-> > +
-> > +       regmap_write(pdata->regmap, SN_IRQ_HPD_REG, 0);
-> > +       pm_runtime_put_autosuspend(pdata->dev);
->=20
-> Before doing the pm_runtime_put_autosuspend() it feels like you should
-> ensure that the interrupt has finished. Otherwise we could be midway
-> through processing an interrupt and the pm_runtime reference could go
-> away, right? Maybe we just disable the irq which I think will wait for
-> anything outstanding to finish?
-
-Should the IRQ handler also call pm_runtime_get/put then?
-
-> > @@ -1223,6 +1282,34 @@ static int ti_sn_bridge_parse_dsi_host(struct ti=
-_sn65dsi86 *pdata)
-> >         return 0;
-> >  }
-> >
-> > +static irqreturn_t ti_sn65dsi86_irq_handler(int irq, void *arg)
-> > +{
-> > +       struct ti_sn65dsi86 *pdata =3D arg;
-> > +       int ret;
-> > +       unsigned int hpd;
-> > +
-> > +       ret =3D regmap_read(pdata->regmap, SN_IRQ_HPD_STATUS_REG, &hpd);
-> > +       if (ret || !hpd)
-> > +               return IRQ_NONE;
-> > +
-> > +       if (hpd & IRQ_HPD_INSERTION_STATUS)
-> > +               drm_bridge_hpd_notify(&pdata->bridge, connector_status_=
-connected);
-> > +
-> > +       if (hpd & IRQ_HPD_REMOVAL_STATUS)
-> > +               drm_bridge_hpd_notify(&pdata->bridge, connector_status_=
-disconnected);
-> > +
-> > +       /* When replugged, ensure we trigger a detect to update the dis=
-play */
-> > +       if (hpd & IRQ_HPD_REPLUG_STATUS)
-> > +               drm_bridge_hpd_notify(&pdata->bridge, connector_status_=
-disconnected);
->=20
-> How does the ordering work here if _both_ insertion and removal are
-> asserted? Is that somehow not possible? Should this be "else if" type
-> statements then, or give a warn if more than one bit is set, or ... ?
-
-As I understand it, that would trigger a REPLUG IRQ. However this is one
-part I quite disliked about the drm_bridge_hpd_notify. The values here
-are not taken as the hardware state anyway. A call to drm_bridge_hpd_notify=
- will=20
-trigger a call on the detect function so a further read will occur to
-determine the current state using the same function as is used with
-polling.
-
-The IRQ handler only cuts out the polling as far as I see.
-
-
-> > +       /* reset the status registers */
-> > +       regmap_write(pdata->regmap, SN_IRQ_HPD_STATUS_REG,
-> > +                    IRQ_HPD_STATUS | IRQ_HPD_INSERTION_STATUS |
-> > +                    IRQ_HPD_REMOVAL_STATUS | IRQ_HPD_REPLUG_STATUS);
->=20
-> IMO this regmap_write() belongs right after the read and should be
-> based on what you read--you shouldn't just clear all of them. AKA:
->=20
-> a) Read to see what interrupt are asserted.
-> b) Ack the interrupts that you saw asserted.
-> c) Process the interrupts that you saw asserted.
->=20
-> If you process before acking then you can miss interrupts (in other
-> words if you do "a" then "c" then "b" then you can miss interrupts
-> that come in after "b" but before "c".
-
-Agreed, I'll respin.
-
-> > @@ -1247,9 +1342,29 @@ static int ti_sn_bridge_probe(struct auxiliary_d=
-evice *adev,
-> >         pdata->bridge.type =3D pdata->next_bridge->type =3D=3D DRM_MODE=
-_CONNECTOR_DisplayPort
-> >                            ? DRM_MODE_CONNECTOR_DisplayPort : DRM_MODE_=
-CONNECTOR_eDP;
-> >
-> > -       if (pdata->bridge.type =3D=3D DRM_MODE_CONNECTOR_DisplayPort)
-> > +       if (pdata->bridge.type =3D=3D DRM_MODE_CONNECTOR_DisplayPort) {
-> >                 pdata->bridge.ops =3D DRM_BRIDGE_OP_EDID;
-> >
-> > +               if (!pdata->no_hpd)
-> > +                       pdata->bridge.ops |=3D DRM_BRIDGE_OP_DETECT;
-> > +       }
-> > +
-> > +       if (!pdata->no_hpd && pdata->irq > 0) {
-> > +               dev_err(pdata->dev, "registering IRQ %d\n", pdata->irq);
-> > +
-> > +               ret =3D devm_request_threaded_irq(pdata->dev, pdata->ir=
-q, NULL,
-> > +                                               ti_sn65dsi86_irq_handle=
-r,
-> > +                                               IRQF_ONESHOT, "sn65dsi8=
-6-irq",
-> > +                                               pdata);
-> > +               if (ret)
-> > +                       return dev_err_probe(pdata->dev, ret,
-> > +                                            "Failed to register DP int=
-errupt\n");
-> > +
-> > +               /* Enable IRQ based HPD */
-> > +               regmap_write(pdata->regmap, SN_IRQ_EN_REG, IRQ_EN);
->=20
-> Why not put the above regmap_write() in the ti_sn_bridge_hpd_enable() cal=
-l?
-
-I assumed the IRQ handler may get used by other non-HPD events. Which is
-also why it was originally registered in the main probe(). HPD is just
-one feature of the interrupts. Of course it's only used for HPD now
-though. I guess I could have solved the bridge dependency by splitting
-the IRQ handler to have a dedicated HPD handler function which would
-return if the bridge wasn't initialised, but went with the deferred
-registration of the handler.
-
-I can move this and then leave it to anyone else implementing further
-IRQ features to refactor if needed.
-
->=20
-> -Doug

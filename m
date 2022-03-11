@@ -2,109 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAFC4D5BAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9824C4D5BB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346689AbiCKGkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 01:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
+        id S1346727AbiCKGnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 01:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238501AbiCKGkm (ORCPT
+        with ESMTP id S1346755AbiCKGnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 01:40:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F00343EF13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:39:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93C7814BF;
-        Thu, 10 Mar 2022 22:39:39 -0800 (PST)
-Received: from [10.163.33.198] (unknown [10.163.33.198])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E653F3F99C;
-        Thu, 10 Mar 2022 22:39:37 -0800 (PST)
-Message-ID: <2abaff3b-455a-c345-be93-0036b8dd1519@arm.com>
-Date:   Fri, 11 Mar 2022 12:09:37 +0530
+        Fri, 11 Mar 2022 01:43:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1D18DAB7;
+        Thu, 10 Mar 2022 22:42:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2F7FB82AD0;
+        Fri, 11 Mar 2022 06:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B10BC340EC;
+        Fri, 11 Mar 2022 06:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646980925;
+        bh=KHmrA0e9XJ0drm0KHtDYjHPot3SnAT2Zkho6x2+qGDQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PEdAuJ28Kk052LmQd6G2UpwvrpvYzpU8FVVIDz0LfW4Yl29FyDI7HvTeZdVVlA4mT
+         qcy6y6e92W2iTPtOVL9UM5rwcPlFswHPWMrQBy6biYNEotdwMciISnXbR6KNx3BcFK
+         xtpxDVtBgdbL6aweq6eJPgn7t4pGHhizjekcSs4k=
+Date:   Fri, 11 Mar 2022 07:42:01 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: Re: [PATCH 5.10 38/58] KVM: arm64: Allow indirect vectors to be used
+ without SPECTRE_V3A
+Message-ID: <YirvObKn0ADrEOk+@kroah.com>
+References: <20220310140812.869208747@linuxfoundation.org>
+ <20220310140813.956533242@linuxfoundation.org>
+ <20220310234858.GB16308@amd>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm/huge_memory: remove unneeded local variable follflags
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220310131253.30970-1-linmiaohe@huawei.com>
- <90246c21-94e9-e64e-dd83-fce45de89f72@arm.com>
- <15d17cb9-6eae-0345-8e67-da30a5978300@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <15d17cb9-6eae-0345-8e67-da30a5978300@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310234858.GB16308@amd>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 11, 2022 at 12:48:59AM +0100, Pavel Machek wrote:
+> Hi!
+> 
+> What is going on here?
+> 
+> > commit 5bdf3437603d4af87f9c7f424b0c8aeed2420745 upstream.
+> 
+> Upstream commit 5bdf is very different from this. In particular,
+> 
+> >  arch/arm64/kvm/hyp/smccc_wa.S    |   66 +++++++++++++++++++++++++++++++++++++++
+> 
+> I can't find smccc_wa.S, neither in mainline, nor in -next. And it
+> looks buggy. I suspect loop_k24 should loop 24 times, but it does 8
+> loops AFAICT. Same problem with loop_k32.
 
+The kvm portion of these patches is the "trickiest" portions.  I'll let
+James explain them, as he did so to me when sending the backports.
 
-On 3/11/22 11:56, Miaohe Lin wrote:
-> On 2022/3/11 12:51, Anshuman Khandual wrote:
->> Hi Miaohe,
->>
->> On 3/10/22 18:42, Miaohe Lin wrote:
->>> We can pass FOLL_GET | FOLL_DUMP to follow_page directly to simplify
->>> the code a bit.
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>  mm/huge_memory.c | 4 +---
->>>  1 file changed, 1 insertion(+), 3 deletions(-)
->>>
->>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->>> index 3557aabe86fe..418d077da246 100644
->>> --- a/mm/huge_memory.c
->>> +++ b/mm/huge_memory.c
->>> @@ -2838,7 +2838,6 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
->>>  	 */
->>>  	for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
->>>  		struct vm_area_struct *vma = find_vma(mm, addr);
->>> -		unsigned int follflags;
->>>  		struct page *page;
->>>  
->>>  		if (!vma || addr < vma->vm_start)
->>> @@ -2851,8 +2850,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
->>>  		}
->>>  
->>>  		/* FOLL_DUMP to ignore special (like zero) pages */
->>> -		follflags = FOLL_GET | FOLL_DUMP;
->>> -		page = follow_page(vma, addr, follflags);
->>> +		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
->>>  
->>>  		if (IS_ERR(page))
->>>  			continue;
->>
->> LGTM, but there is another similar instance in add_page_for_migration()
->> inside mm/migrate.c, requiring this exact clean up.
->>
-> 
-> Thanks for comment. That similar case is done in my previous patch series[1]
-> aimed at migration cleanup and fixup. It might be more suitable to do that
-> clean up in that specialized series?
+thanks,
 
-Both these similar scenarios i.e the one proposed here and other one in the
-migration series, should be folded into a separate single patch, either here
-or in the series itself.
-
-> 
-> [1]:https://lore.kernel.org/linux-mm/20220304093409.25829-4-linmiaohe@huawei.com/
-> 
->> Hence with that change in place.
->>
->> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> 
-> Thanks again.
-> 
->> .
->>
-> 
+greg k-h

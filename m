@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6721B4D5AF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE18D4D5AF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346880AbiCKF5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S1344316AbiCKF5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346638AbiCKFxq (ORCPT
+        with ESMTP id S1346643AbiCKFxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:53:46 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D6729828
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:29 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id x205-20020a627cd6000000b004f6e1b97b45so4589926pfc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:29 -0800 (PST)
+        Fri, 11 Mar 2022 00:53:47 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749E7C4F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:31 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id c7-20020a17090a674700b001beef0afd32so4710281pjm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=grb5a6vd5s389/PkvAcjoLVljHIGkLuaJsaIdEv33mY=;
-        b=YFjKQa0E0JuYvS/yaq6ESb3DkJnZPMDL032gaFvp9UIIwFNfgfFJULVAKSga4rRMfF
-         2NdoY73oUSUbbChOCEUb2Nd7YIfIvuPYVY2ze0h0yixtfKdRhPuWqTL3RBHdsB2KnbtP
-         pMSP6fiP3GUt1K5xBLOVXq1GYGCEK3ssX82dGNIqXVCM0vQshKWKCFGfOZt3LeI0mTPp
-         8TOpmGUJ/hG1NMLZfNaUZ8HySUhMCuNw2anzrG8vMVLf+7aeDnYPQfbx5i4LqTWVfaiY
-         gt8yGnpI3BNGBlcDRESIf6JQp3o3/t7Nl7rY7BLHWlLGISnEy3a7jzL5ihAjqoHW9Krq
-         oVVQ==
+        bh=XUeIxaJPBuNQuCYNQZ93S//8bghme83ZNdK7Pf65uzI=;
+        b=qUDIHocJC53kBWqba7+6hpgTpb9XEJrOG19q2OBqMhLr35ZL9pep0J6pN1YWlLFelu
+         YA9umKxxW1W7nuC7bIkdSkylFj3LaBA+kSQ9xRpnNUZNvadWeiBF3sobOAHoRM9QQKbT
+         Cj3VXZ9ALmIMoeMFjMKaOewgKqUjicR75sVwi0aZ4W4gQA5t2Rs+Q+VKBG/+/TbQxa2i
+         2hugzANq8QWXfmRpnOB7j1neOZo3iG1/0jX4n9l/sM/gpn/4ahsFpvjnW6ApGqsSPgZb
+         IsppuH9iA6IrwfQhTe/pz8WcHNH+5xI0g1SDTidbbnuZVaSo3AYaT4WYvLZ5LhSOTFLd
+         QQjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=grb5a6vd5s389/PkvAcjoLVljHIGkLuaJsaIdEv33mY=;
-        b=KzRLxL2Wfk+2EgTTx1F7NQ6gtkfWaH0sqyvsXYYkoEkyQ524dP/19mx2Og/o4Yg/Cb
-         yz8SEPNnqsaEnmYOLtYrWpSFqIckR5APUgEi4Hz61NcNmcJVyGwnEomypnTIdS+yi8Mb
-         BkSo+eCTwPD0JliM6fs3jHEzfuEg/rgbTu2Q9M8FZeBI6NXiA626P+VcbYrfNPRt73VS
-         lbm8ftqULKxN2zAs/nmGeO7TRt+DKyNmhc5HEyq5LMGZj8uRUcTdJNhekWdpBBTfvj5C
-         vbZkF8IsBjjefa8M3pM4+VIqoUQHxcx2VtESuhnJFrNFdwB7qnVy5t0817T0L8MWT2yt
-         RMKg==
-X-Gm-Message-State: AOAM532OWiu/YMLWzvMwvQdkJMsvZcqmozG3qmINFVyv0ij0S8YXfOGE
-        LcibFB/LjHy+eaZChnixrW71WP0fnZ8FgAIaJsKptJ1m+aE0rEO2NmYmIn+spBViTBLM/CeJOa3
-        Yg3bMqjYiVdE9Jv94nkWR1B+JpWsF/uhoxoP6FTU4Fop3kH7DlxrNwgifRbm42zFaljeM2A==
-X-Google-Smtp-Source: ABdhPJxp1BucRXL83iX9rBdt3M9lRLSk6MRY+TSzC7R8KusOHiCWrN3BzlkVMCq8ooUFdEjNp3t6/tqD/po=
+        bh=XUeIxaJPBuNQuCYNQZ93S//8bghme83ZNdK7Pf65uzI=;
+        b=uKW82LC/WoBfv8xLNvBtZzs9cvorHJ6cli4rOgtTTLMAkMeGYj8HYo6wGP1lm2wBnl
+         HYO0VpI8/0JPN0w3L36XLgJiRKm3DZpBWUTZOygTwmT5hHXC/5YXSr+J1j1CqDiEbFtx
+         Zns6DQo/ecUVC+dW14QkjEPi7BRdJaUI1Ge7pwbEJ/7WUbNQkS73YTrQnjTSRSscyAHH
+         8lBU9ceDvekF5NiWl3slklWHuEc9rJSHmkaCa/duOYqC9K7GMrjD93IVx7k5yjgaPTnR
+         utPFRcTUY3tKYkfWR6DyrYztfmYOzFoc+ic0pEZEm1PbrDCtqjeI4JH7hP/Mc7R3G6bq
+         1ObA==
+X-Gm-Message-State: AOAM531eqGdECsQqmeNx+/6pgU5HP6njkAZnIByWkpMA6NvbzScs6Cuh
+        vWT2iHfyQm2eCcNiDq7yOwHNG3zboTpCtbK8p3mgl7P4I3wG2JqjYIN7l6Myl7pMaNh7yI3H3oc
+        V+7I16Wdu1U5wYEoy6TiHHIbIzG9FXwvBhF3wVO79/lJcp2nwwTZiMz+NAeW65aiMbhkpMA==
+X-Google-Smtp-Source: ABdhPJwDycjRrhtZFnXXWZeJUf1trL7SjYtbATLpvLYHR5roeOqFf/K3Hs2H1NroM/k2QelNev9LjB+EUFQ=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1e10:b0:1bf:6c78:54a9 with SMTP id
- pg16-20020a17090b1e1000b001bf6c7854a9mr460737pjb.1.1646977948789; Thu, 10 Mar
- 2022 21:52:28 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:aa7:88d5:0:b0:4f7:7fbd:c653 with SMTP id
+ k21-20020aa788d5000000b004f77fbdc653mr5228547pff.41.1646977950526; Thu, 10
+ Mar 2022 21:52:30 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Mar 2022 05:50:00 +0000
+Date:   Fri, 11 Mar 2022 05:50:01 +0000
 In-Reply-To: <20220311055056.57265-1-seanjc@google.com>
-Message-Id: <20220311055056.57265-50-seanjc@google.com>
+Message-Id: <20220311055056.57265-51-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220311055056.57265-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [RFC PATCH 049/105] KVM: selftests: Convert set_sregs_test away from VCPU_ID
+Subject: [RFC PATCH 050/105] KVM: selftests: Convert vmx_dirty_log_test away
+ from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>
@@ -71,108 +72,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/set_sregs_test.c     | 45 +++++++++----------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c       | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/set_sregs_test.c b/tools/testing/selftests/kvm/x86_64/set_sregs_test.c
-index 4dc7fd925023..2b3cae9a1d5b 100644
---- a/tools/testing/selftests/kvm/x86_64/set_sregs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/set_sregs_test.c
-@@ -22,9 +22,7 @@
- #include "kvm_util.h"
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_dirty_log_test.c b/tools/testing/selftests/kvm/x86_64/vmx_dirty_log_test.c
+index 68f26a8b4f42..fb8c7f7236f7 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_dirty_log_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_dirty_log_test.c
+@@ -17,8 +17,6 @@
  #include "processor.h"
+ #include "vmx.h"
  
--#define VCPU_ID                  5
+-#define VCPU_ID				1
 -
--static void test_cr4_feature_bit(struct kvm_vm *vm, struct kvm_sregs *orig,
-+static void test_cr4_feature_bit(struct kvm_vcpu *vcpu, struct kvm_sregs *orig,
- 				 uint64_t feature_bit)
- {
- 	struct kvm_sregs sregs;
-@@ -37,11 +35,11 @@ static void test_cr4_feature_bit(struct kvm_vm *vm, struct kvm_sregs *orig,
- 	memcpy(&sregs, orig, sizeof(sregs));
- 	sregs.cr4 |= feature_bit;
+ /* The memory slot index to track dirty pages */
+ #define TEST_MEM_SLOT_INDEX		1
+ #define TEST_MEM_PAGES			3
+@@ -73,6 +71,7 @@ int main(int argc, char *argv[])
+ 	unsigned long *bmap;
+ 	uint64_t *host_test_mem;
  
--	rc = _vcpu_sregs_set(vm, VCPU_ID, &sregs);
-+	rc = _vcpu_sregs_set(vcpu->vm, vcpu->id, &sregs);
- 	TEST_ASSERT(rc, "KVM allowed unsupported CR4 bit (0x%lx)", feature_bit);
- 
- 	/* Sanity check that KVM didn't change anything. */
--	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	vcpu_sregs_get(vcpu->vm, vcpu->id, &sregs);
- 	TEST_ASSERT(!memcmp(&sregs, orig, sizeof(sregs)), "KVM modified sregs");
- }
- 
-@@ -83,6 +81,7 @@ static uint64_t calc_cr4_feature_bits(struct kvm_vm *vm)
- int main(int argc, char *argv[])
- {
- 	struct kvm_sregs sregs;
 +	struct kvm_vcpu *vcpu;
  	struct kvm_vm *vm;
- 	uint64_t cr4;
- 	int rc;
-@@ -96,43 +95,43 @@ int main(int argc, char *argv[])
- 	 * the vCPU model, i.e. without doing KVM_SET_CPUID2.
- 	 */
- 	vm = vm_create(DEFAULT_GUEST_PHY_PAGES);
--	vm_vcpu_add(vm, VCPU_ID);
-+	vcpu = vm_vcpu_add(vm, 0);
+ 	struct kvm_run *run;
+ 	struct ucall uc;
+@@ -81,10 +80,10 @@ int main(int argc, char *argv[])
+ 	nested_vmx_check_supported();
  
--	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	vcpu_sregs_get(vm, vcpu->id, &sregs);
+ 	/* Create VM */
+-	vm = vm_create_default(VCPU_ID, 0, l1_guest_code);
++	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
+ 	vmx = vcpu_alloc_vmx(vm, &vmx_pages_gva);
+-	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
+-	run = vcpu_state(vm, VCPU_ID);
++	vcpu_args_set(vm, vcpu->id, 1, vmx_pages_gva);
++	run = vcpu->run;
  
- 	sregs.cr4 |= calc_cr4_feature_bits(vm);
- 	cr4 = sregs.cr4;
+ 	/* Add an extra memory slot for testing dirty logging */
+ 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
+@@ -116,13 +115,13 @@ int main(int argc, char *argv[])
  
--	rc = _vcpu_sregs_set(vm, VCPU_ID, &sregs);
-+	rc = _vcpu_sregs_set(vm, vcpu->id, &sregs);
- 	TEST_ASSERT(!rc, "Failed to set supported CR4 bits (0x%lx)", cr4);
+ 	while (!done) {
+ 		memset(host_test_mem, 0xaa, TEST_MEM_PAGES * 4096);
+-		_vcpu_run(vm, VCPU_ID);
++		vcpu_run(vm, vcpu->id);
+ 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+ 			    "Unexpected exit reason: %u (%s),\n",
+ 			    run->exit_reason,
+ 			    exit_reason_str(run->exit_reason));
  
--	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	vcpu_sregs_get(vm, vcpu->id, &sregs);
- 	TEST_ASSERT(sregs.cr4 == cr4, "sregs.CR4 (0x%llx) != CR4 (0x%lx)",
- 		    sregs.cr4, cr4);
- 
- 	/* Verify all unsupported features are rejected by KVM. */
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_UMIP);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_LA57);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_VMXE);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_SMXE);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_FSGSBASE);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_PCIDE);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_OSXSAVE);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_SMEP);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_SMAP);
--	test_cr4_feature_bit(vm, &sregs, X86_CR4_PKE);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_UMIP);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_LA57);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_VMXE);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_SMXE);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_FSGSBASE);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_PCIDE);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_OSXSAVE);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_SMEP);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_SMAP);
-+	test_cr4_feature_bit(vcpu, &sregs, X86_CR4_PKE);
- 	kvm_vm_free(vm);
- 
- 	/* Create a "real" VM and verify APIC_BASE can be set. */
--	vm = vm_create_default(VCPU_ID, 0, NULL);
-+	vm = vm_create_with_one_vcpu(&vcpu, NULL);
- 
--	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	vcpu_sregs_get(vm, vcpu->id, &sregs);
- 	sregs.apic_base = 1 << 10;
--	rc = _vcpu_sregs_set(vm, VCPU_ID, &sregs);
-+	rc = _vcpu_sregs_set(vm, vcpu->id, &sregs);
- 	TEST_ASSERT(rc, "Set IA32_APIC_BASE to %llx (invalid)",
- 		    sregs.apic_base);
- 	sregs.apic_base = 1 << 11;
--	rc = _vcpu_sregs_set(vm, VCPU_ID, &sregs);
-+	rc = _vcpu_sregs_set(vm, vcpu->id, &sregs);
- 	TEST_ASSERT(!rc, "Couldn't set IA32_APIC_BASE to %llx (valid)",
- 		    sregs.apic_base);
- 
+-		switch (get_ucall(vm, VCPU_ID, &uc)) {
++		switch (get_ucall(vm, vcpu->id, &uc)) {
+ 		case UCALL_ABORT:
+ 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
+ 			       	  __FILE__, uc.args[1]);
 -- 
 2.35.1.723.g4982287a31-goog
 

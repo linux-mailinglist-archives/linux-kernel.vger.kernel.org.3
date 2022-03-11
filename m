@@ -2,96 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E4A4D672A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8E84D6734
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350566AbiCKRHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:07:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
+        id S1350683AbiCKRIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiCKRHc (ORCPT
+        with ESMTP id S1350607AbiCKRH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:07:32 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 79A0EA9954;
-        Fri, 11 Mar 2022 09:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=yUZNbj+mFhT5GgO79ZxbHQUCuPOmg45HEXuYwzHNgEQ=; b=b
-        l/cLrUP11fdJ1KL0f/zCeNs45kBab316RJZzweydFKgIjSVXNqho32NsLjH0ve9A
-        /RZchKdCA2om0oiyAbT2Y+yOGqw4uLEOQE3yjfEBQdUzaMXMpwfZSzgu0qUySYF/
-        5zouxF5FDVmluiyyPDhzDEvCE6wfjQ+hpcgfuY9eB8=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogA3P1N7gStiYnwIAA--.11214S2;
-        Sat, 12 Mar 2022 01:06:03 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     leon@kernel.org, jgg@ziepe.ca, yishaih@mellanox.com
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH] RDMA/mlx5: Fix memory leak
-Date:   Fri, 11 Mar 2022 09:06:01 -0800
-Message-Id: <1647018361-18266-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 5oFpogA3P1N7gStiYnwIAA--.11214S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr48Ww4kWw18ur48GFWUCFg_yoWDGrb_Gr
-        1qv3s7Xa45AFnakryDCrs7WryI9r4UWw1xXr1vg3Wak393CayUCa9aqF9Yvw17JrWYgFyj
-        yrnFkr1xAw4FgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2
-        jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4
-        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48J
-        MxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-        DUUUUU=
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwESBlPy7ubR6QAjsk
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 12:07:56 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08611D63A2;
+        Fri, 11 Mar 2022 09:06:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 200491F441;
+        Fri, 11 Mar 2022 17:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647018411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JSXcqRdGy8e39Bfyh4bjxSE8ya8/hJV+iGXqtr1mwZU=;
+        b=zQyt4+5n13hOeCa9xgCswD1KUwJoBAVHqClZsOVB/PC81hDRKVuQgH1NmYqJHrPtu7uSBy
+        PhKQMACw5TXT3jEJnxs41RXUlcaW2trrHTw/O9jZxqtPwhLGzXcXKc1h5hTKvlf/IDc0dP
+        5Ixbw+BN/hU3tzWgbjphSRqoV6EI8m0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647018411;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JSXcqRdGy8e39Bfyh4bjxSE8ya8/hJV+iGXqtr1mwZU=;
+        b=QCVBTLAApqTWfX+QacBXJ4GMfGLfvOFCxwcaEUXx1xHk0oPnraa4sv0x634bkXioi9HjnJ
+        26OphLW7CWS9nCDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 05DD013A8E;
+        Fri, 11 Mar 2022 17:06:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7gxNOqmBK2IROQAAMHmgww
+        (envelope-from <jroedel@suse.de>); Fri, 11 Mar 2022 17:06:49 +0000
+Date:   Fri, 11 Mar 2022 18:06:49 +0100
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v12 32/46] x86/compressed/64: Add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <YiuBqZnjEUyMfBMu@suse.de>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-33-brijesh.singh@amd.com>
+ <CAMkAt6pO0xZb2pye-VEKdFQ_dYFgLA21fkYmnYPTWo8mzPrKDQ@mail.gmail.com>
+ <20220310212504.2kt6sidexljh2s6p@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220310212504.2kt6sidexljh2s6p@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[why]
-xa_insert is failed, so caller of subscribe_event_xa_alloc
-cannot call other function to free obj_event. Therefore,
-Resource release is needed on the error handling path to
-prevent memory leak.
+On Thu, Mar 10, 2022 at 03:25:04PM -0600, Michael Roth wrote:
+> Joerg, do you have more background on that? Would it make sense, outside
+> of this series, to change it to a terminate? Maybe with a specific set
+> of error codes for ES_{OK,UNSUPPORTED,VMM_ERROR,DECODE_FAILED}?
 
-[how]
-Fix this by adding kfree on the error handling path.
+This seems to be a left over from development of the SEV-ES guest
+patch-set. I wanted to see whether the VM crashed due to a triple fault
+or an error in the #VC handler. The halt loop can be replaced by
+termination request now.
 
-Fixes: 7597385 ("IB/mlx5: Enable subscription for device events over DEVX")
+> > I am still working on why the early_printk()s in that function are not
+> > working, it seems that they lead to a different halt.
+> 
+> I don't see a different halt. They just don't seem to print anything.
+> (keep in mind you still need to advance the IP or else the guest is
+> still gonna end up spinning here, even if you're removing the halt loop
+> for testing purposes)
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/infiniband/hw/mlx5/devx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+The early_printks() also cause #VC exceptions, and if that handling is
+broken for some reason nothing will be printed.
 
-diff --git a/drivers/infiniband/hw/mlx5/devx.c b/drivers/infiniband/hw/mlx5/devx.c
-index 08b7f6b..15c0884 100644
---- a/drivers/infiniband/hw/mlx5/devx.c
-+++ b/drivers/infiniband/hw/mlx5/devx.c
-@@ -1886,8 +1886,10 @@ subscribe_event_xa_alloc(struct mlx5_devx_event_table *devx_event_table,
- 				key_level2,
- 				obj_event,
- 				GFP_KERNEL);
--		if (err)
-+		if (err) {
-+			kfree(obj_event);
- 			return err;
-+		}
- 		INIT_LIST_HEAD(&obj_event->obj_sub_list);
- 	}
- 
+> 
+> > working, it seems that they lead to a different halt. Have you tested
+> > any of those error paths manually? For example if you set your CPUID
+> > bits to explicitly fail here do you see the expected printks?
+> 
+> I think at that point in the code, when the XSAVE stuff is setup, the
+> console hasn't been enabled yet, so messages would get buffered until they
+> get flushed later (which won't happen since there's halt loop after). I
+> know in some cases devs will dump the log buffer from memory instead to get
+> at the error messages for early failures. (Maybe that's also why Joerg
+> decided to use a halt loop there instead of terminating?)
+
+It is hard to dump the log-buffer from encrypted memory :) But I
+remember having seen messages from these early_printks under SEV-ES for
+different bugs. Not sure why they don't appear in this situation.
+
+> So maybe reworking the error handling in handle_vc_boot_ghcb() to use
+> sev_es_terminate() might be warranted, but probably worth checking with
+> Joerg first, and should be done as a separate series since it is not
+> SNP-related.
+
+I am fine with this change.
+
+Regards,
+
 -- 
-2.7.4
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+Germany
+ 
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev
 

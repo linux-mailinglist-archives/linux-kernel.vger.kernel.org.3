@@ -2,206 +2,422 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1B94D6AE6
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61FC4D6AE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiCKX1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiCKX1G (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229508AbiCKX1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 11 Mar 2022 18:27:06 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E379199D5F;
-        Fri, 11 Mar 2022 15:26:02 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229460AbiCKX1E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 11 Mar 2022 18:27:04 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5495B198ED1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:25:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647041162; x=1678577162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FhLI30JK+BcSkM8Wok3yK+8l0ZbaHT6oDrtnpTgbszc=;
-  b=m8B27ayD/7OISSMPiu3ZaeELECmxjGivtoLI4UoW6/fYAvEYmwP5LbFv
-   nqZvvyFBlmzL3JKEtM9OZnLrXPzm6AZiyvGjmClkUWCDmXJuX8ahMDEDX
-   fEYAuOD3zFF/9lr1XsldRUpj9H7m3lnQxdcKe5LIKRIB8in2s70fY2t3o
-   +NkeGHcGLFsQWpwIg8F6Ml2V17iFiUbgUVRPYfEJZ/6MLX1IGJOseofhD
-   mJ0Id1IV6ZtykBkUuX0jvSB+Kx2w4EA9A90kfSVVF1wIeetOpMLO7tRUa
-   JlKuXgA1UAyocXLS/mXZSMWfW2CHGSULDtNDwIC+aqufxXlNTzhz+jJnC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237843541"
+  t=1647041158; x=1678577158;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ggGak2etokDyvvjjrVuBKN48VZhBf9RgpAI2PB0PHCc=;
+  b=gZ0/2u6bcnh/0rxAWoU5GiYy8EUBIb9LNqNpaZBKkkjkebTkxC68lmjN
+   HTeHbIPLrYIF/JGPhD/2eZ9SesamXR//9YOd7j/2G/cvTrTVyE6WHT1f2
+   wPvEplx0gCgy3mHNJWqiPlO8O3me4Jgzgqj0DTyFcRAhwf8LMsF+655cS
+   0ax/sN8WmcmomkFe/MFhHK5l7Ie/GxNwnmF6Q9W/k7kRBgyhTzXIJMvg9
+   aw9xGCHKG85fcwRwMvl8UhylgZqYJ4XstlrI0zH9JEBmARzBM8XNNe6ap
+   pvoH9hveLJdC6VpFa0yG+PC7A64xfw10xoXtr73BqCKZHl/lfG8/y6iG2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="316393846"
 X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="237843541"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 15:26:01 -0800
+   d="scan'208";a="316393846"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 15:25:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="579448467"
+   d="scan'208";a="555503430"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 15:25:56 -0800
+  by orsmga008.jf.intel.com with ESMTP; 11 Mar 2022 15:25:56 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nSodv-0007FQ-CD; Fri, 11 Mar 2022 23:25:55 +0000
-Date:   Sat, 12 Mar 2022 07:25:37 +0800
+        id 1nSodv-0007FN-AO; Fri, 11 Mar 2022 23:25:55 +0000
+Date:   Sat, 12 Mar 2022 07:25:40 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Medad CChien <medadyoung@gmail.com>, rric@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, mchehab@kernel.org,
-        bp@alien8.de, robh+dt@kernel.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        ctcchien@nuvoton.com
-Cc:     kbuild-all@lists.01.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v3 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-Message-ID: <202203120713.ExrZZZo2-lkp@intel.com>
-References: <20220311014245.4612-4-ctcchien@nuvoton.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>
+Subject: drivers/tty/serial/ucc_uart.c:264:33: sparse: sparse: incorrect type
+ in argument 1 (different address spaces)
+Message-ID: <202203120736.nYDE453D-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220311014245.4612-4-ctcchien@nuvoton.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Medad,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on ras/edac-for-next]
-[also build test ERROR on robh/for-next v5.17-rc7 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Medad-CChien/EDAC-nuvoton-Add-nuvoton-NPCM-memory-controller-driver/20220311-094500
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220312/202203120713.ExrZZZo2-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   68453767131a5deec1e8f9ac92a9042f929e585d
+commit: 18f0211c9a104b6f40ab92f644a95d7f3028515c tty: serial: ucc_uart: replace qe_io{read,write}* wrappers by generic io{read,write}*
+date:   11 months ago
+config: powerpc-randconfig-s032-20220228 (https://download.01.org/0day-ci/archive/20220312/202203120736.nYDE453D-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6cb0bb6039e1ce83a8d67c6d571abd2a45e82b10
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Medad-CChien/EDAC-nuvoton-Add-nuvoton-NPCM-memory-controller-driver/20220311-094500
-        git checkout 6cb0bb6039e1ce83a8d67c6d571abd2a45e82b10
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=18f0211c9a104b6f40ab92f644a95d7f3028515c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 18f0211c9a104b6f40ab92f644a95d7f3028515c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ arch/arm/mach-imx/ arch/arm/mach-omap2/ arch/arm/mach-socfpga/ arch/arm/mach-tegra/ drivers/edac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
 
-   drivers/edac/npcm_edac.c: In function 'forced_ecc_error_store':
-   drivers/edac/npcm_edac.c:370:13: warning: suggest parentheses around operand of '!' or change '&' to '&&' or '!' to '~' [-Wparentheses]
-     370 |         if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
->> drivers/edac/npcm_edac.c:386:92: error: macro "edac_printk" requires 4 arguments, but only 2 given
-     386 |                                 edac_printk(KERN_INFO, "bit_no for checkcode must be 0~7\n");
-         |                                                                                            ^
-   In file included from drivers/edac/edac_module.h:14,
-                    from drivers/edac/npcm_edac.c:15:
-   drivers/edac/edac_mc.h:48: note: macro "edac_printk" defined here
-      48 | #define edac_printk(level, prefix, fmt, arg...) \
-         | 
->> drivers/edac/npcm_edac.c:386:33: error: 'edac_printk' undeclared (first use in this function); did you mean '_dev_printk'?
-     386 |                                 edac_printk(KERN_INFO, "bit_no for checkcode must be 0~7\n");
-         |                                 ^~~~~~~~~~~
-         |                                 _dev_printk
-   drivers/edac/npcm_edac.c:386:33: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/edac/npcm_edac.c:395:88: error: macro "edac_printk" requires 4 arguments, but only 2 given
-     395 |                                 edac_printk(KERN_INFO, "bit_no for data must be 0~63\n");
-         |                                                                                        ^
-   In file included from drivers/edac/edac_module.h:14,
-                    from drivers/edac/npcm_edac.c:15:
-   drivers/edac/edac_mc.h:48: note: macro "edac_printk" defined here
-      48 | #define edac_printk(level, prefix, fmt, arg...) \
-         | 
-   drivers/edac/npcm_edac.c: In function 'npcm_edac_mc_probe':
-   drivers/edac/npcm_edac.c:583:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     583 |         u32 ecc_en = readl(reg + npcm_chip->ecc_ctl_en_reg);
-         |         ^~~
+sparse warnings: (new ones prefixed by >>)
+>> drivers/tty/serial/ucc_uart.c:264:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:264:33: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:264:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:268:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:268:33: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:268:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:314:9: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:314:9: sparse:     expected unsigned short volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:314:9: sparse:     got restricted __be16 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:314:9: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:314:9: sparse:     expected unsigned short const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:314:9: sparse:     got restricted __be16 [noderef] __iomem *
+>> drivers/tty/serial/ucc_uart.c:347:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:347:33: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:347:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:348:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:348:17: sparse:     expected unsigned short volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:348:17: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:348:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:348:17: sparse:     expected unsigned short const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:348:17: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:350:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:350:33: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:350:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:369:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:369:30: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:369:30: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:382:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:382:37: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:382:37: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:383:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:383:17: sparse:     expected unsigned short volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:383:17: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:383:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:383:17: sparse:     expected unsigned short const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:383:17: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:386:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:386:33: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:386:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:424:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:424:17: sparse:     expected unsigned short volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:424:17: sparse:     got restricted __be16 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:424:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:424:17: sparse:     expected unsigned short const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:424:17: sparse:     got restricted __be16 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:435:9: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:435:9: sparse:     expected unsigned short volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:435:9: sparse:     got restricted __be16 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:435:9: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:435:9: sparse:     expected unsigned short const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:435:9: sparse:     got restricted __be16 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:474:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:474:38: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:474:38: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:481:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:481:33: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:481:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:512:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:512:17: sparse:     expected unsigned short volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:512:17: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:512:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:512:17: sparse:     expected unsigned short const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:512:17: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:515:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:515:33: sparse:     expected void const [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:515:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:604:58: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:604:58: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:604:58: sparse:     got restricted __be16 *
+>> drivers/tty/serial/ucc_uart.c:605:61: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be32 * @@
+   drivers/tty/serial/ucc_uart.c:605:61: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:605:61: sparse:     got restricted __be32 *
+   drivers/tty/serial/ucc_uart.c:606:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:606:33: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:606:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:612:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:612:63: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:612:63: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:613:53: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be32 * @@
+   drivers/tty/serial/ucc_uart.c:613:53: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:613:53: sparse:     got restricted __be32 *
+   drivers/tty/serial/ucc_uart.c:614:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:614:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:614:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:625:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:625:44: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:625:44: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:626:61: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be32 * @@
+   drivers/tty/serial/ucc_uart.c:626:61: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:626:61: sparse:     got restricted __be32 *
+   drivers/tty/serial/ucc_uart.c:627:33: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:627:33: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:627:33: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:637:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:637:49: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:637:49: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:638:53: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be32 * @@
+   drivers/tty/serial/ucc_uart.c:638:53: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:638:53: sparse:     got restricted __be32 *
+   drivers/tty/serial/ucc_uart.c:639:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:639:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:639:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:653:46: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct ucc_uart_pram *uccup @@     got struct ucc_uart_pram [noderef] __iomem *uccup @@
+   drivers/tty/serial/ucc_uart.c:653:46: sparse:     expected struct ucc_uart_pram *uccup
+   drivers/tty/serial/ucc_uart.c:653:46: sparse:     got struct ucc_uart_pram [noderef] __iomem *uccup
+   drivers/tty/serial/ucc_uart.c:661:48: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned char * @@
+   drivers/tty/serial/ucc_uart.c:661:48: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:661:48: sparse:     got unsigned char *
+   drivers/tty/serial/ucc_uart.c:662:48: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned char * @@
+   drivers/tty/serial/ucc_uart.c:662:48: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:662:48: sparse:     got unsigned char *
+   drivers/tty/serial/ucc_uart.c:663:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:663:44: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:663:44: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:664:28: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:664:28: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:664:28: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:665:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:665:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:665:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:666:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:666:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:666:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:667:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:667:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:667:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:668:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:668:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:668:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:669:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:669:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:669:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:670:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:670:37: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:670:37: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:671:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:671:37: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:671:37: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:672:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:672:25: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:672:25: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:674:51: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:674:51: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:674:51: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:675:30: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got restricted __be16 * @@
+   drivers/tty/serial/ucc_uart.c:675:30: sparse:     expected void [noderef] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:675:30: sparse:     got restricted __be16 *
+   drivers/tty/serial/ucc_uart.c:680:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:680:17: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:680:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:680:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:680:17: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:680:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:684:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:684:17: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:684:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:684:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:684:17: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:684:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:687:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:687:17: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:687:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:687:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:687:17: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:687:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:691:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:691:17: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
+   drivers/tty/serial/ucc_uart.c:691:17: sparse:     got restricted __be32 [noderef] __iomem *
+   drivers/tty/serial/ucc_uart.c:691:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
+   drivers/tty/serial/ucc_uart.c:691:17: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
 
+vim +264 drivers/tty/serial/ucc_uart.c
 
-vim +/edac_printk +386 drivers/edac/npcm_edac.c
-
-   352	
-   353	static ssize_t forced_ecc_error_store(struct device *dev,
-   354					      struct device_attribute *mattr,
-   355					      const char *data, size_t count)
-   356	{
-   357		struct mem_ctl_info *mci = to_mci(dev);
-   358		struct priv_data *priv = mci->pvt_info;
-   359		const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-   360		int	args_cnt;
-   361		int	ret;
-   362		char	**args;
-   363		u32	regval;
-   364		u8	bit_no;
+   248	
+   249	/*
+   250	 * Return 1 if the QE is done transmitting all buffers for this port
+   251	 *
+   252	 * This function scans each BD in sequence.  If we find a BD that is not
+   253	 * ready (READY=1), then we return 0 indicating that the QE is still sending
+   254	 * data.  If we reach the last BD (WRAP=1), then we know we've scanned
+   255	 * the entire list, and all BDs are done.
+   256	 */
+   257	static unsigned int qe_uart_tx_empty(struct uart_port *port)
+   258	{
+   259		struct uart_qe_port *qe_port =
+   260			container_of(port, struct uart_qe_port, port);
+   261		struct qe_bd *bdp = qe_port->tx_bd_base;
+   262	
+   263		while (1) {
+ > 264			if (ioread16be(&bdp->status) & BD_SC_READY)
+   265				/* This BD is not done, so return "not done" */
+   266				return 0;
+   267	
+   268			if (ioread16be(&bdp->status) & BD_SC_WRAP)
+   269				/*
+   270				 * This BD is done and it's the last one, so return
+   271				 * "done"
+   272				 */
+   273				return 1;
+   274	
+   275			bdp++;
+   276		}
+   277	}
+   278	
+   279	/*
+   280	 * Set the modem control lines
+   281	 *
+   282	 * Although the QE can control the modem control lines (e.g. CTS), we
+   283	 * don't need that support. This function must exist, however, otherwise
+   284	 * the kernel will panic.
+   285	 */
+   286	static void qe_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+   287	{
+   288	}
+   289	
+   290	/*
+   291	 * Get the current modem control line status
+   292	 *
+   293	 * Although the QE can control the modem control lines (e.g. CTS), this
+   294	 * driver currently doesn't support that, so we always return Carrier
+   295	 * Detect, Data Set Ready, and Clear To Send.
+   296	 */
+   297	static unsigned int qe_uart_get_mctrl(struct uart_port *port)
+   298	{
+   299		return TIOCM_CAR | TIOCM_DSR | TIOCM_CTS;
+   300	}
+   301	
+   302	/*
+   303	 * Disable the transmit interrupt.
+   304	 *
+   305	 * Although this function is called "stop_tx", it does not actually stop
+   306	 * transmission of data.  Instead, it tells the QE to not generate an
+   307	 * interrupt when the UCC is finished sending characters.
+   308	 */
+   309	static void qe_uart_stop_tx(struct uart_port *port)
+   310	{
+   311		struct uart_qe_port *qe_port =
+   312			container_of(port, struct uart_qe_port, port);
+   313	
+   314		qe_clrbits_be16(&qe_port->uccp->uccm, UCC_UART_UCCE_TX);
+   315	}
+   316	
+   317	/*
+   318	 * Transmit as many characters to the HW as possible.
+   319	 *
+   320	 * This function will attempt to stuff of all the characters from the
+   321	 * kernel's transmit buffer into TX BDs.
+   322	 *
+   323	 * A return value of non-zero indicates that it successfully stuffed all
+   324	 * characters from the kernel buffer.
+   325	 *
+   326	 * A return value of zero indicates that there are still characters in the
+   327	 * kernel's buffer that have not been transmitted, but there are no more BDs
+   328	 * available.  This function should be called again after a BD has been made
+   329	 * available.
+   330	 */
+   331	static int qe_uart_tx_pump(struct uart_qe_port *qe_port)
+   332	{
+   333		struct qe_bd *bdp;
+   334		unsigned char *p;
+   335		unsigned int count;
+   336		struct uart_port *port = &qe_port->port;
+   337		struct circ_buf *xmit = &port->state->xmit;
+   338	
+   339		/* Handle xon/xoff */
+   340		if (port->x_char) {
+   341			/* Pick next descriptor and fill from buffer */
+   342			bdp = qe_port->tx_cur;
+   343	
+   344			p = qe2cpu_addr(be32_to_cpu(bdp->buf), qe_port);
+   345	
+   346			*p++ = port->x_char;
+ > 347			iowrite16be(1, &bdp->length);
+   348			qe_setbits_be16(&bdp->status, BD_SC_READY);
+   349			/* Get next BD. */
+   350			if (ioread16be(&bdp->status) & BD_SC_WRAP)
+   351				bdp = qe_port->tx_bd_base;
+   352			else
+   353				bdp++;
+   354			qe_port->tx_cur = bdp;
+   355	
+   356			port->icount.tx++;
+   357			port->x_char = 0;
+   358			return 1;
+   359		}
+   360	
+   361		if (uart_circ_empty(xmit) || uart_tx_stopped(port)) {
+   362			qe_uart_stop_tx(port);
+   363			return 0;
+   364		}
    365	
-   366		/* Split string buffer into separate parameters */
-   367		args = argv_split(GFP_KERNEL, data, &args_cnt);
+   366		/* Pick next descriptor and fill from buffer */
+   367		bdp = qe_port->tx_cur;
    368	
-   369		/* Check ecc enabled */
-   370		if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
-   371			return count;
-   372	
-   373		/* Check no write operation pending to controller*/
-   374		while (readl(priv->reg + npcm_chip->ddr_ctl_controller_busy_reg) &
-   375				CTL_CONTROLLER_BUSY_FLAG) {
-   376			usleep_range(1000, 10000);
-   377		}
-   378	
-   379		/* Write appropriate syndrome to xor_check_bit*/
-   380		if (!strcmp(args[0], "CE") && args_cnt == 3) {
-   381			ret = kstrtou8(args[2], 0, &bit_no);
-   382			if (ret)
-   383				return ret;
-   384			if (!strcmp(args[1], "checkcode")) {
-   385				if (bit_no > 7) {
- > 386					edac_printk(KERN_INFO, "bit_no for checkcode must be 0~7\n");
-   387					return count;
-   388				}
-   389				regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   390				regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
-   391					(check_synd[bit_no] << XOR_CHECK_BIT_SPLIT_WIDTH);
-   392				writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   393			} else if (!strcmp(args[1], "data")) {
-   394				if (bit_no > 63) {
-   395					edac_printk(KERN_INFO, "bit_no for data must be 0~63\n");
-   396					return count;
-   397				}
-   398				regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   399				regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
-   400						 (data_synd[bit_no] << XOR_CHECK_BIT_SPLIT_WIDTH);
-   401				writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   402			}
-   403			/* Enable the ECC writeback_en for corrected error */
-   404			regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   405			writel((regval | NPCM_ECC_CTL_AUTO_WRITEBACK_EN),
-   406			       priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   407		} else if (!strcmp(args[0], "UE")) {
-   408			regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   409			regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
-   410					 (ECC_DOUBLE_MULTI_ERR_SYND << XOR_CHECK_BIT_SPLIT_WIDTH);
-   411			writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   412		}
-   413	
-   414		/* Assert fwc */
-   415		writel((NPCM_ECC_CTL_FORCE_WC | readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg)),
-   416		       priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-   417	
-   418		return count;
-   419	}
-   420	
+   369		while (!(ioread16be(&bdp->status) & BD_SC_READY) &&
+   370		       (xmit->tail != xmit->head)) {
+   371			count = 0;
+   372			p = qe2cpu_addr(be32_to_cpu(bdp->buf), qe_port);
+   373			while (count < qe_port->tx_fifosize) {
+   374				*p++ = xmit->buf[xmit->tail];
+   375				xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+   376				port->icount.tx++;
+   377				count++;
+   378				if (xmit->head == xmit->tail)
+   379					break;
+   380			}
+   381	
+   382			iowrite16be(count, &bdp->length);
+   383			qe_setbits_be16(&bdp->status, BD_SC_READY);
+   384	
+   385			/* Get next BD. */
+   386			if (ioread16be(&bdp->status) & BD_SC_WRAP)
+   387				bdp = qe_port->tx_bd_base;
+   388			else
+   389				bdp++;
+   390		}
+   391		qe_port->tx_cur = bdp;
+   392	
+   393		if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+   394			uart_write_wakeup(port);
+   395	
+   396		if (uart_circ_empty(xmit)) {
+   397			/* The kernel buffer is empty, so turn off TX interrupts.  We
+   398			   don't need to be told when the QE is finished transmitting
+   399			   the data. */
+   400			qe_uart_stop_tx(port);
+   401			return 0;
+   402		}
+   403	
+   404		return 1;
+   405	}
+   406	
 
 ---
 0-DAY CI Kernel Test Service

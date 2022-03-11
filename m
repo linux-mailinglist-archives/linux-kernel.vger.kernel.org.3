@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DD34D638C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28A44D6395
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbiCKOhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S1349432AbiCKOhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349415AbiCKOhD (ORCPT
+        with ESMTP id S1349419AbiCKOhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:37:03 -0500
+        Fri, 11 Mar 2022 09:37:04 -0500
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9381C8DA3;
-        Fri, 11 Mar 2022 06:35:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F7D1C8DA4;
+        Fri, 11 Mar 2022 06:36:00 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B3033240014;
-        Fri, 11 Mar 2022 14:35:56 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id EE790240005;
+        Fri, 11 Mar 2022 14:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647009357;
+        t=1647009359;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w/9w4iol/OgR2hA7bibkg4EZnyOwhop/XnEYBOaJEpI=;
-        b=B0RV7CSHOUnTxHpAUVx9T5dtZIA4ERthcyJokO0wCwhPzbzqFRjaPzMQ4ZPjbOSQ8SnOqt
-        Rbvjv23dKjGI/LYcAGN/9sxXAxEin8eLoasf9Me1MM0cu/ITB+SkgOLWVQ0WJdIja41HHd
-        wnuU9+VlMaVS+Oi2fNlsTdK0ZElR2ZTVvvPoD9Gx5pLpIhXFTFa/xcgupp5/HdDAHtQHNb
-        4PocK8KdvF1iKM5GZDmo265ca3u3dyY1Dk9llZRxe++/Vrq2+tKdWhSp1mFaBM+L8oBcDq
-        XStkh8dhmo1H26T6xBM1EWqCTZGv9dpa1LKSIhPLfeG33mnBXtw4CDB5q5ZLDw==
+        bh=osJFZDLYgAC0fspugFGrGdYz4LqqrPjdk0ybNWCGf6E=;
+        b=OxZaue9a/kjsG7KtVJ2Qznfrr0EA/l8zjAIVPpqQ22B9aEsHmVHVfWwSkBWJ9L6rd85+x4
+        YSIBKJvTUCeU1XSkCQbQGYigtWswXM1eNOisDUjnOMjszRS/n69AGWOvcqkEcdCPpTbK9v
+        QAu9zK5ORcqK9/OnXp7q3Yjb9wOPknhYKNQHDq13jflODtCN9ahfljCRl93cYllYbCOCy4
+        fzHK2/n1wOrtH/lKrJ9GjTiVk9dY2FYjuFk/Le81yULVRtbpiSDp+jSJdANaV0x+1AAxni
+        +KjVv8XMoFtlMkBfKU26VRjRPSm2VGPC6RHPwtPcgiw1iqvzNstuPg/DyhGT+Q==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -41,11 +41,10 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Samuel Holland <samuel@sholland.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v3 04/46] media: sun6i-csi: Tidy up platform code
-Date:   Fri, 11 Mar 2022 15:34:50 +0100
-Message-Id: <20220311143532.265091-5-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v3 05/46] media: sun6i-csi: Always set exclusive module clock rate
+Date:   Fri, 11 Mar 2022 15:34:51 +0100
+Message-Id: <20220311143532.265091-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
 References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
@@ -60,172 +59,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various renames, variables lowering and other cosmetic changes in the
-platform-support code. No functional change intended.
+In some situations the default rate of the module clock is not the
+required one for operation (for example when reconfiguring the clock
+tree to use a different parent). As a result, always set the correct
+rate for the clock (and take care of cleanup).
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 76 +++++++++++--------
- 1 file changed, 43 insertions(+), 33 deletions(-)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 54 ++++++++++++++-----
+ 1 file changed, 41 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index dc79f3c14336..8155e9560164 100644
+index 8155e9560164..2355088fdc37 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -776,12 +776,11 @@ static int sun6i_csi_v4l2_init(struct sun6i_csi_device *csi_dev)
+@@ -154,9 +154,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
+ 		regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 0);
+ 
+ 		clk_disable_unprepare(csi_dev->clk_ram);
+-		if (of_device_is_compatible(dev->of_node,
+-					    "allwinner,sun50i-a64-csi"))
+-			clk_rate_exclusive_put(csi_dev->clk_mod);
+ 		clk_disable_unprepare(csi_dev->clk_mod);
+ 		reset_control_assert(csi_dev->reset);
+ 		return 0;
+@@ -168,9 +165,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
+ 		return ret;
+ 	}
+ 
+-	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
+-		clk_set_rate_exclusive(csi_dev->clk_mod, 300000000);
+-
+ 	ret = clk_prepare_enable(csi_dev->clk_ram);
+ 	if (ret) {
+ 		dev_err(csi_dev->dev, "Enable clk_dram_csi clk err %d\n", ret);
+@@ -190,8 +184,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
+ clk_ram_disable:
+ 	clk_disable_unprepare(csi_dev->clk_ram);
+ clk_mod_disable:
+-	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
+-		clk_rate_exclusive_put(csi_dev->clk_mod);
+ 	clk_disable_unprepare(csi_dev->clk_mod);
  	return ret;
  }
- 
--/* -----------------------------------------------------------------------------
-- * Resources and IRQ
-- */
--static irqreturn_t sun6i_csi_isr(int irq, void *dev_id)
-+/* Platform */
-+
-+static irqreturn_t sun6i_csi_isr(int irq, void *private)
+@@ -819,6 +811,7 @@ static int sun6i_csi_resources_setup(struct sun6i_csi_device *csi_dev,
+ 				     struct platform_device *platform_dev)
  {
--	struct sun6i_csi_device *csi_dev = (struct sun6i_csi_device *)dev_id;
-+	struct sun6i_csi_device *csi_dev = private;
- 	struct regmap *regmap = csi_dev->regmap;
- 	u32 status;
- 
-@@ -816,79 +815,88 @@ static const struct regmap_config sun6i_csi_regmap_config = {
- 	.max_register	= 0x9c,
- };
- 
--static int sun6i_csi_resource_request(struct sun6i_csi_device *csi_dev,
--				      struct platform_device *pdev)
-+static int sun6i_csi_resources_setup(struct sun6i_csi_device *csi_dev,
-+				     struct platform_device *platform_dev)
- {
-+	struct device *dev = csi_dev->dev;
+ 	struct device *dev = csi_dev->dev;
++	unsigned long clk_mod_rate;
  	void __iomem *io_base;
  	int ret;
  	int irq;
- 
--	io_base = devm_platform_ioremap_resource(pdev, 0);
-+	/* Registers */
-+
-+	io_base = devm_platform_ioremap_resource(platform_dev, 0);
- 	if (IS_ERR(io_base))
- 		return PTR_ERR(io_base);
- 
--	csi_dev->regmap = devm_regmap_init_mmio(&pdev->dev, io_base,
-+	csi_dev->regmap = devm_regmap_init_mmio(dev, io_base,
- 						&sun6i_csi_regmap_config);
- 	if (IS_ERR(csi_dev->regmap)) {
--		dev_err(&pdev->dev, "Failed to init register map\n");
-+		dev_err(dev, "failed to init register map\n");
- 		return PTR_ERR(csi_dev->regmap);
- 	}
- 
--	csi_dev->clk_bus = devm_clk_get(&pdev->dev, "bus");
-+	/* Clocks */
-+
-+	csi_dev->clk_bus = devm_clk_get(dev, "bus");
- 	if (IS_ERR(csi_dev->clk_bus)) {
--		dev_err(&pdev->dev, "Unable to acquire bus clock\n");
-+		dev_err(dev, "failed to acquire bus clock\n");
- 		return PTR_ERR(csi_dev->clk_bus);
- 	}
- 
--	csi_dev->clk_mod = devm_clk_get(&pdev->dev, "mod");
-+	csi_dev->clk_mod = devm_clk_get(dev, "mod");
- 	if (IS_ERR(csi_dev->clk_mod)) {
--		dev_err(&pdev->dev, "Unable to acquire csi clock\n");
-+		dev_err(dev, "failed to acquire module clock\n");
- 		return PTR_ERR(csi_dev->clk_mod);
- 	}
- 
--	csi_dev->clk_ram = devm_clk_get(&pdev->dev, "ram");
-+	csi_dev->clk_ram = devm_clk_get(dev, "ram");
- 	if (IS_ERR(csi_dev->clk_ram)) {
--		dev_err(&pdev->dev, "Unable to acquire dram-csi clock\n");
-+		dev_err(dev, "failed to acquire ram clock\n");
+@@ -856,28 +849,53 @@ static int sun6i_csi_resources_setup(struct sun6i_csi_device *csi_dev,
  		return PTR_ERR(csi_dev->clk_ram);
  	}
  
--	csi_dev->reset = devm_reset_control_get_shared(&pdev->dev, NULL);
-+	/* Reset */
++	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
++		clk_mod_rate = 300000000;
++	else
++		clk_mod_rate = 297000000;
 +
-+	csi_dev->reset = devm_reset_control_get_shared(dev, NULL);
++	ret = clk_set_rate_exclusive(csi_dev->clk_mod, clk_mod_rate);
++	if (ret) {
++		dev_err(dev, "failed to set mod clock rate\n");
++		return ret;
++	}
++
+ 	/* Reset */
+ 
+ 	csi_dev->reset = devm_reset_control_get_shared(dev, NULL);
  	if (IS_ERR(csi_dev->reset)) {
--		dev_err(&pdev->dev, "Cannot get reset controller\n");
-+		dev_err(dev, "failed to acquire reset\n");
- 		return PTR_ERR(csi_dev->reset);
+ 		dev_err(dev, "failed to acquire reset\n");
+-		return PTR_ERR(csi_dev->reset);
++		ret = PTR_ERR(csi_dev->reset);
++		goto error_clk_rate_exclusive;
  	}
  
--	irq = platform_get_irq(pdev, 0);
-+	/* Interrupt */
-+
-+	irq = platform_get_irq(platform_dev, 0);
- 	if (irq < 0)
- 		return -ENXIO;
+ 	/* Interrupt */
  
--	ret = devm_request_irq(&pdev->dev, irq, sun6i_csi_isr, 0,
--			       SUN6I_CSI_NAME, csi_dev);
-+	ret = devm_request_irq(dev, irq, sun6i_csi_isr, 0, SUN6I_CSI_NAME,
-+			       csi_dev);
+ 	irq = platform_get_irq(platform_dev, 0);
+-	if (irq < 0)
+-		return -ENXIO;
++	if (irq < 0) {
++		dev_err(dev, "failed to get interrupt\n");
++		ret = -ENXIO;
++		goto error_clk_rate_exclusive;
++	}
+ 
+ 	ret = devm_request_irq(dev, irq, sun6i_csi_isr, 0, SUN6I_CSI_NAME,
+ 			       csi_dev);
  	if (ret) {
--		dev_err(&pdev->dev, "Cannot request csi IRQ\n");
-+		dev_err(dev, "failed to request interrupt\n");
- 		return ret;
+ 		dev_err(dev, "failed to request interrupt\n");
+-		return ret;
++		goto error_clk_rate_exclusive;
  	}
  
  	return 0;
++
++error_clk_rate_exclusive:
++	clk_rate_exclusive_put(csi_dev->clk_mod);
++
++	return ret;
++}
++
++static void sun6i_csi_resources_cleanup(struct sun6i_csi_device *csi_dev)
++{
++	clk_rate_exclusive_put(csi_dev->clk_mod);
  }
  
--static int sun6i_csi_probe(struct platform_device *pdev)
-+static int sun6i_csi_probe(struct platform_device *platform_dev)
- {
- 	struct sun6i_csi_device *csi_dev;
-+	struct device *dev = &platform_dev->dev;
- 	int ret;
- 
--	csi_dev = devm_kzalloc(&pdev->dev, sizeof(*csi_dev), GFP_KERNEL);
-+	csi_dev = devm_kzalloc(dev, sizeof(*csi_dev), GFP_KERNEL);
- 	if (!csi_dev)
- 		return -ENOMEM;
- 
--	csi_dev->dev = &pdev->dev;
-+	csi_dev->dev = &platform_dev->dev;
-+	platform_set_drvdata(platform_dev, csi_dev);
- 
--	ret = sun6i_csi_resource_request(csi_dev, pdev);
-+	ret = sun6i_csi_resources_setup(csi_dev, platform_dev);
+ static int sun6i_csi_probe(struct platform_device *platform_dev)
+@@ -897,7 +915,16 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
  	if (ret)
  		return ret;
  
--	platform_set_drvdata(pdev, csi_dev);
--
- 	return sun6i_csi_v4l2_init(csi_dev);
+-	return sun6i_csi_v4l2_init(csi_dev);
++	ret = sun6i_csi_v4l2_init(csi_dev);
++	if (ret)
++		goto error_resources;
++
++	return 0;
++
++error_resources:
++	sun6i_csi_resources_cleanup(csi_dev);
++
++	return ret;
  }
  
-@@ -909,16 +917,18 @@ static const struct of_device_id sun6i_csi_of_match[] = {
- 	{ .compatible = "allwinner,sun50i-a64-csi", },
- 	{},
- };
-+
- MODULE_DEVICE_TABLE(of, sun6i_csi_of_match);
+ static int sun6i_csi_remove(struct platform_device *pdev)
+@@ -905,6 +932,7 @@ static int sun6i_csi_remove(struct platform_device *pdev)
+ 	struct sun6i_csi_device *csi_dev = platform_get_drvdata(pdev);
  
- static struct platform_driver sun6i_csi_platform_driver = {
--	.probe = sun6i_csi_probe,
--	.remove = sun6i_csi_remove,
--	.driver = {
--		.name = SUN6I_CSI_NAME,
--		.of_match_table = of_match_ptr(sun6i_csi_of_match),
-+	.probe	= sun6i_csi_probe,
-+	.remove	= sun6i_csi_remove,
-+	.driver	= {
-+		.name		= SUN6I_CSI_NAME,
-+		.of_match_table	= of_match_ptr(sun6i_csi_of_match),
- 	},
- };
-+
- module_platform_driver(sun6i_csi_platform_driver);
+ 	sun6i_csi_v4l2_cleanup(csi_dev);
++	sun6i_csi_resources_cleanup(csi_dev);
  
- MODULE_DESCRIPTION("Allwinner A31 Camera Sensor Interface driver");
+ 	return 0;
+ }
 -- 
 2.35.1
 

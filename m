@@ -2,118 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507534D5E3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB47E4D5E43
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347383AbiCKJUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S1347389AbiCKJVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347374AbiCKJUq (ORCPT
+        with ESMTP id S245399AbiCKJVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:20:46 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F3A1BD04B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:19:44 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0C4B33F338
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646990383;
-        bh=Av5kn9IVqiEMwOUuim1I4aokjkuB5Y7LLwWdVqqCtTY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=usMld3WJmmoljeuQyPGnz8rFhm14g5H+hEMo0fF1jnNi0rsN3TK5gc+I7Mro0ohN8
-         7jeFd8kDgRXWpVtT8nq55F6WJ8wFsiV1GLiui+NPT3CPWl54gg3+CI7FGc6/PyUZFR
-         PbvLHEEWOxg+OFo84C+sdfDHXRCIkTJoOrz+3r2ZoGws1ArRxpS3G//jbiyVD6zRAY
-         BVg4bgi8qZEq492wE5E+YC9pQDVrUw/xajPEMiTTLixLaNK2dp43V+HrocBhekD1Im
-         QLJQIP8+S9aWLDvaamFdHvNZIx0MSYeodWjJZlt2kPEYHLPjYPnQPY/57I3soQDIFj
-         dSS8emon/ZTYg==
-Received: by mail-ej1-f72.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso4596538eje.20
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:19:42 -0800 (PST)
+        Fri, 11 Mar 2022 04:21:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 011371BD051
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646990413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JjMnaabkCThW4LfIHa74LeIIYTcgnA3J8O+F2l0SgkM=;
+        b=ROnfCZqZOHuG1xNN+XdvwEpcncs89/AKof8BW69/hWvnfpdzYJrN2njt9Qr4/440vg/f+W
+        3hxlFOHdCDKbcnof0kPJmNwUSLExHBvMa5Poo6GLCR5JJNZx5O7Vmfo2CEudybw1vpNSZJ
+        rfu2oCaISwwygh7gO74wtwuY7KoXGiM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-498-tHs1gQtQMm-4ydOHmbO3mg-1; Fri, 11 Mar 2022 04:20:10 -0500
+X-MC-Unique: tHs1gQtQMm-4ydOHmbO3mg-1
+Received: by mail-wm1-f70.google.com with SMTP id 3-20020a05600c230300b00384e15ceae4so5258288wmo.7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=Av5kn9IVqiEMwOUuim1I4aokjkuB5Y7LLwWdVqqCtTY=;
-        b=P9/LFO8+W3yzd3Yytk1TXPi+9QVb0viAfLILknuxB7uZ4EjN3yMkHqHS2gc8qE+nCJ
-         b5VJgcL/48v2O8mW3nFKeM7docoAlvnVE0YidvRxciBJ7Vy4dmboX/hivtmJbOmSkUoL
-         BRX9eTdtBMkdoBxn1fy6kdRTBvfLw30WEiecLaAKe1PdNwp7fq10JiTn2s+30LwWdjUT
-         jYFY7bKvKDHlCF/LnNEbQjkmTWxyb+MUgGIkk0fA3KrrfHe5jMAEw5tjKYRNb26WcR4f
-         fWyG0/YofrlK0kEBJH9slw5uGgYMxrp+ykdHiAr1YISXn2fcryZjRYHY2j0OkBQ5KXj6
-         IFYg==
-X-Gm-Message-State: AOAM531a3TTjUsJO01Q+4V5eQNK3gKKu7kjJ+odAHIK1FFxMxXXKEoUp
-        e9mrIu98lFBRNNWCWBr+m7G74XBl8lPc767nm/LRM/xjWESxciBmshkCsdVV5VktY7NDF/salTZ
-        OYfx74TEe/kRIxT9SydnT0jYBNPoXOB95cXv1KsBOlw==
-X-Received: by 2002:a17:906:7952:b0:6da:94c9:cccb with SMTP id l18-20020a170906795200b006da94c9cccbmr7637833ejo.469.1646990382314;
-        Fri, 11 Mar 2022 01:19:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyRKm1a5/uP3YrjyiVawWXoAkJeYr2NNxwI/Wq9OKmU1+1AG8kKCcxyamOntOnZjVkmmrvOxg==
-X-Received: by 2002:a17:906:7952:b0:6da:94c9:cccb with SMTP id l18-20020a170906795200b006da94c9cccbmr7637825ejo.469.1646990382159;
-        Fri, 11 Mar 2022 01:19:42 -0800 (PST)
-Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id cf17-20020a170906b2d100b006daa59af421sm2741808ejb.149.2022.03.11.01.19.40
+        bh=JjMnaabkCThW4LfIHa74LeIIYTcgnA3J8O+F2l0SgkM=;
+        b=LMxQV4csOdBJVGrATLj9ftJGum/NyAD9Q+sFMTzni3ZkAXxNRn/0ZQyxEc5fpuLrmg
+         ABL7q+678Wvw3OOBLokdG1obCyfFvmupi6ZZuIEgzjA1ykBqe37WhxpBhbLt/feZtsSo
+         fPj4Iz25ATsLCY96k/7ZgjnN5GgaNVQwXovQJ6i2V1MuFBm7o61gEtJzVHZV9onKwBaI
+         MhvXhc2GmB3Iay7whIGxFRkDHDQ94GAwV4le++e3h1lmi4Zw8ijFucjuxagZn+D+2BgL
+         hnLN+VfxRZ2y/rGMeMsXvrOG1s4vOOX90hfFnzjn6EDjAi/AAgxuOE0uBnp0f+Fxb6zk
+         EVBg==
+X-Gm-Message-State: AOAM532beGhg3bvIPtr+ahSj9kcLLmROoL5WUJaMcKiaWOpWf30NwV9R
+        OvALIMNZyJ1Dd5xyaBVT3d+2ektiSklyGl5osbQYQ5qoXSPRquKvl2K5Gqmt8Qlw7EHonl8iX4A
+        m8DEWTtVQ1ksAm2cOiECOofmz
+X-Received: by 2002:a05:6000:1847:b0:203:813a:509e with SMTP id c7-20020a056000184700b00203813a509emr6485324wri.329.1646990409468;
+        Fri, 11 Mar 2022 01:20:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx059XXbXV5c+1JfZ3BucwQzUjl7dzAZ6gRMB7RhWqx+WgCAbRdWc2w8xLDzsxYVlTt8YiWVQ==
+X-Received: by 2002:a05:6000:1847:b0:203:813a:509e with SMTP id c7-20020a056000184700b00203813a509emr6485304wri.329.1646990409203;
+        Fri, 11 Mar 2022 01:20:09 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:8200:163d:7a08:6e61:87a5? (p200300cbc7078200163d7a086e6187a5.dip0.t-ipconnect.de. [2003:cb:c707:8200:163d:7a08:6e61:87a5])
+        by smtp.gmail.com with ESMTPSA id p11-20020adf9d8b000000b001f063deef80sm6101400wre.86.2022.03.11.01.20.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 01:19:41 -0800 (PST)
-Message-ID: <b0489963-4ddb-ec7f-ef0d-e48f99004be5@canonical.com>
-Date:   Fri, 11 Mar 2022 10:19:40 +0100
+        Fri, 11 Mar 2022 01:20:08 -0800 (PST)
+Message-ID: <52412f08-829a-6c29-60c6-a24c866e6253@redhat.com>
+Date:   Fri, 11 Mar 2022 10:20:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/3]sgpio:nuvoton:add support for Nuvoton NPCM SoCs
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] mm/khugepaged: sched to numa node when collapse huge page
 Content-Language: en-US
-To:     jimliu2 <jim.t90615@gmail.com>, JJLIU0@nuvoton.com,
-        KWLIU@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-        robh+dt@kernel.org, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
-        benjaminfair@google.com, CTCCHIEN@nuvoton.com
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-References: <20220311060936.10663-1-JJLIU0@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220311060936.10663-1-JJLIU0@nuvoton.com>
+To:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220311090119.2412738-1-maobibo@loongson.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220311090119.2412738-1-maobibo@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 07:09, jimliu2 wrote:
-> Add sgpio feature for Nuvoton NPCM SoCs
+On 11.03.22 10:01, Bibo Mao wrote:
+> collapse huge page is slow, specially when khugepaged daemon runs
+> on different numa node with that of huge page. It suffers from
+> huge page copying across nodes, also cache is not used for target
+> node. With this patch, khugepaged daemon switches to the same numa
+> node with huge page. It saves copying time and makes use of local
+> cache better.
+
+Hi,
+
+just the usual question, do you have any performance numbers to back
+your claims (e.g., "is slow, specially when") and proof that this patch
+does the trick?
+
+
 > 
-
-1. Explain what is SGPIO.
-2. Fix all subjects to match subsystems.
-3. Check git log to see what subjects are being used and how they are
-formatted.
-
-> jimliu2 (3):
->   dts: add Nuvoton sgpio feature
->   dt-bindings: support Nuvoton sgpio
->   gpio:gpio-npcm-sgpio: Add Nuvoton sgpio driver
-
-Space missing after ':'.
-
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  mm/khugepaged.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
->  .../bindings/gpio/nuvoton,sgpio.yaml          |  78 +++
->  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |  30 +
->  drivers/gpio/Kconfig                          |  12 +
->  drivers/gpio/Makefile                         |   1 +
->  drivers/gpio/gpio-npcm-sgpio.c                | 634 ++++++++++++++++++
->  5 files changed, 755 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
->  create mode 100644 drivers/gpio/gpio-npcm-sgpio.c
-> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 131492fd1148..460c285dc974 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -116,6 +116,7 @@ struct khugepaged_scan {
+>  	struct list_head mm_head;
+>  	struct mm_slot *mm_slot;
+>  	unsigned long address;
+> +	int node;
+>  };
+>  
+>  static struct khugepaged_scan khugepaged_scan = {
+> @@ -1066,6 +1067,7 @@ static void collapse_huge_page(struct mm_struct *mm,
+>  	struct vm_area_struct *vma;
+>  	struct mmu_notifier_range range;
+>  	gfp_t gfp;
+> +	const struct cpumask *cpumask;
+
+We tend to stick to reverse Christmas tree format as good as possible.
+
+>  
+>  	VM_BUG_ON(address & ~HPAGE_PMD_MASK);
+>  
+> @@ -1079,6 +1081,13 @@ static void collapse_huge_page(struct mm_struct *mm,
+>  	 * that. We will recheck the vma after taking it again in write mode.
+>  	 */
+>  	mmap_read_unlock(mm);
+> +
+> +	/* sched to specified node before huage page memory copy */
+
+s/huage/huge/
+
+> +	cpumask = cpumask_of_node(node);
+> +	if ((khugepaged_scan.node != node) && !cpumask_empty(cpumask)) {
+> +		set_cpus_allowed_ptr(current, cpumask);
+> +		khugepaged_scan.node = node;
+> +	}
+>  	new_page = khugepaged_alloc_page(hpage, gfp, node);
+>  	if (!new_page) {
+>  		result = SCAN_ALLOC_HUGE_PAGE_FAIL;
+> @@ -2380,6 +2389,7 @@ int start_stop_khugepaged(void)
+>  		kthread_stop(khugepaged_thread);
+>  		khugepaged_thread = NULL;
+>  	}
+> +	khugepaged_scan.node = NUMA_NO_NODE;
+>  	set_recommended_min_free_kbytes();
+>  fail:
+>  	mutex_unlock(&khugepaged_mutex);
 
 
-Best regards,
-Krzysztof
+-- 
+Thanks,
+
+David / dhildenb
+

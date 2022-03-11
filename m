@@ -2,91 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818704D6372
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943164D6376
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349343AbiCKO3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S1349255AbiCKOag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbiCKO3g (ORCPT
+        with ESMTP id S234520AbiCKOad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:29:36 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981B3EBAD8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:28:32 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1A2AE3F4BE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:28:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647008911;
-        bh=PdIndayzdh0p1erKParNfrZ1poZ/AkWCjFd9nsPB1bM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=r53M9jV+B8XmgcA7X8IiKPGsHT7nVwDDq+PhKCeLEp8O9hBjfPqebgMaJEYmLdO41
-         L4ZeuYKaCVDw7wTKxrLQOPKY35ERdumH+YC+7eJ5XsqVrZiNypcu5WIRkxhRpCN9hw
-         xLOq1Wl6hbrD+Hjn4wp1lLn6ZQZBQ0z3GsaygtXWuzuDFOk0X4VR1TPrL/dvsHoo28
-         c0XB6NC1mVZbWOAYxCzPVZtkZl0EQSHJfAu56847GseXvaDF9Jgt0+THQ7ZcYJpUoT
-         TaLrq7s2tucgCsjpsV8vnfEYJN8japQMpOxZE5Q3kCgqyov/dxB+lOVLSQlj9GqS3w
-         cDr6/edhPbHVg==
-Received: by mail-ej1-f70.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso5007779eje.20
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:28:31 -0800 (PST)
+        Fri, 11 Mar 2022 09:30:33 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63689E338F;
+        Fri, 11 Mar 2022 06:29:30 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id z26so12239061lji.8;
+        Fri, 11 Mar 2022 06:29:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nJkLUw2fF6Q/1cDr2N/dQ7NtiGvkifC2ibZYvvSHEdU=;
+        b=Pk99k1lsqIqmRCLmWCf1DH3Xp4lMUs5Q+riC9rSNZtZi5L9Y938iWzsP+Gyix81pmx
+         sVAKbQKdb4iyCo5/xHq7bH33Yvig5qKWrJjlafZ9HEZVrUiFJwqjNYyjdCXEpaw14tNr
+         WpsQ1GBzWISh/swMZF9rnymWuVeIz82eh58D6hzzyLCaPJOkOEJYuXYnK4sP6nr/x7Uz
+         ZODEwWNDfkYRvTJSgP5h/Oagz6saJxAGbGszVQiV+obGhhgq3SLY4zidV8NAYKXAJZBH
+         CfOGJ4hXk5b1KfkD86g5GgTFVsbD4bvoaVQATcQnqwOZLIyRsE6HQqc++dCTmCTk8YNF
+         gWBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PdIndayzdh0p1erKParNfrZ1poZ/AkWCjFd9nsPB1bM=;
-        b=nYacU9/xcxhTEb4TP/AOR1ddF1wvVWNN6xMAb7Add/gmCKbfGyFfefEgZBkAFlPPZp
-         BojrAYPJuk7iMxPGnsqQbV+77Go6ZEQwe7NdtDd95zzE27MM7NQq52BxE6xY76uGoq1c
-         FQAk7FKcXqCp3pqnJ+t90Tod801NiN3Gyv5T/y1IQC5OaMC9zelPJbiqA/OmRTvrpCTZ
-         H1153VbPLauIRr/DYxkR8XTqK4vZBUY8N0awW895yTaped0vLfVJ4KejawB9K+g1BRP2
-         4EKo61OG/gwOT38b2WtmqRsc1y5pJJpcT3nP2NNv0iKY7iwd3tv7RhEkgXwUE8V862lr
-         hAXw==
-X-Gm-Message-State: AOAM530KeC3TfFY0Wt2WO2yyC9ddwqKIWpTi4C/OhM6RB9D5NnPq6fcw
-        IeMM6kE+nwm236o2DbpVxWuGcvPBLYtF00lh+t2la6Dtq5DXSIgPpWNuH535pq37sCvCN5QAjjY
-        EYHBgRqA+OzaFUB7/zCNzuKvcH4Xh8N8U0ZhBJuLU9A==
-X-Received: by 2002:a17:906:40a:b0:6db:3e2a:a7ce with SMTP id d10-20020a170906040a00b006db3e2aa7cemr8563512eja.255.1647008910476;
-        Fri, 11 Mar 2022 06:28:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxu7HRELcvW932dJyiTM8RcnBlSViVbwCdvsfEGJ7B4Ej6w1K6mhpjwwmEC8B/O6gJR4wVowQ==
-X-Received: by 2002:a17:906:40a:b0:6db:3e2a:a7ce with SMTP id d10-20020a170906040a00b006db3e2aa7cemr8563494eja.255.1647008910276;
-        Fri, 11 Mar 2022 06:28:30 -0800 (PST)
-Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05640240c700b00416cee953dasm1089877edb.24.2022.03.11.06.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 06:28:29 -0800 (PST)
-Message-ID: <0454647b-7aa3-ed70-0b92-1e5c98d0adc0@canonical.com>
-Date:   Fri, 11 Mar 2022 15:28:28 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nJkLUw2fF6Q/1cDr2N/dQ7NtiGvkifC2ibZYvvSHEdU=;
+        b=QEsoIfEmcD2HFG5Jo9vfvUArjofgHVCMMUR/UchYLkbuMWQOIWl/vTeMz2e7PLmDdQ
+         IH6iW2FETU21cDVSrKHHm7z6Dn9Akb3g0nHLe9EMlruiENJB1xDespGiNCDOdhvAAIip
+         l60l4TtNqxChS6hir+nEU+Pf9V4WgDPc28zj97ZdDPCsknGFDKUco9SH8kE/PT8JQt3u
+         h7PS4BXP4UtdRnXNK2JsG3vOH86rqIupLc1MkmIWJpFFkilLL96n/yPTrNPCdiYEYmEw
+         1Lotsy5iGBcqVE/ytG45PyzFdRgJ732YdS2tKmrNfk+yqKyJmb9qKAfe7NwBTRsSrthv
+         uiuQ==
+X-Gm-Message-State: AOAM532TjsA1xzIqZypuAJEcXZ0Irp5gEh0xDEfpTbjYo2UDII0NrU2R
+        G+mqCoCgHjiyQUooi2fKfH4wxi246rvHuQ==
+X-Google-Smtp-Source: ABdhPJyLxuyTh4KFNJvSOCfo8f+yr0SH0ahlebWO9xiK91FVHP0Hildk3KX0+Nkqf7PVNtdflPtZOg==
+X-Received: by 2002:a05:651c:1209:b0:244:b99d:8902 with SMTP id i9-20020a05651c120900b00244b99d8902mr6024821lja.185.1647008968755;
+        Fri, 11 Mar 2022 06:29:28 -0800 (PST)
+Received: from mobilestation ([95.79.188.22])
+        by smtp.gmail.com with ESMTPSA id n13-20020a056512388d00b00443d9064160sm1629495lft.125.2022.03.11.06.29.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 06:29:27 -0800 (PST)
+Date:   Fri, 11 Mar 2022 17:29:26 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
+Message-ID: <20220311142926.czypl55ni6wpqpjm@mobilestation>
+References: <20220309091711.3850-1-linmq006@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] dt-bindings: phy: mediatek: Add YAML schema for PCIe
- PHY
-Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-References: <20220311133527.5914-1-jianjun.wang@mediatek.com>
- <20220311133527.5914-3-jianjun.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220311133527.5914-3-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309091711.3850-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,100 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 14:35, Jianjun Wang wrote:
-> Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
+On Wed, Mar 09, 2022 at 09:17:10AM +0000, Miaoqian Lin wrote:
+> The of_find_compatible_node() function returns a node pointer with
+> refcount incremented, We should use of_node_put() on it when done
+> Add the missing of_node_put() to release the refcount.
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Fixes: 2121aa3e2312 ("mips: cdmm: Add mti,mips-cdmm dtb node support")
+
+Nice catch. Thanks.
+
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
+
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
->  .../bindings/phy/mediatek,pcie-phy.yaml       | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+>  drivers/bus/mips_cdmm.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
-> new file mode 100644
-> index 000000000000..da15b4bf3117
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/mediatek,pcie-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek PCIe PHY Device Tree Binding
-
-Title is for hardware, so s/Device Tree Binding//
-
-> +
-> +maintainers:
-> +  - Jianjun Wang <jianjun.wang@mediatek.com>
-> +
-> +description: |
-> +  The PCIe PHY supports physical layer functionality for PCIe Gen3 port.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,pcie-phy
-
-Is it going to be exactly one pcie-phy for all Mediatek chipsets for
-next years? Are you sure about that? It sounds highly unlikely....
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  reg-names:
-> +    items:
-> +      - const: sif
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  nvmem-cells:
-> +    maxItems: 7
-> +    description:
-> +      Phandles to nvmem cell that contains the efuse data, if unspecified,
-> +      default value is used.
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: glb_intr
-> +      - const: tx_ln0_pmos
-> +      - const: tx_ln0_nmos
-> +      - const: rx_ln0
-> +      - const: tx_ln1_pmos
-> +      - const: tx_ln1_nmos
-> +      - const: rx_ln1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pciephy: phy@11e80000 {
-> +        compatible = "mediatek,pcie-phy";
-> +        #phy-cells = <0>;
-> +        reg = <0x11e80000 0x10000>;
-> +        reg-names = "sif";
-> +        nvmem-cells = <&pciephy_glb_intr>,
-> +                      <&pciephy_tx_ln0_pmos>,
-> +                      <&pciephy_tx_ln0_nmos>,
-> +                      <&pciephy_rx_ln0>,
-> +                      <&pciephy_tx_ln1_pmos>,
-> +                      <&pciephy_tx_ln1_nmos>,
-> +                      <&pciephy_rx_ln1>;
-> +        nvmem-cell-names = "glb_intr", "tx_ln0_pmos",
-> +                           "tx_ln0_nmos", "rx_ln0",
-> +                           "tx_ln1_pmos", "tx_ln1_nmos",
-> +                           "rx_ln1";
-> +    };
-
-
-Best regards,
-Krzysztof
+> diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+> index 626dedd110cb..fca0d0669aa9 100644
+> --- a/drivers/bus/mips_cdmm.c
+> +++ b/drivers/bus/mips_cdmm.c
+> @@ -351,6 +351,7 @@ phys_addr_t __weak mips_cdmm_phys_base(void)
+>  	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
+>  	if (np) {
+>  		err = of_address_to_resource(np, 0, &res);
+> +		of_node_put(np);
+>  		if (!err)
+>  			return res.start;
+>  	}
+> -- 
+> 2.17.1
+> 

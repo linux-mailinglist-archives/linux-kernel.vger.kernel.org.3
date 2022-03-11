@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D873B4D6262
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93A54D6267
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348893AbiCKN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S1348909AbiCKNa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348876AbiCKN3x (ORCPT
+        with ESMTP id S1346052AbiCKNa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:29:53 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B405D5E1;
-        Fri, 11 Mar 2022 05:28:48 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so6251315otl.6;
-        Fri, 11 Mar 2022 05:28:48 -0800 (PST)
+        Fri, 11 Mar 2022 08:30:56 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7120093188;
+        Fri, 11 Mar 2022 05:29:53 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id cx5so8171168pjb.1;
+        Fri, 11 Mar 2022 05:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=lWnNWcx+SboqtPq9WI7B/BLf7BDyEwBuicgeSMUjIxY=;
+        b=CI2lfgcC0JOTIFvd4yDLT3+LWmWjTs5HWYaKKWWWBU97Q9NR/plDDe0BG3emS2zFKB
+         +PJDSRQC719268FrWzd6QkLdlmk0gVmCBDJok4gCU8MnZ/0SRRUhP0gGlKoebPC+zHzO
+         zOQRl9LlHG6abAWeq3UVrxPIE/ip2pXQRjjjb9O5VwHcZG1FCNZTU/DuAxpPk9S7v2J8
+         PvnhwSHFwfCvh6aX1eBI5E6w+9QtXlEam++fKNpT6NmS/HpMMKfCg3QngORtBnRb/f2M
+         YLQXFYXmISlNn/Few8+6us2FBav5lVbBA9/3HjYoS9YLk/IVlPUywlRlU9ayBI30Ih/s
+         Yn4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=DqWgVz4mscQx7VQZPkY837R3TSNSLttxQeZWV9I4qb4=;
-        b=tI1D7Djk9/hipqQSZZhI5yR0TSGDEDK/6gDK02Mg6DDYkBBxzt5m/9N2UgG3Mrtou7
-         OW90wZVr+FWmdYHxX+Pwrby7QsVwH1+Ahci7bJkoGajQpHADvYJsnUvdAuH8/dVxCppv
-         ITs1Ev05yKzwYt5OZG30NOyf8jrxuJjLO/ZtbawliqH8am6zjn+F+8osoUQ7qpWmkCYz
-         aXum3g3ZiuLREmMIL5T8pZz+A0AEEnqC6zAwJ+UXyydzwPKsPOhXl/PJ224BPBtnZGQd
-         pMjdSjP/fOx5LBZCEO6T/Wxne7w9FgAtN9SrGJvqS60GZNu+a4aLEJSNsVPYb86LPArF
-         +/iw==
-X-Gm-Message-State: AOAM531u9cY1wMhV2ve6091KWC7GW15dCWiBKBqvJm76FMwHEbSLzlV8
-        rq6OaYq0VYJ/WtHmmL56sg==
-X-Google-Smtp-Source: ABdhPJyW3etsHadVks+qdx/NCSOI597tN0DpxS5HBRpw1Cqr6gc/YxuiIbex7hKaXujqBfrqa3jSPw==
-X-Received: by 2002:a05:6830:438d:b0:5c4:f0f:70ac with SMTP id s13-20020a056830438d00b005c40f0f70acmr4240041otv.111.1647005327910;
-        Fri, 11 Mar 2022 05:28:47 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm3613104oth.56.2022.03.11.05.28.46
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lWnNWcx+SboqtPq9WI7B/BLf7BDyEwBuicgeSMUjIxY=;
+        b=iY6DAJFXeFd2NLcw01C0KA1SxLZIydEu17aNWLq/y237y845glNZH5zsG5AwDsB4Q2
+         5o8lxiARvPrGai1iCgq6kWEJEwFl2rvefKOg7P/OvS+jSNLhJXMH2wMfUbmGFDSDNP1h
+         YGY17bJZ7Bt29TV6dnzivGzOtN7MfXTRgH87TSztG4im2QIDvr6+DrmwG9XDbAfuudHg
+         HIDA6BSfGxwzIif5DoJ1v4t+R9k1OKbrEzv+kPUnbwgT7J1pCEgBBAKyH5LDVjWNNeLU
+         aOiOGfkogNpQtx0Ch0rB7A3m2nGIAO1pDRQ+G3ftFkWEbBQo83oIGIiLbHF4gxGqONv4
+         lwbw==
+X-Gm-Message-State: AOAM5327WYTU6XNR/4mTo5Pj/HuqsKyxrwLcGY4dn7IhJrvUlt2vVuLr
+        MAyIO2fcOZXKpUs/8XmzdT8=
+X-Google-Smtp-Source: ABdhPJwNo2sTsZyi47iCLuC+XNJ4MMfgBohTLUQ/Ge/2csyWYtjNvf7ShW0r3I+OCg63OmoQHP2JUw==
+X-Received: by 2002:a17:902:b490:b0:14c:da4a:deca with SMTP id y16-20020a170902b49000b0014cda4adecamr10745394plr.134.1647005392946;
+        Fri, 11 Mar 2022 05:29:52 -0800 (PST)
+Received: from localhost.localdomain ([211.212.143.131])
+        by smtp.gmail.com with ESMTPSA id l17-20020a056a0016d100b004c34686e322sm11319934pfc.182.2022.03.11.05.29.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 05:28:47 -0800 (PST)
-Received: (nullmailer pid 3638165 invoked by uid 1000);
-        Fri, 11 Mar 2022 13:28:45 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Medad CChien <medadyoung@gmail.com>
-Cc:     tony.luck@intel.com, KWLIU@nuvoton.com, devicetree@vger.kernel.org,
-        james.morse@arm.com, ctcchien@nuvoton.com, tali.perry1@gmail.com,
-        robh+dt@kernel.org, JJLIU0@nuvoton.com, venture@google.com,
-        mchehab@kernel.org, tmaimon77@gmail.com, yuenn@google.com,
-        benjaminfair@google.com, avifishman70@gmail.com,
-        linux-edac@vger.kernel.org, KFTING@nuvoton.com,
-        linux-kernel@vger.kernel.org, bp@alien8.de, YSCHU@nuvoton.com,
-        rric@kernel.org, openbmc@lists.ozlabs.org
-In-Reply-To: <20220311014245.4612-3-ctcchien@nuvoton.com>
-References: <20220311014245.4612-1-ctcchien@nuvoton.com> <20220311014245.4612-3-ctcchien@nuvoton.com>
-Subject: Re: [PATCH v3 2/3] dt-bindings: edac: nuvoton,npcm-memory-controller.yaml
-Date:   Fri, 11 Mar 2022 07:28:45 -0600
-Message-Id: <1647005325.599595.3638164.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 05:29:52 -0800 (PST)
+From:   Steve Lee <steve.lee.analog@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ryans.lee@maximintegrated.com,
+        Steve Lee <steve.lee.analog@gmail.com>
+Subject: [V2 1/2] ASoC: max98390: Add reset gpio control
+Date:   Fri, 11 Mar 2022 22:29:05 +0900
+Message-Id: <20220311132906.32292-1-steve.lee.analog@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 09:42:44 +0800, Medad CChien wrote:
-> Add device tree bindings for NPCM memory controller.
-> 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> ---
->  .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> 
+ Add reset gpio control to support RESET PIN connected to gpio.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+---
+ sound/soc/codecs/max98390.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1604217
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/sound/soc/codecs/max98390.c b/sound/soc/codecs/max98390.c
+index b392567c2b3e..5c6162701667 100644
+--- a/sound/soc/codecs/max98390.c
++++ b/sound/soc/codecs/max98390.c
+@@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
+ 
+ 	struct max98390_priv *max98390 = NULL;
+ 	struct i2c_adapter *adapter = to_i2c_adapter(i2c->dev.parent);
++	struct gpio_desc *reset_gpio;
+ 
+ 	ret = i2c_check_functionality(adapter,
+ 		I2C_FUNC_SMBUS_BYTE
+@@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
+ 		return ret;
+ 	}
+ 
++	reset_gpio = devm_gpiod_get_optional(&i2c->dev,
++						"maxim,reset-gpios", GPIOD_OUT_LOW);
++
++	/* Power on device */
++	if (reset_gpio) {
++		usleep_range(1000, 2000);
++		/* bring out of reset */
++		gpiod_set_value_cansleep(reset_gpio, 1);
++		usleep_range(1000, 2000);
++	}
++
+ 	/* Check Revision ID */
+ 	ret = regmap_read(max98390->regmap,
+ 		MAX98390_R24FF_REV_ID, &reg);
+-- 
+2.17.1
 

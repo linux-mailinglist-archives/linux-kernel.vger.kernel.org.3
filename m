@@ -2,249 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970AA4D66DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93F74D66DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348262AbiCKQyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S1347508AbiCKQy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345058AbiCKQyB (ORCPT
+        with ESMTP id S1349706AbiCKQyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:54:01 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2054.outbound.protection.outlook.com [40.107.94.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA8CA9E2D;
-        Fri, 11 Mar 2022 08:52:55 -0800 (PST)
+        Fri, 11 Mar 2022 11:54:24 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BA33ED1A;
+        Fri, 11 Mar 2022 08:53:17 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PmQW98YI6DlvwqWXIyMi7QcV9KFICsSFd/nJvWgTWOHwNzCtXGVDN0afbCfC/fsOuqnCELDGcz1N+f6TicNV9njR/1G0GEHUDyeY36XBTpJGN4d8fTFQYibVEKXPUmrlNlVvAo+sU1akIINkBh6VG5CVwZBfS1tATSP1uIb4TZHemjXEAOpxkKTXG6e2dhlxEVRlBWbv/Il/cfjPZUUUaLLVMIq5u6sULZFTAEkPIbQIZ1XxU3+jkx2fm72ug15OoTQCgeeX6TkIGcR0h0wnkqFqSRbu4jonyQkv/1ptbzUmeTZZjN9KD4u9OkQ+Njn14w3yXED+cvKPELaNccym9Q==
+ b=iWIJOuGbfUomklQ7HsfmNF7HmwML03l8QVNcfs3bfLhX50fT3m8m2ZwCNCF1d9btTJT/Ou6f72zzbcmMsiQK75Bqo0iPdJwNbzrpyaYrBxmWa5dhGcMDUTQIjGXQCWX3EoY+aow/PNJqHygyvepKMDXkxwr0BzaxLLmd3Zq7NbEbHjWlzckGCgciHrODBk6MYJjyhEJvQwWrf+ay+OwNm3lc13vrqNODp4v3ogadsgk4BvwI14GDx3+SnhRt736L1iR/avnlgBD2udEHKrm/QWvZMKl/g04K/2vbTY5xMaxpIMgvxyCqmaEkX8Px18giBO/yQ43vgpnbQkxft+H7+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZteyEXqBRIKqXdNDV3sJusL9+V+WIS4yuBBDTbzMIJU=;
- b=gqe3jfc7aQ/RuEMeGpy4xGHyaQIjHNUKlqWE3N2it1192QVVFIY5R8ZTL6+FuSVTs/4Nk6X42JJOoboufXWTe6hN3OQ/MckivbI1bfRx9WIdtAABt4A4h9C4xWToWwGHsXt70WqV2K6UzoYfuiWnxe4ody4xTBddikLFffpU4bTyH/AnpToL5HuPoZ2LPiwoF81T6Dlh8BCHjhQLAYMp9ocGcDSou7AykLisKjBTdLtrHJc5YQbeHJajzsAw0CqU5oV6deobBGZqlBh+aTAVMV37eN4+kxmsdIhP9Rf3kR/fWeQrgCkFXELJYGMp+vcfBLTuZ9x/wetcVhUzg94a/w==
+ bh=1llhpnji2qZBxGkLVyKQGenNeXDgubiBl+Vzz/hJWbc=;
+ b=mweH5So9JbnvMnkNz18lUTLRGKhwtS/sg52U07sSfcLb316/+ph4F4VxAkeeQq71m1SFGpRVEZ8AyoL6rGYss3NHMTwLQXGS8+U8xezcWBxwAqe6wO5PFwBQWyXKp2KfaRujHAGvk0U65R0FNdj3vC1MtJ/55Zp6NW8fpKztr77ezDb6qLzG9N2ICuCMMu8NCbEgfDal3G748U1WvM/J8tPOo48HB6E/B0vYwoocfmbzWdJb3Vsbs8OFGDHpn2Gs5GBcl+SQOn7OZHwqrqIcb7I8gjoV5pcDUOz9zRJup5Fna4B/Tadtx2hFVgLFDpZfj1v/G6rGVTVBlz8h9LKahQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZteyEXqBRIKqXdNDV3sJusL9+V+WIS4yuBBDTbzMIJU=;
- b=S5ZSHj+dyeaaBm+Yvg7D8v1c1QC+yt6F+5EHHVl7xLNkyeocYMHSEuS5jAo0Z+tcmJTf6RxQ9XLMAfrWmRTwlU+6IsZkl0s+0oJTVd0DDpQwm5vdws02yDCrx3m4lL3Wb/2pHb0bM8Sou03Yz4DC6W7/1AAi1buXqUAvcs/tOX0=
-Received: from DS7PR03CA0019.namprd03.prod.outlook.com (2603:10b6:5:3b8::24)
- by DM6PR12MB3707.namprd12.prod.outlook.com (2603:10b6:5:1c1::28) with
+ bh=1llhpnji2qZBxGkLVyKQGenNeXDgubiBl+Vzz/hJWbc=;
+ b=rmhdbsJHKmoqgZQX6Pyp4QMjyIQ6V4HSnHD2EccZwHShJ99HSoAKzKB7NqsXl2hOyfPhxG3gsdyYX8ovh1v0QoVnOv0xDL6kuA2tGh7Ckfe86jlsFJqNYNGLcVytx91Y3q9vW6iFnt0ZC3V7720i9Xx0MkGPSK7iHvpjhUBtEkRgJ2YLv8p6KbU9coFKfoQz8yHKJKaxAvfzUNMEjGIpDXAVoiR10wvxdyc+EGOisKWlEaoLlm3BoKt1uV9eejstdvO3UHbGc+6T6ISJ4ScpDXJIZzX3caYem2gTphPspZE0/EdQeH1wzZbbUk8V4MaWPDqunxPgYAOfwDbAKOPNfQ==
+Received: from DM6PR03CA0020.namprd03.prod.outlook.com (2603:10b6:5:40::33) by
+ BN6PR1201MB0116.namprd12.prod.outlook.com (2603:10b6:405:56::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Fri, 11 Mar
- 2022 16:52:52 +0000
-Received: from DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b8:cafe::27) by DS7PR03CA0019.outlook.office365.com
- (2603:10b6:5:3b8::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.24 via Frontend
- Transport; Fri, 11 Mar 2022 16:52:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT031.mail.protection.outlook.com (10.13.172.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5061.22 via Frontend Transport; Fri, 11 Mar 2022 16:52:50 +0000
-Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 11 Mar 2022 10:52:49 -0600
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <bp@alien8.de>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH 2/2] x86/mce: Add messages to describe panic machine errors on AMD's MCEs grading
-Date:   Fri, 11 Mar 2022 10:51:17 -0600
-Message-ID: <20220311165114.482074-3-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220311165114.482074-1-carlos.bilbao@amd.com>
-References: <20220311165114.482074-1-carlos.bilbao@amd.com>
+ 2022 16:53:15 +0000
+Received: from DM6NAM11FT063.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:40:cafe::9f) by DM6PR03CA0020.outlook.office365.com
+ (2603:10b6:5:40::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22 via Frontend
+ Transport; Fri, 11 Mar 2022 16:53:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT063.mail.protection.outlook.com (10.13.172.219) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5061.22 via Frontend Transport; Fri, 11 Mar 2022 16:53:15 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 11 Mar
+ 2022 16:53:14 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 11 Mar
+ 2022 08:53:13 -0800
+Received: from moonraker.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Fri, 11 Mar 2022 08:53:12 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jeff Brasen <jbrasen@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH] ACPI: SPCR: Add support for NVIDIA 16550-compatible port subtype
+Date:   Fri, 11 Mar 2022 16:53:10 +0000
+Message-ID: <20220311165310.60418-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bbe3b87e-34da-4fc4-c400-08da037f9440
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3707:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3707A48D92E7B1A4AE1F264AF80C9@DM6PR12MB3707.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 1033bdce-aaab-4395-3f97-08da037fa2e9
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0116:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB01166B7B3D3C3D69AD6216F6D90C9@BN6PR1201MB0116.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OjyZy79JIAXjhuKpDwoUGbQJd/fN3XHh94SmlFJMVJ8IYCyxZ4v64Z/nPgO+hm1RpkvbK+Ml9uldWiVC9yTWnaLragVk0+Fr8VOt7gRjIpwVe9YKw1CtSlabFefSbj82zR5K0IIWHbQG//QHBlLj8eci9/OPXdR0JktYdlortZaSqruQV8xizRnHvyNt5iRof3hhdDWGSTwvtf+KU4y3Jme4CL/lYhQnO9o8+Z1P6JX/QuPhROFH7ZvUuR+HQKzBOwNHPQEmzaFoct9aZScCR4dCuOXXYN/849UBxMiqakm9RMYrdf1k4otYCoXUOwN0oNpQLBpYW//xmOSnPkedJaL203j7ai3eDtRJcB//wKBt8oLKybSrs8VltHUSYDG6ck1K7KkDvOvBXqKfyRFzARRoCnMsJ1OccvvmkZD/aVV/nVHdaYAKKTlqU5wRP9kBXwOHzEbiJCjDFnL+JSVvd4+8DTgUWnxCB9Rn48A4tURt7yTWZRoZ+lsAZwHewQpOaqJA6eE1gDEKdbIDNBN98SDaqxuvVEWIvNGQ1O9xVTvTj5XCXWEReSZItfVolyLEbuyxWshRAAaExApFc39LRSI8IaPlCr11ithBaL2T7TV/tk7b2POJWjSPqCLff5BT/pd8JdPO3la+FbcBKOPxFXE+C7Y7QNn63c3TKt+C8FtZs5WdpK/BqKNjhDtLm9zrnww5lW0Zjt9NN6TuBFvo7A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(26005)(81166007)(426003)(336012)(186003)(16526019)(2616005)(1076003)(83380400001)(36860700001)(47076005)(356005)(86362001)(40460700003)(82310400004)(70206006)(70586007)(316002)(36756003)(6916009)(54906003)(15650500001)(2906002)(4326008)(8676002)(8936002)(5660300002)(44832011)(6666004)(508600001)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 16:52:50.8255
+X-Microsoft-Antispam-Message-Info: wTjygQemLKNAYB/tTn+ark7/cY57d+qvjtJkjUCk9GESiW79E7MlQbXIPTcSwbyueK3cbiK6nWMt7+/kuD9zR8GlgR9ZuJKwpjZNFkAS5W6fGUylWOBk6jue7VV0UPPkPGyjP68QusX/bUKhsyHbrDXrC7NqlB4zeB2IdPto+cvTkH/OZUw+gyGW+eiFRLIkD5c4pcYQ981QztV/TmFvm5InKKIcuF1JV/fVaiHYbYYzPNyZqUEjYXcYvkdesVk+xbrcRluyiKpwGWfGBjimF/nH6gikgPzcY4itlSKnF/Bvun8I9y2VRyPBYaR0NVlPq7wesBq3K48icZZFi2gNc/YU3wUKDLTL+pq/f8SaHj3pkbkxMI4TPIyQqgq8YUiWdLtYmurhb/d4k78w/3m4jghq/2Dh3gBnX/pkd78gPpeW9v+t6tn50ZTcu80/7SjYjyG+PU6appMLeMk0f/l+gm6BvtP+bSofxDbkk1dLI4PcaCiTu1EqgePxwUk/DdqnhO23Ru6ATidpbsqAfkVoPMcWDGkRQDzEVCzLO539KFzMX5gUBtVfmXT2423V1Ox463M92c/taQZhWmvSA2Ry+tK9M2s7VXr7xClu+gKKcfl/mmfmwv4VRIAoIPTankFhjkBgDRXLbfTpkaE02sG9aPXDU3vYh3EFcKfZ+CGwEsdWHsKbMIUxNPb5usO4p+ickAzfbHnTpxNVYSgi2kP6Og==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(107886003)(5660300002)(86362001)(4326008)(8676002)(47076005)(36756003)(82310400004)(1076003)(2616005)(4744005)(508600001)(8936002)(40460700003)(316002)(70206006)(186003)(7696005)(36860700001)(26005)(70586007)(81166007)(2906002)(6916009)(54906003)(426003)(356005)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 16:53:15.4021
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbe3b87e-34da-4fc4-c400-08da037f9440
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1033bdce-aaab-4395-3f97-08da037fa2e9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT063.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3707
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0116
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a machine error is graded as PANIC by AMD grading logic, the MCE
-handler calls mce_panic(). The notification chain does not come into effect
-so the AMD EDAC driver does not decode the errors. In these cases, the
-messages displayed to the user are more cryptic and miss information
-that might be relevant, like the context in which the error took place.
+From: Jeff Brasen <jbrasen@nvidia.com>
 
-Fix the above issue including messages on AMD's grading logic for machine
-errors graded as PANIC.
+Add support for the NVIDIA specific 16550 subtype to SPCR table parsing
+routine.
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+Signed-off-by: Jeff Brasen <jbrasen@nvidia.com>
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 ---
- arch/x86/kernel/cpu/mce/severity.c | 33 ++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
+ drivers/acpi/spcr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 4a089e9dbbaf..11be63eaf7e5 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -330,10 +330,12 @@ static __always_inline int mce_severity_amd_smca(struct mce *m, enum context err
-  * Evaluate the severity of an overflow error for AMD systems, dependent on
-  * the recoverable features available.
-  */
--static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
-+static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx, char **msg)
- {
- 	int ret;
- 
-+	WARN_ON(!msg);
-+
- 	/*
- 	 * On older systems where overflow_recov flag is not present, we
- 	 * should simply panic if an error overflow occurs. If
-@@ -343,6 +345,8 @@ static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
- 	if (mce_flags.overflow_recov) {
- 		if (mce_flags.smca) {
- 			ret = mce_severity_amd_smca(m, ctx);
-+			if (ret == MCE_PANIC_SEVERITY)
-+				*msg = "Uncorrected unrecoverable error";
- 		} else {
- 			/* kill current process */
- 			ret = MCE_AR_SEVERITY;
-@@ -351,8 +355,10 @@ static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
- 	}
- 
- 	/* at least one error was not logged */
--	if (m->status & MCI_STATUS_OVER)
-+	if (m->status & MCI_STATUS_OVER) {
-+		*msg = "Overflow uncorrected";
- 		return MCE_PANIC_SEVERITY;
-+	}
- 
- 	/*
- 	 * For any other case, return MCE_UC_SEVERITY so that we log the
-@@ -367,6 +373,7 @@ static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
- static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
- {
- 	enum context ctx = error_context(m, regs);
-+	char *severity_msg;
- 	int ret;
- 
- 	/*
-@@ -411,13 +418,16 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- #ifdef CONFIG_MEMORY_FAILURE
- 			ret = MCE_AR_SEVERITY;
- #else
-+			severity_msg = "Consumed poisoned data in kernel recoverable area";
- 			ret = MCE_PANIC_SEVERITY;
- #endif
- 			break;
- 		case IN_KERNEL:
-+			severity_msg = "Attempt to consume poisoned data in kernel context";
- 			ret = MCE_PANIC_SEVERITY;
- 			break;
- 		default:
-+			severity_msg = "Attempt to consume poisoned data in unknown context";
- 			ret = MCE_PANIC_SEVERITY;
- 		}
- 
-@@ -426,6 +436,7 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 
- 	/* Processor Context Corrupt, no need to fumble too much, die! */
- 	if (m->status & MCI_STATUS_PCC) {
-+		severity_msg = "Processor Context Corrupt";
- 		ret = MCE_PANIC_SEVERITY;
- 		goto amd_severity;
- 	}
-@@ -441,9 +452,11 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 			ret = MCE_AR_SEVERITY;
- 			break;
- 		case IN_KERNEL:
-+			severity_msg = "Data load error in unrecoverable kernel context";
- 			ret = MCE_PANIC_SEVERITY;
- 			break;
- 		default:
-+			severity_msg = "Data load error in unknown context";
- 			ret = MCE_PANIC_SEVERITY;
- 		}
- 
-@@ -464,13 +477,16 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- #ifdef CONFIG_MEMORY_FAILURE
- 			ret = MCE_AR_SEVERITY;
- #else
-+			severity_msg = "Instruction fetch error in kernel recoverable area";
- 			ret = MCE_PANIC_SEVERITY;
- #endif
- 			break;
- 		case IN_KERNEL:
-+			severity_msg = "Instruction fetch error in kernel context";
- 			ret = MCE_PANIC_SEVERITY;
- 			break;
- 		default:
-+			severity_msg = "Instruction fetch error in unknown context";
- 			ret = MCE_PANIC_SEVERITY;
- 		}
- 
-@@ -478,15 +494,24 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 	}
- 
- 	if (m->status & MCI_STATUS_OVER) {
--		ret = mce_grade_overflow_amd(m, ctx);
-+		ret = mce_grade_overflow_amd(m, ctx, &severity_msg);
- 		goto amd_severity;
- 	}
- 
--	if (ctx == IN_KERNEL)
-+	if (ctx == IN_KERNEL) {
-+		severity_msg = "Uncorrectable error in kernel context";
- 		ret = MCE_PANIC_SEVERITY;
-+	}
- 
- amd_severity:
- 
-+	/*
-+	 * It only makes sense to provide a message on panic scenarios,
-+	 * as otherwise EDAC will be notified and conduct the decoding.
-+	 */
-+	if (msg && ret == MCE_PANIC_SEVERITY)
-+		*msg = severity_msg;
-+
- 	return ret;
- }
- 
+diff --git a/drivers/acpi/spcr.c b/drivers/acpi/spcr.c
+index d589543875b8..1eabfcd122ee 100644
+--- a/drivers/acpi/spcr.c
++++ b/drivers/acpi/spcr.c
+@@ -142,6 +142,7 @@ int __init acpi_parse_spcr(bool enable_earlycon, bool enable_console)
+ 	case ACPI_DBG2_16550_COMPATIBLE:
+ 	case ACPI_DBG2_16550_SUBSET:
+ 	case ACPI_DBG2_16550_WITH_GAS:
++	case ACPI_DBG2_16550_NVIDIA:
+ 		uart = "uart";
+ 		break;
+ 	default:
 -- 
-2.27.0
+2.25.1
 

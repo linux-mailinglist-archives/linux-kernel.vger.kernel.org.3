@@ -2,84 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7EB4D677B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CAA4D6793
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350722AbiCKRXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
+        id S1350744AbiCKR0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350678AbiCKRXh (ORCPT
+        with ESMTP id S237215AbiCKR0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:23:37 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F45112A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:22:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647019354; x=1678555354;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G8bJh+8Vok15nE7dEaU6t77F8wutWwiQPFPCIa6xWJg=;
-  b=O0U2Hp0CSDQg7zCPB7OhtQbomKjVe7hyjRRJ3lNxujCLQYHYZYpytUnB
-   7T8vLJ2mbkYJm7rPbyQ95KoyXw8xmBDd7K+gW47wPqCQvZpbzUNFz+vsK
-   bBDad/7fBWdf5b5z7ynJNBXE4pt+S5sKOQtch41/Y5BcSKcdTNjCUB6yv
-   2bE3dSJ+8StXwqGWIq203gxVPUN1kGfqBGRhW2SthHKWkODA1rCSe4FPJ
-   HUAOeU6F8ClW8roesi4Ra+mkdx71ZTGIzrilcgf+Ae+1/6BHns33ZXh5u
-   HYDE8Q0ZjyP1ySYd5bTH66q5i7dMsLHGvVzh6k69/5KkfIB6aC/zrXoEz
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255803344"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="255803344"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:22:34 -0800
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="644991411"
-Received: from cpeirce-mobl1.amr.corp.intel.com (HELO [10.212.128.243]) ([10.212.128.243])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:22:32 -0800
-Message-ID: <9fcfa987-4acf-689e-3fea-fd01dc7b4e26@intel.com>
-Date:   Fri, 11 Mar 2022 09:22:26 -0800
+        Fri, 11 Mar 2022 12:26:45 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1578F1D0D51
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:25:42 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id p17so8198945plo.9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QxcnJJvBNCY+bGfnFgLArG30Rx8eamlF+KA/wCgp2ak=;
+        b=sRCgtqRwTdMHtzhNI7YQxf++43csWqxxhxHiIWZUApUDmTYDJj6RFA3fKtOLrA6TRZ
+         us6iW/6dQnVO9b1lfj1tYw12dO15MDaYQE6sKJczkNASZFF9D4quSBe5hBiC9syF6uf8
+         2HV4UTD2g3FVMUTUeZWvo0Wtp0D2MsxbQTACr31G+le84FCm8bfgQLOHMy9SYT0YGysB
+         2iCxbNK47qhvPHQKQhKOr4b91cjsrKCQFsNzdTF1OQff4gEOnwDyMqeA/g4Kg0NkQsSW
+         87XI4DbRm5XxB7QmhHK3c7Gd9kSjw4M+inl8695FsRfLk3tAfEAegD2HG0+rziACkca2
+         /ktw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QxcnJJvBNCY+bGfnFgLArG30Rx8eamlF+KA/wCgp2ak=;
+        b=geNqIebbrzXTR9Da/6qeHHkpstYbKa2l/tGjKIGqTJ6CxyLgLHlv+P5Pf5AGzD6ECm
+         D22/bdXc0EOM6sNiUG24MGsMhvtXqrN3HQ4ZrDsaSurdoU96WgxPfkzqbj75wYEnqdjZ
+         BmQdf6BcBNPN88wCMbz1efRBtRixhMDKyUF6cLHw57p3bVahncmXMk43M7jhcW15VQwP
+         1NVq771hdWAPLewdGj9VL3Zf34bzDoRIOyAKamnW1lzo6KIcb5/3e+JGJDqC5vTnDa7u
+         y9HhIMZlqVr6T/X7uVjr+60UO6uriS3pKfGtM9mDr04qm5GrmcCcQ9qqWqMkgPQRvwhI
+         6ycA==
+X-Gm-Message-State: AOAM531y4UN8wx3tpdahKNTPt+OotCLDoInGnYiGaRkE+TwtRCgoVWOd
+        mvAr1Nyi8NviGpq8UnPzTYv26g==
+X-Google-Smtp-Source: ABdhPJzrbt6D2XQuVil7KpcYtFucz4BGvOQxIezfqXq84jqtbTpP4Bi8DbC26FKdK98HEcgNv8MtgA==
+X-Received: by 2002:a17:902:e5ca:b0:152:54c1:f87f with SMTP id u10-20020a170902e5ca00b0015254c1f87fmr11485758plf.59.1647019541529;
+        Fri, 11 Mar 2022 09:25:41 -0800 (PST)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id v14-20020a056a00148e00b004e1cee6f6b4sm12178835pfu.47.2022.03.11.09.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 09:25:41 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:25:38 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] hv_netvsc: Add check for kvmalloc_array
+Message-ID: <20220311092538.0cb478cf@hermes.local>
+In-Reply-To: <20220311032035.2037962-1-jiasheng@iscas.ac.cn>
+References: <20220311032035.2037962-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCHv5 11/30] x86/tdx: Handle in-kernel MMIO
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-12-kirill.shutemov@linux.intel.com>
- <81a7ad6d-6bd9-7674-3229-67a5cd2e485a@intel.com>
- <20220310005145.hzv2lzxgs7uxblfr@black.fi.intel.com>
- <da0056e8-58cf-2c95-fe66-4dad1ae9c4da@intel.com>
- <20220310164839.erpjijvxwuzjql5x@black.fi.intel.com>
- <9b2836ce-5267-8342-65eb-1084ba7e0cdf@intel.com>
- <20220311171848.g5wobw3rmi4e2zkd@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220311171848.g5wobw3rmi4e2zkd@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/22 09:18, Kirill A. Shutemov wrote:
->> Do we *WANT* #VE's to be exposed to the #GP fixup machinery?
-> We need the fixup at least for MSRs.
+On Fri, 11 Mar 2022 11:20:35 +0800
+Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
 
-Could you mention that, along with the implications for the other #VE's
-in the MSR patch changelog?
+> As the potential failure of the kvmalloc_array(),
+> it should be better to check and restore the 'data'
+> if fails in order to avoid the dereference of the
+> NULL pointer.
+> 
+> Fixes: 6ae746711263 ("hv_netvsc: Add per-cpu ethtool stats for netvsc")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/net/hyperv/netvsc_drv.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+> index 3646469433b1..018c4a5f6f44 100644
+> --- a/drivers/net/hyperv/netvsc_drv.c
+> +++ b/drivers/net/hyperv/netvsc_drv.c
+> @@ -1587,6 +1587,12 @@ static void netvsc_get_ethtool_stats(struct net_device *dev,
+>  	pcpu_sum = kvmalloc_array(num_possible_cpus(),
+>  				  sizeof(struct netvsc_ethtool_pcpu_stats),
+>  				  GFP_KERNEL);
+> +	if (!pcpu_sum) {
+> +		for (j = 0; j < i; j++)
+> +			data[j] = 0;
+> +		return;
+> +	}
+
+I don't think you understood what my comment was.
+
+The zeroing here is not necessary. Just do:
+        if (!pcpu_sum)
+               return;
+
+The data pointer is to buffer allocated here:
+
+static int ethtool_get_stats(struct net_device *dev, void __user *useraddr)
+{
+...
+	if (n_stats) {
+		data = vzalloc(array_size(n_stats, sizeof(u64)));  <<<<< is already zeroed.
+		if (!data)
+			return -ENOMEM;
+		ops->get_ethtool_stats(dev, &stats, data);

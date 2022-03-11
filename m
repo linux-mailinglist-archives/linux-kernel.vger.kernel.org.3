@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDEB4D68EF
+	by mail.lfdr.de (Postfix) with ESMTP id 61DC84D68EE
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351058AbiCKTI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S1351063AbiCKTIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351046AbiCKTIS (ORCPT
+        with ESMTP id S1351047AbiCKTIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 14:08:18 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8CF1B3A69
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:08 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id fs4-20020a17090af28400b001bf5624c0aaso9033679pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:08 -0800 (PST)
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680251B45D8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:10 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 27so8194128pgk.10
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ez1m8ji0DENiS3MZwucDKYsoMBLcsLLT3XVhtPvMlT4=;
-        b=AJRZoiUSCJAIrzm032iHUICwDZq/hq8Zyd+0XX14SBnOKC0e2eobJYzH9yvUz+4JBz
-         F0NgASM4Gn41ToKhL/ZFuYihUKIRe/tteZZREyCn+Xi116UhFsMXOfEYuyu2J/FP55Ks
-         XRyazFiUYgGhBU4KK+rSZk4E/40pWNOk1mVpnkLu/u67ESTD4qeYnF++dwPjbo8B0H5r
-         5P8nlKgoTXW5QMBagNvjL0o9ke56d0j7d4wirVH/SX2BRvOoKsZQDkrDlZ2D5+QrjyYl
-         1Dopzx9r6iBC19OZ94o+hfw+op06Hvgjz5eTuglSokDkQOasgInXMg+wuLfGXa9VdD6D
-         iZIA==
+        bh=H+7HXLBkyAOLpnbUPOmqITaSjFmsP/5pELWsoOHR/vE=;
+        b=MJUW/OBtekTcOTSPuabcFv3BZEGGPew/ae5RAx3Okfwdh7+YFVmWWVBCoD2oJ9Wpp2
+         yiGW3QXb4/sREzD5y8Ba3WABTEmXNS4zXZMt11BPqGrjIRvnnYrfBJHqf05nQHuRTfoQ
+         HtrZNCd49fExA3DSuGIxYVOTGgHwbzMgx8JzfVqSZWBRig7y9a0r5GBTAALGT6wJ8h5d
+         1mZT0oa97bKk6POT4ycHwrShqf3jeoz1RqYEIe1YSaWdzJdFyhsQUkNrKan7IoJmhYia
+         TWWZg1lcE/0BzVPilxag1kNVCgjk1t/S1yWle7P4w4w9O/XDRfUvm+pGvIoV+2wLIPcq
+         OQUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ez1m8ji0DENiS3MZwucDKYsoMBLcsLLT3XVhtPvMlT4=;
-        b=Zg8LTwNEpHrBvdnyrp9EuUSUcLRbH1bpbJ71g2yfqnk7gB9tRis6SXJpUmViP8IGbN
-         1rKXwYPAYQdBvL/nbkLVOxzaDHmQUgNoNYkXr+0IMjtjTCpeUAWn8VBo/r0Ab1krxNMh
-         jf3fW61DiijzG+tTLnUdK9HPnXi/kLm+f0xgDns0CuprpREOY1/C5W7UpU5uwRP+78DC
-         ZKeCGkcKQQitJKMqDdIaaWd2+NAQXkj6EcEAW1cIi3CSfvjx/qNYLLM+6R9ZgFgJk9Vb
-         ly4kc1+W8SgTPq/04q8if6VzeJvE5OFKDfay4SLEnZ4CFZdoDKYFYSY+cj2Hv4BsUE5v
-         erlw==
-X-Gm-Message-State: AOAM532Jnvq57hcYjukXqn9wSSo211kQeYQqm82MRYSRJ2gS7t71AfMU
-        TWRxmCMJ8uUFIptbisMXbmQ=
-X-Google-Smtp-Source: ABdhPJwzrGkJNU8eaqpNmtPYmUY5AIgPhop03DqvgllySa8neNw7f69O4zIOiZLwIyR6udKDnvGUNQ==
-X-Received: by 2002:a17:903:2051:b0:151:d161:f0a4 with SMTP id q17-20020a170903205100b00151d161f0a4mr12109442pla.37.1647025628182;
-        Fri, 11 Mar 2022 11:07:08 -0800 (PST)
+        bh=H+7HXLBkyAOLpnbUPOmqITaSjFmsP/5pELWsoOHR/vE=;
+        b=c02UDWHWjTQW5J3sEeQs3QQzCFqiNWWHl7YTMbNOB70aKhvvgS7KfC2fYvrzwbi6Ly
+         //FkUMTccFwNZjpFIQ8oeFBZFzUj8/9pKhHbiirBQdOpA6+Kr9fG/3DqUtCkjdWjhPnU
+         QzLeQ4+7SzEwJabZFU3NsFEq2C90+qJuMBdeHIkYjwe6NFpcDmSUyALXHoJa0TDynlE4
+         QiJEvTX/AyXQ1imc+OA4qSYkJg7sb9OiUdsfmsuzlh1onZFaBTiHwx87SSWdUadLuIxv
+         USjHQvG+DespG6dfZTs6osLPF2OgHOd4na2dwPmt3rJpoLfAYevCPEoFhpFbJCnzy642
+         z0Aw==
+X-Gm-Message-State: AOAM533E3HTBPZWOGT4xEbgUW/PCWXbw+cgtC0ptDvJQ32O4oqYLLoHD
+        1vv/fZnCQKvpVkqkvsgp+04=
+X-Google-Smtp-Source: ABdhPJy26ze4QxSMoBycri2ovrzLLtoevyKLqjLrR1rTJIL+/VdzLtOd0fg/tVvh/U2SjSZv0AfVrA==
+X-Received: by 2002:a63:7cb:0:b0:380:f89f:c9a2 with SMTP id 194-20020a6307cb000000b00380f89fc9a2mr6316679pgh.264.1647025629551;
+        Fri, 11 Mar 2022 11:07:09 -0800 (PST)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id a5-20020a621a05000000b004f79f8f795fsm857329pfa.0.2022.03.11.11.07.07
+        by smtp.gmail.com with ESMTPSA id a5-20020a621a05000000b004f79f8f795fsm857329pfa.0.2022.03.11.11.07.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 11:07:07 -0800 (PST)
+        Fri, 11 Mar 2022 11:07:09 -0800 (PST)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -55,15 +55,17 @@ Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Nadav Amit <namit@vmware.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
         Andy Lutomirski <luto@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Nick Piggin <npiggin@gmail.com>, x86@kernel.org
-Subject: [RESEND PATCH v3 4/5] mm/mprotect: do not flush on permission promotion
-Date:   Fri, 11 Mar 2022 11:07:48 -0800
-Message-Id: <20220311190749.338281-5-namit@vmware.com>
+Subject: [RESEND PATCH v3 5/5] mm: avoid unnecessary flush on change_huge_pmd()
+Date:   Fri, 11 Mar 2022 11:07:49 -0800
+Message-Id: <20220311190749.338281-6-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220311190749.338281-1-namit@vmware.com>
 References: <20220311190749.338281-1-namit@vmware.com>
@@ -81,24 +83,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Currently, using mprotect() to unprotect a memory region or uffd to
-unprotect a memory region causes a TLB flush. At least on x86, as
-protection is promoted, no TLB flush is needed.
+Calls to change_protection_range() on THP can trigger, at least on x86,
+two TLB flushes for one page: one immediately, when pmdp_invalidate() is
+called by change_huge_pmd(), and then another one later (that can be
+batched) when change_protection_range() finishes.
 
-Add an arch-specific pte_may_need_flush() which tells whether a TLB
-flush is needed based on the old PTE and the new one. Implement an x86
-pte_may_need_flush().
+The first TLB flush is only necessary to prevent the dirty bit (and with
+a lesser importance the access bit) from changing while the PTE is
+modified. However, this is not necessary as the x86 CPUs set the
+dirty-bit atomically with an additional check that the PTE is (still)
+present. One caveat is Intel's Knights Landing that has a bug and does
+not do so.
 
-For x86, besides the simple logic that PTE protection promotion or
-changes of software bits does require a flush, also add logic that
-considers the dirty-bit. If the dirty-bit is clear and write-protect is
-set, no TLB flush is needed, as x86 updates the dirty-bit atomically
-on write, and if the bit is clear, the PTE is reread.
+Leverage this behavior to eliminate the unnecessary TLB flush in
+change_huge_pmd(). Introduce a new arch specific pmdp_invalidate_ad()
+that only invalidates the access and dirty bit from further changes.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Peter Xu <peterx@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Will Deacon <will@kernel.org>
@@ -107,196 +113,117 @@ Cc: Nick Piggin <npiggin@gmail.com>
 Cc: x86@kernel.org
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- arch/x86/include/asm/pgtable_types.h |  2 +
- arch/x86/include/asm/tlbflush.h      | 82 ++++++++++++++++++++++++++++
- include/asm-generic/tlb.h            | 14 +++++
- mm/huge_memory.c                     |  9 +--
- mm/mprotect.c                        |  3 +-
- 5 files changed, 105 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/pgtable.h |  5 +++++
+ arch/x86/mm/pgtable.c          | 10 ++++++++++
+ include/linux/pgtable.h        | 20 ++++++++++++++++++++
+ mm/huge_memory.c               |  4 ++--
+ mm/pgtable-generic.c           |  8 ++++++++
+ 5 files changed, 45 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 40497a9020c6..8668bc661026 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -110,9 +110,11 @@
- #if defined(CONFIG_X86_64) || defined(CONFIG_X86_PAE)
- #define _PAGE_NX	(_AT(pteval_t, 1) << _PAGE_BIT_NX)
- #define _PAGE_DEVMAP	(_AT(u64, 1) << _PAGE_BIT_DEVMAP)
-+#define _PAGE_SOFTW4	(_AT(pteval_t, 1) << _PAGE_BIT_SOFTW4)
- #else
- #define _PAGE_NX	(_AT(pteval_t, 0))
- #define _PAGE_DEVMAP	(_AT(pteval_t, 0))
-+#define _PAGE_SOFTW4	(_AT(pteval_t, 0))
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 62ab07e24aef..23ad34edcc4b 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1173,6 +1173,11 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+ 	}
+ }
+ #endif
++
++#define __HAVE_ARCH_PMDP_INVALIDATE_AD
++extern pmd_t pmdp_invalidate_ad(struct vm_area_struct *vma,
++				unsigned long address, pmd_t *pmdp);
++
+ /*
+  * Page table pages are page-aligned.  The lower half of the top
+  * level is used for userspace and the top half for the kernel.
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 3481b35cb4ec..b2fcb2c749ce 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -608,6 +608,16 @@ int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ 
+ 	return young;
+ }
++
++pmd_t pmdp_invalidate_ad(struct vm_area_struct *vma, unsigned long address,
++			 pmd_t *pmdp)
++{
++	pmd_t old = pmdp_establish(vma, address, pmdp, pmd_mkinvalid(*pmdp));
++
++	if (cpu_feature_enabled(X86_BUG_PTE_LEAK))
++		flush_pmd_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
++	return old;
++}
  #endif
  
- #define _PAGE_PROTNONE	(_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE)
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 98fa0a114074..ec01e6cff137 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -259,6 +259,88 @@ static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
- 
- extern void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch);
- 
-+/*
-+ * The enabled_mask tells which bits that were present and gets cleared require
-+ * flush.
-+ *
-+ * The disabled_mask tells which bits that were missing and gets set require
-+ * flush.
-+ *
-+ * All the other bits except the ignored bits will require a flush no matter if
-+ * they gets set or cleared.
-+ *
-+ * This function ignores the global bit, as it is used for protnone. This
-+ * function should therefore not be used if the global bit might really be
-+ * cleared.
-+ *
-+ * The function allows to ignore_access flags (provide _PAGE_ACCESS as argument
-+ * to do so). The expected use is that the access bit would be ignored for PTEs
-+ * but not for PMDs. That is the way the kernel perform TLB flushes after
-+ * updates of the access-bit in other situations.
-+ */
-+static inline bool pte_flags_need_flush(unsigned long oldflags,
-+					unsigned long newflags,
-+					pteval_t ignore_access)
-+{
-+	const pteval_t ignore_mask = _PAGE_SOFTW1 | _PAGE_SOFTW2 |
-+		_PAGE_SOFTW3 | _PAGE_SOFTW4 | _PAGE_GLOBAL | ignore_access;
-+	const pteval_t enable_mask = _PAGE_RW | _PAGE_DIRTY | _PAGE_PRESENT |
-+				     (_PAGE_ACCESSED & ~ignore_access);
-+	const pteval_t disable_mask = _PAGE_NX;
-+	unsigned long diff = oldflags ^ newflags;
-+
-+	VM_BUG_ON(ignore_access != 0 && ignore_access != _PAGE_ACCESSED);
-+
-+	return diff & ((oldflags & enable_mask) |
-+		       (newflags & disable_mask) |
-+		       ~(enable_mask | disable_mask | ignore_mask));
-+}
-+
-+/*
-+ * pte_needs_flush() checks whether permissions were demoted and require a
-+ * flush. It should only be used for userspace PTEs.
-+ */
-+static inline bool pte_needs_flush(pte_t oldpte, pte_t newpte)
-+{
-+	/* !PRESENT -> * ; no need for flush */
-+	if (!pte_present(oldpte))
-+		return false;
-+
-+	/* PRESENT -> !PRESENT ; needs flush */
-+	if (!pte_present(newpte))
-+		return true;
-+
-+	/* PFN changed ; needs flush */
-+	if (pte_pfn(oldpte) != pte_pfn(newpte))
-+		return true;
-+
-+	return pte_flags_need_flush(pte_flags(oldpte), pte_flags(newpte),
-+				    _PAGE_ACCESSED);
-+}
-+#define pte_needs_flush pte_needs_flush
-+
-+/*
-+ * huge_pmd_needs_flush() checks whether permissions were demoted and
-+ * require a flush. It should only be used for userspace huge PMDs.
-+ */
-+static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
-+{
-+	/* !PRESENT -> * ; no need for flush */
-+	if (!pmd_present(oldpmd))
-+		return false;
-+
-+	/* PRESENT -> !PRESENT ; needs flush */
-+	if (!pmd_present(newpmd))
-+		return true;
-+
-+	/* PFN changed ; needs flush */
-+	if (pmd_pfn(oldpmd) != pmd_pfn(newpmd))
-+		return true;
-+
-+	return pte_flags_need_flush(pmd_flags(oldpmd), pmd_flags(newpmd), 0);
-+}
-+#define huge_pmd_needs_flush huge_pmd_needs_flush
-+
- #endif /* !MODULE */
- 
- static inline void __native_tlb_flush_global(unsigned long cr4)
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index fd7feb5c7894..3a30e23fa35d 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -654,6 +654,20 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
- 	} while (0)
+ /**
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index f4f4077b97aa..5826e8e52619 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -570,6 +570,26 @@ extern pmd_t pmdp_invalidate(struct vm_area_struct *vma, unsigned long address,
+ 			    pmd_t *pmdp);
  #endif
  
-+#ifndef pte_needs_flush
-+static inline bool pte_needs_flush(pte_t oldpte, pte_t newpte)
-+{
-+	return true;
-+}
++#ifndef __HAVE_ARCH_PMDP_INVALIDATE_AD
++
++/*
++ * pmdp_invalidate_ad() invalidates the PMD while changing a transparent
++ * hugepage mapping in the page tables. This function is similar to
++ * pmdp_invalidate(), but should only be used if the access and dirty bits would
++ * not be cleared by the software in the new PMD value. The function ensures
++ * that hardware changes of the access and dirty bits updates would not be lost.
++ *
++ * Doing so can allow in certain architectures to avoid a TLB flush in most
++ * cases. Yet, another TLB flush might be necessary later if the PMD update
++ * itself requires such flush (e.g., if protection was set to be stricter). Yet,
++ * even when a TLB flush is needed because of the update, the caller may be able
++ * to batch these TLB flushing operations, so fewer TLB flush operations are
++ * needed.
++ */
++extern pmd_t pmdp_invalidate_ad(struct vm_area_struct *vma,
++				unsigned long address, pmd_t *pmdp);
 +#endif
 +
-+#ifndef huge_pmd_needs_flush
-+static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
-+{
-+	return true;
-+}
-+#endif
-+
- #endif /* CONFIG_MMU */
- 
- #endif /* _ASM_GENERIC__TLB_H */
+ #ifndef __HAVE_ARCH_PTE_SAME
+ static inline int pte_same(pte_t pte_a, pte_t pte_b)
+ {
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index d58a5b498011..51b0f3cb1ba0 100644
+index 51b0f3cb1ba0..691d80edcfd7 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -1698,7 +1698,7 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- {
- 	struct mm_struct *mm = vma->vm_mm;
- 	spinlock_t *ptl;
--	pmd_t entry;
-+	pmd_t oldpmd, entry;
- 	bool preserve_write;
- 	int ret;
- 	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
-@@ -1784,9 +1784,9 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	 * pmdp_invalidate() is required to make sure we don't miss
+@@ -1781,10 +1781,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	 * The race makes MADV_DONTNEED miss the huge pmd and don't clear it
+ 	 * which may break userspace.
+ 	 *
+-	 * pmdp_invalidate() is required to make sure we don't miss
++	 * pmdp_invalidate_ad() is required to make sure we don't miss
  	 * dirty/young flags set by hardware.
  	 */
--	entry = pmdp_invalidate(vma, addr, pmd);
-+	oldpmd = pmdp_invalidate(vma, addr, pmd);
+-	oldpmd = pmdp_invalidate(vma, addr, pmd);
++	oldpmd = pmdp_invalidate_ad(vma, addr, pmd);
  
--	entry = pmd_modify(entry, newprot);
-+	entry = pmd_modify(oldpmd, newprot);
+ 	entry = pmd_modify(oldpmd, newprot);
  	if (preserve_write)
- 		entry = pmd_mk_savedwrite(entry);
- 	if (uffd_wp) {
-@@ -1803,7 +1803,8 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	ret = HPAGE_PMD_NR;
- 	set_pmd_at(mm, addr, pmd, entry);
+diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+index 6523fda274e5..90ab721a12a8 100644
+--- a/mm/pgtable-generic.c
++++ b/mm/pgtable-generic.c
+@@ -201,6 +201,14 @@ pmd_t pmdp_invalidate(struct vm_area_struct *vma, unsigned long address,
+ }
+ #endif
  
--	tlb_flush_pmd_range(tlb, addr, HPAGE_PMD_SIZE);
-+	if (huge_pmd_needs_flush(oldpmd, entry))
-+		tlb_flush_pmd_range(tlb, addr, HPAGE_PMD_SIZE);
- 
- 	BUG_ON(vma_is_anonymous(vma) && !preserve_write && pmd_write(entry));
- unlock:
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index f9730bac2d78..97967d589ddb 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -152,7 +152,8 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 				ptent = pte_mkwrite(ptent);
- 			}
- 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
--			tlb_flush_pte_range(tlb, addr, PAGE_SIZE);
-+			if (pte_needs_flush(oldpte, ptent))
-+				tlb_flush_pte_range(tlb, addr, PAGE_SIZE);
- 			pages++;
- 		} else if (is_swap_pte(oldpte)) {
- 			swp_entry_t entry = pte_to_swp_entry(oldpte);
++#ifndef __HAVE_ARCH_PMDP_INVALIDATE_AD
++pmd_t pmdp_invalidate_ad(struct vm_area_struct *vma, unsigned long address,
++			 pmd_t *pmdp)
++{
++	return pmdp_invalidate(vma, address, pmdp);
++}
++#endif
++
+ #ifndef pmdp_collapse_flush
+ pmd_t pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long address,
+ 			  pmd_t *pmdp)
 -- 
 2.25.1
 

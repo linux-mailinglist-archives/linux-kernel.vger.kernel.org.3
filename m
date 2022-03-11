@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7997C4D6256
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62E14D625A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348905AbiCKNY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S245737AbiCKN1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345965AbiCKNYM (ORCPT
+        with ESMTP id S240969AbiCKN1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:24:12 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A0C76E2F;
-        Fri, 11 Mar 2022 05:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647004988; x=1678540988;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UXpw8xMUXXNMq602k1Jggox1J6ysJh5BAv361tPlTcw=;
-  b=KZEkNrHTIeAtqBK4mOqvbDsHCjg7dYekL3ojVUQwWmuJAYhfPMwg2Z0T
-   RcawHPKZXCCmQVjj3rcSYh+ZGbOCORdM9QHOrQf2bZL/xehOjn0Ql9XQv
-   SrN+drxYJhdJDZmPsDRnQYtJ0FcSUBszIFfW0gViCKs6jMihnFa61CuIZ
-   peI3gYeNql6Oqr54agAszoDlI+5XEARj0NdX8nk3cY9KqfdEqACalbR1z
-   bHOPrsVJ97OLvy0MLvK6EHV41GsosqqHTXl/Rtd+K4hh+L5kVFg0MLMLA
-   ykRkPm850ZSr4OYC51w2xMxT1DuN6uG01y1y4C4BBV4s5lZGZp4hk2VhS
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="254398554"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="254398554"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:23:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="612153648"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Mar 2022 05:23:05 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSfEX-0006Sh-18; Fri, 11 Mar 2022 13:23:05 +0000
-Date:   Fri, 11 Mar 2022 21:22:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     kbuild-all@lists.01.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH] tracing: Add snapshot at end of kernel boot up
-Message-ID: <202203112151.vHjFh9wP-lkp@intel.com>
-References: <20220310214133.0e58e321@gandalf.local.home>
+        Fri, 11 Mar 2022 08:27:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EDB77AA6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:26:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC6C461E1E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 13:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89470C340E9;
+        Fri, 11 Mar 2022 13:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647005193;
+        bh=JV5dp9g+TAY5SSai+UAS2mG/uTcSNrIa389c8fPQlPg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NmQaGbDuPPEXWIpZXDwFBVdTQLTyOXbaJi9fSvRLcNqcHa24Aym+DFKAvfwGqbWaa
+         KovDSW3KGMppZJYyfwNaayDpLmDCEiil2NCHgOCdw/ydgrmLF6atTVUX2NEyKByufR
+         YXIElxIwTyophPfYhTyQT/i6/LLk3KtavUYF96BWaEdRN5XiiUxh8U3IndAwaWHD8m
+         ZRUKKjyPzWHB0cj+bxrbjv0SoJzGKWiYRUXIw3cWiYw3VLjWEP1YygSJyBfiMzz5E6
+         DXcglmqg2SKbdMZ7qLU9zy832p8B5cotjnR9FiopSmbWozjUUqWtT/5zQLGaBiUdCD
+         7Ss9C0e/SB+HQ==
+Date:   Fri, 11 Mar 2022 13:26:29 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Asymmetric regmap read/write reg
+Message-ID: <YitOBbJd4mY3hjSA@sirena.org.uk>
+References: <20220310215408.GA3149079@euler>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tfzFQds3CQb/PCVZ"
 Content-Disposition: inline
-In-Reply-To: <20220310214133.0e58e321@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220310215408.GA3149079@euler>
+X-Cookie: A fool and his money are soon popular.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,42 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
 
-Thank you for the patch! Perhaps something to improve:
+--tfzFQds3CQb/PCVZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on linux/master hnaz-mm/master linus/master v5.17-rc7 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Thu, Mar 10, 2022 at 01:54:08PM -0800, Colin Foster wrote:
 
-url:    https://github.com/0day-ci/linux/commits/Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: xtensa-buildonly-randconfig-r002-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112151.vHjFh9wP-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Add-snapshot-at-end-of-kernel-boot-up/20220311-104216
-        git checkout 60ed6397c93a264f9ccbc8a6ca0b3ecc4dfdf6da
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
+> The Ocelot chip has requires 100ns between address write and when the
+> address is ready to be clocked out. This can be dealt with in three
+> different ways:
+> 1. Use a slow enough clock speed
+> 2. Use a delay between address write and value read
+> 3. Clock out N padding bytes to account for the 100ns access time
+>=20
+> Forcing a slow clock speed is obviously not ideal, and forcing a delay
+> between "write_then_read" sounds too driver-specific, so option 3 seems
+> like the best option - especially if bulk reads are utilized.
+>=20
+> Where regmap comes in is specifically the padding bytes. Reads require
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Why not implement this using a delay?  That seems both more
+straightforward and likely tending to be more accurate given that clock
+rates for SPI devices tend to be a bit vague.  Much less disruptive to
+implement too.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+--tfzFQds3CQb/PCVZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> WARNING: modpost: vmlinux.o(.text+0x7c164): Section mismatch in reference from the function __se_sys_delete_module() to the function .init.text:ftrace_boot_snapshot()
-The function __se_sys_delete_module() references
-the function __init ftrace_boot_snapshot().
-This is often because __se_sys_delete_module lacks a __init
-annotation or the annotation of ftrace_boot_snapshot is wrong.
+-----BEGIN PGP SIGNATURE-----
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrTgQACgkQJNaLcl1U
+h9BeLgf+LLbPW8CHVk2YjB9BkNqoZblpnZ7lo74hLtRI/781lHmhBNxm/MvZxAI7
+XhlErE0SmyQfLKrnIM+ns5yYYt36eYV5j1FxoJwxubZu6r82CA4xNj/jPiUfBks8
+qgI7YzIsxly7PVz6SBFgRjlNWe4IP+j9sjkYLy+Ez3EK812kyrnpvDWDCYHa+jhx
+M4Oh6G1+5HtoUcv4pVG7yWqD40d+RKgSB47TvEJThoL0j5K8gcbpTXYADvb2/P8f
+iqrNzeQv6KeZnYtfP5WWFi2hEpEQpejzeOFnq8MjJPd3RpVErTjJNdZp++qxQtwS
+FA6Mt8UfJRVTEMNYMep/FcrhRWiWsQ==
+=XMCC
+-----END PGP SIGNATURE-----
+
+--tfzFQds3CQb/PCVZ--

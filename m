@@ -2,177 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9614D6A76
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2EA4D6ABE
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiCKWok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 17:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S229728AbiCKXNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 18:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiCKWoa (ORCPT
+        with ESMTP id S230091AbiCKXMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:44:30 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D782D277498;
-        Fri, 11 Mar 2022 14:20:03 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 075505DB;
-        Fri, 11 Mar 2022 13:48:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1647035306;
-        bh=P5ZzCyWn8Nc/M66e9melDdZzKd2Hn269uTStfhzFeC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SeBg6gzwol1DPY+p8aBXLrgBeFwTV/cLJNNB+CzisLZn5BmXq8SHYUi4BmZTI5U87
-         EwF40TMiZh3r0gEjiam4MJxKeWQSKEJyhstMlz6G6s6e5q1orIIbmJ+LmDI+adDj6J
-         dD4rHas3tEoq254WVvMBjHQvd6oLPDMmrV61sYro=
-Date:   Fri, 11 Mar 2022 13:48:22 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: Add power-efuse binding
-Message-ID: <YivDpkajrJk3KfBM@hatter.bewilderbeest.net>
-References: <20220308011811.10353-1-zev@bewilderbeest.net>
- <20220308011811.10353-2-zev@bewilderbeest.net>
- <YitpuR+SlDiKh4eq@robh.at.kernel.org>
+        Fri, 11 Mar 2022 18:12:51 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E652692A2;
+        Fri, 11 Mar 2022 15:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647040306; x=1678576306;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TII6J4aKIbWXaAC0bycqdUuzXY20aYHTjj7YIZmiAvQ=;
+  b=iwSI8WJCcqWOByyFTliGfNDJf+uhbBfP9YiD6yYuX0uec3yb9Lz0/d2P
+   rSNHUVV14RQ8o1iyYSeDPcUi8bgdrq5Hkh6FV4fX+5LQP+qAZ0t0yJZ/R
+   WpB1Lxt7jHQQ1Mi3JRCEtI+1wHmFCSEkfRirYY/2FNLWUrSmUBRkiZyj1
+   qgoySM7Ga1/jLcG+ssUJcdmOKhz8DAlxoSFKqFh/m8PPu/rf0VA/O/dHF
+   ifX7CCjv5zVMorHlS4Rq63fj6OzWTFWbWvKfW9MsM0vhQccsC/3g3w23D
+   xoFoSZ0iDU1zHRPWrz0Oy0hJNan8GgozKmxjb02i8ePLx8L5Rkub26NFm
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237832400"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="237832400"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 13:51:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="496890795"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 13:51:12 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSnAG-00079K-09; Fri, 11 Mar 2022 21:51:12 +0000
+Date:   Sat, 12 Mar 2022 05:50:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, Levin Du <djw@t-chip.com.cn>,
+        Tianling Shen <cnsztl@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Alex Bee <knaerzche@gmail.com>, Liang Chen <cl@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH v2 2/3] arm64: dts: rockchip: add basic dts for the radxa
+ rock3 model a
+Message-ID: <202203120525.muN78AQX-lkp@intel.com>
+References: <20220310210352.451136-3-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YitpuR+SlDiKh4eq@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220310210352.451136-3-michael.riesch@wolfvision.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 07:24:41AM PST, Rob Herring wrote:
->On Mon, Mar 07, 2022 at 05:18:09PM -0800, Zev Weiss wrote:
->> This can be used to describe a power output supplied by a regulator
->> device that the system controls.
->>
->> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->> ---
->>  .../devicetree/bindings/misc/power-efuse.yaml | 49 +++++++++++++++++++
->>  1 file changed, 49 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
->> new file mode 100644
->> index 000000000000..5f8f0b21af0e
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
->> @@ -0,0 +1,49 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Generic power efuse device
->> +
->> +maintainers:
->> +  - Zev Weiss <zev@bewilderbeest.net>
->> +
->> +description: |
->> +  This binding describes a physical power output supplied by a
->> +  regulator providing efuse functionality (manual on/off control, and
->> +  auto-shutoff if current, voltage, or thermal limits are exceeded).
->> +
->> +  These may be found on systems such as "smart" network PDUs, and
->> +  typically supply power to devices entirely separate from the system
->> +  described by the device-tree by way of an external connector such as
->> +  an Open19 power cable:
->> +
->> +  https://www.open19.org/marketplace/coolpower-cable-assembly-8ru/
->
->Not really a helpful link...
->
->I still don't understand what the h/w looks like here. At least I now
->understand we're talking a fuse on power rail, not efuses in an SoC
->used as OTP bits or feature disables.
->
+Hi Michael,
 
-The systems this would actually be used for would be things like these:
-  - https://www.open19.org/marketplace/delta-16kw-power-shelf/
-  - https://www.open19.org/marketplace/inspur-open19-power-shelf-ob19200l1/
+Thank you for the patch! Yet something to improve:
 
-The rightmost pictures on those pages show the four black connectors 
-where the cable assembly linked in the patch plugs in, each of which 
-provides the outputs from 12 such efuses, on 12 pairs of ground and 
-+12VDC pins.  (There are also two more single outputs off to the side.)
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on arm/for-next xilinx-xlnx/master arm64/for-next/core shawnguo/for-next clk/clk-next kvmarm/next keystone/next v5.17-rc7]
+[cannot apply to rockchip/for-next soc/for-next next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-It essentially just amounts to an external power output supplied by a 
-regulator, with the regulator providing an on/off switch, overcurrent 
-protection, etc.
+url:    https://github.com/0day-ci/linux/commits/Michael-Riesch/arm64-dts-rockchip-add-basic-dts-for-the-radxa-rock3-model-a/20220311-050612
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-buildonly-randconfig-r002-20220310 (https://download.01.org/0day-ci/archive/20220312/202203120525.muN78AQX-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8d0dad8b66056847b8a2e95272ee74ca4b12fd29
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michael-Riesch/arm64-dts-rockchip-add-basic-dts-for-the-radxa-rock3-model-a/20220311-050612
+        git checkout 8d0dad8b66056847b8a2e95272ee74ca4b12fd29
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-And yes, the ambiguity of the "efuse" terminology is unfortunate (the 
-"power-" prefix was an attempt to clarify it slightly).  That's the term 
-used in the documentation for the hardware and hence is what I've called 
-it here, but I'd be open to using a different name if that would help.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->> +
->> +properties:
->> +  compatible:
->> +    const: power-efuse
->> +
->> +  vout-supply:
->> +    description:
->> +      phandle to the regulator providing power for the efuse
->
->Vout is a supply to the efuse and not the rail being fused?
+Note: the linux-review/Michael-Riesch/arm64-dts-rockchip-add-basic-dts-for-the-radxa-rock3-model-a/20220311-050612 HEAD c217f194b7a9cbdb7cbb8149ae1f6e8c2faf6e3f builds fine.
+      It only hurts bisectability.
 
-Yeah, that was a fairly muddled description -- it's really the latter.  
-Perhaps:
+All errors (new ones prefixed by >>):
 
-   phandle to the regulator providing power for the output rail
-   controlled by the efuse
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:132.1-5 Label or path gpu not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:473.1-16 Label or path usb_host0_ehci not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:477.1-16 Label or path usb_host0_ohci not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:481.1-16 Label or path usb_host1_ehci not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:485.1-16 Label or path usb_host1_ohci not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:489.1-10 Label or path usb2phy1 not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:493.1-15 Label or path usb2phy1_host not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts:498.1-14 Label or path usb2phy1_otg not found
+>> FATAL ERROR: Syntax error parsing input tree
 
-?
-
->
->Sorry, I know nothing about how an efuse is implemented so you are going
->to have to explain or draw it.
->
->> +
->> +  error-flags-cache-ttl-ms:
->> +    description:
->> +      The number of milliseconds the vout-supply regulator's error
->> +      flags should be cached before re-fetching them.
->
->How does one fetch/read? the error flags?
->
-
-In the specific case I'm dealing with, via PMBus STATUS_* commands, 
-though I was aiming to keep this more generic so it could potentially be 
-used to describe non-PMBus arrangements (in the Linux case, via whatever 
-mechanism the implementation of the regulator's .get_error_flags() 
-function uses).
-
->> +
->> +required:
->> +  - compatible
->> +  - vout-supply
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    efuse {
->> +        compatible = "power-efuse";
->> +        vout-supply = <&efuse_reg>;
->> +        error-flags-cache-ttl-ms = <500>;
->> +    };
->> --
->> 2.35.1
->>
->>
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

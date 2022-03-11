@@ -2,83 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732814D62B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BF44D62C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349017AbiCKOB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S1349033AbiCKOCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349018AbiCKOBY (ORCPT
+        with ESMTP id S238102AbiCKOCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:01:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90C1C4B38;
-        Fri, 11 Mar 2022 06:00:17 -0800 (PST)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KFSFp1xr9z67yL5;
-        Fri, 11 Mar 2022 21:58:38 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Fri, 11 Mar 2022 15:00:14 +0100
-Received: from [10.47.87.13] (10.47.87.13) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Fri, 11 Mar
- 2022 14:00:14 +0000
-Message-ID: <a007c783-49a2-4ab3-a592-9f37ea41eaae@huawei.com>
-Date:   Fri, 11 Mar 2022 14:00:13 +0000
+        Fri, 11 Mar 2022 09:02:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 802321C57D0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647007297;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=I+nWv4ywDxtdW2kAMKWAd/9h8AiRGVEXkvqyetpKnWc=;
+        b=Tq1z9Srzf6uzlrAUXqGZiT9bTfdi2YP+szhWq24H0sGNXeMb81xeATYDs5AZf32eS8ZoSu
+        r9LUA50/oedaSunzte3Qb5BC8+q6kdB14H7FGbCRUL36C2DGGXlEGZh1uvNgZzOHQzU58o
+        V/iZwrWtvgtPThsXF7C3qKePY9F8Ty4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-sly5me0lPe6uMFhCLHqmOA-1; Fri, 11 Mar 2022 09:01:36 -0500
+X-MC-Unique: sly5me0lPe6uMFhCLHqmOA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C64741854E21;
+        Fri, 11 Mar 2022 14:01:31 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.16.83])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 06A257AD1B;
+        Fri, 11 Mar 2022 14:01:30 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 58049223A46; Fri, 11 Mar 2022 09:01:30 -0500 (EST)
+Date:   Fri, 11 Mar 2022 09:01:30 -0500
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Anderson <dvander@google.com>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>, selinux@vger.kernel.org,
+        paulmoore@microsoft.com, luca.boccassi@microsoft.com
+Subject: Re: [PATCH v19 0/4] overlayfs override_creds=off & nested get xattr
+ fix
+Message-ID: <YitWOqzIRjnP1lok@redhat.com>
+References: <20211117015806.2192263-1-dvander@google.com>
+ <CAOQ4uxjjapFeOAFGLmsXObdgFVYLfNer-rnnee1RR+joxK3xYg@mail.gmail.com>
+ <Yao51m9EXszPsxNN@redhat.com>
+ <CAOQ4uxjk4piLyx67Ena-FfypDVWzRqVN0xmFUXXPYa+SC4Q-vQ@mail.gmail.com>
+ <YapjNRrjpDu2a5qQ@redhat.com>
+ <CAHC9VhQTUgBRBEz_wFX8daSA70nGJCJLXj8Yvcqr5+DHcfDmwA@mail.gmail.com>
+ <CA+FmFJA-r+JgMqObNCvE_X+L6jxWtDrczM9Jh0L38Fq-6mnbbA@mail.gmail.com>
+ <CAHC9VhRer7UWdZyizWO4VuxrgQDnLCOyj8LO7P6T5BGjd=s9zQ@mail.gmail.com>
+ <CAHC9VhQkLSBGQ-F5Oi9p3G6L7Bf_jQMWAxug_G4bSOJ0_cYXxQ@mail.gmail.com>
+ <CAOQ4uxhfU+LGunL3cweorPPdoCXCZU0xMtF=MekOAe-F-68t_Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] perf parse-events: Fix null check
-To:     Weiguo Li <liwg06@foxmail.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>
-CC:     <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <tencent_DF39269807EC9425E24787E6DB632441A405@qq.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <tencent_DF39269807EC9425E24787E6DB632441A405@qq.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.87.13]
-X-ClientProxiedBy: lhreml707-chm.china.huawei.com (10.201.108.56) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxhfU+LGunL3cweorPPdoCXCZU0xMtF=MekOAe-F-68t_Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 13:06, Weiguo Li wrote:
-> We did a null check after "tmp->symbol = strdup(...)", but we checked
-> "list->symbol" other than "tmp->symbol".
+On Fri, Mar 11, 2022 at 06:09:56AM +0200, Amir Goldstein wrote:
+> On Fri, Mar 11, 2022 at 12:11 AM Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > On Wed, Mar 9, 2022 at 4:13 PM Paul Moore <paul@paul-moore.com> wrote:
+> > > On Tue, Mar 1, 2022 at 12:05 AM David Anderson <dvander@google.com> wrote:
+> > > > On Mon, Feb 28, 2022 at 5:09 PM Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > ...
+> >
+> > > >> This patchset may not have been The Answer, but surely there is
+> > > >> something we can do to support this use-case.
+> > > >
+> > > > Yup exactly, and we still need patches 3 & 4 to deal with this. My current plan is to try and rework our sepolicy (we have some ideas on how it could be made compatible with how overlayfs works). If that doesn't pan out we'll revisit these patches and think harder about how to deal with the coherency issues.
+> > >
+> > > Can you elaborate a bit more on the coherency issues?  Is this the dir
+> > > cache issue that is alluded to in the patchset?  Anything else that
+> > > has come up on review?
+> > >
+> > > Before I start looking at the dir cache in any detail, did you have
+> > > any thoughts on how to resolve the problems that have arisen?
+> >
+> > David, Vivek, Amir, Miklos, or anyone for that matter, can you please
+> > go into more detail on the cache issues?  I *think* I may have found a
+> > potential solution for an issue that could arise when the credential
+> > override is not in place, but I'm not certain it's the only issue :)
+> >
 > 
-> Signed-off-by: Weiguo Li <liwg06@foxmail.com>
-
-Reviewed-by: John Garry <john.garry@huawei.com>
-
-> ---
->   tools/perf/util/parse-events.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Paul,
 > 
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> index 9739b05b999e..dfb50a5f83d0 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -2193,7 +2193,7 @@ int perf_pmu__test_parse_init(void)
->   	for (i = 0; i < ARRAY_SIZE(symbols); i++, tmp++) {
->   		tmp->type = symbols[i].type;
->   		tmp->symbol = strdup(symbols[i].symbol);
-> -		if (!list->symbol)
-> +		if (!tmp->symbol)
->   			goto err_free;
->   	}
->   
+> In this thread I claimed that the authors of the patches did not present
+> a security model for overlayfs, such as the one currently in overlayfs.rst.
+> If we had a model we could have debated its correctness and review its
+> implementation.
+
+Agreed. After going through the patch set, I was wondering what's the
+overall security model and how to visualize that.
+
+So probably there needs to be a documentation patch which explains
+what's the new security model and how does it work.
+
+Also think both in terms of DAC and MAC. (Instead of just focussing too
+hard on SELinux).
+
+My understanding is that in current model, some of the overlayfs
+operations require priviliges. So mounter is supposed to be priviliged
+and does the operation on underlying layers.
+
+Now in this new model, there will be two levels of check. Both overlay
+level and underlying layer checks will happen in the context of task
+which is doing the operation. So first of all, all tasks will need
+to have enough priviliges to be able to perform various operations
+on lower layer. 
+
+If we do checks at both the levels in with the creds of calling task,
+I guess that probably is fine. (But will require a closer code inspection
+to make sure there is no privilege escalation both for mounter as well
+calling task).
+
+> 
+> As a proof that there is no solid model, I gave an *example* regarding
+> the overlay readdir cache.
+> 
+> When listing a merged dir, meaning, a directory containing entries from
+> several overlay layers, ovl_permission() is called to check user's permission,
+> but ovl_permission() does not currently check permissions to read all layers,
+> because that is not the current overlayfs model.
+> 
+> Overlayfs has a readdir cache, so without override_cred, a user with high
+> credentials can populate the readdir cache and then a user will fewer
+> credentials, not enough to access the lower layers, but enough to access
+> the upper most layer, will pass ovl_permission() check and be allowed to
+> read from readdir cache.
+
+I am not very familiar with dir caching code. When I read through the
+overlayfs.rst, it gave the impression that caching is per "struct file".
+
+"This merged name list is cached in the
+'struct file' and so remains as long as the file is kept open."
+
+And I was wondering if that's the case, then one user should not be able
+to access the cache built by another priviliged user (until and unless
+privileged user passed fd).
+
+But looks like we build this cache and store in ovl inode and that's
+why this issue of cache built by higher privileged process will be
+accessible to lower privileged process.
+
+With current model this is not an issue because "mounter" is providing
+those privileges to unprivileged process. So while unprivileged process
+can't do "readdir" on an underlying lower dir, it might still be able
+to do that through an overlay mount. But if we don't switch to mounter's
+creds, then we probably can't rely on this dir caching. Agreed that
+disabling dir caching seems simplest solution if we were to do
+override_creds=off.
+
+Thanks
+Vivek
+
+> 
+> This specific problem can be solved in several ways - disable readdir
+> cache with override_cred=off, check all layers in ovl_permission().
+> That's not my point. My point is that I provided a proof that the current
+> model of override_cred=off is flawed and it is up to the authors of the
+> patch to fix the model and provide the analysis of overlayfs code to
+> prove the model's correctness.
+> 
+> The core of the matter is there is no easy way to "merge" the permissions
+> from all layers into a single permission blob that could be checked once.
+> 
+> Maybe the example I gave is the only flaw in the model, maybe not
+> I am not sure. I will be happy to help you in review of a model and the
+> solution that you may have found.
+> 
+> Thanks,
+> Amir.
+> 
 

@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB47E4D5E43
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939434D5E46
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347389AbiCKJVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S1347412AbiCKJVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245399AbiCKJVQ (ORCPT
+        with ESMTP id S1347388AbiCKJVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:21:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 011371BD051
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646990413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 11 Mar 2022 04:21:42 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5B21BD05B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:38 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:20:34 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646990436;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JjMnaabkCThW4LfIHa74LeIIYTcgnA3J8O+F2l0SgkM=;
-        b=ROnfCZqZOHuG1xNN+XdvwEpcncs89/AKof8BW69/hWvnfpdzYJrN2njt9Qr4/440vg/f+W
-        3hxlFOHdCDKbcnof0kPJmNwUSLExHBvMa5Poo6GLCR5JJNZx5O7Vmfo2CEudybw1vpNSZJ
-        rfu2oCaISwwygh7gO74wtwuY7KoXGiM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-tHs1gQtQMm-4ydOHmbO3mg-1; Fri, 11 Mar 2022 04:20:10 -0500
-X-MC-Unique: tHs1gQtQMm-4ydOHmbO3mg-1
-Received: by mail-wm1-f70.google.com with SMTP id 3-20020a05600c230300b00384e15ceae4so5258288wmo.7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JjMnaabkCThW4LfIHa74LeIIYTcgnA3J8O+F2l0SgkM=;
-        b=LMxQV4csOdBJVGrATLj9ftJGum/NyAD9Q+sFMTzni3ZkAXxNRn/0ZQyxEc5fpuLrmg
-         ABL7q+678Wvw3OOBLokdG1obCyfFvmupi6ZZuIEgzjA1ykBqe37WhxpBhbLt/feZtsSo
-         fPj4Iz25ATsLCY96k/7ZgjnN5GgaNVQwXovQJ6i2V1MuFBm7o61gEtJzVHZV9onKwBaI
-         MhvXhc2GmB3Iay7whIGxFRkDHDQ94GAwV4le++e3h1lmi4Zw8ijFucjuxagZn+D+2BgL
-         hnLN+VfxRZ2y/rGMeMsXvrOG1s4vOOX90hfFnzjn6EDjAi/AAgxuOE0uBnp0f+Fxb6zk
-         EVBg==
-X-Gm-Message-State: AOAM532beGhg3bvIPtr+ahSj9kcLLmROoL5WUJaMcKiaWOpWf30NwV9R
-        OvALIMNZyJ1Dd5xyaBVT3d+2ektiSklyGl5osbQYQ5qoXSPRquKvl2K5Gqmt8Qlw7EHonl8iX4A
-        m8DEWTtVQ1ksAm2cOiECOofmz
-X-Received: by 2002:a05:6000:1847:b0:203:813a:509e with SMTP id c7-20020a056000184700b00203813a509emr6485324wri.329.1646990409468;
-        Fri, 11 Mar 2022 01:20:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx059XXbXV5c+1JfZ3BucwQzUjl7dzAZ6gRMB7RhWqx+WgCAbRdWc2w8xLDzsxYVlTt8YiWVQ==
-X-Received: by 2002:a05:6000:1847:b0:203:813a:509e with SMTP id c7-20020a056000184700b00203813a509emr6485304wri.329.1646990409203;
-        Fri, 11 Mar 2022 01:20:09 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:8200:163d:7a08:6e61:87a5? (p200300cbc7078200163d7a086e6187a5.dip0.t-ipconnect.de. [2003:cb:c707:8200:163d:7a08:6e61:87a5])
-        by smtp.gmail.com with ESMTPSA id p11-20020adf9d8b000000b001f063deef80sm6101400wre.86.2022.03.11.01.20.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 01:20:08 -0800 (PST)
-Message-ID: <52412f08-829a-6c29-60c6-a24c866e6253@redhat.com>
-Date:   Fri, 11 Mar 2022 10:20:08 +0100
+        bh=8GonAYtSpZjNXZsLXx8i8OotrK/IuPCNnxQKAWeALZI=;
+        b=UeQfqtA1TcN01C7HmzVx6RaDWx9ACIJX7aWc29f5gjxYYQiHzxwWQNbB1qWJNg9xK2FUrN
+        Zr1q3t4647lkMSa4N1qsLF1hzoEOV4iojR3ved8wSaoOvFFhl5yf5u32JnqPNlvHSm+x4o
+        te1mT7pV+GSI4bg1UIxc83K98YSvL1r77SNu9YWbhAaJwPrRkbGssGZNp3rbjRMX0I/m9N
+        IaiPBvwEkFjif6sGe4VXeJKMva8oxkVv7TmrTHD7lNtvAvUA6KE6iVV5t5TnOENMFYhnt9
+        WY6FjZ3LJ6ZP7Et3W5I58nhnlQ5phwlR3jZ14EvOVnj23UbBN6MaW4buENdDlg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646990436;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8GonAYtSpZjNXZsLXx8i8OotrK/IuPCNnxQKAWeALZI=;
+        b=9SPONLiOLO0CdQCHdSViwadvKZNlaT30l74utHOKJSLHZmPi9kxorp3EE19qTW9H7A1xGQ
+        +vPSAB5QCY7OHEAA==
+From:   "irqchip-bot for Hector Martin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Add support for AICv2
+Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: <20220309192123.152028-8-marcan@marcan.st>
+References: <20220309192123.152028-8-marcan@marcan.st>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] mm/khugepaged: sched to numa node when collapse huge page
-Content-Language: en-US
-To:     Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220311090119.2412738-1-maobibo@loongson.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220311090119.2412738-1-maobibo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <164699043431.16921.2816635433995674360.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,79 +64,320 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.03.22 10:01, Bibo Mao wrote:
-> collapse huge page is slow, specially when khugepaged daemon runs
-> on different numa node with that of huge page. It suffers from
-> huge page copying across nodes, also cache is not used for target
-> node. With this patch, khugepaged daemon switches to the same numa
-> node with huge page. It saves copying time and makes use of local
-> cache better.
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Hi,
+Commit-ID:     768d4435de2a042f35069c68587d8e6702102248
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/768d4435de2a042f35069c68587d8e6702102248
+Author:        Hector Martin <marcan@marcan.st>
+AuthorDate:    Thu, 10 Mar 2022 04:21:23 +09:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Fri, 11 Mar 2022 08:59:47 
 
-just the usual question, do you have any performance numbers to back
-your claims (e.g., "is slow, specially when") and proof that this patch
-does the trick?
+irqchip/apple-aic: Add support for AICv2
 
+Introduce support for the new AICv2 hardware block in t6000/t6001 SoCs.
 
-> 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->  mm/khugepaged.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 131492fd1148..460c285dc974 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -116,6 +116,7 @@ struct khugepaged_scan {
->  	struct list_head mm_head;
->  	struct mm_slot *mm_slot;
->  	unsigned long address;
-> +	int node;
->  };
->  
->  static struct khugepaged_scan khugepaged_scan = {
-> @@ -1066,6 +1067,7 @@ static void collapse_huge_page(struct mm_struct *mm,
->  	struct vm_area_struct *vma;
->  	struct mmu_notifier_range range;
->  	gfp_t gfp;
-> +	const struct cpumask *cpumask;
+It seems these blocks are missing the information required to compute
+the event register offset in the capability registers, so we specify
+that in the DT as a second reg entry.
 
-We tend to stick to reverse Christmas tree format as good as possible.
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220309192123.152028-8-marcan@marcan.st
+---
+ drivers/irqchip/irq-apple-aic.c | 181 +++++++++++++++++++++++++------
+ 1 file changed, 148 insertions(+), 33 deletions(-)
 
->  
->  	VM_BUG_ON(address & ~HPAGE_PMD_MASK);
->  
-> @@ -1079,6 +1081,13 @@ static void collapse_huge_page(struct mm_struct *mm,
->  	 * that. We will recheck the vma after taking it again in write mode.
->  	 */
->  	mmap_read_unlock(mm);
-> +
-> +	/* sched to specified node before huage page memory copy */
-
-s/huage/huge/
-
-> +	cpumask = cpumask_of_node(node);
-> +	if ((khugepaged_scan.node != node) && !cpumask_empty(cpumask)) {
-> +		set_cpus_allowed_ptr(current, cpumask);
-> +		khugepaged_scan.node = node;
-> +	}
->  	new_page = khugepaged_alloc_page(hpage, gfp, node);
->  	if (!new_page) {
->  		result = SCAN_ALLOC_HUGE_PAGE_FAIL;
-> @@ -2380,6 +2389,7 @@ int start_stop_khugepaged(void)
->  		kthread_stop(khugepaged_thread);
->  		khugepaged_thread = NULL;
->  	}
-> +	khugepaged_scan.node = NUMA_NO_NODE;
->  	set_recommended_min_free_kbytes();
->  fail:
->  	mutex_unlock(&khugepaged_mutex);
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+index 93c6224..ba2dff7 100644
+--- a/drivers/irqchip/irq-apple-aic.c
++++ b/drivers/irqchip/irq-apple-aic.c
+@@ -103,6 +103,58 @@
+ 
+ #define AIC_MAX_IRQ		0x400
+ 
++/*
++ * AIC v2 registers (MMIO)
++ */
++
++#define AIC2_VERSION		0x0000
++#define AIC2_VERSION_VER	GENMASK(7, 0)
++
++#define AIC2_INFO1		0x0004
++#define AIC2_INFO1_NR_IRQ	GENMASK(15, 0)
++#define AIC2_INFO1_LAST_DIE	GENMASK(27, 24)
++
++#define AIC2_INFO2		0x0008
++
++#define AIC2_INFO3		0x000c
++#define AIC2_INFO3_MAX_IRQ	GENMASK(15, 0)
++#define AIC2_INFO3_MAX_DIE	GENMASK(27, 24)
++
++#define AIC2_RESET		0x0010
++#define AIC2_RESET_RESET	BIT(0)
++
++#define AIC2_CONFIG		0x0014
++#define AIC2_CONFIG_ENABLE	BIT(0)
++#define AIC2_CONFIG_PREFER_PCPU	BIT(28)
++
++#define AIC2_TIMEOUT		0x0028
++#define AIC2_CLUSTER_PRIO	0x0030
++#define AIC2_DELAY_GROUPS	0x0100
++
++#define AIC2_IRQ_CFG		0x2000
++
++/*
++ * AIC2 registers are laid out like this, starting at AIC2_IRQ_CFG:
++ *
++ * Repeat for each die:
++ *   IRQ_CFG: u32 * MAX_IRQS
++ *   SW_SET: u32 * (MAX_IRQS / 32)
++ *   SW_CLR: u32 * (MAX_IRQS / 32)
++ *   MASK_SET: u32 * (MAX_IRQS / 32)
++ *   MASK_CLR: u32 * (MAX_IRQS / 32)
++ *   HW_STATE: u32 * (MAX_IRQS / 32)
++ *
++ * This is followed by a set of event registers, each 16K page aligned.
++ * The first one is the AP event register we will use. Unfortunately,
++ * the actual implemented die count is not specified anywhere in the
++ * capability registers, so we have to explicitly specify the event
++ * register as a second reg entry in the device tree to remain
++ * forward-compatible.
++ */
++
++#define AIC2_IRQ_CFG_TARGET	GENMASK(3, 0)
++#define AIC2_IRQ_CFG_DELAY_IDX	GENMASK(7, 5)
++
+ #define MASK_REG(x)		(4 * ((x) >> 5))
+ #define MASK_BIT(x)		BIT((x) & GENMASK(4, 0))
+ 
+@@ -193,6 +245,7 @@ struct aic_info {
+ 	/* Register offsets */
+ 	u32 event;
+ 	u32 target_cpu;
++	u32 irq_cfg;
+ 	u32 sw_set;
+ 	u32 sw_clr;
+ 	u32 mask_set;
+@@ -220,6 +273,14 @@ static const struct aic_info aic1_fipi_info = {
+ 	.fast_ipi	= true,
+ };
+ 
++static const struct aic_info aic2_info = {
++	.version	= 2,
++
++	.irq_cfg	= AIC2_IRQ_CFG,
++
++	.fast_ipi	= true,
++};
++
+ static const struct of_device_id aic_info_match[] = {
+ 	{
+ 		.compatible = "apple,t8103-aic",
+@@ -229,11 +290,16 @@ static const struct of_device_id aic_info_match[] = {
+ 		.compatible = "apple,aic",
+ 		.data = &aic1_info,
+ 	},
++	{
++		.compatible = "apple,aic2",
++		.data = &aic2_info,
++	},
+ 	{}
+ };
+ 
+ struct aic_irq_chip {
+ 	void __iomem *base;
++	void __iomem *event;
+ 	struct irq_domain *hw_domain;
+ 	struct irq_domain *ipi_domain;
+ 
+@@ -310,7 +376,7 @@ static void __exception_irq_entry aic_handle_irq(struct pt_regs *regs)
+ 		 * We cannot use a relaxed read here, as reads from DMA buffers
+ 		 * need to be ordered after the IRQ fires.
+ 		 */
+-		event = readl(ic->base + ic->info.event);
++		event = readl(ic->event + ic->info.event);
+ 		type = FIELD_GET(AIC_EVENT_TYPE, event);
+ 		irq = FIELD_GET(AIC_EVENT_NUM, event);
+ 
+@@ -373,6 +439,14 @@ static struct irq_chip aic_chip = {
+ 	.irq_set_type = aic_irq_set_type,
+ };
+ 
++static struct irq_chip aic2_chip = {
++	.name = "AIC2",
++	.irq_mask = aic_irq_mask,
++	.irq_unmask = aic_irq_unmask,
++	.irq_eoi = aic_irq_eoi,
++	.irq_set_type = aic_irq_set_type,
++};
++
+ /*
+  * FIQ irqchip
+  */
+@@ -529,10 +603,15 @@ static struct irq_chip fiq_chip = {
+ static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
+ 			      irq_hw_number_t hw)
+ {
++	struct aic_irq_chip *ic = id->host_data;
+ 	u32 type = FIELD_GET(AIC_EVENT_TYPE, hw);
++	struct irq_chip *chip = &aic_chip;
++
++	if (ic->info.version == 2)
++		chip = &aic2_chip;
+ 
+ 	if (type == AIC_EVENT_TYPE_IRQ) {
+-		irq_domain_set_info(id, irq, hw, &aic_chip, id->host_data,
++		irq_domain_set_info(id, irq, hw, chip, id->host_data,
+ 				    handle_fasteoi_irq, NULL, NULL);
+ 		irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(irq)));
+ 	} else {
+@@ -888,24 +967,26 @@ static int aic_init_cpu(unsigned int cpu)
+ 	/* Commit all of the above */
+ 	isb();
+ 
+-	/*
+-	 * Make sure the kernel's idea of logical CPU order is the same as AIC's
+-	 * If we ever end up with a mismatch here, we will have to introduce
+-	 * a mapping table similar to what other irqchip drivers do.
+-	 */
+-	WARN_ON(aic_ic_read(aic_irqc, AIC_WHOAMI) != smp_processor_id());
++	if (aic_irqc->info.version == 1) {
++		/*
++		 * Make sure the kernel's idea of logical CPU order is the same as AIC's
++		 * If we ever end up with a mismatch here, we will have to introduce
++		 * a mapping table similar to what other irqchip drivers do.
++		 */
++		WARN_ON(aic_ic_read(aic_irqc, AIC_WHOAMI) != smp_processor_id());
+ 
+-	/*
+-	 * Always keep IPIs unmasked at the hardware level (except auto-masking
+-	 * by AIC during processing). We manage masks at the vIPI level.
+-	 * These registers only exist on AICv1, AICv2 always uses fast IPIs.
+-	 */
+-	aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
+-	if (static_branch_likely(&use_fast_ipi)) {
+-		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
+-	} else {
+-		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
+-		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
++		/*
++		 * Always keep IPIs unmasked at the hardware level (except auto-masking
++		 * by AIC during processing). We manage masks at the vIPI level.
++		 * These registers only exist on AICv1, AICv2 always uses fast IPIs.
++		 */
++		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
++		if (static_branch_likely(&use_fast_ipi)) {
++			aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
++		} else {
++			aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
++			aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
++		}
+ 	}
+ 
+ 	/* Initialize the local mask state */
+@@ -933,14 +1014,16 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 		return -EIO;
+ 
+ 	irqc = kzalloc(sizeof(*irqc), GFP_KERNEL);
+-	if (!irqc)
++	if (!irqc) {
++		iounmap(regs);
+ 		return -ENOMEM;
++	}
+ 
+ 	irqc->base = regs;
+ 
+ 	match = of_match_node(aic_info_match, node);
+ 	if (!match)
+-		return -ENODEV;
++		goto err_unmap;
+ 
+ 	irqc->info = *(struct aic_info *)match->data;
+ 
+@@ -958,6 +1041,28 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 		off = start_off = irqc->info.target_cpu;
+ 		off += sizeof(u32) * irqc->max_irq; /* TARGET_CPU */
+ 
++		irqc->event = irqc->base;
++
++		break;
++	}
++	case 2: {
++		u32 info1, info3;
++
++		info1 = aic_ic_read(irqc, AIC2_INFO1);
++		info3 = aic_ic_read(irqc, AIC2_INFO3);
++
++		irqc->nr_irq = FIELD_GET(AIC2_INFO1_NR_IRQ, info1);
++		irqc->max_irq = FIELD_GET(AIC2_INFO3_MAX_IRQ, info3);
++		irqc->nr_die = FIELD_GET(AIC2_INFO1_LAST_DIE, info1) + 1;
++		irqc->max_die = FIELD_GET(AIC2_INFO3_MAX_DIE, info3);
++
++		off = start_off = irqc->info.irq_cfg;
++		off += sizeof(u32) * irqc->max_irq; /* IRQ_CFG */
++
++		irqc->event = of_iomap(node, 1);
++		if (WARN_ON(!irqc->event))
++			goto err_unmap;
++
+ 		break;
+ 	}
+ 	}
+@@ -981,20 +1086,13 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 
+ 	irqc->hw_domain = irq_domain_create_tree(of_node_to_fwnode(node),
+ 						 &aic_irq_domain_ops, irqc);
+-	if (WARN_ON(!irqc->hw_domain)) {
+-		iounmap(irqc->base);
+-		kfree(irqc);
+-		return -ENODEV;
+-	}
++	if (WARN_ON(!irqc->hw_domain))
++		goto err_unmap;
+ 
+ 	irq_domain_update_bus_token(irqc->hw_domain, DOMAIN_BUS_WIRED);
+ 
+-	if (aic_init_smp(irqc, node)) {
+-		irq_domain_remove(irqc->hw_domain);
+-		iounmap(irqc->base);
+-		kfree(irqc);
+-		return -ENODEV;
+-	}
++	if (aic_init_smp(irqc, node))
++		goto err_remove_domain;
+ 
+ 	set_handle_irq(aic_handle_irq);
+ 	set_handle_fiq(aic_handle_fiq);
+@@ -1011,6 +1109,13 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 		off += irqc->info.die_stride;
+ 	}
+ 
++	if (irqc->info.version == 2) {
++		u32 config = aic_ic_read(irqc, AIC2_CONFIG);
++
++		config |= AIC2_CONFIG_ENABLE;
++		aic_ic_write(irqc, AIC2_CONFIG, config);
++	}
++
+ 	if (!is_kernel_in_hyp_mode())
+ 		pr_info("Kernel running in EL1, mapping interrupts");
+ 
+@@ -1027,6 +1132,16 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 		irqc->nr_irq, irqc->max_irq, irqc->nr_die, irqc->max_die, AIC_NR_FIQ, AIC_NR_SWIPI);
+ 
+ 	return 0;
++
++err_remove_domain:
++	irq_domain_remove(irqc->hw_domain);
++err_unmap:
++	if (irqc->event && irqc->event != irqc->base)
++		iounmap(irqc->event);
++	iounmap(irqc->base);
++	kfree(irqc);
++	return -ENODEV;
+ }
+ 
+-IRQCHIP_DECLARE(apple_m1_aic, "apple,aic", aic_of_ic_init);
++IRQCHIP_DECLARE(apple_aic, "apple,aic", aic_of_ic_init);
++IRQCHIP_DECLARE(apple_aic2, "apple,aic2", aic_of_ic_init);

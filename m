@@ -2,159 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2384D641D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3AD4D6421
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347903AbiCKOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S1349558AbiCKOx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243203AbiCKOxk (ORCPT
+        with ESMTP id S1349439AbiCKOxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:53:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3381EA9958;
-        Fri, 11 Mar 2022 06:52:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 888CD175A;
-        Fri, 11 Mar 2022 06:52:34 -0800 (PST)
-Received: from [10.57.43.254] (unknown [10.57.43.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 673393F7F5;
-        Fri, 11 Mar 2022 06:52:32 -0800 (PST)
-Message-ID: <292386ee-cfa8-d849-57ce-156c76680e12@arm.com>
-Date:   Fri, 11 Mar 2022 14:52:30 +0000
+        Fri, 11 Mar 2022 09:53:52 -0500
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EA619CCC5;
+        Fri, 11 Mar 2022 06:52:48 -0800 (PST)
+Received: by mail-oo1-f49.google.com with SMTP id x26-20020a4a621a000000b00320d7d4af22so10752922ooc.4;
+        Fri, 11 Mar 2022 06:52:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XouDAonvXlO6XU2IHSFCooSQTQ5SzgR1sMybojkfzAI=;
+        b=EgY27qioBEkTd8PkRaG91a6dO58+0mM0YqJZbufrDf+r2acEGmywtBFL+mwM/YN9iP
+         GnuHRhJ6jRxZXkq8P0pfbFeUZd4Zn+PHz4jpwn57vjY7iA+aeR59C7UzUlHgurDw0UYQ
+         0aIarLUAhdvbTHUIiTR4jfZNc9iDG1Jj36m/CPb0XK/lSmO9aaJwTGySM+TRN6glpRRA
+         XHzfeLmHAhiuroYzESqa9OOpES38e61np89jTkHby/N0xDPtccBMpdOCtu/1L1TV2185
+         mVOZzm7wnkwGkLXDOV3UCi1iS+KZojIThTMy4KvJ3YEhCmw3pLQQtt6Qv1F20HS/pvUT
+         H1Ng==
+X-Gm-Message-State: AOAM532z8ewZSADPxQDfzg2jL7PY2WIO9u8LdIZA3n4+iwhNivW/zsbK
+        x1gVWwjGAySV2m9td8oiag==
+X-Google-Smtp-Source: ABdhPJwVM00FBPusKKPXsuJpjuUgFPFT6v1xv+HzGc+G1sqBrbm5F+Ukz/YBeNSj5BBqeajDFr8FEg==
+X-Received: by 2002:a05:6870:3927:b0:da:34c1:560c with SMTP id b39-20020a056870392700b000da34c1560cmr10991064oap.176.1647010367441;
+        Fri, 11 Mar 2022 06:52:47 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b63-20020acab242000000b002d9ddf4596fsm3929216oif.49.2022.03.11.06.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 06:52:46 -0800 (PST)
+Received: (nullmailer pid 3772694 invoked by uid 1000);
+        Fri, 11 Mar 2022 14:52:45 -0000
+Date:   Fri, 11 Mar 2022 08:52:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     krzysztof.kozlowski@canonical.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, jirislaby@kernel.org,
+        kernel@axis.com, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, linux-serial@vger.kernel.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: serial: samsung: Add ARTPEC-8 UART
+Message-ID: <YitiPSZp4thtal8D@robh.at.kernel.org>
+References: <20220311094515.3223023-1-vincent.whitchurch@axis.com>
+ <20220311094515.3223023-2-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/6] coresight: Fail to open with return stacks if they
- are unavailable
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        leo.yan@linaro.com, mike.leach@linaro.org
-Cc:     Leo Yan <leo.yan@linaro.org>, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20220113091056.1297982-1-james.clark@arm.com>
- <20220113091056.1297982-3-james.clark@arm.com>
- <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311094515.3223023-2-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28/01/2022 11:24, Suzuki K Poulose wrote:
-> Hi James
+On Fri, 11 Mar 2022 10:45:14 +0100, Vincent Whitchurch wrote:
+> Add a compatible for the UART on the ARTPEC-8 SoC.  This hardware block
+> is closely related to the variants used on the Exynos chips.  The
+> register layout is identical to Exynos850 et al but the fifo size is
+> different (64 bytes in each direction for all instances).
 > 
-> On 13/01/2022 09:10, James Clark wrote:
->> Maintain consistency with the other options by failing to open when they
->> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
->> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
->> requested but not supported by hardware.
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
 > 
-> Looking at this again (with similar comment to the Branch Broadcast),
-> won't it disable using retstack on all CPUs, even when some of them
-> support it ?
+> Notes:
+>     v2:
+>     - Expand commit message.
+>     - Define required clocks.
 > 
-> i.e., CPU0 - supports retstack, CPU1 - doesn't
-> 
-> A perf run with retstack will fail, as CPU1 doesn't support it (even
-> though we advertise it, unconditionally).
-> 
-> So, if we ignore the failure, this would still allow CPU0 to use
-> the feature and as long as the OpenCSD is able to decode the trace
-> we should ignore the failure ?
-> 
-> I think we may also need to tune the etm4x_enable_hw() to skip
-> updating the TRCCONFIGR with features not supported by the ETM
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
-Hi Suzuki,
-
-I'm picking up this branch broadcast change again after the haitus.
-
-For this point, do you think it would be worth distinguishing between "no
-known CPUs that support the feature" vs "not currently running on a
-CPU that supports it but there are others that do"?
-
-Also would we want to distinguish between per-CPU or per-process events?
-For the former it actually is possible to fail to open because all of
-the information is known.
-
-I'm just thinking of the case where someone asks for a load of flags
-and thinks that they're getting them but get no feedback that they won't.
-But I understand having some complicated solution like I'm suggesting
-might be even more surprising to users.
-
-Maybe the cleanest solution is to ask users to supply a config that
-can work on anywhere the event could possibly be scheduled. It doesn't
-really make sense to have retstack on a per-process event on big-little
-and then getting half of one type of data and half of another. It would
-make more sense to fail to open in that case and they have the choice of
-either doing per-CPU events or disabling retstacks altogether.
-
-This seems like a similar problem to the issue causing the Coresight self
-test failure where a certain sink was picked that couldn't be reached and
-the test failed.
-
-In that case the change we made doesn't quite match up to my suggestion here:
-
- * Per-cpu but an unreachable sink -> fail
- * Per-process and potentially reachable sink in the future -> pass
-
-Maybe it would have been better to say that the sink always has to be
-reachable otherwise is the outcome predicatable?
-
-James
-
-> Suzuki
-> 
-> 
->>
->> The consequence of not doing this is that the user may not be
->> aware that they are not enabling the feature as it is silently disabled.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> index 04669ecc0efa..a93c1a5fe045 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
->>       }
->>         /* return stack - enable if selected and supported */
->> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
->> -        /* bit[12], Return stack enable bit */
->> -        config->cfg |= BIT(12);
->> -
->> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
->> +        if (!drvdata->retstack) {
->> +            ret = -EINVAL;
->> +            goto out;
->> +        } else {
->> +            /* bit[12], Return stack enable bit */
->> +            config->cfg |= BIT(12);
->> +        }
->> +    }
->>       /*
->>        * Set any selected configuration and preset.
->>        *
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>

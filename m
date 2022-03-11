@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D0B4D5757
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 02:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6823D4D5759
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 02:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345324AbiCKB3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 20:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S1345348AbiCKBaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 20:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238638AbiCKB3x (ORCPT
+        with ESMTP id S1345337AbiCKBaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 20:29:53 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E191198EC3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:28:51 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id 25so10185154ljv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dW9ZypqBoCugmw6ZCMV/tiPW76WW4fYGbEuqLLIjSso=;
-        b=b26lvnNBl47MpfzrhncI8jFj4I7n4NCEu1IWehFbMVOKTNCirpYiZBDSZfHTSUTwB+
-         OSxpFnzfpJlDLl0WOxCGg8dVM/U3mThKvghhRYNkqSssU7F4W3wM6lxZjC0TVC8LTNtL
-         rukTZxD9aFsb4zxvo7+gSr/yWV4k16ICvIMSc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dW9ZypqBoCugmw6ZCMV/tiPW76WW4fYGbEuqLLIjSso=;
-        b=omfMqBopf46vKXOESIeuxxtJK0IJ85ZdAZodvIgWYQOn2OtxApVKM4EJgX19ssnc3H
-         UlbbUJD22y6GCzTmow6/WycZRUVsIyEgVdBz2qVKoK1S9iU123phpCDOQP+5ShkLRvQm
-         6vYTvloSiLE7caIJxXOrm4rKuaYTJPAvgr/VQhE9JADzPEWMWYUcWON0IdkZisnTah/1
-         J7H/lpMlLxRrKrr5RLqTo6AMbpa0W3Z9JU5IE6nxAHBzUNU7NaP6LLY1qaOU6G1yUEXR
-         BepIxLmEZciHzuEJBb5IGFm1iG0TfnGMWCiLSk1qAirvhspZRmIX2xd09xoubo66zR/A
-         3s/A==
-X-Gm-Message-State: AOAM53340DyMNctyhTfIAyR423dRfayHgr2lhnt0ByDtDF6nUrWLMTG/
-        zYeOhIXX4AcBA7RYphe6NmAwCg/3l2HutkNqNw4=
-X-Google-Smtp-Source: ABdhPJzbH8c9ZGI/V1jp9et8LmG4RG9fzTPG7GX9ZtM73H7gQRfzKnq3B+yb/tMMaRujI4dDmYMEoA==
-X-Received: by 2002:a2e:a795:0:b0:248:27a5:4798 with SMTP id c21-20020a2ea795000000b0024827a54798mr3465475ljf.446.1646962129167;
-        Thu, 10 Mar 2022 17:28:49 -0800 (PST)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id 13-20020ac2568d000000b00446985451c3sm1280068lfr.157.2022.03.10.17.28.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 17:28:48 -0800 (PST)
-Received: by mail-lf1-f52.google.com with SMTP id n19so12502011lfh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:28:48 -0800 (PST)
-X-Received: by 2002:a05:6512:e8a:b0:443:7b8c:579a with SMTP id
- bi10-20020a0565120e8a00b004437b8c579amr4570765lfb.687.1646962127821; Thu, 10
- Mar 2022 17:28:47 -0800 (PST)
+        Thu, 10 Mar 2022 20:30:23 -0500
+Received: from smtp.tom.com (smtprz02.163.net [106.3.154.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBB65199D50
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:29:20 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by vip-app02.163.net (Postfix) with ESMTP id 89A814400E2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:29:19 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646962159; bh=m8QdkyzF5uJyIUo9GVO42SoDTGsjEsvoqS7wv+zGISc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sIXI/KvAEXG8MUgcV1YhcN0SJFIo5C2NY+LC+IbCYhk1LyX870bAZxQ0m/28bVD+h
+         AvezerSrky1CSg41dyz1q2ol52u+A4QVpFOKXH9r/3rVwICq3nqnbCiAtw5WFyL1yl
+         WJ36Uydytktgon3PD2BVh12FgBiBKgdRhv7lua/c=
+Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
+          by localhost (TOM SMTP Server) with SMTP ID 2117842678
+          for <linux-kernel@vger.kernel.org>;
+          Fri, 11 Mar 2022 09:29:19 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1646962159; bh=m8QdkyzF5uJyIUo9GVO42SoDTGsjEsvoqS7wv+zGISc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sIXI/KvAEXG8MUgcV1YhcN0SJFIo5C2NY+LC+IbCYhk1LyX870bAZxQ0m/28bVD+h
+         AvezerSrky1CSg41dyz1q2ol52u+A4QVpFOKXH9r/3rVwICq3nqnbCiAtw5WFyL1yl
+         WJ36Uydytktgon3PD2BVh12FgBiBKgdRhv7lua/c=
+Received: from localhost (unknown [101.93.196.13])
+        by antispamvip.163.net (Postfix) with ESMTPA id 1945F15414F8;
+        Fri, 11 Mar 2022 09:29:17 +0800 (CST)
+Date:   Fri, 11 Mar 2022 09:29:16 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH] tcp: export symbol tcp_set_congestion_control
+Message-ID: <20220311092916.00005266@tom.com>
+In-Reply-To: <20220310124825.159ce624@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20220310134830.130818-1-sunmingbao@tom.com>
+        <20220310124825.159ce624@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20220310174545.68e872fc@gandalf.local.home>
-In-Reply-To: <20220310174545.68e872fc@gandalf.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 10 Mar 2022 17:28:31 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjrhzKn2p6s7WPDGegmcnyOWL4jt5+4By11sGJGAkxG1w@mail.gmail.com>
-Message-ID: <CAHk-=wjrhzKn2p6s7WPDGegmcnyOWL4jt5+4By11sGJGAkxG1w@mail.gmail.com>
-Subject: Re: [GIT PULL] tracing: minor fixes
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 2:45 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
->  - Fix unregistering the same event twice a the user could disable
->    the event osnoise will disable on unregistering.
+On Thu, 10 Mar 2022 12:48:25 -0800
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-What? That sounds like a (bad) markov chain text generator made random
-commit noises.
+> On Thu, 10 Mar 2022 21:48:30 +0800 Mingbao Sun wrote:
+> > Since the kernel API 'kernel_setsockopt' was removed, and since the
+> > function =E2=80=98tcp_set_congestion_control=E2=80=99 is just the real =
+underlying guy
+> > handling this job, so it makes sense to get it exported. =20
+>=20
+> Do you happen to have a reference to the commit which removed
+> kernel_setsockopt and the justification?  My knee jerk reaction
+> would the that's a better path than allowing in-kernel socket users=20
+> to poke at internal functions even if that works as of today.
 
-I tried to edit that to something that actually makes some sense, but
-who knows..
+FYI
+(Sorry for putting URLs in the mail):
 
-                  Linus
+kernel_setsockopt disappeared from kernel v5.8,
+and all the relevant users have switched to
+dedicated small functions.
+
+The mail thread:
+https://lists.archive.carbon60.com/linux/kernel/3712394
+
+The commit:
+https://github.com/torvalds/linux/commit/5a892ff2facb4548c17c05931ed899038a=
+0da63e
+

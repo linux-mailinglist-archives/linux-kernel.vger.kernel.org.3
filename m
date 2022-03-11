@@ -2,71 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6094D6347
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925C24D6348
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347402AbiCKOS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S242365AbiCKOTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243411AbiCKOS0 (ORCPT
+        with ESMTP id S231685AbiCKOTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:18:26 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F761C74F9;
-        Fri, 11 Mar 2022 06:17:20 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 79C82240002;
-        Fri, 11 Mar 2022 14:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647008239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IjzOVVFwC8YElYj8/GGShDmz19TH4NBCiTfKXK73bOo=;
-        b=MzM2DzFv1Q5pucT5b8sktuJE/gaDbYQcAq0LSMU98HTmzmqr3bTnBwuILIuHeK1W0p0XS7
-        3ljzPQiOuTRY9mnWxe+D9+T5uhjs49vxI5YkHBRtKJLUsa77V5rkf3t9S46sD2DpdptnC+
-        HTGh9Jq3kMPQhu8kwVqxNkrE/FtmzYPHrkjrJFhTblQHuOz/pMTgcPWN7GaiPEifPH8IgJ
-        7IZYxtr+fys1Qrz5/xAIUc0LRlOt+LLoObOFCkxClgjkX62hkOudEM4RyqRjQvF6ArBnls
-        Lnjpyd/TcNT1vIEcPF971Se5w1ZE2TXcYOrUc19/bKwSy1rVrk+U90eDkw4rRw==
-Date:   Fri, 11 Mar 2022 15:17:15 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <YitZ6y2JoNzeHUrp@aptenodytes>
-References: <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
- <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
- <YgqAv2vLimYgRwDS@aptenodytes>
- <YgqM3ZdMfEz+ZKo/@pendragon.ideasonboard.com>
- <Ygt8LF8qx3rnxlgp@aptenodytes>
- <Ygt9j+rwEC+2aUjH@pendragon.ideasonboard.com>
- <Yh4+E9el5NdQ7qJq@aptenodytes>
- <YiH/kLakb/GOaYIT@pendragon.ideasonboard.com>
- <YiIa1SRFhtvURTbN@aptenodytes>
- <YiIdo4PF/5smLocf@pendragon.ideasonboard.com>
+        Fri, 11 Mar 2022 09:19:45 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F549119F00
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:18:41 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BDTCW1029467;
+        Fri, 11 Mar 2022 14:18:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Qy8F67MnbhoV2EvV6dtq0vsTBfGRqjKRt2v3zgtZw10=;
+ b=fEwzRaZcnjIwP4ua0hqvr4q5vzYLBeGN5UhnCd7IiZc1MWsZPzngKIZ6YHRi7KfTDZXj
+ NrWpr0eG4o2GijqJfIfhfqeKO64FadGKqPLjkocphKUlWgv87sxsTYxt/+XITafmQiE5
+ ziLwSNJXRX56FizTctox566qr/EvnT4KnZAKcqOO7D23ta+fRa4p8GK/onGF6VVEmSF5
+ /XLyKeX/UX74A1DmgzpOeNXdEp3q9iRBgk6Xpv7UzeKjluEaecBkC88R/Zic1diK3xYY
+ K+Fz9szKRNMdjWzKlJg84oRDp5daMwKtwuXUq+JTIOJs8Kplrj6Zs93AulWEDGmsnazi MA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxn2saqf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 14:18:29 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BECVdq024357;
+        Fri, 11 Mar 2022 14:18:28 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
+        by userp3030.oracle.com with ESMTP id 3ekvyxmsdq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Mar 2022 14:18:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=edDwlj6k728NErkfpXFcthMjS/5qD6GypPSgHvFHL5MQEXOqqGxOaAclziUAuT3e7eZtIre+QMj0VYpsmTthJTYE0NDvXAF2+0PPwLE5LY2m67KtPFpOGaGPHZtgPR4XYx8h83b34mkbYEdhxcwn7KlJ6w+jddXxmqoV3g/+nm/7J68+NhP/TNa4rzAeIC/bOiNepS0QhcO9s0BXeieHA0TSEzU2Gb8KuQxnmAF+IZuXe4CiNdRp2yNrefti2xqWyi3pnpBwE+VkT6qzZe2iwFTqE79WgRcrICZvVHiJt2w0o/iZ4xfVYHEtV4XCP9eQ7maT3l+co2x+goEQcbaNpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qy8F67MnbhoV2EvV6dtq0vsTBfGRqjKRt2v3zgtZw10=;
+ b=Pyw+GW1mG9r0jzFnwwabBjUj33s4iW231wQNuwG6i9wljV9PCTvP1P+OShcBDuIsvMsw04xJADmib6wR6hTZXEUN+Oe4G9e21DIRli1V8CiagqWN3GAKVLQb8+F7ucqVSty+pJtVhRjsY0hweT1sFRKT0w2sigyB1oIwqlwdoBVz6J2pDHlr3tZWNVUc5PX4QbviT3Kt9POPBqyc/9MCUC5o0PZ8nnzB+kGWjdY2suXEvkjF7g99zKEyBqEYwBKwSTEFhmwE/rOKjYI0f+nGnERGyWleKHAeWL11L/9NK8mxJQgKZX2XEXe5cJeXRwAX+XCSE8xrK3U9hPUENd7HSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qy8F67MnbhoV2EvV6dtq0vsTBfGRqjKRt2v3zgtZw10=;
+ b=w4kLrvuJzY/qrU1WuleiYJNzO9m3exd33XxUgltlJGI6Ukzpv9yDH6UhPeEYOI2621MYLhSPZwMdyTKgsyBro9U9mENuZZ8qKlhEwLrKPYCd5ORvsY2qH7TxvHY+tIt5Btvus22oBiRAZMneg3Vto1mAxhTrTjvOnAIrCJ5V7A8=
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
+ by MN2PR10MB4272.namprd10.prod.outlook.com (2603:10b6:208:1dc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
+ 2022 14:18:26 +0000
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::1b2:b41c:b2f0:c755]) by BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::1b2:b41c:b2f0:c755%7]) with mapi id 15.20.5061.023; Fri, 11 Mar 2022
+ 14:18:25 +0000
+Message-ID: <da0efe1c-1d02-3c45-482a-b92ac314e211@oracle.com>
+Date:   Fri, 11 Mar 2022 09:18:13 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [PATCH] xen: use time_is_before_eq_jiffies() instead of open
+ coding it
+Content-Language: en-US
+To:     Qing Wang <wangqing@vivo.com>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+References: <1646018104-61415-1-git-send-email-wangqing@vivo.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+In-Reply-To: <1646018104-61415-1-git-send-email-wangqing@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR10CA0028.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::33) To BLAPR10MB5009.namprd10.prod.outlook.com
+ (2603:10b6:208:321::10)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kNn+ks4zuyAAfq3C"
-Content-Disposition: inline
-In-Reply-To: <YiIdo4PF/5smLocf@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 76e595bd-750d-4e3b-8bd5-08da036a0125
+X-MS-TrafficTypeDiagnostic: MN2PR10MB4272:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR10MB42723CDF35B9FE052EB602AF8A0C9@MN2PR10MB4272.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hVfNnIaP3vNEO0bnxsaTuPjb4L9ponjaJ9Volmv6xUBEjcO/mU+v89kCdPgjyH7sJri6ghT8SuugGxFdWVE+V/WHWEYB99QdOGc0D4c8155Ck1WYS+N1Nf0IwWvolmEvL3SUT0HFSW7f8JtPWdmgLQj6PEl9NSSEai/o2on+JCFaYfgn71yW9csOSfqY7eoqOrE765UyFbWKUlrXGwoIliaf2e5DrgzoicovJd2uEF+kaKfgjuYzUK3k7NAY5t0tZmtk74VSJIbPuuCyWzn45JBQi5H4ZnBPxNFqkQJAQ96A0j6d+ZctXyiVcGpXI1poyG0nNbo/t6pBM0Sj/f3EfU3aYeZTA5NFGaZjF/IEwkjjvrzry55H0LZjULkqBsIT88Fev2qVlpUX4smbUYL4rJl2ivsHF7y3embNszl8blnIq/TI9ku5HO1NjjEQz6YL4ABaAWZf3vlvyc8AGCpIJ8cLWpchiXgzxsG7JmKRcFcMBOrrTUWyUXNUWqxgJytBlptpdsPOyNYL4Z7wllNJAKUirNijtcLFcaHhdDe7GxKU+W8NL1msVOZ52lUK7jsa3ULcBns7gzcamewQA+smuHbMUcPIbzhZzR/VkEJIPth0hvls6MwItDoLV5eY/1Z3qAlWg2be3t4eZfGrGK080ZnOnnOglN7Xmrcvbedg3rN7cEDuN4mfIILbMny/UJaoNZD5ISRndeKYN7bV+Ime67sYUl5Zn+eRZKFD6GSj7KU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(508600001)(6486002)(6666004)(66556008)(66476007)(86362001)(8676002)(316002)(31696002)(110136005)(26005)(186003)(6512007)(6506007)(38100700002)(53546011)(2616005)(31686004)(2906002)(558084003)(36756003)(8936002)(5660300002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjY1ZThRWFFYaXBBMGRJc3NrVlpLbFJrL1NVMGtLb3hxUUsrclN3cEE4UUIy?=
+ =?utf-8?B?azJ6NzM2eTVkR1hUUkxFNTNpaHNiL1JLaUtQbG5GdVFVOHFzN2dKM1cvekYz?=
+ =?utf-8?B?TER4aEJySVAxc1BVYit5NUF1WTN4cGtWMlNNTkZKQ3Mwb3o4N01IOVFSeHc0?=
+ =?utf-8?B?MVhPd2Q4KzdkMFhzejdjVXpTbkF6MmVmNGZNMDEzU2RQeWNYNDhKYzVzMHJI?=
+ =?utf-8?B?TVpieFVHSnJhMms4UTM0WlNnYW9EYzA5aFNLckZnbVJyUXlhMW9wbGphMTZO?=
+ =?utf-8?B?RkQvNEFWcXMvZ3d1aE1mNkp3endPTXF1RWhjektCbFZZZGpTUmxzU1YxZGlW?=
+ =?utf-8?B?aTV1bzduY3ZGbmdPeFNQbHhvdUZFUEhvSjNVZGVLUkhCajNHN2hJOVhjVFVy?=
+ =?utf-8?B?akNTNVN5Ujh6QzlOQWJkVEVJU0dKNzJhM2R1UDVieDZsU09QenNaTllKOWZU?=
+ =?utf-8?B?VDhlOEM2MGdzVm1UOEJTc29iU3diMTl1MEh2U2g1dTdEc2RtREZ1U2FjR2Zp?=
+ =?utf-8?B?WDhWbUhqTVhsQWV2cWtyNUlyWk5udHhCd2RsRzJmTUk0RHJxc3JTcFlIK1lp?=
+ =?utf-8?B?bFlXM3ByNjAxVEpDUjdoNDNsa3NUcFFkTUJvMk1Jei92ZGJyZ0w1WGNaQmth?=
+ =?utf-8?B?VmxaMzM2VjBiU0ROVHIzMjZDOVJwWW9lNUF2dWs3WEQ4bERtK3VBWXN1NVRS?=
+ =?utf-8?B?a0hMUVE3RGtEdEp0dkxUd1Z1Uy8xdlhCY0FFS0NZWU1BT1RiQUw5Q2h6V3dF?=
+ =?utf-8?B?SnFEeG9WNzQxaFhndFlwVE5KWmlsVEFLbW5GRlhpMDdqSmRzcjRMdmphSXJp?=
+ =?utf-8?B?SE80TXdaNVdodGdwczExdHowV3FTNyswMm1SR3RJclV1V1FSNnFYNVllUEFo?=
+ =?utf-8?B?bEs0dUtFRkZaRG5OM2NTUHIxZGhGb2IvN3krY1RHTnM5eDVLb1ZYUDJRWmJM?=
+ =?utf-8?B?Rm95RXlUTjRvK293Uk1KNG1CMUpuTFJRdGQyZHRUQjVNR0hteHFETkd0MnU5?=
+ =?utf-8?B?MVY1Y2JGWEJhZzF2WVR3NkxXWHE3aFM2eHhneUxScGErWXQ3dHFYUG8xbGdn?=
+ =?utf-8?B?VkplNFI2dUlnUlFZZGMwZks5SWE4TnB2UFVmOVdUbThJV3pUbnE4Q3lxVk9Z?=
+ =?utf-8?B?eTdPUTR6cTBZeDE0M0Jsb3dWdytZZ213UE8yOFhpdzhBM3BiVnFWeHNNTlFZ?=
+ =?utf-8?B?MUZaaFRqc0wzK1RhRmN6alZHMlZZMmJpRkp5b2dwc2huV1E4S1V5ekRjckpE?=
+ =?utf-8?B?SDArV0pBbVBRQ0lYd1RDY0p6dWcvcHJzTDdtRVA2VmFoZmVLbFhMeUV4Y2pQ?=
+ =?utf-8?B?MklEaTFkS0l6bm1sb1h6eFZ2KzlGZ0JyWGJPWTlzNWZkWURTTkJGZUlpbVBn?=
+ =?utf-8?B?SkJjZTVtTlZiL0czdUJabTFEUk8zd3hTM0gyUkFpMDl5N3V1NWprbXFGVE5R?=
+ =?utf-8?B?ZHNSUjFZdGNzM0lydXV4WENGWVlWa0xGMmtYQkdwNzJrUHB0bzVyQTlPK1Nn?=
+ =?utf-8?B?dGZjcEl2akZWdWtmTkdaMVM4MUJvbU5uSHhaQjhHY1BDYnFZMHp0cE1xSUhW?=
+ =?utf-8?B?SUNLQ1ptNk82U0RySGpRWWFlMXFYR0hFajljM3hlNzl2dVhRUE9CSmhmNWpa?=
+ =?utf-8?B?SmZYSkxYZUl3RitRaU4rWlFrcWF1ZVVlM0lxV1VhdFNMRW1OVm5Nd05OTWFF?=
+ =?utf-8?B?aE0yVWozWUdnc1FCVm1nbXVWK0ZoZFB2WTBsRUlGZjcxbjFqeEVkTm8xMnVF?=
+ =?utf-8?B?OThoaEVpVitZcGE1bmVMaDYrVFh5QS9ybC95YnZwZXF5OG5QSWRjOG9PZGgx?=
+ =?utf-8?B?UUhaWE1VVWZ1Y0hEMGpLUEdRUUZZTjV3Y1ZsOEtzSWJweXNodXZRRzJLaFpx?=
+ =?utf-8?B?Q2VCL2hXd3dCZENyWCtncU42RXVVaDFieHNMaUlITEUvLy96ZVhvNlpKbWtz?=
+ =?utf-8?B?SUJHelJmZVVQUEZJMTBxcTlsWGF6VGRSdzB6TEowUmpLMzV6cGZRQWFQL1l0?=
+ =?utf-8?B?SDZGZ1dibGd3PT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76e595bd-750d-4e3b-8bd5-08da036a0125
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 14:18:25.4980
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VTIpCaTnipPcHh+8MEGKnDt2hP7qWo8qr8CxADQQKp+2ZD6UucqVQoqrU17X06LLtXtSaOZE61Ian7gi7GnVtR1K/u4GhBQVF73W0BLy0q4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4272
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10282 signatures=692556
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203110070
+X-Proofpoint-ORIG-GUID: DKb-WaV8DylUQLM_UEA3d-5ONZG8-IeW
+X-Proofpoint-GUID: DKb-WaV8DylUQLM_UEA3d-5ONZG8-IeW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,390 +154,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---kNn+ks4zuyAAfq3C
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2/27/22 10:15 PM, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
+>
+> Use the helper function time_is_{before,after}_jiffies() to improve
+> code readability.
+>
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
 
-Hi Laurent,
 
-On Fri 04 Mar 22, 16:09, Laurent Pinchart wrote:
-> Hi Paul,
->=20
-> (With a question for Sakari below)
->=20
-> On Fri, Mar 04, 2022 at 02:57:41PM +0100, Paul Kocialkowski wrote:
-> > On Fri 04 Mar 22, 14:01, Laurent Pinchart wrote:
-> > > On Tue, Mar 01, 2022 at 04:38:59PM +0100, Paul Kocialkowski wrote:
-> > > > On Tue 15 Feb 22, 12:16, Laurent Pinchart wrote:
-> > > > > On Tue, Feb 15, 2022 at 11:10:52AM +0100, Paul Kocialkowski wrote:
-> > > > > > On Mon 14 Feb 22, 19:09, Laurent Pinchart wrote:
-> > > > > > > On Mon, Feb 14, 2022 at 05:18:07PM +0100, Paul Kocialkowski w=
-rote:
-> > > > > > > > On Mon 07 Feb 22, 17:51, Laurent Pinchart wrote:
-> > > > > > > > > On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkows=
-ki wrote:
-> > > > > > > > > > This introduces YAML bindings documentation for the All=
-winner A31 Image
-> > > > > > > > > > Signal Processor (ISP).
-> > > > > > > > > >=20
-> > > > > > > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@boo=
-tlin.com>
-> > > > > > > > > > ---
-> > > > > > > > > >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++=
-++++++++++++++++
-> > > > > > > > > >  1 file changed, 117 insertions(+)
-> > > > > > > > > >  create mode 100644 Documentation/devicetree/bindings/m=
-edia/allwinner,sun6i-a31-isp.yaml
-> > > > > > > > > >=20
-> > > > > > > > > > diff --git a/Documentation/devicetree/bindings/media/al=
-lwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwin=
-ner,sun6i-a31-isp.yaml
-> > > > > > > > > > new file mode 100644
-> > > > > > > > > > index 000000000000..2d87022c43ce
-> > > > > > > > > > --- /dev/null
-> > > > > > > > > > +++ b/Documentation/devicetree/bindings/media/allwinner=
-,sun6i-a31-isp.yaml
-> > > > > > > > > > @@ -0,0 +1,117 @@
-> > > > > > > > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > > > > > > > > +%YAML 1.2
-> > > > > > > > > > +---
-> > > > > > > > > > +$id: http://devicetree.org/schemas/media/allwinner,sun=
-6i-a31-isp.yaml#
-> > > > > > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > > > > > > +
-> > > > > > > > > > +title: Allwinner A31 Image Signal Processor Driver (IS=
-P) Device Tree Bindings
-> > > > > > > > > > +
-> > > > > > > > > > +maintainers:
-> > > > > > > > > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > > > > > > > +
-> > > > > > > > > > +properties:
-> > > > > > > > > > +  compatible:
-> > > > > > > > > > +    enum:
-> > > > > > > > > > +      - allwinner,sun6i-a31-isp
-> > > > > > > > > > +      - allwinner,sun8i-v3s-isp
-> > > > > > > > > > +
-> > > > > > > > > > +  reg:
-> > > > > > > > > > +    maxItems: 1
-> > > > > > > > > > +
-> > > > > > > > > > +  interrupts:
-> > > > > > > > > > +    maxItems: 1
-> > > > > > > > > > +
-> > > > > > > > > > +  clocks:
-> > > > > > > > > > +    items:
-> > > > > > > > > > +      - description: Bus Clock
-> > > > > > > > > > +      - description: Module Clock
-> > > > > > > > > > +      - description: DRAM Clock
-> > > > > > > > >=20
-> > > > > > > > > That's interesting, does the ISP have a dedicated DRAM ?
-> > > > > > > >=20
-> > > > > > > > It doesn't, it actually uses the main DRAM with the "mbus" =
-interconnect.
-> > > > > > > > The clock is probably for the DMA engine.
-> > > > > > > >=20
-> > > > > > > > > > +
-> > > > > > > > > > +  clock-names:
-> > > > > > > > > > +    items:
-> > > > > > > > > > +      - const: bus
-> > > > > > > > > > +      - const: mod
-> > > > > > > > > > +      - const: ram
-> > > > > > > > > > +
-> > > > > > > > > > +  resets:
-> > > > > > > > > > +    maxItems: 1
-> > > > > > > > > > +
-> > > > > > > > > > +  ports:
-> > > > > > > > > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > > > > > > > > +
-> > > > > > > > > > +    properties:
-> > > > > > > > > > +      port@0:
-> > > > > > > > > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > > > > > > > +        description: CSI0 input port
-> > > > > > > > > > +
-> > > > > > > > > > +        properties:
-> > > > > > > > > > +          reg:
-> > > > > > > > > > +            const: 0
-> > > > > > > > > > +
-> > > > > > > > > > +          endpoint:
-> > > > > > > > > > +            $ref: video-interfaces.yaml#
-> > > > > > > > > > +            unevaluatedProperties: false
-> > > > > > > > >=20
-> > > > > > > > > If no other property than remote-endpoint are allowed, I'=
-d write
-> > > > > > > > >=20
-> > > > > > > > >           endpoint:
-> > > > > > > > >             $ref: video-interfaces.yaml#
-> > > > > > > > > 	    remote-endpoint: true
-> > > > > > > > >             additionalProperties: false
-> > > > > > > > >=20
-> > > > > > > > > Same below.
-> > > > > > > > >=20
-> > > > > > > > > > +
-> > > > > > > > > > +        additionalProperties: false
-> > > > > > > > > > +
-> > > > > > > > > > +      port@1:
-> > > > > > > > > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > > > > > > > +        description: CSI1 input port
-> > > > > > > > > > +
-> > > > > > > > > > +        properties:
-> > > > > > > > > > +          reg:
-> > > > > > > > > > +            const: 0
-> > > > > > > > >=20
-> > > > > > > > > This should be 1.
-> > > > > > > >=20
-> > > > > > > > Correct, thanks!
-> > > > > > > >=20
-> > > > > > > > > > +
-> > > > > > > > > > +          endpoint:
-> > > > > > > > > > +            $ref: video-interfaces.yaml#
-> > > > > > > > > > +            unevaluatedProperties: false
-> > > > > > > > > > +
-> > > > > > > > > > +        additionalProperties: false
-> > > > > > > > > > +
-> > > > > > > > > > +    anyOf:
-> > > > > > > > > > +      - required:
-> > > > > > > > > > +        - port@0
-> > > > > > > > > > +      - required:
-> > > > > > > > > > +        - port@1
-> > > > > > > > >=20
-> > > > > > > > > As ports are an intrinsic property of the ISP, both shoul=
-d be required,
-> > > > > > > > > but they don't have to be connected.
-> > > > > > > >=20
-> > > > > > > > Well the ISP does have the ability to source from either CS=
-I0 and CSI1
-> > > > > > > > but I don't really get the point of declaring both ports wh=
-en only one
-> > > > > > > > of the two controllers is present.
-> > > > > > >=20
-> > > > > > > If it's within an SoC I don't mind too much. What I usually i=
-nsist on is
-> > > > > > > declaring all ports even when no external devices are connect=
-ed on the
-> > > > > > > board. It may however be easier to implement things on the dr=
-iver side
-> > > > > > > when all the ports are declared, even for internal devices. I=
- won't
-> > > > > > > insist either way here.
-> > > > > > >=20
-> > > > > > > > > By the way, how do you select at runtime which CSI-2 RX t=
-he ISP gets its
-> > > > > > > > > image stream from ? Is it configured through registers of=
- the ISP ?
-> > > > > > > >=20
-> > > > > > > > Actually what the ISP gets is fully dependent on what is re=
-ceived by the
-> > > > > > > > CSI controller it is connected to (which can be the mipi cs=
-i-2 controller
-> > > > > > > > or its direct parallel pins), so the configuration happens =
-on the CSI side.
-> > > > > > >=20
-> > > > > > > OK, then how do you select at runtime which CSI the ISP gets =
-its image
-> > > > > > > stream from ? :-)
-> > > > > >=20
-> > > > > > What is done in the driver is that all available csi(s) entitie=
-s pads are linked
-> > > > > > to a single csi sink media pad, which allows userspace to enabl=
-e one or the
-> > > > > > other. If there's only one, it's enabled by default.
-> > > > > >=20
-> > > > > > The actual stream source (isp_dev->proc.source) is selected at =
-link_validate
-> > > > > > time and the source bit is set in sun6i_isp_proc_enable.
-> > > > > >=20
-> > > > > > I hope this answers your question!
-> > > > >=20
-> > > > > Yes it does, thank you.
-> > > > >=20
-> > > > > While this works, it makes life a bit more complicated for usersp=
-ace, as
-> > > > > switching between the two sources require disabling the link firs=
-t and
-> > > > > then enabling the new one. This is something that caused issues i=
-n the
-> > > > > libcamera simple pipeline handler, I ended up having to implement=
- a
-> > > > > workaround.
-> > > >=20
-> > > > That surprises me a bit, I thought this was a typical use-case for =
-links.
-> > > > So the fact that it's a two-step process causes issues somehow?
-> > >=20
-> > > It's not so much that the links have to be configured in two steps
-> > > (although it would be nice if that could be fixed), but the fact that
-> > > the order of the operations matter. Userspace has to know what
-> > > combination of links is acceptable in order to determine the order of
-> > > the enable/disable operations, otherwise errors may be returned. That
-> > > makes it more difficult to write generic userspace code.
-> >=20
-> > Ah right, I understand that. Now it's pretty much trial-and-error if us=
-erspace
-> > doesn't have prior knowledge about the hardware. But to be honest I ass=
-umed
-> > that it was more or less understood that there cannot be fully generic
-> > userspace for this and that knowedlege about the driver and pipeline fl=
-ow
-> > is required to do things right.
->=20
-> You're right, and that's why we have device-specific code in libcamera.
-> However, the more generic-friendly the APIs can be, the more the
-> device-specific userspace code will be able to use generic helpers, so
-> it still matters.
->=20
-> > > > > Could you instead have two sink pads for the ISP, and select the =
-sensor
-> > > > > at stream on time instead of link validation time by checking whi=
-ch link
-> > > > > is enabled ? If no links or both links are enabled, you can then =
-return
-> > > > > an error.
-> > > >=20
-> > > > Yes that's totally doable.
-> > > >=20
-> > > > There's a similar situation with the sun6i-csi bridge where the sou=
-rce pad
-> > > > has two possible links: one for routing to sun6i-csi capture (video=
- device)
-> > > > and one for routing to the isp entity.
-> > > >=20
-> > > > Would that also be best represented as two pads?
-> > >=20
-> > > Are the two outputs mutually exclusive ? Sorry if I've asked before.
-> >=20
-> > I don't think you have. Yes they are mutually exclusive, only one source
-> > can be selected at a time. Same situation as the ISP where the two CSI =
-unit
-> > inputs are mutually exclusive.
->=20
-> On the sink (input) side that's quite common, if you have two different
-> sources but a single sink, the sink can't (usually) process both sources
-> at the same time. I understand that for the sun6i-csi bridge it's the
-> other way around, with the bridge can output to either a DMA engine or
-> to the ISP, but not both at the same time. That's less common, but can
-> certainly happen. I think I'd go for two source pads in that case too.
-> Sakari, any opinion ?
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 
-As I was reading this thread again, I think there might be a misunderstandi=
-ng
-here when you said that "switching between the two sources require disabling
-the link first and then enabling the new one".
 
-The driver is currently not checking the validity of the setup at link_setup
-but at link_validate (which is called at streamon time), so userspace can
-effectively disable/enable links in whichever order and a valid setup is on=
-ly
-required when streaming starts. I think that's already the situation that y=
-ou
-want to achieve.
+Applied to for-linus-5.18
 
-To summarize, the following pads can have multiple links:
-- csi sink (parallel sensor source or mipi csi-2 bridge source)
-- csi source (isp sink or video capture sink)
-- isp sink (csi0 source or csi1 source)
-
-I'll send my next versions without changes (one pad, multiple links)
-but we can revisit this if there's an issue with that after all.
-
-Cheers,
-
-Paul
-
-> > > > > Ideally I'd say such internal routing should use the new V4L2 sub=
-dev
-> > > > > routing API that is currently being implemented (see [1]), but I =
-don't
-> > > > > know when it will land, and I don't want to delay your patch seri=
-es.
-> > > > >=20
-> > > > > [1] https://lore.kernel.org/linux-media/20211130141536.891878-28-=
-tomi.valkeinen@ideasonboard.com
-> > > >=20
-> > > > I'm still a bit confused what problem this is trying to solve.
-> > > > My understanding was that the current pad/link API allows represent=
-ing complex
-> > > > topologies and switching different paths with link enable/disable.
-> > >=20
-> > > That was the intent of the MEDIA_IOC_SETUP_LINK ioctl, but we ended up
-> > > with something that is fairly ill-defined, and doesn't have the abili=
-ty
-> > > to set multiple links atomically. It turned out to be less usable for
-> > > userspace than expected. Mistakes happen (and I'll blame myself here,
-> > > having designed that API) when we don't have real test cases during
-> > > kernel development.
-> >=20
-> > Yeah it's hard to predict these kinds of things in advance I suppose.
-> > Thanks for the heads up!
-> >=20
-> > > > > > > > > > +
-> > > > > > > > > > +required:
-> > > > > > > > > > +  - compatible
-> > > > > > > > > > +  - reg
-> > > > > > > > > > +  - interrupts
-> > > > > > > > > > +  - clocks
-> > > > > > > > > > +  - clock-names
-> > > > > > > > > > +  - resets
-> > > > > > > > > > +
-> > > > > > > > > > +additionalProperties: false
-> > > > > > > > > > +
-> > > > > > > > > > +examples:
-> > > > > > > > > > +  - |
-> > > > > > > > > > +    #include <dt-bindings/interrupt-controller/arm-gic=
-=2Eh>
-> > > > > > > > > > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> > > > > > > > > > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> > > > > > > > > > +
-> > > > > > > > > > +    isp: isp@1cb8000 {
-> > > > > > > > > > +        compatible =3D "allwinner,sun8i-v3s-isp";
-> > > > > > > > > > +        reg =3D <0x01cb8000 0x1000>;
-> > > > > > > > > > +        interrupts =3D <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH=
->;
-> > > > > > > > > > +        clocks =3D <&ccu CLK_BUS_CSI>,
-> > > > > > > > > > +             <&ccu CLK_CSI1_SCLK>,
-> > > > > > > > > > +             <&ccu CLK_DRAM_CSI>;
-> > > > > > > > > > +        clock-names =3D "bus", "mod", "ram";
-> > > > > > > > > > +        resets =3D <&ccu RST_BUS_CSI>;
-> > > > > > > > > > +
-> > > > > > > > > > +        ports {
-> > > > > > > > > > +            #address-cells =3D <1>;
-> > > > > > > > > > +            #size-cells =3D <0>;
-> > > > > > > > > > +
-> > > > > > > > > > +            port@0 {
-> > > > > > > > > > +                reg =3D <0>;
-> > > > > > > > > > +
-> > > > > > > > > > +                isp_in_csi0: endpoint {
-> > > > > > > > > > +                    remote-endpoint =3D <&csi0_out_isp=
->;
-> > > > > > > > > > +                };
-> > > > > > > > > > +            };
-> > > > > > > > > > +        };
-> > > > > > > > > > +    };
-> > > > > > > > > > +
-> > > > > > > > > > +...
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---kNn+ks4zuyAAfq3C
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIrWesACgkQ3cLmz3+f
-v9H/qwgAoJ0iY70KHMsk2Wxl0Y8gur2XscmVSFGx5nYg9vVy1dHSdkUMTzAO8cUT
-TwdttkByR80Yk8PWefn/KwQB3u7Touzw4qGCm7RQXos88Aatl1YPrKB110defLFd
-IBlWEb14OysTJtx3zfGLRBTBGB3bZ33a+ljk3mYyFrKJM8v/6pnrmKehPX+9/Bre
-KUxC9Ym0qW+YFlS66oeiu01njGjG8qMkbVyUUoh/pjdXULTr6cEe/i75ZswnLHrL
-vkco3jfm2a80G13QINKyO3vfC3Eu5rT20PIm+TqbwgA/QUpsjwF9NGAz1ZtSyux6
-tBsDZ+pxG5EWczBq4vPlEhcrusckIQ==
-=qGKp
------END PGP SIGNATURE-----
-
---kNn+ks4zuyAAfq3C--

@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EB44D5790
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 02:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FC84D579C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 02:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345419AbiCKBvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 20:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S1345453AbiCKBwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 20:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiCKBvb (ORCPT
+        with ESMTP id S241288AbiCKBwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 20:51:31 -0500
+        Thu, 10 Mar 2022 20:52:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D0F65CD;
-        Thu, 10 Mar 2022 17:50:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858D91959F5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:51:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1921BB829A1;
-        Fri, 11 Mar 2022 01:50:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66172C340EB;
-        Fri, 11 Mar 2022 01:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646963426;
-        bh=UTLIxBwkAa6+a+oJdAWOCcqoxU8Z4IdlVYhcKep9wKI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nO2MrXJntZmfjMoIOmT9F0FRcK0mtdojnjJqQ/fteCIixZZbeSf8LiI9E5Ha0eZgD
-         59s18emSpb3ohxUSttI/iMdUEnrRhmSzx95LnrKSZITEZqqx7WHuwqPbfzDnk8byzw
-         EbrofH30cgteMKHlDuepkyCL4k9iDYOUis/dYitzgFoud2kJLvzy7zLRvYe2URduu0
-         1+ZEIIrs8vfk4HbQSnPXTSjbJEoSpWswtnQtrVQDEQcb1vHyYAwXueyEji06vhxrHN
-         hNouXWPbm9Z7dqexDJmV39n1NhYfaHgJoloj1+uY/3lM3MWFpnejWqk3o5SV6SB+d/
-         nsk7+AAUBmpEQ==
-Date:   Thu, 10 Mar 2022 17:50:25 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiyong Park <jiyong@google.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>, adelva@google.com,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] vsock: each transport cycles only on its own sockets
-Message-ID: <20220310175025.69e35aaf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CALeUXe7OGUUt+5hpiLcg=1vWsOWkSRLN3Lb-ncpXZZjsgZntjQ@mail.gmail.com>
-References: <20220310135012.175219-1-jiyong@google.com>
-        <20220310141420.lsdchdfcybzmdhnz@sgarzare-redhat>
-        <20220310102636-mutt-send-email-mst@kernel.org>
-        <20220310170853.0e07140f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CALeUXe7OGUUt+5hpiLcg=1vWsOWkSRLN3Lb-ncpXZZjsgZntjQ@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34A14B82999
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24469C340E8;
+        Fri, 11 Mar 2022 01:50:59 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 20:50:57 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Subject: Re: [GIT PULL] tracing: minor fixes
+Message-ID: <20220310205057.6769ac0d@gandalf.local.home>
+In-Reply-To: <CAHk-=wjrhzKn2p6s7WPDGegmcnyOWL4jt5+4By11sGJGAkxG1w@mail.gmail.com>
+References: <20220310174545.68e872fc@gandalf.local.home>
+        <CAHk-=wjrhzKn2p6s7WPDGegmcnyOWL4jt5+4By11sGJGAkxG1w@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 10:26:08 +0900 Jiyong Park wrote:
-> First of all, sorry for the stupid breakage I made in V2. I forgot to turn
-> CONFIG_VMWARE_VMCI_VSOCKETS on when I did the build by
-> myself. I turned it on later and fixed the build error in V3.
+On Thu, 10 Mar 2022 17:28:31 -0800
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Thu, Mar 10, 2022 at 2:45 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> >  - Fix unregistering the same event twice a the user could disable
+> >    the event osnoise will disable on unregistering.  
 > 
-> > Jiyong, would you mind collecting the tags from Stefano and Michael
-> > and reposting? I fixed our build bot, it should build test the patch
-> > - I can't re-run on an already ignored patch, sadly.  
+> What? That sounds like a (bad) markov chain text generator made random
+> commit noises.
 > 
-> Jakub, please bear with me; Could you explain what you exactly want
-> me to do? I'm new to kernel development and don't know how changes
-> which Stefano and Machael maintain get tested and staged.
+> I tried to edit that to something that actually makes some sense, but
+> who knows..
 
-I was just asking to send the same patch (v3) second time to kick off
-a CI. You can change the subject prefix to "[PATCH net v3 resend]".
-And add
+Ah sorry. That was something difficult to shorten, and I wrote that up at
+the end of the night.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+tracepoints will warn if you try to unregister a callback that is not
+registered. It doesn't break anything to do so, but because tracepoints are
+asynchronous, and when the user reads the ring buffer it triggers calls to
+special functions associated to a tracepoint, unregistering twice usually
+is because of a bug that can cause a hard to debug situation. So we warn if
+a callback is unregistered from a tracepoint that is not currently
+registered.
 
-between the "Fixes:" and your "Signed-off-by:" tag, since the code will
-be identical.
+What happened above is that the osnoise tracer registered callbacks to the
+tracepoints. And it unregisters them when the tracer is stopped (echo 0
+into tracing_on) or removed (echo nop > current_tracer). If the user stops
+osnoise with the echo 0 to tracing_on that will cause the tracepoint
+callbacks to be unregistered. If the user then turns off osnoise, then it
+will unregister the callbacks again, even though they were no longer
+registered.
 
-The CI didn't catch v3 because I fumbled patch filtering config.
-Your posting was correct, it was entirely my error.
+Basically it was just an accounting error.
+
+-- Steve

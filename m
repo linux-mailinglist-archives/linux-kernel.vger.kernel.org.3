@@ -2,176 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373C14D6749
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2A34D6750
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350585AbiCKRMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:12:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S1350613AbiCKRPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242458AbiCKRMd (ORCPT
+        with ESMTP id S242080AbiCKRO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:12:33 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71B0C149BB3;
-        Fri, 11 Mar 2022 09:11:29 -0800 (PST)
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D7D3420B7178;
-        Fri, 11 Mar 2022 09:11:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7D3420B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1647018689;
-        bh=pT3g6CrwH4SQoJr9Yxs/BZSyCrdQloWXDWTTxKQ765E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AprZZalV75mZHkDRko9bb+rY6+FSE0puTQCtfpYTZEkOTGGZBxiyDkShofOPB6Jtp
-         OZBPR2gk1LMFmfxTk69BogTF0s/oE8sZTdRMZt0nd9C9CMelRfB1/zowIb9V+Xdo1x
-         JKi/Ah8WIRAL1NPU9uV3AoRFR7G33BLeV/zaJaxI=
-Date:   Fri, 11 Mar 2022 09:11:23 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [next] arm64: allmodconfig: kernel BUG at
- include/linux/page-flags.h:509
-Message-ID: <20220311171123.GA1675@kbox>
-References: <CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com>
- <20220311112426.7e3cf434@gandalf.local.home>
+        Fri, 11 Mar 2022 12:14:58 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431A21959D4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:13:55 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 14F9E3F323
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 17:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647018833;
+        bh=RfqNtSnj7KKKappRytqaJ2yaBytssi4EFd5mt0OX61o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=iTKMULHw0VSM/mQTOwU6K9A/dmM99yp0YiRjgxKj4kksoYJuKQElBd1PDnjGTd/9V
+         biME75E4YyMee/jn2jX/XwAl7HNKsK5o5Kg+Xfy4Y3cIYW2MF1tpeqRWc6UOSA/CYn
+         eyh8Ked5z0NAcVRakGtznLrNj/jMkqMA9p2xiN35w8tV3Mvs4lqrOcKMI7Ed0R+8bi
+         8bVpgJjaJAI+pPdT8IZPRIMLo4S7HWxaxOrw+/6j6EFfNeP/zFaE9pW0U+AfcRuTuN
+         wnDqTCjLNIVEotAtz0AnJWDpIfidQxU+VNpOD05D0HhsfkUkb5AOcptE1y0js8Y5cT
+         cgmL/BZAVfPrw==
+Received: by mail-ed1-f70.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso5219254edh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:13:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RfqNtSnj7KKKappRytqaJ2yaBytssi4EFd5mt0OX61o=;
+        b=CZHdE4M9lplEpHFLsGCE0D0BNgcqisBV/KuCKgdAVVCuWiKhQVWqiKtn4t1ycbOZN0
+         fNTf9BvJRtyGI6u7ukXp6Fs4an9wv1+7JcHoauwvClHjt3puwnGw184Gi2uO3prUR8ua
+         EN0socQwxMD9iPJ/1gYUHfhV8rJx+MUV/93ihAalZn78Mul1/LThhxzK2FuzV5Or1nEL
+         c+Khc1YPx3s7cJxp2FzjqNkwMzVE5gJ8MjtamWC+mns07uG1rklGuuO5jmOdIOUX0BpU
+         8ZrgtJhlaTOl75QJM+c601f5c9S6+O/nfZvHjVit2eItmF/MEK3ShvQdgjklxfDjWCFR
+         0Gmw==
+X-Gm-Message-State: AOAM533v+g/0h9ITVS3zrmDLFdNdf0IjMnu8Lmu0SAlonSVSjyDQF5w1
+        /hoDDMo3zwd0ysNzMvp7hR7EywMrQfcOATqkaYfVnkn0juZZC1zj0vFkjzbynB2DuteqPVZTzFh
+        M0yjm4zvrhnoAm2W3OmymrypkntedWVOFMWSrcn4dEw==
+X-Received: by 2002:a17:907:97c7:b0:6da:b3ba:6d9f with SMTP id js7-20020a17090797c700b006dab3ba6d9fmr9858771ejc.256.1647018832687;
+        Fri, 11 Mar 2022 09:13:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyRIzUayyIxbwvakLgZFmLbT5KgaaaJ42ffeJIr0rYpRuq1vd6YDm0FwIL/67DY8Vy2zzgkGQ==
+X-Received: by 2002:a17:907:97c7:b0:6da:b3ba:6d9f with SMTP id js7-20020a17090797c700b006dab3ba6d9fmr9858747ejc.256.1647018832433;
+        Fri, 11 Mar 2022 09:13:52 -0800 (PST)
+Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id hz7-20020a1709072ce700b006db4bd52016sm3254706ejc.144.2022.03.11.09.13.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 09:13:52 -0800 (PST)
+Message-ID: <9cebbeb7-3914-6a7a-def1-06b5ee71932f@canonical.com>
+Date:   Fri, 11 Mar 2022 18:13:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311112426.7e3cf434@gandalf.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 05/10] dt-bindings: timer: Add HPE GXP Timer Binding
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220310195229.109477-1-nick.hawkins@hpe.com>
+ <20220310195229.109477-5-nick.hawkins@hpe.com>
+ <YittU9MfIFye9e2p@robh.at.kernel.org>
+ <PH0PR84MB1718CAA1172CE891AA4E361C880C9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <PH0PR84MB1718CAA1172CE891AA4E361C880C9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 11:24:26AM -0500, Steven Rostedt wrote:
-> On Fri, 11 Mar 2022 10:43:32 +0100
-> Anders Roxell <anders.roxell@linaro.org> wrote:
+On 11/03/2022 17:22, Hawkins, Nick wrote:
+> On Thu, Mar 10, 2022 at 01:52:24PM -0600, nick.hawkins@hpe.com wrote:
+>>> From: Nick Hawkins <nick.hawkins@hpe.com>>
+>>>
+>>> Creating binding for gxp timer in device tree hpe,gxp-timer Although 
+>>> there are multiple times on the SoC we are only enabling one at this 
+>>> time.
+>>>
+>>> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>>
+>>>
+>>> ----
+>>>
+>>> v2:
+>>>  *Removed maintainer change from patch  *Verified there was no 
+>>> compilation errors  *Added reference code in separate patch of 
+>>> patchset
+>>> ---
+>>>  .../bindings/timer/hpe,gxp-timer.yaml         | 45 +++++++++++++++++++
+>>>  1 file changed, 45 insertions(+)
+>>>  create mode 100644 
+>>> Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml 
+>>> b/Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+>>> new file mode 100644
+>>> index 000000000000..1f4e345c5fb8
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+>>> @@ -0,0 +1,45 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+>>> +---
+>>> +$id: 
+>>> +INVALID URI REMOVED
+>>> +xp-timer.yaml*__;Iw!!NpxR!yaItMPvjqEf3fKyp1xDQAzawRQDd8uDGTNKMlVPpn5Y
+>>> +56IUABMYbali7jonBl20K$
+>>> +$schema: 
+>>> +INVALID URI REMOVED
+>>> +aml*__;Iw!!NpxR!yaItMPvjqEf3fKyp1xDQAzawRQDd8uDGTNKMlVPpn5Y56IUABMYba
+>>> +li7jmX565-G$
+>>> +
+>>> +title: HPE GXP TIMER
+>>> +
+>>> +maintainers:
+>>> +  - Nick Hawkins <nick.hawkins@hpe.com>>
+>>> +  - Jean-Marie Verdun <verdun@hpe.com>>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: hpe,gxp-timer
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: T0CNT register
+>>> +      - description: T0CS register
+>>> +      - description: TIMELO register
 > 
-> > Hi,
-> > 
-> > I'm building and running an arm64 allmodconfig kernel on next.
-> > Reacently I've seen this error below, for full log see [1].
-> > 
-> > [   56.000810][    T1] ------------[ cut here ]------------
-> > [   56.003178][    T1] kernel BUG at include/linux/page-flags.h:509!
-> > [   56.006291][    T1] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> > [   56.008921][    T1] Modules linked in:
-> > [   56.010600][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G
-> >         T 5.17.0-rc6-next-20220304 #1
-> > ff4358f1e97b9d4d3a7966961f455fb8cb5c735d
-> > [   56.015962][    T1] Hardware name: linux,dummy-virt (DT)
-> > [   56.018189][    T1] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT
-> > -SSBS BTYPE=--)
-> > [   56.021355][    T1] pc : set_page_reservations+0xf8/0x3b8
-> > [   56.023655][    T1] lr : set_page_reservations+0xec/0x3b8
-> > [   56.025976][    T1] sp : ffff80000eb37c20
-> > [   56.027699][    T1] x29: ffff80000eb37c20 x28: ffff0000079d8050
-> > x27: 0000000000000001
-> > [   56.031030][    T1] x26: ffff80000a2c6140 x25: ffff80000e240380
-> > x24: ffff80000b780f70
-> > [   56.034381][    T1] x23: fffffc0000000000 x22: 000000000028b100
-> > x21: fffffc000028b100
-> > [   56.037728][    T1] x20: ffff80000e23ffe0 x19: ffff80000e23ffe0
-> > x18: 0000000000000000
-> > [   56.041039][    T1] x17: 0000000000000000 x16: 0000000000000000
-> > x15: 0000000000000000
-> > [   56.044323][    T1] x14: 0000000000000000 x13: fffffffffffe34f0
-> > x12: fffffffffffe3498
-> > [   56.047644][    T1] x11: 0000000000000000 x10: 0000000000000000 x9
-> > : 0000000000000000
-> > [   56.050941][    T1] x8 : 0000000000000000 x7 : 0000000000000000 x6
-> > : 0000000000000000
-> > [   56.054258][    T1] x5 : 0000000000000000 x4 : 0000000000000000 x3
-> > : 0000000000000000
-> > [   56.057729][    T1] x2 : 0000000000000000 x1 : 0000000000000000 x0
-> > : 0000000000000001
-> > [   56.061075][    T1] Call trace:
-> > [   56.062436][    T1]  set_page_reservations+0xf8/0x3b8
-> > [   56.064709][    T1]  trace_events_user_init+0x1bc/0x3f8
+>> Is the spec public to know what T0CNT, T0CS, and TIMELO are?
+> No it is not, should I not mention the register descriptions at all?
 > 
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  clock-frequency:
+>>> +    description: The frequency of the clock that drives the counter, in Hz.
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - interrupts
+>>> +  - clock-frequency
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    timer@10003000 {
+>>> +        compatible = "hpe,gxp-timer";
+>>> +        reg = <0xc0000080 0x1>>, <0xc0000094 0x01>>, <0xc0000088 0x08>>;
 > 
-> Hmm,
+>> Based on the driver these are 4 bytes, 1 byte, 4 bytes in size.
 > 
-> static void set_page_reservations(bool set)
-> {
-> 	int page;
-> 
-> 	for (page = 0; page < MAX_PAGES; ++page) {
-> 		void *addr = register_page_data + (PAGE_SIZE * page);
-> 
-> 		if (set)
-> 			SetPageReserved(virt_to_page(addr));
-> 		else
-> 			ClearPageReserved(virt_to_page(addr));
-> 	}
-> }
-> 
-> static int __init trace_events_user_init(void)
-> {
-> 	int ret;
-> 
-> 	/* Zero all bits beside 0 (which is reserved for failures) */
-> 	bitmap_zero(page_bitmap, MAX_EVENTS);
-> 	set_bit(0, page_bitmap);
-> 
-> 	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
-> 
-> 	if (!register_page_data)
-> 		return -ENOMEM;
-> 
-> 	set_page_reservations(true);
-> 
-> Beau,
-> 
-> Why are you reserving the page? Can't you just allocate a page and use that?
-> 
-> 	page = alloc_pages(GFP_KERNEL | __GFP_ZERO, 0);
-> 	register_page_data = page_address(page);
-> 
-> What was the purpose of setting it reserved?
-> 
+>> Are there other registers in 0x80-0x95 range or do these offsets change in other chips? If not, just 1 entry covering the whole thing would be better.
+> There are other registers in this range that cover different timers/clocks, for the most part between chip generations the offsets remain the same unless there is an architectural issue.
+> Can you provide a quick example of what one entry would be?
 
-Maybe I am mistaken, but I remember reading in the case of a kernel
-allocated page shared with user space they must be reserved. It was
-stated that the PTE may not know the PFN belongs to user or kernel.
+arch/arm/boot/dts/versatile-ab.dts
 
-If this is not the case, I don't see why we couldn't allocate zero'd
-pages as you describe. We just need to make sure we don't crash user
-processes touching the page if it does get paged out (and ideally not
-slow down their execution).
+and actually 90% of DTS... it's rather a challange to find such
+fine-grained iomap.
 
-> -- Steve
-> 
-> > [   56.067110][    T1]  do_one_initcall+0x2ac/0x6c0
-> > [   56.069267][    T1]  do_initcalls+0x17c/0x244
-> > [   56.071269][    T1]  kernel_init_freeable+0x2a0/0x344
-> > [   56.073587][    T1]  kernel_init+0x34/0x180
-> > [   56.075614][    T1]  ret_from_fork+0x10/0x20
-> > [   56.077655][    T1] Code: 97937293 f9401a80 91000400 f9001a80
-> > (d4210000) [   56.080828][    T1] ---[ end trace 0000000000000000 ]---
-> > [   56.083250][    T1] Kernel panic - not syncing: Oops - BUG: Fatal
-> > exception [   56.086279][    T1] ---[ end Kernel panic - not syncing:
-> > Oops - BUG: Fatal exception ]---
-> > 
-> > Reported-by: Anders Roxell <anders.roxell@linaro.org>
-> > 
-> > Any idea what happens?
-> > 
-> > 
-> > Cheers,
-> > Anders
-> > [1] http://ix.io/3Rkj
-
-Thanks,
--Beau
+Best regards,
+Krzysztof

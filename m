@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301F94D5E95
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BA34D5E96
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347601AbiCKJjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S1347545AbiCKJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239888AbiCKJjI (ORCPT
+        with ESMTP id S239888AbiCKJjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:39:08 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E930D9BB85;
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id h2so3425247pfh.6;
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
+        Fri, 11 Mar 2022 04:39:15 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03471BBE25;
+        Fri, 11 Mar 2022 01:38:10 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id b8so7678838pjb.4;
+        Fri, 11 Mar 2022 01:38:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4UdACirxY0xsWd1veLmX7WNmlz8Y4QUFgsG8QaePNhI=;
-        b=agrL8Vmm1KeqiI6nEnTVDa1ZDOK8ULV8iyMijEcu7zlaHK/lViw8aOiuYCHluRe3Qi
-         oI2maBBIeOnqNHMah24Rs+m8zgWKzTMpYvDbNT30bnfLtUj8FirJYsb4Odg1qG6Pox7K
-         HITnTQoW3KUSvStsl7JahidRqX8hYxPZ2DdoiPtxSAQMtWbPJ3wxFPLjfzLDA/naZp2B
-         U+NT8mxtT8Cn0PyuSyh7R+PoimjJHsvqsQv+gGcBk2rZL99FfWbB+HhTDtH0Wl8ocVB3
-         n2I9viEraC7mJBkzRsFBEQ0rsBriRXbD406YQvHY/rOc53ejhYsjL7V2p99pkn8/Ghvz
-         jenw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+sti7R5r7TlUzIhwq2afJWAsp4Iedj4R4baq+ryUh2g=;
+        b=UPsLXqoS5RBH3+XHcocj3dT6VT/oGbCNu4zvXSVjMWOQiIW4Zv17pEQjwbEJSmuHKq
+         nwt/rKa9jWswtdLbCpD7380vcsbGTynIJOI+EJOU1h24OKwK9TOjMpg9t2KCq89gkedX
+         rrzz28GkgRUXbJ8yI9rda/V2EE7WzDjn74gJiwec3XUzXqWu84Tv355++8yxsjlK8OCr
+         slB+drV0Yvrnt1rRSJOGrEFj/+gHKsH53kXryJxw9tB1AIbdUcpyjUv0Z9hkhy0DOKEd
+         5pv8Y9K17lZ4i1+xAmlhZruknJN1k+vaMTTA0LNYp6VuZm+Ut3GT05DuXjkEdPPJjUZu
+         sMbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4UdACirxY0xsWd1veLmX7WNmlz8Y4QUFgsG8QaePNhI=;
-        b=mwgx6+zl0qGHxEIoCHBoJ0h7tTpS1XqXP6ia37u7ao7ab1fHf2dzi8c1lUbdLvLbCY
-         f6yjfO5t9ahEfWTqK6nFjywJTCHv4oPDn12IbkapSlZvsyW5bzlYT02AEyDomEv1dDhM
-         z1GNsOPzc+g5hfeLVHezEdNR8lMt4DCmw8OR7rWz5rTwXIEwr0whiWVFOZbf8dd99xMi
-         LR3AiOrjPksAdjwPtw2saXipKbiPC3gbDJrUqDp1QlD0hr6Bzm7JLA3BK1dzgSrx6aU/
-         2ijrn4r49PkroM00nnJNvBNgp9DJyHIQxqUpaFyBRrDkUG7qMyKKf0FohD4vNj7u3KH9
-         JurA==
-X-Gm-Message-State: AOAM53137hVcV5CvW10kmoxnaqs1FI38YP/uejklb/40D6DwydSbdR0z
-        RXyP83UTFcTPClM84HC6x9fi3hekslipDw==
-X-Google-Smtp-Source: ABdhPJwi+/lQ+Rkkt9up1U51/sxroO3UN6n1mL7YQhZ1PnzaQEQ/lsj9lpDBsMDW6DVKszVkq0Sl+A==
-X-Received: by 2002:a63:d758:0:b0:380:fba9:f6e5 with SMTP id w24-20020a63d758000000b00380fba9f6e5mr4125220pgi.330.1646991485433;
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+sti7R5r7TlUzIhwq2afJWAsp4Iedj4R4baq+ryUh2g=;
+        b=UEFdijlLkokXLInQ46BCqFR+xJBxU6Ul5Cbb7HAk72spTVTvt8xs+BVts4MMXVnDV+
+         r3ymBtYnGc7GbvjGyXTDNctG5/mefkqd27ZImVOON1w7xs+LBgKYhiH1zbszGztw181V
+         /x4JyGwEKpXZ3dnTJ+Fgpl7b1PtUQELE/+LeRWRPIxzw7Zje2nyWoSP+2gntPsObNMJq
+         rr1PijKSec6LRBW6BEizClWdGJ3ddDx26kMhwv8GX97ZzPJDnP2ysFpv8lEaGjhk5Wrq
+         PH+tLCpMzrtGUpuEjLbeyoRMo2a2oIvK06esPAl1O3wu6gFjCy+N0L6K8dv0X0Ac0DbW
+         7m2A==
+X-Gm-Message-State: AOAM5313nmYAICDpf+NjZIAukC8XObmO/0dM2RiaaH9BI/B4dtPn6unp
+        XMX7yw4D5omfXNvzn3j8uTY=
+X-Google-Smtp-Source: ABdhPJzYRJlhVYjsiUbgyuUOuHb8yYvjyX5Y3NPJ7anc1+dPGbWZPcJPM2mEEqB5bo8jjieTu90yqg==
+X-Received: by 2002:a17:90b:1c86:b0:1bf:2a7e:5c75 with SMTP id oo6-20020a17090b1c8600b001bf2a7e5c75mr9954721pjb.145.1646991489547;
+        Fri, 11 Mar 2022 01:38:09 -0800 (PST)
 Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm9011011pfk.26.2022.03.11.01.38.02
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm9011011pfk.26.2022.03.11.01.38.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
+        Fri, 11 Mar 2022 01:38:09 -0800 (PST)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org
+        soc@kernel.org, Brijesh Singh <brijeshkumar.singh@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Rob Herring <robh+dt@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 0/3] PL022 DT fixes for seattle, lg and lpc platform
-Date:   Fri, 11 Mar 2022 15:07:57 +0530
-Message-Id: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 1/3] arm64: dts: seattle: Update spi clock properties
+Date:   Fri, 11 Mar 2022 15:07:58 +0530
+Message-Id: <20220311093800.18778-2-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,36 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset is an attempt to fix DTs which are not compliant with
-pl022 spi binding. Please note, there are other fixes required also
-which are sent from other trees.
-As git trees for these platforms are not available, Rob advised me to
-seek help from soc tree maintainers.
+PL022 binding require two clocks to be defined but AMD seattle platform
+does't comply with binding and define only one clock i.e apb_pclk.
 
-Arnd and Olof, could you please help in reviewing and merging this
-patchset.
+Update spi clocks and clocks-names property by adding appropriate clock
+reference to make it compliant with bindings.
 
-These patches are base on
-git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git, arm/dt
+CC: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+v2:
+- Resend to soc ML
+- Add Rob's acked-by tag
 
-Link to v1 below:
-https://lore.kernel.org/linux-devicetree/20220311025932.GD54098@9a2d8922b8f1/T/#m734e470b3be87b7591b3e6d618e4c777f8e61981
-
-Patch1: Fix spi clock for amd seattle platform
-Patch2: Fix spi clock for lg platforms
-Patch3: Fix spi clock for lpc platform
-
-Kuldeep Singh (3):
-  arm64: dts: seattle: Update spi clock properties
-  arm64: dts: lg131x: Update spi clock properties
-  ARM: dts: lpc32xx: Update spi clock properties
-
- arch/arm/boot/dts/lpc32xx.dtsi               | 8 ++++----
  arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi | 8 ++++----
- arch/arm64/boot/dts/lg/lg1312.dtsi           | 8 ++++----
- arch/arm64/boot/dts/lg/lg1313.dtsi           | 8 ++++----
- 4 files changed, 16 insertions(+), 16 deletions(-)
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi b/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
+index b664e7af74eb..2aa21d98d560 100644
+--- a/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
++++ b/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
+@@ -113,8 +113,8 @@ spi0: spi@e1020000 {
+ 			reg = <0 0xe1020000 0 0x1000>;
+ 			spi-controller;
+ 			interrupts = <0 330 4>;
+-			clocks = <&uartspiclk_100mhz>;
+-			clock-names = "apb_pclk";
++			clocks = <&uartspiclk_100mhz>, <&uartspiclk_100mhz>;
++			clock-names = "sspclk", "apb_pclk";
+ 		};
+ 
+ 		spi1: spi@e1030000 {
+@@ -123,8 +123,8 @@ spi1: spi@e1030000 {
+ 			reg = <0 0xe1030000 0 0x1000>;
+ 			spi-controller;
+ 			interrupts = <0 329 4>;
+-			clocks = <&uartspiclk_100mhz>;
+-			clock-names = "apb_pclk";
++			clocks = <&uartspiclk_100mhz>, <&uartspiclk_100mhz>;
++			clock-names = "sspclk", "apb_pclk";
+ 			num-cs = <1>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
 -- 
 2.25.1
 

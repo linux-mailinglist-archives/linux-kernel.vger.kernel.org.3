@@ -2,246 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95294D60FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB4C4D6102
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243933AbiCKLtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S244394AbiCKLxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:53:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235982AbiCKLtD (ORCPT
+        with ESMTP id S235279AbiCKLxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:49:03 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D732E5AEE1;
-        Fri, 11 Mar 2022 03:47:57 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 637251F38D;
-        Fri, 11 Mar 2022 11:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646999276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZPi2Lq7LI0qBLB7OUgojUP5kZPqchQd2szwvFI9eSxI=;
-        b=EzG96CXKOz6D4h0n229lwacCan0Qmk+ItX0dzGXJRvO8n49VUfIwv9Z/JoDHb6C/5P7tPM
-        st2syWvQZ+ZPacpwxHgv37nfphKmMfvZJ/jE/YYveV/dzkmjvrdZlIT2FwhTR7AiFhkULQ
-        jZIEvYQX/eoaIg1yPD9uC2npTAQRXyY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646999276;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZPi2Lq7LI0qBLB7OUgojUP5kZPqchQd2szwvFI9eSxI=;
-        b=z9NB8w5eOAgdC+gXCNkx0Hr+De4edG/t0HAkcdW9Z1iFcWK9utOKGCJs4caVlWJePv2cBc
-        9pEqd0kkzZyn3iBA==
-Received: from vasant-suse.fritz.box (unknown [10.163.24.178])
-        by relay2.suse.de (Postfix) with ESMTP id 2E5B8A3B89;
-        Fri, 11 Mar 2022 11:47:56 +0000 (UTC)
-From:   Vasant Karasulli <vkarasulli@suse.de>
-To:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ddiss@suse.de
-Cc:     Vasant Karasulli <vkarasulli@suse.de>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH v3 2/2] exfat: keep trailing dots in paths if keep_last_dots is
-Date:   Fri, 11 Mar 2022 12:47:46 +0100
-Message-Id: <20220311114746.7643-3-vkarasulli@suse.de>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220311114746.7643-1-vkarasulli@suse.de>
-References: <20220311114746.7643-1-vkarasulli@suse.de>
+        Fri, 11 Mar 2022 06:53:49 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F82051329
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:52:45 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id e186so16620369ybc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vcfCQf2ipBXym0WGWa/TPLq262jF+MOIdkhc8cIElBc=;
+        b=qT6Ctf9FHvk5UXjURmdbs62M1JDay7M+EVARQ2dkMVVf+RhXGnyAClPHGmYONCKgow
+         INFKIBS3t7CwxZsdD/OeaAinCjIdI9blsmY/P5ICQv3iQaCppBePlntLQlpJNwjVGddz
+         Pi32uihRrfaFX6oxskxTdjd1f6+nJHG67qwGL4g3/xbfPn7sCZ2EeXmFLjg2xeB3Vj0p
+         QSjouGtbY9EYf7pU3UveTOT7zcaotD5rK7zgiVv+dYk9oTQtcaKEakM6MvUJxoKTS2S7
+         UDpZQSws0lcYUrYNO17coAtjXj2nFB6O+D6sqV1RhifF5q72MDMNArDfGDq7WM2bkiVB
+         oPbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vcfCQf2ipBXym0WGWa/TPLq262jF+MOIdkhc8cIElBc=;
+        b=LxI8x/9mJUaWOWw6hAssqddqimBgjikB+15eeXP2hsihMqgOiETDBv/tgrnhlgJWku
+         +23PWmYudROHbeSgrvf7wfx7bd1kYpoEfpVlCzxtkYo8ixgwUO7R4AAUvVwQZJDASodS
+         iv8zKD36GPc6SabJlGi2/XSZNthaThd2VVB7m/gMzubUYXN9VN1LsnlZ098S5MNb+YLo
+         21JUT/yYtja6gYJvD5oCcBMCwB8KyYpOf4ryqqqs5FogQIAnwOTaGW1K8nK5NfR3jR10
+         y/jl3DV+3cKRMvwMzMp293Qci8UEoaG8fLvv0Ay4qzyanE3oyqRQGfl7K5L+qO281DMT
+         PI0A==
+X-Gm-Message-State: AOAM532PC7diPouC4YgHCfSPe1pJsxgPkSi2iLCbl18i9WE1r/QAocIJ
+        UcBsLnRckEltf6X+eR3R1ixwbEKOIh++o8kQjR3wMA==
+X-Google-Smtp-Source: ABdhPJz/cuI5oGeD+7slacIT8yD/BzgUoTMLR5eYU9e7xyrQS31gC2q8RtTsPCwh4VJ0sXH2N3uPpHsFU23FwhMiVVs=
+X-Received: by 2002:a25:da91:0:b0:628:aa84:f69e with SMTP id
+ n139-20020a25da91000000b00628aa84f69emr8246947ybf.603.1646999564536; Fri, 11
+ Mar 2022 03:52:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220310140812.869208747@linuxfoundation.org>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 11 Mar 2022 17:22:33 +0530
+Message-ID: <CA+G9fYsV1RA=jfBqG88NsZhdouCsB7=xg2Oq78AAL5_vUhObjw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/58] 5.10.105-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-exfat currently unconditionally strips trailing
-periods '.' when performing path lookup, but allows them in the filenames
-during file creation. This is done intentionally, loosely following Windows
-behaviour and specifications which state:
+On Thu, 10 Mar 2022 at 19:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.105 release.
+> There are 58 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.105-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-  #exFAT
-  The concatenated file name has the same set of illegal characters as
-  other FAT-based file systems (see Table 31).
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-  #FAT
-  ...
-  Leading and trailing spaces in a long name are ignored.
-  Leading and embedded periods are allowed in a name and are stored in
-  the long name. Trailing periods are ignored.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Note: Leading and trailing space ' ' characters are currently retained
-by Linux kernel exfat, in conflict with the above specification.
-On Windows 10, File Explore application retains leading and trailing
-space characters. But on the commandline behavior was exactly the opposite.
-Some implementations, such as fuse-exfat, don't perform path trailer
-removal. When mounting images which contain trailing-dot paths, these
-paths are unreachable, e.g.:
+## Build
+* kernel: 5.10.105-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 222eae85893657f02832253fe1c164f7d0b2c88c
+* git describe: v5.10.104-59-g222eae858936
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.104-59-g222eae858936
 
-  + mount.exfat-fuse /dev/zram0 /mnt/test/
-  FUSE exfat 1.3.0
-  + cd /mnt/test/
-  + touch fuse_created_dots... '  fuse_created_spaces  '
-  + ls -l
-  total 0
-  -rwxrwxrwx 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-  -rwxrwxrwx 1 root 0 0 Aug 18 09:45  fuse_created_dots...
-  + cd /
-  + umount /mnt/test/
-  + mount -t exfat /dev/zram0 /mnt/test
-  + cd /mnt/test
-  + ls -l
-  ls: cannot access 'fuse_created_dots...': No such file or directory
-  total 0
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-  -????????? ? ?    ? ?            ?  fuse_created_dots...
-  + touch kexfat_created_dots... '  kexfat_created_spaces  '
-  + ls -l
-  ls: cannot access 'fuse_created_dots...': No such file or directory
-  total 0
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  kexfat_created_spaces  '
-  -????????? ? ?    ? ?            ?  fuse_created_dots...
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45  kexfat_created_dots
-  + cd /
-  + umount /mnt/test/
+## Test Regressions (compared to v5.10.104-43-ge5e4a8f0fb6e)
+No test regressions found.
 
-With this change, the "keep_last_dots" mount option can be used to access
-paths with trailing periods and disallow creating files with names with
-trailing periods. E.g. continuing from the previous example:
+## Metric Regressions (compared to v5.10.104-43-ge5e4a8f0fb6e)
+No metric regressions found.
 
-  + mount -t exfat -o keep_last_dots /dev/zram0 /mnt/test
-  + cd /mnt/test
-  + ls -l
-  total 0
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  fuse_created_spaces  '
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  kexfat_created_spaces  '
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32  fuse_created_dots...
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32  kexfat_created_dots
+## Test Fixes (compared to v5.10.104-43-ge5e4a8f0fb6e)
+No test fixes found.
 
-  + echo > kexfat_created_dots_again...
-  sh: kexfat_created_dots_again...: Invalid argument
+## Metric Fixes (compared to v5.10.104-43-ge5e4a8f0fb6e)
+No metric fixes found.
 
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1188964
-Link: https://lore.kernel.org/linux-fsdevel/003b01d755e4$31fb0d80$95f12880$
-@samsung.com/
-Link: https://docs.microsoft.com/en-us/windows/win32/fileio/exfat-specification
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Vasant Karasulli <vkarasulli@suse.de>
-Co-developed-by: David Disseldorp <ddiss@suse.de>
-Signed-off-by: David Disseldorp <ddiss@suse.de>
----
- fs/exfat/namei.c | 50 ++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 36 insertions(+), 14 deletions(-)
+## Test result summary
+total: 103231, pass: 87446, fail: 919, skip: 13751, xfail: 1115
 
-diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-index af4eb39cc0c3..a4f8010fbd38 100644
---- a/fs/exfat/namei.c
-+++ b/fs/exfat/namei.c
-@@ -65,11 +65,14 @@ static int exfat_d_revalidate(struct dentry *dentry, unsigned int flags)
- 	return ret;
- }
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 46 passed, 14 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
 
--/* returns the length of a struct qstr, ignoring trailing dots */
--static unsigned int exfat_striptail_len(unsigned int len, const char *name)
-+/* returns the length of a struct qstr, ignoring trailing dots if necessary */
-+static unsigned int exfat_striptail_len(unsigned int len, const char *name,
-+					bool keep_last_dots)
- {
--	while (len && name[len - 1] == '.')
--		len--;
-+	if (!keep_last_dots) {
-+		while (len && name[len - 1] == '.')
-+			len--;
-+	}
- 	return len;
- }
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
-@@ -83,7 +86,8 @@ static int exfat_d_hash(const struct dentry *dentry, struct qstr *qstr)
- 	struct super_block *sb = dentry->d_sb;
- 	struct nls_table *t = EXFAT_SB(sb)->nls_io;
- 	const unsigned char *name = qstr->name;
--	unsigned int len = exfat_striptail_len(qstr->len, qstr->name);
-+	unsigned int len = exfat_striptail_len(qstr->len, qstr->name,
-+			   EXFAT_SB(sb)->options.keep_last_dots);
- 	unsigned long hash = init_name_hash(dentry);
- 	int i, charlen;
- 	wchar_t c;
-@@ -104,8 +108,10 @@ static int exfat_d_cmp(const struct dentry *dentry, unsigned int len,
- {
- 	struct super_block *sb = dentry->d_sb;
- 	struct nls_table *t = EXFAT_SB(sb)->nls_io;
--	unsigned int alen = exfat_striptail_len(name->len, name->name);
--	unsigned int blen = exfat_striptail_len(len, str);
-+	unsigned int alen = exfat_striptail_len(name->len, name->name,
-+				EXFAT_SB(sb)->options.keep_last_dots);
-+	unsigned int blen = exfat_striptail_len(len, str,
-+				EXFAT_SB(sb)->options.keep_last_dots);
- 	wchar_t c1, c2;
- 	int charlen, i;
-
-@@ -136,7 +142,8 @@ static int exfat_utf8_d_hash(const struct dentry *dentry, struct qstr *qstr)
- {
- 	struct super_block *sb = dentry->d_sb;
- 	const unsigned char *name = qstr->name;
--	unsigned int len = exfat_striptail_len(qstr->len, qstr->name);
-+	unsigned int len = exfat_striptail_len(qstr->len, qstr->name,
-+			       EXFAT_SB(sb)->options.keep_last_dots);
- 	unsigned long hash = init_name_hash(dentry);
- 	int i, charlen;
- 	unicode_t u;
-@@ -161,8 +168,11 @@ static int exfat_utf8_d_cmp(const struct dentry *dentry, unsigned int len,
- 		const char *str, const struct qstr *name)
- {
- 	struct super_block *sb = dentry->d_sb;
--	unsigned int alen = exfat_striptail_len(name->len, name->name);
--	unsigned int blen = exfat_striptail_len(len, str);
-+	unsigned int alen = exfat_striptail_len(name->len, name->name,
-+				EXFAT_SB(sb)->options.keep_last_dots);
-+	unsigned int blen = exfat_striptail_len(len, str,
-+				EXFAT_SB(sb)->options.keep_last_dots);
-+
- 	unicode_t u_a, u_b;
- 	int charlen, i;
-
-@@ -416,13 +426,25 @@ static int __exfat_resolve_path(struct inode *inode, const unsigned char *path,
- 	struct super_block *sb = inode->i_sb;
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
- 	struct exfat_inode_info *ei = EXFAT_I(inode);
-+	int pathlen = strlen(path);
-
--	/* strip all trailing periods */
--	namelen = exfat_striptail_len(strlen(path), path);
-+	/*
-+	 * get the length of the pathname excluding
-+	 * trailing periods, if any.
-+	 */
-+	namelen = exfat_striptail_len(pathlen, path, false);
-+	if (EXFAT_SB(sb)->options.keep_last_dots) {
-+		/*
-+		 * Do not allow the creation of files with names
-+		 * ending with period(s).
-+		 */
-+		if (!lookup && (namelen < pathlen))
-+			return -EINVAL;
-+		namelen = pathlen;
-+	}
- 	if (!namelen)
- 		return -ENOENT;
--
--	if (strlen(path) > (MAX_NAME_LENGTH * MAX_CHARSET_SIZE))
-+	if (pathlen > (MAX_NAME_LENGTH * MAX_CHARSET_SIZE))
- 		return -ENAMETOOLONG;
-
- 	/*
 --
-2.32.0
-
+Linaro LKFT
+https://lkft.linaro.org

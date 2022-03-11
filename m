@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710C94D6742
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 433F14D6746
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350592AbiCKRKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S1350597AbiCKRLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349007AbiCKRKw (ORCPT
+        with ESMTP id S1349499AbiCKRLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:10:52 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F17D444E;
-        Fri, 11 Mar 2022 09:09:49 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id f8so8361725pfj.5;
-        Fri, 11 Mar 2022 09:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rIifNEL223B4Q2cC9Cr3V2sE1A970stkqMVY6Ytp1f0=;
-        b=H8iikbdM7qPlNb22UcDTD2aGwWXFDeRZbdCezuETwBJIwTXE5G7rICTtFqWpEnqJMy
-         dv8/hW5OepQoLY8trtjVjtlXIA2Aa1MiooCruVm9NDVxwCfqJFPVK40u5bvfmh7lHFRA
-         5JL1gBsT7txcofpgktrMYPf4P5g3/vU5guoLLzWR0bVMpoKmFDsofXxhn6rM1iX9RBMX
-         zOs6Fx/qbKFsTxeFjfjAnFxZdrAWKY4MlLiTt1AmnkUIQBf3Razrr3Vt2iL6esw1NXmA
-         hlELyJsD7A4fWA/47ag17Swoe+KHwo533y7A+dxXL4sskpqs+A3vqNVuZmJHk5o5uNKZ
-         xyEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rIifNEL223B4Q2cC9Cr3V2sE1A970stkqMVY6Ytp1f0=;
-        b=2cN4IBIptN82IvOqE8pD9OOXiW9QpmQf8uzS5Nh4m8Xrjn19nxtG8Dqr/bgCf8fUtX
-         dIxOs7/BV49SDdvZ6v88Ma3QCiJZQoJNMah+uP7lsRe2di4r+eH8qNpFHrn6wfuvSOtz
-         bs1trxwHLRSKrP/MuPWc912HaXwsT+DuSdIkUluzEYVbu8V9yp6DI3MKBmQVCEebUUM2
-         MCGK0GgQPThPHQzg/A4UoSdvNX+BSF7YKK50G8rfM+sZHxr7LiMJrNqAl2K2Ht8jIZvS
-         Fw/yubJcJBL+ctzPEz+5KobPpmG7ihAr076Ar3ePG0ygi4Hhyo+gBBkU94Lq3u9uHqHr
-         dVeA==
-X-Gm-Message-State: AOAM532TSPKS1wjVR0P1QozU65siT0zUgK5qFrzr6wLwuRhTNw6xJlel
-        12gWbrbGd4C86+/9/iimpd04jeEWUDVHu3BBgbk=
-X-Google-Smtp-Source: ABdhPJziCmcDqqb028R5oB78OOeUFH41SSAnC+DRmTfu5ERq7qEKOzhe8Jv2Q3IlO7l1Yv+YqW4R3ggzmXOHWcwUfSI=
-X-Received: by 2002:a63:6809:0:b0:37c:68d3:1224 with SMTP id
- d9-20020a636809000000b0037c68d31224mr9049808pgc.287.1647018589126; Fri, 11
- Mar 2022 09:09:49 -0800 (PST)
+        Fri, 11 Mar 2022 12:11:12 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE4FD444E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:10:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647018608; x=1678554608;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=p9BhkaxiWbSuCDwfv6fPTGlhyGO3m3RMfcZIxaye4DA=;
+  b=W78cKCIfoRAyViAKCS75PvWOzRCbA00Ftd57ITzgMHAfpaB6SlLU/3xe
+   TBLPk/08PxaskTf9vWUtoodL1jZ8InSnNLXL9dkyw9gj3s/wCrKpL94jm
+   ariPDaC5Y7e0DSh6BwosGnselrRgP5UAcTMgFaRMmYHTAYCYo0jiDUI04
+   C/JKCyutjhiJgEjSdd9ZX1OwYNg1BPuq4+cuuSvpmeBnkcEsAHD3O3ZK2
+   NkxSoAifmyXp9pYubJjsLVvqwmNs08aUzBYWPG7V8NMr4hYVHDNFUuwho
+   DPvP/+4bjuEg9zSGh1xb6qrRswlrKPkcnSqVNVdo5Dh1QLezNtr+v2XQm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="316333577"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="316333577"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:10:08 -0800
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="644988416"
+Received: from cpeirce-mobl1.amr.corp.intel.com (HELO [10.212.128.243]) ([10.212.128.243])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:10:07 -0800
+Message-ID: <c3b12235-b0ee-c5c5-b876-e96519786503@intel.com>
+Date:   Fri, 11 Mar 2022 09:10:01 -0800
 MIME-Version: 1.0
-References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
- <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net> <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
- <YinGZObp37b27LjK@hirez.programming.kicks-ass.net> <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
- <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net> <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
-In-Reply-To: <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 11 Mar 2022 09:09:38 -0800
-Message-ID: <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
-        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220310120749.23077-1-osalvador@suse.de>
+ <20220310183951.cb713c6ae926ea6ea8489a71@linux-foundation.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa node
+ changes its N_CPU state
+In-Reply-To: <20220310183951.cb713c6ae926ea6ea8489a71@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 2:40 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Mar 10, 2022 at 05:29:11PM +0100, Peter Zijlstra wrote:
->
-> > This seems to cure most of the rest. I'm still seeing one failure:
-> >
-> > libbpf: prog 'connect_v4_prog': BPF program load failed: Invalid argument
-> > libbpf: failed to load program 'connect_v4_prog'
-> > libbpf: failed to load object './connect4_prog.o'
-> > test_fexit_bpf2bpf_common:FAIL:tgt_prog_load unexpected error: -22 (errno 22)
-> > #48/4 fexit_bpf2bpf/func_replace_verify:FAIL
->
->
-> Hmm, with those two patches on I get:
->
-> root@tigerlake:/usr/src/linux-2.6/tgl-build# ./test_progs -t fexit
-> #46 fentry_fexit:OK
-> #48 fexit_bpf2bpf:OK
-> #49 fexit_sleep:OK
-> #50 fexit_stress:OK
-> #51 fexit_test:OK
-> Summary: 5/9 PASSED, 0 SKIPPED, 0 FAILED
->
-> On the tigerlake, I suppose I'm doing something wrong on the other
-> machine because there it's even failing on the pre-ibt kernel image.
->
-> I'll go write up changelogs and stick these on.
+On 3/10/22 18:39, Andrew Morton wrote:
+> On Thu, 10 Mar 2022 13:07:49 +0100 Oscar Salvador <osalvador@suse.de> wrote:
+>> We do already have two CPU callbacks (vmstat_cpu_online() and vmstat_cpu_dead())
+>> that check exactly that, so get rid of the CPU callbacks in
+>> migrate_on_reclaim_init() and only call set_migration_target_nodes() from
+>> vmstat_cpu_{dead,online}() whenever a numa node change its N_CPU state.
+> What I'm not getting here (as so often happens) is a sense of how badly
+> this affects our users.  Does anyone actually hotplug frequently enough
+> to care?
 
-What is the latest branch I can use to test it?
+I asked Abhishek about this a bit here:
+
+> https://lore.kernel.org/all/4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com/
+
+It sounded to me like there are ppc users who convert their systems from
+SMT=1 to SMT=8.  I'd guess that they want to do this as a side-channel
+mitigation because ppc has been dealing with the same basic issues as
+those of us over in x86 land.  The increase in time (20s->36s) would be
+noticeable and probably slightly annoying to a human waiting on it.
+
+I'd love to hear more details on this from Abhishek, like whether end
+users do this as opposed to IBM's kernel developers.  But, it does sound
+deserving of a stable@ tag to me.

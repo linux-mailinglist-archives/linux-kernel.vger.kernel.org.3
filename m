@@ -2,142 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AC94D69BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9F64D69BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiCKUy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 15:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S230215AbiCKUyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 15:54:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiCKUyT (ORCPT
+        with ESMTP id S230107AbiCKUyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 15:54:19 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B0A1D6C9D
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:08 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r29so3139430edc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:08 -0800 (PST)
+        Fri, 11 Mar 2022 15:54:51 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EE21EDA14
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:38 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so12096360pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1GNOH6IByfdma2vK0oN46OfXdE9F5N+dlrc1RJjEFIk=;
-        b=RjeIvEgAZemAjh7MW5o+VKfWDPmEow0ENexq1P+K144S2pVSqDjee0cdc4oZOCqpUn
-         owc6GknawkgmT4HhECQzAJruWMy4OX5wgfWGvHcgiqL4Qn6FKSh6eGCkSDNwOO3qdYGB
-         TVWBvbiYnMqIZynJcRgG7j1ULCqToHZ8s7RStTM0nXC2XpGJcy0gpFg/MzsARoANMg+r
-         k9zcJafb990WHJIKgVy/EKpW/Qcr4zOM3f5frffwcfKqHDShTtlEF/JkKxeslfOPaUpd
-         8IjkL0X9Q8vwC5RBPVsVuob5Sx7UFW+kiv5dty0Da0xaxC8eAlrZfes2eJXxABHjCXT0
-         KBLw==
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=iHGGTD8PyTVJNiJh8Y1TqDmvdURAM0MJZFSp08G78Is=;
+        b=OmeYL54C6iNXt9LA5vp8y8mnjIFX2umARAfHq156jOatkVuSmDuZIwkS7f2FW0qwaM
+         5ZcUlJrxBhu2aRiZalij+7oG7d8AjI8f/+p3yjZccOkt16ApsErI2vLxyuKS6DuL/2dF
+         XewBS297splmdPZ0m9Tf4z1eJIcZx+4akKT6g2aj67G5AJJXej6AjUlZn8pE7Xix+uW9
+         +wHOlFU0fia6lsu9e/MAehDrINiQnCIHHF1csnbTAW/Bycm1C9QSB31Vecjarp+QCVOP
+         HiORxMdyYLmTdnvP+r5VuzNjUvSiT1vhHOd/KScpx8we9rsWuGWTtNNy49EIk5zYOuNt
+         Ra1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1GNOH6IByfdma2vK0oN46OfXdE9F5N+dlrc1RJjEFIk=;
-        b=X3YtkuqcjAx8vF/yLCyzTL566MoPEQxJGV3pQzOpmg6aZllFwDj9+QF3fBZ03sMcco
-         vHXwW18O/FtU/n/Wyw42PrvtCVD3N42QpEv0EgpJCOZ7so0zYUGuZqYyQ6DHu1KxoCsd
-         DckBBICSN+DySRvbWNnVDzL66+J7/XrNAEPWay23+g6t2iyvzFoZxrkGsazTfuj73ASy
-         Zm51h3yp4PijkviXOP8T2CDvu6T8nL+95eBLB0AgBwyliOVMM3uUFyNdXqM3VLzKcLbm
-         iPzgxwb1WkLmNKcrm83vtwA9MfXaKgRSKdWY2a3MOlgGbfDCrXUNsdB4Hx6QRlWsA3X+
-         nRzg==
-X-Gm-Message-State: AOAM531ZRaMDA7bgE6oHS/ZacVBZvRet4kuUK9Go6/BjA7VoLo6k8t00
-        MnBKUQbhhEx70BJLmtA8xFCaf+3oZ1LeawI0wZyC
-X-Google-Smtp-Source: ABdhPJwSR0cPGoV54LnNJjSTlEQtUj6d/H5MywubGfYXG4EWqco8EDA0qvmEgqp6RbgvnM4pYc61bLNnIxwMEl9aSDA=
-X-Received: by 2002:aa7:d494:0:b0:415:a309:7815 with SMTP id
- b20-20020aa7d494000000b00415a3097815mr10502424edr.340.1647031985810; Fri, 11
- Mar 2022 12:53:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20211117015806.2192263-1-dvander@google.com> <CAOQ4uxjjapFeOAFGLmsXObdgFVYLfNer-rnnee1RR+joxK3xYg@mail.gmail.com>
- <Yao51m9EXszPsxNN@redhat.com> <CAOQ4uxjk4piLyx67Ena-FfypDVWzRqVN0xmFUXXPYa+SC4Q-vQ@mail.gmail.com>
- <YapjNRrjpDu2a5qQ@redhat.com> <CAHC9VhQTUgBRBEz_wFX8daSA70nGJCJLXj8Yvcqr5+DHcfDmwA@mail.gmail.com>
- <CA+FmFJA-r+JgMqObNCvE_X+L6jxWtDrczM9Jh0L38Fq-6mnbbA@mail.gmail.com>
- <CAHC9VhRer7UWdZyizWO4VuxrgQDnLCOyj8LO7P6T5BGjd=s9zQ@mail.gmail.com>
- <CAHC9VhQkLSBGQ-F5Oi9p3G6L7Bf_jQMWAxug_G4bSOJ0_cYXxQ@mail.gmail.com>
- <CAOQ4uxhfU+LGunL3cweorPPdoCXCZU0xMtF=MekOAe-F-68t_Q@mail.gmail.com> <YitWOqzIRjnP1lok@redhat.com>
-In-Reply-To: <YitWOqzIRjnP1lok@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 11 Mar 2022 15:52:54 -0500
-Message-ID: <CAHC9VhQ+x3ko+=oU-P+w4ssqyyskRxaKsBGJLnXtP_NzWNuxHg@mail.gmail.com>
-Subject: Re: [PATCH v19 0/4] overlayfs override_creds=off & nested get xattr fix
-To:     Amir Goldstein <amir73il@gmail.com>,
-        Vivek Goyal <vgoyal@redhat.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        David Anderson <dvander@google.com>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-doc@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>, selinux@vger.kernel.org,
-        paulmoore@microsoft.com, luca.boccassi@microsoft.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=iHGGTD8PyTVJNiJh8Y1TqDmvdURAM0MJZFSp08G78Is=;
+        b=cYnG1rl4XZY3DkNd6v6XaMaKBku8ec+fayiFDboCX0PHEMF1Ba2DBjaTOtENKJjoAF
+         8sbczRLfrcXT/MJgpYc3XX+7x9IGetMRWcjn6bnKXQN+Tp3dMVCclC7UdN9WfWU60F+B
+         sf07KYbLIHMSyCT73uQ9Pbrt4zsVGYhEGEyH+mYOklrMHiRVwFPzB05pXpfH3AWvunYM
+         z5it5GZbzsnYj34YUzSOv1a9ZwD1PedRkpOqUB+2dswFfyqrFRlqA0aPQwpwkSvIhcYF
+         Z8I1WsWZYDEUQwzn69hpqxSDobBMGvpu4tXXPF+6HpECLVzfFEOZi3A0u7QphHdAkJoi
+         Ss/g==
+X-Gm-Message-State: AOAM530kDTfVCwjngomPMghu6O+Mjnl9jIki44QrRzCC7q9wdZ67Eoja
+        /vdrJvVAZ6tl5HQYIUjHkfheLjEOW/I=
+X-Google-Smtp-Source: ABdhPJxyNiCIk7FbxSXHe8ETZAAIY9TdBqDpTX658H+y+43oFI+tublXZJqo5GDPLxBqu4SZR0vqAw==
+X-Received: by 2002:a17:902:744c:b0:153:29de:55aa with SMTP id e12-20020a170902744c00b0015329de55aamr8245142plt.2.1647032012678;
+        Fri, 11 Mar 2022 12:53:32 -0800 (PST)
+Received: from smtpclient.apple ([66.170.99.1])
+        by smtp.gmail.com with ESMTPSA id s15-20020a63af4f000000b0037c8875108dsm9332340pgo.45.2022.03.11.12.53.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 11 Mar 2022 12:53:31 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [RESEND PATCH v3 5/5] mm: avoid unnecessary flush on
+ change_huge_pmd()
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <e5f84691-3475-1cbd-e46c-163bf594a4bc@intel.com>
+Date:   Fri, 11 Mar 2022 12:53:30 -0800
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Nick Piggin <npiggin@gmail.com>, x86@kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A2252098-2EE1-4F8D-A1A2-A49EE8FD18A7@gmail.com>
+References: <20220311190749.338281-1-namit@vmware.com>
+ <20220311190749.338281-6-namit@vmware.com>
+ <e5f84691-3475-1cbd-e46c-163bf594a4bc@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 9:01 AM Vivek Goyal <vgoyal@redhat.com> wrote:
-> On Fri, Mar 11, 2022 at 06:09:56AM +0200, Amir Goldstein wrote:
-> > Hi Paul,
 
-Hi Amir, Vivek,
 
-Thanks for the replies, I think I now have a better understanding of
-the concerns which is starting to make the path forward a bit more
-clear.  A few more comments below ...
+> On Mar 11, 2022, at 12:41 PM, Dave Hansen <dave.hansen@intel.com> =
+wrote:
+>=20
+> On 3/11/22 11:07, Nadav Amit wrote:
+>> From: Nadav Amit <namit@vmware.com>
+>>=20
+>> Calls to change_protection_range() on THP can trigger, at least on =
+x86,
+>> two TLB flushes for one page: one immediately, when pmdp_invalidate() =
+is
+>> called by change_huge_pmd(), and then another one later (that can be
+>> batched) when change_protection_range() finishes.
+>>=20
+>> The first TLB flush is only necessary to prevent the dirty bit (and =
+with
+>> a lesser importance the access bit) from changing while the PTE is
+>> modified. However, this is not necessary as the x86 CPUs set the
+>> dirty-bit atomically with an additional check that the PTE is (still)
+>> present. One caveat is Intel's Knights Landing that has a bug and =
+does
+>> not do so.
+>=20
+> First of all, thank you for your diligence here.  This is a super
+> obscure issue.  I think I put handling for it in the kernel and I'm =
+not
+> sure I would have even thought about this angle.
+>=20
+> That said, I'm not sure this is all necessary.
+>=20
+> Yes, the Dirty bit can get set unexpectedly in some PTEs.  But, the
+> question is whether it is *VALUABLE* and needs to be preserved.  The
+> current kernel code pretty much just lets the hardware set the Dirty =
+bit
+> and then ignores it.  If it were valuable, ignoring it would have been =
+a
+> bad thing.  We'd be losing data on today's kernels because the =
+hardware
+> told us about a write that happened but that the kernel ignored.
+>=20
+> My mental model of what the microcode responsible for the erratum does
+> is something along these lines:
+>=20
+> 	if (write)
+> 		pte |=3D _PAGE_DIRTY;
+> 	if (!pte_present(pte))
+> 		#PF
+>=20
+> The PTE is marked dirty, but the write never actually executes.  The
+> thread that triggered the A/D setting *also* gets a fault.
+>=20
 
-> > In this thread I claimed that the authors of the patches did not present
-> > a security model for overlayfs, such as the one currently in overlayfs.rst.
-> > If we had a model we could have debated its correctness and review its
-> > implementation.
->
-> Agreed. After going through the patch set, I was wondering what's the
-> overall security model and how to visualize that.
->
-> So probably there needs to be a documentation patch which explains
-> what's the new security model and how does it work.
+This makes perfect sense. I guess I misunderstood or forgot the erratum.
+But feel free to recheck. It would allow to remove the KNL check, and
+probably the first patch in this series. But I don=E2=80=99t think it =
+would
+allow to get rid of pmdp_invalidate_ad() since I do not fell comfortable
+just to use pmdp_establish() directly: I do not know about other
+architectures well enough to say that they have the same atomicity
+guarantees when it comes to A/D bits.
 
-Yes, of course.  I'll be sure to add a section to the existing docs.
+> I'll double-check with some Intel folks to make sure I'm not missing
+> something.  But, either way, I don't think we should be going to this
+> much trouble for the good ol' Xeon Phi.  I doubt there are many still
+> around and I *REALLY* doubt they're running new kernels.
+>=20
+> *If* we need this (and I'm not convinced we do), my first instinct =
+would
+> be to just do this instead:
+>=20
+> 	clear_cpu_cap(c, X86_FEATURE_PSE);
+>=20
+> on KNL systems.  If anyone cares, they know where to find us.
 
-> Also think both in terms of DAC and MAC. (Instead of just focussing too
-> hard on SELinux).
+I think that it is not necessary and your understanding of the erratum
+is the right one. Let me know if you find it is not the case.
 
-Definitely.  Most of what I've been thinking about the past day or so
-has been how to properly handle some of the DAC/capability issues; I
-have yet to start playing with the code, but for the most part I think
-the MAC/SELinux bits are already working properly.
+BTW: Thanks for the quick response, and sorry for the time it took me
+to send v3.
 
-> My understanding is that in current model, some of the overlayfs
-> operations require priviliges. So mounter is supposed to be priviliged
-> and does the operation on underlying layers.
->
-> Now in this new model, there will be two levels of check. Both overlay
-> level and underlying layer checks will happen in the context of task
-> which is doing the operation. So first of all, all tasks will need
-> to have enough priviliges to be able to perform various operations
-> on lower layer.
->
-> If we do checks at both the levels in with the creds of calling task,
-> I guess that probably is fine. (But will require a closer code inspection
-> to make sure there is no privilege escalation both for mounter as well
-> calling task).
-
-I have thoughts on this, but I don't think I'm yet in a position to
-debate this in depth just yet; I still need to finish poking around
-the code and playing with a few things :)
-
-It may take some time before I'm back with patches, but I appreciate
-all of the tips and insight - thank you!
-
--- 
-paul-moore.com

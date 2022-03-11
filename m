@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2884D58EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B4A4D58E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346134AbiCKD3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 22:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        id S1346004AbiCKD3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 22:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346028AbiCKD3m (ORCPT
+        with ESMTP id S239978AbiCKD3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 22:29:42 -0500
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082FBEC5D7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:28:19 -0800 (PST)
-X-QQ-mid: bizesmtp85t1646969247tscer40p
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 11 Mar 2022 11:27:21 +0800 (CST)
-X-QQ-SSF: 01400000002000C0H000000A0000000
-X-QQ-FEAT: Mzskoac49Oix45HU7RpkQ25a/rIjfqz/xgRkOTk+Y7CcKbw/h3EHuchHvEdlb
-        YN24DiTvtEVge8S7aK4kQwchQyKrDxvx1VNqEfkQIrt+wImigdULiJ3EOryxyvIF/NG+0ha
-        UBt61aD3nL4PF/5sMItOvZyBTcYl55U4a279CoBfx6U0u34TdQ7Q7UdhGHhpubR5z/1Ce6t
-        z6ct/d3hBKwL2uXlnUEdySVHF3UkUjDga1LCdAyRhFY24h5Pyq1MDtaJGqJgqqmBiFUia8g
-        +/qXnndJXL4VdQt3YME58G787MOhCea1Cc/WURqTIsl5HwymukdxtgwORTtm3LrdXw5ZkpC
-        BZkeRwiRdqrLVjuYe9GF25I3cda06tv8QDO5Ths5aXavKIcB+TB3ROgaYxCOA==
-X-QQ-GoodBg: 1
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH v2] Bluetooth: btrtl: btmrvl: Fix firmware filename for rtl chipset
-Date:   Fri, 11 Mar 2022 11:27:20 +0800
-Message-Id: <20220311032720.28499-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 22:29:06 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE25EAC83
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:28:04 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id u75-20020a63794e000000b003810e49ae0eso203409pgc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=XKkoV9WqAMW6txuBkF5Wd3rs0lT6dWVS/pJ+2/MRtag=;
+        b=kufdfWVgYM9IzhcIFS2Zm75ZysbcrHo+Ft1gBPcwjP2xCCig08BOid5sNt+kBPWRCt
+         Ovz6oGnz2qY/BmB4MJJ6UNIZ/H8ietBfYnn5sVsOHxpNc6NScHhfFnq4RBZEl8hehthK
+         trb78KhZBvWAPpHIauti2B4oEYlX8VRIMdKqK9TcUZjfDEqlcGcrb1FeKztPVY/pOYf/
+         +a00MkCYl8XEqFqYIhj9SSHFrR02lJqzd4OSOOOyd0FfcAWXXF4yCKMU85lnOXpJEBCl
+         2cTtAImJkpdW04qL3ZFJe9E+JX4lhJcq8QiAauf9Re1Z7r1omuYMWrT3ntK69u4uP89q
+         SeTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=XKkoV9WqAMW6txuBkF5Wd3rs0lT6dWVS/pJ+2/MRtag=;
+        b=smYNc0XKhexPWVg6DjmLCZga/Uskde0nrTCd8DVG68wDJslxnWHMuIDunIxcvYkzOW
+         x5QYjo7L2gvCbcuXnS/TA0Kp84bgOk5WLgKK4K/AwZ9E1nZCr0ixH5LbqM+/uUchgAtW
+         ab2mOVH5M8daZtkBbRD8Hiq5us08QM1BiNDxWeN1cd4+eU6s2BQA4GJSHeQqmN22yt7R
+         F4sPnI/LlDoK+dcyAXMbRGzniTlc3k8fNgqATbA2kBS34+1s/H4fGErp3kRkrCtu0v1N
+         XkYcxAkd4KIeTbBf4I11A/zrYZ9RaqeEE2s4GJfVzF+5Ctr07OBL8e9+3lS+SS+yAWgV
+         oikw==
+X-Gm-Message-State: AOAM532TFecurmCovMAtqwW/m44/yj1lyTxZePQ7zfpw3goqr6N+ngWL
+        druWHPGv/mV1+44jy1yLq7VCd2HFwv8=
+X-Google-Smtp-Source: ABdhPJwIG2XZcUj85RKHGPmCh8wL09k3iIswXlIqpkv0ONOnCCRLF0z1lkYsbPsHDBhGQ3AIDKCVaQ/orcQ=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:130e:b0:4f3:9654:266d with SMTP id
+ j14-20020a056a00130e00b004f39654266dmr8042509pfu.59.1646969284051; Thu, 10
+ Mar 2022 19:28:04 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 11 Mar 2022 03:27:40 +0000
+Message-Id: <20220311032801.3467418-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH 00/21] KVM: x86: Event/exception fixes and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firmware for rtl chipset is as part of the linux-firmware repository
-in dir linux-firmware/rtl_bt. Today, the rtl8761a_config,
-rtl8821a_config, rtl8723b_config and rtl8723bs_config files are used
-in btrtl, but it doesn't actually exist, which causes errors like:
+The main goal of this series is to fix KVM's longstanding bug of not
+honoring L1's exception intercepts wants when handling an exception that
+occurs during delivery of a different exception.  E.g. if L0 and L1 are
+using shadow paging, and L2 hits a #PF, and then hits another #PF while
+vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
+KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
+so that the #PF is routed to L1, not injected into L2 as a #DF.
 
-bluetooth: Direct firmware load for rtl_bt/rtl8821a_config.bin
-           failed with error -2
+nVMX has hacked around the bug for years by overriding the #PF injector
+for shadow paging to go straight to VM-Exit, and nSVM has started doing
+the same.  The hacks mostly work, but they're incomplete, confusing, and
+lead to other hacky code, e.g. bailing from the emulator because #PF
+injection forced a VM-Exit and suddenly KVM is back in L1.
 
-According to the files in the rtl_bt directory in the Linux firmware,
-fixes the driver to load correct firmware file for rtl.
+Everything leading up to that are related fixes and cleanups I encountered
+along the way; some through code inspection, some through tests (I truly
+thought this series was finished 10 commits and 3 days ago...).
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- drivers/bluetooth/btrtl.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+Nothing in here is all that urgent; all bugs tagged for stable have been
+around for multiple releases (years in most cases).
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index c2030f7e25b4..e3cfe0dff07d 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -88,14 +88,14 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723bs_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723bs_config" },
-+	  .cfg_name = "rtl_bt/rtl8723bs_config-OBDA8723" },
- 
- 	/* 8723B */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xb, 0x6, HCI_USB),
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723b_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723b_config" },
-+	  .cfg_name = NULL },
- 
- 	/* 8723D */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
-@@ -116,7 +116,7 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8821a_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8821a_config" },
-+	  .cfg_name = NULL },
- 
- 	/* 8821C */
- 	{ IC_INFO(RTL_ROM_LMP_8821A, 0xc, 0x8, HCI_USB),
-@@ -131,7 +131,7 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8761a_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8761a_config" },
-+	  .cfg_name = NULL },
- 
- 	/* 8761B */
- 	{ IC_INFO(RTL_ROM_LMP_8761A, 0xb, 0xa, HCI_UART),
-@@ -921,15 +921,12 @@ MODULE_VERSION(VERSION);
- MODULE_LICENSE("GPL");
- MODULE_FIRMWARE("rtl_bt/rtl8723a_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723b_fw.bin");
--MODULE_FIRMWARE("rtl_bt/rtl8723b_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_fw.bin");
--MODULE_FIRMWARE("rtl_bt/rtl8723bs_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723bs_config-OBDA8723.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
--MODULE_FIRMWARE("rtl_bt/rtl8761a_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8821a_fw.bin");
--MODULE_FIRMWARE("rtl_bt/rtl8821a_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8822b_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8822b_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
+Sean Christopherson (21):
+  KVM: x86: Return immediately from x86_emulate_instruction() on code
+    #DB
+  KVM: nVMX: Unconditionally purge queued/injected events on nested
+    "exit"
+  KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
+  KVM: x86: Don't check for code breakpoints when emulating on exception
+  KVM: nVMX: Treat General Detect #DB (DR7.GD=1) as fault-like
+  KVM: nVMX: Prioritize TSS T-flag #DBs over Monitor Trap Flag
+  KVM: x86: Treat #DBs from the emulator as fault-like (code and
+    DR7.GD=1)
+  KVM: x86: Use DR7_GD macro instead of open coding check in emulator
+  KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU is not in WFS
+  KVM: nVMX: Unconditionally clear mtf_pending on nested VM-Exit
+  KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
+  KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
+  KVM: x86: Make kvm_queued_exception a properly named, visible struct
+  KVM: x86: Formalize blocking of nested pending exceptions
+  KVM: x86: Use kvm_queue_exception_e() to queue #DF
+  KVM: x86: Hoist nested event checks above event injection logic
+  KVM: x86: Evaluate ability to inject SMI/NMI/IRQ after potential
+    VM-Exit
+  KVM: x86: Morph pending exceptions to pending VM-Exits at queue time
+  KVM: VMX: Update MTF and ICEBP comments to document KVM's subtle
+    behavior
+  KVM: selftests: Use uapi header to get VMX and SVM exit reasons/codes
+  KVM: selftests: Add an x86-only test to verify nested exception
+    queueing
+
+ arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
+ arch/x86/include/asm/kvm_host.h               |  33 +-
+ arch/x86/kvm/emulate.c                        |   3 +-
+ arch/x86/kvm/svm/nested.c                     | 100 ++---
+ arch/x86/kvm/svm/svm.c                        |  18 +-
+ arch/x86/kvm/vmx/nested.c                     | 322 +++++++++-----
+ arch/x86/kvm/vmx/sgx.c                        |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        |  53 ++-
+ arch/x86/kvm/x86.c                            | 409 ++++++++++++------
+ arch/x86/kvm/x86.h                            |  10 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/svm_util.h   |   5 +-
+ .../selftests/kvm/include/x86_64/vmx.h        |  51 +--
+ .../kvm/x86_64/nested_exceptions_test.c       | 307 +++++++++++++
+ 15 files changed, 914 insertions(+), 403 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
+
+
+base-commit: 4a204f7895878363ca8211f50ec610408c8c70aa
 -- 
-2.20.1
-
-
+2.35.1.723.g4982287a31-goog
 

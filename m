@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770794D5856
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C324D585B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345761AbiCKCrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 21:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S1345690AbiCKCut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 21:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239089AbiCKCrh (ORCPT
+        with ESMTP id S233034AbiCKCur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 21:47:37 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2981A41E9;
-        Thu, 10 Mar 2022 18:46:34 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6rDYwB_1646966789;
-Received: from 192.168.193.160(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6rDYwB_1646966789)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Mar 2022 10:46:30 +0800
-Message-ID: <fc2fa0a9-eae8-edc4-f86f-b9056d93ee12@linux.alibaba.com>
-Date:   Thu, 10 Mar 2022 18:46:29 -0800
+        Thu, 10 Mar 2022 21:50:47 -0500
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A91A274F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:49:45 -0800 (PST)
+Date:   Fri, 11 Mar 2022 02:49:40 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1646966983;
+        bh=580k28RZJWmruhyNLJaUIw7q1yifrWd4WqcSy+ybKWo=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=ZF8FYbbFpCzxGnaB7xZpON8TRl6aEG9ZJXzgjVQdF/0AaUKypfyo2r6NOf41G4VPX
+         chPLti/RlDcF1XukztOtMmYbSMzy2dM2xXq38Iw3rFe55l1RTmuXP6it83vOPb5MOH
+         qJajJIRq0AK+ZgZ+PaTlV17YnB5UTh7oYgF04Ru733MZqiTbAK4q4dDtWDCaV0xy6a
+         urzqvoUKEuOmAW97BV0uRrETdfOnY1jZf2HJOej5uu6/v8kLzs0rtTIFJwNtarMZGj
+         Dbkgrn4ScnkWOWLDdu9aM1S+eC4v5ossq5QL/ensZaLjBXuMelyytpe7kva6H3dqwr
+         dsDmBshLVTHMw==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: [RFC PATCH v1 1/2] list: add type-safer list_head wrapper
+Message-ID: <wKlkWvCGvBrBjshT6gHT23JY9kWImhFPmTKfZWtN5Bkv_OtIFHTy7thr5SAEL6sYDthMDth-rvFETX-gCZPPCb9t2bO1zilj0Q-OTTSbe00=@protonmail.com>
+In-Reply-To: <CAHk-=wjF4d_v5t=ht_vCOHxNDoPvsBuK-2jiEBus-__oPZuPFQ@mail.gmail.com>
+References: <20220311013238.3387227-1-pobrn@protonmail.com> <20220311013238.3387227-2-pobrn@protonmail.com> <CAHk-=wjkqz42CNjDgWA9U3uNWa9GriqaCqqKciqm0sZUYjfLQg@mail.gmail.com> <CAHk-=wjF4d_v5t=ht_vCOHxNDoPvsBuK-2jiEBus-__oPZuPFQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
- <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
- <202203091211.4F00F560@keescook>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <202203091211.4F00F560@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,30 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
 
-On 3/9/22 12:16, Kees Cook wrote:
-> On Mon, Mar 07, 2022 at 07:16:36AM -0800, Dan Li wrote:
->> But currently it still crashes when I try to enable
->> "-mbranch-protection=pac-ret+leaf+bti".
->>
->> Because the address of "&&redirected" is not encrypted under pac,
->> the autiasp check will fail when set_return_addr returns, and
->> eventually cause the function to crash when it returns to "&&redirected"
->> ("&&redirected" as a reserved label always seems to start with a bti j
->> insn).
-> 
-> Strictly speaking, this is entirely correct. :)
-> 
->> For lkdtm, if we're going to handle both cases in one function, maybe
->> it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
->> and maybe also turn off -O2 options for the function :)
-> 
-> If we can apply a function attribute to turn off pac for the "does this
-> work without protections", that should be sufficient.
-> 
+2022. m=C3=A1rcius 11., p=C3=A9ntek 3:01 keltez=C3=A9ssel, Linus Torvalds =
+=C3=ADrta:
+> On Thu, Mar 10, 2022 at 5:42 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > That one didn't do the automatic offset thing, but see
+> >
+> >    https://lore.kernel.org/all/CAADWXX-Pr-D3wSr5wsqTEOBSJzB9k7bSH+7hnCA=
+j0AeL0=3DU4mg@mail.gmail.com/
+> >
+> > on the problems that has.
+>
+> Note: I think the problems are serious enough that it almost certainly
+> isn't worth doing - it makes the code uglier for very little upside.
+>
+> So I tried to explain how it _could_ be done, but that doesn't mean
+> that it _should_ be done.
+>
+> Having the member name as part of the list traversal macro isn't
+> actually generally a real problem.
+>
+> I added it to the list_traversal_head() macro in that original patch
+> because I think we can easily use the member head name to _verify_
+> that the declaration and the use match.
+>
+> Yes, squirrelling  off the offset and not needing the member head name
+> at all at when traversing the list is obviously simpler syntax, but
+> that part has never been the real problem with list traversal. And
+> verifying that the member name that is passed in is the same as in the
+> list_traversal_head() would be trivial.
+>
+> To verify it, we could simply change that type name from:
+>
+>      type *name##_traversal_type;
+>
+> to be
+>
+>      type *name##_traversal_type_##member;
+>
+> instead, and suddenly the member name in 'list_traverse()' has to
+> match that thing that list_traversal_head() created.
+>
+> So yes, you'd have that third argument in list_traverse(), but it
+> would be trivially checked at compile-time.
 
-Got it, will do in the next version :)
+That is indeed a simpler thing to do, and doesn't need `offsetof()` at the
+declaration, but there are places - not many -  where the `list_head` membe=
+r
+is inside a subobject, for example, so `member` now contains a period.
 
-Thanks,
-Dan.
+
+>
+> And you'd avoid all the ugly complexities (described above) with lists
+> that are embedded inside data structures that refer to each other)
+
+
+Regards,
+Barnab=C3=A1s P=C5=91cze

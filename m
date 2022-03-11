@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFBE4D64F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E8C4D6540
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348161AbiCKPu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S1349907AbiCKPyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiCKPuz (ORCPT
+        with ESMTP id S1349899AbiCKPwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:50:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94A51C2D95
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 621D7B82C1C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F1AC340E9;
-        Fri, 11 Mar 2022 15:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647013788;
-        bh=vFydxBFqRh4gnkjZK63kJHNwdn3NtDUoiD8VT7M6qy4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mbh/5i5D+jJiaA3aSmvQXm/73G3kYlpZYs5WutA4kgnGS8vvFDqoyqnwAVuaRATI3
-         RcKZZ5mYbt8GLob1FWxYNKI3sz5pJDJi7UwU2AMQEsejl2aLYuxRlvQ5/ZZnM4wbNY
-         baGY5qk1XDaso0KIv2lbvYwdoyRElptstm0l5CQSh5rDvIq9ljdehfPXfbk1kKH0Os
-         N+ULASO3hkSgWz/t0lYGR27NHbDx/fUVTjQ9+8H9ePE/AhMKtHa/ESyitvR6rqrIFq
-         JyPJu7ahmb3wxPoSrrwQCbJSPkk/AmlylljQ9juyNvI5IxUWpO5lJpkjVm+aPhbvA6
-         roUR6xHjUyDPg==
-Date:   Fri, 11 Mar 2022 16:49:44 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 05/19] context_tracking: Split user tracking Kconfig
-Message-ID: <20220311154944.GD227945@lothringen>
-References: <20220302154810.42308-1-frederic@kernel.org>
- <20220302154810.42308-6-frederic@kernel.org>
- <20220310194346.GT4285@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 11 Mar 2022 10:52:21 -0500
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FA31CCB08;
+        Fri, 11 Mar 2022 07:50:55 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so10915194ooa.10;
+        Fri, 11 Mar 2022 07:50:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YxoZwXk5JXeLrOiq7bY7pTDwkNHArk5BUIDnHUOp3fI=;
+        b=XjHeNiwB/r1gEk87H55x7G8nUSVmS2XYotqcJ+zHrd8i5gLH6/CnuJVRijRG2LphtW
+         r3zXGoWF9YDLkCcJWeehuF46+cFnlKpKUra+LMjbuXfl23QvS2FDVNaRHpWQs2+RVkI7
+         4hxFuu6Sqg5NslZy4xFS2bKXamYzExjyQZ1rBc10rHdx2Y+inWkRMahD8hOKIIZx/HAJ
+         ppApSKyBdV8ejl5joExQHB28jOYZ6BUqzlcCXUWPsHa57/VzXYiwS2wmXRYBbrl8k6Ww
+         IFraIgtn44jcAqZayr0oDH3CCfMf/goMaMp76rBcQmBdLJtujhWfvbaY4DTSJCJ3iU+N
+         tGKg==
+X-Gm-Message-State: AOAM530Fqs23SpZs1oxrTvRd3LafvaGvJK4UVtMuN8SM7TvLaBT8H/N8
+        ftaelxF0WMabyCcr7W0zMlrMpG7e9Q==
+X-Google-Smtp-Source: ABdhPJwTNhTLkhpo9jtKQvQYWXEtv5T34b0UK/llvnOM7PooDJmEUR4392gY6ZLXZe41uYkJ8Pb+sQ==
+X-Received: by 2002:a05:6870:4149:b0:da:5e34:9448 with SMTP id r9-20020a056870414900b000da5e349448mr11505061oad.112.1647013855095;
+        Fri, 11 Mar 2022 07:50:55 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n11-20020a9d710b000000b005af4ceeaac1sm3727274otj.37.2022.03.11.07.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 07:50:54 -0800 (PST)
+Received: (nullmailer pid 3867362 invoked by uid 1000);
+        Fri, 11 Mar 2022 15:50:52 -0000
+Date:   Fri, 11 Mar 2022 09:50:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     hsinyi@chromium.org, Thomas Gleixner <tglx@linutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: timer: Add compatible for Mediatek
+ MT8186
+Message-ID: <Yitv3IUpCzp1/eGX@robh.at.kernel.org>
+References: <20220311130732.22706-1-allen-kh.cheng@mediatek.com>
+ <20220311130732.22706-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310194346.GT4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220311130732.22706-2-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:43:46AM -0800, Paul E. McKenney wrote:
-> On Wed, Mar 02, 2022 at 04:47:56PM +0100, Frederic Weisbecker wrote:
-> > Context tracking is going to be used not only to track user transitions
-> > but also idle/IRQs/NMIs. The user tracking part will then become a
-> > seperate feature. Prepare Kconfig for that.
+On Fri, 11 Mar 2022 21:07:29 +0800, Allen-KH Cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 > 
-> s/seperate/separate/ # nit
-
-Thanks, of course I'm never sure about that one.
-
-> > diff --git a/arch/Kconfig b/arch/Kconfig
-> > index 678a80713b21..1a3b79cfc9e3 100644
-> > --- a/arch/Kconfig
-> > +++ b/arch/Kconfig
-> > @@ -762,7 +762,7 @@ config HAVE_ARCH_WITHIN_STACK_FRAMES
-> >  	  and similar) by implementing an inline arch_within_stack_frames(),
-> >  	  which is used by CONFIG_HARDENED_USERCOPY.
-> >  
-> > -config HAVE_CONTEXT_TRACKING
-> > +config HAVE_CONTEXT_TRACKING_USER
+> This commit adds dt-binding documentation of timer for Mediatek MT8186 SoC
+> Platform.
 > 
-> Just checking...  This means that only some configs will see userland
-> execution as being different than kernel execution, correct?  (Which
-> is the case today, to be fair.)
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Exactly!
-
-Thanks!
+Acked-by: Rob Herring <robh@kernel.org>

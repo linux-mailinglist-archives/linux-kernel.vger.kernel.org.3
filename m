@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AC84D5E4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA5A4D5E5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245729AbiCKJX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S1347370AbiCKJXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347464AbiCKJWw (ORCPT
+        with ESMTP id S1345021AbiCKJXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:22:52 -0500
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AF41BD05A;
-        Fri, 11 Mar 2022 01:21:49 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id j17so12043279wrc.0;
-        Fri, 11 Mar 2022 01:21:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3PWKx/GG7lvu/JjEo7HaErVf5eLJj3x+U8mzOkpm4PA=;
-        b=53U5Mw6aVJGlHPEvjR82QFxgDo9mVxy0XlWQ92Yt4S/5p/zZLLrY9BqkDXXJwKgmXN
-         xrX9sDSOGlGR6AxnmqTNnTbMg1w1MjFDsLBovU08kwsvQku1D3Cxq/RHfaL7Ajd0+tjQ
-         0Z/0d99aUyulmHT3vsmctaJXEnmrOrvy1xTGWzeAO5dtc27Gju9jNczXxID+EVZ7dSAp
-         N1qbmd/ITgESxgrJ6dCgvC+KzjylEfKDaFja3TYTOv5jz1wy+64DLwgj2LSuStLkEVni
-         hNr5WZp52+1ZpiJhITk87mnwE872UvmhmzUwWCWE5YtjZJYjaIViVO/b76XPP2HaWKAI
-         a1aw==
-X-Gm-Message-State: AOAM533kcitS6nLbgOHcF2s3PI6CJx6VTg7e6TEJRJqOOw7O50rNpRSj
-        0V7KeECQKzLkN/MuJ3lbVHSuvbN3kDk=
-X-Google-Smtp-Source: ABdhPJw4pyA7cBFM2v3sxvGR9xY4shXmmwYpFXW/tyzlTvFLL+i47S3C+2xWK3LbVXoQeyu7A8WBuA==
-X-Received: by 2002:a5d:59ac:0:b0:203:9615:31db with SMTP id p12-20020a5d59ac000000b00203961531dbmr1665156wrr.457.1646990507935;
-        Fri, 11 Mar 2022 01:21:47 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id r1-20020a5d4941000000b001ed89dcacbbsm6156925wrs.23.2022.03.11.01.21.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 01:21:47 -0800 (PST)
-Message-ID: <0fb3795e-0ab1-494b-aefd-ccfa78420723@kernel.org>
-Date:   Fri, 11 Mar 2022 10:21:46 +0100
+        Fri, 11 Mar 2022 04:23:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D90B3B1;
+        Fri, 11 Mar 2022 01:22:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E48A1F381;
+        Fri, 11 Mar 2022 09:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646990554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0izCbKy2PPDXTj3zqLWTj1ez7s4mrzmIYx97ZIN4SaQ=;
+        b=pcQn5HK48a7pGy1Uie5Q/uhC9zp+X98MWoSUrVTBJ9+4GGdOqVavasGuHcy+EPFuUWlyhU
+        PvayG78vRTejFQ8Ggi7AdDQzJ0QelHbK2ZxYAXC2kTLBigaHCxBHik28X2LHo7Phgtz2BF
+        OQRf4lU00xDvtTbDF94osF7v3fM02Pg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646990554;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0izCbKy2PPDXTj3zqLWTj1ez7s4mrzmIYx97ZIN4SaQ=;
+        b=J+vUxs6CxNl4yRwPAXVmhazKXZenTR2kKtNXQWKOrgangeXmQvkUHtd/vdrT6pABlnIF72
+        Z9upYF45BJRfLYBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 019A613A82;
+        Fri, 11 Mar 2022 09:22:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0QF6OtkUK2L/UwAAMHmgww
+        (envelope-from <vkarasulli@suse.de>); Fri, 11 Mar 2022 09:22:33 +0000
+Date:   Fri, 11 Mar 2022 10:22:32 +0100
+From:   Vasant Karasulli <vkarasulli@suse.de>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     David Disseldorp <ddiss@suse.de>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>
+Subject: Re: [PATCH v2 2/2] exfat currently unconditionally strips trailing
+ periods '.' when performing path lookup, but allows them in the filenames
+ during file creation. This is done intentionally, loosely following Windows
+ behaviour and specifications which state:
+Message-ID: <YisU2FA7EBeguwN5@vasant-suse>
+References: <20220310142455.23127-1-vkarasulli@suse.de>
+ <20220310142455.23127-3-vkarasulli@suse.de>
+ <20220310210633.095f0245@suse.de>
+ <CAKYAXd_ij3WqJHQZvH458XRwLBtboiJnr-fK0hVPDi_j_8XDZQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 2/3] serial: 8250_fintek.c: Report chipID
-Content-Language: en-US
-To:     Trevor Woerner <twoerner@gmail.com>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-References: <20220311070203.18159-2-twoerner@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220311070203.18159-2-twoerner@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKYAXd_ij3WqJHQZvH458XRwLBtboiJnr-fK0hVPDi_j_8XDZQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,46 +77,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 03. 22, 8:02, Trevor Woerner wrote:
-> Provide some feedback to confirm this driver is enabled, and specify which
-> chip was detected.
+On Fr 11-03-22 18:03:57, Namjae Jeon wrote:
+> 2022-03-11 5:06 GMT+09:00, David Disseldorp <ddiss@suse.de>:
+> > Thanks for reworking these changes, Vasant.
+> >
+> > Please trim the 1/2 and 2/2 patch subjects down to around 50 chars
+> > (including a "exfat: " prefix), with the details moved into the commit
+> > message body...
+> >
+> > On Thu, 10 Mar 2022 15:24:55 +0100, Vasant Karasulli wrote:
+> >
+> >>   #exFAT
+> >>   The concatenated file name has the same set of illegal characters as
+> >>   other FAT-based file systems (see Table 31).
+> >>
+> >>   #FAT
+> >>   ...
+> >>   Leading and trailing spaces in a long name are ignored.
+> >>   Leading and embedded periods are allowed in a name and are stored in
+> >>   the long name. Trailing periods are ignored.
+> >>
+> >> Note: Leading and trailing space ' ' characters are currently retained
+> >> by Linux kernel exfat, in conflict with the above specification.
+> >
+> > I think it makes sense to mention your findings from the Windows tests
+> > here. E.g. "Windows 10 also retains leading and trailing space
+> > characters".
+> Windows 10 do also strip them. So you can make another patch to strip
+> it as well as trailing periods.
+Actually I found contradicting behavior between Window 10 File Explorer and
+Commandline. Commandline seems to strip trailing spaces, but File Explorer
+doesn't.
 
-No, we don't do that. In fact, the output is mostly useless as it 
-doesn't even tell the user what device this is about.
+> >
+> >> Some implementations, such as fuse-exfat, don't perform path trailer
+> >> removal. When mounting images which contain trailing-dot paths, these
+> >> paths are unreachable, e.g.:
+> >>
+> >>   + mount.exfat-fuse /dev/zram0 /mnt/test/
+> >>   FUSE exfat 1.3.0
+> >>   + cd /mnt/test/
+> >>   + touch fuse_created_dots... '  fuse_created_spaces  '
+> >>   + ls -l
+> >>   total 0
+> >>   -rwxrwxrwx 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
+> >>   -rwxrwxrwx 1 root 0 0 Aug 18 09:45  fuse_created_dots...
+> >>   + cd /
+> >>   + umount /mnt/test/
+> >>   + mount -t exfat /dev/zram0 /mnt/test
+> >>   + cd /mnt/test
+> >>   + ls -l
+> >>   ls: cannot access 'fuse_created_dots...': No such file or directory
+> >>   total 0
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
+> >>   -????????? ? ?    ? ?            ?  fuse_created_dots...
+> >>   + touch kexfat_created_dots... '  kexfat_created_spaces  '
+> >>   + ls -l
+> >>   ls: cannot access 'fuse_created_dots...': No such file or directory
+> >>   total 0
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  kexfat_created_spaces  '
+> >>   -????????? ? ?    ? ?            ?  fuse_created_dots...
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45  kexfat_created_dots
+> >>   + cd /
+> >>   + umount /mnt/test/
+> >>
+> >> With this change, the "keep_last_dots" mount option can be used to access
+> >> paths with trailing periods and disallow creating files with names with
+> >> trailing periods. E.g. continuing from the previous example:
+> >>
+> >>   + mount -t exfat -o keep_last_dots /dev/zram0 /mnt/test
+> >>   + cd /mnt/test
+> >>   + ls -l
+> >>   total 0
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  fuse_created_spaces  '
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  kexfat_created_spaces  '
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32  fuse_created_dots...
+> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32  kexfat_created_dots
+> >
+> > It'd be nice to demonstrate "keep_last_dots" creation here as well, e.g.
+> >
+> >   + echo > kexfat_created_dots_again...
+> >   sh: kexfat_created_dots_again...: Invalid argument
+> >
+> > @Namjae: not sure whether this is what you had in mind for preventing
+> > creation of invalid paths. What's your preference?
+> Look like what I wanted.
+That's great. I will resend the patch after modifying the commit message
+as David suggested.
+>
+> Thanks!
+> >
+> > Cheers, David
+> >
 
-> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> ---
->   drivers/tty/serial/8250/8250_fintek.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-> index d9f0e546b1a1..03ad2354d808 100644
-> --- a/drivers/tty/serial/8250/8250_fintek.c
-> +++ b/drivers/tty/serial/8250/8250_fintek.c
-> @@ -155,11 +155,22 @@ static int fintek_8250_check_id(struct fintek_8250 *pdata)
->   
->   	switch (chip) {
->   	case CHIP_ID_F81865:
-> +		pr_info("Fintek F81865\n");
-> +		break;
->   	case CHIP_ID_F81866:
-> +		pr_info("Fintek F81866\n");
-> +		break;
->   	case CHIP_ID_F81966:
-> +		pr_info("Fintek F81966\n");
-> +		break;
->   	case CHIP_ID_F81216AD:
-> +		pr_info("Fintek F81216AD\n");
-> +		break;
->   	case CHIP_ID_F81216H:
-> +		pr_info("Fintek F81216H\n");
-> +		break;
->   	case CHIP_ID_F81216:
-> +		pr_info("Fintek F81216\n");
->   		break;
->   	default:
->   		return -ENODEV;
+Thanks,
+Vasant Karasulli
+Kernel generalist
+www.suse.com<http://www.suse.com>
+[https://www.suse.com/assets/img/social-platforms-suse-logo.png]<http://www.suse.com/>
+SUSE - Open Source Solutions for Enterprise Servers & Cloud<http://www.suse.com/>
+Modernize your infrastructure with SUSE Linux Enterprise servers, cloud technology for IaaS, and SUSE's software-defined storage.
+www.suse.com
 
-thanks,
--- 
-js

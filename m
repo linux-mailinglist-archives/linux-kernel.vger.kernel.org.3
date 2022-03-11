@@ -2,162 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2899C4D5E37
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA014D5E3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344505AbiCKJTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S1347352AbiCKJTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241266AbiCKJTF (ORCPT
+        with ESMTP id S1347301AbiCKJTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:19:05 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B1EEBBB6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:17:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Fri, 11 Mar 2022 04:19:34 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8B71BBF7F
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:18:32 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 01D0C210FD;
-        Fri, 11 Mar 2022 09:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646990278; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZIwsGY7IaLaNCuNB/GMYgm4WxxYBqrvPiFnud/lWki0=;
-        b=f/sCKAvo5qXKZODL6GbBGBDvcUCL3nXHUbKdTcYGfVRQiq6unrzoTN+0YJZn3tzlHrzWA1
-        TgGwch7hpJJZLuScVo67qQKeqLS3pGHaHPVLVg6+h495l/IM113evs06rsNSoyVT8rAU5F
-        /npCO5w2x3Fpm+UtAlT099P1JhwJOM4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646990278;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZIwsGY7IaLaNCuNB/GMYgm4WxxYBqrvPiFnud/lWki0=;
-        b=yB38EpcKFDNBggeC7Yn6rmhywJODN8CN1mF+WDUNgV3Phw6bAiu8I6KWIuoZiPIqToypm4
-        zBcyPVXVs5j6R0Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8275813A82;
-        Fri, 11 Mar 2022 09:17:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id l04kG8UTK2LKUQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Fri, 11 Mar 2022 09:17:57 +0000
-Date:   Fri, 11 Mar 2022 10:17:55 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa
- node changes its N_CPU state
-Message-ID: <YisTwzumn3tgL9H4@localhost.localdomain>
-References: <20220310120749.23077-1-osalvador@suse.de>
- <87a6dxaxil.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6B8613F1AF
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646990309;
+        bh=IxdbcL7k69aeR5PAgcBMvpQeQoS7r//O6hQJcwASqCA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=oRJl62yIxnAqlW3Pfe8iUM7YjHKH0G+Tg9V5Iu6HsXFxrHeGfjx0JLXs+X5iQQ2m0
+         WBhEQGJjb2ITi3Uu4CTvc1Jfm7/uQuL/k14fa9vvhsEgk4xeDKyjV04qRDNG/bz4Qu
+         uuqEQKt5WaV5Is2FMx+4lsnE6NfW8aAM7DzpBS/bETco8EB92QTxIvT6V2D1WtXdTA
+         lj02D8jCHrXMraW1VZDxQiLDneknQ/coQXR0pPKpg0AyYGzHpFHSDDF5aHW4xzaBOs
+         G5olOHKLdarZjAUDiaHcVdRvQ7s4bfxRWfHwBjrGjK7TRBkHlyaL04ZniOi8x8879i
+         jtOk3K3Fgut6A==
+Received: by mail-ej1-f72.google.com with SMTP id og24-20020a1709071dd800b006dab87bec4fso4643998ejc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:18:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IxdbcL7k69aeR5PAgcBMvpQeQoS7r//O6hQJcwASqCA=;
+        b=xNolzEZxK2XnBgeRvjvE253I6CXhmE3ur9g3AdJ6eBtwH8k5ixZM5bFWl0XzaW6dr1
+         LdbHvEengxZ4qZTgmrSS6cojLb+tGCZLwrN+POjisewy0awHc0oN+aOu3OL7uAdmC+h1
+         iYvNzGCeg484+SsJ2/PK3bwBGnSfp1XDJFAR5eMDW4nsF+f3zGaDwgcvmufB76AlSmsQ
+         RBnB8XJ4f3GxMXgea9pGaxdjyE1762DYsR5SxcfDS4p8TLW8R5brlDg65kLjmW7zZmqQ
+         4urh3CU5jrFZavkwuG4rTtNvEooMETWOucoNXvMA8nXRxMZbeUvKmFILcmmNzeRVGjx9
+         8+ig==
+X-Gm-Message-State: AOAM531CnGaTi3TBf4Sd1Bv/sflvJ16DiD6+x+IHxFaWqR6+iKv++A97
+        66jUt5X74dFUiRI+/0JRc2tgfC6j4A0nf3foio2wi94sVoqM0ItcrA7l0k79qcm1OKFgoOTku28
+        dsQiKbehWYqs2W9H7EZE/YQMfwK5mO4IH5BHCoK9Olg==
+X-Received: by 2002:a05:6402:10d5:b0:408:f881:f0f3 with SMTP id p21-20020a05640210d500b00408f881f0f3mr7969320edu.112.1646990309096;
+        Fri, 11 Mar 2022 01:18:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxJx30zZcpXpgPnCtN4/x64kV31WgzQQ1W7CmqqYo9CyZbalXQfJsGU39fnHARIBZSBH2iX0Q==
+X-Received: by 2002:a05:6402:10d5:b0:408:f881:f0f3 with SMTP id p21-20020a05640210d500b00408f881f0f3mr7969298edu.112.1646990308915;
+        Fri, 11 Mar 2022 01:18:28 -0800 (PST)
+Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id l9-20020a170906078900b006dac5f336f8sm2712366ejc.124.2022.03.11.01.18.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 01:18:28 -0800 (PST)
+Message-ID: <3f77c8c8-4bba-007b-fae9-5fb47f44719c@canonical.com>
+Date:   Fri, 11 Mar 2022 10:18:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a6dxaxil.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/3] dts: add Nuvoton sgpio feature
+Content-Language: en-US
+To:     jimliu2 <jim.t90615@gmail.com>, JJLIU0@nuvoton.com,
+        KWLIU@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+        robh+dt@kernel.org, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
+        benjaminfair@google.com, CTCCHIEN@nuvoton.com
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <20220311060936.10663-1-JJLIU0@nuvoton.com>
+ <20220311060936.10663-2-JJLIU0@nuvoton.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220311060936.10663-2-JJLIU0@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 01:06:26PM +0800, Huang, Ying wrote:
-> Oscar Salvador <osalvador@suse.de> writes:
-> > -static int __init migrate_on_reclaim_init(void)
-> > -{
-> > -	int ret;
-> > -
-> >  	node_demotion = kmalloc_array(nr_node_ids,
-> >  				      sizeof(struct demotion_nodes),
-> >  				      GFP_KERNEL);
-> >  	WARN_ON(!node_demotion);
-> >  
-> > -	ret = cpuhp_setup_state_nocalls(CPUHP_MM_DEMOTION_DEAD, "mm/demotion:offline",
-> > -					NULL, migration_offline_cpu);
-> >  	/*
-> > -	 * In the unlikely case that this fails, the automatic
-> > -	 * migration targets may become suboptimal for nodes
-> > -	 * where N_CPU changes.  With such a small impact in a
-> > -	 * rare case, do not bother trying to do anything special.
-> > +	 * At this point, all numa nodes with memory/CPus have their state
-> > +	 * properly set, so we can build the demotion order now.
-> >  	 */
-> > -	WARN_ON(ret < 0);
-> > -	ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
-> > -				migration_online_cpu, NULL);
-> > -	WARN_ON(ret < 0);
-> > -
-> > +	set_migration_target_nodes();
+On 11/03/2022 07:09, jimliu2 wrote:
+> add Nuvoton sgpio feature
 > 
-> If my understanding were correct, we should enclose
-> set_migration_target_nodes() here with cpus_read_lock().  And add some
-> comment before set_migration_target_nodes() for this.  I don't know
-> whether the locking order is right.
-
-Oh, I see that cpuhp_setup_state() holds the cpu-hotplug lock while
-calling in, so yeah, we might want to hold in there.
-
-The thing is, not long ago we found out that we could have ACPI events
-like memory-hotplug operations at boot stage [1], so I guess it is
-safe to assume we could also have cpu-hotplug operations at that stage
-as well, and so we want to hold cpus_read_lock() just to be on the safe
-side.
-
-But, unless I am missing something, that does not apply to
-set_migration_target_nodes() being called from a callback,
-as the callback (somewhere up the chain) already holds that lock.
-e.g: (_cpu_up takes cpus_write_lock()) and the same for the down
-operation.
-
-So, to sum it up, we only need the cpus_read_lock() in
-migrate_on_reclaim_init().
-
-> >  	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
+> Signed-off-by: jimliu2 <JJLIU0@nuvoton.com>
+> ---
+>  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
 > 
-> And we should register the notifier before calling set_migration_target_nodes()?
+> diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> index 3696980a3da1..58f4b463c745 100644
+> --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> @@ -329,6 +329,36 @@
+>  				status = "disabled";
+>  			};
+>  
+> +			sgpio1: sgpio@101000 {
 
-I cannot made my mind here.
-The primary reason I placed the call before registering the notifier is
-because the original code called set_migration_target_nodes() before
-doing so:
+Generic node name.
 
-<--
-ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
-			migration_online_cpu, NULL);
-WARN_ON(ret < 0);
+> +				clocks = <&clk NPCM7XX_CLK_APB3>;
+> +				compatible = "nuvoton,npcm750-sgpio";
+> +				interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				pinctrl-names = "default";
+> +				pinctrl-0 = <&iox1_pins>;
+> +				bus-frequency = <16000000>;
+> +				nin_gpios = <64>;
+> +				nout_gpios = <64>;
+> +				reg = <0x101000 0x200>;
 
-hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
--->
+In each node first goes compatible, then reg.
 
-I thought about following the same line. Why do you think it should be
-called afterwards?
-
-I am not really sure whether it has a different impact depending on the
-order.
-Note that memory-hotplug acpi events can happen at boot time, so by the
-time we register the memory_hotplug notifier, we can have some hotplug
-memory coming in, and so we call set_migration_target_nodes().
-
-But that is fine, and I cannot see a difference shufling the order
-of them. 
-Do you see a problem in there?
-
-[1] https://patchwork.kernel.org/project/linux-mm/patch/20200915094143.79181-3-ldufour@linux.ibm.com/
-
-
--- 
-Oscar Salvador
-SUSE Labs
+Best regards,
+Krzysztof

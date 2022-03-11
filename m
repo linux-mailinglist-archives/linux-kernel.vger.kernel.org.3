@@ -2,102 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F634D5DFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7104D5E07
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242810AbiCKJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
+        id S244286AbiCKJCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239684AbiCKJAO (ORCPT
+        with ESMTP id S239684AbiCKJCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:00:14 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C461BAF30
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:59:10 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B60D53F19E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 08:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646989149;
-        bh=0knUq+nj9peEmS1Svs4MEOnTn+oxEzDhNDhC8HFWh70=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=rGFHtxSiiXtPs+Pzh/WdGhQ8M9Zn8moC+B3YUqj54xCJlwhZHF5H47xKxAf45LsIi
-         JMyNB4zNzUJV7yL060P1AuTga35RP32VCPhrvom4YMq8UiF3xax7vKGzvTj5Qe+/ud
-         cYPt+9hBRLSyzReOHEkm89i38RAHTYxl+278jZWftJJSKtLfOKfi4nepnlU2kQwdUQ
-         Yc431KD5izCKXtW58afY387UGu+auJt+k2gjPVvR23iyW28vh8Cm+0zxVyWIoXqw7f
-         eOAImOJYdhP331mdvlldJISTq7+wX9KU/577Hm1GCDRxFKE1bfz39MJGTNcl6sZ5xF
-         GdxP2vSgCUIKQ==
-Received: by mail-ej1-f70.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so4599480eje.6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:59:09 -0800 (PST)
+        Fri, 11 Mar 2022 04:02:13 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DB1BB708
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:01:08 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bu29so14015753lfb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=W3zfuD5dHgrDuKUno5kyEdgPfGowqMZSjsoGskY52Po=;
+        b=P2znEwK8yU15naBA2c8ZVJCAP9IWe2bqBJa0ZO7Di3nEpK941berc1fWxU2/6hMNCN
+         XkdV2rtDEF7D/pSBJ3KJqZq0OO0mgiWH4xcLt59PRu8A8+oR2XVHYdF1pUZ4gmKMKY0i
+         iQ/+LHyiof6llqvjnrGLMkE/pYWEAHSjwDGNL7XC/EHt9BiC6RDbdA81UkuJKx4+KkrE
+         sFlD4y3+mgxx89kAKBl0e8rd8LfxaApGN3xbztLXlF8exMiIeVXiqjUeE4em7BqDEBA2
+         yfd5YmQ7q8lAQqp/FU5XLd9WOVA1kMHMJzDeVjIOn1axEwmV4n/3jcrAdfEM9R1rL5gh
+         ljNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0knUq+nj9peEmS1Svs4MEOnTn+oxEzDhNDhC8HFWh70=;
-        b=6giw6AZNPykwAnqTmGV1v3q5nQNKHNV6ZWLXcUrfo5u0ZUKrR239+zMFEouwfgVKV4
-         SSLk/rusGNB4SzXdOsZ/et4z0hMilNfaNlsocr3FReFEYR1xgbNU/7feTDC8XZuq7Xkx
-         N4yXiJjsjVBWhjOOkXJ3ffPAr7W+Sizpm0joBcptGeP9wTDlpkcMANQiQgGsTMUhlo+k
-         4e86EuCwi5yHvs3Iykby3iJUQH0XLynpsJz8D/VcW7GgDQBTHUKk2dR47mOYHneGH909
-         vUeow4sSUDV3OAhVDiiCsD9Jj0UR/fPfGNn6oIh5ynmjHywrQE4XjD9xWqNA3S8dTwMw
-         iDsw==
-X-Gm-Message-State: AOAM530GHuWcHk1jhGr0uHc89bmq4AyRubNpKTo7VMODgrF88jTD3VvW
-        XAHBvX/YzO4PJv1pLG7WfIep62sEku77fHieW1eYC6W44NBeu9fSsWyfvYXjuto8ETptT31du4C
-        xLAz2S/goYBhyY0EK06yTCznIYMfVGV3RNsnfGtagJQ==
-X-Received: by 2002:a17:906:4fc2:b0:6db:718f:7b18 with SMTP id i2-20020a1709064fc200b006db718f7b18mr7304015ejw.412.1646989139043;
-        Fri, 11 Mar 2022 00:58:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwJ0MYmCOnRGydkzT13dr5ZvqsEe8P/UTOTbqINId0zENiFAHB5jwB73TPSN7i3f0Z42WkHBw==
-X-Received: by 2002:a17:906:4fc2:b0:6db:718f:7b18 with SMTP id i2-20020a1709064fc200b006db718f7b18mr7303993ejw.412.1646989138835;
-        Fri, 11 Mar 2022 00:58:58 -0800 (PST)
-Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id fq14-20020a1709069d8e00b006da650af5a9sm2680769ejc.3.2022.03.11.00.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 00:58:58 -0800 (PST)
-Message-ID: <b9eb6b6b-b295-4d10-d4f2-c56461994d71@canonical.com>
-Date:   Fri, 11 Mar 2022 09:58:57 +0100
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=W3zfuD5dHgrDuKUno5kyEdgPfGowqMZSjsoGskY52Po=;
+        b=3P9MyIln3UIS9Kmbhb/Eh7ejMozivMsrGYyV6iTVGW54rkbe+kd4b/ywjv5dmH/oAR
+         wCt0zmwsRHghH6Ab1CmaA/KyRceDDhflUPN4qkH7iCSgRVHIt3MINQAIbviKBM6qXZTx
+         Vrm32D7XZtE9/uitcRz434LckQrSaOaWunbqeLw2sKvRvEXNVWkVbfkHKFZANVspOv1J
+         zYvAUaHBc7jxZyIReqFzBZT/GJccWdGT8bbM6jeXGm5PqBMIM+FjZuuA7HAaPbBpw7l9
+         QLfJ1dPWaLbEmS5CEeBmdZcGthlWTobLulbxnbmumdbOu1rlyJOec3sGc20ClSI8DHSq
+         6Njw==
+X-Gm-Message-State: AOAM531WkyOxYnXR260L3I8ZBVobzw69aZvdc8JiCDVQ3BNmAKAHoqlg
+        gCXZ4xEfQZl4wW0XEVqItU4h7HDa2XBjHH+O36p2YQ==
+X-Google-Smtp-Source: ABdhPJwx01X9odav3MPZuw3GNyb7UI52+doEIUsUOpjQsej0esLxDASHJVS8cckwz1Xs6p3Yeo0h7Q==
+X-Received: by 2002:a05:6512:1c5:b0:448:2f4b:22ae with SMTP id f5-20020a05651201c500b004482f4b22aemr5413813lfp.379.1646989267084;
+        Fri, 11 Mar 2022 01:01:07 -0800 (PST)
+Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
+        by smtp.gmail.com with ESMTPSA id x33-20020a0565123fa100b00443d3cffd89sm1482182lfa.210.2022.03.11.01.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 01:01:06 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 07/10] net: dsa: Pass MST state changes to
+ driver
+In-Reply-To: <20220311002235.ws5ag6p4t4j7di4k@skbuf>
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-8-tobias@waldekranz.com>
+ <20220303222055.7a5pr4la3wmuuekc@skbuf> <87mthymblh.fsf@waldekranz.com>
+ <20220310103509.g35syl776kyh5j2n@skbuf> <87h785n67k.fsf@waldekranz.com>
+ <20220310161857.33owtynhm3pdyxiy@skbuf> <87bkydmnmy.fsf@waldekranz.com>
+ <20220310230828.fvx24zhoyue5mkb7@skbuf> <878rthmk91.fsf@waldekranz.com>
+ <20220311002235.ws5ag6p4t4j7di4k@skbuf>
+Date:   Fri, 11 Mar 2022 10:01:05 +0100
+Message-ID: <875yokn9ri.fsf@waldekranz.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/3] ARM: dts: nuvoton: Add new device node
-Content-Language: en-US
-To:     Medad CChien <medadyoung@gmail.com>, rric@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, mchehab@kernel.org,
-        bp@alien8.de, robh+dt@kernel.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        ctcchien@nuvoton.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
-References: <20220311014245.4612-1-ctcchien@nuvoton.com>
- <20220311014245.4612-2-ctcchien@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220311014245.4612-2-ctcchien@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 02:42, Medad CChien wrote:
->  Add NPCM memory controller device node
-> 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> ---
+On Fri, Mar 11, 2022 at 02:22, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Fri, Mar 11, 2022 at 12:59:54AM +0100, Tobias Waldekranz wrote:
+>> On Fri, Mar 11, 2022 at 01:08, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> > On Thu, Mar 10, 2022 at 11:46:45PM +0100, Tobias Waldekranz wrote:
+>> >> On Thu, Mar 10, 2022 at 18:18, Vladimir Oltean <olteanv@gmail.com> wr=
+ote:
+>> >> > On Thu, Mar 10, 2022 at 05:05:35PM +0100, Tobias Waldekranz wrote:
+>> >> >> On Thu, Mar 10, 2022 at 12:35, Vladimir Oltean <olteanv@gmail.com>=
+ wrote:
+>> >> >> > On Thu, Mar 10, 2022 at 09:54:34AM +0100, Tobias Waldekranz wrot=
+e:
+>> >> >> >> >> +	if (!dsa_port_can_configure_learning(dp) || dp->learning) {
+>> >> >> >> >> +		switch (state->state) {
+>> >> >> >> >> +		case BR_STATE_DISABLED:
+>> >> >> >> >> +		case BR_STATE_BLOCKING:
+>> >> >> >> >> +		case BR_STATE_LISTENING:
+>> >> >> >> >> +			/* Ideally we would only fast age entries
+>> >> >> >> >> +			 * belonging to VLANs controlled by this
+>> >> >> >> >> +			 * MST.
+>> >> >> >> >> +			 */
+>> >> >> >> >> +			dsa_port_fast_age(dp);
+>> >> >> >> >
+>> >> >> >> > Does mv88e6xxx support this? If it does, you might just as we=
+ll
+>> >> >> >> > introduce another variant of ds->ops->port_fast_age() for an =
+msti.
+>> >> >> >>=20
+>> >> >> >> You can limit ATU operations to a particular FID. So the way I =
+see it we
+>> >> >> >> could either have:
+>> >> >> >>=20
+>> >> >> >> int (*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 =
+vid)
+>> >> >> >>=20
+>> >> >> >> + Maybe more generic. You could imagine there being a way to tr=
+igger
+>> >> >> >>   this operation from userspace for example.
+>> >> >> >> - We would have to keep the VLAN<->MSTI mapping in the DSA laye=
+r in
+>> >> >> >>   order to be able to do the fan-out in dsa_port_set_mst_state.
+>> >> >> >>=20
+>> >> >> >> or:
+>> >> >> >>=20
+>> >> >> >> int (*port_msti_fast_age)(struct dsa_switch *ds, int port, u16 =
+msti)
+>> >> >> >>=20
+>> >> >> >> + Let's the mapping be an internal affair in the driver.
+>> >> >> >> - Perhaps, less generically useful.
+>> >> >> >>=20
+>> >> >> >> Which one do you prefer? Or is there a hidden third option? :)
+>> >> >> >
+>> >> >> > Yes, I was thinking of "port_msti_fast_age". I don't see a cheap=
+ way of
+>> >> >> > keeping VLAN to MSTI associations in the DSA layer. Only if we c=
+ould
+>> >> >> > retrieve this mapping from the bridge layer - maybe with somethi=
+ng
+>> >> >> > analogous to br_vlan_get_info(), but br_mst_get_info(), and this=
+ gets
+>> >> >> > passed a VLAN_N_VID sized bitmap, which the bridge populates wit=
+h ones
+>> >> >> > and zeroes.
+>> >> >>=20
+>> >> >> That can easily be done. Given that, should we go for port_vlan_fa=
+st_age
+>> >> >> instead? port_msti_fast_age feels like an awkward interface, since=
+ I
+>> >> >> don't think there is any hardware out there that can actually perf=
+orm
+>> >> >> that operation without internally fanning it out over all affected=
+ VIDs
+>> >> >> (or FIDs in the case of mv88e6xxx).
+>> >> >
+>> >> > Yup, yup. My previous email was all over the place with regard to t=
+he
+>> >> > available options, because I wrote it in multiple phases so it wasn=
+'t
+>> >> > chronologically ordered top-to-bottom. But port_vlan_fast_age() mak=
+es
+>> >> > the most sense if you can implement br_mst_get_info(). Same goes for
+>> >> > dsa_port_notify_bridge_fdb_flush().
+>> >> >
+>> >> >> > The reason why I asked for this is because I'm not sure of the
+>> >> >> > implications of flushing the entire FDB of the port for a single=
+ MSTP
+>> >> >> > state change. It would trigger temporary useless flooding in oth=
+er MSTIs
+>> >> >> > at the very least. There isn't any backwards compatibility conce=
+rn to
+>> >> >> > speak of, so we can at least try from the beginning to limit the
+>> >> >> > flushing to the required VLANs.
+>> >> >>=20
+>> >> >> Aside from the performance implications of flows being temporarily
+>> >> >> flooded I don't think there are any.
+>> >> >>=20
+>> >> >> I suppose if you've disabled flooding of unknown unicast on that p=
+ort,
+>> >> >> you would loose the flow until you see some return traffic (or whe=
+n one
+>> >> >> side gives up and ARPs). While somewhat esoteric, it would be nice=
+ to
+>> >> >> handle this case if the hardware supports it.
+>> >> >
+>> >> > If by "handle this case" you mean "flush only the affected VLANs", =
+then
+>> >> > yes, I fully agree.
+>> >> >
+>> >> >> > What I didn't think about, and will be a problem, is
+>> >> >> > dsa_port_notify_bridge_fdb_flush() - we don't know the vid to fl=
+ush.
+>> >> >> > The easy way out here would be to export dsa_port_notify_bridge_=
+fdb_flush(),
+>> >> >> > add a "vid" argument to it, and let drivers call it. Thoughts?
+>> >> >>=20
+>> >> >> To me, this seems to be another argument in favor of
+>> >> >> port_vlan_fast_age. That way you would know the VIDs being flushed=
+ at
+>> >> >> the DSA layer, and driver writers needn't concern themselves with =
+having
+>> >> >> to remember to generate the proper notifications back to the bridg=
+e.
+>> >> >
+>> >> > See above.
+>> >> >
+>> >> >> > Alternatively, if you think that cross-flushing FDBs of multiple=
+ MSTIs
+>> >> >> > isn't a real problem, I suppose we could keep the "port_fast_age=
+" method.
+>> >> >>=20
+>> >> >> What about falling back to it if the driver doesn't support per-VL=
+AN
+>> >> >> flushing? Flushing all entries will work in most cases, at the cos=
+t of
+>> >> >> some temporary flooding. Seems more useful than refusing the offlo=
+ad
+>> >> >> completely.
+>> >> >
+>> >> > So here's what I don't understand. Do you expect a driver other than
+>> >> > mv88e6xxx to do something remotely reasonable under a bridge with M=
+STP
+>> >> > enabled? The idea being to handle gracefully the case where a port =
+is
+>> >> > BLOCKING in an MSTI but FORWARDING in another. Because if not, let's
+>> >> > just outright not offload that kind of bridge, and only concern
+>> >> > ourselves with what MST-capable drivers can do.
+>> >>=20
+>> >> I think you're right. I was trying to make it easier for other driver
+>> >> writers, but it will just be more confusing and error prone.
+>> >>=20
+>> >> Alright, so v3 will have something like this:
+>> >>=20
+>> >> bool dsa_port_can_offload_mst(struct dsa_port *dp)
+>> >> {
+>> >> 	return ds->ops->vlan_msti_set &&
+>> >> 		ds->ops->port_mst_state_set &&
+>> >> 		ds->ops->port_vlan_fast_age &&
+>> >> 		dsa_port_can_configure_learning(dp);
+>> >> }
+>> >>=20
+>> >> If this returns false, we have two options:
+>> >>=20
+>> >> 1. Return -EOPNOTSUPP, which the bridge will be unable to discriminate
+>> >>    from a non-switchdev port saying "I have no idea what you're talki=
+ng
+>> >>    about". I.e. the bridge will happily apply the config, but the
+>> >>    hardware won't match. I don't like this, but it lines up with most
+>> >>    other stuff.
+>> >>=20
+>> >> 2. Return a hard error, e.g. -EINVAL/-ENOSYS. This will keep the brid=
+ge
+>> >>    in sync with the hardware and also gives some feedback to the
+>> >>    user. This seems like the better approach to me, but it is a new k=
+ind
+>> >>    of paradigm.
+>> >>=20
+>> >> What do you think?
+>> >
+>> > Wait, what? It matters a lot where you place the call to
+>> > dsa_port_can_offload_mst(), too. You don't have to propagate a hard
+>> > error code, either, at least if you make dsa_port_bridge_join() return
+>> > -EOPNOTSUPP prior to calling switchdev_bridge_port_offload(), no?
+>> > DSA transforms this error code into 0, and dsa_port_offloads_bridge*()
+>> > starts returning false, which makes us ignore all MSTP related switchd=
+ev
+>> > notifiers.
+>>=20
+>> Right. So we also need:
+>>=20
+>> 1. A br_mst_enabled() that we can call from dsa_port_bridge_join to
+>>    validate the initial state.
+>>=20
+>> 2. A switchdev attr event sent out when enabling/disabling MST on the
+>>    bridge, so that we can NAK the change.
+>
+> So far, so good. This, to me, is analogous to the way in which a hypothet=
+ical
+> VLAN-unaware switchdev driver wouldn't deny VLAN additions or removals,
+> but it would only accept a VLAN-unaware bridge, and refuse to transition
+> into a VLAN-aware one. So even though we wouldn't deny the bridge from
+> keeping state that would have effect when VLAN awareness is on, we
+> would just deny the bridge from making that state active. Same with MSTP
+> awareness in my view - don't deny MSTI migrations, per-MSTI port state
+> changes etc, just the ability to turn on MSTP awareness.
+>
+> In practice I have only seen things done the other way around - the
+> dpaa2-switch driver refuses VLAN-unaware bridges, so it doesn't need to
+> handle ignoring VLAN switchdev notifiers - a slightly simpler task.
+> Also, the concept of unoffloaded uppers seems to be pretty unique to DSA
+> so far, among switchdev drivers.
+>
+>> > The important part will be to make sure that MSTP is enabled for this
+>> > bridge from the get-go (that being the only case in which we can offlo=
+ad
+>> > an MSTP aware bridge), and refusing to offload dynamic changes to its
+>> > MSTP state. I didn't re-check now, but I think I remember there being
+>>=20
+>> Hang on though. Won't that mean that this sequence...
+>>=20
+>> ip link add dev br0 type bridge \
+>>     vlan_filtering 1 vlan_default_pvid 0 mst_enable 1
+>> ip link set dev swp1 master br0
+>>=20
+>> ...will work, but offloading will be disabled on swp0; whereas this
+>> sequence...
+>>=20
+>> ip link add dev br0 type bridge \
+>>     vlan_filtering 1 vlan_default_pvid 0
+>> ip link set dev swp1 master br0
+>> ip link set dev br0 type bridge mst_enable 1
+>>=20
+>> ...will fail on the final command? Even though they are logically
+>> equivalent? But maybe that's just the way the cookie crumbles.
+>
+> Well, they could be made equivalent for academic purposes, if you're
+> prepared to dynamically unoffload a bridge port from the MST awareness
+> notifier, be my guest, I never tried it... I suppose we could try it, in
+> theory it's just a call to dsa_port_pre_bridge_leave() +
+> dsa_port_bridge_leave() after all. But it's effort to be spent in work
+> and testing, and I'm not sure whether anyone will see the benefit or use
+> case. During initial bridge join, at least it's an established code
+> path, the drivers which don't implement ds->ops->port_bridge_join() have
+> exercised it. Alvin =C5=A0ipraga has fixed a few bugs related to rtl8365mb
+> and this after some recent rework, it should work just fine now.
 
-Subject is too generic. Describe shortly what are you adding.
+I completely agree. Just wanted to make sure that I had understood it
+correctly. Thanks.
 
-
-Best regards,
-Krzysztof
+>> > limitations even in the software bridge related to dynamic MSTP mode
+>> > changes anyway - there had to not be any port VLANs, which IIUC means
+>> > that you actually need to _delete_ the port PVIDs which are automatica=
+lly
+>> > created before you could change the MSTP mode.
+>>=20
+>> There are some ergonomic issues there, yes. I might look at it again and
+>> see if there is some reasonable way of allowing the mode to be changed
+>> even when VLANs are present.
+>>=20
+>> > This is the model, what's wrong with it? I said "don't offload the
+>> > bridge", not "don't offload specific MSTP operations".
+>>=20
+>> Nothing is wrong, I just couldn't see the whole picture.
+>>=20
+>> This is the way.

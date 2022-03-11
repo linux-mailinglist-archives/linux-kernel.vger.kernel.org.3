@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C0E4D6933
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01EF4D6941
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351082AbiCKTuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S1351173AbiCKT6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbiCKTuT (ORCPT
+        with ESMTP id S241078AbiCKT6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 14:50:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5941D1B45EE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=RABIBhFIaklwwduCWghSw0c+OOipsVwUT2sVRxK728c=; b=V87MKzh8WFchR1TeJJI0APaJhp
-        XqMDETLLZlcgvWhsIWSyDJvs1CrMlasidnm5MeXbb5jQC4zIObtx3bFmLaz2BTvKZxSx8qat94GpQ
-        SYe4LviwJC79Eoq0cQNvhhZkdRC+vZ4KaPd4g+zCmHGsO0aFA1OM4jb4JySCOnk1TCzTGNvDszOxi
-        7F35JAK6ERl4F7wB5g1B6zyF8T1Ku9ofMmyO/dUulWrcA37Db4ETX5R3fPCKPKgv/f8jiqBifptkf
-        QSwbR5nMd1sF9ut8I+mJ0JMfs2wRCbNjZ4dvFoy9WNW1VuqdsEvXO/GWrJUMbSUlAnQID/s5OJv1G
-        aQHD3+jw==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSlGD-0007Z5-S7; Fri, 11 Mar 2022 19:49:14 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk
-Subject: [PATCH v2] ARM: Spectre-BHB: provide empty stub for non-config
-Date:   Fri, 11 Mar 2022 11:49:12 -0800
-Message-Id: <20220311194912.26249-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 11 Mar 2022 14:58:48 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5C129CA6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:57:44 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id u3so13546361ljd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:57:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wd/VfUESiedi2T20MDzQRQGroPtqGURIlMD0YY8oI7c=;
+        b=Mrv0ya7At6brNnSMetWxGly9F3DEvixI5X0RSd0S2xAl8G8x/qAsW2i4SfvlNRGXmY
+         IJciyrCO4rFR0y1TF0IhVUjhikkLVMgtOCQVeEnv1wi1AL2tDinPKnvD5p9hTSrEBqvo
+         Bais2VxhX6RGbk78jzHb5/kN7xAkSYu0sOREI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wd/VfUESiedi2T20MDzQRQGroPtqGURIlMD0YY8oI7c=;
+        b=UeRPP0fAxnFTxCMoefVgMaMcnl4E8F1TF1CQWocNcE0qsDOQ1FoicC1LRpJW5a3PyX
+         DNo/ZW+pYaS58lylOeYBTNQSPqeLkJFeqTEekhMqjHzqarD4ChAlamVJreaEpJ/R1ExF
+         nMDFWp+n8kOXOG2+VYKpBhJu/hxhc9KXdZc77qz/188rv1lG0EwtrdjkBNaR9R3ij6QH
+         Uz8RFuGrqrvOPhWW+9YSHndY5xNHetJGfx7UTeBxFp7pFj3F50VoJ4MGsgdP9aUBEs6j
+         Nrn5+W7qmwFu9HBiLPePCfpkxWVgokTqEC6upRVBf0DeAoUDQny/VaAKiuVPzTkpb5KM
+         cozg==
+X-Gm-Message-State: AOAM531CjcaD0TO1s7u/Bqzcvr71IwHYiSCZNKXvMRYDD3yMjjcfF2V6
+        ryuIU4Mv+9eHRpbgG0VDCScEKOpAHREwN05jBEQ=
+X-Google-Smtp-Source: ABdhPJzRqIBP/GqAjuhMu77XjTWSSMoSr7Q1d3Ui71GRQZqCTV139jOXmqsdN75m2RC6Z6UZLYbDuw==
+X-Received: by 2002:a05:651c:1503:b0:244:c075:2103 with SMTP id e3-20020a05651c150300b00244c0752103mr6852040ljf.442.1647028662398;
+        Fri, 11 Mar 2022 11:57:42 -0800 (PST)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id p2-20020a196042000000b00448729bbc48sm596517lfk.82.2022.03.11.11.57.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 11:57:42 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id z11so16805358lfh.13
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:57:42 -0800 (PST)
+X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id
+ v4-20020a2e9904000000b00247ec95fdeemr6789578lji.291.1647028186416; Fri, 11
+ Mar 2022 11:49:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220308141437.144919-1-david@redhat.com> <20220308141437.144919-11-david@redhat.com>
+ <a0bd6f52-7bb5-0c32-75c8-2c7c592c2d6d@redhat.com> <CAHk-=wjWx_bPBLB=qMMae8Sy3KrO+Kvaf4juPknO5HX-+Ot0XQ@mail.gmail.com>
+ <e166e925-508e-3830-574f-59b2d2cf2431@redhat.com>
+In-Reply-To: <e166e925-508e-3830-574f-59b2d2cf2431@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 11 Mar 2022 11:49:30 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiSNvb=0B=QzwCO7Xg6xZPJwe20p8ogsS=iOphkbNsKTw@mail.gmail.com>
+Message-ID: <CAHk-=wiSNvb=0B=QzwCO7Xg6xZPJwe20p8ogsS=iOphkbNsKTw@mail.gmail.com>
+Subject: Re: [PATCH v1 10/15] mm/page-flags: reuse PG_slab as
+ PG_anon_exclusive for PageAnon() pages
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_GENERIC_CPU_VULNERABILITIES is not set, references
-to spectre_v2_update_state() cause a build error, so provide an
-empty stub for that function when the Kconfig option is not set.
+On Fri, Mar 11, 2022 at 11:36 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> Yes, but PG_has_hwpoisoned is located on the second subpage of a
+> compound page, not on the head page.
 
-Fixes this build error:
+Ahh. Ok, I missed that when just looking at the patch.
 
-arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
-proc-v7-bugs.c:(.text+0x52): undefined reference to `spectre_v2_update_state'
-arm-linux-gnueabi-ld: proc-v7-bugs.c:(.text+0x82): undefined reference to `spectre_v2_update_state'
+I wish we had a different namespace entirely for those separate bits
+or something.
 
-Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: patches@armlinux.org.uk
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-v2: add Russell's Ack and suggestion to send directly to Linus.
-
-Linus- Russel King says:
-
-I'd suggest sending this direct to Linus as I've been doing with the
-other fixes for Spectre BHB. Trying to fit it now into a pull request
-is just going to be very messy.
-
-KernelVersion: v5.17-rc7-205-g79b00034e9dc
-
- arch/arm/include/asm/spectre.h |    6 ++++++
- 1 file changed, 6 insertions(+)
-
---- linux-next-20220310.orig/arch/arm/include/asm/spectre.h
-+++ linux-next-20220310/arch/arm/include/asm/spectre.h
-@@ -25,7 +25,13 @@ enum {
- 	SPECTRE_V2_METHOD_LOOP8 = BIT(__SPECTRE_V2_METHOD_LOOP8),
- };
- 
-+#ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
- void spectre_v2_update_state(unsigned int state, unsigned int methods);
-+#else
-+static inline void spectre_v2_update_state(unsigned int state,
-+					   unsigned int methods)
-+{}
-+#endif
- 
- int spectre_bhb_update_vectors(unsigned int method);
- 
+                  Linus

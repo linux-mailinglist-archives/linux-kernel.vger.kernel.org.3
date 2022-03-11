@@ -2,63 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8DF4D623A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F3B4D61F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348837AbiCKNRp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Mar 2022 08:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S1348711AbiCKNDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235260AbiCKNRo (ORCPT
+        with ESMTP id S1348678AbiCKNDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:17:44 -0500
-Received: from mail.aps.go.ke (mail.aps.go.ke [41.76.170.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F34F1C2F5A;
-        Fri, 11 Mar 2022 05:16:39 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.aps.go.ke (Postfix) with ESMTP id 06BE9B23D87;
-        Fri, 11 Mar 2022 02:29:11 +0300 (EAT)
-Received: from mail.aps.go.ke ([127.0.0.1])
-        by localhost (mail.aps.go.ke [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id AQVrUKyUnARX; Fri, 11 Mar 2022 02:29:10 +0300 (EAT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.aps.go.ke (Postfix) with ESMTP id 4F5B2A7C216;
-        Thu, 10 Mar 2022 23:05:44 +0300 (EAT)
-X-Virus-Scanned: amavisd-new at aps.go.ke
-Received: from mail.aps.go.ke ([127.0.0.1])
-        by localhost (mail.aps.go.ke [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id C3YkXpGD81YL; Thu, 10 Mar 2022 23:05:44 +0300 (EAT)
-Received: from [156.96.56.93] (unknown [156.96.56.93])
-        by mail.aps.go.ke (Postfix) with ESMTPSA id 94ADEA7045F;
-        Thu, 10 Mar 2022 22:25:39 +0300 (EAT)
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 11 Mar 2022 08:03:09 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9EE1C0262
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647003726; x=1678539726;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8p85oTWSgB5OqD5IXy7JJjQ5MEHJCs1MBGpwJc3QHC8=;
+  b=WfMl+PuO3si1oZCpGxg83o0WjshOGRtaxBIiU9tukuG4N0/EryhMYPfb
+   FTtGVPWcYhX6cl2CT/z2DqXRcVoqJ4Su29IZn3zKXejPXGd3Rz0W54kYs
+   bi//Kr5vaRZ5ydlPp0zb+xmuKiszG0SKEX5jqgX+pWM/3oirJ06Bw1t2E
+   h7IGZK/c1hIqiYbWzerOtfepR4lEHkef5P7TJvaI2TdMy7Lvk1dslUBZA
+   LbK23V/QQCzEDULojw7fUL6rTTm9hwaN1Jfecsylw7Z8cWfIEYHdea6Go
+   8JMIwESbYAILj78+rqs5TUw8FY/BOqLshrjA3/T9+gSZcacx/lf1qomG1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="253130354"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="253130354"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 05:02:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="597103569"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Mar 2022 05:02:04 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSeuC-0006Qd-3Y; Fri, 11 Mar 2022 13:02:04 +0000
+Date:   Fri, 11 Mar 2022 21:01:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.17-rc1 4/8]
+ arch/arm/mm/init.c:317:5: warning: format specifies type 'unsigned long' but
+ the argument has type 'char *'
+Message-ID: <202203112007.GfOV3M1u-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Bitcoin Deposit
-To:     Recipients <kshhmn@vms-south.vn>
-From:   "Thomas Singh" <kshhmn@vms-south.vn>
-Date:   Thu, 10 Mar 2022 11:25:10 -0800
-Message-Id: <20220310192540.94ADEA7045F@mail.aps.go.ke>
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,LOTS_OF_MONEY,
-        MONEY_FROM_41,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RCVD_IN_SBL,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,URIBL_ABUSE_SURBL,
-        URIBL_RED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello: Dave Franklin
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.17-rc1
+head:   66e9038ef48dc66c07b12443b73e2d1f3f12cbab
+commit: 18e0d99ee35450767fc8222f1727febdd2a4deac [4/8] ARM: Print virtual memory info again
+config: arm-orion5x_defconfig (https://download.01.org/0day-ci/archive/20220311/202203112007.GfOV3M1u-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=18e0d99ee35450767fc8222f1727febdd2a4deac
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.17-rc1
+        git checkout 18e0d99ee35450767fc8222f1727febdd2a4deac
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
-   As requested we have deposited the 18 BTC which amount to
-($782,742.24 USD) as per request by you. Please login with below 
-details to confirm your BTC balance.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Website:    : www.tatcoin.net
-Customer ID : 51047802
-Password    : reamsicle725#!
+All warnings (new ones prefixed by >>):
 
-Confirm your account balance.
+   arch/arm/mm/init.c:97:13: warning: no previous prototype for function 'setup_dma_zone' [-Wmissing-prototypes]
+   void __init setup_dma_zone(const struct machine_desc *mdesc)
+               ^
+   arch/arm/mm/init.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init setup_dma_zone(const struct machine_desc *mdesc)
+   ^
+   static 
+>> arch/arm/mm/init.c:317:5: warning: format specifies type 'unsigned long' but the argument has type 'char *' [-Wformat]
+                     "     kernel : 0x%08lx - 0x%08lx   (%4ld MB)\n",
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+>> arch/arm/mm/init.c:322:5: warning: data argument not used by format string [-Wformat-extra-args]
+                     MLM(MODULES_VADDR, MODULES_END),
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
+           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^
+   arch/arm/mm/init.c:309:25: note: expanded from macro 'MLM'
+   #define MLM(b, t) b, t, ((t) - (b)) >> 20
+                           ^
+   arch/arm/mm/init.c:307:13: warning: no previous prototype for function 'mem_init_print_arm_info' [-Wmissing-prototypes]
+   void __init mem_init_print_arm_info(void)
+               ^
+   arch/arm/mm/init.c:307:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init mem_init_print_arm_info(void)
+   ^
+   static 
+   4 warnings generated.
+
+
+vim +317 arch/arm/mm/init.c
+
+   306	
+   307	void __init mem_init_print_arm_info(void)
+   308	{
+   309	#define MLM(b, t) b, t, ((t) - (b)) >> 20
+   310		pr_notice("Virtual kernel memory layout:\n"
+   311			  "    fixmap  : 0x%08lx - 0x%08lx   (%4ld MB)\n"
+   312			  "    vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n"
+   313			  "    lowmem  : 0x%08lx - 0x%08lx   (%4ld MB)\n"
+   314	#ifdef CONFIG_MODULES
+   315			  "    modules : 0x%08lx - 0x%08lx   (%4ld MB)\n",
+   316	#endif
+ > 317			  "     kernel : 0x%08lx - 0x%08lx   (%4ld MB)\n",
+   318			  MLM(FIXADDR_START, FIXADDR_END),
+   319			  MLM(VMALLOC_START, VMALLOC_END),
+   320			  MLM(PAGE_OFFSET, (unsigned long)high_memory),
+   321	#ifdef CONFIG_MODULES
+ > 322			  MLM(MODULES_VADDR, MODULES_END),
+   323	#endif
+   324			  /* From beginning of .text to end of .bss */
+   325			  MLM((unsigned long)_text, (unsigned long)__bss_stop));
+   326	#undef MLM
+   327	}
+   328	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

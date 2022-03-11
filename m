@@ -2,103 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8CF4D5A64
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F564D5A66
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346444AbiCKFU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S1346305AbiCKFXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346318AbiCKFU0 (ORCPT
+        with ESMTP id S239861AbiCKFXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:20:26 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35EC53B40
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:19:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646975963; x=1678511963;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xwc2i6LlEWjmFgoAFpU4R582uWeKh9r/XjxfgQG3MqM=;
-  b=cCUwcgQCLksDBdkjR5ZtUHDOUGhxXaPPeD6ehvkHan23W9rC5sLHPTVV
-   CkOxp1khI0g+dgXfqNLx0dWU5oVrEv4jPvCe91LZAcGq3n8bO7FY9VGhj
-   /sZWpQv+rBB8yGfrF5PjjZdjt8rVhlw3w5Wr2Z1yOVHVOBR33uUTm0J1d
-   Qf9z2ScebkmSKGNffMDwAtJxcvcHd2YNcZ5akwT4wKbcJOa88G3l6MIc2
-   gX74MlKzZ2GD4M/3gWG6EEkfoXYslQ795ZSo9Cc54vTNHy2pmdWNUqxKM
-   RTi1P/VsRwWSA3/BGzJThqlb8zTyTrtgmk5GCA5iUSgqbkgBhg5NnY56T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="253066608"
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="253066608"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 21:19:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="644818916"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 10 Mar 2022 21:19:22 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSXgP-0005sG-Eh; Fri, 11 Mar 2022 05:19:21 +0000
-Date:   Fri, 11 Mar 2022 13:18:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zack Rusin <zackr@vmware.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Martin Krastev <krastevm@vmware.com>
-Subject: drivers/gpu/drm/vmwgfx/vmwgfx_ttm_buffer.c:123:22: sparse: sparse:
- symbol 'vmw_pt_sys_placement' was not declared. Should it be static?
-Message-ID: <202203111316.4BboSv7D-lkp@intel.com>
+        Fri, 11 Mar 2022 00:23:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928571ACA36
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:22:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0450B61ABC
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C949C340EC;
+        Fri, 11 Mar 2022 05:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646976131;
+        bh=8gqE6SNCXYrxBQ43gUi43oisXrMLQipGnGqrX9t1jAg=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=inNNV5r+0gxtvwo+9FvyS2LZxm1WpUr72oCgH87pOCQpqcSm5wZehU93QOG2Zfa0o
+         TxHFZSqxo5HIg38GU+5pjWilylKLLgx0lDCAETphdnVFPRYAfZbPIBDSlqOJ3RVcEC
+         NoRYTSkqf9aXephGUXBWSobaX+Tx23pyvwk6VvmhuTmGkef5AsfryR42WGPDuRS6vt
+         mRKvS0GjvRi8En4Bvx6SUKA6Rh3wQSKtPKTpIGwTIJW8uWrcaILEvAIrQJMphCDSXt
+         q0YsxCWHZ+HpwC3blY+kA5dPFHVgljXol5kGQ1LfGAg3uMaFRTnEnA4eTpVRLngih0
+         FsBI6Q0smfrIw==
+Date:   Thu, 10 Mar 2022 21:22:09 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 1/2 v2] f2fs: don't get FREEZE lock in f2fs_evict_inode
+ in frozen fs
+Message-ID: <Yircgd9d773xnk3+@google.com>
+References: <20220309214834.3408741-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220309214834.3408741-1-jaegeuk@kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dda64ead7e82caa47fafe0edc36067ee64df2203
-commit: f6be23264bbac88d1e2bb39658e1b8a397e3f46d drm/vmwgfx: Introduce a new placement for MOB page tables
-date:   3 months ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220311/202203111316.4BboSv7D-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6be23264bbac88d1e2bb39658e1b8a397e3f46d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f6be23264bbac88d1e2bb39658e1b8a397e3f46d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/vmwgfx/
+Let's purge inode cache in order to avoid the below deadlock.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[freeze test]                         shrinkder
+freeze_super
+ - pwercpu_down_write(SB_FREEZE_FS)
+                                       - super_cache_scan
+                                         - down_read(&sb->s_umount)
+                                           - prune_icache_sb
+                                            - dispose_list
+                                             - evict
+                                              - f2fs_evict_inode
+thaw_super
+ - down_write(&sb->s_umount);
+                                              - __percpu_down_read(SB_FREEZE_FS)
 
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/vmwgfx/vmwgfx_ttm_buffer.c:123:22: sparse: sparse: symbol 'vmw_pt_sys_placement' was not declared. Should it be static?
-
-vim +/vmw_pt_sys_placement +123 drivers/gpu/drm/vmwgfx/vmwgfx_ttm_buffer.c
-
-   122	
- > 123	struct ttm_placement vmw_pt_sys_placement = {
-   124		.num_placement = 1,
-   125		.placement = &vmw_sys_placement_flags,
-   126		.num_busy_placement = 1,
-   127		.busy_placement = &vmw_sys_placement_flags
-   128	};
-   129	
-
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+ Change log from v1:
+  - add doc
+
+ Documentation/ABI/testing/sysfs-fs-f2fs | 1 +
+ fs/f2fs/debug.c                         | 1 +
+ fs/f2fs/f2fs.h                          | 1 +
+ fs/f2fs/inode.c                         | 6 ++++--
+ fs/f2fs/super.c                         | 4 ++++
+ 5 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+index 58bf0dc83712..5a5f3c5445f6 100644
+--- a/Documentation/ABI/testing/sysfs-fs-f2fs
++++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+@@ -458,6 +458,7 @@ Description:	Show status of f2fs superblock in real time.
+ 		0x800  SBI_QUOTA_SKIP_FLUSH  skip flushing quota in current CP
+ 		0x1000 SBI_QUOTA_NEED_REPAIR quota file may be corrupted
+ 		0x2000 SBI_IS_RESIZEFS       resizefs is in process
++		0x4000 SBI_IS_FREEZING       freefs is in process
+ 		====== ===================== =================================
+ 
+ What:		/sys/fs/f2fs/<disk>/ckpt_thread_ioprio
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index 9a13902c7702..cba5eab24595 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -338,6 +338,7 @@ static char *s_flag[] = {
+ 	[SBI_QUOTA_SKIP_FLUSH]	= " quota_skip_flush",
+ 	[SBI_QUOTA_NEED_REPAIR]	= " quota_need_repair",
+ 	[SBI_IS_RESIZEFS]	= " resizefs",
++	[SBI_IS_FREEZING]	= " freezefs",
+ };
+ 
+ static int stat_show(struct seq_file *s, void *v)
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 68d791ec8b27..da729f53daa8 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1293,6 +1293,7 @@ enum {
+ 	SBI_QUOTA_SKIP_FLUSH,			/* skip flushing quota in current CP */
+ 	SBI_QUOTA_NEED_REPAIR,			/* quota file may be corrupted */
+ 	SBI_IS_RESIZEFS,			/* resizefs is in process */
++	SBI_IS_FREEZING,			/* freezefs is in process */
+ };
+ 
+ enum {
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index ab8e0c06c78c..71f232dcf3c2 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -778,7 +778,8 @@ void f2fs_evict_inode(struct inode *inode)
+ 	f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
+ 	f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
+ 
+-	sb_start_intwrite(inode->i_sb);
++	if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING))
++		sb_start_intwrite(inode->i_sb);
+ 	set_inode_flag(inode, FI_NO_ALLOC);
+ 	i_size_write(inode, 0);
+ retry:
+@@ -809,7 +810,8 @@ void f2fs_evict_inode(struct inode *inode)
+ 		if (dquot_initialize_needed(inode))
+ 			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
+ 	}
+-	sb_end_intwrite(inode->i_sb);
++	if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING))
++		sb_end_intwrite(inode->i_sb);
+ no_delete:
+ 	dquot_drop(inode);
+ 
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 8e3840973077..4b570b5c2674 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -1663,11 +1663,15 @@ static int f2fs_freeze(struct super_block *sb)
+ 	/* ensure no checkpoint required */
+ 	if (!llist_empty(&F2FS_SB(sb)->cprc_info.issue_list))
+ 		return -EINVAL;
++
++	/* to avoid deadlock on f2fs_evict_inode->SB_FREEZE_FS */
++	set_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
+ 	return 0;
+ }
+ 
+ static int f2fs_unfreeze(struct super_block *sb)
+ {
++	clear_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
+ 	return 0;
+ }
+ 
+-- 
+2.35.1.723.g4982287a31-goog
+

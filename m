@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877064D598B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C760F4D598F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346242AbiCKEak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S1346284AbiCKEbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiCKEag (ORCPT
+        with ESMTP id S1346246AbiCKEbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:30:36 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B76175820
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:29:32 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id w4so6702989ply.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:29:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zrOypvYSBV/aO1CQ4KPF0DXRvckOSNU+3tRTfGLgwBc=;
-        b=jZOmkQuMI6RuFhKg8NvmaxRDGtTrt81dOEQyqYgjW74rFBLVRanGjb2i0VmOH9c8u0
-         oDsFgE/gVtj/2zwlvuY0m7sMnt25p8cZESvHeYZKU6UxlTf3LiXQGvf9y05sQUZy/mcr
-         Dr8j3zAT3wY6PzxPiHYPWjvztkeGKv96NtDwPXTKw3ISsyEnKMXvAdQt9sMGbtR0iN6N
-         TZvP3DmwgA1Cz8ich7sgblV8Qbrp6EsLHqsjutBsl7gVa9xK44gyoLLNmwE944wRFo+L
-         PACWqwc2BT29y68XXByp9nq5NJgFhlF3NR5FHie7p51WEURn/FdO7pEhT4jnszHnxKVm
-         pXVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=zrOypvYSBV/aO1CQ4KPF0DXRvckOSNU+3tRTfGLgwBc=;
-        b=jpOtwQ8xESu4NMPAE6KBJHWmdCWBIoU37vbTZQR68t6BsEeKfyOv5v/1SAasQTeEh1
-         XAuOiLwrqaeLl2T/dX7LDIsSU7z0W8LUSAoBzlEfrSonE/r6CG4MU4UMtPGkIz0QRCkq
-         Ew8BFsx1jH3x+mVJnZ/H4kdw3H7iZG7J82fJ+VhPlBvHphlIkZIlh1f5v11J8Vnd7Qeq
-         3RSyDfp4GwkoaS8Wn8C5/KW8mFqQVbXy3Ktj3VvfcVfXDsgU6DJPOr9z3wnB3qNtx+D8
-         bbpJyAUmrHJ7vYcw5RKDw+E1Z455tNjKubjCAX+HCedeW+MK7i1Cbof10Zj3Ma2iDFtu
-         5yKA==
-X-Gm-Message-State: AOAM531w3Mj6GcCPm/C7RqLsxHTs23D3mccdOg1o5yKqTMxCm+v9DwRA
-        Uy2+oxLHCuvsqfZOv9WArCGuCg==
-X-Google-Smtp-Source: ABdhPJwpxDR3gGioaEv9ojhLroxIx+LBfNQORccewdv7C3h8rx4tg3f/4LAKta2pms042VRbyIeHMQ==
-X-Received: by 2002:a17:902:f682:b0:151:a262:ad4a with SMTP id l2-20020a170902f68200b00151a262ad4amr8932436plg.84.1646972972298;
-        Thu, 10 Mar 2022 20:29:32 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id o65-20020a17090a0a4700b001bef5cffea7sm11864363pjo.0.2022.03.10.20.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 20:29:31 -0800 (PST)
-Date:   Thu, 10 Mar 2022 20:29:31 -0800 (PST)
-X-Google-Original-Date: Thu, 10 Mar 2022 20:28:45 PST (-0800)
-Subject:     Re: [PATCH] riscv: Work to remove kernel dependence on the M-extension
-In-Reply-To: <b10e777c-1511-519b-20bb-a682a6119132@MichaelKloos.com>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Michael@MichaelKloos.com
-Message-ID: <mhng-97bc7422-36da-436a-a326-1705ef6fcace@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 10 Mar 2022 23:31:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE151A39FF;
+        Thu, 10 Mar 2022 20:30:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E866195C;
+        Fri, 11 Mar 2022 04:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 543B7C340F8;
+        Fri, 11 Mar 2022 04:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646973013;
+        bh=ciDN2VAdc1eJObt9pEjQs0UqJnRaibkHAZzfwB1zNDM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IJxuGnBGVmX96EIHP0XifFxYJTsVbjlK15Onw84fO1WgXSFydjCfE3RLOCMq5qAPU
+         PdnkKkS0z9p8jqjzIal+lib47SeHR8kYXccHHLe72+tCdtyJEimy3BHBbZh96LOB7L
+         vS+gOs6SHxfsJuI9xcxFOnGgb2lCaQZHc/X/NDoDFH9y1KYq6ZolFMONrC9Wv+vVxr
+         LLYLIZ7FE7JHiQ5MFP5FQCDnIOVvuPOFLR7ia52gGXvu0t5C3d8k/gsqLpKd4u9wEo
+         xE5D+qjWzdOHPFjP4rIKBbxNIxeviJplsKU4rGpO1x1ywcUwZlmfmlEx/0fBgaZDOq
+         vHSOx/w3QJzDA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35AA7F03842;
+        Fri, 11 Mar 2022 04:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next] net: dsa: lantiq_gswip: enable jumbo frames on GSWIP
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164697301321.12732.1511628765770626834.git-patchwork-notify@kernel.org>
+Date:   Fri, 11 Mar 2022 04:30:13 +0000
+References: <20220308230457.1599237-1-olek2@wp.pl>
+In-Reply-To: <20220308230457.1599237-1-olek2@wp.pl>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     hauke@hauke-m.de, andrew@lunn.ch, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tom@tomn.co.uk
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 05:37:27 PST (-0800), Michael@MichaelKloos.com wrote:
-> Is there something I can do that would help alleviate your concerns or
-> apprehension?
+Hello:
 
-IMO this is one of those cases where having hardware is required.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-I can understand the goal of providing a Linux port for the minimal 
-RISC-V compatible system, but IIUC the minimal RISC-V compatible system 
-is any object associated with a member of the RISC-V foundation that 
-said member attests is a RISC-V system.  There's really no way to 
-implement Linux on all such systems so we have to set the bar somewhere, 
-and bar is generally set at "more time will be spent using this than 
-maintaining it".  Systems without M have generally not met that bar, and 
-I don't see anything changing now.
+On Wed,  9 Mar 2022 00:04:57 +0100 you wrote:
+> This enables non-standard MTUs on a per-port basis, with the overall
+> frame size set based on the CPU port.
+> 
+> When the MTU is not changed, this should have no effect.
+> 
+> Long packets crash the switch with MTUs of greater than 2526, so the
+> maximum is limited for now. Medium packets are sometimes dropped (e.g.
+> TCP over 2477, UDP over 2516-2519, ICMP over 2526), Hence an MTU value
+> of 2400 seems safe.
+> 
+> [...]
 
-If you have users then I'm happy to reconsider, the goal here is to make 
-real systems work.  That said: we've already got enough trouble trying 
-to make actual shipping hardware function correctly, we're all going to 
-lose our minds trying to chase around everything that could in theory be 
-a RISC-V system but doesn't actually exist.
+Here is the summary with links:
+  - [net-next] net: dsa: lantiq_gswip: enable jumbo frames on GSWIP
+    https://git.kernel.org/netdev/net-next/c/c40bb4fedcd6
 
->
-> On 3/10/2022 8:22 AM, Michael T. Kloos wrote:
->
->> Some other thoughts:
->> It sounds like I am not the first person to want this feature and I
->> probably won't be the last.  I created the change for my own reasons, the
->> same as any other contributor.  I think we all know that I can not pull
->> out some chart and say, "This many people want this and here is why."  I
->> live in central Ohio and have been doing this as a hobby.  I don't even
->> know anyone else who knows about systems and operating system development.
->> If the justification that you are looking for is that I as some
->> hypothetical developer at a major tech company is about to release a new
->> RISC-V chip without M support but we want it to run Linux, I can not
->> provide that answer.  It sounds a bit like some software or hardware,
->> chicken or the egg anyway.  Trying to maintain my own fork if people
->> start contributing patches with incompatible assembly scares me.
->>      Michael
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

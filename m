@@ -2,161 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E154D6012
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E745B4D6017
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347707AbiCKKtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S1345144AbiCKKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238713AbiCKKtM (ORCPT
+        with ESMTP id S238713AbiCKKt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:49:12 -0500
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA503A146C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1646995685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DIbxokGLfszPWvvBfF32ODiQ346zEr4gzjmkYm4XMII=;
-        b=XYbmxf5f0Hocr41hhdPMtDmvKkp6JXAP9LCRpLCIlO8WAbWCL/CB6tI7fMzRwdVSp54mBE
-        l8YdHCk5oqO1aTWQDjgSIW3PCfV0RPzj2sqU88pBpHHgY8yb4SkVZ+BYNnexWBS4JpRgFG
-        BQY7/2vw/UAYxtNzI1HuBNd/tFv4YhY=
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
- (mail-db5eur01lp2059.outbound.protection.outlook.com [104.47.2.59]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-14-faktBsoIM8225rnSx08a9Q-2; Fri, 11 Mar 2022 11:48:02 +0100
-X-MC-Unique: faktBsoIM8225rnSx08a9Q-2
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FR2VKUxNgT3Z9x14b5fQqWvKkDEFnT10+S/OucuL7GO1Un0Pb8UPrtP5iV1O0lQZHhyfjsdQDKXKzFKWNnfSw7xfKigxecQwNvkMfGYc10JM4M67Pr+Bo5hdJO7gP3qNaFtm/hoAmxYDGhMYeDx0ugU8yeMcEvQO6RoPuL6UtNUhNGAI+Uv92iQBVFjohYC0raDz6Vt+uwrjgpuI1kEfDaxyBUS9DILvsmxCmik1vvGf7lBDfs/ilGbTEp6jW5VTKYZ3G/1jkqrKqT/LfbKnueEqDqSlDujPK9ge0r8hmIdgVFfERksmxIq+hxAkb7eZkWQXzC2hFColtMNT1QuJhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DIbxokGLfszPWvvBfF32ODiQ346zEr4gzjmkYm4XMII=;
- b=OtRQwmpRDYOdDviFOSX93y67sNGFZxkWrDJgfLeWu/MPilo8Klxlh8Nah0GPTWJJ9hOfXZWWgS9KhdQAylEpypIen1doofglwZPEEEee/E0mFSL8sKB2ILXzfK9qTBAyJJ0M5koVG2wUM31wHZ1udLrBJoyGebxskCQa3NMBSCbR26SDfROAUV9tZkPXcGXxC0nNesvQZRwX1PD+ARdlSSiyFJw4Kmx4WYMa2Caai2Rd56YFdvnF4eJITowd/bFnFMWfPaqkFXSVBXkr/UKXyOMWqbVzN1eQX1pMoiektv4sYTW8tbrkNjsXe2soST/DDCu8NmmsovZh7CJkx/GZ3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB5600.eurprd04.prod.outlook.com (2603:10a6:803:e7::16)
- by AM0PR0402MB3489.eurprd04.prod.outlook.com (2603:10a6:208:16::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
- 2022 10:47:59 +0000
-Received: from VI1PR04MB5600.eurprd04.prod.outlook.com
- ([fe80::e8ce:db1c:5bb0:af0]) by VI1PR04MB5600.eurprd04.prod.outlook.com
- ([fe80::e8ce:db1c:5bb0:af0%6]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 10:47:59 +0000
-Message-ID: <5276ee7f-22b5-0223-72b6-ca71ae82c3f6@suse.com>
-Date:   Fri, 11 Mar 2022 11:47:54 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 2/2] xen/grant-table: remove readonly parameter from
- functions
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
-        Jens Axboe <axboe@kernel.dk>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-block@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net
-References: <20220311103429.12845-1-jgross@suse.com>
- <20220311103429.12845-3-jgross@suse.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <20220311103429.12845-3-jgross@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P191CA0039.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:209:7f::16) To VI1PR04MB5600.eurprd04.prod.outlook.com
- (2603:10a6:803:e7::16)
+        Fri, 11 Mar 2022 05:49:56 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F412182BC0;
+        Fri, 11 Mar 2022 02:48:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646995732; x=1678531732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3q2RXnw3ENJ9hR2e3HJcmwGSdFSeyoDplqjI07wWEkE=;
+  b=EQY7RCxwaQog7FcOOxbg8aZEv8+Yt39ockNWxTPGLdZ5VNeREVHu/jz/
+   6Mr/ZDdOKTw/a5Afxa0IgUr4CJMh0DQ5JysUz7ME9DgMGk1rJ/U2XMVsq
+   uMTCKudBNhtuV+8jjDQqbPFCy2xMQOa8bAcfGNoY/RUtjAb4GMaqiG4/C
+   Sz/GY7UYIyKy/8zg2pQV4DG876iFOzcxtrcSS68Jb/cQraaTlyDuu5Awg
+   c9huEYq3U+JwfW7x3W6nhQvfIeGPGWFaOgl3WJUw7I1t6XlCie/EWH4tR
+   /aRgq9OE8L/Q9bW3r0JuK32yS4wGKlwyr4LwYvpkwjmGVOLvZ+VEBjR+/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="237723039"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="237723039"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 02:48:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="579251273"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 02:48:49 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nScpE-0006Gx-A9; Fri, 11 Mar 2022 10:48:48 +0000
+Date:   Fri, 11 Mar 2022 18:48:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v33 01/29] integrity: disassociate ima_filter_rule from
+ security_audit_rule
+Message-ID: <202203111810.oPf2VNfH-lkp@intel.com>
+References: <20220310234632.16194-2-casey@schaufler-ca.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ccf1c0e1-d7e0-4cbd-f674-08da034c9b62
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3489:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <AM0PR0402MB348967F264AD215F3C597051B30C9@AM0PR0402MB3489.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HBMNmKesdLinpyu2mMehi5dmgmoclLxVC2xMy7QuXudxKXlloOixKRcuvOgivv2U3VypJiT9ryhYGveOHRJhAaHpxeD3DIWFCAGdbZR0qogdUXE24T1P9Xk/M73Lb20yBTsWWUOaePrpbhmagm5W9B/+klndJtI5Rh6w7bVD4m949efPf1PNOHIjYQCZQNhaQ67B8nXyo9m9bhGbY1DeYSLsz6JCXO5P/NJRC3f+eKlFOLm/xm2Vb/rdHdHmDbHooN4+lYOrUjl/GWXDptuT3BwcD0pZCAXN/WWHzXqH13A9FGmIUBPWeIJvqssmyqCv8iascSSYu5B+Q+8ceOAXbnpRi4zP9e9fpH9H2TUPSU1LLW117dw4MenOhGYm12j08UNjexpdXIv2HGKGg62msEBNyjr5hkkfLgQEAslos+dgEs+/6pstIslhxiRUbVGclI7IK4/U85gE6hajdsZUZfTDXt7a0oa5YD4e3Nmwhi5zwnsUekX2m0V38dltix6aYCK5fnSAL56fL2DL1XU5Wo/U8MnRHhDH+j8nOKan1RNxLMuuU/F3mh0qUjc+25vBcwcAkZCMsLyAwsg2iL8tRpdcHrsqht8kSgAjyf0Yo73VL9263Lwr6KgeBP2wn5HoHUs6XC6+O4OKBoDCKwE7NTmfF8+zxt3ldP0xf4ho/MghzCZ4qIvfCcmLyqpIShZKIxTnTyekVFy2LFPX9qydywyEAY4ANkr03zdU5BHk2Qo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5600.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66556008)(7416002)(8936002)(7406005)(6666004)(6512007)(6506007)(66946007)(558084003)(31696002)(4326008)(8676002)(6862004)(86362001)(5660300002)(53546011)(26005)(31686004)(37006003)(316002)(186003)(83380400001)(2616005)(508600001)(38100700002)(6486002)(54906003)(2906002)(36756003)(6636002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFNjM0pWMnY3Y2lPcW85V3RyZmdQcStqbElsTnZLb3ZFNnV3UFBqQVEwN3Bs?=
- =?utf-8?B?eTZ4VEJtQkk0bHVYV1F2SWlSNGRXOTF1SVB3WkZZcEdoMW9OTVZ5aXh3allm?=
- =?utf-8?B?ZTRudEFmdnJuVitUMUFPTTNsZ1NicENKUVJ4QzZ0RFgxSmhHbTIwZm93QTBi?=
- =?utf-8?B?QVhoNTkvdHZ5bjkwLzVKZFV1RkJPcThUUlZQb3FzSTcyTHRDbUpVMzdsRnFF?=
- =?utf-8?B?NDlIUUNTRGlzS3VqWnhSc1pUYURjN0lzTHQ4OHh6dnZXcnVFM1pwbGhwYXd4?=
- =?utf-8?B?K0JGRUF2UGNtS0psT003YXo3OXQ2anpXZ1RzazdBd2Z4cnZqVXJHbThXdnQ2?=
- =?utf-8?B?ZndxZGsxeWxzME9wT1ZWM29VdHhmaXBhODZhelZpZ0IvTDFCbGFSTXdLMUNj?=
- =?utf-8?B?bEVRN2JsRVV1OUliVVNLQlBxTTA4dlNxREtYK013d2NieThLbWtvc2FwMWYz?=
- =?utf-8?B?RlJLYlNpV1E5cWRKamRodWx4cTdyQStLTWpMZlJ0UVNId1BndGxHdnkvTEZN?=
- =?utf-8?B?d09PQkYrS29zU0Z2QkFJRTNXNGI3a1FwR0pReGZDQUZOLzdGMmZWYWlUYzVE?=
- =?utf-8?B?aGkzSVdnWUpiUkVVVjBVYUd4UzhTWFZBM2V4Y3R3OVNVR2c0Z25Nd2UrSFYx?=
- =?utf-8?B?UFlPZURmVUxSZXIrZkpqeDBxSE14QUJMUTlsT3ZRcUs5RHNOT0kwTE0rVWVl?=
- =?utf-8?B?SXh0ck1ic3RlSytaWDVEN1ViZTJPM3JMbmhxUHlvZFNPOFdmd1FuaU11TS9m?=
- =?utf-8?B?SVpMczg4RC9mK0VVY1hreTB2WDNTM3NtVWYzaVJzVDVuN2JUN2pxQ0tVTWNy?=
- =?utf-8?B?eFVUNE8xaWtEKzNrNkNhN0dBMXBpQm1IS3JmT3J6ZElaSjMyZUdGUUl4ejFH?=
- =?utf-8?B?RTI1TThVQ1BldVBZVHBrMGdsNE1aTE51bnA0enJjT1NQekZ0dTZ6eHR4Tkox?=
- =?utf-8?B?UmQxQkpTUytUZVFjNmNsWFlISjE4YnQvVGxSL0hvcTVRbFd3UFBhUUJHNkxO?=
- =?utf-8?B?amh2cllJWmFpQnJsQ3ZESVV4UTVqQUN5dURScDFoRmpNM1VrVjU3U1pFbnNU?=
- =?utf-8?B?U3NkQ2k3WUVNVnpGeXdsRGtIZGJRT1RQd05DZkZpb2RxYzlLNXhTUFYvZHp2?=
- =?utf-8?B?djRucEczYnlpWm42eDM1UmN5dFdFVzYrdlpEKzN2SW1vUGtkNUR6R01zdEho?=
- =?utf-8?B?V3ByeDMrbUdoc0UwTmp3UmxRTjRicWpRc0QvMVN0TzlibitDQjRXWktPNmRU?=
- =?utf-8?B?d1I3R3VFcW13SFQzc25DTCtSUVZOeEpQRUM0dGhwcndoUzR0eEtHamlheXJC?=
- =?utf-8?B?N0tuSkVjWTFRcVZKc2dGN3AxVkpBNWkzQXRZTkR0dWxBNGZMdlZtYldnSmg5?=
- =?utf-8?B?ZnU3TFprVnZuZE1vNFB3MVFJVWYwR2dLM041QnBuUEExUDNuVUszdHE2OUk0?=
- =?utf-8?B?cXFYZGs1Tks5RFJ2RmdDYWJscXhLN2krWDNwc3hpQkxmTnQxcG1WcVk0OWhj?=
- =?utf-8?B?THA1WUMwMFlhRmE4T2U3TzRSQTNYVHJlQUJnb1F3VEtSSFRoMk8yeGVvUUp2?=
- =?utf-8?B?ZDQ0ZldjRWNtQmtQTlBZZ2c3NWJzMTBqanJ4aUlDdUNBbUFqVnZYY0JMbWsz?=
- =?utf-8?B?K2pOY2NCaTU0bTRtOVVKOEFXcVI5NXRvVVFwbW0wWTlXRUVPWW1BTkdFNFk2?=
- =?utf-8?B?TGZwOU5SWTFqR00wV1Z3TE5EUVhNMmdlbm9OU2d6ZloxUUg5RU9rendrUXFQ?=
- =?utf-8?B?VzZzQXhmWnpiK0dMekNvc3ZJaStQUDV1ZytYTUZsQ2hhVUpKRFgvb1Bsc0Ji?=
- =?utf-8?B?dTZDSm4rYXBzMUJDdXZQdFlXM3RPUFNrbkFzeHJjTVVkV05FblRpcUdpVVlI?=
- =?utf-8?B?S2tHRHNLZmlJbG0xUHZ0REU2dVBzWGloNWhzU1BXeHRvM242SEpxYmZUZFU3?=
- =?utf-8?Q?j968dqETLSwE3RJRtkntiRqD+PcCrqNF?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ccf1c0e1-d7e0-4cbd-f674-08da034c9b62
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5600.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 10:47:59.3510
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uZx5z2nctVZyeUeUEhFpfh0eeSk4mMu0ciTMoVUfZfltieVRWuKSmxYEnyiF0c1qSXgLVgCrGjrwux4em2gWyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3489
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310234632.16194-2-casey@schaufler-ca.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,12 +70,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.03.2022 11:34, Juergen Gross wrote:
-> The gnttab_end_foreign_access() family of functions is taking a
-> "readonly" parameter, which isn't used. Remove it from the function
-> parameters.
-> 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+Hi Casey,
 
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+I love your patch! Yet something to improve:
 
+[auto build test ERROR on pcmoore-audit/next]
+[also build test ERROR on pcmoore-selinux/next linus/master jmorris-security/next-testing v5.17-rc7 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
+config: arc-buildonly-randconfig-r006-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111810.oPf2VNfH-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/2796a69611ebb559eacf03666a3ae2fbd48e0c12
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
+        git checkout 2796a69611ebb559eacf03666a3ae2fbd48e0c12
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   security/integrity/ima/ima_policy.c: In function 'ima_lsm_free_rule':
+>> security/integrity/ima/ima_policy.c:360:17: error: implicit declaration of function 'ima_filter_rule_free'; did you mean 'ima_file_free'? [-Werror=implicit-function-declaration]
+     360 |                 ima_filter_rule_free(entry->lsm[i].rule);
+         |                 ^~~~~~~~~~~~~~~~~~~~
+         |                 ima_file_free
+   security/integrity/ima/ima_policy.c: In function 'ima_lsm_copy_rule':
+>> security/integrity/ima/ima_policy.c:409:17: error: implicit declaration of function 'ima_filter_rule_init' [-Werror=implicit-function-declaration]
+     409 |                 ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   security/integrity/ima/ima_policy.c: In function 'ima_match_rules':
+>> security/integrity/ima/ima_policy.c:625:30: error: implicit declaration of function 'ima_filter_rule_match' [-Werror=implicit-function-declaration]
+     625 |                         rc = ima_filter_rule_match(osid, rule->lsm[i].type,
+         |                              ^~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +360 security/integrity/ima/ima_policy.c
+
+176377d97d6a3f Tyler Hicks      2020-08-11  354  
+b169424551930a Janne Karhunen   2019-06-14  355  static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+b169424551930a Janne Karhunen   2019-06-14  356  {
+b169424551930a Janne Karhunen   2019-06-14  357  	int i;
+b169424551930a Janne Karhunen   2019-06-14  358  
+b169424551930a Janne Karhunen   2019-06-14  359  	for (i = 0; i < MAX_LSM_RULES; i++) {
+b8867eedcf76ca Tyler Hicks      2020-07-10 @360  		ima_filter_rule_free(entry->lsm[i].rule);
+b169424551930a Janne Karhunen   2019-06-14  361  		kfree(entry->lsm[i].args_p);
+b169424551930a Janne Karhunen   2019-06-14  362  	}
+465aee77aae857 Tyler Hicks      2020-07-09  363  }
+465aee77aae857 Tyler Hicks      2020-07-09  364  
+465aee77aae857 Tyler Hicks      2020-07-09  365  static void ima_free_rule(struct ima_rule_entry *entry)
+465aee77aae857 Tyler Hicks      2020-07-09  366  {
+465aee77aae857 Tyler Hicks      2020-07-09  367  	if (!entry)
+465aee77aae857 Tyler Hicks      2020-07-09  368  		return;
+465aee77aae857 Tyler Hicks      2020-07-09  369  
+465aee77aae857 Tyler Hicks      2020-07-09  370  	/*
+465aee77aae857 Tyler Hicks      2020-07-09  371  	 * entry->template->fields may be allocated in ima_parse_rule() but that
+465aee77aae857 Tyler Hicks      2020-07-09  372  	 * reference is owned by the corresponding ima_template_desc element in
+465aee77aae857 Tyler Hicks      2020-07-09  373  	 * the defined_templates list and cannot be freed here
+465aee77aae857 Tyler Hicks      2020-07-09  374  	 */
+465aee77aae857 Tyler Hicks      2020-07-09  375  	kfree(entry->fsname);
+176377d97d6a3f Tyler Hicks      2020-08-11  376  	ima_free_rule_opt_list(entry->keyrings);
+465aee77aae857 Tyler Hicks      2020-07-09  377  	ima_lsm_free_rule(entry);
+b169424551930a Janne Karhunen   2019-06-14  378  	kfree(entry);
+b169424551930a Janne Karhunen   2019-06-14  379  }
+b169424551930a Janne Karhunen   2019-06-14  380  
+b169424551930a Janne Karhunen   2019-06-14  381  static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+b169424551930a Janne Karhunen   2019-06-14  382  {
+b169424551930a Janne Karhunen   2019-06-14  383  	struct ima_rule_entry *nentry;
+483ec26eed42bf Janne Karhunen   2020-01-15  384  	int i;
+b169424551930a Janne Karhunen   2019-06-14  385  
+b169424551930a Janne Karhunen   2019-06-14  386  	/*
+b169424551930a Janne Karhunen   2019-06-14  387  	 * Immutable elements are copied over as pointers and data; only
+b169424551930a Janne Karhunen   2019-06-14  388  	 * lsm rules can change
+b169424551930a Janne Karhunen   2019-06-14  389  	 */
+f60c826d031817 Alex Dewar       2020-09-09  390  	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
+f60c826d031817 Alex Dewar       2020-09-09  391  	if (!nentry)
+f60c826d031817 Alex Dewar       2020-09-09  392  		return NULL;
+f60c826d031817 Alex Dewar       2020-09-09  393  
+c593642c8be046 Pankaj Bharadiya 2019-12-09  394  	memset(nentry->lsm, 0, sizeof_field(struct ima_rule_entry, lsm));
+b169424551930a Janne Karhunen   2019-06-14  395  
+b169424551930a Janne Karhunen   2019-06-14  396  	for (i = 0; i < MAX_LSM_RULES; i++) {
+483ec26eed42bf Janne Karhunen   2020-01-15  397  		if (!entry->lsm[i].args_p)
+b169424551930a Janne Karhunen   2019-06-14  398  			continue;
+b169424551930a Janne Karhunen   2019-06-14  399  
+b169424551930a Janne Karhunen   2019-06-14  400  		nentry->lsm[i].type = entry->lsm[i].type;
+39e5993d0d452b Tyler Hicks      2020-07-09  401  		nentry->lsm[i].args_p = entry->lsm[i].args_p;
+39e5993d0d452b Tyler Hicks      2020-07-09  402  		/*
+39e5993d0d452b Tyler Hicks      2020-07-09  403  		 * Remove the reference from entry so that the associated
+39e5993d0d452b Tyler Hicks      2020-07-09  404  		 * memory will not be freed during a later call to
+39e5993d0d452b Tyler Hicks      2020-07-09  405  		 * ima_lsm_free_rule(entry).
+39e5993d0d452b Tyler Hicks      2020-07-09  406  		 */
+39e5993d0d452b Tyler Hicks      2020-07-09  407  		entry->lsm[i].args_p = NULL;
+b169424551930a Janne Karhunen   2019-06-14  408  
+b8867eedcf76ca Tyler Hicks      2020-07-10 @409  		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
+b169424551930a Janne Karhunen   2019-06-14  410  				     nentry->lsm[i].args_p,
+b169424551930a Janne Karhunen   2019-06-14  411  				     &nentry->lsm[i].rule);
+483ec26eed42bf Janne Karhunen   2020-01-15  412  		if (!nentry->lsm[i].rule)
+483ec26eed42bf Janne Karhunen   2020-01-15  413  			pr_warn("rule for LSM \'%s\' is undefined\n",
+aa0c0227d33171 Tyler Hicks      2020-07-09  414  				nentry->lsm[i].args_p);
+b169424551930a Janne Karhunen   2019-06-14  415  	}
+b169424551930a Janne Karhunen   2019-06-14  416  	return nentry;
+b169424551930a Janne Karhunen   2019-06-14  417  }
+b169424551930a Janne Karhunen   2019-06-14  418  
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

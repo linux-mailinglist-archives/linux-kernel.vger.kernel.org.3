@@ -2,150 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC33D4D69B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AC94D69BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiCKUyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 15:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S231158AbiCKUy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 15:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiCKUyA (ORCPT
+        with ESMTP id S230324AbiCKUyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 15:54:00 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C7343ADF
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:52:48 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id k9-20020a056830242900b005ad25f8ebfdso7096879ots.7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:52:48 -0800 (PST)
+        Fri, 11 Mar 2022 15:54:19 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B0A1D6C9D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:08 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id r29so3139430edc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EoGq7CQCvilBzLF7EBvLt44/XMCx9ydzBEATyyna41M=;
-        b=CKKJLhM3DL0STMT/zHMYyuQkf7SjzNu9GIO9XEDKVh6oPrb8hpH8CDIv32r2mMmodO
-         OC0AXhq5oIUdcxLhu3S1kRXRl3KfkRZdrKoQonU/m+d7VeqYOA4SsEdC7qRz8Pdy9brt
-         e6vHcthX3R55CCIZKRCwOpe8BhDcghibEyq/qUu6KKZIuDlTVhhTo2VsRhFLBhF2SL6q
-         ARrVGlenbvXoXn4K3QM050iftag/43xdBuhk+JNoNivjvDJ+bgGMaNiijFCS1rntcrqT
-         C2S2qT/f4accnWi7ioLEfEkhQbiTz06Y5ccVkIdpii1rRDEH+dLuTh9Knz875k1KHaAA
-         kvnA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1GNOH6IByfdma2vK0oN46OfXdE9F5N+dlrc1RJjEFIk=;
+        b=RjeIvEgAZemAjh7MW5o+VKfWDPmEow0ENexq1P+K144S2pVSqDjee0cdc4oZOCqpUn
+         owc6GknawkgmT4HhECQzAJruWMy4OX5wgfWGvHcgiqL4Qn6FKSh6eGCkSDNwOO3qdYGB
+         TVWBvbiYnMqIZynJcRgG7j1ULCqToHZ8s7RStTM0nXC2XpGJcy0gpFg/MzsARoANMg+r
+         k9zcJafb990WHJIKgVy/EKpW/Qcr4zOM3f5frffwcfKqHDShTtlEF/JkKxeslfOPaUpd
+         8IjkL0X9Q8vwC5RBPVsVuob5Sx7UFW+kiv5dty0Da0xaxC8eAlrZfes2eJXxABHjCXT0
+         KBLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EoGq7CQCvilBzLF7EBvLt44/XMCx9ydzBEATyyna41M=;
-        b=my9Urxv++8nsdSmXDmsGexEgQ5P16cKk00N8lMRttPKOGZoQScaQWMhvN4fsnzwEMS
-         7MUyg2yU23ShvZ9wznRpWtPcj4uJTNTNa8nZjE0pMgktPXhZ1ZQSK21Js66k/SiPKu9Z
-         OaAFnz+d7wa+NV79tC0kxUo/4neqQJSil3AmJ3tdUzkw7NN2ZhyuFwh0mLaKjkaEJhtF
-         JuFtQ1xmJVPHLvk2bTo20oihQjfMOKnNQcDutM/PLC03CJGi3Kyziy6Ik9VyaUn+y36n
-         vg6HzCE8ou9ZFBllt28sTKtAAmVDkbJAGkTr+B60/DNnaMJ5L1ExPIcd/GL259+2xmC8
-         RHsg==
-X-Gm-Message-State: AOAM5330x5v9FFnk4wWXqwGzWtFcbwHdqSQ3vCl6gzBHS8wuwvbtsPWS
-        pyp4A6+DuGhoHRW3OySc0CV0QDm5quaYKg==
-X-Google-Smtp-Source: ABdhPJxFVPqtmT+KW+gdOsiTMsN9KZ49xHJYjMjRYlvIq1fZNQlALIw5/drNOFmDnOmXp/sMZ9V0Zg==
-X-Received: by 2002:a05:6830:1394:b0:5af:6776:ea37 with SMTP id d20-20020a056830139400b005af6776ea37mr5808079otq.80.1647031967989;
-        Fri, 11 Mar 2022 12:52:47 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id y66-20020a9d22c8000000b005c943ff75dbsm825295ota.7.2022.03.11.12.52.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 12:52:47 -0800 (PST)
-Date:   Fri, 11 Mar 2022 14:52:45 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Deepak Kumar Singh <quic_deesin@quicinc.com>
-Cc:     swboyd@chromium.org, quic_clew@quicinc.com,
-        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Ohad Ben-Cohen <ohad@wizery.com>
-Subject: Re: [PATCH V1 2/3] rpmsg: glink: Add lock to avoid race when rpmsg
- device is released
-Message-ID: <Yiu2nawUPxWYaIY3@builder.lan>
-References: <1643223886-28170-1-git-send-email-quic_deesin@quicinc.com>
- <1643223886-28170-3-git-send-email-quic_deesin@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1GNOH6IByfdma2vK0oN46OfXdE9F5N+dlrc1RJjEFIk=;
+        b=X3YtkuqcjAx8vF/yLCyzTL566MoPEQxJGV3pQzOpmg6aZllFwDj9+QF3fBZ03sMcco
+         vHXwW18O/FtU/n/Wyw42PrvtCVD3N42QpEv0EgpJCOZ7so0zYUGuZqYyQ6DHu1KxoCsd
+         DckBBICSN+DySRvbWNnVDzL66+J7/XrNAEPWay23+g6t2iyvzFoZxrkGsazTfuj73ASy
+         Zm51h3yp4PijkviXOP8T2CDvu6T8nL+95eBLB0AgBwyliOVMM3uUFyNdXqM3VLzKcLbm
+         iPzgxwb1WkLmNKcrm83vtwA9MfXaKgRSKdWY2a3MOlgGbfDCrXUNsdB4Hx6QRlWsA3X+
+         nRzg==
+X-Gm-Message-State: AOAM531ZRaMDA7bgE6oHS/ZacVBZvRet4kuUK9Go6/BjA7VoLo6k8t00
+        MnBKUQbhhEx70BJLmtA8xFCaf+3oZ1LeawI0wZyC
+X-Google-Smtp-Source: ABdhPJwSR0cPGoV54LnNJjSTlEQtUj6d/H5MywubGfYXG4EWqco8EDA0qvmEgqp6RbgvnM4pYc61bLNnIxwMEl9aSDA=
+X-Received: by 2002:aa7:d494:0:b0:415:a309:7815 with SMTP id
+ b20-20020aa7d494000000b00415a3097815mr10502424edr.340.1647031985810; Fri, 11
+ Mar 2022 12:53:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1643223886-28170-3-git-send-email-quic_deesin@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211117015806.2192263-1-dvander@google.com> <CAOQ4uxjjapFeOAFGLmsXObdgFVYLfNer-rnnee1RR+joxK3xYg@mail.gmail.com>
+ <Yao51m9EXszPsxNN@redhat.com> <CAOQ4uxjk4piLyx67Ena-FfypDVWzRqVN0xmFUXXPYa+SC4Q-vQ@mail.gmail.com>
+ <YapjNRrjpDu2a5qQ@redhat.com> <CAHC9VhQTUgBRBEz_wFX8daSA70nGJCJLXj8Yvcqr5+DHcfDmwA@mail.gmail.com>
+ <CA+FmFJA-r+JgMqObNCvE_X+L6jxWtDrczM9Jh0L38Fq-6mnbbA@mail.gmail.com>
+ <CAHC9VhRer7UWdZyizWO4VuxrgQDnLCOyj8LO7P6T5BGjd=s9zQ@mail.gmail.com>
+ <CAHC9VhQkLSBGQ-F5Oi9p3G6L7Bf_jQMWAxug_G4bSOJ0_cYXxQ@mail.gmail.com>
+ <CAOQ4uxhfU+LGunL3cweorPPdoCXCZU0xMtF=MekOAe-F-68t_Q@mail.gmail.com> <YitWOqzIRjnP1lok@redhat.com>
+In-Reply-To: <YitWOqzIRjnP1lok@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 11 Mar 2022 15:52:54 -0500
+Message-ID: <CAHC9VhQ+x3ko+=oU-P+w4ssqyyskRxaKsBGJLnXtP_NzWNuxHg@mail.gmail.com>
+Subject: Re: [PATCH v19 0/4] overlayfs override_creds=off & nested get xattr fix
+To:     Amir Goldstein <amir73il@gmail.com>,
+        Vivek Goyal <vgoyal@redhat.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        David Anderson <dvander@google.com>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>, selinux@vger.kernel.org,
+        paulmoore@microsoft.com, luca.boccassi@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26 Jan 13:04 CST 2022, Deepak Kumar Singh wrote:
+On Fri, Mar 11, 2022 at 9:01 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+> On Fri, Mar 11, 2022 at 06:09:56AM +0200, Amir Goldstein wrote:
+> > Hi Paul,
 
-> When remote host goes down glink char device channel is freed,
-> At the same time user space apps can still try to open rpmsg_char
-> device which will result in calling rpmsg_create_ept. This may cause
-> reference to already freed context of glink chardev channel.
-> 
+Hi Amir, Vivek,
 
-Hi Deepak,
+Thanks for the replies, I think I now have a better understanding of
+the concerns which is starting to make the path forward a bit more
+clear.  A few more comments below ...
 
-Could you please be a little bit more specific on the details of where
-you're seeing this race? Perhaps I'm just missing something obvious?
+> > In this thread I claimed that the authors of the patches did not present
+> > a security model for overlayfs, such as the one currently in overlayfs.rst.
+> > If we had a model we could have debated its correctness and review its
+> > implementation.
+>
+> Agreed. After going through the patch set, I was wondering what's the
+> overall security model and how to visualize that.
+>
+> So probably there needs to be a documentation patch which explains
+> what's the new security model and how does it work.
 
-> Use per ept lock to avoid race between rpmsg_destroy_ept and
-> rpmsg_destory_ept.
+Yes, of course.  I'll be sure to add a section to the existing docs.
 
-I presume one of these should say rpmsg_eptdev_open().
+> Also think both in terms of DAC and MAC. (Instead of just focussing too
+> hard on SELinux).
 
-Regards,
-Bjorn
+Definitely.  Most of what I've been thinking about the past day or so
+has been how to properly handle some of the DAC/capability issues; I
+have yet to start playing with the code, but for the most part I think
+the MAC/SELinux bits are already working properly.
 
-> ---
->  drivers/rpmsg/rpmsg_char.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index 72ee101..2108ef8 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -85,6 +85,7 @@ static int rpmsg_eptdev_destroy(struct device *dev, void *data)
->  	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
->  
->  	mutex_lock(&eptdev->ept_lock);
-> +	eptdev->rpdev = NULL;
->  	if (eptdev->ept) {
->  		rpmsg_destroy_ept(eptdev->ept);
->  		eptdev->ept = NULL;
-> @@ -145,15 +146,24 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->  
->  	get_device(dev);
->  
-> +	mutex_lock(&eptdev->ept_lock);
-> +	if (!eptdev->rpdev) {
-> +		put_device(dev);
-> +		mutex_unlock(&eptdev->ept_lock);
-> +		return -ENETRESET;
-> +	}
-> +
->  	ept = rpmsg_create_ept(rpdev, rpmsg_ept_cb, eptdev, eptdev->chinfo);
->  	if (!ept) {
->  		dev_err(dev, "failed to open %s\n", eptdev->chinfo.name);
-> +		mutex_unlock(&eptdev->ept_lock);
->  		put_device(dev);
->  		return -EINVAL;
->  	}
->  
->  	ept->sig_cb = rpmsg_sigs_cb;
->  	eptdev->ept = ept;
-> +	mutex_unlock(&eptdev->ept_lock);
->  	filp->private_data = eptdev;
->  
->  	return 0;
-> @@ -285,7 +295,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
->  	if (eptdev->sig_pending)
->  		mask |= EPOLLPRI;
->  
-> +	mutex_lock(&eptdev->ept_lock);
->  	mask |= rpmsg_poll(eptdev->ept, filp, wait);
-> +	mutex_unlock(&eptdev->ept_lock);
->  
->  	return mask;
->  }
-> -- 
-> 2.7.4
-> 
+> My understanding is that in current model, some of the overlayfs
+> operations require priviliges. So mounter is supposed to be priviliged
+> and does the operation on underlying layers.
+>
+> Now in this new model, there will be two levels of check. Both overlay
+> level and underlying layer checks will happen in the context of task
+> which is doing the operation. So first of all, all tasks will need
+> to have enough priviliges to be able to perform various operations
+> on lower layer.
+>
+> If we do checks at both the levels in with the creds of calling task,
+> I guess that probably is fine. (But will require a closer code inspection
+> to make sure there is no privilege escalation both for mounter as well
+> calling task).
+
+I have thoughts on this, but I don't think I'm yet in a position to
+debate this in depth just yet; I still need to finish poking around
+the code and playing with a few things :)
+
+It may take some time before I'm back with patches, but I appreciate
+all of the tips and insight - thank you!
+
+-- 
+paul-moore.com

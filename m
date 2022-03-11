@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F8C4D5E4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBE24D5E4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347411AbiCKJV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S1347446AbiCKJWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347396AbiCKJVp (ORCPT
+        with ESMTP id S1347403AbiCKJVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Mar 2022 04:21:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FFC1BD05D
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C0A1BD051
         for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:20:42 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:20:39 -0000
+Date:   Fri, 11 Mar 2022 09:20:40 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646990440;
+        s=2020; t=1646990441;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VTBxIhlZUfsoX4c6mMezxGSXt9jd9PN3MbMHTLVSixE=;
-        b=H7AjKYlzEkKdUYOkfT5yLH78lmMNK7h9RHeLqg4Qr2xk4vXDF7iJujGHSWyolTjEhNKx+5
-        UR9ObYCV0buNb1W9dLGlD8jjq3RacC31wwY6rpHAdENn3VobIIqaSV+bxN9cDTadxDIQmd
-        LCUUNbh5uXFIhPcNvfK4yHg2vFI0JfwbVWK9xZ2UoKhgsHB3RN6Y88JIyIBz5wsfiX2bS/
-        sCzYBUs4MQ+g8EnWNVZExze6VnyfLXHkWxWPtpUZqujq4XyPBsqo0SPUlGIPgeXjuIlJFU
-        YI4YmAlVR1+zNfbuNDNUl4WFZKpNcFciRfPNTpffwHViAV6z2FPi9X1TaEYBBw==
+        bh=biqCa2wK0y8jzYUEIskT5LvVqKF2o1w4BelHcSOhH3Q=;
+        b=M7xcAdUa+2Q+TbgcJTu90NcCq5Q+iwFZaW1kyFLDiGXpuV0Qe0klk3WbfqY2ltKc81mY1A
+        C4dsC2cLjn8Sbt6c6RiyBHnggBJN22SSvceDSwehmFtjhKxsGvaNsdzWf3CNcidRlnyOCG
+        BseWh1CTN73zd5rriq/VmVf3OtS4uINmh0Ob6CJYuuMLUqGb2vj8MoZIMN3Ytd1STME8RG
+        +hHhrdnlGJPjPkqNx2Yss6TgSREoS8mPQ6TiEt7baUUXIFOTQph21IWmT85ZGKd8NOHQy4
+        5K713ss3gwJdLXHupCRN/m2Eoyi3e4bIL2A4m3x0eR2+iFbCgqSsJxPD30eOLA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646990440;
+        s=2020e; t=1646990441;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VTBxIhlZUfsoX4c6mMezxGSXt9jd9PN3MbMHTLVSixE=;
-        b=KfLUIl3igAULIEeGlGc33934MEjgjLaKQvu03V3pqQDon9dTLDAOgxjpXLxwhbZMutTT8C
-        zLh67jCNOPoeGEDA==
+        bh=biqCa2wK0y8jzYUEIskT5LvVqKF2o1w4BelHcSOhH3Q=;
+        b=2XJibOIHlDQheiKACV1OY6TDOmA1QduAN/M1pclGoFaZh9sWoUsTnfcpgtSODlFxPa8Woj
+        qk6aYibd+fLDnrAQ==
 From:   "irqchip-bot for Hector Martin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller:
- apple,aic2: New binding for AICv2
-Cc:     Rob Herring <robh@kernel.org>, Hector Martin <marcan@marcan.st>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220309192123.152028-3-marcan@marcan.st>
-References: <20220309192123.152028-3-marcan@marcan.st>
+Subject: [irqchip: irq/irqchip-next] PCI: apple: Change MSI handling to handle
+ 4-cell AIC fwspec form
+Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: <20220309192123.152028-2-marcan@marcan.st>
+References: <20220309192123.152028-2-marcan@marcan.st>
 MIME-Version: 1.0
-Message-ID: <164699043956.16921.5388075787173970256.tip-bot2@tip-bot2>
+Message-ID: <164699044041.16921.50682772081546341.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,150 +67,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     ab1fd5abb75001d37e1fef5f310951b56f41ad58
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/ab1fd5abb75001d37e1fef5f310951b56f41ad58
+Commit-ID:     89eb1681b73ff584c5678f7185a2d8e3070e9b78
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/89eb1681b73ff584c5678f7185a2d8e3070e9b78
 Author:        Hector Martin <marcan@marcan.st>
-AuthorDate:    Thu, 10 Mar 2022 04:21:18 +09:00
+AuthorDate:    Thu, 10 Mar 2022 04:21:17 +09:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 11 Mar 2022 08:59:00 
+CommitterDate: Thu, 10 Mar 2022 09:49:03 
 
-dt-bindings: interrupt-controller: apple,aic2: New binding for AICv2
+PCI: apple: Change MSI handling to handle 4-cell AIC fwspec form
 
-This new incompatible revision of the AIC peripheral introduces
-multi-die support. This binding is based on apple,aic, but
-changes interrupt-cells to add a new die argument.
+AIC2 changes the IRQ fwspec to add a cell. Always use the second-to-last
+cell for the MSI handling, so it will work for both AIC1 and AIC2 devices.
 
-Also adds a second reg entry to specify the offset of the event
-register. Inexplicably, the capability registers allow us to compute
-other register offsets, but not this one. This allows us to keep
-forward-compatibility with future SoCs that will likely implement
-different die counts, thus shifting the event register. Apple also
-specify the offset explicitly in their device tree...
-
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220309192123.152028-3-marcan@marcan.st
+Link: https://lore.kernel.org/r/20220309192123.152028-2-marcan@marcan.st
 ---
- Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml | 98 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- MAINTAINERS                                                            |  2 +-
- 2 files changed, 99 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
+ drivers/pci/controller/pcie-apple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
-new file mode 100644
-index 0000000..47a78a1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic2.yaml
-@@ -0,0 +1,98 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interrupt-controller/apple,aic2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple Interrupt Controller 2
-+
-+maintainers:
-+  - Hector Martin <marcan@marcan.st>
-+
-+description: |
-+  The Apple Interrupt Controller 2 is a simple interrupt controller present on
-+  Apple ARM SoC platforms starting with t600x (M1 Pro and Max).
-+
-+  It provides the following features:
-+
-+  - Level-triggered hardware IRQs wired to SoC blocks
-+    - Single mask bit per IRQ
-+    - Automatic masking on event delivery (auto-ack)
-+    - Software triggering (ORed with hw line)
-+  - Automatic prioritization (single event/ack register per CPU, lower IRQs =
-+    higher priority)
-+  - Automatic masking on ack
-+  - Support for multiple dies
-+
-+  This device also represents the FIQ interrupt sources on platforms using AIC,
-+  which do not go through a discrete interrupt controller. It also handles
-+  FIQ-based Fast IPIs.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: apple,t6000-aic
-+      - const: apple,aic2
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 4
-+    description: |
-+      The 1st cell contains the interrupt type:
-+        - 0: Hardware IRQ
-+        - 1: FIQ
-+
-+      The 2nd cell contains the die ID.
-+
-+      The next cell contains the interrupt number.
-+        - HW IRQs: interrupt number
-+        - FIQs:
-+          - 0: physical HV timer
-+          - 1: virtual HV timer
-+          - 2: physical guest timer
-+          - 3: virtual guest timer
-+
-+      The last cell contains the interrupt flags. This is normally
-+      IRQ_TYPE_LEVEL_HIGH (4).
-+
-+  reg:
-+    items:
-+      - description: Address and size of the main AIC2 registers.
-+      - description: Address and size of the AIC2 Event register.
-+
-+  reg-names:
-+    items:
-+      - const: core
-+      - const: event
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - '#interrupt-cells'
-+  - interrupt-controller
-+  - reg
-+  - reg-names
-+
-+additionalProperties: false
-+
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
-+
-+examples:
-+  - |
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        aic: interrupt-controller@28e100000 {
-+            compatible = "apple,t6000-aic", "apple,aic2";
-+            #interrupt-cells = <4>;
-+            interrupt-controller;
-+            reg = <0x2 0x8e100000 0x0 0xc000>,
-+                  <0x2 0x8e10c000 0x0 0x4>;
-+            reg-names = "core", "event";
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 69a2935..7a920a2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1767,7 +1767,7 @@ T:	git https://github.com/AsahiLinux/linux.git
- F:	Documentation/devicetree/bindings/arm/apple.yaml
- F:	Documentation/devicetree/bindings/arm/apple/*
- F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
--F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-+F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
- F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+index 854d951..a2c3c20 100644
+--- a/drivers/pci/controller/pcie-apple.c
++++ b/drivers/pci/controller/pcie-apple.c
+@@ -219,7 +219,7 @@ static int apple_msi_domain_alloc(struct irq_domain *domain, unsigned int virq,
+ 	if (hwirq < 0)
+ 		return -ENOSPC;
+ 
+-	fwspec.param[1] += hwirq;
++	fwspec.param[fwspec.param_count - 2] += hwirq;
+ 
+ 	ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &fwspec);
+ 	if (ret)

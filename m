@@ -2,236 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3C74D626C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B07A4D6270
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 14:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344507AbiCKNcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 08:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
+        id S1348828AbiCKNfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 08:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243586AbiCKNcl (ORCPT
+        with ESMTP id S237550AbiCKNfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:32:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3E371C4696
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:31:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647005496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mas990unEz6PSP1U0FiOPnrCX3Hkd5pxKLR2A9Xu28U=;
-        b=K6TC1VjC0gbfbXW302WklOXT7LIH9Tt5qNVbFCKSIC3tX/eegt4KZkMu1ehbiJ2nVplYP+
-        RbUg0gxRmagz5L55I8a76Izw9xDYFt5GoMzSxBLXet7iXzFERFtUwva+IZC58ujwv8io0n
-        xQ2W1cwiCnPq7nyvO9P5wiTq/qqVr3I=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-G9lOa2RTMpi1NAIsrfkU-A-1; Fri, 11 Mar 2022 08:31:35 -0500
-X-MC-Unique: G9lOa2RTMpi1NAIsrfkU-A-1
-Received: by mail-qt1-f199.google.com with SMTP id f13-20020ac8014d000000b002ddae786fb0so6473586qtg.19
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:31:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Mas990unEz6PSP1U0FiOPnrCX3Hkd5pxKLR2A9Xu28U=;
-        b=LMyFs62otW8gMyz3R/8P0bnCzLdp5ced+AKcb9K9fOBHG3ANhHytlFIc17afnOq6gS
-         aL8tRpu8cVViARAi0OxBZ1jEWsXROiXmzDRqFe5pOHFPip1AV2yDiXLzFotgnS+ABdvl
-         fOeL72YF2wZYwR77HLw3tFHVoWv5qoCp6n1Q+htySYMG6YVp0sdzDxMIyjrhLbLfbZdQ
-         28i1TPQyz/lxVmoJmvoyeTsJ+TQZ5rbXKfBWgH9U7emFiKbMBVj0uavQWJboVhNTLe8k
-         1SxwJsGI0ijL3Q7npjD+1NxZTtDS7OkVqg6oIkmM+Eatd4Ba7n0x/0rvDcnfJanDFp4s
-         t72g==
-X-Gm-Message-State: AOAM5322JGSzYST5YRzMeXSoGfMInVfDyRL3cpp3b+MvYbFfRLfAf+2F
-        RlwGZ4LS2jrRQSAGxOsrhxTr2qDeaKriR5ne9Sytf+keNwMXGDxiuBrvWUEd0iz5fWqfDuN38yx
-        qA4znZpNlF0UTleszcDKnOkkp
-X-Received: by 2002:ac8:5a88:0:b0:2e1:bbda:3b21 with SMTP id c8-20020ac85a88000000b002e1bbda3b21mr2084705qtc.307.1647005495271;
-        Fri, 11 Mar 2022 05:31:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxNdUIp1eKLAi+jizuIu9aOp2IavAeVwIgZiIQsmyB0BOQZveyw+HUV51FZhgO0o6hTm9/huQ==
-X-Received: by 2002:ac8:5a88:0:b0:2e1:bbda:3b21 with SMTP id c8-20020ac85a88000000b002e1bbda3b21mr2084690qtc.307.1647005494961;
-        Fri, 11 Mar 2022 05:31:34 -0800 (PST)
-Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id g1-20020ae9e101000000b0067d4bfffc57sm2729346qkm.117.2022.03.11.05.31.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 05:31:34 -0800 (PST)
-Date:   Fri, 11 Mar 2022 07:31:31 -0600
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     bjorn.andersson@linaro.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, linux-arm-msm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: qcom-rng: ensure buffer for generate is
- completely filled
-Message-ID: <20220311133131.v3gtasex5fpnyqfp@halaneylaptop>
-References: <20220310232459.749638-1-bmasney@redhat.com>
+        Fri, 11 Mar 2022 08:35:02 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120057.outbound.protection.outlook.com [40.107.12.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FE319BE41
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:33:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YAcpItox412N0zYn5lbgU7HPZdpnU4J2/R+rmp04FqnvKyBt9UrxBoR258rs7jwBCWVeZeh4hQDgDlLEG27syTKQAQcuZeUNJz4ePSFz9jtS7vf6msOxovI0JwV8Qr5bZOOUKqDEiVSIlBYYnwHmWmw5hxyHyZMcjbaBx/woR21uUebD0DfmjoPMnDI6XG51AYhwKkbqpJteFbNyrbuMkO1GZiKj+ONnaF1MwKOykRw6IHf/fxmUUHg6BWEG+nbd1CdkfhBg4lFlkzEUjcgAr2HJrrvO0E/GWPmNFZZ/iAmlREMPOfWKZympSoVQH1WX3+LE8zvvKhb3A3u52BTl0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dX0+3nsdUivkASMfoMbtVJZz6rX2bsl/3vZ1NGCAYeY=;
+ b=gPtn9CftFtg31H+gWqLlHb0H8psl6NPK2tH/zHvOds3zCYw8y/sjZNdkUaQLsRnnrXYOUZVET9PiPKekJEDPmBDNjiNLn/aHpnN9Y2yfVaoKx1/0yr8m8WmjZoc/XvA2qk7XTRjJ770KM5ls3YkxRmKnx8gOdw828k6LUJ/o3Zowf/TnyjExOb5spoUbiqttFknf/k5M7zgZBAHjgE2KWDba8zjzftMxGQ/3P5BgPskTQSSyCUoUqMfYJA6HOanSeTzsbQQI3FeQDjxkZ6BgqsLAUk75+kfV4fCuTtzj+0AOTrKo2X0pHbVBBsZalJxytJ0dzdF0tOzT7yTxiioGPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB3145.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
+ 2022 13:33:57 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d%5]) with mapi id 15.20.5061.024; Fri, 11 Mar 2022
+ 13:33:57 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     YueHaibing <yuehaibing@huawei.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "dja@axtens.net" <dja@axtens.net>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] powerpc/smp: Remove unused inline functions
+Thread-Topic: [PATCH -next] powerpc/smp: Remove unused inline functions
+Thread-Index: AQHYNUbS0zqMT8BARUmTa0TLfcskr6y6LsWA
+Date:   Fri, 11 Mar 2022 13:33:57 +0000
+Message-ID: <7ba59091-f547-4463-2e0f-df7b330a14ae@csgroup.eu>
+References: <20220311125106.27812-1-yuehaibing@huawei.com>
+In-Reply-To: <20220311125106.27812-1-yuehaibing@huawei.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6706c68a-ce78-485a-6d79-08da0363cb62
+x-ms-traffictypediagnostic: MRZP264MB3145:EE_
+x-microsoft-antispam-prvs: <MRZP264MB3145A20F35AE88086E838C9FED0C9@MRZP264MB3145.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S2l4KTbLhdyRzW0Z5wmQ1zTJWLloy0mGAuZDOWYJBw6Xk3v9aFASQ//Wp7GpZxEjWv6GyyA894fgea4347q/0IwQ+OxjGTjHIP+AGFD0epfETLsNBDaydnpmcraAdktxiks55kiH7et67Kk2kShfcf5hwF/MjadCC1M0QG2+ZcqoOHJEpTE7iLeFzovCw9GtdOZ6JC2pDsYaJb/U6APx/XchpPz3djBpePntFUJS+BU/ohBQrTXN8yP3OSGKXIKyC4r5Lx+D8wwWs0vC1cnE90COO7TEcV6kR3cK3cIdfhJAATuE98EKmNl0fZuE4QBJEMWhdOyvRmdBT6iNmHbaAuBR/8iZuW5fgskbmJM/0mUOLGj+ufs/gsRczJ6NDvyLAaNzqQFBEpQSQ+ektmkc6pAGzg9KR/dd4C00JsES0xx1evbWW9p67QN+anQC4xOTf+hXP4OdM61oLUFejl12Niev0BsTnZmArEu26qUNa1soLRgPgnyrRnyPKSuyBQjBAHgDlG0AA5NgCAS6x2AL5KLC3jVal7KGeKCIDnjTvtC+sGaOWlXUDcq0mD//wTG4CtgOCxmGx/veG/t+deVUUsBdKoL58ncjEv1NWpwDXhWd6NkwGp9hwsHHHi8MV6YzR/f9VxomMqWGV45RZW0yVp5jzAlDZFs/hWIJtC19VKXbhjzbXZLPqRGReDpLuOhREsbg7KlNbrMVuG74HfyF79+MK9iGRHwcgHa/pTEpc6XeI6ssGLPPlKYg1832f84pFDw0u9ecBCAjDuliqrRwLA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(31686004)(31696002)(122000001)(91956017)(38100700002)(66556008)(5660300002)(110136005)(86362001)(6512007)(71200400001)(4326008)(54906003)(8676002)(26005)(66476007)(64756008)(66446008)(76116006)(2906002)(186003)(66946007)(83380400001)(6486002)(38070700005)(2616005)(36756003)(6506007)(8936002)(316002)(4744005)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akFDRll5WnZWeXAvMTY2YXdsN2tJM1lmdFM0KzBvcFA0VFVsS3FmbTRhSG9B?=
+ =?utf-8?B?WnMwKzBLVng2c0EzaWZzd1ZKRVo4eUZrWXJPN0huSzJHS09reWYzUmhrR0tU?=
+ =?utf-8?B?K1dieHM4eXJQakVHQjEvSzRpWExGTU91RlpNT1BWU1p3ZHNEWlFSSkZrRzZC?=
+ =?utf-8?B?c280ZjliSm1hWjRRcXM3RHJ0K1ZudFFwemlENFZJWEJzRk9yMXZVdVV6OVlj?=
+ =?utf-8?B?a3pGbTZXc0x0NlZMK3dCNU9MWlVlTU0vYSt6emZmUTVpNTFiTG9HZHJMTml1?=
+ =?utf-8?B?SW9nWnhEdGpiRnIzekFQRUdudk1mMHJGOWxKZ3dreWFYbFB2RmRZcWlPcjZG?=
+ =?utf-8?B?RUZiODVnM1RJRWFKYkpyWkt0VlRXMDM5L1REUktFZVZVMnNhN042OWR1cFMw?=
+ =?utf-8?B?a2dBY1cvbStVeERJclJ2MS9tL21Rb2JJelVjQ1VFVlJ4Ynluc2NMdDV3RTR6?=
+ =?utf-8?B?RDBoT2ErYThxTmxxcDF0WUVpa2hzVWUrdVhTQ1NkUHZDSEJmcE1VbXZTZml5?=
+ =?utf-8?B?UUtpWFVtcnFhQ1k0UUZya3F6TWRGSFZxU0dPZFd6eU14aURTMFRhczExL0xz?=
+ =?utf-8?B?bmF4dDVBcGt4TnpENTZsdTlEc2ZkNU51anVMZDlieFk5bjBmSGtJNVAyRldY?=
+ =?utf-8?B?SUN1SUhmNWJBNURhUDhWYnJNMllSbkEwTWd6KzI4RlNBNGpkZVBOaER5OWtZ?=
+ =?utf-8?B?UWVRQTJTRG90dFBGZEVwdWhFR2gzbVExcFlXUWpYL2VlSTZrckNkZnA4S0pY?=
+ =?utf-8?B?SjBPTFh2bVBXY1diK2RkVkNaODdzMTlJa1BqMEFWOTBUNjdYYTFxSEhCMnN3?=
+ =?utf-8?B?QXlhNHp0YnlzeDZqR3dtNHJMWWNoYlV3YlM5ZU1MNmRuWjdIZkp1c0ZKNHF0?=
+ =?utf-8?B?YjJOZ3lLT1FES1dvSzBkVjU1VXMwTkprMVI2UEU0YURLSGlRNkt5bGp5WGU4?=
+ =?utf-8?B?ZVhjeTNRbkc2aVRxVi9mT0pRZi9QWXJURVU2c0I2dGprVmF3WjZ5N1dZOGZI?=
+ =?utf-8?B?a2g3UFVSa0JWYlk4Tm1hbmVKYVg1NXVydHVJWW9nK2o0UlR1MHJyUk9zenFp?=
+ =?utf-8?B?YTMvSnE5YlFWcnNxYXc0UGhLVTNnc1pWYktLa1k3a2pMUytVVFQ4YjgvQ0R6?=
+ =?utf-8?B?dy93aHR1QXJWcWpiSlNyVlRMRXowV3B4WVRVTVFVU1lVQ1Y3UXZ0MUdOcTlD?=
+ =?utf-8?B?YjdGYW45a3JXWnBmVmFoZG9PUjVrZXMvd01kY25wMXBYbU8ycVh4M29zOEo4?=
+ =?utf-8?B?ZUpSNUliM2gra25BQXhYRENoczE1em9ueXk2a3N5ak4yVjgraEJsTHl3QmRS?=
+ =?utf-8?B?d05jRnpNaFphbGJmalFzeU9jRStHMVVaaUNtYmZzdVpqMGQvb1BiYkIzYlZm?=
+ =?utf-8?B?NnFidlpqZldlU0Jta3E0cE9jNzRKMDNnN3d1aDMzMlBUbkpNc0NrM0xOMnpO?=
+ =?utf-8?B?Rm5IbDk2WGEzNUhMVm84Z2Z2SDN5c3lZOE9Yclc2MmY4Wm5zS2U5VVM2c0Jz?=
+ =?utf-8?B?bkU2M0hoam1lV2ZzOStRQnNsSVFkR29LK2xMZzVvVGNNYit3enVIY3A4MUFa?=
+ =?utf-8?B?Ym5GQlhIdGFvN29rWTJXWnI5amt6NG1WMEtoSTlPM2MvbDJlbWYwSHJXVDZI?=
+ =?utf-8?B?SEVlL0tmam1jcWsveFdBY2d6ajV6ZjFPeFNmMVNqUlloN1dKNk5SVnkvZ3BO?=
+ =?utf-8?B?UUx6SDdqblpuZE1PRWxWZ1Vvamh5TGJHMC8wTjlzaFpoWUowdHVuUlZvN2NI?=
+ =?utf-8?B?NEVlb3p1bXlBQjRKckN6U0R4ZmJpQ041cjN0dTZWNUNFUnQvT3lGREd5VXd0?=
+ =?utf-8?B?bDlsOWxsUW82L1RYSzgrK216QUtNRHpjbDhXQVNTcTJFSmlLdURXa21COUJw?=
+ =?utf-8?B?Q3dBRWRvcnl2RloxenU2bjNTNmhFV1FDSXBPdEtSNjFNZXJMWmZHNXpWUWdL?=
+ =?utf-8?B?R0xpaG5BWG5LSFIxQVlIZHVBWFZsSVhsYW44WHprZUdSeUw2TXhvY3V2UHpO?=
+ =?utf-8?Q?FJIEFzAWswiw7yHwl3NAFpFVUOQ3XA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4397614F07DE5E47BE0238A56718F73C@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220310232459.749638-1-bmasney@redhat.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6706c68a-ce78-485a-6d79-08da0363cb62
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 13:33:57.4436
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Mw+2W6LmslEi/KsceAcUXQ57UZLq3Bw+0BWtOfG/OtdhMrD0O+Uj7eE39z/0xU/hkkjY7VCbkJ/Cgd0KdIpDLJqHx/CEfkD2U+boZPsZjoc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB3145
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 06:24:59PM -0500, Brian Masney wrote:
-> The generate function in struct rng_alg expects that the destination
-> buffer is completely filled if the function returns 0. qcom_rng_read()
-> can run into a situation where the buffer is partially filled with
-> randomness and the remaining part of the buffer is zeroed since
-> qcom_rng_generate() doesn't check the return value. This issue can
-> be reproduced by running the following from libkcapi:
-> 
->     kcapi-rng -b 9000000 > OUTFILE
-> 
-> The generated OUTFILE will have three huge sections that contain all
-> zeros, and this is caused by the code where the test
-> 'val & PRNG_STATUS_DATA_AVAIL' fails.
-> 
-> Let's fix this issue by ensuring that qcom_rng_read() always returns
-> with a full buffer if the function returns success. Let's also have
-> qcom_rng_generate() return the correct value.
-> 
-> Here's some statistics from the ent project
-> (https://www.fourmilab.ch/random/) that shows information about the
-> quality of the generated numbers:
-> 
->     $ ent -c qcom-random-before
->     Value Char Occurrences Fraction
->       0           606748   0.067416
->       1            33104   0.003678
->       2            33001   0.003667
->     ...
->     253   �        32883   0.003654
->     254   �        33035   0.003671
->     255   �        33239   0.003693
-> 
->     Total:       9000000   1.000000
-> 
->     Entropy = 7.811590 bits per byte.
-> 
->     Optimum compression would reduce the size
->     of this 9000000 byte file by 2 percent.
-> 
->     Chi square distribution for 9000000 samples is 9329962.81, and
->     randomly would exceed this value less than 0.01 percent of the
->     times.
-> 
->     Arithmetic mean value of data bytes is 119.3731 (127.5 = random).
->     Monte Carlo value for Pi is 3.197293333 (error 1.77 percent).
->     Serial correlation coefficient is 0.159130 (totally uncorrelated =
->     0.0).
-> 
-> Without this patch, the results of the chi-square test is 0.01%, and
-> the numbers are certainly not random according to ent's project page.
-> The results improve with this patch:
-> 
->     $ ent -c qcom-random-after
->     Value Char Occurrences Fraction
->       0            35432   0.003937
->       1            35127   0.003903
->       2            35424   0.003936
->     ...
->     253   �        35201   0.003911
->     254   �        34835   0.003871
->     255   �        35368   0.003930
-> 
->     Total:       9000000   1.000000
-> 
->     Entropy = 7.999979 bits per byte.
-> 
->     Optimum compression would reduce the size
->     of this 9000000 byte file by 0 percent.
-> 
->     Chi square distribution for 9000000 samples is 258.77, and randomly
->     would exceed this value 42.24 percent of the times.
-> 
->     Arithmetic mean value of data bytes is 127.5006 (127.5 = random).
->     Monte Carlo value for Pi is 3.141277333 (error 0.01 percent).
->     Serial correlation coefficient is 0.000468 (totally uncorrelated =
->     0.0).
-> 
-> This change was tested on a Nexus 5 phone (msm8974 SoC).
-> 
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> Fixes: ceec5f5b5988 ("crypto: qcom-rng - Add Qcom prng driver")
-> Cc: stable@vger.kernel.org # 4.19+
-
-FWIW
-
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-
-> ---
->  drivers/crypto/qcom-rng.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/crypto/qcom-rng.c b/drivers/crypto/qcom-rng.c
-> index 99ba8d51d102..11f30fd48c14 100644
-> --- a/drivers/crypto/qcom-rng.c
-> +++ b/drivers/crypto/qcom-rng.c
-> @@ -8,6 +8,7 @@
->  #include <linux/clk.h>
->  #include <linux/crypto.h>
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> @@ -43,16 +44,19 @@ static int qcom_rng_read(struct qcom_rng *rng, u8 *data, unsigned int max)
->  {
->  	unsigned int currsize = 0;
->  	u32 val;
-> +	int ret;
->  
->  	/* read random data from hardware */
->  	do {
-> -		val = readl_relaxed(rng->base + PRNG_STATUS);
-> -		if (!(val & PRNG_STATUS_DATA_AVAIL))
-> -			break;
-> +		ret = readl_poll_timeout(rng->base + PRNG_STATUS, val,
-> +					 val & PRNG_STATUS_DATA_AVAIL,
-> +					 200, 10000);
-> +		if (ret)
-> +			return ret;
->  
->  		val = readl_relaxed(rng->base + PRNG_DATA_OUT);
->  		if (!val)
-> -			break;
-> +			return -EINVAL;
->  
->  		if ((max - currsize) >= WORD_SZ) {
->  			memcpy(data, &val, WORD_SZ);
-> @@ -61,11 +65,10 @@ static int qcom_rng_read(struct qcom_rng *rng, u8 *data, unsigned int max)
->  		} else {
->  			/* copy only remaining bytes */
->  			memcpy(data, &val, max - currsize);
-> -			break;
->  		}
->  	} while (currsize < max);
->  
-> -	return currsize;
-> +	return 0;
->  }
->  
->  static int qcom_rng_generate(struct crypto_rng *tfm,
-> @@ -87,7 +90,7 @@ static int qcom_rng_generate(struct crypto_rng *tfm,
->  	mutex_unlock(&rng->lock);
->  	clk_disable_unprepare(rng->clk);
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static int qcom_rng_seed(struct crypto_rng *tfm, const u8 *seed,
-> -- 
-> 2.34.1
-> 
-
+DQoNCkxlIDExLzAzLzIwMjIgw6AgMTM6NTEsIFl1ZUhhaWJpbmcgYSDDqWNyaXTCoDoNCj4gY29t
+bWl0IDQ0MWMxOWM4YTI5MCAoInBvd2VycGMva3ZtL2Jvb2szc19odjogUmV3b3JrIHRoZSBzZWNv
+bmRhcnkgaW5oaWJpdCBjb2RlIikNCj4gbGVmdCBiZWhpbmQgdGhpcywgc28gY2FuIHJlbW92ZSBp
+dC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFl1ZUhhaWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNv
+bT4NCj4gUmV2aWV3ZWQtYnk6IERhbmllbCBBeHRlbnMgPGRqYUBheHRlbnMubmV0Pg0KDQpSZXZp
+ZXdlZC1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0K
+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9zbXAuaCB8IDIgLS0NCj4gICAx
+IGZpbGUgY2hhbmdlZCwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bv
+d2VycGMvaW5jbHVkZS9hc20vc21wLmggYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vc21wLmgN
+Cj4gaW5kZXggNjBhYjczOWE1ZTNiLi5mNjM1MDVkNzQ5MzIgMTAwNjQ0DQo+IC0tLSBhL2FyY2gv
+cG93ZXJwYy9pbmNsdWRlL2FzbS9zbXAuaA0KPiArKysgYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9h
+c20vc21wLmgNCj4gQEAgLTE4OSw4ICsxODksNiBAQCBleHRlcm4gdm9pZCBfX2NwdV9kaWUodW5z
+aWduZWQgaW50IGNwdSk7DQo+ICAgI2RlZmluZSBzbXBfc2V0dXBfY3B1X21hcHMoKQ0KPiAgICNk
+ZWZpbmUgdGhyZWFkX2dyb3VwX3NoYXJlc19sMiAgMA0KPiAgICNkZWZpbmUgdGhyZWFkX2dyb3Vw
+X3NoYXJlc19sMwkwDQo+IC1zdGF0aWMgaW5saW5lIHZvaWQgaW5oaWJpdF9zZWNvbmRhcnlfb25s
+aW5pbmcodm9pZCkge30NCj4gLXN0YXRpYyBpbmxpbmUgdm9pZCB1bmluaGliaXRfc2Vjb25kYXJ5
+X29ubGluaW5nKHZvaWQpIHt9DQo+ICAgc3RhdGljIGlubGluZSBjb25zdCBzdHJ1Y3QgY3B1bWFz
+ayAqY3B1X3NpYmxpbmdfbWFzayhpbnQgY3B1KQ0KPiAgIHsNCj4gICAJcmV0dXJuIGNwdW1hc2tf
+b2YoY3B1KTs=

@@ -2,163 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9E34D62D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE204D62CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349050AbiCKOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S1349035AbiCKOFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241882AbiCKOIG (ORCPT
+        with ESMTP id S239331AbiCKOFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:08:06 -0500
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DBA1C57ED;
-        Fri, 11 Mar 2022 06:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1647007621; bh=X7QPQb+htRz7ijlZAL5/j6af/llFgL+z+jlTnD4er04=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kBKz9ja3yPteYgNxZud4I+jBYVWeHmLpYWX7faXPvY8ysYCgTW3HdxfoK6Ru26Ilp
-         S3T/OJCsZG6LU72Iwb2B6bZztPdVGwdLfnRrbgJMOjFVyp0HCoZJgu55vnzXkaKakf
-         fVz/G54FbP2iwqdVSH9e9C1kpJmGNqmjQ9J/ScAz9ygAhutzqN8DDrOdwOcFUs3G2N
-         /Zuyx5DhuN85emmNwT9dgBWl2d3qOgnqlNNLumCbfv1tWAtUogTcCAtQu5uf2MoPCJ
-         GC5yzsNRNFFPLwHDFcdn53ruuU7rPqOGc6DdHWnU3zRKbovRG1tpIgn+xJUF79Lqph
-         U6udsEk3xTeQA==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 993C339E985;
-        Fri, 11 Mar 2022 14:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1647007621; bh=X7QPQb+htRz7ijlZAL5/j6af/llFgL+z+jlTnD4er04=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kBKz9ja3yPteYgNxZud4I+jBYVWeHmLpYWX7faXPvY8ysYCgTW3HdxfoK6Ru26Ilp
-         S3T/OJCsZG6LU72Iwb2B6bZztPdVGwdLfnRrbgJMOjFVyp0HCoZJgu55vnzXkaKakf
-         fVz/G54FbP2iwqdVSH9e9C1kpJmGNqmjQ9J/ScAz9ygAhutzqN8DDrOdwOcFUs3G2N
-         /Zuyx5DhuN85emmNwT9dgBWl2d3qOgnqlNNLumCbfv1tWAtUogTcCAtQu5uf2MoPCJ
-         GC5yzsNRNFFPLwHDFcdn53ruuU7rPqOGc6DdHWnU3zRKbovRG1tpIgn+xJUF79Lqph
-         U6udsEk3xTeQA==
-Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mleia.com (Postfix) with ESMTPSA id 371DA39E948;
-        Fri, 11 Mar 2022 14:07:01 +0000 (UTC)
-Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
- <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
- <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
- <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
-Date:   Fri, 11 Mar 2022 16:07:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Fri, 11 Mar 2022 09:05:15 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E47DF7464;
+        Fri, 11 Mar 2022 06:04:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1647007450; x=1678543450;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0g8YZ60F6koJZZ5mPXUhXc+2GWru9uudgvFhUcsgcW4=;
+  b=beaOKpnksohKcVErRoo+TAxzUQd9brxNpMSz18hd8ZD2iebgF+hMPbY2
+   5lXhekFSQCwzNPoNKBHqbnxqqnyrfT8ImW0kE3Iod071DB+CZA1e6lxC6
+   P96AK2H/Y+tvyGbLEHkfjmjejQs3Vbm4Dy69FyLk3Pba2Ly8PuYdx5uxV
+   Zss8RhhCcjOL1yT+q+2DoC1fvN5Vn/Zb3TnYllvVnA58ocbBzUNmm0BIg
+   xvgm4uMg/sW/cEeL0hpxMROiO/P0lBjlTuELY+iCmjxmmhcu4qRyFWW+d
+   B2fzmdSj2O1IRIYGAMIYgXbr4oZb+GaO6k5m92t5razpk+0TiAbvjxIY2
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,174,1643698800"; 
+   d="scan'208";a="151697579"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2022 07:04:08 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 11 Mar 2022 07:04:08 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 11 Mar 2022 07:04:08 -0700
+Date:   Fri, 11 Mar 2022 15:07:00 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     Andrew Lunn <andrew@lunn.ch>, <Divya.Koppera@microchip.com>,
+        <netdev@vger.kernel.org>, <hkallweit1@gmail.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <richardcochran@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <Madhuri.Sripada@microchip.com>, <Manohar.Puri@microchip.com>
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220311140700.ibwyeu5bsz7tkibd@soft-dev3-1.localhost>
+References: <CO1PR11MB4771237FE3F53EBE43B614F6E2089@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YiYD2kAFq5EZhU+q@lunn.ch>
+ <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YidgHT8CLWrmhbTW@lunn.ch>
+ <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
+ <YiecBKGhVui1Gtb/@lunn.ch>
+ <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
+ <YifoltDp4/Fs+9op@lunn.ch>
+ <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
+ <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20220311_140701_650581_6E8DF4CB 
-X-CRM114-Status: GOOD (  29.83  )
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/22 3:38 PM, Arnd Bergmann wrote:
-> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
->>
->> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
->>> PL022 binding require two clocks to be defined but lpc platform doesn't
->>> comply with bindings and define only one clock i.e apb_pclk.
->>>
->>> Update spi clocks and clocks-names property by adding appropriate clock
->>> reference to make it compliant with bindings.
->>>
->>> CC: Vladimir Zapolskiy <vz@mleia.com>
->>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
->>> ---
->>> v2:
->>> - New patch with similar changeset
->>> - Send to soc ML
->>>
->>>    arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
->>>    1 file changed, 4 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
->>> index c87066d6c995..30958e02d5e2 100644
->>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
->>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
->>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
->>>                                compatible = "arm,pl022", "arm,primecell";
->>>                                reg = <0x20084000 0x1000>;
->>>                                interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
->>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
->>> -                             clock-names = "apb_pclk";
->>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
->>> +                             clock-names = "sspclk", "apb_pclk";
->>
->> In fact I'm uncertain if it is the right change, could it happen that the commit
->> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
->> schema pattern?
+The 03/09/2022 14:55, Russell King (Oracle) wrote:
 > 
-> Good pointm this doesn't quite seem right: it is unlikely that the same clock
-> is used for both the SPI bus and the APB bus.
+> On Wed, Mar 09, 2022 at 02:24:43PM +0100, Horatiu Vultur wrote:
+> > The 03/09/2022 00:36, Andrew Lunn wrote:
+> > >
+> > > On Tue, Mar 08, 2022 at 11:14:04PM +0100, Horatiu Vultur wrote:
+> > > > The 03/08/2022 19:10, Andrew Lunn wrote:
+> > > > >
+> > > > > > > So this is a function of the track length between the MAC and the PHY?
+> > > > > >
+> > > > > > Nope.
+> > > > > > This latency represents the time it takes for the frame to travel from RJ45
+> > > > > > module to the timestamping unit inside the PHY. To be more precisely,
+> > > > > > the timestamping unit will do the timestamp when it detects the end of
+> > > > > > the start of the frame. So it represents the time from when the frame
+> > > > > > reaches the RJ45 to when the end of start of the frame reaches the
+> > > > > > timestamping unit inside the PHY.
+> > > > >
+> > > > > I must be missing something here. How do you measure the latency
+> > > > > difference for a 1 meter cable vs a 100m cable?
+> > > >
+> > > > In the same way because the end result will be the same.
+> > >
+> > > The latency from the RJ45 to the PHY will be the same. But the latency
+> > > from the link peer PHY to the local PHY will be much more, 500ns. In
+> > > order for this RJ45 to PHY delay to be meaningful, don't you also need
+> > > to know the length of the cable? Is there a configuration knob
+> > > somewhere for the cable length?
+> > >
+> > > I'm assuming the ptp protocol does not try to measure the cable delay,
+> > > since if it did, there would be no need to know the RJ45-PHY delay, it
+> > > would be part of that.
+> > >
+> > > > > Isn't this error all just in the noise?
+> > > >
+> > > > I am not sure I follow this question.
+> > >
+> > > At minimum, you expect to have a 1m cable. The RJ45-PHY track length
+> > > is maybe 2cm? So 2% of the overall length. So you are trying to
+> > > correct the error this 2% causes. If you have a 100m cable, 0.02% is
+> > > RJ45-PHY part that you are trying to correct the error on. These
+> > > numbers seem so small, it seems pointless. It only seems to make sense
+> > > if you know the length of the cable, and to an accuracy of a few cm.
+> >
+> > I am not trying to adjust for the length of the cable.
+> > If we have the following drawing:
+> >
+> >  MAC                     PHY                    RJ45
+> > -----       --------------------------       --------
+> > |   |       |                        |       |       |
+> > |   |<----->|timestamp | FIFO | GPHY |<----->|       |<------> Peer
+> > |   |       |   unit                 |       |       |
+> > -----       --------------------------       --------
+> >                  ^                                   ^
+> >                  |            latency                |
+> >                  -------------------------------------
+> >
+> > I am trying to calculate this latency, which includes a 2cm of track +
+> > latency inside the PHY. As Richard mentioned also the PHY introduce some
+> > latency which can be microseconds.
 > 
->> Apparently just one clock is wanted on all observed platforms and cases, this
->> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
->>
->>          pl022->clk = devm_clk_get(&adev->dev, NULL);
->>
->> So, I would vote to fix the device tree bindings schema.
+> I think we understand this, and compensating for the delay in the PHY
+> is quite reasonable, which surely will be a fixed amount irrespective
+> of the board.
 > 
-> Isn't this just using the wrong name? The name of the macro
-> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
-> rather than the APB clock, so we only need to change clock-names
-> property here and leave it unchanged otherwise.
+> However, Andrew's point is that the latency introduced by the copper
+> wire between the PHY and the RJ45 is insignificant, so insignificant
+> it's not worth bothering with - and I agree.
 
-Yes, the name is wrong, here I'm ready to take the blame:
+OK, that is fine for me, we can ignore the latency introduced by the
+copper wire.
 
-Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device nodes")
-
-Noteworthy the commit above presets the same clock name to other PrimeCell
-controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x (SD),
-plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in fact.
-
-On LPC32xx the bus clock source and function clock source for SSP is HCLK.
-
-My guess is that the misnamed "apb_pclk" migrated into the schema from
-the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
-firstly fix the schema by removing "apb_pclk" clock. It will leave just one
-clock, so "clock-names" property can be set as optional, and the drop
-the property from the lpc32xx.dtsi.
-
-> Looking at the driver, I also see that this refers to the clock as
-> "SSP/SPI bus clock", and it reads the rate from that.
-
-Yes, that's correct, it's a SPI bus clock with an option to set a rate.
-
-> In case of the LG platform, my impression is that the clocks listed
-> in DT don't reflect the system at all, they all refer to the same
-> fixed clock node at 198000000HZ, which is also used as for the
-> UART and timer nodes. Changing the name on that one doesn't
-> really make it correct, but should not hurt either.
 > 
->          Arnd
+> > I understand if we consider that this latency should not be in the DT
+> > and be part of the driver because the latency over the 2cm or 1.5cm of track
+> > is almost nothing. But then what about the case when we want to add these
+> > latencies to a MAC? They will depend on the latency inside the PHY so
+> > those should come from DT.
 > 
+> If you want to measure it to the MAC, then yes, the latency through
+> the PHY needs to be considered, and we probably need some new
+> interfaces inside the kernel so that MAC drivers can query phylib
+> to discover what the delay is.
 
---
-Best wishes,
-Vladimir
+Does that mean that each PHY needs to implement a new API? Because that
+would be a little bit of work to do there.
+
+> I don't think this is soemthing that
+> should be thrown into firmware, since the delay inside the PHY
+> should be constant (depending on what MAC side interface mode is
+> selected.)
+> 
+> Having it in firmware means that we're reliant on people ensuring
+> that they've looked up the right value for the PHY and its interface
+> mode not just once, but for every board out there - and if an error
+> is found, it brings up the question whether it should be corrected
+> on all boards or just one (and then there'll be questions why some
+> people have chosen randomly different values.)
+> 
+> > So it really doesn't matter to me if I use a 1m cable or 100m cable.
+> > What it matters is to see that mean path delay will be ~5ns for 1m cable
+> > and ~500ns for 100m cable. And if is not, then I need to update the
+> > register to calculate correctly the latency from RJ45 to timestamp unit
+> > in the PHY.
+> 
+> Does this mean you ask the user how long the cable is? Do you get them
+> to measure it to the nearest millimeter?
+
+My expectation is that the end user should not care about the length of
+the cable. He just needs to start ptp4l and have some sane results.
+Only the board manufacture were supposed to know the length of the
+cable to set their latency values.
+
+> 
+> What about the overlap in the RJ45 connectors, and the height of the
+> pins in the RJ45? Some RJ45 connectors have staggered lengths for
+> their pins which would affect the true length. What about the total
+> length of the conductors in the RJ45 socket to the point that the
+> RJ45 plug makes contact? What happens if production then has to
+> change the make of RJ45 socket due to supply issues (which given
+> what is going on in the world at the moment is not unlikely.)
+
+If they don't introduce any significat latency then we can ignore them.
+
+> 
+> If you care about the 20mm or so on the board, then you ought to care
+> about all these other factors as well, and I suspect you're going to
+> be hard pressed to gather all that.
+> 
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+-- 
+/Horatiu

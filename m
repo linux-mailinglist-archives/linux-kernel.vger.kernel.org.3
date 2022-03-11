@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5984D6AC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD244D6A39
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiCKXD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S230028AbiCKWzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 17:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiCKXDR (ORCPT
+        with ESMTP id S229940AbiCKWyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:03:17 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8831647D
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:58:22 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id x6-20020a923006000000b002bea39c3974so6443346ile.12
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:58:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=2Q57z1F8XAilR8GwXp2jj5N7XCSKupWDFaXmEOuADRs=;
-        b=YcPKmhVmogr4u5WqPKgjiKkDhN3WlHQS6nwheJbL1WJnBuPh7VWuPKIntRVYeTG5iK
-         d/ZwxAzMZm4n8Cffe5aLPzaPtMl6Ybcj05GUPSonsSf3mnpIh8BB+qvWhsXcGfvCVXqP
-         7UjvOIlk4tA9GPGLxIXFLL0kquQxMQlTvSdai7Igrgh0W4twoKti1DL2avJyVd8Yghb6
-         3MDyfKA9IN0aq/m+VX9RxQ4zulMXlxruVG7Qa9I5dKBgCatv6iL66aNy76Hxr5Clv+zW
-         1Kr5eFOsaFfxjyiliOZOR3i6VN4mz6A1it5du+9eCi/BFCYmUUYGZ7BuQ9M1brkAnCo7
-         jMKg==
-X-Gm-Message-State: AOAM533GvXs4Y5+6jOxRytrUaEwt0fA6oZwHuVkgB8Dy1kR6rtVvdC35
-        lmJ9/pYTEOv5cE1EZ+SmeMuGpKksT/CcIBNDLcKX8TxukAVP
-X-Google-Smtp-Source: ABdhPJzlSRIpwopQ8QEJSaEfO56jSAg8VmG8rwEcJCD1LVuSs7XkXxwvm92qEiO8iYlqHohMkIKoqCvixG1+yhAYSTDudbLJMQDg
+        Fri, 11 Mar 2022 17:54:40 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553E5EACA6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 14:28:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wWQbXRbezK3NRtMtSi3ATf+Wd1xnlwmrtyeo6SDza4g=; b=cscqcGcM1lLDTv+e62zL2JJ8/l
+        cjyGSld5RQSrMMzrK/JdnjJVU6L6l3yRd7ZL235Cc91w7HF9VEiyo4+RBu+yHRkTGKLuf/UeNmFtw
+        h1kA3VfBe0IKLd04WWWViDYGEDY0I/TyWjwZJMsdrLandRQ7XdxXsaCxuDDSS7AKWnD/omYWWKJOi
+        swpIjr2rGRmLSPzOy1kjVyeUJDS45VVrW3b4iD2D/PWN59WP7YeZh1EOi0EeuMXi9vBMMsUCpsoq4
+        EAtBAJK/RHJagf/UtFneS5/33r4uOUE2vzUElJUvYzx+1JhK1siaKTTmGhzSH/ThdHQmeVoZv4s3O
+        MnDl4fmw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSmXf-001usC-TV; Fri, 11 Mar 2022 21:11:19 +0000
+Date:   Fri, 11 Mar 2022 21:11:19 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v1 10/15] mm/page-flags: reuse PG_slab as
+ PG_anon_exclusive for PageAnon() pages
+Message-ID: <Yiu693LTmhLyo1yu@casper.infradead.org>
+References: <20220308141437.144919-1-david@redhat.com>
+ <20220308141437.144919-11-david@redhat.com>
+ <a0bd6f52-7bb5-0c32-75c8-2c7c592c2d6d@redhat.com>
+ <CAHk-=wjWx_bPBLB=qMMae8Sy3KrO+Kvaf4juPknO5HX-+Ot0XQ@mail.gmail.com>
+ <e166e925-508e-3830-574f-59b2d2cf2431@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1447:b0:2c6:7e8b:6ff8 with SMTP id
- p7-20020a056e02144700b002c67e8b6ff8mr8132718ilo.178.1647033009715; Fri, 11
- Mar 2022 13:10:09 -0800 (PST)
-Date:   Fri, 11 Mar 2022 13:10:09 -0800
-In-Reply-To: <Yiu4tCONfHVH1Qfv@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007a3fb305d9f7c1bd@google.com>
-Subject: Re: [syzbot] memory leak in usb_get_configuration
-From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
-        rob@robgreener.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e166e925-508e-3830-574f-59b2d2cf2431@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 11, 2022 at 08:36:37PM +0100, David Hildenbrand wrote:
+> I used PG_error before, but felt like using a bit that is never ever
+> valid to be set/cleared/checked on a subpage would be even a better fit:
+> 
+> Note the:
+> 
+>   PAGEFLAG(Waiters, waiters, PF_ONLY_HEAD) __CLEARPAGEFLAG(Waiters, waiters, PF_ONLY_HEAD)
+> 
+> whereby PF_ONLY_HEAD translates to:
+> 
+> "for compound page, callers only ever operate on the head page."
+> 
+> 
+> I can just switch to PG_error, but for the second subpage, PG_waiters
+> should be just fine (unless I am missing something important).
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-memory leak in usb_get_configuration
+I think you're missing something important that almost everybody misses
+when looking at this code (including me).
 
-BUG: memory leak
-unreferenced object 0xffff8881128c0320 (size 32):
-  comm "kworker/1:1", pid 25, jiffies 4294943657 (age 15.110s)
-  hex dump (first 32 bytes):
-    09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
-    3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
-  backtrace:
-    [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+PF_ANY flags can be set on individual pages.
+PF_HEAD means "we automatically redirect all operations to the head page".
+PF_ONLY_HEAD means "If you try to call this on a tail page, we BUG".
+PF_NO_TAIL means "If you try to read this flag on a tail page, we'll
+look at the head page instead, but if you try to set/clear this flag
+on a tail page, we BUG"
+PF_NO_COMPOUND means "We BUG() if you call this on a compound page"
 
-BUG: memory leak
-unreferenced object 0xffff888108eeb640 (size 64):
-  comm "kworker/1:1", pid 25, jiffies 4294943661 (age 15.080s)
-  hex dump (first 32 bytes):
-    01 00 00 00 01 00 00 00 09 04 00 00 00 d0 bb 3a  ...............:
-    00 00 00 00 00 00 00 00 32 03 8c 12 81 88 ff ff  ........2.......
-  backtrace:
-    [<ffffffff82c9871d>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c9871d>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff82c9871d>] usb_parse_configuration drivers/usb/core/config.c:772 [inline]
-    [<ffffffff82c9871d>] usb_get_configuration+0x7bd/0x1cd0 drivers/usb/core/config.c:944
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+So really, you can reuse any flag as PF_SECOND that isn't PF_ANY.
 
-BUG: memory leak
-unreferenced object 0xffff888112a7bf00 (size 64):
-  comm "kworker/1:2", pid 1569, jiffies 4294944314 (age 8.550s)
-  hex dump (first 32 bytes):
-    01 00 00 00 01 00 00 00 09 04 00 00 00 d0 bb 3a  ...............:
-    00 00 00 00 00 00 00 00 52 66 72 12 81 88 ff ff  ........Rfr.....
-  backtrace:
-    [<ffffffff82c9871d>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c9871d>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff82c9871d>] usb_parse_configuration drivers/usb/core/config.c:772 [inline]
-    [<ffffffff82c9871d>] usb_get_configuration+0x7bd/0x1cd0 drivers/usb/core/config.c:944
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-
-
-Tested on:
-
-commit:         0014404f Merge branch 'akpm' (patches from Andrew)
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=155954d9700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1005e709700000
-
+No, that's not what the documentation currently says.  It should be.
+I had a patch to reword it at some point, but I guess it got lost.
+The current documentation reads like "We replicate the flag currently
+set on the head page to all tail pages", but that just isn't what
+the code does.

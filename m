@@ -2,124 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8744D6880
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BE64D6888
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 19:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350963AbiCKSir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 13:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
+        id S1350931AbiCKSjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 13:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350925AbiCKSic (ORCPT
+        with ESMTP id S239316AbiCKSja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:38:32 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09131E8B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 10:37:28 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5AC9F5C0270;
-        Fri, 11 Mar 2022 13:37:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 11 Mar 2022 13:37:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=j1NPISH+l624H2
-        cG6MYTSkySP6eLhrxXfSj11vAvYwo=; b=V3vSXoaFybxo84Ee4yrWh3V5zGpdmL
-        AeVQsqJqkloux83Pa9wzI3sqii1Pam2/d1kKcKn75EQBtPPyCbdxV6QtH3WJn2pg
-        1VhBRwT3FylAn50qk5xAJeag6+Iwb+BvPta7dLhlHucnWkh0XknZNqFGiVhRGkZi
-        fVm8OlqdwHCjVivNTo0vX5arzzeCHjQx31eQDFfm4puq94nz8WMTZpUUm9QcRK0V
-        3iXzIn3Zw/8IGjYI2o9JxugM/lTsyx7Ecyh/oQsu+tQTt/D03gMRTEywvkIWXbsy
-        cYA43HydClVmi0hwFjAS0Mtb8yQum9pruTcNvP7SXJK6r2vkFJCMk1ZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=j1NPISH+l624H2cG6MYTSkySP6eLhrxXfSj11vAvYwo=; b=e9mb3dlK
-        uxl6FtHxHyD8ArjJvdc3+DWkr20woot6m2OkSgtUeg9N/vGCDGTtzAffFljcdxyr
-        +UFHhE5fxD5h3uq4lbBQ8r2Q0tJ6NcgBrYZddPWv2GJPbR/P/JT1aRSfAD0mAOJL
-        +OxNwPmKdCBGR8thF2HVT7U33uvdrUW+qGzHhqyYkVmdDo+BnWtFiDtE5fsAH+92
-        zWk8Iwe1Xqwcrnf2njM7Z7D1j9F86oYGP7D/CVbC+xg4ju9Bg8+GJGAaxpUQLmXQ
-        uwTN9f/Y2ydIycoCUF19M3XfKuvHh8cZfcVM4XYEgr0dXqnbQMCVyN3AAGaFGNRY
-        RG3rNOf4I7LC6w==
-X-ME-Sender: <xms:5JYrYr0JvtFT8X6pr5BXbZLYKsmIJZgkNeZ9nhexpnwtaed332Y-dg>
-    <xme:5JYrYqEP3DJpBwoGmReyEcoctnb9kVYE7J3wV9fCnk7jYKFo_pnN5HIzQbOZ6OJ76
-    MWIkV2S82q4WOropw>
-X-ME-Received: <xmr:5JYrYr6liVvPy_774szB04b55v_6dnkmMKu14RyRjUrZ4Rt71g82d-nhC4uN-cdw-5-sh0mN>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvvddgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvffufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
-    jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeeije
-    euvdeuudeuhfeghfehieeuvdetvdeugfeigeevteeuieeuhedtgeduheefleenucevlhhu
-    shhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
-    gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:5JYrYg2yj3hxwNOb6oEuummSx4XhFt4IDtICiyHdF6AySuBXmsDIOg>
-    <xmx:5JYrYuFBZhXdSXovR6ylx7q7-m9cZggRV22DE58IDVql1iu2i-psmQ>
-    <xmx:5JYrYh_PDFawYqypGs1T8QIIQNr7sbfyJ4XiCUYTYCcIuo3YHOWobA>
-    <xmx:5JYrYhBw2WZUzgR7SJzmZt13wAj_4OMNcEfVCWUT9_csn_QvhZVVfw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Mar 2022 13:37:23 -0500 (EST)
-From:   Zi Yan <zi.yan@sent.com>
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v7 5/5] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-Date:   Fri, 11 Mar 2022 13:36:56 -0500
-Message-Id: <20220311183656.1911811-6-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220311183656.1911811-1-zi.yan@sent.com>
-References: <20220311183656.1911811-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Fri, 11 Mar 2022 13:39:30 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F43766B;
+        Fri, 11 Mar 2022 10:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647023906; x=1678559906;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=4KMmcZq9iYcm7zU+PV1ghcFmoDOgXCkCmuwpZ208LLQ=;
+  b=WH+htBUCAb+nOS8iGeBJEgJ9AZrkxYh1Z/aDTTEQfQeQ2UHRoCK+C9u4
+   7qbGUZD6KLr5SafOXRoa7Hxeuh8T8nH6Lfgxagalr6dIBwuSmBTf6QXv/
+   UfBLP2O4v2TXI3hUc6l0SlvDcyzVXpvZxdF5sM4dlWnonlcm4ggC5+1Qu
+   WuMbTtqf9tvOow88EBY/kaiOHKXVLNTQT5X14xsdybIX674Woh5FfHt/8
+   e4NcWNGQjU38Rc7EXKpoGTcGSjS0cmb67+uU74vs0N6HrJk3FfQabA61p
+   tvfibQQJg5jiizjwCCgiINoE0pyKiBHckmiXTJ5iIsGFc3OHcXe/pYx0d
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="316352189"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="316352189"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 10:38:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="689146712"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Mar 2022 10:38:25 -0800
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 11 Mar 2022 10:38:25 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Fri, 11 Mar 2022 10:38:25 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.171)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Fri, 11 Mar 2022 10:38:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jTnTF1luehlYfJkhirjdCDF6oZ0CAmakw+bHziYRgke452KgY3tEnoWEkbVYqAiUkCWssyY2yiwdBxGlFgsldhNCsWbN7Nomv7RZcNAXtNUxHTDhDyKPytx0YgzTepkzJSxelqlbcE9gXkvsH51UHR/cI64i0e43k7JccT03itVbTmoVI4lD9pwyvsHaidie5DvDYdUkPgF5nWzS//7N7qUBwLTfKi7QtB+UlIfoA1UJ8ZajA3fMBCPqSi7BpfVnHSp1LaVN/nStEOYy/SD5Ummu2QoOFbH9VB69RN01CUHxP3TQncxCwD1VgD4dELag+eSumTV4+Yq7cKq2uezkEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3DkNFdnd3TaJpqBDJKs6LfeFPcTHhYitNB0dRz582/g=;
+ b=J4z7fFtw56ncychazaT1pB2R1GRVB7ZTKRTnXA+PwKbYzhx2AhGJ2+eB8of13OqtOA+fGUmkKWy6xB+ixCbjsonm7jYDr/za91hk9nCGgJRubqUGjI2i1IH8kcvgLYghw8MCjtTpNLWJOwEH2wkduAg8OeDcO8B9PFsYt/5LIqTzk73xv3w1JdLxtiUeIjWW2vwHH5xa9ztUJY1VRG/5VQteMWVdSLBY40sf6BmUTM39yDUYnNR5hvP6KGau7PvFGoAY6/ksQBrV/2Hjbqzp4Xf2Spuob9aaPFcG+PxxcFq0klH9TPi4qsug10y0//v4BNAGT79tM/A+JBp4EbK98g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by SA2PR11MB5034.namprd11.prod.outlook.com (2603:10b6:806:f8::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
+ 2022 18:38:23 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::dda5:a04:f265:68ad]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::dda5:a04:f265:68ad%3]) with mapi id 15.20.5038.027; Fri, 11 Mar 2022
+ 18:38:23 +0000
+Message-ID: <7d5de631-3ebc-01ee-69b8-ae105408cb59@intel.com>
+Date:   Fri, 11 Mar 2022 19:38:15 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Content-Language: en-US
+To:     Rajvi Jingar <rajvi.jingar@intel.com>, <bhelgaas@google.com>
+CC:     <david.e.box@linux.intel.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220224202937.2414867-1-rajvi.jingar@intel.com>
+ <20220224202937.2414867-2-rajvi.jingar@intel.com>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+In-Reply-To: <20220224202937.2414867-2-rajvi.jingar@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0077.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1f::10) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 576b9929-96a7-4b05-49cb-08da038e5250
+X-MS-TrafficTypeDiagnostic: SA2PR11MB5034:EE_
+X-Microsoft-Antispam-PRVS: <SA2PR11MB5034102E883EEC496C9198ECCB0C9@SA2PR11MB5034.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vkHa/EODCHjbs7Rb4k990dnq509cKisDT8Bdjyb5YWNnh9R6q1gF5wyZ/S/JqVZqzFLZpLwydcYdxz+PjRc671goISM5Och18FHzDhLx5h8j7mFIIpbz3vXE7yqFid2svQKCI22MgqoTVPYQ4qvSc7m1CydqhGzGX1zk25fug74cVOyjZGt0YBSkZC8PaLIa5UCFT7VZMOObe7heLt3rK0g1Ws8TN06dRZsJoUI+LWIZitk0vROKSdVVBglSDHKBQx/vIs49/TwLQ4Nfpk/Ra99ZybW7Y5j3A3CIY6TpELBMVTf4dkcXq2V8ehMZPR/0/8KWwcDEKpudhidcvYaETa8UDW4ljETyfwY6C00Y/sigavqhP6UFeQ2TQzyeR6hFBXWlrT2zGg/uuzhloMIbHi7UagqAsaIdAVjsbGbB1LxF1leTpsOnnpNdOnYJoTUpkKrmUUMZKPr2C1pjNrrHXwLxoMDaORLbt6GKtUiJPu0FGXHtJRLMVajrlleH0E59+1Pk3Y9sCt9GsCNtymDQUr4MBrU1goFlbmQXnOWa4ZWhb4h1PaEykxVRmLTHMmulHHXYJu49Dtwnws9YteozkyKZZkcedoXgucivtCPUAFYfgsRGPX7OSpTjQiquSPTcnvLjsDUNeQsw/XdwtX4tftjVXIdWRXIEymOJk71XNuIVKZkpibcfK3B9oWV3y+Xsj4wliDLZEJUp59n726Mu0zYl2PQ9c3ArC0a6J+9CVto=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(66946007)(82960400001)(31686004)(6666004)(53546011)(186003)(36916002)(8676002)(66556008)(86362001)(2616005)(36756003)(6506007)(5660300002)(83380400001)(26005)(4326008)(508600001)(316002)(2906002)(8936002)(6486002)(6512007)(66476007)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MllqUThYS2hpTmE4TGlTZE5IVTc2NmQzM1dCeFQ0WHVlMGk3eXdJL0hJSVlC?=
+ =?utf-8?B?K2VjRjF1d3VvRFJjZWRiWVo1bnV3endBMm9TZDRNYVlKMXVqdTE5anJ2Mm9P?=
+ =?utf-8?B?T00yN3NOQit6NVJNOXRHbWpsVW4ySHc3T0NlekRiMTJCUGZOeGgzb3J1R2g1?=
+ =?utf-8?B?RWdOeGN5RjRhd0NVcndvOEM1eUNWY3JRMGRibThQdGNaSUFlRTRBTE1yWk1O?=
+ =?utf-8?B?d21nZ3k5aklmMWVqdnpjQ0xRMjIrMGZsNmd4dnJrdFAxNXM3Njhwb1dPMnZ0?=
+ =?utf-8?B?QWcxUUloSXlGQXhZTnFxaDNCT29ZK2RsOWJ0ZE1lYTFUME5DNGpCTFFJUktn?=
+ =?utf-8?B?Q3A0UUhneTZMNjlGSjNGWHNVSVluZTRQblF5eHBzUW5NMjc4NXVZbjg4S3g3?=
+ =?utf-8?B?L2hiV1RITDUvQ3o2dUZhRkl4bFpjZlNORTFqdUo5WTNFd3JIQTVjVDRma2lX?=
+ =?utf-8?B?d21EOFFjR1h1aUhLRTl3Tyt1NnVLZkhPaXhrWitUOXBXYkhpRFhlR01WV2Ns?=
+ =?utf-8?B?NmRobHBya0pONTV2N0huSWdRNTJrQmJidGM5dUo1OXNlaXpvdUVoekNXK0Zj?=
+ =?utf-8?B?THBtYXRqTVFWdkVWQWpQNks2UGdUY09FY2hINCs0QllTM2NpRXVKS09vRFFi?=
+ =?utf-8?B?ZHBxamFObjBrSnVOTzB4NFZUUC9QQ2FUZHpwdkxCMVJaMFNRdGFuRlpSMFd3?=
+ =?utf-8?B?OGlReFVrU1MwZmpGM3praTJlTkE5VWZlYVlsQUQzaitxRzdCL05NajFMSzVT?=
+ =?utf-8?B?RlhwWXBNTXV4eGV0aHM2eVBYL1psTFoyQzh4Z2M3RTZPdmdLeCt3cTBHblBE?=
+ =?utf-8?B?bjhteldyMlBMUXFqYW5yeUFoL2Z6OE9BTWhuRVZLMVQ4dzFmL2hnTVRWYS9G?=
+ =?utf-8?B?TUdYeUZyNUJLZHU4ekg5ZUduK0IwWGpOTHpneENuYURKMTR0b0FlQlNmNjZs?=
+ =?utf-8?B?UUxnODFTTnFheEsrMGRhZ3Zoa3VjMEJCTDhkWHVpMlQ5QU5mT1NHUnBWM01m?=
+ =?utf-8?B?Ync1c1NUVWx4ekcyckhHRHpxcGk5RWNYY0RJbTlYU2Q4SFF3bjJLUFNpTTlD?=
+ =?utf-8?B?NG95ZUNsT0tJZWd0U0gxTXhqK1c3NGgzZ1A0K2JvOWRKNmhjRW1XREZyNWN3?=
+ =?utf-8?B?NlpmMUJENmxVTkxDZDhlVHpIaUMwWlpONkgreUE4NStaUEcrUFFhOWxmMVF3?=
+ =?utf-8?B?OWxJK2Z2TzZyNFRSWTNPeWdLcHBOQlhpaDBVS1dWd2lHbzRSMGJ2ZjNrK3NT?=
+ =?utf-8?B?OTk3cW9HMmJ5d0VpK3ZVbkJEUUhFVVpMMHlnd0owYjd4OVdCeEhWRGRYaHlm?=
+ =?utf-8?B?M21IdFFvMGtndlZEOE9Ca3graTNPMGhZclYxVGJhMU9XUmVrVmxNSFhGYUpq?=
+ =?utf-8?B?L2EwMHpucjcwZ0cvZVA0RVFzN1VTYk9WOVBQMWlLS1FaU2ZmWHpCZnMxczBG?=
+ =?utf-8?B?eWdYWXpsOGViUWlBYzg4dEtKQkc1QUVhTUt4YXZMOUEzOWZ6d0hRSTM5R01N?=
+ =?utf-8?B?dU1qbUJtVU9TSlRWWUJLQklJdk9PWi9WbDdVQjZYc2lIRFRtNnVPdEZma3F5?=
+ =?utf-8?B?ZjVsWC94Zzh0TmdNdGlJMFlHOFJ2ZVo0T1puRE5TZ3VhZ2h3NlpSdDZ1YjUr?=
+ =?utf-8?B?azdIWjVpYm1raUt0ZU4xd3pMTnZNWVlDVVE0ci9vTUpxbnVoNnlRd1RPWU9B?=
+ =?utf-8?B?ZlFkUnFMTCt4S0Z6YWJoMUNxT0NKd0JpY0JxVjFtSUVqRTJjeWpURVlGajAv?=
+ =?utf-8?B?L3lGdVZ3UWNualNTTk16S0NnVmNjN1JoanJhNXlISlJmejlIZU1paUlPWkgv?=
+ =?utf-8?B?cXRWK0tKb2VOblhTS3FoZTA4K092eExGcmxMQjQyYTZ1SWJ2VXdxL3FTeFhm?=
+ =?utf-8?B?RGMxbU1Yb1N5c2V3eHRjOUt0Y2J5WERQeDVNbVZwcXFKbnkxemJMVnMvSVdE?=
+ =?utf-8?B?OFpDWDhzYzhwaG9uamJuYU1yaER0SVppZk80dmg1MnZLdGV6Z3llZmlBMisx?=
+ =?utf-8?B?OEZnUFBaeE1BPT0=?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 576b9929-96a7-4b05-49cb-08da038e5250
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 18:38:22.9939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AQSmfMqRndh9U1a8xrPQWlSv5FqpGaBvex6Njv/jxa6TSSY7fgUwu85owM4AcdLhqaouhFO61HmOrGtGglBf3JIFJfJzOBS05fVfZFw6uyM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5034
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+On 2/24/2022 9:29 PM, Rajvi Jingar wrote:
+> For the PCIe devices (like nvme) that do not go into D3 state still need to
+> disable PTM on PCIe root ports to allow the port to enter a lower-power PM
+> state and the SoC to reach a lower-power idle state as a whole. Move the
+> pci_disable_ptm() out of pci_prepare_to_sleep() as this code path is not
+> followed for devices that do not go into D3. This patch fixes the issue
+> seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530 with Coffee
+> Lake CPU platforms to get improved residency in low power idle states.
+>
+> Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> Suggested-by: David E. Box <david.e.box@linux.intel.com>
 
-alloc_contig_range() now only needs to be aligned to pageblock_order,
-drop virtio_mem size requirement that it needs to be the max of
-pageblock_order and MAX_ORDER.
+I would add a Fixes tag pointing to the commit that introduced 
+pci_disable_ptm().
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- drivers/virtio/virtio_mem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Otherwise I agree with this change:
 
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index e7d6b679596d..e07486f01999 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2476,10 +2476,10 @@ static int virtio_mem_init_hotplug(struct virtio_me=
-m *vm)
- 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
-=20
- 	/*
--	 * TODO: once alloc_contig_range() works reliably with pageblock
--	 * granularity on ZONE_NORMAL, use pageblock_nr_pages instead.
-+	 * alloc_contig_range() works reliably with pageblock
-+	 * granularity on ZONE_NORMAL, use pageblock_nr_pages.
- 	 */
--	sb_size =3D PAGE_SIZE * MAX_ORDER_NR_PAGES;
-+	sb_size =3D PAGE_SIZE * pageblock_nr_pages;
- 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
-=20
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
---=20
-2.35.1
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+> ---
+>   drivers/pci/pci-driver.c | 11 +++++++++++
+>   drivers/pci/pci.c        | 10 ----------
+>   2 files changed, 11 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index ac3f7e1676a9..8be3f81afdf6 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -836,6 +836,17 @@ static int pci_pm_suspend_noirq(struct device *dev)
+>   
+>   	if (!pci_dev->state_saved) {
+>   		pci_save_state(pci_dev);
+> +
+> +		/*
+> +		 * There are systems (for example, Intel mobile chips since Coffee
+> +		 * Lake) where the power drawn while suspended can be significantly
+> +		 * reduced by disabling PTM on PCIe root ports as this allows the
+> +		 * port to enter a lower-power PM state and the SoC to reach a
+> +		 * lower-power idle state as a whole.
+> +		 */
+> +		if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
+> +			pci_disable_ptm(pci_dev);
+> +
+>   		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+>   			pci_prepare_to_sleep(pci_dev);
+>   	}
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9ecce435fb3f..f8768672c064 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2660,16 +2660,6 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+>   	if (target_state == PCI_POWER_ERROR)
+>   		return -EIO;
+>   
+> -	/*
+> -	 * There are systems (for example, Intel mobile chips since Coffee
+> -	 * Lake) where the power drawn while suspended can be significantly
+> -	 * reduced by disabling PTM on PCIe root ports as this allows the
+> -	 * port to enter a lower-power PM state and the SoC to reach a
+> -	 * lower-power idle state as a whole.
+> -	 */
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> -
+>   	pci_enable_wake(dev, target_state, wakeup);
+>   
+>   	error = pci_set_power_state(dev, target_state);
+
 

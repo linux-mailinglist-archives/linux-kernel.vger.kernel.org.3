@@ -2,135 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236C84D57C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 02:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EB44D5790
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 02:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345495AbiCKB6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 20:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S1345419AbiCKBvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 20:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345582AbiCKB6L (ORCPT
+        with ESMTP id S231840AbiCKBvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 20:58:11 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C30119D624
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:57:01 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id b188so7869245oia.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wYmIXqGoP18VRv8GkXhEyrdmBAb5Sj51YjCRhrfnyCU=;
-        b=UGR4hg7JGEyj5FStkRpY9WIuMMQwsLO5XjqKrJ1IytrD2WEwb++4ThYnP+bPWy7K3n
-         3nId0tS8PoBY1seJ/fDAoaNW5D2HeT5+Em4agfYD+yNRJufAIMxeGLefO1S/OfQTti3q
-         GjxxVD+ufIDzBKGHuuwzUoqPMetmNybncnfP02labX0KUJARz/SD4GO5NEbE9R8XC4K5
-         DFt4aOlH8LuuCw67BbnkrLm4IqgrJ/fjvILsP2AgW553tjl7Es1IzCIqI7L96LZhOlIE
-         pKTErC3wrOLUUk2SNMoZve4WaUha0cCMLh4xhhPe8Qy6c35MYo14OgoBo3AY1Nzat9B7
-         GSvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wYmIXqGoP18VRv8GkXhEyrdmBAb5Sj51YjCRhrfnyCU=;
-        b=6HgvSNPciQQ3J1ZghegKjQJDLZ6QbP55z1q9m3YjiUe9Wc/5vD1B4R5wZPJcEAhTuo
-         mwvK9ritctk9AdYGW/4czSy9V9KJJA3ny9NFG/kDdYYnzS5lD6sEFJNvXqcF+hJkaeBO
-         wKKOAhACiNth6/2UJL3B9+uUeTj6M0qHfPxsX+sC6SdGr0vXRG6xJg53pt4WUFAdLUAL
-         lm/LLq2PIa82qJeTWX6HUh4Nj4G0pem3bF0/pqYG1wsfPqQoRqIl1gC4PSkogZhsl4X1
-         kax8ykj05yqN1/p3loilxVFIOTtpKYayRXrJBALYwBezZb+2yO4M8+G71WujS9FK7wgd
-         I+YA==
-X-Gm-Message-State: AOAM531E94G7WuK6LPQFjGHlUfcbwQQusCE36GvqJX20sTpHTi0sqHeO
-        k0YM315h23MbfOQMtcOwF18fPoJQSPA=
-X-Google-Smtp-Source: ABdhPJzB592mysFn9oE13RiW1HT6RiVvGe7i0vIoCvDktvlr1mcYcbmQE/S+t+fIeyVHsVu26yd94A==
-X-Received: by 2002:a05:6808:d51:b0:2d5:3fbe:7d43 with SMTP id w17-20020a0568080d5100b002d53fbe7d43mr11666035oik.118.1646963820470;
-        Thu, 10 Mar 2022 17:57:00 -0800 (PST)
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com. [209.85.210.43])
-        by smtp.gmail.com with ESMTPSA id dv1-20020a056870d88100b000d9e83cacf8sm2917358oab.9.2022.03.10.17.57.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 17:57:00 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id s35-20020a0568302aa300b005b2463a41faso5338106otu.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 17:57:00 -0800 (PST)
-X-Received: by 2002:a81:6357:0:b0:2d7:2af4:6e12 with SMTP id
- x84-20020a816357000000b002d72af46e12mr6731354ywb.317.1646963397784; Thu, 10
- Mar 2022 17:49:57 -0800 (PST)
+        Thu, 10 Mar 2022 20:51:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D0F65CD;
+        Thu, 10 Mar 2022 17:50:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1921BB829A1;
+        Fri, 11 Mar 2022 01:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66172C340EB;
+        Fri, 11 Mar 2022 01:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646963426;
+        bh=UTLIxBwkAa6+a+oJdAWOCcqoxU8Z4IdlVYhcKep9wKI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nO2MrXJntZmfjMoIOmT9F0FRcK0mtdojnjJqQ/fteCIixZZbeSf8LiI9E5Ha0eZgD
+         59s18emSpb3ohxUSttI/iMdUEnrRhmSzx95LnrKSZITEZqqx7WHuwqPbfzDnk8byzw
+         EbrofH30cgteMKHlDuepkyCL4k9iDYOUis/dYitzgFoud2kJLvzy7zLRvYe2URduu0
+         1+ZEIIrs8vfk4HbQSnPXTSjbJEoSpWswtnQtrVQDEQcb1vHyYAwXueyEji06vhxrHN
+         hNouXWPbm9Z7dqexDJmV39n1NhYfaHgJoloj1+uY/3lM3MWFpnejWqk3o5SV6SB+d/
+         nsk7+AAUBmpEQ==
+Date:   Thu, 10 Mar 2022 17:50:25 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiyong Park <jiyong@google.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>, adelva@google.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] vsock: each transport cycles only on its own sockets
+Message-ID: <20220310175025.69e35aaf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CALeUXe7OGUUt+5hpiLcg=1vWsOWkSRLN3Lb-ncpXZZjsgZntjQ@mail.gmail.com>
+References: <20220310135012.175219-1-jiyong@google.com>
+        <20220310141420.lsdchdfcybzmdhnz@sgarzare-redhat>
+        <20220310102636-mutt-send-email-mst@kernel.org>
+        <20220310170853.0e07140f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CALeUXe7OGUUt+5hpiLcg=1vWsOWkSRLN3Lb-ncpXZZjsgZntjQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
- <20220310232538.1044947-1-tadeusz.struk@linaro.org>
-In-Reply-To: <20220310232538.1044947-1-tadeusz.struk@linaro.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 10 Mar 2022 20:49:21 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSdFoTTqqL5CxCbL4gEg4-QvUQzQSM+45G9XL0BtLs7fGA@mail.gmail.com>
-Message-ID: <CA+FuTSdFoTTqqL5CxCbL4gEg4-QvUQzQSM+45G9XL0BtLs7fGA@mail.gmail.com>
-Subject: Re: [PATCH v3] net: ipv6: fix skb_over_panic in __ip6_append_data
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     kuba@kernel.org,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 6:26 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
->
-> Syzbot found a kernel bug in the ipv6 stack:
-> LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
-> The reproducer triggers it by sending a crafted message via sendmmsg()
-> call, which triggers skb_over_panic, and crashes the kernel:
->
-> skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
-> head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
-> dev:<NULL>
->
-> Update the check that prevents an invalid packet with MTU equall to the
-> fregment header size to eat up all the space for payload.
->
-> The reproducer can be found here:
-> LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
->
-> Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: netdev@vger.kernel.org
-> Cc: bpf@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: stable@vger.kernel.org
->
-> Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
-> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+On Fri, 11 Mar 2022 10:26:08 +0900 Jiyong Park wrote:
+> First of all, sorry for the stupid breakage I made in V2. I forgot to turn
+> CONFIG_VMWARE_VMCI_VSOCKETS on when I did the build by
+> myself. I turned it on later and fixed the build error in V3.
+> 
+> > Jiyong, would you mind collecting the tags from Stefano and Michael
+> > and reposting? I fixed our build bot, it should build test the patch
+> > - I can't re-run on an already ignored patch, sadly.  
+> 
+> Jakub, please bear with me; Could you explain what you exactly want
+> me to do? I'm new to kernel development and don't know how changes
+> which Stefano and Machael maintain get tested and staged.
 
-Acked-by: Willem de Bruijn <willemb@google.com>
+I was just asking to send the same patch (v3) second time to kick off
+a CI. You can change the subject prefix to "[PATCH net v3 resend]".
+And add
 
-small nit: "equal to the fragment" and all these Cc:s aren't really
-needed in the commit message.
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-I don't think we'll find a commit for a Fixes tag. This goes ways back.
+between the "Fixes:" and your "Signed-off-by:" tag, since the code will
+be identical.
+
+The CI didn't catch v3 because I fumbled patch filtering config.
+Your posting was correct, it was entirely my error.

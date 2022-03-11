@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD4C4D5EDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3497B4D5EE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347384AbiCKJ40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S1347433AbiCKJ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiCKJ4X (ORCPT
+        with ESMTP id S235035AbiCKJ4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:56:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57CA31B6E30
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:55:19 -0800 (PST)
+        Fri, 11 Mar 2022 04:56:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FE131B718B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:55:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646992518;
+        s=mimecast20190719; t=1646992549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ylmH23lNYpJ5L3ifT6u21HFSeJ1A7vGW+YoFCvEO9M0=;
-        b=BS+EOAtcWUZn4dZ+R9C+4E9dAxsplpEHKXTDG2pj37ZbMl+Lxn+eogxLR+Pi3UyKzriF+V
-        8SXZs5aJcWVKyqR76UDyQzhoS4g/s8Y9cjh2dRocsyWoSZFBXVONjRjryQT7p0EB/hHotY
-        YBGouwKX2blnkLvBHGF0Rb+CfsrkKFc=
+        bh=0SbZtGCQk+RjFIs2wZUGH3GgdAqVUCvyBNpcfJWzG8I=;
+        b=JlgEmcYzfuBiWCh3t3ulwyS8HjLGdQEvQ1mZvOkF+qY8GFoO84cZOSNGYGSv7GQQFO0OlP
+        Jk5NbYETF7Th6J8pNBPkejGyM4e7jakT/UwHKhkHyA/GZ/gsp52VCGXrSLiwh7dj9Atg33
+        yEP3wIAMiYChpCtScKV+9atudusJXlo=
 Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
  [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-BLmQOyNXP2mCCA7YWe41eg-1; Fri, 11 Mar 2022 04:55:17 -0500
-X-MC-Unique: BLmQOyNXP2mCCA7YWe41eg-1
-Received: by mail-wr1-f69.google.com with SMTP id t15-20020a5d534f000000b001f1e5759cebso2637515wrv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:55:16 -0800 (PST)
+ us-mta-470-fs-jA5FENqq-Qh4_JWvOzw-1; Fri, 11 Mar 2022 04:55:48 -0500
+X-MC-Unique: fs-jA5FENqq-Qh4_JWvOzw-1
+Received: by mail-wr1-f69.google.com with SMTP id a11-20020adffb8b000000b001efe754a488so2622165wrr.13
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:55:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=ylmH23lNYpJ5L3ifT6u21HFSeJ1A7vGW+YoFCvEO9M0=;
-        b=Inb3Nwxatcnxnr/uh654L/xlQHB9MpquETRYCiVt2F5ksG6IyxbZKU+4Dp73G8r+YK
-         EmzuzYQ9JX9CApxu7LrjjY7b2nUJkx1y8F8Et/ADLTrMbqk+IWwSRHcSyW/iZErZGxMw
-         aq8adg7zgMKnQwshgAHKpWOVJC4nvxUgk9sm0PkRlyLZNFyzc20zXaHEGRj9RGROuiZm
-         DjgSZeunH6FY5KS3lUp0GVI8TEKTxLhcqhCzbUUDTEwu0COjMf3CX9jXsWXu6r7hYTgB
-         0qZYKASlkBvAUwdXGzDBMko4tAy8yjGhA5aEJh4IGA1aakqJ+rYHGOXyGAKO7JI9TsBf
-         sn2g==
-X-Gm-Message-State: AOAM530DKvJJmJw2Rk4brN5WRV5k1XQCZlm5+FmKYJz9qTYzJa19RoRb
-        kqif4rMtF6VlP1ak9wcy+7Q/U5r4WbMo0UuvqZpBKYKyfbSXoB8tNs3IbpR6zGpDy6W34BLDG0z
-        VElo4hIY1JR0kfFVjhZtIu6MQ
-X-Received: by 2002:a5d:64e5:0:b0:1f1:fa31:e7d3 with SMTP id g5-20020a5d64e5000000b001f1fa31e7d3mr6940753wri.573.1646992515898;
-        Fri, 11 Mar 2022 01:55:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzLC643/T4UbINF7UgQYXhn1FtkQIwPzi08Sb5vJL6N19y2iFpM7UaA6J5H7uueEZlzOIGkoQ==
-X-Received: by 2002:a5d:64e5:0:b0:1f1:fa31:e7d3 with SMTP id g5-20020a5d64e5000000b001f1fa31e7d3mr6940740wri.573.1646992515653;
-        Fri, 11 Mar 2022 01:55:15 -0800 (PST)
+        bh=0SbZtGCQk+RjFIs2wZUGH3GgdAqVUCvyBNpcfJWzG8I=;
+        b=R3r7qgWPid1l255P1m+mnKHUukCD8mtUQS+lm2XPPt5DztAesjgwnhX8TBlhjFtAQD
+         tP84mj2/fHw4eYljRNFhlxFiPd0fMXclTBiuEVrm8PqPLQkYGSnaDY5ESbNrmwNqgbki
+         Y9UYDblHC2XVkTowcAX2lH0V7Z8Vt0Askjdbg4xZ2os70PnPNoLiQADmEUx48EBvZmUo
+         HUNQkONZMlwJ6dH9qrDVgEfck5i5ykW1lwzBDomnuqJTe5EESbQ4A3JURkF+Q2OJhFz4
+         NOtLmKy5gGMDQ60Ib4ZFVrvW2uPqkaFAbrjSFrRBEjHQNf711GuD7gJsU924detQKMRO
+         IE9w==
+X-Gm-Message-State: AOAM530iXUOiB9t/9O+Zece02VxQ3Ekahx/5f74YAKDncGzKSIVBMOjW
+        +AnG3eWRYub403CV1uMIc2hoWTD5I+tlrt/9F2kp6CNST9GTcPHiAVHhWl747iYzjOo07LqQdRj
+        /8F1HFnbw5MIZ9b1ACV3uPdbz
+X-Received: by 2002:adf:f70a:0:b0:1ee:33bf:3864 with SMTP id r10-20020adff70a000000b001ee33bf3864mr6498093wrp.4.1646992547133;
+        Fri, 11 Mar 2022 01:55:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwy7/m6Ad24W702h4xglXhkhq/XRbfI+NUlig4g23i0BZ8F3TjeAKyQUG7wWs7g/FTmvb0dbw==
+X-Received: by 2002:adf:f70a:0:b0:1ee:33bf:3864 with SMTP id r10-20020adff70a000000b001ee33bf3864mr6498077wrp.4.1646992546843;
+        Fri, 11 Mar 2022 01:55:46 -0800 (PST)
 Received: from ?IPV6:2003:cb:c707:8200:163d:7a08:6e61:87a5? (p200300cbc7078200163d7a086e6187a5.dip0.t-ipconnect.de. [2003:cb:c707:8200:163d:7a08:6e61:87a5])
-        by smtp.gmail.com with ESMTPSA id i11-20020a05600c354b00b00389f440512esm591995wmq.32.2022.03.11.01.55.15
+        by smtp.gmail.com with ESMTPSA id r13-20020a5d498d000000b001f0587248c4sm6093300wrq.3.2022.03.11.01.55.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 01:55:15 -0800 (PST)
-Message-ID: <caf087b4-b184-c45e-e212-87f0a573a4d0@redhat.com>
-Date:   Fri, 11 Mar 2022 10:55:14 +0100
+        Fri, 11 Mar 2022 01:55:46 -0800 (PST)
+Message-ID: <7496e04f-5b34-b37c-381c-8444199f2321@redhat.com>
+Date:   Fri, 11 Mar 2022 10:55:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
-Subject: Re: [PATCH] mm/khugepaged: sched to numa node when collapse huge page
+Subject: Re: [PATCH] mm/madvise: Use vma_lookup() instead of find_vma()
 Content-Language: en-US
-To:     maobibo <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220311090119.2412738-1-maobibo@loongson.cn>
- <52412f08-829a-6c29-60c6-a24c866e6253@redhat.com>
- <d2883450-1278-877e-e273-bda5a5728465@loongson.cn>
+References: <20220311082731.63513-1-linmiaohe@huawei.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <d2883450-1278-877e-e273-bda5a5728465@loongson.cn>
+In-Reply-To: <20220311082731.63513-1-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.03.22 10:51, maobibo wrote:
+On 11.03.22 09:27, Miaohe Lin wrote:
+> Using vma_lookup() verifies the start address is contained in the found
+> vma. This results in easier to read the code.
 > 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/madvise.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> On 03/11/2022 05:20 PM, David Hildenbrand wrote:
->> On 11.03.22 10:01, Bibo Mao wrote:
->>> collapse huge page is slow, specially when khugepaged daemon runs
->>> on different numa node with that of huge page. It suffers from
->>> huge page copying across nodes, also cache is not used for target
->>> node. With this patch, khugepaged daemon switches to the same numa
->>> node with huge page. It saves copying time and makes use of local
->>> cache better.
->>
->> Hi,
->>
->> just the usual question, do you have any performance numbers to back
->> your claims (e.g., "is slow, specially when") and proof that this patch
->> does the trick?
-> With specint 2006 on loongarch 3C5000L 32core numa system, it improves
-> about 6%. The page size is 16K and pmd page size is 32M, memory performance
-> across numa node is obvious different. However I do not test it on x86 box.
-> 
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 5b6d796e55de..afd68bfc77d4 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -883,8 +883,8 @@ static long madvise_populate(struct vm_area_struct *vma,
+>  		 * our VMA might have been split.
+>  		 */
+>  		if (!vma || start >= vma->vm_end) {
+> -			vma = find_vma(mm, start);
+> -			if (!vma || start < vma->vm_start)
+> +			vma = vma_lookup(mm, start);
+> +			if (!vma)
+>  				return -ENOMEM;
+>  		}
+>  
 
-Thanks, can you add these details to the patch description?
-
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Thanks,

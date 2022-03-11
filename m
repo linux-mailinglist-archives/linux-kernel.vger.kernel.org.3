@@ -2,97 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366624D63F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9296F4D63F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344675AbiCKOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S1349697AbiCKOmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349857AbiCKOl5 (ORCPT
+        with ESMTP id S1349728AbiCKOmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:41:57 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA1C9AD9C;
-        Fri, 11 Mar 2022 06:40:30 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g3so11211253edu.1;
-        Fri, 11 Mar 2022 06:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=6bBLgCZgh0VQ3FiDVqjw/OukOofGYEtfzJRk02RBM7o=;
-        b=gY/yIqlH3OgvuFjrktmlEFwOsbONmlnlNbX+FuSeohPTknZWmyBmI2Zl7nZxPFdJ4X
-         ttO8wJYlBiwlW2uTD3y53K/0mpxcey7ORYV8RY7E6+4E59BuE5HfBykd8XdFRf4pf0OC
-         8kOk0Yx4MHDJxTMQb/n+/nY62aQCspVizCb0pfxgXaMMCAChLosPK2BdiIon8CXTtz66
-         xyhDicp5gdFLpnPy9f+fVMhc4USmymLeeskvw4ueAXa7Jj8f5R+taHwdJoStM8WkOEjT
-         i0TBzWc937PSkKUUthz+rn7Nbx6rKnkYroOdH095vz8o0JEawpvqYBsWXNwuX5C7PAUI
-         YgbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=6bBLgCZgh0VQ3FiDVqjw/OukOofGYEtfzJRk02RBM7o=;
-        b=J8bqkCpzNH9A5lP5585PPLNMYW8uSuwfDJ4m6fvA+eeuELxL1CVxwdNOZa+pr8AnMx
-         wffJC37lVzNsCg+aYeIsxTvtMmFsNr2O5hLELgjJhzyyYOSG16SqydeI/3/7Dr5hQV6x
-         4pM004HWHgtxKTiqP9mA4NKZ2PVCz0ka+m2ZbVpj+SKU0GdGkbmAd2Qf5cOqGpV+qdpM
-         4rBA0ACbcaBomIjENdTwYVJm9ihhE/2pOZUktnKLr22wVAW8D0JKkTBPh32rLgp0pwkr
-         Am+EdDpwd9OKMGf3o5W/RE/7J0QjCkyz2P/dQdxPzuws4xRba1peuL9aSardYXPCZrBp
-         Tp/Q==
-X-Gm-Message-State: AOAM530UGS7ItQ+gE/Q37/vn+dQAN7rGr7C6/nRpQ+kYnfvxRZM2lV+v
-        WyLpy33t5qNykfqwg/49lTzRXQVsKYs=
-X-Google-Smtp-Source: ABdhPJx6wABjmYegKi4YgVH5rutTffU4pxGVLltDmYlM4H7/jarWaxh3CL1PYSblSpN226tNEjgPzA==
-X-Received: by 2002:aa7:d5d9:0:b0:416:1dd3:7714 with SMTP id d25-20020aa7d5d9000000b004161dd37714mr9225263eds.256.1647009628632;
-        Fri, 11 Mar 2022 06:40:28 -0800 (PST)
-Received: from felia.fritz.box (200116b826a9a900147fc2a0771e144b.dip.versatel-1u1.de. [2001:16b8:26a9:a900:147f:c2a0:771e:144b])
-        by smtp.gmail.com with ESMTPSA id bq23-20020a170906d0d700b006db0372d3a2sm3045117ejb.20.2022.03.11.06.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 06:40:28 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] fs: remove reference to the removed config NFSD_V3
-Date:   Fri, 11 Mar 2022 15:39:41 +0100
-Message-Id: <20220311143941.9628-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 09:42:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF071AAA74;
+        Fri, 11 Mar 2022 06:40:51 -0800 (PST)
+Date:   Fri, 11 Mar 2022 14:40:35 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647009636;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bq7jXPjH2+/y4/vaCcgbMOclnKGE2wW5g01S7r6BW64=;
+        b=ayjuyhu/VpJ3TZcdP6LIwIrI+AFqGWtt5B8FHcm5hxm7DqQLdWVUOTgD1tT1J1nUV1acFU
+        8PQiWmkoLXeCYR+wpyL0uLPjxp3ThUsayLTIc5C1ZSzAP17QvpQ4ucbRfkViL0NVd2a883
+        MKEhjwNxRTLfznmTgTEwVGHvmOoK2DtRTO+9ljW4qJKZgrhp/pgx4aSZwPHZQEMPwOYrZ0
+        0zFvHLtNXaJoUTvNO4wvIwj2HpwQS0Auo3HEzHDYsx3W8Gs3aYnA/YKuP+rOmx8UawEJLf
+        DzrCsiOkJ2HUMgacd1peX6TfZ+F/JSundqYa6OdjyRvagqND+RGABmuO0tcQVA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647009636;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bq7jXPjH2+/y4/vaCcgbMOclnKGE2wW5g01S7r6BW64=;
+        b=vmwBhKQOPIpnC4o7GxW8wQbqR1f50jt2THhRkRE5YAzboNcTXgQ+mcsKGoN2N/K698ZBuA
+        pT4Bh1ujiwktn5BQ==
+From:   "tip-bot2 for Frederic Weisbecker" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/preempt: Tell about PREEMPT_DYNAMIC on kernel headers
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220217111240.GA742892@lothringen>
+References: <20220217111240.GA742892@lothringen>
+MIME-Version: 1.0
+Message-ID: <164700963517.16921.5629732002889775470.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6a687e69a54e ("NFSD: Remove CONFIG_NFSD_V3") removes the config
-NFSD_V3, but misses one reference in fs/Kconfig.
+The following commit has been merged into the sched/core branch of tip:
 
-Remove this remaining reference to the removed config symbol.
+Commit-ID:     a0a7e453b502cbbf7ff372f907a4e27a2ebf5445
+Gitweb:        https://git.kernel.org/tip/a0a7e453b502cbbf7ff372f907a4e27a2ebf5445
+Author:        Frederic Weisbecker <frederic@kernel.org>
+AuthorDate:    Thu, 17 Feb 2022 12:12:40 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 11 Mar 2022 15:36:35 +01:00
 
-This issue was discovered with ./scripts/checkkconfigsymbols.py.
+sched/preempt: Tell about PREEMPT_DYNAMIC on kernel headers
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Displaying "PREEMPT" on kernel headers when CONFIG_PREEMPT_DYNAMIC=y
+can be misleading for anybody involved in remote debugging because it
+is then not guaranteed that there is an actual preemption behaviour. It
+depends on default Kconfig or boot defined choices.
+
+Therefore, tell about PREEMPT_DYNAMIC on static kernel headers and leave
+the search for the actual preemption behaviour to browsing dmesg.
+
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220217111240.GA742892@lothringen
 ---
-Chuck, please pick this quick fix to your commit in linux-next.
+ init/Makefile       |  3 ++-
+ scripts/mkcompile_h | 17 ++++++++++++-----
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
- fs/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 7f2455e8e18a..ec2cf8ccd170 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -344,7 +344,7 @@ config LOCKD
+diff --git a/init/Makefile b/init/Makefile
+index 06326e3..d82623d 100644
+--- a/init/Makefile
++++ b/init/Makefile
+@@ -31,7 +31,8 @@ quiet_cmd_compile.h = CHK     $@
+       cmd_compile.h = \
+ 	$(CONFIG_SHELL) $(srctree)/scripts/mkcompile_h $@	\
+ 	"$(UTS_MACHINE)" "$(CONFIG_SMP)" "$(CONFIG_PREEMPT_BUILD)"	\
+-	"$(CONFIG_PREEMPT_RT)" "$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
++	"$(CONFIG_PREEMPT_DYNAMIC)" "$(CONFIG_PREEMPT_RT)" \
++	"$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
  
- config LOCKD_V4
- 	bool
--	depends on NFSD_V3 || NFS_V3
-+	depends on NFS_V3
- 	depends on FILE_LOCKING
- 	default y
+ include/generated/compile.h: FORCE
+ 	$(call cmd,compile.h)
+diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
+index 6a2a04d..ca40a52 100755
+--- a/scripts/mkcompile_h
++++ b/scripts/mkcompile_h
+@@ -5,9 +5,10 @@ TARGET=$1
+ ARCH=$2
+ SMP=$3
+ PREEMPT=$4
+-PREEMPT_RT=$5
+-CC_VERSION="$6"
+-LD=$7
++PREEMPT_DYNAMIC=$5
++PREEMPT_RT=$6
++CC_VERSION="$7"
++LD=$8
  
--- 
-2.17.1
-
+ # Do not expand names
+ set -f
+@@ -41,8 +42,14 @@ fi
+ UTS_VERSION="#$VERSION"
+ CONFIG_FLAGS=""
+ if [ -n "$SMP" ] ; then CONFIG_FLAGS="SMP"; fi
+-if [ -n "$PREEMPT" ] ; then CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT"; fi
+-if [ -n "$PREEMPT_RT" ] ; then CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_RT"; fi
++
++if [ -n "$PREEMPT_RT" ] ; then
++	CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_RT"
++elif [ -n "$PREEMPT_DYNAMIC" ] ; then
++	CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_DYNAMIC"
++elif [ -n "$PREEMPT" ] ; then
++	CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT"
++fi
+ 
+ # Truncate to maximum length
+ UTS_LEN=64

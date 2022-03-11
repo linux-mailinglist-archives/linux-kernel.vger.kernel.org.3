@@ -2,124 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D6D4D5E10
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654B44D5E11
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343551AbiCKJG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S1343583AbiCKJLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235346AbiCKJG4 (ORCPT
+        with ESMTP id S235362AbiCKJLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:06:56 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6338D1BB700
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:05:53 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id v130so15901343ybe.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m4uZHfd5TEknERkFPf+I/joPh8Butuy4Qgst4A1Cqjw=;
-        b=pF6htef8BElDLh5mKnFuCbURvy+T/DgtLXd1OrtoV5iZB/kuFmt74asVUCwjaEiP1W
-         VvVb0/uyuvzAHsaOwfvAPUbNjLLi/4O+SisK77Z/w6dLGflRJWAcnwFg8SMYxuEzUtm9
-         Kn0yMKbWtwRnmtRjIb/fgaiA5s9Zib6MbM6LijkloeJGFeDoxalPAyalbbC5Vvm4edYz
-         fKO5lHEqYrZVhfKCrzgSemS8X69xLKp4tDnuTSv1x4AULBBK4IQkDR+YI9t12YnNKIli
-         OXfoMRM7zpWFlX+2+hnO36gI1Xv1n89u0KcNlYLC4ioZEqwTkHNfcCLxhOk5rKKtlYoP
-         icDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m4uZHfd5TEknERkFPf+I/joPh8Butuy4Qgst4A1Cqjw=;
-        b=xWHE81c6WGbRpgJfP4R/MNoBIsBIxfaG1R/261E+tnrBKBxFsqyxzdfL0uTG7hN25T
-         efBWNKi+hp9fgGy8N8C7Ka4+O1DRnxWxmTVXDBoInDKSjWwyeCZq/JK3MAcpljP3GTFD
-         vcK0i2q8qIcy08BfOjbee8b0935Ekqg4/Rqtrxay0ce2Dnv/TE2TDuOE0LGcPpg2J0ml
-         UTfhD724BbbYG/TyThcvtDC/qdU/LSU2bk9eSHl+2rrcQWHHZtGXtr4IUiaga5yCY47L
-         DwOScUNnYSTCRMOfStL4dco505RffgKck0VA9ihXwJ4IbWIHprIyc0mCTB0B0umXyHh/
-         ea5Q==
-X-Gm-Message-State: AOAM533KK40pGeMK3WnShsJMUqUL+3A1YWhfuq4fcxYVTrCPc0Dmi5AR
-        Ksc9mF6O+9c/ZmR8W3ITeNMdlt1Hvxt+MDlWUo5VRg==
-X-Google-Smtp-Source: ABdhPJw9qo6/6qA17qt3SommKl5Kt2eGwf1GjUaS4QRzcq/DenqfvaHGIbgh5aqK7drz/IJ4KLgY2d7lQMruWIN46Do=
-X-Received: by 2002:a25:d188:0:b0:628:ba86:ee68 with SMTP id
- i130-20020a25d188000000b00628ba86ee68mr7040760ybg.427.1646989552644; Fri, 11
- Mar 2022 01:05:52 -0800 (PST)
+        Fri, 11 Mar 2022 04:11:43 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0062A1BB70D;
+        Fri, 11 Mar 2022 01:10:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646989841; x=1678525841;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9XZd3A5JSwNwuvRtar4ydpQDnQtwJ4sZrgR4lOTdwJM=;
+  b=VnkVWAE8Nh5FEMQ7JIc9cIruW9AfbiwLZCrYV31eb1k1PjcXMEW39oLD
+   AxNDC3N48YrhrIFmmdFA/HvztgOv3v+CTh6q6FgsBY/gGuU+2GjR+PR8D
+   3aEjLHYitMdVSPKP8JUcXN4fm2Kqxa04tUI4Cv1qq6BTnT8e3lxYQK8Om
+   Hloqlezy7IP0GUpADkh1hfY1bqhy18lUhhUrvdjbj96QlYd+hOMcfkX98
+   Ni5Y8AOFdbVQZ8TBwtQ/qk0jAae7AimiGHYiWAZlSsLBSTe9ICy38ZWMh
+   uv2kFepiv3rUbJ0YQMFIRknJOqQvvSngL9ElY5oUjdmLrxv0cJVf8EKDQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="341963142"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="341963142"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 01:10:40 -0800
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="555227879"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.194])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 01:10:36 -0800
+Message-ID: <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
+Date:   Fri, 11 Mar 2022 11:10:30 +0200
 MIME-Version: 1.0
-References: <20220302082718.32268-1-songmuchun@bytedance.com>
- <20220302082718.32268-6-songmuchun@bytedance.com> <CAPcyv4hsMWe1AreVVhGJD-St3FGtGBMeA-BX7XbA_kVX97tw4Q@mail.gmail.com>
-In-Reply-To: <CAPcyv4hsMWe1AreVVhGJD-St3FGtGBMeA-BX7XbA_kVX97tw4Q@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 11 Mar 2022 17:04:06 +0800
-Message-ID: <CAMZfGtUmhcryboPdRC7ZhWVuV3TX0rLcKUxhvamAGbHUoATaow@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] dax: fix missing writeprotect the pte entry
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+Content-Language: en-US
+To:     "Steinar H. Gunderson" <sesse@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220310093844.982656-1-sesse@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220310093844.982656-1-sesse@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 8:59 AM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> On Wed, Mar 2, 2022 at 12:30 AM Muchun Song <songmuchun@bytedance.com> wrote:
-> >
-> > Currently dax_mapping_entry_mkclean() fails to clean and write protect
-> > the pte entry within a DAX PMD entry during an *sync operation. This
-> > can result in data loss in the following sequence:
-> >
-> >   1) process A mmap write to DAX PMD, dirtying PMD radix tree entry and
-> >      making the pmd entry dirty and writeable.
-> >   2) process B mmap with the @offset (e.g. 4K) and @length (e.g. 4K)
-> >      write to the same file, dirtying PMD radix tree entry (already
-> >      done in 1)) and making the pte entry dirty and writeable.
-> >   3) fsync, flushing out PMD data and cleaning the radix tree entry. We
-> >      currently fail to mark the pte entry as clean and write protected
-> >      since the vma of process B is not covered in dax_entry_mkclean().
-> >   4) process B writes to the pte. These don't cause any page faults since
-> >      the pte entry is dirty and writeable. The radix tree entry remains
-> >      clean.
-> >   5) fsync, which fails to flush the dirty PMD data because the radix tree
-> >      entry was clean.
-> >   6) crash - dirty data that should have been fsync'd as part of 5) could
-> >      still have been in the processor cache, and is lost.
->
-> Excellent description.
->
-> >
-> > Just to use pfn_mkclean_range() to clean the pfns to fix this issue.
->
-> So the original motivation for CONFIG_FS_DAX_LIMITED was for archs
-> that do not have spare PTE bits to indicate pmd_devmap(). So this fix
-> can only work in the CONFIG_FS_DAX_LIMITED=n case and in that case it
-> seems you can use the current page_mkclean_one(), right?
+On 10.3.2022 11.38, Steinar H. Gunderson wrote:
+> There is no good reason why we cannot synthesize "cycle" events
+> from Intel PT just as we can synthesize "instruction" events,
+> in particular when CYC packets are available. This enables using
+> PT to getting much more accurate cycle profiles than regular sampling
+> (record -e cycles) when the work last for very short periods (<10 ms).
+> Thus, add support for this, based off of the existing IPC calculation
+> framework. The new option to --itrace is "y" (for cYcles), as c was
+> taken for calls. Cycle and instruction events can be synthesized
+> together, and are by default.
+> 
+> The only real caveat is that CYC packets are only emitted whenever
+> some other packet is, which in practice is when a branch instruction
+> is encountered. Thus, even at no subsampling (e.g. --itrace=y0ns),
+> it is impossible to get more accuracy than a single basic block, and all
+> cycles spent executing that block will get attributed to the branch
+> instruction that ends it. Thus, one cannot know whether the cycles came
+> from e.g. a specific load, a mispredicted branch, or something else.
+> When subsampling (which is the default), the cycle events will get
+> smeared out even more, but will still be useful to attribute cycle
+> counts to functions.
+> 
+> Signed-off-by: Steinar H. Gunderson <sesse@google.com>
+> ---
+>  tools/perf/Documentation/itrace.txt        |  3 +-
+>  tools/perf/Documentation/perf-intel-pt.txt | 33 +++++++-----
+>  tools/perf/util/auxtrace.c                 |  9 +++-
+>  tools/perf/util/auxtrace.h                 |  7 ++-
+>  tools/perf/util/intel-pt.c                 | 59 +++++++++++++++++++---
+>  5 files changed, 88 insertions(+), 23 deletions(-)
+> 
 
-I don't know the history of CONFIG_FS_DAX_LIMITED.
-page_mkclean_one() need a struct page associated with
-the pfn,  do the struct pages exist when CONFIG_FS_DAX_LIMITED
-and ! FS_DAX_PMD? If yes, I think you are right. But I don't
-see this guarantee. I am not familiar with DAX code, so what am
-I missing here?
+<SNIP>
 
-Thanks.
+> -static int intel_pt_synth_instruction_sample(struct intel_pt_queue *ptq)
+> +static int intel_pt_synth_instruction_or_cycle_sample(struct intel_pt_queue *ptq)
+>  {
+>  	struct intel_pt *pt = ptq->pt;
+>  	union perf_event *event = ptq->event_buf;
+>  	struct perf_sample sample = { .ip = 0, };
+> +	int err;
+>  
+>  	if (intel_pt_skip_event(pt))
+>  		return 0;
+> @@ -1633,7 +1639,7 @@ static int intel_pt_synth_instruction_sample(struct intel_pt_queue *ptq)
+>  	else
+>  		sample.period = ptq->state->tot_insn_cnt - ptq->last_insn_cnt;
+>  
+> -	if (ptq->sample_ipc)
+> +	if (ptq->sample_ipc || pt->sample_cycles)
+
+This is not quite right.  ptq->sample_ipc is set to indicate when the
+cycle count is accurate for the current instruction.  It can be weakened
+by using "Approx IPC" which was introduced for dlfilter-show-cycles.
+Probably that approach should be followed for a "cycles" event also.
+
+From perf-intel-pt man page:
+
+dlfilter-show-cycles.so
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Cycles can be displayed using dlfilter-show-cycles.so in which case the itrace A
+option can be useful to provide higher granularity cycle information:
+
+	perf script --itrace=A --call-trace --dlfilter dlfilter-show-cycles.so
+
+To see a list of dlfilters:
+
+	perf script -v --list-dlfilters
+
+See also linkperf:perf-dlfilters[1]
+
+
+>  		sample.cyc_cnt = ptq->ipc_cyc_cnt - ptq->last_in_cyc_cnt;
+>  	if (sample.cyc_cnt) {
+>  		sample.insn_cnt = ptq->ipc_insn_cnt - ptq->last_in_insn_cnt;
+> @@ -1643,8 +1649,30 @@ static int intel_pt_synth_instruction_sample(struct intel_pt_queue *ptq)
+>  
+>  	ptq->last_insn_cnt = ptq->state->tot_insn_cnt;
+
+There are variables here that are specific to the "instructions" event, so
+mixing "cycles" with "instructions" means duplicating those, however maybe
+it would be better not to allow "y" and "i" options at the same time?
+
+>  
+> -	return intel_pt_deliver_synth_event(pt, event, &sample,
+> -					    pt->instructions_sample_type);
+> +	if (pt->sample_instructions) {
+> +		err = intel_pt_deliver_synth_event(pt, event, &sample,
+> +						   pt->instructions_sample_type);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	/*
+> +	 * NOTE: If not doing sampling (e.g. itrace=y0us), we will in practice
+> +	 * only see cycles being attributed to branches, since CYC packets
+> +	 * only are emitted together with other packets are emitted.
+> +	 * We should perhaps consider spreading it out over everything since
+> +	 * the last CYC packet, ie., since last time sample.cyc_cnt was nonzero.
+> +	 */
+> +	if (pt->sample_cycles && sample.cyc_cnt) {
+> +		sample.id = ptq->pt->cycles_id;
+> +		sample.stream_id = ptq->pt->cycles_id;
+
+A "cycles" sample needs to set the sample period to the number of cycles since the
+last "cycles" sample.
+
+> +		err = intel_pt_deliver_synth_event(pt, event, &sample,
+> +						   pt->cycles_sample_type);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+>  }

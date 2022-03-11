@@ -2,106 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD394D6923
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5161C4D6925
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351146AbiCKThs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
+        id S1351152AbiCKTk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiCKThq (ORCPT
+        with ESMTP id S234259AbiCKTk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 14:37:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19387A1BCF
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:36:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647027402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wPUrpfRAqac225NyEd4nrs7asUwgp/J03uajT5hWfqA=;
-        b=ODb/Hqet88t30d9PPigV44qy9132GbWtMnzdvmrmvz4P1HKd9Ev2/+JWOe6CqWsSH7FXOe
-        b33VGd+GshOW/qq6nYYpI9Uuc/cf9n3xLnp0VxkQbjHppKpgYY0C7+PfOOTSNFKYTMoYBQ
-        UjYypYiOVMFb68xtPBDesMW3Uc2yuy0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649--ZpX_t2XPv2ZnqpHW4ifqg-1; Fri, 11 Mar 2022 14:36:41 -0500
-X-MC-Unique: -ZpX_t2XPv2ZnqpHW4ifqg-1
-Received: by mail-wm1-f69.google.com with SMTP id z9-20020a7bc7c9000000b00389bd375677so3798875wmk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:36:40 -0800 (PST)
+        Fri, 11 Mar 2022 14:40:28 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D2A172249;
+        Fri, 11 Mar 2022 11:39:23 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2dc28791ecbso104805227b3.4;
+        Fri, 11 Mar 2022 11:39:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mh7tQAL0n2bfKeDOiESqkHoSAFen1q88Q72P8o10M7A=;
+        b=W8yPWXikTd3d8CG7OAaTfCsJUv8lX0jtJk/K204unOsnjmJqY5TXkjQbvznknMk/i2
+         zslAJLXCzeIvSP5eYHxnbg0im1/T7xstqlhL5icnhxyXLFNT0yIZdR7te+P47YysSnZL
+         17GMjtE3UqI1QjHCld1TOzg1VWO5vZ8DLz8fWSp6iTrvCoA9H/Piy6qBaS0T0SB3cMFO
+         avasPngLRedqGgiXrJM1Y27Z2Kh63qZkbdRIF2jmWs0vlIugsGNZF+38iuv39CFwQNtb
+         7GWb7gXFPcr/pAHsuCFN/LAkeRSNH1ugN1K2YHkpFc9Ka8VbAwKLI1T0Lo+001BZktah
+         qMig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=wPUrpfRAqac225NyEd4nrs7asUwgp/J03uajT5hWfqA=;
-        b=a9Ji4FKq/NfYpczWqoW106ClYIxdtL7c+H53VkHaoJmJIY+74CZNlns/y+nTz09IxV
-         DTfqtAF4nnO3IC4OGshYxi/WvodWeJBLIxig9Ld9OxXINLujimNN7AjJQ15oK1HAU8T1
-         lcSvqOnl5QyZsNLIt2BKVItUqybtovNyLByxyoufBVBGYAC0QsGq0H6/Nqwj+ZbEuJ00
-         5lhdVlsLFJ4TQR9xNMzSfUD1X0/EncwFsjczgMKzQn88BXVhwpcBK3k+24FczdFZ73U2
-         nHnUGWA4VPVDxg0UrNHkIstixT8HJmJTW9DgJXI5/iReUzY7D2E+vyGiUONUBMTEjb8W
-         LrMw==
-X-Gm-Message-State: AOAM531AE1bEhrdpollPkTHm7GpytVoVW29rT8rloijbYND4896/Ojch
-        usdsawTXeiFTGXDa++CEItMkAzBUGmcRJBZ1YyLjhKZHkE0Ub9xCuofcu60cpI4XD0K/xkZNrU8
-        g0/3wa5GUW129p90YwRBhv7cH
-X-Received: by 2002:a05:600c:a0a:b0:350:564b:d55e with SMTP id z10-20020a05600c0a0a00b00350564bd55emr8525939wmp.124.1647027399838;
-        Fri, 11 Mar 2022 11:36:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwmSNNgK3mtCqM8BBLibdarWwsWTj73jvbn2Q9MTbGHUOVZZYQKYfSDUZJrKEFrYJWsCU7UaA==
-X-Received: by 2002:a05:600c:a0a:b0:350:564b:d55e with SMTP id z10-20020a05600c0a0a00b00350564bd55emr8525926wmp.124.1647027399517;
-        Fri, 11 Mar 2022 11:36:39 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:8200:163d:7a08:6e61:87a5? (p200300cbc7078200163d7a086e6187a5.dip0.t-ipconnect.de. [2003:cb:c707:8200:163d:7a08:6e61:87a5])
-        by smtp.gmail.com with ESMTPSA id v6-20020a5d5906000000b001f0639f69e6sm7631228wrd.55.2022.03.11.11.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 11:36:39 -0800 (PST)
-Message-ID: <e166e925-508e-3830-574f-59b2d2cf2431@redhat.com>
-Date:   Fri, 11 Mar 2022 20:36:37 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mh7tQAL0n2bfKeDOiESqkHoSAFen1q88Q72P8o10M7A=;
+        b=3uOoigvNKpNS2Tn2Exih6JIWV2zxj7MqxB1wdhMyLBInF9yB9Xg4o+l6EI5idawyvg
+         SzWkSmsm5IAUjMWMqL8lzX+W37O2LJc1D/Gskdrvv7rV4hvlaI1TUfM2Bl+Lt9bVZ8Z+
+         QffadWymENacELnugNtEePehEIISlZaz7+WL9MaB5R/sNsqdUp8e4BrrKYDki6+YKw79
+         SaFI0GlCGyyCaq0BTTQQJsd7CYsqyfamo2a7mOgMsIgGN+z7WFraIGYeYmy1lHilwi2V
+         GlTB8x7xpN1vtqV9EyjKF0aNt4EPYoDUtkonujmRSTKp50hqNnOYyZeboLTinuES2YrB
+         mPxg==
+X-Gm-Message-State: AOAM533PlrlxxwJJX2zauO7AE11+vVtxBFnmFr6nV4ojeuy9xOUvOd+g
+        r2JVmFR7nOHnf8N3TfhUp18OdEI/TUiAke/h8Zs+JgS+jbU=
+X-Google-Smtp-Source: ABdhPJwdPCDYT3XTqvaxrFf38dMJcyUvh98/yM+YN1EMw/AaIwHtCxJvZ6LmxyfTNN3Xmd84OjgIZJ8+FQUkanYZdVY=
+X-Received: by 2002:a0d:c645:0:b0:2db:9ed9:e6e5 with SMTP id
+ i66-20020a0dc645000000b002db9ed9e6e5mr9835172ywd.292.1647027562199; Fri, 11
+ Mar 2022 11:39:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 10/15] mm/page-flags: reuse PG_slab as
- PG_anon_exclusive for PageAnon() pages
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220308141437.144919-1-david@redhat.com>
- <20220308141437.144919-11-david@redhat.com>
- <a0bd6f52-7bb5-0c32-75c8-2c7c592c2d6d@redhat.com>
- <CAHk-=wjWx_bPBLB=qMMae8Sy3KrO+Kvaf4juPknO5HX-+Ot0XQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAHk-=wjWx_bPBLB=qMMae8Sy3KrO+Kvaf4juPknO5HX-+Ot0XQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <c5ea7235-8642-6a89-f4ce-bd0861b6e4aa@linaro.org> <CA+V-a8tkhERx+8zDae5aWkNQ9Oxd1AamRL=i4TDC2X8RGgAo0w@mail.gmail.com>
+ <5e13c1ba-0bf5-e360-c350-e7a1a1402350@linaro.org> <CAL_Jsq+CWKvkHMNhAa3o_rSLy_+AoHi6wkB3MRM8O3jJ5sG_Wg@mail.gmail.com>
+ <c3e75761-e554-d8b1-f41d-f7bed5a0cce7@linaro.org>
+In-Reply-To: <c3e75761-e554-d8b1-f41d-f7bed5a0cce7@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 11 Mar 2022 19:38:56 +0000
+Message-ID: <CA+V-a8vVMu2JteQ9AwvsP=QG6dme+FuFVX5tWgvuEzBffhd1oA@mail.gmail.com>
+Subject: Re: [PATCH] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the interrupt
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,44 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.03.22 20:22, Linus Torvalds wrote:
-> On Fri, Mar 11, 2022 at 10:46 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> -       PG_has_hwpoisoned = PG_mappedtodisk,
->> +       PG_has_hwpoisoned = PG_waiters,
-> 
-> That makes me too nervous for words. PG_waiters is very subtle.
+On Thu, Mar 10, 2022 at 2:59 PM Srinivas Kandagatla
+<srinivas.kandagatla@linaro.org> wrote:
+>
+>
+>
+> On 10/03/2022 14:14, Rob Herring wrote:
+> > On Thu, Mar 10, 2022 at 4:42 AM Srinivas Kandagatla
+> > <srinivas.kandagatla@linaro.org> wrote:
+> >>
+> >>
+> >>
+> >> On 10/03/2022 10:23, Lad, Prabhakar wrote:
+> >>> On Thu, Mar 10, 2022 at 10:16 AM Srinivas Kandagatla
+> >>> <srinivas.kandagatla@linaro.org> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>> On 24/12/2021 16:13, Lad Prabhakar wrote:
+> >>>>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> >>>>> allocation of IRQ resources in DT core code, this causes an issue
+> >>>>
+> >>>> Are you saying that we should not be using platform_get_resource(pdev,
+> >>>> IORESOURCE_IRQ, ...) on drivers that support DT?
+> >
+> > We should be using platform_get_irq(). (period, on all platform drivers)
+> >
+>
+> Thanks, I see why is it preferred.
+>
+> Code as of now will not prevent drivers from calling
+> platform_get_resource(..IORESOURCE_IRQ).
+>
+> Are we planning to enforce this in any way?
+>
+> >>>>> when using hierarchical interrupt domains using "interrupts" property
+> >>>>> in the node as this bypasses the hierarchical setup and messes up the
+> >>>>> irq chaining.
+> >>>>
+> >>>> Should this not be fixed in the DT core itself?
+> >>>>
+> >>> Yes the plan is to fix in the DT core itself (refer [0]).
+> >>>
+> >>> [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> >>>
+> >>>>>
+> >>>>> In preparation for removal of static setup of IRQ resource from DT core
+> >>>>> code use platform_get_irq().
+> >>>>
+> >>>> I would prefer this patch to be part of the series that removes IRQ
+> >>>> resource handling from DT core.
+> >>>>
+> >>> Since there are too many users (which are in different subsystems)
+> >>> getting this all in single series would be a pain. As a result it is
+> >>> split up into individual subsystems.
+> >> Am happy for this to be included in that series,
+> >> TBH, this patch make more sense along with that series than by itself.
+> >
+> > No it doesn't. This is no different than converting to devm_* variants
+> > or other cleanups to match current preferred styles.
+> >
+> > Treewide cross subsystem clean-ups are a huge pain to merge. Why would
+> > you ask for that when it is clearly not necessary?
+>
+> Only reason for this ask was to understand how platform_get_resource()
+> will change moving forward, if this is something that you are planning
+> to include in your fix patches.
+>
+> I can go ahead and apply the patch, if that helps.
+>
+Yes please, that would be helpful.
 
-Yes, but PG_has_hwpoisoned is located on the second subpage of a
-compound page, not on the head page.
-
-> 
-> Not only is it magical in bit location ways (and the special
-> clear_bit_unlock_is_negative_byte() macro that *literally* exists only
-> for unlocking a page), it just ends up having fairly subtle semantics
-> with intentionally racy clearing etc.
-> 
-> Mixing that up with any hwpoison bits - that aren't used by any normal
-> mortals and thus get very little coverage - just sounds horribly
-> horribly wrong.
-
-I used PG_error before, but felt like using a bit that is never ever
-valid to be set/cleared/checked on a subpage would be even a better fit:
-
-Note the:
-
-  PAGEFLAG(Waiters, waiters, PF_ONLY_HEAD) __CLEARPAGEFLAG(Waiters, waiters, PF_ONLY_HEAD)
-
-whereby PF_ONLY_HEAD translates to:
-
-"for compound page, callers only ever operate on the head page."
-
-
-I can just switch to PG_error, but for the second subpage, PG_waiters
-should be just fine (unless I am missing something important).
-
--- 
-Thanks,
-
-David / dhildenb
-
+Cheers,
+Prabhakar

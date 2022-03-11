@@ -2,110 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC94D5A27
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBA14D5A2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240951AbiCKE7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        id S231964AbiCKFCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiCKE70 (ORCPT
+        with ESMTP id S229555AbiCKFCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:59:26 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8269EBAD6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646974702; x=1678510702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+R6A86dmxY6vLKDrP3Nt7gOE39thRUmcMWjHFlzWGv4=;
-  b=VT7gVPu5Nn8Lzb8EZ2e4Cn3EJyiLYK4/3SST4VmA06tRaWsiPpewA59s
-   +fLL5xs6wTtOtyr/NGIpneE36Xzn6Pryj1tzYCXpbGGLeiFXKTN+yZslj
-   fyGRHw1FjcxzjYoHhvaZmb6pTJsPSk77YGWx69baVEcF46/+atBJtWPvB
-   ywYrGVcJhAPN1rBCOKurwRmwl4wHEi29wYdbPHdBdbLSpiGflsVLJH8k7
-   h53mJFiLR/RIzew7asg90ijoYJTL72IknPFpMtTsyO3WJYqYnD6NbiPLa
-   rW3LC5xbe2vb20MRgTmJoaCdSJCpZ6URsNrHam9Uv5Lk3s197PzU93w6l
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="255234447"
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="255234447"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 20:58:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="511270924"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Mar 2022 20:58:20 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSXM3-0005rD-PF; Fri, 11 Mar 2022 04:58:19 +0000
-Date:   Fri, 11 Mar 2022 12:58:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Julien Massot <julien.massot@iot.bzh>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202203111221.j1ubHVTj-lkp@intel.com>
+        Fri, 11 Mar 2022 00:02:32 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60751AAFF7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:01:27 -0800 (PST)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220311050121epoutp028c4b003c20286988e780d33583c770e1~bOu2-5dNh2170521705epoutp02H
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 05:01:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220311050121epoutp028c4b003c20286988e780d33583c770e1~bOu2-5dNh2170521705epoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646974881;
+        bh=+59sJV9cSMvjPyOkvqv4pGAyNeXUmdaNbqejXC9+ehU=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=jbOX0UYImNy59sJdrt4j57gnOGzS5iSB860TtTxtw9dmPYZv7OQxLI6tdgSol8s3D
+         CLIw3khr5m8yPoTbImbFs1ZO1mk5hCtyE+G7BvG1nC0iXalSh0BAHdnynfRL421iM0
+         vInCQ4zAyy27FpXsVWl+QN5EN5LDS/1sn29NDRcg=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220311050120epcas1p170f3e6e10551a472c5916531a4ebd4dd~bOu2ecVFH0422304223epcas1p1J;
+        Fri, 11 Mar 2022 05:01:20 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.234]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KFDKk6ycTz4x9QC; Fri, 11 Mar
+        2022 05:01:14 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        98.74.08277.697DA226; Fri, 11 Mar 2022 14:01:10 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220311050109epcas1p481408b3da1a1ecb860b0ee5f964e87e6~bOuru_CxM3089030890epcas1p4G;
+        Fri, 11 Mar 2022 05:01:09 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220311050109epsmtrp1f8f8281f5047c193569c9b472e714d71~bOuruDap90504105041epsmtrp1C;
+        Fri, 11 Mar 2022 05:01:09 +0000 (GMT)
+X-AuditID: b6c32a36-1edff70000002055-90-622ad79605ab
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AA.45.03370.597DA226; Fri, 11 Mar 2022 14:01:09 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220311050109epsmtip1a6ddfbae51b2ab3ffd63457bfc67ced8~bOurfxOPW1780817808epsmtip10;
+        Fri, 11 Mar 2022 05:01:09 +0000 (GMT)
+Subject: Re: [PATCH V1] extcon/usb: Remove disable irq operation in system
+ sleep.
+To:     Roger Quadros <rogerq@kernel.org>,
+        Bruce Chen <brucechen251@gmail.com>, bruce.chen@unisoc.com,
+        myungjoo.ham@samsung.com, linux-kernel@vger.kernel.org,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     orsonzhai@gmail.com, gengcixi@gmail.com, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <0c8047d5-e171-2953-be50-b9a21c4b22d8@samsung.com>
+Date:   Fri, 11 Mar 2022 14:26:08 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <32165383-5ccf-e6a1-92ef-cde14c401eaa@kernel.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEJsWRmVeSWpSXmKPExsWy7bCmvu6061pJBpfauCzmPbnEarGx8SGT
+        xauvE9gtVj5gsVjUvoTF4vKuOWwWtxtXsFlM/zCb0eLcvXWsFv/PfmC3WP5gF7sDt8fOWXfZ
+        PTat6mTz6NuyitHj+I3tTB6H28+ye3zeJBfAFpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9q
+        ZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0npJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1
+        ICWnwLRArzgxt7g0L10vL7XEytDAwMgUqDAhO+Prvn9MBQuFK85cWcbawLicv4uRk0NCwERi
+        +/5ZzF2MXBxCAjsYJeZM38MK4XxilLg/sZ8ZpEpI4DOjxMTHCjAd87r+QhXtYpQ4PekeC4Tz
+        nlHi1pEnTCBVwgLBEie6nzGCJERAEje37mABSTALREusPfeVHcRmE9CS2P/iBhuIzS+gKHH1
+        x2NGEJtXwE6i6eBHsDiLgKrEzPcrWUFsUYEwiZPbWqBqBCVOznwCNpMTqP7u+b3sEPPFJW49
+        mc8EYctLbH87B+w5CYEDHBKzl+1nhvjBReL+gSvsELawxKvjW6BsKYmX/W3sEA3NjBINL24z
+        Qjg9jBJHn/WxQFQZS+xfOhloBQfQCk2J9bv0IcKKEjt/z2WE2Mwn8e5rDytIiYQAr0RHmxBE
+        ibLE5Qd3mSBsSYnF7Z1sExiVZiH5ZxaSH2Yh+WEWwrIFjCyrGMVSC4pz01OLDQuM4PGdnJ+7
+        iRGceLXMdjBOevtB7xAjEwfjIUYJDmYlEd6mUI0kId6UxMqq1KL8+KLSnNTiQ4ymwBCeyCwl
+        mpwPTP15JfGGJpYGJmZGxiYWhmaGSuK8q6adThQSSE8sSc1OTS1ILYLpY+LglGpg8nfQqZ/v
+        e1WnbRZbmHnpbV2/xwcCdvxY3D3niv8pzTRBUeWgz2xfHDUiX+pej7tc+Gn+0zcJCwPW8xZ7
+        lr0JFjxplJke+Yd7VS7z0sPvD9veY/l96tTB0GJb88rlP3433Y0smuTR2P5HI8xjW5HSeyHe
+        71N7j3v6L21kjFw1cW30bvET+tvPT70wrarotay54Z79szUKdlxRPiK61vb3m5Aq3zn5s9q1
+        302ZulrH3cjs/MfpZRd+P7xvYpMXYrrireKKzb9/am/myg92VGj7Ij0h/MYkRje2BCPOirf/
+        eU5zKiXFGd7bIJfP+UXjrl+CT8OmYMuQF79u+nbLLpninL395inpD3vlFh9657ayVImlOCPR
+        UIu5qDgRAH7/mt5FBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSnO7U61pJBqdPiljMe3KJ1WJj40Mm
+        i1dfJ7BbrHzAYrGofQmLxeVdc9gsbjeuYLOY/mE2o8W5e+tYLf6f/cBusfzBLnYHbo+ds+6y
+        e2xa1cnm0bdlFaPH8RvbmTwOt59l9/i8SS6ALYrLJiU1J7MstUjfLoEr4+u+f0wFC4UrzlxZ
+        xtrAuJy/i5GTQ0LARGJe11/WLkYuDiGBHYwS3ae/M0IkJCWmXTzK3MXIAWQLSxw+XAxR85ZR
+        YuWTxUwgNcICwRInup8xgiREBN4zStzr+cwKkmAWiJa4/+wu2CAhgXOMEsvW5oHYbAJaEvtf
+        3GADsfkFFCWu/ngMVsMrYCfRdPAjWJxFQFVi5vuVYHNEBcIkdi55zARRIyhxcuYTFhCbE6j+
+        7vm97BC71CX+zLvEDGGLS9x6Mp8JwpaX2P52DvMERuFZSNpnIWmZhaRlFpKWBYwsqxglUwuK
+        c9Nziw0LjPJSy/WKE3OLS/PS9ZLzczcxguNPS2sH455VH/QOMTJxMB5ilOBgVhLhbQrVSBLi
+        TUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qBieuy6ZmQ50LT
+        S0LMfDS3NF3Ia79RF2Q92/GNd8LUbD3JC+e/qZq/OiL7V1H6av+LluK4CdKFjLqPFJkbfi6a
+        /IS1n3cv2942X+smxpkZk6xsXuVyngvN87/8NU5r/i+V8wlm92/12eaZZDt1XJ8cFTZXQP8I
+        i61C6PJzzRNWxcXvvSqfcWFKSXPz/oxNLCkr/jJc/DQ1/vMRC/WchhTJopnHDRUCLPx89LaW
+        yLtttLml9f/dmaszn/JpfNr89pHQj/oSl7vJotfadr7xW+53pUviwrmfH79tnrokdn9jUtC2
+        efml0zb/2Gov4W1dbLb7JpNsz6ejk+asubQhvXp3E7tpafR/m8+XP4S+maKzQImlOCPRUIu5
+        qDgRAILTleAuAwAA
+X-CMS-MailID: 20220311050109epcas1p481408b3da1a1ecb860b0ee5f964e87e6
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220303092051epcas1p4a6ec4cff37a8f266a584d8d90aa9eac0
+References: <1646292963-20570-1-git-send-email-brucechen251@gmail.com>
+        <CGME20220303092051epcas1p4a6ec4cff37a8f266a584d8d90aa9eac0@epcas1p4.samsung.com>
+        <32165383-5ccf-e6a1-92ef-cde14c401eaa@kernel.org>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dda64ead7e82caa47fafe0edc36067ee64df2203
-commit: 285892a74f1370a12249f765c6a4e3b16194852e remoteproc: Add Renesas rcar driver
-date:   3 months ago
-config: nios2-randconfig-s032-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111221.j1ubHVTj-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=285892a74f1370a12249f765c6a4e3b16194852e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 285892a74f1370a12249f765c6a4e3b16194852e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/remoteproc/
+On 3/3/22 6:20 PM, Roger Quadros wrote:
+> +TI folks Aswath & Vignesh.
+> 
+> Hi Bruce,
+> 
+> On 03/03/2022 09:36, Bruce Chen wrote:
+>> From: Bruce Chen <bruce.chen@unisoc.com>
+>>
+>> If disable vbus/id irq, it will lead to wakeup system fail
+>> in unisoc platform. In unisoc platform, Irq enable and irq
+>> wakeup are the same interrupt line. So remove disable vbus/id
+>> irq operation is a way to solve the issue> 
+>> Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
+>> ---
+>>  drivers/extcon/extcon-usb-gpio.c | 15 ---------------
+>>  1 file changed, 15 deletions(-)
+>>
+>> diff --git a/drivers/extcon/extcon-usb-gpio.c b/drivers/extcon/extcon-usb-gpio.c
+>> index f2b65d9..40d967a 100644
+>> --- a/drivers/extcon/extcon-usb-gpio.c
+>> +++ b/drivers/extcon/extcon-usb-gpio.c
+>> @@ -226,16 +226,6 @@ static int usb_extcon_suspend(struct device *dev)
+>>  		}
+>>  	}
+>>  
+>> -	/*
+>> -	 * We don't want to process any IRQs after this point
+>> -	 * as GPIOs used behind I2C subsystem might not be
+>> -	 * accessible until resume completes. So disable IRQ.
+>> -	 */
+> 
+> I think the reason this was added was that if USB cable is plugged/unplugged
+> while system was suspending it was causing some faults on TI DRA7 EVM
+> at usb_irq_handler()/usb_extcon_detect_cable() when it tries to read GPIO status
+> when I2C based GPIO controller was used but already suspended.
+> But looks like disabling the IRQ is not the right approach either so your patch
+> is right.
+> 
+> However I'm not sure if the above issue will still exist on DRA7 and other TI EVMS
+> using ID/VBUS GPIO over I2C device.
+> 
+> Let's wait for Aswath/Vignesh to confirm. If no issues I'm OK with this patch.
+> 
+>> -	if (info->id_gpiod)
+>> -		disable_irq(info->id_irq);
+>> -	if (info->vbus_gpiod)
+>> -		disable_irq(info->vbus_irq);
+>> -
+>>  	if (!device_may_wakeup(dev))
+>>  		pinctrl_pm_select_sleep_state(dev);
+>>  
+>> @@ -267,11 +257,6 @@ static int usb_extcon_resume(struct device *dev)
+>>  		}
+>>  	}
+>>  
+>> -	if (info->id_gpiod)
+>> -		enable_irq(info->id_irq);
+>> -	if (info->vbus_gpiod)
+>> -		enable_irq(info->vbus_irq);
+>> -
+>>  	queue_delayed_work(system_power_efficient_wq,
+>>  			   &info->wq_detcable, 0);
+>>  
+> 
+> cheers,
+> -roger
+> 
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied it after editing the patch title as following: Thanks.
+
+- extcon: usb-gpio: Remove disable irq operation in system sleep
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     expected void *va
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     got void [noderef] __iomem *
->> drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void *va @@
-   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     expected void [noderef] __iomem *addr
-   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     got void *va
-
-vim +45 drivers/remoteproc/rcar_rproc.c
-
-    40	
-    41	static int rcar_rproc_mem_release(struct rproc *rproc,
-    42					   struct rproc_mem_entry *mem)
-    43	{
-    44		dev_dbg(&rproc->dev, "unmap memory: %pa\n", &mem->dma);
-  > 45		iounmap(mem->va);
-    46	
-    47		return 0;
-    48	}
-    49	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics

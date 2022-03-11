@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4E74D5AF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89824D5AED
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346763AbiCKFz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S1346808AbiCKFzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346663AbiCKFxG (ORCPT
+        with ESMTP id S1346672AbiCKFxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:53:06 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE809ECB30
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:03 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id d13-20020a170902b70d00b0015317d9f08bso2687945pls.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:03 -0800 (PST)
+        Fri, 11 Mar 2022 00:53:07 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDB8ECB30
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:05 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id p15-20020a17090a748f00b001bf3ba2ae95so4694968pjk.9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=2u0xd0WcowKvmISsLBh9KyoTA6pAMwWdV2GBKIgUrbo=;
-        b=pOUYZZCshqTXfQrSZFVmAf4rn78F8RsYlHJfnxQVU5d4HBhCgopz1vDHEpnckZrw9K
-         QrHZhYyPWszPCMVLfhDBy/y/ZAhY5Ru019vjD93misUktnORHOAKuuixJcrLzR32Ji5I
-         rQ3XbbubzduLdJ9y/2kalTtFn8SdHT7d7/ektpze50TTr8gXkJ2Cefhdv7oAHPcgfOMs
-         P7LsgZHMu7fsx+ZRJvMEJRolNie5YLfdXm6HbxayEHLcQli3Eb8XD734VkoKDZiNfKYc
-         14qEJNSg2IRV5BYZb03ujSsEhDO2uKWjQcjvwv0vv1In1Qc+8g9Q5qVwLu0WvVMQ1DxU
-         y+/A==
+        bh=F7WunbLiKS/wqkMxeA4n9Mz5mHg6sYejl2gq2yFp4zY=;
+        b=atD/qZ+53Jwm+gU4v6bfw8wwiWlESo+4csu5HtcfwYavf4FtNNsAIwNLtOTPaiej9+
+         74/JrXUUrGmjiXslHVs8+hlRHeX9XPnZTV6SBdmuwtI9h3F4ZRnUTbFtVcAcbEirhrPx
+         nk5eDXL6rvJwD517aj8lbP1Yzi+06+4BAjsWUrb+ewdcsiwH2JeXUMk79ZPV95JyvjU7
+         3kUQG2Dghn/nhJN7e9Zryslqaq4efvd1xMkxjUF6s3i/5PKHCZN9WDLxiYYxDHNJLhP3
+         OeuFAR8HDELsLCTY/OLTuYh2AN6V7cDwbV9oVyI0sVNqrQ6xTljnBUP1qbjrbqApHr7r
+         7QDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=2u0xd0WcowKvmISsLBh9KyoTA6pAMwWdV2GBKIgUrbo=;
-        b=ycwaPVSZfexe+LN/8xgZjYQMjqmYp9xiFMwiXcOKJplL0OJijGAiVkWVRtN+ePHbom
-         HKjn5jFozhXkZKPwfAeS4ZOHEO+H6mpNJ4aEUbilF2dtRHMrNGP03TMcN6muq/yF1cYe
-         VzOvxTsNC/RxBbZ/oPxmFPd6EGvG8TwJAL5K6QeqzF0KGDEKnovAmRFhe1mlO65Hy5Hl
-         1JzKKhktLVzPXOsfZ6Mm4/CUhLSf0AXXrTut+CUT+1cABu7MtAnxydmVDGdlYgnZFLai
-         LkbEID9Ya5tEs9udc7n7Ucfz1CwQ/1S5ba2u9ZrbYtQS61ttA6mclFbOp7PkIVN3R7rJ
-         1XVA==
-X-Gm-Message-State: AOAM531uWU/mr2EG37An+uONR+GzveuhjGqFqWdzzsqjRn83qvjGClOR
-        DKGOoQ+wZ+nYXpYYBaMNyqj1NBNtaveFAM7NeBjLXca9uVTwNInQV0qTM5WYWmfeueHqee0FWAD
-        o0F+zhwUpYFjALy2JV07sc+h1Kq/j+QRm/FEPSuAYEiowhRen43qVu5q8+VdDcltX02ds4g==
-X-Google-Smtp-Source: ABdhPJz9MPMo5uQwiaUROKw8oy+BpdG6vOyBaXXyEKbqec18KmT+bOo9I3kBBMWm0K4JR9tQfrPNsrVKew0=
+        bh=F7WunbLiKS/wqkMxeA4n9Mz5mHg6sYejl2gq2yFp4zY=;
+        b=TDSxePx5CSPdeTem3rI3tgcdXI7YTawmZMny+O+AZOAIOH+RELNXDXKe1dD1maxAx5
+         o/cgRvG7vsCOwMq5j1GASf8p0w8TkylvJbU+mtMB2YLLssrfzW5vrrsqszgEw6Rp3GbU
+         rcYCu7Gx2uTbYxXgb1kETLC2T8tB09tTQq19cJil5F0Jsv2tgDsCH1CWAazLFL9d8tja
+         NiQocumF/oO+f8Hlca5vpbD9D/fde8bH6p8HetfVa8ALv28axtP+O+Jgd1f/3TlUY3/g
+         nz2mytw5ghDbF1a1HXVCx9dH0UYTnk59PBAxyei6kv2D86U5VGimLuI2LDjd7PUN+ej+
+         Hz7Q==
+X-Gm-Message-State: AOAM532cpW3lzMRSJmEBmSIaKwteUbOEFglb9e225WGKCdBhKygYuXmm
+        d7I2U2z7nUnKx00D2CTdHaEE/5xoPCUZR4/NWST2CIw2XD4gQo0v6rhvBCO3M9N0jQc7UONAlMa
+        xJ+pbT8mIYAe2Kt9+C3UTOgZ3Y4PmEtqSaH7Cs4bNQSJ1fvHfo879Kv0GwC2RXP/9QZl0ag==
+X-Google-Smtp-Source: ABdhPJyEzh3xDiW+Qhe0DkksBdU9lVC32o7WAdXJZm9d1ipPIPPXjkEG4T4fU0qz7vGC9Yh9zarRt4zuA/k=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a63:2a95:0:b0:37c:46b0:2088 with SMTP id
- q143-20020a632a95000000b0037c46b02088mr7222162pgq.150.1646977923323; Thu, 10
- Mar 2022 21:52:03 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1f0c:b0:4f6:fee8:7c8c with SMTP id
+ be12-20020a056a001f0c00b004f6fee87c8cmr8716777pfb.60.1646977925169; Thu, 10
+ Mar 2022 21:52:05 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Mar 2022 05:49:45 +0000
+Date:   Fri, 11 Mar 2022 05:49:46 +0000
 In-Reply-To: <20220311055056.57265-1-seanjc@google.com>
-Message-Id: <20220311055056.57265-35-seanjc@google.com>
+Message-Id: <20220311055056.57265-36-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220311055056.57265-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [RFC PATCH 034/105] KVM: selftests: Convert vmx_preemption_timer_test
- away from VCPU_ID
+Subject: [RFC PATCH 035/105] KVM: selftests: Convert vmx_pmu_msrs_test away
+ from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>
@@ -72,89 +72,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../kvm/x86_64/vmx_preemption_timer_test.c    | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ .../selftests/kvm/x86_64/vmx_pmu_msrs_test.c  | 25 +++++++++----------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c b/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c
-index f5b4ae914131..168adc5b2272 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c
-@@ -22,7 +22,6 @@
- #include "processor.h"
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
+index 2454a1f2ca0c..7bb81b7a4825 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
+@@ -18,8 +18,6 @@
+ #include "kvm_util.h"
  #include "vmx.h"
  
--#define VCPU_ID		5
- #define PREEMPTION_TIMER_VALUE			100000000ull
- #define PREEMPTION_TIMER_VALUE_THRESHOLD1	 80000000ull
- 
-@@ -159,6 +158,7 @@ int main(int argc, char *argv[])
- 	struct kvm_regs regs1, regs2;
+-#define VCPU_ID	      0
+-
+ #define X86_FEATURE_PDCM	(1<<15)
+ #define PMU_CAP_FW_WRITES	(1ULL << 13)
+ #define PMU_CAP_LBR_FMT		0x3f
+@@ -62,6 +60,7 @@ int main(int argc, char *argv[])
+ 	struct kvm_cpuid_entry2 *entry_a_0;
+ 	bool pdcm_supported = false;
  	struct kvm_vm *vm;
- 	struct kvm_run *run;
 +	struct kvm_vcpu *vcpu;
- 	struct kvm_x86_state *state;
- 	struct ucall uc;
- 	int stage;
-@@ -175,22 +175,22 @@ int main(int argc, char *argv[])
- 	}
+ 	int ret;
+ 	union cpuid10_eax eax;
+ 	union perf_capabilities host_cap;
+@@ -70,7 +69,7 @@ int main(int argc, char *argv[])
+ 	host_cap.capabilities &= (PMU_CAP_FW_WRITES | PMU_CAP_LBR_FMT);
  
  	/* Create VM */
 -	vm = vm_create_default(VCPU_ID, 0, guest_code);
--	run = vcpu_state(vm, VCPU_ID);
 +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	run = vcpu->run;
+ 	cpuid = kvm_get_supported_cpuid();
  
--	vcpu_regs_get(vm, VCPU_ID, &regs1);
-+	vcpu_regs_get(vm, vcpu->id, &regs1);
+ 	if (kvm_get_cpuid_max_basic() >= 0xa) {
+@@ -89,25 +88,25 @@ int main(int argc, char *argv[])
+ 	}
  
- 	vcpu_alloc_vmx(vm, &vmx_pages_gva);
--	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
-+	vcpu_args_set(vm, vcpu->id, 1, vmx_pages_gva);
+ 	/* testcase 1, set capabilities when we have PDCM bit */
+-	vcpu_set_cpuid(vm, VCPU_ID, cpuid);
+-	vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_FW_WRITES);
++	vcpu_set_cpuid(vm, vcpu->id, cpuid);
++	vcpu_set_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_FW_WRITES);
  
- 	for (stage = 1;; stage++) {
--		_vcpu_run(vm, VCPU_ID);
-+		vcpu_run(vm, vcpu->id);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 			    "Stage %d: unexpected exit reason: %u (%s),\n",
- 			    stage, run->exit_reason,
- 			    exit_reason_str(run->exit_reason));
+ 	/* check capabilities can be retrieved with KVM_GET_MSR */
+-	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
++	ASSERT_EQ(vcpu_get_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
  
--		switch (get_ucall(vm, VCPU_ID, &uc)) {
-+		switch (get_ucall(vm, vcpu->id, &uc)) {
- 		case UCALL_ABORT:
- 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
- 				  __FILE__, uc.args[1]);
-@@ -232,22 +232,22 @@ int main(int argc, char *argv[])
- 				stage, uc.args[4], uc.args[5]);
- 		}
+ 	/* check whatever we write with KVM_SET_MSR is _not_ modified */
+-	vcpu_run(vm, VCPU_ID);
+-	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
++	vcpu_run(vm, vcpu->id);
++	ASSERT_EQ(vcpu_get_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
  
--		state = vcpu_save_state(vm, VCPU_ID);
-+		state = vcpu_save_state(vm, vcpu->id);
- 		memset(&regs1, 0, sizeof(regs1));
--		vcpu_regs_get(vm, VCPU_ID, &regs1);
-+		vcpu_regs_get(vm, vcpu->id, &regs1);
+ 	/* testcase 2, check valid LBR formats are accepted */
+-	vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, 0);
+-	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), 0);
++	vcpu_set_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES, 0);
++	ASSERT_EQ(vcpu_get_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES), 0);
  
- 		kvm_vm_release(vm);
+-	vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, host_cap.lbr_format);
+-	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
++	vcpu_set_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES, host_cap.lbr_format);
++	ASSERT_EQ(vcpu_get_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
  
- 		/* Restore state in a new VM.  */
--		kvm_vm_restart(vm);
--		vm_vcpu_add(vm, VCPU_ID);
--		vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
--		vcpu_load_state(vm, VCPU_ID, state);
--		run = vcpu_state(vm, VCPU_ID);
-+		vcpu = vm_recreate_with_one_vcpu(vm);
-+
-+		vcpu_set_cpuid(vm, vcpu->id, kvm_get_supported_cpuid());
-+		vcpu_load_state(vm, vcpu->id, state);
-+		run = vcpu->run;
- 		kvm_x86_state_cleanup(state);
+ 	/* testcase 3, check invalid LBR format is rejected */
+-	ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
++	ret = _vcpu_set_msr(vm, vcpu->id, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
+ 	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
  
- 		memset(&regs2, 0, sizeof(regs2));
--		vcpu_regs_get(vm, VCPU_ID, &regs2);
-+		vcpu_regs_get(vm, vcpu->id, &regs2);
- 		TEST_ASSERT(!memcmp(&regs1, &regs2, sizeof(regs2)),
- 			    "Unexpected register values after vcpu_load_state; rdi: %lx rsi: %lx",
- 			    (ulong) regs2.rdi, (ulong) regs2.rsi);
+ 	kvm_vm_free(vm);
 -- 
 2.35.1.723.g4982287a31-goog
 

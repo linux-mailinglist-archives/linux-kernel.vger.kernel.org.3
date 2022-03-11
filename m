@@ -2,97 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235CF4D608A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C74D4D608C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348223AbiCKL1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        id S1348228AbiCKL2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiCKL1W (ORCPT
+        with ESMTP id S244539AbiCKL2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:27:22 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BB9972FD;
-        Fri, 11 Mar 2022 03:26:19 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id r29so1341267edc.0;
-        Fri, 11 Mar 2022 03:26:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dN1cmhl+ncZxKyDen+V5dcOQg02w9seP44292qGiJ7c=;
-        b=ZGDxim386zG0ppsGHci14yix59pJvvBC/xsFLpSNgtn6mc19bQ81MjKboXM35vOjGX
-         QacjvMF/l9xOmMxRmwtYHe+1w7A016RFW02b6TZeFjRuAG4XLLKJmnRdFs6FKqWFUcQr
-         5n+n9MKXaJClCXhghMH/eEwdmuSWXtOFKNM75XUvcOcem94+Vqlh4jsxoqMDYv+OEyC9
-         EVPnoZRkCWLvZAHBAs6znb2vmZV7SjN9ZqdMKf/7ouno7YylLGxG3fyr71S+huhDZ+Ui
-         EqrkMriagLB60j142DixDKMx3Gxbe/VhCfWmWtxfYKlI2zx0tJMNNQXM4fbtyy5omilj
-         iSog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dN1cmhl+ncZxKyDen+V5dcOQg02w9seP44292qGiJ7c=;
-        b=HZb8NdDNy5lfLEFz9R0+SZeCY7Gql2GgeWZIc8ae9FA6+aLAA74NPHRCxsx7izFb4P
-         ooW2lp7H7QqukmrnEdZFNxsbSkkivXtOm/rg03oS88tsI42LbStn2ZWHkO1iTkE4Tqbs
-         MgMSCSUdePvFp1d8y3RGTkmRXWAMOmpiyg/7kaOGbVyRgFhyPKQ+ryA+hyylNa7Q1Qcq
-         jAkidU+JGWPQBNVScnyqkvQhT9Bf0uw5jR3Y0H5e4ITvmYbN+RcgPWCaRNTF929E82Oh
-         NuesVkb0Sxlm2q39/UySbTUmRV8vfBGlRXP8PBOrNXvBEClUDY9xYXLFQ5/fkjN/B9QB
-         NrRQ==
-X-Gm-Message-State: AOAM531i4kzH5KmXlxGtXPTrr1bCptV/Upe1J3R5/3q1OS3Qmn7AboLk
-        2Unnn6zKesaWpbLhhgqQ42Tj6Qj+YaRkkZg1mTum5HXIvdxG3A==
-X-Google-Smtp-Source: ABdhPJwH0kXpCp7EhOQgFULMF7ZsjfMq1lJL5n8aUWMbPhdxiZIHPO/BXR8rfRUJuZnULu6TK6wMnREmkpYOHeFRHyc=
-X-Received: by 2002:a50:da89:0:b0:413:adb1:cf83 with SMTP id
- q9-20020a50da89000000b00413adb1cf83mr8304823edj.158.1646997978379; Fri, 11
- Mar 2022 03:26:18 -0800 (PST)
+        Fri, 11 Mar 2022 06:28:10 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE751B71AC
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:27:07 -0800 (PST)
+X-UUID: efc33294d8ba406990cda7df0c0a72b7-20220311
+X-UUID: efc33294d8ba406990cda7df0c0a72b7-20220311
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1195719023; Fri, 11 Mar 2022 19:26:59 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 11 Mar 2022 19:26:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 11 Mar
+ 2022 19:26:59 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 11 Mar 2022 19:26:59 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <rostedt@goodmis.org>, <mingo@redhat.com>
+CC:     <matthias.bgg@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <mark-pk.tsai@mediatek.com>,
+        <yj.chiang@mediatek.com>
+Subject: [PATCH] tracing: make tracer_init_tracefs initcall asynchronous
+Date:   Fri, 11 Mar 2022 19:26:56 +0800
+Message-ID: <20220311112656.25348-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220310011617.29660-1-kris@embeddedTS.com> <20220310011617.29660-2-kris@embeddedTS.com>
- <CAHp75Vdu1r0S2ZCjH2mjToYZiwQTOiUAvY5v-T7f=u28tVuxcQ@mail.gmail.com>
- <1646933773.2804.1.camel@embeddedTS.com> <CAMRc=MerqLPZSCd8+YSAwJPe1_zpOYQK5C-DXirC6dvR4Yss5g@mail.gmail.com>
- <1646941640.2804.4.camel@embeddedTS.com>
-In-Reply-To: <1646941640.2804.4.camel@embeddedTS.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 11 Mar 2022 13:25:42 +0200
-Message-ID: <CAHp75VcQz+h45+7_j=QkNfo7L=q1EKRskDCULNwZYjcgwxz5ug@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] gpio: ts4900: Do not set DAT and OE together
-To:     Kris Bahnsen <kris@embeddedts.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Featherston <mark@embeddedts.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 9:47 PM Kris Bahnsen <kris@embeddedts.com> wrote:
-> On Thu, 2022-03-10 at 20:30 +0100, Bartosz Golaszewski wrote:
-> > On Thu, Mar 10, 2022 at 6:36 PM Kris Bahnsen <kris@embeddedts.com> wrote:
+tracer_init_tracefs() is slow especially when there are
+lots of trace events.
+Create a kthread to do tracer_init_tracefs() asynchronously
+to speed up the initialization of kernel and move the
+related functions and variables out of init section.
 
-...
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+---
+ fs/tracefs/inode.c          |  8 ++++----
+ kernel/trace/ftrace.c       | 12 ++++++------
+ kernel/trace/trace.c        | 21 ++++++++++++++++-----
+ kernel/trace/trace_events.c |  2 +-
+ 4 files changed, 27 insertions(+), 16 deletions(-)
 
-> > Hey Kris,
-> >
-> > I already sent it out to Linus, please create a follow-up patch for that.
-
-> Can you please clarify what that entails since Andy had requested changes to the
-> commit message. Should I just create a new patch on top of the commit already on
-> master to address the comment changes?
-
-Address the comments.
-
-> How would I address commit message changes,
-> or is that not my responsibility at this point?
-
-It's impossible.
-
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index de7252715b12..9a713d6bcb7e 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -561,10 +561,10 @@ struct dentry *tracefs_create_dir(const char *name, struct dentry *parent)
+  *
+  * Returns the dentry of the instances directory.
+  */
+-__init struct dentry *tracefs_create_instance_dir(const char *name,
+-					  struct dentry *parent,
+-					  int (*mkdir)(const char *name),
+-					  int (*rmdir)(const char *name))
++struct dentry *tracefs_create_instance_dir(const char *name,
++					   struct dentry *parent,
++					   int (*mkdir)(const char *name),
++					   int (*rmdir)(const char *name))
+ {
+ 	struct dentry *dentry;
+ 
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index a4b462b6f944..197630cbd5dd 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -940,7 +940,7 @@ static const struct file_operations ftrace_profile_fops = {
+ };
+ 
+ /* used to initialize the real stat files */
+-static struct tracer_stat function_stats __initdata = {
++static struct tracer_stat function_stats = {
+ 	.name		= "functions",
+ 	.stat_start	= function_stat_start,
+ 	.stat_next	= function_stat_next,
+@@ -949,7 +949,7 @@ static struct tracer_stat function_stats __initdata = {
+ 	.stat_show	= function_stat_show
+ };
+ 
+-static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
++static void ftrace_profile_tracefs(struct dentry *d_tracer)
+ {
+ 	struct ftrace_profile_stat *stat;
+ 	struct dentry *entry;
+@@ -991,7 +991,7 @@ static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
+ }
+ 
+ #else /* CONFIG_FUNCTION_PROFILER */
+-static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
++static void ftrace_profile_tracefs(struct dentry *d_tracer)
+ {
+ }
+ #endif /* CONFIG_FUNCTION_PROFILER */
+@@ -6359,7 +6359,7 @@ void ftrace_destroy_filter_files(struct ftrace_ops *ops)
+ 	mutex_unlock(&ftrace_lock);
+ }
+ 
+-static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
++static int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+ {
+ 
+ 	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+@@ -7754,8 +7754,8 @@ void ftrace_init_tracefs(struct trace_array *tr, struct dentry *d_tracer)
+ 			  d_tracer, tr, &ftrace_no_pid_fops);
+ }
+ 
+-void __init ftrace_init_tracefs_toplevel(struct trace_array *tr,
+-					 struct dentry *d_tracer)
++void ftrace_init_tracefs_toplevel(struct trace_array *tr,
++				  struct dentry *d_tracer)
+ {
+ 	/* Only the top level directory has the dyn_tracefs and profile */
+ 	WARN_ON(!(tr->flags & TRACE_ARRAY_FL_GLOBAL));
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index eb44418574f9..f55da82060e2 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -9562,10 +9562,10 @@ int tracing_init_dentry(void)
+ extern struct trace_eval_map *__start_ftrace_eval_maps[];
+ extern struct trace_eval_map *__stop_ftrace_eval_maps[];
+ 
+-static struct workqueue_struct *eval_map_wq __initdata;
+-static struct work_struct eval_map_work __initdata;
++static struct workqueue_struct *eval_map_wq;
++static struct work_struct eval_map_work;
+ 
+-static void __init eval_map_work_func(struct work_struct *work)
++static void eval_map_work_func(struct work_struct *work)
+ {
+ 	int len;
+ 
+@@ -9573,7 +9573,7 @@ static void __init eval_map_work_func(struct work_struct *work)
+ 	trace_insert_eval_map(NULL, __start_ftrace_eval_maps, len);
+ }
+ 
+-static int __init trace_eval_init(void)
++static int trace_eval_init(void)
+ {
+ 	INIT_WORK(&eval_map_work, eval_map_work_func);
+ 
+@@ -9671,7 +9671,7 @@ static struct notifier_block trace_module_nb = {
+ };
+ #endif /* CONFIG_MODULES */
+ 
+-static __init int tracer_init_tracefs(void)
++static int tracefs_init(void *data)
+ {
+ 	int ret;
+ 
+@@ -9721,6 +9721,17 @@ static __init int tracer_init_tracefs(void)
+ 	return 0;
+ }
+ 
++static __init int tracer_init_tracefs(void)
++{
++	struct task_struct *thread;
++
++	thread = kthread_run(tracefs_init, NULL, "tracefs_init");
++	if (IS_ERR(thread))
++		return PTR_ERR(thread);
++
++	return 0;
++}
++
+ fs_initcall(tracer_init_tracefs);
+ 
+ static int trace_panic_handler(struct notifier_block *this,
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 3147614c1812..fe055bef1e8f 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -3687,7 +3687,7 @@ static __init int event_trace_init_fields(void)
+ 	return 0;
+ }
+ 
+-__init int event_trace_init(void)
++int event_trace_init(void)
+ {
+ 	struct trace_array *tr;
+ 	struct dentry *entry;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.18.0
+

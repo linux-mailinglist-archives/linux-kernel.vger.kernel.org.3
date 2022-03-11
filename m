@@ -2,124 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D264D5ABF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCFD4D5AC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346513AbiCKFrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S1346509AbiCKFsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345203AbiCKFrD (ORCPT
+        with ESMTP id S240044AbiCKFsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:47:03 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E79B1AD391;
-        Thu, 10 Mar 2022 21:45:59 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C6E7E68AFE; Fri, 11 Mar 2022 06:45:55 +0100 (CET)
-Date:   Fri, 11 Mar 2022 06:45:55 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v0] pata_parport: add driver (PARIDE replacement)
-Message-ID: <20220311054555.GA16362@lst.de>
-References: <20220310212812.13944-1-linux@zary.sk>
+        Fri, 11 Mar 2022 00:48:45 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D572BF6;
+        Thu, 10 Mar 2022 21:47:26 -0800 (PST)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2FE6F488;
+        Fri, 11 Mar 2022 06:47:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646977645;
+        bh=oockvR1LA+v9n302HI7aC2gMooUZaYtMOy6sArIIR2I=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=DHFCOygtdIWYDOa312BgpS/tKmOtVfjrUwPBlAjBDNa8Dku1KLiq4c2nL217+FDpI
+         asDffEq0T0LvXow4y7D/ESM6SMGACt2+ghp5a59VfUYhFyPu0MUiTka6sY5IdhzjfT
+         ttCRAF4JC0ihIbgIoE9i9m/u0UI+icDdw5BB2YaY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310212812.13944-1-linux@zary.sk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAD=FV=UqTh-FLDyXvH=ED-4cbJ6ggDLsTGqhTeqNMsKDphbzYA@mail.gmail.com>
+References: <20220310152227.2122960-1-kieran.bingham+renesas@ideasonboard.com> <20220310152227.2122960-4-kieran.bingham+renesas@ideasonboard.com> <CAD=FV=UqTh-FLDyXvH=ED-4cbJ6ggDLsTGqhTeqNMsKDphbzYA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] drm/bridge: ti-sn65dsi86: Support hotplug detection
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+To:     Doug Anderson <dianders@chromium.org>
+Date:   Fri, 11 Mar 2022 05:47:22 +0000
+Message-ID: <164697764297.2392702.10094603553189733655@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 10:28:12PM +0100, Ondrej Zary wrote:
-> Add pata_parport (PARIDE replacement) core libata driver.
-> 
-> The original paride protocol modules are used for now so allow them to
-> be compiled without old PARIDE core.
+Hi Doug,
 
-I agree with Damien that this needs a bit more text here.  Explaining
-what kind of hardware this drives, that this will allow to eventually
-drop paride, how it reuesed the low-level drivers, etc.
+Quoting Doug Anderson (2022-03-10 23:10:12)
+> Hi,
+>=20
+> On Thu, Mar 10, 2022 at 7:22 AM Kieran Bingham
+> <kieran.bingham+renesas@ideasonboard.com> wrote:
+> >
+> > @@ -1135,6 +1161,36 @@ static void ti_sn_bridge_atomic_post_disable(str=
+uct drm_bridge *bridge,
+> >         pm_runtime_put_sync(pdata->dev);
+> >  }
+> >
+> > +static enum drm_connector_status ti_sn_bridge_detect(struct drm_bridge=
+ *bridge)
+> > +{
+> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
+> > +       int val;
+> > +
+> > +       regmap_read(pdata->regmap, SN_HPD_DISABLE_REG, &val);
+>=20
+> Don't you need a pm_runtime_get_sync() before this and a
+> put_autosuspend() after? The "detect" will be used in the yes-HPD but
+> no-IRQ case, right? In that case there's nobody holding the pm_runtime
+> reference.
 
-> +	  If your parallel port support is in a loadable module, you must build
-> +	  PATA_PARPORT as a module. If you built PATA_PARPORT support into your
-> +	  kernel, you may still build the individual protocol modules
-> +	  as loadable modules.
+Hrm ... I'll have to dig on this a bit. The polling is done by the DRM
+core, so indeed I suspect it could be done outside of a context that
+holds the pm runtime reference.
 
-I'd drop the above.  The dependencies are already enforced by Kconfig
-and we don't really tend to mention this elsewhere.
+Equally a get and put on the reference doesn't hurt even if it's already
+taken, so perhaps it's best to add it, but I'll try to confirm it's
+requirement first.
 
-> +	  Unlike the old PARIDE, there are no high-level drivers needed.
-> +	  The IDE devices behind parallel port adapters are handled by the
-> +	  ATA layer.
 
-I also don't think this is needed.
+> Also, a nit that it'd be great if you error checked the regmap_read().
+> I know this driver isn't very good about it, but it's probably
+> something to get better. i2c transactions can fail. I guess another
+> alternative would be to init "val" to 0...
 
-> index 000000000000..3ea8d824091e
-> --- /dev/null
-> +++ b/drivers/ata/parport/pata_parport.c
-> @@ -0,0 +1,805 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+It's a good point indeed. If we can't read the device we should return
+disconnected.
 
-Please add your copyright statement here.
+>=20
+>=20
+> > +       return val & HPD_DEBOUNCED_STATE ? connector_status_connected
+> > +                                        : connector_status_disconnecte=
+d;
+> > +}
+> > +
+> > +static void ti_sn_bridge_hpd_enable(struct drm_bridge *bridge)
+> > +{
+> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
+> > +
+> > +       /* The device must remain active for HPD to function */
+> > +       pm_runtime_get_sync(pdata->dev);
+> > +       regmap_write(pdata->regmap, SN_IRQ_HPD_REG,
+> > +                    IRQ_HPD_EN | IRQ_HPD_INSERTION_EN |
+> > +                    IRQ_HPD_REMOVAL_EN | IRQ_HPD_REPLUG_EN);
+> > +}
+> > +
+> > +static void ti_sn_bridge_hpd_disable(struct drm_bridge *bridge)
+> > +{
+> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
+> > +
+> > +       regmap_write(pdata->regmap, SN_IRQ_HPD_REG, 0);
+> > +       pm_runtime_put_autosuspend(pdata->dev);
+>=20
+> Before doing the pm_runtime_put_autosuspend() it feels like you should
+> ensure that the interrupt has finished. Otherwise we could be midway
+> through processing an interrupt and the pm_runtime reference could go
+> away, right? Maybe we just disable the irq which I think will wait for
+> anything outstanding to finish?
 
-> +static void pata_parport_tf_load(struct ata_port *ap, const struct ata_taskfile *tf)
+Should the IRQ handler also call pm_runtime_get/put then?
 
-Overly long line.
+> > @@ -1223,6 +1282,34 @@ static int ti_sn_bridge_parse_dsi_host(struct ti=
+_sn65dsi86 *pdata)
+> >         return 0;
+> >  }
+> >
+> > +static irqreturn_t ti_sn65dsi86_irq_handler(int irq, void *arg)
+> > +{
+> > +       struct ti_sn65dsi86 *pdata =3D arg;
+> > +       int ret;
+> > +       unsigned int hpd;
+> > +
+> > +       ret =3D regmap_read(pdata->regmap, SN_IRQ_HPD_STATUS_REG, &hpd);
+> > +       if (ret || !hpd)
+> > +               return IRQ_NONE;
+> > +
+> > +       if (hpd & IRQ_HPD_INSERTION_STATUS)
+> > +               drm_bridge_hpd_notify(&pdata->bridge, connector_status_=
+connected);
+> > +
+> > +       if (hpd & IRQ_HPD_REMOVAL_STATUS)
+> > +               drm_bridge_hpd_notify(&pdata->bridge, connector_status_=
+disconnected);
+> > +
+> > +       /* When replugged, ensure we trigger a detect to update the dis=
+play */
+> > +       if (hpd & IRQ_HPD_REPLUG_STATUS)
+> > +               drm_bridge_hpd_notify(&pdata->bridge, connector_status_=
+disconnected);
+>=20
+> How does the ordering work here if _both_ insertion and removal are
+> asserted? Is that somehow not possible? Should this be "else if" type
+> statements then, or give a warn if more than one bit is set, or ... ?
 
-> +			pi->proto->write_regr(pi, 0, ATA_REG_NSECT, tf->hob_nsect);
-> +			pi->proto->write_regr(pi, 0, ATA_REG_LBAL, tf->hob_lbal);
-> +			pi->proto->write_regr(pi, 0, ATA_REG_LBAM, tf->hob_lbam);
-> +			pi->proto->write_regr(pi, 0, ATA_REG_LBAH, tf->hob_lbah);
+As I understand it, that would trigger a REPLUG IRQ. However this is one
+part I quite disliked about the drm_bridge_hpd_notify. The values here
+are not taken as the hardware state anyway. A call to drm_bridge_hpd_notify=
+ will=20
+trigger a call on the detect function so a further read will occur to
+determine the current state using the same function as is used with
+polling.
 
-Same here.
+The IRQ handler only cuts out the polling as far as I see.
 
-> +static void pata_parport_exec_command(struct ata_port *ap, const struct ata_taskfile *tf)
 
-.. and here.
+> > +       /* reset the status registers */
+> > +       regmap_write(pdata->regmap, SN_IRQ_HPD_STATUS_REG,
+> > +                    IRQ_HPD_STATUS | IRQ_HPD_INSERTION_STATUS |
+> > +                    IRQ_HPD_REMOVAL_STATUS | IRQ_HPD_REPLUG_STATUS);
+>=20
+> IMO this regmap_write() belongs right after the read and should be
+> based on what you read--you shouldn't just clear all of them. AKA:
+>=20
+> a) Read to see what interrupt are asserted.
+> b) Ack the interrupts that you saw asserted.
+> c) Process the interrupts that you saw asserted.
+>=20
+> If you process before acking then you can miss interrupts (in other
+> words if you do "a" then "c" then "b" then you can miss interrupts
+> that come in after "b" but before "c".
 
-And a bunch more.
+Agreed, I'll respin.
 
-> +static void pata_parport_bus_release(struct device *dev)
-> +{
-> +	/* nothing to do here but required to avoid warning on device removal */
-> +}
-> +
-> +static struct bus_type pata_parport_bus_type = {
-> +	.name = DRV_NAME,
-> +};
-> +
-> +static struct device pata_parport_bus = {
-> +	.init_name = DRV_NAME,
-> +	.release = pata_parport_bus_release,
-> +};
-> +
-> +/* temporary for old paride protocol modules */
-> +static struct scsi_host_template pata_parport_sht = {
-> +	PATA_PARPORT_SHT("pata_parport")
-> +};
+> > @@ -1247,9 +1342,29 @@ static int ti_sn_bridge_probe(struct auxiliary_d=
+evice *adev,
+> >         pdata->bridge.type =3D pdata->next_bridge->type =3D=3D DRM_MODE=
+_CONNECTOR_DisplayPort
+> >                            ? DRM_MODE_CONNECTOR_DisplayPort : DRM_MODE_=
+CONNECTOR_eDP;
+> >
+> > -       if (pdata->bridge.type =3D=3D DRM_MODE_CONNECTOR_DisplayPort)
+> > +       if (pdata->bridge.type =3D=3D DRM_MODE_CONNECTOR_DisplayPort) {
+> >                 pdata->bridge.ops =3D DRM_BRIDGE_OP_EDID;
+> >
+> > +               if (!pdata->no_hpd)
+> > +                       pdata->bridge.ops |=3D DRM_BRIDGE_OP_DETECT;
+> > +       }
+> > +
+> > +       if (!pdata->no_hpd && pdata->irq > 0) {
+> > +               dev_err(pdata->dev, "registering IRQ %d\n", pdata->irq);
+> > +
+> > +               ret =3D devm_request_threaded_irq(pdata->dev, pdata->ir=
+q, NULL,
+> > +                                               ti_sn65dsi86_irq_handle=
+r,
+> > +                                               IRQF_ONESHOT, "sn65dsi8=
+6-irq",
+> > +                                               pdata);
+> > +               if (ret)
+> > +                       return dev_err_probe(pdata->dev, ret,
+> > +                                            "Failed to register DP int=
+errupt\n");
+> > +
+> > +               /* Enable IRQ based HPD */
+> > +               regmap_write(pdata->regmap, SN_IRQ_EN_REG, IRQ_EN);
+>=20
+> Why not put the above regmap_write() in the ti_sn_bridge_hpd_enable() cal=
+l?
 
-Did you look into my suggestion to use struct pardevice.dev instead?
+I assumed the IRQ handler may get used by other non-HPD events. Which is
+also why it was originally registered in the main probe(). HPD is just
+one feature of the interrupts. Of course it's only used for HPD now
+though. I guess I could have solved the bridge dependency by splitting
+the IRQ handler to have a dedicated HPD handler function which would
+return if the bridge wasn't initialised, but went with the deferred
+registration of the handler.
 
-> index ddb9e589da7f..f3bd01a9c9ec 100644
-> --- a/drivers/block/paride/paride.h
-> +++ b/drivers/block/paride/paride.h
-> @@ -1,3 +1,7 @@
-> +#if IS_ENABLED(CONFIG_PATA_PARPORT)
-> +#include "../../ata/parport/pata_parport.h"
-> +
-> +#else
+I can move this and then leave it to anyone else implementing further
+IRQ features to refactor if needed.
 
-Maybe add a comment here?  Also this is a pretty clear indication
-that pata_parport.h should be in include/linux/ at least for now.
+>=20
+> -Doug

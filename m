@@ -2,171 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CAD4D6050
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7105B4D6094
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348168AbiCKLDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 06:03:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S1348239AbiCKLbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 06:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348176AbiCKLCv (ORCPT
+        with ESMTP id S232676AbiCKLbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 06:02:51 -0500
-Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E4B1BD9A1;
-        Fri, 11 Mar 2022 03:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1646996508;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=NZfuSuOf3HsgXGGjM3uvYPU0K7q//s5hos77iiW/mIg=;
-  b=W8/fB8epR3knMSnFqwbhNSlEO6rtkoBOkbRSHWzmjN5T6j8gMHtyQUa/
-   Sb/TabtzS9PBH+zCeStAsfVmWF1CXNEbFcaf7ZOlGzPAedodcgpkxpyT/
-   ChScCxTn6p/Ojz7hy81eEnl5uYdliSBQSYC5OM1r3D+ZPROTEUHRmEv59
-   Q=;
-Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=pass (signature verified) header.i=@citrix.onmicrosoft.com
-X-SBRS: 5.1
-X-MesageID: 66009274
-X-Ironport-Server: esa2.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.83
-X-Policy: $RELAYED
-IronPort-Data: A9a23:PvFD16v87McJy26zE3mMDyL8zOfnVMteMUV32f8akzHdYApBsoF/q
- tZmKT+OO/bYYTT2fNpzaIS1oEoDsMTUm4VgHFM/qyxgH38b+JbJXdiXEBz9bniYRiHhoOOLz
- Cm8hv3odp1coqr0/0/1WlTZhSAgk/nOHNIQMcacUsxLbVYMpBwJ1FQyw4bVvqYy2YLjW1jU4
- IuryyHiEATNNwBcYzp8B52r8HuDjNyq0N/PlgVjDRzjlAa2e0g9VPrzF4noR5fLatA88tqBb
- /TC1NmEElbxpH/BPD8HfoHTKSXmSpaKVeSHZ+E/t6KK2nCurQRquko32WZ1he66RFxlkvgoo
- Oihu6BcRi8wIoPSnN88CiVkMDNdYO5l+4f+Kz+W5Jn7I03uKxMAwt1rBUAye4YZ5vx2ESdF8
- vlwxDIlN07ZwbjsmfTiF7cq1p9LwMrDZevzvll6yj7UF7A+SI3rSKTW/95Imjw3g6iiGN6AO
- ZJBOGAwMHwsZTUWYVocL8sCod2hlz6iVhtnunWuj7Metj27IAtZj+G2bYu9lsaxbd5Ogk+Sq
- 2bC/mL4KhIXLtqSzXyC6H3EruXIhyLgHoUJCKe/6OVpkXWU3GUYDBBQXly+ydG7gEOjX9NUK
- 2QP5zEj66M18SSDR8n3WBCQo3OeuBMYHdZTe8Uq5QfIxqfK7gKxAmkfUiUHeNEgrNUxRzEhy
- hmOhdyBLT5gqrqOUlqG66yZ6zi1PEA9KW4EeD9BTgYf5dTniJ88gwiJTdt5FqOxyNrvFlnYx
- zGMsTh7jbEUhs0jyaq25xbEjiiqq5yPSRQ6jjg7RUr8sFk/PtT8IdX1tx6Ltp6sMbp1UHGYo
- FYan/O/tdwyLoOuyW+uQ900FvaAsqPt3CLnvXZjGJwo9jKI8nGlfJxN7DwWGHqFIvroaheyP
- haN5Fo5CIt7eSLzMPQpO97Z59ECkPC4fekJQMw4eTanjnJZUAactB9jakeLt4wGuBh9yPpvU
- Xt3nCvFMJr7NUiF5GbnLwv++eVyrszb+Y81bcmqp/hA+eDCDEN5sZ9fbDOzghkRtctoWjn9/
- ddFLNetwB5CSuD4aSS/2ddNcQ5bdidkVciu8pI/mgu/zuxOQTBJ5xj5m+5JRmCYt/4NyregE
- o+VBie0N2YTdVWYcF7XOxiPmZvkXIplrGJTAMDfFQ3A5pTXWq72tP13X8JuJdEPrbU/pdYpH
- 6htU5jRWZxnF2WYkwnxmLGg9eSOgjzw3lnQV8dkCRBiF6Ndq/vhoYa1IFGwqHFQUkJad6IW+
- tWd6+8SerJaLyxKB8fKcvO/iVS3uHkWguVpWEXUZNJUfS3RHEJCcUQdUtdfzxkwFCj+
-IronPort-HdrOrdr: A9a23:3gXLcqOAfiKg+sBcTjujsMiBIKoaSvp037BK7S1MoNJuEvBw9v
- re+MjzsCWftN9/Yh4dcLy7VpVoIkmskKKdg7NhXotKNTOO0AeVxelZhrcKqAeQeREWmNQ96U
- 9hGZIOdeEZDzJB/LrHCN/TKade/DGFmprY+9s31x1WPGZXgzkL1XYDNu6ceHcGIjVuNN4CO7
- e3wNFInDakcWR/VLXAOpFUN9Kz3uEijfjdEGY7OyI=
-X-IronPort-AV: E=Sophos;i="5.90,173,1643691600"; 
-   d="scan'208";a="66009274"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LEiWyupErfhEk0a5x0tQH4FhUD58IQIcepJ9CkxWd/sxWOyhtiRXJgAjRVnmjSM9B7a/MUUj5dbplIhg29Yodxg9tOhMmCQZv5FtZ7VK3zwDQ1AyX2Afo5y8xXcalSVo7jnpGOUTQLV7OvCtjw5+ynIIxhkHfXcOrWn9VZbmoupDhxxRySyj2dXvo+LDmehUtjZOTLSxGweInJIw4tNvkoqMIlbh/R6F88DBbNcBTy0KldCVHLAehgmUsSeSRpbXpSgcRijc2Q0JhRGbxQYI+xsk0vMef7QqGiMInH6T7oOm+VS/WjAQfLbFQ9xGGEXW9D18VlPW/5HvJqSUyLccKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7r+XHGjRDZfJFK8qVKqeLX5YluqIfaqF+fN63ptoViM=;
- b=kqowpKl9+jiu/D7ulcILiWQ4P1t22oT/Dm5hNdZEdxLIdp7/Znu9P72+wpKjjt0sniN0Oeu95M/NUZFO+SQkKbygZ29Vay7FyzZ2US63PRUXT2xngk3JlNXMi92capKB2OdKz4OSvx67E8CABo5k5MvSMLszxWn0duNOiu1ViiFu2tnQ7qFWGmqiRYUNYTb212ZvjimPArR6nqHIhw7vqnw+pzeMS6wBgLwVF+5mikToj0NTiqb7kMGI1xppy6c06ENz9A3Fa4bT2tGgEmeXOC2x5viy1EYsquWaGGnKm10WbEE3sa7vBorYZRyr4T0GNaTqcbftzJfofoxOA/P9zQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7r+XHGjRDZfJFK8qVKqeLX5YluqIfaqF+fN63ptoViM=;
- b=xle8AYtbEulfowagL+mL9Sy01DQuwR7Ga8pjYm7T+5fRtaScMFj4vxnPE+7b2yXsOB30j+wS1Oje+YE1ck3z5FxnvFNMhkEOnRBmKllKo22lXHm2MFU6BXpzN7SQruLKAjmxmbkoXCN9AE5J5hvRu3tI540CCHB8D5fY/G0Cp8Q=
-Date:   Fri, 11 Mar 2022 12:01:40 +0100
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Juergen Gross <jgross@suse.com>
-CC:     <xen-devel@lists.xenproject.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Beulich <jbeulich@suse.com>
-Subject: Re: [PATCH] xen/blkfront: speed up purge_persistent_grants()
-Message-ID: <YissFI7k6AYkM45X@Air-de-Roger>
-References: <20220311103527.12931-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8
+        Fri, 11 Mar 2022 06:31:12 -0500
+X-Greylist: delayed 1338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 03:30:08 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8942619E0B8;
+        Fri, 11 Mar 2022 03:30:08 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 22BB6prM000315;
+        Fri, 11 Mar 2022 05:06:51 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 22BB6oR9000314;
+        Fri, 11 Mar 2022 05:06:50 -0600
+Date:   Fri, 11 Mar 2022 05:06:50 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, corbet@lwn.net
+Subject: Re: [PATCH V2 06/32] x86/sgx: Support VMA permissions more relaxed than enclave permissions
+Message-ID: <20220311110650.GA32701@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <cover.1644274683.git.reinette.chatre@intel.com> <0555a4b4a5e8879eb8f879ab3d9908302000f11c.1644274683.git.reinette.chatre@intel.com> <YiY8bD/QcmcHH8dz@iki.fi> <774e906c-53fc-279c-1fb7-0922557a9da5@intel.com> <YicQbzR1o1qZUGbw@iki.fi> <YiccplUukAJ5SeFn@iki.fi> <YiceFtul/VsViuUu@iki.fi> <e7e8dde9-b929-4a01-1e39-dbf3303fdd0c@intel.com> <YieLk2YIMD9i8djv@iki.fi>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220311103527.12931-1-jgross@suse.com>
-X-ClientProxiedBy: MR1P264CA0047.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:3e::19) To SA0PR03MB5610.namprd03.prod.outlook.com
- (2603:10b6:806:b2::9)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e525ee9e-8b8b-4b93-b503-08da034e8790
-X-MS-TrafficTypeDiagnostic: DM5PR03MB3275:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR03MB32759E503A9B056FC41C99318F0C9@DM5PR03MB3275.namprd03.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KQn+0NUe9VX22Zmfim6tbAKg/gP4rIwMeHemgsF5YeXy6ow0Sr5+SJ+szxux9z3c20p1Mn85cbuTNbvsa54xVRxCbp3/RKBcNQrskTLbaj51HqN+NjRZ3ob/VOhGpki6OAhDYFhNudK57RBx1B4VPB2uUTfnWtQ7ujH+sthlM+ly3yp0IK7HxdmnJPxw9eDl0ezF81JyMF9R9F/H808slE6KnFN5Hixftl63CLVQMh3vn1mNl4SHgnOn1r10jF+JbZKakY/OYHMAXBJoArewilWyHyUII0C9BqDaC+CJbfQKcWHr+AtkNj4tjPsl66bxoAXBzFgDCWXX+hP1pDYC+EkpSXiIVdR5kc3VHrwg9Q7BxlYFzWxJC39YKn1pXSEHggHhT2zRdIdHgFcgrNBCwhAdejZww0rE2w2JDd650TegKmQMtCIMakiTOIx8/yftO6GrI16+SK4YoSGcSM5GLuihJ6OuhIqsor3Sl9SVEtQX2xWDEdTkq8jZ6CgtGdRnvcK5YLcId3Vt/zy1K/veVsqSTy2uGJMR0v5lZlon6TQzzJUidTmv8JYg7JD3+G/lyEW9eJ0EPImaPYjH4i46tPDtfP5wdfiRusaRLuIU3Om7qI2hnqabJkMpEa04MzQCBAACLJa1MqOx5lgM/advMg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR03MB5610.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(316002)(186003)(26005)(66556008)(66946007)(6512007)(9686003)(66476007)(4326008)(2906002)(82960400001)(8676002)(6486002)(38100700002)(6506007)(508600001)(8936002)(86362001)(5660300002)(4744005)(6666004)(54906003)(6916009)(33716001)(85182001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y3diL0hLQm1hQzJ5QUNxZkNOU0gvQlM0dkJncnFCSzVTNUE1YVQya2pTN2N1?=
- =?utf-8?B?Vkp0aDE0L2xIbGZRT2tkaEVac2VWSHlLN0kzVCtqdFFtTlpjZ21Ta1V2VkRw?=
- =?utf-8?B?RU8yWjB1UXdDZkg4Vm9nZUJVMncvcEl6Qi84bjZyZjducS9CS1VIMGVXcUE5?=
- =?utf-8?B?WWU4NElyendlUWQzUnQ0OXI1dWowVWFnU3lEeVZjdFdqcEluZEF2WHJxVjBq?=
- =?utf-8?B?cWtYNlJQVVVuZi96OTliWjcxSUdnMnNPRkplSGtpa3F1WTVSR0IvdUloQW0v?=
- =?utf-8?B?a3VnZCtucitkeFZrUFF3Ty9lQjhsVGZrUUYvTnB4enZFZVRBZGRDTEV6dkIr?=
- =?utf-8?B?VjZGeURoMzV2QVQyT0NXQWNTUmRSZkc0VXVOK29mbTllaTRRaXpvUG9TbldY?=
- =?utf-8?B?N3o2T3pZQ0VzOVJKZG1jdHUxT2RyVi9rdWtqQW15STRYWGdMWXVjZ0JRTUFm?=
- =?utf-8?B?V1R4dXZJOExnSG9va0gvN3dxNmVpQ2FWVTBiVHQ2T2NSakFqa1BFZEQ5dE8v?=
- =?utf-8?B?bXI1eWRKSnlDQzM4RHY5RHZOL1FGMi96Rk9DeVhDZlhIMFFSSjNGdFVER1Ba?=
- =?utf-8?B?YXZ0T1ZZeFBINGIwa24vcnhXUjRRQ0R0eElYd3U5eVdvZSt5MStRY3lNYmVt?=
- =?utf-8?B?L3lxRW9vTno1dXdlaGROWW82ZEhCYTRPQzBwTXRXR0ZMaWl5Snc4S2drQU9T?=
- =?utf-8?B?em13K2NXMWVlRWNzdVZPOEhDeEExRExISzVUM09NMWZIRXFrNjVGM1VKclg1?=
- =?utf-8?B?MnBDMWNHVHFMTmlaMmswblNoUE1MT3JrNjluYjRlWWFSMVRoOXZjTU1kZXRs?=
- =?utf-8?B?WUxKeHFGUCtlQlVDT1ZNMHFHaXB0OUFLZHJOdVRZb2NVcWdHNzVLRUtGdDMr?=
- =?utf-8?B?Rmtqa1h0bi8yb2F3S2lwWklrU1B6VEZTcGZHa1J5Q01rZk9oOTE3bUU5Tkxw?=
- =?utf-8?B?OEQ1bTNXcExKNThzWG9WMXdQYWJoc0xwM2ZOa3ZzcVdYa2ljVHVZTG4vbmJ6?=
- =?utf-8?B?Yi9OVFNtY3gwOVcyd2JZNERDWHJ3VkhwMyswSjl0WUtBQVA0NVF0N1F4Sjlq?=
- =?utf-8?B?U2pPQXNKZW9MY2dsRXRpMmpMY3c5ZXlXcEJGQUhnai9WWUtoTmxPRGFuTm5E?=
- =?utf-8?B?L1VHUFhWQXRQZGpHa0F1elN3NWN0SVM5RGNZb2REdWZiVkRycktvVVRFZDFJ?=
- =?utf-8?B?Q0dqc29jRy9EaU5IbDVKSTdFOTNZMEhWaHlvRytNSU9IYm5KdzFBc0d2Uzlh?=
- =?utf-8?B?UERsbUdGcFNaZml4bDhIU2VIbTdOUUl0Y2kwZ1ZrZTJQV2o3THJyK29INlVV?=
- =?utf-8?B?RmFTaVFyc3dXaHprRDczcDlCN1poWDBKb3E1aDA0SExtTVVwc1ZYMEdjRWQ4?=
- =?utf-8?B?cU01TkcyOENYVitvVFQzVGt0czkzeUY5Z1pzSVdlZmZjUUhrUjk1cWF0S2FP?=
- =?utf-8?B?MnFpNFNZZmdpdXgwVnVkVHFkY0NxZDhkaUN4ODVoSWUzc0ZCaHFtMit3WTZZ?=
- =?utf-8?B?OUFRVUFwbG1iNzV2bkppZ3BQMUVWYlNPWVpOVEE5SlduUXQvL2NRelRZbUdX?=
- =?utf-8?B?U1J6OFUvK2tXcmQreDczWjlWZ1lFNmNKN3hScVkyaDMrYndHeGNFS0p2aVZ5?=
- =?utf-8?B?cU5LQzY4Mnl0TVliaDc0OFNMVE8ySWJreXhUellXL3Y0dis2ajVTZGg2blNV?=
- =?utf-8?B?eHBxbjk3d2swMGlJcldmci82L0tmUDB6c3l1ZnF3ZjFEeXVwNTdLazFDSm81?=
- =?utf-8?B?QzNSUmJJL0NJUFZQeVBLeWlqMDZpbllZV1BpZHJlcVZhd0grcW9JUXpzcWh5?=
- =?utf-8?B?VkMrZ0lFdWowaHI1L2hQRjFGTm1rYWdwSTIwRGEvRmhQekhNYldIWGpoQkdL?=
- =?utf-8?B?TXRJOE5CRkJWUGR3TlNjbVY5eG9xM2YycFoxVCtVRHcwdFZicXlXbW9Oekd5?=
- =?utf-8?B?bXZudVpDSG5ybkFWOEplVi8vVVFOcHJDdGp1SnZjSmRqcjMwR3R6WW92T3V3?=
- =?utf-8?B?Zm0waDFhNEhnPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e525ee9e-8b8b-4b93-b503-08da034e8790
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR03MB5610.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 11:01:44.6835
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4dGSxbXSyHy+HsKoFZu3IUYkMWn2J9cTJj1hZlUWN06E8m+gee8OVndEDir23tkyPpd25dr4wed6TFLA5MJQnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR03MB3275
-X-OriginatorOrg: citrix.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YieLk2YIMD9i8djv@iki.fi>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Fri, 11 Mar 2022 05:06:52 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 11:35:27AM +0100, Juergen Gross wrote:
-> purge_persistent_grants() is scanning the grants list for persistent
-> grants being no longer in use by the backend. When having found such a
-> grant, it will be set to "invalid" and pushed to the tail of the list.
-> 
-> Instead of pushing it directly to the end of the list, add it first to
-> a temporary list, avoiding to scan those entries again in the main
-> list traversal. After having finished the scan, append the temporary
-> list to the grant list.
-> 
-> Suggested-by: Jan Beulich <jbeulich@suse.com>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+On Tue, Mar 08, 2022 at 07:00:03PM +0200, Jarkko Sakkinen wrote:
 
-Reviewed-by: Roger Pau Monné <roger.pau@citrix.com>
+Good morning, I hope this note finds the week ending well for
+everyone.
 
-Thanks.
+Based on previous experiences, I wasn't going to respond to this
+conversation.  However, after seeing Thomas' response to Cathy's
+microcode patch series, and reflecting on things a bit, I thought it
+would be useful to do so in order to stimulate further scholarly discussion.
+
+For the record, Thomas was spot-on with concerns about how much sense
+it makes to persist enclaves through a microcode update.  Everyone
+despises downtime, but if you are serious about security, idling a machine
+out to fully 'reset it', in the face of a microcode update seems to be
+the only prudent action.
+
+However, with all due respect, the assertion that Linux is all about
+the highest standards in technical honesty and soundness of
+engineering, are specious, at least in the context of the development
+of this driver.
+
+I see that Jarkko noted his conversations with Mark Shanahan on SGX
+micro-architectural details.  For the record, I have been fortunate
+enough to have engaged with Shanahan, Razos, Johnson and a number of
+the other engineers behind this technology.  I've also had the
+opportunity to engage with and provide recommendations to the SGX
+engineering team in Israel, before the demise of the Platform Security
+Group and the exile of SGX to servers only.
+
+I believe that Simon Johnson received a Principal Engineer nomination
+for his work on SGX.  He called me one morning here at the lake and we
+had a rather lengthy and entertaining discussion about the issues
+surrounding doing packet inspection from inside of an enclave, I
+believe at 40 GBPS line rates, maybe 10, I can't remember.  In any
+event, way faster then what could be accomplished in the face of the
+~60,000 cycle overhead of untrusted<->trusted context switches, which
+in turn motivated the 'switchless' architecture.
+
+So with the length and girth discussions at bay, reflections on the
+technical and security issues at hand follow below, for whatever they
+are worth.
+
+> On Tue, Mar 08, 2022 at 08:04:33AM -0800, Reinette Chatre wrote:
+> > ok, with the implications understood and accepted I will proceed
+> > with a new series that separates EPCM from PTEs and make RWX PTEs
+> > possible by default for EAUG pages. This has broader impact than
+> > just removing the three patches you list. "[PATCH 07/32] x86/sgx:
+> > Add pfn_mkwrite() handler for present PTEs" is also no longer
+> > needed and there is no longer a need to flush PTEs after
+> > restricting permissions. New changes also need to be considered -
+> > at least the current documentation. I'll rework the series.
+
+> Yes, I really think it is a solid plan. Any possible LSM hooks would
+> most likely attach to build product, not the dynamic behaviour.
+
+I assume everyone remembers, if not the kernel archives will have full
+details, that we had a very lively discussion about these issues
+starting well over two years ago.
+
+Jarkko's, rather dogmatic assertion, that it should simply be 'The
+Wild West', with respect to PTE memory permissions on dynamically
+allocated enclave memory, suggests that all of the hand wringing and
+proselytizing about SGX being a way to circumvent LSM controls on
+executable memory were political and technical grandstanding,
+amounting to nothing but security theater.
+
+Apologies if this is perceived to be a bit strident, it had been a
+long week already on Wednesday morning.
+
+I made the point at the time, that remained unacknowledged, that none
+of the machinations involved had any practical security value with
+respect to where everyone wanted this technology to go, ie. a driver
+with full Enclave Dynamic Memory Management (EDMM) support, which is
+the precipice on which we now stand.
+
+I noted that the only valid security controls for this technology were
+reputational controls based on cryptographic identities.  In fact, we
+developed, and posted, a rather complete implementation of such an
+infrastructure.  Here is a URL to the last patch that we had time to
+fuss with putting up:
+
+ftp://ftp.enjellic.com/pub/sgx/kernel/SFLC-5.12.patch
+
+I think we have a 5.13, if not a 5.14 patch laying around as well.
+
+The response, from one of the illuminaries in these discussions was;
+"I dare you to post the patches so I can immediately NACK them".
+
+I guess that pretty much covers the question of why their may be
+perceived reluctance in some quarters about spending time trying to
+upstream kernel functionality.
+
+So, it was with some interest, that I noted Reinette Chatre's recent
+e-mail which indicated, that in the face of the EDMM driver and the
+security implications it presents, a proof-of-concept implementation
+for reputational security controls had been developed.  That
+implementation is based on MRENCLAVE and/or MRSIGNER values, both
+cryptographically based identities, as was ours.
+
+Although we didn't bother with MRENCLAVE values, for largely the same
+reason why SGX_KEYPOLICY_MRENCLAVE isn't considered useful for
+symmetric key generation inside of an enclave, with perhaps the
+exception of shrouding keys to defeat speculation attacks.
+
+So, to assist the conversation, and for the 'Lore' record.
+
+In an EDMM environment, anyone with adverse intent is going to simply
+ship an enclave that amounts to nothing more than a bootloader.  Said
+enclave will setup a network connection to an external code
+repository, which will verify that it is only talking to a known
+enclave through remote attestation, and then download whatever code,
+via a cryptographically secured connection, that they actually want to
+run in the enclave.
+
+How do I know that?
+
+I know that because we were paid to develop those types of systems by
+customers who wanted to run proprietary and/or confidential code in
+the 'cloud'.  It was interesting to see the number of groups that
+looked at SGX as a means to protect their 'secret sauce'.
+
+I conclude, from Jarkko's comment above, that the kernel is going to
+simply ignore this threat scenario, seems vaguely unwise.
+
+So, perhaps the best way to advance a profitable discussion, is for
+the involved kernel developers to state, for the benefit of those of
+us less enlightened, how effective LSM's are going to be developed for
+the EDMM threat model.
+
+I can offer up a few strawmen approaches
+
+- Refuse any socket connections to an application that maps an enclave.
+
+- Refuse to allow an application mapping an enclave to access any
+files, particularly if it looks like they contain encrypted content.
+
+- Count the number of page mappings requested and decide that NN pages
+are OK but NN+ are not, MAP_POPULATE returns E2BIG??
+
+- Implement seccomp like controls to analyze and interpret OCALL
+behavior.
+
+The first three seem a bit like show-stoppers when it comes to doing
+anything useful with SGX, seccomp has a reputation of being hard to
+get 'right', that would seem to be particularly the case here.
+
+Perhaps something more exotic.
+
+How about a BPF enabled LSM that monitors enclave page access
+patterns, so a concerned system administrator can build custom
+variants of the directed page side channel attack that Oakland
+demonstrated against Haven.  Oakland, in his conclusions, described
+their approach as 'devastating' to the notion that SGX could prevent an
+adversarial OS from knowing what is going on inside of an enclave.
+
+The conundrum is pretty simple and straight forward.  Either the
+technology works, as advertised, which means, by definition, that the
+operating system has no effective insight into what an enclave is
+doing.
+
+Or some of the kernel developers are right, and there is a way for the
+OS to have effective insight and thus control, over what an enclave is
+trying to do.  A fact that effectively implies that Fortanix, Asylo,
+Enarx, Gramine, Oculum et.al. are peddling the equivalent of Security
+Snake Oil when it comes to SGX enabled 'confidential' computing.
+
+The above shouldn't be considered pejorative to those products,
+companies or initiatives.  I have an acquaintance in the IT business
+that tells me I worry too much about if things work and how, because
+he has made a ton of money selling people stuff that he knows doesn't
+work.
+
+For the record, I'm completely ambivalent with respect to how any of
+this gets done or what the PTE permissions for dynamic content are.
+For those who may not be ambivalent about whether Linux gets security
+'right', let me leave the following thoughts.
+
+It hasn't been my experience that good engineers design things or
+processes for the sake of designing them.  The architecture for
+EDMM/SGX was proposed and presented in the form of two papers at
+HASP-2016.
+
+Let's see, the operating system 'flow' model counts as an author none
+other then Mark Shanahan himself, with Bin Xing and Rebekah Hurd.
+
+The SGX instructions and architecture paper was done by Frank McKeen,
+Ilya Alexandrovich, Ittai Anati, Dror Capi, Simon Johnson, Rebekah
+Hurd and Carlos Razos.
+
+The interactions I've had left me feeling like these were really smart
+people.  Maybe they were on psychedelics when they designed this and
+wrote the papers?  It would seem to be helpful for these discussions
+to know if this was the case.
+
+Or maybe, perhaps, there are some subtleties, hidden 'gotchas',
+micro-architectural pecularities and/or security considerations that
+influenced the documented EDMM flow.  Seems like secure kernel
+development would benefit from knowing that, rather then concluding
+that this method is slow, and perhaps hard to implement, so Linux is
+going to ignore these potential issues.
+
+The EDMM papers, if anyone should happen to read them, indicate in the
+acknowledgments that the design was done in collaboration with OS
+designers.  I'm presuming that was Pienado's group at Microsoft
+Research, given that is where Haven came from, maybe they were
+dabbling with psychedelics.
+
+I believe they did manage to document the early micro-architectural
+errata about certain page access patterns causing processor faults.
+That leads one to believe they couldn't have been too confused about
+what was going on.
+
+When I brought all of this up last time I was told I was trying to
+present a 'scary boogeyman'.  That could be, I will leave that for
+others to judge.
+
+My pragmatic response to that accusation is why would we argue to have
+systemd and the distro's change system behaviors to accomodate the
+ability to apply an LSM to a 500K 'bootloader'.  When that
+'bootloader' can turn around and potentially pull down gigabytes of
+code that we appear to have decided don't need any controls applied to
+whatsoever.
+
+Caution would seem to suggest the need to understand the implications
+of these issues a bit better than we currently do.
+
+> Thank you.
+> 
+> BR, Jarkko
+
+Best wishes for a pleasant weekend to everyone.
+
+Dr. Greg
+
+As always,
+Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
+Enjellic Systems Development, LLC     IOT platforms and edge devices.
+4206 N. 19th Ave.
+Fargo, ND  58102
+PH: 701-281-1686                      EMAIL: dg@enjellic.com
+------------------------------------------------------------------------------
+"Thinking implies disagreement; and disagreement implies
+ non-conformity; and non-comformity implies heresy; and heresy implies
+ disloyality -- so obviously thinking must be stopped"
+                                -- [Call to Greatness, 1954]
+                                   Adlai Stephenson

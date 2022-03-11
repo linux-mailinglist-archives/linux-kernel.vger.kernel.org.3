@@ -2,167 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9F64D69BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F65F4D69C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiCKUyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 15:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S230406AbiCKU5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 15:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiCKUyv (ORCPT
+        with ESMTP id S230055AbiCKU5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 15:54:51 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EE21EDA14
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:38 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so12096360pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=iHGGTD8PyTVJNiJh8Y1TqDmvdURAM0MJZFSp08G78Is=;
-        b=OmeYL54C6iNXt9LA5vp8y8mnjIFX2umARAfHq156jOatkVuSmDuZIwkS7f2FW0qwaM
-         5ZcUlJrxBhu2aRiZalij+7oG7d8AjI8f/+p3yjZccOkt16ApsErI2vLxyuKS6DuL/2dF
-         XewBS297splmdPZ0m9Tf4z1eJIcZx+4akKT6g2aj67G5AJJXej6AjUlZn8pE7Xix+uW9
-         +wHOlFU0fia6lsu9e/MAehDrINiQnCIHHF1csnbTAW/Bycm1C9QSB31Vecjarp+QCVOP
-         HiORxMdyYLmTdnvP+r5VuzNjUvSiT1vhHOd/KScpx8we9rsWuGWTtNNy49EIk5zYOuNt
-         Ra1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=iHGGTD8PyTVJNiJh8Y1TqDmvdURAM0MJZFSp08G78Is=;
-        b=cYnG1rl4XZY3DkNd6v6XaMaKBku8ec+fayiFDboCX0PHEMF1Ba2DBjaTOtENKJjoAF
-         8sbczRLfrcXT/MJgpYc3XX+7x9IGetMRWcjn6bnKXQN+Tp3dMVCclC7UdN9WfWU60F+B
-         sf07KYbLIHMSyCT73uQ9Pbrt4zsVGYhEGEyH+mYOklrMHiRVwFPzB05pXpfH3AWvunYM
-         z5it5GZbzsnYj34YUzSOv1a9ZwD1PedRkpOqUB+2dswFfyqrFRlqA0aPQwpwkSvIhcYF
-         Z8I1WsWZYDEUQwzn69hpqxSDobBMGvpu4tXXPF+6HpECLVzfFEOZi3A0u7QphHdAkJoi
-         Ss/g==
-X-Gm-Message-State: AOAM530kDTfVCwjngomPMghu6O+Mjnl9jIki44QrRzCC7q9wdZ67Eoja
-        /vdrJvVAZ6tl5HQYIUjHkfheLjEOW/I=
-X-Google-Smtp-Source: ABdhPJxyNiCIk7FbxSXHe8ETZAAIY9TdBqDpTX658H+y+43oFI+tublXZJqo5GDPLxBqu4SZR0vqAw==
-X-Received: by 2002:a17:902:744c:b0:153:29de:55aa with SMTP id e12-20020a170902744c00b0015329de55aamr8245142plt.2.1647032012678;
-        Fri, 11 Mar 2022 12:53:32 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id s15-20020a63af4f000000b0037c8875108dsm9332340pgo.45.2022.03.11.12.53.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 11 Mar 2022 12:53:31 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [RESEND PATCH v3 5/5] mm: avoid unnecessary flush on
- change_huge_pmd()
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <e5f84691-3475-1cbd-e46c-163bf594a4bc@intel.com>
-Date:   Fri, 11 Mar 2022 12:53:30 -0800
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>, x86@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A2252098-2EE1-4F8D-A1A2-A49EE8FD18A7@gmail.com>
-References: <20220311190749.338281-1-namit@vmware.com>
- <20220311190749.338281-6-namit@vmware.com>
- <e5f84691-3475-1cbd-e46c-163bf594a4bc@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 15:57:31 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCD11F484F
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:56:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647032178; x=1678568178;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Eft7ilMFBTtn33WKAneo4xUPJ38xQRQ0vY+nWyGwX7A=;
+  b=GCDGbPropqXfjKzSTtdYwH9y4a61mq8OeM2Dw7R5A4dJJlEAehZxFdSQ
+   RWs/Avw7Y2eOkrFt2ITAc0ee2wzpPYaA6wWA6xwzHxeyFUXv4JlHDtOCN
+   1bg1M8hXB2GoFafOw1ZQM8farPf1uXenFmbf52wo/xXhdLO7x/NZthWhI
+   wj8gx/S3YEUjGPUkXxWlgI8TUMV1v0OpSKmSYFHjR65mYBnThDvjV3KT5
+   UA3S5QdkILpZFHbXfbLW64cDqjxl4mo8VppamVumGRCn5TLarZyrinilV
+   fJMPdXelhcs2v6ErVt9b19oJCeOXSmEO4l88pAlkzweXc2ATSuytOw+1D
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255599380"
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="255599380"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 12:55:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
+   d="scan'208";a="514633839"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2022 12:55:06 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSmHy-00075B-56; Fri, 11 Mar 2022 20:55:06 +0000
+Date:   Sat, 12 Mar 2022 04:54:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for
+ function 'kasan_hw_tags_enable'
+Message-ID: <202203120429.Fx8bkRdV-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peter,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   79b00034e9dcd2b065c1665c8b42f62b6b80a9be
+commit: e5af50a5df571c1d0268b02f924de49b742c990f arm64: kasan: mte: move GCR_EL1 switch to task switch when KASAN disabled
+date:   5 months ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220312/202203120429.Fx8bkRdV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e5af50a5df571c1d0268b02f924de49b742c990f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e5af50a5df571c1d0268b02f924de49b742c990f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/gpu/drm/tegra/ drivers/usb/host/ kernel/debug/kdb/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for function 'kasan_hw_tags_enable' [-Wmissing-prototypes]
+   void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+               ^
+   arch/arm64/kernel/mte.c:197:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+   ^
+   static 
+   arch/arm64/kernel/mte.c:103:20: warning: unused function '__mte_enable_kernel' [-Wunused-function]
+   static inline void __mte_enable_kernel(const char *mode, unsigned long tcf)
+                      ^
+   2 warnings generated.
 
 
-> On Mar 11, 2022, at 12:41 PM, Dave Hansen <dave.hansen@intel.com> =
-wrote:
->=20
-> On 3/11/22 11:07, Nadav Amit wrote:
->> From: Nadav Amit <namit@vmware.com>
->>=20
->> Calls to change_protection_range() on THP can trigger, at least on =
-x86,
->> two TLB flushes for one page: one immediately, when pmdp_invalidate() =
-is
->> called by change_huge_pmd(), and then another one later (that can be
->> batched) when change_protection_range() finishes.
->>=20
->> The first TLB flush is only necessary to prevent the dirty bit (and =
-with
->> a lesser importance the access bit) from changing while the PTE is
->> modified. However, this is not necessary as the x86 CPUs set the
->> dirty-bit atomically with an additional check that the PTE is (still)
->> present. One caveat is Intel's Knights Landing that has a bug and =
-does
->> not do so.
->=20
-> First of all, thank you for your diligence here.  This is a super
-> obscure issue.  I think I put handling for it in the kernel and I'm =
-not
-> sure I would have even thought about this angle.
->=20
-> That said, I'm not sure this is all necessary.
->=20
-> Yes, the Dirty bit can get set unexpectedly in some PTEs.  But, the
-> question is whether it is *VALUABLE* and needs to be preserved.  The
-> current kernel code pretty much just lets the hardware set the Dirty =
-bit
-> and then ignores it.  If it were valuable, ignoring it would have been =
-a
-> bad thing.  We'd be losing data on today's kernels because the =
-hardware
-> told us about a write that happened but that the kernel ignored.
->=20
-> My mental model of what the microcode responsible for the erratum does
-> is something along these lines:
->=20
-> 	if (write)
-> 		pte |=3D _PAGE_DIRTY;
-> 	if (!pte_present(pte))
-> 		#PF
->=20
-> The PTE is marked dirty, but the write never actually executes.  The
-> thread that triggered the A/D setting *also* gets a fault.
->=20
+vim +/kasan_hw_tags_enable +197 arch/arm64/kernel/mte.c
 
-This makes perfect sense. I guess I misunderstood or forgot the erratum.
-But feel free to recheck. It would allow to remove the KNL check, and
-probably the first patch in this series. But I don=E2=80=99t think it =
-would
-allow to get rid of pmdp_invalidate_ad() since I do not fell comfortable
-just to use pmdp_establish() directly: I do not know about other
-architectures well enough to say that they have the same atomicity
-guarantees when it comes to A/D bits.
+   196	
+ > 197	void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+   198					 __le32 *updptr, int nr_inst)
+   199	{
+   200		BUG_ON(nr_inst != 1); /* Branch -> NOP */
+   201	
+   202		if (kasan_hw_tags_enabled())
+   203			*updptr = cpu_to_le32(aarch64_insn_gen_nop());
+   204	}
+   205	
 
-> I'll double-check with some Intel folks to make sure I'm not missing
-> something.  But, either way, I don't think we should be going to this
-> much trouble for the good ol' Xeon Phi.  I doubt there are many still
-> around and I *REALLY* doubt they're running new kernels.
->=20
-> *If* we need this (and I'm not convinced we do), my first instinct =
-would
-> be to just do this instead:
->=20
-> 	clear_cpu_cap(c, X86_FEATURE_PSE);
->=20
-> on KNL systems.  If anyone cares, they know where to find us.
-
-I think that it is not necessary and your understanding of the erratum
-is the right one. Let me know if you find it is not the case.
-
-BTW: Thanks for the quick response, and sorry for the time it took me
-to send v3.
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

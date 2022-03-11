@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F024D5F5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B184D5F66
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347822AbiCKKXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S1347847AbiCKKXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347815AbiCKKXh (ORCPT
+        with ESMTP id S1347820AbiCKKXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:23:37 -0500
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 02:22:31 PST
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C678304
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:22:30 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="65516873"
+        Fri, 11 Mar 2022 05:23:39 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 02:22:34 PST
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95E6B5D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:22:34 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="45621046"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643641200"; 
-   d="scan'208";a="65516873"
-Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Mar 2022 19:21:24 +0900
-Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
-        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id A052BE07E1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 19:21:23 +0900 (JST)
+   d="scan'208";a="45621046"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Mar 2022 19:21:27 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id D0011C68A4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 19:21:26 +0900 (JST)
 Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
-        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id AF2A2D97A8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 19:21:22 +0900 (JST)
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 08F8AF36ED
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 19:21:26 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om1.fujitsu.com (Postfix) with ESMTP id 6049C406139C9;
-        Fri, 11 Mar 2022 19:21:22 +0900 (JST)
+        by yto-om1.fujitsu.com (Postfix) with ESMTP id BA77A406139C9;
+        Fri, 11 Mar 2022 19:21:25 +0900 (JST)
 From:   Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         x86@kernel.org, hpa@zytor.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     tarumizu.kohei@fujitsu.com
-Subject: [PATCH v2 0/8] Add hardware prefetch control driver for arm64 and x86
-Date:   Fri, 11 Mar 2022 19:19:32 +0900
-Message-Id: <20220311101940.3403607-1-tarumizu.kohei@fujitsu.com>
+Subject: [PATCH v2 1/8] drivers: base: Add hardware prefetch control core driver
+Date:   Fri, 11 Mar 2022 19:19:33 +0900
+Message-Id: <20220311101940.3403607-2-tarumizu.kohei@fujitsu.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220311101940.3403607-1-tarumizu.kohei@fujitsu.com>
+References: <20220311101940.3403607-1-tarumizu.kohei@fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
@@ -52,233 +54,501 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series add sysfs interface to control CPU's hardware
-prefetch behavior for performance tuning from userspace for arm64 and
-x86 (on supported CPU).
+This driver adds the register/unregister function to create the
+"prefetch_control" directory and some attribute files in every CPU's
+cache/index[0,2] directory.
 
-Changes from v1:
-  - split the attribute file so that one-value-per-file
-    - example of old attribute file
-      /sys/devices/system/cpu/cpu*/cache/index[0,2]/prefetch_control
-    - example of new attribute file
-      /sys/devices/system/cpu/cpu*/cache/index[0,2]/prefetch_control/*_prefetcher_*
-  - remove the description of "default m" in arm64's Kconfig
-https://lore.kernel.org/lkml/20220125071414.811344-1-tarumizu.kohei@fujitsu.com/
+Each attribute file exists depending on kind of processor and cache
+level. For example, on an INTEL_FAM6_BROADWELL_X:
 
-[Background]
-============
-A64FX and some Intel processors have implementation-dependent register
-for controlling CPU's hardware prefetch behavior. A64FX has
-IMP_PF_STREAM_DETECT_CTRL_EL0[1], and Intel processors have MSR 0x1a4
-(MSR_MISC_FEATURE_CONTROL)[2]. These registers cannot be accessed from
-userspace.
+    /sys/devices/system/cpu/cpu0/cache/index0/prefetch_control
+        hardware_prefetcher_enable
+        ip_prefetcher_enable
 
-[1]https://github.com/fujitsu/A64FX/tree/master/doc/
-   A64FX_Specification_HPC_Extension_v1_EN.pdf
+    /sys/devices/system/cpu/cpu0/cache/index2/prefetch_control
+        adjacent_cache_line_prefetcher_enable
+        hardware_prefetcher_enable
 
-[2]https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
-    Volume 4
+If the architecture has control of the CPU's hardware prefetcher
+behavior, use this function to create sysfs. When registering, it is
+necessary to provide what type of hardware prefetcher is supported
+and how to read/write to the register.
 
-The advantage of using this is improved performance. As an example of
-performance improvements, the results of running the Stream benchmark
-on the A64FX are described in section [Merit].
+Following patches add support for ARM64 and x86.
 
-For MSR 0x1a4, it is also possible to change the value from userspace
-via the MSR driver. However, using MSR driver is not recommended, so
-it needs a proper kernel interface[3].
-
-[3]https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/about/
-
-For these reasons, we provide a new proper kernel interface to control
-both IMP_PF_STREAM_DETECT_CTRL_EL0 and MSR 0x1a4.
-
-[Overall design]
-================
-The source code for this driver is divided into common parts
-(driver/base/pfctl.c) and architecture parts (arch/XXX/XXX/pfctl.c).
-Common parts is described architecture-independent processing, such as
-creating sysfs.
-Architecture parts is described architecture-dependent processing. It
-must contain at least the what type of hardware prefetcher is supported
-and how to read/write to the register. These information are set
-through registration function in common parts.
-
-This driver creates "prefetch_control" directory and some attribute
-files in every CPU's cache/index[0,2] directory, if CPU supports
-hardware prefetch control behavior. Each attribute file corresponds to
-the cache level of the parent index directory.
-
-Detailed description of this sysfs interface is in
-Documentation/ABI/testing/sysfs-devices-system-cpu (patch8).
-
-This driver needs cache sysfs directory and cache level/type
-information. In ARM processor, these information can be obtained
-from registers even without ACPI PPTT.
-We add processing to create a cache/index directory using only the
-information from the register if the machine does not support ACPI
-PPTT and Kconfig for hardware prefetch control (CONFIG_HWPF_CONTROL)
-is true in patch5.
-This action caused a problem and is described in [Known problem].
-
-[Examples]
-==========
-This section provides an example of using this sysfs interface at the
-x86's model of INTEL_FAM6_BROADWELL_X.
-
-This model has the following register specifications:
-
-[0]    L2 Hardware Prefetcher Disable (R/W)
-[1]    L2 Adjacent Cache Line Prefetcher Disable (R/W)
-[2]    DCU Hardware Prefetcher Disable (R/W)
-[3]    DCU IP Prefetcher Disable (R/W)
-[63:4] Reserved
-
-In this case, index0 (L1d cache) corresponds to bit[2,3] and index2
-(L2 cache) corresponds to bit [0,1]. A list of attribute files of
-index0 and index2 in CPU1 at BROADWELL_X is following:
-
-```
-# ls /sys/devices/system/cpu/cpu1/cache/index0/prefetch_control/
-
-hardware_prefetcher_enable
-ip_prefetcher_enable
-
-# ls /sys/devices/system/cpu/cpu1/cache/index2/prefetch_control/
-
-adjacent_cache_line_prefetcher_enable
-hardware_prefetcher_enable
-```
-
-If user would like to disable the setting of "L2 Adjacent Cache Line
-Prefetcher Disable (R/W)" in CPU1, do the following:
-
-```
-# echo 0 > /sys/devices/system/cpu/cpu1/cache/index2/prefetch_control/adjacent_cache_line_prefetcher_enable
-```
-
-In another example, a list of index0 at A64FX is following:
-
-```
-# ls /sys/devices/system/cpu/cpu1/cache/index0/prefetch_control/
-
-stream_detect_prefetcher_dist
-stream_detect_prefetcher_enable
-stream_detect_prefetcher_strong
-```
-
-[Patch organizations]
-=====================
-This patch series add hardware prefetch control core driver for ARM64
-and x86. Also, we add support for FUJITSU_CPU_PART_A64FX at ARM64 and
-BROADWELL_X at x86.
-
-- patch1: Add hardware prefetch core driver
-
-  This driver provides a register/unregister function to create the
-  "prefetch_control" directory and some attribute files in every CPU's
-  cache/index[0,2] directory.
-  If the architecture has control of the CPU's hardware prefetch
-  behavior, use this function to create sysfs. When registering, it
-  is necessary to provide what type of Hardware Prefetcher is
-  supported and how to read/write to the register.
-
-- patch2: Add Kconfig/Makefile to build hardware prefetch control core
-  driver
-
-- patch3: Add support for ARM64
-
-  This adds module init/exit code, and creates sysfs attribute file
-  "stream_detect_prefetcher_enable", "stream_detect_prefetcher_strong"
-  and "stream_detect_prefetcher_dist" for ARM64. This driver works only
-  if part number is FUJITSU_CPU_PART_A64FX at this point.
-
-- patch4: Add Kconfig/Makefile to build driver for arm64
-
-- patch5: Create cache sysfs directory without ACPI PPTT for hardware
-  prefetch control
-
-  Hardware Prefetch control driver needs cache sysfs directory and cache
-  level/type information. In ARM processor, these information can be
-  obtained from registers even without PPTT. Therefore, we set the
-  cpu_map_populated to true to create cache sysfs directory, if the
-  machine doesn't have PPTT.
-
-- patch6: Add support for x86
-
-  This adds module init/exit code, and creates sysfs attribute file
-  "hardware_prefetcher_enable", "ip_prefetcher_enable" and
-  "adjacent_cache_line_prefetcher_enable" for x86. This driver works
-  only if the model is INTEL_FAM6_BROADWELL_X at this point.
-
-- patch7: Add Kconfig/Makefile to build driver for x86
-
-- patch8: Add documentation for the new sysfs interface
-
-
-[Known problem]
-===============
-- `lscpu` command terminates with -ENOENT because cache/index directory
-  is exists but shared_cpu_map file does not exist. This is due to
-  patch5, which creates a cache/index directory containing only level
-  and type without ACPI PPTT.
-
-[Merit]
-=======
-For reference, here is the result of STREAM Triad when tuning with
-the "s file in L1 and L2 cache on A64FX.
-
-| dist combination  | Pattern A   | Pattern B   |
-|-------------------|-------------|-------------|
-| L1:256,  L2:1024  | 234505.2144 | 114600.0801 |
-| L1:1536, L2:1024  | 279172.8742 | 118979.4542 |
-| L1:256,  L2:10240 | 247716.7757 | 127364.1533 |
-| L1:1536, L2:10240 | 283675.6625 | 125950.6847 |
-
-In pattern A, we set the size of the array to 174720, which is about
-half the size of the L1d cache. In pattern B, we set the size of the
-array to 10485120, which is about twice the size of the L2 cache.
-
-In pattern A, a change of dist at L1 has a larger effect. On the other
-hand, in pattern B, the change of dist at L2 has a larger effect.
-As described above, the optimal dist combination depends on the
-characteristics of the application. Therefore, such a sysfs interface
-is useful for performance tuning.
-
-Best regards,
-Kohei Tarumizu
-
-Kohei Tarumizu (8):
-  drivers: base: Add hardware prefetch control core driver
-  drivers: base: Add Kconfig/Makefile to build hardware prefetch control
-    core driver
-  arm64: Add hardware prefetch control support for ARM64
-  arm64: Add Kconfig/Makefile to build hardware prefetch control driver
-  arm64: Create cache sysfs directory without ACPI PPTT for hardware
-    prefetch control
-  x86: Add hardware prefetch control support for x86
-  x86: Add Kconfig/Makefile to build hardware prefetch control driver
-  docs: ABI: Add sysfs documentation interface of hardware prefetch
-    control driver
-
- .../ABI/testing/sysfs-devices-system-cpu      |  89 ++++
- MAINTAINERS                                   |   8 +
- arch/arm64/Kconfig                            |   7 +
- arch/arm64/kernel/Makefile                    |   1 +
- arch/arm64/kernel/cacheinfo.c                 |  29 ++
- arch/arm64/kernel/pfctl.c                     | 368 ++++++++++++++++
- arch/x86/Kconfig                              |   7 +
- arch/x86/kernel/cpu/Makefile                  |   2 +
- arch/x86/kernel/cpu/pfctl.c                   | 314 +++++++++++++
- drivers/base/Kconfig                          |  13 +
- drivers/base/Makefile                         |   1 +
- drivers/base/pfctl.c                          | 412 ++++++++++++++++++
- include/linux/pfctl.h                         |  41 ++
- 13 files changed, 1292 insertions(+)
- create mode 100644 arch/arm64/kernel/pfctl.c
- create mode 100644 arch/x86/kernel/cpu/pfctl.c
+Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+---
+ drivers/base/pfctl.c  | 412 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pfctl.h |  41 +++++
+ 2 files changed, 453 insertions(+)
  create mode 100644 drivers/base/pfctl.c
  create mode 100644 include/linux/pfctl.h
 
+diff --git a/drivers/base/pfctl.c b/drivers/base/pfctl.c
+new file mode 100644
+index 000000000000..9335d513f55f
+--- /dev/null
++++ b/drivers/base/pfctl.c
+@@ -0,0 +1,412 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2022 FUJITSU LIMITED
++ *
++ * This driver provides tunable sysfs interface for Hardware Prefetch Control.
++ * See Documentation/ABI/testing/sysfs-devices-system-cpu for more information.
++ *
++ * This code provides architecture-independent functions such as create and
++ * remove attribute file.
++ * The implementation of reads and writes to the Hardware Prefetch Control
++ * register is architecture-dependent. Therefore, each architecture register
++ * a callback to read and write the register via pfctl_register_driver().
++ */
++
++#include <linux/cacheinfo.h>
++#include <linux/cpu.h>
++#include <linux/device.h>
++#include <linux/pfctl.h>
++#include <linux/parser.h>
++#include <linux/slab.h>
++
++#ifdef pr_fmt
++#undef pr_fmt
++#endif
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++static DEFINE_PER_CPU(struct device *, cache_device_pcpu);
++#define per_cpu_cache_device(cpu) (per_cpu(cache_device_pcpu, cpu))
++
++struct pfctl_driver *pdriver;
++enum cpuhp_state hp_online;
++
++static const char dist_auto_string[] = "auto";
++
++static bool prefetcher_is_available(unsigned int level, enum cache_type type,
++				    int prefetcher)
++{
++	if ((level == 1) && (type == CACHE_TYPE_DATA)) {
++		if (pdriver->supported_l1d_prefetcher & prefetcher)
++			return true;
++	} else if ((level == 2) && (type == CACHE_TYPE_UNIFIED)) {
++		if (pdriver->supported_l2_prefetcher & prefetcher)
++			return true;
++	}
++
++	return false;
++}
++
++#define pfctl_enable_show(prefetcher, pattr)				\
++static ssize_t								\
++prefetcher##_enable_show(struct device *dev,				\
++			 struct device_attribute *attr, char *buf)	\
++{									\
++	int ret;							\
++	u64 val;							\
++	unsigned int cpu;						\
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);	\
++									\
++	cpu = dev->parent->parent->parent->id;				\
++									\
++	ret = pdriver->read_pfreg(pattr, cpu, this_leaf->level, &val);	\
++	if (ret < 0)							\
++		return ret;						\
++									\
++	if ((val == PFCTL_ENABLE_VAL) || (val == PFCTL_DISABLE_VAL))	\
++		return sysfs_emit(buf, "%llu\n", val);			\
++	else								\
++		return -EINVAL;						\
++}
++
++pfctl_enable_show(hardware_prefetcher, HWPF_ENABLE);
++pfctl_enable_show(ip_prefetcher, IPPF_ENABLE);
++pfctl_enable_show(adjacent_cache_line_prefetcher, ACLPF_ENABLE);
++pfctl_enable_show(stream_detect_prefetcher, SDPF_ENABLE);
++
++static ssize_t
++stream_detect_prefetcher_strong_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	int ret;
++	u64 val;
++	unsigned int cpu;
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);
++
++	cpu = dev->parent->parent->parent->id;
++
++	ret = pdriver->read_pfreg(SDPF_STRONG, cpu, this_leaf->level, &val);
++	if (ret < 0)
++		return ret;
++
++	if ((val == PFCTL_STRONG_VAL) || (val == PFCTL_WEAK_VAL))
++		return sysfs_emit(buf, "%llu\n", val);
++	else
++		return -EINVAL;
++
++}
++
++static ssize_t
++stream_detect_prefetcher_dist_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	int ret;
++	u64 val;
++	unsigned int cpu;
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);
++
++	cpu = dev->parent->parent->parent->id;
++
++	ret = pdriver->read_pfreg(SDPF_DIST, cpu, this_leaf->level, &val);
++	if (ret < 0)
++		return ret;
++
++	if (val == PFCTL_DIST_AUTO_VAL)
++		return sysfs_emit(buf, "%s\n", dist_auto_string);
++	else
++		return sysfs_emit(buf, "%llu\n", val);
++}
++
++#define pfctl_enable_store(prefetcher, pattr)				\
++static ssize_t								\
++prefetcher##_enable_store(struct device *dev,				\
++			  struct device_attribute *attr,		\
++			  const char *buf, size_t count)		\
++{									\
++	int ret;							\
++	u64 val;							\
++	unsigned int cpu;						\
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);	\
++									\
++	ret = kstrtoull(buf, 10, &val);					\
++	if (ret < 0)							\
++		return -EINVAL;						\
++									\
++	if ((val != PFCTL_ENABLE_VAL) && (val != PFCTL_DISABLE_VAL))	\
++		return -EINVAL;						\
++									\
++	cpu = dev->parent->parent->parent->id;				\
++									\
++	ret = pdriver->write_pfreg(pattr, cpu, this_leaf->level, val);	\
++	if (ret < 0)							\
++		return ret;						\
++									\
++	return count;							\
++}
++
++pfctl_enable_store(hardware_prefetcher, HWPF_ENABLE);
++pfctl_enable_store(ip_prefetcher, IPPF_ENABLE);
++pfctl_enable_store(adjacent_cache_line_prefetcher, ACLPF_ENABLE);
++pfctl_enable_store(stream_detect_prefetcher, SDPF_ENABLE);
++
++static ssize_t
++stream_detect_prefetcher_strong_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t count)
++{
++	int ret;
++	u64 val;
++	unsigned int cpu;
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);
++
++	ret = kstrtoull(buf, 10, &val);
++	if (ret < 0)
++		return -EINVAL;
++
++	if ((val != PFCTL_STRONG_VAL) && (val != PFCTL_WEAK_VAL))
++		return -EINVAL;
++
++	cpu = dev->parent->parent->parent->id;
++
++	ret = pdriver->write_pfreg(SDPF_STRONG, cpu, this_leaf->level, val);
++	if (ret < 0)
++		return ret;
++
++	return count;
++}
++
++static ssize_t
++stream_detect_prefetcher_dist_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	int ret;
++	u64 val;
++	unsigned int cpu;
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);
++
++	if (sysfs_streq(buf, dist_auto_string)) {
++		val = PFCTL_DIST_AUTO_VAL;
++	} else {
++		ret = kstrtoull(buf, 10, &val);
++		if (ret < 0)
++			return -EINVAL;
++	}
++
++	cpu = dev->parent->parent->parent->id;
++
++	ret = pdriver->write_pfreg(SDPF_DIST, cpu, this_leaf->level, val);
++	if (ret < 0)
++		return ret;
++
++	return count;
++}
++
++static DEVICE_ATTR_ADMIN_RW(hardware_prefetcher_enable);
++static DEVICE_ATTR_ADMIN_RW(ip_prefetcher_enable);
++static DEVICE_ATTR_ADMIN_RW(adjacent_cache_line_prefetcher_enable);
++static DEVICE_ATTR_ADMIN_RW(stream_detect_prefetcher_enable);
++static DEVICE_ATTR_ADMIN_RW(stream_detect_prefetcher_strong);
++static DEVICE_ATTR_ADMIN_RW(stream_detect_prefetcher_dist);
++
++static umode_t
++pfctl_attrs_is_visible(struct kobject *kobj, struct attribute *attr, int unused)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct cacheinfo *this_leaf = dev_get_drvdata(dev->parent);
++	umode_t mode = attr->mode;
++
++	if ((attr == &dev_attr_hardware_prefetcher_enable.attr) &&
++	    (prefetcher_is_available(this_leaf->level, this_leaf->type, HWPF)))
++		return mode;
++
++	if ((attr == &dev_attr_ip_prefetcher_enable.attr) &&
++	    (prefetcher_is_available(this_leaf->level, this_leaf->type, IPPF)))
++		return mode;
++
++	if ((attr == &dev_attr_adjacent_cache_line_prefetcher_enable.attr) &&
++	    (prefetcher_is_available(this_leaf->level, this_leaf->type, ACLPF)))
++		return mode;
++
++	if (((attr == &dev_attr_stream_detect_prefetcher_enable.attr) ||
++	     (attr == &dev_attr_stream_detect_prefetcher_strong.attr) ||
++	     (attr == &dev_attr_stream_detect_prefetcher_dist.attr)) &&
++	    (prefetcher_is_available(this_leaf->level, this_leaf->type, SDPF)))
++		return mode;
++
++	return 0;
++}
++
++static struct attribute *pfctl_attrs[] = {
++	&dev_attr_hardware_prefetcher_enable.attr,
++	&dev_attr_ip_prefetcher_enable.attr,
++	&dev_attr_adjacent_cache_line_prefetcher_enable.attr,
++	&dev_attr_stream_detect_prefetcher_enable.attr,
++	&dev_attr_stream_detect_prefetcher_strong.attr,
++	&dev_attr_stream_detect_prefetcher_dist.attr,
++	NULL,
++};
++
++static const struct attribute_group pfctl_group = {
++	.attrs = pfctl_attrs,
++	.is_visible = pfctl_attrs_is_visible,
++};
++
++static const struct attribute_group *pfctl_groups[] = {
++	&pfctl_group,
++	NULL,
++};
++
++static int find_cache_device(unsigned int cpu)
++{
++	struct device *cpu_dev = get_cpu_device(cpu);
++	struct device *cache_dev;
++
++	cache_dev = device_find_child_by_name(cpu_dev, "cache");
++	if (!cache_dev)
++		return -ENODEV;
++	per_cpu_cache_device(cpu) = cache_dev;
++
++	return 0;
++}
++
++static int _remove_pfctl_attr(struct device *dev, void *data)
++{
++	struct cacheinfo *leaf = dev_get_drvdata(dev);
++	struct device *pfctl_dev;
++
++	if (!prefetcher_is_available(leaf->level, leaf->type, ANYPF))
++		return 0;
++
++	pfctl_dev = device_find_child_by_name(dev, "prefetch_control");
++	if (!pfctl_dev)
++		return 0;
++
++	device_unregister(pfctl_dev);
++	return 0;
++}
++
++static void remove_pfctl_attr(unsigned int cpu)
++{
++	struct device *cache_dev = per_cpu_cache_device(cpu);
++
++	if (!cache_dev)
++		return;
++
++	device_for_each_child(cache_dev, NULL, _remove_pfctl_attr);
++}
++
++static int _create_pfctl_attr(struct device *dev, void *data)
++{
++	struct cacheinfo *leaf = dev_get_drvdata(dev);
++	struct device *pfctl_dev;
++
++	if (!prefetcher_is_available(leaf->level, leaf->type, ANYPF))
++		return 0;
++
++	pfctl_dev = cpu_device_create(dev, NULL, pfctl_groups,
++				      "prefetch_control");
++	if (IS_ERR(pfctl_dev))
++		return PTR_ERR(pfctl_dev);
++
++	return 0;
++}
++
++static int create_pfctl_attr(unsigned int cpu)
++{
++	int ret;
++	struct device *cache_dev = per_cpu_cache_device(cpu);
++
++	if (!cache_dev)
++		return -ENODEV;
++
++	ret = device_for_each_child(cache_dev, NULL, _create_pfctl_attr);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int pfctl_online(unsigned int cpu)
++{
++	int ret;
++
++	ret = find_cache_device(cpu);
++	if (ret < 0)
++		return ret;
++
++	ret = create_pfctl_attr(cpu);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int pfctl_prepare_down(unsigned int cpu)
++{
++	remove_pfctl_attr(cpu);
++
++	return 0;
++}
++
++/**
++ * pfctl_register_driver - register a Hardware Prefetch Control driver
++ * @driver_data: struct pfctl_driver must contain the supported prefetcher type
++ *               and function pointer for reading and writing hardware prefetch
++ *               register. If these are not defined this function return error.
++ *
++ * Note: This function must be called after the cache device is initialized
++ * because it requires access to the cache device.
++ * (e.g. Call at the late_initcall)
++ *
++ * Context: Any context.
++ * Return: 0 on success, negative error code on failure.
++ */
++int pfctl_register_driver(struct pfctl_driver *driver_data)
++{
++	int ret;
++
++	if (pdriver)
++		return -EEXIST;
++
++	if ((driver_data->supported_l1d_prefetcher == 0) &&
++	    (driver_data->supported_l2_prefetcher == 0))
++		return -EINVAL;
++
++	if (!driver_data->read_pfreg || !driver_data->write_pfreg)
++		return -EINVAL;
++
++	pdriver = driver_data;
++
++	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "base/pfctl:online",
++				pfctl_online, pfctl_prepare_down);
++	if (ret < 0) {
++		pr_err("failed to register hotplug callbacks\n");
++		pdriver = NULL;
++		return ret;
++	}
++
++	hp_online = ret;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(pfctl_register_driver);
++
++/**
++ * pfctl_unregister_driver - unregister the Hardware Prefetch Control driver
++ * @driver_data: Used to verify that this function is called by the driver that
++ *               called pfctl_register_driver by determining if driver_data is
++ *               the same.
++ *
++ * Context: Any context.
++ * Return: nothing.
++ */
++void pfctl_unregister_driver(struct pfctl_driver *driver_data)
++{
++	if (!pdriver || (driver_data != pdriver))
++		return;
++
++	cpuhp_remove_state(hp_online);
++
++	pdriver = NULL;
++}
++EXPORT_SYMBOL_GPL(pfctl_unregister_driver);
+diff --git a/include/linux/pfctl.h b/include/linux/pfctl.h
+new file mode 100644
+index 000000000000..607442606a95
+--- /dev/null
++++ b/include/linux/pfctl.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PFCTL_H
++#define _LINUX_PFCTL_H
++
++#define PFCTL_ENABLE_VAL		1
++#define PFCTL_DISABLE_VAL		0
++#define PFCTL_STRONG_VAL		1
++#define PFCTL_WEAK_VAL			0
++#define PFCTL_DIST_AUTO_VAL		0
++
++enum pfctl_attr {
++	HWPF_ENABLE,
++	IPPF_ENABLE,
++	ACLPF_ENABLE,
++	SDPF_ENABLE,
++	SDPF_STRONG,
++	SDPF_DIST,
++};
++
++enum prefetcher {
++	HWPF	= BIT(0), /* Hardware Prefetcher */
++	IPPF	= BIT(1), /* IP Prefetcher */
++	ACLPF	= BIT(2), /* Adjacent Cache Line Prefetcher */
++	SDPF	= BIT(3), /* Stream Detect Prefetcher */
++	ANYPF	= HWPF|IPPF|ACLPF|SDPF,
++};
++
++struct pfctl_driver {
++	unsigned int supported_l1d_prefetcher;
++	unsigned int supported_l2_prefetcher;
++
++	int (*read_pfreg)(enum pfctl_attr pattr, unsigned int cpu,
++			  unsigned int level, u64 *val);
++	int (*write_pfreg)(enum pfctl_attr pattr, unsigned int cpu,
++			   unsigned int level, u64 val);
++};
++
++int pfctl_register_driver(struct pfctl_driver *driver_data);
++void pfctl_unregister_driver(struct pfctl_driver *driver_data);
++
++#endif
 -- 
 2.27.0
 

@@ -2,181 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA5A4D5E5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B114D5E5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347370AbiCKJXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S242316AbiCKJYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 04:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345021AbiCKJXk (ORCPT
+        with ESMTP id S1347460AbiCKJXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:23:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D90B3B1;
-        Fri, 11 Mar 2022 01:22:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E48A1F381;
-        Fri, 11 Mar 2022 09:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646990554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0izCbKy2PPDXTj3zqLWTj1ez7s4mrzmIYx97ZIN4SaQ=;
-        b=pcQn5HK48a7pGy1Uie5Q/uhC9zp+X98MWoSUrVTBJ9+4GGdOqVavasGuHcy+EPFuUWlyhU
-        PvayG78vRTejFQ8Ggi7AdDQzJ0QelHbK2ZxYAXC2kTLBigaHCxBHik28X2LHo7Phgtz2BF
-        OQRf4lU00xDvtTbDF94osF7v3fM02Pg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646990554;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0izCbKy2PPDXTj3zqLWTj1ez7s4mrzmIYx97ZIN4SaQ=;
-        b=J+vUxs6CxNl4yRwPAXVmhazKXZenTR2kKtNXQWKOrgangeXmQvkUHtd/vdrT6pABlnIF72
-        Z9upYF45BJRfLYBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 019A613A82;
-        Fri, 11 Mar 2022 09:22:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0QF6OtkUK2L/UwAAMHmgww
-        (envelope-from <vkarasulli@suse.de>); Fri, 11 Mar 2022 09:22:33 +0000
-Date:   Fri, 11 Mar 2022 10:22:32 +0100
-From:   Vasant Karasulli <vkarasulli@suse.de>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     David Disseldorp <ddiss@suse.de>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.de>
-Subject: Re: [PATCH v2 2/2] exfat currently unconditionally strips trailing
- periods '.' when performing path lookup, but allows them in the filenames
- during file creation. This is done intentionally, loosely following Windows
- behaviour and specifications which state:
-Message-ID: <YisU2FA7EBeguwN5@vasant-suse>
-References: <20220310142455.23127-1-vkarasulli@suse.de>
- <20220310142455.23127-3-vkarasulli@suse.de>
- <20220310210633.095f0245@suse.de>
- <CAKYAXd_ij3WqJHQZvH458XRwLBtboiJnr-fK0hVPDi_j_8XDZQ@mail.gmail.com>
+        Fri, 11 Mar 2022 04:23:55 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB1397BBF
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:22:49 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id 10so4326012qtz.11
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 01:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5yB2ssbuBZx5F0u4321kFXuP4TmIeDrCq6d7hvGDPTg=;
+        b=cmhwVxbwFxNLFe88VcQKADx1bM2QPDytOUGUzFpRUf6kfONBxDn3fCJJOWbMgyIjs6
+         3yt7nNySNS+pzTrYw7kFmgPCgeP0SelBrffzhy6vkhYUV0d1GxoU4+IP8ni5VXNhmUoK
+         YQ55VpIVgQaGYdtng2Eeo7b4RnlHMaLiEy74J5StS34Vh/N6krSkcs4cei7tRYFp0d80
+         xuLVy+IBziQVmOGUOBjc7ZYIzcOs46V4I6n7GWZfn99mNWEZbJs+YFt8c0Na1fELKSvr
+         3sz+5TA/n9KvE8/j+epguoOl7q2qml6OHE+q3Iiyuz2taFl3vqChrstWFhg02cyHpE5v
+         tarw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5yB2ssbuBZx5F0u4321kFXuP4TmIeDrCq6d7hvGDPTg=;
+        b=DgwzDND1Otg8UzuH5xR9mk8gM65QlvsRSEJ4eb54nievWiOBxsuO3rj3Cyun/hTBu+
+         6zR7SvLo7GVUqBEDORnr/HAv6LNKRjpuzQUikotMF2jSaH4uyBIwlKupatGvBHc5EB+j
+         ZPCUKtk1SLC+ncgiJ63KFuLJYra8IzdzwpkTca6opesy2P/RIe8jQlHzm7nkEenumY9I
+         cZRney4eFYpoelvZKleJaXXYQXdiOtez0R2r891rP/Y/jPY0pVY2hrOL/auaY9aE648l
+         52OX4Sb6vlKYUB21O+fnBKofQKI1QlbHaNOuza0eOIad+M9PKlEccr2Xvk45rxbz3Qhd
+         dn4w==
+X-Gm-Message-State: AOAM5307kaAt/9EoHNNWlZyaLNDsZtbZH4GrgLPr2tfpfTeNAZqeSO4b
+        fooNW59O+gkLZZee+GfdsgA5tm/aHzD1BFObUzA+zw==
+X-Google-Smtp-Source: ABdhPJzOrg/mWzHuLqY4b86LL9GlAgWC/OwT3yStEwxtsa3p088p8nFS7JNBlBKBc5nLmwxCu/dm/rrw7Goxu+n5yFg=
+X-Received: by 2002:ac8:7d0a:0:b0:2e0:4e16:d3fb with SMTP id
+ g10-20020ac87d0a000000b002e04e16d3fbmr7249289qtb.295.1646990568534; Fri, 11
+ Mar 2022 01:22:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKYAXd_ij3WqJHQZvH458XRwLBtboiJnr-fK0hVPDi_j_8XDZQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1646758500-3776-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1646758500-3776-2-git-send-email-quic_vpolimer@quicinc.com>
+ <CAE-0n51bfqWs8yOiyQ-A_bEQ7CZSqavz8epcFEWYyZxxoRYFHg@mail.gmail.com> <BN0PR02MB8173F2E408848216D489D503E40C9@BN0PR02MB8173.namprd02.prod.outlook.com>
+In-Reply-To: <BN0PR02MB8173F2E408848216D489D503E40C9@BN0PR02MB8173.namprd02.prod.outlook.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 11 Mar 2022 12:22:37 +0300
+Message-ID: <CAA8EJppt_NjOdJWGrP=8zwG1yEAyJBtnv4G5vLW3CHZ8WrGFvw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/5] arm64/dts/qcom/sc7280: remove assigned-clock-rate
+ property for mdp clk
+To:     Vinod Polimera <vpolimer@qti.qualcomm.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        quic_vpolimer <quic_vpolimer@quicinc.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fr 11-03-22 18:03:57, Namjae Jeon wrote:
-> 2022-03-11 5:06 GMT+09:00, David Disseldorp <ddiss@suse.de>:
-> > Thanks for reworking these changes, Vasant.
-> >
-> > Please trim the 1/2 and 2/2 patch subjects down to around 50 chars
-> > (including a "exfat: " prefix), with the details moved into the commit
-> > message body...
-> >
-> > On Thu, 10 Mar 2022 15:24:55 +0100, Vasant Karasulli wrote:
-> >
-> >>   #exFAT
-> >>   The concatenated file name has the same set of illegal characters as
-> >>   other FAT-based file systems (see Table 31).
-> >>
-> >>   #FAT
-> >>   ...
-> >>   Leading and trailing spaces in a long name are ignored.
-> >>   Leading and embedded periods are allowed in a name and are stored in
-> >>   the long name. Trailing periods are ignored.
-> >>
-> >> Note: Leading and trailing space ' ' characters are currently retained
-> >> by Linux kernel exfat, in conflict with the above specification.
-> >
-> > I think it makes sense to mention your findings from the Windows tests
-> > here. E.g. "Windows 10 also retains leading and trailing space
-> > characters".
-> Windows 10 do also strip them. So you can make another patch to strip
-> it as well as trailing periods.
-Actually I found contradicting behavior between Window 10 File Explorer and
-Commandline. Commandline seems to strip trailing spaces, but File Explorer
-doesn't.
-
-> >
-> >> Some implementations, such as fuse-exfat, don't perform path trailer
-> >> removal. When mounting images which contain trailing-dot paths, these
-> >> paths are unreachable, e.g.:
-> >>
-> >>   + mount.exfat-fuse /dev/zram0 /mnt/test/
-> >>   FUSE exfat 1.3.0
-> >>   + cd /mnt/test/
-> >>   + touch fuse_created_dots... '  fuse_created_spaces  '
-> >>   + ls -l
-> >>   total 0
-> >>   -rwxrwxrwx 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-> >>   -rwxrwxrwx 1 root 0 0 Aug 18 09:45  fuse_created_dots...
-> >>   + cd /
-> >>   + umount /mnt/test/
-> >>   + mount -t exfat /dev/zram0 /mnt/test
-> >>   + cd /mnt/test
-> >>   + ls -l
-> >>   ls: cannot access 'fuse_created_dots...': No such file or directory
-> >>   total 0
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-> >>   -????????? ? ?    ? ?            ?  fuse_created_dots...
-> >>   + touch kexfat_created_dots... '  kexfat_created_spaces  '
-> >>   + ls -l
-> >>   ls: cannot access 'fuse_created_dots...': No such file or directory
-> >>   total 0
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  kexfat_created_spaces  '
-> >>   -????????? ? ?    ? ?            ?  fuse_created_dots...
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 09:45  kexfat_created_dots
-> >>   + cd /
-> >>   + umount /mnt/test/
-> >>
-> >> With this change, the "keep_last_dots" mount option can be used to access
-> >> paths with trailing periods and disallow creating files with names with
-> >> trailing periods. E.g. continuing from the previous example:
-> >>
-> >>   + mount -t exfat -o keep_last_dots /dev/zram0 /mnt/test
-> >>   + cd /mnt/test
-> >>   + ls -l
-> >>   total 0
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  fuse_created_spaces  '
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  kexfat_created_spaces  '
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32  fuse_created_dots...
-> >>   -rwxr-xr-x 1 root 0 0 Aug 18 10:32  kexfat_created_dots
-> >
-> > It'd be nice to demonstrate "keep_last_dots" creation here as well, e.g.
-> >
-> >   + echo > kexfat_created_dots_again...
-> >   sh: kexfat_created_dots_again...: Invalid argument
-> >
-> > @Namjae: not sure whether this is what you had in mind for preventing
-> > creation of invalid paths. What's your preference?
-> Look like what I wanted.
-That's great. I will resend the patch after modifying the commit message
-as David suggested.
+On Fri, 11 Mar 2022 at 11:06, Vinod Polimera <vpolimer@qti.qualcomm.com> wrote:
 >
-> Thanks!
+>
+>
+> > -----Original Message-----
+> > From: Stephen Boyd <swboyd@chromium.org>
+> > Sent: Wednesday, March 9, 2022 1:36 AM
+> > To: quic_vpolimer <quic_vpolimer@quicinc.com>;
+> > devicetree@vger.kernel.org; dri-devel@lists.freedesktop.org;
+> > freedreno@lists.freedesktop.org; linux-arm-msm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org; robdclark@gmail.com;
+> > dianders@chromium.org; quic_kalyant <quic_kalyant@quicinc.com>
+> > Subject: Re: [PATCH v5 1/5] arm64/dts/qcom/sc7280: remove assigned-clock-
+> > rate property for mdp clk
 > >
-> > Cheers, David
+> > WARNING: This email originated from outside of Qualcomm. Please be wary
+> > of any links or attachments, and do not enable macros.
 > >
+> > Quoting Vinod Polimera (2022-03-08 08:54:56)
+> > > Kernel clock driver assumes that initial rate is the
+> > > max rate for that clock and was not allowing it to scale
+> > > beyond the assigned clock value.
+> >
+> > How? I see ftbl_disp_cc_mdss_mdp_clk_src[] has multiple frequencies and
+> > clk_rcg2_shared_ops so it doesn't look like anything in the clk driver
+> > is preventing the frequency from changing beyond the assigned value.
+>
+> Folowing the comment of Stephen, i have checked a bit more. it appears that clock driver is not setting the max clock from assgined clocks, dpu driver is doing that.
+> i am planning to fix it as below.
+> 1) assign ULONG_MAX to max_rate while initializing clock in dpu driver.
+> 2) remove unnecessary checks in the core_perf library. If rate doesn't match with the entries in the opp table, it will throw error, hence furthur checks are not needed.
+> 3) no changes in dt are required. (we can drop all the posted ones)
 
-Thanks,
-Vasant Karasulli
-Kernel generalist
-www.suse.com<http://www.suse.com>
-[https://www.suse.com/assets/img/social-platforms-suse-logo.png]<http://www.suse.com/>
-SUSE - Open Source Solutions for Enterprise Servers & Cloud<http://www.suse.com/>
-Modernize your infrastructure with SUSE Linux Enterprise servers, cloud technology for IaaS, and SUSE's software-defined storage.
-www.suse.com
+Why? They made perfect sense. The dts assignments should be replaced
+by the opp setting in the bind function, as this would also set the
+performance point of the respective power domain.
 
+>
+> Changes :
+> ```--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
+> @@ -284,17 +284,6 @@ void dpu_core_perf_crtc_release_bw(struct drm_crtc *crtc)
+>         }
+>  }
+>
+> -static int _dpu_core_perf_set_core_clk_rate(struct dpu_kms *kms, u64 rate)
+> -{
+> -       struct dss_clk *core_clk = kms->perf.core_clk;
+> -
+> -       if (core_clk->max_rate && (rate > core_clk->max_rate))
+> -               rate = core_clk->max_rate;
+> -
+> -       core_clk->rate = rate;
+> -       return dev_pm_opp_set_rate(&kms->pdev->dev, core_clk->rate);
+> -}
+> -
+>  static u64 _dpu_core_perf_get_core_clk_rate(struct dpu_kms *kms)
+>  {
+>         u64 clk_rate = kms->perf.perf_tune.min_core_clk;
+> @@ -405,7 +394,7 @@ int dpu_core_perf_crtc_update(struct drm_crtc *crtc,
+>
+>                 trace_dpu_core_perf_update_clk(kms->dev, stop_req, clk_rate);
+>
+> -               ret = _dpu_core_perf_set_core_clk_rate(kms, clk_rate);
+> +               ret = dev_pm_opp_set_rate(&kms->pdev->dev, clk_rate);
+>                 if (ret) {
+>                         DPU_ERROR("failed to set %s clock rate %llu\n",
+>                                         kms->perf.core_clk->clk_name, clk_rate);
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_io_util.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_io_util.c
+
+This file has been removed in msm/next
+
+> @@ -175,7 +175,7 @@ int msm_dss_parse_clock(struct platform_device *pdev,
+>                         continue;
+>                 mp->clk_config[i].rate = rate;
+>                 mp->clk_config[i].type = DSS_CLK_PCLK;
+> -               mp->clk_config[i].max_rate = rate;
+> +               mp->clk_config[i].max_rate = ULONG_MAX;
+>         }
+>
+>         mp->num_clk = num_clk;
+> --```
+>
+> Thanks,
+> Vinod.
+>
+> >
+> > >
+> > > Drop the assigned clock rate property and vote on the mdp clock as per
+> > > calculated value during the usecase.
+> > >
+> > > Changes in v2:
+> > > - Remove assigned-clock-rate property and set mdp clk during resume
+> > sequence.
+> > > - Add fixes tag.
+> > >
+> > > Changes in v3:
+> > > - Remove extra line after fixes tag.(Stephen Boyd)
+> >
+> > This changelog should be removed.
+> >
+> > >
+> > > Fixes: 62fbdce91("arm64: dts: qcom: sc7280: add display dt nodes")
+> >
+> > I thought folks were saying that this is bad to keep? I don't really
+> > mind either way, but I guess it's better to drop the fixes tag because
+> > this is largely a performance improvement?
+> >
+> > > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+
+
+-- 
+With best wishes
+Dmitry

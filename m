@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B1C4D5B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D524D5BA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 07:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345679AbiCKG1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 01:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S1346619AbiCKGdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 01:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiCKG1g (ORCPT
+        with ESMTP id S229533AbiCKGdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 01:27:36 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7451A8C9B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 22:26:33 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KFG6W66kjzcb4G;
-        Fri, 11 Mar 2022 14:21:39 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Fri, 11 Mar 2022 01:33:05 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051C5198D19;
+        Thu, 10 Mar 2022 22:32:01 -0800 (PST)
+Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KFGJq5yxVzfYv1;
+        Fri, 11 Mar 2022 14:30:35 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 11 Mar 2022 14:26:31 +0800
-Subject: Re: [PATCH] mm/huge_memory: remove unneeded local variable follflags
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220310131253.30970-1-linmiaohe@huawei.com>
- <90246c21-94e9-e64e-dd83-fce45de89f72@arm.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <15d17cb9-6eae-0345-8e67-da30a5978300@huawei.com>
-Date:   Fri, 11 Mar 2022 14:26:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2308.21; Fri, 11 Mar 2022 14:31:59 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 11 Mar 2022 14:31:58 +0800
+Subject: Re: [PATCH -next 00/11] support concurrent sync io for bfq on a
+ specail occasion
+To:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
+        <jack@suse.cz>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <e299180e-cdbd-0837-8478-5e397ac8166b@huawei.com>
+Date:   Fri, 11 Mar 2022 14:31:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <90246c21-94e9-e64e-dd83-fce45de89f72@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
+In-Reply-To: <20220305091205.4188398-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -52,57 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/11 12:51, Anshuman Khandual wrote:
-> Hi Miaohe,
+friendly ping ...
+
+ÔÚ 2022/03/05 17:11, Yu Kuai Ð´µÀ:
+> Currently, bfq can't handle sync io concurrently as long as they
+> are not issued from root group. This is because
+> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> bfq_asymmetric_scenario().
 > 
-> On 3/10/22 18:42, Miaohe Lin wrote:
->> We can pass FOLL_GET | FOLL_DUMP to follow_page directly to simplify
->> the code a bit.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/huge_memory.c | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index 3557aabe86fe..418d077da246 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -2838,7 +2838,6 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
->>  	 */
->>  	for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
->>  		struct vm_area_struct *vma = find_vma(mm, addr);
->> -		unsigned int follflags;
->>  		struct page *page;
->>  
->>  		if (!vma || addr < vma->vm_start)
->> @@ -2851,8 +2850,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
->>  		}
->>  
->>  		/* FOLL_DUMP to ignore special (like zero) pages */
->> -		follflags = FOLL_GET | FOLL_DUMP;
->> -		page = follow_page(vma, addr, follflags);
->> +		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
->>  
->>  		if (IS_ERR(page))
->>  			continue;
+> This patchset tries to support concurrent sync io if all the sync ios
+> are issued from the same cgroup:
 > 
-> LGTM, but there is another similar instance in add_page_for_migration()
-> inside mm/migrate.c, requiring this exact clean up.
+> 1) Count root_group into 'num_groups_with_pending_reqs', patch 1-5;
 > 
-
-Thanks for comment. That similar case is done in my previous patch series[1]
-aimed at migration cleanup and fixup. It might be more suitable to do that
-clean up in that specialized series?
-
-[1]:https://lore.kernel.org/linux-mm/20220304093409.25829-4-linmiaohe@huawei.com/
-
-> Hence with that change in place.
+> 2) Don't idle if 'num_groups_with_pending_reqs' is 1, patch 6;
 > 
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-Thanks again.
-
-> .
+> 3) Don't count the group if the group doesn't have pending requests,
+> while it's child groups may have pending requests, patch 7;
 > 
-
+> This is because, for example:
+> if sync ios are issued from cgroup /root/c1/c2, root, c1 and c2
+> will all be counted into 'num_groups_with_pending_reqs',
+> which makes it impossible to handle sync ios concurrently.
+> 
+> 4) Decrease 'num_groups_with_pending_reqs' when the last queue completes
+> all the requests, while child groups may still have pending
+> requests, patch 8-10;
+> 
+> This is because, for example:
+> t1 issue sync io on root group, t2 and t3 issue sync io on the same
+> child group. num_groups_with_pending_reqs is 2 now.
+> After t1 stopped, num_groups_with_pending_reqs is still 2. sync io from
+> t2 and t3 still can't be handled concurrently.
+> 
+> fio test script: startdelay is used to avoid queue merging
+> [global]
+> filename=/dev/nvme0n1
+> allow_mounted_write=0
+> ioengine=psync
+> direct=1
+> ioscheduler=bfq
+> offset_increment=10g
+> group_reporting
+> rw=randwrite
+> bs=4k
+> 
+> [test1]
+> numjobs=1
+> 
+> [test2]
+> startdelay=1
+> numjobs=1
+> 
+> [test3]
+> startdelay=2
+> numjobs=1
+> 
+> [test4]
+> startdelay=3
+> numjobs=1
+> 
+> [test5]
+> startdelay=4
+> numjobs=1
+> 
+> [test6]
+> startdelay=5
+> numjobs=1
+> 
+> [test7]
+> startdelay=6
+> numjobs=1
+> 
+> [test8]
+> startdelay=7
+> numjobs=1
+> 
+> test result:
+> running fio on root cgroup
+> v5.17-rc6:	   550 Mib/s
+> v5.17-rc6-patched: 550 Mib/s
+> 
+> running fio on non-root cgroup
+> v5.17-rc6:	   349 Mib/s
+> v5.17-rc6-patched: 550 Mib/s
+> 
+> Yu Kuai (11):
+>    block, bfq: add new apis to iterate bfq entities
+>    block, bfq: apply news apis where root group is not expected
+>    block, bfq: cleanup for __bfq_activate_requeue_entity()
+>    block, bfq: move the increasement of 'num_groups_with_pending_reqs' to
+>      it's caller
+>    block, bfq: count root group into 'num_groups_with_pending_reqs'
+>    block, bfq: do not idle if only one cgroup is activated
+>    block, bfq: only count parent bfqg when bfqq is activated
+>    block, bfq: record how many queues have pending requests in bfq_group
+>    block, bfq: move forward __bfq_weights_tree_remove()
+>    block, bfq: decrease 'num_groups_with_pending_reqs' earlier
+>    block, bfq: cleanup bfqq_group()
+> 
+>   block/bfq-cgroup.c  | 13 +++----
+>   block/bfq-iosched.c | 87 +++++++++++++++++++++++----------------------
+>   block/bfq-iosched.h | 41 +++++++++++++--------
+>   block/bfq-wf2q.c    | 56 +++++++++++++++--------------
+>   4 files changed, 106 insertions(+), 91 deletions(-)
+> 

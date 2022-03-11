@@ -2,92 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433F14D6746
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373C14D6749
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350597AbiCKRLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S1350585AbiCKRMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349499AbiCKRLM (ORCPT
+        with ESMTP id S242458AbiCKRMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:11:12 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE4FD444E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:10:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647018608; x=1678554608;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=p9BhkaxiWbSuCDwfv6fPTGlhyGO3m3RMfcZIxaye4DA=;
-  b=W78cKCIfoRAyViAKCS75PvWOzRCbA00Ftd57ITzgMHAfpaB6SlLU/3xe
-   TBLPk/08PxaskTf9vWUtoodL1jZ8InSnNLXL9dkyw9gj3s/wCrKpL94jm
-   ariPDaC5Y7e0DSh6BwosGnselrRgP5UAcTMgFaRMmYHTAYCYo0jiDUI04
-   C/JKCyutjhiJgEjSdd9ZX1OwYNg1BPuq4+cuuSvpmeBnkcEsAHD3O3ZK2
-   NkxSoAifmyXp9pYubJjsLVvqwmNs08aUzBYWPG7V8NMr4hYVHDNFUuwho
-   DPvP/+4bjuEg9zSGh1xb6qrRswlrKPkcnSqVNVdo5Dh1QLezNtr+v2XQm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="316333577"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="316333577"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:10:08 -0800
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="644988416"
-Received: from cpeirce-mobl1.amr.corp.intel.com (HELO [10.212.128.243]) ([10.212.128.243])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:10:07 -0800
-Message-ID: <c3b12235-b0ee-c5c5-b876-e96519786503@intel.com>
-Date:   Fri, 11 Mar 2022 09:10:01 -0800
+        Fri, 11 Mar 2022 12:12:33 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71B0C149BB3;
+        Fri, 11 Mar 2022 09:11:29 -0800 (PST)
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D7D3420B7178;
+        Fri, 11 Mar 2022 09:11:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7D3420B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1647018689;
+        bh=pT3g6CrwH4SQoJr9Yxs/BZSyCrdQloWXDWTTxKQ765E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AprZZalV75mZHkDRko9bb+rY6+FSE0puTQCtfpYTZEkOTGGZBxiyDkShofOPB6Jtp
+         OZBPR2gk1LMFmfxTk69BogTF0s/oE8sZTdRMZt0nd9C9CMelRfB1/zowIb9V+Xdo1x
+         JKi/Ah8WIRAL1NPU9uV3AoRFR7G33BLeV/zaJaxI=
+Date:   Fri, 11 Mar 2022 09:11:23 -0800
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [next] arm64: allmodconfig: kernel BUG at
+ include/linux/page-flags.h:509
+Message-ID: <20220311171123.GA1675@kbox>
+References: <CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com>
+ <20220311112426.7e3cf434@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220310120749.23077-1-osalvador@suse.de>
- <20220310183951.cb713c6ae926ea6ea8489a71@linux-foundation.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa node
- changes its N_CPU state
-In-Reply-To: <20220310183951.cb713c6ae926ea6ea8489a71@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311112426.7e3cf434@gandalf.local.home>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/22 18:39, Andrew Morton wrote:
-> On Thu, 10 Mar 2022 13:07:49 +0100 Oscar Salvador <osalvador@suse.de> wrote:
->> We do already have two CPU callbacks (vmstat_cpu_online() and vmstat_cpu_dead())
->> that check exactly that, so get rid of the CPU callbacks in
->> migrate_on_reclaim_init() and only call set_migration_target_nodes() from
->> vmstat_cpu_{dead,online}() whenever a numa node change its N_CPU state.
-> What I'm not getting here (as so often happens) is a sense of how badly
-> this affects our users.  Does anyone actually hotplug frequently enough
-> to care?
+On Fri, Mar 11, 2022 at 11:24:26AM -0500, Steven Rostedt wrote:
+> On Fri, 11 Mar 2022 10:43:32 +0100
+> Anders Roxell <anders.roxell@linaro.org> wrote:
+> 
+> > Hi,
+> > 
+> > I'm building and running an arm64 allmodconfig kernel on next.
+> > Reacently I've seen this error below, for full log see [1].
+> > 
+> > [   56.000810][    T1] ------------[ cut here ]------------
+> > [   56.003178][    T1] kernel BUG at include/linux/page-flags.h:509!
+> > [   56.006291][    T1] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+> > [   56.008921][    T1] Modules linked in:
+> > [   56.010600][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G
+> >         T 5.17.0-rc6-next-20220304 #1
+> > ff4358f1e97b9d4d3a7966961f455fb8cb5c735d
+> > [   56.015962][    T1] Hardware name: linux,dummy-virt (DT)
+> > [   56.018189][    T1] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT
+> > -SSBS BTYPE=--)
+> > [   56.021355][    T1] pc : set_page_reservations+0xf8/0x3b8
+> > [   56.023655][    T1] lr : set_page_reservations+0xec/0x3b8
+> > [   56.025976][    T1] sp : ffff80000eb37c20
+> > [   56.027699][    T1] x29: ffff80000eb37c20 x28: ffff0000079d8050
+> > x27: 0000000000000001
+> > [   56.031030][    T1] x26: ffff80000a2c6140 x25: ffff80000e240380
+> > x24: ffff80000b780f70
+> > [   56.034381][    T1] x23: fffffc0000000000 x22: 000000000028b100
+> > x21: fffffc000028b100
+> > [   56.037728][    T1] x20: ffff80000e23ffe0 x19: ffff80000e23ffe0
+> > x18: 0000000000000000
+> > [   56.041039][    T1] x17: 0000000000000000 x16: 0000000000000000
+> > x15: 0000000000000000
+> > [   56.044323][    T1] x14: 0000000000000000 x13: fffffffffffe34f0
+> > x12: fffffffffffe3498
+> > [   56.047644][    T1] x11: 0000000000000000 x10: 0000000000000000 x9
+> > : 0000000000000000
+> > [   56.050941][    T1] x8 : 0000000000000000 x7 : 0000000000000000 x6
+> > : 0000000000000000
+> > [   56.054258][    T1] x5 : 0000000000000000 x4 : 0000000000000000 x3
+> > : 0000000000000000
+> > [   56.057729][    T1] x2 : 0000000000000000 x1 : 0000000000000000 x0
+> > : 0000000000000001
+> > [   56.061075][    T1] Call trace:
+> > [   56.062436][    T1]  set_page_reservations+0xf8/0x3b8
+> > [   56.064709][    T1]  trace_events_user_init+0x1bc/0x3f8
+> 
+> 
+> Hmm,
+> 
+> static void set_page_reservations(bool set)
+> {
+> 	int page;
+> 
+> 	for (page = 0; page < MAX_PAGES; ++page) {
+> 		void *addr = register_page_data + (PAGE_SIZE * page);
+> 
+> 		if (set)
+> 			SetPageReserved(virt_to_page(addr));
+> 		else
+> 			ClearPageReserved(virt_to_page(addr));
+> 	}
+> }
+> 
+> static int __init trace_events_user_init(void)
+> {
+> 	int ret;
+> 
+> 	/* Zero all bits beside 0 (which is reserved for failures) */
+> 	bitmap_zero(page_bitmap, MAX_EVENTS);
+> 	set_bit(0, page_bitmap);
+> 
+> 	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
+> 
+> 	if (!register_page_data)
+> 		return -ENOMEM;
+> 
+> 	set_page_reservations(true);
+> 
+> Beau,
+> 
+> Why are you reserving the page? Can't you just allocate a page and use that?
+> 
+> 	page = alloc_pages(GFP_KERNEL | __GFP_ZERO, 0);
+> 	register_page_data = page_address(page);
+> 
+> What was the purpose of setting it reserved?
+> 
 
-I asked Abhishek about this a bit here:
+Maybe I am mistaken, but I remember reading in the case of a kernel
+allocated page shared with user space they must be reserved. It was
+stated that the PTE may not know the PFN belongs to user or kernel.
 
-> https://lore.kernel.org/all/4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com/
+If this is not the case, I don't see why we couldn't allocate zero'd
+pages as you describe. We just need to make sure we don't crash user
+processes touching the page if it does get paged out (and ideally not
+slow down their execution).
 
-It sounded to me like there are ppc users who convert their systems from
-SMT=1 to SMT=8.  I'd guess that they want to do this as a side-channel
-mitigation because ppc has been dealing with the same basic issues as
-those of us over in x86 land.  The increase in time (20s->36s) would be
-noticeable and probably slightly annoying to a human waiting on it.
+> -- Steve
+> 
+> > [   56.067110][    T1]  do_one_initcall+0x2ac/0x6c0
+> > [   56.069267][    T1]  do_initcalls+0x17c/0x244
+> > [   56.071269][    T1]  kernel_init_freeable+0x2a0/0x344
+> > [   56.073587][    T1]  kernel_init+0x34/0x180
+> > [   56.075614][    T1]  ret_from_fork+0x10/0x20
+> > [   56.077655][    T1] Code: 97937293 f9401a80 91000400 f9001a80
+> > (d4210000) [   56.080828][    T1] ---[ end trace 0000000000000000 ]---
+> > [   56.083250][    T1] Kernel panic - not syncing: Oops - BUG: Fatal
+> > exception [   56.086279][    T1] ---[ end Kernel panic - not syncing:
+> > Oops - BUG: Fatal exception ]---
+> > 
+> > Reported-by: Anders Roxell <anders.roxell@linaro.org>
+> > 
+> > Any idea what happens?
+> > 
+> > 
+> > Cheers,
+> > Anders
+> > [1] http://ix.io/3Rkj
 
-I'd love to hear more details on this from Abhishek, like whether end
-users do this as opposed to IBM's kernel developers.  But, it does sound
-deserving of a stable@ tag to me.
+Thanks,
+-Beau

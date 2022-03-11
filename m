@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357FB4D5B08
+	by mail.lfdr.de (Postfix) with ESMTP id 81A834D5B09
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347440AbiCKF62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S1347516AbiCKF6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346628AbiCKFxz (ORCPT
+        with ESMTP id S1346685AbiCKFx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:53:55 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC891A815
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:46 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id f21-20020a633815000000b0038105768c61so1017186pga.21
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:46 -0800 (PST)
+        Fri, 11 Mar 2022 00:53:56 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0201F24BD0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:47 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id bh9-20020a056a02020900b0036c0d29eb3eso4229250pgb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=7U7G4ALbdiuLS3ZHKyVSI7ZzJ4cEKDAs0AuckoMKbn8=;
-        b=LuwwEux2gAAv/ehbXUSCHfeOQ2oNIFRHgMMd5lrdxiXjZkFA8RTpCwg7/Q+woF4ndy
-         IKB1tSYRlZLL7ubSrKms5wGSpJ+pK8meHfe0nQuG/FNKTHlOwzErE+A/aG4QlZram2Zx
-         Absg0t4M/6TzpWZFU7xJeRN26fOsfvfb3TBwZjGC6s+mlU3e+ZRVwxjoL+zieTgw5PVi
-         1QHB6eW+lgeZZt+5vFyRZJR1l+dp1yqQj61RAQ9xskPvkmrgL5ONY/bGuNI55zCVM9kW
-         LryQmNYQYIa9qL3NxYoXRXQU1uFNpPO9tKUxrJQ8sHYbiER+rW5bTnAtRQBvgHWrRj0X
-         XfRQ==
+        bh=nUHZ1KA1ftEOMfEbikAYeJFQo8bEj6QMYdpYS9qK0NM=;
+        b=Z0Q964YhE/4eI7sjNOXnSy4JgpCGRK68K2SXng9Zxoy3avE7ySYJ1cxXMO7qLV4bi0
+         6TzfoTkyHkqIbmxIeZep9oDChHausUCjOLLpaQI1hORgfxlOkGcXjFRFp7fCtX/YltoC
+         SLSXT2pyx+zsii7/bubGymCHnZvTfjzsj2qEwNmM0FEhaFP2l2/ym+sX8hMFGXT/Dt/h
+         yooCnKpvdllukAs4wELb4r5+KJMrtQi/Xcw7DCdzJCTYCU4U2W9BaON8fN6ghRjHduM8
+         lIrt2qMPFHn5CvoF9y2CoV0hP2MnTZ27ez7PxZ4CES5ZUgyOShYdNQh+R2K7HCXwqh91
+         gflg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=7U7G4ALbdiuLS3ZHKyVSI7ZzJ4cEKDAs0AuckoMKbn8=;
-        b=CcrnfOA8uGxoZ6knjjVsDVLxcVYNjd8HEbscXL1tKSB31Juyl4+XbtIoFW0wpRWNP1
-         BIQIx/TkcJ3ok+8lWg/M3WXEQ336ZVWqfL+/dmVbvHdxiz72vErojPqRifsktRBb3Qwg
-         vykJegAZuTRZNb3CMfpm9Qqz1yblHmAuWVzqiQO/WvP1ryE0edg9tNs9avXRQNmnRrJO
-         GSS9onSvFUDT7T3m+9G1RlUuG9gIeIXAoSe3vmtoO3zKW5v/W4rJm5NXu5tBbYC/vB2Z
-         huIUMANWXjEEHUlYKk05otwOqT/zqJ3BTyqDjkuWhEfAyG7VksInrlYeQL0HSDFuXmMt
-         fT4A==
-X-Gm-Message-State: AOAM533eEZs6EJF9JQ+lRsZ657MydyNtdiwQ0P2n1g0kCmMdxF02hm7H
-        On3SA7447YaO8yIRXCMIxrQKQ7071Qc7TMcvZfFnAaknLerIJ+uZR0qd1IRx2VtPcm79sruR9yb
-        Pw2J2fIE6xuMjDiWd17eNe0x614YTdNuAAomLNUHZ7Qz8uc1fOGBahoUu2hl5JwaNkPu2cQ==
-X-Google-Smtp-Source: ABdhPJzvoUwYnDlBdw2GhELRmmSWDdTSILCiFAtrzZQA4NYDbxPKoXGXVVcQePmODtuqxCS4eDnRfqZS+7E=
+        bh=nUHZ1KA1ftEOMfEbikAYeJFQo8bEj6QMYdpYS9qK0NM=;
+        b=3hbbhkER7dEy5mj0vb1/amyBC2KYeH9ZhevoAWDZT3ZYhHiohFQ7tgOW0rkqIPdTCb
+         GjdZ/ed+nsBjw3H/gp9aQFEJY+iW9SvY4m4zkoZAPuQ71F3m07bQmCm4v+dcajMW55ai
+         25s1mwfeTDZLqmRpVzuvmHsLdVQNWKFPDHyFhHh9M2cBm4hSXTaVJyuHCBAOSMdXUGuI
+         LYb8Mr99xgYa9VEmZ7QxR10s+8itPbFRLpwtelUisrdpDdWwED31UYBh3dBLAJO+5r/m
+         f7tUxRsbNv7NtKdvdX6XA4g5OrpvAlJrAkDKVFrGZTrpQMUbib4rF0kKfxr1DShthOYY
+         lKbA==
+X-Gm-Message-State: AOAM533G6+w0lMNW61HItDg3jopUQY+NskS/xuJj7uw+XWTO4oOOvBPW
+        svBbj3pZ+SZ6Vgm99FnJjNxBKYUvVkKU1BoyI7+3cZ9MCosl624E3+d1ghUvIa8I/0RRoSn0DmZ
+        WCA6v1+YV8sj2/L8dS7mnRGXJrSzfP4ZbjHfOPYokbjmz/UXziQFs7AxD4jRHLEBM6Yn1GQ==
+X-Google-Smtp-Source: ABdhPJz0fXDVhF/jmxD1s70qnp6Oy4ARUe3EyBDOzyQFlw1uQ90B6FVEG0XLJg/D5rvQPnIMW+1d0SaTWYY=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:ba8e:b0:151:ed65:fda4 with SMTP id
- k14-20020a170902ba8e00b00151ed65fda4mr8852878pls.127.1646977965338; Thu, 10
- Mar 2022 21:52:45 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4d81:b0:1bf:8ce4:4f51 with SMTP id
+ oj1-20020a17090b4d8100b001bf8ce44f51mr461518pjb.0.1646977966903; Thu, 10 Mar
+ 2022 21:52:46 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Mar 2022 05:50:10 +0000
+Date:   Fri, 11 Mar 2022 05:50:11 +0000
 In-Reply-To: <20220311055056.57265-1-seanjc@google.com>
-Message-Id: <20220311055056.57265-60-seanjc@google.com>
+Message-Id: <20220311055056.57265-61-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220311055056.57265-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [RFC PATCH 059/105] KVM: selftests: Convert hyperv_clock away from VCPU_ID
+Subject: [RFC PATCH 060/105] KVM: selftests: Convert evmcs_test away from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>
@@ -71,71 +71,118 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/hyperv_clock.c       | 25 +++++++++----------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ .../testing/selftests/kvm/x86_64/evmcs_test.c | 51 ++++++++++---------
+ 1 file changed, 26 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-index e0b2bb1339b1..43584ddc4de0 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-@@ -171,22 +171,20 @@ static void guest_main(struct ms_hyperv_tsc_page *tsc_page, vm_paddr_t tsc_page_
+diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
+index f97049ab045f..dc7c1eb28fd4 100644
+--- a/tools/testing/selftests/kvm/x86_64/evmcs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
+@@ -18,7 +18,6 @@
+ 
+ #include "vmx.h"
+ 
+-#define VCPU_ID		5
+ #define NMI_VECTOR	2
+ 
+ static int ud_count;
+@@ -160,55 +159,56 @@ void guest_code(struct vmx_pages *vmx_pages)
  	GUEST_DONE();
  }
  
--#define VCPU_ID 0
--
--static void host_check_tsc_msr_rdtsc(struct kvm_vm *vm)
-+static void host_check_tsc_msr_rdtsc(struct kvm_vcpu *vcpu)
+-void inject_nmi(struct kvm_vm *vm)
++void inject_nmi(struct kvm_vcpu *vcpu)
  {
- 	u64 tsc_freq, r1, r2, t1, t2;
- 	s64 delta_ns;
+ 	struct kvm_vcpu_events events;
  
--	tsc_freq = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TSC_FREQUENCY);
-+	tsc_freq = vcpu_get_msr(vcpu->vm, vcpu->id, HV_X64_MSR_TSC_FREQUENCY);
- 	TEST_ASSERT(tsc_freq > 0, "TSC frequency must be nonzero");
+-	vcpu_events_get(vm, VCPU_ID, &events);
++	vcpu_events_get(vcpu->vm, vcpu->id, &events);
  
- 	/* First, check MSR-based clocksource */
- 	r1 = rdtsc();
--	t1 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
-+	t1 = vcpu_get_msr(vcpu->vm, vcpu->id, HV_X64_MSR_TIME_REF_COUNT);
- 	nop_loop();
- 	r2 = rdtsc();
--	t2 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
-+	t2 = vcpu_get_msr(vcpu->vm, vcpu->id, HV_X64_MSR_TIME_REF_COUNT);
+ 	events.nmi.pending = 1;
+ 	events.flags |= KVM_VCPUEVENT_VALID_NMI_PENDING;
  
- 	TEST_ASSERT(t2 > t1, "Time reference MSR is not monotonic (%ld <= %ld)", t1, t2);
+-	vcpu_events_set(vm, VCPU_ID, &events);
++	vcpu_events_set(vcpu->vm, vcpu->id, &events);
+ }
  
-@@ -203,33 +201,34 @@ static void host_check_tsc_msr_rdtsc(struct kvm_vm *vm)
- 
- int main(void)
+-static void save_restore_vm(struct kvm_vm *vm)
++static struct kvm_vcpu *save_restore_vm(struct kvm_vm *vm,
++					struct kvm_vcpu *vcpu)
  {
+ 	struct kvm_regs regs1, regs2;
+ 	struct kvm_x86_state *state;
+ 
+-	state = vcpu_save_state(vm, VCPU_ID);
++	state = vcpu_save_state(vm, vcpu->id);
+ 	memset(&regs1, 0, sizeof(regs1));
+-	vcpu_regs_get(vm, VCPU_ID, &regs1);
++	vcpu_regs_get(vm, vcpu->id, &regs1);
+ 
+ 	kvm_vm_release(vm);
+ 
+ 	/* Restore state in a new VM.  */
+-	kvm_vm_restart(vm);
+-	vm_vcpu_add(vm, VCPU_ID);
+-	vcpu_set_hv_cpuid(vm, VCPU_ID);
+-	vcpu_enable_evmcs(vm, VCPU_ID);
+-	vcpu_load_state(vm, VCPU_ID, state);
++	vcpu = vm_recreate_with_one_vcpu(vm);
++	vcpu_set_hv_cpuid(vm, vcpu->id);
++	vcpu_enable_evmcs(vm, vcpu->id);
++	vcpu_load_state(vm, vcpu->id, state);
+ 	kvm_x86_state_cleanup(state);
+ 
+ 	memset(&regs2, 0, sizeof(regs2));
+-	vcpu_regs_get(vm, VCPU_ID, &regs2);
++	vcpu_regs_get(vm, vcpu->id, &regs2);
+ 	TEST_ASSERT(!memcmp(&regs1, &regs2, sizeof(regs2)),
+ 		    "Unexpected register values after vcpu_load_state; rdi: %lx rsi: %lx",
+ 		    (ulong) regs2.rdi, (ulong) regs2.rsi);
++	return vcpu;
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+ 	vm_vaddr_t vmx_pages_gva = 0;
+ 
 +	struct kvm_vcpu *vcpu;
  	struct kvm_vm *vm;
  	struct kvm_run *run;
  	struct ucall uc;
- 	vm_vaddr_t tsc_page_gva;
  	int stage;
  
--	vm = vm_create_default(VCPU_ID, 0, guest_main);
--	run = vcpu_state(vm, VCPU_ID);
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_main);
-+	run = vcpu->run;
+-	/* Create VM */
+-	vm = vm_create_default(VCPU_ID, 0, guest_code);
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+ 
+ 	if (!nested_vmx_supported() ||
+ 	    !kvm_check_cap(KVM_CAP_NESTED_STATE) ||
+@@ -217,28 +217,29 @@ int main(int argc, char *argv[])
+ 		exit(KSFT_SKIP);
+ 	}
  
 -	vcpu_set_hv_cpuid(vm, VCPU_ID);
+-	vcpu_enable_evmcs(vm, VCPU_ID);
 +	vcpu_set_hv_cpuid(vm, vcpu->id);
++	vcpu_enable_evmcs(vm, vcpu->id);
  
- 	tsc_page_gva = vm_vaddr_alloc_page(vm);
- 	memset(addr_gva2hva(vm, tsc_page_gva), 0x0, getpagesize());
- 	TEST_ASSERT((addr_gva2gpa(vm, tsc_page_gva) & (getpagesize() - 1)) == 0,
- 		"TSC page has to be page aligned\n");
--	vcpu_args_set(vm, VCPU_ID, 2, tsc_page_gva, addr_gva2gpa(vm, tsc_page_gva));
-+	vcpu_args_set(vm, vcpu->id, 2, tsc_page_gva, addr_gva2gpa(vm, tsc_page_gva));
+ 	vcpu_alloc_vmx(vm, &vmx_pages_gva);
+-	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
++	vcpu_args_set(vm, vcpu->id, 1, vmx_pages_gva);
  
--	host_check_tsc_msr_rdtsc(vm);
-+	host_check_tsc_msr_rdtsc(vcpu);
+ 	vm_init_descriptor_tables(vm);
+-	vcpu_init_descriptor_tables(vm, VCPU_ID);
++	vcpu_init_descriptor_tables(vm, vcpu->id);
+ 	vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
+ 	vm_install_exception_handler(vm, NMI_VECTOR, guest_nmi_handler);
+ 
+ 	pr_info("Running L1 which uses EVMCS to run L2\n");
  
  	for (stage = 1;; stage++) {
+-		run = vcpu_state(vm, VCPU_ID);
 -		_vcpu_run(vm, VCPU_ID);
++		run = vcpu->run;
++
 +		vcpu_run(vm, vcpu->id);
  		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
  			    "Stage %d: unexpected exit reason: %u (%s),\n",
@@ -146,7 +193,31 @@ index e0b2bb1339b1..43584ddc4de0 100644
 +		switch (get_ucall(vm, vcpu->id, &uc)) {
  		case UCALL_ABORT:
  			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
- 				  __FILE__, uc.args[1]);
+ 		      		  __FILE__, uc.args[1]);
+@@ -256,12 +257,12 @@ int main(int argc, char *argv[])
+ 			    uc.args[1] == stage, "Stage %d: Unexpected register values vmexit, got %lx",
+ 			    stage, (ulong)uc.args[1]);
+ 
+-		save_restore_vm(vm);
++		vcpu = save_restore_vm(vm, vcpu);
+ 
+ 		/* Force immediate L2->L1 exit before resuming */
+ 		if (stage == 8) {
+ 			pr_info("Injecting NMI into L1 before L2 had a chance to run after restore\n");
+-			inject_nmi(vm);
++			inject_nmi(vcpu);
+ 		}
+ 
+ 		/*
+@@ -271,7 +272,7 @@ int main(int argc, char *argv[])
+ 		 */
+ 		if (stage == 9) {
+ 			pr_info("Trying extra KVM_GET_NESTED_STATE/KVM_SET_NESTED_STATE cycle\n");
+-			save_restore_vm(vm);
++			vcpu = save_restore_vm(vm, vcpu);
+ 		}
+ 	}
+ 
 -- 
 2.35.1.723.g4982287a31-goog
 

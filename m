@@ -2,122 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006564D6120
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F4F4D6130
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348467AbiCKME0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        id S1348484AbiCKMGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239962AbiCKMEZ (ORCPT
+        with ESMTP id S236467AbiCKMGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:04:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC399129B8E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:03:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 308EA61BD6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:03:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BB9C340E9;
-        Fri, 11 Mar 2022 12:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647000200;
-        bh=4HqIUdAejX6Wm0p0O/9WPDB8wevECYxP6SoZVcoOkpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gxPRwB6yfowPMf3pv9E2ecWZb9RpuF/DUswsqrwmFl/Yx/QAinqNU53ttaB0v24VZ
-         wVEovQnXPTglyWehBEcwmEARda3vg9eP9fGtx3U7D9pbmBp/5pk3GFoBt3L2+o0VRd
-         sxjMiyEaKihk6Mozsy6nW4t6hzodvjlTtNnfK9id9VS0ECcfYK5NE6eI+0/6pV6Zjj
-         QyV8ztllVV9NFYX0HsqzPie0oDyJqeaLApm52gEdq1KHqC7lOeBR0TN3tJcBlyO7FI
-         zc6LEDRm9TDn6xb2j0HWfPtK4pT7Yg6rBcy5jm2EpVGVlijoQNo3WYzaE3v7GXN6Pl
-         waGa4NR3kojKA==
-Date:   Fri, 11 Mar 2022 12:03:15 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     John Keeping <john@metanate.com>
-Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Daniel Beer <daniel.beer@igorinstitute.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ASoC: tas5805m: fix pdn polarity
-Message-ID: <Yis6g1VSWfl7I8cS@sirena.org.uk>
-References: <20220309135649.195277-1-john@metanate.com>
- <YijOHNT0eqDyoviP@sirena.org.uk>
- <YijTk0/UTXpjFiRq@donbot>
- <YijVrgZ+Ysv9J/8E@sirena.org.uk>
- <YikLB4+xHVxjFTSL@donbot>
- <YikiXAseSiODXfrD@sirena.org.uk>
- <YipbBti4yeq2HzCe@donbot>
+        Fri, 11 Mar 2022 07:06:03 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59FF1AEEF1;
+        Fri, 11 Mar 2022 04:05:00 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id p9so12581005wra.12;
+        Fri, 11 Mar 2022 04:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CluZnJvaFq+gv5SsBEdks07J31iiWkZ5fHpUB0bqBcM=;
+        b=qw+ajJ3bas5PbBQI9GqAWDJtr1KHk5lF7RWDvKeZSUWN09yo6r3mVvLnJt7yrUnGGW
+         gsvPxknVOA7c9SgZrcdZQk/3ro/18kya2vr/H64cqmcHGXQxwOO4zMEPhYObRUfdsU+B
+         BHF2jjdpfoYCSQx+Y5G5ae/u1KXY38+LZrSmg00Q1P9Bhp1G2Fv5zTxiLOTs8MV1fkQf
+         tzMlShgQCn6RUx1pGONYHEq+GJV35waRSt1OKKqg69RAF76pyKUdhkHcQFWeNm5ZDGpG
+         lW3UVnxzzisq8e4IUJqjB6M3XKZfiAyg0y5Ad1BEA9nbtytriaHHdFj7HFv5BN/nN+yU
+         Eqyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CluZnJvaFq+gv5SsBEdks07J31iiWkZ5fHpUB0bqBcM=;
+        b=kexN5pIfER/MqNFmTT0rMq5I7Nts5ZYItAT5TdnRC9wiOwpmWXIeG4lyG8Nl34Ceua
+         r71n/f+06kHjafrl8qhO6UWT5dlIGUAeWgCO8JknymxnObttLtK12+8Q+8gKsufptgdR
+         FRqKahUPAcdvmJEuIcsWmRPZKqVNnSSf/r/Z8y/9a8dc/641IIkTO2JiPPuetmsGD7gD
+         N0dmbRexuTxJOF9eaULO/SFnK5K0Bgr2PALvbMrT5HTYmUWUcMVpkM0GU1az4H6XVHAo
+         DmUhrL2WmKQuB4p26ZxlanPd9rOnTjLTP9EMzFPDjDXQOBLA4zlwQJ96kLgcpJpwuc6j
+         qEqw==
+X-Gm-Message-State: AOAM533bNNriM92sEnChpKBY1tADLEOfjPfcHwOz3cIIo1v/U6OUXHKo
+        7yxJLWmnO1Q/4/FKALoLkBk=
+X-Google-Smtp-Source: ABdhPJw60L/wNBZRfT4SbS1AbolE9XQ7lQrIbYwPi4ZXCq4AAqHgcxz8c6qE8LDV5dRnQfyrKPmEMg==
+X-Received: by 2002:a05:6000:184e:b0:1f0:3569:ccac with SMTP id c14-20020a056000184e00b001f03569ccacmr7235289wri.680.1647000299064;
+        Fri, 11 Mar 2022 04:04:59 -0800 (PST)
+Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
+        by smtp.gmail.com with ESMTPSA id r20-20020adfa154000000b001f0326a23e1sm6595223wrr.88.2022.03.11.04.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 04:04:58 -0800 (PST)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: [PATCH v3 0/4] Ingenic DRM bridge_atomic_enable proposal
+Date:   Fri, 11 Mar 2022 13:04:49 +0100
+Message-Id: <20220311120453.163297-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ue3Ft+ZyXNvUs6rC"
-Content-Disposition: inline
-In-Reply-To: <YipbBti4yeq2HzCe@donbot>
-X-Cookie: A fool and his money are soon popular.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello, v3 :
 
---ue3Ft+ZyXNvUs6rC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Drop -spi in the compatible string, adjust bindings doc accordingly 
 
-On Thu, Mar 10, 2022 at 08:09:42PM +0000, John Keeping wrote:
-> On Wed, Mar 09, 2022 at 09:55:40PM +0000, Mark Brown wrote:
+KR
+Christophe
 
-> > Sure, I still think it would be good to update the binding document to
-> > clarify things as part of your patch - the binding currently just has it
-> > as the "pdn" pin not the /pdn pin or anything.
+------------------------
 
-> I've been thinking about this but I can't really think what to say.
-> tas571x's binding says:
+Hello, this is the v2 for my set of patches :
 
-> 	GPIO specifier for the TAS571x's active low powerdown line
+- use dev_err_probe() instead of dev_err() in the newvision panel
+driver probe function
 
-> Is that the sort of wording you have in mind?
+- add bindings documentation for the Leadtek ltk035c5444t
 
-Something along those lines, probably also mention something about the
-flag.  If the DT has to specify the polarity for things to work
-(basically, if it's not active high) then that should be in the binding.
+Cheers - Christophe
 
-> To me it seems like a general principle that the GPIO_ACTIVE_{HIGH,LOW}
-> flags should be used to indicate how the pin works so that the driver
-> consistently uses logical levels regardless of how the hardware is
-> wired.
+------------------------
 
-Every layer that introduces an inversion is a source of confusion - if
-the physical signal needs to be set low but the code in the driver sets
-the signal high that's a surprise for people, and generally if the user
-needs to specify that the polarity is inverted every time they bind the
-device that's a gotcha people won't tend to expect.
+Hello, this is a set of patches to allow the upstreaming of the
+NV3052C panel found in the Anbernic RG350M mips gaming handheld.
 
-> Maybe this just means I'm approaching this "down" from the software
-> abstraction more than "up" from the hardware.
+It was never upstreamed so far due to a longstanding graphical
+bug, which I propose to solve by introducing ingenic_drm_bridge_atomic_enable
+in the drm driver so the CRTC can be enabled after the panel itself slept
+out, and not before as it used to.
 
-Think about it more as being about making it easier to follow what the
-physical state of the GPIO is.
+After the drm change, 2 of the existing panels have to be modified accordingly
+to introduce missing .enable and .disable in their code.
 
---ue3Ft+ZyXNvUs6rC
-Content-Type: application/pgp-signature; name="signature.asc"
+Christophe Branchereau (4):
+  drm/ingenic : add ingenic_drm_bridge_atomic_enable
+  drm/panel: Add panel driver for NewVision NV3052C based LCDs
+  drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and
+    .disable
+  dt-bindings: display/panel: Add Leadtek ltk035c5444t
 
------BEGIN PGP SIGNATURE-----
+ .../display/panel/leadtek,ltk035c5444t.yaml   |  59 +++
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  19 +-
+ drivers/gpu/drm/panel/Kconfig                 |   9 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-abt-y030xx067a.c  |  23 +-
+ drivers/gpu/drm/panel/panel-innolux-ej030na.c |  31 +-
+ .../gpu/drm/panel/panel-newvision-nv3052c.c   | 497 ++++++++++++++++++
+ 7 files changed, 627 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrOoIACgkQJNaLcl1U
-h9CSJwf/To5CYtIziBuS54e+GW2lDzBvZwgCuFLgS9CHWvsAd7Aruvx8692etcPQ
-duLqthmmsVX7Gt1UxtNw7Kw6pn1gWEEC2YTjJlOoOAiJ3cfdYrxJ3gZ1MgHKwBfo
-mAri9fABt7VxeFBEuC1tuZXgsxueLNQLbxW9hOhHuD/nkih+nEBye1RulCmdZmwB
-mX0rW2Df1OcHjynho8zkPzs8JTLmJaogQ8+j7orHSg7BRMVtsqx0AoBxw8MJHtXS
-iP9tFcRPVAhpbQB9pXaRocEjdYr46FrA4wkaaceBuKJ2yK7rKzVkFRGszD6Y2fql
-TTNEz3fL/H+CukasYWbd2qWgcWt3Yw==
-=J7Dn
------END PGP SIGNATURE-----
+-- 
+2.35.1
 
---ue3Ft+ZyXNvUs6rC--

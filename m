@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE0E4D5F34
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 020704D5F37
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240108AbiCKKM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        id S1347747AbiCKKOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347740AbiCKKMw (ORCPT
+        with ESMTP id S238557AbiCKKOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:12:52 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEC51BF928;
-        Fri, 11 Mar 2022 02:11:49 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id l10so4856687wmb.0;
-        Fri, 11 Mar 2022 02:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XWWog9ZrcbURy+En9U1Yp9z2N+ClQ0Jz7PvXhWlINPA=;
-        b=bR3WTCIoI2i/HXjv3iIT1VuPIwABYlp7o/7/SLe7quhaN9Cz/Km9RWnf/FQ4Dj7ED8
-         wq0OCPOfhmYGlf7hMWwznJ8noHvxvWNsmerSLjR/Y8GQyNbt8DdSiN+SsrJD3tMNRiX7
-         Ni8kcuuHUGQkXmLfE9xxlmZeRDT5+nlUwZzv1JVSzxk0lVV/0lVJu8nT/Kvhk2EYXBF8
-         AGvS8g5FdGXaqZvIoSeqs0jQrK1JMlwe8Ly2PK3JUirXD1liL9N5Qfky+nBff42G61+o
-         5unoDDsFQkaJM9xgOlwnx04eCz4umbzt8NZyZiZGAnSwNUcC0K1MaELFDeQeUQ1iIQvD
-         8Uhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XWWog9ZrcbURy+En9U1Yp9z2N+ClQ0Jz7PvXhWlINPA=;
-        b=vsA+EKDjD4v762WDmAWbwxgA9IS6sbKf40MZ1z91NzPkwNQwyLIyZ3I5a4NJN/jnhq
-         7ZOV1sAQA2MNeSM6aVBBlBDd35LraevpQaYIoZCwBNvvML+5HjtCgyhqrdwG+U8RID9e
-         DHAR+n3H+gfoHdeCM8K7LcJqePCUetCPUNaiXAWzNOYIj8aMVJqNdMoEEGCyP1FYJOIV
-         OiNoxQZIaSeJp7ZBw2nY5bvp0kWkfQ+keFpO5IQSEeU7nSzRkkuk4mdz5j2beOgriyf+
-         mzA5BJgOyw3SAAL0PmyGQde6/W0gY1tg5O7QsJmfJ7Tfw8NeCqKWpNrekz7h3zDCNQmY
-         xeUg==
-X-Gm-Message-State: AOAM530zS3Huvj3H+ZKTDwvdWA+bj3fJu499Bgq1CmWykMZDxnHHAAu5
-        12YHKVly0CRR+2aMOSARdqM=
-X-Google-Smtp-Source: ABdhPJwoLQwf10MjQ3fNJUd75Kn+U5Htx3BCjBMXK/s5yTthUALNOUzfisPvQD2+EPEbPNbOUAGr+Q==
-X-Received: by 2002:a05:600c:1c88:b0:389:bede:34d0 with SMTP id k8-20020a05600c1c8800b00389bede34d0mr15225444wms.62.1646993507804;
-        Fri, 11 Mar 2022 02:11:47 -0800 (PST)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id y10-20020adfee0a000000b001f0639001ffsm9297617wrn.9.2022.03.11.02.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 02:11:47 -0800 (PST)
-Date:   Fri, 11 Mar 2022 10:11:45 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/58] 5.10.105-rc2 review
-Message-ID: <YisgYcR0hDPM+ToD@debian>
-References: <20220310140812.869208747@linuxfoundation.org>
+        Fri, 11 Mar 2022 05:14:03 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C44931BF92A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:12:58 -0800 (PST)
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxusylICtiOUoHAA--.3045S3;
+        Fri, 11 Mar 2022 18:12:53 +0800 (CST)
+Subject: Re: [PATCH] mm/khugepaged: sched to numa node when collapse huge page
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220311090119.2412738-1-maobibo@loongson.cn>
+ <52412f08-829a-6c29-60c6-a24c866e6253@redhat.com>
+ <d2883450-1278-877e-e273-bda5a5728465@loongson.cn>
+ <caf087b4-b184-c45e-e212-87f0a573a4d0@redhat.com>
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <9d8b5ced-5350-9201-079f-47cbb4f587b3@loongson.cn>
+Date:   Fri, 11 Mar 2022 18:12:53 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <caf087b4-b184-c45e-e212-87f0a573a4d0@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxusylICtiOUoHAA--.3045S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKryrKrykZF1kZF45CFyfJFb_yoWDKrX_uF
+        4DCw1xu34UZ3yxJFs5t348XrnxJa1kX3s5Jry5Jws7X34fXFZIqF429rW0vwn3K3y3Cr47
+        u3sIva1fJrZIgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbI8YjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
+        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        xUcVWlDUUUU
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Thu, Mar 10, 2022 at 03:18:20PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.105 release.
-> There are 58 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+On 03/11/2022 05:55 PM, David Hildenbrand wrote:
+> On 11.03.22 10:51, maobibo wrote:
+>>
+>>
+>> On 03/11/2022 05:20 PM, David Hildenbrand wrote:
+>>> On 11.03.22 10:01, Bibo Mao wrote:
+>>>> collapse huge page is slow, specially when khugepaged daemon runs
+>>>> on different numa node with that of huge page. It suffers from
+>>>> huge page copying across nodes, also cache is not used for target
+>>>> node. With this patch, khugepaged daemon switches to the same numa
+>>>> node with huge page. It saves copying time and makes use of local
+>>>> cache better.
+>>>
+>>> Hi,
+>>>
+>>> just the usual question, do you have any performance numbers to back
+>>> your claims (e.g., "is slow, specially when") and proof that this patch
+>>> does the trick?
+>> With specint 2006 on loongarch 3C5000L 32core numa system, it improves
+>> about 6%. The page size is 16K and pmd page size is 32M, memory performance
+>> across numa node is obvious different. However I do not test it on x86 box.
+>>
 > 
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
+> Thanks, can you add these details to the patch description?
+Surely, will do in next patch.
 
-Build test:
-mips (gcc version 11.2.1 20220301): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220301): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20220301): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/862
-[2]. https://openqa.qa.codethink.co.uk/tests/867
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+regards
+bibo, mao
+> 
+> 
 

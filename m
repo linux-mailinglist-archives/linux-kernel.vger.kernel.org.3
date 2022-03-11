@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5114D5C43
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4852F4D5C4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345623AbiCKH0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S242713AbiCKH3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240189AbiCKH0e (ORCPT
+        with ESMTP id S230505AbiCKH3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:26:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10CB1B6E1A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:25:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A987B82AD2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5C8C340E9;
-        Fri, 11 Mar 2022 07:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646983529;
-        bh=g84WdhT8WlUiVZ4Pe91HKYziG64yo/SO8s//Xpd2fk0=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=RYbR6QstwFDm4TM9v8bCHTbEje2eF314IM+w4i62zCcjy5CbFYtxmMOKpJl1xESrz
-         1BCXHnRkodtI0iUZHM1Id/Byrwtcth5mck8sVVve34jt7pFw08XUoAwxdlRGG/xbZs
-         bGgog83ItM1AGidvcly4RQhLWGsbx5S5WBDhGI8gTjLDYk4BnFir5Tq35/MNVNkeCB
-         MZKdaibOGRjUtHJ23sJKNEOyFufuv+omYan+GeYH1vI8J+HpgUmVsHy3lwtcYSGyly
-         XlKLxpYMmGv0fIXnXZ6OMuI4YvbBOwMIkd3EwnqMZLMsMZ1cY1GJ0qdxBsBliotM5X
-         x1JAFcmvQVRsg==
-Message-ID: <86d59c1d-b453-5ee2-4737-b4dd03829965@kernel.org>
-Date:   Fri, 11 Mar 2022 15:25:25 +0800
+        Fri, 11 Mar 2022 02:29:36 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E950B1B6E1F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:28:33 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V6t3gLV_1646983708;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V6t3gLV_1646983708)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 11 Mar 2022 15:28:30 +0800
+Date:   Fri, 11 Mar 2022 15:28:28 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com,
+        huyue2@coolpad.com
+Subject: Re: [PATCH 1/2] erofs: clean up z_erofs_extent_lookback
+Message-ID: <Yir6HNsdYFdLVwEN@B-P7TQMD6M-0146.local>
+References: <20220310182743.102365-1-hsiangkao@linux.alibaba.com>
+ <20220311151232.00003619.zbestahu@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [f2fs-dev] [PATCH 1/2 v2] f2fs: don't get FREEZE lock in
- f2fs_evict_inode in frozen fs
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220309214834.3408741-1-jaegeuk@kernel.org>
- <Yircgd9d773xnk3+@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yircgd9d773xnk3+@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220311151232.00003619.zbestahu@gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/11 13:22, Jaegeuk Kim wrote:
-> Let's purge inode cache in order to avoid the below deadlock.
+On Fri, Mar 11, 2022 at 03:12:32PM +0800, Yue Hu wrote:
+> On Fri, 11 Mar 2022 02:27:42 +0800
+> Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 > 
-> [freeze test]                         shrinkder
-> freeze_super
->   - pwercpu_down_write(SB_FREEZE_FS)
->                                         - super_cache_scan
->                                           - down_read(&sb->s_umount)
->                                             - prune_icache_sb
->                                              - dispose_list
->                                               - evict
->                                                - f2fs_evict_inode
-> thaw_super
->   - down_write(&sb->s_umount);
->                                                - __percpu_down_read(SB_FREEZE_FS)
+> > Avoid the unnecessary tail recursion since it can be converted into
+> > a loop directly in order to prevent potential stack overflow.
+> > 
+> > It's a pretty straightforward conversion.
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > ---
+> >  fs/erofs/zmap.c | 67 ++++++++++++++++++++++++-------------------------
+> >  1 file changed, 33 insertions(+), 34 deletions(-)
+> > 
+> > diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> > index b4059b9c3bac..572f0b8151ba 100644
+> > --- a/fs/erofs/zmap.c
+> > +++ b/fs/erofs/zmap.c
+> > @@ -431,48 +431,47 @@ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
+> >  				   unsigned int lookback_distance)
+> >  {
+> >  	struct erofs_inode *const vi = EROFS_I(m->inode);
+> > -	struct erofs_map_blocks *const map = m->map;
+> >  	const unsigned int lclusterbits = vi->z_logical_clusterbits;
+> > -	unsigned long lcn = m->lcn;
+> > -	int err;
+> >  
+> > -	if (lcn < lookback_distance) {
+> > -		erofs_err(m->inode->i_sb,
+> > -			  "bogus lookback distance @ nid %llu", vi->nid);
+> > -		DBG_BUGON(1);
+> > -		return -EFSCORRUPTED;
+> > -	}
+> > +	while (m->lcn >= lookback_distance) {
+> > +		unsigned long lcn = m->lcn - lookback_distance;
+> > +		int err;
 > 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> may better to declare variable 'lclusterbits' in loop just like 'err' usage?
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+I'm fine with either way. Ok, will post the next version later.
 
 Thanks,
+Gao Xiang

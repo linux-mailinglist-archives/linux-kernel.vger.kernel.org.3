@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8FA4D68EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A281B4D68EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 20:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351042AbiCKTIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 14:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
+        id S1351050AbiCKTIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 14:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351030AbiCKTII (ORCPT
+        with ESMTP id S1351036AbiCKTIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 14:08:08 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8591AE650
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:04 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id s42so8672574pfg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:04 -0800 (PST)
+        Fri, 11 Mar 2022 14:08:10 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623B51AE66C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:06 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id rm8-20020a17090b3ec800b001c55791fdb1so1199763pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:07:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sDJ/41RHMLJzc98gGAPcQbU38m8lJtFcZEeAQmDlWXg=;
-        b=eB2fEtFzdgN9cXc57alBRC4gluos4heUHZd/NkibI+iQkHVIgyj9X/N3a59R9POFfz
-         FZAEGeEoGaP/DiE1VKnvbdnQHI9dsGk0DFE/1tJBP3Sg24jyuIIvJsZyw+uOYNNaDR5P
-         62e/plny9+qhehr27OSqyhSf3wCMDRZ8k+gXY2FT3fY2V9dgrCAExF8mufrS9LbOWuWG
-         ZUrU5JjD8b6cLYG9WZwCfsop5Xvm/ntnuXh5WrZOXYdeHzkZypMKytBFZb4inGRjlDos
-         e0K7M+qmuOJCczhU20fTRaMNq2L8nicOYYEVQJ0yt3APiBEMLeIJacTtxNqhnQWbHep3
-         AxFA==
+        bh=2SJwDWdiGMEZCVwB+/7uYYAov/bAs7rI8E5dgDcHCHE=;
+        b=RNQvCIeNkI4a6kLZuTON6FllInIPnYqg62rwO8uY4lqXnydg7/VigusyjdDFurCpyA
+         aZXwXDaW7rxdtHW2kXSbfdOGvqMuG0VR3uYmnR5C6fefO6pRdmPrLDeAcGksiwudrbPJ
+         +uS23aBaNlyW0XX7OGc85OfYadCVJY7t8QkH11lz1wPwpTu7NxXw8LIsKfNXGjEdDh+d
+         LdeTShgIANY79GqZTPLLMZeOjHeXEtMEeyXY/slpMh9JNQn9q2wrgVKViNoLw7GUcJmV
+         xAw8FyP6gSJJoLj3ROIh4jy5cZhvnzwyl03cKtvmVJzRqjbXUTvg55K/2sLgZQ1OfwL7
+         Ir6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sDJ/41RHMLJzc98gGAPcQbU38m8lJtFcZEeAQmDlWXg=;
-        b=L3hZr9W9YP+n4W3DcaOmibgeuX9q9xvHO2LEtC6mbFASqpZH+RV/wUzdughr0L+87v
-         Fu826DUkkpS4V1KhrWplYa+sNIkCSWLH5C/uxn35nggS8i3uJf61b0nYpk30MfffNr75
-         RcgqL7diSA/qGWJdFs7AGDqfbxeAmxyUfSX3GIExlvfn1m0LydXeLa2ks86hbdHUefcG
-         FWqxTDSy4jg2ODe3lciFcpe5QSY4PHemyWsgGHTFQw41HuIaizQHF/RhpNYZhv72n4v/
-         IycekCM4xlLoEuP5pzFE4Gd2hvVTYV/Bf/us5vdV8LTr55+lkwFXUQnUJEfeddrOCx4c
-         62Hg==
-X-Gm-Message-State: AOAM531VU2rcV5J0+a9Vc/4rYGE5xSJ5IPU6YmngwAUx09BMW+8KDVF4
-        FEpkJabhuxS0U2M9uJwiCgA=
-X-Google-Smtp-Source: ABdhPJyTK8Dn5ndOR70NtnVBIdFNMmT84r6IAuEigLqvHxRv905ZSZ5+Jzeb5r4L2W+TCEADjvwsUg==
-X-Received: by 2002:a63:f90b:0:b0:378:a292:3951 with SMTP id h11-20020a63f90b000000b00378a2923951mr9594408pgi.312.1647025624006;
-        Fri, 11 Mar 2022 11:07:04 -0800 (PST)
+        bh=2SJwDWdiGMEZCVwB+/7uYYAov/bAs7rI8E5dgDcHCHE=;
+        b=ZMTjfrlQnsF1jW1DbzzeeKi8/RxwPN3hZQyUuykeggH3w7FgmFjx/0W0+Lc93DAp8x
+         8JcQo9pAkYrIvJOAxDCigfkwRRIxjxBDQmjPZ/oNyXAWNHtjGbUr4HuDrGv2qdwJlIGZ
+         N9LdLmg/e6+nUeXlLKaieTVg8GAAFfFc8/SpbxuDTiWMNxeV8StTOvrZ0NBTLhGraqZ7
+         RwAuC+iVJoUVzPQibfbn1X91qhM9TMAmrwtESDRjRkXIg4IGefm11ZHHypKu4MLZikBa
+         TI/aucISactRIsMMrhPxRzHHeMlPHMfnPloZxkFqmBlI19dLBkG1G5MOHNgzrlAmGohp
+         PWIw==
+X-Gm-Message-State: AOAM531/m2xzfUGqSr5yqqUrqhIsGpX+DYd3sqFyjEexmJeSnyFE7YTK
+        9JPyt3HQaEzvJt9FpTKdLsY=
+X-Google-Smtp-Source: ABdhPJzL9/Di0EFA1D/q8bRtKkBUbBPgCgrnm9WVIMobs4Hsr0B+nA08KlWZ2rvqyD+IC3SeAeAwHA==
+X-Received: by 2002:a17:902:a9cb:b0:151:f21c:2432 with SMTP id b11-20020a170902a9cb00b00151f21c2432mr12252500plr.158.1647025625493;
+        Fri, 11 Mar 2022 11:07:05 -0800 (PST)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id a5-20020a621a05000000b004f79f8f795fsm857329pfa.0.2022.03.11.11.07.02
+        by smtp.gmail.com with ESMTPSA id a5-20020a621a05000000b004f79f8f795fsm857329pfa.0.2022.03.11.11.07.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 11:07:03 -0800 (PST)
+        Fri, 11 Mar 2022 11:07:05 -0800 (PST)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>, Andi Kleen <ak@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Nick Piggin <npiggin@gmail.com>, x86@kernel.org
-Subject: [RESEND PATCH v3 1/5] x86: Detection of Knights Landing A/D leak
-Date:   Fri, 11 Mar 2022 11:07:45 -0800
-Message-Id: <20220311190749.338281-2-namit@vmware.com>
+Subject: [RESEND PATCH v3 2/5] x86/mm: check exec permissions on fault
+Date:   Fri, 11 Mar 2022 11:07:46 -0800
+Message-Id: <20220311190749.338281-3-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220311190749.338281-1-namit@vmware.com>
 References: <20220311190749.338281-1-namit@vmware.com>
@@ -83,23 +83,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Knights Landing has a issue that a thread setting A or D bits may not do
-so atomically against checking the present bit.  A thread which is going
-to page fault may still set those bits, even though the present bit was
-already atomically cleared.
+access_error() currently does not check for execution permission
+violation. As a result, spurious page-faults due to execution permission
+violation cause SIGSEGV.
 
-This implies that when the kernel clears present atomically, some time
-later the supposed to be zero entry could be corrupted with stray A or D
-bits.
+It appears not to be an issue so far, but the next patches avoid TLB
+flushes on permission promotion, which can lead to this scenario. nodejs
+for instance crashes when TLB flush is avoided on permission promotion.
 
-Since the PTE could be already used for storing a swap index, or a NUMA
-migration index, this cannot be tolerated. Most of the time the kernel
-detects the problem, but in some rare cases it may not.
+Add a check to prevent access_error() from returning mistakenly that
+spurious page-faults due to instruction fetch are a reason for an access
+error.
 
-This patch adds an interface to detect the bug, which will be used in a
-following patch.
+It is assumed that error code bits of "instruction fetch" and "write" in
+the hardware error code are mutual exclusive, and the change assumes so.
+However, to be on the safe side, especially if hypervisors misbehave,
+assert this is the case and warn otherwise.
 
-Cc: Andi Kleen <ak@linux.intel.com>
 Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Andrew Cooper <andrew.cooper3@citrix.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
@@ -112,40 +112,46 @@ Cc: Will Deacon <will@kernel.org>
 Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
 Cc: x86@kernel.org
-Link: https://lore.kernel.org/lkml/1465919919-2093-1-git-send-email-lukasz.anaczkowski@intel.com/
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/kernel/cpu/intel.c        | 5 +++++
- 2 files changed, 6 insertions(+)
+ arch/x86/mm/fault.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 67ef0e81c7dc..184b299dbf12 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -442,5 +442,6 @@
- #define X86_BUG_TAA			X86_BUG(22) /* CPU is affected by TSX Async Abort(TAA) */
- #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
- #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
-+#define X86_BUG_PTE_LEAK		X86_BUG(25) /* PTE may leak A/D bits after clear */
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index d0074c6ed31a..ad0ef0a6087a 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1107,10 +1107,28 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
+ 				       (error_code & X86_PF_INSTR), foreign))
+ 		return 1;
  
- #endif /* _ASM_X86_CPUFEATURES_H */
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 8321c43554a1..74780fef3f12 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -296,6 +296,11 @@ static void early_init_intel(struct cpuinfo_x86 *c)
- 		}
+-	if (error_code & X86_PF_WRITE) {
++	if (error_code & (X86_PF_WRITE | X86_PF_INSTR)) {
++		/*
++		 * CPUs are not expected to set the two error code bits
++		 * together, but to ensure that hypervisors do not misbehave,
++		 * run an additional sanity check.
++		 */
++		if ((error_code & (X86_PF_WRITE|X86_PF_INSTR)) ==
++					(X86_PF_WRITE|X86_PF_INSTR)) {
++			WARN_ON_ONCE(1);
++			return 1;
++		}
++
+ 		/* write, present and write, not present: */
+-		if (unlikely(!(vma->vm_flags & VM_WRITE)))
++		if ((error_code & X86_PF_WRITE) &&
++		    unlikely(!(vma->vm_flags & VM_WRITE)))
++			return 1;
++
++		/* exec, present and exec, not present: */
++		if ((error_code & X86_PF_INSTR) &&
++		    unlikely(!(vma->vm_flags & VM_EXEC)))
+ 			return 1;
++
+ 		return 0;
  	}
  
-+	if (c->x86_model == INTEL_FAM6_XEON_PHI_KNL) {
-+		pr_info_once("Enabling PTE leaking workaround\n");
-+		set_cpu_bug(c, X86_BUG_PTE_LEAK);
-+	}
-+
- 	/*
- 	 * Intel Quark Core DevMan_001.pdf section 6.4.11
- 	 * "The operating system also is required to invalidate (i.e., flush)
 -- 
 2.25.1
 

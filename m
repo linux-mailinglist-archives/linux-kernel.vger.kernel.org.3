@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492844D5B22
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AC54D5AC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 06:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347674AbiCKF7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 00:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S1346514AbiCKFve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 00:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346684AbiCKFyG (ORCPT
+        with ESMTP id S235070AbiCKFvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 00:54:06 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD0190260
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:59 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id p5-20020a17090a748500b001bee6752974so4596741pjk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:52:59 -0800 (PST)
+        Fri, 11 Mar 2022 00:51:32 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9A6E98EA
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:50:29 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id 195so9119786iou.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 21:50:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=fm4Ez6oGyl4LPe9mYSi8bmbgLSQ68BKOeDO53IkpUIM=;
-        b=h2CP2Jb+1kLR3+tIB5df6wfhbrMGxGnDLUSNLhNxdM2RsuHjfcoet0BNBwRXOAeK2f
-         szCSLE93OqwEegMEjnRTq10gpQIHmafLmv01EJyA7aVKAD4gkg71WQ0S+Kz9sUvWHtk7
-         QqGqEthqNkBq9m0haZMwagHBuYi6ony/jB3d9SO+H2I+QKvTi0YlQG6D+vGxgiL2zFLU
-         jc8m5iU0J8R9YWyUMo1a5XmpkFHij3b9IOao0gFWXDaPJV4EAS6Nrg6V/MHm/E4XmdYi
-         F0EmkuNDV8mHn5A0toFk3SoZQpEPojbmm+OV5tryDVpCKdDRF0GcsH6cFzl9Q0SJssw+
-         VOBw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3B8QjIlmdJC8Bd0Vem9hqomGTMW6ZUxC9fqa1LEpXd8=;
+        b=QZGS63PS9pfUSfyFr/oDhhJNtJFuik3KIdwKY3PpvuP3fY8aefSNurgtEJ75OAJyXL
+         CbRQeVKeQor4yz60nSIWEdR5TZyN0QV5+FekbuenDvWrWpkFpxM/C4z3yTEHlb/CMZsz
+         3tk7l0R0YAf4zaLJ8CRpfdHIa8eu6xV20zKYwP2lEhHwTocUGa2bGeUbL+8BP4kzFmk/
+         qspHqatyaz920KEXdhgy+7n0G4bWFdblmhL49w9f0cn27W06zm6HVcD9ApjQMvrHUGEc
+         nEV34M7C8hyfoRJKqjBc5ni9sld+2F3Ibx0OyfKLTKdJiIRDULBT4HlyFk2YUmbGdvLr
+         7VsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=fm4Ez6oGyl4LPe9mYSi8bmbgLSQ68BKOeDO53IkpUIM=;
-        b=KialOnRalucgAa8vApHqrUHlkczQkzGmfeb2LBPLEq2CGeMz6XdqObtU3C6VtuFuPz
-         b/r9yjluD0+1mT/Jgn/RJ7PT4kZIOe4PeQ+X50Ah0j1ZDYFXwSSUcoFYWqv3K004l9aR
-         V96yDX+8qcQgdPkEd9fPbG5kPdk1G5FmzK7JCsd7zeMWHngngsZ28oPv17SbUEzDIt4g
-         TOU+9ssbvX7IIirJG7AB+Sv6Dgp2ZCyBrsLJ01c+dvjq9dZzJsZnfXdXhXpKPmHcqY+7
-         m7NckWbevd9FN1oQiGEFCD2aR7+IR11Ww/Vtz5G2m7LrEpCv38QvHS+10/nMCXNflLBW
-         7fSw==
-X-Gm-Message-State: AOAM531sEUY2SoOYzYajPqEDRlMssr9LWUkHbarBa4Sstnv4votEKdYV
-        Kw/v9Qo73ZKCxIHdmwVFQvBXhZzm2ysMjw5CBLQwkraqEhxgynjmIh70MDCMGFl/NaMIxtgaeJp
-        /gjqLZz5WSEUjA4RaP2hyAn01sVoGXZgt9x9W1Kg2qION4+5lH6hjjx0HemyJs75ADGGlmA==
-X-Google-Smtp-Source: ABdhPJzdtT0AWT0bvZgzHoaNplzt1NmCVMJtRt66d8Nt4cxwnXp20DzahHhYlQsC6SnyOiu32qDl8l/vBec=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1e10:b0:1bf:6c78:54a9 with SMTP id
- pg16-20020a17090b1e1000b001bf6c7854a9mr460945pjb.1.1646977979005; Thu, 10 Mar
- 2022 21:52:59 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Mar 2022 05:50:18 +0000
-In-Reply-To: <20220311055056.57265-1-seanjc@google.com>
-Message-Id: <20220311055056.57265-68-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220311055056.57265-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [RFC PATCH 067/105] KVM: selftests: Convert userspace_io_test away
- from VCPU_ID
-From:   Sean Christopherson <seanjc@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3B8QjIlmdJC8Bd0Vem9hqomGTMW6ZUxC9fqa1LEpXd8=;
+        b=SUlq/6VP+A0zjr03k55EJpU9m8/8fA73NcIgdXlKOTpuFb3Yrk76mpS0oqieumCxCl
+         LuntwUjFI4FYBNI90UdJikrBtcYObIduhKFer9fObI2/P1KHb6OQmj+exzeawa5H2ias
+         9qT7lDaS+h99Dv4f2yjNbuxbEIceY+H+VEP2IvLaio9SCVaa4nmSkIlyYybOcQU3veN+
+         9MQ96lfvtwz9h8WTfP+MosDWn3EgtFHqrfq+XDmaxzNBESoXPgt1AWicFhAiKx7Z24Gi
+         Kms8+Ea5yiAw/0FC8IVeyUI60yy3pOHJiyzx+jZgsBrJdkVBVEh2KNxcLPU1AeOoQfA6
+         xhxQ==
+X-Gm-Message-State: AOAM533GHFuKz+xUap7M2U3mchDb/0sw33l5ONCWqaZcDFQCKFIceJIl
+        a0t61w0eBQSGPKa3RKdTaA19oiYXM52gPCBmTBI=
+X-Google-Smtp-Source: ABdhPJzAbtdKwaCEOZhQzztbjFX7GP+aQtiKKok15pkU1whKZ1twhEO8IZfK457hIHx3+Bb+/kd5NE5f7iIGcTsyC+U=
+X-Received: by 2002:a05:6602:168f:b0:648:c800:3d61 with SMTP id
+ s15-20020a056602168f00b00648c8003d61mr514167iow.197.1646977829264; Thu, 10
+ Mar 2022 21:50:29 -0800 (PST)
+MIME-Version: 1.0
+References: <20220310081548.31846-1-steve.lee.analog@gmail.com> <SJ0PR03MB67794358405FA661992A206D990B9@SJ0PR03MB6779.namprd03.prod.outlook.com>
+In-Reply-To: <SJ0PR03MB67794358405FA661992A206D990B9@SJ0PR03MB6779.namprd03.prod.outlook.com>
+From:   Lee Steve <steve.lee.analog@gmail.com>
+Date:   Fri, 11 Mar 2022 14:50:18 +0900
+Message-ID: <CA+Fz0PbNBXfC_0SYKVuHDic0ZREpHBk+oSqU5sO9Mq0AjY8_-w@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: max98390: Add reset gpio control
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "ckeepax@opensource.cirrus.com" <ckeepax@opensource.cirrus.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "rf@opensource.wolfsonmicro.com" <rf@opensource.wolfsonmicro.com>,
+        "shumingf@realtek.com" <shumingf@realtek.com>,
+        "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "jack.yu@realtek.com" <jack.yu@realtek.com>,
+        "steves.lee@maximintegrated.com" <steves.lee@maximintegrated.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,77 +80,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- .../selftests/kvm/x86_64/userspace_io_test.c   | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+On Thu, Mar 10, 2022 at 5:48 PM Sa, Nuno <Nuno.Sa@analog.com> wrote:
+>
+> Hi Steve,
+>
+> > From: Steve Lee <steve.lee.analog@gmail.com>
+> > Sent: Thursday, March 10, 2022 9:16 AM
+> > To: lgirdwood@gmail.com; broonie@kernel.org; perex@perex.cz;
+> > tiwai@suse.com; ckeepax@opensource.cirrus.com; geert@linux-
+> > m68k.org; rf@opensource.wolfsonmicro.com; shumingf@realtek.com;
+> > srinivas.kandagatla@linaro.org; krzk@kernel.org; dmurphy@ti.com;
+> > jack.yu@realtek.com; Sa, Nuno <Nuno.Sa@analog.com>;
+> > steves.lee@maximintegrated.com; linux-kernel@vger.kernel.org;
+> > alsa-devel@alsa-project.org
+> > Cc: Steve Lee <steve.lee.analog@gmail.com>
+> > Subject: [PATCH] ASoC: max98390: Add reset gpio control
+> >
+> > [External]
+> >
+> >  Add reset gpio control to support RESET PIN connected to gpio.
+> >
+> > Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+> > ---
+> >  sound/soc/codecs/max98390.c | 18 ++++++++++++++++++
+> >  sound/soc/codecs/max98390.h |  1 +
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/sound/soc/codecs/max98390.c
+> > b/sound/soc/codecs/max98390.c
+> > index b392567c2b3e..574d8d5f1119 100644
+> > --- a/sound/soc/codecs/max98390.c
+> > +++ b/sound/soc/codecs/max98390.c
+> > @@ -1073,6 +1073,24 @@ static int max98390_i2c_probe(struct
+> > i2c_client *i2c,
+> >               return ret;
+> >       }
+> >
+> > +     max98390->reset_gpio =3D of_get_named_gpio(i2c-
+> > >dev.of_node,
+> > +                                             "maxim,reset-gpios", 0);
+>
+> Why not using devm_gpiod_get_optional()? We could request the pin
+> already in the asserted state and make the code slightly better...
+>
+> /* I guess there's no need to save it in our struct as we only use it her=
+e? */
+> struct gpio_desc *reset_gpio;
+>
+> reset_gpio =3D devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_HIGH=
+);
+> if (reset_gpio) {
+>       usleep_range(1000, 2000);
+>      /* bring out of reset */
+>       gpio_direction_output(max98390->reset_gpio, 0);
+>       usleep_range(1000, 2000);
+> }
+>
+> Also, do we have this on the bindings doc? If not, it should be done on a=
+ second
+> patch on this series...
+>
+> - Nuno S=C3=A1
+>
 
-diff --git a/tools/testing/selftests/kvm/x86_64/userspace_io_test.c b/tools/testing/selftests/kvm/x86_64/userspace_io_test.c
-index e4bef2e05686..0ba774ed6476 100644
---- a/tools/testing/selftests/kvm/x86_64/userspace_io_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/userspace_io_test.c
-@@ -10,8 +10,6 @@
- #include "kvm_util.h"
- #include "processor.h"
- 
--#define VCPU_ID			1
--
- static void guest_ins_port80(uint8_t *buffer, unsigned int count)
- {
- 	unsigned long end;
-@@ -52,31 +50,29 @@ static void guest_code(void)
- 
- int main(int argc, char *argv[])
- {
-+	struct kvm_vcpu *vcpu;
- 	struct kvm_regs regs;
- 	struct kvm_run *run;
- 	struct kvm_vm *vm;
- 	struct ucall uc;
--	int rc;
- 
- 	/* Tell stdout not to buffer its content */
- 	setbuf(stdout, NULL);
- 
--	/* Create VM */
--	vm = vm_create_default(VCPU_ID, 0, guest_code);
--	run = vcpu_state(vm, VCPU_ID);
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	run = vcpu->run;
- 
- 	memset(&regs, 0, sizeof(regs));
- 
- 	while (1) {
--		rc = _vcpu_run(vm, VCPU_ID);
-+		vcpu_run(vm, vcpu->id);
- 
--		TEST_ASSERT(rc == 0, "vcpu_run failed: %d\n", rc);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 			    "Unexpected exit reason: %u (%s),\n",
- 			    run->exit_reason,
- 			    exit_reason_str(run->exit_reason));
- 
--		if (get_ucall(vm, VCPU_ID, &uc))
-+		if (get_ucall(vm, vcpu->id, &uc))
- 			break;
- 
- 		TEST_ASSERT(run->io.port == 0x80,
-@@ -89,13 +85,13 @@ int main(int argc, char *argv[])
- 		 * scope from a testing perspective as it's not ABI in any way,
- 		 * i.e. it really is abusing internal KVM knowledge.
- 		 */
--		vcpu_regs_get(vm, VCPU_ID, &regs);
-+		vcpu_regs_get(vm, vcpu->id, &regs);
- 		if (regs.rcx == 2)
- 			regs.rcx = 1;
- 		if (regs.rcx == 3)
- 			regs.rcx = 8192;
- 		memset((void *)run + run->io.data_offset, 0xaa, 4096);
--		vcpu_regs_set(vm, VCPU_ID, &regs);
-+		vcpu_regs_set(vm, vcpu->id, &regs);
- 	}
- 
- 	switch (uc.cmd) {
--- 
-2.35.1.723.g4982287a31-goog
-
+Thanks for comment on this patch. I will check and update as commented.

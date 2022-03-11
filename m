@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D4B4D649F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E834D64A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349252AbiCKPcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
+        id S1349302AbiCKPcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiCKPcG (ORCPT
+        with ESMTP id S1349173AbiCKPcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:32:06 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE5D1B8CB5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:31:03 -0800 (PST)
+        Fri, 11 Mar 2022 10:32:12 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2A1C025E;
+        Fri, 11 Mar 2022 07:31:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647012663; x=1678548663;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=PF6Eg9uUIzx22Jx9LT/iohqhCZ1p6IWaB9RmrqgpzxQ=;
-  b=wqcwFTGZNDsrt9hLHRavxiZ+alxGveEAoC9pgfEOX8a05qfdIXdRU4/9
-   ZGUi+2A7xWIocpKoM7cB0YBFju1CLXPhDHtWU8QkY9wQ2DF2pCmn7Lnbn
-   f/SKv3PodQMRtnwRB4u9JmLm0cpqrdjSurS0XtEEb18JOSziNKTgLdjLt
+  t=1647012667; x=1678548667;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=sxa44dfwh+7OfJVU2hGG661tCEMXjNsht7SbfX+FjMQ=;
+  b=m9oFnRR8m9MCwDodx1GEkT4N4eRqxIM4pnZW9Gb9oreYDJylmZzgmVup
+   kV07laFxjOBqiuaTmWEkSmybqZtujewfXgWrpXaJctlg5HDoPhHwFXqFN
+   DUAQBQxzm8WP6RKSgeaXK+TsYRb+8NKfvZMmyk74ViprSwTrG/iY3b6m2
    k=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Mar 2022 07:31:02 -0800
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 11 Mar 2022 07:31:06 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 07:31:01 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 07:31:06 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 11 Mar 2022 07:31:00 -0800
+ 15.2.986.15; Fri, 11 Mar 2022 07:31:05 -0800
 Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 11 Mar 2022 07:30:56 -0800
+ 15.2.986.15; Fri, 11 Mar 2022 07:31:01 -0800
 From:   Charan Teja Kalla <quic_charante@quicinc.com>
 To:     <akpm@linux-foundation.org>, <surenb@google.com>, <vbabka@suse.cz>,
         <rientjes@google.com>, <sfr@canb.auug.org.au>,
         <edgararriaga@google.com>, <minchan@kernel.org>,
         <nadav.amit@gmail.com>, <mhocko@suse.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: [PATCH V2,0/2]mm: madvise: return correct bytes processed with process_madvise
-Date:   Fri, 11 Mar 2022 20:59:04 +0530
-Message-ID: <cover.1647008754.git.quic_charante@quicinc.com>
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        "# 5 . 10+" <stable@vger.kernel.org>
+Subject: [PATCH V2,1/2] mm: madvise: return correct bytes advised with process_madvise
+Date:   Fri, 11 Mar 2022 20:59:05 +0530
+Message-ID: <125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1647008754.git.quic_charante@quicinc.com>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -63,29 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the process_madvise(), always choose to return non zero processed
-bytes over an error. This can help the user to know on which VMA, passed
-in the 'struct iovec' vector list, is failed to advise thus can take the
-decission of retrying/skipping on that VMA.
+The process_madvise() system call returns error even after processing
+some VMA's passed in the 'struct iovec' vector list which leaves the
+user confused to know where to restart the advise next. It is also
+against this syscall man page[1] documentation where it mentions that
+"return value may be less than the total number of requested bytes, if
+an error occurred after some iovec elements were already processed.".
 
+Consider a user passed 10 VMA's in the 'struct iovec' vector list of
+which 9 are processed but one. Then it just returns the error caused on
+that failed VMA despite the first 9 VMA's processed, leaving the user
+confused about on which VMA it is failed. Returning the number of bytes
+processed here can help the user to know which VMA it is failed on and
+thus can retry/skip the advise on that VMA.
+
+[1]https://man7.org/linux/man-pages/man2/process_madvise.2.html.
+
+Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
+Cc: <stable@vger.kernel.org> # 5.10+
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+---
 Changes in V2:
-  -- Separated the fixes returning processed bytes in case of an error
-     and ENOMEM handling of process_madvise() due to unmapped hole in
-     the VMA, as per the Minchan comments.
-  -- Improved the comment for ENOMEM handling case as per Amit comments.
+ -- Separated the ENOMEM handling and return bytes processed, as per Minchan comments.
+ -- This contains correcting return bytes processed with process_madvise().
 
 Changes in V1:
-  -- Fixed the return value of process_madvise().
-  -- Fixed ENOMEM handling of process_madvise() from do_madvise()
-  -- https://patchwork.kernel.org/project/linux-mm/patch/1646803679-11433-1-git-send-email-quic_charante@quicinc.com/
+ -- Fixed the ENOMEM handling and return bytes processed by process_madvise.
+ -- https://patchwork.kernel.org/project/linux-mm/patch/1646803679-11433-1-git-send-email-quic_charante@quicinc.com/
 
-Charan Teja Kalla (2):
-  mm: madvise: return correct bytes advised with process_madvise
-  mm: madvise: skip unmapped vma holes passed to process_madvise
+ mm/madvise.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- mm/madvise.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 38d0f51..e97e6a9 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1433,8 +1433,7 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+ 		iov_iter_advance(&iter, iovec.iov_len);
+ 	}
+ 
+-	if (ret == 0)
+-		ret = total_len - iov_iter_count(&iter);
++	ret = (total_len - iov_iter_count(&iter)) ? : ret;
+ 
+ release_mm:
+ 	mmput(mm);
 -- 
 2.7.4
 

@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B654D6456
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352894D6458
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348511AbiCKPKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S1348567AbiCKPLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234275AbiCKPKw (ORCPT
+        with ESMTP id S232801AbiCKPLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:10:52 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819FE1C232A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:09:48 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id n19so15497926lfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:09:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qqY71AUzATHTLGKyAzwvSw6q4/NroX39pMmuicUc9QM=;
-        b=lNYnqjfB2ONnlK2OT+blK4EuYRqEDUuqvPBFjmbTehTX9zN0zNGdAMbmGFjuz2ju3d
-         pYM0kM2QuWs1T361dlk5ChZN+7gljju/RfsrwfymsUScdXysvOFcF5KIEJFOe6MjfSUS
-         lwxonnSHL7D/TeeRoMSDmUnTPw4LtToaAgb7aRtkJ5j82jznc1nlFK1Q5mdEbRLJ+A9J
-         paMeQNbenMSVJSYv/KQrBP67rWb/B2jpUpwo0hx/13ob9tveOqe7PMDzpcswEh0LIVOA
-         WC7ou0vQqRGSupaTU76Zj4l+zhWHobs5QiDR0XEgkT3fq4G6pwOj07nu5K5wQB0mlTxq
-         5hiQ==
+        Fri, 11 Mar 2022 10:11:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16E601C46B4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:10:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647011413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S86JNNozDNBpXX5OqlAvYtryTmTo71qDJCBEDOod3jQ=;
+        b=YEBO4HO/tK3qVQnkaF5BdXODbAzEKzLkBxYnXWzeW5AXOXaUhFhlfhVIBEqVvqq7sFhmE/
+        +GRhquSxa2rEt7j27M0eRyvrDamB1F9zzUMQ/MgkbVtfWokyukbq8IjBlxo39ND1hQbQni
+        ErtJf3SKqLYz75ryfpgHKK0HPKsWZRQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-qw0SBPIhPGKcIwrn-DKZ9g-1; Fri, 11 Mar 2022 10:10:12 -0500
+X-MC-Unique: qw0SBPIhPGKcIwrn-DKZ9g-1
+Received: by mail-ed1-f71.google.com with SMTP id r28-20020a50aadc000000b00418572a365bso909edc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:10:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qqY71AUzATHTLGKyAzwvSw6q4/NroX39pMmuicUc9QM=;
-        b=jAPiNtV2UPEgIQzc8aglwEh0OdazMOB7tnQXjigvofB2euhQBNtosGlT6g5L9/gJ6Z
-         sRHbLRKMXnwWJrIF/n6cbbaHa65QoFcVj9HUpvTLopnagFANlzS4LkoHlstasVRfzhjZ
-         m2ELuc6qt13/6ZQxhOwEuaUVF3Q9wkhlLqXTShpiNiWX2BgM5wXrQ5G8Y/0qjm4NKwLL
-         6t5RWncAu5MrdyjoB9HBfvkP9ONPemzv3RVTNwq5nIJ4zlTuZLdgTe9qZfo9+0wGpFg1
-         SMtMPD1cYXLjgj8DF0FDuc5V9Rsq5FVmhXXK3C+BzJWXipaidVglj27F6kyRxkGGn6pe
-         BPVw==
-X-Gm-Message-State: AOAM530ORiCG87l21mV9RoywDHLBb1Ik9pbSQ22cWWGeZbSWGixgqa5m
-        mE0GL95C9P9agniZWbWRraiSxnooGLPV3Q==
-X-Google-Smtp-Source: ABdhPJyP7Hm372/ApUE3c0lGEDB1sgUok3CVvp4PMBVGtAi8hCEmi+cS9QBaZtP14ItjK+kQCbA3gw==
-X-Received: by 2002:ac2:4145:0:b0:448:273a:7697 with SMTP id c5-20020ac24145000000b00448273a7697mr6370536lfi.601.1647011386742;
-        Fri, 11 Mar 2022 07:09:46 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
-        by smtp.gmail.com with ESMTPSA id 16-20020ac25f10000000b00443890bd84asm1663988lfq.114.2022.03.11.07.09.45
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=S86JNNozDNBpXX5OqlAvYtryTmTo71qDJCBEDOod3jQ=;
+        b=LkuL8a7AOng96ikw/kqEoanfo87g1lu/axh746xGDqtUYD4BB8UhW97pKtU/4uCBVB
+         klPqMcvv/TzadFEYwLynxrL3BnFdYNzcCxcWMvgnVWSQAyggXvQut7U8sE0/cXCpIbIW
+         7PvC7sYala//rdyliB3CGT0Lcg438TBJBJP0aFohnei7LHA7C1VecNoS29IEszk0wLOZ
+         g385SGHgncUTm15YqtOTyZfRrb5bWeXM2bSP/ScD/U/JezA81WZ7VyuI+S+mKEcczIjD
+         aSdBGw7qPQb8hq+f33uDkgrgMn3ZiXs2DVW+01wjGV8HioUxlHZ8ayLLHS219N/pAOou
+         B6yg==
+X-Gm-Message-State: AOAM531NJ5qmaoWHzfhzxIJayxNy8uehFgKsAa/66gbGdk0YkW3i3vfG
+        xBWLw3whjlKHZu5P79uT1x7gjywZI9cinFJbiz2tfVfszS5usDRZUWHjukYldu4L0yjmyQx5rwK
+        p1mZsdhhvfHmL9kjg/fMvr5qJ
+X-Received: by 2002:a17:906:9f21:b0:6b6:1f07:fb86 with SMTP id fy33-20020a1709069f2100b006b61f07fb86mr8921781ejc.495.1647011404525;
+        Fri, 11 Mar 2022 07:10:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxpg4AhO6R+aOLseJyWOkNzsFA5iV8kBdrbE562CRDglmbNK4DdT28I2Eiql+gwjeGck5AhzA==
+X-Received: by 2002:a17:906:9f21:b0:6b6:1f07:fb86 with SMTP id fy33-20020a1709069f2100b006b61f07fb86mr8921290ejc.495.1647011397721;
+        Fri, 11 Mar 2022 07:09:57 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id j20-20020a508a94000000b00416c19650e8sm1728303edj.71.2022.03.11.07.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:09:45 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v5.17-rc8
-Date:   Fri, 11 Mar 2022 16:09:45 +0100
-Message-Id: <20220311150945.84262-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 11 Mar 2022 07:09:57 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 18/30] KVM: x86/mmu: Zap only TDP MMU leafs in
+ kvm_zap_gfn_range()
+In-Reply-To: <20220303193842.370645-19-pbonzini@redhat.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-19-pbonzini@redhat.com>
+Date:   Fri, 11 Mar 2022 16:09:56 +0100
+Message-ID: <87wnh08r0b.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,47 +84,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-Here's a PR with a couple of MMC fixes intended for v5.17-rc8. Details about the
-highlights are as usual found in the signed tag.
+> From: Sean Christopherson <seanjc@google.com>
+>
+> Zap only leaf SPTEs in the TDP MMU's zap_gfn_range(), and rename various
+> functions accordingly.  When removing mappings for functional correctness
+> (except for the stupid VFIO GPU passthrough memslots bug), zapping the
+> leaf SPTEs is sufficient as the paging structures themselves do not point
+> at guest memory and do not directly impact the final translation (in the
+> TDP MMU).
+>
+> Note, this aligns the TDP MMU with the legacy/full MMU, which zaps only
+> the rmaps, a.k.a. leaf SPTEs, in kvm_zap_gfn_range() and
+> kvm_unmap_gfn_range().
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
+> Message-Id: <20220226001546.360188-18-seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Please pull this in!
+I've noticed that multi-vCPU Hyper-V guests started crashing randomly on
+boot with the latest kvm/queue and I've bisected the problem to this
+particular patch. Basically, I'm not able to boot e.g. 16-vCPU guest
+successfully anymore. Both Intel and AMD seem to be affected. Reverting
+this commit saves the day.
 
-Kind regards
-Ulf Hansson
+Having some experience with similarly looking crashes in the past, I'd
+suspect it is TLB flush related. I'd appreciate any thoughts.
 
+> ---
+>  arch/x86/kvm/mmu/mmu.c     |  4 ++--
+>  arch/x86/kvm/mmu/tdp_mmu.c | 41 ++++++++++----------------------------
+>  arch/x86/kvm/mmu/tdp_mmu.h |  8 +-------
+>  3 files changed, 14 insertions(+), 39 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 8408d7db8d2a..febdcaaa7b94 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5834,8 +5834,8 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+>  
+>  	if (is_tdp_mmu_enabled(kvm)) {
+>  		for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
+> -			flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, gfn_start,
+> -							  gfn_end, flush);
+> +			flush = kvm_tdp_mmu_zap_leafs(kvm, i, gfn_start,
+> +						      gfn_end, true, flush);
+>  	}
+>  
+>  	if (flush)
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index f3939ce4a115..c71debdbc732 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -834,10 +834,8 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  }
+>  
+>  /*
+> - * Tears down the mappings for the range of gfns, [start, end), and frees the
+> - * non-root pages mapping GFNs strictly within that range. Returns true if
+> - * SPTEs have been cleared and a TLB flush is needed before releasing the
+> - * MMU lock.
+> + * Zap leafs SPTEs for the range of gfns, [start, end). Returns true if SPTEs
+> + * have been cleared and a TLB flush is needed before releasing the MMU lock.
+>   *
+>   * If can_yield is true, will release the MMU lock and reschedule if the
+>   * scheduler needs the CPU or there is contention on the MMU lock. If this
+> @@ -845,42 +843,25 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+>   * the caller must ensure it does not supply too large a GFN range, or the
+>   * operation can cause a soft lockup.
+>   */
+> -static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> -			  gfn_t start, gfn_t end, bool can_yield, bool flush)
+> +static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
+> +			      gfn_t start, gfn_t end, bool can_yield, bool flush)
+>  {
+> -	bool zap_all = (start == 0 && end >= tdp_mmu_max_gfn_host());
+>  	struct tdp_iter iter;
+>  
+> -	/*
+> -	 * No need to try to step down in the iterator when zapping all SPTEs,
+> -	 * zapping the top-level non-leaf SPTEs will recurse on their children.
+> -	 */
+> -	int min_level = zap_all ? root->role.level : PG_LEVEL_4K;
+> -
+>  	end = min(end, tdp_mmu_max_gfn_host());
+>  
+>  	lockdep_assert_held_write(&kvm->mmu_lock);
+>  
+>  	rcu_read_lock();
+>  
+> -	for_each_tdp_pte_min_level(iter, root, min_level, start, end) {
+> +	for_each_tdp_pte_min_level(iter, root, PG_LEVEL_4K, start, end) {
+>  		if (can_yield &&
+>  		    tdp_mmu_iter_cond_resched(kvm, &iter, flush, false)) {
+>  			flush = false;
+>  			continue;
+>  		}
+>  
+> -		if (!is_shadow_present_pte(iter.old_spte))
+> -			continue;
+> -
+> -		/*
+> -		 * If this is a non-last-level SPTE that covers a larger range
+> -		 * than should be zapped, continue, and zap the mappings at a
+> -		 * lower level, except when zapping all SPTEs.
+> -		 */
+> -		if (!zap_all &&
+> -		    (iter.gfn < start ||
+> -		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end) &&
+> +		if (!is_shadow_present_pte(iter.old_spte) ||
+>  		    !is_last_spte(iter.old_spte, iter.level))
+>  			continue;
+>  
+> @@ -898,13 +879,13 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>   * SPTEs have been cleared and a TLB flush is needed before releasing the
+>   * MMU lock.
+>   */
+> -bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
+> -				 gfn_t end, bool can_yield, bool flush)
+> +bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
+> +			   bool can_yield, bool flush)
+>  {
+>  	struct kvm_mmu_page *root;
+>  
+>  	for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
+> -		flush = zap_gfn_range(kvm, root, start, end, can_yield, flush);
+> +		flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
+>  
+>  	return flush;
+>  }
+> @@ -1202,8 +1183,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+>  				 bool flush)
+>  {
+> -	return __kvm_tdp_mmu_zap_gfn_range(kvm, range->slot->as_id, range->start,
+> -					   range->end, range->may_block, flush);
+> +	return kvm_tdp_mmu_zap_leafs(kvm, range->slot->as_id, range->start,
+> +				     range->end, range->may_block, flush);
+>  }
+>  
+>  typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
+> index 5e5ef2576c81..54bc8118c40a 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.h
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.h
+> @@ -15,14 +15,8 @@ __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm_mmu_page *root)
+>  void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  			  bool shared);
+>  
+> -bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
+> +bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start,
+>  				 gfn_t end, bool can_yield, bool flush);
+> -static inline bool kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id,
+> -					     gfn_t start, gfn_t end, bool flush)
+> -{
+> -	return __kvm_tdp_mmu_zap_gfn_range(kvm, as_id, start, end, true, flush);
+> -}
+> -
+>  bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  void kvm_tdp_mmu_zap_all(struct kvm *kvm);
+>  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm);
 
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+-- 
+Vitaly
 
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.17-rc6
-
-for you to fetch changes up to 1760fdb6fe9f796fbdb9b4106b3e0bbacc16b55c:
-
-  mmc: core: Restore (almost) the busy polling for MMC_SEND_OP_COND (2022-03-07 11:47:39 +0100)
-
-----------------------------------------------------------------
-MMC core:
- - Restore (almost) the busy polling for MMC_SEND_OP_COND
-
-MMC host:
- - meson-gx: Fix DMA usage of meson_mmc_post_req()
-
-----------------------------------------------------------------
-Rong Chen (1):
-      mmc: meson: Fix usage of meson_mmc_post_req()
-
-Ulf Hansson (1):
-      mmc: core: Restore (almost) the busy polling for MMC_SEND_OP_COND
-
- drivers/mmc/core/block.c        |  2 +-
- drivers/mmc/core/mmc.c          |  2 +-
- drivers/mmc/core/mmc_ops.c      | 13 +++++++++----
- drivers/mmc/core/mmc_ops.h      |  3 ++-
- drivers/mmc/core/sd.c           |  2 +-
- drivers/mmc/host/meson-gx-mmc.c | 15 ++++++++-------
- 6 files changed, 22 insertions(+), 15 deletions(-)

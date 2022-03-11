@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48314D6140
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC19E4D6142
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241191AbiCKMLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
+        id S241839AbiCKMMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238418AbiCKMLH (ORCPT
+        with ESMTP id S239673AbiCKMMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:11:07 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F68105A85
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647000603; x=1678536603;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n2K56dej/Wn14HY5B3MUed47jvCOE6FkOsivhbZ/lcQ=;
-  b=g8mPj+lOB5/mNnxUu3Bds3XICUWZgJ3D8HumlWOJEbgW4W1m3sYFBiBB
-   2Sp4hsfitBMB1cGMnZTPlYedhJhu1CUBpwWPJCfrKX3uud3A4HpHL3Lvw
-   E/3ay+EM9KgOeWVcmJVHKPmdsRd8gUtT8vpIs97teIgGg4GuvqhoEWgUf
-   xR96athgKHaM1u69Zns7E7vRDJOdG+u0Ia8Q1BXWw4fAEAFtsMYLjID9/
-   +EGEoekGux42G67vrgCmn1uWfsMd2UxpNeStmlZEaHjTjfHfX8P/DNjQK
-   ZQ5R96a7dRm70ysGgMASOrGiIpO6g6fWPV4dKN2zzjh0FIMMn0ZLXnh3S
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="316282679"
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="316282679"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 04:10:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="496748695"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 04:10:02 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSe5p-0006Mq-I6; Fri, 11 Mar 2022 12:10:01 +0000
-Date:   Fri, 11 Mar 2022 20:09:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: [toke:xdp-queueing-03 7/9] net/core/filter.c:9727:5: warning: no
- previous prototype for 'dequeue_btf_struct_access'
-Message-ID: <202203112035.kNSbLE5J-lkp@intel.com>
+        Fri, 11 Mar 2022 07:12:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB3119F14;
+        Fri, 11 Mar 2022 04:11:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 243B6B82BEB;
+        Fri, 11 Mar 2022 12:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 866E9C340E9;
+        Fri, 11 Mar 2022 12:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647000665;
+        bh=O89ScCFBuspgUWddx0ttaCHWVam7dsgvZ77m4faLqt4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sw3AuBCbdamTmM2i1PmRwyH29G+wXBiUGt/ZAMzGGnCeJth+Rr0A9oqta4xzZyaCJ
+         rko0mYWNshkTwlPnk1uN1RiBJ9nMqQ8tWf5CXcOiSb+N0iERSCa70SKsvlhYli23IJ
+         HbWQ4KR8JHuXwH7M5KM4ozEYjvvd9eSoyBGODtrh12gtrPxDPChbhb03HY5juOdLHK
+         rVAeEvvn8XOeHF2lmpWU7QmwNsPPg0mBXAtpDn0bssIZTmD3M0WhMJ+iYBIzkgze0S
+         bYoBPwlh4oLLw9hoj7250ZuMiVVQllQim4AkLIS5xn4gkh7sqEhcX1kY+GFyxLJVgw
+         bEb9YfRtrl+yg==
+Date:   Fri, 11 Mar 2022 14:10:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>
+Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
+ permissions
+Message-ID: <Yis8LV99mORcLYs6@iki.fi>
+References: <cover.1644274683.git.reinette.chatre@intel.com>
+ <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com>
+ <YhLhoMFPyOFZ2fsX@iki.fi>
+ <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
+ <YimWaAqEnXHbLdjh@iki.fi>
+ <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,107 +76,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
-head:   91c92d46077f70b03fd162128dd3373663d529d4
-commit: 9bae1dad48ccbee1a035d242a407ea54a29ae2c9 [7/9] bpf: Enable direct packet access for dequeue packets
-config: arc-buildonly-randconfig-r002-20220310 (https://download.01.org/0day-ci/archive/20220311/202203112035.kNSbLE5J-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=9bae1dad48ccbee1a035d242a407ea54a29ae2c9
-        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
-        git fetch --no-tags toke xdp-queueing-03
-        git checkout 9bae1dad48ccbee1a035d242a407ea54a29ae2c9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash net/core/
+On Thu, Mar 10, 2022 at 12:33:20PM -0600, Haitao Huang wrote:
+> Hi Jarkko
+> 
+> I have some trouble understanding the sequences below.
+> 
+> On Thu, 10 Mar 2022 00:10:48 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
+> 
+> > On Wed, Feb 23, 2022 at 07:21:50PM +0000, Dhanraj, Vijay wrote:
+> > > Hi All,
+> > > 
+> > > Regarding the recent update of splitting the page permissions change
+> > > request into two IOCTLS (RELAX and RESTRICT), can we combine them into
+> > > one? That is, revert to how it was done in the v1 version?
+> > > 
+> > > Why? Currently in Gramine (a library OS for unmodified applications,
+> > > https://gramineproject.io/) with the new proposed change, one needs to
+> > > store the page permission for each page or range of pages. And for every
+> > > request of `mmap` or `mprotect`, Gramine would have to do a lookup
+> > > of the
+> > > page permissions for the request range and then call the respective
+> > > IOCTL
+> > > either RESTRICT or RELAX. This seems a little overwhelming.
+> > > 
+> > > Request: Instead, can we do `MODPE`,  call `RESTRICT` IOCTL, and then do
+> > > an `EACCEPT` irrespective of RELAX or RESTRICT page permission request?
+> > > With this approach, we can avoid storing  page permissions and simplify
+> > > the implementation.
+> > > 
+> > > I understand RESTRICT IOCTL would do a `MODPR` and trigger `ETRACK`
+> > > flows
+> > > to do TLB shootdowns which might not be needed for RELAX IOCTL but I am
+> > > not sure what will be the performance impact. Is there any data point to
+> > > see the performance impact?
+> > > 
+> > > Thanks,
+> > > -Vijay
+> > 
+> > This should get better in the next versuin. "relax" is gone. And for
+> > dynamic EAUG'd pages only VMA and EPCM permissions matter, i.e.
+> > internal vm_max_prot_bits is set to RWX.
+> > 
+> > I patched the existing series eno
+> > 
+> > For Enarx I'm using the following patterns.
+> > 
+> > Shim mmap() handler:
+> > 1. Ask host for mmap() syscall.
+> > 2. Construct secinfo matching the protection bits.
+> > 3. For each page in the address range: EACCEPTCOPY with a
+> >    zero page.
+> 
+> For EACCEPTCOPY to work, I believe PTE.RW is required for the target page.
+> So this only works for mmap(..., RW) or mmap(...,RWX).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I use it only with EAUG.
 
-All warnings (new ones prefixed by >>):
+> So that gives you pages with RW/RWX.
+> 
+> To change permissions of any of those pages from RW/RWX to R/RX , you need
+> call ENCLAVE_RESTRICT_PERMISSIONS ioctl with R or with PROT_NONE. you can't
+> just do EMODPE.
+> 
+> so for RW->R, you either:
+> 
+> 1)EMODPR(EPCM.NONE)
+> 2)EACCEPT(EPCM.NONE)
+> 3)EMODPE(R) -- not sure this would work as spec says EMODPE requires "Read
+> access permitted by enclave"
+> 
+> or:
+> 
+> 1)EMODPR(EPCM.PROT_R)
+> 2)EACCEPT(EPCM.PROT_R)
 
->> net/core/filter.c:9727:5: warning: no previous prototype for 'dequeue_btf_struct_access' [-Wmissing-prototypes]
-    9727 | int dequeue_btf_struct_access(struct bpf_verifier_log *log,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   net/core/filter.c: In function 'dequeue_btf_struct_access':
-   net/core/filter.c:9736:14: error: implicit declaration of function 'bpf_get_btf_vmlinux' [-Werror=implicit-function-declaration]
-    9736 |         if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
-         |              ^~~~~~~~~~~~~~~~~~~
->> net/core/filter.c:9736:43: warning: comparison between pointer and integer
-    9736 |         if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
-         |                                           ^~
->> net/core/filter.c:9744:35: warning: passing argument 1 of 'btf_type_by_id' makes pointer from integer without a cast [-Wint-conversion]
-    9744 |         pkt_type = btf_type_by_id(bpf_get_btf_vmlinux(), xdp_md_btf_ids[0]);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-         |                                   |
-         |                                   int
-   In file included from net/core/filter.c:50:
-   include/linux/btf.h:348:71: note: expected 'const struct btf *' but argument is of type 'int'
-     348 | static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
-         |                                                     ~~~~~~~~~~~~~~~~~~^~~
-   net/core/filter.c:9748:24: error: implicit declaration of function 'btf_struct_access'; did you mean 'dequeue_btf_struct_access'? [-Werror=implicit-function-declaration]
-    9748 |                 return btf_struct_access(log, btf, t, off, size, atype,
-         |                        ^~~~~~~~~~~~~~~~~
-         |                        dequeue_btf_struct_access
-   net/core/filter.c: In function 'dequeue_get_convert_ctx_access':
-   net/core/filter.c:9861:43: warning: comparison between pointer and integer
-    9861 |         if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
-         |                                           ^~
-   cc1: some warnings being treated as errors
+I checked from SDM and you're correct.
 
+Then the appropriate thing is to reset to R.
 
-vim +/dequeue_btf_struct_access +9727 net/core/filter.c
+> > Shim mprotect() handler:
+> > 1. Ask host for mprotect() syscall.
+> > 2. For each page in the address range: EACCEPT with PROT_NONE
+> >    secinfo and EMODPE with the secinfo having the prot bits.
+> 
+> EACCEPT requires PTE.R. And EAUG'd pages will always initialized with
+> EPCM.RW,
+> so EACCEPT(EPCM.PROT_NONE) will fail with SGX_PAGE_ATTRIBUTES_MISMATCH.
 
-  9726	
-> 9727	int dequeue_btf_struct_access(struct bpf_verifier_log *log,
-  9728				      const struct btf *btf,
-  9729				      const struct btf_type *t, int off, int size,
-  9730				      enum bpf_access_type atype,
-  9731				      u32 *next_btf_id, enum bpf_type_flag *flag)
-  9732	{
-  9733		const struct btf_type *pkt_type;
-  9734		enum bpf_reg_type reg_type;
-  9735	
-> 9736		if (!bpf_get_btf_vmlinux() || btf != bpf_get_btf_vmlinux())
-  9737			return -EINVAL;
-  9738	
-  9739		if (atype != BPF_READ) {
-  9740			bpf_log(log, "only read is supported\n");
-  9741			return -EACCES;
-  9742		}
-  9743	
-> 9744		pkt_type = btf_type_by_id(bpf_get_btf_vmlinux(), xdp_md_btf_ids[0]);
-  9745		if (!pkt_type)
-  9746			return -EINVAL;
-  9747		if (t != pkt_type)
-  9748			return btf_struct_access(log, btf, t, off, size, atype,
-  9749						 next_btf_id, flag);
-  9750	
-  9751		switch (off) {
-  9752		case offsetof(struct xdp_md, data):
-  9753			reg_type = PTR_TO_PACKET;
-  9754			break;
-  9755		case offsetof(struct xdp_md, data_meta):
-  9756			reg_type = PTR_TO_PACKET_META;
-  9757			break;
-  9758		case offsetof(struct xdp_md, data_end):
-  9759			reg_type = PTR_TO_PACKET_END;
-  9760			break;
-  9761		default:
-  9762			bpf_log(log, "only access to data, data_meta, and data_end allowed for xdp_md\n");
-  9763			return -EACCES;
-  9764		}
-  9765	
-  9766		if (!__is_valid_xdp_access(off, size)) {
-  9767			bpf_log(log, "invalid xdp_md access off=%d size=%d\n", off, size);
-  9768			return -EINVAL;
-  9769		}
-  9770		return reg_type;
-  9771	}
-  9772	
+Ditto.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > Backend mprotect() handler:
+> > 1. Invoke ENCLAVE_RESTRICT_PERMISSIONS ioctl for the address
+> >    range with PROT_NONE.
+> > 2. Invoke real mprotect() syscall.
+> > 
+> Note #1 can only be done after EACCEPT. MODPR is not allowed for pending
+> pages.
+
+Yes, and that's what I'm doing. After that shim does EACCEPT's in a loop.
+
+Reinette, the ioctl should already check that either R or W is set in
+secinfo and return -EACCES.
+
+I.e.
+
+(* Check for misconfigured SECINFO flags*)
+IF ( (SCRATCH_SECINFO reserved fields are not zero ) or
+(SCRATCH_SECINFO.FLAGS.R is 0 and SCRATCH_SECINFO.FLAGS.W is not 0) )
+THEN #GP(0); FI;
+
+I was testing this and wondering why my enclave #GP's, and then I checked
+SDM after reading Haitao's response. So clearly check in kernel side is
+needed.
+
+BR, Jarkko

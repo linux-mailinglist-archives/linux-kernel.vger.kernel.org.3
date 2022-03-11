@@ -2,115 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7DB4D5A02
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A7F4D5A06
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346437AbiCKEtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
+        id S1346472AbiCKEuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346357AbiCKEtW (ORCPT
+        with ESMTP id S1346517AbiCKEud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:49:22 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC57B0EBF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:48:20 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id r2so296857ilh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OBRXqLWuyBojQser+FbveA33IOgP8H/VueHlz3pP7BU=;
-        b=Dyxrf9L35Hr+o6Rm/FEKjC+JQ97HPxYkwKzea8dMbY2oborFn0jItr+z4C7tIGKC97
-         8CTghaUFfyVolu/8SQcbgXHPRbOQmxXT2ukp7wit0PME42zZ0LDpu5Y6PvMe6BtiPWp2
-         3cEDeZCu8FaaXKll6oe67z4fOGMc7dx1mDtWbpssZseAEqblBKdkJfMuaQ6AyVYbdjcL
-         +ZVZHqKsDL4/ypd8F/RCAVTmLiZ8m493W9XdltdXs4JDb6MH+YOg5OjHhSaZK9kQahIm
-         bIvpqdAjCHCEwQfHGz4fLPTwo0UfpgOUXu6y0+tbuz5pW4PXETXeTy7a/bk0DayQSzFo
-         7Efg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OBRXqLWuyBojQser+FbveA33IOgP8H/VueHlz3pP7BU=;
-        b=fGR1Z7cEMtjkzeKk/uoPtRfDoTvq5KNyQGwbrQWG/yBHG/tfhqJOPdgWbfZaig82E6
-         ZC3bUpl6WdD/Y9xk1ChV1w4+CAMwati/fwQOTj8jF8/DAynyqQjPN1MySDoUxasMuKAe
-         ynFiN8y5NM8R1iaROyxwcCsSPg4TiMlChjxyo4gkyPBKLWNBElCYX69ZVx4a204j5gH6
-         PPcImALWAdMcNazaLh67sUzPPY1Tf7ZovlExR3jFAfAesLJE0CEaAUKYF0t/m73pnXZW
-         gag5Qx4Fn8BzfssU9zD5/diKvhRv+mInCrnvck86T/9ZnPlG7/GFbws7JtNAoWxrqFpS
-         Fn5Q==
-X-Gm-Message-State: AOAM5305mf4ED00CmbrI8rrP3/rQJj75bQNN3FZj0SfE6fS9aqcl3uV+
-        CAehfN6O8+YR0uiXdHst1jI=
-X-Google-Smtp-Source: ABdhPJwJ5EfN6gJUuWZfyYHiS3993axqKmOQimf6tP1CjpSIoyz16zSG/Fwey29yVYI3Ip9G+rcrEQ==
-X-Received: by 2002:a05:6e02:11a4:b0:2c6:40dc:d30 with SMTP id 4-20020a056e0211a400b002c640dc0d30mr6420886ilj.283.1646974099505;
-        Thu, 10 Mar 2022 20:48:19 -0800 (PST)
-Received: from frodo.hsd1.co.comcast.net ([2601:284:8204:2010::f10e])
-        by smtp.googlemail.com with ESMTPSA id q9-20020a5edb09000000b00645c7a00cbbsm3529834iop.20.2022.03.10.20.48.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 20:48:19 -0800 (PST)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
-        linux@rasmusvillemoes.dk, joe@perches.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 5/5] dyndbg: show both old and new in change-info
-Date:   Thu, 10 Mar 2022 21:47:56 -0700
-Message-Id: <20220311044756.425777-6-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220311044756.425777-1-jim.cromie@gmail.com>
-References: <20220311044756.425777-1-jim.cromie@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 23:50:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03A1EF0A9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:49:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE64617B5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85350C340EC;
+        Fri, 11 Mar 2022 04:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1646974158;
+        bh=ieKn790GjrKSPuQn2caaZWrzBmooKYSB6PRk5jmqHFQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RiCFEZwBuQmmlgqHA+kqM/K6eJdBD9xlftp7cCJ5OGOGTeIyz87Fuq0iGjyKcsQBL
+         vBl7/JIVlxHBbL5/2DwFurRmzUKDbDDJDSAgMikQ8N1XkICyckwdAugEPNVo1fpCdR
+         wy5s2Gdn/tqDbRW9VclshFIYtN0XHH7w6epPguo8=
+Date:   Thu, 10 Mar 2022 20:49:17 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "alex@ghiti.fr" <alex@ghiti.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v8 00/14] Convert powerpc to default topdown mmap layout
+ (v8)
+Message-Id: <20220310204917.3d42e6cf3088f7cf1c7fe7a6@linux-foundation.org>
+In-Reply-To: <877d91m7wd.fsf@mpe.ellerman.id.au>
+References: <cover.1646847561.git.christophe.leroy@csgroup.eu>
+        <ddfed61b-e387-4554-eb88-6654b391d1a4@csgroup.eu>
+        <877d91m7wd.fsf@mpe.ellerman.id.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-print old -> new flag values in the info("change") message.
+On Fri, 11 Mar 2022 15:26:42 +1100 Michael Ellerman <mpe@ellerman.id.au> wrote:
 
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- lib/dynamic_debug.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> > What will be the merge strategy ? I guess it's a bit late to get it 
+> > through powerpc tree, so I was just wondering whether we could get 
+> > patches 2 to 5 in mm this cycle, and the powerpc ones next cycle ?
+> 
+> Yeah I didn't pick it up because the mm changes don't have many acks and
+> I'm always nervous about carrying generic mm changes.
+> 
+> It would be my preference if Andrew could take 2-5 through mm for v5.18,
+> but it is quite late, so I'm not sure how he will feel about that.
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index b15a9c715e5b..cceac8ebbacd 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -158,7 +158,7 @@ static int ddebug_change(const struct ddebug_query *query,
- 	struct ddebug_table *dt;
- 	unsigned int newflags;
- 	unsigned int nfound = 0;
--	struct flagsbuf fbuf;
-+	struct flagsbuf fbuf, nbuf;
- 
- 	/* search for matching ddebugs */
- 	mutex_lock(&ddebug_lock);
-@@ -223,11 +223,12 @@ static int ddebug_change(const struct ddebug_query *query,
- 				static_branch_enable(&dp->key.dd_key_true);
- 			}
- #endif
-+			v4pr_info("changed %s:%d [%s]%s %s -> %s\n",
-+				  trim_prefix(dp->filename), dp->lineno,
-+				  dt->mod_name, dp->function,
-+				  ddebug_describe_flags(dp->flags, &fbuf),
-+				  ddebug_describe_flags(newflags, &nbuf));
- 			dp->flags = newflags;
--			v4pr_info("changed %s:%d [%s]%s =%s\n",
--				 trim_prefix(dp->filename), dp->lineno,
--				 dt->mod_name, dp->function,
--				 ddebug_describe_flags(dp->flags, &fbuf));
- 		}
- 	}
- 	mutex_unlock(&ddebug_lock);
--- 
-2.35.1
+5.18 isn't a problem.  Perhaps you meant 5.17, which would be real tough.
 
+Can we take a look after 5.18-rc1?

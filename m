@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB56D4D5854
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770794D5856
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345744AbiCKCqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 21:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S1345761AbiCKCrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 21:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345695AbiCKCqh (ORCPT
+        with ESMTP id S239089AbiCKCrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 21:46:37 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926CA1A6171
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:45:35 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so6945980pjl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:45:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=47i1jj48gdh3ugZzKcCuj8iKYQMqov+4VOJuq+ofx1c=;
-        b=EwsUUWwZsnckxs2a4ZBw8a9ZffO4o4ww26MBKNDANGiNO/8noFSkJHVfuhyqhy8B9p
-         nkdYIVNy0ZeeYNaq6/8qCbC73vC+7gT4s54Si/VYAwu2ccJOTzFZLv/1+RDvHD7Jj+JO
-         Ghg5aguK+r4EFNoq+afjB8BGxdwZYevnaXojB3+Ei4UbsMnM0xjAkSbGH3KaaVENaUxK
-         +atuZ5iPE6xfqgYHjOZxBqODlc1/a52i6vibGuuzNSJh0ae5b3NCyoFc/urowJ/Vk0Sb
-         xTaCBBJL9wd6HpZ+2eW2mWyGEPZjY4AjV7U7yTQJUcbjlZHlJghWHx1ahg9GEv+E+zNk
-         Zb+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=47i1jj48gdh3ugZzKcCuj8iKYQMqov+4VOJuq+ofx1c=;
-        b=pgoi0DjsP3VNBuLzEni17s7g7XtjGY9Yh7tFspUU8Wvrd9GFG8U849nEcTWvI6A01v
-         4NOUOXoh+s1WOMUdyd3Be8kMfKXDhvH/Zy5602MvXUSz/wbyui4utFnxKOZoaoH7h71A
-         O6IQNVVn5dGEN+PkVbJC1oZ4qkRcU3faXqU13E0ICdbRqARiyBAzk8rgtkD0Gg7yw7VF
-         IJcCdXMOn39uz8+tkWIqGbQUuFYbLu5gh6vmv6e/AjBJ0ZhqH6R2+bi6Fi4mDrpGiVRy
-         AIy7BNue1LpPE8OtjMexeqoCtgBMkgTKLT3wLR8a6lh5hV7NP12OWpzuI3GOVkBA0Nig
-         FDvg==
-X-Gm-Message-State: AOAM532SthwqWVxK4idFDVaIGx2I2oTTALRqIcUNAei7JI9W9pScgSZy
-        0f/Rkj2CEs9D7TZllyIEvKR8BA==
-X-Google-Smtp-Source: ABdhPJxflJ3gDTpRwiLKqo8WKXUUCVF0L/GEoBXyngNxZCllT97T7WemfWcoM3I53cQCENyD2VayNQ==
-X-Received: by 2002:a17:90a:cce:b0:1bf:6387:30d9 with SMTP id 14-20020a17090a0cce00b001bf638730d9mr19593474pjt.196.1646966734760;
-        Thu, 10 Mar 2022 18:45:34 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g1-20020aa796a1000000b004f788397831sm693790pfk.217.2022.03.10.18.45.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 18:45:34 -0800 (PST)
-Date:   Fri, 11 Mar 2022 02:45:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chenyi Qiang <chenyi.qiang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] KVM: X86: Extend KVM_SET_VCPU_EVENTS to inject a
- SHUTDOWN event
-Message-ID: <Yiq3yqdUQ/aLz3yc@google.com>
-References: <20220310084001.10235-1-chenyi.qiang@intel.com>
- <20220310084001.10235-2-chenyi.qiang@intel.com>
- <Yio4qknizH25MBkP@google.com>
- <5f2012f7-80ba-c034-a098-cede4184a125@intel.com>
+        Thu, 10 Mar 2022 21:47:37 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2981A41E9;
+        Thu, 10 Mar 2022 18:46:34 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6rDYwB_1646966789;
+Received: from 192.168.193.160(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6rDYwB_1646966789)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 11 Mar 2022 10:46:30 +0800
+Message-ID: <fc2fa0a9-eae8-edc4-f86f-b9056d93ee12@linux.alibaba.com>
+Date:   Thu, 10 Mar 2022 18:46:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f2012f7-80ba-c034-a098-cede4184a125@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        gregkh@linuxfoundation.org, linux@roeck-us.net,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
+ <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
+ <202203091211.4F00F560@keescook>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <202203091211.4F00F560@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022, Chenyi Qiang wrote:
-> 
-> On 3/11/2022 1:43 AM, Sean Christopherson wrote:
-> > On Thu, Mar 10, 2022, Chenyi Qiang wrote:
-> > > @@ -4976,6 +4977,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
-> > >   		}
-> > >   	}
-> > > +	if (events->flags & KVM_VCPUEVENT_SHUTDOWN)
-> > > +		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
-> > 
-> > Huh.  I think we need to make this bidirection and add it to get_vcpu_events()
-> > as well, and treat it as a bug fix.  In direct triple fault cases, i.e. hardware
-> > detected and morphed to VM-Exit, KVM will never lose the triple fault.  But for
-> > triple faults sythesized by KVM, e.g. the RSM path or nested_vmx_abort(), if KVM
-> > exits to userspace before the request is serviced, userspace could migrate the
-> > VM and lose the triple fault.
-> 
-> Good catch. Then the name of this definition is not quit fit now. How about
-> changing to KVM_VCPUEVENT_SYTHESIZED_TRIPLE_FAULT?
 
-I don't think the SYNTHESIZED part is necessary.  KVM doesn't make that distinction
-for other events/exceptions, and whose to say that KVM won't end up with a case where
-a "real" triple fault needs to be migrated.
 
-I do have a slight preference for KVM_VCPUEVENT_TRIPLE_FAULT or KVM_VCPUEVENT_SHUTDOWN,
-but it's a very slight preference.
+On 3/9/22 12:16, Kees Cook wrote:
+> On Mon, Mar 07, 2022 at 07:16:36AM -0800, Dan Li wrote:
+>> But currently it still crashes when I try to enable
+>> "-mbranch-protection=pac-ret+leaf+bti".
+>>
+>> Because the address of "&&redirected" is not encrypted under pac,
+>> the autiasp check will fail when set_return_addr returns, and
+>> eventually cause the function to crash when it returns to "&&redirected"
+>> ("&&redirected" as a reserved label always seems to start with a bti j
+>> insn).
+> 
+> Strictly speaking, this is entirely correct. :)
+> 
+>> For lkdtm, if we're going to handle both cases in one function, maybe
+>> it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
+>> and maybe also turn off -O2 options for the function :)
+> 
+> If we can apply a function attribute to turn off pac for the "does this
+> work without protections", that should be sufficient.
+> 
+
+Got it, will do in the next version :)
+
+Thanks,
+Dan.

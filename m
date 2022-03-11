@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1337F4D63F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366624D63F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236152AbiCKOlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S1344675AbiCKOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344430AbiCKOk4 (ORCPT
+        with ESMTP id S1349857AbiCKOl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:40:56 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C14374842;
-        Fri, 11 Mar 2022 06:38:34 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id r127so7057142qke.13;
-        Fri, 11 Mar 2022 06:38:34 -0800 (PST)
+        Fri, 11 Mar 2022 09:41:57 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA1C9AD9C;
+        Fri, 11 Mar 2022 06:40:30 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id g3so11211253edu.1;
+        Fri, 11 Mar 2022 06:40:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iU7gCGr1VdelurSCAywqdNeaWdDipjKRqNaP000KsAo=;
-        b=PgpGhqFkFlrhdXEk5NEwF9LnOxYUeXR7cl7/M/TirE17bvhJL2qugvXCtwvlL4o4Dx
-         L88gwsbwDdOIga1mu+25Awtebtfq44yuIMG5iCJ0VsaaEVVPUNdfv+NRf7KXQeIwypJu
-         O8tZasWRh4WjIPL5ykgBT7qJs+Lyamqqom+fysMikTwBYZjuT8TsitusNFFYIOgDU0xx
-         XHt5BzFqKYLLRwaqwYJEJbVxH+HW4ZEOkIr1QA19a/ZnPF8THsaPwt0wfhqp312cN9mr
-         EWLQAd6GK+aqdwCSami1lTIStb48UD5E0fagjHl8zzpb4hHyx3KEaGxNnm+u0v8Kote0
-         1ypg==
+        h=from:to:cc:subject:date:message-id;
+        bh=6bBLgCZgh0VQ3FiDVqjw/OukOofGYEtfzJRk02RBM7o=;
+        b=gY/yIqlH3OgvuFjrktmlEFwOsbONmlnlNbX+FuSeohPTknZWmyBmI2Zl7nZxPFdJ4X
+         ttO8wJYlBiwlW2uTD3y53K/0mpxcey7ORYV8RY7E6+4E59BuE5HfBykd8XdFRf4pf0OC
+         8kOk0Yx4MHDJxTMQb/n+/nY62aQCspVizCb0pfxgXaMMCAChLosPK2BdiIon8CXTtz66
+         xyhDicp5gdFLpnPy9f+fVMhc4USmymLeeskvw4ueAXa7Jj8f5R+taHwdJoStM8WkOEjT
+         i0TBzWc937PSkKUUthz+rn7Nbx6rKnkYroOdH095vz8o0JEawpvqYBsWXNwuX5C7PAUI
+         YgbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iU7gCGr1VdelurSCAywqdNeaWdDipjKRqNaP000KsAo=;
-        b=7Ag7JrPatoLWhD+bgxBG22eczX/CSifT8ZbWp+8HPMgQ2+eTiYOvGH6mzNRvn2cg4R
-         JoR3CV4BETEi0DobwLsVtKLCRo/F5bod4lbe4ef6kIo1cjb9Hyi23D9EGFa4K3BF2nDO
-         QN0y5m+wmo3VMvTG5Tjs293iciVKaUUytmUn84An5mEn+9uUKbb+kkQrJFU51L+D70fI
-         BKfzz8lbi6B6gm6I2NOz3/i1p/gj3Bbc1yKBywntTdhcqG3BI9TMqXaZZHya7J5iqtjb
-         RkE9cKDAl5JZU+eXiJKV3tlLn1uJRvcOMhFvzJV0Xm9wMWgGHOlzaZ4XhgsrT8uSulqN
-         9zJQ==
-X-Gm-Message-State: AOAM532zkWjaezKvFn/dhnWAxYFj9YcPuVZGmgMfYPPyvpZlddAjEUo5
-        xqBbxvw2uq29p2rfumuGILDkr1792Bg=
-X-Google-Smtp-Source: ABdhPJw6nD67gfFWGHM95lBbaXlhy7v9j3Co97lvY43StlVZnpd/eC3HALjxThfHbP3Kuo1mh5gAnQ==
-X-Received: by 2002:a37:3d5:0:b0:67b:335d:59c3 with SMTP id 204-20020a3703d5000000b0067b335d59c3mr6551783qkd.739.1647009512972;
-        Fri, 11 Mar 2022 06:38:32 -0800 (PST)
-Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id s7-20020ac85cc7000000b002e1b34b30c9sm3116984qta.75.2022.03.11.06.38.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=6bBLgCZgh0VQ3FiDVqjw/OukOofGYEtfzJRk02RBM7o=;
+        b=J8bqkCpzNH9A5lP5585PPLNMYW8uSuwfDJ4m6fvA+eeuELxL1CVxwdNOZa+pr8AnMx
+         wffJC37lVzNsCg+aYeIsxTvtMmFsNr2O5hLELgjJhzyyYOSG16SqydeI/3/7Dr5hQV6x
+         4pM004HWHgtxKTiqP9mA4NKZ2PVCz0ka+m2ZbVpj+SKU0GdGkbmAd2Qf5cOqGpV+qdpM
+         4rBA0ACbcaBomIjENdTwYVJm9ihhE/2pOZUktnKLr22wVAW8D0JKkTBPh32rLgp0pwkr
+         Am+EdDpwd9OKMGf3o5W/RE/7J0QjCkyz2P/dQdxPzuws4xRba1peuL9aSardYXPCZrBp
+         Tp/Q==
+X-Gm-Message-State: AOAM530UGS7ItQ+gE/Q37/vn+dQAN7rGr7C6/nRpQ+kYnfvxRZM2lV+v
+        WyLpy33t5qNykfqwg/49lTzRXQVsKYs=
+X-Google-Smtp-Source: ABdhPJx6wABjmYegKi4YgVH5rutTffU4pxGVLltDmYlM4H7/jarWaxh3CL1PYSblSpN226tNEjgPzA==
+X-Received: by 2002:aa7:d5d9:0:b0:416:1dd3:7714 with SMTP id d25-20020aa7d5d9000000b004161dd37714mr9225263eds.256.1647009628632;
+        Fri, 11 Mar 2022 06:40:28 -0800 (PST)
+Received: from felia.fritz.box (200116b826a9a900147fc2a0771e144b.dip.versatel-1u1.de. [2001:16b8:26a9:a900:147f:c2a0:771e:144b])
+        by smtp.gmail.com with ESMTPSA id bq23-20020a170906d0d700b006db0372d3a2sm3045117ejb.20.2022.03.11.06.40.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 06:38:32 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:38:30 -0500
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: Re: [PATCH 1/3] serial: 8250_fintek.c: Finish support for the F81865
-Message-ID: <20220311143830.GA39653@localhost>
-References: <20220311070203.18159-1-twoerner@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220311070203.18159-1-twoerner@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Fri, 11 Mar 2022 06:40:28 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] fs: remove reference to the removed config NFSD_V3
+Date:   Fri, 11 Mar 2022 15:39:41 +0100
+Message-Id: <20220311143941.9628-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,45 +66,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-03-11 @ 02:02:00 AM, Trevor Woerner wrote:
-> This driver only partially supports the F81865 device. The UART portions
-> of this SuperIO chip behave exactly like the UART of the F81866, except
-> that the F81866 has 128-byte FIFOs whereas the F81865 has 16-byte FIFOs.
-> Therefore fill out the support for the F81865 in the places where it is
-> missing.
-> 
-> Tested at 1500000 baud on the iEi NANO-PV-D5251-R10 board.
+Commit 6a687e69a54e ("NFSD: Remove CONFIG_NFSD_V3") removes the config
+NFSD_V3, but misses one reference in fs/Kconfig.
 
-Is it too late to send a v2? I'd like to fixup the subject to remove the ".c",
-and I should probably add some comments in the driver explaining that the
-F81865 is functionally the same as the F81866 (except for the fifo sizes)
-which is why the F81865 doesn't have any of its own #define's.
+Remove this remaining reference to the removed config symbol.
 
-> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> ---
->  drivers/tty/serial/8250/8250_fintek.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-> index 251f0018ae8c..d9f0e546b1a1 100644
-> --- a/drivers/tty/serial/8250/8250_fintek.c
-> +++ b/drivers/tty/serial/8250/8250_fintek.c
-> @@ -316,6 +316,7 @@ static void fintek_8250_set_termios(struct uart_port *port,
->  		break;
->  	case CHIP_ID_F81966:
->  	case CHIP_ID_F81866:
-> +	case CHIP_ID_F81865:
->  		reg = F81866_UART_CLK;
->  		break;
->  	default:
-> @@ -363,6 +364,7 @@ static void fintek_8250_set_termios_handler(struct uart_8250_port *uart)
->  	case CHIP_ID_F81216H:
->  	case CHIP_ID_F81966:
->  	case CHIP_ID_F81866:
-> +	case CHIP_ID_F81865:
->  		uart->port.set_termios = fintek_8250_set_termios;
->  		break;
->  
-> -- 
-> 2.34.1.75.gabe6bb3905
-> 
+This issue was discovered with ./scripts/checkkconfigsymbols.py.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Chuck, please pick this quick fix to your commit in linux-next.
+
+ fs/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 7f2455e8e18a..ec2cf8ccd170 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -344,7 +344,7 @@ config LOCKD
+ 
+ config LOCKD_V4
+ 	bool
+-	depends on NFSD_V3 || NFS_V3
++	depends on NFS_V3
+ 	depends on FILE_LOCKING
+ 	default y
+ 
+-- 
+2.17.1
+

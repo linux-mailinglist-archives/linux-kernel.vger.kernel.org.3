@@ -2,160 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B854D6B2C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 432D74D6B10
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 00:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiCKXez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 18:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S229665AbiCKXgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 18:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiCKXex (ORCPT
+        with ESMTP id S229509AbiCKXga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:34:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F1D17F6B0;
-        Fri, 11 Mar 2022 15:33:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD48160EED;
-        Fri, 11 Mar 2022 23:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A910C340E9;
-        Fri, 11 Mar 2022 23:33:45 +0000 (UTC)
-Date:   Fri, 11 Mar 2022 18:33:43 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, anders.roxell@linaro.org,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] user_events: Use alloc_pages instead of kzalloc for
- register pages
-Message-ID: <20220311183343.4d8c94a5@gandalf.local.home>
-In-Reply-To: <20220311223028.1865-1-beaub@linux.microsoft.com>
-References: <20220311223028.1865-1-beaub@linux.microsoft.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 11 Mar 2022 18:36:30 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F7AF1EA9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:35:25 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id z4so8665274pgh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 15:35:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=13t7T+1H2gbtDRvuwDVr1bm3a+2J2xIzpet95fdBuh4=;
+        b=RIgXQdVfVb6lODawzvdTxr4kAtwLPsRjREsyVUC9K9FXvakpJNymy17e6FkbZx5Gvv
+         LeDcUKOKw2VoVa83HdzrEPE+n4lq8xuCULunoupKYxugg5JDuOq5trFf3fm42gMytdUt
+         ERkjzkjwpAU0zoJJj8eO/F2dpsyBXR6QjMjtDGcOsDfDr2CJipG41gyKlmh4HlNGNwWJ
+         vwkcU6O57nxaJWLRTl+0Hya9nMI7GHfWxpWRkjw+wUNIj2S8tgExKh9huQ4lWfIYS5K0
+         A8C1eX/+5cBiho3K4ItispCSGtWUy9zYfhJ3aJCa4TY2pJ8nVxCb77Wvrz7OmBeIoOjA
+         1QIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=13t7T+1H2gbtDRvuwDVr1bm3a+2J2xIzpet95fdBuh4=;
+        b=8FTGG9gC7rKLF4aeFyWvE2v35GIDhVI1RfUXZ9v53LUbV4re47YY8V8VZlO/4GvgMR
+         PseZ8L6xL0TY1Vk0NIbR6jsH0Mu0Qhu4r7wOR+YfYLNw6d49Mb3I+eL5HuP4//Xz3sQa
+         I2S71UgzZN5Kj0OuydJWSBW4w+MMGKHdUVi3/bA70VSzNg1AEm3m4DXlQ6ALKpTFsd8I
+         IvWMXFhlVXBWbdoubhsuT5cY3RgYdyb4Q7K2ccHhLrGiHfCkmTIuxYSd0yf6PfvorY4P
+         5kce93fN7bxqJvps9WAYL5CeUeUN2vDtnTIxmHemUchlDY/Vf4QbwRQflGkkzKf7AQOa
+         7MOg==
+X-Gm-Message-State: AOAM532LWltvtTPqBPjjmiVk/3YIqx7axtDqKB8RiIhqt9fdg5Ad5tM8
+        xDOXxWvawX9V1xavbHyvzhjwcEIfZCNPKkGLUIsJFw==
+X-Google-Smtp-Source: ABdhPJy2YDPTfdvIBlgNDhr+xnU7i87kZGa7MwrAaA3nvXLDFGkcmuMWf5/eMsJKEsCu2BWW9StjfFYHKRuRIZXl8BI=
+X-Received: by 2002:a62:1481:0:b0:4f6:38c0:ed08 with SMTP id
+ 123-20020a621481000000b004f638c0ed08mr12796868pfu.86.1647041724808; Fri, 11
+ Mar 2022 15:35:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com> <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
+In-Reply-To: <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 11 Mar 2022 15:35:13 -0800
+Message-ID: <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
+Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 14:30:28 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 2b5e9fdb63a0..59c900789757 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1587,16 +1587,20 @@ static void set_page_reservations(bool set)
->  static int __init trace_events_user_init(void)
->  {
->  	int ret;
-> +	struct page *register_pages;
-
-The int ret should come last.
-
->  
->  	/* Zero all bits beside 0 (which is reserved for failures) */
->  	bitmap_zero(page_bitmap, MAX_EVENTS);
->  	set_bit(0, page_bitmap);
->  
-> -	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
-> +	register_pages = alloc_pages(GFP_KERNEL | __GFP_ZERO,
-> +				     get_order(MAX_EVENTS));
->  
-> -	if (!register_page_data)
-> +	if (!register_pages)
->  		return -ENOMEM;
->  
-> +	register_page_data = page_address(register_pages);
+On Sun, Feb 27, 2022 at 4:08 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+>
+> To easily track filesystem from a pmem device, we introduce a holder for
+> dax_device structure, and also its operation.  This holder is used to
+> remember who is using this dax_device:
+>  - When it is the backend of a filesystem, the holder will be the
+>    instance of this filesystem.
+>  - When this pmem device is one of the targets in a mapped device, the
+>    holder will be this mapped device.  In this case, the mapped device
+>    has its own dax_device and it will follow the first rule.  So that we
+>    can finally track to the filesystem we needed.
+>
+> The holder and holder_ops will be set when filesystem is being mounted,
+> or an target device is being activated.
+>
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  drivers/dax/super.c | 89 +++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/dax.h | 32 ++++++++++++++++
+>  2 files changed, 121 insertions(+)
+>
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index e3029389d809..da5798e19d57 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+> @@ -21,6 +21,9 @@
+>   * @cdev: optional character interface for "device dax"
+>   * @private: dax driver private data
+>   * @flags: state and boolean properties
+> + * @ops: operations for dax_device
+> + * @holder_data: holder of a dax_device: could be filesystem or mapped device
+> + * @holder_ops: operations for the inner holder
+>   */
+>  struct dax_device {
+>         struct inode inode;
+> @@ -28,6 +31,8 @@ struct dax_device {
+>         void *private;
+>         unsigned long flags;
+>         const struct dax_operations *ops;
+> +       void *holder_data;
+> +       const struct dax_holder_operations *holder_ops;
+>  };
+>
+>  static dev_t dax_devt;
+> @@ -193,6 +198,29 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
+>  }
+>  EXPORT_SYMBOL_GPL(dax_zero_page_range);
+>
+> +int dax_holder_notify_failure(struct dax_device *dax_dev, u64 off,
+> +                             u64 len, int mf_flags)
+> +{
+> +       int rc, id;
 > +
->  	set_page_reservations(true);
->  
->  	ret = create_user_tracefs();
-> @@ -1604,7 +1608,7 @@ static int __init trace_events_user_init(void)
->  	if (ret) {
->  		pr_warn("user_events could not register with tracefs\n");
->  		set_page_reservations(false);
-> -		kfree(register_page_data);
-> +		__free_pages(register_pages, get_order(MAX_EVENTS));
->  		return ret;
->  	}
->  
+> +       id = dax_read_lock();
+> +       if (!dax_alive(dax_dev)) {
+> +               rc = -ENXIO;
+> +               goto out;
+> +       }
+> +
+> +       if (!dax_dev->holder_ops) {
+> +               rc = -EOPNOTSUPP;
 
-I tried it slightly differently. Why waist bits if MAX_EVENTS is greater
-than the order. That is, make MAX_EVENTS depend on the order, not the other
-way around.
+I think it is ok to return success (0) for this case. All the caller
+of dax_holder_notify_failure() wants to know is if the notification
+was successfully delivered to the holder. If there is no holder
+present then there is nothing to report. This is minor enough for me
+to fix up locally if nothing else needs to be changed.
 
--- Steve
+> +               goto out;
+> +       }
+> +
+> +       rc = dax_dev->holder_ops->notify_failure(dax_dev, off, len, mf_flags);
+> +out:
+> +       dax_read_unlock(id);
+> +       return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_holder_notify_failure);
+> +
+>  #ifdef CONFIG_ARCH_HAS_PMEM_API
+>  void arch_wb_cache_pmem(void *addr, size_t size);
+>  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size)
+> @@ -268,6 +296,10 @@ void kill_dax(struct dax_device *dax_dev)
+>
+>         clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+>         synchronize_srcu(&dax_srcu);
+> +
+> +       /* clear holder data */
+> +       dax_dev->holder_ops = NULL;
+> +       dax_dev->holder_data = NULL;
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 4febc1d6ae72..6941d0794347 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -30,9 +30,10 @@
- 
- /*
-  * Limits how many trace_event calls user processes can create:
-- * Must be multiple of PAGE_SIZE.
-+ * Must be a power of two of PAGE_SIZE.
-  */
--#define MAX_PAGES 1
-+#define MAX_PAGE_ORDER 0
-+#define MAX_PAGES (1 << MAX_PAGE_ORDER)
- #define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
- 
- /* Limit how long of an event name plus args within the subsystem. */
-@@ -1606,41 +1607,25 @@ static int create_user_tracefs(void)
- 	return -ENODEV;
- }
- 
--static void set_page_reservations(bool set)
--{
--	int page;
--
--	for (page = 0; page < MAX_PAGES; ++page) {
--		void *addr = register_page_data + (PAGE_SIZE * page);
--
--		if (set)
--			SetPageReserved(virt_to_page(addr));
--		else
--			ClearPageReserved(virt_to_page(addr));
--	}
--}
--
- static int __init trace_events_user_init(void)
- {
-+	struct page pages;
- 	int ret;
- 
- 	/* Zero all bits beside 0 (which is reserved for failures) */
- 	bitmap_zero(page_bitmap, MAX_EVENTS);
- 	set_bit(0, page_bitmap);
- 
--	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
--
--	if (!register_page_data)
-+	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
-+	if (!pages)
- 		return -ENOMEM;
--
--	set_page_reservations(true);
-+	register_page_data = page_address(pages);
- 
- 	ret = create_user_tracefs();
- 
- 	if (ret) {
- 		pr_warn("user_events could not register with tracefs\n");
--		set_page_reservations(false);
--		kfree(register_page_data);
-+		free_page((unsigned long)register_page_data);
- 		return ret;
- 	}
- 
+Isn't this another failure scenario? If kill_dax() is called while a
+holder is still holding the dax_device that seems to be another
+->notify_failure scenario to tell the holder that the device is going
+away and the holder has not released the device yet.
+
+>  }
+>  EXPORT_SYMBOL_GPL(kill_dax);
+>
+> @@ -409,6 +441,63 @@ void put_dax(struct dax_device *dax_dev)
+>  }
+>  EXPORT_SYMBOL_GPL(put_dax);
+>
+> +/**
+> + * dax_holder() - obtain the holder of a dax device
+> + * @dax_dev: a dax_device instance
+> +
+> + * Return: the holder's data which represents the holder if registered,
+> + * otherwize NULL.
+> + */
+> +void *dax_holder(struct dax_device *dax_dev)
+> +{
+> +       if (!dax_alive(dax_dev))
+> +               return NULL;
+
+It's safe for the holder to assume that it can de-reference
+->holder_data freely in its notify_handler callback because
+dax_holder_notify_failure() arranges for the callback to run in
+dax_read_lock() context.
+
+This is another minor detail that I can fixup locally.
+
+> +
+> +       return dax_dev->holder_data;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_holder);
+> +
+> +/**
+> + * dax_register_holder() - register a holder to a dax device
+> + * @dax_dev: a dax_device instance
+> + * @holder: a pointer to a holder's data which represents the holder
+> + * @ops: operations of this holder
+> +
+> + * Return: negative errno if an error occurs, otherwise 0.
+> + */
+> +int dax_register_holder(struct dax_device *dax_dev, void *holder,
+> +               const struct dax_holder_operations *ops)
+> +{
+> +       if (!dax_alive(dax_dev))
+> +               return -ENXIO;
+> +
+> +       if (cmpxchg(&dax_dev->holder_data, NULL, holder))
+> +               return -EBUSY;
+> +
+> +       dax_dev->holder_ops = ops;
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_register_holder);
+> +
+> +/**
+> + * dax_unregister_holder() - unregister the holder for a dax device
+> + * @dax_dev: a dax_device instance
+> + * @holder: the holder to be unregistered
+> + *
+> + * Return: negative errno if an error occurs, otherwise 0.
+> + */
+> +int dax_unregister_holder(struct dax_device *dax_dev, void *holder)
+> +{
+> +       if (!dax_alive(dax_dev))
+> +               return -ENXIO;
+> +
+> +       if (cmpxchg(&dax_dev->holder_data, holder, NULL) != holder)
+> +               return -EBUSY;
+> +       dax_dev->holder_ops = NULL;
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_unregister_holder);
+> +
+>  /**
+>   * inode_dax: convert a public inode into its dax_dev
+>   * @inode: An inode with i_cdev pointing to a dax_dev
+> diff --git a/include/linux/dax.h b/include/linux/dax.h
+> index 9fc5f99a0ae2..262d7bad131a 100644
+> --- a/include/linux/dax.h
+> +++ b/include/linux/dax.h
+> @@ -32,8 +32,24 @@ struct dax_operations {
+>         int (*zero_page_range)(struct dax_device *, pgoff_t, size_t);
+>  };
+>
+> +struct dax_holder_operations {
+> +       /*
+> +        * notify_failure - notify memory failure into inner holder device
+> +        * @dax_dev: the dax device which contains the holder
+> +        * @offset: offset on this dax device where memory failure occurs
+> +        * @len: length of this memory failure event
+
+Forgive me if this has been discussed before, but since dax_operations
+are in terms of pgoff and nr pages and memory_failure() is in terms of
+pfns what was the rationale for making the function signature byte
+based?
+
+I want to get this series merged into linux-next shortly after
+v5.18-rc1. Then we can start working on incremental fixups rather
+resending the full series with these long reply cycles.

@@ -2,201 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5F54D589D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE144D58AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345918AbiCKDDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 22:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S1345934AbiCKDHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 22:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345912AbiCKDDe (ORCPT
+        with ESMTP id S238895AbiCKDHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 22:03:34 -0500
-Received: from smtp.tom.com (smtprz02.163.net [106.3.154.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 169122610
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:02:29 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by vip-app02.163.net (Postfix) with ESMTP id 3CACD44017A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 11:02:29 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1646967749; bh=t7WJRPIus0dQzi8s/xkccP/qagUo8vwUmNLGEBagdNw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KVz/qPC4RA5hBu6pNftnA1v2BJHh7Kn7EU8MZotGbfa6NypPZ5ZLu8mOFbcR5Cbex
-         xUqNiKJ8KJl9cF+VAw2s9XBL89ecv6/7YrW+v1N5RqHCWs/LW9xsQ/V25MiNtm9l11
-         Cj3lS6CcwbrA9wlX/6QAnhImAOOSHXHxa84lPhng=
-Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
-          by localhost (TOM SMTP Server) with SMTP ID 35945974
-          for <linux-kernel@vger.kernel.org>;
-          Fri, 11 Mar 2022 11:02:29 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1646967749; bh=t7WJRPIus0dQzi8s/xkccP/qagUo8vwUmNLGEBagdNw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KVz/qPC4RA5hBu6pNftnA1v2BJHh7Kn7EU8MZotGbfa6NypPZ5ZLu8mOFbcR5Cbex
-         xUqNiKJ8KJl9cF+VAw2s9XBL89ecv6/7YrW+v1N5RqHCWs/LW9xsQ/V25MiNtm9l11
-         Cj3lS6CcwbrA9wlX/6QAnhImAOOSHXHxa84lPhng=
-Received: from localhost.localdomain (unknown [101.93.196.13])
-        by antispamvip.163.net (Postfix) with ESMTPA id 8196E15415A8;
-        Fri, 11 Mar 2022 11:02:25 +0800 (CST)
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     sunmingbao@tom.com, tyler.sun@dell.com, ping.gan@dell.com,
-        yanxiu.cai@dell.com, libin.zhang@dell.com, ao.sun@dell.com
-Subject: [PATCH 3/3] nvmet-tcp: support specifying the congestion-control
-Date:   Fri, 11 Mar 2022 11:01:13 +0800
-Message-Id: <20220311030113.73384-4-sunmingbao@tom.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220311030113.73384-1-sunmingbao@tom.com>
-References: <20220311030113.73384-1-sunmingbao@tom.com>
+        Thu, 10 Mar 2022 22:07:20 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835DA19CCFB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646967978; x=1678503978;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1Lqyqm7Fm7LZ9Zgf9Nro6Ch9fX24HO/O/bFeTDIFbnc=;
+  b=ZyhttdVR0Njor2QOLCw4uiWQn2buQSAkFkdMcmcWEE8qMjE85kwE+TtX
+   ut3q48IptdXNJcP0u0yvHY/S/GtQ+ifMIfICqjQkARz6ktdyF0fv331yx
+   Ti+K3iWg5+zfmbcERC3nSuXuEgjnDb3YvKH0vik56AOLNo2OHzjhhQTIq
+   UH0J40UZ/Nr84e+TLo3sKGtESR5AbZclWQS/tqC/MUC1TMekP2CMVAYW9
+   DhU6S1XJQPnTTa5RUcRaXXDCZj3Q3tbeK25i1Hym3e5rhXcEem1wkxwxd
+   rIjO4+YPLpxnwnHYal9SnxiaAPQZFcOH37k6wPpOvnweAhiHnFMF+WIX5
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="236090147"
+X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
+   d="scan'208";a="236090147"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 19:06:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
+   d="scan'208";a="688938790"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2022 19:06:16 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSVbc-0005kj-7u; Fri, 11 Mar 2022 03:06:16 +0000
+Date:   Fri, 11 Mar 2022 11:05:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef
+ expression
+Message-ID: <202203111015.NjLSlxCA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mingbao Sun <tyler.sun@dell.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1db333d9a51f3459fba1bcaa564d95befe79f0b3
+commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
+date:   7 months ago
+config: arc-randconfig-s032-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111015.NjLSlxCA-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e188f3330a13df904d77003846eafd3edf99009d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/kernel/ fs/ kernel/ net/ipv4/
 
-congestion-control could have a noticeable impaction on the
-performance of TCP-based communications. This is of course true
-to NVMe_over_TCP.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Different congestion-controls (e.g., cubic, dctcp) are suitable for
-different scenarios. Proper adoption of congestion control would benefit
-the performance. On the contrary, the performance could be destroyed.
 
-Though we can specify the congestion-control of NVMe_over_TCP via
-writing '/proc/sys/net/ipv4/tcp_congestion_control', but this also
-changes the congestion-control of all the future TCP sockets that
-have not been explicitly assigned the congestion-control, thus bringing
-potential impaction on their performance.
+sparse warnings: (new ones prefixed by >>)
+   arch/arc/kernel/smp.c:264:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long [noderef] __percpu *ipi_data_ptr @@     got unsigned long * @@
+   arch/arc/kernel/smp.c:264:48: sparse:     expected unsigned long [noderef] __percpu *ipi_data_ptr
+   arch/arc/kernel/smp.c:264:48: sparse:     got unsigned long *
+   arch/arc/kernel/smp.c:279:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile *v @@     got unsigned long [noderef] __percpu *__ai_ptr @@
+   arch/arc/kernel/smp.c:279:18: sparse:     expected void const volatile *v
+   arch/arc/kernel/smp.c:279:18: sparse:     got unsigned long [noderef] __percpu *__ai_ptr
+   arch/arc/kernel/smp.c:277:29: sparse: sparse: cast removes address space '__percpu' of expression
+   arch/arc/kernel/smp.c:413:72: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int *dev @@
+   arch/arc/kernel/smp.c:413:72: sparse:     expected void [noderef] __percpu *percpu_dev_id
+   arch/arc/kernel/smp.c:413:72: sparse:     got int *dev
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
+>> arch/arc/kernel/smp.c:279:18: sparse: sparse: dereference of noderef expression
+--
+   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
+   fs/file.c:350:17: sparse:     expected struct file **old_fds
+   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
+   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
+   fs/file.c:351:17: sparse:     expected struct file **new_fds
+   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
+   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
+   fs/file.c:366:17: sparse:    struct file *
+>> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
+   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
+   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
+--
+   net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
+   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
+   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
+>> net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
+   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
+   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
 
-So it makes sense to make NVMe_over_TCP support specifying the
-congestion-control. And this commit addresses the target side.
+vim +279 arch/arc/kernel/smp.c
 
-Implementation approach:
-the following new file entry was created for user to specify the
-congestion-control of each nvmet port.
-'/sys/kernel/config/nvmet/ports/X/tcp_congestion'
-Then later in nvmet_tcp_add_port, the specified congestion-control
-would be applied to the listening socket of the nvmet port.
+41195d236e8445 Vineet Gupta    2013-01-18  261  
+ddf84433f411b6 Vineet Gupta    2013-11-25  262  static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
+41195d236e8445 Vineet Gupta    2013-01-18  263  {
+f2a4aa5646687f Vineet Gupta    2013-11-26 @264  	unsigned long __percpu *ipi_data_ptr = per_cpu_ptr(&ipi_data, cpu);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  265  	unsigned long old, new;
+41195d236e8445 Vineet Gupta    2013-01-18  266  	unsigned long flags;
+41195d236e8445 Vineet Gupta    2013-01-18  267  
+f2a4aa5646687f Vineet Gupta    2013-11-26  268  	pr_debug("%d Sending msg [%d] to %d\n", smp_processor_id(), msg, cpu);
+f2a4aa5646687f Vineet Gupta    2013-11-26  269  
+41195d236e8445 Vineet Gupta    2013-01-18  270  	local_irq_save(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  271  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  272  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  273  	 * Atomically write new msg bit (in case others are writing too),
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  274  	 * and read back old value
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  275  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  276  	do {
+6aa7de059173a9 Mark Rutland    2017-10-23  277  		new = old = READ_ONCE(*ipi_data_ptr);
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  278  		new |= 1U << msg;
+d8e8c7dda11f5d Vineet Gupta    2013-11-28 @279  	} while (cmpxchg(ipi_data_ptr, old, new) != old);
+41195d236e8445 Vineet Gupta    2013-01-18  280  
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  281  	/*
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  282  	 * Call the platform specific IPI kick function, but avoid if possible:
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  283  	 * Only do so if there's no pending msg from other concurrent sender(s).
+82a423053eb3cf Changcheng Deng 2021-08-14  284  	 * Otherwise, receiver will see this msg as well when it takes the
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  285  	 * IPI corresponding to that msg. This is true, even if it is already in
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  286  	 * IPI handler, because !@old means it has not yet dequeued the msg(s)
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  287  	 * so @new msg can be a free-loader
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  288  	 */
+d8e8c7dda11f5d Vineet Gupta    2013-11-28  289  	if (plat_smp_ops.ipi_send && !old)
+ddf84433f411b6 Vineet Gupta    2013-11-25  290  		plat_smp_ops.ipi_send(cpu);
+41195d236e8445 Vineet Gupta    2013-01-18  291  
+41195d236e8445 Vineet Gupta    2013-01-18  292  	local_irq_restore(flags);
+41195d236e8445 Vineet Gupta    2013-01-18  293  }
+41195d236e8445 Vineet Gupta    2013-01-18  294  
 
-Signed-off-by: Mingbao Sun <tyler.sun@dell.com>
+:::::: The code at line 279 was first introduced by commit
+:::::: d8e8c7dda11f5d5cf90495f2e89d917a83509bc0 ARC: [SMP] optimize IPI send and receive
+
+:::::: TO: Vineet Gupta <vgupta@synopsys.com>
+:::::: CC: Vineet Gupta <vgupta@synopsys.com>
+
 ---
- drivers/nvme/target/configfs.c | 37 ++++++++++++++++++++++++++++++++++
- drivers/nvme/target/nvmet.h    |  1 +
- drivers/nvme/target/tcp.c      | 11 ++++++++++
- 3 files changed, 49 insertions(+)
-
-diff --git a/drivers/nvme/target/configfs.c b/drivers/nvme/target/configfs.c
-index 091a0ca16361..644e89bb0ee9 100644
---- a/drivers/nvme/target/configfs.c
-+++ b/drivers/nvme/target/configfs.c
-@@ -222,6 +222,41 @@ static ssize_t nvmet_addr_trsvcid_store(struct config_item *item,
- 
- CONFIGFS_ATTR(nvmet_, addr_trsvcid);
- 
-+static ssize_t nvmet_tcp_congestion_show(struct config_item *item,
-+		char *page)
-+{
-+	struct nvmet_port *port = to_nvmet_port(item);
-+
-+	return snprintf(page, PAGE_SIZE, "%s\n",
-+			port->tcp_congestion ? port->tcp_congestion : "");
-+}
-+
-+static ssize_t nvmet_tcp_congestion_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	struct nvmet_port *port = to_nvmet_port(item);
-+	int len;
-+	char *buf;
-+
-+	len = strcspn(page, "\n");
-+	if (!len)
-+		return -EINVAL;
-+
-+	if (nvmet_is_port_enabled(port, __func__))
-+		return -EACCES;
-+
-+	buf = kmemdup_nul(page, len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	kfree(port->tcp_congestion);
-+	port->tcp_congestion = buf;
-+
-+	return count;
-+}
-+
-+CONFIGFS_ATTR(nvmet_, tcp_congestion);
-+
- static ssize_t nvmet_param_inline_data_size_show(struct config_item *item,
- 		char *page)
- {
-@@ -1597,6 +1632,7 @@ static void nvmet_port_release(struct config_item *item)
- 	list_del(&port->global_entry);
- 
- 	kfree(port->ana_state);
-+	kfree(port->tcp_congestion);
- 	kfree(port);
- }
- 
-@@ -1605,6 +1641,7 @@ static struct configfs_attribute *nvmet_port_attrs[] = {
- 	&nvmet_attr_addr_treq,
- 	&nvmet_attr_addr_traddr,
- 	&nvmet_attr_addr_trsvcid,
-+	&nvmet_attr_tcp_congestion,
- 	&nvmet_attr_addr_trtype,
- 	&nvmet_attr_param_inline_data_size,
- #ifdef CONFIG_BLK_DEV_INTEGRITY
-diff --git a/drivers/nvme/target/nvmet.h b/drivers/nvme/target/nvmet.h
-index 69637bf8f8e1..76a57c4c3456 100644
---- a/drivers/nvme/target/nvmet.h
-+++ b/drivers/nvme/target/nvmet.h
-@@ -145,6 +145,7 @@ struct nvmet_port {
- 	struct config_group		ana_groups_group;
- 	struct nvmet_ana_group		ana_default_group;
- 	enum nvme_ana_state		*ana_state;
-+	const char			*tcp_congestion;
- 	void				*priv;
- 	bool				enabled;
- 	int				inline_data_size;
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index 83ca577f72be..489c46e396b9 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -1741,6 +1741,17 @@ static int nvmet_tcp_add_port(struct nvmet_port *nport)
- 	if (so_priority > 0)
- 		sock_set_priority(port->sock->sk, so_priority);
- 
-+	if (nport->tcp_congestion) {
-+		ret = tcp_set_congestion_control(port->sock->sk,
-+						 nport->tcp_congestion,
-+						 true, true);
-+		if (ret) {
-+			pr_err("failed to set port socket's congestion to %s: %d\n",
-+			       nport->tcp_congestion, ret);
-+			goto err_sock;
-+		}
-+	}
-+
- 	ret = kernel_bind(port->sock, (struct sockaddr *)&port->addr,
- 			sizeof(port->addr));
- 	if (ret) {
--- 
-2.26.2
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

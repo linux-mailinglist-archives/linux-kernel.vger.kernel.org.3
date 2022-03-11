@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433A54D5D4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6AB4D5D27
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiCKIaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S234784AbiCKIUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234020AbiCKIaX (ORCPT
+        with ESMTP id S229531AbiCKIUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:30:23 -0500
-X-Greylist: delayed 608 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 00:29:19 PST
-Received: from mail.nearlyone.de (mail.nearlyone.de [IPv6:2a01:488:66:1000:2ea3:7291:0:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1321B8FF1;
-        Fri, 11 Mar 2022 00:29:19 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 62CE55CD07;
-        Fri, 11 Mar 2022 09:19:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
-        t=1646986747; h=from:subject:date:message-id:to:mime-version:content-type:
-         content-transfer-encoding; bh=ba/SYLs6LiMuyItQixZYYNNJ+XqLIWTXJlICJRitxrY=;
-        b=H5bNnEoNiapHd8wt8oDUlgsBa5BlYOjF4sxn2MGUV476uG20RPzPqjnjRLO98MMJ23zZdd
-        4bQT5t4onqta8YC8N3mIqHhqq7THWbgmGSzcGheSUrjcg/RjCdo7Xbtcqf/i4roCca2vpf
-        MLRChBPJyLvI/Z2bmYwWQHflMx0tAS6/OZOGsLchwApoPYpFFKFzKOFHcYD8zQK+DZtn8E
-        Upki8c9e0lyomrXjKYkrzSDiGpqVCqBpmQj7s/Y14xiw2PqhVhZDLmO7nVWlZPml2ixxWs
-        rMlv8cRWAOLtHnmFlQJz2mdsKcI96SmYfUu3IlhMabBDs6/DL23YbDlewSUNgg==
-Date:   Fri, 11 Mar 2022 09:19:04 +0100
-From:   Daniel Wagner <wagi@monom.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 4.19.233-rt105
-Message-ID: <164698646082.13723.1987519373498826881@beryllium.lan>
+        Fri, 11 Mar 2022 03:20:42 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224111B3A5D;
+        Fri, 11 Mar 2022 00:19:38 -0800 (PST)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M2w4S-1nRUZB0z4W-003JZk; Fri, 11 Mar 2022 09:19:37 +0100
+Received: by mail-wr1-f52.google.com with SMTP id u1so11711576wrg.11;
+        Fri, 11 Mar 2022 00:19:37 -0800 (PST)
+X-Gm-Message-State: AOAM532rgpXhBShZrOQdXJ4Q6esGn7jjbOndTtDF0yRG1uR96PSmDKQH
+        jJZyp4OOdqJ6yZmlqACUOaMF53SHjoAyeoMghuk=
+X-Google-Smtp-Source: ABdhPJxWyOrVHPAd6W5M2rcxGMy+ZmZs2SFgKCrOVAaFDflfl6gItQqEvF+hSHJSQdSa0qDb39ePN/xMvFTNUGT9Yz4=
+X-Received: by 2002:adf:f606:0:b0:203:8dff:f4ac with SMTP id
+ t6-20020adff606000000b002038dfff4acmr4269722wrp.12.1646986776850; Fri, 11 Mar
+ 2022 00:19:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+References: <20220310195123.109359-1-nick.hawkins@hpe.com>
+In-Reply-To: <20220310195123.109359-1-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 11 Mar 2022 09:19:21 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1z6bCfhMUzqjDNaNWky52vH+NjQA5Qpo=0tABv4Z1Ocw@mail.gmail.com>
+Message-ID: <CAK8P3a1z6bCfhMUzqjDNaNWky52vH+NjQA5Qpo=0tABv4Z1Ocw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] ARM: Introduce HPE GXP Architecture
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ziDwfFtTkLuUoe0kpElF7+aylqnFrBKJHdKAQTnZAMeCZiJnoR7
+ vBDunRWTaeqUZazAYYaVO9yFeHFIuRZviwmlZmt3l34REitNEqB0m22M3DIfwKweHQoxl7P
+ xaWYVzknTn+576XmsQjEwHX/VrqfakLliWkK511V4sO+4WQXNCaIYPJiqJGkxa+4KQSMBGy
+ xGe2im0WgMrpNhJ+ycOmA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GIhOawk0cjI=:lvL5EdyDm3ebaUaiAAnMG+
+ H8Autp7mML077zviMO2lu1lgnsvmCMTMMyj1DnB41c8EuxVx5QlDdNn8ROuOv/DGjJLKkm1FS
+ T9zc91JZAqJC7TsMDuwwV7OmI1Og/KJD1qs9ALA47CWzTY6YRy/wwuxQJGzcjr+4os+b2PDbP
+ A+CFX556AjG2OniKOLBUciON78ptU8uIbqnFe+YxHmPx/rMJ+S3a5Kj0w5wHr1DkKFfRly0qK
+ nl62anqUZ9Ga8YYMvk8dlJr37UCr5JIGxKObAQef0wlsXgDUtKX0knkzw/zPZPo3GOdptbRKj
+ D3RuwZMAJ8gqCpJo6Ax6Qe2gfr/XHDkera54OUcWODvPSzfrsbDlN4HHQKbWOyFd/Gwqq3MrH
+ Ml54hZ0eCImMyPoJIJHJMfuw3CqGu5XRo5ZN/caqmkCW0gNwjBprfI9QptYRJon4a9Sp3feB0
+ layPZoUogfOOEc1E+4ReW6/JCy0zmmL/jYmImnJ7AZWQeNnag8/OQvW8hdJPUEMj83Fzhor9+
+ 3C3ElA43ouE8i8L7GgBN7HqX0GwYz7zOGHkso0MHcGbnW8WIGBkhFr9Y+lTDsPXsLTqLVo35R
+ 3eMnpOlKfabqoGN827GqkM5R4U5nULoHG20B0AY34A8JFw4mYdn6UrOqYGSwA2sIvLAF6O42d
+ /kLbR5qpmMQl/U4g0yoFLUqKQO1/Amp8P4ajVF6fjxWde0HUchb+8WBPkHgtdHjavAmuUUvYU
+ BivhNPGY0kevzleJBLtUMrCrzuUXIN4oBD/jld4CccCEeoIdj8B1OWpE5XjOwgul1S5+lTvkS
+ 4oceWKET0/5Jbggqw81Gr/By7ul7GHZtqXsJpZJB7UsD6vFPSY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,226 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Thu, Mar 10, 2022 at 8:51 PM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Changes since v2:
+>  *Reduced size of changes, put them into pathset format
+>
+> Changes since v1:
+>  *Fix compiler warnings
+>
+> The GXP is the HPE BMC SoC that is used in the majority
+> of HPE Generation 10 servers. Traditionally the asic will
+> last multiple generations of server before being replaced.
+>
+> Info about SoC:
+>
+>   HPE GXP is the name of the HPE Soc. This SoC is used to implement
+>   many BMC features at HPE. It supports ARMv7 architecture based on
+>   the Cortex A9 core. It is capable of using an AXI bus to which
+>   a memory controller is attached. It has multiple SPI interfaces
+>   to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+>   for network connectivity. It has multiple i2c engines to drive
+>   connectivity with a host infrastructure. The initial patches
+>   enable the watchdog and timer enabling the host to be able to
+>   boot.
 
-I'm pleased to announce the 4.19.233-rt105 stable release. This is just
-an update to the latest upstream stable release. No RT specific changes.
+This looks much better already, thanks for following the normal
+submission procedures. With the timing for the merge window, this
+is now too late for 5.18, but let's try to get it into 5.19 then.
 
-Note, I've taken the maintainer job for the v4.19-rt series over from
-Clark, hence the signing key has changed (see below).
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v4.19-rt
-  Head SHA1: d335ad45d7f06f4cf7cbf6679a55d8cf957efca0
-
-Or to build 4.19.233-rt105 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.233.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.233-rt105.patch.xz
-
-Signing key fingerprint:
-
-  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
-
-Enjoy!
-Daniel
-
-Changes from v4.19.232-rt104:
----
-
-Alyssa Ross (1):
-      firmware: arm_scmi: Remove space in MODULE_ALIAS name
-
-Antony Antony (1):
-      xfrm: fix the if_id check in changelink
-
-Benjamin Beichler (1):
-      mac80211_hwsim: report NOACK frames in tx_status
-
-Brian Norris (1):
-      arm64: dts: rockchip: Switch RK3399-Gru DP to SPDIF output
-
-D. Wythe (2):
-      net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error generated by client
-      net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
-
-Daniel Wagner (2):
-      Merge tag 'v4.19.233' into v4.19-rt
-      Linux 4.19.233-rt105
-
-Daniele Palmas (1):
-      net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-
-Eric Anholt (1):
-      i2c: bcm2835: Avoid clock stretching timeouts
-
-Eric Dumazet (1):
-      netfilter: fix use-after-free in __nf_register_net_hook()
-
-Filipe Manana (1):
-      btrfs: add missing run of delayed items after unlink during log replay
-
-Florian Westphal (2):
-      netfilter: nf_queue: don't assume sk is full socket
-      netfilter: nf_queue: fix possible use-after-free
-
-Greg Kroah-Hartman (1):
-      Linux 4.19.233
-
-Hangyu Hua (2):
-      usb: gadget: don't release an existing dev->buf
-      usb: gadget: clear related members when goto fail
-
-Hans de Goede (2):
-      Input: elan_i2c - move regulator_[en|dis]able() out of elan_[en|dis]able_power()
-      Input: elan_i2c - fix regulator enable count imbalance after suspend/resume
-
-Huang Pei (1):
-      hamradio: fix macro redefine warning
-
-Hugh Dickins (1):
-      memfd: fix F_SEAL_WRITE after shmem huge page allocated
-
-JaeMan Park (1):
-      mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
-
-Jann Horn (1):
-      efivars: Respect "block" flag in efivar_entry_set_safe()
-
-Jia-Ju Bai (1):
-      net: chelsio: cxgb3: check the return value of pci_find_capability()
-
-Jiasheng Jiang (2):
-      soc: fsl: qe: Check of ioremap return value
-      nl80211: Handle nla_memdup failures in handle_nan_filter
-
-Jiri Bohac (1):
-      xfrm: fix MTU regression
-
-José Expósito (1):
-      Input: clear BTN_RIGHT/MIDDLE on buttonpads
-
-Kai Vehmanen (2):
-      ASoC: rt5668: do not block workqueue if card is unbound
-      ASoC: rt5682: do not block workqueue if card is unbound
-
-Leon Romanovsky (1):
-      xfrm: enforce validity of offload input flags
-
-Lukas Wunner (1):
-      PCI: pciehp: Fix infinite loop in IRQ handler upon power fault
-
-Marek Marczykowski-Górecki (1):
-      xen/netfront: destroy queues before real_num_tx_queues is zeroed
-
-Marek Vasut (1):
-      ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
-
-Nicolas Escande (1):
-      mac80211: fix forwarded mesh frames AC & queue selection
-
-Randy Dunlap (3):
-      net: stmmac: fix return value of __setup handler
-      net: sxgbe: fix return value of __setup handler
-      ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
-
-Ronnie Sahlberg (1):
-      cifs: fix double free race when mount fails in cifs_get_root()
-
-Sergey Shtylyov (1):
-      ata: pata_hpt37x: fix PCI clock detection
-
-Steven Rostedt (Google) (1):
-      tracing/histogram: Fix sorting on old "cpu" value
-
-Sukadev Bhattiprolu (1):
-      ibmvnic: free reset-work-item when flushing
-
-Sven Eckelmann (3):
-      batman-adv: Request iflink once in batadv-on-batadv check
-      batman-adv: Request iflink once in batadv_get_real_netdevice
-      batman-adv: Don't expect inter-netns unique iflink indices
-
-Vincent Mailhol (1):
-      can: gs_usb: change active_channels's type from atomic_t to u8
-
-Vladimir Oltean (2):
-      net: dcb: flush lingering app table entries for unregistered devices
-      net: dcb: disable softirqs in dcbnl_flush_dev()
-
-William Mahon (1):
-      HID: add mapping for KEY_ALL_APPLICATIONS
-
-Wolfram Sang (2):
-      i2c: cadence: allow COMPILE_TEST
-      i2c: qup: allow COMPILE_TEST
-
-Ye Bin (1):
-      block: Fix fsync always failed if once failed
-
-Yongzhi Liu (1):
-      dmaengine: shdma: Fix runtime PM imbalance on error
-
-Zhen Ni (1):
-      ALSA: intel_hdmi: Fix reference to PCM buffer address
-
-Zheyu Ma (1):
-      net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
----
-Makefile                                          |  2 +-
- arch/arm/mm/mmu.c                                 |  2 +
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi      | 17 ++++--
- block/blk-flush.c                                 |  4 +-
- drivers/ata/pata_hpt37x.c                         |  4 +-
- drivers/dma/sh/shdma-base.c                       |  4 +-
- drivers/firmware/arm_scmi/driver.c                |  2 +-
- drivers/firmware/efi/vars.c                       |  5 +-
- drivers/hid/hid-debug.c                           |  4 +-
- drivers/hid/hid-input.c                           |  2 +
- drivers/i2c/busses/Kconfig                        |  4 +-
- drivers/i2c/busses/i2c-bcm2835.c                  | 11 ++++
- drivers/input/input.c                             |  6 +++
- drivers/input/mouse/elan_i2c_core.c               | 64 ++++++++---------------
- drivers/net/arcnet/com20020-pci.c                 |  3 ++
- drivers/net/can/usb/gs_usb.c                      | 10 ++--
- drivers/net/ethernet/chelsio/cxgb3/t3_hw.c        |  2 +
- drivers/net/ethernet/ibm/ibmvnic.c                |  4 +-
- drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c   |  6 +--
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |  6 +--
- drivers/net/hamradio/mkiss.c                      |  2 +
- drivers/net/usb/cdc_mbim.c                        |  5 ++
- drivers/net/wireless/mac80211_hwsim.c             | 13 +++++
- drivers/net/xen-netfront.c                        | 39 ++++++++------
- drivers/pci/hotplug/pciehp_hpc.c                  |  7 +--
- drivers/soc/fsl/qe/qe_io.c                        |  2 +
- drivers/usb/gadget/legacy/inode.c                 | 10 ++--
- fs/btrfs/tree-log.c                               | 18 +++++++
- fs/cifs/cifsfs.c                                  |  1 +
- include/net/netfilter/nf_queue.h                  |  2 +-
- include/uapi/linux/input-event-codes.h            |  3 +-
- include/uapi/linux/xfrm.h                         |  6 +++
- kernel/trace/trace_events_hist.c                  |  6 +--
- localversion-rt                                   |  2 +-
- mm/memfd.c                                        | 30 ++++++++---
- net/batman-adv/hard-interface.c                   | 29 ++++++----
- net/dcb/dcbnl.c                                   | 44 ++++++++++++++++
- net/ipv6/ip6_output.c                             | 11 ++--
- net/mac80211/rx.c                                 |  4 +-
- net/netfilter/core.c                              |  5 +-
- net/netfilter/nf_queue.c                          | 22 ++++++--
- net/netfilter/nfnetlink_queue.c                   | 12 +++--
- net/smc/smc_core.c                                |  5 +-
- net/wireless/nl80211.c                            | 12 +++++
- net/xfrm/xfrm_device.c                            |  6 ++-
- net/xfrm/xfrm_interface.c                         |  2 +-
- sound/soc/codecs/rt5668.c                         | 12 +++--
- sound/soc/codecs/rt5682.c                         | 12 +++--
- sound/soc/soc-ops.c                               |  4 +-
- sound/x86/intel_hdmi_audio.c                      |  2 +-
- 50 files changed, 346 insertions(+), 144 deletions(-)
+       Arnd

@@ -2,164 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8E84D6734
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710C94D6742
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350683AbiCKRIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S1350592AbiCKRKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350607AbiCKRH4 (ORCPT
+        with ESMTP id S1349007AbiCKRKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:07:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08611D63A2;
-        Fri, 11 Mar 2022 09:06:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 200491F441;
-        Fri, 11 Mar 2022 17:06:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647018411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JSXcqRdGy8e39Bfyh4bjxSE8ya8/hJV+iGXqtr1mwZU=;
-        b=zQyt4+5n13hOeCa9xgCswD1KUwJoBAVHqClZsOVB/PC81hDRKVuQgH1NmYqJHrPtu7uSBy
-        PhKQMACw5TXT3jEJnxs41RXUlcaW2trrHTw/O9jZxqtPwhLGzXcXKc1h5hTKvlf/IDc0dP
-        5Ixbw+BN/hU3tzWgbjphSRqoV6EI8m0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647018411;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JSXcqRdGy8e39Bfyh4bjxSE8ya8/hJV+iGXqtr1mwZU=;
-        b=QCVBTLAApqTWfX+QacBXJ4GMfGLfvOFCxwcaEUXx1xHk0oPnraa4sv0x634bkXioi9HjnJ
-        26OphLW7CWS9nCDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 05DD013A8E;
-        Fri, 11 Mar 2022 17:06:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7gxNOqmBK2IROQAAMHmgww
-        (envelope-from <jroedel@suse.de>); Fri, 11 Mar 2022 17:06:49 +0000
-Date:   Fri, 11 Mar 2022 18:06:49 +0100
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Peter Gonda <pgonda@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v12 32/46] x86/compressed/64: Add support for SEV-SNP
- CPUID table in #VC handlers
-Message-ID: <YiuBqZnjEUyMfBMu@suse.de>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-33-brijesh.singh@amd.com>
- <CAMkAt6pO0xZb2pye-VEKdFQ_dYFgLA21fkYmnYPTWo8mzPrKDQ@mail.gmail.com>
- <20220310212504.2kt6sidexljh2s6p@amd.com>
+        Fri, 11 Mar 2022 12:10:52 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F17D444E;
+        Fri, 11 Mar 2022 09:09:49 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id f8so8361725pfj.5;
+        Fri, 11 Mar 2022 09:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rIifNEL223B4Q2cC9Cr3V2sE1A970stkqMVY6Ytp1f0=;
+        b=H8iikbdM7qPlNb22UcDTD2aGwWXFDeRZbdCezuETwBJIwTXE5G7rICTtFqWpEnqJMy
+         dv8/hW5OepQoLY8trtjVjtlXIA2Aa1MiooCruVm9NDVxwCfqJFPVK40u5bvfmh7lHFRA
+         5JL1gBsT7txcofpgktrMYPf4P5g3/vU5guoLLzWR0bVMpoKmFDsofXxhn6rM1iX9RBMX
+         zOs6Fx/qbKFsTxeFjfjAnFxZdrAWKY4MlLiTt1AmnkUIQBf3Razrr3Vt2iL6esw1NXmA
+         hlELyJsD7A4fWA/47ag17Swoe+KHwo533y7A+dxXL4sskpqs+A3vqNVuZmJHk5o5uNKZ
+         xyEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rIifNEL223B4Q2cC9Cr3V2sE1A970stkqMVY6Ytp1f0=;
+        b=2cN4IBIptN82IvOqE8pD9OOXiW9QpmQf8uzS5Nh4m8Xrjn19nxtG8Dqr/bgCf8fUtX
+         dIxOs7/BV49SDdvZ6v88Ma3QCiJZQoJNMah+uP7lsRe2di4r+eH8qNpFHrn6wfuvSOtz
+         bs1trxwHLRSKrP/MuPWc912HaXwsT+DuSdIkUluzEYVbu8V9yp6DI3MKBmQVCEebUUM2
+         MCGK0GgQPThPHQzg/A4UoSdvNX+BSF7YKK50G8rfM+sZHxr7LiMJrNqAl2K2Ht8jIZvS
+         Fw/yubJcJBL+ctzPEz+5KobPpmG7ihAr076Ar3ePG0ygi4Hhyo+gBBkU94Lq3u9uHqHr
+         dVeA==
+X-Gm-Message-State: AOAM532TSPKS1wjVR0P1QozU65siT0zUgK5qFrzr6wLwuRhTNw6xJlel
+        12gWbrbGd4C86+/9/iimpd04jeEWUDVHu3BBgbk=
+X-Google-Smtp-Source: ABdhPJziCmcDqqb028R5oB78OOeUFH41SSAnC+DRmTfu5ERq7qEKOzhe8Jv2Q3IlO7l1Yv+YqW4R3ggzmXOHWcwUfSI=
+X-Received: by 2002:a63:6809:0:b0:37c:68d3:1224 with SMTP id
+ d9-20020a636809000000b0037c68d31224mr9049808pgc.287.1647018589126; Fri, 11
+ Mar 2022 09:09:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220310212504.2kt6sidexljh2s6p@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220308153011.021123062@infradead.org> <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net> <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net> <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net> <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net> <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+In-Reply-To: <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 11 Mar 2022 09:09:38 -0800
+Message-ID: <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
+        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 03:25:04PM -0600, Michael Roth wrote:
-> Joerg, do you have more background on that? Would it make sense, outside
-> of this series, to change it to a terminate? Maybe with a specific set
-> of error codes for ES_{OK,UNSUPPORTED,VMM_ERROR,DECODE_FAILED}?
+On Fri, Mar 11, 2022 at 2:40 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Mar 10, 2022 at 05:29:11PM +0100, Peter Zijlstra wrote:
+>
+> > This seems to cure most of the rest. I'm still seeing one failure:
+> >
+> > libbpf: prog 'connect_v4_prog': BPF program load failed: Invalid argument
+> > libbpf: failed to load program 'connect_v4_prog'
+> > libbpf: failed to load object './connect4_prog.o'
+> > test_fexit_bpf2bpf_common:FAIL:tgt_prog_load unexpected error: -22 (errno 22)
+> > #48/4 fexit_bpf2bpf/func_replace_verify:FAIL
+>
+>
+> Hmm, with those two patches on I get:
+>
+> root@tigerlake:/usr/src/linux-2.6/tgl-build# ./test_progs -t fexit
+> #46 fentry_fexit:OK
+> #48 fexit_bpf2bpf:OK
+> #49 fexit_sleep:OK
+> #50 fexit_stress:OK
+> #51 fexit_test:OK
+> Summary: 5/9 PASSED, 0 SKIPPED, 0 FAILED
+>
+> On the tigerlake, I suppose I'm doing something wrong on the other
+> machine because there it's even failing on the pre-ibt kernel image.
+>
+> I'll go write up changelogs and stick these on.
 
-This seems to be a left over from development of the SEV-ES guest
-patch-set. I wanted to see whether the VM crashed due to a triple fault
-or an error in the #VC handler. The halt loop can be replaced by
-termination request now.
-
-> > I am still working on why the early_printk()s in that function are not
-> > working, it seems that they lead to a different halt.
-> 
-> I don't see a different halt. They just don't seem to print anything.
-> (keep in mind you still need to advance the IP or else the guest is
-> still gonna end up spinning here, even if you're removing the halt loop
-> for testing purposes)
-
-The early_printks() also cause #VC exceptions, and if that handling is
-broken for some reason nothing will be printed.
-
-> 
-> > working, it seems that they lead to a different halt. Have you tested
-> > any of those error paths manually? For example if you set your CPUID
-> > bits to explicitly fail here do you see the expected printks?
-> 
-> I think at that point in the code, when the XSAVE stuff is setup, the
-> console hasn't been enabled yet, so messages would get buffered until they
-> get flushed later (which won't happen since there's halt loop after). I
-> know in some cases devs will dump the log buffer from memory instead to get
-> at the error messages for early failures. (Maybe that's also why Joerg
-> decided to use a halt loop there instead of terminating?)
-
-It is hard to dump the log-buffer from encrypted memory :) But I
-remember having seen messages from these early_printks under SEV-ES for
-different bugs. Not sure why they don't appear in this situation.
-
-> So maybe reworking the error handling in handle_vc_boot_ghcb() to use
-> sev_es_terminate() might be warranted, but probably worth checking with
-> Joerg first, and should be done as a separate series since it is not
-> SNP-related.
-
-I am fine with this change.
-
-Regards,
-
--- 
-Jörg Rödel
-jroedel@suse.de
-
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
- 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
-
+What is the latest branch I can use to test it?

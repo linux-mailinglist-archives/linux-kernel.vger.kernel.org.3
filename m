@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1769D4D58BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497044D58B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 04:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345972AbiCKDQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 22:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S1345956AbiCKDPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 22:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345960AbiCKDQC (ORCPT
+        with ESMTP id S235944AbiCKDPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 22:16:02 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9BB1A6157;
-        Thu, 10 Mar 2022 19:15:00 -0800 (PST)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22B0Ad5p029667;
-        Fri, 11 Mar 2022 03:14:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=jqIC8Bg12ntTvl+0SIbsbDTrpL8KxvLBHT167uzVtcw=;
- b=ljBujJ0qV11WSnGUmiynIGtQJ1GRSpxPDm5ogCkJw21m2+a2BN1coAOcDby4ygm4CQks
- 5Jg/W2nw7+bgT0BBoGEC7WHOTNv2PbVVCaKSSBvGA1k2Fxnw6H5BNOURXegGN6uZ/4lc
- cGiNcqjiBhNFA1yrGAX93uBdp2JG27yK6QwL0Iw6P7RAtePAJMkwifYmR+Vt36K2t1X1
- 4ucBLpfpitNOzOBgxKNF0zzSR2FtCEM3fb9qhQIUzmvL37QoRcmt2+RIb/hgjJRe1F1L
- 5FApaWDyQgOUk0IqNfN5deUWH97tCdzCapORsraV8gBz3wQJRQ6fkvZM9xXPzxQo95gO Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqnccjeu9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 03:14:38 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22B3CI1T022677;
-        Fri, 11 Mar 2022 03:14:38 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqnccjetr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 03:14:37 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22B37kPv015817;
-        Fri, 11 Mar 2022 03:14:35 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3enqgnrjhh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 03:14:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22B3EXLx53019128
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 03:14:33 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED5ED4C044;
-        Fri, 11 Mar 2022 03:14:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 808494C040;
-        Fri, 11 Mar 2022 03:14:32 +0000 (GMT)
-Received: from localhost (unknown [9.43.36.239])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Mar 2022 03:14:32 +0000 (GMT)
-Date:   Fri, 11 Mar 2022 08:44:31 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 00/10] ext4: Improve FC trace events
-Message-ID: <20220311031431.3sfbibwuthn4xkym@riteshh-domain>
-References: <cover.1646922487.git.riteshh@linux.ibm.com>
- <20220310110553.431cc997@gandalf.local.home>
- <20220310170731.hq6z6flycmgkhnaa@riteshh-domain>
- <20220310193936.38ae7754@gandalf.local.home>
- <20220311021931.d4oozgtefbalrcch@riteshh-domain>
- <20220310213356.3948cfb7@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310213356.3948cfb7@gandalf.local.home>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qUP-iZseQfzoUmnJRu3EkAsFV4tUzxHh
-X-Proofpoint-GUID: MHi4IatWeYIPMQc3Uve-fpvyTGaiBTWZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-10_09,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=712
- lowpriorityscore=0 adultscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203110013
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 22:15:48 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F421A1C7F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:14:46 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so6995506pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 19:14:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k2icY+6tCwcqgzMbjLM+IMtOMr7cxOX9RXwF/4WbIuE=;
+        b=J3JwssbcL91tpuNT7fB9AVcoTviOQtRwAaCe9iUYL5OxfAk9+y02r+gp7oXfhuwg81
+         2qZbPheJlEQPpBKKhVsq8mte8hVVChgRP0B6I7mKXu1DYlneO/v/zulCcuhzuQCWcckc
+         L3Bx/6f6c2L1qtCazJhLaxvtkk6cBBtphYkOw6XvT14qWlJUwqhXUkaDewhc+9626ynK
+         lx2AAuA8aAAciwgkWY4L6PcPkcbaKiX5vnnOH+egphv+Bd/F6euavBUticf6UU2NKLmC
+         8b1Mfn5s4sJiuqEGBGI53M5/NTBZ3SHpiiQ1n8bkfqWxmKLWrjwKjYa1Fg9Wx18YfOOr
+         vg0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=k2icY+6tCwcqgzMbjLM+IMtOMr7cxOX9RXwF/4WbIuE=;
+        b=Ekmxo725iEYvDRV681HTwROpW5cyk1hAQSguy13Na5BS1x5dMf1zTaK3m4SpsWkMGh
+         yOSddnGhSwgvbk3ojTJo+WDOUgOteUyVqOzQMEAZYdSE3/Tv/+N3DV7y1NBIX96oRqLU
+         M7cZJgBweJSNnBR0+6r3Au98O4ZdrhIJLNsLp7VJN0RggeAWxb+E7KENs+x36W+U0WDJ
+         xgNdGiMkTidgL6PzRoxbhnNxndc+hZJ2tgg5yfYtIyFP+zRIICJ63wPIhf6EafbbiYWe
+         4Y9mpnHpUzcb2IicIAJwBnwsmmj02r9L/CYiVX5ly3fhvS2/DJNGAOidGW/nD6R2JqkV
+         6t0w==
+X-Gm-Message-State: AOAM532y+waTCmhaptIo//hG9yNlodhbPfVgy24E3vhHv2Xpk7pp8/lE
+        nsZWr8kxm0VeJbdaFvU1kbTTcw==
+X-Google-Smtp-Source: ABdhPJy4fvYld+2wi2QVybUrJQ6b31jsGkwcRrlP9HfNyDkH0uCBxKsrzbz1rkxbCv0nElwZJQHYdA==
+X-Received: by 2002:a17:902:e94f:b0:14f:1636:c8a8 with SMTP id b15-20020a170902e94f00b0014f1636c8a8mr8257065pll.130.1646968485668;
+        Thu, 10 Mar 2022 19:14:45 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id g18-20020a056a000b9200b004f783f5e890sm2149999pfj.156.2022.03.10.19.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 19:14:44 -0800 (PST)
+Date:   Thu, 10 Mar 2022 19:14:44 -0800 (PST)
+X-Google-Original-Date: Thu, 10 Mar 2022 15:52:57 PST (-0800)
+Subject:     Re: [PATCH 07/15] dt-bindings: pwm: sifive: include generic pwm schema
+In-Reply-To: <20220214081605.161394-7-krzysztof.kozlowski@canonical.com>
+CC:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, mripard@kernel.org,
+        wens@csie.org, jernej.skrabec@gmail.com, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, heiko@sntech.de,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        nobuhiro1.iwamatsu@toshiba.co.jp, p.zabel@pengutronix.de,
+        anson.huang@nxp.com, vijayakannan.ayyathurai@intel.com,
+        rtanwar@maxlinear.com, jeff@labundy.com, yash.shah@sifive.com,
+        sagar.kadam@sifive.com, vigneshr@ti.com,
+        yoshihiro.shimoda.uh@renesas.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     krzysztof.kozlowski@canonical.com
+Message-ID: <mhng-7a872d06-a00d-49eb-bf67-68ad634e9985@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/10 09:33PM, Steven Rostedt wrote:
-> On Fri, 11 Mar 2022 07:49:31 +0530
-> Ritesh Harjani <riteshh@linux.ibm.com> wrote:
+On Mon, 14 Feb 2022 00:15:57 PST (-0800), krzysztof.kozlowski@canonical.com wrote:
+> Include generic pwm.yaml schema, which enforces PWM node naming and
+> brings pwm-cells requirement.
 >
-> > > # cat /sys/kernel/tracing/events/ext4/ext4_fc_commit_stop/format
-> >
-> > I think you meant ext4_fc_stats.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  Documentation/devicetree/bindings/pwm/pwm-sifive.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> Sure.
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+> index 84e66913d042..676b2160bada 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+> @@ -22,6 +22,9 @@ description:
 >
-> >
-> > >
-> > > and show me what it outputs.
-> >
-> > root@qemu:/home/qemu# cat /sys/kernel/tracing/events/ext4/ext4_fc_stats/format
-> > name: ext4_fc_stats
-> > ID: 986
-> > format:
-> >         field:unsigned short common_type;       offset:0;       size:2; signed:0;
-> >         field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-> >         field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-> >         field:int common_pid;   offset:4;       size:4; signed:1;
-> >
-> >         field:dev_t dev;        offset:8;       size:4; signed:0;
-> >         field:unsigned int fc_ineligible_rc[EXT4_FC_REASON_MAX];        offset:12;      size:36;        signed:0;
+>    https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/pwm
 >
-> Bah, the above tells us how many items, and the TRACE_DEFINE_ENUM() doesn't
-> modify this part of the file.
+> +allOf:
+> +  - $ref: pwm.yaml#
+> +
+>  properties:
+>    compatible:
+>      items:
+> @@ -55,7 +58,6 @@ required:
+>    - compatible
+>    - reg
+>    - clocks
+> -  - "#pwm-cells"
+>    - interrupts
+>
+>  additionalProperties: false
 
-Then shall I just define TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX) in this patch.
-Would that be the correct approach? Like how we have defined other enums.
-We haven't yet defined EXT4_FC_REASON_MAX in current patch.
-(as I saw it doesn't affect TP_STRUCT__entry())
-
-
->
-> I could update it to do so though.
-
-Please let me know if you have any patch for me to try.
-
-Thanks
--ritesh
-
-
->
-> -- Steve
->
->
-> >         field:unsigned long fc_commits; offset:48;      size:8; signed:0;
-> >         field:unsigned long fc_ineligible_commits;      offset:56;      size:8; signed:0;
-> >         field:unsigned long fc_numblks; offset:64;      size:8; signed:0;
->
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>

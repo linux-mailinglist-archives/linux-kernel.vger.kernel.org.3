@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F24D619E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9542E4D61A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346282AbiCKMd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S1348524AbiCKMfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237797AbiCKMdy (ORCPT
+        with ESMTP id S1346557AbiCKMfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:33:54 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB131B4033
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:32:51 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e2ca8d7812so29811797b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:32:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5hFuaglE4yJS/5oL7Fadm33x6yDTEgxO3NGLZmSMlas=;
-        b=eaeVIobJoYGtx7gbe7lEOsjNsTbSONKWDj49lPvnUK+1ZXlWRunUYLO3kMXFu6bFcg
-         rSB3N88d9y2dEINu/eUR4PysWbp8/mtVHMU8wRL46fZD2Pz4SLRXihe8in5lGYUp1KmR
-         e/71qXb/3iQ47/sy2vVHsApp7W0SuxmmAZWQre13LKrqLdq0Eh43oPVGQgamvDP1Y7YZ
-         If+PRe5lx50nB7H3RAPaeXlzzQueVCZmIFv/6MQ0/nX47gXF/dZXytISCZShqW5MpYmk
-         YJGHU8ahLLyKRiz6j5yRpI10hUVwhmlcYiNb4MZncrVhe3Gd2lvnbyGabuLe385aOO1/
-         IGZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5hFuaglE4yJS/5oL7Fadm33x6yDTEgxO3NGLZmSMlas=;
-        b=rss9qrmuLZqAzjr1dVVnwUZtLzZvoHolpxLXGS2LJWl8N64zQFXuQuP4K2GFLCvrRY
-         5Wf5r68CqFfZO6O1W97r6uWPOOn/mOPZgCchOu5HgVnqceIQ6YfvSjprYBqhfTAC59qT
-         feRcfZrrkfFsYlmh9v2j7nnxFS3nza97TEmFD8ZZEkmZAEDoNrFP/rIZUWVjEfKmrQje
-         H6XpsgCnerrp8hA63dnh/G6DDf8Rrg3HaYS2rilIbI5I2h4pJBnkbTaWATuc4ur0pP94
-         1D9+njW8AsNJ391ZgBYdyl4AErjkT0Js34pWuhfM0s4fvGKMD/rBTYdW7ljrvl8pXk/o
-         Mp2g==
-X-Gm-Message-State: AOAM531kN6LcLg9QBmd4i9SGwubtS6bkcG7Wv/Dq7KLUsYyM1QuCvok/
-        hzJFyVLH6tgfg7suYnYBm3kTTJJVIn+TWEw+DGx42w==
-X-Google-Smtp-Source: ABdhPJwG4dl8qdGejVZv6hE+k7iCsMBcP8Ux1BkyXocAMe8OxyGXlE2FuxQ6s+lF7MrZA2iqzPjIHH4I3lYLqwrP6Hw=
-X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
- d12-20020a81e90c000000b002dbd63e56ffmr8227231ywm.60.1647001969840; Fri, 11
- Mar 2022 04:32:49 -0800 (PST)
+        Fri, 11 Mar 2022 07:35:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D691B45DF;
+        Fri, 11 Mar 2022 04:34:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F02E2CE292B;
+        Fri, 11 Mar 2022 12:34:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D7BC340E9;
+        Fri, 11 Mar 2022 12:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647002039;
+        bh=JoyV6/q/Uv7sQ/xVpdf2TXqXbH4Qjo/Nc2SlRZv/Q/0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DIlHp1KHcxxQeF3O1qwwEQTVk9qL2OJA8GZXjr6kQ2zUd0/Zo3gY/mRGexds8zgJ3
+         zNcHEGSceWANzM6rMcTDlaGJ5fK0BQ7sKarseBeL/ovQw8kfrf/vkoFBkLzTgFlmVg
+         jIxBypGKFoXNs3s31XpvyI5Nr8RSSYUlIib24Tw4YEGUAAL0wgDHtiXKfYbnQaCeiE
+         wyS/OWVC5jxpz7EQ0goN9iQbm6tEJexOgk72Z6iSqohaJ4itX8H+SQ9pYfbXu7uKlj
+         IS5uMsTf5nu91jDB90PJtDxCjTT9COxE1j/wRWfK+BitE8IoImClzGcGJn6Dkm387e
+         v3ZFmoOrpCAKA==
+Date:   Fri, 11 Mar 2022 14:33:14 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>
+Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
+ permissions
+Message-ID: <YitBinMgBpPbqful@iki.fi>
+References: <cover.1644274683.git.reinette.chatre@intel.com>
+ <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com>
+ <YhLhoMFPyOFZ2fsX@iki.fi>
+ <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
+ <YimWaAqEnXHbLdjh@iki.fi>
+ <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
+ <Yis8LV99mORcLYs6@iki.fi>
+ <Yis9rA8uC/0bmWCF@iki.fi>
 MIME-Version: 1.0
-References: <20220310140807.749164737@linuxfoundation.org>
-In-Reply-To: <20220310140807.749164737@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 11 Mar 2022 18:02:38 +0530
-Message-ID: <CA+G9fYta+cTAe=tMHJ65tpNoWx2QKVWh3=pafuSRe-h6gwEp0Q@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/33] 4.19.234-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yis9rA8uC/0bmWCF@iki.fi>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,173 +77,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 at 19:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.234 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.234-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Mar 11, 2022 at 02:16:47PM +0200, Jarkko Sakkinen wrote:
+> On Fri, Mar 11, 2022 at 02:10:24PM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Mar 10, 2022 at 12:33:20PM -0600, Haitao Huang wrote:
+> > > Hi Jarkko
+> > > 
+> > > I have some trouble understanding the sequences below.
+> > > 
+> > > On Thu, 10 Mar 2022 00:10:48 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> > > wrote:
+> > > 
+> > > > On Wed, Feb 23, 2022 at 07:21:50PM +0000, Dhanraj, Vijay wrote:
+> > > > > Hi All,
+> > > > > 
+> > > > > Regarding the recent update of splitting the page permissions change
+> > > > > request into two IOCTLS (RELAX and RESTRICT), can we combine them into
+> > > > > one? That is, revert to how it was done in the v1 version?
+> > > > > 
+> > > > > Why? Currently in Gramine (a library OS for unmodified applications,
+> > > > > https://gramineproject.io/) with the new proposed change, one needs to
+> > > > > store the page permission for each page or range of pages. And for every
+> > > > > request of `mmap` or `mprotect`, Gramine would have to do a lookup
+> > > > > of the
+> > > > > page permissions for the request range and then call the respective
+> > > > > IOCTL
+> > > > > either RESTRICT or RELAX. This seems a little overwhelming.
+> > > > > 
+> > > > > Request: Instead, can we do `MODPE`,  call `RESTRICT` IOCTL, and then do
+> > > > > an `EACCEPT` irrespective of RELAX or RESTRICT page permission request?
+> > > > > With this approach, we can avoid storing  page permissions and simplify
+> > > > > the implementation.
+> > > > > 
+> > > > > I understand RESTRICT IOCTL would do a `MODPR` and trigger `ETRACK`
+> > > > > flows
+> > > > > to do TLB shootdowns which might not be needed for RELAX IOCTL but I am
+> > > > > not sure what will be the performance impact. Is there any data point to
+> > > > > see the performance impact?
+> > > > > 
+> > > > > Thanks,
+> > > > > -Vijay
+> > > > 
+> > > > This should get better in the next versuin. "relax" is gone. And for
+> > > > dynamic EAUG'd pages only VMA and EPCM permissions matter, i.e.
+> > > > internal vm_max_prot_bits is set to RWX.
+> > > > 
+> > > > I patched the existing series eno
+> > > > 
+> > > > For Enarx I'm using the following patterns.
+> > > > 
+> > > > Shim mmap() handler:
+> > > > 1. Ask host for mmap() syscall.
+> > > > 2. Construct secinfo matching the protection bits.
+> > > > 3. For each page in the address range: EACCEPTCOPY with a
+> > > >    zero page.
+> > > 
+> > > For EACCEPTCOPY to work, I believe PTE.RW is required for the target page.
+> > > So this only works for mmap(..., RW) or mmap(...,RWX).
+> > 
+> > I use it only with EAUG.
+> > 
+> > > So that gives you pages with RW/RWX.
+> > > 
+> > > To change permissions of any of those pages from RW/RWX to R/RX , you need
+> > > call ENCLAVE_RESTRICT_PERMISSIONS ioctl with R or with PROT_NONE. you can't
+> > > just do EMODPE.
+> > > 
+> > > so for RW->R, you either:
+> > > 
+> > > 1)EMODPR(EPCM.NONE)
+> > > 2)EACCEPT(EPCM.NONE)
+> > > 3)EMODPE(R) -- not sure this would work as spec says EMODPE requires "Read
+> > > access permitted by enclave"
+> > > 
+> > > or:
+> > > 
+> > > 1)EMODPR(EPCM.PROT_R)
+> > > 2)EACCEPT(EPCM.PROT_R)
+> > 
+> > I checked from SDM and you're correct.
+> > 
+> > Then the appropriate thing is to reset to R.
+> > 
+> > > > Shim mprotect() handler:
+> > > > 1. Ask host for mprotect() syscall.
+> > > > 2. For each page in the address range: EACCEPT with PROT_NONE
+> > > >    secinfo and EMODPE with the secinfo having the prot bits.
+> > > 
+> > > EACCEPT requires PTE.R. And EAUG'd pages will always initialized with
+> > > EPCM.RW,
+> > > so EACCEPT(EPCM.PROT_NONE) will fail with SGX_PAGE_ATTRIBUTES_MISMATCH.
+> > 
+> > Ditto.
+> > 
+> > > > Backend mprotect() handler:
+> > > > 1. Invoke ENCLAVE_RESTRICT_PERMISSIONS ioctl for the address
+> > > >    range with PROT_NONE.
+> > > > 2. Invoke real mprotect() syscall.
+> > > > 
+> > > Note #1 can only be done after EACCEPT. MODPR is not allowed for pending
+> > > pages.
+> > 
+> > Yes, and that's what I'm doing. After that shim does EACCEPT's in a loop.
+> > 
+> > Reinette, the ioctl should already check that either R or W is set in
+> > secinfo and return -EACCES.
+> > 
+> > I.e.
+> > 
+> > (* Check for misconfigured SECINFO flags*)
+> > IF ( (SCRATCH_SECINFO reserved fields are not zero ) or
+> > (SCRATCH_SECINFO.FLAGS.R is 0 and SCRATCH_SECINFO.FLAGS.W is not 0) )
+> > THEN #GP(0); FI;
+> > 
+> > I was testing this and wondering why my enclave #GP's, and then I checked
+> > SDM after reading Haitao's response. So clearly check in kernel side is
+> > needed.
+> 
+> I would consider also adding such check "add pages". It's our least common
+> denominator.
+> 
+> If we can assume that at least R is there for every enclave page, then it
+> gives invariant that enables EMODPR with R all the time.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Since EAUG is done already in the #PF handler, so must be EMODPR. Otherwise
+we do things incosistently [*]. One being in #PF handler and other being
+ioctl is unacceptable.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Moving EMODPR to #PF handler would be trivial:
 
-## Build
-* kernel: 4.19.234-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.19.y
-* git commit: 7603caa5cc1196665ba06ded1f0a6f615eeaebf5
-* git describe: v4.19.233-34-g7603caa5cc11
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.233-34-g7603caa5cc11
+1. In mprotect() callback unmap PTE's for
+   the range.
+2. In #PF handler, EMODPR with read permissions.
 
-## Test Regressions (compared to v4.19.233-19-g83f8068e02bc)
-No test regressions found.
+This is something that would be understandable for the user space. The only
+API ever required would be EMODPE for permission changes. You could
+basically implement the whole thing for EPCM inside enclave with no ioctls
+required.
 
-## Metric Regressions (compared to v4.19.233-19-g83f8068e02bc)
-No metric regressions found.
+That would leave only ioctls to the series:
+1. SGX_IOC_ENCLAVE_MODIFY_TYPE
+2. SGX_IOO_ENCLAVE_REMOVE_PAGES
 
-## Test Fixes (compared to v4.19.233-19-g83f8068e02bc)
-No test fixes found.
+[*] For me stick to #PF handler for EAUG is fine for the first mainline
+version. The API side is factors more critical.
 
-## Metric Fixes (compared to v4.19.233-19-g83f8068e02bc)
-No metric fixes found.
+BR, Jarkko
 
-## Test result summary
-total: 84857, pass: 68636, fail: 1023, skip: 13321, xfail: 1877
-
-## Build Summary
-* arm: 281 total, 275 passed, 6 failed
-* arm64: 39 total, 39 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 27 total, 27 passed, 0 failed
-* powerpc: 60 total, 49 passed, 11 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 38 total, 38 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

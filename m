@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D574D5F01
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 10:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB554D5F13
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347740AbiCKJ77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 04:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S245322AbiCKKEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347657AbiCKJ74 (ORCPT
+        with ESMTP id S232675AbiCKKEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 04:59:56 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0A62655A;
-        Fri, 11 Mar 2022 01:58:53 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h15so12098901wrc.6;
-        Fri, 11 Mar 2022 01:58:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i3NW5x0NziceOqfFD3EnA8Wx9WLWdE4ilwBF6WyCrxw=;
-        b=LcMdMHxBvozczf6meHZbQS5OG2OV7qy89Hqz217tElUy3+Zqkxo+NZqQZtRFkJtDe/
-         idLjdrxCt2gMbvjVk+QNutD/LpcDr9UTDHob11BJRYEZpn07xZEpVbazfWnpWaqpGHu9
-         K3LfOs6/Jl1+COyy9YxyjHlPk3kADKzwTB3YR/VbZ8HJoH4GLHSX5oFCW+aWdlni6TtQ
-         xuNclu68VmaktbgF0oYfvWqy2BqbvH7Y4UhUg/FeOj8QF2kTA1dW5D9WOKrgkI3g+NTv
-         GgPC9DGpYKx6+r06mijLvuVC8XU8isZq9fAke82Ooi3sMRNIK+L9S+habNb1YXFPKUY/
-         6wyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i3NW5x0NziceOqfFD3EnA8Wx9WLWdE4ilwBF6WyCrxw=;
-        b=X7DasNXX1iF1otbWX8Ksh/1KpFaOfbE1Bv0ctgi7XokMK6ydHLJ3LqAyXdJ0BWBmyu
-         IZOhFc4NMyEvS3zFPEZ4C9Dz6FZxuiHd+k1KXJoNxIYy0uyC67IpLkvUq5E+CkCXTnj8
-         lDT7w015YEE5bSqSl/+0wmmTf8cZO9q69xJJ5O8gVGOIzIVPHaFwUQCE5lbSBdFIrIMf
-         zmf/5HDUiFeoep9fYIe7lYUOoy1tps7xtoWcwopPMdlIWtczalSM3OmoVkZwOoHDBUOC
-         2xymKILSmspflKeQHPCxpVlBRmdpZK1zO73ssLUgdKRRtbvzRfQeV0pww+ama86w0ohH
-         hVYQ==
-X-Gm-Message-State: AOAM533EDa3kNyqhs77VmikYp1lhnIvPjtQTXECZ6OtqbHrJjjgv2Df9
-        voP5G3mPz3iBZfp869Oiho0=
-X-Google-Smtp-Source: ABdhPJykzFtSjRskkdvrH9sJVSlRPXIugTdlYgVVVxHkxibSM89zlO7T7ljTPvZbt7RbF+uRJL1kzA==
-X-Received: by 2002:a5d:47a1:0:b0:1f1:d729:ecdf with SMTP id 1-20020a5d47a1000000b001f1d729ecdfmr6474537wrb.466.1646992731421;
-        Fri, 11 Mar 2022 01:58:51 -0800 (PST)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d4850000000b0020373b34961sm6123371wrs.66.2022.03.11.01.58.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 01:58:51 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:58:49 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 00/33] 5.4.184-rc2 review
-Message-ID: <YisdWSC5pHrB+53i@debian>
-References: <20220310140808.741682643@linuxfoundation.org>
+        Fri, 11 Mar 2022 05:04:50 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4F2151D19;
+        Fri, 11 Mar 2022 02:03:45 -0800 (PST)
+Received: from zn.tnic (p200300ea9719388a4988cf4d8129e469.dip0.t-ipconnect.de [IPv6:2003:ea:9719:388a:4988:cf4d:8129:e469])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9DCB01EC02DD;
+        Fri, 11 Mar 2022 11:03:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1646993019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OUaGFHp5NKVe5CJxdIfOHD2DfGuKxPuZDH1EuX/Bg7c=;
+        b=coGnfFSEJZLXZjFG3kj9PChLAyiTWAqvojdKLNOzywngKhEAYepgoyd/pwLA9YyOoSdNmJ
+        axkLi0rXa2SG6A28BZ/5SH6a4NPXmzJWGcjXRiUZAYwzGjvugLcq/wowQHhP7h1VBSffBv
+        oF/ommKcvdUlX5m76cTJ6wq/ToBSaok=
+Date:   Fri, 11 Mar 2022 11:03:45 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Michael Cree <mcree@orcon.net.nz>, linux-arch@vger.kernel.org,
+        Richard Henderson <rth@twiddle.net>,
+        linux-m68k@lists.linux-m68k.org, Arnd Bergmann <arnd@arndb.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        X86 ML <x86@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matt Turner <mattst88@gmail.com>
+Subject: Re: [PATCH] x86: Remove a.out support
+Message-ID: <YisegQyTNi02Iq4s@zn.tnic>
+References: <YeCuNapJLK4M5sat@zn.tnic>
+ <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
+ <YeHLIDsjGB944GSP@zn.tnic>
+ <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
+ <YeHQmbMYyy92AbBp@zn.tnic>
+ <YeKyBP5rac8sVvWw@zn.tnic>
+ <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
+ <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
+ <164686349541.391760.11942525130947458475.b4-ty@chromium.org>
+ <87czit4cae.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220310140808.741682643@linuxfoundation.org>
+In-Reply-To: <87czit4cae.fsf_-_@email.froward.int.ebiederm.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Mar 10, 2022 at 05:29:13PM -0600, Eric W. Biederman wrote:
+> Kees can you pick this one up in for-next/execve as well?
 
-On Thu, Mar 10, 2022 at 03:19:01PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.184 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
+I can carry it through tip, no probs.
 
-Build test:
-mips (gcc version 11.2.1 20220301): 65 configs -> no new failure
-arm (gcc version 11.2.1 20220301): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20220301): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
+-- 
+Regards/Gruss,
+    Boris.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/864
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+https://people.kernel.org/tglx/notes-about-netiquette

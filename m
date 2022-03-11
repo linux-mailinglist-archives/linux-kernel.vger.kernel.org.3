@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710174D64EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF694D650A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 16:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349439AbiCKPuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 10:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S1349855AbiCKPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 10:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344713AbiCKPuf (ORCPT
+        with ESMTP id S1349611AbiCKPvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:50:35 -0500
+        Fri, 11 Mar 2022 10:51:18 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90F0892858
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F7141CBAB7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:50:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647013771;
+        s=mimecast20190719; t=1647013811;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fSU6dZRMQZcPZg2xb4qD008kHZwrahckFZUqi6hy1VA=;
-        b=cglcQXY9q6s3X2A1wr2lwmvpq/WF/3qucMoLgqN/YcEHBpUUwN7pkFZ05NSKERCKXN40ER
-        W6WOlPcMrFR7xqaoeyAvDSS25cgFQUwHQXjxV2FrqLjXGnAPHqGrX9uwjOqS83sURzXzay
-        OsjgGX5XNoOyLI9roiJ4SrwavC7fUaE=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Xc/ODvBs4ahi/YUBp9hveSuWTL5SxZ2u6EliH0Mv57o=;
+        b=Tfjl+WaYqzAOXiYPAT8pmJ9Q/Wn0x+wr6E4H6dqQzGysyskPJ7RIt/3OtQ1K/P/HCmBZne
+        ElMsUBYf4zxieYK/RsL0DDfqaLKGRn0izQgi9dDasMRzhArn9i5+GrlSAosEd+zeeMFJ8K
+        ZNCSibBsjFRAJi+Dej9wKrgaS68byLY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-NJrBCHf0OKq5AtQ8Jgt1pg-1; Fri, 11 Mar 2022 10:49:30 -0500
-X-MC-Unique: NJrBCHf0OKq5AtQ8Jgt1pg-1
-Received: by mail-qv1-f70.google.com with SMTP id a9-20020ad45c49000000b004352ae97476so7883807qva.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:49:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fSU6dZRMQZcPZg2xb4qD008kHZwrahckFZUqi6hy1VA=;
-        b=o3HbOmQqJ27K4DK0cq+S4Oa5mLkdPbqd3p/n4WkD5Mv07AuwlU3Jm2m/iBWkmU4tM9
-         Y73U0NWPLyWXb+DSjd1xddIV/A6m4RaqnB5XVIqonxN2Q4AJ+VSscjEOPfOp0Y18k7Yf
-         X+gN2MWSpILKmsiYlqbhKLI9JaTD4ygVL9QmvTTuw+RRqxTBvyK4a9TQatAg7QXncPfB
-         Ui4EhE5Y//H8qe8zAjqNK7O61bJfDONIOyEbCByRLpRPZYT/nkzpeFwgf5kNDkLJ0m9w
-         4f7LYTh6Y9gN1+h/fBe1w/qvfsU8omApQWJifPEr8DE5NIAs2+buGgYLIFttRxulclBV
-         8SLw==
-X-Gm-Message-State: AOAM532wLjbx+GU9m0EbLN8i/76N5A6F0qhRlvSu92goX9EMuPgAdl0w
-        GsnqRy6JuiWbuIWk5BU1e0p5yjfKPuoj+sT5qQGqdUw8PlGRFl1YMKPVFharfdksCgF8trWB93L
-        Lvp6p9aGJ/gVpMB2pQD3ENxik
-X-Received: by 2002:a05:622a:1312:b0:2e1:aab3:4644 with SMTP id v18-20020a05622a131200b002e1aab34644mr7219612qtk.455.1647013769908;
-        Fri, 11 Mar 2022 07:49:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6F8Dtq8kFUxxOA9O+1NF3f8ivmZCWHQHFo0nlnddB1/RhLyaemBEZc4pJUsPc5tJxSMnKyg==
-X-Received: by 2002:a05:622a:1312:b0:2e1:aab3:4644 with SMTP id v18-20020a05622a131200b002e1aab34644mr7219589qtk.455.1647013769706;
-        Fri, 11 Mar 2022 07:49:29 -0800 (PST)
-Received: from xps13.. (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id z6-20020ae9c106000000b0067d3b9ef387sm3602719qki.28.2022.03.11.07.49.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 07:49:29 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     bjorn.andersson@linaro.org
-Cc:     mani@kernel.org, dianders@chromium.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 1/2] ARM: qcom_defconfig: enable options for Qualcomm random number generator
-Date:   Fri, 11 Mar 2022 10:49:18 -0500
-Message-Id: <20220311154919.1797920-2-bmasney@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220311154919.1797920-1-bmasney@redhat.com>
-References: <20220311154919.1797920-1-bmasney@redhat.com>
+ us-mta-116-g3FEoLYsNqmT_L-58hCU1A-1; Fri, 11 Mar 2022 10:50:06 -0500
+X-MC-Unique: g3FEoLYsNqmT_L-58hCU1A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E5DF751DF;
+        Fri, 11 Mar 2022 15:50:04 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 87BB4785FD;
+        Fri, 11 Mar 2022 15:50:02 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 06/31] KVM: x86: hyper-v: Don't use sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
+Date:   Fri, 11 Mar 2022 16:49:18 +0100
+Message-Id: <20220311154943.2299191-7-vkuznets@redhat.com>
+In-Reply-To: <20220311154943.2299191-1-vkuznets@redhat.com>
+References: <20220311154943.2299191-1-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -78,34 +65,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the driver for the Qualcomm random number generator and the
-userspace crypto API.
+Get rid of on-stack allocation of vcpu_mask and optimize kvm_hv_send_ipi()
+for a smaller number of vCPUs in the request. When Hyper-V TLB flush
+is in  use, HvSendSyntheticClusterIpi{,Ex} calls are not commonly used to
+send IPIs to a large number of vCPUs (and are rarely used in general).
 
-This was a tested on a Nexus 5 phone (msm8974 SoC).
+Introduce hv_is_vp_in_sparse_set() to directly check if the specified
+VP_ID is present in sparse vCPU set.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 ---
- arch/arm/configs/qcom_defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/x86/kvm/hyperv.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
-index 9981566f2096..50e28a74c361 100644
---- a/arch/arm/configs/qcom_defconfig
-+++ b/arch/arm/configs/qcom_defconfig
-@@ -295,6 +295,13 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
-+CONFIG_CRYPTO_USER=m
-+CONFIG_CRYPTO_USER_API=m
-+CONFIG_CRYPTO_USER_API_HASH=m
-+CONFIG_CRYPTO_USER_API_SKCIPHER=m
-+CONFIG_CRYPTO_USER_API_AEAD=m
-+CONFIG_CRYPTO_USER_API_RNG=m
-+CONFIG_CRYPTO_DEV_QCOM_RNG=m
- CONFIG_DMA_CMA=y
- CONFIG_CMA_SIZE_MBYTES=64
- CONFIG_PRINTK_TIME=y
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 53eb9540494b..7efa34fb15ef 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1760,6 +1760,23 @@ static void sparse_set_to_vcpu_mask(struct kvm *kvm, u64 *sparse_banks,
+ 	}
+ }
+ 
++static bool hv_is_vp_in_sparse_set(u32 vp_id, u64 valid_bank_mask, u64 sparse_banks[])
++{
++	int bank, sbank = 0;
++
++	if (!test_bit(vp_id / 64, (unsigned long *)&valid_bank_mask))
++		return false;
++
++	for_each_set_bit(bank, (unsigned long *)&valid_bank_mask,
++			 KVM_HV_MAX_SPARSE_VCPU_SET_BITS) {
++		if (bank == vp_id / 64)
++			break;
++		sbank++;
++	}
++
++	return test_bit(vp_id % 64, (unsigned long *)&sparse_banks[sbank]);
++}
++
+ struct kvm_hv_hcall {
+ 	u64 param;
+ 	u64 ingpa;
+@@ -2085,8 +2102,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
+ }
+ 
+-static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+-				 unsigned long *vcpu_bitmap)
++static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
++				    u64 *sparse_banks, u64 valid_bank_mask)
+ {
+ 	struct kvm_lapic_irq irq = {
+ 		.delivery_mode = APIC_DM_FIXED,
+@@ -2096,7 +2113,10 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+ 	unsigned long i;
+ 
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+-		if (vcpu_bitmap && !test_bit(i, vcpu_bitmap))
++		if (sparse_banks &&
++		    !hv_is_vp_in_sparse_set(kvm_hv_get_vpindex(vcpu),
++					    valid_bank_mask,
++					    sparse_banks))
+ 			continue;
+ 
+ 		/* We fail only when APIC is disabled */
+@@ -2109,7 +2129,6 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	struct kvm *kvm = vcpu->kvm;
+ 	struct hv_send_ipi_ex send_ipi_ex;
+ 	struct hv_send_ipi send_ipi;
+-	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+ 	unsigned long valid_bank_mask;
+ 	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+ 	u32 vector;
+@@ -2171,13 +2190,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+ 		return HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 
+-	if (all_cpus) {
+-		kvm_send_ipi_to_many(kvm, vector, NULL);
+-	} else {
+-		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+-
+-		kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
+-	}
++	kvm_hv_send_ipi_to_many(kvm, vector, all_cpus ? NULL : sparse_banks, valid_bank_mask);
+ 
+ ret_success:
+ 	return HV_STATUS_SUCCESS;
 -- 
-2.34.1
+2.35.1
 

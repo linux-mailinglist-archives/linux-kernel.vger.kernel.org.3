@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422CC4D5C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851B24D5C65
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347200AbiCKHfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S1347204AbiCKHfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239910AbiCKHfD (ORCPT
+        with ESMTP id S239800AbiCKHf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:35:03 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7BB1B7197
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:34:00 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 652EC405A5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646984039;
-        bh=FwIsaa6346BnNKKT5tvMxkFu/0GEn2QQ2fVNeegANkg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ShhO7QVpj2/qqVow6bIhgZNzFEqbMy2QEJjLd8Xwd1rNOpCsy55FfvM8CUu6XtvUW
-         tmVBg1XcMlqhPHM7+QS66DMFy/S4G6a6F3S6Bilr8tvqPhq8q37iLbYa8sJ5c6jsAI
-         fb9vCzNRO95GTApYtTgkNuyDA36Splp/Mca55Db0vWhTXrcVQRTR7Qu152Xl+o6qjf
-         XxpnnjmCmEfb8a4oDwfo4JrylNI2lKlE/e1WOgKuQ6+fhkv9z6fb7xpY9UvWG78/SY
-         lei90kTq0xg1oLC0ifJWXbnAfAOJN1A93xBxkQsZFE44p7ASPdXRkZ/ja94svoR3rM
-         emJ1iWECDfjsg==
-Received: by mail-ej1-f71.google.com with SMTP id i14-20020a17090639ce00b006dabe6a112fso4424348eje.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:33:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FwIsaa6346BnNKKT5tvMxkFu/0GEn2QQ2fVNeegANkg=;
-        b=AU9v1MpYTXiizZtr+sVehVrjnVL9HKH1cD7ZgwOLIzSQ0Tf+3PS6XvMo2i5B0LmoR5
-         FK901oH/CwqmAaaJg7OCDOCnEFqubZyXEuOkpQtWiOD2O6E+BiAHXmgxXflq3QJeIURP
-         8Jdurhf4Wg/W2Egft/d6fr4SzSi9hUD2dfPOL6+7wa9q5sYiLBy50v60r/eXmta5YyGc
-         +E82MnzW0JEnp1rhPpggro2jBlvcLFO+CYJV0nzqVYhAXdMWvFtPzKFR96XzSwjd/r8D
-         HiBb0EuRl9tlCMljoCel3qyj3FEz+6hWjtfoof1gapj1I0SAe4yzLnuFTIMU1l1Q5mDT
-         PaFg==
-X-Gm-Message-State: AOAM533V4+vthtx8OE04NlujUry8GAQ3DUu+xj0YF+ZcIhk8NdZvV8aH
-        Kc3V4UDgGKelrJbs2ru27rKoMUtuShmrlQzo11IkdZnYc581X6Cj0ncAewyrFAbYzUCpPRDmEsb
-        5XFUHCS0AmLEZQD23RJSk+BL71R3JgSJMpghZmpz2Qg==
-X-Received: by 2002:a17:907:72ce:b0:6db:aed5:833e with SMTP id du14-20020a17090772ce00b006dbaed5833emr400583ejc.420.1646984036605;
-        Thu, 10 Mar 2022 23:33:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzHSkeNxfQPFajgsgZR2Yv3RA/WJuoMeMF7qYuAnmerumRUXFThKxmJtDF/IuTUkeXY1Sj4WA==
-X-Received: by 2002:a17:907:72ce:b0:6db:aed5:833e with SMTP id du14-20020a17090772ce00b006dbaed5833emr400571ejc.420.1646984036392;
-        Thu, 10 Mar 2022 23:33:56 -0800 (PST)
-Received: from [192.168.0.147] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm2908347edt.3.2022.03.10.23.33.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 23:33:55 -0800 (PST)
-Message-ID: <ef965982-0c21-9cc7-1e5a-69726671ba1f@canonical.com>
-Date:   Fri, 11 Mar 2022 08:33:54 +0100
+        Fri, 11 Mar 2022 02:35:29 -0500
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8871B718E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 23:34:24 -0800 (PST)
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 5345980318D3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:34:24 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 629CE10048508
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 07:34:22 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id SZn4nuAKnkku4SZn4nC1O3; Fri, 11 Mar 2022 07:34:22 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=B8N8bMhM c=1 sm=1 tr=0 ts=622afb7e
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=CKZRavcbcYjQIi5INiMA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ujY7E00cphL1sT4J2hRwfrmCoOATOSDiqnZRVJPHvCw=; b=jVaBN9sNDd93zjoGQcUEMOmkXi
+        TfHiKFLWZHixNGfgnM9E4UuHkedU53npE8ZCNRngxfAT50jm/60EK5gQ0NK4beQxe1Ab7cd/Vtv43
+        ZlbF70uZnnJaREmZUwSN8BCSn;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60312 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nSZn3-003W4l-0t; Fri, 11 Mar 2022 00:34:21 -0700
+Subject: Re: [PATCH 5.15 00/58] 5.15.28-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220310140812.983088611@linuxfoundation.org>
+In-Reply-To: <20220310140812.983088611@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <ec25bf7b-0733-a885-0ec8-e88988697d29@w6rz.net>
+Date:   Thu, 10 Mar 2022 23:34:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MAINTAINERS: sifive: drop Yash Shah
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, aou@eecs.berkeley.edu,
-        p.zabel@pengutronix.de, sagar.kadam@sifive.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-References: <mhng-b01b9acc-de77-4d1d-9cdc-f3830a6c569a@palmer-ri-x1c9>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <mhng-b01b9acc-de77-4d1d-9cdc-f3830a6c569a@palmer-ri-x1c9>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nSZn3-003W4l-0t
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:60312
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,79 +92,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 04:14, Palmer Dabbelt wrote:
-> On Mon, 14 Feb 2022 00:23:49 PST (-0800), krzysztof.kozlowski@canonical.com wrote:
->> Emails to Yash Shah bounce with "The email account that you tried to
->> reach does not exist.", so drop him from all maintainer entries.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
->>  Documentation/devicetree/bindings/gpio/sifive,gpio.yaml     | 1 -
->>  Documentation/devicetree/bindings/pwm/pwm-sifive.yaml       | 1 -
->>  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
->>  MAINTAINERS                                                 | 6 ------
->>  4 files changed, 9 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
->> index e04349567eeb..427c5873f96a 100644
->> --- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
->> +++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
->> @@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  title: SiFive GPIO controller
->>
->>  maintainers:
->> -  - Yash Shah <yash.shah@sifive.com>
->>    - Paul Walmsley <paul.walmsley@sifive.com>
->>
->>  properties:
->> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
->> index 676b2160bada..605c1766dba8 100644
->> --- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
->> +++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
->> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->>  title: SiFive PWM controller
->>
->>  maintainers:
->> -  - Yash Shah <yash.shah@sifive.com>
->>    - Sagar Kadam <sagar.kadam@sifive.com>
->>    - Paul Walmsley <paul.walmsley@sifive.com>
->>
->> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
->> index 2b1f91603897..e2d330bd4608 100644
->> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
->> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
->> @@ -9,7 +9,6 @@ title: SiFive L2 Cache Controller
->>
->>  maintainers:
->>    - Sagar Kadam <sagar.kadam@sifive.com>
->> -  - Yash Shah <yash.shah@sifive.com>
->>    - Paul Walmsley  <paul.walmsley@sifive.com>
->>
->>  description:
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ebf7a75a6bec..87eeac970ca2 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -7090,12 +7090,6 @@ L:	linux-edac@vger.kernel.org
->>  S:	Maintained
->>  F:	drivers/edac/sb_edac.c
->>
->> -EDAC-SIFIVE
->> -M:	Yash Shah <yash.shah@sifive.com>
->> -L:	linux-edac@vger.kernel.org
->> -S:	Supported
->> -F:	drivers/edac/sifive_edac.c
-> 
-> Looks like that leaves this unmaintained?  I'm happy to volunteer, I've 
-> got the boards lying around somewhere and sort of feel on the hook to 
-> keep this stuff alive given that whatever's in there is partially my 
-> fault.  That said, I'm happy to stay out of it so if it's OK to have 
-> otherwise unmaintained EDAC drivers that works for me so
-> 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On 3/10/22 6:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.28 release.
+> There are 58 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.28-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The patch was already merged. EDAC SiFive is now covered by generic EDAC
-and SIFIVE entries. Feel free to restore the entry with yourself.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Best regards,
-Krzysztof
+Tested-by: Ron Economos <re@w6rz.net>
+

@@ -2,98 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61C44D636C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43C14D6369
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349272AbiCKO2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S1349213AbiCKO2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349207AbiCKO2H (ORCPT
+        with ESMTP id S235535AbiCKO2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:28:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E061C7EBF;
-        Fri, 11 Mar 2022 06:27:03 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BDK3OB021042;
-        Fri, 11 Mar 2022 14:27:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : reply-to : subject : to : cc : references : from :
- in-reply-to : content-type : content-transfer-encoding; s=pp1;
- bh=YHOoZuIhJIGUv6nvueS7vbShkSx6GnV2gdzqgAxu/N4=;
- b=oBwHks/afpX7AHd703lqSFwssmM4M3O2/GXreTQrTSV9M5wiYzXZYmc8eHlwiu0OmgCS
- GYCwus3LPeE9km1GqYP2VolzfmM5TqLu6Ve8C8NcHL162+JdJ5eou+lTSF5d9o9QYFT/
- v4jeDXlCZ/+o5cz6KNECzHHXoGqwK8Vh2LYtQ1WhoFSEgK1wZ8aYJ9uAHgrCXZQXP1cS
- MKXbLtWdx0iIS+9VXr2fWJUAHdA4vMyL7ezRIBazLJIrwHccGVw7VFnN/c6aOeaJj6ou
- z0GuV//cB3OSJqf2OxDjPhicw5z8YbizSWkzbk5GWj8gq/p4IZn4dW2Ibhigrbt5peqK hQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqs9289c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 14:27:01 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22BEKNux026331;
-        Fri, 11 Mar 2022 14:27:01 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eqs9289bq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 14:27:01 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22BEDGXW026475;
-        Fri, 11 Mar 2022 14:27:00 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04dal.us.ibm.com with ESMTP id 3epb9d1m99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Mar 2022 14:27:00 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22BEQwBs28049692
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 14:26:58 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B474BE058;
-        Fri, 11 Mar 2022 14:26:58 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6187FBE053;
-        Fri, 11 Mar 2022 14:26:57 +0000 (GMT)
-Received: from [9.65.72.149] (unknown [9.65.72.149])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Mar 2022 14:26:57 +0000 (GMT)
-Message-ID: <fcce28f2-64f7-0946-3f33-3158b7909d6b@linux.ibm.com>
-Date:   Fri, 11 Mar 2022 09:26:25 -0500
+        Fri, 11 Mar 2022 09:28:06 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C307C1C7EBE;
+        Fri, 11 Mar 2022 06:27:02 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id kj21so4180948qvb.11;
+        Fri, 11 Mar 2022 06:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=68CWOwMSv2/Ly+nsrdhsAeru2Ba9NAAn2iQSzGZRvWw=;
+        b=e80phwj1YfnVIQkA0sEcVr4EEbmZjZXtR69W+9YTHG9/Xr4JVpWwwJ77ToWSLiWOtp
+         lFwbRR4x2S4g0pCpt1e1hZ6tesyDbupxZ6hi9qq21kkwDWcXP9RWpL1P34wesiYo5GIa
+         q7zef1mS4kZziRLD/SWaz68A0da3ttJ/1DEwIPUuDGNz5niHr84Olzi7xXtf3UznDb06
+         +lN6oO9lmFUPjGoKl2SQmfViF1QdDTf73Djt65lcGWl20lZeB9fVJp2+AFxlDoJmiuls
+         T3BHYt6aNgS857fi53WJrz58N+84EdLG/4OiNzShY5eNeeMvg0QPxwQuFUmr0OPJc08D
+         W5+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=68CWOwMSv2/Ly+nsrdhsAeru2Ba9NAAn2iQSzGZRvWw=;
+        b=xIXPddQdjVq6zzlpuqTy7WlSjo3/tNwjpmE2hUns+xYKwxIv+2uP/hx6ueg8qhQjYY
+         cYuwrNYyvdiEahHwc1LkPimzCMdypHpb1m2dS+Q6A96rcA9//MtpU5SK1rr70HfEwlzq
+         RLz/FTSArI8IB3BCAf+r2oXogyGpIQV0ySoHE06+Lq2M1/oel/odgmK7VlaoEXvSmlgg
+         5YL8WbuHlMSg5ZgusUomPfl20wY52InZ3HebQawKe9CfHFsTkJ2Wk9I9zGe2oKEvMQNk
+         +oihWjreKWyFELyfpbKE8j+oYIOvb6bCahScE1SlNvTBzlBLVYrOlzCjYenM7CNuUSbQ
+         k3Lw==
+X-Gm-Message-State: AOAM531+lGfv+bto5SHu+qacgLWHykmMwMo4R43fCzv3dzGBUEcIUnmu
+        +qcy6ycZY945LWFr1VCjCloTbw4o+08=
+X-Google-Smtp-Source: ABdhPJzYrYxFEBtuEGDzojfs9wfbRWu+moiK6O19yJfnRKv8Pwu9az9Y+jnx54mf4Vuc6/n6OmD2eA==
+X-Received: by 2002:a05:6214:21c7:b0:435:3600:c1e3 with SMTP id d7-20020a05621421c700b004353600c1e3mr7871370qvh.127.1647008821732;
+        Fri, 11 Mar 2022 06:27:01 -0800 (PST)
+Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05622a13c700b002de9f3894c2sm5632761qtk.50.2022.03.11.06.27.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 06:27:00 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:26:59 -0500
+From:   Trevor Woerner <twoerner@gmail.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH 2/3] serial: 8250_fintek.c: Report chipID
+Message-ID: <20220311142659.GA38527@localhost>
+References: <20220311070203.18159-2-twoerner@gmail.com>
+ <0fb3795e-0ab1-494b-aefd-ccfa78420723@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Reply-To: jjherne@linux.ibm.com
-Subject: Re: [PATCH v18 10/18] s390/vfio-ap: allow hot plug/unplug of AP
- devices when assigned/unassigned
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
- <20220215005040.52697-11-akrowiak@linux.ibm.com>
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20220215005040.52697-11-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cmxpyDpTfjAQ5EnIkLLkLBcgvvXXQr8a
-X-Proofpoint-ORIG-GUID: CDbEbwXNSCzK9CIn_QTDmS9rqxgaL4fz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-11_06,2022-03-11_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 adultscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
- mlxscore=0 impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203110069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fb3795e-0ab1-494b-aefd-ccfa78420723@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,154 +76,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 19:50, Tony Krowiak wrote:
-> Let's allow adapters, domains and control domains to be hot plugged
-> into and hot unplugged from a KVM guest using a matrix mdev when an
-> adapter, domain or control domain is assigned to or unassigned from
-> the matrix mdev.
+Hi Jiri,
+
+Thanks for your review.
+
+On Fri 2022-03-11 @ 10:21:46 AM, Jiri Slaby wrote:
+> On 11. 03. 22, 8:02, Trevor Woerner wrote:
+> > Provide some feedback to confirm this driver is enabled, and specify which
+> > chip was detected.
 > 
-> Whenever an assignment or unassignment of an adapter, domain or control
-> domain is performed, the AP configuration assigned to the matrix
-> mediated device will be filtered and assigned to the AP control block
-> (APCB) that supplies the AP configuration to the guest so that no
-> adapter, domain or control domain that is not in the host's AP
-> configuration nor any APQN that does not reference a queue device bound
-> to the vfio_ap device driver is assigned.
+> No, we don't do that. In fact, the output is mostly useless as it doesn't
+> even tell the user what device this is about.
+
+With this patch, when looking at the kernel's bootup messages one would see:
+
+	[    1.809223] Serial: 8250/16550 driver, 5 ports, IRQ sharing enabled
+	[    1.814420] Fintek F81865
+	[    1.815783] 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+	[    1.822078] Fintek F81865
+	[    1.823453] 00:05: ttyS2 at I/O 0x3e8 (irq = 10, base_baud = 115200) is a 16550A
+	[    1.829813] Fintek F81865
+	[    1.831194] 00:06: ttyS3 at I/O 0x2e8 (irq = 10, base_baud = 115200) is a 16550A
+	[    1.837556] Fintek F81865
+	[    1.838943] 00:07: ttyS4 at I/O 0x2c0 (irq = 10, base_baud = 115200) is a 16550A
+	[    1.845350] Fintek F81865
+	[    1.846703] 00:0c: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+
+…so the grouping would hopefully be a clue, and anyone looking up what a
+fintek f81865 is would see that it's a SuperIO chip with 6 UARTs.
+
+Ideally that information would all be on one line for each port. The first
+line is what I've added, which specifies the actual device, and the second
+line comes from serial_core.c's uart_report_port(). If there were a way to
+pass the fintek information to serial_core, or a way to turn off serial_core's
+uart_report_port() so I could report it in the fintek driver that would be
+better, but neither of those exist.
+
+If I want to know if a kernel has support for a device on my board I would
+normally grep the dmesg output and look for a product id, a chip id, or a
+manufacturer's name. I thought it was strange that with this driver enabled,
+there's no hint that the kernel knows anything about it.
+
+> > Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+> > ---
+> >   drivers/tty/serial/8250/8250_fintek.c | 11 +++++++++++
+> >   1 file changed, 11 insertions(+)
+> > 
+> > diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
+> > index d9f0e546b1a1..03ad2354d808 100644
+> > --- a/drivers/tty/serial/8250/8250_fintek.c
+> > +++ b/drivers/tty/serial/8250/8250_fintek.c
+> > @@ -155,11 +155,22 @@ static int fintek_8250_check_id(struct fintek_8250 *pdata)
+> >   	switch (chip) {
+> >   	case CHIP_ID_F81865:
+> > +		pr_info("Fintek F81865\n");
+> > +		break;
+> >   	case CHIP_ID_F81866:
+> > +		pr_info("Fintek F81866\n");
+> > +		break;
+> >   	case CHIP_ID_F81966:
+> > +		pr_info("Fintek F81966\n");
+> > +		break;
+> >   	case CHIP_ID_F81216AD:
+> > +		pr_info("Fintek F81216AD\n");
+> > +		break;
+> >   	case CHIP_ID_F81216H:
+> > +		pr_info("Fintek F81216H\n");
+> > +		break;
+> >   	case CHIP_ID_F81216:
+> > +		pr_info("Fintek F81216\n");
+> >   		break;
+> >   	default:
+> >   		return -ENODEV;
 > 
-> After updating the APCB, if the mdev is in use by a KVM guest, it is
-> hot plugged into the guest to dynamically provide access to the adapters,
-> domains and control domains provided via the newly refreshed APCB.
-> 
-> Keep in mind that the matrix_dev->guests_lock must be taken outside of the
-> matrix_mdev->kvm->lock which in turn must be taken outside of the
-> matrix_dev->mdevs_lock in order to avoid circular lock dependencies (i.e.,
-> a lockdep splat).Consequently, the locking order for hot plugging the
-> guest's APCB must be:
-> 
-> matrix_dev->guests_lock => matrix_mdev->kvm->lock => matrix_dev->mdevs_lock
-> 
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-> ---
->   drivers/s390/crypto/vfio_ap_ops.c | 198 +++++++++++++++++++-----------
->   1 file changed, 125 insertions(+), 73 deletions(-)
-> 
-> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-> index 623a4b38676d..4c382cd3afc7 100644
-> --- a/drivers/s390/crypto/vfio_ap_ops.c
-> +++ b/drivers/s390/crypto/vfio_ap_ops.c
-> @@ -317,10 +317,25 @@ static void vfio_ap_matrix_init(struct ap_config_info *info,
->   	matrix->adm_max = info->apxa ? info->Nd : 15;
->   }
->   
-> -static void vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev *matrix_mdev)
-> +static void vfio_ap_mdev_hotplug_apcb(struct ap_matrix_mdev *matrix_mdev)
->   {
-> +	if (matrix_mdev->kvm)
-> +		kvm_arch_crypto_set_masks(matrix_mdev->kvm,
-> +					  matrix_mdev->shadow_apcb.apm,
-> +					  matrix_mdev->shadow_apcb.aqm,
-> +					  matrix_mdev->shadow_apcb.adm);
-> +}
-
-This function updates a kvm guest's apcb. So let's rename it to
-vfio_ap_update_apcb(). You can also call this function in vfio_ap_mdev_set_kvm,
-instead of duplicating the code to call kvm_arch_crypto_set_masks().
-
-
-
-> +static bool vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev *matrix_mdev)
-> +{
-> +	DECLARE_BITMAP(shadow_adm, AP_DOMAINS);
-> +
-> +	bitmap_copy(shadow_adm, matrix_mdev->shadow_apcb.adm, AP_DOMAINS);
->   	bitmap_and(matrix_mdev->shadow_apcb.adm, matrix_mdev->matrix.adm,
->   		   (unsigned long *)matrix_dev->info.adm, AP_DOMAINS);
-> +
-> +	return !bitmap_equal(shadow_adm, matrix_mdev->shadow_apcb.adm,
-> +			     AP_DOMAINS);
->   }
-
-your variable, shadow_adm, should be named original_adm. Since it represents
-the original value before filtering. This makes the intent much more clear.
-Same goes for the vars in vfio_ap_mdev_filter_matrix().
-
-...
-> +/**
-> + * vfio_ap_mdev_get_locks - acquire the locks required to assign/unassign AP
-> + *			    adapters, domains and control domains for an mdev in
-> + *			    the proper locking order.
-> + *
-> + * @matrix_mdev: the matrix mediated device object
-> + */
-> +static void vfio_ap_mdev_get_locks(struct ap_matrix_mdev *matrix_mdev)
-> +{
-> +	/* Lock the mutex required to access the KVM guest's state */
-> +	mutex_lock(&matrix_dev->guests_lock);
-> +
-> +	/* If a KVM guest is running, lock the mutex required to plug/unplug the
-> +	 * AP devices passed through to the guest
-> +	 */
-> +	if (matrix_mdev->kvm)
-> +		mutex_lock(&matrix_mdev->kvm->lock);
-> +
-> +	/* The lock required to access the mdev's state */
-> +	mutex_lock(&matrix_dev->mdevs_lock);
-> +}
-
-Simplifying the cdoe, and removing duplication by moving the locking code to a
-function is probably a good thing. But I don't feel like this belongs to this
-particular patch. In general, a patch should only do one thing, and ideally that
-one thing should be as small as reasonably possible. This makes the patch easier
-to read and to review.
-
-I feel like, as much as possible, you should refactor the locking in a series
-of patches that are all kept together. Ideally, they would be a patch series
-completely separate from dynamic ap. After all, this series is already at 18
-patches. :)
-
-...
->   /**
->    * assign_adapter_store - parses the APID from @buf and sets the
->    * corresponding bit in the mediated matrix device's APM
-> @@ -649,17 +723,9 @@ static ssize_t assign_adapter_store(struct device *dev,
->   	int ret;
->   	unsigned long apid;
->   	DECLARE_BITMAP(apm, AP_DEVICES);
-> -
->   	struct ap_matrix_mdev *matrix_mdev = dev_get_drvdata(dev);
->   
-> -	mutex_lock(&matrix_dev->guests_lock);
-> -	mutex_lock(&matrix_dev->mdevs_lock);
-> -
-> -	/* If the KVM guest is running, disallow assignment of adapter */
-> -	if (matrix_mdev->kvm) {
-> -		ret = -EBUSY;
-> -		goto done;
-> -	}
-> +	vfio_ap_mdev_get_locks(matrix_mdev);
->   
->   	ret = kstrtoul(buf, 0, &apid);
->   	if (ret)
-> @@ -671,8 +737,6 @@ static ssize_t assign_adapter_store(struct device *dev,
->   	}
->   
->   	set_bit_inv(apid, matrix_mdev->matrix.apm);
-> -	memset(apm, 0, sizeof(apm));
-> -	set_bit_inv(apid, apm);
->   
->   	ret = vfio_ap_mdev_validate_masks(matrix_mdev);
-
-It looks like you moved the memset() and set_bit_inv() to be closer to where
-"apm" is used, namely, the call to vfio_ap_mdev_filter_matrix(). Any reason you
-cannot move it down under the call to vfio_ap_mdev_link_adapter()? That would
-get it even closer to where it is used.
-
-Also, I think renaming apm to apm_delta or apm_diff makes sense here. After all,
-it is the difference between the original apm, and the new apm. The new apm
-has an extra bit for the newly added adapter. Do I have that right? If so, I
-think renaming the variable will make the code clearer.
-
-Both of the above comments also apply to assign_domain_store().
-
--- 
--- Jason J. Herne (jjherne@linux.ibm.com)
+> thanks,
+> -- 
+> js

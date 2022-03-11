@@ -2,37 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28E24D5670
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 01:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5FF4D5672
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 01:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344904AbiCKATF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 19:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S1345017AbiCKAUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 19:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbiCKATD (ORCPT
+        with ESMTP id S245492AbiCKAUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 19:19:03 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DB9F6E2;
-        Thu, 10 Mar 2022 16:18:00 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V6qSMeb_1646957877;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V6qSMeb_1646957877)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Mar 2022 08:17:58 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ethernet: 8390: Remove unnecessary print function dev_err()
-Date:   Fri, 11 Mar 2022 08:17:56 +0800
-Message-Id: <20220311001756.12234-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 10 Mar 2022 19:20:13 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D2199D5F;
+        Thu, 10 Mar 2022 16:19:11 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so8759341oot.11;
+        Thu, 10 Mar 2022 16:19:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U0AZdJmAf3KnMnmaCT6PVX8yffxCxk1VkTp4io1uedY=;
+        b=T7XZ0yttiyIczz6uUfertqFXDorsdoEbYKOzkVYQ4f1F0sSgHVZNGmWLUQqMWopSCw
+         wCpJDGiczXpAGxAsxY3eh0v/y887FlVKpRsp/JNqLeG2+Zmd5JxE911nGx+vfQEF5zM1
+         +80MRU0TCJmvCYirCevEPleQn6VQTfqBeGCJ5dhEeoc1rtmnhNyGg4lyJTS0Vtk5vPO8
+         8KRdPxSVo8vFGT069tWZdJOZnxS6uJ85vsdm6VJgXFM33/FzsOpM44QPc31dC4XjqRro
+         UfeNcYV585i3AoBTSWSC4m1MXE/IkZ1GhXcrfc3RSUtkF1vJ839aBiR4+MZYKOwaG9dP
+         jrrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U0AZdJmAf3KnMnmaCT6PVX8yffxCxk1VkTp4io1uedY=;
+        b=dwNUH+nJ5iaqfvUvZa4RNPf0PdEa5yigK0q0U/2CpXSEOJkNCK5wRJVviAhRLqI+O2
+         m98996fmAH0VJQRpoil9dzHr3qwFY5dJgXF9TsixELrc0nFRnzMW60oNEI8Y2yxCXSye
+         M1zxeSUhRAiatP0UMqVMNr3LSMaVAyhejfmMe1GcHxFw0xO8E6+3B4fYs4Lqx8h5H6Xa
+         uVzot2IG9YV143ZmWguggN08yR/BBoChyhPrlr8wNdnExWBVgGkwpXJoU3xn+ynWmKId
+         sTk0G0QKBQXrTxKqi1cn1DdTC5P8GOj9MZ/mEbrIWXcxAKC4xP6KO48BACAfHR5L0yZV
+         u5+w==
+X-Gm-Message-State: AOAM531PN3OA5FSLAOk3J+VA/j+77ipkeZlYz2m9OvGtFDBENE/khMfm
+        Zt1gRws0wSYq3/76AuSxP5c=
+X-Google-Smtp-Source: ABdhPJyiVhuWhrH8JIV4+a4K60XF6nqM1KS+9cIGeBeVK6gpoCOYo1uIgDu+V3vdeOg8/+HhKcvR+A==
+X-Received: by 2002:a05:6870:590:b0:d7:b0:7412 with SMTP id m16-20020a056870059000b000d700b07412mr9849300oap.115.1646957950797;
+        Thu, 10 Mar 2022 16:19:10 -0800 (PST)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.7])
+        by smtp.gmail.com with ESMTPSA id m17-20020a0568080f1100b002d71e151e51sm3211000oiw.0.2022.03.10.16.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 16:19:10 -0800 (PST)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+Date:   Fri, 11 Mar 2022 00:18:58 +0000
+Message-Id: <20220311001858.4166205-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,35 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print function dev_err() is redundant because platform_get_irq()
-already prints an error.
+Add a clear_faults write-only debugfs entry for the ibm-cffps device
+driver.
 
-Eliminate the follow coccicheck warning:
-./drivers/net/ethernet/8390/mcf8390.c:414:2-9: line 414 is redundant
-because platform_get_irq() already prints an error
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
 ---
- drivers/net/ethernet/8390/mcf8390.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/ethernet/8390/mcf8390.c b/drivers/net/ethernet/8390/mcf8390.c
-index 90cd7bdf06f5..21047ae1bc3d 100644
---- a/drivers/net/ethernet/8390/mcf8390.c
-+++ b/drivers/net/ethernet/8390/mcf8390.c
-@@ -410,10 +410,8 @@ static int mcf8390_probe(struct platform_device *pdev)
- 	int ret, irq;
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index e3294a1a54bb..fca2642a8ed4 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -67,6 +67,7 @@ enum {
+ 	CFFPS_DEBUGFS_CCIN,
+ 	CFFPS_DEBUGFS_FW,
+ 	CFFPS_DEBUGFS_ON_OFF_CONFIG,
++	CFFPS_DEBUGFS_CLEAR_FAULTS,
+ 	CFFPS_DEBUGFS_NUM_ENTRIES
+ };
  
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		dev_err(&pdev->dev, "no IRQ specified?\n");
-+	if (irq < 0)
- 		return -ENXIO;
--	}
+@@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+ 		if (rc)
+ 			return rc;
  
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (mem == NULL) {
++		rc = 1;
++		break;
++	case CFFPS_DEBUGFS_CLEAR_FAULTS:
++		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
++		if (rc < 0)
++			return rc;
++
+ 		rc = 1;
+ 		break;
+ 	default:
+@@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+ 	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+ 			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+ 			    &ibm_cffps_fops);
++	debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
++			    &ibm_cffps_fops);
+ 
+ 	return 0;
+ }
 -- 
-2.20.1.7.g153144c
+2.25.1
 

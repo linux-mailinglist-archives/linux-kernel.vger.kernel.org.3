@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396254D5CEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688CA4D5CEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346779AbiCKIDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S1347182AbiCKIDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbiCKIC7 (ORCPT
+        with ESMTP id S240698AbiCKIDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:02:59 -0500
+        Fri, 11 Mar 2022 03:03:00 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2931B757A;
-        Fri, 11 Mar 2022 00:01:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EB91B84E7;
+        Fri, 11 Mar 2022 00:01:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646985715; x=1678521715;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AzZqXsvGH16lWupXaADkIIwRJDwU6rAZUXxnYSi/l0A=;
-  b=oAmoB/ZlZlKNZkJ5lHRKMi+5CjAqNSTH4HRC0uTE8rQk/kZAuV2ijTFg
-   78HSCFaift/+2wI5bZ1bvtvrmswQt47X5yHpZ/GPABVBBwa98Oq8hYo++
-   g2lSHsa3iO0QHhWS6FmWGhPgX7MF8OTFHdLTNSw7jNqG9cWXYRAH0jCjX
-   wYq1ozCF/jOLym0sN1pK+u0b4OHtU/MzoKJTWA7S2PMnzT+nBJq4MfCZh
-   Y2e9Sc4PfURgnfvAF85WZJ6HyCp9V/2xWmeWl5oBQPupwxJKN/R2XvIHo
-   qC8c//H2lAaxVDOYUnMEYjnHZdaL6EgaH/WUX1NYpCIdGXtStMcZy3dN/
-   A==;
+  t=1646985718; x=1678521718;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0tEtyDy2Ibn+Yb9/V/d4TdD6beKGnXWWbYrC9P89cv4=;
+  b=mm4qE3zBR3v9d0VJoztFToE1nMjaEriWWrKTWNqYSSeefE7Og7EzElpR
+   OajmJl8gfSUCGOgqnVV72NImKHY/yf7cJo5zvl7YhymTGcA16CCb2x2jA
+   wVqWXL3T3p8NL0r3PuszcbCKUpW9Sz8n7L7QoVJL4rJC7MZSL8vXU8jku
+   8D64szr1nZn3vC571PfQxQAhaQUefHgJCknOi9nC3PEtB0mgNN5dWmMLm
+   uQKDP5ICZ4PmOJsiH/JeVRJChpAYKbGF6f/DOUNQXOtFQLOfT5rMPj+7L
+   G+FJyLgrvGquKHvUfw5YaU2ygcvWuoeMfyWuN2UfICl5AJV/GcghIgbOu
+   g==;
 X-IronPort-AV: E=Sophos;i="5.90,173,1643698800"; 
-   d="scan'208";a="148864908"
+   d="scan'208";a="148864914"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2022 01:01:54 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2022 01:01:57 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 11 Mar 2022 01:01:53 -0700
+ 15.1.2375.17; Fri, 11 Mar 2022 01:01:56 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 11 Mar 2022 01:01:50 -0700
+ 15.1.2375.17 via Frontend Transport; Fri, 11 Mar 2022 01:01:53 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <p.yadav@ti.com>, <michael@walle.cc>, <broonie@kernel.org>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
         Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR mode
-Date:   Fri, 11 Mar 2022 10:01:41 +0200
-Message-ID: <20220311080147.453483-1-tudor.ambarus@microchip.com>
+Subject: [PATCH v2 1/6] spi: spi-mem: Allow specifying the byte order in DTR mode
+Date:   Fri, 11 Mar 2022 10:01:42 +0200
+Message-ID: <20220311080147.453483-2-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220311080147.453483-1-tudor.ambarus@microchip.com>
+References: <20220311080147.453483-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -72,49 +74,65 @@ it may introduce some endianness problems. It can affect the boot sequence
 if the entire boot sequence is not handled in either 8D-8D-8D mode or 1-1-1
 mode. So we must swap the bytes back to have the same byte order as in STR
 modes. Fortunately there are controllers that can swap the bytes back at
-runtime, addressing the flash's endiannesses requirements.
-If the controllers are not capable of swapping the bytes, the protocol is
-downgraded via spi_nor_spimem_adjust_hwcaps(). When available, the swapping
-of the bytes is always done regardless if it's a data or register access,
-so that we comply with the JESD216 requirements: "Byte order of 16-bit
-words is swapped when read in 8D-8D-8D mode compared to 1-1-1".
+runtime, addressing the flash's endiannesses requirements. Provide a way
+for the upper layers to specify the byte order in Octal DTR mode.
 
-Tested with atmel-quadspi driver, both in 8D-8D-8D mode and 1-1-1 mode
-(via the protocol downgrade).
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ drivers/spi/spi-mem.c       | 4 ++++
+ include/linux/spi/spi-mem.h | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-This patch set depends on the SPI MEM changes from linux-mtd/mtd/next and
-also on some SPI NOR patches that are waiting for R-b tags. You can find
-a branch if you want to test it at:
-
-To github.com:ambarus/linux-0day.git
- * [new branch]                spi-nor/next-mx-byte-swap-v2 -> spi-nor/next-mx-byte-swap-v2
-
-v2:
-- all: s/bswap16/swab16 to comply with linux naming scheme
-- SPI MEM: add dtr_swab16 cap to spi_controller_mem_caps and update
-  spi_mem_default_supports_op() to check for it.
-- SPI NOR: do not encode swab16 info in the SPI NOR protocol, use a helper
-  instead
-- SPI NOR: downgrade the SPI NOR protocol in case the SPI Controller does
-  not support swab16
-- add SPI_NOR_SOFT_RESET and support for mx66lm1g45g
-
-Tudor Ambarus (6):
-  spi: spi-mem: Allow specifying the byte order in DTR mode
-  mtd: spi-nor: core: Allow specifying the byte order in DTR mode
-  mtd: spi-nor: sfdp: Get the 8D-8D-8D byte order from BFPT
-  mtd: spi-nor: core: Introduce SPI_NOR_DTR_BSWAP16 no_sfdp_flag
-  mtd: spi-nor: core: Introduce SPI_NOR_SOFT_RESET flash_info fixup_flag
-  mtd: spi-nor: macronix: Add support for mx66lm1g45g
-
- drivers/mtd/spi-nor/core.c     |  16 +++-
- drivers/mtd/spi-nor/core.h     |  10 ++-
- drivers/mtd/spi-nor/macronix.c | 130 +++++++++++++++++++++++++++++++++
- drivers/mtd/spi-nor/sfdp.c     |   4 +
- drivers/spi/spi-mem.c          |   4 +
- include/linux/spi/spi-mem.h    |   6 ++
- 6 files changed, 168 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index f38ac31961c9..3b2e586bb6a6 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -171,6 +171,10 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 		if (!spi_mem_controller_is_capable(ctlr, dtr))
+ 			return false;
+ 
++		if (op->data.dtr_swab16 &&
++		    !(spi_mem_controller_is_capable(ctlr, dtr_swab16)))
++			return false;
++
+ 		if (op->cmd.nbytes != 2)
+ 			return false;
+ 	} else {
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index 2ba044d0d5e5..a1bf51eda31f 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -89,6 +89,8 @@ enum spi_mem_data_dir {
+  * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
+  * @data.buswidth: number of IO lanes used to send/receive the data
+  * @data.dtr: whether the data should be sent in DTR mode or not
++ * @data.dtr_swab16: whether the byte order of 16-bit words is swapped when read
++ *		     or written in Octal DTR mode compared to STR mode.
+  * @data.ecc: whether error correction is required or not
+  * @data.dir: direction of the transfer
+  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
+@@ -120,6 +122,7 @@ struct spi_mem_op {
+ 	struct {
+ 		u8 buswidth;
+ 		u8 dtr : 1;
++		u8 dtr_swab16 : 1;
+ 		u8 ecc : 1;
+ 		enum spi_mem_data_dir dir;
+ 		unsigned int nbytes;
+@@ -290,10 +293,13 @@ struct spi_controller_mem_ops {
+ /**
+  * struct spi_controller_mem_caps - SPI memory controller capabilities
+  * @dtr: Supports DTR operations
++ * @dtr_swab16: Supports swapping bytes on a 16 bit boundary when configured in
++ *		Octal DTR
+  * @ecc: Supports operations with error correction
+  */
+ struct spi_controller_mem_caps {
+ 	bool dtr;
++	bool dtr_swab16;
+ 	bool ecc;
+ };
+ 
 -- 
 2.25.1
 

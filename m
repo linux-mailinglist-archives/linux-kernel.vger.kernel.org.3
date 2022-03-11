@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810004D5A24
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3C44D5A26
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 05:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiCKE73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 23:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S242605AbiCKE7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 23:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiCKE70 (ORCPT
+        with ESMTP id S237718AbiCKE72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 23:59:26 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D54EBAF5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 20:58:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646974702; x=1678510702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZSfgV4FTdC89Jr7bvCxlPiktDojQHbtsbzRZWF+3FDY=;
-  b=LdkZ/6luh5rxFexo2EubGqYciwLadS+gV84FApOyvcGbtUa/IEPzEAd0
-   unYrO2RX23qiuJWEdUM9ruzuLDW6b+Rk3TP9hwFU6ES6NF4xxbK5fXBEA
-   WUZ1T5ZkxwOnQoGw3Tu1XsIqLh24GRGmTdTZaw6t5dLXRDNdDmD8aZ/K8
-   jrZlZY5/aUo1cioEjmf9apl0IDXxjalT6q88A+v76L/92Cd8pgOwPghwC
-   xA3mnfiqfZ2B48BFPw3UEZiDkh956GkTtUD5HgEtznKc5F8UjQE1ia4P1
-   5Wqk8r7sTwMUCgy72KgUbalqc/gig2ylbnIVgAQfQWlTw9XtfZmebOfvm
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="318723607"
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="318723607"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 20:58:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,172,1643702400"; 
-   d="scan'208";a="514376777"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2022 20:58:20 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSXM3-0005rB-Ni; Fri, 11 Mar 2022 04:58:19 +0000
-Date:   Fri, 11 Mar 2022 12:58:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: proc-v7-bugs.c:undefined reference to `spectre_v2_update_state'
-Message-ID: <202203111231.E0EK6F0R-lkp@intel.com>
+        Thu, 10 Mar 2022 23:59:28 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B55F213D;
+        Thu, 10 Mar 2022 20:58:25 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id r13so16699796ejd.5;
+        Thu, 10 Mar 2022 20:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gyE9IcY/AL9lvvlSStbY/lLOPYuMFGZEROA9x6xbLGI=;
+        b=PsuYdL/+Ispy6VwTl/mQFpUDlSYHVjfBN0IUuF5kQujsjD4rot6zOwROwQai0h7cXE
+         rNp4ZrNCo+BNN7dHZl820+1VTComRjrs1dw0EK4DR/xSlMM8hOdr6QeRtf1t2G6z3NXe
+         gC0BZnxkhFtSF4gCeQkNqfJhYe90FeD8h/loAWx7ciGfkHVU2f8Q5ZP9N7yML9broSl3
+         SdZ4JvkBpIvkgNi4qmxUSTobIrAYtYkARSNkIP/R9Cr8967y4lkVpyQkATULC4cAQTyu
+         A/C37H2UGyBmUkt5Iz8SREf7yy1mymS1hMpLE68p3wmiJkbjoCqn6ES7FrBwiKPe2o16
+         2ANA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gyE9IcY/AL9lvvlSStbY/lLOPYuMFGZEROA9x6xbLGI=;
+        b=lN/oWs0EPNU8VwwSlYpcZmn1n2rltaomUyOh/mLf9AXT77dNJyCO67sHcFiHu8hgHO
+         R5XMfjI2Dw0tWTigoL3/Bb8t2vrd4eh2d9djaBRqEcuYe5mFgQf8WkGVw7WLAPbTK+8/
+         uqSLbv/ys4t5B4QNwL4pljk6yFQxQl8Qm9gimFZ3fQ5wwqyNm+/qLcaxgkq51YkoKwUN
+         Mo9muHgr8opy4pS4EZL0YucUBBQeMiTdkmiDIXr6BSDC0RrJz0lr0e3B6s8wmRwuMRo/
+         dcZGBORAZOYvi6a6r6xWCk2eoKSOhhpJN2uflJ3BYloR3GE1t3srT1T/33P53DgpCgMl
+         WsJQ==
+X-Gm-Message-State: AOAM531QNptyNg4LJT6WSPp6i57fID68jbFD6+/UnwPSzfGKaPLNWxOB
+        dhypIGmUQUYnWZOZVSbUuwVC8lg3JvjW1bYs96s=
+X-Google-Smtp-Source: ABdhPJx4jo/HcQhkdwEHWAn2U1prIfLz9M5lp3VyDorElOSP4hYvzjWz0BBM+zkK42cgxU1gNkhOTJ8HAnX/46FFmPQ=
+X-Received: by 2002:a17:907:3f9b:b0:6da:6f2b:4b1c with SMTP id
+ hr27-20020a1709073f9b00b006da6f2b4b1cmr6923862ejc.765.1646974704368; Thu, 10
+ Mar 2022 20:58:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220311032828.702392-1-imagedong@tencent.com> <20220310195429.4ba93edf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220310195429.4ba93edf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 11 Mar 2022 12:58:13 +0800
+Message-ID: <CADxym3YybdOPMwHr3TOf0vxAN5W8mMdeQmQiQq_nr-1SSF5jMA@mail.gmail.com>
+Subject: Re: [PATCH] net: skb: move enum skb_drop_reason to uapi
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Mengen Sun <mengensun@tencent.com>,
+        Hao Peng <flyingpeng@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dda64ead7e82caa47fafe0edc36067ee64df2203
-commit: 9dd78194a3722fa6712192cdd4f7032d45112a9a ARM: report Spectre v2 status through sysfs
-date:   6 days ago
-config: arm-randconfig-r022-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111231.E0EK6F0R-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9dd78194a3722fa6712192cdd4f7032d45112a9a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9dd78194a3722fa6712192cdd4f7032d45112a9a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On Fri, Mar 11, 2022 at 11:54 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Fri, 11 Mar 2022 11:28:28 +0800 menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Move the definition of 'enum skb_drop_reason' in 'skbuff.h' to the uapi
+> > header 'net_dropmon.h', therefore some users, such as eBPF program, can
+> > make use of it.
+>
+> BPF does not need an enum definition to be part of the uAPI to make use
+> of it. BTF should encode the values, and CO-RE can protect from them
+> changing, AFAIU. I think we need a better example user / justification.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+There is something wrong with my description, it's not the eBPF, but the user
+program that loads eBPF.
 
-All errors (new ones prefixed by >>):
+In my case, I'll pass the packet info (protocol, ip, port, etc) and drop reason
+to user space by eBPF that is attached on the kfree_skb() tracepoint.
 
-   arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
->> proc-v7-bugs.c:(.text+0x4e): undefined reference to `spectre_v2_update_state'
+In the user space, I'll custom the description for drop reasons and convert them
+from int to string. Therefore, I need to use 'enum skb_drop_reason' in my
+user space code.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+For now, I copied the definition of 'enum skb_drop_reason' to my code,
+and I think it's better to make them uapi, considering someone else may
+use it this way too.
+
+Thanks
+Menglong Dong

@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB3F4D5D9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4C74D5D9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234599AbiCKIk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
+        id S237025AbiCKIl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiCKIk6 (ORCPT
+        with ESMTP id S237503AbiCKIlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:40:58 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9DE1BA157
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:39:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3B6C8210FB;
-        Fri, 11 Mar 2022 08:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646987994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DfiOPAX1UZrTsNaUT7mGjqf5TamzeUSqWkLnIoo2UwU=;
-        b=gG8PlJp9pbRs1eBpWZC7+H0wQqLy+Kkdh1AryEQYNTsdYnDozxK/Nvlh3YFvpWrBcP4xmm
-        aHlXY8ZGN2QY0q8X1LmasppV7+zBZfGJ9lNCCw4R6peXMtkyGUJePBdBMSNgtFKoc+NHFO
-        z9zKwwQYFhIIo25sANnt7Ts0SMikwGM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646987994;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DfiOPAX1UZrTsNaUT7mGjqf5TamzeUSqWkLnIoo2UwU=;
-        b=sKAntTxnRA5aJK6FzeKWowRAOyfxdjYdRzhwA+CjmNaoPc+V3pD5hhuB7aEQnzp2OFz3Me
-        lMCyQX8/H7sxpRDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B80EA13A85;
-        Fri, 11 Mar 2022 08:39:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RLi8KdkKK2LNPwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Fri, 11 Mar 2022 08:39:53 +0000
-Date:   Fri, 11 Mar 2022 09:39:52 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa
- node changes its N_CPU state
-Message-ID: <YisK2PEkKAqtZPfp@localhost.localdomain>
-References: <20220310120749.23077-1-osalvador@suse.de>
- <87mthxb514.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Fri, 11 Mar 2022 03:41:24 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105411BA15E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:40:22 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id q13so7120963plk.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wwuk7jbsEHLeFz6+/LJoj/dUalVItLfs+0Q0dolP684=;
+        b=AscHYslyW40mq2rObPXzCvGCX+EoUScZoojvmNC7ldKXcJk1h/Wj4jkAA9eDsVibbI
+         wxtr9ieSMsc3g4KK+YNxI2L/I3k2J23Mn5cM9TgxWRW63yA8Y2T8Rd25fya+t/TUcdPC
+         VBjSu5sY9Fsk6jfHKGhnq3zE0I1Jx9eU32Gy7/QJX6n5GHWeV+s5xyFcXBpAgctZ9e1j
+         OnR5wMfeeJKau5C053ouHlcQER6qodF9fPvhK1XQ0qAd13Zq02C9ImJXa5cpq+NPU0w3
+         kp7JWxA6DUPLTpwKpcQNtp4/AT4fx2516iKJtjXHUNDOBHYHzvM7wcw8jcYakE50ZUoA
+         +JYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wwuk7jbsEHLeFz6+/LJoj/dUalVItLfs+0Q0dolP684=;
+        b=DQDdZB8EMlkyOgfMbTYoaADHokLRs2tRhtz9oXrIGacmp+KlYn2jng46vG1gn6tGZ+
+         fk64ARtoVq9fAjYW36qHreUOmwN6FjZjHz1leYCpqUsVnAis/oQFVSryqYeW5peV9ASu
+         2QUKG4fd5H9GA0aquDC2hcFt16jS/sockCTiO2gzi7ierRboiCF0ZAo9+VrUqQLCo4NW
+         1JK/7twfJOEws/yCYbjmGmfkSAFZGAVZpUE8XUR2ZE6a1AhzOXRUKRxpkzwdWNjFTTjp
+         hwQJj7qwx8mnh/wNPZH48MSRHTsgpkOoWVibaEFipDPP+hhQ3ZviIpSs+twPiFEUipob
+         BjNw==
+X-Gm-Message-State: AOAM530o994Bn55q3I3oLluf/rrKsm9nDoy569xwbYM4Bh8ie4+Vfc+H
+        /pvHhLOk8ZfFq6M3+SZ0MVyx0Id+ahD0Sw==
+X-Google-Smtp-Source: ABdhPJwMI9VDRfAs/35Zo71vuqOBm7lSCHJlhIDhSpWXI0sH8nY+eBpFvl4Zco19ACPc6BMoC1S5XA==
+X-Received: by 2002:a17:90a:9294:b0:1b9:48e9:a030 with SMTP id n20-20020a17090a929400b001b948e9a030mr20436733pjo.200.1646988021602;
+        Fri, 11 Mar 2022 00:40:21 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f791d0115esm1119613pfk.171.2022.03.11.00.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 00:40:21 -0800 (PST)
+Date:   Fri, 11 Mar 2022 14:10:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     vireshk@kernel.org, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: Fix potential NULL dereference
+Message-ID: <20220311084019.w45kfluiamgosivu@vireshk-i7>
+References: <1646987730-7597-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87mthxb514.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1646987730-7597-1-git-send-email-baihaowen@meizu.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 10:24:07AM +0800, Huang, Ying wrote:
-> It may be unnecessary to be fixed in this patch.  But I think we need to
-> cleanup the kernel config dependencies of the demotion code at some time.
-
-I am glad you brought this up because it is something I have been
-thinking about.
-I already added it in my to-do list, but I would do it in a separate
-patch if you do not mind.
-
-Now, let us try to untangle this mess:
-
-> 1. Even if !defined(CONFIG_HOTPLUG_CPU) &&
->    !defined(CONFIG_MEMORY_HOTPLUG), we still need to allocate
->    "node_demotion" and call set_migration_target_nodes() during boot time.
+On 11-03-22, 16:35, Haowen Bai wrote:
+> Fix following coccicheck warning:
+> drivers/staging/greybus/bootrom.c:301:35-39: ERROR: fw is NULL but dereferenced.
 > 
-> 2. If !defined(CONFIG_MEMORY_HOTPLUG), we don't need
->    migrate_on_reclaim_callback().
-> 
-> 3. We need defined(CONFIG_NUMA) && defined(CONFIG_MIGRATION) for all
->    these code.
+> When goto queue_work but dereference Uninitialized fw will trigger a NULL 
+> dereference.
 
-Back in the early versions [1] I asked whether we could have some
-scenario where this feature could be used when !CONFIG_MEMORY_HOTPLUG
-[2].
-The reason I was given is that in order to bind the expose PMEM memory
-as RAM (add_memory_driver_managed()), we need MEMORY_HOTPLUG.
+Please have a look at earlier attempts like this:
 
-Now, as I said back then, I am not sure whether PMEM memory can be
-exposed as RAM by other means, but as it was pointed out back then,
-it really looks like we, at least, need CONFIG_MEMORY_HOTPLUG.
-
-Ok, so we have our first dependency: CONFIG_MEMORY_HOTPLUG.
-
-Now, about CONFIG_HOTPLUG_CPU, it seems that that is not a strong dependency,
-as we do not need cpu-hotplug in order to use the feature.
-
-We definitely need CONFIG_MIGRATION and CONFIG_NUMA though.
-
-So, we have something like:
-
-- Depends:
-  * CONFIG_NUMA           (obvius)
-  * CONFIG_MIGRATION      (to migrate between nodes)
-  * CONFIG_MEMORY_HOTPLUG (to expose PMEM as RAM)
-
-Sounds about right?
-
-[1] https://patchwork.kernel.org/project/linux-mm/patch/20210401183221.977831DE@viggo.jf.intel.com/#24099405
-[2] https://patchwork.kernel.org/project/linux-mm/patch/20210401183221.977831DE@viggo.jf.intel.com/#24103467
+https://lore.kernel.org/all/2015099.xVv48VzNit@linux.local/
 
 -- 
-Oscar Salvador
-SUSE Labs
+viresh

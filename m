@@ -2,125 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A093A4D6025
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A7C4D6026
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 11:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347936AbiCKKxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 05:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S1348038AbiCKKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 05:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiCKKx3 (ORCPT
+        with ESMTP id S231485AbiCKKyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 05:53:29 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101311B01A4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 02:52:23 -0800 (PST)
-X-UUID: 133bdabe412341dd9d880869907dd98f-20220311
-X-UUID: 133bdabe412341dd9d880869907dd98f-20220311
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1442557884; Fri, 11 Mar 2022 18:52:17 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 11 Mar 2022 18:52:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Mar 2022 18:52:15 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <linux@armlinux.org.uk>
-CC:     <andreyknvl@gmail.com>, <anshuman.khandual@arm.com>,
-        <ardb@kernel.org>, <arnd@arndb.de>, <dvyukov@google.com>,
-        <geert+renesas@glider.be>, <glider@google.com>,
-        <kasan-dev@googlegroups.com>, <lecopzer.chen@mediatek.com>,
-        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <lukas.bulwahn@gmail.com>,
-        <mark.rutland@arm.com>, <masahiroy@kernel.org>,
-        <matthias.bgg@gmail.com>, <ryabinin.a.a@gmail.com>,
-        <yj.chiang@mediatek.com>
-Subject: Re: [PATCH v3 0/2] arm: kasan: support CONFIG_KASAN_VMALLOC
-Date:   Fri, 11 Mar 2022 18:52:15 +0800
-Message-ID: <20220311105215.5408-1-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <YismXDtUZ2cPtVnN@shell.armlinux.org.uk>
-References: <YismXDtUZ2cPtVnN@shell.armlinux.org.uk>
+        Fri, 11 Mar 2022 05:54:07 -0500
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AA842A02;
+        Fri, 11 Mar 2022 02:52:57 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 666F05FD03;
+        Fri, 11 Mar 2022 13:52:54 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1646995974;
+        bh=9rSBR8JGxQz0Wk2XstNzk9JnyfywhXEj+uhA+3pLrgQ=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=NGW1wUStNxtit3muLwKY3zd3zSfTCKLUwdL8lwg7qVhit5eHFRPlRj6xJBYQloZNN
+         7eecMZ0YYCR/5ZVDX9mUart7M+aoitvfn+B6pBm1/+jr/YqPDWs7QL8clGXSEgXAcy
+         GJpIKlFlyckm4lwAFzwy+AUgqZv0jbZaSZlxI1rYn4CKRPSDJl050EaF8fGdjPOvZR
+         ULbK1ppWyAfn9hM2l5Pp/wUsbmZb8dkTBaDIKiOsNKf09XHFEWDbB3ad9C1KVoI5Hr
+         5vCxlH9kdjQlMcxkToI27Kxc5USTrM19Kseb9OuwWTPW21I+zAgYU0Rvkh7D82Cbm1
+         noufMgfsGATvw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 11 Mar 2022 13:52:52 +0300 (MSK)
+From:   Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
+        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v1 1/3] af_vsock: add two new tests for SOCK_SEQPACKET
+Thread-Topic: [RFC PATCH v1 1/3] af_vsock: add two new tests for
+ SOCK_SEQPACKET
+Thread-Index: AQHYNTYb8Fo8I4zas06sN3idOLyY0g==
+Date:   Fri, 11 Mar 2022 10:52:36 +0000
+Message-ID: <1bb5ce91-da53-7de9-49ba-f49f76f45512@sberdevices.ru>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <38F466471E8C0F4A936B059DF0BDBF06@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/11 07:23:00 #18938550
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Mar 11, 2022 at 12:08:52AM +0100, Linus Walleij wrote:
-> > On Sun, Feb 27, 2022 at 2:48 PM Lecopzer Chen
-> > <lecopzer.chen@mediatek.com> wrote:
-> > 
-> > > Since the framework of KASAN_VMALLOC is well-developed,
-> > > It's easy to support for ARM that simply not to map shadow of VMALLOC
-> > > area on kasan_init.
-> > >
-> > > Since the virtual address of vmalloc for Arm is also between
-> > > MODULE_VADDR and 0x100000000 (ZONE_HIGHMEM), which means the shadow
-> > > address has already included between KASAN_SHADOW_START and
-> > > KASAN_SHADOW_END.
-> > > Thus we need to change nothing for memory map of Arm.
-> > >
-> > > This can fix ARM_MODULE_PLTS with KASan, support KASan for higmem
-> > > and provide the first step to support CONFIG_VMAP_STACK with Arm.
-> > >
-> > >
-> > > Test on
-> > > 1. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping.
-> > > 2. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping + LPAE.
-> > > 3. Qemu with memory 2G and vmalloc=500M for 2G/2G mapping.
-> > >
-> > > v3:
-> > >     rebase on 5.17-rc5.
-> > >     Add simple doc for "arm: kasan: support CONFIG_KASAN_VMALLOC"
-> > >     Tweak commit message.
-> > 
-> > Ater testing this with my kernel-in-vmalloc patches and some hacks, I got
-> > the kernel booting in the VMALLOC area with KASan enabled!
-> > See:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.17-rc1
-> > 
-> > That's a pretty serious stress test. So:
-> > Tested-by: Linus Walleij <linus.walleij@linaro.org>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > for the series.
-> > 
-> > I suppose you could put this into Russell's patch tracker, it's gonna be
-> > for kernel v5.19 by now but why stress. It seems I can fix up
-> > kernel-in-vmalloc on top and submit that for v5.19 as well.
-> 
-> Ard's series already adds vmap stack support (which we've been doing
-> some last minute panic-debugging on to get it ready for this merge
-> window), but the above description makes it sound like this series is
-> a pre-requisit for that.
-> 
-> Is it? Will Ard's work cause further regressions because this series
-> isn't merged.
-> 
-> Please clarify - and urgently, there is not much time left before the
-> merge window opens.
-> 
-
-Sorry I didn't describe it clearly,
-
-config VMAP_STACK
-  default y
-  bool "Use a virtually-mapped stack"
-  depends on HAVE_ARCH_VMAP_STACK
-  depends on !KASAN || KASAN_HW_TAGS || KASAN_VMALLOC
-
-This means KASAN can support with VMAP_STACK=y
-
-
-
-BRs,
-Lecopzer
+VGhpcyBhZGRzIHR3byB0ZXN0czogZm9yIHJlY2VpdmUgdGltZW91dCBhbmQgcmVhZGluZyB0byBp
+bnZhbGlkDQpidWZmZXIgcHJvdmlkZWQgYnkgdXNlci4gSSBmb3Jnb3QgdG8gcHV0IGJvdGggcGF0
+Y2hlcyB0byBtYWluDQpwYXRjaHNldC4NCg0KQXJzZW5peSBLcmFzbm92KDIpOg0KDQphZl92c29j
+azogU09DS19TRVFQQUNLRVQgcmVjZWl2ZSB0aW1lb3V0IHRlc3QNCmFmX3Zzb2NrOiBTT0NLX1NF
+UVBBQ0tFVCBicm9rZW4gYnVmZmVyIHRlc3QNCg0KdG9vbHMvdGVzdGluZy92c29jay92c29ja190
+ZXN0LmMgfCAxNzAgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQoxIGZp
+bGUgY2hhbmdlZCwgMTcwIGluc2VydGlvbnMoKykNCg0KLS0gDQoyLjI1LjENCg==

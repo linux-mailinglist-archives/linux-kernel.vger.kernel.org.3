@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD4D4D5852
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB56D4D5854
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 03:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345745AbiCKCqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 21:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S1345744AbiCKCqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 21:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345695AbiCKCqR (ORCPT
+        with ESMTP id S1345695AbiCKCqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 21:46:17 -0500
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835821A616E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:45:15 -0800 (PST)
-Date:   Fri, 11 Mar 2022 02:45:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1646966713;
-        bh=75n7D8GkYY40Smy0jggoA4SN2YbNoOfxMs7WJaVH1BQ=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=smcqxfpP0eydrrymPUTUQKgUeY4UV3ULEfkQvq3VNj3sGW8i0CVEovFvDjUHAu+aD
-         Bh2zEDb8F2EBGyMXGPEd2DHSWG2tzLj3w5w08uHBCzNZBR1dAibNILjDcqUILci+Qe
-         GNDYMx2iem/kBGXyRuFAHhw8nYt1I/N3q8rtuJ3jW6KEyphkntPgt7GbV8tTM2/ZwQ
-         iEHBdEoXhKPe1qthkJMnp4hcq0GgQ3VlLGbSo1CD+biVwOlF/K2/Yd7MC90+/RMClZ
-         bfIq5TtmlZqiBx61UileYOxq0xQ3fAAmjEjR2+GI/+LiKvq75HzYGuwpE4S59Fl5EH
-         gdMCSzBzuRc/Q==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Subject: Re: [RFC PATCH v1 1/2] list: add type-safer list_head wrapper
-Message-ID: <L-1HXgKDMuTPMcgA_RH5BHU4bFb1U8UcqcmeZyV08uR7oBO2XsgCg3yeQNk3nK2SOtb3VDLMtbMLTjmQmFMju1weR47JOEh5DHzGFVdpHNE=@protonmail.com>
-In-Reply-To: <CAHk-=wjkqz42CNjDgWA9U3uNWa9GriqaCqqKciqm0sZUYjfLQg@mail.gmail.com>
-References: <20220311013238.3387227-1-pobrn@protonmail.com> <20220311013238.3387227-2-pobrn@protonmail.com> <CAHk-=wjkqz42CNjDgWA9U3uNWa9GriqaCqqKciqm0sZUYjfLQg@mail.gmail.com>
+        Thu, 10 Mar 2022 21:46:37 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926CA1A6171
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:45:35 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so6945980pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 18:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=47i1jj48gdh3ugZzKcCuj8iKYQMqov+4VOJuq+ofx1c=;
+        b=EwsUUWwZsnckxs2a4ZBw8a9ZffO4o4ww26MBKNDANGiNO/8noFSkJHVfuhyqhy8B9p
+         nkdYIVNy0ZeeYNaq6/8qCbC73vC+7gT4s54Si/VYAwu2ccJOTzFZLv/1+RDvHD7Jj+JO
+         Ghg5aguK+r4EFNoq+afjB8BGxdwZYevnaXojB3+Ei4UbsMnM0xjAkSbGH3KaaVENaUxK
+         +atuZ5iPE6xfqgYHjOZxBqODlc1/a52i6vibGuuzNSJh0ae5b3NCyoFc/urowJ/Vk0Sb
+         xTaCBBJL9wd6HpZ+2eW2mWyGEPZjY4AjV7U7yTQJUcbjlZHlJghWHx1ahg9GEv+E+zNk
+         Zb+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=47i1jj48gdh3ugZzKcCuj8iKYQMqov+4VOJuq+ofx1c=;
+        b=pgoi0DjsP3VNBuLzEni17s7g7XtjGY9Yh7tFspUU8Wvrd9GFG8U849nEcTWvI6A01v
+         4NOUOXoh+s1WOMUdyd3Be8kMfKXDhvH/Zy5602MvXUSz/wbyui4utFnxKOZoaoH7h71A
+         O6IQNVVn5dGEN+PkVbJC1oZ4qkRcU3faXqU13E0ICdbRqARiyBAzk8rgtkD0Gg7yw7VF
+         IJcCdXMOn39uz8+tkWIqGbQUuFYbLu5gh6vmv6e/AjBJ0ZhqH6R2+bi6Fi4mDrpGiVRy
+         AIy7BNue1LpPE8OtjMexeqoCtgBMkgTKLT3wLR8a6lh5hV7NP12OWpzuI3GOVkBA0Nig
+         FDvg==
+X-Gm-Message-State: AOAM532SthwqWVxK4idFDVaIGx2I2oTTALRqIcUNAei7JI9W9pScgSZy
+        0f/Rkj2CEs9D7TZllyIEvKR8BA==
+X-Google-Smtp-Source: ABdhPJxflJ3gDTpRwiLKqo8WKXUUCVF0L/GEoBXyngNxZCllT97T7WemfWcoM3I53cQCENyD2VayNQ==
+X-Received: by 2002:a17:90a:cce:b0:1bf:6387:30d9 with SMTP id 14-20020a17090a0cce00b001bf638730d9mr19593474pjt.196.1646966734760;
+        Thu, 10 Mar 2022 18:45:34 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g1-20020aa796a1000000b004f788397831sm693790pfk.217.2022.03.10.18.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 18:45:34 -0800 (PST)
+Date:   Fri, 11 Mar 2022 02:45:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] KVM: X86: Extend KVM_SET_VCPU_EVENTS to inject a
+ SHUTDOWN event
+Message-ID: <Yiq3yqdUQ/aLz3yc@google.com>
+References: <20220310084001.10235-1-chenyi.qiang@intel.com>
+ <20220310084001.10235-2-chenyi.qiang@intel.com>
+ <Yio4qknizH25MBkP@google.com>
+ <5f2012f7-80ba-c034-a098-cede4184a125@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f2012f7-80ba-c034-a098-cede4184a125@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,78 +80,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Fri, Mar 11, 2022, Chenyi Qiang wrote:
+> 
+> On 3/11/2022 1:43 AM, Sean Christopherson wrote:
+> > On Thu, Mar 10, 2022, Chenyi Qiang wrote:
+> > > @@ -4976,6 +4977,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+> > >   		}
+> > >   	}
+> > > +	if (events->flags & KVM_VCPUEVENT_SHUTDOWN)
+> > > +		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+> > 
+> > Huh.  I think we need to make this bidirection and add it to get_vcpu_events()
+> > as well, and treat it as a bug fix.  In direct triple fault cases, i.e. hardware
+> > detected and morphed to VM-Exit, KVM will never lose the triple fault.  But for
+> > triple faults sythesized by KVM, e.g. the RSM path or nested_vmx_abort(), if KVM
+> > exits to userspace before the request is serviced, userspace could migrate the
+> > VM and lose the triple fault.
+> 
+> Good catch. Then the name of this definition is not quit fit now. How about
+> changing to KVM_VCPUEVENT_SYTHESIZED_TRIPLE_FAULT?
 
+I don't think the SYNTHESIZED part is necessary.  KVM doesn't make that distinction
+for other events/exceptions, and whose to say that KVM won't end up with a case where
+a "real" triple fault needs to be migrated.
 
-2022. m=C3=A1rcius 11., p=C3=A9ntek 2:42 keltez=C3=A9ssel, Linus Torvalds =
-=C3=ADrta:
-> On Thu, Mar 10, 2022 at 5:33 PM Barnab=C3=A1s P=C5=91cze <pobrn@protonmai=
-l.com> wrote:
-> >
-> > The underlying idea is to define each list head using an anonymous stru=
-ct:
->
-> Why struct? Union is much better, and doesn't pointlessly waste memory
-> for members that are only used for their type.
-
-As far as I can tell, zero-sized arrays won't take up any space. It's true
-that if the type has excessive alignment requirements, then it may indeed
-waste space. Changing it to a pointer+union is a simple change, nonetheless=
-.
-
-
->
-> Anyway, as far as I can tell, your model is unworkable as-is, since it
-> only works for a list that is external to the types in question.
->
-> Which is not even remotely the interesting case. All serious list uses
-> are inside other types, and refer to each other.
->
-> So this seems to be fundamentally broken, in that it only works for
-> trivial things, and is not even as good as
->
->    https://lore.kernel.org/all/CAHk-=3DwiacQM76xec=3DHr7cLchVZ8Mo9VDHmXRJ=
-zJ_EX4sOsApEA@mail.gmail.com/
->
-> that actually converted a real case.
->
-> That one didn't do the automatic offset thing, but see
->
->    https://lore.kernel.org/all/CAADWXX-Pr-D3wSr5wsqTEOBSJzB9k7bSH+7hnCAj0=
-AeL0=3DU4mg@mail.gmail.com/
->
-> on the problems that has.
->
-> Again, you avoided those problems by making the use-case a narrow and
-> uninteresting one.
-
-Yes, I have mentioned at the end that there are limitations of this approac=
-h
-(to keep it easy to use and sane) and that it won't work everywhere,
-namely where the value type is incomplete. E.g.
-  * you cannot have a list of T inside a T;
-  * you cannot have a list of B inside A plus a list of A inside B.
-
-Nonetheless, I still think there are legitimate use cases for this, where
-the simple, limited interface works fine. And I am by no means suggesting
-not going forward with the other ideas that came up. I mostly imagined this
-tlist as an "addition" for the simple, trivial cases.
-
-For example, there are currently more than 1000 occurrences of
-
-  static LIST_HEAD(
-
-in the source tree. I did not check, but I think it's very likely that most=
- of
-them would satisfy the constraints of the proposed interface. And while I c=
-annot
-provide any numbers, I would not be surprised if most list uses in the kern=
-el were
-"boring" and "trivial", where this interface would work.
-
-But I understand if you don't want something that doesn't work for every ca=
-se.
-
-
-Best regards,
-Barnab=C3=A1s P=C5=91cze
+I do have a slight preference for KVM_VCPUEVENT_TRIPLE_FAULT or KVM_VCPUEVENT_SHUTDOWN,
+but it's a very slight preference.

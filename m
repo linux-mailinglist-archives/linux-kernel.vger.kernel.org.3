@@ -2,272 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A547B4D5637
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 01:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CD24D565B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 01:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345109AbiCKABL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Mar 2022 19:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S1344695AbiCKAKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Mar 2022 19:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345151AbiCKABE (ORCPT
+        with ESMTP id S230224AbiCKAKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Mar 2022 19:01:04 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ACEE4D2C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:59:58 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id h11so10005827ljb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 15:59:58 -0800 (PST)
+        Thu, 10 Mar 2022 19:10:37 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C73E33B8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:09:35 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id b37so3025400uad.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Mar 2022 16:09:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=uv1ARUm9lyp+CQBIStJYjj77ryWDMuu9udI8j8V7TJc=;
-        b=Rni0RTtGnmIflbR6+BQsLW0/KrHWFJIIfdNCKLIWk15qKmCOGP7bwaeqp8RKwvdb8k
-         cZqel9Sw8mslp8JqaIYJDE2P5f2BoIEe1ZcMUl0GBpBSmjZQes8H0N5d3nhKsvxdZNQ7
-         sNQNvuDgnLTAiVA3kA70fq2vIDbufBYEAZ1N62jFtUhbWq4dH1ltK86FrJrUs8ToxQJN
-         ydL+6oBC3oYJ0Tlbo4PWNqJEs9WA76AdOp+iCGUadgCQuurGhXb+CR4z+KrDx17llFj2
-         JC6j0xeux2yNo76YQRrH3nVY41FJhOyoWmm73QUtKiyWGJx3Gik/3WmbefsGgw54vD3b
-         nuQg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KKinXJt7hCI4YpcWmOz6K5DlvGxO13aibVS8plGZoac=;
+        b=HqX+58LeRiyJ+PCpXDzYP5OEeCLu5dtyp+co5T4+ZSilbM/f/SuTyjR/SP5bq59Qje
+         NYcX25WKgHXZ7PNbCD+j6iamM/KYFiq87pv9laSQydiTUaVkWdWBOL8O7VL5I/iQtT9r
+         FDGvPa/3t0WOBLSafpitmkfSrZB3/mW3aphHPPlHNz05DljBZ3DuozCDGJSsvgRkA/W3
+         AzU1i1dkD4LVMUUI/BLlEVswagAzDBwpK+fmYbh1jYiRkTc7uCVBegSKSNnUzZploBMO
+         wgdVfKk4l0YBvSpGa3nXIddYza4tfmO3p7JqdnzggMQgnms0/2cZUvYp3RRkMrj241nk
+         C7kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=uv1ARUm9lyp+CQBIStJYjj77ryWDMuu9udI8j8V7TJc=;
-        b=iE2ytl9+kOiApoLtcT//bkc44eKKjekhZxbw3tAXjQK/YGELmYh9xHoxma78y6HJ55
-         WS2KAECl200OAYD2OeDd3jGO7pk1njgIHTrcNdREqyi2WLJJkvk+AcUmgRgzIpt4EphP
-         sEEogHF6isT8Z6nwTEFl1La0NpV7mJaFWJ3PjcE4NxPii2/hdiPnPaLJG1z+xbL50Xmo
-         IOxbLAOA+FIg5nS4NFrF0LYyKe0EK00oAYnbpkBZZ1SkxGDCe8bVdpJNQT4TnOJVuxaS
-         DyBNTRu5moHjHydERqYvRD/N3zLcJ78ddd7HS1qr1xjDgo/EuGUarEBNl2T7lBBs3nnH
-         mDjg==
-X-Gm-Message-State: AOAM533IpIxNU3pUeQE0XX5J6mB7eUY4FjQ8InAhXfeKWsqS1NZL3SaY
-        9LMOJJhpmQNksgBmxpld1eugYw==
-X-Google-Smtp-Source: ABdhPJyQOf302TvXhH2b3rZR80tDsfCRQaobQOu5tWdLlVJfwHUAQpkxeQjo+jL9EMDlrUqsQxNIsQ==
-X-Received: by 2002:a2e:b5b9:0:b0:246:b30:64c8 with SMTP id f25-20020a2eb5b9000000b002460b3064c8mr4379870ljn.17.1646956796325;
-        Thu, 10 Mar 2022 15:59:56 -0800 (PST)
-Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
-        by smtp.gmail.com with ESMTPSA id w23-20020a0565120b1700b0044829a6061esm1248938lfu.186.2022.03.10.15.59.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 15:59:55 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 07/10] net: dsa: Pass MST state changes to
- driver
-In-Reply-To: <20220310230828.fvx24zhoyue5mkb7@skbuf>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
- <20220301100321.951175-8-tobias@waldekranz.com>
- <20220303222055.7a5pr4la3wmuuekc@skbuf> <87mthymblh.fsf@waldekranz.com>
- <20220310103509.g35syl776kyh5j2n@skbuf> <87h785n67k.fsf@waldekranz.com>
- <20220310161857.33owtynhm3pdyxiy@skbuf> <87bkydmnmy.fsf@waldekranz.com>
- <20220310230828.fvx24zhoyue5mkb7@skbuf>
-Date:   Fri, 11 Mar 2022 00:59:54 +0100
-Message-ID: <878rthmk91.fsf@waldekranz.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KKinXJt7hCI4YpcWmOz6K5DlvGxO13aibVS8plGZoac=;
+        b=4uWrrbvGCS7EvwZ3yIctI0pL7Iw+moplldtYhsEf1XUOZwq5L8SgNHB3nA7x55hz9S
+         LavEWMJ6QzQz3CJyjptDh2E/QPUaVtTXH7an0S4KHtpW17CFhBuXedB15Cc+FWBd+k5j
+         7McLUjAALRSDIGUVnveubCPI7Rtiqs5uba1pceBXDWGP1XSDCS5ESkOPIl1ls+lE5W2y
+         0D2Rf1OjJCQ2iD9k7bkAJnyg/kvk/yrObARDf5dag36IsZyg3c6zM6TXfMhUdvPrXxn+
+         N07hFpWPVUBqzMSa8Vot9gzlfG9jm1YS9OqirA7os/puixrXIUpvwGVVq2U8Ow8nlQb5
+         t/Wg==
+X-Gm-Message-State: AOAM531G8w8RSu3jXSErX2NdJELOxpIKP3aCS9Jm//fs3BHcTvoCaS7u
+        fh8rY46fEBeOuFSt02CdzIv2KuitCJmkBqj6ag6fGA==
+X-Google-Smtp-Source: ABdhPJyb6rTtf+blMbaJtCSG6M567B8/H8bDzy2b/FCzeVtcsifwkglVog4fG17ucBsnOxmlRf+HGHL/HFVCdu14FhY=
+X-Received: by 2002:ab0:4d52:0:b0:34c:41ce:275b with SMTP id
+ k18-20020ab04d52000000b0034c41ce275bmr3638164uag.19.1646957374015; Thu, 10
+ Mar 2022 16:09:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <dd620dbd-6d71-7553-d1e9-95676ff12c82@nutanix.com>
+ <YiKsUr1FQwmDP7V0@google.com> <CAOUHufZyrLrkEvFay+FddN5Ve3v_-JvNROHo9hEhsoVuCpwh0Q@mail.gmail.com>
+ <YiX2HcF5o2IjfX1H@dhcp22.suse.cz> <Yim+aOCyfwLrqYWi@dhcp22.suse.cz>
+In-Reply-To: <Yim+aOCyfwLrqYWi@dhcp22.suse.cz>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 10 Mar 2022 17:09:22 -0700
+Message-ID: <CAOUHufZ3MfDSuN4x_2wqGpc5aaKGm840KUKX6KPfvp3OcJbjTg@mail.gmail.com>
+Subject: Re: Regression of madvise(MADV_COLD) on shmem?
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Ivan Teterevkov <ivan.teterevkov@nutanix.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-api@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Tim Murray <timmurray@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Suren Baghdasaryan <surenb@google.com>, dancol@google.com,
+        Shakeel Butt <shakeelb@google.com>, sonnyrao@google.com,
+        oleksandr@redhat.com, Hillf Danton <hdanton@sina.com>,
+        Benoit Lize <lizeb@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 01:08, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Thu, Mar 10, 2022 at 11:46:45PM +0100, Tobias Waldekranz wrote:
->> On Thu, Mar 10, 2022 at 18:18, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Thu, Mar 10, 2022 at 05:05:35PM +0100, Tobias Waldekranz wrote:
->> >> On Thu, Mar 10, 2022 at 12:35, Vladimir Oltean <olteanv@gmail.com> wrote:
->> >> > On Thu, Mar 10, 2022 at 09:54:34AM +0100, Tobias Waldekranz wrote:
->> >> >> >> +	if (!dsa_port_can_configure_learning(dp) || dp->learning) {
->> >> >> >> +		switch (state->state) {
->> >> >> >> +		case BR_STATE_DISABLED:
->> >> >> >> +		case BR_STATE_BLOCKING:
->> >> >> >> +		case BR_STATE_LISTENING:
->> >> >> >> +			/* Ideally we would only fast age entries
->> >> >> >> +			 * belonging to VLANs controlled by this
->> >> >> >> +			 * MST.
->> >> >> >> +			 */
->> >> >> >> +			dsa_port_fast_age(dp);
->> >> >> >
->> >> >> > Does mv88e6xxx support this? If it does, you might just as well
->> >> >> > introduce another variant of ds->ops->port_fast_age() for an msti.
->> >> >> 
->> >> >> You can limit ATU operations to a particular FID. So the way I see it we
->> >> >> could either have:
->> >> >> 
->> >> >> int (*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 vid)
->> >> >> 
->> >> >> + Maybe more generic. You could imagine there being a way to trigger
->> >> >>   this operation from userspace for example.
->> >> >> - We would have to keep the VLAN<->MSTI mapping in the DSA layer in
->> >> >>   order to be able to do the fan-out in dsa_port_set_mst_state.
->> >> >> 
->> >> >> or:
->> >> >> 
->> >> >> int (*port_msti_fast_age)(struct dsa_switch *ds, int port, u16 msti)
->> >> >> 
->> >> >> + Let's the mapping be an internal affair in the driver.
->> >> >> - Perhaps, less generically useful.
->> >> >> 
->> >> >> Which one do you prefer? Or is there a hidden third option? :)
->> >> >
->> >> > Yes, I was thinking of "port_msti_fast_age". I don't see a cheap way of
->> >> > keeping VLAN to MSTI associations in the DSA layer. Only if we could
->> >> > retrieve this mapping from the bridge layer - maybe with something
->> >> > analogous to br_vlan_get_info(), but br_mst_get_info(), and this gets
->> >> > passed a VLAN_N_VID sized bitmap, which the bridge populates with ones
->> >> > and zeroes.
->> >> 
->> >> That can easily be done. Given that, should we go for port_vlan_fast_age
->> >> instead? port_msti_fast_age feels like an awkward interface, since I
->> >> don't think there is any hardware out there that can actually perform
->> >> that operation without internally fanning it out over all affected VIDs
->> >> (or FIDs in the case of mv88e6xxx).
->> >
->> > Yup, yup. My previous email was all over the place with regard to the
->> > available options, because I wrote it in multiple phases so it wasn't
->> > chronologically ordered top-to-bottom. But port_vlan_fast_age() makes
->> > the most sense if you can implement br_mst_get_info(). Same goes for
->> > dsa_port_notify_bridge_fdb_flush().
->> >
->> >> > The reason why I asked for this is because I'm not sure of the
->> >> > implications of flushing the entire FDB of the port for a single MSTP
->> >> > state change. It would trigger temporary useless flooding in other MSTIs
->> >> > at the very least. There isn't any backwards compatibility concern to
->> >> > speak of, so we can at least try from the beginning to limit the
->> >> > flushing to the required VLANs.
->> >> 
->> >> Aside from the performance implications of flows being temporarily
->> >> flooded I don't think there are any.
->> >> 
->> >> I suppose if you've disabled flooding of unknown unicast on that port,
->> >> you would loose the flow until you see some return traffic (or when one
->> >> side gives up and ARPs). While somewhat esoteric, it would be nice to
->> >> handle this case if the hardware supports it.
->> >
->> > If by "handle this case" you mean "flush only the affected VLANs", then
->> > yes, I fully agree.
->> >
->> >> > What I didn't think about, and will be a problem, is
->> >> > dsa_port_notify_bridge_fdb_flush() - we don't know the vid to flush.
->> >> > The easy way out here would be to export dsa_port_notify_bridge_fdb_flush(),
->> >> > add a "vid" argument to it, and let drivers call it. Thoughts?
->> >> 
->> >> To me, this seems to be another argument in favor of
->> >> port_vlan_fast_age. That way you would know the VIDs being flushed at
->> >> the DSA layer, and driver writers needn't concern themselves with having
->> >> to remember to generate the proper notifications back to the bridge.
->> >
->> > See above.
->> >
->> >> > Alternatively, if you think that cross-flushing FDBs of multiple MSTIs
->> >> > isn't a real problem, I suppose we could keep the "port_fast_age" method.
->> >> 
->> >> What about falling back to it if the driver doesn't support per-VLAN
->> >> flushing? Flushing all entries will work in most cases, at the cost of
->> >> some temporary flooding. Seems more useful than refusing the offload
->> >> completely.
->> >
->> > So here's what I don't understand. Do you expect a driver other than
->> > mv88e6xxx to do something remotely reasonable under a bridge with MSTP
->> > enabled? The idea being to handle gracefully the case where a port is
->> > BLOCKING in an MSTI but FORWARDING in another. Because if not, let's
->> > just outright not offload that kind of bridge, and only concern
->> > ourselves with what MST-capable drivers can do.
->> 
->> I think you're right. I was trying to make it easier for other driver
->> writers, but it will just be more confusing and error prone.
->> 
->> Alright, so v3 will have something like this:
->> 
->> bool dsa_port_can_offload_mst(struct dsa_port *dp)
->> {
->> 	return ds->ops->vlan_msti_set &&
->> 		ds->ops->port_mst_state_set &&
->> 		ds->ops->port_vlan_fast_age &&
->> 		dsa_port_can_configure_learning(dp);
->> }
->> 
->> If this returns false, we have two options:
->> 
->> 1. Return -EOPNOTSUPP, which the bridge will be unable to discriminate
->>    from a non-switchdev port saying "I have no idea what you're talking
->>    about". I.e. the bridge will happily apply the config, but the
->>    hardware won't match. I don't like this, but it lines up with most
->>    other stuff.
->> 
->> 2. Return a hard error, e.g. -EINVAL/-ENOSYS. This will keep the bridge
->>    in sync with the hardware and also gives some feedback to the
->>    user. This seems like the better approach to me, but it is a new kind
->>    of paradigm.
->> 
->> What do you think?
+On Thu, Mar 10, 2022 at 2:01 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> Wait, what? It matters a lot where you place the call to
-> dsa_port_can_offload_mst(), too. You don't have to propagate a hard
-> error code, either, at least if you make dsa_port_bridge_join() return
-> -EOPNOTSUPP prior to calling switchdev_bridge_port_offload(), no?
-> DSA transforms this error code into 0, and dsa_port_offloads_bridge*()
-> starts returning false, which makes us ignore all MSTP related switchdev
-> notifiers.
+> On Mon 07-03-22 13:10:08, Michal Hocko wrote:
+> > On Sat 05-03-22 02:17:37, Yu Zhao wrote:
+> > [...]
+> > > diff --git a/mm/swap.c b/mm/swap.c
+> > > index bcf3ac288b56..7fd99f037ca7 100644
+> > > --- a/mm/swap.c
+> > > +++ b/mm/swap.c
+> > > @@ -563,7 +559,7 @@ static void lru_deactivate_file_fn(struct page
+> > > *page, struct lruvec *lruvec)
+> > >
+> > >  static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
+> > >  {
+> > > -       if (PageActive(page) && !PageUnevictable(page)) {
+> > > +       if (!PageUnevictable(page)) {
+> > >                 int nr_pages = thp_nr_pages(page);
+> > >
+> > >                 del_page_from_lru_list(page, lruvec);
+> > > @@ -677,7 +673,7 @@ void deactivate_file_page(struct page *page)
+> > >   */
+> > >  void deactivate_page(struct page *page)
+> > >  {
+> > > -       if (PageLRU(page) && PageActive(page) && !PageUnevictable(page)) {
+> > > +       if (PageLRU(page) && !PageUnevictable(page)) {
+> > >                 struct pagevec *pvec;
+> > >
+> > >                 local_lock(&lru_pvecs.lock);
+> > >
+> > > I'll leave it to Minchan to decide whether this is worth fixing,
+> > > together with this one:
+> >
+> > There doesn't seem to be any dependency on the PageActive anymore. I do
+> > remember we have relied on the PageActive to move from the active list
+> > to the inactive. This is not the case anymore but I am wondering whether
+> > above is really sufficient. If you are deactivating an inactive page
+> > then I would expect you want to move that page in the LRU as well. In
+> > other words don't you want
+> >       if (page_active)
+> >               add_page_to_lru_list
+> >       else
+> >               add_page_to_lru_list_tail
 
-Right. So we also need:
+Yes, this is better.
 
-1. A br_mst_enabled() that we can call from dsa_port_bridge_join to
-   validate the initial state.
+> Do you plan to send an official patch?
 
-2. A switchdev attr event sent out when enabling/disabling MST on the
-   bridge, so that we can NAK the change.
+One thing I still haven't thought through is why the A-bit couldn't
+protect the blob in the test. In theory it should be enough even
+though deactivate_page() is a NOP.
 
-> The important part will be to make sure that MSTP is enabled for this
-> bridge from the get-go (that being the only case in which we can offload
-> an MSTP aware bridge), and refusing to offload dynamic changes to its
-> MSTP state. I didn't re-check now, but I think I remember there being
+1. all pages are initially inactive and have the A-bit set
+2. madvise(COLD) clears the A-bit for zero-filled pages (but fails to
+change their LRU positions)
+3. the memcg hits the limit
+4. pages in the blob are moved to the active LRU because those pages
+still have the A-bit (zero-filled pages remain inactive)
+5. inactive_is_low() tests true and the blob gets deactivated???
 
-Hang on though. Won't that mean that this sequence...
+The last step doesn't make sense, since the inactive list is still very large.
 
-ip link add dev br0 type bridge \
-    vlan_filtering 1 vlan_default_pvid 0 mst_enable 1
-ip link set dev swp1 master br0
-
-...will work, but offloading will be disabled on swp0; whereas this
-sequence...
-
-ip link add dev br0 type bridge \
-    vlan_filtering 1 vlan_default_pvid 0
-ip link set dev swp1 master br0
-ip link set dev br0 type bridge mst_enable 1
-
-...will fail on the final command? Even though they are logically
-equivalent? But maybe that's just the way the cookie crumbles.
-
-> limitations even in the software bridge related to dynamic MSTP mode
-> changes anyway - there had to not be any port VLANs, which IIUC means
-> that you actually need to _delete_ the port PVIDs which are automatically
-> created before you could change the MSTP mode.
-
-There are some ergonomic issues there, yes. I might look at it again and
-see if there is some reasonable way of allowing the mode to be changed
-even when VLANs are present.
-
-> This is the model, what's wrong with it? I said "don't offload the
-> bridge", not "don't offload specific MSTP operations".
-
-Nothing is wrong, I just couldn't see the whole picture.
-
-This is the way.
+Thanks.

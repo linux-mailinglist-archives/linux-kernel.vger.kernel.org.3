@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BACE4D5DE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607CC4D5DE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 09:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbiCKIve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 03:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S242959AbiCKIwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 03:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiCKIv2 (ORCPT
+        with ESMTP id S238027AbiCKIv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 03:51:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB51B754E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:50:24 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nSayY-0004ds-AX; Fri, 11 Mar 2022 09:50:18 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nSayV-005534-Oq; Fri, 11 Mar 2022 09:50:15 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, paskripkin@gmail.com
-Subject: [PATCH net-next v2 4/4] net: usb: asix: suspend embedded PHY if external is used
-Date:   Fri, 11 Mar 2022 09:50:14 +0100
-Message-Id: <20220311085014.1210963-4-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220311085014.1210963-1-o.rempel@pengutronix.de>
-References: <20220311085014.1210963-1-o.rempel@pengutronix.de>
+        Fri, 11 Mar 2022 03:51:56 -0500
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354141BA93A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 00:50:52 -0800 (PST)
+Received: from IT-EXMB-1-123.meizu.com (172.16.1.123) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 11 Mar
+ 2022 16:50:52 +0800
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by
+ IT-EXMB-1-123.meizu.com (172.16.1.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 11 Mar 2022 16:50:49 +0800
+Received: from IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575]) by
+ IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575%3]) with mapi id
+ 15.01.2308.014; Fri, 11 Mar 2022 16:50:49 +0800
+From:   =?gb2312?B?sNe6xs7E?= <baihaowen@meizu.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     "vireshk@kernel.org" <vireshk@kernel.org>,
+        "johan@kernel.org" <johan@kernel.org>,
+        "elder@kernel.org" <elder@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBzdGFnaW5nOiBncmV5YnVzOiBGaXggcG90ZW50aWFs?=
+ =?gb2312?Q?_NULL_dereference?=
+Thread-Topic: [PATCH] staging: greybus: Fix potential NULL dereference
+Thread-Index: AQHYNSL4iVqrOrm/80ClDX0ZeDDii6y5VuSAgACIFEY=
+Date:   Fri, 11 Mar 2022 08:50:49 +0000
+Message-ID: <0a6d02d1b6374cf0bddd0f4e7fbc475a@meizu.com>
+References: <1646987730-7597-1-git-send-email-baihaowen@meizu.com>,<20220311084019.w45kfluiamgosivu@vireshk-i7>
+In-Reply-To: <20220311084019.w45kfluiamgosivu@vireshk-i7>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.137.70]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,80 +58,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case external PHY is used, we need to take care of embedded PHY.
-Since there are no methods to disable this PHY from the MAC side and
-keeping RMII reference clock, we need to suspend it.
-
-This patch will reduce electrical noise (PHY is continuing to send FLPs)
-and power consumption by 0,22W.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v2:
-- rename internal to embedded PHY
-- add note about refclock dependency
----
- drivers/net/usb/asix.h         |  3 +++
- drivers/net/usb/asix_devices.c | 18 +++++++++++++++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-index 072760d76a72..2c81236c6c7c 100644
---- a/drivers/net/usb/asix.h
-+++ b/drivers/net/usb/asix.h
-@@ -158,6 +158,8 @@
- #define AX_EEPROM_MAGIC		0xdeadbeef
- #define AX_EEPROM_LEN		0x200
- 
-+#define AX_EMBD_PHY_ADDR	0x10
-+
- /* This structure cannot exceed sizeof(unsigned long [5]) AKA 20 bytes */
- struct asix_data {
- 	u8 multi_filter[AX_MCAST_FILTER_SIZE];
-@@ -183,6 +185,7 @@ struct asix_common_private {
- 	struct asix_rx_fixup_info rx_fixup_info;
- 	struct mii_bus *mdio;
- 	struct phy_device *phydev;
-+	struct phy_device *phydev_int;
- 	u16 phy_addr;
- 	bool embd_phy;
- 	u8 chipcode;
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 40046d23d986..4241852f392b 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -679,6 +679,22 @@ static int ax88772_init_phy(struct usbnet *dev)
- 
- 	phy_attached_info(priv->phydev);
- 
-+	if (priv->embd_phy)
-+		return 0;
-+
-+	/* In case main PHY is not the embedded PHY and MAC is RMII clock
-+	 * provider, we need to suspend embedded PHY by keeping PLL enabled
-+	 * (AX_SWRESET_IPPD == 0).
-+	 */
-+	priv->phydev_int = mdiobus_get_phy(priv->mdio, AX_EMBD_PHY_ADDR);
-+	if (!priv->phydev_int) {
-+		netdev_err(dev->net, "Could not find internal PHY\n");
-+		return -ENODEV;
-+	}
-+
-+	priv->phydev_int->mac_managed_pm = 1;
-+	phy_suspend(priv->phydev_int);
-+
- 	return 0;
- }
- 
-@@ -734,7 +750,7 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
- 		return ret;
- 
- 	priv->phy_addr = ret;
--	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
-+	priv->embd_phy = ((priv->phy_addr & 0x1f) == AX_EMBD_PHY_ADDR);
- 
- 	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1,
- 			    &priv->chipcode, 0);
--- 
-2.30.2
-
+T2gsIG15IGNhcmVsZXNzIHRvIGNoZWNrIGNvZGUuIFRoYW5rIHlvdSBmb3IgeW91ciBraW5kbHkg
+cmVtaW5kZXIuDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQq3orz+
+yMs6IFZpcmVzaCBLdW1hciA8dmlyZXNoLmt1bWFyQGxpbmFyby5vcmc+DQq3osvNyrG85DogMjAy
+MsTqM9TCMTHI1SAxNjo0MDoxOQ0KytW8/sjLOiCw17rGzsQNCrOty806IHZpcmVzaGtAa2VybmVs
+Lm9yZzsgam9oYW5Aa2VybmVsLm9yZzsgZWxkZXJAa2VybmVsLm9yZzsgZ3JlZ2toQGxpbnV4Zm91
+bmRhdGlvbi5vcmc7IGxpbnV4LXN0YWdpbmdAbGlzdHMubGludXguZGV2OyBsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnDQrW98ziOiBSZTogW1BBVENIXSBzdGFnaW5nOiBncmV5YnVzOiBGaXgg
+cG90ZW50aWFsIE5VTEwgZGVyZWZlcmVuY2UNCg0KT24gMTEtMDMtMjIsIDE2OjM1LCBIYW93ZW4g
+QmFpIHdyb3RlOg0KPiBGaXggZm9sbG93aW5nIGNvY2NpY2hlY2sgd2FybmluZzoNCj4gZHJpdmVy
+cy9zdGFnaW5nL2dyZXlidXMvYm9vdHJvbS5jOjMwMTozNS0zOTogRVJST1I6IGZ3IGlzIE5VTEwg
+YnV0IGRlcmVmZXJlbmNlZC4NCj4NCj4gV2hlbiBnb3RvIHF1ZXVlX3dvcmsgYnV0IGRlcmVmZXJl
+bmNlIFVuaW5pdGlhbGl6ZWQgZncgd2lsbCB0cmlnZ2VyIGEgTlVMTA0KPiBkZXJlZmVyZW5jZS4N
+Cg0KUGxlYXNlIGhhdmUgYSBsb29rIGF0IGVhcmxpZXIgYXR0ZW1wdHMgbGlrZSB0aGlzOg0KDQpo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAxNTA5OS54VnY0OFZ6Tml0QGxpbnV4LmxvY2Fs
+Lw0KDQotLQ0KdmlyZXNoDQo=

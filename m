@@ -2,166 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842F24D632F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E236F4D633B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244819AbiCKOM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S1348423AbiCKOOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239350AbiCKOLE (ORCPT
+        with ESMTP id S1349871AbiCKONi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:11:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948211B308A;
-        Fri, 11 Mar 2022 06:09:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C16861F02;
-        Fri, 11 Mar 2022 14:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC84C340ED;
-        Fri, 11 Mar 2022 14:09:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647007778;
-        bh=0CL2/qApCnzCj9IzxwD5iw737g8Sy9uOx0U4nGkwXFE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GBnlhlJcJ/HAEEPNLdvbr6Rd+QWZVzIQfNqRtTIL6wxdFpwVwgfpXlzDqY5S7KB4k
-         V7Dy+rml9Z8Hur5GsBNJNsgmFjVsXHMV0OjuA85QRKjxLvUoikx7xMRKt/S+4y9JZ9
-         ycwr/DJu0+NeuasA7VuImticuba8w9jyuYDtxWlk5gcdqoSDXMazXGN57RSnUbVZZ8
-         2hl3zVmNAEn62cQvCuaDHMn8e1lthShzTzUVy03lrITpeRuR9SzbrqGGqnVGv9gpY7
-         VcV+W8PaktyLtQDVWPUwsxfDndvzUjQdjmskIrDvr+LVT6bQHy6VzfCr1zYaD5/Pmr
-         a/9C5DBAjqnig==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nSfxY-000lIn-Ga; Fri, 11 Mar 2022 15:09:36 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ming Qian <ming.qian@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 38/38] drivers: media: platform: move some manufacturer entries
-Date:   Fri, 11 Mar 2022 15:07:51 +0100
-Message-Id: <b1803d005b2f671d238fc8579882a493c173d1ef.1647006877.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
-References: <cover.1647006877.git.mchehab@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 09:13:38 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826C21C65CF
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:12:22 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 929C7C01B; Fri, 11 Mar 2022 15:12:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1647007940; bh=F9oTQJj/bOWo+DnmjeL79H/5Dvz3gPQThlOlCq8LXyg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BtQJETfV7ckRZaHu3+Pz0LoOZinNNMnVWZNnSWyvGsJOPkmUGMMfpxr2YRym04l9E
+         zQS5scHlHFAHZhhdNA9K54ROQbUv6U3vI+Cdw8YMFACYaqY3Ijg9epNzip/8v2xASv
+         smMWT4STe0H6bEhP/xAlTIb7XHv4H54IZosVXfhUBYL4nQkSeUOAbxj7Rt0n9tAg1T
+         iRLKSjvoo8ItbWshS2vrqO90w1qBDZSRgTxXqJQ3/lp/lGGA17dB8Xk1SwHSCSt7cc
+         Ft5Ij6xqk+OuMfxemEIFQWYnFgXYAHksYwPQ0HLi/uctAYuKKicksNUK0oxlXrEjI9
+         lIH+9PzldQPQw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 046C5C009;
+        Fri, 11 Mar 2022 15:12:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1647007940; bh=F9oTQJj/bOWo+DnmjeL79H/5Dvz3gPQThlOlCq8LXyg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BtQJETfV7ckRZaHu3+Pz0LoOZinNNMnVWZNnSWyvGsJOPkmUGMMfpxr2YRym04l9E
+         zQS5scHlHFAHZhhdNA9K54ROQbUv6U3vI+Cdw8YMFACYaqY3Ijg9epNzip/8v2xASv
+         smMWT4STe0H6bEhP/xAlTIb7XHv4H54IZosVXfhUBYL4nQkSeUOAbxj7Rt0n9tAg1T
+         iRLKSjvoo8ItbWshS2vrqO90w1qBDZSRgTxXqJQ3/lp/lGGA17dB8Xk1SwHSCSt7cc
+         Ft5Ij6xqk+OuMfxemEIFQWYnFgXYAHksYwPQ0HLi/uctAYuKKicksNUK0oxlXrEjI9
+         lIH+9PzldQPQw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 4c2ced64;
+        Fri, 11 Mar 2022 14:12:15 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH] fscache_aquire_cache: error instead of asserting name is set
+Date:   Fri, 11 Mar 2022 23:12:08 +0900
+Message-Id: <20220311141208.847320-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As there are 4 manufacturer's directories with multiple sources
-(qcom, rockchip, sti and sunxi), move the sources from
-platform/Kconfig to their specific Konfig files.
+name comes straight from the cachefilesd config file, so return an error that
+the daemon handles and reports instead of printing a kernel stack in dmesg
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 ---
+ fs/fscache/cache.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
-
- drivers/media/platform/Kconfig          | 13 +++----------
- drivers/media/platform/qcom/Kconfig     |  3 +++
- drivers/media/platform/rockchip/Kconfig |  3 +++
- drivers/media/platform/sti/Kconfig      |  5 +++++
- drivers/media/platform/sunxi/Kconfig    |  2 ++
- 5 files changed, 16 insertions(+), 10 deletions(-)
- create mode 100644 drivers/media/platform/qcom/Kconfig
- create mode 100644 drivers/media/platform/rockchip/Kconfig
- create mode 100644 drivers/media/platform/sti/Kconfig
-
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 527e9f08008b..a3ad25c6a56c 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -85,23 +85,16 @@ source "drivers/media/platform/mtk-vpu/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
- source "drivers/media/platform/omap3isp/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
--source "drivers/media/platform/qcom/camss/Kconfig"
--source "drivers/media/platform/qcom/venus/Kconfig"
-+source "drivers/media/platform/qcom/Kconfig"
- source "drivers/media/platform/renesas/Kconfig"
--source "drivers/media/platform/rockchip/rga/Kconfig"
--source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-+source "drivers/media/platform/rockchip/Kconfig"
- source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
--source "drivers/media/platform/sti/bdisp/Kconfig"
--source "drivers/media/platform/sti/c8sectpfe/Kconfig"
--source "drivers/media/platform/sti/delta/Kconfig"
--source "drivers/media/platform/sti/hva/Kconfig"
-+source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/sunxi/Kconfig"
--source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
--source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
- source "drivers/media/platform/tegra/vde/Kconfig"
- source "drivers/media/platform/ti-vpe/Kconfig"
- source "drivers/media/platform/via/Kconfig"
-diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
-new file mode 100644
-index 000000000000..aa2428f641d3
---- /dev/null
-+++ b/drivers/media/platform/qcom/Kconfig
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+source "drivers/media/platform/qcom/camss/Kconfig"
-+source "drivers/media/platform/qcom/venus/Kconfig"
-diff --git a/drivers/media/platform/rockchip/Kconfig b/drivers/media/platform/rockchip/Kconfig
-new file mode 100644
-index 000000000000..c7ba06388780
---- /dev/null
-+++ b/drivers/media/platform/rockchip/Kconfig
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+source "drivers/media/platform/rockchip/rga/Kconfig"
-+source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-diff --git a/drivers/media/platform/sti/Kconfig b/drivers/media/platform/sti/Kconfig
-new file mode 100644
-index 000000000000..9fb5e78a92cf
---- /dev/null
-+++ b/drivers/media/platform/sti/Kconfig
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/sti/bdisp/Kconfig"
-+source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-+source "drivers/media/platform/sti/delta/Kconfig"
-+source "drivers/media/platform/sti/hva/Kconfig"
-diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
-index 7151cc249afa..a10032215b08 100644
---- a/drivers/media/platform/sunxi/Kconfig
-+++ b/drivers/media/platform/sunxi/Kconfig
-@@ -2,3 +2,5 @@
+diff --git a/fs/fscache/cache.c b/fs/fscache/cache.c
+index 2749933852a9..6115b974585d 100644
+--- a/fs/fscache/cache.c
++++ b/fs/fscache/cache.c
+@@ -150,7 +150,9 @@ struct fscache_cache *fscache_acquire_cache(const char *name)
+ {
+ 	struct fscache_cache *cache;
  
- source "drivers/media/platform/sunxi/sun4i-csi/Kconfig"
- source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
-+source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-+source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
+-	ASSERT(name);
++	if (!name)
++		return ERR_PTR(-EINVAL);
++
+ 	cache = fscache_lookup_cache(name, true);
+ 	if (IS_ERR(cache))
+ 		return cache;
 -- 
 2.35.1
 

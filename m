@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E404D65E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B45C4D65E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 17:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347117AbiCKQTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 11:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S1350037AbiCKQT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 11:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242453AbiCKQTN (ORCPT
+        with ESMTP id S1348767AbiCKQT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:19:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C44FA0BD6;
-        Fri, 11 Mar 2022 08:18:09 -0800 (PST)
+        Fri, 11 Mar 2022 11:19:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5969F1965EA;
+        Fri, 11 Mar 2022 08:18:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 728B661B77;
-        Fri, 11 Mar 2022 16:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAEFC340E9;
-        Fri, 11 Mar 2022 16:18:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2E90B82A09;
+        Fri, 11 Mar 2022 16:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA18CC340E9;
+        Fri, 11 Mar 2022 16:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647015488;
-        bh=0cZ6b7AXYUuBOJstkAJvZYlOE56pXKXh0+MXEe4ilt4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bB44RNJRgO12CFLMJfvtN1ALIgpjM0ISOh98aXoHrV4oBVvMBWQwNrFwqSw8Eia4E
-         KkVvEiNjIZgSTdlg7CbSYxzSSbdTQ/dIqLhJWXJAfqkLsCTWxTFoYjSUfxH+gm85bx
-         j0KcaRgviBPwBM33xK6jpiJhtjFjmAhX41lHTABOMVIZ5MXwmZM/+We+CRzVOECSy5
-         lThdGaVKKdgrej4/GGRdGTX5pThtNx8+XtW2THufklst1w4Mw23j8UkLKI2tneIF2B
-         y5iaNFRjlEP90KBeHI1frVg7vThMDrmPMhNXLCvYprz5Eu9lGIsRC97XWf5lex9WUY
-         +10LtiIw9lMsw==
-Date:   Fri, 11 Mar 2022 10:18:06 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 1/2] linux/types.h: Remove unnecessary __bitwise__
-Message-ID: <20220311161806.GA304449@bhelgaas>
+        s=k20201202; t=1647015497;
+        bh=MtSfFafo4fW56NZknW5da1zjtvVYaxI2+8q8/FKCwDg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hyODFLCWFhfgwMCC2kUZM0jFfymAIh6K/MjInSDjjFLY4JFpiWF0kdBA1vGhtehx5
+         /iMk9a1IdpI567GuQmZmOG6c0r2UvR+DNsDRPrA7EB8J45CrK2ECqkMDFtfcO6lWHJ
+         Lqd3bIEnmg1Kl/tnP4NBUXBSzxQs5Ef+RaSJsAgzzMmjYz43ekxc9j9Adp4XVQMEzw
+         mkSFpSMFAeGOLkYesvZJQcfeKONRxKXOcv4P7F01aekV7CJLH9Jht6XEBXBX6sAc3b
+         BOIBLoW/WqqjR/5Dd/6apfaVXVKQzD94Q7sPgC5WGBb+xT2J2UkJidDvaKPWmMps6u
+         rLFFsDpH7XENA==
+Date:   Fri, 11 Mar 2022 08:18:15 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mingbao Sun <sunmingbao@tom.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tyler.sun@dell.com,
+        ping.gan@dell.com, yanxiu.cai@dell.com, libin.zhang@dell.com,
+        ao.sun@dell.com
+Subject: Re: [PATCH] tcp: export symbol tcp_set_congestion_control
+Message-ID: <20220311081815.20e26640@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220311071930.GA18301@lst.de>
+References: <20220310134830.130818-1-sunmingbao@tom.com>
+        <20220310124825.159ce624@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20220311071930.GA18301@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310175216.252fabefeca040004216d40d@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,38 +62,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 05:52:16PM -0800, Andrew Morton wrote:
-> On Thu, 10 Mar 2022 16:09:26 -0600 Bjorn Helgaas <helgaas@kernel.org> wrote:
-> 
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > There are no users of "__bitwise__" except the definition of "__bitwise".
-> > Remove __bitwise__ and define __bitwise directly.
-> > 
-> > This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
-> > for all sparse builds").
-> > 
-> 
-> Can we change the copy-pasted code in tools/include/linux/types.h while
-> we're there?
+On Fri, 11 Mar 2022 08:19:30 +0100 Christoph Hellwig wrote:
+> On Thu, Mar 10, 2022 at 12:48:25PM -0800, Jakub Kicinski wrote:
+> > On Thu, 10 Mar 2022 21:48:30 +0800 Mingbao Sun wrote: =20
+> > > Since the kernel API 'kernel_setsockopt' was removed, and since the
+> > > function =E2=80=98tcp_set_congestion_control=E2=80=99 is just the rea=
+l underlying guy
+> > > handling this job, so it makes sense to get it exported. =20
+> >=20
+> > Do you happen to have a reference to the commit which removed
+> > kernel_setsockopt and the justification?  My knee jerk reaction
+> > would the that's a better path than allowing in-kernel socket users=20
+> > to poke at internal functions even if that works as of today. =20
+>=20
+> This was part of the set_fs() removal. Back then we decided we'd rather
+> have type-safe APIs for in-kernel users, which in total was a major
+> removal of code lines.
 
-Oh, you bet!  Thanks for pointing that out!
-
-> --- a/tools/include/linux/types.h~linux-typesh-remove-unnecessary-__bitwise__-fix
-> +++ a/tools/include/linux/types.h
-> @@ -43,11 +43,10 @@ typedef __u8  u8;
->  typedef __s8  s8;
->  
->  #ifdef __CHECKER__
-> -#define __bitwise__ __attribute__((bitwise))
-> +#define __bitwise	__attribute__((bitwise))
->  #else
-> -#define __bitwise__
-> +#define __bitwise
->  #endif
-> -#define __bitwise __bitwise__
->  
->  #define __force
->  #define __user
-> _
-> 
+I see, thanks. I guess no point speculating, we can revisit if
+any bugs due to direct callers actually materialize.

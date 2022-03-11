@@ -2,153 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43C14D6369
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE404D6370
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349213AbiCKO2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S1349316AbiCKO3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235535AbiCKO2G (ORCPT
+        with ESMTP id S1349253AbiCKO3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:28:06 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C307C1C7EBE;
-        Fri, 11 Mar 2022 06:27:02 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id kj21so4180948qvb.11;
-        Fri, 11 Mar 2022 06:27:02 -0800 (PST)
+        Fri, 11 Mar 2022 09:29:03 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B5012624
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:27:58 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id i66so5202429wma.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:27:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=68CWOwMSv2/Ly+nsrdhsAeru2Ba9NAAn2iQSzGZRvWw=;
-        b=e80phwj1YfnVIQkA0sEcVr4EEbmZjZXtR69W+9YTHG9/Xr4JVpWwwJ77ToWSLiWOtp
-         lFwbRR4x2S4g0pCpt1e1hZ6tesyDbupxZ6hi9qq21kkwDWcXP9RWpL1P34wesiYo5GIa
-         q7zef1mS4kZziRLD/SWaz68A0da3ttJ/1DEwIPUuDGNz5niHr84Olzi7xXtf3UznDb06
-         +lN6oO9lmFUPjGoKl2SQmfViF1QdDTf73Djt65lcGWl20lZeB9fVJp2+AFxlDoJmiuls
-         T3BHYt6aNgS857fi53WJrz58N+84EdLG/4OiNzShY5eNeeMvg0QPxwQuFUmr0OPJc08D
-         W5+Q==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=MpXiSYabOrYwVZBoUNg0nqtYEvuBi16Uja5dFf2EH0o=;
+        b=k2nh2gjDZ2GWduILDMTVTdPhwUGy/gKiaKiDAAeWeNvWs+qTTrNrgWKCpvV5YZTUem
+         oS/VqO60ezzCYtbnUQI49E+RYcTTpPSClCwilaRKFbUWSxsD5nb47zN5aSspNsfFktFZ
+         FkbA1p2tgEoHpfs74AHjwcd7z1Fmq06KPg4uI1LJjNZjy+w0+El9JAo7Kd2WQgnuoWT+
+         HpMizIPvpJ4kBD8vcbDXLo7JWtSiBBROSlbVgdGvOfUJcbc+q2t6xbeJDOeNJ7IgcDkf
+         oPtG5W7BIAAQOD9tgIZbFNVeFcpnIzkbhUQGtMeyPsJMSxGYr8R3kg3jnU3j/sB/SxSq
+         Xk9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=68CWOwMSv2/Ly+nsrdhsAeru2Ba9NAAn2iQSzGZRvWw=;
-        b=xIXPddQdjVq6zzlpuqTy7WlSjo3/tNwjpmE2hUns+xYKwxIv+2uP/hx6ueg8qhQjYY
-         cYuwrNYyvdiEahHwc1LkPimzCMdypHpb1m2dS+Q6A96rcA9//MtpU5SK1rr70HfEwlzq
-         RLz/FTSArI8IB3BCAf+r2oXogyGpIQV0ySoHE06+Lq2M1/oel/odgmK7VlaoEXvSmlgg
-         5YL8WbuHlMSg5ZgusUomPfl20wY52InZ3HebQawKe9CfHFsTkJ2Wk9I9zGe2oKEvMQNk
-         +oihWjreKWyFELyfpbKE8j+oYIOvb6bCahScE1SlNvTBzlBLVYrOlzCjYenM7CNuUSbQ
-         k3Lw==
-X-Gm-Message-State: AOAM531+lGfv+bto5SHu+qacgLWHykmMwMo4R43fCzv3dzGBUEcIUnmu
-        +qcy6ycZY945LWFr1VCjCloTbw4o+08=
-X-Google-Smtp-Source: ABdhPJzYrYxFEBtuEGDzojfs9wfbRWu+moiK6O19yJfnRKv8Pwu9az9Y+jnx54mf4Vuc6/n6OmD2eA==
-X-Received: by 2002:a05:6214:21c7:b0:435:3600:c1e3 with SMTP id d7-20020a05621421c700b004353600c1e3mr7871370qvh.127.1647008821732;
-        Fri, 11 Mar 2022 06:27:01 -0800 (PST)
-Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05622a13c700b002de9f3894c2sm5632761qtk.50.2022.03.11.06.27.00
+         :in-reply-to;
+        bh=MpXiSYabOrYwVZBoUNg0nqtYEvuBi16Uja5dFf2EH0o=;
+        b=3fzgZfMBQOjxDaR0cu8EyLXv15decE+ifsOqEtvm55YRptfBdMPzf0Avy7UhQaeVqx
+         Ltx8sNBVdp4576SMPhvAbhDO/QMyG/fa7KdGRQWLcrxAg8fKBD6rkw561DYJbKweywnI
+         l+iOubm7R//WxQk/mT75J3Sq1zokMPEPpM/wv34Jw4myvPDeFpYuBUw+YEBSHF60Kewj
+         W/luX3p4vGLSbwNALUYDGc8uS3M1fNtvU1kRz9NrvhtdMgwVtgo8A/gttctbAybtNE27
+         coMAmbd36HDG3Q/aJ8w0bJWgekeEisDrD7++oGdoImQSqFuZwyHJsqv5rAZHE3NdGiPb
+         hHcg==
+X-Gm-Message-State: AOAM532ifQgsUgYdxk4C7cUmjpk1ZRPff7lk8BdPut1+U4vaNhtszjNA
+        Fw9nck26YUJV/fi+9OwYckyUtQ==
+X-Google-Smtp-Source: ABdhPJxQojmr11qBMELiUdbxhAZwsibac1eN9niCtFM0AGC0j84YVyfws1DV7ZJcT9GegkvTIMpT+w==
+X-Received: by 2002:a1c:f718:0:b0:380:ed20:6557 with SMTP id v24-20020a1cf718000000b00380ed206557mr16407510wmh.53.1647008876745;
+        Fri, 11 Mar 2022 06:27:56 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id u23-20020a7bcb17000000b0037bdfa1665asm14118274wmj.18.2022.03.11.06.27.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 06:27:00 -0800 (PST)
-Date:   Fri, 11 Mar 2022 09:26:59 -0500
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
+        Fri, 11 Mar 2022 06:27:56 -0800 (PST)
+Date:   Fri, 11 Mar 2022 14:27:54 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH 2/3] serial: 8250_fintek.c: Report chipID
-Message-ID: <20220311142659.GA38527@localhost>
-References: <20220311070203.18159-2-twoerner@gmail.com>
- <0fb3795e-0ab1-494b-aefd-ccfa78420723@kernel.org>
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
+ outside the loop
+Message-ID: <20220311142754.a3jnnjqxpok75qgp@maple.lan>
+References: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
+ <20220304025109.15501-1-xiam0nd.tong@gmail.com>
+ <CAHk-=wjesxw9U6JvTw34FREFAsayEE196Fi=VHtJXL8_9wgi=A@mail.gmail.com>
+ <CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0fb3795e-0ab1-494b-aefd-ccfa78420723@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
+On Sat, Mar 05, 2022 at 04:35:36PM -0800, Linus Torvalds wrote:
+> On Sat, Mar 5, 2022 at 1:09 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> What do people think? Is this clever and useful, or just too
+> subtle and odd to exist?
 
-Thanks for your review.
-
-On Fri 2022-03-11 @ 10:21:46 AM, Jiri Slaby wrote:
-> On 11. 03. 22, 8:02, Trevor Woerner wrote:
-> > Provide some feedback to confirm this driver is enabled, and specify which
-> > chip was detected.
+> NOTE! I decided to add that "name of the target head in the target
+> type" to the list_traversal_head() macro, but it's not actually used
+> as is. It's more of a wishful "maybe we could add some sanity checking
+> of the target list entries later".
 > 
-> No, we don't do that. In fact, the output is mostly useless as it doesn't
-> even tell the user what device this is about.
+> Comments?
 
-With this patch, when looking at the kernel's bootup messages one would see:
+It is possible simply to use spelling to help uncover errors in
+list_traverse()?
 
-	[    1.809223] Serial: 8250/16550 driver, 5 ports, IRQ sharing enabled
-	[    1.814420] Fintek F81865
-	[    1.815783] 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-	[    1.822078] Fintek F81865
-	[    1.823453] 00:05: ttyS2 at I/O 0x3e8 (irq = 10, base_baud = 115200) is a 16550A
-	[    1.829813] Fintek F81865
-	[    1.831194] 00:06: ttyS3 at I/O 0x2e8 (irq = 10, base_baud = 115200) is a 16550A
-	[    1.837556] Fintek F81865
-	[    1.838943] 00:07: ttyS4 at I/O 0x2c0 (irq = 10, base_baud = 115200) is a 16550A
-	[    1.845350] Fintek F81865
-	[    1.846703] 00:0c: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+Something like:
 
-…so the grouping would hopefully be a clue, and anyone looking up what a
-fintek f81865 is would see that it's a SuperIO chip with 6 UARTs.
+#define list_traversal_head(type, name, target_member) \
+	union { \
+		struct list_head name; \
+		type *name##_traversal_mismatch_##target_member; \
+	}
 
-Ideally that information would all be on one line for each port. The first
-line is what I've added, which specifies the actual device, and the second
-line comes from serial_core.c's uart_report_port(). If there were a way to
-pass the fintek information to serial_core, or a way to turn off serial_core's
-uart_report_port() so I could report it in the fintek driver that would be
-better, but neither of those exist.
+And:
 
-If I want to know if a kernel has support for a device on my board I would
-normally grep the dmesg output and look for a product id, a chip id, or a
-manufacturer's name. I thought it was strange that with this driver enabled,
-there's no hint that the kernel knows anything about it.
+#define list_traverse(pos, head, member) \
+	for (typeof(*head##_traversal_mismatch_##member) pos = list_first_entry(head, typeof(*pos), member); \
+		!list_entry_is_head(pos, head, member);	\
+		pos = list_next_entry(pos, member))
 
-> > Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> > ---
-> >   drivers/tty/serial/8250/8250_fintek.c | 11 +++++++++++
-> >   1 file changed, 11 insertions(+)
-> > 
-> > diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-> > index d9f0e546b1a1..03ad2354d808 100644
-> > --- a/drivers/tty/serial/8250/8250_fintek.c
-> > +++ b/drivers/tty/serial/8250/8250_fintek.c
-> > @@ -155,11 +155,22 @@ static int fintek_8250_check_id(struct fintek_8250 *pdata)
-> >   	switch (chip) {
-> >   	case CHIP_ID_F81865:
-> > +		pr_info("Fintek F81865\n");
-> > +		break;
-> >   	case CHIP_ID_F81866:
-> > +		pr_info("Fintek F81866\n");
-> > +		break;
-> >   	case CHIP_ID_F81966:
-> > +		pr_info("Fintek F81966\n");
-> > +		break;
-> >   	case CHIP_ID_F81216AD:
-> > +		pr_info("Fintek F81216AD\n");
-> > +		break;
-> >   	case CHIP_ID_F81216H:
-> > +		pr_info("Fintek F81216H\n");
-> > +		break;
-> >   	case CHIP_ID_F81216:
-> > +		pr_info("Fintek F81216\n");
-> >   		break;
-> >   	default:
-> >   		return -ENODEV;
-> 
-> thanks,
-> -- 
-> js
+If I deliberately insert an error into your modified exit.c then the
+resulting errors even make helpful suggestions about what you did
+wrong:
+
+kernel/exit.c:412:32: error: ‘struct task_struct’ has no member named
+‘children_traversal_mismatch_children’; did you mean
+‘children_traversal_mismatch_sibling’?
+
+The suggestions are not always as good as the above
+(children_traversal_mismatch_ptrace_entry suggests
+ptraced_traversal_mismatch_ptrace_entry) but, nevertheless, it does
+ appears to be robust in detecting incorrect traversal.
+
+
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index dd6c2041d09c..1e8b3e495b51 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -25,6 +25,9 @@
+>  #define LIST_HEAD(name) \
+>  	struct list_head name = LIST_HEAD_INIT(name)
+
+Seeing this in the diff did set me thinking about static/global
+list heads.
+
+For architectures without HAVE_LD_DEAD_CODE_DATA_ELIMINATION then the
+"obvious" extension of list_traversal_head() ends up occupying bss
+space. Even replacing the pointer with a zero length array is still
+provoking gcc-11 (arm64) to allocate a byte from bss (often with a lot
+of padding added).
+
+Perhaps in the grand scheme of things this doesn't matter. Across the
+whole tree and all architecture I see only ~1200 instances so even in
+the worst case and with padding everywhere the wasted RAM is only a few
+kb.
+
+Nevertheless I was curious if there is any cunning tricks to avoid
+this? Naturally LIST_HEAD() could just declare a union but that would
+require all sites of use to be updated simultaneously and I rather
+like the way list_traverse_head() is entirely incremental.
+
+
+Daniel.

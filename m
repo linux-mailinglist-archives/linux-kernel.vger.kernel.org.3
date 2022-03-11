@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560664D6960
+	by mail.lfdr.de (Postfix) with ESMTP id 8B16D4D6961
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 21:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351196AbiCKUXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 15:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S1351203AbiCKUXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 15:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344828AbiCKUXn (ORCPT
+        with ESMTP id S1351200AbiCKUXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 15:23:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D9E43EC2;
-        Fri, 11 Mar 2022 12:22:39 -0800 (PST)
+        Fri, 11 Mar 2022 15:23:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C727560E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 12:22:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DD5161F72;
-        Fri, 11 Mar 2022 20:22:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7A0C340EC;
-        Fri, 11 Mar 2022 20:22:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FAC0B82CF5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 20:22:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA2FC340E9;
+        Fri, 11 Mar 2022 20:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647030158;
-        bh=ij5VNrvsFSwVimJAGBzflRTGoXGWzMpxgzmX4BZ5YPM=;
+        s=k20201202; t=1647030161;
+        bh=YsBWt/1b/coRAuiW5Ll4OeIE+LbscJPmSqzzxWr+rrU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=HHNaw7dTrZhU8k9UkXkpKfOG0tJZfuBuqv9Cnw/jdFmXn7Roa1c5D0seA0jWQQE3+
-         PPperXekmJv4dIX8v++kZu5+di4c56v490qAun1wq/d2+gvDWT42ko/5Hck3Ac9VF3
-         5hroXOwdq3hyDD+PpEvHbgi7iDGJea/QZ2BPhuxIHTAhiTRPVQchCF3adPou0k2X0d
-         KCaRlbsFteozlEa0juMWWUChr1gWNL0Py1EA5ReWQuqsP5ireRzSV4ZvjOe5Ka6+e9
-         pby/qGRugO9UdzPT6P3j4XCQnHSejOORcX8XORNW+iuIhmeMhyQW5JafYtRWmCx4rr
-         9NnHSLA9zMqYg==
+        b=O9CsUPvjz4zuDnPlbI3VSsZvEPqDx0EXOWENHempxe6HEPAZ9WK3J+b8Toboe1bWZ
+         XZNUmWjHHiJFPJgdHVFjpdQ8WWYkHd7ebhZHkx/5IzNDO99ocMO/jrTFSwyqB3Z/Bu
+         C3iD5ZjwPENr+eHpjfPt7QtX6pR6pmqqx3NA6tlPfZGwy497Obm/z9NhhMuMKc3XvS
+         4Pg+HQxkn/5kH0gGnveRSsJt3ryyudUCzXo+5O9rb8kw2FFrsKV997CDuA8ZEn2FuN
+         VNhgy2UdwhFSPQ6adIrKN6n4EG7gDvG2PV072pmgtqlV/3w2EECB0rg05XCj2Y6Qzm
+         NJgwOoRq7FPJw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Trevor Wu <trevor.wu@mediatek.com>, tiwai@suse.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        aaronyu@google.com, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, yc.hung@mediatek.com
-In-Reply-To: <20220308072435.22460-1-trevor.wu@mediatek.com>
-References: <20220308072435.22460-1-trevor.wu@mediatek.com>
-Subject: Re: (subset) [PATCH 0/5] ASoC: mediatek: Add support for MT8195 sound card with max98390 and rt5682
-Message-Id: <164703015624.264137.9730451216130586080.b4-ty@kernel.org>
-Date:   Fri, 11 Mar 2022 20:22:36 +0000
+To:     lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        Sameer Pujar <spujar@nvidia.com>
+Cc:     stephan@gerhold.net, robert.hancock@calian.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kuninori.morimoto.gx@renesas.com
+In-Reply-To: <1646910999-2501-1-git-send-email-spujar@nvidia.com>
+References: <1646910999-2501-1-git-send-email-spujar@nvidia.com>
+Subject: Re: [PATCH] ASoC: simple-card-utils: Don't reset clock of active DAI
+Message-Id: <164703015990.264137.12664948520166474876.b4-ty@kernel.org>
+Date:   Fri, 11 Mar 2022 20:22:39 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 15:24:30 +0800, Trevor Wu wrote:
-> This series of patches adds support for mt8195 board with mt6359, max98390
-> and rt5682.
+On Thu, 10 Mar 2022 16:46:39 +0530, Sameer Pujar wrote:
+> Playback or capture errors are seen when clock is reset during an active
+> stage of DAI. Presently this scenario happens when DAI has both playback
+> and capture sessions running and one of these finishes first which will
+> be followed by clock rate reset. The remaining active session will be
+> affected in such case.
 > 
-> Reset controller is included because mt8195 etdm is used to play sound via
-> max98390 before kernel boot.
-> 
-> In addition, the common part of machine driver is extracted for
-> simplification.
+> Address this problem by allowing clock rate reset to happen only when
+> the DAI is no more active.
 > 
 > [...]
 
@@ -75,10 +74,8 @@ Applied to
 
 Thanks!
 
-[1/5] ASoC: mediatek: mt8195: add reset controller
-      commit: f67084148dac015d059c64f25e57abd0ab18946c
-[2/5] dt-bindings: mediatek: mt8195: add reset property
-      commit: ee7f79a81a27c47088fe0af95788621644826d91
+[1/1] ASoC: simple-card-utils: Don't reset clock of active DAI
+      commit: 5bbe2918acccfa60de1c1a2139de9cc5441d5796
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

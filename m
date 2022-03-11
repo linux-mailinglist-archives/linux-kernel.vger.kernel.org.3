@@ -2,224 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745CD4D6118
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 12:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500694D611B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348440AbiCKMAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S1348448AbiCKMBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348387AbiCKMA2 (ORCPT
+        with ESMTP id S239962AbiCKMBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:00:28 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FFD1A9497
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:59:25 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 132so7286469pga.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 03:59:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s+9J3fzeoHrpsTRQ13NQjokEARQep2qnKWa3WiCsX0Q=;
-        b=eJ8NsL3DUayA/69NGeIxF3/euLXDYC0g1D6K4rRyT2N32cAd6QMb6QKp9yYDffC/So
-         dcsMZS9unVMohlwtDD1VbLPlDVpY9LPUJA091tCGnynG0Hohn7iQ3IGXU04pJvkqNcIp
-         QCVL6AsjgHwgFM1/3ekoaHoX2CZYigbohvyT+dcwC7PONZ/NG9UvweSs/bnQPeUJPtHm
-         /S1pgRs0Od+hDFi+ngLRdpzxsZXl7moR2dQjcAfCaOGGSdOB4nC69ekWTNjq4TF1Ve3a
-         CqfIrUgcexHPM6z2Mf6P8M8r+knKr+ErcjDwbj9mrCCtdwxygxvgoRHygPkxXBqRKkQO
-         7y1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s+9J3fzeoHrpsTRQ13NQjokEARQep2qnKWa3WiCsX0Q=;
-        b=RnoNmQEpJ4+E3y96/8SF648X7CkZ0lncew2B9GM3Nsyd/O3i2mhK9F5zBlOHLGGfCw
-         b8gUKfUXBNuPO4XLiKMx5PGzAWcDmbDseQKaAcFCSmHf1fr2pEqxrE0nxBQOMuH45xjb
-         MmhrTPK3HOQi47gh38w+iGAfzacRqFEHAQabFXf4ZTpjNK8O/WlNOtVuBU1zub+YVDax
-         RxHFamhDJkz6HEkkKRYMEAuKjju3bCgjviFdRhm+Te/NmKuAPxOjlT9gEAD14reJ2NE0
-         ra3pvwchafXSxHtZFPuuprRSiST5B1IEx8FLm9bRB3yiAQmOFGoSqEqbGzD1wOtqQOpJ
-         tWeQ==
-X-Gm-Message-State: AOAM533NFd2t6GxSwdBBIomyVZ6O+lDjIv0SL+UA7nf8RwcuRsfwTO4t
-        IV3y2K/jPSWVbnDlpGU3u2kqtMdcerTQ4g==
-X-Google-Smtp-Source: ABdhPJwZF2lkVGEdOHZ1KKa19VO7dejeeUca7CMbSQNoV1PAZnDTo86W4BcrQJ9d3eQtJ2wA/y5EmA==
-X-Received: by 2002:a05:6a00:2402:b0:4e1:3df2:5373 with SMTP id z2-20020a056a00240200b004e13df25373mr9553928pfh.40.1646999964639;
-        Fri, 11 Mar 2022 03:59:24 -0800 (PST)
-Received: from ?IPV6:2409:8a28:e6b:7130:ddd:2fc4:6858:5760? ([2409:8a28:e6b:7130:ddd:2fc4:6858:5760])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f791d0115esm1871923pfk.171.2022.03.11.03.59.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 03:59:23 -0800 (PST)
-Message-ID: <791d2e92-cb88-aac9-67b4-e9d09448df0e@bytedance.com>
-Date:   Fri, 11 Mar 2022 19:59:15 +0800
+        Fri, 11 Mar 2022 07:01:05 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19B51A94A7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647000002; x=1678536002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EVwqrpAEaupKtqKFWaRq0A2+hB9cR3uuFUPXgD0tHEk=;
+  b=BpymFC0wH60CKv/sPJSR1f3zwH7Ef1yiT8zWt8IVordqwByx8DDdg0vJ
+   ehBTQOnailP1rsSuQWuoAVpAsl/gdP41Wx1vy+pKr4UaJYB3x5WIJeWrC
+   7R3rh1NNevjL6kwwBpiJYWJYne7eoc/EeinGA/aw9NdeweFnuFqdUjjYa
+   umjCs16qy8E8jTw4DoHiresbGtVRyQJapBnYRXOQWjNwoGV10SDB8LqRA
+   jVWTkriKCS3Ty/3j9W4Mf3bEoivhrCz8ZCL7H14KWLmZy2P7zcAMlvPr0
+   Gx1P8LK73DiEeIlcZoHH8leQWER90Pf7HzlXNNn4xfdDUrR4ouLDtFMud
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="316281093"
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="316281093"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 04:00:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
+   d="scan'208";a="689044540"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Mar 2022 04:00:01 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nSdw8-0006M7-MG; Fri, 11 Mar 2022 12:00:00 +0000
+Date:   Fri, 11 Mar 2022 19:59:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [toke:xdp-queueing-03 3/9] net/bpf/test_run.c:1372:15: warning: cast
+ to pointer from integer of different size
+Message-ID: <202203111957.Pexg2qR6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [External] Re: [PATCH v2] livepatch: Don't block removal of
- patches that are safe to unload
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, jpoimboe@redhat.com,
-        jikos@kernel.org, joe.lawrence@redhat.com,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220303105446.7152-1-zhouchengming@bytedance.com>
- <YicnIIatfgLc2NN2@alley> <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
- <849e57ee-d412-30bd-3cce-47ce3362409d@bytedance.com> <Yionqn3d9OQF4UiT@alley>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <Yionqn3d9OQF4UiT@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/11 12:30 上午, Petr Mladek wrote:
-> On Thu 2022-03-10 20:57:54, Chengming Zhou wrote:
->> Hi,
->>
->> On 2022/3/9 1:49 上午, Miroslav Benes wrote:
->>> On Tue, 8 Mar 2022, Petr Mladek wrote:
->>>
->>>> On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
->>>>> module_put() is currently never called for a patch with forced flag, to block
->>>>> the removal of that patch module that might still be in use after a forced
->>>>> transition.
->>>>>
->>>>> But klp_force_transition() will set all patches on the list to be forced, since
->>>>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
->>>>> has removed stack ordering of the livepatches, it will cause all other patches can't
->>>>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
->>>>>
->>>>> In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
->>>>> transition. It can still be unloaded safely as long as it has passed through
->>>>> the consistency model in KLP_UNPATCHED transition.
->>>>
->>>> It really looks safe. klp_check_stack_func() makes sure that @new_func
->>>> is not on the stack when klp_target_state == KLP_UNPATCHED. As a
->>>> result, the system should not be using code from the livepatch module
->>>> when KLP_UNPATCHED transition cleanly finished.
->>>>
->>>>
->>>>> But the exception is when force transition of an atomic replace patch, we
->>>>> have to set all previous patches to forced, or they will be removed at
->>>>> the end of klp_try_complete_transition().
->>>>>
->>>>> This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
->>>>> case, and keep the old behavior when in atomic replace case.
->>>>>
->>>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->>>>> ---
->>>>> v2: interact nicely with the atomic replace feature noted by Miroslav.
->>>>> ---
->>>>>  kernel/livepatch/transition.c | 8 ++++++--
->>>>>  1 file changed, 6 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
->>>>> index 5683ac0d2566..34ffb8c014ed 100644
->>>>> --- a/kernel/livepatch/transition.c
->>>>> +++ b/kernel/livepatch/transition.c
->>>>> @@ -641,6 +641,10 @@ void klp_force_transition(void)
->>>>>  	for_each_possible_cpu(cpu)
->>>>>  		klp_update_patch_state(idle_task(cpu));
->>>>>  
->>>>> -	klp_for_each_patch(patch)
->>>>> -		patch->forced = true;
->>>>> +	if (klp_target_state == KLP_UNPATCHED)
->>>>> +		klp_transition_patch->forced = true;
->>>>> +	else if (klp_transition_patch->replace) {
->>>>> +		klp_for_each_patch(patch)
->>>>> +			patch->forced = true;
->>>>
->>>> This works only because there is should be only one patch when
->>>> klp_target_state == KLP_UNPATCHED and
->>>> klp_transition_patch->forced == true.
->>>
->>> I probably misunderstand, but the above is not generally true, is it? I 
->>> mean, if the transition patch is forced during its disablement, it does 
->>> not say anything about the amount of enabled patches.
->>>
->>>> But it is a bit tricky. I would do it the other way:
->>>>
->>>> 	if (klp_transition_patch->replace) {
->>>> 		klp_for_each_patch(patch)
->>>> 			patch->forced = true;
->>>> 	} else if (klp_target_state == KLP_UNPATCHED) {
->>>> 		klp_transition_patch->forced = true;
->>>> 	}
->>>>
->>>> It looks more sane. And it makes it more clear
->>>> that the special handling of KLP_UNPATCHED transition
->>>> is done only when the atomic replace is not used.
->>>
->>> But it is not the same. ->replace being true only comes into play when a 
->>> patch is enabled. If it is disabled, then it behaves like any other patch.
->>>
->>> So, if there is ->replace patch enabled (and it is the only patch present) 
->>> and then more !->replace patches are loaded and then if ->replace patch is 
->>> disabled and forced, your proposal would give a different result than what 
->>> Chengming submitted, because in your case all the other patches will get 
->>> ->forced set to true, while it is not the case in the original. It would 
->>> be an unnecessary restriction if I am not missing something.
->>
->> At first glance, I thought both way is right. But after looking at the case
->> you mentioned above, they are not the same indeed. The original patch
->> treat ->replace and not ->replace patches the same in KLP_UNPATCHED transition,
->> and only set all patches to forced in the atomic replace transition.
-> 
-> I see. OK, Chengming's code makes sense. But we should make the commit
-> message more clear. Something like:
-> 
-> <draft>
-> module_put() is not called for a patch with "forced" flag. It should
-> block the removal of the livepatch module when the code might still
-> be in use after forced transition.
-> 
-> klp_force_transition() currently sets "force" flag for all patches on
-> the list.
-> 
-> In fact, any patch can be safely unloaded when it passed through
-> the consistency model in KLP_UNPATCHED transition.
-> 
-> By other words, the "forced" flag must be set only for livepatches
-> that are being removed. In particular, set the "forced" flag:
-> 
->   + only for klp_transition_patch when the transition to KLP_UNPATCHED
->     state was forced.
-> 
->   + all replaced patches when the transition to KLP_PATCHED state was
->     forced and the patch was replacing the existing patches.
-> </draft>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
+head:   91c92d46077f70b03fd162128dd3373663d529d4
+commit: eb1f31b3643b9fb49f4785deab32e3461eca777f [3/9] xdp: add dequeue program type for getting packets from a PIFO
+config: xtensa-buildonly-randconfig-r004-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111957.Pexg2qR6-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=eb1f31b3643b9fb49f4785deab32e3461eca777f
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-03
+        git checkout eb1f31b3643b9fb49f4785deab32e3461eca777f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash net/bpf/
 
-Ok, I will update the commit message, this draft is more clear.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> It means that we should could actually do:
-> 
-> 	if (klp_target_state == KLP_UNPATCHED) {
-> 		klp_transition_patch->forced = true;
-> 	} else if (klp_transition_patch->replace) {
-> 		klp_for_each_patch(patch) {
-> 			if (patch != klp_transition_patch)
-> 				patch->forced = true;
-> 		}
-> 	}
-> 
-> Huh, that is tricky ;-)
+All warnings (new ones prefixed by >>):
 
-Yes, and I found similar tricky code at the end of
-klp_try_complete_transition():
+   net/bpf/test_run.c: In function 'bpf_prog_test_run_dequeue':
+>> net/bpf/test_run.c:1372:15: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    1372 |         pkt = (void *)retval;
+         |               ^
 
-	if (!patch->enabled)
-		klp_free_patch_async(patch);
-	else if (patch->replace)
-		klp_free_replaced_patches_async(patch);
 
-Thanks.
+vim +1372 net/bpf/test_run.c
 
-> 
-> Best Regards,
-> Petr
+  1347	
+  1348	int bpf_prog_test_run_dequeue(struct bpf_prog *prog, const union bpf_attr *kattr,
+  1349				      union bpf_attr __user *uattr)
+  1350	{
+  1351		struct xdp_txq_info txq = { .dev = current->nsproxy->net_ns->loopback_dev };
+  1352		u32 repeat = kattr->test.repeat, duration, size;
+  1353		struct dequeue_data ctx = { .txq = &txq };
+  1354		struct xdp_buff xdp = {};
+  1355		struct xdp_frame *pkt;
+  1356		int ret = -EINVAL;
+  1357		u64 retval;
+  1358	
+  1359		if (prog->expected_attach_type)
+  1360			return -EINVAL;
+  1361	
+  1362		if (kattr->test.data_in || kattr->test.data_size_in ||
+  1363		    kattr->test.ctx_in || kattr->test.ctx_out || repeat > 1)
+  1364			return -EINVAL;
+  1365	
+  1366		ret = bpf_test_run(prog, &ctx, repeat, &retval, &duration, false);
+  1367		if (ret)
+  1368			return ret;
+  1369		if (!retval)
+  1370			return bpf_test_finish(kattr, uattr, NULL, NULL, 0, retval, duration);
+  1371	
+> 1372		pkt = (void *)retval;
+  1373		xdp_convert_frame_to_buff(pkt, &xdp);
+  1374		size = xdp.data_end - xdp.data_meta;
+  1375		/* We set retval == 1 if pkt != NULL, otherwise 0 */
+  1376		ret = bpf_test_finish(kattr, uattr, xdp.data_meta, NULL, size, !!retval, duration);
+  1377		xdp_return_frame(pkt);
+  1378		return ret;
+  1379	}
+  1380	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

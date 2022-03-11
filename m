@@ -2,172 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEB14D6357
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE08F4D635E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 15:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349145AbiCKOX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 09:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S1349180AbiCKOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 09:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349133AbiCKOXV (ORCPT
+        with ESMTP id S229585AbiCKOY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:23:21 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FA81C7EBD
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 06:22:16 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BDTDpo029475;
-        Fri, 11 Mar 2022 14:21:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=byeKvxA6GX3sO0MuOUglsxX745JYya3OyoNB5zjeBOg=;
- b=Sdl7PbPLyRjHZ9/0a8/IMNrLScsgUtltvB22Nn5VNcgZhHlSkyyVauDLTiltX30DxCnb
- TtwqTudB8IVTEXO0fpIipXadDmkCIgPFttgt3TGup3G6nbaJIR3iK1aVju6I5GjYz29p
- M6ODoLhhoKiiNiYDC5U5z/F52N3j4RR37AlFU7NVPfswCpwux/a9pEOHz1GVnPAJA+fo
- C+2vyjd1cm+esW0FMIK/EhFp4onv7iKQDcXwbqGngqClpEekpJqqF7b7yuPE8hZuM2BW
- ZbP/md+I8YGilN+RZILqNgYqqQ0fLU/jPld+Q/VKEXAPXo8MEcFtY3gDmVT1qbrEGBw9 iQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxn2saww-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 14:21:54 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BEBjgp091758;
-        Fri, 11 Mar 2022 14:21:53 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2044.outbound.protection.outlook.com [104.47.57.44])
-        by aserp3030.oracle.com with ESMTP id 3ekwwe4jt6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 14:21:52 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bfxmx8j/7HcjQ46MrZOSvWDN9s9VbkxaCaeg1QG8EKRyCBkKBpf4DWSXMACSnQQ5GpJ6sFKfOJb7clKIPSaRvujUiWrXJC0LtCE3zAWZekYhWgcM7sytANv9uwU5H8Jb/Si5t7Ny6PdwRg/OmYmbZHWPxTkPJnYCA+8E+9OSTK2poeTeZLYCyvCmc1PtcUteu7Lpm3JlC58mbRcnmPTPlj80XTJTUWPYnXWoIy5VORqhYwBjxWA7YribEjUyn3iP42zOLz2rmakPX/3BpuPEmIgHlWCQTONzj+HKsUc1jg82/Z99XKg/ckF8GDaYUf/Tx5fbuIjNY8KJ3ItcUj4yCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=byeKvxA6GX3sO0MuOUglsxX745JYya3OyoNB5zjeBOg=;
- b=SAjGAyv+X90JpIZcxvN1Uv0ibiKRx5MKxoy3wFLzpDpGTH6ygyqXN+uhEj6ApaoWj1LYSN5NBrgkii8n6/MK7v8JQLrTFR5H++LmqS3pZ9NeRfrurTf8cT4JR6Wzpn97WlsFQ484gg5zTTGWPZqoVB6eNJrqq9TUkVaeQ2sVndrjN4OfxilszMg78zZIZTAGLNCfiMSOolQySk6a9631JSJdZOH2giPtEQkd87wup+Ux3XNMmdcfEnZs0yToOEuAuiNgdFhKFCo3LliQYVsU9dN5YWNbgKU3Lbhp/oX4pjFAH5uvEOifDGe8VTj3iDobdXwZ8muqIk4+OQNDpwOOXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=byeKvxA6GX3sO0MuOUglsxX745JYya3OyoNB5zjeBOg=;
- b=FzNNZhxwVW9S1ad7b840wTBCE1jblJkYgwFyrhtkZeiWB8VSrPkllVaJ6Co4I225NdO6MEAEMeQt5zHtbOw0U/n/SsvC7GZuUenQn2bfa7cKIiVY9n2zySKjeqL+UgfNPikyY/BpdmRcgYVTMrukO4/xjuHUDgx2E3IArCidtTc=
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
- by DS7PR10MB5200.namprd10.prod.outlook.com (2603:10b6:5:3a6::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
- 2022 14:21:51 +0000
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::1b2:b41c:b2f0:c755]) by BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::1b2:b41c:b2f0:c755%7]) with mapi id 15.20.5061.023; Fri, 11 Mar 2022
- 14:21:51 +0000
-Message-ID: <eac862a4-e7e4-b042-61eb-b1894610164b@oracle.com>
-Date:   Fri, 11 Mar 2022 09:21:39 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH] x86/xen: Fix kerneldoc warning
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     jgross@suse.com, sstabellini@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220307062554.8334-1-jiapeng.chong@linux.alibaba.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-In-Reply-To: <20220307062554.8334-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR07CA0018.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::28) To BLAPR10MB5009.namprd10.prod.outlook.com
- (2603:10b6:208:321::10)
+        Fri, 11 Mar 2022 09:24:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD3121520;
+        Fri, 11 Mar 2022 06:23:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3F33B82A73;
+        Fri, 11 Mar 2022 14:23:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57673C340E9;
+        Fri, 11 Mar 2022 14:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647008600;
+        bh=1aN/i+7VUozNB0qC97c4ZeA4vReDaNrLMrM52MVDiqM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=iWp63nefKqlwopNSOeQjJfPZS0jOgdS3OVqEuLh1QBg+B54WG7dbnHO4oiKB+dWeI
+         T09XmYXAyBoPti8b4AFAGqaAIKhi15UzCnEVqsJVaZ5P64HXgUC3GZ8FWZ2i0BewHv
+         /G0rJAH0LWNd2XHftMPhKzUNi0y1PYPGeWrcnaw2HKTAMj6n8X2a6U04J+Y7xgLKud
+         RrBplYiupBHYcKx2YhFyuHGFpeFaW9YwyBPypRNWNzP607oRAEJQeb6vR18k4N/iOu
+         B1IuzRr5+gaotbrWZZdmbnHpmXkjwo9Cwh2o5SBelBjGe3ccVNxWO9TyiWIY8DM7Zw
+         PpQrW8DpXtHyw==
+Message-ID: <66c1fc64b4ec8b25a1ed625a4b61721a00d2e090.camel@kernel.org>
+Subject: Re: [PATCH v3 00/20] netfs: Prep for write helpers
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
+Cc:     ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 11 Mar 2022 09:23:18 -0500
+In-Reply-To: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
+References: <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8c757014-fd37-4e17-e01c-08da036a7c5f
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5200:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR10MB5200F2447265E9E8C5AC10568A0C9@DS7PR10MB5200.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YQVLqVcHkfn1WmKG05T+deK87lC6ojNw/uvxmdWtij0TDmmqtFhULllg+/M4sKdgdo5Xi3NzoCJk+EtdQfdph+hlVEhnUCDaf2msqICmabnEqvgiF0elkn27BZFebKH4QOWVLy+qFSo9CHHmH4J86vXBFhxfeKrWKPm2b2xVffV4mX95mDwJfUu4OrIZ1n1t3x/+VROxTRgwy3FJxG8x6E+Wyme2M9qv6t77eWbfeKELMEnUZNB0r8qNcQRpkNd45utPHWYxOHCVhSF5rICNLWY6GHlppgHK48QuYJ9TRI8oP2jalhOrWtLQaFAFKqkBhuEU72d3UMClaYYLXnz7ncsiwYFMnHhyQXGg/Un5JRoJAyeKsm1mxq1gUGbE/VGk24Xsl2xVHbAPsPZvR4jJt3L/3UF4Smd+CNpkT8iWz0o/UPE0p7ZDLUskc2FCljby9NZaSjhoxFgcozsUW4q+AR2DYfGqqnzFWvQbpjSkir+ez+5ezVmFTeWfqd6zrPc0wPkd/vURPHyiHnNjMmsNt5J5hZV7Duy3/DBmHppwzFRtq6E7ZxvocLfMbEuz37lNUENKN08I3sx4Oi4CEw2sp0YsexGkFCyfQ2hjp1fQsrWepFWbGs2hsSRtMOb2gZxQuzjKnIJSDYtGg2RGE0kIjypj46jhKDuvKSh411vK1lbFaj2Pge8/vJ/KK4smhbfFfdASx9LgA2ahDOiQokHahinKkATGJe2Btj07oIBSKbnOs6MAbW4VTdWpTFV2yM44
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(6506007)(83380400001)(316002)(2906002)(4326008)(8676002)(6486002)(66556008)(7416002)(6666004)(5660300002)(31696002)(66946007)(8936002)(53546011)(86362001)(44832011)(66476007)(4744005)(508600001)(2616005)(36756003)(186003)(26005)(38100700002)(31686004)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?emdyQTRxSXJkK2lOaVVLY0xQSDh5TEQvK1Rsc3YvU0JQUVVJTG5jMldNRE96?=
- =?utf-8?B?UlRWMEN2bWdIRFYwUUVhaXZEU3hIQ2haOHMrUEFIQ2d2MTRmSjhxb3J0dnYr?=
- =?utf-8?B?M1lEUjZvK0RpTGpTVDhyTWx4eXJLUVJ5QXA3cndLREtyYWErb2xsRytDcTRi?=
- =?utf-8?B?elhTTmhjRkpKVWVRWGhxcWdXZHVSMXh4VjRqWklOcTNsaFJqL0F6WEFVVHZD?=
- =?utf-8?B?amxMM0MyV1dHUFN5WkhjZmFodEkreTZUNG5Ub0ZSVEdXK05wVDljZGdWcUhB?=
- =?utf-8?B?UHVYamlRdDRLYkxTNHF0NHZaRUovb25uUzJleS9jRTdOeGIzRThaSTNLdFBm?=
- =?utf-8?B?UFNuNm1odkxzelJIcGt3OGwxQUEvTU9FVDg5WDgwY3NmZ1hLMFFxalNYaDRL?=
- =?utf-8?B?dWJ3a2lQVU1NUm5DNjJCYzBCU3VBbW4rdGhMVWdTSkxhM1g5MC9CV2ViOGlZ?=
- =?utf-8?B?bWJ2MkNyWXdobnFIUnBIMExtS0lDU2lFa3JkaHNsd0ZjWmNLZ2ZhZ3c2Mnpq?=
- =?utf-8?B?Wlo2SU1qMHRsLzJudUxDZ2NIMStZeVk5NnI0elBJUy91dmlpT0hhbFZCZXBC?=
- =?utf-8?B?c0pxZGpIYS9LcjZBMk5xOTdzR0Y5V1pJVEFlVmNqVEp0eVR5aUNmcW9nUUZw?=
- =?utf-8?B?eHYzRWMzRmUwUnZsS05KQm85TTZVUmpLYzVzYzJ1WEMwNWZEOTZlaytXSXcw?=
- =?utf-8?B?YjJlOENYODI3WGI3L2k2T25ENVRLaUQxaFZlbFVIRWJZQnEyUGJpVXZEU2Vw?=
- =?utf-8?B?NkpVeTJsTjlROHZTaXdzYUR6cXQ5anhwN1NKWWtUdUs1V205SXA1V1BEMFAr?=
- =?utf-8?B?OFcyYm5GQjRnZlNabEh6SlBkNncvYmRaRkh5M0tEbFUzTkRLNWNxTG04WjJt?=
- =?utf-8?B?RGt2d3huZ2psejUrb1pSL1dlWnNsWE0ySDYvNWdodmhnUmZ4NnJZc20xYXBh?=
- =?utf-8?B?bmtyU3pta21NWnh0Zm0vT0x4SDIvUGoraFcvek4zRW4zL3RnNlBtd2xGcWU1?=
- =?utf-8?B?VStUZXlDbXdoVWwrNWllc2VXcXkrMG4va0ZmMzloem1zZHNFZVBtL2lPdzRC?=
- =?utf-8?B?NHNyWGxoYVMwKyt1MWZXMmg4eEp0Rk5jZGMwQnMySGFoaHpndHZKaUZERGpq?=
- =?utf-8?B?MXdmMU9Va29hSUt4aFpqMGM5M3MxcHZqZGk0MmNFMnlXWVdKZHN6eWFQeEo5?=
- =?utf-8?B?OVRhWVU3cnVXTGtxaTZKRTN1OCtXWERjVjNCVWdFMTg4MkE4L05nMUdiVEVp?=
- =?utf-8?B?M2o4OWlhejRySUM2YU40RUNLQkVCM2NjVFpsYXR1b3dRRDJ2WmQxWHlJNnZY?=
- =?utf-8?B?bWwzRzdLNlZ2TkQ1dXltcG9KUGM1RWNYVHRVLzloMXNTUXdxbnN2eUxPaUJT?=
- =?utf-8?B?dG50OFNDUlVoVWRwN0hRT3ZnemNPT1kzYmorbDFZL2VGNVk1Q3ZEeGU4UHZt?=
- =?utf-8?B?d1lOZFowMWxXbFdSc2VaaHZTVjJLaGVzbFdTdStVNjhQRzZkbFR2OW9BbE55?=
- =?utf-8?B?UDB3NFR6aDJaOXE0VVZQMVpLYS9DbGlBcGVNVGpzU2kybE1ZUmIvZnJnQ1li?=
- =?utf-8?B?S1ZpVExsUkN6bWJlZ1FjYXlud21raXVVZmgyRm83Vkthc0lWc0FDMDZFOG9Z?=
- =?utf-8?B?ZTdXbzVwM2tva29SOHJnVk9aemFKdGxQUnpuVmFObG0wdUxaVEhZNmR6OGdq?=
- =?utf-8?B?WDlPWGZxR2k1bGwxSytBMmtxaFE2UFpEbm5URFpkYlM3NDBBZVpNbTVvdjhX?=
- =?utf-8?B?MFFzWU55YVRnZkZXV0FtUFgrNU9yUkJpWVp5VFBYQVlRbjlKc1NBd3J4anhX?=
- =?utf-8?B?KytjYUNOb3hoTTdaL1RVQjBWalBWL2xQYm81ZkFXSzJ5WFhHMklDeW94VDlG?=
- =?utf-8?B?RERsRkhBSDM5N2ZLclJSV3QzcmxVa2JNUmFFbXJOdVV6N0Rldm8xMldjcVky?=
- =?utf-8?B?UGc2MllLS1VlNllzem5tTXBvN0hjNDgyN1lIZ0gydWU4SVMvamg0QXBqUlJa?=
- =?utf-8?B?eVh1d1lXUXVnPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c757014-fd37-4e17-e01c-08da036a7c5f
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 14:21:51.5996
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wte9l6w2hE7818hzSazcEKjwIj1R3V80xVWLUvBlFb0dzrwFroBcPInVg7wlTnjc338xhxI6Vwwl23LbXHvdFiMeSMBdfr725lmIRxBqNRk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5200
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10282 signatures=692556
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203110070
-X-Proofpoint-ORIG-GUID: Q3Wvoga4btLSncV1zrSRZmncOX1sI_ge
-X-Proofpoint-GUID: Q3Wvoga4btLSncV1zrSRZmncOX1sI_ge
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-03-10 at 16:13 +0000, David Howells wrote:
+> Having had a go at implementing write helpers and content encryption
+> support in netfslib, it seems that the netfs_read_{,sub}request structs and
+> the equivalent write request structs were almost the same and so should be
+> merged, thereby requiring only one set of alloc/get/put functions and a
+> common set of tracepoints.
+> 
+> Merging the structs also has the advantage that if a bounce buffer is added
+> to the request struct, a read operation can be performed to fill the bounce
+> buffer, the contents of the buffer can be modified and then a write
+> operation can be performed on it to send the data wherever it needs to go
+> using the same request structure all the way through.  The I/O handlers
+> would then transparently perform any required crypto.  This should make it
+> easy to perform RMW cycles if needed.
+> 
+> The potentially common functions and structs, however, by their names all
+> proclaim themselves to be associated with the read side of things.  The
+> bulk of these changes alter this in the following ways:
+> 
+>  (1) Rename struct netfs_read_{,sub}request to netfs_io_{,sub}request.
+> 
+>  (2) Rename some enums, members and flags to make them more appropriate.
+> 
+>  (3) Adjust some comments to match.
+> 
+>  (4) Drop "read"/"rreq" from the names of common functions.  For instance,
+>      netfs_get_read_request() becomes netfs_get_request().
+> 
+>  (5) The ->init_rreq() and ->issue_op() methods become ->init_request() and
+>      ->issue_read().  I've kept the latter as a read-specific function and
+>      in another branch added an ->issue_write() method.
+> 
+> The driver source is then reorganised into a number of files:
+> 
+> 	fs/netfs/buffered_read.c	Create read reqs to the pagecache
+> 	fs/netfs/io.c			Dispatchers for read and write reqs
+> 	fs/netfs/main.c			Some general miscellaneous bits
+> 	fs/netfs/objects.c		Alloc, get and put functions
+> 	fs/netfs/stats.c		Optional procfs statistics.
+> 
+> and future development can be fitted into this scheme, e.g.:
+> 
+> 	fs/netfs/buffered_write.c	Modify the pagecache
+> 	fs/netfs/buffered_flush.c	Writeback from the pagecache
+> 	fs/netfs/direct_read.c		DIO read support
+> 	fs/netfs/direct_write.c		DIO write support
+> 	fs/netfs/unbuffered_write.c	Write modifications directly back
+> 
+> Beyond the above changes, there are also some changes that affect how
+> things work:
+> 
+>  (1) Make fscache_end_operation() generally available.
+> 
+>  (2) In the netfs tracing header, generate enums from the symbol -> string
+>      mapping tables rather than manually coding them.
+> 
+>  (3) Add a struct for filesystems that uses netfslib to put into their
+>      inode wrapper structs to hold extra state that netfslib is interested
+>      in, such as the fscache cookie.  This allows netfslib functions to be
+>      set in filesystem operation tables and jumped to directly without
+>      having to have a filesystem wrapper.
+> 
+>  (4) Add a member to the struct added in (3) to track the remote inode
+>      length as that may differ if local modifications are buffered.  We may
+>      need to supply an appropriate EOF pointer when storing data (in AFS
+>      for example).
+> 
+>  (5) Pass extra information to netfs_alloc_request() so that the
+>      ->init_request() hook can access it and retain information to indicate
+>      the origin of the operation.
+> 
+>  (6) Make the ->init_request() hook return an error, thereby allowing a
+>      filesystem that isn't allowed to cache an inode (ceph or cifs, for
+>      example) to skip readahead.
+> 
+>  (7) Switch to using refcount_t for subrequests and add tracepoints to log
+>      refcount changes for the request and subrequest structs.
+> 
+>  (8) Add a function to consolidate dispatching a read request.  Similar
+>      code is used in three places and another couple are likely to be added
+>      in the future.
+> 
+> 
+> The patches can be found on this branch:
+> 
+> 	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
+> 
+> This is based on top of ceph's master branch as some of the patches
+> conflict.
+> 
+> David
+> ---
+> 
+> Changes
+> =======
+> ver #3)
+>  - Rebased one patch back on the ceph tree as the top patch got removed[4].
+>  - Split out the bit to move ceph cap-getting on readahead out from the
+>    patch adding an inode context[5].
+>  - Made ceph_init_request() store the caps got in rreq->netfs_priv for
+>    later freeing.
+>  - Comment the need to keep the netfs inode context contiguous with the VFS
+>    inode struct[6].
+>  - Altered the traces to use 'R=' consistently to denote a request debug ID.
+>  
+> ver #2)
+>  - Changed kdoc references to renamed files[1].
+>  - Switched the begin-read-function patch and the prepare-to-split patch as
+>    fewer functions then need unstatic'ing.
+>  - Fixed an uninitialised var in netfs_begin_read()[2][3].
+>  - Fixed a refleak caused by an unremoved line when netfs_begin_read() was
+>    introduced.
+>  - Used "#if IS_ENABLED()" in netfs_i_cookie(), not "#ifdef".
+>  - Implemented missing bit of ceph readahead through netfs_readahead().
+>  - Rearranged the patch order to make the ceph readahead possible.
+> 
+> Link: https://lore.kernel.org/r/20220303202811.6a1d53a1@canb.auug.org.au/ [1]
+> Link: https://lore.kernel.org/r/20220303163826.1120936-1-nathan@kernel.org/ [2]
+> Link: https://lore.kernel.org/r/20220303235647.1297171-1-colin.i.king@gmail.com/ [3]
+> Link: https://lore.kernel.org/r/527234d849b0de18b326d6db0d59070b70d19b7e.camel@kernel.org/ [4]
+> Link: https://lore.kernel.org/r/8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org/ [5]
+> Link: https://lore.kernel.org/r/beaf4f6a6c2575ed489adb14b257253c868f9a5c.camel@kernel.org/ [6]
+> Link: https://lore.kernel.org/r/164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk/ # v1
+> Link: https://lore.kernel.org/r/164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk/ # v2
+> 
+> ---
+> David Howells (19):
+>       netfs: Generate enums from trace symbol mapping lists
+>       netfs: Rename netfs_read_*request to netfs_io_*request
+>       netfs: Finish off rename of netfs_read_request to netfs_io_request
+>       netfs: Split netfs_io_* object handling out
+>       netfs: Adjust the netfs_rreq tracepoint slightly
+>       netfs: Trace refcounting on the netfs_io_request struct
+>       netfs: Trace refcounting on the netfs_io_subrequest struct
+>       netfs: Adjust the netfs_failure tracepoint to indicate non-subreq lines
+>       netfs: Refactor arguments for netfs_alloc_read_request
+>       netfs: Change ->init_request() to return an error code
+>       ceph: Make ceph_init_request() check caps on readahead
+>       netfs: Add a netfs inode context
+>       netfs: Add a function to consolidate beginning a read
+>       netfs: Prepare to split read_helper.c
+>       netfs: Rename read_helper.c to io.c
+>       netfs: Split fs/netfs/read_helper.c
+>       netfs: Split some core bits out into their own file
+>       netfs: Keep track of the actual remote file size
+>       afs: Maintain netfs_i_context::remote_i_size
+> 
+> Jeffle Xu (1):
+>       fscache: export fscache_end_operation()
+> 
+> 
+>  Documentation/filesystems/netfs_library.rst |  140 ++-
+>  fs/9p/cache.c                               |   10 +-
+>  fs/9p/v9fs.c                                |    4 +-
+>  fs/9p/v9fs.h                                |   13 +-
+>  fs/9p/vfs_addr.c                            |   62 +-
+>  fs/9p/vfs_inode.c                           |   13 +-
+>  fs/afs/dynroot.c                            |    1 +
+>  fs/afs/file.c                               |   41 +-
+>  fs/afs/inode.c                              |   32 +-
+>  fs/afs/internal.h                           |   23 +-
+>  fs/afs/super.c                              |    4 +-
+>  fs/afs/write.c                              |   10 +-
+>  fs/cachefiles/io.c                          |   10 +-
+>  fs/ceph/addr.c                              |  116 +-
+>  fs/ceph/cache.c                             |   28 +-
+>  fs/ceph/cache.h                             |   15 +-
+>  fs/ceph/inode.c                             |    6 +-
+>  fs/ceph/super.h                             |   17 +-
+>  fs/cifs/cifsglob.h                          |   10 +-
+>  fs/cifs/fscache.c                           |   19 +-
+>  fs/cifs/fscache.h                           |    2 +-
+>  fs/fscache/internal.h                       |   11 -
+>  fs/netfs/Makefile                           |    8 +-
+>  fs/netfs/buffered_read.c                    |  428 +++++++
+>  fs/netfs/internal.h                         |   49 +-
+>  fs/netfs/io.c                               |  657 ++++++++++
+>  fs/netfs/main.c                             |   20 +
+>  fs/netfs/objects.c                          |  160 +++
+>  fs/netfs/read_helper.c                      | 1205 -------------------
+>  fs/netfs/stats.c                            |    1 -
+>  fs/nfs/fscache.c                            |    8 -
+>  include/linux/fscache.h                     |   14 +
+>  include/linux/netfs.h                       |  162 ++-
+>  include/trace/events/cachefiles.h           |    6 +-
+>  include/trace/events/netfs.h                |  190 ++-
+>  35 files changed, 1867 insertions(+), 1628 deletions(-)
+>  create mode 100644 fs/netfs/buffered_read.c
+>  create mode 100644 fs/netfs/io.c
+>  create mode 100644 fs/netfs/main.c
+>  create mode 100644 fs/netfs/objects.c
+>  delete mode 100644 fs/netfs/read_helper.c
+> 
+> 
 
-On 3/7/22 1:25 AM, Jiapeng Chong wrote:
-> Fix the following W=1 kernel warnings:
->
-> arch/x86/xen/setup.c:725: warning: expecting prototype for
-> machine_specific_memory_setup(). Prototype was for xen_memory_setup()
-> instead.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+I ran this through xfstests on ceph, with fscache enabled and it seemed
+to do fine.
 
-
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-
-
-Applied to for-linus-5.18
-
+Tested-by: Jeff Layton <jlayton@kernel.org>

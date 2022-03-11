@@ -2,78 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB824D61A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E47D4D61AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 13:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348604AbiCKMiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 07:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        id S1348613AbiCKMjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 07:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239789AbiCKMiU (ORCPT
+        with ESMTP id S236082AbiCKMjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 07:38:20 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF2E1B45EC
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:37:17 -0800 (PST)
-Received: from [127.0.0.1] (dynamic-002-247-254-048.2.247.pool.telefonica.de [2.247.254.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD1E01EC0347;
-        Fri, 11 Mar 2022 13:37:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647002232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oq41xZrY/MyPw65YYgn+VmNTNE6/MaYtYT7L5NwXPC8=;
-        b=aaEuLCJssRrOmm/JVzhDI67RrOIyRD9eNm7S1uFN7QDKvwwaVPCPSClUTESVg0Xf5/4iUt
-        sjRTYA3LM0zZKnKneInasbNbp0QX66NNmgGB6Jaiv+sihPUDC/mIYMmi4aOQknZYgZsxcs
-        NR1ZJJc4I9SyDuzO23371VueYk1qgd4=
-Date:   Fri, 11 Mar 2022 12:37:09 +0000
-From:   Boris Petkov <bp@alien8.de>
-To:     Bharata B Rao <bharata@amd.com>, linux-kernel@vger.kernel.org
-CC:     linux-mm@kvack.org, x86@kernel.org, shuah@kernel.org,
-        kirill.shutemov@linux.intel.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, will@kernel.org, mingo@redhat.com,
-        oleg@redhat.com, catalin.marinas@arm.com, ananth.narayan@amd.com
-Subject: Re: [RFC PATCH v0 3/6] x86: Enable Upper Address Ignore(UAI) feature
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220310111545.10852-4-bharata@amd.com>
-References: <20220310111545.10852-1-bharata@amd.com> <20220310111545.10852-4-bharata@amd.com>
-Message-ID: <808EE3DA-69B1-47E3-825E-6DDCE1331F65@alien8.de>
+        Fri, 11 Mar 2022 07:39:22 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7896E0AC6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 04:38:16 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KFQT30BCwz9sS8;
+        Fri, 11 Mar 2022 13:38:15 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XKomrJimBXhG; Fri, 11 Mar 2022 13:38:14 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KFQT2691Nz9sS7;
+        Fri, 11 Mar 2022 13:38:14 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C35E18B796;
+        Fri, 11 Mar 2022 13:38:14 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ia6w-43ynZ7o; Fri, 11 Mar 2022 13:38:14 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.87])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 75EE38B790;
+        Fri, 11 Mar 2022 13:38:14 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22BCc7Ao3854065
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 11 Mar 2022 13:38:07 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22BCc4863854064;
+        Fri, 11 Mar 2022 13:38:04 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1] powerpc: Use static call for get_irq()
+Date:   Fri, 11 Mar 2022 13:38:04 +0100
+Message-Id: <afb92085f930651d8b1063e4d4bf0396c80ebc7d.1647002274.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1647002283; l=3058; s=20211009; h=from:subject:message-id; bh=mCINRThVIFcTaXfGzdqc1OpQCUN3uvZOAfilNMot2os=; b=GnKPWvWQ03NeIAxp/0h3RNLpjj7IVDTif2xSsblE+mG97TZmkjd1Yl3gTlHDBbb9QAmmgSDZ+MsG xjgLn7mqCMpi0P+ADa383i1dnNddOSoD/uXjqAXX164YMKyJ4VPz
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+__do_irq() inconditionnaly calls ppc_md.get_irq()
 
->diff --git a/arch/x86/kernel/setup=2Ec b/arch/x86/kernel/setup=2Ec
->index f7a132eb794d=2E=2E12615b1b4af5 100644
->--- a/arch/x86/kernel/setup=2Ec
->+++ b/arch/x86/kernel/setup=2Ec
->@@ -740,6 +740,12 @@ dump_kernel_offset(struct notifier_block *self, unsi=
-gned long v, void *p)
-> 	return 0;
-> }
->=20
->+static inline void __init uai_enable(void)
->+{
->+	if (boot_cpu_has(X86_FEATURE_UAI))
+That's definitely a hot path.
 
-cpu_feature_enabled
+At the time being ppc_md.get_irq address is read every time
+from ppc_md structure.
 
->+		msr_set_bit(MSR_EFER, _EFER_UAI);
->+}
+Replace that call by a static call, and initialise that
+call after ppc_md.init_IRQ() has set ppc_md.get_irq.
 
+Emit a warning and don't set the static call if ppc_md.init_IRQ()
+is still NULL, that way the kernel won't blow up if for some
+reason ppc_md.get_irq() doesn't get properly set.
 
---=20
-Sent from a small device: formatting sux and brevity is inevitable=2E 
+With the patch:
+
+	00000000 <__SCT__ppc_get_irq>:
+	   0:	48 00 00 20 	b       20 <__static_call_return0>	<== Replaced by 'b <ppc_md.get_irq>' at runtime
+...
+	00000020 <__static_call_return0>:
+	  20:	38 60 00 00 	li      r3,0
+	  24:	4e 80 00 20 	blr
+...
+	00000058 <__do_irq>:
+...
+	  64:	48 00 00 01 	bl      64 <__do_irq+0xc>
+				64: R_PPC_REL24	__SCT__ppc_get_irq
+	  68:	2c 03 00 00 	cmpwi   r3,0
+...
+
+Before the patch:
+
+	00000038 <__do_irq>:
+...
+	  3c:	3d 20 00 00 	lis     r9,0
+				3e: R_PPC_ADDR16_HA	ppc_md+0x1c
+...
+	  44:	81 29 00 00 	lwz     r9,0(r9)
+				46: R_PPC_ADDR16_LO	ppc_md+0x1c
+...
+	  4c:	7d 29 03 a6 	mtctr   r9
+	  50:	4e 80 04 21 	bctrl
+	  54:	2c 03 00 00 	cmpwi   r3,0
+...
+
+On PPC64 which doesn't implement static calls yet we get:
+
+00000000000000d0 <__do_irq>:
+...
+      dc:	00 00 22 3d 	addis   r9,r2,0
+			dc: R_PPC64_TOC16_HA	.data+0x8
+...
+      e4:	00 00 89 e9 	ld      r12,0(r9)
+			e4: R_PPC64_TOC16_LO_DS	.data+0x8
+...
+      f0:	a6 03 89 7d 	mtctr   r12
+      f4:	18 00 41 f8 	std     r2,24(r1)
+      f8:	21 04 80 4e 	bctrl
+      fc:	18 00 41 e8 	ld      r2,24(r1)
+...
+
+So on PPC64 that's similar to what we get without static calls.
+But at least until ppc_md.get_irq() is set the call is to
+__static_call_return0.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/kernel/irq.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
+index 752fb182eacb..1c4715a03cd1 100644
+--- a/arch/powerpc/kernel/irq.c
++++ b/arch/powerpc/kernel/irq.c
+@@ -52,6 +52,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/vmalloc.h>
+ #include <linux/pgtable.h>
++#include <linux/static_call.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/interrupt.h>
+@@ -730,6 +731,8 @@ static __always_inline void call_do_irq(struct pt_regs *regs, void *sp)
+ 	);
+ }
+ 
++DEFINE_STATIC_CALL_RET0(ppc_get_irq, *ppc_md.get_irq);
++
+ void __do_irq(struct pt_regs *regs)
+ {
+ 	unsigned int irq;
+@@ -741,7 +744,7 @@ void __do_irq(struct pt_regs *regs)
+ 	 *
+ 	 * This will typically lower the interrupt line to the CPU
+ 	 */
+-	irq = ppc_md.get_irq();
++	irq = static_call(ppc_get_irq)();
+ 
+ 	/* We can hard enable interrupts now to allow perf interrupts */
+ 	if (should_hard_irq_enable())
+@@ -809,6 +812,9 @@ void __init init_IRQ(void)
+ 
+ 	if (ppc_md.init_IRQ)
+ 		ppc_md.init_IRQ();
++
++	if (!WARN_ON(!ppc_md.get_irq))
++		static_call_update(ppc_get_irq, ppc_md.get_irq);
+ }
+ 
+ #ifdef CONFIG_BOOKE_OR_40x
+-- 
+2.34.1
+

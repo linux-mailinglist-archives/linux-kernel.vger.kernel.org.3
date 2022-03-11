@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6054D67A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41BB4D679D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 18:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350775AbiCKRar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 12:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S1350753AbiCKR35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 12:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbiCKRap (ORCPT
+        with ESMTP id S1347454AbiCKR34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:30:45 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6654B180212
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:29:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647019781; x=1678555781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vYfkd+DeJvPsBWt5ueO6Fu3G+xZhbCFAdZ7JQ4e/VCs=;
-  b=O9rXUy/WAl/Q7LEppJAbiWU36iM4kPSuyDcIV0xvOv4tikLRfx0TfNEU
-   THTYfoebOra7yJSaCiREAltchfulgUo5EjkiNRWqm8J53IvPG8QiwdGiq
-   w2beYSjFFzZuRSLpYiKCRTBVpo7zetJJzVf6zx5TyXp9zN94wa+cUbuqw
-   djosd93fZ7rLUrZMK1qBU+ATrNxtLL0Y3AXSmznHUGkO3IPQ4Qid4zlfa
-   2C70B/CjPU/grkug2DdzqxrYy10yUEhpOi0hVMiPxGl8p8P/9/SY/K4ns
-   62dxv0zGFE7dfXx81jzMUcUwbxrTmmt0nTkkz5frjJuSc5a25izlGUILT
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="318836869"
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="318836869"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 09:29:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,174,1643702400"; 
-   d="scan'208";a="579355080"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2022 09:29:39 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSj58-0006rB-MQ; Fri, 11 Mar 2022 17:29:38 +0000
-Date:   Sat, 12 Mar 2022 01:28:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Howard Yen <howardyen@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-gs-raviole-5.10-android12-qpr3
- 1465/9999] drivers/usb/host/xhci-ring.c:2900:5: warning: no previous
- prototype for 'xhci_handle_event'
-Message-ID: <202203120155.TB0VrOL5-lkp@intel.com>
+        Fri, 11 Mar 2022 12:29:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E24175821
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 09:28:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 24D8ECE2986
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 17:28:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF96C340E9;
+        Fri, 11 Mar 2022 17:28:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647019725;
+        bh=d5z9c3EOdhxF2p3xDGp+4qitBzF+8Lm3Do/gcuSvtSA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pC9eiC+706ZZZyFZiO+I2EImk55YkM5DNe6IUnidqCTowfTE6mlPz8X3obfmOQsYt
+         C2ePj/tCLaltOl8NWS8U1/U2pYrw3hXYiAs4/tIhV0AKEVp7Aa12ZQQeO4/2WRkQc8
+         tvEQjkEfk0Gjdm2Nimpyb50tvEA46visb+L2OREnHqwitJ6QpYSYt3jCcpCqVBwGxT
+         DWtNc1TU1GHIlyTxi7F8KsWuK09xSGbtm2ZCc1OKRayYH9w1Sb0DTRBkQ3PMdvN6us
+         vW4BwGDJ/cISPo0881WGhfFRHtiQEM7CZ1Fut/6rW+TAryOsbENDmFC9O18MfaezIS
+         H2LzNkpTCTXmQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BF6885C0140; Fri, 11 Mar 2022 09:28:44 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:28:44 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 18/19] rcu/context_tracking: Merge dynticks counter and
+ context tracking states
+Message-ID: <20220311172844.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220302154810.42308-1-frederic@kernel.org>
+ <20220302154810.42308-19-frederic@kernel.org>
+ <20220310203222.GC4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220311163525.GF227945@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220311163525.GF227945@lothringen>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,155 +73,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Howard,
+On Fri, Mar 11, 2022 at 05:35:25PM +0100, Frederic Weisbecker wrote:
+> On Thu, Mar 10, 2022 at 12:32:22PM -0800, Paul E. McKenney wrote:
+> > On Wed, Mar 02, 2022 at 04:48:09PM +0100, Frederic Weisbecker wrote:
+> > > Updating the context tracking state and the RCU dynticks counter
+> > > atomically in a single operation is a first step towards improving CPU
+> > > isolation. This makes the context tracking state updates fully ordered
+> > > and therefore allow for later enhancements such as postponing some work
+> > > while a task is running isolated in userspace until it ever comes back
+> > > to the kernel.
+> > > 
+> > > The state field becomes divided in two parts:
+> > > 
+> > > 1) Lower bits for context tracking state:
+> > > 
+> > >    	CONTEXT_IDLE = 1,
+> > > 	CONTEXT_USER = 2,
+> > > 	CONTEXT_GUEST = 4,
+> > 
+> > And the CONTEXT_DISABLED value of -1 works because you can have only
+> > one of the above three bits set at a time?
+> > 
+> > Except that RCU needs this to unconditionally at least distinguish
+> > between kernel and idle, given the prevalence of CONFIG_NO_HZ_IDLE=y.
+> > So does the CONTEXT_DISABLED really happen anymore?
+> > 
+> > A few more questions interspersed below.
+> 
+> The value of CONTEXT_DISABLED is never stored in the ct->state. It is just
+> returned as is when CONTEXT_TRACKING is disabled. So this shouldn't conflict
+> with RCU.
 
-FYI, the error/warning still remains.
+Whew!  ;-)
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr3
-head:   bdc732d112f3e2c4160fe03c62c32308529ab0f6
-commit: 26afe6712de0fad3a5de2b372286d029f8ff3231 [1465/9999] FROMLIST: usb: host: export symbols for xhci hooks usage
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220312/202203120155.TB0VrOL5-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/26afe6712de0fad3a5de2b372286d029f8ff3231
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-gs-raviole-5.10-android12-qpr3
-        git checkout 26afe6712de0fad3a5de2b372286d029f8ff3231
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
+> > > @@ -452,15 +453,16 @@ void noinstr __ct_user_exit(enum ctx_state state)
+> > >  			 * Exit RCU idle mode while entering the kernel because it can
+> > >  			 * run a RCU read side critical section anytime.
+> > >  			 */
+> > > -			rcu_eqs_exit(true);
+> > > +			ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
+> > >  			if (state == CONTEXT_USER) {
+> > >  				instrumentation_begin();
+> > >  				vtime_user_exit(current);
+> > >  				trace_user_exit(0);
+> > >  				instrumentation_end();
+> > >  			}
+> > > +		} else {
+> > > +			atomic_sub(state, &ct->state);
+> > 
+> > OK, atomic_sub() got my attention.  What is going on here?  ;-)
+> 
+> Right :-)
+> 
+> So that's when context tracking user is running but RCU doesn't
+> track user. This is for example when NO_HZ_FULL=n but VIRT_CPU_ACCOUNTING_GEN=y.
+> 
+> I might remove that standalone VIRT_CPU_ACCOUNTING_GEN=y one day but for now
+> it's there.
+> 
+> Anyway so in this case we only want to track KERNEL <-> USER from context
+> tracking POV, but we don't need the DYNTICKS_RCU_IDX part, hence the spared
+> ordering.
+> 
+> But it still needs to be atomic because NMIs may increase DYNTICKS_RCU_IDX on
+> the same field.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+OK, so the idea is because NO_HZ_FULL=n, RCU doesn't care about user
+space execution?
 
-All warnings (new ones prefixed by >>):
+How about looking at it the other way?  Is there some reason that RCU
+shouldn't take advantage of the userspace-execution information when it
+exists?  For example, in the NO_HZ_FULL=n but VIRT_CPU_ACCOUNTING_GEN=y
+case, is there some chance that RCU would be ignoring a non-noinstr
+function?
 
->> drivers/usb/host/xhci-ring.c:2900:5: warning: no previous prototype for 'xhci_handle_event' [-Wmissing-prototypes]
-    2900 | int xhci_handle_event(struct xhci_hcd *xhci)
-         |     ^~~~~~~~~~~~~~~~~
->> drivers/usb/host/xhci-ring.c:2976:6: warning: no previous prototype for 'xhci_update_erst_dequeue' [-Wmissing-prototypes]
-    2976 | void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > @@ -548,7 +550,7 @@ EXPORT_SYMBOL_GPL(context_tracking);
+> > >  void ct_idle_enter(void)
+> > >  {
+> > >  	lockdep_assert_irqs_disabled();
+> > > -	rcu_eqs_enter(false);
+> > > +	ct_kernel_exit(false, RCU_DYNTICKS_IDX + CONTEXT_IDLE);
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(ct_idle_enter);
+> > >  
+> > > @@ -566,7 +568,7 @@ void ct_idle_exit(void)
+> > >  	unsigned long flags;
+> > >  
+> > >  	local_irq_save(flags);
+> > > -	rcu_eqs_exit(false);
+> > > +	ct_kernel_enter(false, RCU_DYNTICKS_IDX - CONTEXT_IDLE);
+> > 
+> > Nice!  This works because all transitions must be either from or
+> > to kernel context, correct?
+> 
+> Exactly. There is no such thing as IDLE -> USER -> GUEST, etc...
+> There has to be KERNEL in the middle of each. Because we never
+> call rcu_idle_enter() -> rcu_user_enter() for example. The has to be
+> rcu_idle_exit() in the middle.
+> 
+> (famous last words).
 
+Works for me, for the moment, anyway.  ;-)
 
-vim +/xhci_handle_event +2900 drivers/usb/host/xhci-ring.c
+> > >  /* Return true if the specified CPU is currently idle from an RCU viewpoint.  */
+> > > @@ -321,8 +321,7 @@ bool rcu_dynticks_zero_in_eqs(int cpu, int *vp)
+> > >  	int snap;
+> > >  
+> > >  	// If not quiescent, force back to earlier extended quiescent state.
+> > > -	snap = ct_dynticks_cpu(cpu) & ~0x1;
+> > > -
+> > > +	snap = ct_dynticks_cpu(cpu) & ~RCU_DYNTICKS_IDX;
+> > 
+> > Do we also need to get rid of the low-order bits?  Or is that happening
+> > elsewhere?  Or is there some reason that they can stick around?
+> 
+> Yep, ct_dynticks_cpu() clears the low order CONTEXT_* bits.
 
-  2893	
-  2894	/*
-  2895	 * This function handles all OS-owned events on the event ring.  It may drop
-  2896	 * xhci->lock between event processing (e.g. to pass up port status changes).
-  2897	 * Returns >0 for "possibly more events to process" (caller should call again),
-  2898	 * otherwise 0 if done.  In future, <0 returns should indicate error code.
-  2899	 */
-> 2900	int xhci_handle_event(struct xhci_hcd *xhci)
-  2901	{
-  2902		union xhci_trb *event;
-  2903		int update_ptrs = 1;
-  2904		u32 trb_type;
-  2905		int ret;
-  2906	
-  2907		/* Event ring hasn't been allocated yet. */
-  2908		if (!xhci->event_ring || !xhci->event_ring->dequeue) {
-  2909			xhci_err(xhci, "ERROR event ring not ready\n");
-  2910			return -ENOMEM;
-  2911		}
-  2912	
-  2913		event = xhci->event_ring->dequeue;
-  2914		/* Does the HC or OS own the TRB? */
-  2915		if ((le32_to_cpu(event->event_cmd.flags) & TRB_CYCLE) !=
-  2916		    xhci->event_ring->cycle_state)
-  2917			return 0;
-  2918	
-  2919		trace_xhci_handle_event(xhci->event_ring, &event->generic);
-  2920	
-  2921		/*
-  2922		 * Barrier between reading the TRB_CYCLE (valid) flag above and any
-  2923		 * speculative reads of the event's flags/data below.
-  2924		 */
-  2925		rmb();
-  2926		trb_type = TRB_FIELD_TO_TYPE(le32_to_cpu(event->event_cmd.flags));
-  2927		/* FIXME: Handle more event types. */
-  2928	
-  2929		switch (trb_type) {
-  2930		case TRB_COMPLETION:
-  2931			handle_cmd_completion(xhci, &event->event_cmd);
-  2932			break;
-  2933		case TRB_PORT_STATUS:
-  2934			handle_port_status(xhci, event);
-  2935			update_ptrs = 0;
-  2936			break;
-  2937		case TRB_TRANSFER:
-  2938			ret = handle_tx_event(xhci, &event->trans_event);
-  2939			if (ret >= 0)
-  2940				update_ptrs = 0;
-  2941			break;
-  2942		case TRB_DEV_NOTE:
-  2943			handle_device_notification(xhci, event);
-  2944			break;
-  2945		default:
-  2946			if (trb_type >= TRB_VENDOR_DEFINED_LOW)
-  2947				handle_vendor_event(xhci, event, trb_type);
-  2948			else
-  2949				xhci_warn(xhci, "ERROR unknown event type %d\n", trb_type);
-  2950		}
-  2951		/* Any of the above functions may drop and re-acquire the lock, so check
-  2952		 * to make sure a watchdog timer didn't mark the host as non-responsive.
-  2953		 */
-  2954		if (xhci->xhc_state & XHCI_STATE_DYING) {
-  2955			xhci_dbg(xhci, "xHCI host dying, returning from "
-  2956					"event handler.\n");
-  2957			return 0;
-  2958		}
-  2959	
-  2960		if (update_ptrs)
-  2961			/* Update SW event ring dequeue pointer */
-  2962			inc_deq(xhci, xhci->event_ring);
-  2963	
-  2964		/* Are there more items on the event ring?  Caller will call us again to
-  2965		 * check.
-  2966		 */
-  2967		return 1;
-  2968	}
-  2969	EXPORT_SYMBOL_GPL(xhci_handle_event);
-  2970	
-  2971	/*
-  2972	 * Update Event Ring Dequeue Pointer:
-  2973	 * - When all events have finished
-  2974	 * - To avoid "Event Ring Full Error" condition
-  2975	 */
-> 2976	void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-  2977			union xhci_trb *event_ring_deq)
-  2978	{
-  2979		u64 temp_64;
-  2980		dma_addr_t deq;
-  2981	
-  2982		temp_64 = xhci_read_64(xhci, &xhci->ir_set->erst_dequeue);
-  2983		/* If necessary, update the HW's version of the event ring deq ptr. */
-  2984		if (event_ring_deq != xhci->event_ring->dequeue) {
-  2985			deq = xhci_trb_virt_to_dma(xhci->event_ring->deq_seg,
-  2986					xhci->event_ring->dequeue);
-  2987			if (deq == 0)
-  2988				xhci_warn(xhci, "WARN something wrong with SW event ring dequeue ptr\n");
-  2989			/*
-  2990			 * Per 4.9.4, Software writes to the ERDP register shall
-  2991			 * always advance the Event Ring Dequeue Pointer value.
-  2992			 */
-  2993			if ((temp_64 & (u64) ~ERST_PTR_MASK) ==
-  2994					((u64) deq & (u64) ~ERST_PTR_MASK))
-  2995				return;
-  2996	
-  2997			/* Update HC event ring dequeue pointer */
-  2998			temp_64 &= ERST_PTR_MASK;
-  2999			temp_64 |= ((u64) deq & (u64) ~ERST_PTR_MASK);
-  3000		}
-  3001	
-  3002		/* Clear the event handler busy flag (RW1C) */
-  3003		temp_64 |= ERST_EHB;
-  3004		xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
-  3005	}
-  3006	EXPORT_SYMBOL_GPL(xhci_update_erst_dequeue);
-  3007	
+Whew!  ;-)
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > > diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> > > index 9bf5cc79d5eb..1ac48c804006 100644
+> > > --- a/kernel/rcu/tree_stall.h
+> > > +++ b/kernel/rcu/tree_stall.h
+> > > @@ -459,7 +459,7 @@ static void print_cpu_stall_info(int cpu)
+> > >  			rdp->rcu_iw_pending ? (int)min(delta, 9UL) + '0' :
+> > >  				"!."[!delta],
+> > >  	       ticks_value, ticks_title,
+> > > -	       rcu_dynticks_snap(cpu) & 0xfff,
+> > > +	       (rcu_dynticks_snap(cpu) >> RCU_DYNTICKS_SHIFT) & 0xfff ,
+> > 
+> > Actually, the low-ordder several bits are useful when debugging, so
+> > could you please not shift them away?  Maybe also go to 0xffff to allow
+> > for more bits taken?
+> 
+> Yeah that makes sense, I'll change that.
+> 
+> Thanks a lot for the reviews!
+
+Thank you for the series!
+
+							Thanx, Paul

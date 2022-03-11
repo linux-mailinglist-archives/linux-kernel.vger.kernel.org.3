@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9484D5CC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CFC4D5CC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Mar 2022 08:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347306AbiCKHx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 02:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S229962AbiCKHyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 02:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347277AbiCKHxo (ORCPT
+        with ESMTP id S1347289AbiCKHxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:53:44 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2063.outbound.protection.outlook.com [40.107.22.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25554BB577;
-        Thu, 10 Mar 2022 23:52:42 -0800 (PST)
+        Fri, 11 Mar 2022 02:53:48 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2068.outbound.protection.outlook.com [40.107.22.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C803DBA740;
+        Thu, 10 Mar 2022 23:52:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fRm44I/AqO9i8oVtGjoAwz2HuHuwAZoKhtckuycJBZhd71WEL09F0m6U1Rw7HNZIHJxcoleGrlOLNN2rWU4aej574zb+tZkJvOXETmx/USo3SlemG2+UaAZyVkymAaqnousF/KQY+qHFDohpCrWzXyg9oTZtFTBOwlAIKyYOGfOXqmUhxY7IviTo4vcC719jdwv/zbm/ktO2JL6gS8QUEJaYFVuJnJawAYbKCQgeoDaUbygv/Tv5URN7nwLvsuia+zRI6FKHnWCfyncntESDb+51gusvS3Wu6+B0fkLEwiohjcm7gTOM8nkZM3DqjLJkE1FoDstlgrL90u4/19Zgow==
+ b=Pum9Dg448ENuENHezdP8vsI/On+VPDT5on1qEuP1Ot2TmkNsvUcCMjDy+46r/BtJiqTdkgG9hfd9rDFwWsBNIG9+i4UZpeBL12UeMP9tOJUXbyh8Z+0inz+VzGO2y4AYZUVCvsT7Qm21QKRmYvH63Zw+8pzTP2yXTKC1nlo2PMNCneUX6GkotmE5YrhH9zGXx3ILPvY5L1XNqIvLFTeNho4x+dTo+MdrM+wfQ7m8wyWMnZxl9D5Djvu57FsziA6Db9/z9eTRxanvxk8aJwUim1EpIhDfClqp1FootmvCkC+OBaTU5z0mQOv8OlCZfIJ9T85kWV0HlJhT+6XC1K1vQg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1bUeLjEYNurmQmNiZYNV+D5rwdXTOYZz+osKmYIV90w=;
- b=Kg5MoKNn9rL2TRgKWNW7kQ1KSHK9H2ElYHjcRiPCNJ4ZwVld/3BU34Rqp5po99eFq2lW8HydXbi+VADQ4ze4bpstH+oVpw3ovBVr2n/UMDbiymlmsP2FczgIpFYUv2oIRdY8bhuy9dIQ4r7+ApUjmK3OUfxe14qIcKpAUwMVeNhufTqv1eKbYKIJEdukuCRpBMeGDInyMA/IxJ6kiATEC5VjFZwWfVgjTODNgZqWh142d1IMSzBOJNBwoDDB9pVXaMgPdc65vrJdb03rKqe61z+sxX0quokBmlFWecpa97VnZo1dmLKisY2D1He8wj0noeIA9xSC3OZZfy/SssIIOw==
+ bh=prmxw1sdsDypUMG8otmd/XhaE7mFmMevqvhhIPGOk40=;
+ b=fmNFkDnMPeAUsRX9MBjcfwsphm59BlwPqY8QNps1FUZ13S6yQNRjogSylVNkiPP8kdkE4MT+ym1acJmBMQM+Dbogo6/u97jgUh04ZF8mhfzhSrM/YHNKPGpUNtSDTqQhO/wGdF9eJ+/N069FKmE5ZigCC9D5ssgOZvtRlXT50HIMEEOBC/OePVSVx2I/JjveOuHo6GcHTgdQzbcZLCZd1GCZheKbdEuCL4cUsJNoN2nnCVXArQm1iT66wf8c9+/CwsCpnTf8oLD7Pz3tpLxapAlnlv1gXriRO/9ZzE1eRROXCSwd9X1A2nrcDFUyk2FIkhaFfCv13cCpGyLUBFAxTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1bUeLjEYNurmQmNiZYNV+D5rwdXTOYZz+osKmYIV90w=;
- b=PaiJ9PTGv3shDqUNYwUTVm6yaX0R9c65tbJYzLcltEz0UHBNMEVVtXepYZqL4mFDhGDhojyTIni86AAhUBoKAZOZn2E73Woi/GBB05ZaguVwxOcW/CAoYJ85sGk/y2tgDBc4vAbye2s+uluBygQlzsGIYxaVRwjmkHeHKhyumYg=
+ bh=prmxw1sdsDypUMG8otmd/XhaE7mFmMevqvhhIPGOk40=;
+ b=THBrFemfzQyuN0l9V9H8dPZHu6LXOuc5L+iUQLKwwzWjDeWIg3hdrfUGp1wcaqjqsj8dkIebiRw0IwAb+K7yIWXhSRyZNHgOmmkJUUatnMJFWXilzEOc4OkgCibr/Y0t54JlcEbV4w2vMF1otsWNEEcmDHY7odORglNyNtVIOW0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by DB7PR04MB4443.eurprd04.prod.outlook.com (2603:10a6:5:32::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 11 Mar
- 2022 07:52:39 +0000
+ 2022 07:52:43 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 07:52:39 +0000
+ 07:52:43 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         mirela.rabulea@oss.nxp.com
@@ -47,9 +47,9 @@ Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 4/5] media: imx-jpeg: Handle source change in a function
-Date:   Fri, 11 Mar 2022 15:51:46 +0800
-Message-Id: <538ff8ce60241c4a0729f1a518ecf0ee74291cad.1646983646.git.ming.qian@nxp.com>
+Subject: [PATCH 5/5] media: imx-jpeg: Support dynamic resolution change
+Date:   Fri, 11 Mar 2022 15:51:47 +0800
+Message-Id: <b57b1bf40c56d77c42397a58dc9634509e03582f.1646983646.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1646983646.git.ming.qian@nxp.com>
 References: <cover.1646983646.git.ming.qian@nxp.com>
@@ -59,53 +59,53 @@ X-ClientProxiedBy: SGXP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::27)
  To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 30850c2e-1e6e-419b-57dd-08da03341d59
+X-MS-Office365-Filtering-Correlation-Id: d66dea7e-666b-4ad7-ac64-08da03341f9c
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4443:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR04MB44431BCB229FFC1554359C4DE70C9@DB7PR04MB4443.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DB7PR04MB44438664EDDD0DCD3C9FA5BCE70C9@DB7PR04MB4443.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2+gU6ocIV+wTQVqOW8Ks62vZZwlmllE3GIasfR/y9d/wlb1Aim4oB54VHl66fJab/mRfKKf/gu4Aj0XZnDWflAlNBZ6JJwso2oe9XTvOkT7/Eoullt2XEO1c6gEhIm2KalfJROkss7cmoM/vEKaVKFfBeUU7a3nq456uzsmjAMGYqpCZJBzrKGUbMeX+AsDqqBs2o76teeqsorNklJObweuzJNkUTUdjx//R7qm6ml8YYrdyUPDBwS20kmGgY6dLke0MMpdymNmHtomXig4AZZderMO5tNou2u2CwiVgtFnJ2XcZOfGhvkivAC16fHUWZ5H0pH7tIcGd7kGBMWoiUk9VvRsrPgjGzixDL7G1+ZK8bXmG3j9kUxqgzKdebwlgg8B67NdgKdfabuanAlzOm06dhP3Ahl7xJlyHkLQwPhsV8mjcD93sFFQzbBFPdYd0EyT+zKNflRvR/pSQZPyfSs1OjKZH0haMi6zTXFyNq4Uf0ANMvwxC3ZJVEa8HAYdcWsGivDshDaIl7w1s60ZRH3SyTgPyTS7kgSvAnIcEt/SzVykGD1rBoR8dlXR3AovG2KrYqox+plmNWRxrz6LAMUA/cq/IaXO3idI2X+bq43iw4Xcigg0a204FAF7eEXMILjHZ6dTWLQRdClCiXAXmynbZFuluhXOUx24Rm6wWELHuCJlEJSZ3lAtjA7R6bQ187Lj9rjECtbp3qOLbYJPUWQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(8936002)(26005)(52116002)(44832011)(2906002)(8676002)(6486002)(2616005)(508600001)(86362001)(4326008)(186003)(66946007)(6512007)(6506007)(5660300002)(66556008)(38350700002)(6666004)(38100700002)(66476007)(316002)(83380400001)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 6/G0Mik3tIIbzSL/XCwmTXDm3joMQxnUoJhjTKcJSKJ+oQPZ8c5AoStx4LSQYw6DMmUZ2F3y9ZzS9E0FG9FRpZ/tGmQ2hlqKVLjhIwa/gMNPFRTFOOQGCXa47TpiRKjCK0Us8tgvN6jH3pneX7SjhJuSctHNJI7Zx5xzJ+Pd6ERkZx70fe7HLc6CRSDEGTwZfSOnsw8uExQ+ua7tE9YAZl4TlqBPUUYGBFcPnDOV3zWiFA4g2HujgVKlEfnC1MFfvFi+fbxhmCe+IEODxbqIsynHxnJdtZvyaS5//GTgQFQl5h7wk0lhTIi6+QNjofcB4x9z4BO6cyRfeK3hfWwB6h+kw2sRsRaV4cBTCJzww07osNxxXMYE2X/lsBPgJyW+4sNUAjmT9r29sF93ZZtYbhOlIvxoNGQIdeJ/h2MX8phxb+C0hPGZndMYH2nVH62Xc04z9lbTBsJ9aXg3Nfw4fPOas+8TCwyvtVnzEBfRjwnSGZaTXWNtge3z+ZQtrrpoPo2nPPfShPQ+4F3Oowqf95TckeAMWlaaSHyNUcGZaoCrJZz23+w3wm0FaNdCZldk1S4kjnPpCf4tsjvhrQ10sPmlW1kSArLjEyMxf63sndTcpHdcpMbOyURcoUBZ/g9xB4ZfppYAGMxXWMhbEsK+Lzn8CcIyNUQR5V3S8Rfpjjm3juFy8MG0DkQeRDzyDO9DCxxRkQjoZyPsD/E4IU1Hqw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(8936002)(26005)(52116002)(44832011)(2906002)(8676002)(6486002)(2616005)(508600001)(86362001)(4326008)(186003)(66946007)(6512007)(6506007)(5660300002)(66556008)(38350700002)(38100700002)(66476007)(316002)(83380400001)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lSUSLUlp6c0ydu3iCkuC/4WxPiVYmJ5KJWB+Z6T5fCKZeJiR+ThR58vdFsAu?=
- =?us-ascii?Q?B36/8t8/XBfA4ZHqXmFm96xvKGnxNzx0UJz4imTmwwd4dvVQJ6v+tgMVv+L9?=
- =?us-ascii?Q?2fqrfJ3C8I6YTlfDaBJGiGLbH4GqoCAkyvjjUrVEgKIgsew71c6cTcR8Bm9q?=
- =?us-ascii?Q?CUZfvUREOMzHccrHclaT1ju8UPsTWpJ878tm3GRKP9Ttlx0ssl/UEeAkL5qG?=
- =?us-ascii?Q?l3JiHNgZydCeiPB026Ppwq5f8Ob1FGTGGdCx5GfKGOhco1JVCms3Er4eB/e1?=
- =?us-ascii?Q?6n9dsoNTdUpV7P8xZFHwR0A8oNQguBG9B8WKkN91KG2mLVQPu2/85FCmBfTD?=
- =?us-ascii?Q?Z09Cs8FqGzF+12ja/GF+nNf49bSfCF4mg4fY4I4uPTAr4Q/DdsdRNP4ZwStu?=
- =?us-ascii?Q?JNyQFos/aVvS33RP2F3pbKQUcodFjEJ/2mAP0To7jZclnS3N7GeqXB/dCfmQ?=
- =?us-ascii?Q?OunXbLj38D9okJ5QynuOHQBddnyGELBp2TfMESjDAhvgoGjeWsJg4JgOwY5y?=
- =?us-ascii?Q?YsPoqqiC4C3CJJr4L8udFu8bRI7PUtY01XUpS6nF9boiRrMQ8rVwKtDYMjL3?=
- =?us-ascii?Q?K067vPSYwMbXnuPLnsXGw2YXj453rlAe2LsmSmPi+Nx7YeQxuhwhDPqUf6hc?=
- =?us-ascii?Q?VO9tFzKUc28z/A+ltT0cLjJvs4B8JC3ZQbA3jVrOidgCmVMzFIdemk6engvN?=
- =?us-ascii?Q?osz/YsJo2b4Y6fi56YjzBIDU1QiNGvBYKblS1IBmmaeolKGi+jgeY0TPl5Zz?=
- =?us-ascii?Q?k8xk5vEK3Q+ajc2ZaiQSQPtJUBHwRbjYMpA3OKtlVHZFNeK8I+LkcGWVUUst?=
- =?us-ascii?Q?adQgUFTMELrpEhemMBSesyhOcmcuIpXMp/Nnw696oGWaBxidiGSyWtWLAU63?=
- =?us-ascii?Q?5NSnt0yejNIbunsviDHErVnBGC3CR8N6snNA0BtAXNbCtqF20S/2Qu+zwsqI?=
- =?us-ascii?Q?/ZkUmBb5TyGUW8OKQVGN98bg6BsFUZHl/hXaNVI95k0QJ2mE7s+9USi8K2Rc?=
- =?us-ascii?Q?Ab2cyGTJAH6oGryQdVXisTbrxACBkzjl5Oc2zp+hTK0Ro8c6U9c/IhL0cTvf?=
- =?us-ascii?Q?FGW60WkzK7BqGZYS1Ib+QiojEpNgmzBbDzAVZHpW6110ebct+k/q/e03ytt/?=
- =?us-ascii?Q?X6IvHeft0nGrZB/IJbQQpr/ZIJW2zrUP6+6qLAckY1WPJpOUHQHEaALVIRmW?=
- =?us-ascii?Q?5fR3tXAF6oT+o4klVyRyz6mEzAkZk/DgW2lGEUlQOjSJ0/ogWV+mmIsbPe7f?=
- =?us-ascii?Q?6yjK/BTw/dER6dfIAD8eFHFpi4PUrtk4TZmK1T39n6LVVb3K7cl42UetyjhG?=
- =?us-ascii?Q?F0hIQHHuq81tz71Vv5rHrHrl7/JcMBf5hyP8FewnACsHNK8eAc4PU3Q4o8vx?=
- =?us-ascii?Q?d41W3+RNvE3ECqhQxhh4LO9vco9OjY4+bAo0jwPz/hMEUIdc4jTscMjZbQZC?=
- =?us-ascii?Q?xT41hLmQNQOxUnXfq31mFhEi81f5dmP3xo2zwcU02QPBIoO0bLOPFQV8Xk66?=
- =?us-ascii?Q?sScbfq/VI8HZ/Lwl65COVklj6gNhncMmqZ4hs7C64MSnczLSJrTVG0gdspPJ?=
- =?us-ascii?Q?8zeLRY8mN0S/D3MMoptJy6SvtYm0+r2Niwl3nOBqXTRVPOeE0rrvbRVNWRgX?=
- =?us-ascii?Q?hlunIP3/TiqUYpLKRZF4iNo=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z+5MVFyPthGV5O21pA6BuuEDixpiytqpdTaJNtkh1iUBsJ0gQaffRQXzG6Bi?=
+ =?us-ascii?Q?CmKjfGs20fvYbMSXeKYun3nXA5vma/u7oYDdMfYKnlWBVGqkGGDnol7lx/J4?=
+ =?us-ascii?Q?waMotatg7P2sLqoUiVxztOYnrP0Qmdi7s9vg9wXK16zEyag/IqmwWb/amUrn?=
+ =?us-ascii?Q?A0+OHnmMUNrUHsxRWaBF4JplZzIghWGZ5DN2zxtPX0OpRXxvfeP0CDNknPeS?=
+ =?us-ascii?Q?c0LRjCdIR/QD+edgcaOif2L1NQqZBPq9ND9yjpJdsUnXj5QECuX8q95E9faM?=
+ =?us-ascii?Q?BKk+3pMXpziuav03fLYcTZX4jG8xYDeYp8nIgDGC89TLddSl9m1zusqallEo?=
+ =?us-ascii?Q?NZIUnNh2zeubHx8QqKL9YW1SExTe3GFuk1v2TEzA41okak/7YraEBv3YdxCG?=
+ =?us-ascii?Q?eepovDBnf05YZRlffWCW8oklJS3KmMxkeaecJXssXSrSCBSH1YPQ9MJFJuN9?=
+ =?us-ascii?Q?RdBhoBmGMwNHosKHTSlzJze1xDDnhycQ7h8n+wg2j2KExXrbv5mBBP0hmO0g?=
+ =?us-ascii?Q?asOjuYWqxrh71SOlQnrLcZuRQh27tCvQji9TYvn0PWXoMhxCnT52W21keZkt?=
+ =?us-ascii?Q?j/3mbax/t64zqTQeMupsGVXo0MgxwbivYhUuFFBAn6R48zi27ybFDcuGUy3f?=
+ =?us-ascii?Q?GZjM2UmJVO58rT0T2lyRu0f8dkIfC9B0nkGGA8HRRuK/Q0ZPdcsm4Q/c0w2h?=
+ =?us-ascii?Q?JXwtJQIwVp6iwppYO5tKlMg3ztumUkFKrjlcpB8snanjE3T96XLlwrZ9DgJ7?=
+ =?us-ascii?Q?DgrBVYiFZOYfw0gx+lvOcyzkGr6A++Smawv1HaiezboTzyzxo0fyhxpXcnbN?=
+ =?us-ascii?Q?DL+gK4JidCKeFIPWa8+EQT2YLIhRDEo8Y6DnkYmSur4wkBHpT4sSGIGGCRSz?=
+ =?us-ascii?Q?hFYG5F23kYjJyUwzp+IyAod52DnlwZqBQXTkt+r4o8Zs6BAysmeqsrZ2aN7i?=
+ =?us-ascii?Q?coPxKORxd6t9MAi/+ig0lZtvt688EX7JBAV1RDONtdEVFYOvoQx7osayx1qb?=
+ =?us-ascii?Q?L4HlclW6QhAVJjV9A3arc8BE7pb5Q3jS6sUNKm6gNafEHPOhg610u0N7iKsU?=
+ =?us-ascii?Q?h+8PXGH2oDYhy3aiYWyvsTyPIzsst7nkXTP6eA6OAd9FlPnofP55jdjqTXk6?=
+ =?us-ascii?Q?TKMMQNO9vdx08twED/nN31fYfIEEeWFhLX+k33sLRm3W6lCGXsgEwibS81cV?=
+ =?us-ascii?Q?hvx97RwdWLSvUrETK/dsQbhHmLnJIZVfZYDonOlA3+cCTBn+mdyKNLSfiuWA?=
+ =?us-ascii?Q?tHcxjetpXjWHZSAisFsd2E92BTXEiKK0SIXS4R+Jyz50+l2jhlaqhdvLv4Ff?=
+ =?us-ascii?Q?Mf0eWGdcUnxCFDTYYiDS4T5pW8PXLlvElANo3rNVv3jN2WqpOnioeJx5U15D?=
+ =?us-ascii?Q?iqDphXU8skrscy4qOlPF6NHgGFYcjx/s/LaAXbOsI7Wmxi53+R0KBaXqQuOZ?=
+ =?us-ascii?Q?K/yjzTBaDeNpRpq3lm74jw5+vyFKgLacZwW17JR8z2hC+bkG7DTg5aq+w138?=
+ =?us-ascii?Q?qeT9/nXsxMQgFY0bJsN1P4ranA3lO7+GggCCkyFMNUqlKC4pzc2VvqkDJxr5?=
+ =?us-ascii?Q?M/jvZ0AJsHXiwoDfId0eJHl6z9bgUP2uI5czYrqUOx3JDL/z6z6wqtKWwKP2?=
+ =?us-ascii?Q?BnB7oicCSMb6ZGWcEJ4ZJPo=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30850c2e-1e6e-419b-57dd-08da03341d59
+X-MS-Exchange-CrossTenant-Network-Message-Id: d66dea7e-666b-4ad7-ac64-08da03341f9c
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 07:52:39.3798
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 07:52:43.2078
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: phK7j6usU1LQ3yOUbHD2nH32ciBcLJs8PaUD07oj/BsQFTM6TE3CFN9+lGM7GSKHX/jq3sxLiaKnEMgmNbQC1w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: CxCk8la2bW0WNKuSxYuk9A+ojBpQero5ywROv2oXuQwms/gq90ZiXuQeJ1Tiw8I5nCrb3YmtJcw1wTW1nkHIJg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4443
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -117,174 +117,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refine code to support dynamic resolution change
+To support dynamic resolution change,
+driver should meet the following conditions:
+1. the previous pictures are all decoded before source change event.
+2. prevent decoding new resolution pictures with incorrect capture
+   buffer, until user handle source change event and setup capture.
+3. report correct fmt and resolution during source change.
 
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
- drivers/media/platform/imx-jpeg/mxc-jpeg.c | 114 ++++++++++++---------
- 1 file changed, 65 insertions(+), 49 deletions(-)
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c | 69 +++++++++++++++++-----
+ drivers/media/platform/imx-jpeg/mxc-jpeg.h |  2 +
+ 2 files changed, 55 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-index 9e8a4157ce2f..dbcb83ed86e4 100644
+index dbcb83ed86e4..3a78673d6c6f 100644
 --- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
 +++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-@@ -315,6 +315,9 @@ struct mxc_jpeg_src_buf {
- 	/* mxc-jpeg specific */
- 	bool			dht_needed;
- 	bool			jpeg_parse_error;
-+	const struct mxc_jpeg_fmt	*fmt;
-+	int			w;
-+	int			h;
- };
- 
- static inline struct mxc_jpeg_src_buf *vb2_to_mxc_buf(struct vb2_buffer *vb)
-@@ -327,6 +330,9 @@ static unsigned int debug;
- module_param(debug, int, 0644);
- MODULE_PARM_DESC(debug, "Debug level (0-3)");
- 
-+static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q, u32 precision);
-+static void mxc_jpeg_sizeimage(struct mxc_jpeg_q_data *q);
-+
- static void _bswap16(u16 *a)
- {
- 	*a = ((*a & 0x00FF) << 8) | ((*a & 0xFF00) >> 8);
-@@ -922,6 +928,59 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
- 	mxc_jpeg_set_desc(cfg_desc_handle, reg, slot);
- }
- 
-+static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
-+				   struct mxc_jpeg_src_buf *jpeg_src_buf)
-+{
-+	struct device *dev = ctx->mxc_jpeg->dev;
-+	struct mxc_jpeg_q_data *q_data_cap;
-+	bool src_chg = false;
-+
-+	if (!jpeg_src_buf->fmt)
-+		return src_chg;
-+
-+	q_data_cap = mxc_jpeg_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+	if (q_data_cap->w != jpeg_src_buf->w || q_data_cap->h != jpeg_src_buf->h) {
-+		dev_dbg(dev, "Detected jpeg res=(%dx%d)->(%dx%d), pixfmt=%c%c%c%c\n",
-+			q_data_cap->w, q_data_cap->h,
-+			jpeg_src_buf->w, jpeg_src_buf->h,
-+			(jpeg_src_buf->fmt->fourcc & 0xff),
-+			(jpeg_src_buf->fmt->fourcc >>  8) & 0xff,
-+			(jpeg_src_buf->fmt->fourcc >> 16) & 0xff,
-+			(jpeg_src_buf->fmt->fourcc >> 24) & 0xff);
-+
-+		/*
-+		 * set-up the capture queue with the pixelformat and resolution
-+		 * detected from the jpeg output stream
-+		 */
-+		q_data_cap->w = jpeg_src_buf->w;
-+		q_data_cap->h = jpeg_src_buf->h;
-+		q_data_cap->fmt = jpeg_src_buf->fmt;
-+		q_data_cap->w_adjusted = q_data_cap->w;
-+		q_data_cap->h_adjusted = q_data_cap->h;
-+
-+		/*
-+		 * align up the resolution for CAST IP,
-+		 * but leave the buffer resolution unchanged
-+		 */
-+		v4l_bound_align_image(&q_data_cap->w_adjusted,
-+				      q_data_cap->w_adjusted,  /* adjust up */
-+				      MXC_JPEG_MAX_WIDTH,
-+				      q_data_cap->fmt->h_align,
-+				      &q_data_cap->h_adjusted,
-+				      q_data_cap->h_adjusted, /* adjust up */
-+				      MXC_JPEG_MAX_HEIGHT,
-+				      q_data_cap->fmt->v_align,
-+				      0);
-+
-+		/* setup bytesperline/sizeimage for capture queue */
-+		mxc_jpeg_bytesperline(q_data_cap, jpeg_src_buf->fmt->precision);
-+		mxc_jpeg_sizeimage(q_data_cap);
-+		notify_src_chg(ctx);
-+		src_chg = true;
-+	}
-+	return src_chg;
-+}
-+
- static void mxc_jpeg_device_run(void *priv)
- {
- 	struct mxc_jpeg_ctx *ctx = priv;
-@@ -1209,8 +1268,7 @@ static u32 mxc_jpeg_get_image_format(struct device *dev,
- 	return fourcc;
- }
- 
--static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q,
--				  u32 precision)
-+static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q, u32 precision)
- {
- 	/* Bytes distance between the leftmost pixels in two adjacent lines */
- 	if (q->fmt->fourcc == V4L2_PIX_FMT_JPEG) {
-@@ -1261,9 +1319,7 @@ static void mxc_jpeg_sizeimage(struct mxc_jpeg_q_data *q)
- static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+@@ -933,13 +933,14 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
  {
  	struct device *dev = ctx->mxc_jpeg->dev;
--	struct mxc_jpeg_q_data *q_data_out, *q_data_cap;
--	enum v4l2_buf_type cap_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+ 	struct mxc_jpeg_q_data *q_data_cap;
 -	bool src_chg = false;
-+	struct mxc_jpeg_q_data *q_data_out;
- 	u32 fourcc;
- 	struct v4l2_jpeg_header header;
- 	struct mxc_jpeg_sof *psof = NULL;
-@@ -1331,51 +1387,11 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
- 	if (fourcc == 0)
- 		return -EINVAL;
  
--	/*
--	 * set-up the capture queue with the pixelformat and resolution
--	 * detected from the jpeg output stream
--	 */
--	q_data_cap = mxc_jpeg_get_q_data(ctx, cap_type);
--	if (q_data_cap->w != header.frame.width ||
--	    q_data_cap->h != header.frame.height)
+ 	if (!jpeg_src_buf->fmt)
+-		return src_chg;
++		return false;
+ 
+ 	q_data_cap = mxc_jpeg_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
+-	if (q_data_cap->w != jpeg_src_buf->w || q_data_cap->h != jpeg_src_buf->h) {
++	if (q_data_cap->fmt != jpeg_src_buf->fmt ||
++	    q_data_cap->w != jpeg_src_buf->w ||
++	    q_data_cap->h != jpeg_src_buf->h) {
+ 		dev_dbg(dev, "Detected jpeg res=(%dx%d)->(%dx%d), pixfmt=%c%c%c%c\n",
+ 			q_data_cap->w, q_data_cap->h,
+ 			jpeg_src_buf->w, jpeg_src_buf->h,
+@@ -976,9 +977,16 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
+ 		mxc_jpeg_bytesperline(q_data_cap, jpeg_src_buf->fmt->precision);
+ 		mxc_jpeg_sizeimage(q_data_cap);
+ 		notify_src_chg(ctx);
 -		src_chg = true;
--	q_data_cap->w = header.frame.width;
--	q_data_cap->h = header.frame.height;
--	q_data_cap->fmt = mxc_jpeg_find_format(ctx, fourcc);
--	q_data_cap->w_adjusted = q_data_cap->w;
--	q_data_cap->h_adjusted = q_data_cap->h;
--	/*
--	 * align up the resolution for CAST IP,
--	 * but leave the buffer resolution unchanged
--	 */
--	v4l_bound_align_image(&q_data_cap->w_adjusted,
--			      q_data_cap->w_adjusted,  /* adjust up */
--			      MXC_JPEG_MAX_WIDTH,
--			      q_data_cap->fmt->h_align,
--			      &q_data_cap->h_adjusted,
--			      q_data_cap->h_adjusted, /* adjust up */
--			      MXC_JPEG_MAX_HEIGHT,
--			      q_data_cap->fmt->v_align,
--			      0);
--	dev_dbg(dev, "Detected jpeg res=(%dx%d)->(%dx%d), pixfmt=%c%c%c%c\n",
--		q_data_cap->w, q_data_cap->h,
--		q_data_cap->w_adjusted, q_data_cap->h_adjusted,
--		(fourcc & 0xff),
--		(fourcc >>  8) & 0xff,
--		(fourcc >> 16) & 0xff,
--		(fourcc >> 24) & 0xff);
--
--	/* setup bytesperline/sizeimage for capture queue */
--	mxc_jpeg_bytesperline(q_data_cap, q_data_cap->fmt->precision);
--	mxc_jpeg_sizeimage(q_data_cap);
-+	jpeg_src_buf->fmt = mxc_jpeg_find_format(ctx, fourcc);
-+	jpeg_src_buf->w = header.frame.width;
-+	jpeg_src_buf->h = header.frame.height;
++		ctx->source_change = 1;
+ 	}
+-	return src_chg;
++	return ctx->source_change ? true : false;
++}
++
++static int mxc_jpeg_job_ready(void *priv)
++{
++	struct mxc_jpeg_ctx *ctx = priv;
++
++	return ctx->source_change ? 0 : 1;
+ }
  
--	/*
--	 * if the CAPTURE format was updated with new values, regardless of
--	 * whether they match the values set by the client or not, signal
--	 * a source change event
--	 */
--	if (src_chg)
--		notify_src_chg(ctx);
-+	mxc_jpeg_source_change(ctx, jpeg_src_buf);
+ static void mxc_jpeg_device_run(void *priv)
+@@ -1028,6 +1036,13 @@ static void mxc_jpeg_device_run(void *priv)
+ 
+ 		return;
+ 	}
++	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE) {
++		if (ctx->source_change || mxc_jpeg_source_change(ctx, jpeg_src_buf)) {
++			spin_unlock_irqrestore(&ctx->mxc_jpeg->hw_lock, flags);
++			v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
++			return;
++		}
++	}
+ 
+ 	mxc_jpeg_enable(reg);
+ 	mxc_jpeg_set_l_endian(reg, 1);
+@@ -1074,6 +1089,7 @@ static void mxc_jpeg_set_last_buffer_dequeued(struct mxc_jpeg_ctx *ctx)
+ 	q->last_buffer_dequeued = true;
+ 	wake_up(&q->done_wq);
+ 	ctx->stopped = 0;
++	ctx->header_parsed = false;
+ }
+ 
+ static int mxc_jpeg_decoder_cmd(struct file *file, void *priv,
+@@ -1167,6 +1183,8 @@ static int mxc_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct mxc_jpeg_q_data *q_data = mxc_jpeg_get_q_data(ctx, q->type);
+ 	int ret;
+ 
++	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE && V4L2_TYPE_IS_CAPTURE(q->type))
++		ctx->source_change = 0;
+ 	dev_dbg(ctx->mxc_jpeg->dev, "Start streaming ctx=%p", ctx);
+ 	q_data->sequence = 0;
+ 
+@@ -1345,16 +1363,15 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ 		dev_warn(dev, "Invalid user resolution 0x0");
+ 		dev_warn(dev, "Keeping resolution from JPEG: %dx%d",
+ 			 header.frame.width, header.frame.height);
+-		q_data_out->w = header.frame.width;
+-		q_data_out->h = header.frame.height;
+ 	} else if (header.frame.width != q_data_out->w ||
+ 		   header.frame.height != q_data_out->h) {
+ 		dev_err(dev,
+ 			"Resolution mismatch: %dx%d (JPEG) versus %dx%d(user)",
+ 			header.frame.width, header.frame.height,
+ 			q_data_out->w, q_data_out->h);
+-		return -EINVAL;
+ 	}
++	q_data_out->w = header.frame.width;
++	q_data_out->h = header.frame.height;
+ 	if (header.frame.width % 8 != 0 || header.frame.height % 8 != 0) {
+ 		dev_err(dev, "JPEG width or height not multiple of 8: %dx%d\n",
+ 			header.frame.width, header.frame.height);
+@@ -1390,8 +1407,10 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ 	jpeg_src_buf->fmt = mxc_jpeg_find_format(ctx, fourcc);
+ 	jpeg_src_buf->w = header.frame.width;
+ 	jpeg_src_buf->h = header.frame.height;
++	ctx->header_parsed = true;
+ 
+-	mxc_jpeg_source_change(ctx, jpeg_src_buf);
++	if (!v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx))
++		mxc_jpeg_source_change(ctx, jpeg_src_buf);
  
  	return 0;
  }
+@@ -1468,6 +1487,7 @@ static void mxc_jpeg_buf_finish(struct vb2_buffer *vb)
+ 	if (list_empty(&q->done_list)) {
+ 		vbuf->flags |= V4L2_BUF_FLAG_LAST;
+ 		ctx->stopped = 0;
++		ctx->header_parsed = false;
+ 	}
+ }
+ 
+@@ -1613,26 +1633,42 @@ static int mxc_jpeg_enum_fmt_vid_cap(struct file *file, void *priv,
+ 				     struct v4l2_fmtdesc *f)
+ {
+ 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
++	struct mxc_jpeg_q_data *q_data = mxc_jpeg_get_q_data(ctx, f->type);
+ 
+-	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE)
++	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE) {
+ 		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
+ 			MXC_JPEG_FMT_TYPE_ENC);
+-	else
++	} else if (!ctx->header_parsed) {
+ 		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
+ 			MXC_JPEG_FMT_TYPE_RAW);
++	} else {
++		/* For the decoder CAPTURE queue, only enumerate the raw formats
++		 * supported for the format currently active on OUTPUT
++		 * (more precisely what was propagated on capture queue
++		 * after jpeg parse on the output buffer)
++		 */
++		if (f->index)
++			return -EINVAL;
++		f->pixelformat = q_data->fmt->fourcc;
++		strscpy(f->description, q_data->fmt->name, sizeof(f->description));
++		return 0;
++	}
+ }
+ 
+ static int mxc_jpeg_enum_fmt_vid_out(struct file *file, void *priv,
+ 				     struct v4l2_fmtdesc *f)
+ {
+ 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
++	u32 type = ctx->mxc_jpeg->mode == MXC_JPEG_DECODE ?  MXC_JPEG_FMT_TYPE_ENC :
++							     MXC_JPEG_FMT_TYPE_RAW;
++	int ret;
+ 
++	ret = enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f, type);
++	if (ret)
++		return ret;
+ 	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE)
+-		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
+-				MXC_JPEG_FMT_TYPE_ENC);
+-	else
+-		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
+-				MXC_JPEG_FMT_TYPE_RAW);
++		f->flags = V4L2_FMT_FLAG_DYN_RESOLUTION;
++	return 0;
+ }
+ 
+ static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fmt,
+@@ -2013,6 +2049,7 @@ static const struct v4l2_file_operations mxc_jpeg_fops = {
+ };
+ 
+ static const struct v4l2_m2m_ops mxc_jpeg_m2m_ops = {
++	.job_ready      = mxc_jpeg_job_ready,
+ 	.device_run	= mxc_jpeg_device_run,
+ };
+ 
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+index 82b38cc2dfab..9ae56e6e0fbe 100644
+--- a/drivers/media/platform/imx-jpeg/mxc-jpeg.h
++++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+@@ -94,6 +94,8 @@ struct mxc_jpeg_ctx {
+ 	unsigned int			stopping;
+ 	unsigned int			stopped;
+ 	unsigned int			slot;
++	unsigned int			source_change;
++	bool				header_parsed;
+ };
+ 
+ struct mxc_jpeg_slot_data {
 -- 
 2.33.0
 

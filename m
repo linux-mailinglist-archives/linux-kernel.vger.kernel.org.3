@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE264D6C73
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 05:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00CB4D6C75
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 05:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiCLEWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 23:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S230340AbiCLEiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 23:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiCLEWu (ORCPT
+        with ESMTP id S229502AbiCLEiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 23:22:50 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84F9281E21;
-        Fri, 11 Mar 2022 20:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=+gLcGmfUavchbuYzTum2r/Cahes9vKXyruyiqqiTf5s=; b=CMBLK8sxyUiz/5o7JuVQ/I5C55
-        903XhfPUhQQvFvSQKr7Zq620PsBrJBcjYVgfY+3gQcIE/tR47koCam7j+xRVkS84eip4ckBtgQKf4
-        Fkeg8mWwAhoSMVLu8y+sRPkqnIlxwtyZPIhkOwmWtbi0UzwF5Ju3GrH8W7mZCdQXOeJcd5iYMuNgO
-        JzNXZADIlyiudyrqc+F7wXgSYKdQiB3vlbaeaOpf7IRkN2igh1ihg4Te7qNVR0LhZoNjcPCYt2Ly0
-        +Sb7G2LlQvB6UO5LdVzKw2DMqQaprdbaumM0VLYNmOLuDoFawvMQ0m+2SxRNP6T0CFIHBRzJKJmlm
-        Ab7f8ICQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nStGD-000kGC-6V; Sat, 12 Mar 2022 04:21:45 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] sparc: vDSO: fix return value of __setup handler
-Date:   Fri, 11 Mar 2022 20:21:44 -0800
-Message-Id: <20220312042144.15470-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 11 Mar 2022 23:38:09 -0500
+Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C938115A20E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 20:37:03 -0800 (PST)
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4KFqlL1BRmz4wx4D
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 04:37:02 +0000 (UTC)
+Authentication-Results: mail-41103.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="fDlvTRj2"
+Date:   Sat, 12 Mar 2022 04:36:45 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1647059817;
+        bh=UdpFS6g8t/sfigVRjnlG7mj5G3nr7GIWn+0FHNn7FF8=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=fDlvTRj2emWHiPwixHIo73iFx69Q7zlCSQAfiLI1jI5nmcAH6lwcEUYsPsNgTb7W9
+         ginjFqWZchzpUsItj1rxInLib4pY2H/pa7epX08lNb08AyONIsLd+/0tWxI5+KJ44W
+         5jmlOya7Pp5OnwhRhLVeBP2nWXNHCdFwyBBcFx81LRguBnck+Eg6fOKqnLxiRaeebX
+         SimeLd1Jq2SPqSOpIcgm4DPvtWILHC3XZLsy0lJaA3tT5ExeANHvGf1Ko0bKV7PAFr
+         nBQ/YxJqyePN5VLVPDrb9+aTxWs2ooIQsJVFpGysDfw9vH8+5CVfSMLFapKR7Xw4sS
+         RE8myk2/9PAHg==
+To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
+From:   David Cohen <dacohen@pm.me>
+Cc:     David Cohen <dacohen@pm.me>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: David Cohen <dacohen@pm.me>
+Subject: [PATCH v2] PM: fix dynamic debug within pm_pr_debug()
+Message-ID: <20220312043624.40732-1-dacohen@pm.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +55,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from vdso_setup().
+Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
+to filter pm debug messages based on pm_debug_messages_on flag.
+According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
+indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
+support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
+which does support dynamic debug.
 
-Fixes: 62d6f3b7b85e ("sparc: vDSO: Silence an uninitialized variable warning")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-From: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
+The problem is if we enable/disable dynamic debug inside __pm_pr_debug()
+it will affect all pm_pr_debug() calls at once, so we can't individually
+control them.
+
+This patch changes __pm_pr_debug() implementation into macros to make
+pr_debug() to be directly called by all pm_pr_debug() cases. As a direct
+side effect all pm_pr_debug() can be individually controlled by dynamic
+debug feature.
+
+Signed-off-by: David Cohen <dacohen@pm.me>
 ---
- arch/sparc/vdso/vma.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ include/linux/suspend.h | 19 +++++++++++++++----
+ kernel/power/main.c     | 29 -----------------------------
+ 2 files changed, 15 insertions(+), 33 deletions(-)
 
---- linux-next-20220309.orig/arch/sparc/vdso/vma.c
-+++ linux-next-20220309/arch/sparc/vdso/vma.c
-@@ -449,9 +449,8 @@ static __init int vdso_setup(char *s)
- 	unsigned long val;
- 
- 	err = kstrtoul(s, 10, &val);
--	if (err)
--		return err;
--	vdso_enabled = val;
--	return 0;
-+	if (!err)
-+		vdso_enabled = val;
-+	return 1;
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 300273ff40cc..d727d3c867e3 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -542,22 +542,33 @@ static inline void unlock_system_sleep(void) {}
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+ extern bool pm_print_times_enabled;
+ extern bool pm_debug_messages_on;
+-extern __printf(2, 3) void __pm_pr_dbg(bool defer, const char *fmt, ...);
++#define __pm_pr_dbg(fmt, ...)=09=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09pr_debug("PM: " fmt, ##__VA_ARGS__);=09\
++=09} while(0)
++#define __pm_deferred_pr_dbg(fmt, ...)=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09printk_deferred(KERN_DEBUG "PM: " fmt, ##__VA_ARGS__);=09\
++=09} while(0)
+ #else
+ #define pm_print_times_enabled=09(false)
+ #define pm_debug_messages_on=09(false)
+
+ #include <linux/printk.h>
+
+-#define __pm_pr_dbg(defer, fmt, ...) \
++#define __pm_pr_dbg(fmt, ...) \
++=09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
++#define __pm_deferred_pr_dbg(fmt, ...) \
+ =09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
+ #endif
+
+ #define pm_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(false, fmt, ##__VA_ARGS__)
++=09__pm_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #define pm_deferred_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(true, fmt, ##__VA_ARGS__)
++=09__pm_deferred_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #ifdef CONFIG_PM_AUTOSLEEP
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 7e646079fbeb..5242bf2ee469 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -545,35 +545,6 @@ static int __init pm_debug_messages_setup(char *str)
  }
- __setup("vdso=", vdso_setup);
+ __setup("pm_debug_messages", pm_debug_messages_setup);
+
+-/**
+- * __pm_pr_dbg - Print a suspend debug message to the kernel log.
+- * @defer: Whether or not to use printk_deferred() to print the message.
+- * @fmt: Message format.
+- *
+- * The message will be emitted if enabled through the pm_debug_messages
+- * sysfs attribute.
+- */
+-void __pm_pr_dbg(bool defer, const char *fmt, ...)
+-{
+-=09struct va_format vaf;
+-=09va_list args;
+-
+-=09if (!pm_debug_messages_on)
+-=09=09return;
+-
+-=09va_start(args, fmt);
+-
+-=09vaf.fmt =3D fmt;
+-=09vaf.va =3D &args;
+-
+-=09if (defer)
+-=09=09printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+-=09else
+-=09=09printk(KERN_DEBUG "PM: %pV", &vaf);
+-
+-=09va_end(args);
+-}
+-
+ #else /* !CONFIG_PM_SLEEP_DEBUG */
+ static inline void pm_print_times_init(void) {}
+ #endif /* CONFIG_PM_SLEEP_DEBUG */
+--
+2.35.1
+
+
